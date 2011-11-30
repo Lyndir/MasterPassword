@@ -1,0 +1,3 @@
+[submodule "External/Pearl"]
+	path = External/Pearl
+	url = git@github.com:Lyndir/Pearl.git

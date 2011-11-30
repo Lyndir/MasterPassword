@@ -1,0 +1,15 @@
+//
+// Prefix header for all source files of the 'Pearl' target in the 'Pearl' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+#endif
+
+#define PEARL
+#define PEARL_CRYPTO
+#define PEARL_UIKIT
+
+#import "Pearl.h"
+#import "Pearl-Crypto.h"
+#import "Pearl-UIKit.h"

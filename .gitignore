@@ -1,0 +1,25 @@
+# OS-Specific junk.
+.DS_Store
+
+# IntelliJ
+/.idea/*
+!/.idea/encodings.xml
+!/.idea/inspectionProfiles
+!/.idea/projectCodeStyle.xml
+!/.idea/validation.xml
+*.iml
+/*.ipr
+/*.iws
+
+# Xcode IDE
+/*.xcodeproj/*
+!/*.xcodeproj/*.pbxproj
+!/*.xcodeproj/xcshareddata
+!/*.xcodeproj/xcshareddata/*
+!/*.xcodeproj/project.xcworkspace
+!/*.xcodeproj/project.xcworkspace/*
+/*.xcodeproj/project.xcworkspace/xcuserdata
+
+# IPA
+/sendipa/*
+!/sendipa/sendipa.conf
