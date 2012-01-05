@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>OPElementTypeCalculated</key>
+	<dict>
+		<key>Long</key>
+		<array>
+			<string>CvcvCvcvnoCvcv</string>
+			<string>CvcvnoCvcvCvcv</string>
+			<string>CvcvCvcvCvcvno</string>
+		</array>
+		<key>Medium</key>
+		<array>
+			<string>CvcnoCvc</string>
+			<string>CvcCvcno</string>
+		</array>
+		<key>Short</key>
+		<array>
+			<string>Cvcn</string>
+		</array>
+		<key>Basic</key>
+		<array>
+			<string>aaanaaan</string>
+			<string>aannaaan</string>
+			<string>aaannaaa</string>
+		</array>
+		<key>PIN</key>
+		<array>
+			<string>nnnn</string>
+		</array>
+	</dict>
+	<key>OPCharacterClasses</key>
+	<dict>
+		<key>V</key>
+		<string>AEIOU</string>
+		<key>C</key>
+		<string>BCDFGHJKLMNPQRSTVWXYZ</string>
+		<key>v</key>
+		<string>aeiou</string>
+		<key>c</key>
+		<string>bcdfghjklmnpqrstvwxyz</string>
+		<key>A</key>
+		<string>AEIOUBCDFGHJKLMNPQRSTVWXYZ</string>
+		<key>a</key>
+		<string>AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz</string>
+		<key>n</key>
+		<string>0123456789</string>
+		<key>o</key>
+		<string>!@#$%^&amp;*()</string>
+		<key>X</key>
+		<string>AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789!@#$%^&amp;*()</string>
+	</dict>
+</dict>
+</plist>

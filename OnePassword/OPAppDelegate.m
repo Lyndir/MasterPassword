@@ -15,9 +15,57 @@
 @synthesize managedObjectContext = __managedObjectContext;
 @synthesize managedObjectModel = __managedObjectModel;
 @synthesize persistentStoreCoordinator = __persistentStoreCoordinator;
+@synthesize keyPhrase = _keyPhrase;
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
++ (void)initialize {
+    
+    [Logger get].autoprintLevel = LogLevelDebug;
+}
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *keyPhraseHash = [OPConfig get].keyPhraseHash;
+        
+        AlertViewController *keyPhraseAlert = [[AlertViewController alloc] initQuestionWithTitle:@"One Password"
+                                                                                         message:keyPhraseHash? @"Unlock with your master password:": @"Choose your master password:"
+                                                                               tappedButtonBlock:
+                                               ^(NSInteger buttonIndex, NSString *answer) {
+                                                   if (buttonIndex == 0)
+                                                       exit(0);
+                                                   
+                                                   if (![answer length]) {
+                                                       [AlertViewController showAlertWithTitle:[PearlStrings get].commonTitleError
+                                                                                       message:@"No master password entered."
+                                                                             tappedButtonBlock:
+                                                        ^(NSInteger buttonIndex) {
+                                                            exit(0);
+                                                        } cancelTitle:@"Quit" otherTitles:nil];
+                                                   }
+                                                   
+                                                   NSString *answerHash = [[answer hashWith:PearlDigestSHA1] encodeHex];
+                                                   if (keyPhraseHash) {
+                                                       if (![keyPhraseHash isEqualToString:answerHash]) {
+                                                           [AlertViewController showAlertWithTitle:[PearlStrings get].commonTitleError
+                                                                                           message:@"Incorrect master password."
+                                                                                 tappedButtonBlock:
+                                                            ^(NSInteger buttonIndex) {
+                                                                exit(0);
+                                                            } cancelTitle:@"Quit" otherTitles:nil];
+                                                           
+                                                           return;
+                                                       }
+                                                   } else
+                                                       [OPConfig get].keyPhraseHash = answerHash;
+                                                   
+                                                   self.keyPhrase = answer;
+                                               } cancelTitle:@"Quit" otherTitles:@"Unlock", nil];
+        keyPhraseAlert.alertField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        keyPhraseAlert.alertField.autocorrectionType = UITextAutocorrectionTypeNo;
+        keyPhraseAlert.alertField.secureTextEntry = YES;
+        [keyPhraseAlert showAlert];
+    });
+    
     // Override point for customization after application launch.
     return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
@@ -56,6 +104,11 @@
 {
     // Saves changes in the application's managed object context before the application terminates.
     [self saveContext];
+}
+
++ (OPAppDelegate *)get {
+    
+    return (OPAppDelegate *)[super get];
 }
 
 - (void)saveContext
@@ -106,6 +159,7 @@
     }
     NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"OnePassword" withExtension:@"momd"];
     __managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    
     return __managedObjectModel;
 }
 
@@ -124,7 +178,12 @@
     
     NSError *error = nil;
     __persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![__persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error])
+    if (![__persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL
+                                                          options:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                   (id)kCFBooleanTrue,  NSMigratePersistentStoresAutomaticallyOption,
+                                                                   (id)kCFBooleanTrue,  NSInferMappingModelAutomaticallyOption,
+                                                                   nil]
+                                                            error:&error])
     {
         /*
          Replace this implementation with code to handle the error appropriately.
@@ -149,9 +208,14 @@
          Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
          
          */
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
-    }    
+        err(@"Unresolved error %@, %@", error, [error userInfo]);
+#if DEBUG
+        wrn(@"Deleted datastore: %@", storeURL);
+        [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];        
+#endif
+        @throw [NSException exceptionWithName:error.domain reason:error.localizedDescription
+                                     userInfo:[NSDictionary dictionaryWithObject:error forKey:@"cause"]];
+    }
     
     return __persistentStoreCoordinator;
 }

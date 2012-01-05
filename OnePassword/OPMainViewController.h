@@ -6,8 +6,19 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-@interface OPMainViewController : UITableViewController
+#import "OPTypeViewController.h"
+#import "OPElementEntity.h"
+#import "OPSearchDelegate.h"
 
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@interface OPMainViewController : UITableViewController <OPTypeDelegate, UITextFieldDelegate, UISearchBarDelegate, OPSearchResultsDelegate>
+
+@property (strong, nonatomic) OPElementEntity *activeElement;
+@property (strong, nonatomic) IBOutlet OPSearchDelegate *searchResultsController;
+@property (weak, nonatomic) IBOutlet UITextField *contentField;
+@property (weak, nonatomic) IBOutlet UITextView *contentTextView;
+@property (weak, nonatomic) IBOutlet UILabel *typeLabel;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *contentType;
+
+- (IBAction)didChangeContentType:(UISegmentedControl *)sender;
 
 @end

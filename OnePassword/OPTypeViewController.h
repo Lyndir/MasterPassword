@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol OPTypeDelegate <NSObject>
+
+- (void)didSelectType:(OPElementType)type;
+
+@end
+
 @interface OPTypeViewController : UITableViewController
+
+@property (nonatomic, weak) id<OPTypeDelegate> delegate;
 
 @end

@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="Test1.xcdatamodel" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <elements/>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="872" systemVersion="11C74" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="OPElementEntity" representedClassName="OPElementEntity" syncable="YES">
+        <attribute name="contentType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="contentUTI" attributeType="String" defaultValueString="public.plain-text" syncable="YES"/>
+        <attribute name="lastUsed" attributeType="Date" syncable="YES"/>
+        <attribute name="name" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="type" attributeType="Integer 16" defaultValueString="257" syncable="YES"/>
+        <attribute name="uses" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="OPElementStoredEntity" representedClassName="OPElementStoredEntity" parentEntity="OPElementEntity" syncable="YES">
+        <attribute name="contentObject" attributeType="Transformable" storedInTruthFile="YES" syncable="YES"/>
+    </entity>
+    <fetchRequest name="OPSearchElement" entity="OPElementEntity" predicateString="name BEGINSWITH &quot;$query&quot;"/>
+    <elements>
+        <element name="OPElementEntity" positionX="160" positionY="192" width="128" height="135"/>
+        <element name="OPElementStoredEntity" positionX="160" positionY="192" width="128" height="75"/>
+    </elements>
 </model>

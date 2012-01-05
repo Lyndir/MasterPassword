@@ -9,43 +9,71 @@
 #import "OPTypeViewController.h"
 
 @implementation OPTypeViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
+@synthesize delegate;
 
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    
+    return YES;
 }
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    assert(self.navigationController.topViewController == self);
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    OPElementType type;
+    switch (indexPath.section) {
+        case 0: {
+            // Calculated
+            switch (indexPath.row) {
+                case 0:
+                    type = OPElementTypeCalculatedLong;
+                    break;
+                case 1:
+                    type = OPElementTypeCalculatedMedium;
+                    break;
+                case 2:
+                    type = OPElementTypeCalculatedShort;
+                    break;
+                case 3:
+                    type = OPElementTypeCalculatedBasic;
+                    break;
+                case 4:
+                    type = OPElementTypeCalculatedPIN;
+                    break;
+                    
+                default:
+                    [NSException raise:NSInternalInconsistencyException
+                                format:@"Unsupported row: %d, when selecting calculated element type.", indexPath.row];
+            }
+            break;
+        }
+            
+        case 1: {
+            // Stored
+            switch (indexPath.row) {
+                case 0:
+                    type = OPElementTypeStoredPersonal;
+                    break;
+                case 1:
+                    type = OPElementTypeStoredDevicePrivate;
+                    break;
+                    
+                default:
+                    [NSException raise:NSInternalInconsistencyException
+                                format:@"Unsupported row: %d, when selecting stored element type.", indexPath.row];
+            }
+            break;
+        }
+            
+        default:
+            [NSException raise:NSInternalInconsistencyException
+                        format:@"Unsupported section: %d, when selecting element type.", indexPath.section];
+    }
+    
+    [delegate didSelectType:type];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end
