@@ -1,0 +1,32 @@
+#! /usr/bin/env bash
+source bashlib
+shopt -s nullglob
+
+emit "Converting iTunesArtwork"
+icons=(
+    [29]="Icon-Small.png"
+    [50]="Icon-Small-50.png"
+    [58]="Icon-Small@2x.png"
+    [57]="Icon.png"
+    [72]="Icon-72.png"
+    [114]="Icon@2x.png"
+)
+cd "${0%/*}/../OnePassword"
+
+for size in "${!icons[@]}"; do
+    file=${icons[size]}
+
+    emit "$file ($size px)" --
+        convert "iTunesArtwork.png" -resize "${size}x${size}" "$file"
+    emit -$?
+done
+
+
+echo
+emit "Converting @2x artwork"
+for file in !(Icon*)@2x.png; do
+    emit "${file/@2x}" --
+        convert "$file" -resize 50% "${file/@2x}"
+    emit -$?
+done
+

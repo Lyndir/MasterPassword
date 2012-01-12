@@ -55,6 +55,7 @@
     
     // Because IB's edit button doesn't auto-toggle self.editable like editButtonItem does.
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.tableView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Background.png"]];
     
     [super viewDidLoad];
 }
@@ -91,7 +92,9 @@
 
 - (void)updateWasAnimated:(BOOL)animated {
 
-    self.typeLabel.text = self.activeElement? NSStringFromOPElementType(self.activeElement.type): @"moo";
+    self.searchDisplayController.searchBar.placeholder = self.activeElement.name;
+
+    self.typeLabel.text = self.activeElement? NSStringFromOPElementType(self.activeElement.type): @"";
 
     self.contentTextView.alpha = self.contentType.selectedSegmentIndex == OPElementContentTypeNote? 1: 0;
     self.contentTextView.editable = self.editing && self.activeElement.type & OPElementTypeStored;
@@ -106,9 +109,6 @@
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSString *contentDescription = self.activeElement.contentDescription;
-        if (contentDescription)
-            [self.activeElement use];
-
         dispatch_async(dispatch_get_main_queue(), ^{
             self.contentField.text = contentDescription;
         });
@@ -123,6 +123,12 @@
     [self updateAnimated:YES];
 }
 
+- (IBAction)didTriggerContent:(id)sender {
+    
+    [[UIPasteboard generalPasteboard] setValue:self.activeElement.content
+                             forPasteboardType:self.activeElement.contentUTI];
+}
+
 - (void)didSelectType:(OPElementType)type {
     
     self.activeElement.type = type;
@@ -132,15 +138,21 @@
 - (void)didSelectElement:(OPElementEntity *)element {
     
     self.activeElement = element;
+    [self.activeElement use];
     [self updateAnimated:YES];
 
+    self.searchDisplayController.searchBar.text = @"";
     [self.searchDisplayController setActive:NO animated:YES];
-    self.searchDisplayController.searchBar.text = self.activeElement.name;
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     
     [self updateAnimated:YES];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return NO;
 }
 
 @end

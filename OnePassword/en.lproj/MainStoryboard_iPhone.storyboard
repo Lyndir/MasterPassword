@@ -218,15 +218,6 @@
         </scene>
         <scene sceneID="Rm6-uL-WP4">
             <objects>
-                <searchDisplayController id="P8c-gf-nN3">
-                    <connections>
-                        <outlet property="delegate" destination="0QO-2P-OhD" id="gst-Hm-5ja"/>
-                        <outlet property="searchBar" destination="qeo-n2-WVh" id="bFO-FC-Xdj"/>
-                        <outlet property="searchContentsController" destination="b9f-OB-AqY" id="xgo-Uj-wpm"/>
-                        <outlet property="searchResultsDataSource" destination="0QO-2P-OhD" id="XJh-rC-kId"/>
-                        <outlet property="searchResultsDelegate" destination="0QO-2P-OhD" id="Bm8-Q3-lLA"/>
-                    </connections>
-                </searchDisplayController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8LM-KK-u1f" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="b9f-OB-AqY" customClass="OPMainViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="y6z-21-Ptd">
@@ -252,6 +243,9 @@
                                             <state key="highlighted">
                                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
+                                            <connections>
+                                                <action selector="didTriggerContent:" destination="b9f-OB-AqY" eventType="touchUpInside" id="Ost-qu-K2L"/>
+                                            </connections>
                                         </button>
                                         <imageView userInteractionEnabled="NO" contentMode="center" image="Square.png" id="qWn-td-zdb">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="222"/>
@@ -269,7 +263,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="textColor" red="0.36470589040000001" green="0.40000003579999999" blue="0.47843140360000003" alpha="1" colorSpace="deviceRGB"/>
                                             <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="20"/>
-                                            <textInputTraits key="textInputTraits"/>
+                                            <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                         </textField>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -292,7 +286,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                     <gestureRecognizers/>
                                     <color key="tintColor" red="0.36470589040000001" green="0.40000003579999999" blue="0.47843140360000003" alpha="1" colorSpace="deviceRGB"/>
-                                    <textInputTraits key="textInputTraits"/>
+                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
                                     <connections>
                                         <outlet property="delegate" destination="b9f-OB-AqY" id="8OW-dn-MdW"/>
                                     </connections>
@@ -352,6 +346,15 @@
                         <outlet property="typeLabel" destination="QgX-q3-JLG" id="tv1-jy-Qbu"/>
                     </connections>
                 </tableViewController>
+                <searchDisplayController id="P8c-gf-nN3">
+                    <connections>
+                        <outlet property="delegate" destination="0QO-2P-OhD" id="gst-Hm-5ja"/>
+                        <outlet property="searchBar" destination="qeo-n2-WVh" id="bFO-FC-Xdj"/>
+                        <outlet property="searchContentsController" destination="b9f-OB-AqY" id="xgo-Uj-wpm"/>
+                        <outlet property="searchResultsDataSource" destination="0QO-2P-OhD" id="XJh-rC-kId"/>
+                        <outlet property="searchResultsDelegate" destination="0QO-2P-OhD" id="Bm8-Q3-lLA"/>
+                    </connections>
+                </searchDisplayController>
                 <customObject id="0QO-2P-OhD" customClass="OPSearchDelegate">
                     <connections>
                         <outlet property="delegate" destination="b9f-OB-AqY" id="y3b-no-DZQ"/>
@@ -389,6 +392,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/OPMainViewController.h"/>
             <relationships>
                 <relationship kind="action" name="didChangeContentType:" candidateClass="UISegmentedControl"/>
+                <relationship kind="action" name="didTriggerContent:"/>
                 <relationship kind="outlet" name="contentField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="contentTextView" candidateClass="UITextView"/>
                 <relationship kind="outlet" name="contentType" candidateClass="UISegmentedControl"/>
@@ -408,7 +412,7 @@
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
+        <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>

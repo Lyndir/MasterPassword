@@ -20,5 +20,6 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *contentType;
 
 - (IBAction)didChangeContentType:(UISegmentedControl *)sender;
+- (IBAction)didTriggerContent:(id)sender;
 
 @end

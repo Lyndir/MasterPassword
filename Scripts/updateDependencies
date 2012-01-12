@@ -4,13 +4,13 @@ cd "${BASH_SOURCE%/*}/.."
 shopt -s extglob
 
 
-## Pearl
+## LisuUI
 #
 ## Submodules that need to be checked out.
-dependencies=( External/Pearl External/Pearl:External/{jrswizzle,uicolor-utilities} )
+dependencies=( External/Pearl External/Pearl:External/jrswizzle External/Pearl:External/uicolor-utilities )
 
 ## Custom migration.
-# Nothing yet.
+# None yet.
 
 
 ################################################################################

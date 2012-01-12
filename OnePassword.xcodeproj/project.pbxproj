@@ -27,6 +27,8 @@
 		DA5BFA61147E415C00F98B1E /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA5BFA5F147E415C00F98B1E /* MainStoryboard_iPad.storyboard */; };
 		DA5BFA64147E415C00F98B1E /* OnePassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA5BFA62147E415C00F98B1E /* OnePassword.xcdatamodeld */; };
 		DA5BFA67147E415C00F98B1E /* OPMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5BFA66147E415C00F98B1E /* OPMainViewController.m */; };
+		DA5DB7A614BE4B19002DD256 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5DB7A514BE4B19002DD256 /* Default.png */; };
+		DA5DB7A814BE4B4B002DD256 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5DB7A714BE4B4B002DD256 /* Default@2x.png */; };
 		DA7C28C414AF078900491972 /* Bold_Lines.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7C28A514AF078900491972 /* Bold_Lines.png */; };
 		DA7C28C514AF078900491972 /* Box.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7C28A614AF078900491972 /* Box.png */; };
 		DA7C28C614AF078900491972 /* Dashed_Divider.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7C28A714AF078900491972 /* Dashed_Divider.png */; };
@@ -58,6 +60,12 @@
 		DA7C28E014AF078900491972 /* Smooth_Divider.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7C28C114AF078900491972 /* Smooth_Divider.png */; };
 		DA7C28E114AF078900491972 /* Square.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7C28C214AF078900491972 /* Square.png */; };
 		DA7C28E214AF078900491972 /* White_Rectangular.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7C28C314AF078900491972 /* White_Rectangular.png */; };
+		DAAF5C2214BF308400A0F1F0 /* Background.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAF5C2014BF308400A0F1F0 /* Background.png */; };
+		DAAF5C2314BF308400A0F1F0 /* Background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAF5C2114BF308400A0F1F0 /* Background@2x.png */; };
+		DABF7DA514BE54E4007F3557 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = DABF7DA414BE54E4007F3557 /* Default.png */; };
+		DABF7DAA14BE561C007F3557 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = DABF7DA714BE561C007F3557 /* Icon-72.png */; };
+		DABF7DAB14BE561C007F3557 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DABF7DA814BE561C007F3557 /* Icon.png */; };
+		DABF7DAC14BE561C007F3557 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABF7DA914BE561C007F3557 /* Icon@2x.png */; };
 		DAC6325E1486805C0075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC6326D148680650075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC63277148680700075AEA5 /* libuicolor-utilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */; };
@@ -195,6 +203,8 @@
 		DA5BFA63147E415C00F98B1E /* OnePassword.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = OnePassword.xcdatamodel; sourceTree = "<group>"; };
 		DA5BFA65147E415C00F98B1E /* OPMainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OPMainViewController.h; sourceTree = "<group>"; };
 		DA5BFA66147E415C00F98B1E /* OPMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OPMainViewController.m; sourceTree = "<group>"; };
+		DA5DB7A514BE4B19002DD256 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
+		DA5DB7A714BE4B4B002DD256 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
 		DA7C28A514AF078900491972 /* Bold_Lines.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bold_Lines.png; sourceTree = "<group>"; };
 		DA7C28A614AF078900491972 /* Box.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Box.png; sourceTree = "<group>"; };
 		DA7C28A714AF078900491972 /* Dashed_Divider.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Dashed_Divider.png; sourceTree = "<group>"; };
@@ -226,6 +236,12 @@
 		DA7C28C114AF078900491972 /* Smooth_Divider.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Smooth_Divider.png; sourceTree = "<group>"; };
 		DA7C28C214AF078900491972 /* Square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Square.png; sourceTree = "<group>"; };
 		DA7C28C314AF078900491972 /* White_Rectangular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = White_Rectangular.png; sourceTree = "<group>"; };
+		DAAF5C2014BF308400A0F1F0 /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Background.png; sourceTree = "<group>"; };
+		DAAF5C2114BF308400A0F1F0 /* Background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Background@2x.png"; sourceTree = "<group>"; };
+		DABF7DA414BE54E4007F3557 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = SOURCE_ROOT; };
+		DABF7DA714BE561C007F3557 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
+		DABF7DA814BE561C007F3557 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		DABF7DA914BE561C007F3557 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libuicolor-utilities.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC6326C148680650075AEA5 /* libjrswizzle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjrswizzle.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC632791486809A0075AEA5 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JRSwizzle.h; path = External/Pearl/External/jrswizzle/JRSwizzle.h; sourceTree = SOURCE_ROOT; };
@@ -1421,6 +1437,13 @@
 		DA5BFA51147E415C00F98B1E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				DAAF5C2014BF308400A0F1F0 /* Background.png */,
+				DAAF5C2114BF308400A0F1F0 /* Background@2x.png */,
+				DABF7DA714BE561C007F3557 /* Icon-72.png */,
+				DABF7DA814BE561C007F3557 /* Icon.png */,
+				DABF7DA914BE561C007F3557 /* Icon@2x.png */,
+				DA5DB7A714BE4B4B002DD256 /* Default@2x.png */,
+				DA5DB7A514BE4B19002DD256 /* Default.png */,
 				DA7C28A414AF078900491972 /* divider */,
 				DA5BFA52147E415C00F98B1E /* OnePassword-Info.plist */,
 				DA5BFA53147E415C00F98B1E /* InfoPlist.strings */,
@@ -1569,6 +1592,7 @@
 		DAC77CD31482AAD600BCF976 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DABF7DA414BE54E4007F3557 /* Default.png */,
 				DAC77CD41482AAD600BCF976 /* Pearl.strings */,
 			);
 			path = Resources;
@@ -2861,6 +2885,14 @@
 				DA7C28E214AF078900491972 /* White_Rectangular.png in Resources */,
 				DA007F5514B25EE100251337 /* ciphers.plist in Resources */,
 				DA007F5614B26EFA00251337 /* Pearl.strings in Resources */,
+				DA5DB7A614BE4B19002DD256 /* Default.png in Resources */,
+				DA5DB7A814BE4B4B002DD256 /* Default@2x.png in Resources */,
+				DABF7DA514BE54E4007F3557 /* Default.png in Resources */,
+				DABF7DAA14BE561C007F3557 /* Icon-72.png in Resources */,
+				DABF7DAB14BE561C007F3557 /* Icon.png in Resources */,
+				DABF7DAC14BE561C007F3557 /* Icon@2x.png in Resources */,
+				DAAF5C2214BF308400A0F1F0 /* Background.png in Resources */,
+				DAAF5C2314BF308400A0F1F0 /* Background@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
