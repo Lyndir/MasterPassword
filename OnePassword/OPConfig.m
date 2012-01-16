@@ -10,7 +10,7 @@
 
 @implementation OPConfig
 
-@dynamic dataStoreError, keyPhraseHash;
+@dynamic dataStoreError, keyPhraseHash, rememberKeyPhrase;
 
 
 -(id) init {
@@ -20,6 +20,7 @@
     
     [self.defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
                                      [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(dataStoreError)),
+                                     [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(rememberKeyPhrase)),
                                      
                                      nil]];
     

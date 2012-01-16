@@ -11,7 +11,7 @@ icons=(
     [72]="Icon-72.png"
     [114]="Icon@2x.png"
 )
-cd "${0%/*}/../OnePassword"
+cd "${0%/*}/../OnePassword/Resources"
 
 for size in "${!icons[@]}"; do
     file=${icons[size]}
@@ -24,9 +24,11 @@ done
 
 echo
 emit "Converting @2x artwork"
-for file in !(Icon*)@2x.png; do
+for file in {.,Automaton}/*@2x.png; do
+    inArray "${file##*/}" "${icons[@]}" && continue
+
     emit "${file/@2x}" --
-        convert "$file" -resize 50% "${file/@2x}"
+        convert "$file" -filter box -resize 50% -unsharp 0x1 "${file/@2x}"
     emit -$?
 done
 

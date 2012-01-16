@@ -23,10 +23,12 @@
 @implementation OPMainViewController
 @synthesize activeElement = _activeElement;
 @synthesize searchResultsController = _searchResultsController;
-@synthesize typeLabel = _typeLabel;
-@synthesize contentType = _contentType;
+@synthesize typeButton = _typeButton;
+@synthesize helpView = _helpView;
+@synthesize siteName = _siteName;
+@synthesize passwordCounter = _passwordCounter;
+@synthesize passwordIncrementer = _passwordIncrementer;
 @synthesize contentField = _contentField;
-@synthesize contentTextView = _contentTextView;
 
 #pragma mark - View lifecycle
 
@@ -48,26 +50,25 @@
     [super viewWillAppear:animated];
     
     [self updateAnimated:NO];
-    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:animated];
 }
 
 - (void)viewDidLoad {
     
     // Because IB's edit button doesn't auto-toggle self.editable like editButtonItem does.
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    self.tableView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Background.png"]];
-    
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
+
     [super viewDidLoad];
 }
 
 - (void)viewDidUnload {
     
     [self setContentField:nil];
-    [self setTypeLabel:nil];
-    
-    [self setContentType:nil];
-    [self setContentTextView:nil];
+    [self setTypeButton:nil];
     [self setSearchResultsController:nil];
+    [self setHelpView:nil];
+    [self setSiteName:nil];
+    [self setPasswordCounter:nil];
+    [self setPasswordIncrementer:nil];
     [super viewDidUnload];
 }
 
@@ -92,17 +93,23 @@
 
 - (void)updateWasAnimated:(BOOL)animated {
 
+    NSUInteger chapter = self.activeElement? 2: 1;
+    [self.helpView loadRequest:
+            [NSURLRequest requestWithURL:
+                    [NSURL URLWithString:[NSString stringWithFormat:@"#%d", chapter] relativeToURL:
+                            [[NSBundle mainBundle] URLForResource:@"help" withExtension:@"html"]]]];
+
+    [self.navigationItem setRightBarButtonItem:self.activeElement.type & OPElementTypeStored? self.editButtonItem: nil animated:animated];
+
     self.searchDisplayController.searchBar.placeholder = self.activeElement.name;
+    self.siteName.text = self.activeElement.name;
+    
+    self.passwordCounter.alpha = self.activeElement.type & OPElementTypeCalculated? 1: 0;
+    self.passwordIncrementer.alpha = self.activeElement.type & OPElementTypeCalculated? 1: 0;
 
-    self.typeLabel.text = self.activeElement? NSStringFromOPElementType(self.activeElement.type): @"";
+    [self.typeButton setTitle:NSStringFromOPElementType(self.activeElement.type)
+                     forState:UIControlStateNormal];
 
-    self.contentTextView.alpha = self.contentType.selectedSegmentIndex == OPElementContentTypeNote? 1: 0;
-    self.contentTextView.editable = self.editing && self.activeElement.type & OPElementTypeStored;
-
-    self.contentType.alpha = self.editing && self.activeElement.type & OPElementTypeStored? 1: 0;
-    self.contentType.selectedSegmentIndex = self.activeElement.contentType;
-
-    self.contentField.alpha = self.contentType.selectedSegmentIndex == OPElementContentTypePassword? 1: 0;
     self.contentField.enabled = self.editing && self.activeElement.type & OPElementTypeStored;
     self.contentField.clearButtonMode = self.contentField.enabled? UITextFieldViewModeAlways: UITextFieldViewModeNever;
     self.contentField.text = @"...";
@@ -119,7 +126,6 @@
 
 - (IBAction)didChangeContentType:(UISegmentedControl *)sender {
     
-    self.activeElement.contentType = self.contentType.selectedSegmentIndex;
     [self updateAnimated:YES];
 }
 
@@ -127,6 +133,9 @@
     
     [[UIPasteboard generalPasteboard] setValue:self.activeElement.content
                              forPasteboardType:self.activeElement.contentUTI];
+}
+
+- (IBAction)didIncrementPasswordCounter {
 }
 
 - (void)didSelectType:(OPElementType)type {
@@ -148,11 +157,6 @@
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     
     [self updateAnimated:YES];
-}
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    return NO;
 }
 
 @end

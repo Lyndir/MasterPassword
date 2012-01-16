@@ -10,6 +10,9 @@
 
 
 NSString *NSStringFromOPElementType(OPElementType type) {
+
+    if (!type)
+        return nil;
     
     switch (type) {
         case OPElementTypeCalculatedLong:

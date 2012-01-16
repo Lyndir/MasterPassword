@@ -22,82 +22,56 @@
     [Logger get].autoprintLevel = LogLevelDebug;
 }
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (void)applicationWillResignActive:(UIApplication *)application {
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *keyPhraseHash = [OPConfig get].keyPhraseHash;
-        
-        AlertViewController *keyPhraseAlert = [[AlertViewController alloc] initQuestionWithTitle:@"One Password"
-                                                                                         message:keyPhraseHash? @"Unlock with your master password:": @"Choose your master password:"
-                                                                               tappedButtonBlock:
-                                               ^(NSInteger buttonIndex, NSString *answer) {
-                                                   if (buttonIndex == 0)
-                                                       exit(0);
-                                                   
-                                                   if (![answer length]) {
-                                                       [AlertViewController showAlertWithTitle:[PearlStrings get].commonTitleError
-                                                                                       message:@"No master password entered."
-                                                                             tappedButtonBlock:
-                                                        ^(NSInteger buttonIndex) {
-                                                            exit(0);
-                                                        } cancelTitle:@"Quit" otherTitles:nil];
-                                                   }
-                                                   
-                                                   NSString *answerHash = [[answer hashWith:PearlDigestSHA1] encodeHex];
-                                                   if (keyPhraseHash) {
-                                                       if (![keyPhraseHash isEqualToString:answerHash]) {
+    if (![[OPConfig get].rememberKeyPhrase boolValue])
+        self.keyPhrase = nil;
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    
+    if (!self.keyPhrase)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSString *keyPhraseHash = [OPConfig get].keyPhraseHash;
+            
+            AlertViewController *keyPhraseAlert = [[AlertViewController alloc] initQuestionWithTitle:@"One Password"
+                                                                                             message:keyPhraseHash? @"Unlock with your master password:": @"Choose your master password:"
+                                                                                   tappedButtonBlock:
+                                                   ^(NSInteger buttonIndex, NSString *answer) {
+                                                       if (buttonIndex == 0)
+                                                           exit(0);
+                                                       
+                                                       if (![answer length]) {
                                                            [AlertViewController showAlertWithTitle:[PearlStrings get].commonTitleError
-                                                                                           message:@"Incorrect master password."
+                                                                                           message:@"No master password entered."
                                                                                  tappedButtonBlock:
                                                             ^(NSInteger buttonIndex) {
                                                                 exit(0);
                                                             } cancelTitle:@"Quit" otherTitles:nil];
-                                                           
-                                                           return;
                                                        }
-                                                   } else
-                                                       [OPConfig get].keyPhraseHash = answerHash;
-                                                   
-                                                   self.keyPhrase = answer;
-                                               } cancelTitle:@"Quit" otherTitles:@"Unlock", nil];
-        keyPhraseAlert.alertField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        keyPhraseAlert.alertField.autocorrectionType = UITextAutocorrectionTypeNo;
-        keyPhraseAlert.alertField.secureTextEntry = YES;
-        [keyPhraseAlert showAlert];
-    });
-    
-    // Override point for customization after application launch.
-    return [super application:application didFinishLaunchingWithOptions:launchOptions];
-}
-
-- (void)applicationWillResignActive:(UIApplication *)application
-{
-    /*
-     Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-     Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-     */
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
-    /*
-     Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-     If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-     */
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    /*
-     Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-     */
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    /*
-     Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-     */
+                                                       
+                                                       NSString *answerHash = [[answer hashWith:PearlDigestSHA1] encodeHex];
+                                                       if (keyPhraseHash) {
+                                                           if (![keyPhraseHash isEqualToString:answerHash]) {
+                                                               [AlertViewController showAlertWithTitle:[PearlStrings get].commonTitleError
+                                                                                               message:@"Incorrect master password."
+                                                                                     tappedButtonBlock:
+                                                                ^(NSInteger buttonIndex) {
+                                                                    exit(0);
+                                                                } cancelTitle:@"Quit" otherTitles:nil];
+                                                               
+                                                               return;
+                                                           }
+                                                       } else
+                                                           [OPConfig get].keyPhraseHash = answerHash;
+                                                       
+                                                       self.keyPhrase = answer;
+                                                   } cancelTitle:@"Quit" otherTitles:@"Unlock", nil];
+            keyPhraseAlert.alertField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            keyPhraseAlert.alertField.autocorrectionType = UITextAutocorrectionTypeNo;
+            keyPhraseAlert.alertField.secureTextEntry = YES;
+            [keyPhraseAlert showAlert];
+        });
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

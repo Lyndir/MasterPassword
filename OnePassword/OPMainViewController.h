@@ -10,16 +10,19 @@
 #import "OPElementEntity.h"
 #import "OPSearchDelegate.h"
 
-@interface OPMainViewController : UITableViewController <OPTypeDelegate, UITextFieldDelegate, UISearchBarDelegate, OPSearchResultsDelegate>
+@interface OPMainViewController : UIViewController <OPTypeDelegate, UITextFieldDelegate, UISearchBarDelegate, OPSearchResultsDelegate>
 
 @property (strong, nonatomic) OPElementEntity *activeElement;
 @property (strong, nonatomic) IBOutlet OPSearchDelegate *searchResultsController;
 @property (weak, nonatomic) IBOutlet UITextField *contentField;
-@property (weak, nonatomic) IBOutlet UITextView *contentTextView;
-@property (weak, nonatomic) IBOutlet UILabel *typeLabel;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *contentType;
+@property (weak, nonatomic) IBOutlet UIButton *typeButton;
+@property (weak, nonatomic) IBOutlet UIWebView *helpView;
+@property (weak, nonatomic) IBOutlet UILabel *siteName;
+@property (weak, nonatomic) IBOutlet UILabel *passwordCounter;
+@property (weak, nonatomic) IBOutlet UIButton *passwordIncrementer;
 
 - (IBAction)didChangeContentType:(UISegmentedControl *)sender;
-- (IBAction)didTriggerContent:(id)sender;
+- (IBAction)didTriggerContent;
+- (IBAction)didIncrementPasswordCounter;
 
 @end

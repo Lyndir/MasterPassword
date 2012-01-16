@@ -10,6 +10,7 @@
 
 @property (nonatomic, retain) NSNumber *dataStoreError;
 @property (nonatomic, retain) NSString *keyPhraseHash;
+@property (nonatomic, retain) NSNumber *rememberKeyPhrase;
 
 + (OPConfig *)get;
 
