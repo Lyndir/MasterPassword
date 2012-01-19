@@ -122,6 +122,9 @@
     
     self.contentField.enabled = NO;
     
+    if ([self.activeElement isKindOfClass:[OPElementGeneratedEntity class]])
+        self.passwordCounter.text = [NSString stringWithFormat:@"%d", ((OPElementGeneratedEntity *) self.activeElement).counter];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSString *contentDescription = self.activeElement.contentDescription;
         dispatch_async(dispatch_get_main_queue(), ^{

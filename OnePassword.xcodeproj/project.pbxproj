@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		DA007F5214B24DCD00251337 /* OPConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA007F5114B24DCD00251337 /* OPConfig.m */; };
 		DA007F5514B25EE100251337 /* ciphers.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA007F5414B25EE100251337 /* ciphers.plist */; };
-		DA007F5614B26EFA00251337 /* Pearl.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAC77CD41482AAD600BCF976 /* Pearl.strings */; };
 		DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */; };
 		DA0A848C14C4DFCB0090EA8E /* OPElementGeneratedEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0A848B14C4DFCB0090EA8E /* OPElementGeneratedEntity.m */; };
 		DA0B951114C2D69E001D4EB1 /* help.html in Resources */ = {isa = PBXBuildFile; fileRef = DA0B951014C2D69E001D4EB1 /* help.html */; };
@@ -375,6 +374,7 @@
 		DA5DB7A814BE4B4B002DD256 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5DB7A714BE4B4B002DD256 /* Default@2x.png */; };
 		DA7659AF14C5E22E00769249 /* Square-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7659AD14C5E22E00769249 /* Square-bottom.png */; };
 		DA7659B014C5E22E00769249 /* Square-top.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7659AE14C5E22E00769249 /* Square-top.png */; };
+		DA7974C114C8C69F00A71457 /* Pearl.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAC77CD41482AAD600BCF976 /* Pearl.strings */; };
 		DAC6325E1486805C0075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC6326D148680650075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC63277148680700075AEA5 /* libuicolor-utilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */; };
@@ -1027,7 +1027,7 @@
 		DAC77CD01482AAD600BCF976 /* PearlStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlStrings.h; sourceTree = "<group>"; };
 		DAC77CD11482AAD600BCF976 /* PearlStrings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlStrings.m; sourceTree = "<group>"; };
 		DAC77CD21482AAD600BCF976 /* Resettable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Resettable.h; sourceTree = "<group>"; };
-		DAC77CD51482AAD600BCF976 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Pearl.strings; sourceTree = "<group>"; };
+		DAC77CD51482AAD600BCF976 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Pearl.strings; sourceTree = "<group>"; };
 		DAC77CD61482AAD600BCF976 /* Strings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Strings.h; sourceTree = "<group>"; };
 		DAC77CD71482AAD600BCF976 /* Strings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Strings.m; sourceTree = "<group>"; };
 		DAC77CD81482AAD600BCF976 /* StringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringUtils.h; sourceTree = "<group>"; };
@@ -4200,7 +4200,6 @@
 				DA5BFA5E147E415C00F98B1E /* MainStoryboard_iPhone.storyboard in Resources */,
 				DA5BFA61147E415C00F98B1E /* MainStoryboard_iPad.storyboard in Resources */,
 				DA007F5514B25EE100251337 /* ciphers.plist in Resources */,
-				DA007F5614B26EFA00251337 /* Pearl.strings in Resources */,
 				DA5DB7A614BE4B19002DD256 /* Default.png in Resources */,
 				DA5DB7A814BE4B4B002DD256 /* Default@2x.png in Resources */,
 				DAE998D214C1D2A0002D7C22 /* Content-Backdrop.png in Resources */,
@@ -4681,6 +4680,7 @@
 				DA7659AF14C5E22E00769249 /* Square-bottom.png in Resources */,
 				DA7659B014C5E22E00769249 /* Square-top.png in Resources */,
 				DADC3C4D14C62B350091CB4D /* Settings.bundle in Resources */,
+				DA7974C114C8C69F00A71457 /* Pearl.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
