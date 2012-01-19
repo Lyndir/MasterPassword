@@ -8,10 +8,10 @@
 
 #import "OPSearchDelegate.h"
 #import "OPAppDelegate.h"
+#import "OPElementGeneratedEntity.h"
 
 @interface OPSearchDelegate (Private)
 
-- (NSManagedObjectContext *)managedObjectContext;
 - (void)update;
 
 @end
@@ -21,41 +21,47 @@
 @synthesize delegate;
 @synthesize searchDisplayController;
 
-- (NSManagedObjectContext *)managedObjectContext {
-
-    return [(OPAppDelegate *)[UIApplication sharedApplication].delegate managedObjectContext];
+- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
+    
+    self.searchDisplayController.searchBar.text = @"";
+    self.searchDisplayController.searchBar.prompt = @"Enter the site's domain name (eg. apple.com):";
+    [self update];
 }
 
-- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
+- (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
+    
+    self.searchDisplayController.searchBar.prompt = nil;
+}
 
-    [self.searchDisplayController.searchResultsTableView setEditing:self.searchDisplayController.searchContentsController.editing animated:NO];
-    [self update];
+- (void)searchDisplayController:(UISearchDisplayController *)controller willShowSearchResultsTableView:(UITableView *)tableView {
+    
+    [tableView setEditing:self.searchDisplayController.searchContentsController.editing animated:NO];
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
-
+    
     [self update];
-
+    
     return YES;
 }
 
 - (void)update {
-
+    
     NSString *text = self.searchDisplayController.searchBar.text;
     if (!text)
         text = @"";
-
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([OPElementEntity class])];
     [fetchRequest setSortDescriptors:
-            [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]]];
+     [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]]];
     [fetchRequest setPredicate:
-            [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", text]];
-
+     [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", text]];
+    
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                        managedObjectContext:[self managedObjectContext]
+                                                                        managedObjectContext:[OPAppDelegate managedObjectContext]
                                                                           sectionNameKeyPath:nil cacheName:nil];
     self.fetchedResultsController.delegate = self;
-
+    
     NSError *error;
     if (![self.fetchedResultsController performFetch:&error])
         err(@"Couldn't fetch elements: %@", error);
@@ -151,7 +157,7 @@
         cell.detailTextLabel.text = @"New";
     } else {
         OPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
-
+        
         cell.textLabel.text = element.name;
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", element.uses];
     }
@@ -162,8 +168,8 @@
     OPElementEntity *element;
     indexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section - 1];
     if (indexPath.section == -1) {
-        element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([OPElementEntity class])
-                                                inManagedObjectContext:[self managedObjectContext]];
+        element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([OPElementGeneratedEntity class])
+                                                inManagedObjectContext:[OPAppDelegate managedObjectContext]];
         element.name = self.searchDisplayController.searchBar.text;
     } else
         element = [self.fetchedResultsController objectAtIndexPath:indexPath];
@@ -190,13 +196,13 @@
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    
     indexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section - 1];
-
+    
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         OPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
-
-        [[self managedObjectContext] deleteObject:element];
+        
+        [[OPAppDelegate managedObjectContext] deleteObject:element];
     }
 }
 

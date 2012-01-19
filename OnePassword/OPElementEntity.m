@@ -7,7 +7,6 @@
 //
 
 #import "OPElementEntity.h"
-#import "OPAppDelegate.h"
 
 
 @implementation OPElementEntity
@@ -27,14 +26,7 @@
 
 - (id)content {
     
-    if (![self.name length])
-        return nil;
-    
-    if (self.type & OPElementTypeCalculated)
-        return OPCalculateContent(self.type, self.name, [OPAppDelegate get].keyPhrase);
-
-    @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                   reason:[NSString stringWithFormat:@"Unsupported type: %d", self.type] userInfo:nil];
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Content implementation missing." userInfo:nil];
 }
 
 - (NSString *)contentDescription {

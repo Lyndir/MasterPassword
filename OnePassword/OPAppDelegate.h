@@ -16,6 +16,7 @@
 @property (strong, nonatomic) NSString *keyPhrase;
 
 + (OPAppDelegate *)get;
++ (NSManagedObjectContext *)managedObjectContext;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

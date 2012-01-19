@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="872" systemVersion="11C74" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="OPElementEntity" representedClassName="OPElementEntity" syncable="YES">
+    <entity name="OPElementEntity" representedClassName="OPElementEntity" isAbstract="YES" syncable="YES">
         <attribute name="contentType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="contentUTI" attributeType="String" defaultValueString="public.plain-text" syncable="YES"/>
         <attribute name="lastUsed" attributeType="Date" syncable="YES"/>
@@ -8,12 +8,16 @@
         <attribute name="type" attributeType="Integer 16" defaultValueString="257" syncable="YES"/>
         <attribute name="uses" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
     </entity>
+    <entity name="OPElementGeneratedEntity" representedClassName="OPElementGeneratedEntity" parentEntity="OPElementEntity" syncable="YES">
+        <attribute name="counter" optional="YES" attributeType="Integer 16" defaultValueString="1" syncable="YES"/>
+    </entity>
     <entity name="OPElementStoredEntity" representedClassName="OPElementStoredEntity" parentEntity="OPElementEntity" syncable="YES">
-        <attribute name="contentObject" attributeType="Transformable" storedInTruthFile="YES" syncable="YES"/>
+        <attribute name="contentObject" optional="YES" attributeType="Transformable" storedInTruthFile="YES" syncable="YES"/>
     </entity>
     <fetchRequest name="OPSearchElement" entity="OPElementEntity" predicateString="name BEGINSWITH &quot;$query&quot;"/>
     <elements>
         <element name="OPElementEntity" positionX="160" positionY="192" width="128" height="135"/>
-        <element name="OPElementStoredEntity" positionX="160" positionY="192" width="128" height="75"/>
+        <element name="OPElementGeneratedEntity" positionX="160" positionY="192" width="128" height="60"/>
+        <element name="OPElementStoredEntity" positionX="160" positionY="192" width="128" height="60"/>
     </elements>
 </model>

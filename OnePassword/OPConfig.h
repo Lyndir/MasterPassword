@@ -9,8 +9,9 @@
 @interface OPConfig : Config
 
 @property (nonatomic, retain) NSNumber *dataStoreError;
-@property (nonatomic, retain) NSString *keyPhraseHash;
+@property (nonatomic, retain) NSNumber *storeKeyPhrase;
 @property (nonatomic, retain) NSNumber *rememberKeyPhrase;
+@property (nonatomic, retain) NSNumber *helpHidden;
 
 + (OPConfig *)get;
 

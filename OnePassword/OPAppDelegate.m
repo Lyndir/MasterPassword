@@ -10,6 +10,13 @@
 
 #import "OPMainViewController.h"
 
+@interface OPAppDelegate ()
+
++ (NSDictionary *)keyPhraseQuery;
++ (NSDictionary *)keyPhraseHashQuery;
+
+@end
+
 @implementation OPAppDelegate
 
 @synthesize managedObjectContext = __managedObjectContext;
@@ -22,26 +29,63 @@
     [Logger get].autoprintLevel = LogLevelDebug;
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application {
++ (NSDictionary *)keyPhraseQuery {
     
-    if (![[OPConfig get].rememberKeyPhrase boolValue])
-        self.keyPhrase = nil;
+    static NSDictionary *OPKeyPhraseQuery = nil;
+    if (!OPKeyPhraseQuery)
+        OPKeyPhraseQuery = [KeyChain createQueryForClass:kSecClassGenericPassword
+                                              attributes:[NSDictionary dictionaryWithObject:@"MasterKeyPhrase"
+                                                                                     forKey:(__bridge id)kSecAttrService]
+                                                 matches:nil];
+    
+    return OPKeyPhraseQuery;
+}
+
++ (NSDictionary *)keyPhraseHashQuery {
+    
+    static NSDictionary *OPKeyPhraseHashQuery = nil;
+    if (!OPKeyPhraseHashQuery)
+        OPKeyPhraseHashQuery = [KeyChain createQueryForClass:kSecClassGenericPassword
+                                                  attributes:[NSDictionary dictionaryWithObject:@"MasterKeyPhraseHash"
+                                                                                         forKey:(__bridge id)kSecAttrService]
+                                                     matches:nil];
+    
+    return OPKeyPhraseHashQuery;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
-    if (!self.keyPhrase)
+    if ([[OPConfig get].storeKeyPhrase boolValue]) {
+        // Key phrase is stored in keychain.  Load it.
+        dbg(@"Loading master key phrase from key chain.");
+        NSData *keyPhraseData = [KeyChain dataOfItemForQuery:[OPAppDelegate keyPhraseQuery]];
+        dbg(@" -> Master key phrase %@.", keyPhraseData? @"found": @"NOT found");
+        
+        self.keyPhrase = keyPhraseData? [[NSString alloc] initWithBytes:keyPhraseData.bytes length:keyPhraseData.length
+                                                               encoding:NSUTF8StringEncoding]: nil;
+    } else {
+        // Key phrase should not be stored in keychain.  Delete it.
+        dbg(@"Deleting master key phrase from key chain.");
+        [KeyChain deleteItemForQuery:[OPAppDelegate keyPhraseQuery]];
+    }
+    
+    if (!self.keyPhrase) {
+        // Key phrase is not known.  Ask user to set/specify it.
+        dbg(@"Key phrase not known.  Will ask user.");
+        
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSString *keyPhraseHash = [OPConfig get].keyPhraseHash;
+            NSData *keyPhraseHash = [KeyChain dataOfItemForQuery:[OPAppDelegate keyPhraseHashQuery]];
+            dbg(@"Key phrase hash %@.", keyPhraseHash? @"known": @"NOT known");
             
             AlertViewController *keyPhraseAlert = [[AlertViewController alloc] initQuestionWithTitle:@"One Password"
                                                                                              message:keyPhraseHash? @"Unlock with your master password:": @"Choose your master password:"
                                                                                    tappedButtonBlock:
                                                    ^(NSInteger buttonIndex, NSString *answer) {
-                                                       if (buttonIndex == 0)
+                                                       if (!buttonIndex)
                                                            exit(0);
                                                        
                                                        if (![answer length]) {
+                                                           // User didn't enter a key phrase.
                                                            [AlertViewController showAlertWithTitle:[PearlStrings get].commonTitleError
                                                                                            message:@"No master password entered."
                                                                                  tappedButtonBlock:
@@ -50,9 +94,13 @@
                                                             } cancelTitle:@"Quit" otherTitles:nil];
                                                        }
                                                        
-                                                       NSString *answerHash = [[answer hashWith:PearlDigestSHA1] encodeHex];
-                                                       if (keyPhraseHash) {
-                                                           if (![keyPhraseHash isEqualToString:answerHash]) {
+                                                       NSData *answerHash = [answer hashWith:PearlDigestSHA512];
+                                                       if (keyPhraseHash)
+                                                           // A key phrase hash is known -> a key phrase is set.
+                                                           // Make sure the user's entered key phrase matches it.
+                                                           if (![keyPhraseHash isEqual:answerHash]) {
+                                                               dbg(@"Key phrase hash mismatch. Expected: %@, answer: %@.", keyPhraseHash, answerHash);
+                                                               
                                                                [AlertViewController showAlertWithTitle:[PearlStrings get].commonTitleError
                                                                                                message:@"Incorrect master password."
                                                                                      tappedButtonBlock:
@@ -62,16 +110,23 @@
                                                                
                                                                return;
                                                            }
-                                                       } else
-                                                           [OPConfig get].keyPhraseHash = answerHash;
                                                        
                                                        self.keyPhrase = answer;
                                                    } cancelTitle:@"Quit" otherTitles:@"Unlock", nil];
             keyPhraseAlert.alertField.autocapitalizationType = UITextAutocapitalizationTypeNone;
             keyPhraseAlert.alertField.autocorrectionType = UITextAutocorrectionTypeNo;
+            keyPhraseAlert.alertField.enablesReturnKeyAutomatically = YES;
+            keyPhraseAlert.alertField.returnKeyType = UIReturnKeyGo;
             keyPhraseAlert.alertField.secureTextEntry = YES;
             [keyPhraseAlert showAlert];
         });
+    }
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+    
+    if (![[OPConfig get].rememberKeyPhrase boolValue])
+        self.keyPhrase = nil;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -83,6 +138,11 @@
 + (OPAppDelegate *)get {
     
     return (OPAppDelegate *)[super get];
+}
+
++ (NSManagedObjectContext *)managedObjectContext{
+    
+    return [(OPAppDelegate *)[UIApplication sharedApplication].delegate managedObjectContext];
 }
 
 - (void)saveContext
@@ -97,6 +157,25 @@
         err(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     } 
+}
+
+- (void)setKeyPhrase:(NSString *)keyPhrase {
+    
+    _keyPhrase = keyPhrase;
+    
+    if (keyPhrase) {
+        NSData *keyPhraseHash = [keyPhrase hashWith:PearlDigestSHA512];
+        dbg(@"Updating master key phrase hash to: %@.", keyPhraseHash);
+        [KeyChain addOrUpdateItemForQuery:[OPAppDelegate keyPhraseHashQuery]
+                           withAttributes:[NSDictionary dictionaryWithObject:keyPhraseHash
+                                                                      forKey:(__bridge id)kSecValueData]];
+        if ([[OPConfig get].storeKeyPhrase boolValue]) {
+            dbg(@"Storing master key phrase in key chain.");
+            [KeyChain addOrUpdateItemForQuery:[OPAppDelegate keyPhraseQuery]
+                               withAttributes:[NSDictionary dictionaryWithObject:[keyPhrase dataUsingEncoding:NSUTF8StringEncoding]
+                                                                          forKey:(__bridge id)kSecValueData]];
+        }
+    }
 }
 
 #pragma mark - Core Data stack

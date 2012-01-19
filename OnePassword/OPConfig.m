@@ -10,18 +10,19 @@
 
 @implementation OPConfig
 
-@dynamic dataStoreError, keyPhraseHash, rememberKeyPhrase;
+@dynamic dataStoreError, storeKeyPhrase, rememberKeyPhrase, helpHidden;
 
 
--(id) init {
+- (id)init {
     
     if(!(self = [super init]))
         return self;
     
     [self.defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
                                      [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(dataStoreError)),
+                                     [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(storeKeyPhrase)),
                                      [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(rememberKeyPhrase)),
-                                     
+                                     [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(helpHidden)),
                                      nil]];
     
     return self;

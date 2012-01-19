@@ -31,4 +31,5 @@ typedef enum {
 } OPElementType;
 
 NSString *NSStringFromOPElementType(OPElementType type);
-NSString *OPCalculateContent(OPElementType type, NSString *name, NSString *keyPhrase);
+Class ClassForOPElementType(OPElementType type);
+NSString *OPCalculateContent(OPElementType type, NSString *name, NSString *keyPhrase, int counter);

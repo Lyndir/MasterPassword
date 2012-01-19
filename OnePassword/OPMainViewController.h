@@ -20,9 +20,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *siteName;
 @property (weak, nonatomic) IBOutlet UILabel *passwordCounter;
 @property (weak, nonatomic) IBOutlet UIButton *passwordIncrementer;
+@property (weak, nonatomic) IBOutlet UIButton *passwordEdit;
+@property (weak, nonatomic) IBOutlet UIView *contentContainer;
+@property (weak, nonatomic) IBOutlet UIView *helpContainer;
 
-- (IBAction)didChangeContentType:(UISegmentedControl *)sender;
-- (IBAction)didTriggerContent;
-- (IBAction)didIncrementPasswordCounter;
+- (IBAction)copyContent;
+- (IBAction)incrementPasswordCounter;
+- (IBAction)editPassword;
+- (IBAction)toggleHelp;
+- (void)toggleHelp:(BOOL)hidden;
 
 @end
