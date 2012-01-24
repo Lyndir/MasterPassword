@@ -25,8 +25,11 @@
 @synthesize keyPhrase = _keyPhrase;
 
 + (void)initialize {
-    
+
+#ifdef DEBUG
     [Logger get].autoprintLevel = LogLevelDebug;
+    [NSClassFromString(@"WebView") performSelector:@selector(_enableRemoteInspector)];
+#endif
 }
 
 + (NSDictionary *)keyPhraseQuery {
@@ -53,6 +56,62 @@
     return OPKeyPhraseHashQuery;
 }
 
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    UIImage *navBarImage = [[UIImage imageNamed:@"ui_navbar_container"]  resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
+    [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsLandscapePhone];
+    [[UINavigationBar appearance] setTitleTextAttributes:
+     [NSDictionary dictionaryWithObjectsAndKeys:
+      [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0],  UITextAttributeTextColor,
+      [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8],                          UITextAttributeTextShadowColor, 
+      [NSValue valueWithUIOffset:UIOffsetMake(0, -1)],                                  UITextAttributeTextShadowOffset, 
+      [UIFont fontWithName:@"Helvetica-Neue" size:0.0],                                 UITextAttributeFont, 
+      nil]];
+    
+    UIImage *navBarButton   = [[UIImage imageNamed:@"ui_navbar_button"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
+    UIImage *navBarBack     = [[UIImage imageNamed:@"ui_navbar_back"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 13, 0, 5)];
+    [[UIBarButtonItem appearance] setBackgroundImage:navBarButton forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [[UIBarButtonItem appearance] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
+    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:navBarBack forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:
+     [NSDictionary dictionaryWithObjectsAndKeys:
+      [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0],                          UITextAttributeTextColor,
+      [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.5],                          UITextAttributeTextShadowColor,
+      [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],                                   UITextAttributeTextShadowOffset,
+      [UIFont fontWithName:@"Helvetica-Neue" size:0.0],                                 UITextAttributeFont,
+      nil]
+                                                forState:UIControlStateNormal];
+
+    UIImage *toolBarImage = [[UIImage imageNamed:@"ui_toolbar_container"]  resizableImageWithCapInsets:UIEdgeInsetsMake(25, 5, 5, 5)];
+    [[UISearchBar appearance] setBackgroundImage:toolBarImage];
+    [[UIToolbar appearance] setBackgroundImage:toolBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+    
+    /*
+    UIImage *minImage = [[UIImage imageNamed:@"slider-minimum.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
+    UIImage *maxImage = [[UIImage imageNamed:@"slider-maximum.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
+    UIImage *thumbImage = [UIImage imageNamed:@"slider-handle.png"];
+    
+    [[UISlider appearance] setMaximumTrackImage:maxImage forState:UIControlStateNormal];
+    [[UISlider appearance] setMinimumTrackImage:minImage forState:UIControlStateNormal];
+    [[UISlider appearance] setThumbImage:thumbImage forState:UIControlStateNormal];
+    
+    UIImage *segmentSelected = [[UIImage imageNamed:@"segcontrol_sel.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];
+    UIImage *segmentUnselected = [[UIImage imageNamed:@"segcontrol_uns.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 15)];
+    UIImage *segmentSelectedUnselected = [UIImage imageNamed:@"segcontrol_sel-uns.png"];
+    UIImage *segUnselectedSelected = [UIImage imageNamed:@"segcontrol_uns-sel.png"];
+    UIImage *segmentUnselectedUnselected = [UIImage imageNamed:@"segcontrol_uns-uns.png"];
+    
+    [[UISegmentedControl appearance] setBackgroundImage:segmentUnselected forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [[UISegmentedControl appearance] setBackgroundImage:segmentSelected forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
+    
+    [[UISegmentedControl appearance] setDividerImage:segmentUnselectedUnselected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [[UISegmentedControl appearance] setDividerImage:segmentSelectedUnselected forLeftSegmentState:UIControlStateSelected rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [[UISegmentedControl appearance] setDividerImage:segUnselectedSelected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateSelected barMetrics:UIBarMetricsDefault];*/
+    
+    return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
     if ([[OPConfig get].storeKeyPhrase boolValue]) {
@@ -140,9 +199,14 @@
     return (OPAppDelegate *)[super get];
 }
 
-+ (NSManagedObjectContext *)managedObjectContext{
++ (NSManagedObjectContext *)managedObjectContext {
     
     return [(OPAppDelegate *)[UIApplication sharedApplication].delegate managedObjectContext];
+}
+
++ (NSManagedObjectModel *)managedObjectModel {
+    
+    return [(OPAppDelegate *)[UIApplication sharedApplication].delegate managedObjectModel];
 }
 
 - (void)saveContext

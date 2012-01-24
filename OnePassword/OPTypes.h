@@ -15,21 +15,22 @@ typedef enum {
 } OPElementContentType;
 
 typedef enum {
-    OPElementTypeCalculated = 2 << 7,
-    OPElementTypeStored     = 2 << 8,
+    OPElementTypeClassCalculated = 2 << 7,
+    OPElementTypeClassStored     = 2 << 8,
 } OPElementTypeClass;
 
 typedef enum {
-    OPElementTypeCalculatedLong         = OPElementTypeCalculated   | 0x01,
-    OPElementTypeCalculatedMedium       = OPElementTypeCalculated   | 0x02,
-    OPElementTypeCalculatedShort        = OPElementTypeCalculated   | 0x03,
-    OPElementTypeCalculatedBasic        = OPElementTypeCalculated   | 0x04,
-    OPElementTypeCalculatedPIN          = OPElementTypeCalculated   | 0x05,
+    OPElementTypeCalculatedLong         = OPElementTypeClassCalculated  | 0x01,
+    OPElementTypeCalculatedMedium       = OPElementTypeClassCalculated  | 0x02,
+    OPElementTypeCalculatedShort        = OPElementTypeClassCalculated  | 0x03,
+    OPElementTypeCalculatedBasic        = OPElementTypeClassCalculated  | 0x04,
+    OPElementTypeCalculatedPIN          = OPElementTypeClassCalculated  | 0x05,
     
-    OPElementTypeStoredPersonal         = OPElementTypeStored       | 0x01,
-    OPElementTypeStoredDevicePrivate    = OPElementTypeStored       | 0x02,
+    OPElementTypeStoredPersonal         = OPElementTypeClassStored      | 0x01,
+    OPElementTypeStoredDevicePrivate    = OPElementTypeClassStored      | 0x02,
 } OPElementType;
 
 NSString *NSStringFromOPElementType(OPElementType type);
-Class ClassForOPElementType(OPElementType type);
+NSString *ClassNameFromOPElementType(OPElementType type);
+Class ClassFromOPElementType(OPElementType type);
 NSString *OPCalculateContent(OPElementType type, NSString *name, NSString *keyPhrase, int counter);

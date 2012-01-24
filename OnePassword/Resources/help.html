@@ -17,35 +17,57 @@
             h2 {
                 font-size: inherit;
             }
+            i {
+                font-weight: bold;
+            }
+            img {
+                display: inline-block;
+                height: 1.4em;
+                margin: -0.2em 0;
+                vertical-align: middle;
+            }
         </style>
+        <script src="jquery-1.6.1.min.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            function setClass(activeClass) {
+                $(".Class").css("display", "none");
+                $(".Class." + activeClass).css("display", "block");
+            }
+        </script>
     </head>
     <body>
-        <h1>One Password</h1>
-        <h2>by Lyndir</h2>
+        <h1 onclick="setClass('OPElementStoredEntity')">One Password</h1>
+        <h2 onclick="setClass('OPElementGeneratedEntity')">by Lyndir</h2>
 
         <h2 id="1">&mdash; 1 &mdash;</h2>
         <p>
             <b>Find the site</b> that you need a password for by entering it into the <i>search field</i>.
         </p>
         <p>
-            <b>While searching</b>, previously used sites will show up along with a <i>usage counter</i>.
-            The counter shows how many times you've generated a password for the site.
+            <b>While searching</b>, previously used sites will show up along with a <i>usage counter</i>.<br />
+            The counter indicates the amount of times you've generated a password for that site.
         </p>
         
         <h2 id="2">&mdash; 2 &mdash;</h2>
         <p>
-            <b>The site</b>'s password is now displayed.
+            <b>The site</b>'s password is now displayed.<br />
+            Tap it to <i>copy the password</i>.  Once copied, you can switch to another application and paste it into a password field.
+        </p>
+        
+        <p class="Class OPElementStoredEntity">
+            <b>To change</b> the password for this site, tap the <i>edit icon</i> <img src="icon_edit.png" />.
         </p>
         <p>
-            <b>Below it</b> you can set the site's <i>password type</i>.  Some types <i>auto-generate</i> a password,
+            <b>Below the password</b> you can set the <i>password type</i>.  Some types <i>create a password for you</i>,
             others let you <i>choose your own</i>.
         </p>
-        <p>
-            <b>If your new password</b> is not deemed <q>valid</q> by the site, try changing the password type.
+        <p class="Class OPElementGeneratedEntity">
+            <b>If the site complains</b> when you try to set or update the password, try changing the password type.
         </p>
-        <p>
-            <b>To generate a new password</b> for the site, you can increment the site's <i>password counter</i>.
-            Do this when, for instance, you've had to share the password with somebody else.
+        
+        <p class="Class OPElementGeneratedEntity">
+            <b>To create another</b> password for this site, you can increment the <i>password counter</i> <img src="icon_plus.png" />.
+            This is useful, for example, when you've had to share the password with somebody else.
         </p>
         
     </body>

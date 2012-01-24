@@ -15,7 +15,7 @@
 
 - (id)content {
     
-    assert(self.type & OPElementTypeStored);
+    assert(self.type & OPElementTypeClassStored);
 
     return self.contentObject;
 }

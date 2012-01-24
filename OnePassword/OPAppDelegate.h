@@ -17,6 +17,7 @@
 
 + (OPAppDelegate *)get;
 + (NSManagedObjectContext *)managedObjectContext;
++ (NSManagedObjectModel *)managedObjectModel;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

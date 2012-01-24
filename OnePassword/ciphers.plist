@@ -4,22 +4,22 @@
 <dict>
 	<key>OPElementTypeCalculated</key>
 	<dict>
-		<key>Long</key>
+		<key>Long Password</key>
 		<array>
 			<string>CvcvCvcvnoCvcv</string>
 			<string>CvcvnoCvcvCvcv</string>
 			<string>CvcvCvcvCvcvno</string>
 		</array>
-		<key>Medium</key>
+		<key>Medium Password</key>
 		<array>
 			<string>CvcnoCvc</string>
 			<string>CvcCvcno</string>
 		</array>
-		<key>Short</key>
+		<key>Short Password</key>
 		<array>
 			<string>Cvcn</string>
 		</array>
-		<key>Basic</key>
+		<key>Basic Password</key>
 		<array>
 			<string>aaanaaan</string>
 			<string>aannaaan</string>

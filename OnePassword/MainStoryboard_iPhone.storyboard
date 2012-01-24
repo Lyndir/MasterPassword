@@ -13,14 +13,19 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="aNa-wb-cYK">
+                            <rect key="frame" x="0.0" y="588" width="320" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
                         <sections>
                             <tableViewSection id="gUv-FU-O36">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="144" id="NCB-rX-weq">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="144"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="204" id="NCB-rX-weq">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="204"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="143"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="203"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Generated" lineBreakMode="tailTruncation" minimumFontSize="10" id="azh-GA-KA1">
@@ -29,34 +34,40 @@
                                                     <fontDescription key="fontDescription" name="GillSans-Bold" family="Gill Sans" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
-                                                    <color key="shadowColor" cocoaTouchSystemColor="lightTextColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="list_first.png" highlightedImage="list_first_active.png" id="WXs-ZQ-JuJ">
-                                                    <rect key="frame" x="10" y="100" width="300" height="44"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_first.png" id="WXs-ZQ-JuJ">
+                                                    <rect key="frame" x="10" y="160" width="300" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                    <rect key="contentStretch" x="0.050000000000000003" y="0.050000000000000003" width="0.89999999999999991" height="0.89999999999999991"/>
+                                                    <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Long" lineBreakMode="tailTruncation" minimumFontSize="10" id="QIm-RX-xY7">
-                                                    <rect key="frame" x="20" y="100" width="280" height="24"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Long Password" lineBreakMode="tailTruncation" minimumFontSize="10" id="QIm-RX-xY7">
+                                                    <rect key="frame" x="20" y="160" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="18"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Word-like, 14 characters, contains symbols." lineBreakMode="tailTruncation" minimumFontSize="10" id="6iu-aM-lJA">
-                                                    <rect key="frame" x="20" y="124" width="280" height="20"/>
+                                                    <rect key="frame" x="20" y="184" width="280" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="GillSans-Light" family="Gill Sans" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="These types need only your master password. Nothing is stored, so nothing to loose or have stolen." lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" id="E4a-XS-Qlz">
-                                                    <rect key="frame" x="23" y="49" width="280" height="43"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" id="E4a-XS-Qlz">
+                                                    <rect key="frame" x="23" y="49" width="280" height="112"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <string key="text">These types create a safe password for your site.
+The passwords aren't saved anywhere.  This is a major advantage: if you loose your device, your passwords cannot be stolen.  You can use any other device to get all your passwords back, no need for restoring backups or any other pains.</string>
                                                     <fontDescription key="fontDescription" name="GillSans-LightItalic" family="Gill Sans" pointSize="14"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
-                                                    <color key="shadowColor" cocoaTouchSystemColor="lightTextColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -64,25 +75,27 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="re0-ZT-bnP">
-                                        <rect key="frame" x="0.0" y="144" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="204" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="list_middle.png" highlightedImage="list_middle_active.png" id="EWy-Eb-L5p">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_middle.png" id="EWy-Eb-L5p">
                                                     <rect key="frame" x="10" y="0.0" width="300" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <rect key="contentStretch" x="0.050000000000000003" y="0.050000000000000003" width="0.89999999999999991" height="0.89999999999999991"/>
+                                                    <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Medium" lineBreakMode="tailTruncation" minimumFontSize="10" id="5NA-XX-th4">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Medium Password" lineBreakMode="tailTruncation" minimumFontSize="10" id="5NA-XX-th4">
                                                     <rect key="frame" x="20" y="0.0" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="18"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Word-like, 8 characters." lineBreakMode="tailTruncation" minimumFontSize="10" id="MI2-JM-j4b">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Word-like, 8 characters, contains symbols." lineBreakMode="tailTruncation" minimumFontSize="10" id="MI2-JM-j4b">
                                                     <rect key="frame" x="20" y="24" width="280" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="GillSans-Light" family="Gill Sans" pointSize="14"/>
@@ -95,23 +108,25 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="4pb-c9-i2D">
-                                        <rect key="frame" x="0.0" y="188" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="248" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="list_middle.png" highlightedImage="list_middle_active.png" id="Jqw-h1-g2X">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_middle.png" id="Jqw-h1-g2X">
                                                     <rect key="frame" x="10" y="0.0" width="300" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <rect key="contentStretch" x="0.050000000000000003" y="0.050000000000000003" width="0.89999999999999991" height="0.89999999999999991"/>
+                                                    <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Short" lineBreakMode="tailTruncation" minimumFontSize="10" id="iqW-mf-H1R">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Short Password" lineBreakMode="tailTruncation" minimumFontSize="10" id="iqW-mf-H1R">
                                                     <rect key="frame" x="20" y="0.0" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="18"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Word-like, 4 characters." lineBreakMode="tailTruncation" minimumFontSize="10" id="Zi3-26-3iq">
                                                     <rect key="frame" x="20" y="24" width="280" height="20"/>
@@ -126,23 +141,25 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="ywW-4w-Wej">
-                                        <rect key="frame" x="0.0" y="232" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="292" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="list_middle.png" highlightedImage="list_middle_active.png" id="Son-EL-Drx">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_middle.png" id="Son-EL-Drx">
                                                     <rect key="frame" x="10" y="0.0" width="300" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <rect key="contentStretch" x="0.050000000000000003" y="0.050000000000000003" width="0.89999999999999991" height="0.89999999999999991"/>
+                                                    <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Basic" lineBreakMode="tailTruncation" minimumFontSize="10" id="Pim-A8-aib">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Basic Password" lineBreakMode="tailTruncation" minimumFontSize="10" id="Pim-A8-aib">
                                                     <rect key="frame" x="20" y="0.0" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="18"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="8 characters." lineBreakMode="tailTruncation" minimumFontSize="10" id="CYQ-D8-vNS">
                                                     <rect key="frame" x="20" y="24" width="280" height="20"/>
@@ -157,16 +174,16 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="5p5-OD-zpn">
-                                        <rect key="frame" x="0.0" y="276" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="336" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="list_last.png" highlightedImage="list_last_active.png" id="5nI-rL-CoO">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_last.png" id="5nI-rL-CoO">
                                                     <rect key="frame" x="10" y="0.0" width="300" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <rect key="contentStretch" x="0.050000000000000003" y="0.050000000000000003" width="0.89999999999999991" height="0.89999999999999991"/>
+                                                    <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="PIN" lineBreakMode="tailTruncation" minimumFontSize="10" id="Yu2-5k-AwW">
                                                     <rect key="frame" x="20" y="0.0" width="280" height="24"/>
@@ -174,6 +191,8 @@
                                                     <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="18"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="4 numbers." lineBreakMode="tailTruncation" minimumFontSize="10" id="5Zm-AH-bAe">
                                                     <rect key="frame" x="20" y="24" width="280" height="20"/>
@@ -191,43 +210,48 @@
                             </tableViewSection>
                             <tableViewSection id="Jqk-Jl-vVm">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="144" id="OK2-fa-fDw">
-                                        <rect key="frame" x="0.0" y="320" width="320" height="144"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="164" id="OK2-fa-fDw">
+                                        <rect key="frame" x="0.0" y="380" width="320" height="164"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="143"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="163"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Keychain" lineBreakMode="tailTruncation" minimumFontSize="10" id="146-3h-mdD">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="User-specified" lineBreakMode="tailTruncation" minimumFontSize="10" id="146-3h-mdD">
                                                     <rect key="frame" x="20" y="20" width="280" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="GillSans-Bold" family="Gill Sans" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
-                                                    <color key="shadowColor" cocoaTouchSystemColor="lightTextColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="These types store a user-specified password in your device's keychain." lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" id="Bbk-lL-BeB">
-                                                    <rect key="frame" x="20" y="49" width="280" height="43"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" id="Bbk-lL-BeB">
+                                                    <rect key="frame" x="20" y="49" width="280" height="63"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <string key="text">If you need to specify a custom password for your site, use one of these types.  The site's password will be encrypted using your master password.</string>
                                                     <fontDescription key="fontDescription" name="GillSans-LightItalic" family="Gill Sans" pointSize="14"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
-                                                    <color key="shadowColor" cocoaTouchSystemColor="lightTextColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="list_first.png" highlightedImage="list_first_active.png" id="fxL-ee-UVP">
-                                                    <rect key="frame" x="10" y="100" width="300" height="44"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_first.png" id="fxL-ee-UVP">
+                                                    <rect key="frame" x="10" y="120" width="300" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                    <rect key="contentStretch" x="0.050000000000000003" y="0.050000000000000003" width="0.89999999999999991" height="0.89999999999999991"/>
+                                                    <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Personal" lineBreakMode="tailTruncation" minimumFontSize="10" id="kzc-rQ-74F">
-                                                    <rect key="frame" x="20" y="100" width="280" height="24"/>
+                                                    <rect key="frame" x="20" y="120" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="18"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Keychain storage, AES-encrypted." lineBreakMode="tailTruncation" minimumFontSize="10" id="vNa-Yq-XIJ">
-                                                    <rect key="frame" x="20" y="124" width="280" height="20"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="AES-encrypted, backed up with iTunes/iCloud." lineBreakMode="tailTruncation" minimumFontSize="10" id="vNa-Yq-XIJ">
+                                                    <rect key="frame" x="20" y="144" width="280" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="GillSans-Light" family="Gill Sans" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -239,16 +263,16 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="ePk-a9-aNi">
-                                        <rect key="frame" x="0.0" y="464" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="544" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="list_last.png" highlightedImage="list_last_active.png" id="PUy-Qk-CeF">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_last.png" id="PUy-Qk-CeF">
                                                     <rect key="frame" x="10" y="0.0" width="300" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <rect key="contentStretch" x="0.050000000000000003" y="0.050000000000000003" width="0.89999999999999991" height="0.89999999999999991"/>
+                                                    <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Device Private" lineBreakMode="tailTruncation" minimumFontSize="10" id="2kB-0P-FeR">
                                                     <rect key="frame" x="20" y="0.0" width="280" height="24"/>
@@ -256,90 +280,10 @@
                                                     <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="18"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Keychain storage, AES-encrypted, not backed up." lineBreakMode="tailTruncation" minimumFontSize="10" id="6S8-9Y-pzj">
-                                                    <rect key="frame" x="20" y="24" width="280" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                    <fontDescription key="fontDescription" name="GillSans-Light" family="Gill Sans" pointSize="14"/>
-                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                            <tableViewSection id="gSo-5f-umo">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="144" id="w3P-Kp-ThX">
-                                        <rect key="frame" x="0.0" y="508" width="320" height="144"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="143"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Google® Authenticator" lineBreakMode="tailTruncation" minimumFontSize="10" id="UQV-0l-m1n">
-                                                    <rect key="frame" x="20" y="20" width="280" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="GillSans-Bold" family="Gill Sans" pointSize="17"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                    <color key="shadowColor" cocoaTouchSystemColor="lightTextColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Useful for logging into your Google account or another application that supports the Google authenticator." lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" id="jYS-eD-SvL">
-                                                    <rect key="frame" x="20" y="49" width="280" height="43"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="GillSans-LightItalic" family="Gill Sans" pointSize="14"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                    <color key="shadowColor" cocoaTouchSystemColor="lightTextColor"/>
-                                                </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="list_first.png" highlightedImage="list_first_active.png" id="IEv-rr-FYK">
-                                                    <rect key="frame" x="10" y="100" width="300" height="44"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                    <rect key="contentStretch" x="0.050000000000000003" y="0.050000000000000003" width="0.89999999999999991" height="0.89999999999999991"/>
-                                                </imageView>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Time Based" lineBreakMode="tailTruncation" minimumFontSize="10" id="TsD-2p-06X">
-                                                    <rect key="frame" x="20" y="100" width="280" height="24"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                    <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="18"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Single-use, short-lived, no storage." lineBreakMode="tailTruncation" minimumFontSize="10" id="gdJ-yU-Nq1">
-                                                    <rect key="frame" x="20" y="124" width="280" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                    <fontDescription key="fontDescription" name="GillSans-Light" family="Gill Sans" pointSize="14"/>
-                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="mNd-Mf-m7b">
-                                        <rect key="frame" x="0.0" y="652" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="list_last.png" highlightedImage="list_last_active.png" id="d68-HV-PnO">
-                                                    <rect key="frame" x="10" y="0.0" width="300" height="44"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <rect key="contentStretch" x="0.050000000000000003" y="0.050000000000000003" width="0.89999999999999991" height="0.89999999999999991"/>
-                                                </imageView>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Counter Based" lineBreakMode="tailTruncation" minimumFontSize="10" id="voz-p2-qnL">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="24"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                    <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="18"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Single-use, requires storage." lineBreakMode="tailTruncation" minimumFontSize="10" id="gL8-Rf-kqz">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="AES-encrypted, not backed up." lineBreakMode="tailTruncation" minimumFontSize="10" id="6S8-9Y-pzj">
                                                     <rect key="frame" x="20" y="24" width="280" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="GillSans-Light" family="Gill Sans" pointSize="14"/>
@@ -359,7 +303,7 @@
                             <outlet property="delegate" destination="NKe-nv-566" id="O5k-hI-7Tf"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="rak-Td-wu1"/>
+                    <navigationItem key="navigationItem" title="Type" id="rak-Td-wu1"/>
                 </tableViewController>
             </objects>
             <point key="canvasLocation" x="962" y="182"/>
@@ -371,6 +315,7 @@
                     <connections>
                         <outlet property="delegate" destination="PQa-Xl-A3x" id="O2f-mW-ab8"/>
                         <outlet property="searchDisplayController" destination="P8c-gf-nN3" id="exk-dS-Ui3"/>
+                        <outlet property="searchTipContainer" destination="zOR-Du-qRL" id="lk6-2X-lIb"/>
                     </connections>
                 </customObject>
                 <searchDisplayController id="P8c-gf-nN3">
@@ -388,22 +333,23 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="top" image="Content-Backdrop.png" id="0hY-LL-ITu">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="372"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <view contentMode="scaleToFill" id="g9q-4d-ZgJ">
-                                <rect key="frame" x="0.0" y="43" width="320" height="155"/>
+                                <rect key="frame" x="0.0" y="43" width="320" height="175"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="top" image="Content-Backdrop.png" id="enb-OH-DVZ">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="155"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="175"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="top" image="Square-top.png" id="qWn-td-zdb">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="155"/>
+                                    <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleToFill" image="ui_panel_container.png" id="0Yh-Py-lB6">
+                                        <rect key="frame" x="11" y="20" width="298" height="87"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <rect key="contentStretch" x="0.050000000000000003" y="0.10000000000000001" width="0.89999999999999991" height="0.79999999999999982"/>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleToFill" image="display.png" id="0Yh-Py-lB6">
+                                    <imageView userInteractionEnabled="NO" alpha="0.80000001192092896" contentMode="scaleToFill" image="ui_panel_display.png" id="cw7-HD-Wht">
                                         <rect key="frame" x="11" y="20" width="298" height="86"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <rect key="contentStretch" x="0.050000000000000003" y="0.10000000000000001" width="0.89999999999999991" height="0.79999999999999982"/>
@@ -430,6 +376,8 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        <size key="shadowOffset" width="0.0" height="1"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="S3cre7^Pa$swcrD" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="fiX-10-fif">
                                         <rect key="frame" x="20" y="46" width="280" height="60"/>
@@ -441,34 +389,21 @@
                                             <outlet property="delegate" destination="PQa-Xl-A3x" id="qOM-gq-c6g"/>
                                         </connections>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Cei-5z-uWE">
-                                        <rect key="frame" x="11" y="119" width="299" height="35"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" title="Long" backgroundImage="list_first.png">
-                                            <color key="titleColor" cocoaTouchSystemColor="lightTextColor"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <segue destination="NKe-nv-566" kind="push" identifier="OP_Main_ChooseType" id="vw4-Vd-O6q"/>
-                                        </connections>
-                                    </button>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.50000000000000011" contentMode="left" text="1" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="Iuf-np-e9C">
                                         <rect key="frame" x="240" y="27" width="40" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="Optima-ExtraBlack" family="Optima" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        <size key="shadowOffset" width="0.0" height="1"/>
                                     </label>
                                     <button opaque="NO" alpha="0.50000000000000011" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jec-mu-nPt">
-                                        <rect key="frame" x="276" y="20" width="34" height="34"/>
+                                        <rect key="frame" x="274.5" y="18.5" width="37" height="37"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                                        <state key="normal" image="plus.png">
+                                        <state key="normal" image="icon_plus.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -480,11 +415,11 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="9FS-fS-xH6">
-                                        <rect key="frame" x="276" y="20" width="34" height="34"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <rect key="frame" x="275" y="18.5" width="37" height="37"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                                        <state key="normal" image="edit.png">
+                                        <state key="normal" image="icon_edit.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -495,24 +430,108 @@
                                             <action selector="editPassword" destination="PQa-Xl-A3x" eventType="touchUpInside" id="jZC-Jm-ZZ0"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" id="Cei-5z-uWE">
+                                        <rect key="frame" x="10" y="115" width="300" height="46"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <size key="titleShadowOffset" width="0.0" height="1"/>
+                                        <state key="normal" title="Long" backgroundImage="ui_button_standard_large.png">
+                                            <color key="titleColor" cocoaTouchSystemColor="lightTextColor"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="NKe-nv-566" kind="push" identifier="OP_Main_ChooseType" id="vw4-Vd-O6q"/>
+                                        </connections>
+                                    </button>
+                                    <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="v2m-Gf-pEV">
+                                        <rect key="frame" x="55" y="8" width="210" height="57"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="fdm-NG-GFC">
+                                                <rect key="frame" x="0.0" y="-1" width="210" height="60"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            </imageView>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Tap       to set a password." textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="ieN-QQ-PyR">
+                                                <rect key="frame" x="20" y="0.0" width="170" height="37"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_edit.png" id="KEn-n3-qhX">
+                                                <rect key="frame" x="48.5" y="6.5" width="24" height="24"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view clipsSubviews="YES" alpha="0.60000000000000009" contentMode="scaleToFill" id="61G-By-qLB">
-                                <rect key="frame" x="0.0" y="196" width="320" height="220"/>
+                                <rect key="frame" x="0.0" y="216" width="320" height="200"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="bottom" image="Square-bottom.png" id="lbm-A0-3PK">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="58"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                     </imageView>
-                                    <webView opaque="NO" contentMode="scaleToFill" id="8FQ-x4-lR9">
-                                        <rect key="frame" x="0.0" y="1" width="320" height="219"/>
+                                    <webView opaque="NO" contentMode="scaleToFill" id="8FQ-x4-lR9" customClass="DebuggableUIWebView">
+                                        <rect key="frame" x="0.0" y="1" width="320" height="199"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </webView>
                                 </subviews>
                                 <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                            </view>
+                            <view alpha="0.0" contentMode="scaleToFill" id="yRY-qt-gz8">
+                                <rect key="frame" x="10" y="250" width="300" height="150"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_alert_black.png" id="TUv-Tl-xTc">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="150"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <rect key="contentStretch" x="0.25" y="0.6499999999999998" width="0.64999999999999969" height="0.10000000000000002"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Password Changed!" lineBreakMode="tailTruncation" minimumFontSize="10" id="ZdH-we-KcW">
+                                        <rect key="frame" x="70" y="20" width="210" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="jCg-t7-RuK">
+                                        <rect key="frame" x="20" y="60" width="260" height="70"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <string key="text">The password for apple.com has changed.
+
+Don't forget to update the site with your new password! Your old password was:
+L4m3P4sSw0rD</string>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cX2-vD-vjc">
+                                        <rect key="frame" x="259" y="5" width="32" height="32"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" image="icon_cancel.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="closeAlert" destination="PQa-Xl-A3x" eventType="touchUpInside" id="oJt-DU-l38"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <searchBar contentMode="redraw" barStyle="blackOpaque" placeholder="Site" id="qeo-n2-WVh">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -523,16 +542,38 @@
                                     <outlet property="delegate" destination="PQa-Xl-A3x" id="oXp-0r-Gkl"/>
                                 </connections>
                             </searchBar>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="zOR-Du-qRL">
+                                <rect key="frame" x="55" y="-27" width="210" height="57"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="ORD-Xv-bOQ">
+                                        <rect key="frame" x="0.0" y="-1" width="210" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Enter the site's name." textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="21b-bH-lR9">
+                                        <rect key="frame" x="20" y="0.0" width="170" height="37"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_edit.png" id="4Xf-mC-295">
+                                        <rect key="frame" x="49" y="6" width="24" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.14901960784313725" green="0.16470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <navigationItem key="navigationItem" title="One Password" id="hB9-S6-KHC">
-                        <barButtonItem key="leftBarButtonItem" id="2Bg-ut-2K4">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="C1k-kx-Gcx">
-                                <rect key="frame" x="5" y="12" width="18" height="19"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <barButtonItem key="rightBarButtonItem" id="Csu-uI-sPX">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="iwA-Sh-vZO">
+                                <rect key="frame" x="283" y="6" width="32" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal">
+                                <state key="normal" image="icon_question.png">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -540,14 +581,20 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="toggleHelp" destination="PQa-Xl-A3x" eventType="touchUpInside" id="BpO-gU-wS3"/>
+                                    <action selector="toggleHelp" destination="PQa-Xl-A3x" eventType="touchUpInside" id="Ufm-QL-QUM"/>
                                 </connections>
                             </button>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="alertBody" destination="jCg-t7-RuK" id="Aru-Nr-DY0"/>
+                        <outlet property="alertContainer" destination="yRY-qt-gz8" id="gZx-90-Zgr"/>
+                        <outlet property="alertTitle" destination="ZdH-we-KcW" id="VWi-aS-HRw"/>
                         <outlet property="contentContainer" destination="g9q-4d-ZgJ" id="Hgw-Hp-FHB"/>
                         <outlet property="contentField" destination="fiX-10-fif" id="b2c-gv-qMp"/>
+                        <outlet property="contentTipBody" destination="ieN-QQ-PyR" id="flJ-gF-wbI"/>
+                        <outlet property="contentTipContainer" destination="v2m-Gf-pEV" id="9zL-GR-kyH"/>
+                        <outlet property="contentTipEditIcon" destination="KEn-n3-qhX" id="dDG-Nt-OLM"/>
                         <outlet property="helpContainer" destination="61G-By-qLB" id="Jwt-0d-ZAV"/>
                         <outlet property="helpView" destination="8FQ-x4-lR9" id="MOg-5s-kvK"/>
                         <outlet property="passwordCounter" destination="Iuf-np-e9C" id="CIm-Mk-nJh"/>
@@ -555,6 +602,7 @@
                         <outlet property="passwordIncrementer" destination="jec-mu-nPt" id="i9B-lX-zzX"/>
                         <outlet property="searchDisplayController" destination="P8c-gf-nN3" id="CLs-YI-7NC"/>
                         <outlet property="searchResultsController" destination="0QO-2P-OhD" id="xEC-gV-lHp"/>
+                        <outlet property="searchTipContainer" destination="zOR-Du-qRL" id="X7h-Vh-iCE"/>
                         <outlet property="siteName" destination="gSK-aB-wNI" id="IIe-z8-zy8"/>
                         <outlet property="typeButton" destination="Cei-5z-uWE" id="4M1-d7-5Bh"/>
                     </connections>
@@ -584,19 +632,61 @@
     <resources>
         <image name="Content-Backdrop.png" width="480" height="480"/>
         <image name="Square-bottom.png" width="551" height="58"/>
-        <image name="Square-top.png" width="551" height="164"/>
-        <image name="display.png" width="298" height="86"/>
-        <image name="edit.png" width="32" height="32"/>
-        <image name="list_first.png" width="299" height="35"/>
-        <image name="list_first_active.png" width="299" height="35"/>
-        <image name="list_last.png" width="299" height="35"/>
-        <image name="list_last_active.png" width="299" height="36"/>
-        <image name="list_middle.png" width="299" height="34"/>
-        <image name="list_middle_active.png" width="299" height="34"/>
-        <image name="plus.png" width="32" height="32"/>
+        <image name="icon_cancel.png" width="32" height="32"/>
+        <image name="icon_edit.png" width="32" height="32"/>
+        <image name="icon_plus.png" width="32" height="32"/>
+        <image name="icon_question.png" width="32" height="32"/>
+        <image name="tip_alert_black.png" width="235" height="81"/>
+        <image name="tip_basic_black.png" width="210" height="60"/>
+        <image name="ui_button_standard_large.png" width="300" height="46"/>
+        <image name="ui_list_first.png" width="300" height="35"/>
+        <image name="ui_list_last.png" width="300" height="35"/>
+        <image name="ui_list_middle.png" width="300" height="34"/>
+        <image name="ui_panel_container.png" width="300" height="87"/>
+        <image name="ui_panel_display.png" width="300" height="86"/>
     </resources>
+    <classes>
+        <class className="OPMainViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/OPMainViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="closeAlert"/>
+                <relationship kind="action" name="copyContent"/>
+                <relationship kind="action" name="editPassword"/>
+                <relationship kind="action" name="incrementPasswordCounter"/>
+                <relationship kind="action" name="toggleHelp"/>
+                <relationship kind="outlet" name="alertBody" candidateClass="UITextView"/>
+                <relationship kind="outlet" name="alertContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="alertTitle" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="contentContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="contentField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="contentTipBody" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="contentTipContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="contentTipEditIcon" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="helpContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="helpView" candidateClass="UIWebView"/>
+                <relationship kind="outlet" name="passwordCounter" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="passwordEdit" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="passwordIncrementer" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="searchResultsController" candidateClass="OPSearchDelegate"/>
+                <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="siteName" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="typeButton" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="OPSearchDelegate" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/OPSearchDelegate.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="searchDisplayController" candidateClass="UISearchDisplayController"/>
+                <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="OPTypeViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/OPTypeViewController.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>

@@ -18,32 +18,32 @@ NSString *NSStringFromOPElementType(OPElementType type) {
     
     switch (type) {
         case OPElementTypeCalculatedLong:
-            return @"Long";
+            return @"Long Password";
             
         case OPElementTypeCalculatedMedium:
-            return @"Medium";
+            return @"Medium Password";
             
         case OPElementTypeCalculatedShort:
-            return @"Short";
+            return @"Short Password";
             
         case OPElementTypeCalculatedBasic:
-            return @"Basic";
+            return @"Basic Password";
             
         case OPElementTypeCalculatedPIN:
             return @"PIN";
             
         case OPElementTypeStoredPersonal:
-            return @"Personal";
+            return @"Personal Password";
             
         case OPElementTypeStoredDevicePrivate:
-            return @"Device Private";
+            return @"Device Private Password";
             
         default:
             [NSException raise:NSInternalInconsistencyException format:@"Type not supported: %d", type];
     }
 }
 
-Class ClassForOPElementType(OPElementType type) {
+Class ClassFromOPElementType(OPElementType type) {
     
     if (!type)
         return nil;
@@ -75,10 +75,15 @@ Class ClassForOPElementType(OPElementType type) {
     }
 }
 
+NSString *ClassNameFromOPElementType(OPElementType type) {
+    
+    return NSStringFromClass(ClassFromOPElementType(type));
+}
+
 static NSDictionary *OPTypes_ciphers = nil;
 NSString *OPCalculateContent(OPElementType type, NSString *name, NSString *keyPhrase, int counter) {
     
-    assert(type & OPElementTypeCalculated);
+    assert(type & OPElementTypeClassCalculated);
     
     if (OPTypes_ciphers == nil)
         OPTypes_ciphers = [NSDictionary dictionaryWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"ciphers"

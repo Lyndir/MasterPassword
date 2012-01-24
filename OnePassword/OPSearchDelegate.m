@@ -12,6 +12,7 @@
 
 @interface OPSearchDelegate (Private)
 
+- (void)configureCell:(UITableViewCell *)cell inTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath;
 - (void)update;
 
 @end
@@ -20,17 +21,30 @@
 @synthesize fetchedResultsController;
 @synthesize delegate;
 @synthesize searchDisplayController;
+@synthesize searchTipContainer;
 
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
     
     self.searchDisplayController.searchBar.text = @"";
     self.searchDisplayController.searchBar.prompt = @"Enter the site's domain name (eg. apple.com):";
+    
+    [UIView animateWithDuration:0.2f animations:^{
+        self.searchTipContainer.alpha = 0;
+    }];
+    
     [self update];
 }
 
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
     
     self.searchDisplayController.searchBar.prompt = nil;
+}
+
+- (void)searchDisplayController:(UISearchDisplayController *)controller didLoadSearchResultsTableView:(UITableView *)tableView {
+    
+    tableView.backgroundColor = [UIColor blackColor];
+    tableView.rowHeight = 34.0f;
+    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 - (void)searchDisplayController:(UISearchDisplayController *)controller willShowSearchResultsTableView:(UITableView *)tableView {
@@ -74,29 +88,28 @@
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
     
-    indexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section + 1];
-    newIndexPath = [NSIndexPath indexPathForRow:newIndexPath.row inSection:newIndexPath.section + 1];
-    
+    UITableView *tableView = self.searchDisplayController.searchResultsTableView;
     switch(type) {
             
         case NSFetchedResultsChangeInsert:
-            [self.searchDisplayController.searchResultsTableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeDelete:
-            [self.searchDisplayController.searchResultsTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self configureCell:[self.searchDisplayController.searchResultsTableView cellForRowAtIndexPath:indexPath]
+            [self configureCell:[tableView cellForRowAtIndexPath:indexPath]
+                    inTableView:tableView
                     atIndexPath:indexPath];
             break;
             
         case NSFetchedResultsChangeMove:
-            [self.searchDisplayController.searchResultsTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
-                                                                       withRowAnimation:UITableViewRowAnimationFade];
-            [self.searchDisplayController.searchResultsTableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
-                                                                       withRowAnimation:UITableViewRowAnimationFade];
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                             withRowAnimation:UITableViewRowAnimationFade];
+            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+                             withRowAnimation:UITableViewRowAnimationFade];
             break;
     }
 }
@@ -104,18 +117,17 @@
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
     
-    ++sectionIndex;
-    
+    UITableView *tableView = self.searchDisplayController.searchResultsTableView;
     switch(type) {
             
         case NSFetchedResultsChangeInsert:
-            [self.searchDisplayController.searchResultsTableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]
-                                                               withRowAnimation:UITableViewRowAnimationFade];
+            [tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]
+                     withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeDelete:
-            [self.searchDisplayController.searchResultsTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]
-                                                               withRowAnimation:UITableViewRowAnimationFade];
+            [tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]
+                     withRowAnimation:UITableViewRowAnimationFade];
             break;
     }
 }
@@ -132,7 +144,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    if (--section == -1)
+    if (section == [self numberOfSectionsInTableView:tableView] - 1)
         return 1;
     
     return [[[self.fetchedResultsController sections] objectAtIndex:section] numberOfObjects];
@@ -141,38 +153,51 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OPElementSearch"];
-    if (!cell)
+    if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"OPElementSearch"];
+        UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"ui_list_middle"] resizableImageWithCapInsets:UIEdgeInsetsMake(5, 5, 5, 5)]];
+        backgroundImageView.frame = CGRectMake(-5, 0, 330, 34);
+        UIView *backgroundView = [[UIView alloc] initWithFrame:cell.frame];
+        [backgroundView addSubview:backgroundImageView];
+        
+        cell.backgroundView = backgroundView;
+        cell.textLabel.backgroundColor = [UIColor clearColor];
+        cell.textLabel.textColor = [UIColor whiteColor];
+        cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+        cell.detailTextLabel.textColor = [UIColor lightGrayColor];
+    }
     
-    [self configureCell:cell atIndexPath:indexPath];
+    [self configureCell:cell inTableView:tableView atIndexPath:indexPath];
     
     return cell;
 }
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+- (void)configureCell:(UITableViewCell *)cell inTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     
-    indexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section - 1];
-    if (indexPath.section == -1) {
-        cell.textLabel.text = self.searchDisplayController.searchBar.text;
-        cell.detailTextLabel.text = @"New";
-    } else {
+    if (indexPath.section < [[self.fetchedResultsController sections] count]) {
         OPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
         
         cell.textLabel.text = element.name;
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", element.uses];
+    } else {
+        // "New" section
+        cell.textLabel.text = self.searchDisplayController.searchBar.text;
+        cell.detailTextLabel.text = @"New";
     }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     OPElementEntity *element;
-    indexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section - 1];
-    if (indexPath.section == -1) {
+    if (indexPath.section < [[self.fetchedResultsController sections] count])
+        element = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    else {
+        // "New" section.
         element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([OPElementGeneratedEntity class])
                                                 inManagedObjectContext:[OPAppDelegate managedObjectContext]];
         element.name = self.searchDisplayController.searchBar.text;
-    } else
-        element = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    }
     
     [self.delegate didSelectElement:element];
 }
@@ -197,7 +222,9 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    indexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section - 1];
+    if (indexPath.section == [[self.fetchedResultsController sections] count])
+        // "New" section.
+        return;
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         OPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];

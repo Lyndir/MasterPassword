@@ -19,7 +19,7 @@
     if (![self.name length])
         return nil;
     
-    if (self.type & OPElementTypeCalculated)
+    if (self.type & OPElementTypeClassCalculated)
         return OPCalculateContent(self.type, self.name, [OPAppDelegate get].keyPhrase, self.counter);
     
     @throw [NSException exceptionWithName:NSInternalInconsistencyException

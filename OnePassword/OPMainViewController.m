@@ -19,6 +19,9 @@
 
 - (void)updateAnimated:(BOOL)animated;
 - (void)updateWasAnimated:(BOOL)animated;
+- (void)showContentTip:(NSString *)message withIcon:(UIImageView *)icon;
+- (void)showAlertWithTitle:(NSString *)title message:(NSString *)message;
+- (void)updateElement:(void (^)(void))updateElement;
 
 @end
 
@@ -33,6 +36,13 @@
 @synthesize passwordEdit = _passwordEdit;
 @synthesize contentContainer = _contentContainer;
 @synthesize helpContainer = _helpContainer;
+@synthesize contentTipContainer = _copiedContainer;
+@synthesize alertContainer = _alertContainer;
+@synthesize alertTitle = _alertTitle;
+@synthesize alertBody = _alertBody;
+@synthesize contentTipBody = _contentTipBody;
+@synthesize contentTipEditIcon = _contentTipEditIcon;
+@synthesize searchTipContainer = _searchTip;
 @synthesize contentField = _contentField;
 
 #pragma mark - View lifecycle
@@ -54,6 +64,18 @@
     
     [super viewWillAppear:animated];
     
+    if (![self.searchTipContainer.superview isKindOfClass:[UIWindow class]]) {
+        // Put the search tip on the window so it's above the nav bar.
+        [self.searchTipContainer removeFromSuperview];
+        [[UIApplication sharedApplication].keyWindow addSubview:self.searchTipContainer];
+        self.searchTipContainer.frame = CGRectSetY(self.searchTipContainer.frame, self.searchTipContainer.frame.origin.y
+                                                   + self.navigationController.navigationBar.frame.size.height /* Nav */ + 20 /* Status */);
+    }
+    if (!self.activeElement.name)
+        [UIView animateWithDuration:animated? 0.2f: 0 animations:^{
+            self.searchTipContainer.alpha = 1;
+        }];
+    
     [self toggleHelp:[[OPConfig get].helpHidden boolValue]];
     [self updateAnimated:NO];
 }
@@ -61,7 +83,23 @@
 - (void)viewDidLoad {
     
     // Because IB's edit button doesn't auto-toggle self.editable like editButtonItem does.
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification object:nil queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      if (![OPAppDelegate get].keyPhrase) {
+                                                          self.activeElement = nil;
+                                                          [self updateAnimated:NO];
+                                                      }
+                                                  }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      if (![OPAppDelegate get].keyPhrase) {
+                                                          self.activeElement = nil;
+                                                          [self updateAnimated:NO];
+                                                      }
+                                                  }];
+    
+    [self closeAlert];
     
     [super viewDidLoad];
 }
@@ -78,6 +116,13 @@
     [self setPasswordEdit:nil];
     [self setContentContainer:nil];
     [self setHelpContainer:nil];
+    [self setContentTipContainer:nil];
+    [self setAlertContainer:nil];
+    [self setAlertTitle:nil];
+    [self setAlertBody:nil];
+    [self setContentTipBody:nil];
+    [self setContentTipEditIcon:nil];
+    [self setSearchTipContainer:nil];
     [super viewDidUnload];
 }
 
@@ -107,14 +152,14 @@
      [NSURLRequest requestWithURL:
       [NSURL URLWithString:[NSString stringWithFormat:@"#%d", chapter] relativeToURL:
        [[NSBundle mainBundle] URLForResource:@"help" withExtension:@"html"]]]];
-    
-    [self.navigationItem setRightBarButtonItem:self.activeElement.type & OPElementTypeStored? self.editButtonItem: nil animated:animated];
+    [self.helpView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"setClass('%@');",
+                                                           ClassNameFromOPElementType(self.activeElement.type)]];
     
     self.siteName.text = self.activeElement.name;
     
-    self.passwordCounter.alpha = self.activeElement.type & OPElementTypeCalculated? 0.5f: 0;
-    self.passwordIncrementer.alpha = self.activeElement.type & OPElementTypeCalculated? 0.5f: 0;
-    self.passwordEdit.alpha = self.activeElement.type & OPElementTypeStored? 0.5f: 0;
+    self.passwordCounter.alpha = self.activeElement.type & OPElementTypeClassCalculated? 0.5f: 0;
+    self.passwordIncrementer.alpha = self.activeElement.type & OPElementTypeClassCalculated? 0.5f: 0;
+    self.passwordEdit.alpha = self.activeElement.type & OPElementTypeClassStored? 0.5f: 0;
     
     [self.typeButton setTitle:NSStringFromOPElementType(self.activeElement.type)
                      forState:UIControlStateNormal];
@@ -133,35 +178,86 @@
     });
 }
 
+- (void)showContentTip:(NSString *)message withIcon:(UIImageView *)icon {
+    
+    self.contentTipBody.text = message;
+    
+    icon.hidden = NO;
+    [UIView animateWithDuration:0.2f animations:^{
+        self.contentTipContainer.alpha = 1;
+    } completion:^(BOOL finished) {
+        if (!finished) {
+            icon.hidden = YES;
+            return;
+        }
+        
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 5.0f * NSEC_PER_SEC);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [UIView animateWithDuration:0.2f animations:^{
+                self.contentTipContainer.alpha = 0;
+            } completion:^(BOOL finished) {
+                icon.hidden = YES;
+            }];
+        });
+    }];
+}
+
+- (void)showAlertWithTitle:(NSString *)title message:(NSString *)message {
+    
+    self.alertTitle.text = title;
+    if ([self.alertBody.text length])
+        self.alertBody.text = [NSString stringWithFormat:@"%@\n\n---\n\n%@", self.alertBody.text, message];
+    else
+        self.alertBody.text = message;
+    
+    [UIView animateWithDuration:0.2f animations:^{
+        self.alertContainer.alpha = 1;
+    }];
+}
+
 #pragma mark - Protocols
 
 - (IBAction)copyContent {
     
+    if (!self.activeElement)
+        return;
+    
     [[UIPasteboard generalPasteboard] setValue:self.activeElement.content
                              forPasteboardType:self.activeElement.contentUTI];
+    
+    [self showContentTip:@"Copied!" withIcon:nil];
 }
 
 - (IBAction)incrementPasswordCounter {
     
-    if ([self.activeElement isKindOfClass:[OPElementGeneratedEntity class]])
-        [AlertViewController showAlertWithTitle:@"Change Password"
-                                        message:l(@"Setting a new password for %@.\n"
-                                                  @"Don't forget to update your password on the site as well!", self.activeElement.name)
-                              tappedButtonBlock:^(NSInteger buttonIndex) {
-                                  if (!buttonIndex)
-                                      return;
-                                  
-                                  // Update password counter.
-                                  if ([self.activeElement isKindOfClass:[OPElementGeneratedEntity class]]) {
-                                      ++((OPElementGeneratedEntity *) self.activeElement).counter;
-                                      [self updateAnimated:YES];
-                                  }
-                              } cancelTitle:[PearlStrings get].commonButtonAbort otherTitles:[PearlStrings get].commonButtonThanks, nil];
+    if (![self.activeElement isKindOfClass:[OPElementGeneratedEntity class]])
+        // Not of a type that supports a password counter;
+        return;
+    
+    [self updateElement:^{
+        ++((OPElementGeneratedEntity *) self.activeElement).counter;
+    }];
+}
+
+- (void)updateElement:(void (^)(void))updateElement {
+    
+    // Update password counter.
+    NSString *oldPassword = self.activeElement.contentDescription;
+    updateElement();
+    NSString *newPassword = self.activeElement.contentDescription;
+    [self updateAnimated:YES];
+    
+    // Show new and old password.
+    if (oldPassword && ![oldPassword isEqualToString:newPassword])
+        [self showAlertWithTitle:@"Password Changed!" message:l(@"The password for %@ has changed.\n\n"
+                                                                @"Don't forget to update the site with your new password! "
+                                                                @"Your old password was:\n"
+                                                                @"%@", self.activeElement.name, oldPassword)];
 }
 
 - (IBAction)editPassword {
     
-    if (self.activeElement.type & OPElementTypeStored) {
+    if (self.activeElement.type & OPElementTypeClassStored) {
         self.contentField.enabled = YES;
         [self.contentField becomeFirstResponder];
     }
@@ -179,48 +275,49 @@
 
 - (void)toggleHelp:(BOOL)hidden {
     
-        if (hidden) {
-            self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 373);
-            //self.helpContainer.frame = CGRectSetHeight(self.helpContainer.frame, 0);
-            self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, 414);
-            [OPConfig get].helpHidden = [NSNumber numberWithBool:YES];
-        } else {
-            self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 155);
-            //self.helpContainer.frame = CGRectSetHeight(self.helpContainer.frame, 219);
-            self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, 196);
-            [OPConfig get].helpHidden = [NSNumber numberWithBool:NO];
-        }
+    if (hidden) {
+        self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 373);
+        self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, 415);
+        [OPConfig get].helpHidden = [NSNumber numberWithBool:YES];
+    } else {
+        self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 175);
+        self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, 216);
+        [OPConfig get].helpHidden = [NSNumber numberWithBool:NO];
+    }
+}
+
+- (IBAction)closeAlert {
+    
+    [UIView animateWithDuration:0.3f animations:^{
+        self.alertContainer.alpha = 0;
+    } completion:^(BOOL finished) {
+        self.alertBody.text = nil;
+    }];
 }
 
 - (void)didSelectType:(OPElementType)type {
     
-    [AlertViewController showAlertWithTitle:@"Change Password Type"
-                                    message:l(@"Changing the type of %@'s password.\n"
-                                              @"Don't forget to update your password on the site as well!", self.activeElement.name)
-                          tappedButtonBlock:^(NSInteger buttonIndex) {
-                              if (!buttonIndex)
-                                  return;
-                              
-                              // Update password type.
-                              if (ClassForOPElementType(type) != ClassForOPElementType(self.activeElement.type)) {
-                                  // Type requires a different class of element.  Recreate the element.
-                                  OPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass(ClassForOPElementType(type))
-                                                                                              inManagedObjectContext:[OPAppDelegate managedObjectContext]];
-                                  
-                                  newElement.name = self.activeElement.name;
-                                  newElement.uses = self.activeElement.uses;
-                                  newElement.lastUsed = self.activeElement.lastUsed;
-                                  newElement.contentUTI = self.activeElement.contentUTI;
-                                  newElement.contentType = self.activeElement.contentType;
-                                  
-                                  [[OPAppDelegate managedObjectContext] deleteObject:self.activeElement];
-                                  self.activeElement = newElement;
-                              }
-                              self.activeElement.type = type;
-                              
-                              // Redraw.
-                              [self updateAnimated:YES];
-                          } cancelTitle:[PearlStrings get].commonButtonAbort otherTitles:[PearlStrings get].commonButtonThanks, nil];
+    [self updateElement:^{
+        // Update password type.
+        if (ClassFromOPElementType(type) != ClassFromOPElementType(self.activeElement.type)) {
+            // Type requires a different class of element.  Recreate the element.
+            OPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromOPElementType(type)
+                                                                        inManagedObjectContext:[OPAppDelegate managedObjectContext]];
+            newElement.name = self.activeElement.name;
+            newElement.uses = self.activeElement.uses;
+            newElement.lastUsed = self.activeElement.lastUsed;
+            newElement.contentUTI = self.activeElement.contentUTI;
+            newElement.contentType = self.activeElement.contentType;
+            
+            [[OPAppDelegate managedObjectContext] deleteObject:self.activeElement];
+            self.activeElement = newElement;
+        }
+        
+        self.activeElement.type = type;
+        
+        if (type & OPElementTypeClassStored && !self.activeElement.contentDescription)
+            [self showContentTip:@"Tap       to set a password." withIcon:self.contentTipEditIcon];
+    }];
 }
 
 - (void)didSelectElement:(OPElementEntity *)element {
@@ -251,19 +348,17 @@
     
     if (textField == self.contentField) {
         self.contentField.enabled = NO;
-        [AlertViewController showAlertWithTitle:@"Change Password"
-                                        message:l(@"Setting a new password for %@.\n"
-                                                  @"Don't forget to update your password on the site as well!", self.activeElement.name)
-                              tappedButtonBlock:^(NSInteger buttonIndex) {
-                                  if (buttonIndex) {
-                                      // Update password content.
-                                      if ([self.activeElement isKindOfClass:[OPElementStoredEntity class]])
-                                          ((OPElementStoredEntity *) self.activeElement).contentObject = self.contentField.text;
-                                  }
-                                  
-                                  // Redraw.
-                                  [self updateAnimated:YES];
-                              } cancelTitle:[PearlStrings get].commonButtonAbort otherTitles:[PearlStrings get].commonButtonThanks, nil];
+        if (![self.activeElement isKindOfClass:[OPElementStoredEntity class]])
+            // Not of a type whose content can be edited.
+            return;
+        
+        if ([((OPElementStoredEntity *) self.activeElement).contentObject isEqual:self.contentField.text])
+            // Content hasn't changed.
+            return;
+        
+        [self updateElement:^{
+            ((OPElementStoredEntity *) self.activeElement).contentObject = self.contentField.text;
+        }];
     }
 }
 

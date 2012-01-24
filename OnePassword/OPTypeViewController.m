@@ -13,6 +13,13 @@
 
 #pragma mark - View lifecycle
 
+- (void)viewDidLoad {
+    
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
+
+    [super viewDidLoad];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     
     return YES;

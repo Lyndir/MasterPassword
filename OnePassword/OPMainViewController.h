@@ -23,11 +23,19 @@
 @property (weak, nonatomic) IBOutlet UIButton *passwordEdit;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet UIView *helpContainer;
+@property (weak, nonatomic) IBOutlet UIView *contentTipContainer;
+@property (weak, nonatomic) IBOutlet UIView *alertContainer;
+@property (weak, nonatomic) IBOutlet UILabel *alertTitle;
+@property (weak, nonatomic) IBOutlet UITextView *alertBody;
+@property (weak, nonatomic) IBOutlet UILabel *contentTipBody;
+@property (weak, nonatomic) IBOutlet UIImageView *contentTipEditIcon;
+@property (weak, nonatomic) IBOutlet UIView *searchTipContainer;
 
 - (IBAction)copyContent;
 - (IBAction)incrementPasswordCounter;
 - (IBAction)editPassword;
 - (IBAction)toggleHelp;
 - (void)toggleHelp:(BOOL)hidden;
+- (IBAction)closeAlert;
 
 @end

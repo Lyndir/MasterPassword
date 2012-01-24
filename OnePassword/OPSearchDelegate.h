@@ -21,7 +21,6 @@
 
 @property (weak, nonatomic) IBOutlet id<OPSearchResultsDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UISearchDisplayController *searchDisplayController;
-
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+@property (weak, nonatomic) IBOutlet UIView *searchTipContainer;
 
 @end
