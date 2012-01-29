@@ -15,19 +15,27 @@
 + (NSDictionary *)keyPhraseQuery;
 + (NSDictionary *)keyPhraseHashQuery;
 
+- (void)loadKeyPhrase;
+- (void)forgetKeyPhrase;
+- (void)loadStoredKeyPhrase;
+- (void)askKeyPhrase;
+
 @end
 
 @implementation OPAppDelegate
 
-@synthesize managedObjectContext = __managedObjectContext;
 @synthesize managedObjectModel = __managedObjectModel;
+@synthesize managedObjectContext = __managedObjectContext;
 @synthesize persistentStoreCoordinator = __persistentStoreCoordinator;
+
 @synthesize keyPhrase = _keyPhrase;
+@synthesize keyPhraseHash = _keyPhraseHash;
+@synthesize keyPhraseHashHex = _keyPhraseHashHex;
 
 + (void)initialize {
-
+    
 #ifdef DEBUG
-    [Logger get].autoprintLevel = LogLevelDebug;
+    [Logger get].autoprintLevel = LogLevelTrace;
     [NSClassFromString(@"WebView") performSelector:@selector(_enableRemoteInspector)];
 #endif
 }
@@ -37,7 +45,7 @@
     static NSDictionary *OPKeyPhraseQuery = nil;
     if (!OPKeyPhraseQuery)
         OPKeyPhraseQuery = [KeyChain createQueryForClass:kSecClassGenericPassword
-                                              attributes:[NSDictionary dictionaryWithObject:@"MasterKeyPhrase"
+                                              attributes:[NSDictionary dictionaryWithObject:@"MasterPassword"
                                                                                      forKey:(__bridge id)kSecAttrService]
                                                  matches:nil];
     
@@ -49,7 +57,7 @@
     static NSDictionary *OPKeyPhraseHashQuery = nil;
     if (!OPKeyPhraseHashQuery)
         OPKeyPhraseHashQuery = [KeyChain createQueryForClass:kSecClassGenericPassword
-                                                  attributes:[NSDictionary dictionaryWithObject:@"MasterKeyPhraseHash"
+                                                  attributes:[NSDictionary dictionaryWithObject:@"MasterPasswordHash"
                                                                                          forKey:(__bridge id)kSecAttrService]
                                                      matches:nil];
     
@@ -83,36 +91,82 @@
       [UIFont fontWithName:@"Helvetica-Neue" size:0.0],                                 UITextAttributeFont,
       nil]
                                                 forState:UIControlStateNormal];
-
+    
     UIImage *toolBarImage = [[UIImage imageNamed:@"ui_toolbar_container"]  resizableImageWithCapInsets:UIEdgeInsetsMake(25, 5, 5, 5)];
     [[UISearchBar appearance] setBackgroundImage:toolBarImage];
     [[UIToolbar appearance] setBackgroundImage:toolBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
     
     /*
-    UIImage *minImage = [[UIImage imageNamed:@"slider-minimum.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
-    UIImage *maxImage = [[UIImage imageNamed:@"slider-maximum.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
-    UIImage *thumbImage = [UIImage imageNamed:@"slider-handle.png"];
-    
-    [[UISlider appearance] setMaximumTrackImage:maxImage forState:UIControlStateNormal];
-    [[UISlider appearance] setMinimumTrackImage:minImage forState:UIControlStateNormal];
-    [[UISlider appearance] setThumbImage:thumbImage forState:UIControlStateNormal];
-    
-    UIImage *segmentSelected = [[UIImage imageNamed:@"segcontrol_sel.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];
-    UIImage *segmentUnselected = [[UIImage imageNamed:@"segcontrol_uns.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 15)];
-    UIImage *segmentSelectedUnselected = [UIImage imageNamed:@"segcontrol_sel-uns.png"];
-    UIImage *segUnselectedSelected = [UIImage imageNamed:@"segcontrol_uns-sel.png"];
-    UIImage *segmentUnselectedUnselected = [UIImage imageNamed:@"segcontrol_uns-uns.png"];
-    
-    [[UISegmentedControl appearance] setBackgroundImage:segmentUnselected forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [[UISegmentedControl appearance] setBackgroundImage:segmentSelected forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
-    
-    [[UISegmentedControl appearance] setDividerImage:segmentUnselectedUnselected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [[UISegmentedControl appearance] setDividerImage:segmentSelectedUnselected forLeftSegmentState:UIControlStateSelected rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [[UISegmentedControl appearance] setDividerImage:segUnselectedSelected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateSelected barMetrics:UIBarMetricsDefault];*/
+     UIImage *minImage = [[UIImage imageNamed:@"slider-minimum.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
+     UIImage *maxImage = [[UIImage imageNamed:@"slider-maximum.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
+     UIImage *thumbImage = [UIImage imageNamed:@"slider-handle.png"];
+     
+     [[UISlider appearance] setMaximumTrackImage:maxImage forState:UIControlStateNormal];
+     [[UISlider appearance] setMinimumTrackImage:minImage forState:UIControlStateNormal];
+     [[UISlider appearance] setThumbImage:thumbImage forState:UIControlStateNormal];
+     
+     UIImage *segmentSelected = [[UIImage imageNamed:@"segcontrol_sel.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];
+     UIImage *segmentUnselected = [[UIImage imageNamed:@"segcontrol_uns.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 15)];
+     UIImage *segmentSelectedUnselected = [UIImage imageNamed:@"segcontrol_sel-uns.png"];
+     UIImage *segUnselectedSelected = [UIImage imageNamed:@"segcontrol_uns-sel.png"];
+     UIImage *segmentUnselectedUnselected = [UIImage imageNamed:@"segcontrol_uns-uns.png"];
+     
+     [[UISegmentedControl appearance] setBackgroundImage:segmentUnselected forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+     [[UISegmentedControl appearance] setBackgroundImage:segmentSelected forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
+     
+     [[UISegmentedControl appearance] setDividerImage:segmentUnselectedUnselected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+     [[UISegmentedControl appearance] setDividerImage:segmentSelectedUnselected forLeftSegmentState:UIControlStateSelected rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+     [[UISegmentedControl appearance] setDividerImage:segUnselectedSelected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateSelected barMetrics:UIBarMetricsDefault];*/
     
     return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+    
+    [self loadKeyPhrase];
+}
+
+- (void)loadKeyPhrase {
+    
+    if ([[OPConfig get].forgetKeyPhrase boolValue]) {
+        [self forgetKeyPhrase];
+        return;
+    }
+    
+    [self loadStoredKeyPhrase];
+    if (!self.keyPhrase) {
+        // Key phrase is not known.  Ask user to set/specify it.
+        dbg(@"Key phrase not known.  Will ask user.");
+        [self askKeyPhrase];
+        return;
+    }
+}
+
+- (void)forgetKeyPhrase {
+    
+    dbg(@"Forgetting key phrase.");
+    [AlertViewController showAlertWithTitle:@"Changing Master Password"
+                                    message:
+     @"You've requested to change your master password.\n\n"
+     @"If you continue, your current sites and passwords will become unavailable.\n\n"
+     @"You can always change back to the old master password later.\n"
+     @"Your old sites and passwords will then become available again."
+                                  viewStyle:UIAlertViewStyleDefault
+                          tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                              if (buttonIndex == [alert firstOtherButtonIndex]) {
+                                  // Key phrase reset.  Delete it.
+                                  dbg(@"Deleting master key phrase and hash from key chain.");
+                                  [KeyChain deleteItemForQuery:[OPAppDelegate keyPhraseQuery]];
+                                  [KeyChain deleteItemForQuery:[OPAppDelegate keyPhraseHashQuery]];
+                              }
+                              
+                              [self loadKeyPhrase];
+                          }
+                                cancelTitle:[PearlStrings get].commonButtonAbort
+                                otherTitles:[PearlStrings get].commonButtonContinue, nil];
+    [OPConfig get].forgetKeyPhrase = [NSNumber numberWithBool:NO];
+}
+
+- (void)loadStoredKeyPhrase {
     
     if ([[OPConfig get].storeKeyPhrase boolValue]) {
         // Key phrase is stored in keychain.  Load it.
@@ -127,59 +181,55 @@
         dbg(@"Deleting master key phrase from key chain.");
         [KeyChain deleteItemForQuery:[OPAppDelegate keyPhraseQuery]];
     }
+}
+
+- (void)askKeyPhrase {
     
-    if (!self.keyPhrase) {
-        // Key phrase is not known.  Ask user to set/specify it.
-        dbg(@"Key phrase not known.  Will ask user.");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSData *keyPhraseHash = [KeyChain dataOfItemForQuery:[OPAppDelegate keyPhraseHashQuery]];
+        dbg(@"Key phrase hash %@.", keyPhraseHash? @"known": @"NOT known");
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSData *keyPhraseHash = [KeyChain dataOfItemForQuery:[OPAppDelegate keyPhraseHashQuery]];
-            dbg(@"Key phrase hash %@.", keyPhraseHash? @"known": @"NOT known");
-            
-            AlertViewController *keyPhraseAlert = [[AlertViewController alloc] initQuestionWithTitle:@"One Password"
-                                                                                             message:keyPhraseHash? @"Unlock with your master password:": @"Choose your master password:"
-                                                                                   tappedButtonBlock:
-                                                   ^(NSInteger buttonIndex, NSString *answer) {
-                                                       if (!buttonIndex)
-                                                           exit(0);
-                                                       
-                                                       if (![answer length]) {
-                                                           // User didn't enter a key phrase.
-                                                           [AlertViewController showAlertWithTitle:[PearlStrings get].commonTitleError
-                                                                                           message:@"No master password entered."
-                                                                                 tappedButtonBlock:
-                                                            ^(NSInteger buttonIndex) {
-                                                                exit(0);
-                                                            } cancelTitle:@"Quit" otherTitles:nil];
-                                                       }
-                                                       
-                                                       NSData *answerHash = [answer hashWith:PearlDigestSHA512];
-                                                       if (keyPhraseHash)
-                                                           // A key phrase hash is known -> a key phrase is set.
-                                                           // Make sure the user's entered key phrase matches it.
-                                                           if (![keyPhraseHash isEqual:answerHash]) {
-                                                               dbg(@"Key phrase hash mismatch. Expected: %@, answer: %@.", keyPhraseHash, answerHash);
-                                                               
-                                                               [AlertViewController showAlertWithTitle:[PearlStrings get].commonTitleError
-                                                                                               message:@"Incorrect master password."
-                                                                                     tappedButtonBlock:
-                                                                ^(NSInteger buttonIndex) {
-                                                                    exit(0);
-                                                                } cancelTitle:@"Quit" otherTitles:nil];
-                                                               
-                                                               return;
-                                                           }
-                                                       
-                                                       self.keyPhrase = answer;
-                                                   } cancelTitle:@"Quit" otherTitles:@"Unlock", nil];
-            keyPhraseAlert.alertField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-            keyPhraseAlert.alertField.autocorrectionType = UITextAutocorrectionTypeNo;
-            keyPhraseAlert.alertField.enablesReturnKeyAutomatically = YES;
-            keyPhraseAlert.alertField.returnKeyType = UIReturnKeyGo;
-            keyPhraseAlert.alertField.secureTextEntry = YES;
-            [keyPhraseAlert showAlert];
-        });
-    }
+        [AlertViewController showAlertWithTitle:@"One Password"
+                                        message:keyPhraseHash? @"Unlock with your master password:": @"Choose your master password:"
+                                      viewStyle:UIAlertViewStyleSecureTextInput
+                              tappedButtonBlock:
+         ^(UIAlertView *alert, NSInteger buttonIndex) {
+             if (buttonIndex == [alert cancelButtonIndex])
+                 exit(0);
+             
+             NSString *answer = [alert textFieldAtIndex:0].text;
+             if (![answer length]) {
+                 // User didn't enter a key phrase.
+                 [AlertViewController showAlertWithTitle:[PearlStrings get].commonTitleError
+                                                 message:@"No master password entered."
+                                               viewStyle:UIAlertViewStyleDefault
+                                       tappedButtonBlock:
+                  ^(UIAlertView *alert, NSInteger buttonIndex) {
+                      exit(0);
+                  } cancelTitle:@"Quit" otherTitles:nil];
+             }
+             
+             NSData *answerHash = [answer hashWith:PearlDigestSHA512];
+             if (keyPhraseHash)
+                 // A key phrase hash is known -> a key phrase is set.
+                 // Make sure the user's entered key phrase matches it.
+                 if (![keyPhraseHash isEqual:answerHash]) {
+                     dbg(@"Key phrase hash mismatch. Expected: %@, answer: %@.", keyPhraseHash, answerHash);
+                     
+                     [AlertViewController showAlertWithTitle:[PearlStrings get].commonTitleError
+                                                     message:@"Incorrect master password."
+                                                   viewStyle:UIAlertViewStyleDefault
+                                           tappedButtonBlock:
+                      ^(UIAlertView *alert, NSInteger buttonIndex) {
+                          exit(0);
+                      } cancelTitle:@"Quit" otherTitles:nil];
+                     
+                     return;
+                 }
+             
+             self.keyPhrase = answer;
+         } cancelTitle:@"Quit" otherTitles:@"Unlock", nil];
+    });
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -228,10 +278,12 @@
     _keyPhrase = keyPhrase;
     
     if (keyPhrase) {
-        NSData *keyPhraseHash = [keyPhrase hashWith:PearlDigestSHA512];
-        dbg(@"Updating master key phrase hash to: %@.", keyPhraseHash);
+        self.keyPhraseHash = [keyPhrase hashWith:PearlDigestSHA512];
+        self.keyPhraseHashHex = [self.keyPhraseHash encodeHex];
+        
+        dbg(@"Updating master key phrase hash to: %@.", self.keyPhraseHashHex);
         [KeyChain addOrUpdateItemForQuery:[OPAppDelegate keyPhraseHashQuery]
-                           withAttributes:[NSDictionary dictionaryWithObject:keyPhraseHash
+                           withAttributes:[NSDictionary dictionaryWithObject:self.keyPhraseHash
                                                                       forKey:(__bridge id)kSecValueData]];
         if ([[OPConfig get].storeKeyPhrase boolValue]) {
             dbg(@"Storing master key phrase in key chain.");

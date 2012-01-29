@@ -61,15 +61,18 @@
 
 - (void)update {
     
-    NSString *text = self.searchDisplayController.searchBar.text;
-    if (!text)
-        text = @"";
+    NSString *query = self.searchDisplayController.searchBar.text;
+    if (!query)
+        query = @"";
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([OPElementEntity class])];
+    NSFetchRequest *fetchRequest = [[OPAppDelegate get].managedObjectModel
+                                    fetchRequestFromTemplateWithName:@"OPSearchElement"
+                                    substitutionVariables:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                           query,                                   @"query",
+                                                           [OPAppDelegate get].keyPhraseHashHex,    @"mpHashHex",
+                                                           nil]];
     [fetchRequest setSortDescriptors:
      [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]]];
-    [fetchRequest setPredicate:
-     [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", text]];
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                         managedObjectContext:[OPAppDelegate managedObjectContext]
@@ -196,7 +199,10 @@
         // "New" section.
         element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([OPElementGeneratedEntity class])
                                                 inManagedObjectContext:[OPAppDelegate managedObjectContext]];
+        assert([element isKindOfClass:ClassFromOPElementType(element.type)]);
+        
         element.name = self.searchDisplayController.searchBar.text;
+        element.mpHashHex = [OPAppDelegate get].keyPhraseHashHex;
     }
     
     [self.delegate didSelectElement:element];

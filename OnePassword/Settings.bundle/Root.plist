@@ -6,11 +6,21 @@
 	<array>
 		<dict>
 			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string></string>
+			<key>FooterText</key>
+			<string>http://masterpassword.lyndir.com</string>
+		</dict>
+		<dict>
+			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 			<key>Title</key>
 			<string>Version</string>
 			<key>Key</key>
 			<string>version</string>
+			<key>DefaultValue</key>
+			<string></string>
 		</dict>
 		<dict>
 			<key>Type</key>
@@ -19,6 +29,8 @@
 			<string>Build</string>
 			<key>Key</key>
 			<string>build</string>
+			<key>DefaultValue</key>
+			<string></string>
 		</dict>
 		<dict>
 			<key>Type</key>
@@ -27,12 +39,34 @@
 			<string>Copyright</string>
 			<key>Key</key>
 			<string>copyright</string>
+			<key>DefaultValue</key>
+			<string></string>
 		</dict>
 		<dict>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
-			<string>Security</string>
+			<string>Master Password</string>
+			<key>FooterText</key>
+			<string>This causes your master password to be remembered while your device is powered on.  Similar to your phone&apos;s SIM lock, you only need to enter the password once after powering on.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Remember my password</string>
+			<key>Key</key>
+			<string>rememberKeyPhrase</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string></string>
+			<key>FooterText</key>
+			<string>Use this to save your master password in the key chain.  This is somewhat less secure should your device get stolen, but it means you won&apos;t need to enter the master password anymore.  You can compensate for the reduced security by going into General-&gt;Passcode Lock, disabling &quot;Simple Passcode&quot;, and setting a more secure passcode for your device.</string>
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
@@ -40,17 +74,25 @@
 			<key>Key</key>
 			<string>storeKeyPhrase</string>
 			<key>Title</key>
-			<string>Store master password</string>
+			<string>Store my password</string>
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
 		<dict>
 			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string></string>
+			<key>FooterText</key>
+			<string>Turn this on if you want to change the master password.  Start the application and it will ask you for a new master password.  All passwords will change to those for the new master password.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>Remember master password</string>
+			<string>Change my password</string>
 			<key>Key</key>
-			<string>rememberKeyPhrase</string>
+			<string>forgetKeyPhrase</string>
 			<key>DefaultValue</key>
 			<false/>
 		</dict>

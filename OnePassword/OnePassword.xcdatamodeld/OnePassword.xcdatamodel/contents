@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="872" systemVersion="11C74" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="OPElementEntity" representedClassName="OPElementEntity" isAbstract="YES" syncable="YES">
-        <attribute name="contentType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="contentUTI" attributeType="String" defaultValueString="public.plain-text" syncable="YES"/>
         <attribute name="lastUsed" attributeType="Date" syncable="YES"/>
+        <attribute name="mpHashHex" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="type" attributeType="Integer 16" defaultValueString="257" syncable="YES"/>
         <attribute name="uses" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -14,7 +13,7 @@
     <entity name="OPElementStoredEntity" representedClassName="OPElementStoredEntity" parentEntity="OPElementEntity" syncable="YES">
         <attribute name="contentObject" optional="YES" attributeType="Transformable" storedInTruthFile="YES" syncable="YES"/>
     </entity>
-    <fetchRequest name="OPSearchElement" entity="OPElementEntity" predicateString="name BEGINSWITH &quot;$query&quot;"/>
+    <fetchRequest name="OPSearchElement" entity="OPElementEntity" predicateString="name BEGINSWITH[cd] $query AND mpHashHex == $mpHashHex"/>
     <elements>
         <element name="OPElementEntity" positionX="160" positionY="192" width="128" height="135"/>
         <element name="OPElementGeneratedEntity" positionX="160" positionY="192" width="128" height="60"/>

@@ -10,7 +10,7 @@
 #import "OPElementEntity.h"
 #import "OPSearchDelegate.h"
 
-@interface OPMainViewController : UIViewController <OPTypeDelegate, UITextFieldDelegate, UISearchBarDelegate, OPSearchResultsDelegate>
+@interface OPMainViewController : UIViewController <OPTypeDelegate, UITextFieldDelegate, UISearchBarDelegate, OPSearchResultsDelegate, UIWebViewDelegate>
 
 @property (strong, nonatomic) OPElementEntity *activeElement;
 @property (strong, nonatomic) IBOutlet OPSearchDelegate *searchResultsController;

@@ -10,7 +10,7 @@
 
 @implementation OPConfig
 
-@dynamic dataStoreError, storeKeyPhrase, rememberKeyPhrase, helpHidden;
+@dynamic dataStoreError, storeKeyPhrase, rememberKeyPhrase, forgetKeyPhrase, helpHidden;
 
 
 - (id)init {
@@ -22,6 +22,7 @@
                                      [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(dataStoreError)),
                                      [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(storeKeyPhrase)),
                                      [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(rememberKeyPhrase)),
+                                     [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(forgetKeyPhrase)),
                                      [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(helpHidden)),
                                      nil]];
     

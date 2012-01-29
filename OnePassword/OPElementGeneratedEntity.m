@@ -16,6 +16,8 @@
 
 - (id)content {
 
+    assert(self.type & OPElementTypeClassCalculated);
+    
     if (![self.name length])
         return nil;
     

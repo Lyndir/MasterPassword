@@ -13,14 +13,12 @@
 @interface OPElementEntity : NSManagedObject
 
 @property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *mpHashHex;
 @property (nonatomic) int16_t type;
 @property (nonatomic) int16_t uses;
 @property (nonatomic) NSTimeInterval lastUsed;
-@property (nonatomic, retain) NSString *contentUTI;
-@property (nonatomic) int16_t contentType;
 
 - (void)use;
 - (id)content;
-- (NSString *)contentDescription;
 
 @end

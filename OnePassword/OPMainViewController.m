@@ -84,7 +84,7 @@
     
     // Because IB's edit button doesn't auto-toggle self.editable like editButtonItem does.
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification object:nil queue:[NSOperationQueue mainQueue]
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
                                                       if (![OPAppDelegate get].keyPhrase) {
                                                           self.activeElement = nil;
@@ -171,9 +171,10 @@
         self.passwordCounter.text = [NSString stringWithFormat:@"%d", ((OPElementGeneratedEntity *) self.activeElement).counter];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSString *contentDescription = self.activeElement.contentDescription;
+        NSString *description = self.activeElement.description;
+        
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.contentField.text = contentDescription;
+            self.contentField.text = description;
         });
     });
 }
@@ -223,7 +224,7 @@
         return;
     
     [[UIPasteboard generalPasteboard] setValue:self.activeElement.content
-                             forPasteboardType:self.activeElement.contentUTI];
+                             forPasteboardType:(id)kUTTypeUTF8PlainText];
     
     [self showContentTip:@"Copied!" withIcon:nil];
 }
@@ -242,9 +243,9 @@
 - (void)updateElement:(void (^)(void))updateElement {
     
     // Update password counter.
-    NSString *oldPassword = self.activeElement.contentDescription;
+    NSString *oldPassword = self.activeElement.description;
     updateElement();
-    NSString *newPassword = self.activeElement.contentDescription;
+    NSString *newPassword = self.activeElement.description;
     [self updateAnimated:YES];
     
     // Show new and old password.
@@ -304,10 +305,9 @@
             OPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromOPElementType(type)
                                                                         inManagedObjectContext:[OPAppDelegate managedObjectContext]];
             newElement.name = self.activeElement.name;
+            newElement.mpHashHex = self.activeElement.mpHashHex;
             newElement.uses = self.activeElement.uses;
             newElement.lastUsed = self.activeElement.lastUsed;
-            newElement.contentUTI = self.activeElement.contentUTI;
-            newElement.contentType = self.activeElement.contentType;
             
             [[OPAppDelegate managedObjectContext] deleteObject:self.activeElement];
             self.activeElement = newElement;
@@ -315,7 +315,7 @@
         
         self.activeElement.type = type;
         
-        if (type & OPElementTypeClassStored && !self.activeElement.contentDescription)
+        if (type & OPElementTypeClassStored && ![self.activeElement.description length])
             [self showContentTip:@"Tap       to set a password." withIcon:self.contentTipEditIcon];
     }];
 }
@@ -360,6 +360,16 @@
             ((OPElementStoredEntity *) self.activeElement).contentObject = self.contentField.text;
         }];
     }
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request
+ navigationType:(UIWebViewNavigationType)navigationType {
+    if (navigationType == UIWebViewNavigationTypeLinkClicked) {
+        [[UIApplication sharedApplication] openURL:[request URL]];
+        return NO;
+    }
+
+    return YES;
 }
 
 @end

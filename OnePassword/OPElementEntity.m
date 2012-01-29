@@ -12,11 +12,10 @@
 @implementation OPElementEntity
 
 @dynamic name;
+@dynamic mpHashHex;
 @dynamic type;
 @dynamic uses;
 @dynamic lastUsed;
-@dynamic contentUTI;
-@dynamic contentType;
 
 - (void)use {
     
@@ -29,9 +28,15 @@
     @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Content implementation missing." userInfo:nil];
 }
 
-- (NSString *)contentDescription {
+- (NSString *)description {
     
     return [[self content] description];
+}
+
+- (NSString *)debugDescription {
+    
+    return [NSString stringWithFormat:@"{%@: name=%@, mpHashHex=%@, type=%d, uses=%d, lastUsed=%@}",
+            NSStringFromClass([self class]), self.name, self.mpHashHex, self.type, self.uses, self.lastUsed];
 }
 
 @end

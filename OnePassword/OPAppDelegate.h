@@ -10,14 +10,16 @@
 
 @interface OPAppDelegate : AbstractAppDelegate
 
-@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
-@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (strong, nonatomic) NSString *keyPhrase;
+@property (readonly, strong, nonatomic) NSManagedObjectContext          *managedObjectContext;
+@property (readonly, strong, nonatomic) NSManagedObjectModel            *managedObjectModel;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator    *persistentStoreCoordinator;
+@property (strong, nonatomic) NSString                                  *keyPhrase;
+@property (strong, nonatomic) NSData                                    *keyPhraseHash;
+@property (strong, nonatomic) NSString                                  *keyPhraseHashHex;
 
 + (OPAppDelegate *)get;
-+ (NSManagedObjectContext *)managedObjectContext;
 + (NSManagedObjectModel *)managedObjectModel;
++ (NSManagedObjectContext *)managedObjectContext;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
