@@ -5,68 +5,68 @@
 	<key>PreferenceSpecifiers</key>
 	<array>
 		<dict>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-			<key>Title</key>
-			<string></string>
 			<key>FooterText</key>
 			<string>http://masterpassword.lyndir.com</string>
+			<key>Title</key>
+			<string></string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
 		</dict>
 		<dict>
-			<key>Type</key>
-			<string>PSTitleValueSpecifier</string>
-			<key>Title</key>
-			<string>Version</string>
+			<key>DefaultValue</key>
+			<string></string>
 			<key>Key</key>
 			<string>version</string>
-			<key>DefaultValue</key>
-			<string></string>
-		</dict>
-		<dict>
+			<key>Title</key>
+			<string>Version</string>
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
-			<key>Title</key>
-			<string>Build</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<string></string>
 			<key>Key</key>
 			<string>build</string>
-			<key>DefaultValue</key>
-			<string></string>
-		</dict>
-		<dict>
+			<key>Title</key>
+			<string>Build</string>
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
-			<key>Title</key>
-			<string>Copyright</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<string></string>
 			<key>Key</key>
 			<string>copyright</string>
-			<key>DefaultValue</key>
-			<string></string>
+			<key>Title</key>
+			<string>Copyright</string>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
 		</dict>
 		<dict>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
+			<key>FooterText</key>
+			<string>This causes your master password to be remembered while your device is powered on.  Similar to your phone's SIM lock, you only need to enter the password once after powering on.</string>
 			<key>Title</key>
 			<string>Master Password</string>
-			<key>FooterText</key>
-			<string>This causes your master password to be remembered while your device is powered on.  Similar to your phone&apos;s SIM lock, you only need to enter the password once after powering on.</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>Remember my password</string>
-			<key>Key</key>
-			<string>rememberKeyPhrase</string>
-			<key>DefaultValue</key>
-			<false/>
-		</dict>
-		<dict>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<false/>
+			<key>Key</key>
+			<string>rememberKeyPhrase</string>
+			<key>Title</key>
+			<string>Remember my password</string>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+		</dict>
+		<dict>
+			<key>FooterText</key>
+			<string>Use this to save your master password in the key chain.  This is somewhat less secure should your device get stolen, but it means you won't need to enter the master password anymore.  You can compensate for the reduced security by going into General-&gt;Passcode Lock, disabling "Simple Passcode", and setting a more secure passcode for your device.</string>
 			<key>Title</key>
 			<string></string>
-			<key>FooterText</key>
-			<string>Use this to save your master password in the key chain.  This is somewhat less secure should your device get stolen, but it means you won&apos;t need to enter the master password anymore.  You can compensate for the reduced security by going into General-&gt;Passcode Lock, disabling &quot;Simple Passcode&quot;, and setting a more secure passcode for your device.</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
@@ -79,22 +79,22 @@
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
 		<dict>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-			<key>Title</key>
-			<string></string>
 			<key>FooterText</key>
 			<string>Turn this on if you want to change the master password.  Start the application and it will ask you for a new master password.  All passwords will change to those for the new master password.</string>
+			<key>Title</key>
+			<string></string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
 		</dict>
 		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>Change my password</string>
-			<key>Key</key>
-			<string>forgetKeyPhrase</string>
 			<key>DefaultValue</key>
 			<false/>
+			<key>Key</key>
+			<string>forgetKeyPhrase</string>
+			<key>Title</key>
+			<string>Change my password</string>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
 		</dict>
 	</array>
 	<key>StringsTable</key>
