@@ -217,7 +217,10 @@
                      dbg(@"Key phrase hash mismatch. Expected: %@, answer: %@.", keyPhraseHash, answerHash);
                      
                      [AlertViewController showAlertWithTitle:[PearlStrings get].commonTitleError
-                                                     message:@"Incorrect master password."
+                                                     message:
+                                                             @"Incorrect master password.\n\n"
+                             @"If you are trying to use the app with a different master password, "
+                                                                     @"flip the 'Change my password' option in Settings."
                                                    viewStyle:UIAlertViewStyleDefault
                                            tappedButtonBlock:
                       ^(UIAlertView *alert, NSInteger buttonIndex) {

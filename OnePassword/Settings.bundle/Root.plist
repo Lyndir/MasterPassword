@@ -14,37 +14,37 @@
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
-			<string></string>
-			<key>Key</key>
-			<string>version</string>
+			<string>[auto]</string>
 			<key>Title</key>
 			<string>Version</string>
+			<key>Key</key>
+			<string>unset</string>
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
-			<string></string>
-			<key>Key</key>
-			<string>build</string>
+			<string>[auto]</string>
 			<key>Title</key>
 			<string>Build</string>
+			<key>Key</key>
+			<string>unset</string>
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
-			<string></string>
-			<key>Key</key>
-			<string>copyright</string>
+			<string>[auto]</string>
 			<key>Title</key>
 			<string>Copyright</string>
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
+			<key>Key</key>
+			<string>unset</string>
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>This causes your master password to be remembered while your device is powered on.  Similar to your phone's SIM lock, you only need to enter the password once after powering on.</string>
+			<string>This causes your master password to be remembered while your device is powered on.  Similar to your phone&apos;s SIM lock, you only need to enter the password once after powering on.</string>
 			<key>Title</key>
 			<string>Master Password</string>
 			<key>Type</key>
@@ -62,7 +62,7 @@
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>Use this to save your master password in the key chain.  This is somewhat less secure should your device get stolen, but it means you won't need to enter the master password anymore.  You can compensate for the reduced security by going into General-&gt;Passcode Lock, disabling "Simple Passcode", and setting a more secure passcode for your device.</string>
+			<string>Use this to save your master password in the key chain.  This is somewhat less secure should your device get stolen, but it means you won&apos;t need to enter the master password anymore.  You can compensate for the reduced security by going into General-&gt;Passcode Lock, disabling &quot;Simple Passcode&quot;, and setting a more secure passcode for your device.</string>
 			<key>Title</key>
 			<string></string>
 			<key>Type</key>

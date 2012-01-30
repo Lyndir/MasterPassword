@@ -6,20 +6,6 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		DA6556DC14D55C1500841C99 /* InfoPlist */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = DA6556DD14D55C1600841C99 /* Build configuration list for PBXAggregateTarget "InfoPlist" */;
-			buildPhases = (
-				DA6556E014D55C2700841C99 /* ShellScript */,
-			);
-			dependencies = (
-			);
-			name = InfoPlist;
-			productName = InfoPlist;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		DA007F5214B24DCD00251337 /* OPConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA007F5114B24DCD00251337 /* OPConfig.m */; };
 		DA007F5514B25EE100251337 /* ciphers.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA007F5414B25EE100251337 /* ciphers.plist */; };
@@ -670,13 +656,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		DA6556E114D55C4400841C99 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DA6556DC14D55C1500841C99;
-			remoteInfo = InfoPlist;
-		};
 		DAC63281148681190075AEA5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
@@ -1809,12 +1788,12 @@
 				DAE2C646148247E500BA6B10 /* OPTypeViewController.m */,
 				DA55B29C14B38272001131B7 /* OPContentViewController.h */,
 				DA55B29D14B38272001131B7 /* OPContentViewController.m */,
-				DA5BFA51147E415C00F98B1E /* Supporting Files */,
 				DA34DA1414B1BEA100F721C1 /* OPTypes.h */,
 				DA34DA1514B1BEA100F721C1 /* OPTypes.m */,
 				DA007F5014B24DCC00251337 /* OPConfig.h */,
 				DA007F5114B24DCD00251337 /* OPConfig.m */,
 				DADC3C4C14C62B350091CB4D /* Settings.bundle */,
+				DA5BFA51147E415C00F98B1E /* Supporting Files */,
 			);
 			path = OnePassword;
 			sourceTree = "<group>";
@@ -2292,15 +2271,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "OnePassword" */;
 			buildPhases = (
-				DA6556E314D55F3000841C99 /* ShellScript */,
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
 				DA5BFA42147E415C00F98B1E /* Resources */,
+				DA6556E314D55F3000841C99 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				DA6556E214D55C4400841C99 /* PBXTargetDependency */,
 				DAC63282148681190075AEA5 /* PBXTargetDependency */,
 			);
 			name = OnePassword;
@@ -2388,7 +2366,6 @@
 				DAC77CAC148291A600BCF976 /* Pearl */,
 				DAC6325C1486805C0075AEA5 /* uicolor-utilities */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
-				DA6556DC14D55C1500841C99 /* InfoPlist */,
 			);
 		};
 /* End PBXProject section */
@@ -2951,20 +2928,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		DA6556E014D55C2700841C99 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-				InfoPlist.h,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = "/usr/bin/env bash";
-			shellScript = "cat > \"$SCRIPT_OUTPUT_FILE_0\" <<. \n#define GIT_COMMIT      $(git describe --tags --always --dirty --long)\n#define GIT_TAG         $(git describe --tags | sed 's/-[^-]*-[^-]*$//')h\n#define GIT_COMMIT_YEAR $(git log --format=format:%ci HEAD^.. | sed 's/-.*//')\n.\ntouch /Users/lhunath/Documents/workspace/lyndir/OnePassword/OnePassword/OnePassword-Info.plist";
-		};
 		DA6556E314D55F3000841C99 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2975,8 +2938,8 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "PATH+=:/usr/libexec\n\nPlistBuddy -c \"Set :CFBundleVersion $(git describe --tags --always --dirty --long)\" \"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"\nPlistBuddy -c \"Set :CFBundleShortVersionString $(git describe --tags | sed 's/-[^-]*-[^-]*$//')\" \"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"\n\nPlistBuddy -c \"Set :CFBundleShortVersionString $(git describe --tags | sed 's/-[^-]*-[^-]*$//')\" \"OnePassword/Settings.bundle/Root.plist\"\n";
+			shellPath = "/usr/bin/env bash";
+			shellScript = "PATH+=:/usr/libexec\nset -e\n\nsetPlistWithKey() {\n    local key=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n\n    PlistBuddy -c \"Set :$key $value\" \"$plist\"\n}\ngetPlistWithKey() {\n    local key=$1 plist=${2:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Print :$key\" \"$plist\"\n}\nsetSettingWithTitle() {\n    local i title=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Settings.bundle/Root.plist\"}\n    \n    for (( i=0; 1; ++i )); do\n        PlistBuddy -c \"Print :PreferenceSpecifiers:$i\" \"$plist\" &>/dev/null || break\n        echo \"Checking preference specifier $i\"\n    \n        [[ $(PlistBuddy -c \"Print :PreferenceSpecifiers:$i:Title\" \"$plist\" 2>/dev/null) = $title ]] || continue\n\n        echo \"Correct title, setting value.\"\n        PlistBuddy -c \"Set :PreferenceSpecifiers:$i:DefaultValue $value\" \"$plist\"\n        break\n    done\n}\n\nbuild=$(git describe --tags --always --dirty --long)\ntag=$(git describe --tags | sed 's/-[^-]*-[^-]*$//')\n\nsetPlistWithKey CFBundleVersion \"$build\"\nsetPlistWithKey CFBundleShortVersionString \"$tag\"\n\nsetSettingWithTitle \"Build\" \"$build\"\nsetSettingWithTitle \"Version\" \"$tag\"\nsetSettingWithTitle \"Copyright\" \"$(getPlistWithKey NSHumanReadableCopyright)\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -3061,11 +3024,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		DA6556E214D55C4400841C99 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DA6556DC14D55C1500841C99 /* InfoPlist */;
-			targetProxy = DA6556E114D55C4400841C99 /* PBXContainerItemProxy */;
-		};
 		DAC63282148681190075AEA5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DAC77CAC148291A600BCF976 /* Pearl */;
@@ -3174,20 +3132,6 @@
 			};
 			name = Release;
 		};
-		DA6556DE14D55C1600841C99 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		DA6556DF14D55C1600841C99 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		DAC632661486805C0075AEA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3282,14 +3226,6 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
-		};
-		DA6556DD14D55C1600841C99 /* Build configuration list for PBXAggregateTarget "InfoPlist" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DA6556DE14D55C1600841C99 /* Debug */,
-				DA6556DF14D55C1600841C99 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
 		};
 		DAC632651486805C0075AEA5 /* Build configuration list for PBXNativeTarget "uicolor-utilities" */ = {
 			isa = XCConfigurationList;

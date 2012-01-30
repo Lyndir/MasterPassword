@@ -91,12 +91,13 @@ NSString *OPCalculateContent(OPElementType type, NSString *name, NSString *keyPh
     
     // Determine the hash whose bytes will be used for calculating a password: md4(name-keyPhrase)
     assert(name && keyPhrase);
-    NSData *keyHash = [[NSString stringWithFormat:@"%@-%@-%d", name, keyPhrase, counter] hashWith:PearlDigestMD4];
+    NSData *keyHash = [[NSString stringWithFormat:@"%@-%@-%d", name, keyPhrase, counter] hashWith:PearlDigestSHA1];
     const char *keyBytes = keyHash.bytes;
     
     // Determine the cipher from the first hash byte.
     assert([keyHash length]);
-    NSArray *typeCiphers = [[OPTypes_ciphers valueForKey:@"OPElementTypeCalculated"] valueForKey:NSStringFromOPElementType(type)];
+    NSArray *typeCiphers = [[OPTypes_ciphers valueForKey:ClassNameFromOPElementType(type)]
+            valueForKey:NSStringFromOPElementType(type)];
     NSString *cipher = [typeCiphers objectAtIndex:keyBytes[0] % [typeCiphers count]];
 
     // Encode the content, character by character, using subsequent hash bytes and the cipher.
