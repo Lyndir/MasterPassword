@@ -15,7 +15,6 @@
 + (NSDictionary *)keyPhraseQuery;
 + (NSDictionary *)keyPhraseHashQuery;
 
-- (void)loadKeyPhrase;
 - (void)forgetKeyPhrase;
 - (void)loadStoredKeyPhrase;
 - (void)askKeyPhrase;
@@ -122,7 +121,15 @@
 }
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
-    [self loadKeyPhrase];
+    if ([[OPConfig get].firstRun boolValue])
+        [self showGuide];
+    else
+        [self loadKeyPhrase];
+}
+
+- (void)showGuide {
+    
+    [self.navigationController performSegueWithIdentifier:@"OP_Guide" sender:self];
 }
 
 - (void)loadKeyPhrase {

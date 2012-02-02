@@ -24,4 +24,7 @@
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 
+- (void)showGuide;
+- (void)loadKeyPhrase;
+
 @end

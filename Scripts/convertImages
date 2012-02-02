@@ -24,7 +24,7 @@ done
 
 echo
 emit "Converting @2x artwork"
-for file in ./*@2x.png; do
+for file in ./{,Guide/}*@2x.png; do
     inArray "${file##*/}" "${icons[@]}" && continue
 
     emit "${file/@2x}" --

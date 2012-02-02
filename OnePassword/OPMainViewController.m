@@ -64,13 +64,8 @@
     
     [super viewWillAppear:animated];
     
-    if (![self.searchTipContainer.superview isKindOfClass:[UIWindow class]]) {
-        // Put the search tip on the window so it's above the nav bar.
-        [self.searchTipContainer removeFromSuperview];
-        [[UIApplication sharedApplication].keyWindow addSubview:self.searchTipContainer];
-        self.searchTipContainer.frame = CGRectSetY(self.searchTipContainer.frame, self.searchTipContainer.frame.origin.y
-                                                   + self.navigationController.navigationBar.frame.size.height /* Nav */ + 20 /* Status */);
-    }
+    self.searchTipContainer.hidden = NO;
+    
     if (!self.activeElement.name)
         [UIView animateWithDuration:animated? 0.2f: 0 animations:^{
             self.searchTipContainer.alpha = 1;
@@ -80,7 +75,21 @@
     [self updateAnimated:NO];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+
+    [super viewWillDisappear:animated];
+    
+    self.searchTipContainer.hidden = YES;
+}
+
 - (void)viewDidLoad {
+    
+    // Put the search tip on the window so it's above the nav bar.
+//    [self.searchTipContainer removeFromSuperview];
+//    [[UIApplication sharedApplication].keyWindow addSubview:self.searchTipContainer];
+//    self.searchTipContainer.frame = CGRectSetY(self.searchTipContainer.frame, self.searchTipContainer.frame.origin.y
+//                                               + self.navigationController.navigationBar.frame.size.height /* Nav */ + 20 /* Status */);
+    self.searchTipContainer.hidden = YES;
     
     // Because IB's edit button doesn't auto-toggle self.editable like editButtonItem does.
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
@@ -368,7 +377,7 @@
         [[UIApplication sharedApplication] openURL:[request URL]];
         return NO;
     }
-
+    
     return YES;
 }
 
