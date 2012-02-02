@@ -121,7 +121,7 @@
 }
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
-    if ([[OPConfig get].firstRun boolValue])
+    if ([[OPConfig get].showQuickstart boolValue])
         [self showGuide];
     else
         [self loadKeyPhrase];

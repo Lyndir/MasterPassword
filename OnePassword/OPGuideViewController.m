@@ -28,6 +28,7 @@
     
     [super viewWillDisappear:animated];
     
+    [OPConfig get].showQuickstart = [NSNumber numberWithBool:NO];
     [[OPAppDelegate get] loadKeyPhrase];
 }
 

@@ -13,6 +13,7 @@
 @property (nonatomic, retain) NSNumber *rememberKeyPhrase;
 @property (nonatomic, retain) NSNumber *forgetKeyPhrase;
 @property (nonatomic, retain) NSNumber *helpHidden;
+@property (nonatomic, retain) NSNumber *showQuickstart;
 
 + (OPConfig *)get;
 

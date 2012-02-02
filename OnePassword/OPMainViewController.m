@@ -76,7 +76,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-
+    
     [super viewWillDisappear:animated];
     
     self.searchTipContainer.hidden = YES;
@@ -85,10 +85,11 @@
 - (void)viewDidLoad {
     
     // Put the search tip on the window so it's above the nav bar.
-//    [self.searchTipContainer removeFromSuperview];
-//    [[UIApplication sharedApplication].keyWindow addSubview:self.searchTipContainer];
-//    self.searchTipContainer.frame = CGRectSetY(self.searchTipContainer.frame, self.searchTipContainer.frame.origin.y
-//                                               + self.navigationController.navigationBar.frame.size.height /* Nav */ + 20 /* Status */);
+    CGRect newFrame = [self.navigationController.navigationBar convertRect:self.searchTipContainer.frame
+                                                                  fromView:self.searchTipContainer.superview];
+    [self.searchTipContainer removeFromSuperview];
+    [self.navigationController.navigationBar addSubview:self.searchTipContainer];
+    self.searchTipContainer.frame = newFrame;
     self.searchTipContainer.hidden = YES;
     
     // Because IB's edit button doesn't auto-toggle self.editable like editButtonItem does.

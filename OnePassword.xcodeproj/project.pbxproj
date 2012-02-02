@@ -15,6 +15,8 @@
 		DA34DA0D14B1BC7D00F721C1 /* OPElementStoredEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA34DA0C14B1BC7D00F721C1 /* OPElementStoredEntity.m */; };
 		DA34DA1114B1BC7E00F721C1 /* OPElementEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA34DA1014B1BC7E00F721C1 /* OPElementEntity.m */; };
 		DA34DA1614B1BEA100F721C1 /* OPTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = DA34DA1514B1BEA100F721C1 /* OPTypes.m */; };
+		DA41A40B14DB3BF100638533 /* guide_page_0.png in Resources */ = {isa = PBXBuildFile; fileRef = DA41A40914DB3BF100638533 /* guide_page_0.png */; };
+		DA41A40C14DB3BF100638533 /* guide_page_0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA41A40A14DB3BF100638533 /* guide_page_0@2x.png */; };
 		DA55B29E14B38272001131B7 /* OPContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA55B29D14B38272001131B7 /* OPContentViewController.m */; };
 		DA55B2A214B4EB47001131B7 /* OPSearchDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DA55B2A114B4EB46001131B7 /* OPSearchDelegate.m */; };
 		DA5BFA49147E415C00F98B1E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA48147E415C00F98B1E /* UIKit.framework */; };
@@ -706,6 +708,8 @@
 		DA34DA1014B1BC7E00F721C1 /* OPElementEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OPElementEntity.m; sourceTree = "<group>"; };
 		DA34DA1414B1BEA100F721C1 /* OPTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OPTypes.h; sourceTree = "<group>"; };
 		DA34DA1514B1BEA100F721C1 /* OPTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OPTypes.m; sourceTree = "<group>"; };
+		DA41A40914DB3BF100638533 /* guide_page_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_page_0.png; sourceTree = "<group>"; };
+		DA41A40A14DB3BF100638533 /* guide_page_0@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_page_0@2x.png"; sourceTree = "<group>"; };
 		DA55B29C14B38272001131B7 /* OPContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OPContentViewController.h; sourceTree = "<group>"; };
 		DA55B29D14B38272001131B7 /* OPContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OPContentViewController.m; sourceTree = "<group>"; };
 		DA55B2A014B4EB46001131B7 /* OPSearchDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OPSearchDelegate.h; sourceTree = "<group>"; };
@@ -1860,12 +1864,14 @@
 		DA6556F714D730B700841C99 /* Guide */ = {
 			isa = PBXGroup;
 			children = (
+				DA41A40A14DB3BF100638533 /* guide_page_0@2x.png */,
 				DA65570714D760BD00841C99 /* guide_page_1@2x.png */,
 				DA65570814D760BD00841C99 /* guide_page_2@2x.png */,
 				DA65570914D760BD00841C99 /* guide_page_3@2x.png */,
 				DA65570A14D760BD00841C99 /* guide_page_4@2x.png */,
 				DA65570B14D760BD00841C99 /* guide_page_5@2x.png */,
 				DA65570C14D760BD00841C99 /* guide_page_6@2x.png */,
+				DA41A40914DB3BF100638533 /* guide_page_0.png */,
 				DA6556F814D730B700841C99 /* guide_page_1.png */,
 				DA6556F914D730B700841C99 /* guide_page_2.png */,
 				DA6556FA14D730B700841C99 /* guide_page_3.png */,
@@ -2317,9 +2323,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		DA5BFA43147E415C00F98B1E /* OnePassword */ = {
+		DA5BFA43147E415C00F98B1E /* MasterPassword */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "OnePassword" */;
+			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */;
 			buildPhases = (
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
@@ -2331,7 +2337,7 @@
 			dependencies = (
 				DAC63282148681190075AEA5 /* PBXTargetDependency */,
 			);
-			name = OnePassword;
+			name = MasterPassword;
 			productName = OnePassword;
 			productReference = DA5BFA44147E415C00F98B1E /* OnePassword.app */;
 			productType = "com.apple.product-type.application";
@@ -2412,7 +2418,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DA5BFA43147E415C00F98B1E /* OnePassword */,
+				DA5BFA43147E415C00F98B1E /* MasterPassword */,
 				DAC77CAC148291A600BCF976 /* Pearl */,
 				DAC6325C1486805C0075AEA5 /* uicolor-utilities */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
@@ -2984,6 +2990,8 @@
 				DA65571014D760BD00841C99 /* guide_page_4@2x.png in Resources */,
 				DA65571114D760BD00841C99 /* guide_page_5@2x.png in Resources */,
 				DA65571214D760BD00841C99 /* guide_page_6@2x.png in Resources */,
+				DA41A40B14DB3BF100638533 /* guide_page_0.png in Resources */,
+				DA41A40C14DB3BF100638533 /* guide_page_0@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3281,7 +3289,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "OnePassword" */ = {
+		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA5BFA6E147E415C00F98B1E /* Debug */,
