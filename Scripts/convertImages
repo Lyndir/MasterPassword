@@ -11,7 +11,7 @@ icons=(
     [72]="Icon-72.png"
     [114]="Icon@2x.png"
 )
-cd "${0%/*}/../OnePassword/Resources"
+cd "${0%/*}/../MasterPassword/Resources"
 
 for size in "${!icons[@]}"; do
     file=${icons[size]}
