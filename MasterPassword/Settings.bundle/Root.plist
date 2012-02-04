@@ -106,9 +106,9 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>Show Quickstart</string>
+			<string>Show Quick Start</string>
 			<key>Key</key>
-			<string>showQuickstart</string>
+			<string>showQuickStart</string>
 			<key>DefaultValue</key>
 			<true/>
 		</dict>

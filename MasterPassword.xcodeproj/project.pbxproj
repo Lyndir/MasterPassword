@@ -203,6 +203,7 @@
 		DA84819414CB521E00A2FA22 /* tip_location_mercury.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84817614CB521E00A2FA22 /* tip_location_mercury.png */; };
 		DA84819514CB521E00A2FA22 /* tip_location_teal.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84817714CB521E00A2FA22 /* tip_location_teal.png */; };
 		DA84819614CB521E00A2FA22 /* tip_location_wood.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84817814CB521E00A2FA22 /* tip_location_wood.png */; };
+		DA8E8E4614DD7C1D0044257E /* logo-bare.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8E8E4514DD7C1D0044257E /* logo-bare.png */; };
 		DAA3B68E14CCCEE700F35AF6 /* icon_addressbook-person@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA3B53814CCCEE700F35AF6 /* icon_addressbook-person@2x.png */; };
 		DAA3B68F14CCCEE700F35AF6 /* icon_addressbook.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA3B53914CCCEE700F35AF6 /* icon_addressbook.png */; };
 		DAA3B69014CCCEE700F35AF6 /* icon_addressbook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA3B53A14CCCEE700F35AF6 /* icon_addressbook@2x.png */; };
@@ -904,6 +905,8 @@
 		DA84817614CB521E00A2FA22 /* tip_location_mercury.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tip_location_mercury.png; sourceTree = "<group>"; };
 		DA84817714CB521E00A2FA22 /* tip_location_teal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tip_location_teal.png; sourceTree = "<group>"; };
 		DA84817814CB521E00A2FA22 /* tip_location_wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tip_location_wood.png; sourceTree = "<group>"; };
+		DA8E8E4514DD7C1D0044257E /* logo-bare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo-bare.png"; path = "Resources/logo-bare.png"; sourceTree = "<group>"; };
+		DA8E8E4714DDA62D0044257E /* MasterPassword.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MasterPassword.entitlements; sourceTree = "<group>"; };
 		DAA3B53814CCCEE700F35AF6 /* icon_addressbook-person@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_addressbook-person@2x.png"; sourceTree = "<group>"; };
 		DAA3B53914CCCEE700F35AF6 /* icon_addressbook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_addressbook.png; sourceTree = "<group>"; };
 		DAA3B53A14CCCEE700F35AF6 /* icon_addressbook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_addressbook@2x.png"; sourceTree = "<group>"; };
@@ -1805,6 +1808,7 @@
 		DA5BFA50147E415C00F98B1E /* MasterPassword */ = {
 			isa = PBXGroup;
 			children = (
+				DA8E8E4714DDA62D0044257E /* MasterPassword.entitlements */,
 				DA7C28A214AF02A000491972 /* Models */,
 				DA7C28A314AF02B100491972 /* Data */,
 				DA5BFA59147E415C00F98B1E /* OPAppDelegate.h */,
@@ -1834,6 +1838,7 @@
 		DA5BFA51147E415C00F98B1E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				DA8E8E4514DD7C1D0044257E /* logo-bare.png */,
 				DA6556F714D730B700841C99 /* Guide */,
 				DAA3B80414CDBBC600F35AF6 /* jquery-1.6.1.min.js */,
 				DA84811E14CB50C100A2FA22 /* Tooltips */,
@@ -2992,6 +2997,7 @@
 				DA65571214D760BD00841C99 /* guide_page_6@2x.png in Resources */,
 				DA41A40B14DB3BF100638533 /* guide_page_0.png in Resources */,
 				DA41A40C14DB3BF100638533 /* guide_page_0@2x.png in Resources */,
+				DA8E8E4614DD7C1D0044257E /* logo-bare.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3182,6 +3188,7 @@
 		DA5BFA6E147E415C00F98B1E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MasterPassword/MasterPassword.entitlements;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MasterPassword/MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword/MasterPassword-Info.plist";
@@ -3194,6 +3201,7 @@
 		DA5BFA6F147E415C00F98B1E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MasterPassword/MasterPassword.entitlements;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MasterPassword/MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword/MasterPassword-Info.plist";

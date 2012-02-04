@@ -17,8 +17,8 @@
 @property (nonatomic) int16_t type;
 @property (nonatomic) int16_t uses;
 @property (nonatomic) NSTimeInterval lastUsed;
+@property (nonatomic, readonly) id content;
 
 - (void)use;
-- (id)content;
 
 @end

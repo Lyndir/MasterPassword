@@ -42,14 +42,16 @@
 
 - (void)searchDisplayController:(UISearchDisplayController *)controller didLoadSearchResultsTableView:(UITableView *)tableView {
     
+    [[NSNotificationCenter defaultCenter] addObserverForName:OPPersistentStoreDidChangeNotification
+                                                      object:nil queue:nil usingBlock:^(NSNotification *note) {
+                                                          NSError *error;
+                                                          if (![self.fetchedResultsController performFetch:&error])
+                                                              err(@"Couldn't fetch elements: %@", error);
+                                                      }];
+    
     tableView.backgroundColor = [UIColor blackColor];
     tableView.rowHeight = 34.0f;
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-}
-
-- (void)searchDisplayController:(UISearchDisplayController *)controller willShowSearchResultsTableView:(UITableView *)tableView {
-    
-    [tableView setEditing:self.searchDisplayController.searchContentsController.editing animated:NO];
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
@@ -89,7 +91,8 @@
     [self.searchDisplayController.searchResultsTableView beginUpdates];
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
+       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
     
     UITableView *tableView = self.searchDisplayController.searchResultsTableView;
     switch(type) {
@@ -118,7 +121,8 @@
 }
 
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
     
     UITableView *tableView = self.searchDisplayController.searchResultsTableView;
     switch(type) {
@@ -191,21 +195,33 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    OPElementEntity *element;
     if (indexPath.section < [[self.fetchedResultsController sections] count])
-        element = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        [self.delegate didSelectElement:[self.fetchedResultsController objectAtIndexPath:indexPath]];
     
     else {
         // "New" section.
-        element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([OPElementGeneratedEntity class])
-                                                inManagedObjectContext:[OPAppDelegate managedObjectContext]];
-        assert([element isKindOfClass:ClassFromOPElementType(element.type)]);
-        
-        element.name = self.searchDisplayController.searchBar.text;
-        element.mpHashHex = [OPAppDelegate get].keyPhraseHashHex;
+        NSString *siteName = self.searchDisplayController.searchBar.text;
+        [AlertViewController showAlertWithTitle:@"New Site"
+                                        message:l(@"Do you want to create a new site named:\n%@", siteName)
+                                      viewStyle:UIAlertViewStyleDefault
+                              tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                  if (buttonIndex == [alert cancelButtonIndex])
+                                      return;
+                                  
+                                  [self.fetchedResultsController.managedObjectContext performBlock:^{
+                                      OPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([OPElementGeneratedEntity class])
+                                                                                               inManagedObjectContext:self.fetchedResultsController.managedObjectContext];
+                                      assert([element isKindOfClass:ClassFromOPElementType(element.type)]);
+                                      
+                                      element.name = siteName;
+                                      element.mpHashHex = [OPAppDelegate get].keyPhraseHashHex;
+                                      
+                                      dispatch_async(dispatch_get_main_queue(), ^{
+                                          [self.delegate didSelectElement:element];
+                                      });
+                                  }];
+                              } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonYes, nil];
     }
-    
-    [self.delegate didSelectElement:element];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -232,11 +248,11 @@
         // "New" section.
         return;
     
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        OPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        
-        [[OPAppDelegate managedObjectContext] deleteObject:element];
-    }
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+        [self.fetchedResultsController.managedObjectContext performBlock:^{
+            OPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
+            [self.fetchedResultsController.managedObjectContext deleteObject:element];
+        }];
 }
 
 

@@ -75,25 +75,29 @@
     [self updateAnimated:NO];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated {
     
-    [super viewWillDisappear:animated];
+    [super viewDidAppear:animated];
     
-    self.searchTipContainer.hidden = YES;
+    // Put the search tip on the window so it's above the nav bar.
+    if (![self.searchTipContainer.superview isEqual:self.navigationController.navigationBar.superview]) {
+        CGRect frameInWindow = [self.searchTipContainer.window convertRect:self.searchTipContainer.frame
+                                                                  fromView:self.searchTipContainer.superview];
+        [self.searchTipContainer removeFromSuperview];
+        [self.navigationController.navigationBar.superview addSubview:self.searchTipContainer];
+        self.searchTipContainer.frame = [self.searchTipContainer.window convertRect:frameInWindow
+                                                                             toView:self.searchTipContainer.superview];
+    }
 }
 
 - (void)viewDidLoad {
     
-    // Put the search tip on the window so it's above the nav bar.
-    CGRect newFrame = [self.navigationController.navigationBar convertRect:self.searchTipContainer.frame
-                                                                  fromView:self.searchTipContainer.superview];
-    [self.searchTipContainer removeFromSuperview];
-    [self.navigationController.navigationBar addSubview:self.searchTipContainer];
-    self.searchTipContainer.frame = newFrame;
-    self.searchTipContainer.hidden = YES;
-    
-    // Because IB's edit button doesn't auto-toggle self.editable like editButtonItem does.
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
+    //self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo-bare.png"]];
+    self.navigationItem.titleView.frame = CGRectMake(0, 0, 50, 50);
+    self.navigationItem.titleView.center = self.navigationController.navigationBar.center;
+    self.navigationItem.titleView.contentMode = UIViewContentModeScaleAspectFit;
+    
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
                                                       if (![OPAppDelegate get].keyPhrase) {
@@ -216,10 +220,12 @@
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message {
     
     self.alertTitle.text = title;
+    NSRange scrollRange = NSMakeRange(self.alertBody.text.length, message.length);
     if ([self.alertBody.text length])
         self.alertBody.text = [NSString stringWithFormat:@"%@\n\n---\n\n%@", self.alertBody.text, message];
     else
         self.alertBody.text = message;
+    [self.alertBody scrollRangeToVisible:scrollRange];
     
     [UIView animateWithDuration:0.2f animations:^{
         self.alertContainer.alpha = 1;
@@ -310,18 +316,19 @@
     
     [self updateElement:^{
         // Update password type.
-        if (ClassFromOPElementType(type) != ClassFromOPElementType(self.activeElement.type)) {
+        if (ClassFromOPElementType(type) != ClassFromOPElementType(self.activeElement.type))
             // Type requires a different class of element.  Recreate the element.
-            OPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromOPElementType(type)
-                                                                        inManagedObjectContext:[OPAppDelegate managedObjectContext]];
-            newElement.name = self.activeElement.name;
-            newElement.mpHashHex = self.activeElement.mpHashHex;
-            newElement.uses = self.activeElement.uses;
-            newElement.lastUsed = self.activeElement.lastUsed;
-            
-            [[OPAppDelegate managedObjectContext] deleteObject:self.activeElement];
-            self.activeElement = newElement;
-        }
+            [[OPAppDelegate managedObjectContext] performBlockAndWait:^{
+                OPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromOPElementType(type)
+                                                           inManagedObjectContext:[OPAppDelegate managedObjectContext]];
+                newElement.name = self.activeElement.name;
+                newElement.mpHashHex = self.activeElement.mpHashHex;
+                newElement.uses = self.activeElement.uses;
+                newElement.lastUsed = self.activeElement.lastUsed;
+                
+                [[OPAppDelegate managedObjectContext] deleteObject:self.activeElement];
+                self.activeElement = newElement;
+            }];
         
         self.activeElement.type = type;
         

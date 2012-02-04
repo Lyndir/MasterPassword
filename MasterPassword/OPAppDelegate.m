@@ -121,7 +121,7 @@
 }
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
-    if ([[OPConfig get].showQuickstart boolValue])
+    if ([[OPConfig get].showQuickStart boolValue])
         [self showGuide];
     else
         [self loadKeyPhrase];
@@ -244,13 +244,14 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     
+    [self saveContext];
+    
     if (![[OPConfig get].rememberKeyPhrase boolValue])
         self.keyPhrase = nil;
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-    // Saves changes in the application's managed object context before the application terminates.
+- (void)applicationWillTerminate:(UIApplication *)application {
+    
     [self saveContext];
 }
 
@@ -269,18 +270,13 @@
     return [(OPAppDelegate *)[UIApplication sharedApplication].delegate managedObjectModel];
 }
 
-- (void)saveContext
-{
-    NSError *error = nil;
-    if ([self.managedObjectContext hasChanges] && ![self.managedObjectContext save:&error]) {
-        /*
-         Replace this implementation with code to handle the error appropriately.
-         
-         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-         */
-        err(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
-    } 
+- (void)saveContext {
+    
+    [self.managedObjectContext performBlock:^{
+        NSError *error = nil;
+        if ([self.managedObjectContext hasChanges] && ![self.managedObjectContext save:&error])
+            err(@"Unresolved error %@", error);
+    }];
 }
 
 - (void)setKeyPhrase:(NSString *)keyPhrase {
@@ -312,17 +308,30 @@
  */
 - (NSManagedObjectContext *)managedObjectContext
 {
-    if (__managedObjectContext != nil)
-    {
+    if (__managedObjectContext)
         return __managedObjectContext;
-    }
     
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-    if (coordinator != nil)
-    {
-        __managedObjectContext = [[NSManagedObjectContext alloc] init];
-        [__managedObjectContext setPersistentStoreCoordinator:coordinator];
+    if (coordinator) {
+        __managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        __managedObjectContext.persistentStoreCoordinator = coordinator;
+        
+        [[NSNotificationCenter defaultCenter] addObserverForName:NSPersistentStoreDidImportUbiquitousContentChangesNotification
+                                                          object:coordinator
+                                                           queue:nil
+                                                      usingBlock:^(NSNotification *note) {
+                                                          dbg(@"Ubiquitous content change: %@", note);
+                                                          
+                                                          [__managedObjectContext performBlock:^{
+                                                              [__managedObjectContext mergeChangesFromContextDidSaveNotification:note];
+
+                                                              [[NSNotificationCenter defaultCenter] postNotification:
+                                                               [NSNotification notificationWithName:OPPersistentStoreDidChangeNotification
+                                                                                             object:self userInfo:[note userInfo]]];
+                                                          }];
+                                                      }];
     }
+
     return __managedObjectContext;
 }
 
@@ -332,14 +341,11 @@
  */
 - (NSManagedObjectModel *)managedObjectModel
 {
-    if (__managedObjectModel != nil)
-    {
+    if (__managedObjectModel)
         return __managedObjectModel;
-    }
+
     NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"MasterPassword" withExtension:@"momd"];
-    __managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    
-    return __managedObjectModel;
+    return __managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
 }
 
 /**
@@ -348,19 +354,23 @@
  */
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator
 {
-    if (__persistentStoreCoordinator != nil)
-    {
+    if (__persistentStoreCoordinator)
         return __persistentStoreCoordinator;
-    }
     
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"MasterPassword.sqlite"];
     
-    NSError *error = nil;
     __persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+    [__persistentStoreCoordinator lock];
+    NSError *error = nil;
     if (![__persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL
                                                           options:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                   (id)kCFBooleanTrue,  NSMigratePersistentStoresAutomaticallyOption,
-                                                                   (id)kCFBooleanTrue,  NSInferMappingModelAutomaticallyOption,
+                                                                   [NSNumber numberWithBool:YES],   NSInferMappingModelAutomaticallyOption,
+                                                                   [NSNumber numberWithBool:YES],   NSMigratePersistentStoresAutomaticallyOption,
+                                                                   @"MasterPassword.store",         NSPersistentStoreUbiquitousContentNameKey,
+                                                                   [[[NSFileManager defaultManager]
+                                                                     URLForUbiquityContainerIdentifier:nil]
+                                                                    URLByAppendingPathComponent:@"store"
+                                                                    isDirectory:YES],               NSPersistentStoreUbiquitousContentURLKey,
                                                                    nil]
                                                             error:&error])
     {
@@ -395,7 +405,8 @@
         @throw [NSException exceptionWithName:error.domain reason:error.localizedDescription
                                      userInfo:[NSDictionary dictionaryWithObject:error forKey:@"cause"]];
     }
-    
+    [__persistentStoreCoordinator unlock];
+
     return __persistentStoreCoordinator;
 }
 

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define OPPersistentStoreDidChangeNotification @"OPPersistentStoreDidChange"
+
 typedef enum {
     OPElementContentTypePassword,
     OPElementContentTypeNote,
