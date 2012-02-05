@@ -32,6 +32,31 @@ typedef enum {
     MPElementTypeStoredDevicePrivate    = MPElementTypeClassStored      | 0x02,
 } MPElementType;
 
+#ifndef PRODUCTION
+#define MPTestFlightCheckpointAction @"MPTestFlightCheckpointAction"
+#define MPTestFlightCheckpointHelpChapter @"MPTestFlightCheckpointHelpChapter_%@"
+#define MPTestFlightCheckpointCopyToPasteboard @"MPTestFlightCheckpointCopyToPasteboard"
+#define MPTestFlightCheckpointIncrementPasswordCounter @"MPTestFlightCheckpointIncrementPasswordCounter"
+#define MPTestFlightCheckpointEditPassword @"MPTestFlightCheckpointEditPassword"
+#define MPTestFlightCheckpointCloseAlert @"MPTestFlightCheckpointCloseAlert"
+#define MPTestFlightCheckpointSelectType @"MPTestFlightCheckpointSelectType_%@"
+#define MPTestFlightCheckpointSelectElement @"MPTestFlightCheckpointSelectElement"
+#define MPTestFlightCheckpointDeleteElement @"MPTestFlightCheckpointDeleteElement"
+#define MPTestFlightCheckpointCancelSearch @"MPTestFlightCheckpointCancelSearch"
+#define MPTestFlightCheckpointExternalLink @"MPTestFlightCheckpointExternalLink"
+#define MPTestFlightCheckpointLaunched @"MPTestFlightCheckpointLaunched"
+#define MPTestFlightCheckpointActivated @"MPTestFlightCheckpointActivated"
+#define MPTestFlightCheckpointDeactivated @"MPTestFlightCheckpointDeactivated"
+#define MPTestFlightCheckpointTerminated @"MPTestFlightCheckpointTerminated"
+#define MPTestFlightCheckpointShowGuide @"MPTestFlightCheckpointShowGuide"
+#define MPTestFlightCheckpointMPChanged @"MPTestFlightCheckpointMPChanged"
+#define MPTestFlightCheckpointMPUnstored @"MPTestFlightCheckpointMPUnstored"
+#define MPTestFlightCheckpointMPMismatch @"MPTestFlightCheckpointMPMismatch"
+#define MPTestFlightCheckpointMPAsked @"MPTestFlightCheckpointMPAsked"
+#define MPTestFlightCheckpointStoreIncompatible @"MPTestFlightCheckpointStoreIncompatible"
+#define MPTestFlightCheckpointSetKeyphraseLength @"MPTestFlightCheckpointSetKeyphraseLength_%d"
+#endif
+
 NSString *NSStringFromMPElementType(MPElementType type);
 NSString *ClassNameFromMPElementType(MPElementType type);
 Class ClassFromMPElementType(MPElementType type);

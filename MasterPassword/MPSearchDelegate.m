@@ -252,6 +252,10 @@
         [self.fetchedResultsController.managedObjectContext performBlock:^{
             MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
             [self.fetchedResultsController.managedObjectContext deleteObject:element];
+
+#ifndef PRODUCTION
+            [TestFlight passCheckpoint:MPTestFlightCheckpointDeleteElement];
+#endif
         }];
 }
 

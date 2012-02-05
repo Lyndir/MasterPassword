@@ -1,0 +1,94 @@
+0.8.2 - December 20, 2011
+Promoted 0.8.2 BETA 4 to stable
+
+Known Issues:
+Under some circumstances Session End events may not be sent until the next launch.
+With large log files Session End events may take a long time to show up.
+
+Tested compiled library with
+Xcode 4.3
+Xcode 4.2
+Xcode 4.1
+Xcode 3.2.6
+
+0.8.2 BETA 4 - December 12, 2011
+Prevented "The string argument is NULL" from occuring during finishedHandshake in rare cases
+Resolved issue where background data may not be sent
+
+0.8.2 BETA 3 - December 8, 2011
+Added auto-release pools to background setup and tear down 
+Added C++ specific code to TFLog declaration
+
+0.8.2 BETA 2 - December 5, 2011
+Fixed the "pointer being freed was not allocated" bug
+
+0.8.1 - November 18, 2011
+Implemented TFLog logging system, see README for more information
+Fixed an issue where Session End events may not be sent until next launch
+Fixed an issue where duplicate events could be sent
+Fixed an issue with Session End events not being sent from some iPod touch models
+
+Tested compiled library with
+Xcode 4.2
+Xcode 4.1
+Xcode 3.2.6
+
+0.8 - November 8, 2011
+Added SIGTRAP as a signal type that we catch
+Removed all Objective-c from crash reporting
+Removed the use of non signal safe functions from signal handling
+Created a signal safe way to get symbols from a stack trace
+Changed the keyboardType for Long Answer Questions and Feedback to allow for international character input
+Changed TESTFLIGHT_SDK_VERSION string to be an NSString
+Changed cache folder from Library/Caches/TestFlight to Library/Caches/com.testflight.testflightsdk
+Fixed issue with saving data when device is offline
+Fixed compability issues with iOS 3
+Added calling into the rootViewController shouldAutorotateToInterfaceOrientation if a rootViewController is set
+Made the comments in TestFlight.h compatible with Appledoc
+
+Tested compiled library with
+Xcode 4.2
+Xcode 4.1
+Xcode 3.2
+
+0.7.2 - September 29, 2011
+Changed TESTFLIGHT_SDK_VERSION string to be an NSString
+Fixed an issue where exiting an application while the SDK is active caused modal views to be dismissed
+0.7.1 - September 22, 2011
+Internal release
+Refactoring
+0.7 - September 21, 2011
+Moved TestFlight images and data to the Library/Caches folder
+Resolved an issue where sometimes the rootViewController could not be found and feedback, questions and upgrade views would not be displayed
+In application upgrade changed to allow skipping until the next version is installed and allows upgrades to be forced
+Fixed a memory leak when launching questions
+0.6 - September 2, 2011
+Renamed base64_encode to testflight_base64_encode to remove a conflict with other third party libraries
+Added ability to reinstall crash handlers when they are overwritten using the setOptions API
+Fixed an issue where crash reports might not get sent under certain circumstances
+Fixed a deadlock when the application is put in the background and then resumed before all information can be sent
+Fixed an issue when attempting to un-install all signal handlers during a signal
+Added support for landscape mode on the iPad to the Questions and Feedback views
+Crash reporting now works in versions of Xcode earlier than 4.2
+Fixed a memory leak during handshake
+0.5 - August 19, 2011
+Feedback that is not attached to a checkpoint [TestFlight openFeedbackView]
+Usability changes to question views
+Removed pause and resume sessions, replaced with sessions being stopped and started
+Added text auto correction to the Long Answer question type
+Crash reports now send on crash instead of next launch
+0.4 - August 15, 2011
+In Application Feedback with Questions
+In application updates
+Custom Environment Information added
+Networking stack reimplementation
+Exception handling fixes
+0.3 - June 15, 2011
+Removed all mention of JSONKit from the README
+Added support for using both the Bundle Version and the Bundle Short Version string
+0.2 - June 14, 2011
+Removed all categories this allows users to use the SDK without having to set -ObjC and -load_all
+Prefixed JSONKit for use in TestFlight to remove reported issues where some users were already using JSONKit
+Added support for armv6 again
+0.1 - June 11, 2011
+Initial Version

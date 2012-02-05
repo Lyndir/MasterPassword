@@ -8,7 +8,6 @@
 
 #import "MPMainViewController.h"
 #import "MPAppDelegate.h"
-#import "MPContentViewController.h"
 #import "MPElementGeneratedEntity.h"
 #import "MPElementStoredEntity.h"
 #import "IASKAppSettingsViewController.h"
@@ -57,8 +56,6 @@
     
     if ([[segue identifier] isEqualToString:@"MP_Main_ChooseType"])
         [[segue destinationViewController] setDelegate:self];
-    if ([[segue identifier] isEqualToString:@"MP_Main_Content"])
-        ((MPContentViewController *)[segue destinationViewController]).activeElement = self.activeElement;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -144,13 +141,6 @@
     [super viewDidUnload];
 }
 
-- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
-    
-    [super setEditing:editing animated:animated];
-    
-    [self updateAnimated:animated];
-}
-
 - (void)updateAnimated:(BOOL)animated {
     
     [[MPAppDelegate get] saveContext];
@@ -218,6 +208,10 @@
 
 - (void)setHelpChapter:(NSString *)chapter {
     
+#ifndef PRODUCTION
+    [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointHelpChapter, chapter]];
+#endif
+    
     [self.helpView loadRequest:
      [NSURLRequest requestWithURL:
       [NSURL URLWithString:[NSString stringWithFormat:@"#%@", chapter] relativeToURL:
@@ -276,6 +270,10 @@
                              forPasteboardType:(id)kUTTypeUTF8PlainText];
     
     [self showContentTip:@"Copied!" withIcon:nil];
+    
+#ifndef PRODUCTION
+    [TestFlight passCheckpoint:MPTestFlightCheckpointCopyToPasteboard];
+#endif
 }
 
 - (IBAction)incrementPasswordCounter {
@@ -287,6 +285,10 @@
     [self updateElement:^{
         ++((MPElementGeneratedEntity *) self.activeElement).counter;
     }];
+    
+#ifndef PRODUCTION
+    [TestFlight passCheckpoint:MPTestFlightCheckpointIncrementPasswordCounter];
+#endif
 }
 
 - (void)updateElement:(void (^)(void))updateElement {
@@ -311,6 +313,10 @@
         self.contentField.enabled = YES;
         [self.contentField becomeFirstResponder];
     }
+
+#ifndef PRODUCTION
+    [TestFlight passCheckpoint:MPTestFlightCheckpointEditPassword];
+#endif
 }
 
 - (IBAction)closeAlert {
@@ -320,6 +326,10 @@
     } completion:^(BOOL finished) {
         self.alertBody.text = nil;
     }];
+
+#ifndef PRODUCTION
+    [TestFlight passCheckpoint:MPTestFlightCheckpointCloseAlert];
+#endif
 }
 
 - (IBAction)action:(id)sender {
@@ -346,9 +356,23 @@
                                       [self.navigationController pushViewController:settingsVC animated:YES];
                                       break;
                                 }
+#ifndef PRODUCTION
+                                  case 4:
+                                      [TestFlight openFeedbackView];
+                                      break;
+#endif
                               }
+                              
+#ifndef PRODUCTION
+                              [TestFlight passCheckpoint:MPTestFlightCheckpointAction];
+#endif
                           } cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil
-                                otherTitles:[self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings", nil]; 
+                                otherTitles:
+     [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings",
+#ifndef PRODUCTION
+     @"Feedback",
+#endif
+     nil]; 
 }
 
 - (void)didSelectType:(MPElementType)type {
@@ -371,6 +395,10 @@
         
         self.activeElement.type = type;
         
+#ifndef PRODUCTION
+        [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointSelectType, NSStringFromMPElementType(type)]];
+#endif
+        
         if (type & MPElementTypeClassStored && ![self.activeElement.description length])
             [self showContentTip:@"Tap       to set a password." withIcon:self.contentTipEditIcon];
     }];
@@ -384,10 +412,18 @@
     [self.searchDisplayController setActive:NO animated:YES];
     self.searchDisplayController.searchBar.text = self.activeElement.name;
     
+#ifndef PRODUCTION
+    [TestFlight passCheckpoint:MPTestFlightCheckpointSelectElement];
+#endif
+    
     [self updateAnimated:YES];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    
+#ifndef PRODUCTION
+    [TestFlight passCheckpoint:MPTestFlightCheckpointCancelSearch];
+#endif
     
     [self updateAnimated:YES];
 }
@@ -420,7 +456,12 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request
  navigationType:(UIWebViewNavigationType)navigationType {
+    
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
+#ifndef PRODUCTION
+        [TestFlight passCheckpoint:MPTestFlightCheckpointExternalLink];
+#endif
+        
         [[UIApplication sharedApplication] openURL:[request URL]];
         return NO;
     }

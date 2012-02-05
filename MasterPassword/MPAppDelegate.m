@@ -66,6 +66,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+#ifndef PRODUCTION
+    [TestFlight takeOff:@"bd44885deee7adce0645ce8e5498d80a_NDQ5NDQyMDExLTEyLTAyIDExOjM1OjQ4LjQ2NjM4NA"];
+    [TestFlight setOptions:[NSDictionary dictionaryWithObjectsAndKeys:
+                            [NSNumber numberWithBool:YES],  @"logToConsole",
+                            nil]];
+    [TestFlight passCheckpoint:MPTestFlightCheckpointLaunched];
+#endif
+    
     UIImage *navBarImage = [[UIImage imageNamed:@"ui_navbar_container"]  resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
     [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsLandscapePhone];
@@ -138,11 +146,19 @@
         [self showGuide];
     else
         [self loadKeyPhrase];
+
+#ifndef PRODUCTION
+    [TestFlight passCheckpoint:MPTestFlightCheckpointActivated];
+#endif
 }
 
 - (void)showGuide {
     
     [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
+    
+#ifndef PRODUCTION
+    [TestFlight passCheckpoint:MPTestFlightCheckpointShowGuide];
+#endif
 }
 
 - (void)loadKeyPhrase {
@@ -172,7 +188,7 @@
      @"Your old sites and passwords will then become available again."
                                   viewStyle:UIAlertViewStyleDefault
                           tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                              if (buttonIndex == [alert firstOtherButtonIndex]) {
+                              if (buttonIndex != [alert cancelButtonIndex]) {
                                   // Key phrase reset.  Delete it.
                                   dbg(@"Deleting master key phrase and hash from key chain.");
                                   [KeyChain deleteItemForQuery:[MPAppDelegate keyPhraseQuery]];
@@ -180,6 +196,10 @@
                               }
                               
                               [self loadKeyPhrase];
+                            
+#ifndef PRODUCTION
+                              [TestFlight passCheckpoint:MPTestFlightCheckpointMPChanged];
+#endif
                           }
                                 cancelTitle:[PearlStrings get].commonButtonAbort
                                 otherTitles:[PearlStrings get].commonButtonContinue, nil];
@@ -200,6 +220,9 @@
         // Key phrase should not be stored in keychain.  Delete it.
         dbg(@"Deleting master key phrase from key chain.");
         [KeyChain deleteItemForQuery:[MPAppDelegate keyPhraseQuery]];
+#ifndef PRODUCTION
+        [TestFlight passCheckpoint:MPTestFlightCheckpointMPUnstored];
+#endif
     }
 }
 
@@ -236,6 +259,9 @@
                  if (![keyPhraseHash isEqual:answerHash]) {
                      dbg(@"Key phrase hash mismatch. Expected: %@, answer: %@.", keyPhraseHash, answerHash);
                      
+#ifndef PRODUCTION
+                     [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
+#endif
                      [AlertViewController showAlertWithTitle:[PearlStrings get].commonTitleError
                                                      message:
                       @"Incorrect master password.\n\n"
@@ -250,6 +276,10 @@
                      return;
                  }
              
+#ifndef PRODUCTION
+             [TestFlight passCheckpoint:MPTestFlightCheckpointMPAsked];
+#endif
+
              self.keyPhrase = answer;
          } cancelTitle:@"Quit" otherTitles:@"Unlock", nil];
     });
@@ -261,11 +291,19 @@
     
     if (![[MPConfig get].rememberKeyPhrase boolValue])
         self.keyPhrase = nil;
+
+#ifndef PRODUCTION
+    [TestFlight passCheckpoint:MPTestFlightCheckpointDeactivated];
+#endif
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     
     [self saveContext];
+    
+#ifndef PRODUCTION
+    [TestFlight passCheckpoint:MPTestFlightCheckpointTerminated];
+#endif
 }
 
 + (MPAppDelegate *)get {
@@ -314,6 +352,10 @@
                                                kSecAttrAccessibleWhenUnlocked,                      (__bridge id)kSecAttrAccessible,
                                                nil]];
         }
+        
+#ifndef PRODUCTION
+        [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointSetKeyphraseLength, _keyPhrase.length]];
+#endif
     }
 }
 
@@ -419,6 +461,11 @@
         wrn(@"Deleted datastore: %@", storeURL);
         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];        
 #endif
+        
+#ifndef PRODUCTION
+        [TestFlight passCheckpoint:MPTestFlightCheckpointStoreIncompatible];
+#endif
+        
         @throw [NSException exceptionWithName:error.domain reason:error.localizedDescription
                                      userInfo:[NSDictionary dictionaryWithObject:error forKey:@"cause"]];
     }

@@ -15,7 +15,6 @@
 		DA34DA1114B1BC7E00F721C1 /* MPElementEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA34DA1014B1BC7E00F721C1 /* MPElementEntity.m */; };
 		DA41A40B14DB3BF100638533 /* guide_page_0.png in Resources */ = {isa = PBXBuildFile; fileRef = DA41A40914DB3BF100638533 /* guide_page_0.png */; };
 		DA41A40C14DB3BF100638533 /* guide_page_0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA41A40A14DB3BF100638533 /* guide_page_0@2x.png */; };
-		DA55B29E14B38272001131B7 /* MPContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA55B29D14B38272001131B7 /* MPContentViewController.m */; };
 		DA55B2A214B4EB47001131B7 /* MPSearchDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DA55B2A114B4EB46001131B7 /* MPSearchDelegate.m */; };
 		DA5BFA49147E415C00F98B1E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA48147E415C00F98B1E /* UIKit.framework */; };
 		DA5BFA4B147E415C00F98B1E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
@@ -244,6 +243,7 @@
 		DA95D5F814DF0B9F008D1B94 /* IASKSpecifierValuesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA95D5CE14DF0691008D1B94 /* IASKSpecifierValuesView.xib */; };
 		DA95D5FD14DF295F008D1B94 /* MPConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA95D5F914DF295E008D1B94 /* MPConfig.m */; };
 		DA95D5FE14DF295F008D1B94 /* MPTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = DA95D5FB14DF295F008D1B94 /* MPTypes.m */; };
+		DA95D60614DF3E67008D1B94 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95D60114DF3E67008D1B94 /* libTestFlight.a */; };
 		DAA3B68E14CCCEE700F35AF6 /* icon_addressbook-person@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA3B53814CCCEE700F35AF6 /* icon_addressbook-person@2x.png */; };
 		DAA3B68F14CCCEE700F35AF6 /* icon_addressbook.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA3B53914CCCEE700F35AF6 /* icon_addressbook.png */; };
 		DAA3B69014CCCEE700F35AF6 /* icon_addressbook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA3B53A14CCCEE700F35AF6 /* icon_addressbook@2x.png */; };
@@ -666,7 +666,6 @@
 		DAC781311482AAD800BCF976 /* ValidatingTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC780EE1482AAD700BCF976 /* ValidatingTextField.m */; };
 		DAC781321482AAD800BCF976 /* WebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = DAC780EF1482AAD700BCF976 /* WebViewController.h */; };
 		DAC781331482AAD800BCF976 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC780F01482AAD700BCF976 /* WebViewController.m */; };
-		DAC781361482E67300BCF976 /* MPRecentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC781351482E67300BCF976 /* MPRecentViewController.m */; };
 		DADC3C4D14C62B350091CB4D /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DADC3C4C14C62B350091CB4D /* Settings.bundle */; };
 		DAE2C648148247E500BA6B10 /* MPTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE2C646148247E500BA6B10 /* MPTypeViewController.m */; };
 		DAE998D214C1D2A0002D7C22 /* Content-Backdrop.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE9987914C1D2A0002D7C22 /* Content-Backdrop.png */; };
@@ -755,8 +754,6 @@
 		DA34DA1014B1BC7E00F721C1 /* MPElementEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementEntity.m; sourceTree = "<group>"; };
 		DA41A40914DB3BF100638533 /* guide_page_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_page_0.png; sourceTree = "<group>"; };
 		DA41A40A14DB3BF100638533 /* guide_page_0@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_page_0@2x.png"; sourceTree = "<group>"; };
-		DA55B29C14B38272001131B7 /* MPContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPContentViewController.h; sourceTree = "<group>"; };
-		DA55B29D14B38272001131B7 /* MPContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPContentViewController.m; sourceTree = "<group>"; };
 		DA55B2A014B4EB46001131B7 /* MPSearchDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSearchDelegate.h; sourceTree = "<group>"; };
 		DA55B2A114B4EB46001131B7 /* MPSearchDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSearchDelegate.m; sourceTree = "<group>"; };
 		DA5BFA44147E415C00F98B1E /* MasterPassword.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MasterPassword.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -994,6 +991,8 @@
 		DA95D5FA14DF295E008D1B94 /* MPTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTypes.h; sourceTree = "<group>"; };
 		DA95D5FB14DF295F008D1B94 /* MPTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTypes.m; sourceTree = "<group>"; };
 		DA95D5FC14DF295F008D1B94 /* MPTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTypeViewController.h; sourceTree = "<group>"; };
+		DA95D60114DF3E67008D1B94 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		DA95D60414DF3E67008D1B94 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		DAA3B53814CCCEE700F35AF6 /* icon_addressbook-person@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_addressbook-person@2x.png"; sourceTree = "<group>"; };
 		DAA3B53914CCCEE700F35AF6 /* icon_addressbook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_addressbook.png; sourceTree = "<group>"; };
 		DAA3B53A14CCCEE700F35AF6 /* icon_addressbook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_addressbook@2x.png"; sourceTree = "<group>"; };
@@ -1415,8 +1414,6 @@
 		DAC780EE1482AAD700BCF976 /* ValidatingTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValidatingTextField.m; sourceTree = "<group>"; };
 		DAC780EF1482AAD700BCF976 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		DAC780F01482AAD700BCF976 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
-		DAC781341482E67300BCF976 /* MPRecentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPRecentViewController.h; sourceTree = "<group>"; };
-		DAC781351482E67300BCF976 /* MPRecentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPRecentViewController.m; sourceTree = "<group>"; };
 		DADC3C4C14C62B350091CB4D /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		DAE2C646148247E500BA6B10 /* MPTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTypeViewController.m; sourceTree = "<group>"; };
 		DAE9987914C1D2A0002D7C22 /* Content-Backdrop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Content-Backdrop.png"; path = "Resources/Content-Backdrop.png"; sourceTree = "<group>"; };
@@ -1475,6 +1472,7 @@
 				DA5BFA4B147E415C00F98B1E /* Foundation.framework in Frameworks */,
 				DA5BFA4D147E415C00F98B1E /* CoreGraphics.framework in Frameworks */,
 				DA5BFA4F147E415C00F98B1E /* CoreData.framework in Frameworks */,
+				DA95D60614DF3E67008D1B94 /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1874,6 +1872,7 @@
 				DAC6325F1486805C0075AEA5 /* uicolor-utilities */,
 				DAC6326E148680650075AEA5 /* jrswizzle */,
 				DA95D59E14DF063C008D1B94 /* InAppSettingsKit */,
+				DA95D5FF14DF3E67008D1B94 /* TestFlightSDK */,
 				DA5BFA47147E415C00F98B1E /* Frameworks */,
 				DA5BFA45147E415C00F98B1E /* Products */,
 			);
@@ -1918,12 +1917,8 @@
 				DA65570514D731F000841C99 /* MPGuideViewController.m */,
 				DA55B2A014B4EB46001131B7 /* MPSearchDelegate.h */,
 				DA55B2A114B4EB46001131B7 /* MPSearchDelegate.m */,
-				DAC781341482E67300BCF976 /* MPRecentViewController.h */,
-				DAC781351482E67300BCF976 /* MPRecentViewController.m */,
 				DA95D5FC14DF295F008D1B94 /* MPTypeViewController.h */,
 				DAE2C646148247E500BA6B10 /* MPTypeViewController.m */,
-				DA55B29C14B38272001131B7 /* MPContentViewController.h */,
-				DA55B29D14B38272001131B7 /* MPContentViewController.m */,
 				DA007F5014B24DCC00251337 /* MPConfig.h */,
 				DA95D5F914DF295E008D1B94 /* MPConfig.m */,
 				DA95D5FA14DF295E008D1B94 /* MPTypes.h */,
@@ -2155,6 +2150,16 @@
 			name = Xibs;
 			path = External/InAppSettingsKit/InAppSettingsKit/Xibs;
 			sourceTree = SOURCE_ROOT;
+		};
+		DA95D5FF14DF3E67008D1B94 /* TestFlightSDK */ = {
+			isa = PBXGroup;
+			children = (
+				DA95D60114DF3E67008D1B94 /* libTestFlight.a */,
+				DA95D60414DF3E67008D1B94 /* TestFlight.h */,
+			);
+			name = TestFlightSDK;
+			path = External/TestFlightSDK;
+			sourceTree = "<group>";
 		};
 		DAC6325F1486805C0075AEA5 /* uicolor-utilities */ = {
 			isa = PBXGroup;
@@ -3256,10 +3261,8 @@
 				DA5BFA64147E415C00F98B1E /* MasterPassword.xcdatamodeld in Sources */,
 				DA5BFA67147E415C00F98B1E /* MPMainViewController.m in Sources */,
 				DAE2C648148247E500BA6B10 /* MPTypeViewController.m in Sources */,
-				DAC781361482E67300BCF976 /* MPRecentViewController.m in Sources */,
 				DA34DA0D14B1BC7D00F721C1 /* MPElementStoredEntity.m in Sources */,
 				DA34DA1114B1BC7E00F721C1 /* MPElementEntity.m in Sources */,
-				DA55B29E14B38272001131B7 /* MPContentViewController.m in Sources */,
 				DA55B2A214B4EB47001131B7 /* MPSearchDelegate.m in Sources */,
 				DA0A848C14C4DFCB0090EA8E /* MPElementGeneratedEntity.m in Sources */,
 				DAA3B81414CDC77100F35AF6 /* jquery-1.6.1.min.js in Sources */,
@@ -3413,6 +3416,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -3422,8 +3426,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -3431,7 +3435,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -3445,6 +3451,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MasterPassword/MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword/MasterPassword-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/External/TestFlightSDK\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -3459,6 +3469,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MasterPassword/MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword/MasterPassword-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/External/TestFlightSDK\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -3484,6 +3498,92 @@
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
+		};
+		DA95D60914DF3F3B008D1B94 /* Production */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "PRODUCTION=1";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Production;
+		};
+		DA95D60A14DF3F3B008D1B94 /* Production */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = MasterPassword/MasterPassword.entitlements;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MasterPassword/MasterPassword-Prefix.pch";
+				INFOPLIST_FILE = "MasterPassword/MasterPassword-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/External/TestFlightSDK\"",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Production;
+		};
+		DA95D60B14DF3F3B008D1B94 /* Production */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				DSTROOT = /tmp/Pearl.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Pearl/Pearl-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Production;
+		};
+		DA95D60C14DF3F3B008D1B94 /* Production */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				DSTROOT = /tmp/uicolor_utilities.dst;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Production;
+		};
+		DA95D60D14DF3F3B008D1B94 /* Production */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				DSTROOT = /tmp/jrswizzle.dst;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Production;
+		};
+		DA95D60E14DF3F3B008D1B94 /* Production */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/InAppSettingsKit.dst;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = InAppSettingsKit;
+				SKIP_INSTALL = YES;
+			};
+			name = Production;
 		};
 		DAC632661486805C0075AEA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -3567,6 +3667,7 @@
 			buildConfigurations = (
 				DA5BFA6B147E415C00F98B1E /* Debug */,
 				DA5BFA6C147E415C00F98B1E /* Release */,
+				DA95D60914DF3F3B008D1B94 /* Production */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3576,6 +3677,7 @@
 			buildConfigurations = (
 				DA5BFA6E147E415C00F98B1E /* Debug */,
 				DA5BFA6F147E415C00F98B1E /* Release */,
+				DA95D60A14DF3F3B008D1B94 /* Production */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3585,6 +3687,7 @@
 			buildConfigurations = (
 				DA95D5A514DF063C008D1B94 /* Debug */,
 				DA95D5A614DF063C008D1B94 /* Release */,
+				DA95D60E14DF3F3B008D1B94 /* Production */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
@@ -3593,6 +3696,7 @@
 			buildConfigurations = (
 				DAC632661486805C0075AEA5 /* Debug */,
 				DAC632671486805C0075AEA5 /* Release */,
+				DA95D60C14DF3F3B008D1B94 /* Production */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3602,6 +3706,7 @@
 			buildConfigurations = (
 				DAC63275148680650075AEA5 /* Debug */,
 				DAC63276148680650075AEA5 /* Release */,
+				DA95D60D14DF3F3B008D1B94 /* Production */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3611,6 +3716,7 @@
 			buildConfigurations = (
 				DAC77CB5148291A600BCF976 /* Debug */,
 				DAC77CB6148291A600BCF976 /* Release */,
+				DA95D60B14DF3F3B008D1B94 /* Production */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
