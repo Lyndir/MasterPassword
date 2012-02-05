@@ -238,9 +238,9 @@
                      
                      [AlertViewController showAlertWithTitle:[PearlStrings get].commonTitleError
                                                      message:
-                                                             @"Incorrect master password.\n\n"
-                             @"If you are trying to use the app with a different master password, "
-                                                                     @"flip the 'Change my password' option in Settings."
+                      @"Incorrect master password.\n\n"
+                      @"If you are trying to use the app with a different master password, "
+                      @"flip the 'Change my password' option in Settings."
                                                    viewStyle:UIAlertViewStyleDefault
                                            tappedButtonBlock:
                       ^(UIAlertView *alert, NSInteger buttonIndex) {
@@ -341,14 +341,14 @@
                                                           
                                                           [__managedObjectContext performBlock:^{
                                                               [__managedObjectContext mergeChangesFromContextDidSaveNotification:note];
-
+                                                              
                                                               [[NSNotificationCenter defaultCenter] postNotification:
                                                                [NSNotification notificationWithName:UIScreenModeDidChangeNotification
                                                                                              object:self userInfo:[note userInfo]]];
                                                           }];
                                                       }];
     }
-
+    
     return __managedObjectContext;
 }
 
@@ -360,7 +360,7 @@
 {
     if (__managedObjectModel)
         return __managedObjectModel;
-
+    
     NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"MasterPassword" withExtension:@"momd"];
     return __managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
 }
@@ -422,8 +422,13 @@
         @throw [NSException exceptionWithName:error.domain reason:error.localizedDescription
                                      userInfo:[NSDictionary dictionaryWithObject:error forKey:@"cause"]];
     }
+    
+    if (![[NSFileManager defaultManager] setAttributes:[NSDictionary dictionaryWithObject:NSFileProtectionComplete
+                                                                                   forKey:NSFileProtectionKey]
+                                          ofItemAtPath:storeURL.path error:&error])
+        err(@"Unresolved error %@, %@", error, [error userInfo]);
     [__persistentStoreCoordinator unlock];
-
+    
     return __persistentStoreCoordinator;
 }
 
