@@ -1,14 +1,14 @@
 //
-//  OPTypeViewController.m
+//  MPTypeViewController.m
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 27/11/11.
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import "OPTypeViewController.h"
+#import "MPTypeViewController.h"
 
-@implementation OPTypeViewController
+@implementation MPTypeViewController
 @synthesize delegate;
 
 #pragma mark - View lifecycle
@@ -29,25 +29,25 @@
     
     assert(self.navigationController.topViewController == self);
 
-    OPElementType type;
+    MPElementType type;
     switch (indexPath.section) {
         case 0: {
             // Calculated
             switch (indexPath.row) {
                 case 0:
-                    type = OPElementTypeCalculatedLong;
+                    type = MPElementTypeCalculatedLong;
                     break;
                 case 1:
-                    type = OPElementTypeCalculatedMedium;
+                    type = MPElementTypeCalculatedMedium;
                     break;
                 case 2:
-                    type = OPElementTypeCalculatedShort;
+                    type = MPElementTypeCalculatedShort;
                     break;
                 case 3:
-                    type = OPElementTypeCalculatedBasic;
+                    type = MPElementTypeCalculatedBasic;
                     break;
                 case 4:
-                    type = OPElementTypeCalculatedPIN;
+                    type = MPElementTypeCalculatedPIN;
                     break;
                     
                 default:
@@ -61,10 +61,10 @@
             // Stored
             switch (indexPath.row) {
                 case 0:
-                    type = OPElementTypeStoredPersonal;
+                    type = MPElementTypeStoredPersonal;
                     break;
                 case 1:
-                    type = OPElementTypeStoredDevicePrivate;
+                    type = MPElementTypeStoredDevicePrivate;
                     break;
                     
                 default:

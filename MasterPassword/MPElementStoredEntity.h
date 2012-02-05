@@ -1,5 +1,5 @@
 //
-//  OPElementStoredEntity.h
+//  MPElementStoredEntity.h
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 02/01/12.
@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "OPElementEntity.h"
+#import "MPElementEntity.h"
 
 
-@interface OPElementStoredEntity : OPElementEntity
+@interface MPElementStoredEntity : MPElementEntity
 
 @property (nonatomic, retain, readwrite) id content;
 

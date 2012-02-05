@@ -1,14 +1,14 @@
 //
-//  OPContentViewController.m
+//  MPContentViewController.m
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 03/01/12.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import "OPContentViewController.h"
+#import "MPContentViewController.h"
 
-@implementation OPContentViewController
+@implementation MPContentViewController
 @synthesize activeElement = _activeElement;
 
 #pragma mark - View lifecycle

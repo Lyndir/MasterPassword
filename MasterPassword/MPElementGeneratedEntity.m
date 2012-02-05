@@ -1,28 +1,28 @@
 //
-//  OPElementGeneratedEntity.m
+//  MPElementGeneratedEntity.m
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 16/01/12.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import "OPElementGeneratedEntity.h"
-#import "OPAppDelegate.h"
+#import "MPElementGeneratedEntity.h"
+#import "MPAppDelegate.h"
 
 
-@implementation OPElementGeneratedEntity
+@implementation MPElementGeneratedEntity
 
 @dynamic counter;
 
 - (id)content {
 
-    assert(self.type & OPElementTypeClassCalculated);
+    assert(self.type & MPElementTypeClassCalculated);
     
     if (![self.name length])
         return nil;
     
-    if (self.type & OPElementTypeClassCalculated)
-        return OPCalculateContent(self.type, self.name, [OPAppDelegate get].keyPhrase, self.counter);
+    if (self.type & MPElementTypeClassCalculated)
+        return MPCalculateContent(self.type, self.name, [MPAppDelegate get].keyPhrase, self.counter);
     
     @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                    reason:[NSString stringWithFormat:@"Unsupported type: %d", self.type] userInfo:nil];

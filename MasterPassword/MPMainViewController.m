@@ -1,22 +1,22 @@
 //
-//  OPMainViewController.m
+//  MPMainViewController.m
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 24/11/11.
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import "OPMainViewController.h"
-#import "OPAppDelegate.h"
-#import "OPContentViewController.h"
-#import "OPElementGeneratedEntity.h"
-#import "OPElementStoredEntity.h"
+#import "MPMainViewController.h"
+#import "MPAppDelegate.h"
+#import "MPContentViewController.h"
+#import "MPElementGeneratedEntity.h"
+#import "MPElementStoredEntity.h"
 #import "IASKAppSettingsViewController.h"
 
 #import <MobileCoreServices/MobileCoreServices.h>
 
 
-@interface OPMainViewController (Private)
+@interface MPMainViewController (Private)
 
 - (void)updateAnimated:(BOOL)animated;
 - (void)updateWasAnimated:(BOOL)animated;
@@ -26,7 +26,7 @@
 
 @end
 
-@implementation OPMainViewController
+@implementation MPMainViewController
 @synthesize activeElement = _activeElement;
 @synthesize searchResultsController = _searchResultsController;
 @synthesize typeButton = _typeButton;
@@ -55,10 +55,10 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    if ([[segue identifier] isEqualToString:@"OP_Main_ChooseType"])
+    if ([[segue identifier] isEqualToString:@"MP_Main_ChooseType"])
         [[segue destinationViewController] setDelegate:self];
-    if ([[segue identifier] isEqualToString:@"OP_Main_Content"])
-        ((OPContentViewController *)[segue destinationViewController]).activeElement = self.activeElement;
+    if ([[segue identifier] isEqualToString:@"MP_Main_Content"])
+        ((MPContentViewController *)[segue destinationViewController]).activeElement = self.activeElement;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -72,7 +72,7 @@
             self.searchTipContainer.alpha = 1;
         }];
     
-    [self setHelpHidden:[[OPConfig get].helpHidden boolValue] animated:animated];
+    [self setHelpHidden:[[MPConfig get].helpHidden boolValue] animated:animated];
     [self updateAnimated:animated];
 }
 
@@ -104,14 +104,14 @@
     
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
-                                                      if (![OPAppDelegate get].keyPhrase) {
+                                                      if (![MPAppDelegate get].keyPhrase) {
                                                           self.activeElement = nil;
                                                           [self updateAnimated:NO];
                                                       }
                                                   }];
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
-                                                      if (![OPAppDelegate get].keyPhrase) {
+                                                      if (![MPAppDelegate get].keyPhrase) {
                                                           self.activeElement = nil;
                                                           [self updateAnimated:NO];
                                                       }
@@ -153,7 +153,7 @@
 
 - (void)updateAnimated:(BOOL)animated {
     
-    [[OPAppDelegate get] saveContext];
+    [[MPAppDelegate get] saveContext];
     
     if (animated)
         [UIView animateWithDuration:0.2 animations:^{
@@ -168,18 +168,18 @@
     [self setHelpChapter:self.activeElement? @"2": @"1"];
     self.siteName.text = self.activeElement.name;
     
-    self.passwordCounter.alpha = self.activeElement.type & OPElementTypeClassCalculated? 0.5f: 0;
-    self.passwordIncrementer.alpha = self.activeElement.type & OPElementTypeClassCalculated? 0.5f: 0;
-    self.passwordEdit.alpha = self.activeElement.type & OPElementTypeClassStored? 0.5f: 0;
+    self.passwordCounter.alpha = self.activeElement.type & MPElementTypeClassCalculated? 0.5f: 0;
+    self.passwordIncrementer.alpha = self.activeElement.type & MPElementTypeClassCalculated? 0.5f: 0;
+    self.passwordEdit.alpha = self.activeElement.type & MPElementTypeClassStored? 0.5f: 0;
     
-    [self.typeButton setTitle:NSStringFromOPElementType(self.activeElement.type)
+    [self.typeButton setTitle:NSStringFromMPElementType(self.activeElement.type)
                      forState:UIControlStateNormal];
-    self.typeButton.alpha = NSStringFromOPElementType(self.activeElement.type).length? 1: 0;
+    self.typeButton.alpha = NSStringFromMPElementType(self.activeElement.type).length? 1: 0;
     
     self.contentField.enabled = NO;
     
-    if ([self.activeElement isKindOfClass:[OPElementGeneratedEntity class]])
-        self.passwordCounter.text = [NSString stringWithFormat:@"%d", ((OPElementGeneratedEntity *) self.activeElement).counter];
+    if ([self.activeElement isKindOfClass:[MPElementGeneratedEntity class]])
+        self.passwordCounter.text = [NSString stringWithFormat:@"%d", ((MPElementGeneratedEntity *) self.activeElement).counter];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSString *description = self.activeElement.description;
@@ -207,11 +207,11 @@
         if (hidden) {
             self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 373);
             self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, 415);
-            [OPConfig get].helpHidden = [NSNumber numberWithBool:YES];
+            [MPConfig get].helpHidden = [NSNumber numberWithBool:YES];
         } else {
             self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 175);
             self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, 216);
-            [OPConfig get].helpHidden = [NSNumber numberWithBool:NO];
+            [MPConfig get].helpHidden = [NSNumber numberWithBool:NO];
         }
     }];
 }
@@ -223,7 +223,7 @@
       [NSURL URLWithString:[NSString stringWithFormat:@"#%@", chapter] relativeToURL:
        [[NSBundle mainBundle] URLForResource:@"help" withExtension:@"html"]]]];
     [self.helpView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"setClass('%@');",
-                                                           ClassNameFromOPElementType(self.activeElement.type)]];
+                                                           ClassNameFromMPElementType(self.activeElement.type)]];
 }
 
 - (void)showContentTip:(NSString *)message withIcon:(UIImageView *)icon {
@@ -280,12 +280,12 @@
 
 - (IBAction)incrementPasswordCounter {
     
-    if (![self.activeElement isKindOfClass:[OPElementGeneratedEntity class]])
+    if (![self.activeElement isKindOfClass:[MPElementGeneratedEntity class]])
         // Not of a type that supports a password counter;
         return;
     
     [self updateElement:^{
-        ++((OPElementGeneratedEntity *) self.activeElement).counter;
+        ++((MPElementGeneratedEntity *) self.activeElement).counter;
     }];
 }
 
@@ -307,7 +307,7 @@
 
 - (IBAction)editPassword {
     
-    if (self.activeElement.type & OPElementTypeClassStored) {
+    if (self.activeElement.type & MPElementTypeClassStored) {
         self.contentField.enabled = YES;
         [self.contentField becomeFirstResponder];
     }
@@ -338,7 +338,7 @@
                                       [self setHelpHidden:NO animated:YES];
                                       break;
                                   case 2:
-                                      [[OPAppDelegate get] showGuide];
+                                      [[MPAppDelegate get] showGuide];
                                       break;
                                   case 3: {
                                       IASKAppSettingsViewController *settingsVC = [IASKAppSettingsViewController new];
@@ -351,32 +351,32 @@
                                 otherTitles:[self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings", nil]; 
 }
 
-- (void)didSelectType:(OPElementType)type {
+- (void)didSelectType:(MPElementType)type {
     
     [self updateElement:^{
         // Update password type.
-        if (ClassFromOPElementType(type) != ClassFromOPElementType(self.activeElement.type))
+        if (ClassFromMPElementType(type) != ClassFromMPElementType(self.activeElement.type))
             // Type requires a different class of element.  Recreate the element.
-            [[OPAppDelegate managedObjectContext] performBlockAndWait:^{
-                OPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromOPElementType(type)
-                                                           inManagedObjectContext:[OPAppDelegate managedObjectContext]];
+            [[MPAppDelegate managedObjectContext] performBlockAndWait:^{
+                MPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(type)
+                                                           inManagedObjectContext:[MPAppDelegate managedObjectContext]];
                 newElement.name = self.activeElement.name;
                 newElement.mpHashHex = self.activeElement.mpHashHex;
                 newElement.uses = self.activeElement.uses;
                 newElement.lastUsed = self.activeElement.lastUsed;
                 
-                [[OPAppDelegate managedObjectContext] deleteObject:self.activeElement];
+                [[MPAppDelegate managedObjectContext] deleteObject:self.activeElement];
                 self.activeElement = newElement;
             }];
         
         self.activeElement.type = type;
         
-        if (type & OPElementTypeClassStored && ![self.activeElement.description length])
+        if (type & MPElementTypeClassStored && ![self.activeElement.description length])
             [self showContentTip:@"Tap       to set a password." withIcon:self.contentTipEditIcon];
     }];
 }
 
-- (void)didSelectElement:(OPElementEntity *)element {
+- (void)didSelectElement:(MPElementEntity *)element {
     
     self.activeElement = element;
     [self.activeElement use];
@@ -404,16 +404,16 @@
     
     if (textField == self.contentField) {
         self.contentField.enabled = NO;
-        if (![self.activeElement isKindOfClass:[OPElementStoredEntity class]])
+        if (![self.activeElement isKindOfClass:[MPElementStoredEntity class]])
             // Not of a type whose content can be edited.
             return;
         
-        if ([((OPElementStoredEntity *) self.activeElement).content isEqual:self.contentField.text])
+        if ([((MPElementStoredEntity *) self.activeElement).content isEqual:self.contentField.text])
             // Content hasn't changed.
             return;
         
         [self updateElement:^{
-            ((OPElementStoredEntity *) self.activeElement).content = self.contentField.text;
+            ((MPElementStoredEntity *) self.activeElement).content = self.contentField.text;
         }];
     }
 }

@@ -1,5 +1,5 @@
 //
-//  OPSearchDelegate.h
+//  MPSearchDelegate.h
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 04/01/12.
@@ -7,19 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OPElementEntity.h"
+#import "MPElementEntity.h"
 
-@protocol OPSearchResultsDelegate <NSObject>
+@protocol MPSearchResultsDelegate <NSObject>
 
-- (void)didSelectElement:(OPElementEntity *)element;
+- (void)didSelectElement:(MPElementEntity *)element;
 
 @end
 
-@interface OPSearchDelegate : NSObject <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, NSFetchedResultsControllerDelegate>
+@interface MPSearchDelegate : NSObject <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
-@property (weak, nonatomic) IBOutlet id<OPSearchResultsDelegate> delegate;
+@property (weak, nonatomic) IBOutlet id<MPSearchResultsDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UISearchDisplayController *searchDisplayController;
 @property (weak, nonatomic) IBOutlet UIView *searchTipContainer;
 

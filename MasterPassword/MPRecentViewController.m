@@ -1,14 +1,14 @@
 //
-//  OPRecentViewController.m
+//  MPRecentViewController.m
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 27/11/11.
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import "OPRecentViewController.h"
+#import "MPRecentViewController.h"
 
-@implementation OPRecentViewController
+@implementation MPRecentViewController
 @dynamic tableView;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

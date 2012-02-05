@@ -1,20 +1,20 @@
 //
-//  OPMainViewController.h
+//  MPMainViewController.h
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 24/11/11.
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import "OPTypeViewController.h"
-#import "OPElementEntity.h"
-#import "OPSearchDelegate.h"
+#import "MPTypeViewController.h"
+#import "MPElementEntity.h"
+#import "MPSearchDelegate.h"
 #import "IASKAppSettingsViewController.h"
 
-@interface OPMainViewController : UIViewController <OPTypeDelegate, UITextFieldDelegate, UISearchBarDelegate, OPSearchResultsDelegate, UIWebViewDelegate, IASKSettingsDelegate>
+@interface MPMainViewController : UIViewController <MPTypeDelegate, UITextFieldDelegate, UISearchBarDelegate, MPSearchResultsDelegate, UIWebViewDelegate, IASKSettingsDelegate>
 
-@property (strong, nonatomic) OPElementEntity *activeElement;
-@property (strong, nonatomic) IBOutlet OPSearchDelegate *searchResultsController;
+@property (strong, nonatomic) MPElementEntity *activeElement;
+@property (strong, nonatomic) IBOutlet MPSearchDelegate *searchResultsController;
 @property (weak, nonatomic) IBOutlet UITextField *contentField;
 @property (weak, nonatomic) IBOutlet UIButton *typeButton;
 @property (weak, nonatomic) IBOutlet UIWebView *helpView;

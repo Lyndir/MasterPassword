@@ -1,5 +1,5 @@
 //
-//  OPElementEntity.h
+//  MPElementEntity.h
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 02/01/12.
@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 
 
-@interface OPElementEntity : NSManagedObject
+@interface MPElementEntity : NSManagedObject
 
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *mpHashHex;

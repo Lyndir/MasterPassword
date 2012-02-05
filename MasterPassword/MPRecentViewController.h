@@ -1,5 +1,5 @@
 //
-//  OPRecentViewController.h
+//  MPRecentViewController.h
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 27/11/11.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface OPRecentViewController : UITableViewController
+@interface MPRecentViewController : UITableViewController
 
 @property(nonatomic,retain) IBOutlet UITableView *tableView;
 

@@ -1,5 +1,5 @@
 //
-//  OPAppDelegate.h
+//  MPAppDelegate.h
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 24/11/11.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OPAppDelegate : AbstractAppDelegate
+@interface MPAppDelegate : AbstractAppDelegate
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext          *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel            *managedObjectModel;
@@ -17,7 +17,7 @@
 @property (strong, nonatomic) NSData                                    *keyPhraseHash;
 @property (strong, nonatomic) NSString                                  *keyPhraseHashHex;
 
-+ (OPAppDelegate *)get;
++ (MPAppDelegate *)get;
 + (NSManagedObjectModel *)managedObjectModel;
 + (NSManagedObjectContext *)managedObjectContext;
 

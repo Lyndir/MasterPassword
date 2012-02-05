@@ -2,7 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>OPElementGeneratedEntity</key>
+	<key>MPElementGeneratedEntity</key>
 	<dict>
 		<key>Long Password</key>
 		<array>
@@ -30,7 +30,7 @@
 			<string>nnnn</string>
 		</array>
 	</dict>
-	<key>OPCharacterClasses</key>
+	<key>MPCharacterClasses</key>
 	<dict>
 		<key>V</key>
 		<string>AEIOU</string>

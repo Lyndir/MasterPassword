@@ -1,15 +1,15 @@
 //
-//  OPElementEntity.m
+//  MPElementEntity.m
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 02/01/12.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import "OPElementEntity.h"
+#import "MPElementEntity.h"
 
 
-@implementation OPElementEntity
+@implementation MPElementEntity
 
 @dynamic name;
 @dynamic mpHashHex;

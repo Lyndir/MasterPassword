@@ -1,21 +1,21 @@
 //
-//  OPElementStoredEntity.m
+//  MPElementStoredEntity.m
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 02/01/12.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import "OPElementStoredEntity.h"
-#import "OPAppDelegate.h"
+#import "MPElementStoredEntity.h"
+#import "MPAppDelegate.h"
 
-@interface OPElementStoredEntity ()
+@interface MPElementStoredEntity ()
 
 @property (nonatomic, retain, readwrite) id contentObject;
 
 @end
 
-@implementation OPElementStoredEntity
+@implementation MPElementStoredEntity
 
 @dynamic contentObject;
 
@@ -31,15 +31,15 @@
 
 - (id)content {
     
-    assert(self.type & OPElementTypeClassStored);
+    assert(self.type & MPElementTypeClassStored);
     
     NSData *encryptedContent;
-    if (self.type == OPElementTypeStoredDevicePrivate)
-        encryptedContent = [KeyChain dataOfItemForQuery:[OPElementStoredEntity queryForDevicePrivateElementNamed:self.name]];
+    if (self.type == MPElementTypeStoredDevicePrivate)
+        encryptedContent = [KeyChain dataOfItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]];
     else
         encryptedContent = self.contentObject;
     
-    NSData *decryptedContent = [encryptedContent decryptWithSymmetricKey:[[OPAppDelegate get].keyPhrase
+    NSData *decryptedContent = [encryptedContent decryptWithSymmetricKey:[[MPAppDelegate get].keyPhrase
                                                                           dataUsingEncoding:NSUTF8StringEncoding]
                                                               usePadding:YES];
     return [[NSString alloc] initWithBytes:decryptedContent.bytes length:decryptedContent.length encoding:NSUTF8StringEncoding];
@@ -47,12 +47,12 @@
 
 - (void)setContent:(id)content {
     
-    NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[[OPAppDelegate get].keyPhrase
+    NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[[MPAppDelegate get].keyPhrase
                                                                                dataUsingEncoding:NSUTF8StringEncoding]
                                                                    usePadding:YES];
     
-    if (self.type == OPElementTypeStoredDevicePrivate) {
-        [KeyChain addOrUpdateItemForQuery:[OPElementStoredEntity queryForDevicePrivateElementNamed:self.name]
+    if (self.type == MPElementTypeStoredDevicePrivate) {
+        [KeyChain addOrUpdateItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]
                            withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                            encryptedContent,                                (__bridge id)kSecValueData,
                                            kSecAttrAccessibleWhenUnlockedThisDeviceOnly,    (__bridge id)kSecAttrAccessible,

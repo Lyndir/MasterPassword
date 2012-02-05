@@ -1,15 +1,15 @@
 //
-//  OPGuideViewController.m
+//  MPGuideViewController.m
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 30/01/12.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import "OPGuideViewController.h"
-#import "OPAppDelegate.h"
+#import "MPGuideViewController.h"
+#import "MPAppDelegate.h"
 
-@implementation OPGuideViewController
+@implementation MPGuideViewController
 @synthesize scrollView;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -28,8 +28,8 @@
     
     [super viewWillDisappear:animated];
     
-    [OPConfig get].showQuickStart = [NSNumber numberWithBool:NO];
-    [[OPAppDelegate get] loadKeyPhrase];
+    [MPConfig get].showQuickStart = [NSNumber numberWithBool:NO];
+    [[MPAppDelegate get] loadKeyPhrase];
 }
 
 - (void)viewDidUnload {

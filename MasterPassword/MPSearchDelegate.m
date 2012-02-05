@@ -1,23 +1,23 @@
 //
-//  OPSearchDelegate.m
+//  MPSearchDelegate.m
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 04/01/12.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import "OPSearchDelegate.h"
-#import "OPAppDelegate.h"
-#import "OPElementGeneratedEntity.h"
+#import "MPSearchDelegate.h"
+#import "MPAppDelegate.h"
+#import "MPElementGeneratedEntity.h"
 
-@interface OPSearchDelegate (Private)
+@interface MPSearchDelegate (Private)
 
 - (void)configureCell:(UITableViewCell *)cell inTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath;
 - (void)update;
 
 @end
 
-@implementation OPSearchDelegate
+@implementation MPSearchDelegate
 @synthesize fetchedResultsController;
 @synthesize delegate;
 @synthesize searchDisplayController;
@@ -42,7 +42,7 @@
 
 - (void)searchDisplayController:(UISearchDisplayController *)controller didLoadSearchResultsTableView:(UITableView *)tableView {
     
-    [[NSNotificationCenter defaultCenter] addObserverForName:OPPersistentStoreDidChangeNotification
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIScreenModeDidChangeNotification
                                                       object:nil queue:nil usingBlock:^(NSNotification *note) {
                                                           NSError *error;
                                                           if (![self.fetchedResultsController performFetch:&error])
@@ -67,17 +67,17 @@
     if (!query)
         query = @"";
     
-    NSFetchRequest *fetchRequest = [[OPAppDelegate get].managedObjectModel
-                                    fetchRequestFromTemplateWithName:@"OPSearchElement"
+    NSFetchRequest *fetchRequest = [[MPAppDelegate get].managedObjectModel
+                                    fetchRequestFromTemplateWithName:@"MPSearchElement"
                                     substitutionVariables:[NSDictionary dictionaryWithObjectsAndKeys:
                                                            query,                                   @"query",
-                                                           [OPAppDelegate get].keyPhraseHashHex,    @"mpHashHex",
+                                                           [MPAppDelegate get].keyPhraseHashHex,    @"mpHashHex",
                                                            nil]];
     [fetchRequest setSortDescriptors:
      [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]]];
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                        managedObjectContext:[OPAppDelegate managedObjectContext]
+                                                                        managedObjectContext:[MPAppDelegate managedObjectContext]
                                                                           sectionNameKeyPath:nil cacheName:nil];
     self.fetchedResultsController.delegate = self;
     
@@ -159,9 +159,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OPElementSearch"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MPElementSearch"];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"OPElementSearch"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MPElementSearch"];
         UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"ui_list_middle"] resizableImageWithCapInsets:UIEdgeInsetsMake(5, 5, 5, 5)]];
         backgroundImageView.frame = CGRectMake(-5, 0, 330, 34);
         UIView *backgroundView = [[UIView alloc] initWithFrame:cell.frame];
@@ -182,7 +182,7 @@
 - (void)configureCell:(UITableViewCell *)cell inTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section < [[self.fetchedResultsController sections] count]) {
-        OPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
         
         cell.textLabel.text = element.name;
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", element.uses];
@@ -209,12 +209,12 @@
                                       return;
                                   
                                   [self.fetchedResultsController.managedObjectContext performBlock:^{
-                                      OPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([OPElementGeneratedEntity class])
+                                      MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPElementGeneratedEntity class])
                                                                                                inManagedObjectContext:self.fetchedResultsController.managedObjectContext];
-                                      assert([element isKindOfClass:ClassFromOPElementType(element.type)]);
+                                      assert([element isKindOfClass:ClassFromMPElementType(element.type)]);
                                       
                                       element.name = siteName;
-                                      element.mpHashHex = [OPAppDelegate get].keyPhraseHashHex;
+                                      element.mpHashHex = [MPAppDelegate get].keyPhraseHashHex;
                                       
                                       dispatch_async(dispatch_get_main_queue(), ^{
                                           [self.delegate didSelectElement:element];
@@ -250,7 +250,7 @@
     
     if (editingStyle == UITableViewCellEditingStyleDelete)
         [self.fetchedResultsController.managedObjectContext performBlock:^{
-            OPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
+            MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
             [self.fetchedResultsController.managedObjectContext deleteObject:element];
         }];
 }

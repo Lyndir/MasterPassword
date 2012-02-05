@@ -1,17 +1,17 @@
 //
-//  OPAppDelegate.m
+//  MPAppDelegate.m
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 24/11/11.
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import "OPAppDelegate.h"
+#import "MPAppDelegate.h"
 
-#import "OPMainViewController.h"
+#import "MPMainViewController.h"
 #import "IASKSettingsReader.h"
 
-@interface OPAppDelegate ()
+@interface MPAppDelegate ()
 
 + (NSDictionary *)keyPhraseQuery;
 + (NSDictionary *)keyPhraseHashQuery;
@@ -22,7 +22,7 @@
 
 @end
 
-@implementation OPAppDelegate
+@implementation MPAppDelegate
 
 @synthesize managedObjectModel = __managedObjectModel;
 @synthesize managedObjectContext = __managedObjectContext;
@@ -42,26 +42,26 @@
 
 + (NSDictionary *)keyPhraseQuery {
     
-    static NSDictionary *OPKeyPhraseQuery = nil;
-    if (!OPKeyPhraseQuery)
-        OPKeyPhraseQuery = [KeyChain createQueryForClass:kSecClassGenericPassword
+    static NSDictionary *MPKeyPhraseQuery = nil;
+    if (!MPKeyPhraseQuery)
+        MPKeyPhraseQuery = [KeyChain createQueryForClass:kSecClassGenericPassword
                                               attributes:[NSDictionary dictionaryWithObject:@"MasterPassword"
                                                                                      forKey:(__bridge id)kSecAttrService]
                                                  matches:nil];
     
-    return OPKeyPhraseQuery;
+    return MPKeyPhraseQuery;
 }
 
 + (NSDictionary *)keyPhraseHashQuery {
     
-    static NSDictionary *OPKeyPhraseHashQuery = nil;
-    if (!OPKeyPhraseHashQuery)
-        OPKeyPhraseHashQuery = [KeyChain createQueryForClass:kSecClassGenericPassword
+    static NSDictionary *MPKeyPhraseHashQuery = nil;
+    if (!MPKeyPhraseHashQuery)
+        MPKeyPhraseHashQuery = [KeyChain createQueryForClass:kSecClassGenericPassword
                                                   attributes:[NSDictionary dictionaryWithObject:@"MasterPasswordHash"
                                                                                          forKey:(__bridge id)kSecAttrService]
                                                      matches:nil];
     
-    return OPKeyPhraseHashQuery;
+    return MPKeyPhraseHashQuery;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -134,7 +134,7 @@
 }
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
-    if ([[OPConfig get].showQuickStart boolValue])
+    if ([[MPConfig get].showQuickStart boolValue])
         [self showGuide];
     else
         [self loadKeyPhrase];
@@ -142,12 +142,12 @@
 
 - (void)showGuide {
     
-    [self.navigationController performSegueWithIdentifier:@"OP_Guide" sender:self];
+    [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
 }
 
 - (void)loadKeyPhrase {
     
-    if ([[OPConfig get].forgetKeyPhrase boolValue]) {
+    if ([[MPConfig get].forgetKeyPhrase boolValue]) {
         [self forgetKeyPhrase];
         return;
     }
@@ -175,23 +175,23 @@
                               if (buttonIndex == [alert firstOtherButtonIndex]) {
                                   // Key phrase reset.  Delete it.
                                   dbg(@"Deleting master key phrase and hash from key chain.");
-                                  [KeyChain deleteItemForQuery:[OPAppDelegate keyPhraseQuery]];
-                                  [KeyChain deleteItemForQuery:[OPAppDelegate keyPhraseHashQuery]];
+                                  [KeyChain deleteItemForQuery:[MPAppDelegate keyPhraseQuery]];
+                                  [KeyChain deleteItemForQuery:[MPAppDelegate keyPhraseHashQuery]];
                               }
                               
                               [self loadKeyPhrase];
                           }
                                 cancelTitle:[PearlStrings get].commonButtonAbort
                                 otherTitles:[PearlStrings get].commonButtonContinue, nil];
-    [OPConfig get].forgetKeyPhrase = [NSNumber numberWithBool:NO];
+    [MPConfig get].forgetKeyPhrase = [NSNumber numberWithBool:NO];
 }
 
 - (void)loadStoredKeyPhrase {
     
-    if ([[OPConfig get].storeKeyPhrase boolValue]) {
+    if ([[MPConfig get].storeKeyPhrase boolValue]) {
         // Key phrase is stored in keychain.  Load it.
         dbg(@"Loading master key phrase from key chain.");
-        NSData *keyPhraseData = [KeyChain dataOfItemForQuery:[OPAppDelegate keyPhraseQuery]];
+        NSData *keyPhraseData = [KeyChain dataOfItemForQuery:[MPAppDelegate keyPhraseQuery]];
         dbg(@" -> Master key phrase %@.", keyPhraseData? @"found": @"NOT found");
         
         self.keyPhrase = keyPhraseData? [[NSString alloc] initWithBytes:keyPhraseData.bytes length:keyPhraseData.length
@@ -199,14 +199,14 @@
     } else {
         // Key phrase should not be stored in keychain.  Delete it.
         dbg(@"Deleting master key phrase from key chain.");
-        [KeyChain deleteItemForQuery:[OPAppDelegate keyPhraseQuery]];
+        [KeyChain deleteItemForQuery:[MPAppDelegate keyPhraseQuery]];
     }
 }
 
 - (void)askKeyPhrase {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSData *keyPhraseHash = [KeyChain dataOfItemForQuery:[OPAppDelegate keyPhraseHashQuery]];
+        NSData *keyPhraseHash = [KeyChain dataOfItemForQuery:[MPAppDelegate keyPhraseHashQuery]];
         dbg(@"Key phrase hash %@.", keyPhraseHash? @"known": @"NOT known");
         
         [AlertViewController showAlertWithTitle:@"Master Password"
@@ -259,7 +259,7 @@
     
     [self saveContext];
     
-    if (![[OPConfig get].rememberKeyPhrase boolValue])
+    if (![[MPConfig get].rememberKeyPhrase boolValue])
         self.keyPhrase = nil;
 }
 
@@ -268,19 +268,19 @@
     [self saveContext];
 }
 
-+ (OPAppDelegate *)get {
++ (MPAppDelegate *)get {
     
-    return (OPAppDelegate *)[super get];
+    return (MPAppDelegate *)[super get];
 }
 
 + (NSManagedObjectContext *)managedObjectContext {
     
-    return [(OPAppDelegate *)[UIApplication sharedApplication].delegate managedObjectContext];
+    return [(MPAppDelegate *)[UIApplication sharedApplication].delegate managedObjectContext];
 }
 
 + (NSManagedObjectModel *)managedObjectModel {
     
-    return [(OPAppDelegate *)[UIApplication sharedApplication].delegate managedObjectModel];
+    return [(MPAppDelegate *)[UIApplication sharedApplication].delegate managedObjectModel];
 }
 
 - (void)saveContext {
@@ -301,14 +301,14 @@
         self.keyPhraseHashHex = [self.keyPhraseHash encodeHex];
         
         dbg(@"Updating master key phrase hash to: %@.", self.keyPhraseHashHex);
-        [KeyChain addOrUpdateItemForQuery:[OPAppDelegate keyPhraseHashQuery]
+        [KeyChain addOrUpdateItemForQuery:[MPAppDelegate keyPhraseHashQuery]
                            withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                            self.keyPhraseHash,                                      (__bridge id)kSecValueData,
                                            kSecAttrAccessibleWhenUnlocked,                          (__bridge id)kSecAttrAccessible,
                                            nil]];
-        if ([[OPConfig get].storeKeyPhrase boolValue]) {
+        if ([[MPConfig get].storeKeyPhrase boolValue]) {
             dbg(@"Storing master key phrase in key chain.");
-            [KeyChain addOrUpdateItemForQuery:[OPAppDelegate keyPhraseQuery]
+            [KeyChain addOrUpdateItemForQuery:[MPAppDelegate keyPhraseQuery]
                                withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                [keyPhrase dataUsingEncoding:NSUTF8StringEncoding],  (__bridge id)kSecValueData,
                                                kSecAttrAccessibleWhenUnlocked,                      (__bridge id)kSecAttrAccessible,
@@ -343,7 +343,7 @@
                                                               [__managedObjectContext mergeChangesFromContextDidSaveNotification:note];
 
                                                               [[NSNotificationCenter defaultCenter] postNotification:
-                                                               [NSNotification notificationWithName:OPPersistentStoreDidChangeNotification
+                                                               [NSNotification notificationWithName:UIScreenModeDidChangeNotification
                                                                                              object:self userInfo:[note userInfo]]];
                                                           }];
                                                       }];

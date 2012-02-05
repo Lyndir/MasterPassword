@@ -8,7 +8,7 @@
         <scene sceneID="WkW-SR-cr2">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jZj-N1-rhF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tableViewController id="NKe-nv-566" customClass="OPTypeViewController" sceneMemberID="viewController">
+                <tableViewController id="NKe-nv-566" customClass="MPTypeViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="btl-G4-V0S">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -311,7 +311,7 @@ The passwords aren't saved anywhere.  This is a major advantage: if you loose yo
         <scene sceneID="U26-Zf-euQ">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mK2-p1-3zC" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <customObject id="0QO-2P-OhD" customClass="OPSearchDelegate">
+                <customObject id="0QO-2P-OhD" customClass="MPSearchDelegate">
                     <connections>
                         <outlet property="delegate" destination="PQa-Xl-A3x" id="O2f-mW-ab8"/>
                         <outlet property="searchDisplayController" destination="P8c-gf-nN3" id="exk-dS-Ui3"/>
@@ -327,7 +327,7 @@ The passwords aren't saved anywhere.  This is a major advantage: if you loose yo
                         <outlet property="searchResultsDelegate" destination="0QO-2P-OhD" id="Bm8-Q3-lLA"/>
                     </connections>
                 </searchDisplayController>
-                <viewController id="PQa-Xl-A3x" customClass="OPMainViewController" sceneMemberID="viewController">
+                <viewController id="PQa-Xl-A3x" customClass="MPMainViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ep0-Hn-5TR">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -443,7 +443,7 @@ The passwords aren't saved anywhere.  This is a major advantage: if you loose yo
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="NKe-nv-566" kind="push" identifier="OP_Main_ChooseType" id="vw4-Vd-O6q"/>
+                                            <segue destination="NKe-nv-566" kind="push" identifier="MP_Main_ChooseType" id="vw4-Vd-O6q"/>
                                         </connections>
                                     </button>
                                     <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="v2m-Gf-pEV">
@@ -604,7 +604,7 @@ L4m3P4sSw0rD</string>
         <scene sceneID="Rt1-b4-sUB">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7yf-G7-kVy" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="qz3-eG-aEi" customClass="OPGuideViewController" sceneMemberID="viewController">
+                <viewController id="qz3-eG-aEi" customClass="MPGuideViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cwa-ct-2DY">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -682,7 +682,7 @@ L4m3P4sSw0rD</string>
                     <nil name="viewControllers"/>
                     <connections>
                         <segue destination="PQa-Xl-A3x" kind="relationship" relationship="rootViewController" id="LUg-eF-JQd"/>
-                        <segue destination="qz3-eG-aEi" kind="modal" identifier="OP_Guide" id="vyG-wN-8hU"/>
+                        <segue destination="qz3-eG-aEi" kind="modal" identifier="MP_Guide" id="vyG-wN-8hU"/>
                     </connections>
                 </navigationController>
             </objects>

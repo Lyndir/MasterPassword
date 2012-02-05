@@ -1,5 +1,5 @@
 //
-//  OPGuideViewController.h
+//  MPGuideViewController.h
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 30/01/12.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OPGuideViewController : UIViewController
+@interface MPGuideViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 

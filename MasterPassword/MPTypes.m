@@ -1,41 +1,41 @@
 //
-//  OPTypes.m
+//  MPTypes.m
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 02/01/12.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import "OPTypes.h"
-#import "OPElementGeneratedEntity.h"
-#import "OPElementStoredEntity.h"
+#import "MPTypes.h"
+#import "MPElementGeneratedEntity.h"
+#import "MPElementStoredEntity.h"
 
 
-NSString *NSStringFromOPElementType(OPElementType type) {
+NSString *NSStringFromMPElementType(MPElementType type) {
 
     if (!type)
         return nil;
     
     switch (type) {
-        case OPElementTypeCalculatedLong:
+        case MPElementTypeCalculatedLong:
             return @"Long Password";
             
-        case OPElementTypeCalculatedMedium:
+        case MPElementTypeCalculatedMedium:
             return @"Medium Password";
             
-        case OPElementTypeCalculatedShort:
+        case MPElementTypeCalculatedShort:
             return @"Short Password";
             
-        case OPElementTypeCalculatedBasic:
+        case MPElementTypeCalculatedBasic:
             return @"Basic Password";
             
-        case OPElementTypeCalculatedPIN:
+        case MPElementTypeCalculatedPIN:
             return @"PIN";
             
-        case OPElementTypeStoredPersonal:
+        case MPElementTypeStoredPersonal:
             return @"Personal Password";
             
-        case OPElementTypeStoredDevicePrivate:
+        case MPElementTypeStoredDevicePrivate:
             return @"Device Private Password";
             
         default:
@@ -43,50 +43,50 @@ NSString *NSStringFromOPElementType(OPElementType type) {
     }
 }
 
-Class ClassFromOPElementType(OPElementType type) {
+Class ClassFromMPElementType(MPElementType type) {
     
     if (!type)
         return nil;
     
     switch (type) {
-        case OPElementTypeCalculatedLong:
-            return [OPElementGeneratedEntity class];
+        case MPElementTypeCalculatedLong:
+            return [MPElementGeneratedEntity class];
             
-        case OPElementTypeCalculatedMedium:
-            return [OPElementGeneratedEntity class];
+        case MPElementTypeCalculatedMedium:
+            return [MPElementGeneratedEntity class];
             
-        case OPElementTypeCalculatedShort:
-            return [OPElementGeneratedEntity class];
+        case MPElementTypeCalculatedShort:
+            return [MPElementGeneratedEntity class];
             
-        case OPElementTypeCalculatedBasic:
-            return [OPElementGeneratedEntity class];
+        case MPElementTypeCalculatedBasic:
+            return [MPElementGeneratedEntity class];
             
-        case OPElementTypeCalculatedPIN:
-            return [OPElementGeneratedEntity class];
+        case MPElementTypeCalculatedPIN:
+            return [MPElementGeneratedEntity class];
             
-        case OPElementTypeStoredPersonal:
-            return [OPElementStoredEntity class];
+        case MPElementTypeStoredPersonal:
+            return [MPElementStoredEntity class];
             
-        case OPElementTypeStoredDevicePrivate:
-            return [OPElementStoredEntity class];
+        case MPElementTypeStoredDevicePrivate:
+            return [MPElementStoredEntity class];
             
         default:
             [NSException raise:NSInternalInconsistencyException format:@"Type not supported: %d", type];
     }
 }
 
-NSString *ClassNameFromOPElementType(OPElementType type) {
+NSString *ClassNameFromMPElementType(MPElementType type) {
     
-    return NSStringFromClass(ClassFromOPElementType(type));
+    return NSStringFromClass(ClassFromMPElementType(type));
 }
 
-static NSDictionary *OPTypes_ciphers = nil;
-NSString *OPCalculateContent(OPElementType type, NSString *name, NSString *keyPhrase, int counter) {
+static NSDictionary *MPTypes_ciphers = nil;
+NSString *MPCalculateContent(MPElementType type, NSString *name, NSString *keyPhrase, int counter) {
     
-    assert(type & OPElementTypeClassCalculated);
+    assert(type & MPElementTypeClassCalculated);
     
-    if (OPTypes_ciphers == nil)
-        OPTypes_ciphers = [NSDictionary dictionaryWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"ciphers"
+    if (MPTypes_ciphers == nil)
+        MPTypes_ciphers = [NSDictionary dictionaryWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"ciphers"
                                                                                             withExtension:@"plist"]];
     
     // Determine the hash whose bytes will be used for calculating a password: md4(name-keyPhrase)
@@ -96,8 +96,8 @@ NSString *OPCalculateContent(OPElementType type, NSString *name, NSString *keyPh
     
     // Determine the cipher from the first hash byte.
     assert([keyHash length]);
-    NSArray *typeCiphers = [[OPTypes_ciphers valueForKey:ClassNameFromOPElementType(type)]
-            valueForKey:NSStringFromOPElementType(type)];
+    NSArray *typeCiphers = [[MPTypes_ciphers valueForKey:ClassNameFromMPElementType(type)]
+            valueForKey:NSStringFromMPElementType(type)];
     NSString *cipher = [typeCiphers objectAtIndex:keyBytes[0] % [typeCiphers count]];
 
     // Encode the content, character by character, using subsequent hash bytes and the cipher.
@@ -106,7 +106,7 @@ NSString *OPCalculateContent(OPElementType type, NSString *name, NSString *keyPh
     for (NSUInteger c = 0; c < [cipher length]; ++c) {
         const char keyByte = keyBytes[c + 1];
         NSString *cipherClass = [cipher substringWithRange:NSMakeRange(c, 1)];
-        NSString *cipherClassCharacters = [[OPTypes_ciphers valueForKey:@"OPCharacterClasses"] valueForKey:cipherClass];
+        NSString *cipherClassCharacters = [[MPTypes_ciphers valueForKey:@"MPCharacterClasses"] valueForKey:cipherClass];
         
         [content appendString:[cipherClassCharacters substringWithRange:NSMakeRange(keyByte % [cipherClassCharacters length], 1)]];
     }

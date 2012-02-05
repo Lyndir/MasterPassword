@@ -1,5 +1,5 @@
 //
-//  OPElementGeneratedEntity.h
+//  MPElementGeneratedEntity.h
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 16/01/12.
@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "OPElementEntity.h"
+#import "MPElementEntity.h"
 
 
-@interface OPElementGeneratedEntity : OPElementEntity
+@interface MPElementGeneratedEntity : MPElementEntity
 
 @property (nonatomic, assign) int16_t counter;
 
