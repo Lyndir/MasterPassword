@@ -289,13 +289,17 @@
         
         dbg(@"Updating master key phrase hash to: %@.", self.keyPhraseHashHex);
         [KeyChain addOrUpdateItemForQuery:[OPAppDelegate keyPhraseHashQuery]
-                           withAttributes:[NSDictionary dictionaryWithObject:self.keyPhraseHash
-                                                                      forKey:(__bridge id)kSecValueData]];
+                           withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                           self.keyPhraseHash,                                      (__bridge id)kSecValueData,
+                                           kSecAttrAccessibleWhenUnlocked,                          (__bridge id)kSecAttrAccessible,
+                                           nil]];
         if ([[OPConfig get].storeKeyPhrase boolValue]) {
             dbg(@"Storing master key phrase in key chain.");
             [KeyChain addOrUpdateItemForQuery:[OPAppDelegate keyPhraseQuery]
-                               withAttributes:[NSDictionary dictionaryWithObject:[keyPhrase dataUsingEncoding:NSUTF8StringEncoding]
-                                                                          forKey:(__bridge id)kSecValueData]];
+                               withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                               [keyPhrase dataUsingEncoding:NSUTF8StringEncoding],  (__bridge id)kSecValueData,
+                                               kSecAttrAccessibleWhenUnlocked,                      (__bridge id)kSecAttrAccessible,
+                                               nil]];
         }
     }
 }

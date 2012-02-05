@@ -14,10 +14,10 @@
 
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *mpHashHex;
-@property (nonatomic) int16_t type;
-@property (nonatomic) int16_t uses;
-@property (nonatomic) NSTimeInterval lastUsed;
-@property (nonatomic, readonly) id content;
+@property (nonatomic, assign) int16_t type;
+@property (nonatomic, assign) int16_t uses;
+@property (nonatomic, assign) NSTimeInterval lastUsed;
+@property (nonatomic, retain, readonly) id content;
 
 - (void)use;
 

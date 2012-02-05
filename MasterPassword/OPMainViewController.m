@@ -369,12 +369,12 @@
             // Not of a type whose content can be edited.
             return;
         
-        if ([((OPElementStoredEntity *) self.activeElement).contentObject isEqual:self.contentField.text])
+        if ([((OPElementStoredEntity *) self.activeElement).content isEqual:self.contentField.text])
             // Content hasn't changed.
             return;
         
         [self updateElement:^{
-            ((OPElementStoredEntity *) self.activeElement).contentObject = self.contentField.text;
+            ((OPElementStoredEntity *) self.activeElement).content = self.contentField.text;
         }];
     }
 }

@@ -204,6 +204,7 @@
 		DA84819514CB521E00A2FA22 /* tip_location_teal.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84817714CB521E00A2FA22 /* tip_location_teal.png */; };
 		DA84819614CB521E00A2FA22 /* tip_location_wood.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84817814CB521E00A2FA22 /* tip_location_wood.png */; };
 		DA8E8E4614DD7C1D0044257E /* logo-bare.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8E8E4514DD7C1D0044257E /* logo-bare.png */; };
+		DA8E8E5114DE78C20044257E /* OPMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8E8E5014DE78C20044257E /* OPMenuViewController.m */; };
 		DAA3B68E14CCCEE700F35AF6 /* icon_addressbook-person@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA3B53814CCCEE700F35AF6 /* icon_addressbook-person@2x.png */; };
 		DAA3B68F14CCCEE700F35AF6 /* icon_addressbook.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA3B53914CCCEE700F35AF6 /* icon_addressbook.png */; };
 		DAA3B69014CCCEE700F35AF6 /* icon_addressbook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA3B53A14CCCEE700F35AF6 /* icon_addressbook@2x.png */; };
@@ -907,6 +908,8 @@
 		DA84817814CB521E00A2FA22 /* tip_location_wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tip_location_wood.png; sourceTree = "<group>"; };
 		DA8E8E4514DD7C1D0044257E /* logo-bare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo-bare.png"; path = "Resources/logo-bare.png"; sourceTree = "<group>"; };
 		DA8E8E4714DDA62D0044257E /* MasterPassword.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MasterPassword.entitlements; sourceTree = "<group>"; };
+		DA8E8E4F14DE78C20044257E /* OPMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OPMenuViewController.h; sourceTree = "<group>"; };
+		DA8E8E5014DE78C20044257E /* OPMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OPMenuViewController.m; sourceTree = "<group>"; };
 		DAA3B53814CCCEE700F35AF6 /* icon_addressbook-person@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_addressbook-person@2x.png"; sourceTree = "<group>"; };
 		DAA3B53914CCCEE700F35AF6 /* icon_addressbook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_addressbook.png; sourceTree = "<group>"; };
 		DAA3B53A14CCCEE700F35AF6 /* icon_addressbook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_addressbook@2x.png"; sourceTree = "<group>"; };
@@ -1825,6 +1828,8 @@
 				DAE2C646148247E500BA6B10 /* OPTypeViewController.m */,
 				DA55B29C14B38272001131B7 /* OPContentViewController.h */,
 				DA55B29D14B38272001131B7 /* OPContentViewController.m */,
+				DA8E8E4F14DE78C20044257E /* OPMenuViewController.h */,
+				DA8E8E5014DE78C20044257E /* OPMenuViewController.m */,
 				DA34DA1414B1BEA100F721C1 /* OPTypes.h */,
 				DA34DA1514B1BEA100F721C1 /* OPTypes.m */,
 				DA007F5014B24DCC00251337 /* OPConfig.h */,
@@ -3040,6 +3045,7 @@
 				DA0A848C14C4DFCB0090EA8E /* OPElementGeneratedEntity.m in Sources */,
 				DAA3B81414CDC77100F35AF6 /* jquery-1.6.1.min.js in Sources */,
 				DA65570614D731F000841C99 /* OPGuideViewController.m in Sources */,
+				DA8E8E5114DE78C20044257E /* OPMenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

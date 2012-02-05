@@ -13,6 +13,6 @@
 
 @interface OPElementGeneratedEntity : OPElementEntity
 
-@property (nonatomic) int16_t counter;
+@property (nonatomic, assign) int16_t counter;
 
 @end

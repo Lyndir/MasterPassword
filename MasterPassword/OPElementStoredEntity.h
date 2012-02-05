@@ -13,6 +13,6 @@
 
 @interface OPElementStoredEntity : OPElementEntity
 
-@property (nonatomic, retain) id contentObject;
+@property (nonatomic, retain, readwrite) id content;
 
 @end
