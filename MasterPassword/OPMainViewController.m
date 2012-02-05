@@ -11,6 +11,7 @@
 #import "OPContentViewController.h"
 #import "OPElementGeneratedEntity.h"
 #import "OPElementStoredEntity.h"
+#import "IASKAppSettingsViewController.h"
 
 #import <MobileCoreServices/MobileCoreServices.h>
 
@@ -75,9 +76,21 @@
     [self updateAnimated:animated];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+
+    [super viewWillDisappear:animated];
+    
+    self.searchTipContainer.hidden = YES;
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     
     [super viewDidAppear:animated];
+}
+
+- (void)viewDidLoad {
+    
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
     
     // Put the search tip on the window so it's above the nav bar.
     if (![self.searchTipContainer.superview isEqual:self.navigationController.navigationBar.superview]) {
@@ -88,15 +101,6 @@
         self.searchTipContainer.frame = [self.searchTipContainer.window convertRect:frameInWindow
                                                                              toView:self.searchTipContainer.superview];
     }
-}
-
-- (void)viewDidLoad {
-    
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
-    //self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo-bare.png"]];
-    self.navigationItem.titleView.frame = CGRectMake(0, 0, 50, 50);
-    self.navigationItem.titleView.center = self.navigationController.navigationBar.center;
-    self.navigationItem.titleView.contentMode = UIViewContentModeScaleAspectFit;
     
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
@@ -336,14 +340,15 @@
                                   case 2:
                                       [[OPAppDelegate get] showGuide];
                                       break;
-                                  case 3:
-                                      [[UIApplication sharedApplication] openURL:
-                                       [NSURL URLWithString:[NSString stringWithFormat:@"prefs:root=Apps&path=%@",
-                                                             [InfoPlist get].CFBundleDisplayName]]];
+                                  case 3: {
+                                      IASKAppSettingsViewController *settingsVC = [IASKAppSettingsViewController new];
+                                      settingsVC.delegate = self;
+                                      [self.navigationController pushViewController:settingsVC animated:YES];
                                       break;
+                                }
                               }
                           } cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil
-                                otherTitles:[self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Quick Start", @"Settings", nil]; 
+                                otherTitles:[self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings", nil]; 
 }
 
 - (void)didSelectType:(OPElementType)type {
@@ -421,6 +426,12 @@
     }
     
     return YES;
+}
+
+- (void)settingsViewControllerDidEnd:(IASKAppSettingsViewController *)sender {
+    
+    while ([self.navigationController.viewControllers containsObject:sender])
+        [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

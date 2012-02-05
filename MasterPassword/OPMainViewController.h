@@ -9,8 +9,9 @@
 #import "OPTypeViewController.h"
 #import "OPElementEntity.h"
 #import "OPSearchDelegate.h"
+#import "IASKAppSettingsViewController.h"
 
-@interface OPMainViewController : UIViewController <OPTypeDelegate, UITextFieldDelegate, UISearchBarDelegate, OPSearchResultsDelegate, UIWebViewDelegate>
+@interface OPMainViewController : UIViewController <OPTypeDelegate, UITextFieldDelegate, UISearchBarDelegate, OPSearchResultsDelegate, UIWebViewDelegate, IASKSettingsDelegate>
 
 @property (strong, nonatomic) OPElementEntity *activeElement;
 @property (strong, nonatomic) IBOutlet OPSearchDelegate *searchResultsController;

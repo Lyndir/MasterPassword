@@ -9,6 +9,7 @@
 #import "OPAppDelegate.h"
 
 #import "OPMainViewController.h"
+#import "IASKSettingsReader.h"
 
 @interface OPAppDelegate ()
 
@@ -116,6 +117,18 @@
      [[UISegmentedControl appearance] setDividerImage:segmentUnselectedUnselected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
      [[UISegmentedControl appearance] setDividerImage:segmentSelectedUnselected forLeftSegmentState:UIControlStateSelected rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
      [[UISegmentedControl appearance] setDividerImage:segUnselectedSelected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateSelected barMetrics:UIBarMetricsDefault];*/
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:kIASKAppSettingChanged object:nil queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      if ([NSStringFromSelector(@selector(storeKeyPhrase))
+                                                           isEqualToString:[note.object description]]) {
+                                                          self.keyPhrase = self.keyPhrase;
+                                                          [self loadKeyPhrase];
+                                                      }
+                                                      if ([NSStringFromSelector(@selector(forgetKeyPhrase))
+                                                           isEqualToString:[note.object description]])
+                                                          [self loadKeyPhrase];
+                                                  }];
     
     return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
