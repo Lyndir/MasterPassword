@@ -34,8 +34,12 @@
 - (IBAction)copyContent;
 - (IBAction)incrementPasswordCounter;
 - (IBAction)editPassword;
-- (IBAction)toggleHelp;
-- (void)toggleHelp:(BOOL)hidden;
 - (IBAction)closeAlert;
+- (IBAction)action:(UIBarButtonItem *)sender;
+
+- (BOOL)isHelpVisible;
+- (void)toggleHelpAnimated:(BOOL)animated;
+- (void)setHelpHidden:(BOOL)hidden animated:(BOOL)animated;
+- (void)setHelpChapter:(NSString *)chapter;
 
 @end

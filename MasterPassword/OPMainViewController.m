@@ -71,8 +71,8 @@
             self.searchTipContainer.alpha = 1;
         }];
     
-    [self toggleHelp:[[OPConfig get].helpHidden boolValue]];
-    [self updateAnimated:NO];
+    [self setHelpHidden:[[OPConfig get].helpHidden boolValue] animated:animated];
+    [self updateAnimated:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -161,14 +161,7 @@
 
 - (void)updateWasAnimated:(BOOL)animated {
     
-    NSUInteger chapter = self.activeElement? 2: 1;
-    [self.helpView loadRequest:
-     [NSURLRequest requestWithURL:
-      [NSURL URLWithString:[NSString stringWithFormat:@"#%d", chapter] relativeToURL:
-       [[NSBundle mainBundle] URLForResource:@"help" withExtension:@"html"]]]];
-    [self.helpView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"setClass('%@');",
-                                                           ClassNameFromOPElementType(self.activeElement.type)]];
-    
+    [self setHelpChapter:self.activeElement? @"2": @"1"];
     self.siteName.text = self.activeElement.name;
     
     self.passwordCounter.alpha = self.activeElement.type & OPElementTypeClassCalculated? 0.5f: 0;
@@ -191,6 +184,42 @@
             self.contentField.text = description;
         });
     });
+}
+
+- (BOOL)isHelpVisible {
+    
+    return self.helpContainer.frame.origin.y < 400;
+}
+
+- (void)toggleHelpAnimated:(BOOL)animated {
+    
+    [self setHelpHidden:[self isHelpVisible] animated:animated];
+}
+
+- (void)setHelpHidden:(BOOL)hidden animated:(BOOL)animated {
+    
+    [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
+        
+        if (hidden) {
+            self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 373);
+            self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, 415);
+            [OPConfig get].helpHidden = [NSNumber numberWithBool:YES];
+        } else {
+            self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 175);
+            self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, 216);
+            [OPConfig get].helpHidden = [NSNumber numberWithBool:NO];
+        }
+    }];
+}
+
+- (void)setHelpChapter:(NSString *)chapter {
+    
+    [self.helpView loadRequest:
+     [NSURLRequest requestWithURL:
+      [NSURL URLWithString:[NSString stringWithFormat:@"#%@", chapter] relativeToURL:
+       [[NSBundle mainBundle] URLForResource:@"help" withExtension:@"html"]]]];
+    [self.helpView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"setClass('%@');",
+                                                           ClassNameFromOPElementType(self.activeElement.type)]];
 }
 
 - (void)showContentTip:(NSString *)message withIcon:(UIImageView *)icon {
@@ -280,29 +309,6 @@
     }
 }
 
-- (IBAction)toggleHelp {
-    
-    [UIView animateWithDuration:0.3f animations:^{
-        if (self.helpContainer.frame.origin.y < 400)
-            [self toggleHelp:YES];
-        else
-            [self toggleHelp:NO];
-    }];
-}
-
-- (void)toggleHelp:(BOOL)hidden {
-    
-    if (hidden) {
-        self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 373);
-        self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, 415);
-        [OPConfig get].helpHidden = [NSNumber numberWithBool:YES];
-    } else {
-        self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 175);
-        self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, 216);
-        [OPConfig get].helpHidden = [NSNumber numberWithBool:NO];
-    }
-}
-
 - (IBAction)closeAlert {
     
     [UIView animateWithDuration:0.3f animations:^{
@@ -310,6 +316,34 @@
     } completion:^(BOOL finished) {
         self.alertBody.text = nil;
     }];
+}
+
+- (IBAction)action:(id)sender {
+    
+    [SheetViewController showSheetWithTitle:nil message:nil viewStyle:UIActionSheetStyleAutomatic
+                          tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
+                              if (buttonIndex == [sheet cancelButtonIndex])
+                                  return;
+                              
+                              switch (buttonIndex - [sheet firstOtherButtonIndex]) {
+                                  case 0:
+                                      [self toggleHelpAnimated:YES];
+                                      break;
+                                  case 1:
+                                      [self setHelpChapter:@"faq"];
+                                      [self setHelpHidden:NO animated:YES];
+                                      break;
+                                  case 2:
+                                      [[OPAppDelegate get] showGuide];
+                                      break;
+                                  case 3:
+                                      [[UIApplication sharedApplication] openURL:
+                                       [NSURL URLWithString:[NSString stringWithFormat:@"prefs:root=Apps&path=%@",
+                                                             [InfoPlist get].CFBundleDisplayName]]];
+                                      break;
+                              }
+                          } cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil
+                                otherTitles:[self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Quick Start", @"Settings", nil]; 
 }
 
 - (void)didSelectType:(OPElementType)type {
