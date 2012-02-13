@@ -205,6 +205,8 @@
                                         message:l(@"Do you want to create a new site named:\n%@", siteName)
                                       viewStyle:UIAlertViewStyleDefault
                               tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                  [tableView deselectRowAtIndexPath:indexPath animated:YES];
+                                  
                                   if (buttonIndex == [alert cancelButtonIndex])
                                       return;
                                   

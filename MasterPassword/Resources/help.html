@@ -52,6 +52,9 @@
         <script type="text/javascript">
             function setClass(activeClass) {
                 $(".Class").css("display", "none");
+                if (!$(".Class." + activeClass).length)
+                    return "Not found: " + activeClass;
+                
                 $(".Class." + activeClass).css("display", "block");
             }
         </script>

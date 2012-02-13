@@ -39,16 +39,14 @@
     else
         encryptedContent = self.contentObject;
     
-    NSData *decryptedContent = [encryptedContent decryptWithSymmetricKey:[[MPAppDelegate get].keyPhrase
-                                                                          dataUsingEncoding:NSUTF8StringEncoding]
+    NSData *decryptedContent = [encryptedContent decryptWithSymmetricKey:[[MPAppDelegate get] keyPhraseWithLength:kCipherKeySize]
                                                               usePadding:YES];
     return [[NSString alloc] initWithBytes:decryptedContent.bytes length:decryptedContent.length encoding:NSUTF8StringEncoding];
 }
 
 - (void)setContent:(id)content {
     
-    NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[[MPAppDelegate get].keyPhrase
-                                                                               dataUsingEncoding:NSUTF8StringEncoding]
+    NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[MPAppDelegate get].keyPhrase
                                                                    usePadding:YES];
     
     if (self.type == MPElementTypeStoredDevicePrivate) {

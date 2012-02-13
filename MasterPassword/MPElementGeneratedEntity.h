@@ -13,6 +13,6 @@
 
 @interface MPElementGeneratedEntity : MPElementEntity
 
-@property (nonatomic, assign) int16_t counter;
+@property (nonatomic, assign) uint16_t counter;
 
 @end

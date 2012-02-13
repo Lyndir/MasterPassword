@@ -8,6 +8,13 @@
 
 #import "MPTypeViewController.h"
 
+
+@interface MPTypeViewController ()
+
+- (MPElementType)typeAtIndexPath:(NSIndexPath *)indexPath;
+
+@end
+
 @implementation MPTypeViewController
 @synthesize delegate;
 
@@ -16,7 +23,7 @@
 - (void)viewDidLoad {
     
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
-
+    
     [super viewDidLoad];
 }
 
@@ -25,30 +32,51 @@
     return YES;
 }
 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    
+    if ([delegate respondsToSelector:@selector(selectedType)])
+        if ([delegate selectedType] == [self typeAtIndexPath:indexPath])
+            [cell iterateSubviewsContinueAfter:^BOOL(UIView *subview) {
+                if ([subview isKindOfClass:[UIImageView class]]) {
+                    UIImageView *imageView = ((UIImageView *)subview);
+                    if (!imageView.highlightedImage)
+                        imageView.highlightedImage = [imageView.image highlightedImage];
+                    imageView.highlighted = YES;
+                    return NO;
+                }
+                
+                return YES;
+            }];
+    
+    return cell;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     assert(self.navigationController.topViewController == self);
+    
+    [delegate didSelectType:[self typeAtIndexPath:indexPath]];
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
-    MPElementType type;
+- (MPElementType)typeAtIndexPath:(NSIndexPath *)indexPath {
+    
     switch (indexPath.section) {
         case 0: {
             // Calculated
             switch (indexPath.row) {
                 case 0:
-                    type = MPElementTypeCalculatedLong;
-                    break;
+                    return MPElementTypeCalculatedLong;
                 case 1:
-                    type = MPElementTypeCalculatedMedium;
-                    break;
+                    return MPElementTypeCalculatedMedium;
                 case 2:
-                    type = MPElementTypeCalculatedShort;
-                    break;
+                    return MPElementTypeCalculatedShort;
                 case 3:
-                    type = MPElementTypeCalculatedBasic;
-                    break;
+                    return MPElementTypeCalculatedBasic;
                 case 4:
-                    type = MPElementTypeCalculatedPIN;
-                    break;
+                    return MPElementTypeCalculatedPIN;
                     
                 default:
                     [NSException raise:NSInternalInconsistencyException
@@ -61,11 +89,9 @@
             // Stored
             switch (indexPath.row) {
                 case 0:
-                    type = MPElementTypeStoredPersonal;
-                    break;
+                    return MPElementTypeStoredPersonal;
                 case 1:
-                    type = MPElementTypeStoredDevicePrivate;
-                    break;
+                    return MPElementTypeStoredDevicePrivate;
                     
                 default:
                     [NSException raise:NSInternalInconsistencyException
@@ -79,8 +105,7 @@
                         format:@"Unsupported section: %d, when selecting element type.", indexPath.section];
     }
     
-    [delegate didSelectType:type];
-    [self.navigationController popViewControllerAnimated:YES];
+    @throw nil;
 }
 
 @end

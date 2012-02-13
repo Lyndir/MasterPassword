@@ -11,6 +11,9 @@
 		DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */; };
 		DA0A848C14C4DFCB0090EA8E /* MPElementGeneratedEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0A848B14C4DFCB0090EA8E /* MPElementGeneratedEntity.m */; };
 		DA0B951114C2D69E001D4EB1 /* help.html in Resources */ = {isa = PBXBuildFile; fileRef = DA0B951014C2D69E001D4EB1 /* help.html */; };
+		DA1A144414E4950C00BCFFBE /* libscryptenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA1A143814E494DE00BCFFBE /* libscryptenc.a */; };
+		DA1A144714E4983200BCFFBE /* SCrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = DA1A144514E4983200BCFFBE /* SCrypt.h */; };
+		DA1A144814E4983200BCFFBE /* SCrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1A144614E4983200BCFFBE /* SCrypt.m */; };
 		DA34DA0D14B1BC7D00F721C1 /* MPElementStoredEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA34DA0C14B1BC7D00F721C1 /* MPElementStoredEntity.m */; };
 		DA34DA1114B1BC7E00F721C1 /* MPElementEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA34DA1014B1BC7E00F721C1 /* MPElementEntity.m */; };
 		DA41A40B14DB3BF100638533 /* guide_page_0.png in Resources */ = {isa = PBXBuildFile; fileRef = DA41A40914DB3BF100638533 /* guide_page_0.png */; };
@@ -711,6 +714,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		DA1A143714E494DE00BCFFBE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA1A142714E494DA00BCFFBE /* scrypt.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteInfo = scryptenc;
+		};
+		DA1A143914E494DE00BCFFBE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA1A142714E494DA00BCFFBE /* scrypt.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A0511C5A127770FD00DE46C4;
+			remoteInfo = scryptcrypto;
+		};
+		DA1A143B14E494DE00BCFFBE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA1A142714E494DA00BCFFBE /* scrypt.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DA67FE5D14E4834300DB7CC9;
+			remoteInfo = util;
+		};
 		DA95D5EE14DF0AB3008D1B94 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
@@ -748,6 +772,9 @@
 		DA0A848A14C4DFCB0090EA8E /* MPElementGeneratedEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementGeneratedEntity.h; sourceTree = "<group>"; };
 		DA0A848B14C4DFCB0090EA8E /* MPElementGeneratedEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementGeneratedEntity.m; sourceTree = "<group>"; };
 		DA0B951014C2D69E001D4EB1 /* help.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = help.html; path = Resources/help.html; sourceTree = "<group>"; };
+		DA1A142714E494DA00BCFFBE /* scrypt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = scrypt.xcodeproj; path = External/Pearl/External/iOSPorts/ports/security/scrypt/scrypt.xcodeproj; sourceTree = "<group>"; };
+		DA1A144514E4983200BCFFBE /* SCrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCrypt.h; sourceTree = "<group>"; };
+		DA1A144614E4983200BCFFBE /* SCrypt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCrypt.m; sourceTree = "<group>"; };
 		DA34DA0B14B1BC7D00F721C1 /* MPElementStoredEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementStoredEntity.h; sourceTree = "<group>"; };
 		DA34DA0C14B1BC7D00F721C1 /* MPElementStoredEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementStoredEntity.m; sourceTree = "<group>"; };
 		DA34DA0F14B1BC7E00F721C1 /* MPElementEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementEntity.h; sourceTree = "<group>"; };
@@ -1377,7 +1404,6 @@
 		DAC77CDB1482AAD600BCF976 /* WebUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebUtils.m; sourceTree = "<group>"; };
 		DAC77CDD1482AAD600BCF976 /* CryptUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptUtils.h; sourceTree = "<group>"; };
 		DAC77CDE1482AAD600BCF976 /* CryptUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptUtils.m; sourceTree = "<group>"; };
-		DAC77CDF1482AAD600BCF976 /* Dependencies.README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Dependencies.README; sourceTree = "<group>"; };
 		DAC77CE01482AAD600BCF976 /* KeyChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyChain.h; sourceTree = "<group>"; };
 		DAC77CE11482AAD600BCF976 /* KeyChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyChain.m; sourceTree = "<group>"; };
 		DAC77CE21482AAD600BCF976 /* Pearl-Crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Pearl-Crypto.h"; sourceTree = "<group>"; };
@@ -1504,6 +1530,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA1A144414E4950C00BCFFBE /* libscryptenc.a in Frameworks */,
 				DAC63278148680740075AEA5 /* libjrswizzle.a in Frameworks */,
 				DAC63277148680700075AEA5 /* libuicolor-utilities.a in Frameworks */,
 				DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */,
@@ -1863,9 +1890,20 @@
 			path = Resources/Insignia;
 			sourceTree = "<group>";
 		};
+		DA1A142814E494DA00BCFFBE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DA1A143814E494DE00BCFFBE /* libscryptenc.a */,
+				DA1A143A14E494DE00BCFFBE /* libscryptcrypto.a */,
+				DA1A143C14E494DE00BCFFBE /* libutil.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		DA5BFA39147E415C00F98B1E = {
 			isa = PBXGroup;
 			children = (
+				DA1A142714E494DA00BCFFBE /* scrypt.xcodeproj */,
 				DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */,
 				DA5BFA50147E415C00F98B1E /* MasterPassword */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
@@ -2250,9 +2288,10 @@
 		DAC77CDC1482AAD600BCF976 /* Pearl-Crypto */ = {
 			isa = PBXGroup;
 			children = (
+				DA1A144514E4983200BCFFBE /* SCrypt.h */,
+				DA1A144614E4983200BCFFBE /* SCrypt.m */,
 				DAC77CDD1482AAD600BCF976 /* CryptUtils.h */,
 				DAC77CDE1482AAD600BCF976 /* CryptUtils.m */,
-				DAC77CDF1482AAD600BCF976 /* Dependencies.README */,
 				DAC77CE01482AAD600BCF976 /* KeyChain.h */,
 				DAC77CE11482AAD600BCF976 /* KeyChain.m */,
 				DAC77CE21482AAD600BCF976 /* Pearl-Crypto.h */,
@@ -2529,6 +2568,7 @@
 				DAC781321482AAD800BCF976 /* WebViewController.h in Headers */,
 				DA84808414CB3DBA00A2FA22 /* MessageView.h in Headers */,
 				DA8E8E5514DEB8FC0044257E /* InfoPlist.h in Headers */,
+				DA1A144714E4983200BCFFBE /* SCrypt.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2646,6 +2686,12 @@
 			mainGroup = DA5BFA39147E415C00F98B1E;
 			productRefGroup = DA5BFA45147E415C00F98B1E /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = DA1A142814E494DA00BCFFBE /* Products */;
+					ProjectRef = DA1A142714E494DA00BCFFBE /* scrypt.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				DA5BFA43147E415C00F98B1E /* MasterPassword */,
@@ -2656,6 +2702,30 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		DA1A143814E494DE00BCFFBE /* libscryptenc.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libscryptenc.a;
+			remoteRef = DA1A143714E494DE00BCFFBE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DA1A143A14E494DE00BCFFBE /* libscryptcrypto.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libscryptcrypto.a;
+			remoteRef = DA1A143914E494DE00BCFFBE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DA1A143C14E494DE00BCFFBE /* libutil.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libutil.a;
+			remoteRef = DA1A143B14E494DE00BCFFBE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		DA5BFA42147E415C00F98B1E /* Resources */ = {
@@ -3347,6 +3417,7 @@
 				DAC781331482AAD800BCF976 /* WebViewController.m in Sources */,
 				DA84808514CB3DBA00A2FA22 /* MessageView.m in Sources */,
 				DA8E8E5614DEB8FC0044257E /* InfoPlist.m in Sources */,
+				DA1A144814E4983200BCFFBE /* SCrypt.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3545,6 +3616,7 @@
 				DSTROOT = /tmp/Pearl.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Pearl/Pearl-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/External/Pearl/External/iOSPorts/include/**";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3640,6 +3712,7 @@
 				DSTROOT = /tmp/Pearl.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Pearl/Pearl-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/External/Pearl/External/iOSPorts/include/**";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3653,6 +3726,7 @@
 				DSTROOT = /tmp/Pearl.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Pearl/Pearl-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/External/Pearl/External/iOSPorts/include/**";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3690,6 +3764,7 @@
 				DA95D60E14DF3F3B008D1B94 /* Production */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		DAC632651486805C0075AEA5 /* Build configuration list for PBXNativeTarget "uicolor-utilities" */ = {
 			isa = XCConfigurationList;

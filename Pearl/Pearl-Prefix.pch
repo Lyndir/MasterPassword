@@ -6,6 +6,8 @@
     #import <Foundation/Foundation.h>
 #endif
 
+#define PEARL_WITH_SCRYPT
+
 #define PEARL
 #define PEARL_CRYPTO
 #define PEARL_UIKIT

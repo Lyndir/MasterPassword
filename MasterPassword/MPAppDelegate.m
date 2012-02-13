@@ -13,6 +13,10 @@
 
 @interface MPAppDelegate ()
 
+@property (strong, nonatomic) NSData                                    *keyPhrase;
+@property (strong, nonatomic) NSData                                    *keyPhraseHash;
+@property (strong, nonatomic) NSString                                  *keyPhraseHashHex;
+
 + (NSDictionary *)keyPhraseQuery;
 + (NSDictionary *)keyPhraseHashQuery;
 
@@ -67,11 +71,16 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
 #ifndef PRODUCTION
-    [TestFlight takeOff:@"bd44885deee7adce0645ce8e5498d80a_NDQ5NDQyMDExLTEyLTAyIDExOjM1OjQ4LjQ2NjM4NA"];
-    [TestFlight setOptions:[NSDictionary dictionaryWithObjectsAndKeys:
-                            [NSNumber numberWithBool:YES],  @"logToConsole",
-                            nil]];
-    [TestFlight passCheckpoint:MPTestFlightCheckpointLaunched];
+    @try {
+        [TestFlight takeOff:@"bd44885deee7adce0645ce8e5498d80a_NDQ5NDQyMDExLTEyLTAyIDExOjM1OjQ4LjQ2NjM4NA"];
+        [TestFlight setOptions:[NSDictionary dictionaryWithObjectsAndKeys:
+                                [NSNumber numberWithBool:YES],  @"logToConsole",
+                                nil]];
+        [TestFlight passCheckpoint:MPTestFlightCheckpointLaunched];
+    }
+    @catch (NSException *exception) {
+        err(@"TestFlight: %@", exception);
+    }
 #endif
     
     UIImage *navBarImage = [[UIImage imageNamed:@"ui_navbar_container"]  resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
@@ -146,7 +155,7 @@
         [self showGuide];
     else
         [self loadKeyPhrase];
-
+    
 #ifndef PRODUCTION
     [TestFlight passCheckpoint:MPTestFlightCheckpointActivated];
 #endif
@@ -196,7 +205,7 @@
                               }
                               
                               [self loadKeyPhrase];
-                            
+                              
 #ifndef PRODUCTION
                               [TestFlight passCheckpoint:MPTestFlightCheckpointMPChanged];
 #endif
@@ -211,11 +220,8 @@
     if ([[MPConfig get].storeKeyPhrase boolValue]) {
         // Key phrase is stored in keychain.  Load it.
         dbg(@"Loading master key phrase from key chain.");
-        NSData *keyPhraseData = [KeyChain dataOfItemForQuery:[MPAppDelegate keyPhraseQuery]];
-        dbg(@" -> Master key phrase %@.", keyPhraseData? @"found": @"NOT found");
-        
-        self.keyPhrase = keyPhraseData? [[NSString alloc] initWithBytes:keyPhraseData.bytes length:keyPhraseData.length
-                                                               encoding:NSUTF8StringEncoding]: nil;
+        self.keyPhrase = [KeyChain dataOfItemForQuery:[MPAppDelegate keyPhraseQuery]];
+        dbg(@" -> Master key phrase %@.", self.keyPhrase? @"found": @"NOT found");
     } else {
         // Key phrase should not be stored in keychain.  Delete it.
         dbg(@"Deleting master key phrase from key chain.");
@@ -252,7 +258,8 @@
                   } cancelTitle:@"Quit" otherTitles:nil];
              }
              
-             NSData *answerHash = [answer hashWith:PearlDigestSHA512];
+             NSData *answerKeyPhrase = keyPhraseForPassword(answer);
+             NSData *answerHash = keyPhraseHashForKeyPhrase(answerKeyPhrase);
              if (keyPhraseHash)
                  // A key phrase hash is known -> a key phrase is set.
                  // Make sure the user's entered key phrase matches it.
@@ -279,8 +286,8 @@
 #ifndef PRODUCTION
              [TestFlight passCheckpoint:MPTestFlightCheckpointMPAsked];
 #endif
-
-             self.keyPhrase = answer;
+             
+             self.keyPhrase = answerKeyPhrase;
          } cancelTitle:@"Quit" otherTitles:@"Unlock", nil];
     });
 }
@@ -291,7 +298,7 @@
     
     if (![[MPConfig get].rememberKeyPhrase boolValue])
         self.keyPhrase = nil;
-
+    
 #ifndef PRODUCTION
     [TestFlight passCheckpoint:MPTestFlightCheckpointDeactivated];
 #endif
@@ -330,12 +337,12 @@
     }];
 }
 
-- (void)setKeyPhrase:(NSString *)keyPhrase {
+- (void)setKeyPhrase:(NSData *)keyPhrase {
     
     _keyPhrase = keyPhrase;
     
     if (keyPhrase) {
-        self.keyPhraseHash = [keyPhrase hashWith:PearlDigestSHA512];
+        self.keyPhraseHash = keyPhraseHashForKeyPhrase(keyPhrase);
         self.keyPhraseHashHex = [self.keyPhraseHash encodeHex];
         
         dbg(@"Updating master key phrase hash to: %@.", self.keyPhraseHashHex);
@@ -348,7 +355,7 @@
             dbg(@"Storing master key phrase in key chain.");
             [KeyChain addOrUpdateItemForQuery:[MPAppDelegate keyPhraseQuery]
                                withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                               [keyPhrase dataUsingEncoding:NSUTF8StringEncoding],  (__bridge id)kSecValueData,
+                                               keyPhrase,  (__bridge id)kSecValueData,
                                                kSecAttrAccessibleWhenUnlocked,                      (__bridge id)kSecAttrAccessible,
                                                nil]];
         }
@@ -357,6 +364,11 @@
         [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointSetKeyphraseLength, _keyPhrase.length]];
 #endif
     }
+}
+
+- (NSData *)keyPhraseWithLength:(NSUInteger)keyLength {
+    
+    return [self.keyPhrase subdataWithRange:NSMakeRange(0, MIN(keyLength, self.keyPhrase.length))];
 }
 
 #pragma mark - Core Data stack

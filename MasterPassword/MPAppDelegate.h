@@ -13,9 +13,9 @@
 @property (readonly, strong, nonatomic) NSManagedObjectContext          *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel            *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator    *persistentStoreCoordinator;
-@property (strong, nonatomic) NSString                                  *keyPhrase;
-@property (strong, nonatomic) NSData                                    *keyPhraseHash;
-@property (strong, nonatomic) NSString                                  *keyPhraseHashHex;
+@property (readonly, strong, nonatomic) NSData                          *keyPhrase;
+@property (readonly, strong, nonatomic) NSData                          *keyPhraseHash;
+@property (readonly, strong, nonatomic) NSString                        *keyPhraseHashHex;
 
 + (MPAppDelegate *)get;
 + (NSManagedObjectModel *)managedObjectModel;
@@ -26,5 +26,6 @@
 
 - (void)showGuide;
 - (void)loadKeyPhrase;
+- (NSData *)keyPhraseWithLength:(NSUInteger)keyLength;
 
 @end

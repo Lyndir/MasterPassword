@@ -12,6 +12,9 @@
 
 - (void)didSelectType:(MPElementType)type;
 
+@optional
+- (MPElementType)selectedType;
+
 @end
 
 @interface MPTypeViewController : UITableViewController

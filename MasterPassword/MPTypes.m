@@ -10,9 +10,27 @@
 #import "MPElementGeneratedEntity.h"
 #import "MPElementStoredEntity.h"
 
+#define MP_salt nil
+#define MP_N    16384
+#define MP_r    8
+#define MP_p    1
+#define MP_hash PearlDigestSHA256
 
+NSData *keyPhraseForPassword(NSString *password) {
+    
+    return [SCrypt deriveKeyWithLength:64 fromPassword:[password dataUsingEncoding:NSUTF8StringEncoding]
+                             usingSalt:MP_salt N:MP_N r:MP_r p:MP_p];
+}
+NSData *keyPhraseHashForPassword(NSString *password) {
+    
+    return keyPhraseHashForKeyPhrase(keyPhraseForPassword(password));
+}
+NSData *keyPhraseHashForKeyPhrase(NSData *keyPhrase) {
+    
+    return [keyPhrase hashWith:MP_hash];
+}
 NSString *NSStringFromMPElementType(MPElementType type) {
-
+    
     if (!type)
         return nil;
     
@@ -81,7 +99,7 @@ NSString *ClassNameFromMPElementType(MPElementType type) {
 }
 
 static NSDictionary *MPTypes_ciphers = nil;
-NSString *MPCalculateContent(MPElementType type, NSString *name, NSString *keyPhrase, int counter) {
+NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *keyPhrase, uint16_t counter) {
     
     assert(type & MPElementTypeClassCalculated);
     
@@ -91,15 +109,19 @@ NSString *MPCalculateContent(MPElementType type, NSString *name, NSString *keyPh
     
     // Determine the hash whose bytes will be used for calculating a password: md4(name-keyPhrase)
     assert(name && keyPhrase);
-    NSData *keyHash = [[NSString stringWithFormat:@"%@-%@-%d", name, keyPhrase, counter] hashWith:PearlDigestSHA1];
+    NSData *keyHash = [[NSData dataByConcatenatingWithDelimitor:'-' datas:
+                        [name dataUsingEncoding:NSUTF8StringEncoding],
+                        keyPhrase,
+                        htonl(counter),
+                        nil] hashWith:PearlDigestSHA1];
     const char *keyBytes = keyHash.bytes;
     
     // Determine the cipher from the first hash byte.
     assert([keyHash length]);
     NSArray *typeCiphers = [[MPTypes_ciphers valueForKey:ClassNameFromMPElementType(type)]
-            valueForKey:NSStringFromMPElementType(type)];
+                            valueForKey:NSStringFromMPElementType(type)];
     NSString *cipher = [typeCiphers objectAtIndex:keyBytes[0] % [typeCiphers count]];
-
+    
     // Encode the content, character by character, using subsequent hash bytes and the cipher.
     assert([keyHash length] >= [cipher length] + 1);
     NSMutableString *content = [NSMutableString stringWithCapacity:[cipher length]];

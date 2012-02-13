@@ -57,7 +57,10 @@ typedef enum {
 #define MPTestFlightCheckpointSetKeyphraseLength @"MPTestFlightCheckpointSetKeyphraseLength_%d"
 #endif
 
+NSData *keyPhraseForPassword(NSString *password);
+NSData *keyPhraseHashForPassword(NSString *password);
+NSData *keyPhraseHashForKeyPhrase(NSData *keyPhrase);
 NSString *NSStringFromMPElementType(MPElementType type);
 NSString *ClassNameFromMPElementType(MPElementType type);
 Class ClassFromMPElementType(MPElementType type);
-NSString *MPCalculateContent(MPElementType type, NSString *name, NSString *keyPhrase, int counter);
+NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *keyPhrase, uint16_t counter);

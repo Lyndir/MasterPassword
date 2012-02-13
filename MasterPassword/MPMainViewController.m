@@ -114,8 +114,6 @@
                                                       }
                                                   }];
     
-    [self closeAlert];
-    
     [super viewDidLoad];
 }
 
@@ -216,8 +214,11 @@
      [NSURLRequest requestWithURL:
       [NSURL URLWithString:[NSString stringWithFormat:@"#%@", chapter] relativeToURL:
        [[NSBundle mainBundle] URLForResource:@"help" withExtension:@"html"]]]];
-    [self.helpView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"setClass('%@');",
+    
+    NSString *error = [self.helpView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"setClass('%@');",
                                                            ClassNameFromMPElementType(self.activeElement.type)]];
+    if (error.length)
+        err(@"setClass: %@", error);
 }
 
 - (void)showContentTip:(NSString *)message withIcon:(UIImageView *)icon {
@@ -228,11 +229,6 @@
     [UIView animateWithDuration:0.2f animations:^{
         self.contentTipContainer.alpha = 1;
     } completion:^(BOOL finished) {
-        if (!finished) {
-            icon.hidden = YES;
-            return;
-        }
-        
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 5.0f * NSEC_PER_SEC);
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             [UIView animateWithDuration:0.2f animations:^{
@@ -373,6 +369,11 @@
      @"Feedback",
 #endif
      nil]; 
+}
+
+- (MPElementType)selectedType {
+    
+    return self.activeElement.type;
 }
 
 - (void)didSelectType:(MPElementType)type {
