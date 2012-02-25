@@ -20,7 +20,6 @@
 + (NSDictionary *)keyPhraseQuery;
 + (NSDictionary *)keyPhraseHashQuery;
 
-- (void)forgetKeyPhrase;
 - (void)loadStoredKeyPhrase;
 - (void)askKeyPhrase;
 
@@ -202,6 +201,11 @@
                                   dbg(@"Deleting master key phrase and hash from key chain.");
                                   [KeyChain deleteItemForQuery:[MPAppDelegate keyPhraseQuery]];
                                   [KeyChain deleteItemForQuery:[MPAppDelegate keyPhraseHashQuery]];
+                                  
+                                  [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyForgotten object:self];
+#ifndef PRODUCTION
+                                  [TestFlight passCheckpoint:MPTestFlightCheckpointMPForgotten];
+#endif
                               }
                               
                               [self loadKeyPhrase];
@@ -234,62 +238,7 @@
 
 - (void)askKeyPhrase {
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSData *keyPhraseHash = [KeyChain dataOfItemForQuery:[MPAppDelegate keyPhraseHashQuery]];
-        dbg(@"Key phrase hash %@.", keyPhraseHash? @"known": @"NOT known");
-        
-        [AlertViewController showAlertWithTitle:@"Master Password"
-                                        message:keyPhraseHash? @"Unlock with your master password:": @"Choose your master password:"
-                                      viewStyle:UIAlertViewStyleSecureTextInput
-                              tappedButtonBlock:
-         ^(UIAlertView *alert, NSInteger buttonIndex) {
-             if (buttonIndex == [alert cancelButtonIndex])
-                 exit(0);
-             
-             NSString *answer = [alert textFieldAtIndex:0].text;
-             if (![answer length]) {
-                 // User didn't enter a key phrase.
-                 [AlertViewController showAlertWithTitle:[PearlStrings get].commonTitleError
-                                                 message:@"No master password entered."
-                                               viewStyle:UIAlertViewStyleDefault
-                                       tappedButtonBlock:
-                  ^(UIAlertView *alert, NSInteger buttonIndex) {
-                      exit(0);
-                  } cancelTitle:@"Quit" otherTitles:nil];
-             }
-             
-             NSData *answerKeyPhrase = keyPhraseForPassword(answer);
-             NSData *answerHash = keyPhraseHashForKeyPhrase(answerKeyPhrase);
-             if (keyPhraseHash)
-                 // A key phrase hash is known -> a key phrase is set.
-                 // Make sure the user's entered key phrase matches it.
-                 if (![keyPhraseHash isEqual:answerHash]) {
-                     dbg(@"Key phrase hash mismatch. Expected: %@, answer: %@.", keyPhraseHash, answerHash);
-                     
-#ifndef PRODUCTION
-                     [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
-#endif
-                     [AlertViewController showAlertWithTitle:[PearlStrings get].commonTitleError
-                                                     message:
-                      @"Incorrect master password.\n\n"
-                      @"If you are trying to use the app with a different master password, "
-                      @"flip the 'Change my password' option in Settings."
-                                                   viewStyle:UIAlertViewStyleDefault
-                                           tappedButtonBlock:
-                      ^(UIAlertView *alert, NSInteger buttonIndex) {
-                          exit(0);
-                      } cancelTitle:@"Quit" otherTitles:nil];
-                     
-                     return;
-                 }
-             
-#ifndef PRODUCTION
-             [TestFlight passCheckpoint:MPTestFlightCheckpointMPAsked];
-#endif
-             
-             self.keyPhrase = answerKeyPhrase;
-         } cancelTitle:@"Quit" otherTitles:@"Unlock", nil];
-    });
+    [self.navigationController presentViewController:[self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"] animated:NO completion:nil];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -337,9 +286,44 @@
     }];
 }
 
+- (BOOL)tryMasterPassword:(NSString *)tryPassword {
+    
+    NSData *keyPhraseHash = [KeyChain dataOfItemForQuery:[MPAppDelegate keyPhraseHashQuery]];
+    dbg(@"Key phrase hash %@.", keyPhraseHash? @"known": @"NOT known");
+    
+    if (![tryPassword length])
+        return NO;
+    
+    NSData *tryKeyPhrase = keyPhraseForPassword(tryPassword);
+    NSData *tryKeyPhraseHash = keyPhraseHashForKeyPhrase(tryKeyPhrase);
+    if (keyPhraseHash)
+        // A key phrase hash is known -> a key phrase is set.
+        // Make sure the user's entered key phrase matches it.
+        if (![keyPhraseHash isEqual:tryKeyPhraseHash]) {
+            dbg(@"Key phrase hash mismatch. Expected: %@, answer: %@.", keyPhraseHash, tryKeyPhraseHash);
+            
+#ifndef PRODUCTION
+            [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
+#endif
+            return NO;
+        }
+    
+#ifndef PRODUCTION
+    [TestFlight passCheckpoint:MPTestFlightCheckpointMPAsked];
+#endif
+    
+    self.keyPhrase = tryKeyPhrase;
+    return YES;
+}
+
 - (void)setKeyPhrase:(NSData *)keyPhrase {
     
     _keyPhrase = keyPhrase;
+    
+    if (keyPhrase)
+        [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeySet object:self];
+    else
+        [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyUnset object:self];
     
     if (keyPhrase) {
         self.keyPhraseHash = keyPhraseHashForKeyPhrase(keyPhrase);

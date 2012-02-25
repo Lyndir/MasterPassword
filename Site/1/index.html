@@ -9,9 +9,7 @@
         <link rel="shortcut icon" href="images/resources/favicon.png" type="image/x-png" />
         <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 
-        <link rel="stylesheet" type="text/css" href="css/sprites/glossy-black/sprites.css" />
-        <link rel="stylesheet" type="text/css" href="css/sprites/silk/sprites.css" />
-        <link rel="stylesheet" type="text/css" href="fnt/Exo/stylesheet.css" />
+        <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Exo:100,400,600,900,100italic,400italic,600italic' />
         <link rel="stylesheet" type="text/css" href="css/screen.css" />
 
         <script src="js/jquery-1.6.1.min.js" type="text/javascript"></script>
@@ -67,7 +65,7 @@
             </p>
 
             <p>
-                It aims to secure your online (and offline!) life by changing the way you deal with passwords.
+                It aims to secure your online (and offline!) life by <em>changing the way you deal with passwords</em>.
             </p>
 
             <hr />
@@ -76,20 +74,20 @@
 
             <p>
                 You already know the problem:<br />
-                Passwords are confidential information between you and a site.  They should never be shared with anyone else, definitely not other sites.  Yet that's exactly what happens with most of us:  Hundereds of online accounts to manage and authenticate, we can't help but reuse one, two or five passwords that we can remember.  Maybe we keep a paper stuck to our monitor with a list of passwords on them, because we realize the truth:
+                Passwords are confidential information between you and a site.  They should never be shared with anyone else, definitely not other sites.  Yet that's exactly what happens with most of us:  Hundereds of online accounts to manage and authenticate, <strong>we can't help but reuse one, two or five passwords that we can remember</strong>.  Maybe we keep a paper stuck to our monitor with a list of passwords on them, because we realize the truth:
             </p>
 
             <blockquote>It is impossible to remember a secure password for each of our accounts and still keep those passwords both <em>exclusive</em> and <em>confidential</em>.</blockquote>
 
             <p>
                 Multiple solutions exist:<br />
-                Sites that realize that passwords aren't the end-all of authentication usually implement some sort of alternative authentication mechanism: OpenID, SAML, some form of mobile authentication, secure tokens, etc.<br />
+                Sites that realize that passwords aren't the end-all of authentication usually implement some sort of alternative authentication mechanism: <em>OpenID, SAML, some form of mobile authentication, secure tokens, etc</em>.<br />
                 The problem here is that these solutions only work for the select few sites that have chosen to implement them; and then you, the user, are stuck with whatever mechanism the site has chosen for you.
             </p>
 
             <p>
-                To solve the problem for other sites, there are programs that remember our passwords for us.<br />
-                The problem with these is that they do not actually help us with setting exclusive and confidential passwords for our accounts.  They just offload the work of remembering passwords, and at a great expense: If you loose your data, you loose your online identity and are locked out of everything.
+                To solve the problem for other sites, there are <em>programs that remember our passwords for us</em>.<br />
+                The problem with these is that they do not actually help us with setting exclusive and confidential passwords for our accounts.  They just offload the work of remembering passwords, and at a great expense: <strong>If you loose your data, you loose your online identity and are locked out of everything</strong>.
             </p>
 
             <hr />
@@ -98,7 +96,7 @@
 
             <p>
                 Master Password aims to turn the tables in favor of the user, you.<br />
-                In the end, <em>what we really want</em> is a way of dealing with passwords in an exclusive and confidential way without having to remember them, and without running the risk of losing our online identity to fraudsters.
+                In the end, <em>what we really want</em> is a way of dealing with passwords in an exclusive and confidential way <em>without having to remember</em> them, and <em>without running the risk of losing our online identity</em> to fraudsters.
             </p>
 
             <p>
@@ -119,7 +117,7 @@
                 </li>
                 <li>For those cases where you cannot change your account's password, the application will encrypt passwords with your master password and store them securely (as explained, stored passwords can get lost).</li>
                 <li>Integrates with iCloud to synchronize and back up your site history and stored passwords.</li>
-                <li>For those that care to know, the password generation algorithm is open and documented within the application.</li>
+                <li>For those that care to know, the password generation algorithm is open and fully documented, so you aren't tied down to this application.</li>
             </ul>
 
             <hr />
@@ -134,7 +132,7 @@
                 Participation in the beta is free of charge, but does come with the expectation that you will contribute.  Comment constructively, report issues and propose improvements.
             </p>
             <p>
-                Post-beta, Master Password is expected to sell for somewhere around 7 USD.  The most helpful testers will receive the final version (and all future updates) free of charge.
+                Post-beta, Master Password is expected to sell for somewhere around 10 USD.  The most helpful testers will receive the final version (and all future updates) free of charge.
             </p>
 
         </section>
@@ -158,22 +156,31 @@
                 Alright, let's describe the process in detail.  This part will likely make sense to you only if you're well versed in computer security jargon.  If you're the kind of person who likes to know how the clock ticks before deciding that it can be trusted to keep ticking, read on.
             </p>
             <p>
-                The user chooses a single master password, preferably sufficiently long to harden against brute-force attacks.  When the user requests a password be generated for a site, the application composes a string consisting of the site name, the master password, and a password counter, delimited in that order by a dash character, and hashes those <code>UTF-8</code> bytes using the <code>SHA-1</code> algorithm.  The bytes resulting from this hashing operation are called the <code>keyBytes</code> in the next steps.
+                The user chooses a single master password, preferably sufficiently long to harden against brute-force attacks.  Before usage, a <code>masterKey</code> is derived from this master password using the <a href="http://www.tarsnap.com/scrypt.html">scrypt key derivation function</a>.  This makes it impossibly expensive and time-consuming to attempt brute-forcing a properly sized master password.
             </p>
             <code><pre>
-                keyBytes = sha1( site name "-" master password "-" password counter )
+                masterKey = scrypt( P, S, N, r, p, dkLen )
+                where
+                P     = master password
+                S     = &lt;empty&gt;
+                N     = 16384
+                r     = 8
+                p     = 1
+                dkLen = 64
+            </pre></code>
+            
+            <p>
+                When the user requests a password be generated for a site, the application composes a byte string consisting of the site name, the master key, and a password counter, delimited in that order by a dash character (characters are UTF-8 encoded, numbers in 32-bit network byte order), and hashes it using the <code>SHA-1</code> algorithm.  The result is called the <code>cipherKey</code>.
+            </p>
+            <code><pre>
+                cipherKey = sha1( site name "-" masterKey "-" password counter )
             </pre></code>
             <p>
-                Next, we need the password type that the user has chosen to use for the site.  Password types determine the
-                <q>cipher</q> that will be used to encrypt <code>keyBytes</code> into a readable password.  For
-                instance, the standard password type <q>Long Password</q> activates one of three pre-set ciphers:
-                <code>CvcvCvcvnoCvcv</code>, <code>CvcvnoCvcvCvcv</code> or <code>CvcvCvcvCvcvno</code>.  Which of those
-                will be used, depends on the first of the <code>keyBytes</code>.  Take the byte value modulo the amount of
-                pre-set ciphers (in this case, three), and the result tells you which of the three ciphers to use.
+                Next up is to merge this key with the password type that the user has chosen to use for the site.  Password types determine the <q>cipher</q> that will be used to encrypt <code>cipherKey</code> bytes into a readable password.  For instance, the standard password type <q>Long Password</q> activates one of three pre-set ciphers: <code>CvcvCvcvnoCvcv</code>, <code>CvcvnoCvcvCvcv</code> or <code>CvcvCvcvCvcvno</code>.  Which of those will be used, depends on the first byte of the <code>cipherKey</code>.  Take the byte value modulo the amount of pre-set ciphers (in this case, three), and the result tells you which of the pre-set ciphers to use.
             </p>
             <code><pre>
                 ciphers = [ "CvcvCvcvnoCvcv", "CvcvnoCvcvCvcv", "CvcvCvcvCvcvno" ]
-                cipher  = ciphers[ keyBytes[0] % count( ciphers ) ]
+                cipher  = ciphers[ cipherKey[0] % count( ciphers ) ]
             </pre></code>
             <p>
                 Now that we know what cipher to use for building our final password, all that's left is to iterate the
@@ -181,13 +188,13 @@
                 character in the cipher represents a set of possible output characters (<code>passChars</code>).  For instance, a <code>C</code>
                 character in the cipher indicates that we need to choose a capital consonant character.  An <code>o</code>
                 character in the cipher indicates that we need to choose an <q>other</q> (symbol) character.  Exactly which
-                character to choose in that set for the password output depends on the next byte from <code>keyBytes</code>.
-                Like before, take the next unused <code>keyByte</code>'s byte value modulo the amount of characters in the
+                character to choose in that set for the password output depends on the next byte from the <code>cipherKey</code>.
+                Like before, take the next unused <code>cipherKey</code> byte value modulo the amount of characters in the
                 set of possible output characters for the cipher iteration and use the result to choose the output
                 character (<code>passChar</code>).  Repeat until you've iterated the whole cipher.
             </p>
             <code><pre>
-                passChar  = passChars[ keyBytes[i + 1] % count( passChars ) ]
+                passChar  = passChars[ cipherKey[i + 1] % count( passChars ) ]
                 passWord += passChar
             </pre></code>
 

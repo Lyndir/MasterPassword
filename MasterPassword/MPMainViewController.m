@@ -114,6 +114,9 @@
                                                       }
                                                   }];
     
+    self.alertBody.text = nil;
+    self.contentTipEditIcon.alpha = 0;
+    
     [super viewDidLoad];
 }
 
@@ -167,7 +170,7 @@
     self.contentField.enabled = NO;
     
     if ([self.activeElement isKindOfClass:[MPElementGeneratedEntity class]])
-        self.passwordCounter.text = [NSString stringWithFormat:@"%d", ((MPElementGeneratedEntity *) self.activeElement).counter];
+        self.passwordCounter.text = [NSString stringWithFormat:@"%u", ((MPElementGeneratedEntity *) self.activeElement).counter];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSString *description = self.activeElement.description;
@@ -194,7 +197,7 @@
         
         if (hidden) {
             self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 373);
-            self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, 415);
+            self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, 416);
             [MPConfig get].helpHidden = [NSNumber numberWithBool:YES];
         } else {
             self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 175);
@@ -296,7 +299,7 @@
     [self updateAnimated:YES];
     
     // Show new and old password.
-    if (oldPassword && ![oldPassword isEqualToString:newPassword])
+    if ([oldPassword length] && ![oldPassword isEqualToString:newPassword])
         [self showAlertWithTitle:@"Password Changed!" message:l(@"The password for %@ has changed.\n\n"
                                                                 @"Don't forget to update the site with your new password! "
                                                                 @"Your old password was:\n"

@@ -15,6 +15,7 @@ cd "${0%/*}/../MasterPassword/Resources"
 
 for size in "${!icons[@]}"; do
     file=${icons[size]}
+    [[ iTunesArtwork.png -nt $file ]] || continue
 
     emit "$file ($size px)" --
         convert "iTunesArtwork.png" -resize "${size}x${size}" "$file"
@@ -24,8 +25,9 @@ done
 
 echo
 emit "Converting @2x artwork"
-for file in ./{,Guide/}*@2x.png; do
+for file in ./{,Guide,Lock,Background}/*@2x.png; do
     inArray "${file##*/}" "${icons[@]}" && continue
+    [[ $file -nt ${file/@2x} ]] || continue
 
     emit "${file/@2x}" --
         convert "$file" -filter box -resize 50% -unsharp 0x1 "${file/@2x}"

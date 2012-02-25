@@ -10,16 +10,16 @@ body {
 
     color:                      black;
 
-    font:                       120% ExoLight, sans-serif;
+    font:                       120% Exo, sans-serif;
     font-weight:                100;
 }
 h1, h2, h3, h4 {
     text-shadow:                #FFF 0 -1px 1px, #AAA 0 0 5px;
 
-    font-family:                ExoBold;
+    font-weight:                600;
 }
 strong {
-    font-family:                ExoDemiBold;
+    font-weight:                400;
 }
 h1 .sub {
     font-size:                  0.5em;
@@ -37,20 +37,18 @@ p {
     text-align:                 justify;
 }
 ul {
-    font-family:                ExoDemiBold;
     font-size:                  90%;
-    font-weight:                500;
+    font-weight:                400;
 }
 blockquote {
-    font-family:                ExoDemiBold;
     font-size:                  90%;
-    font-weight:                bold;
+    font-weight:                400;
 }
 a, .link, :link {
     color:                      inherit;
     text-decoration:            underline;
     cursor:                     pointer;
-    font-weight:                500;
+    font-weight:                400;
 }
 a:hover, .link:hover {
     text-decoration:            none;
@@ -130,7 +128,6 @@ blockquote:before {
     position:                   absolute;
     margin:                     -0.5ex 0 0 -1em;
     font-size:                  300%;
-    font-family:                ExoLight;
     font-weight:                100;
 }
 
@@ -182,21 +179,20 @@ section.active {
 a.previous, a.next {
     display:                    block;
     position:                   absolute;
-    width:                      100%;
     margin:                     -2.5em 0 0 0;
 
     font-size:                  150%;
-    font-family:                ExoDemiBold;
+    font-weight:                400;
     text-decoration:            none;
 }
 a.previous {
-    margin-left:                -3em;
+    left: 0;
 }
 a.previous:before {
     content:                    "< ";
 }
 a.next {
-    margin-left:                3em;
+    right: 0;
 
     text-align:                 right;
 }

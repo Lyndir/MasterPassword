@@ -46,7 +46,7 @@
 
 - (void)setContent:(id)content {
     
-    NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[MPAppDelegate get].keyPhrase
+    NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[[MPAppDelegate get] keyPhraseWithLength:kCipherKeySize]
                                                                    usePadding:YES];
     
     if (self.type == MPElementTypeStoredDevicePrivate) {

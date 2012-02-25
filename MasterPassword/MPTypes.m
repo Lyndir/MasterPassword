@@ -10,15 +10,16 @@
 #import "MPElementGeneratedEntity.h"
 #import "MPElementStoredEntity.h"
 
-#define MP_salt nil
-#define MP_N    16384
-#define MP_r    8
-#define MP_p    1
-#define MP_hash PearlDigestSHA256
+#define MP_salt     nil
+#define MP_N        16384
+#define MP_r        8
+#define MP_p        1
+#define MP_dkLen    64
+#define MP_hash     PearlDigestSHA256
 
 NSData *keyPhraseForPassword(NSString *password) {
     
-    return [SCrypt deriveKeyWithLength:64 fromPassword:[password dataUsingEncoding:NSUTF8StringEncoding]
+    return [SCrypt deriveKeyWithLength:MP_dkLen fromPassword:[password dataUsingEncoding:NSUTF8StringEncoding]
                              usingSalt:MP_salt N:MP_N r:MP_r p:MP_p];
 }
 NSData *keyPhraseHashForPassword(NSString *password) {
@@ -109,10 +110,11 @@ NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *keyPhra
     
     // Determine the hash whose bytes will be used for calculating a password: md4(name-keyPhrase)
     assert(name && keyPhrase);
+    uint16_t ncounter = htons(counter);
     NSData *keyHash = [[NSData dataByConcatenatingWithDelimitor:'-' datas:
                         [name dataUsingEncoding:NSUTF8StringEncoding],
                         keyPhrase,
-                        htonl(counter),
+                        [NSData dataWithBytes:&ncounter length:sizeof(ncounter)],
                         nil] hashWith:PearlDigestSHA1];
     const char *keyBytes = keyHash.bytes;
     

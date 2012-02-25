@@ -26,6 +26,8 @@
 
 - (void)showGuide;
 - (void)loadKeyPhrase;
+- (void)forgetKeyPhrase;
 - (NSData *)keyPhraseWithLength:(NSUInteger)keyLength;
+- (BOOL)tryMasterPassword:(NSString *)tryPassword;
 
 @end
