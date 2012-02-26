@@ -11,7 +11,7 @@
 #import "MPSearchDelegate.h"
 #import "IASKAppSettingsViewController.h"
 
-@interface MPMainViewController : UIViewController <MPTypeDelegate, UITextFieldDelegate, UISearchBarDelegate, MPSearchResultsDelegate, UIWebViewDelegate, IASKSettingsDelegate>
+@interface MPMainViewController : UIViewController <MPTypeDelegate, UITextFieldDelegate, MPSearchResultsDelegate, UIWebViewDelegate, IASKSettingsDelegate>
 
 @property (strong, nonatomic) MPElementEntity *activeElement;
 @property (strong, nonatomic) IBOutlet MPSearchDelegate *searchResultsController;

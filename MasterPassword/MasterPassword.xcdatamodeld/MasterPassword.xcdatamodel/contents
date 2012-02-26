@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="872" systemVersion="11C74" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1170" systemVersion="11D50" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="MPElementEntity" representedClassName="MPElementEntity" isAbstract="YES" syncable="YES">
         <attribute name="lastUsed" attributeType="Date" syncable="YES"/>
         <attribute name="mpHashHex" optional="YES" attributeType="String" syncable="YES"/>
@@ -13,7 +13,7 @@
     <entity name="MPElementStoredEntity" representedClassName="MPElementStoredEntity" parentEntity="MPElementEntity" syncable="YES">
         <attribute name="contentObject" optional="YES" attributeType="Transformable" storedInTruthFile="YES" syncable="YES"/>
     </entity>
-    <fetchRequest name="MPSearchElement" entity="MPElementEntity" predicateString="name BEGINSWITH[cd] $query AND mpHashHex == $mpHashHex"/>
+    <fetchRequest name="MPElements" entity="MPElementEntity" predicateString="($query == '' OR name BEGINSWITH[cd] $query) AND mpHashHex == $mpHashHex"/>
     <elements>
         <element name="MPElementEntity" positionX="160" positionY="192" width="128" height="135"/>
         <element name="MPElementGeneratedEntity" positionX="160" positionY="192" width="128" height="60"/>

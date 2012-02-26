@@ -1,4 +1,4 @@
-Thanks for downloading the TestFlight SDK 0.8.2!
+Thanks for downloading the TestFlight SDK 0.8.3!
 
 This document is also available on the web at https://www.testflightapp.com/sdk/doc
 
@@ -12,6 +12,7 @@ This document is also available on the web at https://www.testflightapp.com/sdk/
 8. View your results
 9. Advanced Exception Handling
 10. Remote Logging
+11. iOS 3
 
 START
 
@@ -45,7 +46,7 @@ This SDK can be run from both the iPhone Simulator and Device and has been teste
     3. Set Folders to "Create groups for any added folders"
     4. Select all targets that you want to add the SDK to
 
-2. Verify that libTestFlight.a has been added to the Link Binary With Libraries Build Phase for the targets you want to use the SDK with
+2. Verify that libTestFlight.a and has been added to the Link Binary With Libraries Build Phase for the targets you want to use the SDK with
     
     1. Select your Project in the Project Navigator
     2. Select the target you want to enable the SDK for
@@ -54,15 +55,26 @@ This SDK can be run from both the iPhone Simulator and Device and has been teste
     5. If libTestFlight.a is not listed, drag and drop the library from your Project Navigator to the Link Binary With Libraries area
     6. Repeat Steps 2 - 5 until all targets you want to use the SDK with have the SDK linked
 
-3. In your Application Delegate:
+3. Add libz to your Link Binary With Libraries Build Phase
+
+    1. Select your Project in the Project Navigator
+    2. Select the target you want to enable the SDK for
+    3. Select the Build Phases tab
+    4. Open the Link Binary With Libraries Phase
+    5. Click the + to add a new library
+    6. Find libz.dylib in the list and add it
+    7. Repeat Steps 2 - 6 until all targets you want to use the SDK with have libz.dylib
+
+4. In your Application Delegate:
 
     1. Import TestFlight: `#import "TestFlight.h"`
     NOTE: If you do not want to import TestFlight.h in every file you may add the above line into you pre-compiled header (`<projectname>_Prefix.pch`) file inside of the 
 
-            #ifdef __OBJC__ section. 
+            #ifdef __OBJC__ 
+        section. 
         This will give you access to the SDK across all files.
         
-    2. Get your Team Token which you can find at [http://testflightapp.com/dashboard/team/](http://testflightapp.com/dashboard/team/) select the team you are using from the team selection drop down list on the top of the page and then select edit.
+    2. Get your Team Token which you can find at [http://testflightapp.com/dashboard/team/](http://testflightapp.com/dashboard/team/) select the team you are using from the team selection drop down list on the top of the page and then select Team Info.
 
 
     3. Launch TestFlight with your Team Token
@@ -78,9 +90,9 @@ This SDK can be run from both the iPhone Simulator and Device and has been teste
 
     4. To report crashes to you we install our own uncaught exception handler. If you are not currently using an exception handler of your own then all you need to do is go to the next step. If you currently use an Exception Handler, or you use another framework that does please go to the section on advanced exception handling.
 
-4. To enable the best crash reporting possible we recommend setting the following project build settings in Xcode to NO for all targets that you want to have live crash reporting for. You can find build settings by opening the Project Navigator (default command+1 or command+shift+j) then clicking on the project you are configuring (usually the first selection in the list). From there you can choose to either change the global project settings or settings on an individual project basis. All settings below are in the Deployment Section.
+5. To enable the best crash reporting possible we recommend setting the following project build settings in Xcode to NO for all targets that you want to have live crash reporting for. You can find build settings by opening the Project Navigator (default command+1 or command+shift+j) then clicking on the project you are configuring (usually the first selection in the list). From there you can choose to either change the global project settings or settings on an individual project basis. All settings below are in the Deployment Section.
 
-    1. Deployment Post Processing
+    1. Deployment Postrocessing
     2. Strip Debug Symbols During Copy
     3. Strip Linked Product
 
@@ -98,6 +110,15 @@ To launch unguided feedback call the `openFeedbackView` method. We recommend tha
     -(IBAction)launchFeedback {
         [TestFlight openFeedbackView];
     }
+
+If you want to create your own feedback form you can use the `submitCustomFeedback` method to submit the feedback that the user has entered.
+
+    -(IBAction)submitFeedbackPressed:(id)sender {
+        NSString *feedback = [self getUserFeedback];
+        [TestFlight submitCustomFeedback:feedback];
+    }
+
+The above sample assumes that [self getUserFeedback] is implemented such that it obtains the users feedback from the GUI element you have created and that submitFeedbackPressed is the action for your submit button.
 
 Once users have submitted feedback from inside of the application you can view it in the feedback area of your build page.
 
@@ -183,11 +204,19 @@ We have implemented three different loggers.
 
 Each of the loggers log asynchronously and all TFLog calls are non blocking. The TestFlight logger writes its data to a file which is then sent to our servers on Session End events. The Apple System Logger sends its messages to the Apple System Log and are viewable using the Organizer in Xcode when the device is attached to your computer. The ASL logger can be disabled by turning it off in your TestFlight options
 
-    [TestFlight setOptions:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"logsToConsole"]];
+    [TestFlight setOptions:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"logToConsole"]];
 
 The default option is YES.
 
-The STDERR logger sends log messages to STDERR so that you can see your log statements while debugging. The STDERR logger is only active when a debugger is attached to your application.
+The STDERR logger sends log messages to STDERR so that you can see your log statements while debugging. The STDERR logger is only active when a debugger is attached to your application. If you do not wish to use the STDERR logger you can disable it by turning it off in your TestFlight options
+
+    [TestFlight setOptions:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"logToSTDERR"]];
+
+The default option is YES.
+
+11. iOS3
+
+We now require that anyone who is writing an application that supports iOS3 add the System.framework as an optional link. In order to provide a better shutdown experience we send any large log files to our servers in the background. To add System.framework as an optional link you can follow
 
 END
 

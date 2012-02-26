@@ -73,9 +73,16 @@
     @try {
         [TestFlight takeOff:@"bd44885deee7adce0645ce8e5498d80a_NDQ5NDQyMDExLTEyLTAyIDExOjM1OjQ4LjQ2NjM4NA"];
         [TestFlight setOptions:[NSDictionary dictionaryWithObjectsAndKeys:
-                                [NSNumber numberWithBool:YES],  @"logToConsole",
+                                [NSNumber numberWithBool:NO],   @"logToConsole",
+                                [NSNumber numberWithBool:NO],   @"logToSTDERR",
                                 nil]];
         [TestFlight passCheckpoint:MPTestFlightCheckpointLaunched];
+        [[Logger get] registerListener:^BOOL(LogMessage *message) {
+            if (message.level >= LogLevelInfo)
+                TFLog(@"%@", message);
+            
+            return YES;
+        }];
     }
     @catch (NSException *exception) {
         err(@"TestFlight: %@", exception);
@@ -146,6 +153,8 @@
                                                           [self loadKeyPhrase];
                                                   }];
     
+    [self loadKeyPhrase];
+    
     return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -171,13 +180,19 @@
 
 - (void)loadKeyPhrase {
     
+    if (self.keyPhrase)
+        return;
+    
     if ([[MPConfig get].forgetKeyPhrase boolValue]) {
         [self forgetKeyPhrase];
         return;
     }
     
     [self loadStoredKeyPhrase];
-    if (!self.keyPhrase) {
+    if (self.keyPhrase)
+        [[UIApplication sharedApplication] setStatusBarHidden:NO
+                                                withAnimation:UIStatusBarAnimationSlide];
+    else {
         // Key phrase is not known.  Ask user to set/specify it.
         dbg(@"Key phrase not known.  Will ask user.");
         [self askKeyPhrase];

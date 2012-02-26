@@ -15,9 +15,11 @@
 
 @end
 
-@interface MPSearchDelegate : NSObject <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, NSFetchedResultsControllerDelegate>
+@interface MPSearchDelegate : NSObject <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchDisplayDelegate, NSFetchedResultsControllerDelegate>
 
+@property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic) NSString *query;
 
 @property (weak, nonatomic) IBOutlet id<MPSearchResultsDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UISearchDisplayController *searchDisplayController;

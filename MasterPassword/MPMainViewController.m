@@ -74,7 +74,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-
+    
     [super viewWillDisappear:animated];
     
     self.searchTipContainer.hidden = YES;
@@ -147,11 +147,11 @@
     [[MPAppDelegate get] saveContext];
     
     if (animated)
-        [UIView animateWithDuration:0.2 animations:^{
-            [self updateWasAnimated:YES];
+        [UIView animateWithDuration:0.3f animations:^{
+            [self updateWasAnimated:animated];
         }];
     else
-        [self updateWasAnimated:NO];
+        [self updateWasAnimated:animated];
 }
 
 - (void)updateWasAnimated:(BOOL)animated {
@@ -219,7 +219,7 @@
        [[NSBundle mainBundle] URLForResource:@"help" withExtension:@"html"]]]];
     
     NSString *error = [self.helpView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"setClass('%@');",
-                                                           ClassNameFromMPElementType(self.activeElement.type)]];
+                                                                             ClassNameFromMPElementType(self.activeElement.type)]];
     if (error.length)
         err(@"setClass: %@", error);
 }
@@ -312,7 +312,7 @@
         self.contentField.enabled = YES;
         [self.contentField becomeFirstResponder];
     }
-
+    
 #ifndef PRODUCTION
     [TestFlight passCheckpoint:MPTestFlightCheckpointEditPassword];
 #endif
@@ -325,7 +325,7 @@
     } completion:^(BOOL finished) {
         self.alertBody.text = nil;
     }];
-
+    
 #ifndef PRODUCTION
     [TestFlight passCheckpoint:MPTestFlightCheckpointCloseAlert];
 #endif
@@ -354,7 +354,7 @@
                                       settingsVC.delegate = self;
                                       [self.navigationController pushViewController:settingsVC animated:YES];
                                       break;
-                                }
+                                  }
 #ifndef PRODUCTION
                                   case 4:
                                       [TestFlight openFeedbackView];
@@ -387,7 +387,7 @@
             // Type requires a different class of element.  Recreate the element.
             [[MPAppDelegate managedObjectContext] performBlockAndWait:^{
                 MPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(type)
-                                                           inManagedObjectContext:[MPAppDelegate managedObjectContext]];
+                                                                            inManagedObjectContext:[MPAppDelegate managedObjectContext]];
                 newElement.name = self.activeElement.name;
                 newElement.mpHashHex = self.activeElement.mpHashHex;
                 newElement.uses = self.activeElement.uses;
@@ -410,24 +410,17 @@
 
 - (void)didSelectElement:(MPElementEntity *)element {
     
-    self.activeElement = element;
-    [self.activeElement use];
-    
-    [self.searchDisplayController setActive:NO animated:YES];
-    self.searchDisplayController.searchBar.text = self.activeElement.name;
-    
+    if (element) {
+        self.activeElement = element;
+        [self.activeElement use];
+        
+        [self.searchDisplayController setActive:NO animated:YES];
+        self.searchDisplayController.searchBar.text = self.activeElement.name;
+        
 #ifndef PRODUCTION
-    [TestFlight passCheckpoint:MPTestFlightCheckpointSelectElement];
+        [TestFlight passCheckpoint:MPTestFlightCheckpointSelectElement];
 #endif
-    
-    [self updateAnimated:YES];
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    
-#ifndef PRODUCTION
-    [TestFlight passCheckpoint:MPTestFlightCheckpointCancelSearch];
-#endif
+    }
     
     [self updateAnimated:YES];
 }

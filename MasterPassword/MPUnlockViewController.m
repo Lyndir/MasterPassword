@@ -130,6 +130,13 @@ typedef enum {
     [super viewWillDisappear:animated];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    
+    [self.field becomeFirstResponder];
+    
+    [super viewDidAppear:animated];
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
     if ([textField.text length]) {

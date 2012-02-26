@@ -1,3 +1,41 @@
+0.8.3 - February 14, 2012
+Rolled previous beta code into release builds
+No longer allow in application updates to occur in applications that were obtained from the app store.
+
+Tested compiled library with:
+Xcode 4.3
+Xcode 4.2
+Xcode 4.1
+Xcode 3.2.6
+
+0.8.3 BETA 5 - February 10, 2012
+Changed logging from asynchronous to synchronous.
+Resolved crash when looking for a log path failed.
+Added submitFeedback to the TestFlight class to allow for custom feedback forms.
+
+0.8.3 BETA 4 - January 20, 2012
+Resolved an issue that occured when an application was upgraded from 0.8.3 BETA 1 to 0.8.3 BETA 3+ with unsent data from 0.8.3 BETA 1
+
+0.8.3 BETA 3 - January 19, 2012
+On crash log files over 64k will not be sent until next launch.
+
+Known Issues:
+Logging massive amounts of data at the end of a session may prevent the application from launching in time on next launch
+
+0.8.3 BETA 2 - January 13, 2012
+libz.dylib is now required to be added to your "Link Binary with Libraries" build phase
+Log file compression, The compression is done on an as needed basis rather than before sending
+Changed all outgoing data from JSON to MessagePack
+Added option logToSTDERR to disable the STDERR logger
+
+0.8.3 BETA 1 - December 29, 2011
+In rare occurrences old session data that had not been sent to our server may have been discarded or attached to the wrong build. It is now no longer discarded
+Made sending of Session End events more robust
+Network queuing system does better bursting of unsent data
+Log files that are larger than 64K are now sent sometime after the next launch
+Log files that are larger than 16MB are no longer supported and will be replaced with a message indicating the log file was too large
+Fixed crashes while resuming from background
+
 0.8.2 - December 20, 2011
 Promoted 0.8.2 BETA 4 to stable
 
@@ -5,7 +43,7 @@ Known Issues:
 Under some circumstances Session End events may not be sent until the next launch.
 With large log files Session End events may take a long time to show up.
 
-Tested compiled library with
+Tested compiled library with:
 Xcode 4.3
 Xcode 4.2
 Xcode 4.1
@@ -13,12 +51,11 @@ Xcode 3.2.6
 
 0.8.2 BETA 4 - December 12, 2011
 Prevented "The string argument is NULL" from occuring during finishedHandshake in rare cases
-Resolved issue where background data may not be sent
+Resolved issue where data recorded while offline may not be sent
 
 0.8.2 BETA 3 - December 8, 2011
 Added auto-release pools to background setup and tear down 
-Added C++ specific code to TFLog declaration
-
+ 
 0.8.2 BETA 2 - December 5, 2011
 Fixed the "pointer being freed was not allocated" bug
 
@@ -28,7 +65,7 @@ Fixed an issue where Session End events may not be sent until next launch
 Fixed an issue where duplicate events could be sent
 Fixed an issue with Session End events not being sent from some iPod touch models
 
-Tested compiled library with
+Tested compiled library with:
 Xcode 4.2
 Xcode 4.1
 Xcode 3.2.6
@@ -46,7 +83,7 @@ Fixed compability issues with iOS 3
 Added calling into the rootViewController shouldAutorotateToInterfaceOrientation if a rootViewController is set
 Made the comments in TestFlight.h compatible with Appledoc
 
-Tested compiled library with
+Tested compiled library with:
 Xcode 4.2
 Xcode 4.1
 Xcode 3.2
