@@ -1,6 +1,6 @@
 [submodule "External/Pearl"]
 	path = External/Pearl
-	url = git@github.com:Lyndir/Pearl.git
+	url = git://github.com/Lyndir/Pearl.git
 [submodule "External/InAppSettingsKit"]
 	path = External/InAppSettingsKit
 	url = git://github.com/futuretap/InAppSettingsKit.git
