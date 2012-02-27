@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MPAppDelegate : AbstractAppDelegate
+@interface MPAppDelegate : PearlAppDelegate
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext          *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel            *managedObjectModel;

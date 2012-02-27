@@ -21,7 +21,7 @@
 
 + (NSDictionary *)queryForDevicePrivateElementNamed:(NSString *)name {
     
-    return [KeyChain createQueryForClass:kSecClassGenericPassword
+    return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                           @"DevicePrivate",  (__bridge id)kSecAttrService,
                                           name,              (__bridge id)kSecAttrAccount,
@@ -35,22 +35,22 @@
     
     NSData *encryptedContent;
     if (self.type == MPElementTypeStoredDevicePrivate)
-        encryptedContent = [KeyChain dataOfItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]];
+        encryptedContent = [PearlKeyChain dataOfItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]];
     else
         encryptedContent = self.contentObject;
     
-    NSData *decryptedContent = [encryptedContent decryptWithSymmetricKey:[[MPAppDelegate get] keyPhraseWithLength:kCipherKeySize]
+    NSData *decryptedContent = [encryptedContent decryptWithSymmetricKey:[[MPAppDelegate get] keyPhraseWithLength:PearlCryptKeySize]
                                                               usePadding:YES];
     return [[NSString alloc] initWithBytes:decryptedContent.bytes length:decryptedContent.length encoding:NSUTF8StringEncoding];
 }
 
 - (void)setContent:(id)content {
     
-    NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[[MPAppDelegate get] keyPhraseWithLength:kCipherKeySize]
+    NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[[MPAppDelegate get] keyPhraseWithLength:PearlCryptKeySize]
                                                                    usePadding:YES];
     
     if (self.type == MPElementTypeStoredDevicePrivate) {
-        [KeyChain addOrUpdateItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]
+        [PearlKeyChain addOrUpdateItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]
                            withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                            encryptedContent,                                (__bridge id)kSecValueData,
                                            kSecAttrAccessibleWhenUnlockedThisDeviceOnly,    (__bridge id)kSecAttrAccessible,

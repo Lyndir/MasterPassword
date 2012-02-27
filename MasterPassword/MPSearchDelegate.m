@@ -251,7 +251,7 @@
     else {
         // "New" section.
         NSString *siteName = self.query;
-        [AlertViewController showAlertWithTitle:@"New Site"
+        [PearlAlert showAlertWithTitle:@"New Site"
                                         message:l(@"Do you want to create a new site named:\n%@", siteName)
                                       viewStyle:UIAlertViewStyleDefault
                               tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {

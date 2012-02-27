@@ -333,7 +333,7 @@
 
 - (IBAction)action:(id)sender {
     
-    [SheetViewController showSheetWithTitle:nil message:nil viewStyle:UIActionSheetStyleAutomatic
+    [PearlSheet showSheetWithTitle:nil message:nil viewStyle:UIActionSheetStyleAutomatic
                           tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
                               if (buttonIndex == [sheet cancelButtonIndex])
                                   return;

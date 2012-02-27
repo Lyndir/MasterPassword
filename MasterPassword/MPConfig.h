@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-@interface MPConfig : Config
+@interface MPConfig : PearlConfig
 
 @property (nonatomic, retain) NSNumber *dataStoreError;
 @property (nonatomic, retain) NSNumber *storeKeyPhrase;

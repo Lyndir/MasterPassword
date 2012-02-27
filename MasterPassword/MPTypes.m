@@ -19,7 +19,7 @@
 
 NSData *keyPhraseForPassword(NSString *password) {
     
-    return [SCrypt deriveKeyWithLength:MP_dkLen fromPassword:[password dataUsingEncoding:NSUTF8StringEncoding]
+    return [PearlSCrypt deriveKeyWithLength:MP_dkLen fromPassword:[password dataUsingEncoding:NSUTF8StringEncoding]
                              usingSalt:MP_salt N:MP_N r:MP_r p:MP_p];
 }
 NSData *keyPhraseHashForPassword(NSString *password) {
