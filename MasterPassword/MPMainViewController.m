@@ -55,7 +55,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([[segue identifier] isEqualToString:@"MP_Main_ChooseType"])
-        [[segue destinationViewController] setDelegate:self];
+        ((MPTypeViewController *)[segue destinationViewController]).delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -115,7 +115,7 @@
                                                   }];
     
     self.alertBody.text = nil;
-    self.contentTipEditIcon.alpha = 0;
+    self.contentTipEditIcon.hidden = YES;
     
     [super viewDidLoad];
 }
@@ -232,14 +232,17 @@
     [UIView animateWithDuration:0.2f animations:^{
         self.contentTipContainer.alpha = 1;
     } completion:^(BOOL finished) {
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 5.0f * NSEC_PER_SEC);
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            [UIView animateWithDuration:0.2f animations:^{
-                self.contentTipContainer.alpha = 0;
-            } completion:^(BOOL finished) {
-                icon.hidden = YES;
-            }];
-        });
+        if (finished) {
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [UIView animateWithDuration:0.2f animations:^{
+                    self.contentTipContainer.alpha = 0;
+                } completion:^(BOOL finished) {
+                    if (finished)
+                       icon.hidden = YES;
+                }];
+            });
+        }
     }];
 }
 
