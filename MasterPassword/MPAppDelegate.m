@@ -21,7 +21,7 @@
 + (NSDictionary *)keyPhraseHashQuery;
 
 - (void)loadStoredKeyPhrase;
-- (void)askKeyPhrase;
+- (void)askKeyPhrase:(BOOL)animated;
 
 @end
 
@@ -36,7 +36,9 @@
 @synthesize keyPhraseHashHex = _keyPhraseHashHex;
 
 + (void)initialize {
-    
+
+    [MPConfig get];
+
 #ifdef DEBUG
     [PearlLogger get].autoprintLevel = PearlLogLevelTrace;
     [NSClassFromString(@"WebView") performSelector:@selector(_enableRemoteInspector)];
@@ -146,23 +148,25 @@
                                                       if ([NSStringFromSelector(@selector(storeKeyPhrase))
                                                            isEqualToString:[note.object description]]) {
                                                           self.keyPhrase = self.keyPhrase;
-                                                          [self loadKeyPhrase];
+                                                          [self loadKeyPhrase:YES];
                                                       }
                                                       if ([NSStringFromSelector(@selector(forgetKeyPhrase))
                                                            isEqualToString:[note.object description]])
-                                                          [self loadKeyPhrase];
+                                                          [self loadKeyPhrase:YES];
                                                   }];
-    
-    [self loadKeyPhrase];
+
+    [[UIApplication sharedApplication] setStatusBarHidden:NO
+                                            withAnimation:UIStatusBarAnimationSlide];
     
     return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
+
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
     if ([[MPConfig get].showQuickStart boolValue])
         [self showGuide];
     else
-        [self loadKeyPhrase];
+        [self loadKeyPhrase:NO];
     
 #ifndef PRODUCTION
     [TestFlight passCheckpoint:MPTestFlightCheckpointActivated];
@@ -178,24 +182,16 @@
 #endif
 }
 
-- (void)loadKeyPhrase {
+- (void)loadKeyPhrase:(BOOL)animated {
     
     if (self.keyPhrase)
         return;
-    
-    if ([[MPConfig get].forgetKeyPhrase boolValue]) {
-        [self forgetKeyPhrase];
-        return;
-    }
     
     [self loadStoredKeyPhrase];
-    if (self.keyPhrase)
-        [[UIApplication sharedApplication] setStatusBarHidden:NO
-                                                withAnimation:UIStatusBarAnimationSlide];
-    else {
+    if (!self.keyPhrase) {
         // Key phrase is not known.  Ask user to set/specify it.
         dbg(@"Key phrase not known.  Will ask user.");
-        [self askKeyPhrase];
+        [self askKeyPhrase:animated];
         return;
     }
 }
@@ -205,10 +201,11 @@
     dbg(@"Forgetting key phrase.");
     [PearlAlert showAlertWithTitle:@"Changing Master Password"
                                     message:
-     @"You've requested to change your master password.\n\n"
-     @"If you continue, your current sites and passwords will become unavailable.\n\n"
-     @"You can always change back to the old master password later.\n"
-     @"Your old sites and passwords will then become available again."
+     @"This will allow you to log in with a different master password.\n\n"
+     @"Note that you will only see the sites and passwords for the master password you log in with.\n"
+     @"If you log in with a different master password, your current sites will be unavailable.\n\n"
+     @"You can always change back to your current master password later.\n"
+     @"Your current sites and passwords will then become available again."
                                   viewStyle:UIAlertViewStyleDefault
                           tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                               if (buttonIndex != [alert cancelButtonIndex]) {
@@ -223,7 +220,7 @@
 #endif
                               }
                               
-                              [self loadKeyPhrase];
+                              [self loadKeyPhrase:YES];
                               
 #ifndef PRODUCTION
                               [TestFlight passCheckpoint:MPTestFlightCheckpointMPChanged];
@@ -231,7 +228,12 @@
                           }
                                 cancelTitle:[PearlStrings get].commonButtonAbort
                                 otherTitles:[PearlStrings get].commonButtonContinue, nil];
-    [MPConfig get].forgetKeyPhrase = [NSNumber numberWithBool:NO];
+}
+
+- (void)signOut {
+    
+    self.keyPhrase = nil;
+    [self loadKeyPhrase:YES];
 }
 
 - (void)loadStoredKeyPhrase {
@@ -251,9 +253,13 @@
     }
 }
 
-- (void)askKeyPhrase {
-    
-    [self.navigationController presentViewController:[self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"] animated:NO completion:nil];
+- (void)askKeyPhrase:(BOOL)animated {
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.navigationController presentViewController:
+                [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
+                                                animated:animated completion:nil];
+    });
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

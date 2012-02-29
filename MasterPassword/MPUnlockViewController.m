@@ -35,16 +35,16 @@ typedef enum {
         self.lock.alpha = 0.0f;
         switch (state) {
             case MPLockscreenIdle:
-                [self.lock setImage:[UIImage imageNamed:@"lockscreen_idle"]];
+                [self.lock setImage:[UIImage imageNamed:@"lock_idle"]];
                 break;
             case MPLockscreenError:
-                [self.lock setImage:[UIImage imageNamed:@"lockscreen_red"]];
+                [self.lock setImage:[UIImage imageNamed:@"lock_red"]];
                 break;
             case MPLockscreenSuccess:
-                [self.lock setImage:[UIImage imageNamed:@"lockscreen_green"]];
+                [self.lock setImage:[UIImage imageNamed:@"lock_green"]];
                 break;
             case MPLockscreenProgress:
-                [self.lock setImage:[UIImage imageNamed:@"lockscreen_blue"]];
+                [self.lock setImage:[UIImage imageNamed:@"lock_blue"]];
                 break;
         }
         

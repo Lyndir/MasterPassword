@@ -29,8 +29,15 @@
     [super viewWillDisappear:animated];
     
     [MPConfig get].showQuickStart = [NSNumber numberWithBool:NO];
-    [[MPAppDelegate get] loadKeyPhrase];
 }
+
+- (void)viewDidDisappear:(BOOL)animated {
+
+    [super viewDidDisappear:animated];
+
+    [[MPAppDelegate get] loadKeyPhrase:animated];
+}
+
 
 - (void)viewDidUnload {
 

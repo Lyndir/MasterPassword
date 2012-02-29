@@ -359,7 +359,13 @@
                                   case 4:
                                       [TestFlight openFeedbackView];
                                       break;
+                                  case 5: {
+#else
+                                  case 4: {
 #endif
+                                      [[MPAppDelegate get] signOut];
+                                      break;
+                                  }
                               }
                               
 #ifndef PRODUCTION
@@ -371,6 +377,7 @@
 #ifndef PRODUCTION
      @"Feedback",
 #endif
+     @"Sign Out",
      nil]; 
 }
 

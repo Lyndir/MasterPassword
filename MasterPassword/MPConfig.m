@@ -9,9 +9,7 @@
 #import "MPConfig.h"
 
 @implementation MPConfig
-
-@dynamic dataStoreError, storeKeyPhrase, rememberKeyPhrase, forgetKeyPhrase, helpHidden, showQuickStart;
-
+@dynamic dataStoreError, storeKeyPhrase, rememberKeyPhrase, helpHidden, showQuickStart;
 
 - (id)init {
     
@@ -22,7 +20,6 @@
                                      [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(dataStoreError)),
                                      [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(storeKeyPhrase)),
                                      [NSNumber numberWithBool:YES],                                 NSStringFromSelector(@selector(rememberKeyPhrase)),
-                                     [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(forgetKeyPhrase)),
                                      [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(helpHidden)),
                                      [NSNumber numberWithBool:YES],                                 NSStringFromSelector(@selector(showQuickStart)),
                                      nil]];

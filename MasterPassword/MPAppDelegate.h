@@ -25,7 +25,8 @@
 - (NSURL *)applicationDocumentsDirectory;
 
 - (void)showGuide;
-- (void)loadKeyPhrase;
+- (void)loadKeyPhrase:(BOOL)animated;
+- (void)signOut;
 - (void)forgetKeyPhrase;
 - (NSData *)keyPhraseWithLength:(NSUInteger)keyLength;
 - (BOOL)tryMasterPassword:(NSString *)tryPassword;

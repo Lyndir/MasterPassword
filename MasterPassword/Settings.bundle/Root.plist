@@ -78,24 +78,6 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
-		<dict>
-			<key>FooterText</key>
-			<string>Turn this on if you want to change the master password.  Start the application and it will ask you for a new master password.  All passwords will change to those for the new master password.</string>
-			<key>Title</key>
-			<string></string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>DefaultValue</key>
-			<false/>
-			<key>Key</key>
-			<string>forgetKeyPhrase</string>
-			<key>Title</key>
-			<string>Change my password</string>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-		</dict>
 	</array>
 	<key>StringsTable</key>
 	<string>Root</string>
