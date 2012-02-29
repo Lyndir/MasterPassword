@@ -52,6 +52,12 @@
     return [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad || interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
 }
 
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    
+    [self setHelpHidden:![self isHelpVisible] animated:NO];
+}
+
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([[segue identifier] isEqualToString:@"MP_Main_ChooseType"])
@@ -183,7 +189,7 @@
 
 - (BOOL)isHelpVisible {
     
-    return self.helpContainer.frame.origin.y < 400;
+    return self.helpContainer.frame.origin.y == 216;
 }
 
 - (void)toggleHelpAnimated:(BOOL)animated {
@@ -194,10 +200,9 @@
 - (void)setHelpHidden:(BOOL)hidden animated:(BOOL)animated {
     
     [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
-        
         if (hidden) {
-            self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 373);
-            self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, 416);
+            self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, self.view.bounds.size.height - 44);
+            self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, self.view.bounds.size.height);
             [MPConfig get].helpHidden = [NSNumber numberWithBool:YES];
         } else {
             self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 175);
@@ -239,7 +244,7 @@
                     self.contentTipContainer.alpha = 0;
                 } completion:^(BOOL finished) {
                     if (finished)
-                       icon.hidden = YES;
+                        icon.hidden = YES;
                 }];
             });
         }
@@ -337,149 +342,149 @@
 - (IBAction)action:(id)sender {
     
     [PearlSheet showSheetWithTitle:nil message:nil viewStyle:UIActionSheetStyleAutomatic
-                          tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
-                              if (buttonIndex == [sheet cancelButtonIndex])
-                                  return;
-                              
-                              switch (buttonIndex - [sheet firstOtherButtonIndex]) {
-                                  case 0:
-                                      [self toggleHelpAnimated:YES];
-                                      break;
-                                  case 1:
-                                      [self setHelpChapter:@"faq"];
-                                      [self setHelpHidden:NO animated:YES];
-                                      break;
-                                  case 2:
-                                      [[MPAppDelegate get] showGuide];
-                                      break;
-                                  case 3: {
-                                      IASKAppSettingsViewController *settingsVC = [IASKAppSettingsViewController new];
-                                      settingsVC.delegate = self;
-                                      [self.navigationController pushViewController:settingsVC animated:YES];
-                                      break;
-                                  }
+                 tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
+                     if (buttonIndex == [sheet cancelButtonIndex])
+                         return;
+                     
+                     switch (buttonIndex - [sheet firstOtherButtonIndex]) {
+                         case 0:
+                             [self toggleHelpAnimated:YES];
+                             break;
+                         case 1:
+                             [self setHelpChapter:@"faq"];
+                             [self setHelpHidden:NO animated:YES];
+                             break;
+                         case 2:
+                             [[MPAppDelegate get] showGuide];
+                             break;
+                         case 3: {
+                             IASKAppSettingsViewController *settingsVC = [IASKAppSettingsViewController new];
+                             settingsVC.delegate = self;
+                             [self.navigationController pushViewController:settingsVC animated:YES];
+                             break;
+                         }
 #ifndef PRODUCTION
-                                  case 4:
-                                      [TestFlight openFeedbackView];
-                                      break;
-                                  case 5: {
+                         case 4:
+                             [TestFlight openFeedbackView];
+                             break;
+                         case 5: {
 #else
-                                  case 4: {
+                         case 4: {
 #endif
-                                      [[MPAppDelegate get] signOut];
-                                      break;
-                                  }
-                              }
-                              
+                             [[MPAppDelegate get] signOut];
+                             break;
+                         }
+                         }
+                             
 #ifndef PRODUCTION
-                              [TestFlight passCheckpoint:MPTestFlightCheckpointAction];
+                             [TestFlight passCheckpoint:MPTestFlightCheckpointAction];
 #endif
-                          } cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil
-                                otherTitles:
-     [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings",
+                     } cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil
+                 otherTitles:
+                     [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings",
 #ifndef PRODUCTION
-     @"Feedback",
+                     @"Feedback",
 #endif
-     @"Sign Out",
-     nil]; 
-}
-
-- (MPElementType)selectedType {
-    
-    return self.activeElement.type;
-}
-
-- (void)didSelectType:(MPElementType)type {
-    
-    [self updateElement:^{
-        // Update password type.
-        if (ClassFromMPElementType(type) != ClassFromMPElementType(self.activeElement.type))
-            // Type requires a different class of element.  Recreate the element.
-            [[MPAppDelegate managedObjectContext] performBlockAndWait:^{
-                MPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(type)
-                                                                            inManagedObjectContext:[MPAppDelegate managedObjectContext]];
-                newElement.name = self.activeElement.name;
-                newElement.mpHashHex = self.activeElement.mpHashHex;
-                newElement.uses = self.activeElement.uses;
-                newElement.lastUsed = self.activeElement.lastUsed;
-                
-                [[MPAppDelegate managedObjectContext] deleteObject:self.activeElement];
-                self.activeElement = newElement;
-            }];
-        
-        self.activeElement.type = type;
-        
+                     @"Sign Out",
+                     nil]; 
+                 }
+     
+     - (MPElementType)selectedType {
+         
+         return self.activeElement.type;
+     }
+     
+     - (void)didSelectType:(MPElementType)type {
+         
+         [self updateElement:^{
+             // Update password type.
+             if (ClassFromMPElementType(type) != ClassFromMPElementType(self.activeElement.type))
+                 // Type requires a different class of element.  Recreate the element.
+                 [[MPAppDelegate managedObjectContext] performBlockAndWait:^{
+                     MPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(type)
+                                                                                 inManagedObjectContext:[MPAppDelegate managedObjectContext]];
+                     newElement.name = self.activeElement.name;
+                     newElement.mpHashHex = self.activeElement.mpHashHex;
+                     newElement.uses = self.activeElement.uses;
+                     newElement.lastUsed = self.activeElement.lastUsed;
+                     
+                     [[MPAppDelegate managedObjectContext] deleteObject:self.activeElement];
+                     self.activeElement = newElement;
+                 }];
+             
+             self.activeElement.type = type;
+             
 #ifndef PRODUCTION
-        [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointSelectType, NSStringFromMPElementType(type)]];
+             [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointSelectType, NSStringFromMPElementType(type)]];
 #endif
-        
-        if (type & MPElementTypeClassStored && ![self.activeElement.description length])
-            [self showContentTip:@"Tap       to set a password." withIcon:self.contentTipEditIcon];
-    }];
-}
-
-- (void)didSelectElement:(MPElementEntity *)element {
-    
-    if (element) {
-        self.activeElement = element;
-        [self.activeElement use];
-        
-        [self.searchDisplayController setActive:NO animated:YES];
-        self.searchDisplayController.searchBar.text = self.activeElement.name;
-        
+             
+             if (type & MPElementTypeClassStored && ![self.activeElement.description length])
+                 [self showContentTip:@"Tap        to set a password." withIcon:self.contentTipEditIcon];
+         }];
+     }
+     
+     - (void)didSelectElement:(MPElementEntity *)element {
+         
+         if (element) {
+             self.activeElement = element;
+             [self.activeElement use];
+             
+             [self.searchDisplayController setActive:NO animated:YES];
+             self.searchDisplayController.searchBar.text = self.activeElement.name;
+             
 #ifndef PRODUCTION
-        [TestFlight passCheckpoint:MPTestFlightCheckpointSelectElement];
+             [TestFlight passCheckpoint:MPTestFlightCheckpointSelectElement];
 #endif
-    }
-    
-    [self updateAnimated:YES];
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    
-    if (textField == self.contentField)
-        [self.contentField resignFirstResponder];
-    
-    return YES;
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    
-    if (textField == self.contentField) {
-        self.contentField.enabled = NO;
-        if (![self.activeElement isKindOfClass:[MPElementStoredEntity class]])
-            // Not of a type whose content can be edited.
-            return;
-        
-        if ([((MPElementStoredEntity *) self.activeElement).content isEqual:self.contentField.text])
-            // Content hasn't changed.
-            return;
-        
-        [self updateElement:^{
-            ((MPElementStoredEntity *) self.activeElement).content = self.contentField.text;
-        }];
-    }
-}
-
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request
- navigationType:(UIWebViewNavigationType)navigationType {
-    
-    if (navigationType == UIWebViewNavigationTypeLinkClicked) {
+         }
+         
+         [self updateAnimated:YES];
+     }
+     
+     - (BOOL)textFieldShouldReturn:(UITextField *)textField {
+         
+         if (textField == self.contentField)
+             [self.contentField resignFirstResponder];
+         
+         return YES;
+     }
+     
+     - (void)textFieldDidEndEditing:(UITextField *)textField {
+         
+         if (textField == self.contentField) {
+             self.contentField.enabled = NO;
+             if (![self.activeElement isKindOfClass:[MPElementStoredEntity class]])
+                 // Not of a type whose content can be edited.
+                 return;
+             
+             if ([((MPElementStoredEntity *) self.activeElement).content isEqual:self.contentField.text])
+                 // Content hasn't changed.
+                 return;
+             
+             [self updateElement:^{
+                 ((MPElementStoredEntity *) self.activeElement).content = self.contentField.text;
+             }];
+         }
+     }
+     
+     - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request
+                    navigationType:(UIWebViewNavigationType)navigationType {
+                        
+                        if (navigationType == UIWebViewNavigationTypeLinkClicked) {
 #ifndef PRODUCTION
-        [TestFlight passCheckpoint:MPTestFlightCheckpointExternalLink];
+                            [TestFlight passCheckpoint:MPTestFlightCheckpointExternalLink];
 #endif
-        
-        [[UIApplication sharedApplication] openURL:[request URL]];
-        return NO;
-    }
-    
-    return YES;
-}
-
-- (void)settingsViewControllerDidEnd:(IASKAppSettingsViewController *)sender {
-    
-    while ([self.navigationController.viewControllers containsObject:sender])
-        [self.navigationController popViewControllerAnimated:YES];
-}
-
-@end
+                            
+                            [[UIApplication sharedApplication] openURL:[request URL]];
+                            return NO;
+                        }
+                        
+                        return YES;
+                    }
+     
+     - (void)settingsViewControllerDidEnd:(IASKAppSettingsViewController *)sender {
+         
+         while ([self.navigationController.viewControllers containsObject:sender])
+             [self.navigationController popViewControllerAnimated:YES];
+     }
+     
+     @end
