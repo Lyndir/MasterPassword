@@ -26,15 +26,27 @@
                 navigateTo(document.location.hash.substring(1));
             });
         </script>
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-90535-15']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
     </head>
 
     <body>
         <header>
-            <img class="logo" src="img/iTunesArtwork-Bare.png" />
-            <h1>Master Password</h1>
+            
+            <h1><img class="logo" src="img/iTunesArtwork-Bare.png" /> Master Password</h1>
             <div class="divider">
             </div>
         </header>
+        <a href="http://bit.ly/vNN5Zi" onclick="_gaq.push(['_trackPageview', '/outbound/testflight']);" id="ribbon"></a>
         <section class="frontpage">
 
             <a class="next" href="#about" onClick="navigateTo($(this).attr('href').substring(1));">What is this thing?</a>
@@ -126,7 +138,7 @@
 
             <p>
                 Master Password is currently in beta.<br />
-                Anyone interested in joining the beta is invited to <a href="http://bit.ly/vNN5Zi">join the Lyndir TestFlight team</a>.  Every so often new pending testers are admitted to the Master Password beta testers team.
+                Anyone interested in joining the beta is invited to <a href="http://bit.ly/vNN5Zi" onclick="_gaq.push(['_trackPageview', '/outbound/testflight']);">join the Lyndir TestFlight team</a>.  Every so often new pending testers are admitted to the Master Password beta testers team.
             </p>
             <p>
                 Participation in the beta is free of charge, but does come with the expectation that you will contribute.  Comment constructively, report issues and propose improvements.
@@ -156,7 +168,7 @@
                 Alright, let's describe the process in detail.  This part will likely make sense to you only if you're well versed in computer security jargon.  If you're the kind of person who likes to know how the clock ticks before deciding that it can be trusted to keep ticking, read on.
             </p>
             <p>
-                The user chooses a single master password, preferably sufficiently long to harden against brute-force attacks.  Before usage, a <code>masterKey</code> is derived from this master password using the <a href="http://www.tarsnap.com/scrypt.html">scrypt key derivation function</a>.  This makes it impossibly expensive and time-consuming to attempt brute-forcing a properly sized master password.
+                The user chooses a single master password, preferably sufficiently long to harden against brute-force attacks.  Before usage, a <code>masterKey</code> is derived from this master password using the <a href="http://www.tarsnap.com/scrypt.html" onclick="_gaq.push(['_trackPageview', '/outbound/tarsnap.com/scrypt.html">scrypt key derivation function</a>.  This makes it impossibly expensive and time-consuming to attempt brute-forcing a properly sized master password.
             </p>
             <code><pre>
                 masterKey = scrypt( P, S, N, r, p, dkLen )
@@ -200,7 +212,7 @@
 
         </section>
         <footer>
-            Master Password is a security and productivity product by <a href="http://www.lyndir.com">Lyndir</a>, &copy; 2011.
+            Master Password is a security and productivity product by <a href="http://www.lyndir.com" onclick="_gaq.push(['_trackPageview', '/outbound/lyndir.com']);">Lyndir</a>, &copy; 2011.
         </footer>
     </body>
 

@@ -10,7 +10,7 @@ body {
 
     color:                      black;
 
-    font:                       120% Exo, sans-serif;
+    font:                       105% Exo, sans-serif;
     font-weight:                100;
 }
 h1, h2, h3, h4 {
@@ -79,7 +79,7 @@ header {
             box-shadow:         0 0 50px #666;
 
     margin:                     0 0 5em;
-    padding:                    0 0 1em;
+    padding:                    1em 0;
 
     text-align:                 center;
 }
@@ -90,7 +90,8 @@ header h1 {
     font-size:                  350%;
 }
 header .logo {
-    width:                      200px;
+    height:                     128px;
+    vertical-align:middle;
 }
 header .divider {
     position:                   absolute;
@@ -198,6 +199,17 @@ a.next {
 }
 a.next:after {
     content:                    " >";
+}
+
+#ribbon {
+    background:                 url("../img/ribbon-join-beta.png");
+
+    display:                    block;
+    position:                   absolute;
+    left:                       0;
+    margin-top:                 -5em;
+    width:                      184px;
+    height:                     184px;
 }
 
 #frontpage .sidebox {
