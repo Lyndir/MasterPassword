@@ -1,0 +1,642 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DAB8D98D150374AD00CED3BC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB8D98C150374AD00CED3BC /* Cocoa.framework */; };
+		DAB8D9C8150375C800CED3BC /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9B2150375C800CED3BC /* MasterPassword.xcdatamodeld */; };
+		DAB8D9C9150375C800CED3BC /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D9B5150375C800CED3BC /* Credits.rtf */; };
+		DAB8D9CA150375C800CED3BC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D9B7150375C800CED3BC /* InfoPlist.strings */; };
+		DAB8D9CB150375C800CED3BC /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D9B9150375C800CED3BC /* MainMenu.xib */; };
+		DAB8D9CC150375C800CED3BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9BB150375C800CED3BC /* main.m */; };
+		DAB8D9CE150375C800CED3BC /* MPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9BF150375C800CED3BC /* MPAppDelegate.m */; };
+		DAB8D9CF150375C800CED3BC /* MPElementStoredEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9C0150375C800CED3BC /* MPElementStoredEntity.m */; };
+		DAB8D9D0150375C800CED3BC /* MPTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9C1150375C800CED3BC /* MPTypes.m */; };
+		DAB8D9D1150375C800CED3BC /* MPElementEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9C3150375C800CED3BC /* MPElementEntity.m */; };
+		DAB8D9D2150375C800CED3BC /* MPElementGeneratedEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9C6150375C800CED3BC /* MPElementGeneratedEntity.m */; };
+		DAB8D9D91503940100CED3BC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB8D98C150374AD00CED3BC /* Cocoa.framework */; };
+		DAB8DA131503972100CED3BC /* NSObject_PearlExport.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8D9E41503972100CED3BC /* NSObject_PearlExport.h */; };
+		DAB8DA141503972100CED3BC /* NSObject_PearlExport.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9E51503972100CED3BC /* NSObject_PearlExport.m */; };
+		DAB8DA151503972100CED3BC /* NSString_PearlNSArrayFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8D9E61503972100CED3BC /* NSString_PearlNSArrayFormat.h */; };
+		DAB8DA161503972100CED3BC /* NSString_PearlNSArrayFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9E71503972100CED3BC /* NSString_PearlNSArrayFormat.m */; };
+		DAB8DA171503972100CED3BC /* NSString_PearlSEL.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8D9E81503972100CED3BC /* NSString_PearlSEL.h */; };
+		DAB8DA181503972100CED3BC /* NSString_PearlSEL.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9E91503972100CED3BC /* NSString_PearlSEL.m */; };
+		DAB8DA191503972100CED3BC /* Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8D9EA1503972100CED3BC /* Pearl.h */; };
+		DAB8DA1A1503972100CED3BC /* PearlAbstractStrings.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8D9EB1503972100CED3BC /* PearlAbstractStrings.h */; };
+		DAB8DA1B1503972100CED3BC /* PearlAbstractStrings.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9EC1503972100CED3BC /* PearlAbstractStrings.m */; };
+		DAB8DA1E1503972100CED3BC /* PearlCodeUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8D9EF1503972100CED3BC /* PearlCodeUtils.h */; };
+		DAB8DA1F1503972100CED3BC /* PearlCodeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9F01503972100CED3BC /* PearlCodeUtils.m */; };
+		DAB8DA201503972100CED3BC /* PearlConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8D9F11503972100CED3BC /* PearlConfig.h */; };
+		DAB8DA211503972100CED3BC /* PearlConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9F21503972100CED3BC /* PearlConfig.m */; };
+		DAB8DA221503972100CED3BC /* PearlDeviceUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8D9F31503972100CED3BC /* PearlDeviceUtils.h */; };
+		DAB8DA231503972100CED3BC /* PearlDeviceUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9F41503972100CED3BC /* PearlDeviceUtils.m */; };
+		DAB8DA241503972100CED3BC /* PearlInfoPlist.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8D9F51503972100CED3BC /* PearlInfoPlist.h */; };
+		DAB8DA251503972100CED3BC /* PearlInfoPlist.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9F61503972100CED3BC /* PearlInfoPlist.m */; };
+		DAB8DA261503972100CED3BC /* PearlLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8D9F71503972100CED3BC /* PearlLogger.h */; };
+		DAB8DA271503972100CED3BC /* PearlLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9F81503972100CED3BC /* PearlLogger.m */; };
+		DAB8DA281503972100CED3BC /* PearlMathUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8D9F91503972100CED3BC /* PearlMathUtils.h */; };
+		DAB8DA291503972100CED3BC /* PearlMathUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9FA1503972100CED3BC /* PearlMathUtils.m */; };
+		DAB8DA2A1503972100CED3BC /* PearlObjectUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8D9FB1503972100CED3BC /* PearlObjectUtils.h */; };
+		DAB8DA2B1503972100CED3BC /* PearlObjectUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9FC1503972100CED3BC /* PearlObjectUtils.m */; };
+		DAB8DA2C1503972100CED3BC /* PearlResettable.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8D9FD1503972100CED3BC /* PearlResettable.h */; };
+		DAB8DA2D1503972100CED3BC /* PearlStrings.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8D9FE1503972100CED3BC /* PearlStrings.h */; };
+		DAB8DA2E1503972100CED3BC /* PearlStrings.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9FF1503972100CED3BC /* PearlStrings.m */; };
+		DAB8DA2F1503972100CED3BC /* PearlStringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8DA001503972100CED3BC /* PearlStringUtils.h */; };
+		DAB8DA301503972100CED3BC /* PearlStringUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8DA011503972100CED3BC /* PearlStringUtils.m */; };
+		DAB8DA311503972100CED3BC /* PearlWebUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8DA021503972100CED3BC /* PearlWebUtils.h */; };
+		DAB8DA321503972100CED3BC /* PearlWebUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8DA031503972100CED3BC /* PearlWebUtils.m */; };
+		DAB8DA331503972100CED3BC /* Pearl-Crypto.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8DA091503972100CED3BC /* Pearl-Crypto.h */; };
+		DAB8DA341503972100CED3BC /* PearlCryptUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8DA0A1503972100CED3BC /* PearlCryptUtils.h */; };
+		DAB8DA351503972100CED3BC /* PearlCryptUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8DA0B1503972100CED3BC /* PearlCryptUtils.m */; };
+		DAB8DA361503972100CED3BC /* PearlKeyChain.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8DA0C1503972100CED3BC /* PearlKeyChain.h */; };
+		DAB8DA371503972100CED3BC /* PearlKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8DA0D1503972100CED3BC /* PearlKeyChain.m */; };
+		DAB8DA381503972100CED3BC /* PearlRSAKey.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8DA0E1503972100CED3BC /* PearlRSAKey.h */; };
+		DAB8DA391503972100CED3BC /* PearlRSAKey.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8DA0F1503972100CED3BC /* PearlRSAKey.m */; };
+		DAB8DA3A1503972100CED3BC /* PearlSCrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8DA101503972100CED3BC /* PearlSCrypt.h */; };
+		DAB8DA3B1503972100CED3BC /* PearlSCrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8DA111503972100CED3BC /* PearlSCrypt.m */; };
+		DAFE4A6415039CDC003ABA7C /* Pearl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB8D9D81503940100CED3BC /* Pearl.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		DAB8D988150374AD00CED3BC /* MasterPassword.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MasterPassword.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAB8D98C150374AD00CED3BC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		DAB8D98F150374AD00CED3BC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		DAB8D990150374AD00CED3BC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		DAB8D991150374AD00CED3BC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		DAB8D9B3150375C800CED3BC /* MasterPassword.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MasterPassword.xcdatamodel; sourceTree = "<group>"; };
+		DAB8D9B6150375C800CED3BC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		DAB8D9B8150375C800CED3BC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DAB8D9BA150375C800CED3BC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		DAB8D9BB150375C800CED3BC /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DAB8D9BC150375C800CED3BC /* MasterPassword-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MasterPassword-Info.plist"; sourceTree = "<group>"; };
+		DAB8D9BD150375C800CED3BC /* MasterPassword-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MasterPassword-Prefix.pch"; sourceTree = "<group>"; };
+		DAB8D9BE150375C800CED3BC /* MPAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate.h; sourceTree = "<group>"; };
+		DAB8D9BF150375C800CED3BC /* MPAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate.m; sourceTree = "<group>"; };
+		DAB8D9C0150375C800CED3BC /* MPElementStoredEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementStoredEntity.m; sourceTree = "<group>"; };
+		DAB8D9C1150375C800CED3BC /* MPTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTypes.m; sourceTree = "<group>"; };
+		DAB8D9C2150375C800CED3BC /* MPElementEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementEntity.h; sourceTree = "<group>"; };
+		DAB8D9C3150375C800CED3BC /* MPElementEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementEntity.m; sourceTree = "<group>"; };
+		DAB8D9C4150375C800CED3BC /* MPTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTypes.h; sourceTree = "<group>"; };
+		DAB8D9C5150375C800CED3BC /* MPElementGeneratedEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementGeneratedEntity.h; sourceTree = "<group>"; };
+		DAB8D9C6150375C800CED3BC /* MPElementGeneratedEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementGeneratedEntity.m; sourceTree = "<group>"; };
+		DAB8D9C7150375C800CED3BC /* MPElementStoredEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementStoredEntity.h; sourceTree = "<group>"; };
+		DAB8D9D81503940100CED3BC /* Pearl.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = Pearl.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAB8D9DC1503940100CED3BC /* Pearl-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pearl-Prefix.pch"; sourceTree = "<group>"; };
+		DAB8D9E41503972100CED3BC /* NSObject_PearlExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSObject_PearlExport.h; sourceTree = "<group>"; };
+		DAB8D9E51503972100CED3BC /* NSObject_PearlExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSObject_PearlExport.m; sourceTree = "<group>"; };
+		DAB8D9E61503972100CED3BC /* NSString_PearlNSArrayFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSString_PearlNSArrayFormat.h; sourceTree = "<group>"; };
+		DAB8D9E71503972100CED3BC /* NSString_PearlNSArrayFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSString_PearlNSArrayFormat.m; sourceTree = "<group>"; };
+		DAB8D9E81503972100CED3BC /* NSString_PearlSEL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSString_PearlSEL.h; sourceTree = "<group>"; };
+		DAB8D9E91503972100CED3BC /* NSString_PearlSEL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSString_PearlSEL.m; sourceTree = "<group>"; };
+		DAB8D9EA1503972100CED3BC /* Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pearl.h; sourceTree = "<group>"; };
+		DAB8D9EB1503972100CED3BC /* PearlAbstractStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlAbstractStrings.h; sourceTree = "<group>"; };
+		DAB8D9EC1503972100CED3BC /* PearlAbstractStrings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlAbstractStrings.m; sourceTree = "<group>"; };
+		DAB8D9EF1503972100CED3BC /* PearlCodeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlCodeUtils.h; sourceTree = "<group>"; };
+		DAB8D9F01503972100CED3BC /* PearlCodeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlCodeUtils.m; sourceTree = "<group>"; };
+		DAB8D9F11503972100CED3BC /* PearlConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlConfig.h; sourceTree = "<group>"; };
+		DAB8D9F21503972100CED3BC /* PearlConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlConfig.m; sourceTree = "<group>"; };
+		DAB8D9F31503972100CED3BC /* PearlDeviceUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlDeviceUtils.h; sourceTree = "<group>"; };
+		DAB8D9F41503972100CED3BC /* PearlDeviceUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlDeviceUtils.m; sourceTree = "<group>"; };
+		DAB8D9F51503972100CED3BC /* PearlInfoPlist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlInfoPlist.h; sourceTree = "<group>"; };
+		DAB8D9F61503972100CED3BC /* PearlInfoPlist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlInfoPlist.m; sourceTree = "<group>"; };
+		DAB8D9F71503972100CED3BC /* PearlLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlLogger.h; sourceTree = "<group>"; };
+		DAB8D9F81503972100CED3BC /* PearlLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlLogger.m; sourceTree = "<group>"; };
+		DAB8D9F91503972100CED3BC /* PearlMathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlMathUtils.h; sourceTree = "<group>"; };
+		DAB8D9FA1503972100CED3BC /* PearlMathUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlMathUtils.m; sourceTree = "<group>"; };
+		DAB8D9FB1503972100CED3BC /* PearlObjectUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlObjectUtils.h; sourceTree = "<group>"; };
+		DAB8D9FC1503972100CED3BC /* PearlObjectUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlObjectUtils.m; sourceTree = "<group>"; };
+		DAB8D9FD1503972100CED3BC /* PearlResettable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlResettable.h; sourceTree = "<group>"; };
+		DAB8D9FE1503972100CED3BC /* PearlStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlStrings.h; sourceTree = "<group>"; };
+		DAB8D9FF1503972100CED3BC /* PearlStrings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlStrings.m; sourceTree = "<group>"; };
+		DAB8DA001503972100CED3BC /* PearlStringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlStringUtils.h; sourceTree = "<group>"; };
+		DAB8DA011503972100CED3BC /* PearlStringUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlStringUtils.m; sourceTree = "<group>"; };
+		DAB8DA021503972100CED3BC /* PearlWebUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlWebUtils.h; sourceTree = "<group>"; };
+		DAB8DA031503972100CED3BC /* PearlWebUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlWebUtils.m; sourceTree = "<group>"; };
+		DAB8DA041503972100CED3BC /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		DAB8DA071503972100CED3BC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Pearl.strings; sourceTree = "<group>"; };
+		DAB8DA091503972100CED3BC /* Pearl-Crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Pearl-Crypto.h"; sourceTree = "<group>"; };
+		DAB8DA0A1503972100CED3BC /* PearlCryptUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlCryptUtils.h; sourceTree = "<group>"; };
+		DAB8DA0B1503972100CED3BC /* PearlCryptUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlCryptUtils.m; sourceTree = "<group>"; };
+		DAB8DA0C1503972100CED3BC /* PearlKeyChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlKeyChain.h; sourceTree = "<group>"; };
+		DAB8DA0D1503972100CED3BC /* PearlKeyChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlKeyChain.m; sourceTree = "<group>"; };
+		DAB8DA0E1503972100CED3BC /* PearlRSAKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlRSAKey.h; sourceTree = "<group>"; };
+		DAB8DA0F1503972100CED3BC /* PearlRSAKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlRSAKey.m; sourceTree = "<group>"; };
+		DAB8DA101503972100CED3BC /* PearlSCrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlSCrypt.h; sourceTree = "<group>"; };
+		DAB8DA111503972100CED3BC /* PearlSCrypt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlSCrypt.m; sourceTree = "<group>"; };
+		DAB8DA121503972100CED3BC /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DAB8D985150374AD00CED3BC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAFE4A6415039CDC003ABA7C /* Pearl.dylib in Frameworks */,
+				DAB8D98D150374AD00CED3BC /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DAB8D9D51503940100CED3BC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAB8D9D91503940100CED3BC /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DAB8D97D150374AC00CED3BC = {
+			isa = PBXGroup;
+			children = (
+				DAB8D992150374AD00CED3BC /* MasterPassword */,
+				DAB8D9DA1503940100CED3BC /* Pearl */,
+				DAB8D98B150374AD00CED3BC /* Frameworks */,
+				DAB8D989150374AD00CED3BC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DAB8D989150374AD00CED3BC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DAB8D988150374AD00CED3BC /* MasterPassword.app */,
+				DAB8D9D81503940100CED3BC /* Pearl.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DAB8D98B150374AD00CED3BC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DAB8D98C150374AD00CED3BC /* Cocoa.framework */,
+				DAB8D98E150374AD00CED3BC /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DAB8D98E150374AD00CED3BC /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DAB8D98F150374AD00CED3BC /* AppKit.framework */,
+				DAB8D990150374AD00CED3BC /* CoreData.framework */,
+				DAB8D991150374AD00CED3BC /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		DAB8D992150374AD00CED3BC /* MasterPassword */ = {
+			isa = PBXGroup;
+			children = (
+				DAB8D9B2150375C800CED3BC /* MasterPassword.xcdatamodeld */,
+				DAB8D9B4150375C800CED3BC /* Mac */,
+				DAB8D9C0150375C800CED3BC /* MPElementStoredEntity.m */,
+				DAB8D9C1150375C800CED3BC /* MPTypes.m */,
+				DAB8D9C2150375C800CED3BC /* MPElementEntity.h */,
+				DAB8D9C3150375C800CED3BC /* MPElementEntity.m */,
+				DAB8D9C4150375C800CED3BC /* MPTypes.h */,
+				DAB8D9C5150375C800CED3BC /* MPElementGeneratedEntity.h */,
+				DAB8D9C6150375C800CED3BC /* MPElementGeneratedEntity.m */,
+				DAB8D9C7150375C800CED3BC /* MPElementStoredEntity.h */,
+			);
+			path = MasterPassword;
+			sourceTree = "<group>";
+		};
+		DAB8D9B4150375C800CED3BC /* Mac */ = {
+			isa = PBXGroup;
+			children = (
+				DAB8D9D3150375D300CED3BC /* Supporting Files */,
+				DAB8D9B9150375C800CED3BC /* MainMenu.xib */,
+				DAB8D9BE150375C800CED3BC /* MPAppDelegate.h */,
+				DAB8D9BF150375C800CED3BC /* MPAppDelegate.m */,
+			);
+			path = Mac;
+			sourceTree = "<group>";
+		};
+		DAB8D9D3150375D300CED3BC /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DAB8D9B5150375C800CED3BC /* Credits.rtf */,
+				DAB8D9B7150375C800CED3BC /* InfoPlist.strings */,
+				DAB8D9BB150375C800CED3BC /* main.m */,
+				DAB8D9BC150375C800CED3BC /* MasterPassword-Info.plist */,
+				DAB8D9BD150375C800CED3BC /* MasterPassword-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DAB8D9DA1503940100CED3BC /* Pearl */ = {
+			isa = PBXGroup;
+			children = (
+				DAB8D9E31503972100CED3BC /* Pearl */,
+				DAB8DA081503972100CED3BC /* Pearl-Crypto */,
+				DAB8D9DB1503940100CED3BC /* Supporting Files */,
+			);
+			path = Pearl;
+			sourceTree = "<group>";
+		};
+		DAB8D9DB1503940100CED3BC /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DAB8D9DC1503940100CED3BC /* Pearl-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DAB8D9E31503972100CED3BC /* Pearl */ = {
+			isa = PBXGroup;
+			children = (
+				DAB8D9E41503972100CED3BC /* NSObject_PearlExport.h */,
+				DAB8D9E51503972100CED3BC /* NSObject_PearlExport.m */,
+				DAB8D9E61503972100CED3BC /* NSString_PearlNSArrayFormat.h */,
+				DAB8D9E71503972100CED3BC /* NSString_PearlNSArrayFormat.m */,
+				DAB8D9E81503972100CED3BC /* NSString_PearlSEL.h */,
+				DAB8D9E91503972100CED3BC /* NSString_PearlSEL.m */,
+				DAB8D9EA1503972100CED3BC /* Pearl.h */,
+				DAB8D9EB1503972100CED3BC /* PearlAbstractStrings.h */,
+				DAB8D9EC1503972100CED3BC /* PearlAbstractStrings.m */,
+				DAB8D9EF1503972100CED3BC /* PearlCodeUtils.h */,
+				DAB8D9F01503972100CED3BC /* PearlCodeUtils.m */,
+				DAB8D9F11503972100CED3BC /* PearlConfig.h */,
+				DAB8D9F21503972100CED3BC /* PearlConfig.m */,
+				DAB8D9F31503972100CED3BC /* PearlDeviceUtils.h */,
+				DAB8D9F41503972100CED3BC /* PearlDeviceUtils.m */,
+				DAB8D9F51503972100CED3BC /* PearlInfoPlist.h */,
+				DAB8D9F61503972100CED3BC /* PearlInfoPlist.m */,
+				DAB8D9F71503972100CED3BC /* PearlLogger.h */,
+				DAB8D9F81503972100CED3BC /* PearlLogger.m */,
+				DAB8D9F91503972100CED3BC /* PearlMathUtils.h */,
+				DAB8D9FA1503972100CED3BC /* PearlMathUtils.m */,
+				DAB8D9FB1503972100CED3BC /* PearlObjectUtils.h */,
+				DAB8D9FC1503972100CED3BC /* PearlObjectUtils.m */,
+				DAB8D9FD1503972100CED3BC /* PearlResettable.h */,
+				DAB8D9FE1503972100CED3BC /* PearlStrings.h */,
+				DAB8D9FF1503972100CED3BC /* PearlStrings.m */,
+				DAB8DA001503972100CED3BC /* PearlStringUtils.h */,
+				DAB8DA011503972100CED3BC /* PearlStringUtils.m */,
+				DAB8DA021503972100CED3BC /* PearlWebUtils.h */,
+				DAB8DA031503972100CED3BC /* PearlWebUtils.m */,
+				DAB8DA041503972100CED3BC /* README */,
+				DAB8DA051503972100CED3BC /* Resources */,
+			);
+			name = Pearl;
+			path = External/Pearl/Pearl;
+			sourceTree = SOURCE_ROOT;
+		};
+		DAB8DA051503972100CED3BC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DAB8DA061503972100CED3BC /* Pearl.strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		DAB8DA081503972100CED3BC /* Pearl-Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				DAB8DA091503972100CED3BC /* Pearl-Crypto.h */,
+				DAB8DA0A1503972100CED3BC /* PearlCryptUtils.h */,
+				DAB8DA0B1503972100CED3BC /* PearlCryptUtils.m */,
+				DAB8DA0C1503972100CED3BC /* PearlKeyChain.h */,
+				DAB8DA0D1503972100CED3BC /* PearlKeyChain.m */,
+				DAB8DA0E1503972100CED3BC /* PearlRSAKey.h */,
+				DAB8DA0F1503972100CED3BC /* PearlRSAKey.m */,
+				DAB8DA101503972100CED3BC /* PearlSCrypt.h */,
+				DAB8DA111503972100CED3BC /* PearlSCrypt.m */,
+				DAB8DA121503972100CED3BC /* README */,
+			);
+			name = "Pearl-Crypto";
+			path = "External/Pearl/Pearl-Crypto";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		DAB8D9D61503940100CED3BC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAB8DA131503972100CED3BC /* NSObject_PearlExport.h in Headers */,
+				DAB8DA151503972100CED3BC /* NSString_PearlNSArrayFormat.h in Headers */,
+				DAB8DA171503972100CED3BC /* NSString_PearlSEL.h in Headers */,
+				DAB8DA191503972100CED3BC /* Pearl.h in Headers */,
+				DAB8DA1A1503972100CED3BC /* PearlAbstractStrings.h in Headers */,
+				DAB8DA1E1503972100CED3BC /* PearlCodeUtils.h in Headers */,
+				DAB8DA201503972100CED3BC /* PearlConfig.h in Headers */,
+				DAB8DA221503972100CED3BC /* PearlDeviceUtils.h in Headers */,
+				DAB8DA241503972100CED3BC /* PearlInfoPlist.h in Headers */,
+				DAB8DA261503972100CED3BC /* PearlLogger.h in Headers */,
+				DAB8DA281503972100CED3BC /* PearlMathUtils.h in Headers */,
+				DAB8DA2A1503972100CED3BC /* PearlObjectUtils.h in Headers */,
+				DAB8DA2C1503972100CED3BC /* PearlResettable.h in Headers */,
+				DAB8DA2D1503972100CED3BC /* PearlStrings.h in Headers */,
+				DAB8DA2F1503972100CED3BC /* PearlStringUtils.h in Headers */,
+				DAB8DA311503972100CED3BC /* PearlWebUtils.h in Headers */,
+				DAB8DA331503972100CED3BC /* Pearl-Crypto.h in Headers */,
+				DAB8DA341503972100CED3BC /* PearlCryptUtils.h in Headers */,
+				DAB8DA361503972100CED3BC /* PearlKeyChain.h in Headers */,
+				DAB8DA381503972100CED3BC /* PearlRSAKey.h in Headers */,
+				DAB8DA3A1503972100CED3BC /* PearlSCrypt.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		DAB8D987150374AD00CED3BC /* MasterPassword */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DAB8D9A9150374AD00CED3BC /* Build configuration list for PBXNativeTarget "MasterPassword" */;
+			buildPhases = (
+				DAB8D984150374AD00CED3BC /* Sources */,
+				DAB8D985150374AD00CED3BC /* Frameworks */,
+				DAB8D986150374AD00CED3BC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MasterPassword;
+			productName = MasterPassword;
+			productReference = DAB8D988150374AD00CED3BC /* MasterPassword.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DAB8D9D71503940100CED3BC /* Pearl */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DAB8D9E01503940100CED3BC /* Build configuration list for PBXNativeTarget "Pearl" */;
+			buildPhases = (
+				DAB8D9D41503940100CED3BC /* Sources */,
+				DAB8D9D51503940100CED3BC /* Frameworks */,
+				DAB8D9D61503940100CED3BC /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Pearl;
+			productName = Pearl;
+			productReference = DAB8D9D81503940100CED3BC /* Pearl.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DAB8D97F150374AC00CED3BC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = MP;
+				LastUpgradeCheck = 0430;
+				ORGANIZATIONNAME = Lyndir;
+			};
+			buildConfigurationList = DAB8D982150374AC00CED3BC /* Build configuration list for PBXProject "MasterPassword-Mac" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = DAB8D97D150374AC00CED3BC;
+			productRefGroup = DAB8D989150374AD00CED3BC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DAB8D987150374AD00CED3BC /* MasterPassword */,
+				DAB8D9D71503940100CED3BC /* Pearl */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DAB8D986150374AD00CED3BC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAB8D9C9150375C800CED3BC /* Credits.rtf in Resources */,
+				DAB8D9CA150375C800CED3BC /* InfoPlist.strings in Resources */,
+				DAB8D9CB150375C800CED3BC /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DAB8D984150374AD00CED3BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAB8D9C8150375C800CED3BC /* MasterPassword.xcdatamodeld in Sources */,
+				DAB8D9CC150375C800CED3BC /* main.m in Sources */,
+				DAB8D9CE150375C800CED3BC /* MPAppDelegate.m in Sources */,
+				DAB8D9CF150375C800CED3BC /* MPElementStoredEntity.m in Sources */,
+				DAB8D9D0150375C800CED3BC /* MPTypes.m in Sources */,
+				DAB8D9D1150375C800CED3BC /* MPElementEntity.m in Sources */,
+				DAB8D9D2150375C800CED3BC /* MPElementGeneratedEntity.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DAB8D9D41503940100CED3BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAB8DA141503972100CED3BC /* NSObject_PearlExport.m in Sources */,
+				DAB8DA161503972100CED3BC /* NSString_PearlNSArrayFormat.m in Sources */,
+				DAB8DA181503972100CED3BC /* NSString_PearlSEL.m in Sources */,
+				DAB8DA1B1503972100CED3BC /* PearlAbstractStrings.m in Sources */,
+				DAB8DA1F1503972100CED3BC /* PearlCodeUtils.m in Sources */,
+				DAB8DA211503972100CED3BC /* PearlConfig.m in Sources */,
+				DAB8DA231503972100CED3BC /* PearlDeviceUtils.m in Sources */,
+				DAB8DA251503972100CED3BC /* PearlInfoPlist.m in Sources */,
+				DAB8DA271503972100CED3BC /* PearlLogger.m in Sources */,
+				DAB8DA291503972100CED3BC /* PearlMathUtils.m in Sources */,
+				DAB8DA2B1503972100CED3BC /* PearlObjectUtils.m in Sources */,
+				DAB8DA2E1503972100CED3BC /* PearlStrings.m in Sources */,
+				DAB8DA301503972100CED3BC /* PearlStringUtils.m in Sources */,
+				DAB8DA321503972100CED3BC /* PearlWebUtils.m in Sources */,
+				DAB8DA351503972100CED3BC /* PearlCryptUtils.m in Sources */,
+				DAB8DA371503972100CED3BC /* PearlKeyChain.m in Sources */,
+				DAB8DA391503972100CED3BC /* PearlRSAKey.m in Sources */,
+				DAB8DA3B1503972100CED3BC /* PearlSCrypt.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		DAB8D9B5150375C800CED3BC /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DAB8D9B6150375C800CED3BC /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		DAB8D9B7150375C800CED3BC /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DAB8D9B8150375C800CED3BC /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		DAB8D9B9150375C800CED3BC /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DAB8D9BA150375C800CED3BC /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		DAB8DA061503972100CED3BC /* Pearl.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DAB8DA071503972100CED3BC /* en */,
+			);
+			name = Pearl.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DAB8D9A7150374AD00CED3BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		DAB8D9A8150374AD00CED3BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		DAB8D9AA150374AD00CED3BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MasterPassword/Mac/MasterPassword-Prefix.pch";
+				INFOPLIST_FILE = "MasterPassword/Mac/MasterPassword-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		DAB8D9AB150374AD00CED3BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MasterPassword/Mac/MasterPassword-Prefix.pch";
+				INFOPLIST_FILE = "MasterPassword/Mac/MasterPassword-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		DAB8D9E11503940100CED3BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Pearl/Pearl-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DAB8D9E21503940100CED3BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Pearl/Pearl-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DAB8D982150374AC00CED3BC /* Build configuration list for PBXProject "MasterPassword-Mac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAB8D9A7150374AD00CED3BC /* Debug */,
+				DAB8D9A8150374AD00CED3BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DAB8D9A9150374AD00CED3BC /* Build configuration list for PBXNativeTarget "MasterPassword" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAB8D9AA150374AD00CED3BC /* Debug */,
+				DAB8D9AB150374AD00CED3BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DAB8D9E01503940100CED3BC /* Build configuration list for PBXNativeTarget "Pearl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAB8D9E11503940100CED3BC /* Debug */,
+				DAB8D9E21503940100CED3BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		DAB8D9B2150375C800CED3BC /* MasterPassword.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				DAB8D9B3150375C800CED3BC /* MasterPassword.xcdatamodel */,
+			);
+			currentVersion = DAB8D9B3150375C800CED3BC /* MasterPassword.xcdatamodel */;
+			path = MasterPassword.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = DAB8D97F150374AC00CED3BC /* Project object */;
+}

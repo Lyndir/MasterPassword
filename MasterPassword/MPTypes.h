@@ -58,6 +58,7 @@ typedef enum {
 #define MPTestFlightCheckpointSetKeyphraseLength        @"MPTestFlightCheckpointSetKeyphraseLength_%d"
 #endif
 
+#define MPNotificationStoreUpdated                      @"MPNotificationStoreUpdated"
 #define MPNotificationKeySet                            @"MPNotificationKeySet"
 #define MPNotificationKeyUnset                          @"MPNotificationKeyUnset"
 #define MPNotificationKeyForgotten                      @"MPNotificationKeyForgotten"

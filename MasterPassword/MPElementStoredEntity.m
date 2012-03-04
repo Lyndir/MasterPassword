@@ -53,7 +53,9 @@
         [PearlKeyChain addOrUpdateItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]
                            withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                            encryptedContent,                                (__bridge id)kSecValueData,
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
                                            kSecAttrAccessibleWhenUnlockedThisDeviceOnly,    (__bridge id)kSecAttrAccessible,
+#endif
                                            nil]];
         self.contentObject = nil;
     } else

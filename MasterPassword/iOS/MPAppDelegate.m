@@ -390,12 +390,17 @@
 
 #pragma mark - Core Data stack
 
-/**
- Returns the managed object context for the application.
- If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
- */
-- (NSManagedObjectContext *)managedObjectContext
-{
+- (NSManagedObjectModel *)managedObjectModel {
+
+    if (__managedObjectModel)
+        return __managedObjectModel;
+    
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"MasterPassword" withExtension:@"momd"];
+    return __managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+}
+
+- (NSManagedObjectContext *)managedObjectContext {
+    
     if (__managedObjectContext)
         return __managedObjectContext;
     
@@ -414,7 +419,7 @@
                                                               [__managedObjectContext mergeChangesFromContextDidSaveNotification:note];
                                                               
                                                               [[NSNotificationCenter defaultCenter] postNotification:
-                                                               [NSNotification notificationWithName:UIScreenModeDidChangeNotification
+                                                               [NSNotification notificationWithName:MPNotificationStoreUpdated
                                                                                              object:self userInfo:[note userInfo]]];
                                                           }];
                                                       }];
@@ -423,25 +428,8 @@
     return __managedObjectContext;
 }
 
-/**
- Returns the managed object model for the application.
- If the model doesn't already exist, it is created from the application's model.
- */
-- (NSManagedObjectModel *)managedObjectModel
-{
-    if (__managedObjectModel)
-        return __managedObjectModel;
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
     
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"MasterPassword" withExtension:@"momd"];
-    return __managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-}
-
-/**
- Returns the persistent store coordinator for the application.
- If the coordinator doesn't already exist, it is created and the application's store added to it.
- */
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
-{
     if (__persistentStoreCoordinator)
         return __persistentStoreCoordinator;
     
@@ -460,31 +448,7 @@
                                                                     URLByAppendingPathComponent:@"store"
                                                                     isDirectory:YES],               NSPersistentStoreUbiquitousContentURLKey,
                                                                    nil]
-                                                            error:&error])
-    {
-        /*
-         Replace this implementation with code to handle the error appropriately.
-         
-         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-         
-         Typical reasons for an error here include:
-         * The persistent store is not accessible;
-         * The schema for the persistent store is incompatible with current managed object model.
-         Check the error message to determine what the actual problem was.
-         
-         
-         If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writeable directory.
-         
-         If you encounter schema incompatibility errors during development, you can reduce their frequency by:
-         * Simply deleting the existing store:
-         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil]
-         
-         * Performing automatic lightweight migration by passing the following dictionary as the options parameter: 
-         [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption, [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
-         
-         Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
-         
-         */
+                                                            error:&error]) {
         err(@"Unresolved error %@, %@", error, [error userInfo]);
 #if DEBUG
         wrn(@"Deleted datastore: %@", storeURL);

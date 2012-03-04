@@ -10,8 +10,12 @@
 
 #define PEARL
 #define PEARL_CRYPTO
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #define PEARL_UIKIT
+#endif
 
 #import "Pearl.h"
 #import "Pearl-Crypto.h"
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import "Pearl-UIKit.h"
+#endif
