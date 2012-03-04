@@ -811,64 +811,6 @@ L4m3P4sSw0rD</string>
         <image name="ui_spinner.png" width="75" height="75"/>
         <image name="ui_textfield.png" width="158" height="34"/>
     </resources>
-    <classes>
-        <class className="MPGuideViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPGuideViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="close"/>
-                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
-            </relationships>
-        </class>
-        <class className="MPMainViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPMainViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="action:" candidateClass="UIBarButtonItem"/>
-                <relationship kind="action" name="closeAlert"/>
-                <relationship kind="action" name="copyContent"/>
-                <relationship kind="action" name="editPassword"/>
-                <relationship kind="action" name="incrementPasswordCounter"/>
-                <relationship kind="outlet" name="alertBody" candidateClass="UITextView"/>
-                <relationship kind="outlet" name="alertContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="alertTitle" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="contentContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="contentField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="contentTipBody" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="contentTipContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="contentTipEditIcon" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="helpContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="helpView" candidateClass="UIWebView"/>
-                <relationship kind="outlet" name="passwordCounter" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="passwordEdit" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="passwordIncrementer" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="searchResultsController" candidateClass="MPSearchDelegate"/>
-                <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="siteName" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="typeButton" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="MPSearchDelegate" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPSearchDelegate.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-                <relationship kind="outlet" name="searchDisplayController" candidateClass="UISearchDisplayController"/>
-                <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="MPTypeViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPTypeViewController.h"/>
-        </class>
-        <class className="MPUnlockViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPUnlockViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="changeMP"/>
-                <relationship kind="outlet" name="changeMPView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="field" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="lock" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="messageLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="spinner" candidateClass="UIImageView"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <nil key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

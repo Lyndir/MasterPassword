@@ -107,6 +107,15 @@
 		DA5BFA5B147E415C00F98B1E /* MPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5BFA5A147E415C00F98B1E /* MPAppDelegate.m */; };
 		DA5BFA64147E415C00F98B1E /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA5BFA62147E415C00F98B1E /* MasterPassword.xcdatamodeld */; };
 		DA5BFA67147E415C00F98B1E /* MPMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5BFA66147E415C00F98B1E /* MPMainViewController.m */; };
+		DA5BFCD01502CDF5005BFE16 /* Exo-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA5BFCBE1502CDF5005BFE16 /* Exo-Black.otf */; };
+		DA5BFCD21502CDF5005BFE16 /* Exo-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA5BFCC01502CDF5005BFE16 /* Exo-Bold.otf */; };
+		DA5BFCD41502CDF5005BFE16 /* Exo-DemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA5BFCC21502CDF5005BFE16 /* Exo-DemiBold.otf */; };
+		DA5BFCD61502CDF5005BFE16 /* Exo-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA5BFCC41502CDF5005BFE16 /* Exo-ExtraBold.otf */; };
+		DA5BFCD81502CDF5005BFE16 /* Exo-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA5BFCC61502CDF5005BFE16 /* Exo-ExtraLight.otf */; };
+		DA5BFCDA1502CDF5005BFE16 /* Exo-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA5BFCC81502CDF5005BFE16 /* Exo-Light.otf */; };
+		DA5BFCDC1502CDF5005BFE16 /* Exo-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA5BFCCA1502CDF5005BFE16 /* Exo-Medium.otf */; };
+		DA5BFCDE1502CDF5005BFE16 /* Exo-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA5BFCCC1502CDF5005BFE16 /* Exo-Regular.otf */; };
+		DA5BFCE01502CDF5005BFE16 /* Exo-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA5BFCCE1502CDF5005BFE16 /* Exo-Thin.otf */; };
 		DA5DB7A614BE4B19002DD256 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5DB7A514BE4B19002DD256 /* Default.png */; };
 		DA5DB7A814BE4B4B002DD256 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5DB7A714BE4B4B002DD256 /* Default@2x.png */; };
 		DA6556FE14D730B700841C99 /* guide_page_1.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6556F814D730B700841C99 /* guide_page_1.png */; };
@@ -935,6 +944,15 @@
 		DA5BFA63147E415C00F98B1E /* MasterPassword.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MasterPassword.xcdatamodel; sourceTree = "<group>"; };
 		DA5BFA65147E415C00F98B1E /* MPMainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPMainViewController.h; sourceTree = "<group>"; };
 		DA5BFA66147E415C00F98B1E /* MPMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPMainViewController.m; sourceTree = "<group>"; };
+		DA5BFCBE1502CDF5005BFE16 /* Exo-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Black.otf"; sourceTree = "<group>"; };
+		DA5BFCC01502CDF5005BFE16 /* Exo-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Bold.otf"; sourceTree = "<group>"; };
+		DA5BFCC21502CDF5005BFE16 /* Exo-DemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-DemiBold.otf"; sourceTree = "<group>"; };
+		DA5BFCC41502CDF5005BFE16 /* Exo-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-ExtraBold.otf"; sourceTree = "<group>"; };
+		DA5BFCC61502CDF5005BFE16 /* Exo-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-ExtraLight.otf"; sourceTree = "<group>"; };
+		DA5BFCC81502CDF5005BFE16 /* Exo-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Light.otf"; sourceTree = "<group>"; };
+		DA5BFCCA1502CDF5005BFE16 /* Exo-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Medium.otf"; sourceTree = "<group>"; };
+		DA5BFCCC1502CDF5005BFE16 /* Exo-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Regular.otf"; sourceTree = "<group>"; };
+		DA5BFCCE1502CDF5005BFE16 /* Exo-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Thin.otf"; sourceTree = "<group>"; };
 		DA5DB7A514BE4B19002DD256 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
 		DA5DB7A714BE4B4B002DD256 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
 		DA6556F814D730B700841C99 /* guide_page_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_page_1.png; sourceTree = "<group>"; };
@@ -2304,6 +2322,7 @@
 		DA5BFA51147E415C00F98B1E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				DA5BFCBC1502CDF5005BFE16 /* Fonts */,
 				DA566D3114F8EB0700A6EB2E /* Background */,
 				DA566D1E14F8EAF200A6EB2E /* Lock */,
 				DA8E8E4514DD7C1D0044257E /* logo-bare.png */,
@@ -2330,6 +2349,23 @@
 				DA007F5414B25EE100251337 /* ciphers.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DA5BFCBC1502CDF5005BFE16 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				DA5BFCBE1502CDF5005BFE16 /* Exo-Black.otf */,
+				DA5BFCC41502CDF5005BFE16 /* Exo-ExtraBold.otf */,
+				DA5BFCC01502CDF5005BFE16 /* Exo-Bold.otf */,
+				DA5BFCC21502CDF5005BFE16 /* Exo-DemiBold.otf */,
+				DA5BFCCA1502CDF5005BFE16 /* Exo-Medium.otf */,
+				DA5BFCCC1502CDF5005BFE16 /* Exo-Regular.otf */,
+				DA5BFCC81502CDF5005BFE16 /* Exo-Light.otf */,
+				DA5BFCC61502CDF5005BFE16 /* Exo-ExtraLight.otf */,
+				DA5BFCCE1502CDF5005BFE16 /* Exo-Thin.otf */,
+			);
+			name = Fonts;
+			path = Resources/Fonts;
 			sourceTree = "<group>";
 		};
 		DA6556F714D730B700841C99 /* Guide */ = {
@@ -3591,6 +3627,15 @@
 				DA67305314F98B6F004A189C /* icon_wrench.png in Resources */,
 				DA67305414F98B6F004A189C /* icon_wrench@2x.png in Resources */,
 				DADC288814FDAC0C00047FEB /* Pearl.strings in Resources */,
+				DA5BFCD01502CDF5005BFE16 /* Exo-Black.otf in Resources */,
+				DA5BFCD21502CDF5005BFE16 /* Exo-Bold.otf in Resources */,
+				DA5BFCD41502CDF5005BFE16 /* Exo-DemiBold.otf in Resources */,
+				DA5BFCD61502CDF5005BFE16 /* Exo-ExtraBold.otf in Resources */,
+				DA5BFCD81502CDF5005BFE16 /* Exo-ExtraLight.otf in Resources */,
+				DA5BFCDA1502CDF5005BFE16 /* Exo-Light.otf in Resources */,
+				DA5BFCDC1502CDF5005BFE16 /* Exo-Medium.otf in Resources */,
+				DA5BFCDE1502CDF5005BFE16 /* Exo-Regular.otf in Resources */,
+				DA5BFCE01502CDF5005BFE16 /* Exo-Thin.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
