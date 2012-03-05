@@ -59,7 +59,6 @@
 		DAB8D45E15036BCF00CED3BC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D43F15036BCF00CED3BC /* InfoPlist.strings */; };
 		DAB8D45F15036BCF00CED3BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D44115036BCF00CED3BC /* main.m */; };
 		DAB8D46015036BCF00CED3BC /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D44215036BCF00CED3BC /* MainStoryboard_iPhone.storyboard */; };
-		DAB8D46115036BCF00CED3BC /* MasterPassword-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D44315036BCF00CED3BC /* MasterPassword-Info.plist */; };
 		DAB8D46215036BCF00CED3BC /* MasterPassword.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D44515036BCF00CED3BC /* MasterPassword.entitlements */; };
 		DAB8D46315036BCF00CED3BC /* MPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D44715036BCF00CED3BC /* MPAppDelegate.m */; };
 		DAB8D46415036BCF00CED3BC /* MPConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D44915036BCF00CED3BC /* MPConfig.m */; };
@@ -731,8 +730,6 @@
 		DAFE4A1915039824003ABA7C /* Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45DE15039823003ABA7C /* Pearl.h */; };
 		DAFE4A1A15039824003ABA7C /* PearlAbstractStrings.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45DF15039823003ABA7C /* PearlAbstractStrings.h */; };
 		DAFE4A1B15039824003ABA7C /* PearlAbstractStrings.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45E015039823003ABA7C /* PearlAbstractStrings.m */; };
-		DAFE4A1C15039824003ABA7C /* PearlAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45E115039823003ABA7C /* PearlAppDelegate.h */; };
-		DAFE4A1D15039824003ABA7C /* PearlAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45E215039823003ABA7C /* PearlAppDelegate.m */; };
 		DAFE4A1E15039824003ABA7C /* PearlCodeUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45E315039823003ABA7C /* PearlCodeUtils.h */; };
 		DAFE4A1F15039824003ABA7C /* PearlCodeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45E415039823003ABA7C /* PearlCodeUtils.m */; };
 		DAFE4A2015039824003ABA7C /* PearlConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45E515039823003ABA7C /* PearlConfig.h */; };
@@ -1572,8 +1569,6 @@
 		DAFE45DE15039823003ABA7C /* Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pearl.h; sourceTree = "<group>"; };
 		DAFE45DF15039823003ABA7C /* PearlAbstractStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlAbstractStrings.h; sourceTree = "<group>"; };
 		DAFE45E015039823003ABA7C /* PearlAbstractStrings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlAbstractStrings.m; sourceTree = "<group>"; };
-		DAFE45E115039823003ABA7C /* PearlAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlAppDelegate.h; sourceTree = "<group>"; };
-		DAFE45E215039823003ABA7C /* PearlAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlAppDelegate.m; sourceTree = "<group>"; };
 		DAFE45E315039823003ABA7C /* PearlCodeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlCodeUtils.h; sourceTree = "<group>"; };
 		DAFE45E415039823003ABA7C /* PearlCodeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlCodeUtils.m; sourceTree = "<group>"; };
 		DAFE45E515039823003ABA7C /* PearlConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlConfig.h; sourceTree = "<group>"; };
@@ -2654,8 +2649,6 @@
 				DAFE45DE15039823003ABA7C /* Pearl.h */,
 				DAFE45DF15039823003ABA7C /* PearlAbstractStrings.h */,
 				DAFE45E015039823003ABA7C /* PearlAbstractStrings.m */,
-				DAFE45E115039823003ABA7C /* PearlAppDelegate.h */,
-				DAFE45E215039823003ABA7C /* PearlAppDelegate.m */,
 				DAFE45E315039823003ABA7C /* PearlCodeUtils.h */,
 				DAFE45E415039823003ABA7C /* PearlCodeUtils.m */,
 				DAFE45E515039823003ABA7C /* PearlConfig.h */,
@@ -2809,7 +2802,6 @@
 				DAFE4A1715039824003ABA7C /* NSString_PearlSEL.h in Headers */,
 				DAFE4A1915039824003ABA7C /* Pearl.h in Headers */,
 				DAFE4A1A15039824003ABA7C /* PearlAbstractStrings.h in Headers */,
-				DAFE4A1C15039824003ABA7C /* PearlAppDelegate.h in Headers */,
 				DAFE4A1E15039824003ABA7C /* PearlCodeUtils.h in Headers */,
 				DAFE4A2015039824003ABA7C /* PearlConfig.h in Headers */,
 				DAFE4A2215039824003ABA7C /* PearlDeviceUtils.h in Headers */,
@@ -3013,7 +3005,6 @@
 				DA95D5F814DF0B9F008D1B94 /* IASKSpecifierValuesView.xib in Resources */,
 				DAB8D45E15036BCF00CED3BC /* InfoPlist.strings in Resources */,
 				DAB8D46015036BCF00CED3BC /* MainStoryboard_iPhone.storyboard in Resources */,
-				DAB8D46115036BCF00CED3BC /* MasterPassword-Info.plist in Resources */,
 				DAB8D46215036BCF00CED3BC /* MasterPassword.entitlements in Resources */,
 				DAB8D46A15036BCF00CED3BC /* Settings.bundle in Resources */,
 				DAB8D6FA15036BF600CED3BC /* ui_background.png in Resources */,
@@ -3743,7 +3734,6 @@
 				DAFE4A1615039824003ABA7C /* NSString_PearlNSArrayFormat.m in Sources */,
 				DAFE4A1815039824003ABA7C /* NSString_PearlSEL.m in Sources */,
 				DAFE4A1B15039824003ABA7C /* PearlAbstractStrings.m in Sources */,
-				DAFE4A1D15039824003ABA7C /* PearlAppDelegate.m in Sources */,
 				DAFE4A1F15039824003ABA7C /* PearlCodeUtils.m in Sources */,
 				DAFE4A2115039824003ABA7C /* PearlConfig.m in Sources */,
 				DAFE4A2315039824003ABA7C /* PearlDeviceUtils.m in Sources */,
