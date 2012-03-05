@@ -7,7 +7,7 @@
 //
 
 #import "MPPasswordWindowController.h"
-#import "MPAppDelegate.h"
+#import "MPAppDelegate_Key.h"
 
 @interface MPPasswordWindowController ()
 
@@ -46,7 +46,7 @@
                                     fetchRequestFromTemplateWithName:@"MPElements"
                                     substitutionVariables:[NSDictionary dictionaryWithObjectsAndKeys:
                                                            query,                                   @"query",
-                                                           [MPAppDelegate get].keyPhraseHashHex,    @"mpHashHex",
+                                                           [MPAppDelegate get].keyHashHex,    @"mpHashHex",
                                                            nil]];
 
     return [NSArray arrayWithObjects:@"cow", @"milk", @"hippopotamus", nil];

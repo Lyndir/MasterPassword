@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		DA600BEB150420AC008E9AB6 /* MPPasswordWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA600BE9150420AC008E9AB6 /* MPPasswordWindowController.m */; };
 		DA600BEC150420AC008E9AB6 /* MPPasswordWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA600BEA150420AC008E9AB6 /* MPPasswordWindowController.xib */; };
+		DA600C2D150565FC008E9AB6 /* MPConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA600C2A150565FC008E9AB6 /* MPConfig.m */; };
+		DA600C2E150565FC008E9AB6 /* MPAppDelegate_Key.m in Sources */ = {isa = PBXBuildFile; fileRef = DA600C2B150565FC008E9AB6 /* MPAppDelegate_Key.m */; };
 		DAB8D98D150374AD00CED3BC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB8D98C150374AD00CED3BC /* Cocoa.framework */; };
 		DAB8D9C8150375C800CED3BC /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9B2150375C800CED3BC /* MasterPassword.xcdatamodeld */; };
 		DAB8D9C9150375C800CED3BC /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D9B5150375C800CED3BC /* Credits.rtf */; };
@@ -773,6 +775,10 @@
 		DA600BE8150420AC008E9AB6 /* MPPasswordWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindowController.h; sourceTree = "<group>"; };
 		DA600BE9150420AC008E9AB6 /* MPPasswordWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordWindowController.m; sourceTree = "<group>"; };
 		DA600BEA150420AC008E9AB6 /* MPPasswordWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPPasswordWindowController.xib; sourceTree = "<group>"; };
+		DA600C29150565FC008E9AB6 /* MPConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPConfig.h; path = MasterPassword/MPConfig.h; sourceTree = SOURCE_ROOT; };
+		DA600C2A150565FC008E9AB6 /* MPConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPConfig.m; path = MasterPassword/MPConfig.m; sourceTree = SOURCE_ROOT; };
+		DA600C2B150565FC008E9AB6 /* MPAppDelegate_Key.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPAppDelegate_Key.m; path = MasterPassword/MPAppDelegate_Key.m; sourceTree = SOURCE_ROOT; };
+		DA600C2C150565FC008E9AB6 /* MPAppDelegate_Key.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPAppDelegate_Key.h; path = MasterPassword/MPAppDelegate_Key.h; sourceTree = SOURCE_ROOT; };
 		DAB8D988150374AD00CED3BC /* MasterPassword.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MasterPassword.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAB8D98C150374AD00CED3BC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		DAB8D98F150374AD00CED3BC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -2013,6 +2019,10 @@
 			children = (
 				DAB8D9B2150375C800CED3BC /* MasterPassword.xcdatamodeld */,
 				DAB8D9B4150375C800CED3BC /* Mac */,
+				DA600C2B150565FC008E9AB6 /* MPAppDelegate_Key.m */,
+				DA600C2C150565FC008E9AB6 /* MPAppDelegate_Key.h */,
+				DA600C29150565FC008E9AB6 /* MPConfig.h */,
+				DA600C2A150565FC008E9AB6 /* MPConfig.m */,
 				DAB8D9C0150375C800CED3BC /* MPElementStoredEntity.m */,
 				DAB8D9C1150375C800CED3BC /* MPTypes.m */,
 				DAB8D9C2150375C800CED3BC /* MPElementEntity.h */,
@@ -4163,6 +4173,8 @@
 				DAB8D9D1150375C800CED3BC /* MPElementEntity.m in Sources */,
 				DAB8D9D2150375C800CED3BC /* MPElementGeneratedEntity.m in Sources */,
 				DA600BEB150420AC008E9AB6 /* MPPasswordWindowController.m in Sources */,
+				DA600C2D150565FC008E9AB6 /* MPConfig.m in Sources */,
+				DA600C2E150565FC008E9AB6 /* MPAppDelegate_Key.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

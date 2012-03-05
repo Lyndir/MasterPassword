@@ -3824,6 +3824,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TESTFLIGHT=1",
 					"DEBUG=1",
 					"$(inherited)",
 				);
@@ -3847,6 +3848,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TESTFLIGHT=1",
+					"$(inherited)",
+				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -3917,7 +3922,7 @@
 			};
 			name = Release;
 		};
-		DA95D60914DF3F3B008D1B94 /* Production */ = {
+		DA95D60914DF3F3B008D1B94 /* AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -3925,7 +3930,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = "PRODUCTION=1";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"APPSTORE=1",
+					"$(inherited)",
+				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -3938,9 +3946,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Production;
+			name = AppStore;
 		};
-		DA95D60A14DF3F3B008D1B94 /* Production */ = {
+		DA95D60A14DF3F3B008D1B94 /* AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -3956,9 +3964,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
-			name = Production;
+			name = AppStore;
 		};
-		DA95D60B14DF3F3B008D1B94 /* Production */ = {
+		DA95D60B14DF3F3B008D1B94 /* AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -3970,9 +3978,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = Production;
+			name = AppStore;
 		};
-		DA95D60C14DF3F3B008D1B94 /* Production */ = {
+		DA95D60C14DF3F3B008D1B94 /* AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -3982,9 +3990,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = Production;
+			name = AppStore;
 		};
-		DA95D60D14DF3F3B008D1B94 /* Production */ = {
+		DA95D60D14DF3F3B008D1B94 /* AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -3994,9 +4002,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = Production;
+			name = AppStore;
 		};
-		DA95D60E14DF3F3B008D1B94 /* Production */ = {
+		DA95D60E14DF3F3B008D1B94 /* AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/InAppSettingsKit.dst;
@@ -4004,7 +4012,7 @@
 				PRODUCT_NAME = InAppSettingsKit;
 				SKIP_INSTALL = YES;
 			};
-			name = Production;
+			name = AppStore;
 		};
 		DAC632661486805C0075AEA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -4090,7 +4098,7 @@
 			buildConfigurations = (
 				DA5BFA6B147E415C00F98B1E /* Debug */,
 				DA5BFA6C147E415C00F98B1E /* Release */,
-				DA95D60914DF3F3B008D1B94 /* Production */,
+				DA95D60914DF3F3B008D1B94 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4100,7 +4108,7 @@
 			buildConfigurations = (
 				DA5BFA6E147E415C00F98B1E /* Debug */,
 				DA5BFA6F147E415C00F98B1E /* Release */,
-				DA95D60A14DF3F3B008D1B94 /* Production */,
+				DA95D60A14DF3F3B008D1B94 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4110,7 +4118,7 @@
 			buildConfigurations = (
 				DA95D5A514DF063C008D1B94 /* Debug */,
 				DA95D5A614DF063C008D1B94 /* Release */,
-				DA95D60E14DF3F3B008D1B94 /* Production */,
+				DA95D60E14DF3F3B008D1B94 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4120,7 +4128,7 @@
 			buildConfigurations = (
 				DAC632661486805C0075AEA5 /* Debug */,
 				DAC632671486805C0075AEA5 /* Release */,
-				DA95D60C14DF3F3B008D1B94 /* Production */,
+				DA95D60C14DF3F3B008D1B94 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4130,7 +4138,7 @@
 			buildConfigurations = (
 				DAC63275148680650075AEA5 /* Debug */,
 				DAC63276148680650075AEA5 /* Release */,
-				DA95D60D14DF3F3B008D1B94 /* Production */,
+				DA95D60D14DF3F3B008D1B94 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -4140,7 +4148,7 @@
 			buildConfigurations = (
 				DAC77CB5148291A600BCF976 /* Debug */,
 				DAC77CB6148291A600BCF976 /* Release */,
-				DA95D60B14DF3F3B008D1B94 /* Production */,
+				DA95D60B14DF3F3B008D1B94 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

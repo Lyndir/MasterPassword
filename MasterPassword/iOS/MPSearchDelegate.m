@@ -54,7 +54,7 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointCancelSearch];
 #endif
     
@@ -302,7 +302,7 @@
                 MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
                 [self.fetchedResultsController.managedObjectContext deleteObject:element];
                 
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
                 [TestFlight passCheckpoint:MPTestFlightCheckpointDeleteElement];
 #endif
             }];

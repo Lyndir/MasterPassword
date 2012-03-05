@@ -216,7 +216,7 @@
 
 - (void)setHelpChapter:(NSString *)chapter {
     
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointHelpChapter, chapter]];
 #endif
     
@@ -280,7 +280,7 @@
     
     [self showContentTip:@"Copied!" withIcon:nil];
     
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointCopyToPasteboard];
 #endif
 }
@@ -295,7 +295,7 @@
         ++((MPElementGeneratedEntity *) self.activeElement).counter;
     }];
     
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointIncrementPasswordCounter];
 #endif
 }
@@ -323,7 +323,7 @@
         [self.contentField becomeFirstResponder];
     }
     
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointEditPassword];
 #endif
 }
@@ -336,7 +336,7 @@
         self.alertBody.text = nil;
     }];
     
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointCloseAlert];
 #endif
 }
@@ -365,7 +365,7 @@
                              [self.navigationController pushViewController:settingsVC animated:YES];
                              break;
                          }
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
                          case 4:
                              [TestFlight openFeedbackView];
                              break;
@@ -380,13 +380,13 @@
                          }
                      }
                      
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
                      [TestFlight passCheckpoint:MPTestFlightCheckpointAction];
 #endif
                  } cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil
                        otherTitles:
      [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings",
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
      @"Feedback",
 #endif
      @"Sign Out",
@@ -418,7 +418,7 @@
         
         self.activeElement.type = type;
         
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
         [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointSelectType, NSStringFromMPElementType(type)]];
 #endif
         
@@ -436,7 +436,7 @@
         [self.searchDisplayController setActive:NO animated:YES];
         self.searchDisplayController.searchBar.text = self.activeElement.name;
         
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
         [TestFlight passCheckpoint:MPTestFlightCheckpointSelectElement];
 #endif
     }
@@ -474,7 +474,7 @@
  navigationType:(UIWebViewNavigationType)navigationType {
     
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
         [TestFlight passCheckpoint:MPTestFlightCheckpointExternalLink];
 #endif
         

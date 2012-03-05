@@ -40,7 +40,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
     @try {
         [TestFlight takeOff:@"bd44885deee7adce0645ce8e5498d80a_NDQ5NDQyMDExLTEyLTAyIDExOjM1OjQ4LjQ2NjM4NA"];
         [TestFlight setOptions:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -124,7 +124,7 @@
                                                           [self loadKey:YES];
                                                   }];
     
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
     [PearlAlert showAlertWithTitle:@"Welcome, tester!" message:
      @"Thank you for taking the time to test Master Password.\n\n"
      @"Please provide any feedback, however minor it may seem, via the Feedback action item accessible from the top right.\n\n"
@@ -149,7 +149,7 @@
     else
         [self loadKey:NO];
     
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointActivated];
 #endif
 }
@@ -158,7 +158,7 @@
     
     [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
     
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointShowGuide];
 #endif
 }
@@ -193,7 +193,7 @@
     if (![[MPiOSConfig get].rememberKey boolValue])
         [self updateKey:nil];
     
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointDeactivated];
 #endif
 }
@@ -202,7 +202,7 @@
     
     [self saveContext];
     
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointTerminated];
 #endif
 }
@@ -298,7 +298,7 @@
         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];        
 #endif
         
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
         [TestFlight passCheckpoint:MPTestFlightCheckpointStoreIncompatible];
 #endif
         

@@ -32,7 +32,7 @@ typedef enum {
     MPElementTypeStoredDevicePrivate    = MPElementTypeClassStored      | 0x02,
 } MPElementType;
 
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
 #define MPTestFlightCheckpointAction                    @"MPTestFlightCheckpointAction"
 #define MPTestFlightCheckpointHelpChapter               @"MPTestFlightCheckpointHelpChapter_%@"
 #define MPTestFlightCheckpointCopyToPasteboard          @"MPTestFlightCheckpointCopyToPasteboard"

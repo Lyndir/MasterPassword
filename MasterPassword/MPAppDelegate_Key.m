@@ -6,10 +6,8 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
+#import "MPConfig.h"
 #import "MPAppDelegate_Key.h"
-
-#import "MPMainViewController.h"
-#import "IASKSettingsReader.h"
 
 @implementation MPAppDelegate (Key)
 
@@ -44,7 +42,7 @@ static NSDictionary *keyHashQuery() {
     [PearlKeyChain deleteItemForQuery:keyHashQuery()];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyForgotten object:self];
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointMPForgotten];
 #endif
 }
@@ -56,7 +54,7 @@ static NSDictionary *keyHashQuery() {
 
 - (void)loadStoredKey {
     
-    if ([[MPiOSConfig get].storeKey boolValue]) {
+    if ([[MPConfig get].storeKey boolValue]) {
         // Key is stored in keychain.  Load it.
         dbg(@"Loading key from key chain.");
         [self updateKey:[PearlKeyChain dataOfItemForQuery:keyQuery()]];
@@ -65,15 +63,21 @@ static NSDictionary *keyHashQuery() {
         // Key should not be stored in keychain.  Delete it.
         dbg(@"Deleting key from key chain.");
         [PearlKeyChain deleteItemForQuery:keyQuery()];
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
         [TestFlight passCheckpoint:MPTestFlightCheckpointMPUnstored];
 #endif
     }
 }
 
 + (MPAppDelegate *)get {
-    
-    return (MPAppDelegate *)[super get];
+
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+    return (MPAppDelegate *)[UIApplication sharedApplication].delegate;
+#elif defined (__MAC_OS_X_VERSION_MIN_REQUIRED)
+    return (MPAppDelegate *)[NSApplication sharedApplication].delegate;
+#else
+#error Unsupported OS.
+#endif
 }
 
 - (BOOL)tryMasterPassword:(NSString *)tryPassword {
@@ -92,13 +96,13 @@ static NSDictionary *keyHashQuery() {
         if (![keyHash isEqual:tryKeyHash]) {
             dbg(@"Key phrase hash mismatch. Expected: %@, answer: %@.", keyHash, tryKeyHash);
             
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
             [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
 #endif
             return NO;
         }
     
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointMPAsked];
 #endif
     
@@ -123,18 +127,22 @@ static NSDictionary *keyHashQuery() {
         [PearlKeyChain addOrUpdateItemForQuery:keyHashQuery()
                                 withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                 self.keyHash,                                      (__bridge id)kSecValueData,
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
                                                 kSecAttrAccessibleWhenUnlocked,                          (__bridge id)kSecAttrAccessible,
+#endif
                                                 nil]];
-        if ([[MPiOSConfig get].storeKey boolValue]) {
+        if ([[MPConfig get].storeKey boolValue]) {
             dbg(@"Storing key in key chain.");
             [PearlKeyChain addOrUpdateItemForQuery:keyQuery()
                                     withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                     key,  (__bridge id)kSecValueData,
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
                                                     kSecAttrAccessibleWhenUnlocked,                      (__bridge id)kSecAttrAccessible,
+#endif
                                                     nil]];
         }
         
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
         [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointSetKeyphraseLength, key.length]];
 #endif
     }

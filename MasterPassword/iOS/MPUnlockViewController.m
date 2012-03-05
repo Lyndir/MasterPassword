@@ -214,7 +214,7 @@ typedef enum {
                      
                      [[MPAppDelegate get] loadKey:YES];
                      
-#ifndef PRODUCTION
+#ifdef TESTFLIGHT
                      [TestFlight passCheckpoint:MPTestFlightCheckpointMPChanged];
 #endif
                  }

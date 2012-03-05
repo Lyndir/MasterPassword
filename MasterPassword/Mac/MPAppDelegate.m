@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import "MPAppDelegate.h"
+#import "MPAppDelegate_Key.h"
 
 @interface MPAppDelegate ()
 
@@ -20,12 +20,10 @@
 @synthesize managedObjectModel = __managedObjectModel;
 @synthesize managedObjectContext = __managedObjectContext;
 @synthesize passwordWindow;
-@synthesize keyPhrase;
 
-+ (MPAppDelegate *)get {
-    
-    return (MPAppDelegate *)[NSApplication sharedApplication].delegate;
-}
+@synthesize key;
+@synthesize keyHash;
+@synthesize keyHashHex;
 
 + (NSManagedObjectContext *)managedObjectContext {
     
@@ -52,11 +50,6 @@
     
     NSURL *appSupportURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] lastObject];
     return [appSupportURL URLByAppendingPathComponent:@"com.lyndir.lhunath.MasterPassword"];
-}
-
-- (NSData *)keyPhraseWithLength:(NSUInteger)keyLength {
-    
-    return [self.keyPhrase subdataWithRange:NSMakeRange(0, MIN(keyLength, self.keyPhrase.length))];
 }
 
 #pragma mark - Core Data stack

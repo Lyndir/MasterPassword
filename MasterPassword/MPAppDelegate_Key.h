@@ -6,7 +6,6 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "MPAppDelegate.h"
 
 @interface MPAppDelegate ()
