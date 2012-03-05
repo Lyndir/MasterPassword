@@ -7,7 +7,7 @@
 //
 
 #import "MPMainViewController.h"
-#import "MPAppDelegate.h"
+#import "MPAppDelegate_Key.h"
 #import "MPElementGeneratedEntity.h"
 #import "MPElementStoredEntity.h"
 #import "IASKAppSettingsViewController.h"
@@ -75,7 +75,7 @@
             self.searchTipContainer.alpha = 1;
         }];
     
-    [self setHelpHidden:[[MPConfig get].helpHidden boolValue] animated:animated];
+    [self setHelpHidden:[[MPiOSConfig get].helpHidden boolValue] animated:animated];
     [self updateAnimated:animated];
 }
 
@@ -109,14 +109,14 @@
     
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
-                                                      if (![MPAppDelegate get].keyPhrase) {
+                                                      if (![MPAppDelegate get].key) {
                                                           self.activeElement = nil;
                                                           [self updateAnimated:NO];
                                                       }
                                                   }];
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
-                                                      if (![MPAppDelegate get].keyPhrase) {
+                                                      if (![MPAppDelegate get].key) {
                                                           self.activeElement = nil;
                                                           [self updateAnimated:NO];
                                                       }
@@ -205,11 +205,11 @@
         if (hidden) {
             self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, self.view.bounds.size.height - 44);
             self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, self.view.bounds.size.height);
-            [MPConfig get].helpHidden = [NSNumber numberWithBool:YES];
+            [MPiOSConfig get].helpHidden = [NSNumber numberWithBool:YES];
         } else {
             self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 175);
             self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, 216);
-            [MPConfig get].helpHidden = [NSNumber numberWithBool:NO];
+            [MPiOSConfig get].helpHidden = [NSNumber numberWithBool:NO];
         }
     }];
 }
@@ -373,8 +373,11 @@
 #else
                          case 4:
 #endif
+                         {
                              [[MPAppDelegate get] signOut];
+                             [[MPAppDelegate get] loadKey:YES];
                              break;
+                         }
                      }
                      
 #ifndef PRODUCTION

@@ -13,11 +13,7 @@
 @property (readonly, strong, nonatomic) NSManagedObjectContext          *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel            *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator    *persistentStoreCoordinator;
-@property (readonly, strong, nonatomic) NSData                          *keyPhrase;
-@property (readonly, strong, nonatomic) NSData                          *keyPhraseHash;
-@property (readonly, strong, nonatomic) NSString                        *keyPhraseHashHex;
 
-+ (MPAppDelegate *)get;
 + (NSManagedObjectModel *)managedObjectModel;
 + (NSManagedObjectContext *)managedObjectContext;
 
@@ -25,10 +21,6 @@
 - (NSURL *)applicationDocumentsDirectory;
 
 - (void)showGuide;
-- (void)loadKeyPhrase:(BOOL)animated;
-- (void)signOut;
-- (void)forgetKeyPhrase;
-- (NSData *)keyPhraseWithLength:(NSUInteger)keyLength;
-- (BOOL)tryMasterPassword:(NSString *)tryPassword;
+- (void)loadKey:(BOOL)animated;
 
 @end

@@ -7,21 +7,14 @@
 //
 
 #import "MPAppDelegate.h"
+#import "MPAppDelegate_Key.h"
 
 #import "MPMainViewController.h"
 #import "IASKSettingsReader.h"
 
 @interface MPAppDelegate ()
 
-@property (strong, nonatomic) NSData                                    *keyPhrase;
-@property (strong, nonatomic) NSData                                    *keyPhraseHash;
-@property (strong, nonatomic) NSString                                  *keyPhraseHashHex;
-
-+ (NSDictionary *)keyPhraseQuery;
-+ (NSDictionary *)keyPhraseHashQuery;
-
-- (void)loadStoredKeyPhrase;
-- (void)askKeyPhrase:(BOOL)animated;
+- (void)askKey:(BOOL)animated;
 
 @end
 
@@ -31,42 +24,18 @@
 @synthesize managedObjectContext = __managedObjectContext;
 @synthesize persistentStoreCoordinator = __persistentStoreCoordinator;
 
-@synthesize keyPhrase = _keyPhrase;
-@synthesize keyPhraseHash = _keyPhraseHash;
-@synthesize keyPhraseHashHex = _keyPhraseHashHex;
+@synthesize key;
+@synthesize keyHash;
+@synthesize keyHashHex;
 
 + (void)initialize {
 
-    [MPConfig get];
+    [MPiOSConfig get];
 
 #ifdef DEBUG
     [PearlLogger get].autoprintLevel = PearlLogLevelTrace;
     [NSClassFromString(@"WebView") performSelector:@selector(_enableRemoteInspector)];
 #endif
-}
-
-+ (NSDictionary *)keyPhraseQuery {
-    
-    static NSDictionary *MPKeyPhraseQuery = nil;
-    if (!MPKeyPhraseQuery)
-        MPKeyPhraseQuery = [PearlKeyChain createQueryForClass:kSecClassGenericPassword
-                                              attributes:[NSDictionary dictionaryWithObject:@"MasterPassword"
-                                                                                     forKey:(__bridge id)kSecAttrService]
-                                                 matches:nil];
-    
-    return MPKeyPhraseQuery;
-}
-
-+ (NSDictionary *)keyPhraseHashQuery {
-    
-    static NSDictionary *MPKeyPhraseHashQuery = nil;
-    if (!MPKeyPhraseHashQuery)
-        MPKeyPhraseHashQuery = [PearlKeyChain createQueryForClass:kSecClassGenericPassword
-                                                  attributes:[NSDictionary dictionaryWithObject:@"MasterPasswordHash"
-                                                                                         forKey:(__bridge id)kSecAttrService]
-                                                     matches:nil];
-    
-    return MPKeyPhraseHashQuery;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -145,14 +114,14 @@
     
     [[NSNotificationCenter defaultCenter] addObserverForName:kIASKAppSettingChanged object:nil queue:nil
                                                   usingBlock:^(NSNotification *note) {
-                                                      if ([NSStringFromSelector(@selector(storeKeyPhrase))
+                                                      if ([NSStringFromSelector(@selector(storeKey))
                                                            isEqualToString:[note.object description]]) {
-                                                          self.keyPhrase = self.keyPhrase;
-                                                          [self loadKeyPhrase:YES];
+                                                          [self updateKey:self.key];
+                                                          [self loadKey:YES];
                                                       }
-                                                      if ([NSStringFromSelector(@selector(forgetKeyPhrase))
+                                                      if ([NSStringFromSelector(@selector(forgetKey))
                                                            isEqualToString:[note.object description]])
-                                                          [self loadKeyPhrase:YES];
+                                                          [self loadKey:YES];
                                                   }];
     
 #ifndef PRODUCTION
@@ -175,10 +144,10 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
-    if ([[MPConfig get].showQuickStart boolValue])
+    if ([[MPiOSConfig get].showQuickStart boolValue])
         [self showGuide];
     else
-        [self loadKeyPhrase:NO];
+        [self loadKey:NO];
     
 #ifndef PRODUCTION
     [TestFlight passCheckpoint:MPTestFlightCheckpointActivated];
@@ -194,78 +163,21 @@
 #endif
 }
 
-- (void)loadKeyPhrase:(BOOL)animated {
+- (void)loadKey:(BOOL)animated {
     
-    if (self.keyPhrase)
+    if (self.key)
         return;
     
-    [self loadStoredKeyPhrase];
-    if (!self.keyPhrase) {
-        // Key phrase is not known.  Ask user to set/specify it.
-        dbg(@"Key phrase not known.  Will ask user.");
-        [self askKeyPhrase:animated];
+    [self loadStoredKey];
+    if (!self.key) {
+        // Key is not known.  Ask user to set/specify it.
+        dbg(@"Key not known.  Will ask user.");
+        [self askKey:animated];
         return;
     }
 }
 
-- (void)forgetKeyPhrase {
-    
-    dbg(@"Forgetting key phrase.");
-    [PearlAlert showAlertWithTitle:@"Changing Master Password"
-                                    message:
-     @"This will allow you to log in with a different master password.\n\n"
-     @"Note that you will only see the sites and passwords for the master password you log in with.\n"
-     @"If you log in with a different master password, your current sites will be unavailable.\n\n"
-     @"You can always change back to your current master password later.\n"
-     @"Your current sites and passwords will then become available again."
-                                  viewStyle:UIAlertViewStyleDefault
-                          tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                              if (buttonIndex != [alert cancelButtonIndex]) {
-                                  // Key phrase reset.  Delete it.
-                                  dbg(@"Deleting master key phrase and hash from key chain.");
-                                  [PearlKeyChain deleteItemForQuery:[MPAppDelegate keyPhraseQuery]];
-                                  [PearlKeyChain deleteItemForQuery:[MPAppDelegate keyPhraseHashQuery]];
-                                  
-                                  [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyForgotten object:self];
-#ifndef PRODUCTION
-                                  [TestFlight passCheckpoint:MPTestFlightCheckpointMPForgotten];
-#endif
-                              }
-                              
-                              [self loadKeyPhrase:YES];
-                              
-#ifndef PRODUCTION
-                              [TestFlight passCheckpoint:MPTestFlightCheckpointMPChanged];
-#endif
-                          }
-                                cancelTitle:[PearlStrings get].commonButtonAbort
-                                otherTitles:[PearlStrings get].commonButtonContinue, nil];
-}
-
-- (void)signOut {
-    
-    self.keyPhrase = nil;
-    [self loadKeyPhrase:YES];
-}
-
-- (void)loadStoredKeyPhrase {
-    
-    if ([[MPConfig get].storeKeyPhrase boolValue]) {
-        // Key phrase is stored in keychain.  Load it.
-        dbg(@"Loading master key phrase from key chain.");
-        self.keyPhrase = [PearlKeyChain dataOfItemForQuery:[MPAppDelegate keyPhraseQuery]];
-        dbg(@" -> Master key phrase %@.", self.keyPhrase? @"found": @"NOT found");
-    } else {
-        // Key phrase should not be stored in keychain.  Delete it.
-        dbg(@"Deleting master key phrase from key chain.");
-        [PearlKeyChain deleteItemForQuery:[MPAppDelegate keyPhraseQuery]];
-#ifndef PRODUCTION
-        [TestFlight passCheckpoint:MPTestFlightCheckpointMPUnstored];
-#endif
-    }
-}
-
-- (void)askKeyPhrase:(BOOL)animated {
+- (void)askKey:(BOOL)animated {
 
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.navigationController presentViewController:
@@ -278,8 +190,8 @@
     
     [self saveContext];
     
-    if (![[MPConfig get].rememberKeyPhrase boolValue])
-        self.keyPhrase = nil;
+    if (![[MPiOSConfig get].rememberKey boolValue])
+        [self updateKey:nil];
     
 #ifndef PRODUCTION
     [TestFlight passCheckpoint:MPTestFlightCheckpointDeactivated];
@@ -302,12 +214,12 @@
 
 + (NSManagedObjectContext *)managedObjectContext {
     
-    return [(MPAppDelegate *)[UIApplication sharedApplication].delegate managedObjectContext];
+    return [[self get] managedObjectContext];
 }
 
 + (NSManagedObjectModel *)managedObjectModel {
     
-    return [(MPAppDelegate *)[UIApplication sharedApplication].delegate managedObjectModel];
+    return [[self get] managedObjectModel];
 }
 
 - (void)saveContext {
@@ -317,75 +229,6 @@
         if ([self.managedObjectContext hasChanges] && ![self.managedObjectContext save:&error])
             err(@"Unresolved error %@", error);
     }];
-}
-
-- (BOOL)tryMasterPassword:(NSString *)tryPassword {
-    
-    NSData *keyPhraseHash = [PearlKeyChain dataOfItemForQuery:[MPAppDelegate keyPhraseHashQuery]];
-    dbg(@"Key phrase hash %@.", keyPhraseHash? @"known": @"NOT known");
-    
-    if (![tryPassword length])
-        return NO;
-    
-    NSData *tryKeyPhrase = keyPhraseForPassword(tryPassword);
-    NSData *tryKeyPhraseHash = keyPhraseHashForKeyPhrase(tryKeyPhrase);
-    if (keyPhraseHash)
-        // A key phrase hash is known -> a key phrase is set.
-        // Make sure the user's entered key phrase matches it.
-        if (![keyPhraseHash isEqual:tryKeyPhraseHash]) {
-            dbg(@"Key phrase hash mismatch. Expected: %@, answer: %@.", keyPhraseHash, tryKeyPhraseHash);
-            
-#ifndef PRODUCTION
-            [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
-#endif
-            return NO;
-        }
-    
-#ifndef PRODUCTION
-    [TestFlight passCheckpoint:MPTestFlightCheckpointMPAsked];
-#endif
-    
-    self.keyPhrase = tryKeyPhrase;
-    return YES;
-}
-
-- (void)setKeyPhrase:(NSData *)keyPhrase {
-    
-    _keyPhrase = keyPhrase;
-    
-    if (keyPhrase)
-        [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeySet object:self];
-    else
-        [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyUnset object:self];
-    
-    if (keyPhrase) {
-        self.keyPhraseHash = keyPhraseHashForKeyPhrase(keyPhrase);
-        self.keyPhraseHashHex = [self.keyPhraseHash encodeHex];
-        
-        dbg(@"Updating master key phrase hash to: %@.", self.keyPhraseHashHex);
-        [PearlKeyChain addOrUpdateItemForQuery:[MPAppDelegate keyPhraseHashQuery]
-                           withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                           self.keyPhraseHash,                                      (__bridge id)kSecValueData,
-                                           kSecAttrAccessibleWhenUnlocked,                          (__bridge id)kSecAttrAccessible,
-                                           nil]];
-        if ([[MPConfig get].storeKeyPhrase boolValue]) {
-            dbg(@"Storing master key phrase in key chain.");
-            [PearlKeyChain addOrUpdateItemForQuery:[MPAppDelegate keyPhraseQuery]
-                               withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                               keyPhrase,  (__bridge id)kSecValueData,
-                                               kSecAttrAccessibleWhenUnlocked,                      (__bridge id)kSecAttrAccessible,
-                                               nil]];
-        }
-        
-#ifndef PRODUCTION
-        [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointSetKeyphraseLength, _keyPhrase.length]];
-#endif
-    }
-}
-
-- (NSData *)keyPhraseWithLength:(NSUInteger)keyLength {
-    
-    return [self.keyPhrase subdataWithRange:NSMakeRange(0, MIN(keyLength, self.keyPhrase.length))];
 }
 
 #pragma mark - Core Data stack

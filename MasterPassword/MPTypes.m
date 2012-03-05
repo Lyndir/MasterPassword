@@ -17,18 +17,18 @@
 #define MP_dkLen    64
 #define MP_hash     PearlDigestSHA256
 
-NSData *keyPhraseForPassword(NSString *password) {
+NSData *keyForPassword(NSString *password) {
     
     return [PearlSCrypt deriveKeyWithLength:MP_dkLen fromPassword:[password dataUsingEncoding:NSUTF8StringEncoding]
                              usingSalt:MP_salt N:MP_N r:MP_r p:MP_p];
 }
-NSData *keyPhraseHashForPassword(NSString *password) {
+NSData *keyHashForPassword(NSString *password) {
     
-    return keyPhraseHashForKeyPhrase(keyPhraseForPassword(password));
+    return keyHashForKey(keyForPassword(password));
 }
-NSData *keyPhraseHashForKeyPhrase(NSData *keyPhrase) {
+NSData *keyHashForKey(NSData *key) {
     
-    return [keyPhrase hashWith:MP_hash];
+    return [key hashWith:MP_hash];
 }
 NSString *NSStringFromMPElementType(MPElementType type) {
     
@@ -100,7 +100,7 @@ NSString *ClassNameFromMPElementType(MPElementType type) {
 }
 
 static NSDictionary *MPTypes_ciphers = nil;
-NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *keyPhrase, uint16_t counter) {
+NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, uint16_t counter) {
     
     assert(type & MPElementTypeClassCalculated);
     
@@ -108,12 +108,12 @@ NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *keyPhra
         MPTypes_ciphers = [NSDictionary dictionaryWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"ciphers"
                                                                                             withExtension:@"plist"]];
     
-    // Determine the hash whose bytes will be used for calculating a password: md4(name-keyPhrase)
-    assert(name && keyPhrase);
+    // Determine the hash whose bytes will be used for calculating a password: md4(name-key)
+    assert(name && key);
     uint16_t ncounter = htons(counter);
     NSData *keyHash = [[NSData dataByConcatenatingWithDelimitor:'-' datas:
                         [name dataUsingEncoding:NSUTF8StringEncoding],
-                        keyPhrase,
+                        key,
                         [NSData dataWithBytes:&ncounter length:sizeof(ncounter)],
                         nil] hashWith:PearlDigestSHA1];
     const char *keyBytes = keyHash.bytes;

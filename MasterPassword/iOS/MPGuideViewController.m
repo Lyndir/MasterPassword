@@ -7,7 +7,7 @@
 //
 
 #import "MPGuideViewController.h"
-#import "MPAppDelegate.h"
+#import "MPAppDelegate_Key.h"
 
 @implementation MPGuideViewController
 @synthesize scrollView;
@@ -28,14 +28,14 @@
     
     [super viewWillDisappear:animated];
     
-    [MPConfig get].showQuickStart = [NSNumber numberWithBool:NO];
+    [MPiOSConfig get].showQuickStart = [NSNumber numberWithBool:NO];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
 
     [super viewDidDisappear:animated];
 
-    [[MPAppDelegate get] loadKeyPhrase:animated];
+    [[MPAppDelegate get] loadKey:animated];
 }
 
 

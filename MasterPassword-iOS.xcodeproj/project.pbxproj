@@ -13,6 +13,8 @@
 		DA5BFA4B147E415C00F98B1E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA5BFA4D147E415C00F98B1E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */; };
 		DA5BFA4F147E415C00F98B1E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4E147E415C00F98B1E /* CoreData.framework */; };
+		DA600C2515054F3A008E9AB6 /* MPAppDelegate_Key.m in Sources */ = {isa = PBXBuildFile; fileRef = DA600C2315054F3A008E9AB6 /* MPAppDelegate_Key.m */; };
+		DA600C2815056428008E9AB6 /* MPConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA600C2715056427008E9AB6 /* MPConfig.m */; };
 		DA672D2F14F92C6B004A189C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DA672D2E14F92C6B004A189C /* libz.dylib */; };
 		DA672D3014F9413D004A189C /* libPearl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC77CAD148291A600BCF976 /* libPearl.a */; };
 		DA95D59D14DF063C008D1B94 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
@@ -61,7 +63,7 @@
 		DAB8D46015036BCF00CED3BC /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D44215036BCF00CED3BC /* MainStoryboard_iPhone.storyboard */; };
 		DAB8D46215036BCF00CED3BC /* MasterPassword.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D44515036BCF00CED3BC /* MasterPassword.entitlements */; };
 		DAB8D46315036BCF00CED3BC /* MPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D44715036BCF00CED3BC /* MPAppDelegate.m */; };
-		DAB8D46415036BCF00CED3BC /* MPConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D44915036BCF00CED3BC /* MPConfig.m */; };
+		DAB8D46415036BCF00CED3BC /* MPiOSConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D44915036BCF00CED3BC /* MPiOSConfig.m */; };
 		DAB8D46515036BCF00CED3BC /* MPGuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D44B15036BCF00CED3BC /* MPGuideViewController.m */; };
 		DAB8D46615036BCF00CED3BC /* MPMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D44D15036BCF00CED3BC /* MPMainViewController.m */; };
 		DAB8D46715036BCF00CED3BC /* MPSearchDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D44F15036BCF00CED3BC /* MPSearchDelegate.m */; };
@@ -841,6 +843,10 @@
 		DA5BFA4A147E415C00F98B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		DA5BFA4E147E415C00F98B1E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		DA600C2315054F3A008E9AB6 /* MPAppDelegate_Key.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_Key.m; sourceTree = "<group>"; };
+		DA600C2415054F3A008E9AB6 /* MPAppDelegate_Key.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_Key.h; sourceTree = "<group>"; };
+		DA600C2615056427008E9AB6 /* MPConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPConfig.h; path = MasterPassword/MPConfig.h; sourceTree = SOURCE_ROOT; };
+		DA600C2715056427008E9AB6 /* MPConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPConfig.m; path = MasterPassword/MPConfig.m; sourceTree = SOURCE_ROOT; };
 		DA672D2E14F92C6B004A189C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		DA95D59C14DF063C008D1B94 /* libInAppSettingsKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libInAppSettingsKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA95D5A814DF0691008D1B94 /* IASKAppSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsViewController.h; sourceTree = "<group>"; };
@@ -891,8 +897,8 @@
 		DAB8D44515036BCF00CED3BC /* MasterPassword.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = MasterPassword.entitlements; sourceTree = "<group>"; };
 		DAB8D44615036BCF00CED3BC /* MPAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate.h; sourceTree = "<group>"; };
 		DAB8D44715036BCF00CED3BC /* MPAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate.m; sourceTree = "<group>"; };
-		DAB8D44815036BCF00CED3BC /* MPConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPConfig.h; sourceTree = "<group>"; };
-		DAB8D44915036BCF00CED3BC /* MPConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPConfig.m; sourceTree = "<group>"; };
+		DAB8D44815036BCF00CED3BC /* MPiOSConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPiOSConfig.h; sourceTree = "<group>"; };
+		DAB8D44915036BCF00CED3BC /* MPiOSConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPiOSConfig.m; sourceTree = "<group>"; };
 		DAB8D44A15036BCF00CED3BC /* MPGuideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPGuideViewController.h; sourceTree = "<group>"; };
 		DAB8D44B15036BCF00CED3BC /* MPGuideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPGuideViewController.m; sourceTree = "<group>"; };
 		DAB8D44C15036BCF00CED3BC /* MPMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPMainViewController.h; sourceTree = "<group>"; };
@@ -1754,6 +1760,10 @@
 			children = (
 				DAB8D43C15036BCF00CED3BC /* MasterPassword.xcdatamodeld */,
 				DAB8D43E15036BCF00CED3BC /* iOS */,
+				DA600C2415054F3A008E9AB6 /* MPAppDelegate_Key.h */,
+				DA600C2315054F3A008E9AB6 /* MPAppDelegate_Key.m */,
+				DA600C2615056427008E9AB6 /* MPConfig.h */,
+				DA600C2715056427008E9AB6 /* MPConfig.m */,
 				DAB8D45515036BCF00CED3BC /* MPElementStoredEntity.m */,
 				DAB8D45615036BCF00CED3BC /* MPTypes.m */,
 				DAB8D45715036BCF00CED3BC /* MPElementEntity.h */,
@@ -1862,8 +1872,8 @@
 				DAB8D44215036BCF00CED3BC /* MainStoryboard_iPhone.storyboard */,
 				DAB8D44615036BCF00CED3BC /* MPAppDelegate.h */,
 				DAB8D44715036BCF00CED3BC /* MPAppDelegate.m */,
-				DAB8D44815036BCF00CED3BC /* MPConfig.h */,
-				DAB8D44915036BCF00CED3BC /* MPConfig.m */,
+				DAB8D44815036BCF00CED3BC /* MPiOSConfig.h */,
+				DAB8D44915036BCF00CED3BC /* MPiOSConfig.m */,
 				DAB8D44A15036BCF00CED3BC /* MPGuideViewController.h */,
 				DAB8D44B15036BCF00CED3BC /* MPGuideViewController.m */,
 				DAB8D44C15036BCF00CED3BC /* MPMainViewController.h */,
@@ -3675,7 +3685,7 @@
 				DAB8D45D15036BCF00CED3BC /* MasterPassword.xcdatamodeld in Sources */,
 				DAB8D45F15036BCF00CED3BC /* main.m in Sources */,
 				DAB8D46315036BCF00CED3BC /* MPAppDelegate.m in Sources */,
-				DAB8D46415036BCF00CED3BC /* MPConfig.m in Sources */,
+				DAB8D46415036BCF00CED3BC /* MPiOSConfig.m in Sources */,
 				DAB8D46515036BCF00CED3BC /* MPGuideViewController.m in Sources */,
 				DAB8D46615036BCF00CED3BC /* MPMainViewController.m in Sources */,
 				DAB8D46715036BCF00CED3BC /* MPSearchDelegate.m in Sources */,
@@ -3685,6 +3695,8 @@
 				DAB8D46C15036BCF00CED3BC /* MPTypes.m in Sources */,
 				DAB8D46D15036BCF00CED3BC /* MPElementEntity.m in Sources */,
 				DAB8D46E15036BCF00CED3BC /* MPElementGeneratedEntity.m in Sources */,
+				DA600C2515054F3A008E9AB6 /* MPAppDelegate_Key.m in Sources */,
+				DA600C2815056428008E9AB6 /* MPConfig.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

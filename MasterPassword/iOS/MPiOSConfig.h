@@ -6,14 +6,13 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-@interface MPConfig : PearlConfig
+#import "MPConfig.h"
 
-@property (nonatomic, retain) NSNumber *dataStoreError;
-@property (nonatomic, retain) NSNumber *storeKeyPhrase;
-@property (nonatomic, retain) NSNumber *rememberKeyPhrase;
+@interface MPiOSConfig : MPConfig
+
 @property (nonatomic, retain) NSNumber *helpHidden;
 @property (nonatomic, retain) NSNumber *showQuickStart;
 
-+ (MPConfig *)get;
++ (MPiOSConfig *)get;
 
 @end

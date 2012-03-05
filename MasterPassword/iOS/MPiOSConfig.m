@@ -6,10 +6,10 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import "MPConfig.h"
+#import "MPiOSConfig.h"
 
-@implementation MPConfig
-@dynamic dataStoreError, storeKeyPhrase, rememberKeyPhrase, helpHidden, showQuickStart;
+@implementation MPiOSConfig
+@dynamic helpHidden, showQuickStart;
 
 - (id)init {
     
@@ -17,9 +17,6 @@
         return self;
     
     [self.defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-                                     [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(dataStoreError)),
-                                     [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(storeKeyPhrase)),
-                                     [NSNumber numberWithBool:YES],                                 NSStringFromSelector(@selector(rememberKeyPhrase)),
                                      [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(helpHidden)),
                                      [NSNumber numberWithBool:YES],                                 NSStringFromSelector(@selector(showQuickStart)),
                                      nil]];
@@ -27,9 +24,9 @@
     return self;
 }
 
-+ (MPConfig *)get {
++ (MPiOSConfig *)get {
     
-    return (MPConfig *)[super get];
+    return (MPiOSConfig *)[super get];
 }
 
 @end

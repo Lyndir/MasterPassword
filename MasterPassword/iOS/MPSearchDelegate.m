@@ -7,7 +7,7 @@
 //
 
 #import "MPSearchDelegate.h"
-#import "MPAppDelegate.h"
+#import "MPAppDelegate_Key.h"
 #import "MPElementGeneratedEntity.h"
 
 @interface MPSearchDelegate (Private)
@@ -109,12 +109,12 @@
 - (void)update {
     
     assert(self.query);
-    assert([MPAppDelegate get].keyPhraseHashHex);
+    assert([MPAppDelegate get].keyHashHex);
     NSFetchRequest *fetchRequest = [[MPAppDelegate get].managedObjectModel
                                     fetchRequestFromTemplateWithName:@"MPElements"
                                     substitutionVariables:[NSDictionary dictionaryWithObjectsAndKeys:
                                                            self.query,                              @"query",
-                                                           [MPAppDelegate get].keyPhraseHashHex,    @"mpHashHex",
+                                                           [MPAppDelegate get].keyHashHex,    @"mpHashHex",
                                                            nil]];
     [fetchRequest setSortDescriptors:
      [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]]];
@@ -266,7 +266,7 @@
                                       assert([element isKindOfClass:ClassFromMPElementType(element.type)]);
                                       
                                       element.name = siteName;
-                                      element.mpHashHex = [MPAppDelegate get].keyPhraseHashHex;
+                                      element.mpHashHex = [MPAppDelegate get].keyHashHex;
                                       
                                       dispatch_async(dispatch_get_main_queue(), ^{
                                           [self.delegate didSelectElement:element];

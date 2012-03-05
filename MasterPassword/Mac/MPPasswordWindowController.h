@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface MPPasswordWindowController : NSWindowController
+@interface MPPasswordWindowController : NSWindowController <NSTextFieldDelegate>
 @property (weak) IBOutlet NSTextField *siteField;
 @property (weak) IBOutlet NSTextField *contentField;
 

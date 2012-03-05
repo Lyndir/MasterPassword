@@ -8,12 +8,18 @@
 
 #import "MPAppDelegate.h"
 
-@implementation MPAppDelegate
+@interface MPAppDelegate ()
 
+@property (readwrite, strong, nonatomic) MPPasswordWindowController     *passwordWindow;
+
+@end
+
+@implementation MPAppDelegate
 @synthesize window = _window;
 @synthesize persistentStoreCoordinator = __persistentStoreCoordinator;
 @synthesize managedObjectModel = __managedObjectModel;
 @synthesize managedObjectContext = __managedObjectContext;
+@synthesize passwordWindow;
 @synthesize keyPhrase;
 
 + (MPAppDelegate *)get {
@@ -21,9 +27,25 @@
     return (MPAppDelegate *)[NSApplication sharedApplication].delegate;
 }
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
-{
-    // Insert code here to initialize your application
++ (NSManagedObjectContext *)managedObjectContext {
+    
+    return [[self get] managedObjectContext];
+}
+
++ (NSManagedObjectModel *)managedObjectModel {
+    
+    return [[self get] managedObjectModel];
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    
+}
+
+- (void)applicationDidBecomeActive:(NSNotification *)notification {
+    
+    if (!self.passwordWindow)
+        self.passwordWindow = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
+    [self.passwordWindow showWindow:self];
 }
 
 - (NSURL *)applicationFilesDirectory {

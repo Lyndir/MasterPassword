@@ -7,7 +7,7 @@
 //
 
 #import "MPElementStoredEntity.h"
-#import "MPAppDelegate.h"
+#import "MPAppDelegate_Key.h"
 
 @interface MPElementStoredEntity ()
 
@@ -39,14 +39,14 @@
     else
         encryptedContent = self.contentObject;
     
-    NSData *decryptedContent = [encryptedContent decryptWithSymmetricKey:[[MPAppDelegate get] keyPhraseWithLength:PearlCryptKeySize]
+    NSData *decryptedContent = [encryptedContent decryptWithSymmetricKey:[[MPAppDelegate get] keyWithLength:PearlCryptKeySize]
                                                               usePadding:YES];
     return [[NSString alloc] initWithBytes:decryptedContent.bytes length:decryptedContent.length encoding:NSUTF8StringEncoding];
 }
 
 - (void)setContent:(id)content {
     
-    NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[[MPAppDelegate get] keyPhraseWithLength:PearlCryptKeySize]
+    NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[[MPAppDelegate get] keyWithLength:PearlCryptKeySize]
                                                                    usePadding:YES];
     
     if (self.type == MPElementTypeStoredDevicePrivate) {
