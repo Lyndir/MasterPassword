@@ -651,6 +651,9 @@
 		DA60116415057F10008E9AB6 /* tip_location_wood.png in Resources */ = {isa = PBXBuildFile; fileRef = DA600EE215057F10008E9AB6 /* tip_location_wood.png */; };
 		DA60116515057F10008E9AB6 /* tip_location_wood@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA600EE315057F10008E9AB6 /* tip_location_wood@2x.png */; };
 		DA60116715057FDD008E9AB6 /* iTunesArtwork-Rounded.png in Resources */ = {isa = PBXBuildFile; fileRef = DA60116615057FDD008E9AB6 /* iTunesArtwork-Rounded.png */; };
+		DA60116C15060F28008E9AB6 /* Pearl.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = DAB8D9D81503940100CED3BC /* Pearl.dylib */; };
+		DA60116D15060F28008E9AB6 /* libscrypt.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = DAF56A031503C61E00996D85 /* libscrypt.dylib */; };
+		DA60116E15060F28008E9AB6 /* libopenssl.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = DAF56A381503C67000996D85 /* libopenssl.dylib */; };
 		DAB8D98D150374AD00CED3BC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB8D98C150374AD00CED3BC /* Cocoa.framework */; };
 		DAB8D9C8150375C800CED3BC /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9B2150375C800CED3BC /* MasterPassword.xcdatamodeld */; };
 		DAB8D9C9150375C800CED3BC /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D9B5150375C800CED3BC /* Credits.rtf */; };
@@ -1410,6 +1413,21 @@
 		DAF571F01503C84B00996D85 /* libopenssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAF56A381503C67000996D85 /* libopenssl.dylib */; };
 		DAFE4A6415039CDC003ABA7C /* Pearl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB8D9D81503940100CED3BC /* Pearl.dylib */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DA60116B15060F11008E9AB6 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				DA60116C15060F28008E9AB6 /* Pearl.dylib in CopyFiles */,
+				DA60116D15060F28008E9AB6 /* libscrypt.dylib in CopyFiles */,
+				DA60116E15060F28008E9AB6 /* libopenssl.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		DA600BE8150420AC008E9AB6 /* MPPasswordWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindowController.h; sourceTree = "<group>"; };
@@ -6045,6 +6063,7 @@
 				DAB8D984150374AD00CED3BC /* Sources */,
 				DAB8D985150374AD00CED3BC /* Frameworks */,
 				DAB8D986150374AD00CED3BC /* Resources */,
+				DA60116B15060F11008E9AB6 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -7475,6 +7494,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -7496,6 +7517,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};
@@ -7554,7 +7577,10 @@
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				OTHER_CFLAGS = "-DHAVE_CONFIG_H";
+				OTHER_CFLAGS = (
+					"-DHAVE_CONFIG_H",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -7564,7 +7590,10 @@
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				OTHER_CFLAGS = "-DHAVE_CONFIG_H";
+				OTHER_CFLAGS = (
+					"-DHAVE_CONFIG_H",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -7582,6 +7611,7 @@
 					"-DOPENSSL_NO_RC5",
 					"-DOPENSSL_NO_RFC3779",
 					"-DOPENSSL_NO_STORE",
+					"$(inherited)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -7600,6 +7630,7 @@
 					"-DOPENSSL_NO_RC5",
 					"-DOPENSSL_NO_RFC3779",
 					"-DOPENSSL_NO_STORE",
+					"$(inherited)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
