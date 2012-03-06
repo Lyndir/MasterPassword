@@ -7,7 +7,7 @@ shopt -s extglob
 ## LisuUI
 #
 ## Submodules that need to be checked out.
-dependencies=( External/Pearl External/Pearl:External/jrswizzle External/Pearl:External/uicolor-utilities External/Pearl:External/iOSPorts )
+dependencies=( External/InAppSettingsKit External/Pearl External/Pearl:External/jrswizzle External/Pearl:External/uicolor-utilities External/Pearl:External/iOSPorts )
 
 ## Custom migration.
 # None yet.
