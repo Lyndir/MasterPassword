@@ -63,7 +63,7 @@
                                                     <rect key="frame" x="23" y="49" width="280" height="112"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <string key="text">These types create a safe password for your site.
-The passwords aren't saved anywhere.  This is a major advantage: if you loose your device, your passwords cannot be stolen.  You can use any other device to get all your passwords back, no need for restoring backups or any other pains.</string>
+The passwords aren't saved anywhere.  This is a major advantage: if you lose your device, your passwords cannot be stolen.  You can use any other device to get all your passwords back, no need for restoring backups or any other pains.</string>
                                                     <fontDescription key="fontDescription" name="GillSans-LightItalic" family="Gill Sans" pointSize="14"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
