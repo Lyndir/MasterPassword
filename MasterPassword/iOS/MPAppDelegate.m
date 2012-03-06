@@ -12,12 +12,6 @@
 #import "MPMainViewController.h"
 #import "IASKSettingsReader.h"
 
-@interface MPAppDelegate ()
-
-- (void)askKey:(BOOL)animated;
-
-@end
-
 @implementation MPAppDelegate
 
 @synthesize managedObjectModel = __managedObjectModel;
@@ -165,25 +159,17 @@
 
 - (void)loadKey:(BOOL)animated {
     
-    if (self.key)
-        return;
+    if (!self.key)
+        // Try and load the key from the keychain.
+        [self loadStoredKey];
     
-    [self loadStoredKey];
-    if (!self.key) {
-        // Key is not known.  Ask user to set/specify it.
-        dbg(@"Key not known.  Will ask user.");
-        [self askKey:animated];
-        return;
-    }
-}
-
-- (void)askKey:(BOOL)animated {
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.navigationController presentViewController:
-                [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
-                                                animated:animated completion:nil];
-    });
+    if (!self.key)
+        // Ask the user to set the key through his master password.
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.navigationController presentViewController:
+             [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
+                                                    animated:animated completion:nil];
+        });
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -205,11 +191,6 @@
 #ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointTerminated];
 #endif
-}
-
-+ (MPAppDelegate *)get {
-    
-    return (MPAppDelegate *)[super get];
 }
 
 + (NSManagedObjectContext *)managedObjectContext {
@@ -285,11 +266,11 @@
                                                           options:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                    [NSNumber numberWithBool:YES],   NSInferMappingModelAutomaticallyOption,
                                                                    [NSNumber numberWithBool:YES],   NSMigratePersistentStoresAutomaticallyOption,
-                                                                   @"MasterPassword.store",         NSPersistentStoreUbiquitousContentNameKey,
                                                                    [[[NSFileManager defaultManager]
                                                                      URLForUbiquityContainerIdentifier:nil]
                                                                     URLByAppendingPathComponent:@"store"
                                                                     isDirectory:YES],               NSPersistentStoreUbiquitousContentURLKey,
+                                                                   @"MasterPassword.store",         NSPersistentStoreUbiquitousContentNameKey,
                                                                    nil]
                                                             error:&error]) {
         err(@"Unresolved error %@, %@", error, [error userInfo]);

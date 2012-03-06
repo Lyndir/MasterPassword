@@ -7,6 +7,7 @@
 //
 
 #import "MPAppDelegate_Key.h"
+#import "MPConfig.h"
 
 @interface MPAppDelegate ()
 
@@ -24,6 +25,15 @@
 @synthesize key;
 @synthesize keyHash;
 @synthesize keyHashHex;
+
++ (void)initialize {
+    
+    [MPConfig get];
+    
+#ifdef DEBUG
+    [PearlLogger get].autoprintLevel = PearlLogLevelTrace;
+#endif
+}
 
 + (NSManagedObjectContext *)managedObjectContext {
     
@@ -44,12 +54,61 @@
     if (!self.passwordWindow)
         self.passwordWindow = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
     [self.passwordWindow showWindow:self];
+    
+    [self loadKey];
+}
+
+- (void)loadKey {
+    
+    if (!self.key)
+        // Try and load the key from the keychain.
+        [self loadStoredKey];
+    
+    if (!self.key)
+        // Ask the user to set the key through his master password.
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSAlert *alert = [NSAlert alertWithMessageText:@"Master Password is locked."
+                                             defaultButton:@"Unlock" alternateButton:@"Change" otherButton:@"Quit"
+                                 informativeTextWithFormat:@"Your master password is required to unlock the application."];
+            NSTextField *passwordField = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 200, 22)];
+            [alert setAccessoryView:passwordField];
+            [alert layout];
+            do {
+                NSInteger button = [alert runModal];
+                
+                if (button == 0)
+                    // "Change" button.
+                    if ([[NSAlert alertWithMessageText:@"Changing Master Password"
+                                         defaultButton:nil alternateButton:[PearlStrings get].commonButtonCancel otherButton:nil
+                             informativeTextWithFormat:
+                          @"This will allow you to log in with a different master password.\n\n"
+                          @"Note that you will only see the sites and passwords for the master password you log in with.\n"
+                          @"If you log in with a different master password, your current sites will be unavailable.\n\n"
+                          @"You can always change back to your current master password later.\n"
+                          @"Your current sites and passwords will then become available again."] runModal] == 1) {
+                        [self forgetKey];
+                        continue;
+                    }
+                if (button == -1) {
+                    // "Quit" button.
+                    [[NSApplication sharedApplication] terminate:self];
+                    break;
+                }
+            } while (![self tryMasterPassword:[passwordField stringValue]]);
+        });
 }
 
 - (NSURL *)applicationFilesDirectory {
     
     NSURL *appSupportURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] lastObject];
-    return [appSupportURL URLByAppendingPathComponent:@"com.lyndir.lhunath.MasterPassword"];
+    NSURL *applicationFilesDirectory = [appSupportURL URLByAppendingPathComponent:@"com.lyndir.lhunath.MasterPassword"];
+    
+    NSError *error = nil;
+    [[NSFileManager defaultManager] createDirectoryAtURL:applicationFilesDirectory withIntermediateDirectories:YES attributes:nil error:&error];
+    if (error)
+        [[NSApplication sharedApplication] presentError:error];
+    
+    return applicationFilesDirectory;
 }
 
 #pragma mark - Core Data stack
@@ -97,20 +156,20 @@
     if (__persistentStoreCoordinator)
         return __persistentStoreCoordinator;
     
-    NSURL *storeURL = [[self applicationFilesDirectory] URLByAppendingPathComponent:@"MasterPassword.storedata"];
+    NSURL *storeURL = [[self applicationFilesDirectory] URLByAppendingPathComponent:@"MasterPassword.sqlite"];
     
     __persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     [__persistentStoreCoordinator lock];
     NSError *error = nil;
-    if (![__persistentStoreCoordinator addPersistentStoreWithType:NSXMLStoreType configuration:nil URL:storeURL
+    if (![__persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL
                                                           options:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                    [NSNumber numberWithBool:YES],   NSInferMappingModelAutomaticallyOption,
                                                                    [NSNumber numberWithBool:YES],   NSMigratePersistentStoresAutomaticallyOption,
-                                                                   @"MasterPassword.store",         NSPersistentStoreUbiquitousContentNameKey,
                                                                    [[[NSFileManager defaultManager]
                                                                      URLForUbiquityContainerIdentifier:nil]
                                                                     URLByAppendingPathComponent:@"store"
                                                                     isDirectory:YES],               NSPersistentStoreUbiquitousContentURLKey,
+                                                                   @"MasterPassword.store",         NSPersistentStoreUbiquitousContentNameKey,
                                                                    nil]
                                                             error:&error]) {
         err(@"Unresolved error %@, %@", error, [error userInfo]);
@@ -118,7 +177,7 @@
         wrn(@"Deleted datastore: %@", storeURL);
         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];        
 #endif
-
+        
         [[NSApplication sharedApplication] presentError:error];
         return nil;
     }

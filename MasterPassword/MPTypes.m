@@ -19,8 +19,10 @@
 
 NSData *keyForPassword(NSString *password) {
     
-    return [PearlSCrypt deriveKeyWithLength:MP_dkLen fromPassword:[password dataUsingEncoding:NSUTF8StringEncoding]
-                             usingSalt:MP_salt N:MP_N r:MP_r p:MP_p];
+    NSData *key = [PearlSCrypt deriveKeyWithLength:MP_dkLen fromPassword:[password dataUsingEncoding:NSUTF8StringEncoding]
+                                         usingSalt:MP_salt N:MP_N r:MP_r p:MP_p];
+    trc(@"password: %@ derives to key: %@", password, key);
+    return key;
 }
 NSData *keyHashForPassword(NSString *password) {
     
@@ -111,28 +113,33 @@ NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, ui
     // Determine the hash whose bytes will be used for calculating a password: md4(name-key)
     assert(name && key);
     uint16_t ncounter = htons(counter);
+    trc(@"key hash from: %@-%@-%u", name, key, ncounter);
     NSData *keyHash = [[NSData dataByConcatenatingWithDelimitor:'-' datas:
                         [name dataUsingEncoding:NSUTF8StringEncoding],
                         key,
                         [NSData dataWithBytes:&ncounter length:sizeof(ncounter)],
                         nil] hashWith:PearlDigestSHA1];
+    trc(@"key hash is: %@", keyHash);
     const char *keyBytes = keyHash.bytes;
     
     // Determine the cipher from the first hash byte.
     assert([keyHash length]);
     NSArray *typeCiphers = [[MPTypes_ciphers valueForKey:ClassNameFromMPElementType(type)]
                             valueForKey:NSStringFromMPElementType(type)];
-    NSString *cipher = [typeCiphers objectAtIndex:keyBytes[0] % [typeCiphers count]];
+    NSString *cipher = [typeCiphers objectAtIndex:htons(keyBytes[0]) % [typeCiphers count]];
+    trc(@"type %d, ciphers: %@, selected: %@", type, typeCiphers, cipher);
     
     // Encode the content, character by character, using subsequent hash bytes and the cipher.
     assert([keyHash length] >= [cipher length] + 1);
     NSMutableString *content = [NSMutableString stringWithCapacity:[cipher length]];
     for (NSUInteger c = 0; c < [cipher length]; ++c) {
-        const char keyByte = keyBytes[c + 1];
+        uint16_t keyByte = htons(keyBytes[c + 1]);
         NSString *cipherClass = [cipher substringWithRange:NSMakeRange(c, 1)];
         NSString *cipherClassCharacters = [[MPTypes_ciphers valueForKey:@"MPCharacterClasses"] valueForKey:cipherClass];
+        NSString *character = [cipherClassCharacters substringWithRange:NSMakeRange(keyByte % [cipherClassCharacters length], 1)];
         
-        [content appendString:[cipherClassCharacters substringWithRange:NSMakeRange(keyByte % [cipherClassCharacters length], 1)]];
+        trc(@"class %@ has characters: %@, selected: %@", cipherClass, cipherClassCharacters, character);
+        [content appendString:character];
     }
     
     return content;

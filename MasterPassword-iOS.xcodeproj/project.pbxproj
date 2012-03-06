@@ -1870,10 +1870,10 @@
 			children = (
 				DAB8D9B11503757D00CED3BC /* Supporting Files */,
 				DAB8D44215036BCF00CED3BC /* MainStoryboard_iPhone.storyboard */,
-				DAB8D44615036BCF00CED3BC /* MPAppDelegate.h */,
-				DAB8D44715036BCF00CED3BC /* MPAppDelegate.m */,
 				DAB8D44815036BCF00CED3BC /* MPiOSConfig.h */,
 				DAB8D44915036BCF00CED3BC /* MPiOSConfig.m */,
+				DAB8D44615036BCF00CED3BC /* MPAppDelegate.h */,
+				DAB8D44715036BCF00CED3BC /* MPAppDelegate.m */,
 				DAB8D44A15036BCF00CED3BC /* MPGuideViewController.h */,
 				DAB8D44B15036BCF00CED3BC /* MPGuideViewController.m */,
 				DAB8D44C15036BCF00CED3BC /* MPMainViewController.h */,

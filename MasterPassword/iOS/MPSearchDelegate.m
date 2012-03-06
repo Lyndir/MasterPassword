@@ -264,6 +264,7 @@
                                       MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPElementGeneratedEntity class])
                                                                                                inManagedObjectContext:self.fetchedResultsController.managedObjectContext];
                                       assert([element isKindOfClass:ClassFromMPElementType(element.type)]);
+                                      assert([MPAppDelegate get].keyHashHex);
                                       
                                       element.name = siteName;
                                       element.mpHashHex = [MPAppDelegate get].keyHashHex;

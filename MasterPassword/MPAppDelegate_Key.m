@@ -16,7 +16,7 @@ static NSDictionary *keyQuery() {
     static NSDictionary *MPKeyQuery = nil;
     if (!MPKeyQuery)
         MPKeyQuery = [PearlKeyChain createQueryForClass:kSecClassGenericPassword
-                                             attributes:[NSDictionary dictionaryWithObject:@"Master Password Key"
+                                             attributes:[NSDictionary dictionaryWithObject:@"Stored Master Password"
                                                                                     forKey:(__bridge id)kSecAttrService]
                                                 matches:nil];
     
@@ -28,7 +28,7 @@ static NSDictionary *keyHashQuery() {
     static NSDictionary *MPKeyHashQuery = nil;
     if (!MPKeyHashQuery)
         MPKeyHashQuery = [PearlKeyChain createQueryForClass:kSecClassGenericPassword
-                                                 attributes:[NSDictionary dictionaryWithObject:@"Master Password Key Hash"
+                                                 attributes:[NSDictionary dictionaryWithObject:@"Master Password Verification"
                                                                                         forKey:(__bridge id)kSecAttrService]
                                                     matches:nil];
     
@@ -70,7 +70,7 @@ static NSDictionary *keyHashQuery() {
 }
 
 + (MPAppDelegate *)get {
-
+    
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
     return (MPAppDelegate *)[UIApplication sharedApplication].delegate;
 #elif defined (__MAC_OS_X_VERSION_MIN_REQUIRED)
@@ -126,18 +126,18 @@ static NSDictionary *keyHashQuery() {
         dbg(@"Updating key hash to: %@.", self.keyHashHex);
         [PearlKeyChain addOrUpdateItemForQuery:keyHashQuery()
                                 withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                self.keyHash,                                      (__bridge id)kSecValueData,
+                                                self.keyHash,                                       (__bridge id)kSecValueData,
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-                                                kSecAttrAccessibleWhenUnlocked,                          (__bridge id)kSecAttrAccessible,
+                                                kSecAttrAccessibleWhenUnlocked,                     (__bridge id)kSecAttrAccessible,
 #endif
                                                 nil]];
         if ([[MPConfig get].storeKey boolValue]) {
             dbg(@"Storing key in key chain.");
             [PearlKeyChain addOrUpdateItemForQuery:keyQuery()
                                     withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                    key,  (__bridge id)kSecValueData,
+                                                    key,                                            (__bridge id)kSecValueData,
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-                                                    kSecAttrAccessibleWhenUnlocked,                      (__bridge id)kSecAttrAccessible,
+                                                    kSecAttrAccessibleWhenUnlocked,                 (__bridge id)kSecAttrAccessible,
 #endif
                                                     nil]];
         }

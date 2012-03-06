@@ -22,4 +22,6 @@
 
 - (IBAction)saveAction:(id)sender;
 
+- (void)loadKey;
+
 @end

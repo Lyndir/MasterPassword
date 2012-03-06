@@ -181,7 +181,7 @@
         self.passwordCounter.text = [NSString stringWithFormat:@"%u", ((MPElementGeneratedEntity *) self.activeElement).counter];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSString *description = self.activeElement.description;
+        NSString *description = [self.activeElement description];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             self.contentField.text = description;
