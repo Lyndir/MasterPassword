@@ -221,12 +221,15 @@
          [NSURLRequest requestWithURL:
           [NSURL URLWithString:[NSString stringWithFormat:@"#%@", chapter] relativeToURL:
            [[NSBundle mainBundle] URLForResource:@"help" withExtension:@"html"]]]];
-        
-        NSString *error = [self.helpView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"setClass('%@');",
-                                                                                 ClassNameFromMPElementType(self.activeElement.type)]];
-        if (error.length)
-            err(@"setClass: %@", error);
     });
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    
+    NSString *error = [self.helpView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"setClass('%@');",
+                                                                             ClassNameFromMPElementType(self.activeElement.type)]];
+    if (error.length)
+        err(@"helpView.setClass: %@", error);
 }
 
 - (void)showContentTip:(NSString *)message withIcon:(UIImageView *)icon {
