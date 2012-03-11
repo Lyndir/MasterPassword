@@ -17,10 +17,10 @@
 @dynamic uses;
 @dynamic lastUsed;
 
-- (void)use {
+- (int16_t)use {
     
-    ++self.uses;
     self.lastUsed = [[NSDate date] timeIntervalSinceReferenceDate];
+    return ++self.uses;
 }
 
 - (id)content {

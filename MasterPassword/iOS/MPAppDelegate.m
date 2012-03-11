@@ -27,7 +27,7 @@
     [MPiOSConfig get];
 
 #ifdef DEBUG
-    [PearlLogger get].autoprintLevel = PearlLogLevelTrace;
+    [PearlLogger get].autoprintLevel = PearlLogLevelDebug;
     [NSClassFromString(@"WebView") performSelector:@selector(_enableRemoteInspector)];
 #endif
 }

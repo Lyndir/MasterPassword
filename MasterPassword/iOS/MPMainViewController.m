@@ -94,7 +94,7 @@
 - (void)viewDidLoad {
     
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
-
+    
     self.contentField.font = [UIFont fontWithName:@"Exo-Black" size:self.contentField.font.pointSize];
     
     // Put the search tip on the window so it's above the nav bar.
@@ -109,17 +109,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
-                                                      if (![MPAppDelegate get].key) {
-                                                          self.activeElement = nil;
-                                                          [self updateAnimated:NO];
-                                                      }
-                                                  }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:[NSOperationQueue mainQueue]
-                                                  usingBlock:^(NSNotification *note) {
-                                                      if (![MPAppDelegate get].key) {
-                                                          self.activeElement = nil;
-                                                          [self updateAnimated:NO];
-                                                      }
+                                                      self.activeElement = nil;
                                                   }];
     
     self.alertBody.text = nil;
@@ -154,12 +144,14 @@
     
     [[MPAppDelegate get] saveContext];
     
-    if (animated)
-        [UIView animateWithDuration:0.3f animations:^{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (animated)
+            [UIView animateWithDuration:0.3f animations:^{
+                [self updateWasAnimated:animated];
+            }];
+        else
             [self updateWasAnimated:animated];
-        }];
-    else
-        [self updateWasAnimated:animated];
+    });
 }
 
 - (void)updateWasAnimated:(BOOL)animated {
@@ -180,13 +172,15 @@
     if ([self.activeElement isKindOfClass:[MPElementGeneratedEntity class]])
         self.passwordCounter.text = [NSString stringWithFormat:@"%u", ((MPElementGeneratedEntity *) self.activeElement).counter];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSString *description = [self.activeElement description];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.contentField.text = description;
+    self.contentField.text = @"";
+    if (self.activeElement.name && ![self.activeElement isDeleted])
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            NSString *description = [self.activeElement description];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.contentField.text = description;
+            });
         });
-    });
 }
 
 - (BOOL)isHelpVisible {
@@ -201,17 +195,19 @@
 
 - (void)setHelpHidden:(BOOL)hidden animated:(BOOL)animated {
     
-    [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
-        if (hidden) {
-            self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, self.view.bounds.size.height - 44);
-            self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, self.view.bounds.size.height);
-            [MPiOSConfig get].helpHidden = [NSNumber numberWithBool:YES];
-        } else {
-            self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 175);
-            self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, 216);
-            [MPiOSConfig get].helpHidden = [NSNumber numberWithBool:NO];
-        }
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
+            if (hidden) {
+                self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, self.view.bounds.size.height - 44);
+                self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, self.view.bounds.size.height);
+                [MPiOSConfig get].helpHidden = [NSNumber numberWithBool:YES];
+            } else {
+                self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 175);
+                self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, 216);
+                [MPiOSConfig get].helpHidden = [NSNumber numberWithBool:NO];
+            }
+        }];
+    });
 }
 
 - (void)setHelpChapter:(NSString *)chapter {
@@ -220,52 +216,58 @@
     [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointHelpChapter, chapter]];
 #endif
     
-    [self.helpView loadRequest:
-     [NSURLRequest requestWithURL:
-      [NSURL URLWithString:[NSString stringWithFormat:@"#%@", chapter] relativeToURL:
-       [[NSBundle mainBundle] URLForResource:@"help" withExtension:@"html"]]]];
-    
-    NSString *error = [self.helpView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"setClass('%@');",
-                                                                             ClassNameFromMPElementType(self.activeElement.type)]];
-    if (error.length)
-        err(@"setClass: %@", error);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.helpView loadRequest:
+         [NSURLRequest requestWithURL:
+          [NSURL URLWithString:[NSString stringWithFormat:@"#%@", chapter] relativeToURL:
+           [[NSBundle mainBundle] URLForResource:@"help" withExtension:@"html"]]]];
+        
+        NSString *error = [self.helpView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"setClass('%@');",
+                                                                                 ClassNameFromMPElementType(self.activeElement.type)]];
+        if (error.length)
+            err(@"setClass: %@", error);
+    });
 }
 
 - (void)showContentTip:(NSString *)message withIcon:(UIImageView *)icon {
     
-    self.contentTipBody.text = message;
-    
-    icon.hidden = NO;
-    [UIView animateWithDuration:0.2f animations:^{
-        self.contentTipContainer.alpha = 1;
-    } completion:^(BOOL finished) {
-        if (finished) {
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                [UIView animateWithDuration:0.2f animations:^{
-                    self.contentTipContainer.alpha = 0;
-                } completion:^(BOOL finished) {
-                    if (finished)
-                        icon.hidden = YES;
-                }];
-            });
-        }
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.contentTipBody.text = message;
+        
+        icon.hidden = NO;
+        [UIView animateWithDuration:0.2f animations:^{
+            self.contentTipContainer.alpha = 1;
+        } completion:^(BOOL finished) {
+            if (finished) {
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    [UIView animateWithDuration:0.2f animations:^{
+                        self.contentTipContainer.alpha = 0;
+                    } completion:^(BOOL finished) {
+                        if (finished)
+                            icon.hidden = YES;
+                    }];
+                });
+            }
+        }];
+    });
 }
 
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message {
     
-    self.alertTitle.text = title;
-    NSRange scrollRange = NSMakeRange(self.alertBody.text.length, message.length);
-    if ([self.alertBody.text length])
-        self.alertBody.text = [NSString stringWithFormat:@"%@\n\n---\n\n%@", self.alertBody.text, message];
-    else
-        self.alertBody.text = message;
-    [self.alertBody scrollRangeToVisible:scrollRange];
-    
-    [UIView animateWithDuration:0.2f animations:^{
-        self.alertContainer.alpha = 1;
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.alertTitle.text = title;
+        NSRange scrollRange = NSMakeRange(self.alertBody.text.length, message.length);
+        if ([self.alertBody.text length])
+            self.alertBody.text = [NSString stringWithFormat:@"%@\n\n---\n\n%@", self.alertBody.text, message];
+        else
+            self.alertBody.text = message;
+        [self.alertBody scrollRangeToVisible:scrollRange];
+        
+        [UIView animateWithDuration:0.2f animations:^{
+            self.alertContainer.alpha = 1;
+        }];
+    });
 }
 
 #pragma mark - Protocols
@@ -333,7 +335,8 @@
     [UIView animateWithDuration:0.3f animations:^{
         self.alertContainer.alpha = 0;
     } completion:^(BOOL finished) {
-        self.alertBody.text = nil;
+        if (finished)
+            self.alertBody.text = nil;
     }];
     
 #ifdef TESTFLIGHT
@@ -429,9 +432,18 @@
 
 - (void)didSelectElement:(MPElementEntity *)element {
     
+    [self closeAlert];
+    
     if (element) {
         self.activeElement = element;
-        [self.activeElement use];
+        if ([self.activeElement use] == 1)
+            [self showAlertWithTitle:@"New Site" message:
+             l(@"You've just created a password for %@.\n\n"
+               @"IMPORTANT:\n"
+               @"Don't forget to set or change the password for your account at %@ to the password above. "
+               @"It's best to do this right away. If you forget it, may get confusing later on "
+               @"to remember what password you need to use for logging into the site.",
+               self.activeElement.name, self.activeElement.name)];
         
         [self.searchDisplayController setActive:NO animated:YES];
         self.searchDisplayController.searchBar.text = self.activeElement.name;
