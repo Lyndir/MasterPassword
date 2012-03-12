@@ -574,7 +574,6 @@
 		DA60111515057F10008E9AB6 /* icon_wrench.png in Resources */ = {isa = PBXBuildFile; fileRef = DA600E9115057F10008E9AB6 /* icon_wrench.png */; };
 		DA60111615057F10008E9AB6 /* icon_wrench@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA600E9215057F10008E9AB6 /* icon_wrench@2x.png */; };
 		DA60111715057F10008E9AB6 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = DA600E9315057F10008E9AB6 /* iTunesArtwork.png */; };
-		DA60111915057F10008E9AB6 /* jquery-1.6.1.min.js in Sources */ = {isa = PBXBuildFile; fileRef = DA600E9515057F10008E9AB6 /* jquery-1.6.1.min.js */; };
 		DA60111B15057F10008E9AB6 /* lock_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = DA600E9815057F10008E9AB6 /* lock_blue.png */; };
 		DA60111C15057F10008E9AB6 /* lock_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA600E9915057F10008E9AB6 /* lock_blue@2x.png */; };
 		DA60111D15057F10008E9AB6 /* lock_green.png in Resources */ = {isa = PBXBuildFile; fileRef = DA600E9A15057F10008E9AB6 /* lock_green.png */; };
@@ -705,6 +704,7 @@
 		DAB8DA391503972100CED3BC /* PearlRSAKey.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8DA0F1503972100CED3BC /* PearlRSAKey.m */; };
 		DAB8DA3A1503972100CED3BC /* PearlSCrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8DA101503972100CED3BC /* PearlSCrypt.h */; };
 		DAB8DA3B1503972100CED3BC /* PearlSCrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8DA111503972100CED3BC /* PearlSCrypt.m */; };
+		DAC0F184150D643C00D4AB0A /* jquery-1.6.1.min.js in Resources */ = {isa = PBXBuildFile; fileRef = DA600E9515057F10008E9AB6 /* jquery-1.6.1.min.js */; };
 		DADEA5A61503C9DD00FD084E /* e_os.h in Headers */ = {isa = PBXBuildFile; fileRef = DADEA5A41503C9DD00FD084E /* e_os.h */; };
 		DADEA5A71503C9DD00FD084E /* e_os2.h in Headers */ = {isa = PBXBuildFile; fileRef = DADEA5A51503C9DD00FD084E /* e_os2.h */; };
 		DADEA5BB1503CE3000FD084E /* _MWERKS_GUSI_prefix.h in Headers */ = {isa = PBXBuildFile; fileRef = DADEA5A91503CE3000FD084E /* _MWERKS_GUSI_prefix.h */; };
@@ -6160,6 +6160,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAC0F184150D643C00D4AB0A /* jquery-1.6.1.min.js in Resources */,
 				DAB8D9C9150375C800CED3BC /* Credits.rtf in Resources */,
 				DAB8D9CA150375C800CED3BC /* InfoPlist.strings in Resources */,
 				DAB8D9CB150375C800CED3BC /* MainMenu.xib in Resources */,
@@ -6823,7 +6824,6 @@
 				DA600BEB150420AC008E9AB6 /* MPPasswordWindowController.m in Sources */,
 				DA600C2D150565FC008E9AB6 /* MPConfig.m in Sources */,
 				DA600C2E150565FC008E9AB6 /* MPAppDelegate_Key.m in Sources */,
-				DA60111915057F10008E9AB6 /* jquery-1.6.1.min.js in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

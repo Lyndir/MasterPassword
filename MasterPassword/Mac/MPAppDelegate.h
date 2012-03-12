@@ -9,13 +9,15 @@
 #import <Cocoa/Cocoa.h>
 #import "MPPasswordWindowController.h"
 
-@interface MPAppDelegate : NSObject <NSApplicationDelegate>
+@interface MPAppDelegate : NSObject <NSApplicationDelegate, NSNetServiceDelegate>
 
 @property (assign) IBOutlet NSWindow                                    *window;
 
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator    *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectModel            *managedObjectModel;
 @property (readonly, strong, nonatomic) NSManagedObjectContext          *managedObjectContext;
+
+@property (readonly, strong, nonatomic) NSNetService                    *netService;
 
 + (NSManagedObjectModel *)managedObjectModel;
 + (NSManagedObjectContext *)managedObjectContext;

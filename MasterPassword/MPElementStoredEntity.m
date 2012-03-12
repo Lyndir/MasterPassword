@@ -40,14 +40,14 @@
         encryptedContent = self.contentObject;
     
     NSData *decryptedContent = [encryptedContent decryptWithSymmetricKey:[[MPAppDelegate get] keyWithLength:PearlCryptKeySize]
-                                                              usePadding:YES];
+                                                                 padding:YES];
     return [[NSString alloc] initWithBytes:decryptedContent.bytes length:decryptedContent.length encoding:NSUTF8StringEncoding];
 }
 
 - (void)setContent:(id)content {
     
     NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[[MPAppDelegate get] keyWithLength:PearlCryptKeySize]
-                                                                   usePadding:YES];
+                                                                      padding:YES];
     
     if (self.type == MPElementTypeStoredDevicePrivate) {
         [PearlKeyChain addOrUpdateItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]
