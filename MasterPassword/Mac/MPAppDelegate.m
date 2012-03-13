@@ -9,17 +9,10 @@
 #import "MPAppDelegate_Key.h"
 #import "MPConfig.h"
 
-#import <netinet/in.h>
-#import <sys/socket.h>
-
 
 @interface MPAppDelegate ()
 
 @property (readwrite, strong, nonatomic) MPPasswordWindowController     *passwordWindow;
-@property (readwrite, strong, nonatomic) NSNetService                   *netService;
-@property (readwrite, assign, nonatomic) CFSocketRef                    listeningSocket;
-
-- (void)connectionEstablishedOnHandle:(CFSocketNativeHandle)handle;
 
 @end
 
@@ -28,24 +21,18 @@
 @synthesize persistentStoreCoordinator = __persistentStoreCoordinator;
 @synthesize managedObjectModel = __managedObjectModel;
 @synthesize managedObjectContext = __managedObjectContext;
-@synthesize netService, listeningSocket;
 @synthesize passwordWindow;
 
 @synthesize key;
 @synthesize keyHash;
 @synthesize keyHashHex;
 
-static void ListeningSocketCallback(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, const void *data, void *info) {
-
-    [[MPAppDelegate get] connectionEstablishedOnHandle:*(const CFSocketNativeHandle *)data];
-}
-
 + (void)initialize {
     
     [MPConfig get];
     
 #ifdef DEBUG
-    [PearlLogger get].autoprintLevel = PearlLogLevelTrace;
+    [PearlLogger get].autoprintLevel = PearlLogLevelDebug;
 #endif
 }
 
@@ -61,119 +48,7 @@ static void ListeningSocketCallback(CFSocketRef s, CFSocketCallBackType type, CF
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     
-    [self setupNetworkListener];
 }
-
-- (void)setupNetworkListener {
-    
-    struct sockaddr_in6 serverAddress6;
-    socklen_t serverAddress6_len    = sizeof(serverAddress6);
-    memset(&serverAddress6, 0, serverAddress6_len);
-    serverAddress6.sin6_len         = serverAddress6_len;
-    serverAddress6.sin6_family      = AF_INET6;
-    
-    NSSocketNativeHandle socketHandle;
-    if (0 > (socketHandle = socket(AF_INET6, SOCK_STREAM, 0))) {
-        err(@"Couldn't create socket: %@", errstr());
-        return;
-    }
-    if (0 > bind(socketHandle, (const struct sockaddr *) &serverAddress6, serverAddress6_len)) {
-        err(@"Couldn't bind socket: %@", errstr());
-        close(socketHandle);
-        return;
-    }
-    if (0 > getsockname(socketHandle, (struct sockaddr *) &serverAddress6, &serverAddress6_len)) {
-        err(@"Couldn't get socket info: %@", errstr());
-        close(socketHandle);
-        return;
-    }
-    if (0 > listen(socketHandle, 5)) {
-        err(@"Couldn't get socket info: %@", errstr());
-        close(socketHandle);
-        return;
-    }
-    if (!(self.listeningSocket = CFSocketCreateWithNative(NULL, socketHandle, kCFSocketAcceptCallBack, ListeningSocketCallback, NULL))) {
-        err(@"Couldn't start listening on the socket: %@", errstr());
-        return;
-    }
-    
-    CFRunLoopSourceRef runLoopSource = CFSocketCreateRunLoopSource(NULL, self.listeningSocket, 0);
-    CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopDefaultMode);
-    CFRelease(runLoopSource);
-    
-    int chosenPort = ntohs(serverAddress6.sin6_port);
-    inf(@"Master Password bound to port %d", chosenPort);
-    self.netService = [[NSNetService alloc] initWithDomain:@"" type:@"_masterpassword._tcp." name:@"Master Password" port:chosenPort];
-    if(!self.netService) {
-        err(@"Couldn't initialize the Bonjour service.");
-        return;
-    }
-    
-    self.netService.delegate = self;
-    [self.netService publish];
-}
-
-- (void)connectionEstablishedOnHandle:(CFSocketNativeHandle)handle {
-    
-    dbg(@"%@%d", NSStringFromSelector(_cmd), handle);
-}
-
-/* Sent to the NSNetService instance's delegate prior to advertising the service on the network. If for some reason the service cannot be published, the delegate will not receive this message, and an error will be delivered to the delegate via the delegate's -netService:didNotPublish: method.
- */
-- (void)netServiceWillPublish:(NSNetService *)sender {
-    
-    dbg(@"%@", NSStringFromSelector(_cmd));
-}
-
-/* Sent to the NSNetService instance's delegate when the publication of the instance is complete and successful.
- */
-- (void)netServiceDidPublish:(NSNetService *)sender {
-    
-    dbg(@"%@", NSStringFromSelector(_cmd));
-}
-
-/* Sent to the NSNetService instance's delegate when an error in publishing the instance occurs. The error dictionary will contain two key/value pairs representing the error domain and code (see the NSNetServicesError enumeration above for error code constants). It is possible for an error to occur after a successful publication.
- */
-- (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {
-    
-    dbg(@"%@%@", NSStringFromSelector(_cmd), errorDict);
-}
-
-/* Sent to the NSNetService instance's delegate prior to resolving a service on the network. If for some reason the resolution cannot occur, the delegate will not receive this message, and an error will be delivered to the delegate via the delegate's -netService:didNotResolve: method.
- */
-- (void)netServiceWillResolve:(NSNetService *)sender {
-    
-    dbg(@"%@", NSStringFromSelector(_cmd));
-}
-
-/* Sent to the NSNetService instance's delegate when one or more addresses have been resolved for an NSNetService instance. Some NSNetService methods will return different results before and after a successful resolution. An NSNetService instance may get resolved more than once; truly robust clients may wish to resolve again after an error, or to resolve more than once.
- */
-- (void)netServiceDidResolveAddress:(NSNetService *)sender {
-    
-    dbg(@"%@", NSStringFromSelector(_cmd));
-}
-
-/* Sent to the NSNetService instance's delegate when an error in resolving the instance occurs. The error dictionary will contain two key/value pairs representing the error domain and code (see the NSNetServicesError enumeration above for error code constants).
- */
-- (void)netService:(NSNetService *)sender didNotResolve:(NSDictionary *)errorDict {
-    
-    dbg(@"%@%@", NSStringFromSelector(_cmd), errorDict);
-}
-
-/* Sent to the NSNetService instance's delegate when the instance's previously running publication or resolution request has stopped.
- */
-- (void)netServiceDidStop:(NSNetService *)sender {
-    
-    dbg(@"%@", NSStringFromSelector(_cmd));
-}
-
-/* Sent to the NSNetService instance's delegate when the instance is being monitored and the instance's TXT record has been updated. The new record is contained in the data parameter.
- */
-- (void)netService:(NSNetService *)sender didUpdateTXTRecordData:(NSData *)data {
-    
-    dbg(@"%@%@", NSStringFromSelector(_cmd), data);
-}
-
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
     

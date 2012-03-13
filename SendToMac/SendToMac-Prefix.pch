@@ -1,0 +1,9 @@
+//
+// Prefix header for all source files of the 'SendToMac' target in the 'SendToMac' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+#endif
+
+#import "Pearl-Prefix.pch"

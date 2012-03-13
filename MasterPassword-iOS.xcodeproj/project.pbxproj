@@ -712,6 +712,10 @@
 		DAB8D97A15036BF700CED3BC /* tip_location_wood.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D6F815036BF600CED3BC /* tip_location_wood.png */; };
 		DAB8D97B15036BF700CED3BC /* tip_location_wood@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D6F915036BF600CED3BC /* tip_location_wood@2x.png */; };
 		DAB8D97C1503718B00CED3BC /* jquery-1.6.1.min.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D6AB15036BF600CED3BC /* jquery-1.6.1.min.js */; };
+		DABB9809150FF40100B05417 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
+		DABB980F150FF40100B05417 /* SendToMac.m in Sources */ = {isa = PBXBuildFile; fileRef = DABB980E150FF40100B05417 /* SendToMac.m */; };
+		DABB9814150FF5C100B05417 /* libSendToMac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DABB9808150FF40100B05417 /* libSendToMac.a */; };
+		DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABB981515100B4000B05417 /* SystemConfiguration.framework */; };
 		DAC6325E1486805C0075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC6326D148680650075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC63277148680700075AEA5 /* libuicolor-utilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */; };
@@ -1556,6 +1560,11 @@
 		DAB8D6F715036BF600CED3BC /* tip_location_teal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tip_location_teal@2x.png"; sourceTree = "<group>"; };
 		DAB8D6F815036BF600CED3BC /* tip_location_wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tip_location_wood.png; sourceTree = "<group>"; };
 		DAB8D6F915036BF600CED3BC /* tip_location_wood@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tip_location_wood@2x.png"; sourceTree = "<group>"; };
+		DABB9808150FF40100B05417 /* libSendToMac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSendToMac.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DABB980C150FF40100B05417 /* SendToMac-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SendToMac-Prefix.pch"; sourceTree = "<group>"; };
+		DABB980D150FF40100B05417 /* SendToMac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SendToMac.h; sourceTree = "<group>"; };
+		DABB980E150FF40100B05417 /* SendToMac.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SendToMac.m; sourceTree = "<group>"; };
+		DABB981515100B4000B05417 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libuicolor-utilities.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC6326C148680650075AEA5 /* libjrswizzle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjrswizzle.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC632791486809A0075AEA5 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JRSwizzle.h; path = External/Pearl/External/jrswizzle/JRSwizzle.h; sourceTree = SOURCE_ROOT; };
@@ -1648,6 +1657,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */,
+				DABB9814150FF5C100B05417 /* libSendToMac.a in Frameworks */,
 				DA672D3014F9413D004A189C /* libPearl.a in Frameworks */,
 				DA672D2F14F92C6B004A189C /* libz.dylib in Frameworks */,
 				DAEBC45314F6364500987BF6 /* QuartzCore.framework in Frameworks */,
@@ -1668,6 +1679,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA95D59D14DF063C008D1B94 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DABB9805150FF40100B05417 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DABB9809150FF40100B05417 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1715,9 +1734,9 @@
 			isa = PBXGroup;
 			children = (
 				DA1A142714E494DA00BCFFBE /* scrypt.xcodeproj */,
-				DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */,
 				DA5BFA50147E415C00F98B1E /* MasterPassword */,
 				DAB8D46F15036BF600CED3BC /* Resources */,
+				DABB980A150FF40100B05417 /* SendToMac */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
 				DAC6325F1486805C0075AEA5 /* uicolor-utilities */,
 				DAC6326E148680650075AEA5 /* jrswizzle */,
@@ -1736,6 +1755,7 @@
 				DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */,
 				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
 				DA95D59C14DF063C008D1B94 /* libInAppSettingsKit.a */,
+				DABB9808150FF40100B05417 /* libSendToMac.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1743,6 +1763,8 @@
 		DA5BFA47147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */,
+				DABB981515100B4000B05417 /* SystemConfiguration.framework */,
 				DA672D2E14F92C6B004A189C /* libz.dylib */,
 				DAEBC45214F6364500987BF6 /* QuartzCore.framework */,
 				DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */,
@@ -2610,6 +2632,24 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		DABB980A150FF40100B05417 /* SendToMac */ = {
+			isa = PBXGroup;
+			children = (
+				DABB980D150FF40100B05417 /* SendToMac.h */,
+				DABB980E150FF40100B05417 /* SendToMac.m */,
+				DABB980B150FF40100B05417 /* Supporting Files */,
+			);
+			path = SendToMac;
+			sourceTree = "<group>";
+		};
+		DABB980B150FF40100B05417 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DABB980C150FF40100B05417 /* SendToMac-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		DAC6325F1486805C0075AEA5 /* uicolor-utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -2787,6 +2827,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DABB9806150FF40100B05417 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DAC6325B1486805C0075AEA5 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -2886,6 +2933,23 @@
 			productReference = DA95D59C14DF063C008D1B94 /* libInAppSettingsKit.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		DABB9807150FF40100B05417 /* SendToMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DABB9810150FF40100B05417 /* Build configuration list for PBXNativeTarget "SendToMac" */;
+			buildPhases = (
+				DABB9804150FF40100B05417 /* Sources */,
+				DABB9805150FF40100B05417 /* Frameworks */,
+				DABB9806150FF40100B05417 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SendToMac;
+			productName = SendToMac;
+			productReference = DABB9808150FF40100B05417 /* libSendToMac.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		DAC6325C1486805C0075AEA5 /* uicolor-utilities */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAC632651486805C0075AEA5 /* Build configuration list for PBXNativeTarget "uicolor-utilities" */;
@@ -2973,6 +3037,7 @@
 				DAC6325C1486805C0075AEA5 /* uicolor-utilities */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
 				DA95D59B14DF063C008D1B94 /* InAppSettingsKit */,
+				DABB9807150FF40100B05417 /* SendToMac */,
 			);
 		};
 /* End PBXProject section */
@@ -3722,6 +3787,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DABB9804150FF40100B05417 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DABB980F150FF40100B05417 /* SendToMac.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DAC632591486805C0075AEA5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4014,6 +4087,54 @@
 			};
 			name = AppStore;
 		};
+		DABB9811150FF40100B05417 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				DSTROOT = /tmp/SendToMac.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SendToMac/SendToMac-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		DABB9812150FF40100B05417 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/SendToMac.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SendToMac/SendToMac-Prefix.pch";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		DABB9813150FF40100B05417 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/SendToMac.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SendToMac/SendToMac-Prefix.pch";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = AppStore;
+		};
 		DAC632661486805C0075AEA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4122,6 +4243,15 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		DABB9810150FF40100B05417 /* Build configuration list for PBXNativeTarget "SendToMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DABB9811150FF40100B05417 /* Debug */,
+				DABB9812150FF40100B05417 /* Release */,
+				DABB9813150FF40100B05417 /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		DAC632651486805C0075AEA5 /* Build configuration list for PBXNativeTarget "uicolor-utilities" */ = {
 			isa = XCConfigurationList;
