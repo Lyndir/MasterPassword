@@ -41,8 +41,8 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     
     UITableView *tableView = self.searchDisplayController.searchResultsTableView;
-    for (NSUInteger section = 0; section < [self numberOfSectionsInTableView:tableView]; ++section) {
-        NSUInteger rowCount = [self tableView:tableView numberOfRowsInSection:section];
+    for (NSInteger section = 0; section < [self numberOfSectionsInTableView:tableView]; ++section) {
+        NSInteger rowCount = [self tableView:tableView numberOfRowsInSection:section];
         if (!rowCount)
             continue;
         
@@ -54,9 +54,7 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     
-#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointCancelSearch];
-#endif
     
     [self.delegate didSelectElement:nil];
 }
@@ -189,13 +187,13 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
-    return [[self.fetchedResultsController sections] count] + ([self.query length]? 1: 0);
+    return (signed)[[self.fetchedResultsController sections] count] + ([self.query length]? 1: 0);
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    if (section < [[self.fetchedResultsController sections] count])
-        return [[[self.fetchedResultsController sections] objectAtIndex:section] numberOfObjects];
+    if (section < (signed)[[self.fetchedResultsController sections] count])
+        return (signed)[[[self.fetchedResultsController sections] objectAtIndex:(unsigned)section] numberOfObjects];
     
     return 1;
 }
@@ -230,7 +228,7 @@
 
 - (void)configureCell:(UITableViewCell *)cell inTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section < [[self.fetchedResultsController sections] count]) {
+    if (indexPath.section < (signed)[[self.fetchedResultsController sections] count]) {
         MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
         
         cell.textLabel.text = element.name;
@@ -245,7 +243,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section < [[self.fetchedResultsController sections] count])
+    if (indexPath.section < (signed)[[self.fetchedResultsController sections] count])
         [self.delegate didSelectElement:[self.fetchedResultsController objectAtIndexPath:indexPath]];
     
     else {
@@ -263,7 +261,7 @@
                                   [self.fetchedResultsController.managedObjectContext performBlock:^{
                                       MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPElementGeneratedEntity class])
                                                                                                inManagedObjectContext:self.fetchedResultsController.managedObjectContext];
-                                      assert([element isKindOfClass:ClassFromMPElementType(element.type)]);
+                                      assert([element isKindOfClass:ClassFromMPElementType((unsigned)element.type)]);
                                       assert([MPAppDelegate get].keyHashHex);
                                       
                                       element.name = siteName;
@@ -279,8 +277,8 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     
-    if (section < [[self.fetchedResultsController sections] count])
-        return [[[self.fetchedResultsController sections] objectAtIndex:section] name];
+    if (section < (signed)[[self.fetchedResultsController sections] count])
+        return [[[self.fetchedResultsController sections] objectAtIndex:(unsigned)section] name];
     
     return @"";
 }
@@ -297,15 +295,13 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section < [[self.fetchedResultsController sections] count]) {
+    if (indexPath.section < (signed)[[self.fetchedResultsController sections] count]) {
         if (editingStyle == UITableViewCellEditingStyleDelete)
             [self.fetchedResultsController.managedObjectContext performBlock:^{
                 MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
                 [self.fetchedResultsController.managedObjectContext deleteObject:element];
                 
-#ifdef TESTFLIGHT
                 [TestFlight passCheckpoint:MPTestFlightCheckpointDeleteElement];
-#endif
             }];
     }
 }

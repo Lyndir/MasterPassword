@@ -11,6 +11,23 @@
 
 #import "MPMainViewController.h"
 #import "IASKSettingsReader.h"
+#import "LocalyticsSession.h"
+#import "TestFlight.h"
+#import <Crashlytics/Crashlytics.h>
+
+@interface MPAppDelegate ()
+
+- (NSString *)testFlightInfo;
+- (NSString *)testFlightToken;
+
+- (NSString *)crashlyticsInfo;
+- (NSString *)crashlyticsAPIKey;
+
+- (NSString *)localyticsInfo;
+- (NSString *)localyticsKey;
+
+@end
+
 
 @implementation MPAppDelegate
 
@@ -28,30 +45,70 @@
 
 #ifdef DEBUG
     [PearlLogger get].autoprintLevel = PearlLogLevelDebug;
-    [NSClassFromString(@"WebView") performSelector:@selector(_enableRemoteInspector)];
+//    [NSClassFromString(@"WebView") performSelector:NSSelectorFromString(@"_enableRemoteInspector")];
 #endif
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-#ifdef TESTFLIGHT
-    @try {
-        [TestFlight takeOff:@"bd44885deee7adce0645ce8e5498d80a_NDQ5NDQyMDExLTEyLTAyIDExOjM1OjQ4LjQ2NjM4NA"];
-        [TestFlight setOptions:[NSDictionary dictionaryWithObjectsAndKeys:
-                                [NSNumber numberWithBool:NO],   @"logToConsole",
-                                [NSNumber numberWithBool:NO],   @"logToSTDERR",
-                                nil]];
-        [TestFlight passCheckpoint:MPTestFlightCheckpointLaunched];
-        [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
-            if (message.level >= PearlLogLevelInfo)
-                TFLog(@"%@", message);
-            
-            return YES;
-        }];
-    }
-    @catch (NSException *exception) {
-        err(@"TestFlight: %@", exception);
-    }
+#ifndef DEBUG
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        @try {
+            NSString *testFlightToken = [self testFlightToken];
+            if ([testFlightToken length]) {
+                dbg(@"Initializing TestFlight");
+                [TestFlight addCustomEnvironmentInformation:@"Anonymous" forKey:@"username"];
+                [TestFlight setOptions:[NSDictionary dictionaryWithObjectsAndKeys:
+                                        [NSNumber numberWithBool:NO],   @"logToConsole",
+                                        [NSNumber numberWithBool:NO],   @"logToSTDERR",
+                                        nil]];
+                [TestFlight takeOff:testFlightToken];
+                [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
+                    if (message.level >= PearlLogLevelInfo)
+                        TFLog(@"%@", message);
+                    
+                    return YES;
+                }];
+                [TestFlight passCheckpoint:MPTestFlightCheckpointLaunched];
+            }
+        }
+        @catch (NSException *exception) {
+            err(@"TestFlight: %@", exception);
+        }
+        @try {
+            NSString *crashlyticsAPIKey = [self crashlyticsAPIKey];
+            if ([crashlyticsAPIKey length]) {
+                dbg(@"Initializing Crashlytics");
+                //[Crashlytics sharedInstance].debugMode = YES;
+                [Crashlytics startWithAPIKey:crashlyticsAPIKey afterDelay:0];
+            }
+        }
+        @catch (NSException *exception) {
+            err(@"Crashlytics: %@", exception);
+        }
+        @try {
+            NSString *localyticsKey = [self localyticsKey];
+            if ([localyticsKey length]) {
+                dbg(@"Initializing Localytics");
+                [[LocalyticsSession sharedLocalyticsSession] startSession:localyticsKey];
+                [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
+                    if (message.level >= PearlLogLevelError)
+                        [[LocalyticsSession sharedLocalyticsSession] tagEvent:@"Problem" attributes:
+                         [NSDictionary dictionaryWithObjectsAndKeys:
+                          [message levelDescription],
+                          @"level",
+                          message.message,
+                          @"message",
+                          nil]];
+                    
+                    return YES;
+                }];
+            }
+        }
+        @catch (NSException *exception) {
+            err(@"Localytics exception: %@", exception);
+        }
+    });
 #endif
     
     UIImage *navBarImage = [[UIImage imageNamed:@"ui_navbar_container"]  resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
@@ -59,10 +116,10 @@
     [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsLandscapePhone];
     [[UINavigationBar appearance] setTitleTextAttributes:
      [NSDictionary dictionaryWithObjectsAndKeys:
-      [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0],  UITextAttributeTextColor,
-      [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8],                          UITextAttributeTextShadowColor, 
-      [NSValue valueWithUIOffset:UIOffsetMake(0, -1)],                                  UITextAttributeTextShadowOffset, 
-      [UIFont fontWithName:@"Helvetica-Neue" size:0.0],                                 UITextAttributeFont, 
+      [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],                          UITextAttributeTextColor,
+      [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f],                          UITextAttributeTextShadowColor, 
+      [NSValue valueWithUIOffset:UIOffsetMake(0, -1)],                                      UITextAttributeTextShadowOffset, 
+      [UIFont fontWithName:@"Helvetica-Neue" size:0.0f],                                    UITextAttributeFont, 
       nil]];
     
     UIImage *navBarButton   = [[UIImage imageNamed:@"ui_navbar_button"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
@@ -73,10 +130,10 @@
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
     [[UIBarButtonItem appearance] setTitleTextAttributes:
      [NSDictionary dictionaryWithObjectsAndKeys:
-      [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0],                          UITextAttributeTextColor,
-      [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.5],                          UITextAttributeTextShadowColor,
-      [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],                                   UITextAttributeTextShadowOffset,
-      [UIFont fontWithName:@"Helvetica-Neue" size:0.0],                                 UITextAttributeFont,
+      [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],                          UITextAttributeTextColor,
+      [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f],                          UITextAttributeTextShadowColor,
+      [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],                                       UITextAttributeTextShadowOffset,
+      [UIFont fontWithName:@"Helvetica-Neue" size:0.0f],                                    UITextAttributeFont,
       nil]
                                                 forState:UIControlStateNormal];
     
@@ -118,7 +175,7 @@
                                                           [self loadKey:YES];
                                                   }];
     
-#ifdef TESTFLIGHT
+#ifdef ADHOC
     [PearlAlert showAlertWithTitle:@"Welcome, tester!" message:
      @"Thank you for taking the time to test Master Password.\n\n"
      @"Please provide any feedback, however minor it may seem, via the Feedback action item accessible from the top right.\n\n"
@@ -143,18 +200,14 @@
     else
         [self loadKey:NO];
     
-#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointActivated];
-#endif
 }
 
 - (void)showGuide {
     
     [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
     
-#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointShowGuide];
-#endif
 }
 
 - (void)loadKey:(BOOL)animated {
@@ -172,6 +225,34 @@
         });
 }
 
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    
+    [[LocalyticsSession sharedLocalyticsSession] close];
+    [[LocalyticsSession sharedLocalyticsSession] upload];
+    
+    [super applicationDidEnterBackground:application];
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    
+    [[LocalyticsSession sharedLocalyticsSession] resume];
+    [[LocalyticsSession sharedLocalyticsSession] upload];
+    
+    [super applicationWillEnterForeground:application];
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application {
+    
+    [self saveContext];
+    
+    [TestFlight passCheckpoint:MPTestFlightCheckpointTerminated];
+
+    [[LocalyticsSession sharedLocalyticsSession] close];
+    [[LocalyticsSession sharedLocalyticsSession] upload];
+    
+    [super applicationWillTerminate:application];
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application {
     
     [self saveContext];
@@ -179,18 +260,7 @@
     if (![[MPiOSConfig get].rememberKey boolValue])
         [self updateKey:nil];
     
-#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointDeactivated];
-#endif
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application {
-    
-    [self saveContext];
-    
-#ifdef TESTFLIGHT
-    [TestFlight passCheckpoint:MPTestFlightCheckpointTerminated];
-#endif
 }
 
 + (NSManagedObjectContext *)managedObjectContext {
@@ -279,9 +349,7 @@
         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];        
 #endif
         
-#ifdef TESTFLIGHT
         [TestFlight passCheckpoint:MPTestFlightCheckpointStoreIncompatible];
-#endif
         
         @throw [NSException exceptionWithName:error.domain reason:error.localizedDescription
                                      userInfo:[NSDictionary dictionaryWithObject:error forKey:@"cause"]];
@@ -304,6 +372,72 @@
 - (NSURL *)applicationDocumentsDirectory
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+
+#pragma mark - TestFlight
+
+
+static NSDictionary *testFlightInfo = nil;
+
+- (NSDictionary *)testFlightInfo {
+    
+    if (testFlightInfo == nil)
+        testFlightInfo = [[NSDictionary alloc] initWithContentsOfURL:
+                          [[NSBundle mainBundle] URLForResource:@"TestFlight" withExtension:@"plist"]];
+    
+    return testFlightInfo;
+}
+
+- (NSString *)testFlightToken {
+    
+    return NSNullToNil([[self testFlightInfo] valueForKeyPath:@"Team Token"]);
+}
+
+
+#pragma mark - Crashlytics
+
+
+static NSDictionary *crashlyticsInfo = nil;
+
+- (NSDictionary *)crashlyticsInfo {
+    
+    if (crashlyticsInfo == nil)
+        crashlyticsInfo = [[NSDictionary alloc] initWithContentsOfURL:
+                           [[NSBundle mainBundle] URLForResource:@"Crashlytics" withExtension:@"plist"]];
+    
+    return crashlyticsInfo;
+}
+
+- (NSString *)crashlyticsAPIKey {
+    
+    return NSNullToNil([[self crashlyticsInfo] valueForKeyPath:@"API Key"]);
+}
+
+
+#pragma mark - Localytics
+
+
+static NSDictionary *localyticsInfo = nil;
+
+- (NSDictionary *)localyticsInfo {
+    
+    if (localyticsInfo == nil)
+        localyticsInfo = [[NSDictionary alloc] initWithContentsOfURL:
+                          [[NSBundle mainBundle] URLForResource:@"Localytics" withExtension:@"plist"]];
+    
+    return localyticsInfo;
+}
+
+- (NSString *)localyticsKey {
+    
+#ifdef DEBUG
+    return NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.development"]);
+#elif defined(LITE)
+    return NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.distribution.lite"]);
+#else
+    return NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.distribution"]);
+#endif
 }
 
 @end

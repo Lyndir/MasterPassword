@@ -56,7 +56,6 @@
 		DA95D5F614DF0B9F008D1B94 /* IASKPSTextFieldSpecifierViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA95D5CC14DF0691008D1B94 /* IASKPSTextFieldSpecifierViewCell.xib */; };
 		DA95D5F714DF0B9F008D1B94 /* IASKPSToggleSwitchSpecifierViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA95D5CD14DF0691008D1B94 /* IASKPSToggleSwitchSpecifierViewCell.xib */; };
 		DA95D5F814DF0B9F008D1B94 /* IASKSpecifierValuesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA95D5CE14DF0691008D1B94 /* IASKSpecifierValuesView.xib */; };
-		DA95D60614DF3E67008D1B94 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95D60114DF3E67008D1B94 /* libTestFlight.a */; };
 		DAB8D45D15036BCF00CED3BC /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D43C15036BCF00CED3BC /* MasterPassword.xcdatamodeld */; };
 		DAB8D45E15036BCF00CED3BC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D43F15036BCF00CED3BC /* InfoPlist.strings */; };
 		DAB8D45F15036BCF00CED3BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D44115036BCF00CED3BC /* main.m */; };
@@ -712,9 +711,6 @@
 		DAB8D97A15036BF700CED3BC /* tip_location_wood.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D6F815036BF600CED3BC /* tip_location_wood.png */; };
 		DAB8D97B15036BF700CED3BC /* tip_location_wood@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D6F915036BF600CED3BC /* tip_location_wood@2x.png */; };
 		DAB8D97C1503718B00CED3BC /* jquery-1.6.1.min.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D6AB15036BF600CED3BC /* jquery-1.6.1.min.js */; };
-		DABB9809150FF40100B05417 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
-		DABB980F150FF40100B05417 /* SendToMac.m in Sources */ = {isa = PBXBuildFile; fileRef = DABB980E150FF40100B05417 /* SendToMac.m */; };
-		DABB9814150FF5C100B05417 /* libSendToMac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DABB9808150FF40100B05417 /* libSendToMac.a */; };
 		DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABB981515100B4000B05417 /* SystemConfiguration.framework */; };
 		DAC6325E1486805C0075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC6326D148680650075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
@@ -722,10 +718,29 @@
 		DAC63278148680740075AEA5 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
 		DAC6327B1486809A0075AEA5 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = DAC632791486809A0075AEA5 /* JRSwizzle.h */; };
 		DAC6327C1486809A0075AEA5 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC6327A1486809A0075AEA5 /* JRSwizzle.m */; };
-		DAC6327F148680B10075AEA5 /* UIColor-Expanded.h in Headers */ = {isa = PBXBuildFile; fileRef = DAC6327D148680B10075AEA5 /* UIColor-Expanded.h */; };
-		DAC63280148680B10075AEA5 /* UIColor-Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC6327E148680B10075AEA5 /* UIColor-Expanded.m */; };
 		DAC632891486D9690075AEA5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC632871486D95D0075AEA5 /* Security.framework */; };
 		DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
+		DAD3126715528C9C00A3F9ED /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD3125F15528C9C00A3F9ED /* Crashlytics.framework */; };
+		DAD3126815528C9C00A3F9ED /* Crashlytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAD3126015528C9C00A3F9ED /* Crashlytics.plist */; };
+		DAD3126915528C9C00A3F9ED /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD3126215528C9C00A3F9ED /* libTestFlight.a */; };
+		DAD3126C15528C9C00A3F9ED /* TestFlight.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAD3126615528C9C00A3F9ED /* TestFlight.plist */; };
+		DAD3127215528CD200A3F9ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
+		DAD3128715528D0F00A3F9ED /* LocalyticsDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD3127E15528D0F00A3F9ED /* LocalyticsDatabase.h */; };
+		DAD3128815528D0F00A3F9ED /* LocalyticsDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD3127F15528D0F00A3F9ED /* LocalyticsDatabase.m */; };
+		DAD3128915528D0F00A3F9ED /* LocalyticsSession.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD3128015528D0F00A3F9ED /* LocalyticsSession.h */; };
+		DAD3128A15528D0F00A3F9ED /* LocalyticsSession.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD3128115528D0F00A3F9ED /* LocalyticsSession.m */; };
+		DAD3128B15528D0F00A3F9ED /* LocalyticsUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD3128215528D0F00A3F9ED /* LocalyticsUploader.h */; };
+		DAD3128C15528D0F00A3F9ED /* LocalyticsUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD3128315528D0F00A3F9ED /* LocalyticsUploader.m */; };
+		DAD3128D15528D0F00A3F9ED /* UploaderThread.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD3128415528D0F00A3F9ED /* UploaderThread.h */; };
+		DAD3128E15528D0F00A3F9ED /* UploaderThread.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD3128515528D0F00A3F9ED /* UploaderThread.m */; };
+		DAD3128F15528D0F00A3F9ED /* WebserviceConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD3128615528D0F00A3F9ED /* WebserviceConstants.h */; };
+		DAD3129015528D1600A3F9ED /* Localytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAD3127D15528D0F00A3F9ED /* Localytics.plist */; };
+		DAD312BB1552977200A3F9ED /* UIColor+Expanded.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD312B71552977200A3F9ED /* UIColor+Expanded.h */; };
+		DAD312BC1552977200A3F9ED /* UIColor+Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD312B81552977200A3F9ED /* UIColor+Expanded.m */; };
+		DAD312BD1552977200A3F9ED /* UIColor+HSV.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD312B91552977200A3F9ED /* UIColor+HSV.h */; };
+		DAD312BE1552977200A3F9ED /* UIColor+HSV.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD312BA1552977200A3F9ED /* UIColor+HSV.m */; };
+		DAD312BF1552A1BD00A3F9ED /* libLocalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD3127115528CD200A3F9ED /* libLocalytics.a */; };
+		DAD312C21552A22700A3F9ED /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD312C01552A20800A3F9ED /* libsqlite3.dylib */; };
 		DAEBC45314F6364500987BF6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
 		DAFE4A1315039824003ABA7C /* NSObject_PearlExport.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45D815039823003ABA7C /* NSObject_PearlExport.h */; };
 		DAFE4A1415039824003ABA7C /* NSObject_PearlExport.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45D915039823003ABA7C /* NSObject_PearlExport.m */; };
@@ -890,8 +905,6 @@
 		DA95D5CD14DF0691008D1B94 /* IASKPSToggleSwitchSpecifierViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IASKPSToggleSwitchSpecifierViewCell.xib; sourceTree = "<group>"; };
 		DA95D5CE14DF0691008D1B94 /* IASKSpecifierValuesView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IASKSpecifierValuesView.xib; sourceTree = "<group>"; };
 		DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		DA95D60114DF3E67008D1B94 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
-		DA95D60414DF3E67008D1B94 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		DAB8D43D15036BCF00CED3BC /* MasterPassword.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MasterPassword.xcdatamodel; sourceTree = "<group>"; };
 		DAB8D44015036BCF00CED3BC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DAB8D44115036BCF00CED3BC /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -1560,7 +1573,6 @@
 		DAB8D6F715036BF600CED3BC /* tip_location_teal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tip_location_teal@2x.png"; sourceTree = "<group>"; };
 		DAB8D6F815036BF600CED3BC /* tip_location_wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tip_location_wood.png; sourceTree = "<group>"; };
 		DAB8D6F915036BF600CED3BC /* tip_location_wood@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tip_location_wood@2x.png"; sourceTree = "<group>"; };
-		DABB9808150FF40100B05417 /* libSendToMac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSendToMac.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DABB980C150FF40100B05417 /* SendToMac-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SendToMac-Prefix.pch"; sourceTree = "<group>"; };
 		DABB980D150FF40100B05417 /* SendToMac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SendToMac.h; sourceTree = "<group>"; };
 		DABB980E150FF40100B05417 /* SendToMac.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SendToMac.m; sourceTree = "<group>"; };
@@ -1569,11 +1581,30 @@
 		DAC6326C148680650075AEA5 /* libjrswizzle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjrswizzle.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC632791486809A0075AEA5 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JRSwizzle.h; path = External/Pearl/External/jrswizzle/JRSwizzle.h; sourceTree = SOURCE_ROOT; };
 		DAC6327A1486809A0075AEA5 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JRSwizzle.m; path = External/Pearl/External/jrswizzle/JRSwizzle.m; sourceTree = SOURCE_ROOT; };
-		DAC6327D148680B10075AEA5 /* UIColor-Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor-Expanded.h"; path = "External/Pearl/External/uicolor-utilities/UIColor-Expanded.h"; sourceTree = SOURCE_ROOT; };
-		DAC6327E148680B10075AEA5 /* UIColor-Expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor-Expanded.m"; path = "External/Pearl/External/uicolor-utilities/UIColor-Expanded.m"; sourceTree = SOURCE_ROOT; };
 		DAC632871486D95D0075AEA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		DAC77CAD148291A600BCF976 /* libPearl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPearl.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC77CB1148291A600BCF976 /* Pearl-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pearl-Prefix.pch"; sourceTree = "<group>"; };
+		DAD3125F15528C9C00A3F9ED /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		DAD3126015528C9C00A3F9ED /* Crashlytics.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Crashlytics.plist; sourceTree = "<group>"; };
+		DAD3126215528C9C00A3F9ED /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		DAD3126515528C9C00A3F9ED /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		DAD3126615528C9C00A3F9ED /* TestFlight.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = TestFlight.plist; sourceTree = "<group>"; };
+		DAD3127115528CD200A3F9ED /* libLocalytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLocalytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAD3127D15528D0F00A3F9ED /* Localytics.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Localytics.plist; sourceTree = "<group>"; };
+		DAD3127E15528D0F00A3F9ED /* LocalyticsDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsDatabase.h; sourceTree = "<group>"; };
+		DAD3127F15528D0F00A3F9ED /* LocalyticsDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsDatabase.m; sourceTree = "<group>"; };
+		DAD3128015528D0F00A3F9ED /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsSession.h; sourceTree = "<group>"; };
+		DAD3128115528D0F00A3F9ED /* LocalyticsSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsSession.m; sourceTree = "<group>"; };
+		DAD3128215528D0F00A3F9ED /* LocalyticsUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsUploader.h; sourceTree = "<group>"; };
+		DAD3128315528D0F00A3F9ED /* LocalyticsUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsUploader.m; sourceTree = "<group>"; };
+		DAD3128415528D0F00A3F9ED /* UploaderThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploaderThread.h; sourceTree = "<group>"; };
+		DAD3128515528D0F00A3F9ED /* UploaderThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploaderThread.m; sourceTree = "<group>"; };
+		DAD3128615528D0F00A3F9ED /* WebserviceConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebserviceConstants.h; sourceTree = "<group>"; };
+		DAD312B71552977200A3F9ED /* UIColor+Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Expanded.h"; path = "External/Pearl/External/uicolor-utilities/UIColor+Expanded.h"; sourceTree = SOURCE_ROOT; };
+		DAD312B81552977200A3F9ED /* UIColor+Expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Expanded.m"; path = "External/Pearl/External/uicolor-utilities/UIColor+Expanded.m"; sourceTree = SOURCE_ROOT; };
+		DAD312B91552977200A3F9ED /* UIColor+HSV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+HSV.h"; path = "External/Pearl/External/uicolor-utilities/UIColor+HSV.h"; sourceTree = SOURCE_ROOT; };
+		DAD312BA1552977200A3F9ED /* UIColor+HSV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+HSV.m"; path = "External/Pearl/External/uicolor-utilities/UIColor+HSV.m"; sourceTree = SOURCE_ROOT; };
+		DAD312C01552A20800A3F9ED /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		DAEBC45214F6364500987BF6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DAFE45D815039823003ABA7C /* NSObject_PearlExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSObject_PearlExport.h; sourceTree = "<group>"; };
 		DAFE45D915039823003ABA7C /* NSObject_PearlExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSObject_PearlExport.m; sourceTree = "<group>"; };
@@ -1657,8 +1688,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAD312C21552A22700A3F9ED /* libsqlite3.dylib in Frameworks */,
+				DAD312BF1552A1BD00A3F9ED /* libLocalytics.a in Frameworks */,
 				DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */,
-				DABB9814150FF5C100B05417 /* libSendToMac.a in Frameworks */,
 				DA672D3014F9413D004A189C /* libPearl.a in Frameworks */,
 				DA672D2F14F92C6B004A189C /* libz.dylib in Frameworks */,
 				DAEBC45314F6364500987BF6 /* QuartzCore.framework in Frameworks */,
@@ -1670,7 +1702,8 @@
 				DA5BFA4B147E415C00F98B1E /* Foundation.framework in Frameworks */,
 				DA5BFA4D147E415C00F98B1E /* CoreGraphics.framework in Frameworks */,
 				DA5BFA4F147E415C00F98B1E /* CoreData.framework in Frameworks */,
-				DA95D60614DF3E67008D1B94 /* libTestFlight.a in Frameworks */,
+				DAD3126715528C9C00A3F9ED /* Crashlytics.framework in Frameworks */,
+				DAD3126915528C9C00A3F9ED /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1679,14 +1712,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA95D59D14DF063C008D1B94 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DABB9805150FF40100B05417 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DABB9809150FF40100B05417 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1717,6 +1742,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DAD3126E15528CD200A3F9ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAD3127215528CD200A3F9ED /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -1741,7 +1774,9 @@
 				DAC6325F1486805C0075AEA5 /* uicolor-utilities */,
 				DAC6326E148680650075AEA5 /* jrswizzle */,
 				DA95D59E14DF063C008D1B94 /* InAppSettingsKit */,
-				DA95D5FF14DF3E67008D1B94 /* TestFlightSDK */,
+				DAD3125E15528C9C00A3F9ED /* Crashlytics */,
+				DAD3126115528C9C00A3F9ED /* TestFlight */,
+				DAD3127315528CD200A3F9ED /* Localytics */,
 				DA5BFA47147E415C00F98B1E /* Frameworks */,
 				DA5BFA45147E415C00F98B1E /* Products */,
 			);
@@ -1755,7 +1790,7 @@
 				DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */,
 				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
 				DA95D59C14DF063C008D1B94 /* libInAppSettingsKit.a */,
-				DABB9808150FF40100B05417 /* libSendToMac.a */,
+				DAD3127115528CD200A3F9ED /* libLocalytics.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1763,6 +1798,7 @@
 		DA5BFA47147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DAD312C01552A20800A3F9ED /* libsqlite3.dylib */,
 				DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */,
 				DABB981515100B4000B05417 /* SystemConfiguration.framework */,
 				DA672D2E14F92C6B004A189C /* libz.dylib */,
@@ -1787,10 +1823,10 @@
 				DA600C2615056427008E9AB6 /* MPConfig.h */,
 				DA600C2715056427008E9AB6 /* MPConfig.m */,
 				DAB8D45515036BCF00CED3BC /* MPElementStoredEntity.m */,
+				DAB8D45915036BCF00CED3BC /* MPTypes.h */,
 				DAB8D45615036BCF00CED3BC /* MPTypes.m */,
 				DAB8D45715036BCF00CED3BC /* MPElementEntity.h */,
 				DAB8D45815036BCF00CED3BC /* MPElementEntity.m */,
-				DAB8D45915036BCF00CED3BC /* MPTypes.h */,
 				DAB8D45A15036BCF00CED3BC /* MPElementGeneratedEntity.h */,
 				DAB8D45B15036BCF00CED3BC /* MPElementGeneratedEntity.m */,
 				DAB8D45C15036BCF00CED3BC /* MPElementStoredEntity.h */,
@@ -1876,16 +1912,6 @@
 			name = Xibs;
 			path = External/InAppSettingsKit/InAppSettingsKit/Xibs;
 			sourceTree = SOURCE_ROOT;
-		};
-		DA95D5FF14DF3E67008D1B94 /* TestFlightSDK */ = {
-			isa = PBXGroup;
-			children = (
-				DA95D60114DF3E67008D1B94 /* libTestFlight.a */,
-				DA95D60414DF3E67008D1B94 /* TestFlight.h */,
-			);
-			name = TestFlightSDK;
-			path = External/TestFlightSDK;
-			sourceTree = "<group>";
 		};
 		DAB8D43E15036BCF00CED3BC /* iOS */ = {
 			isa = PBXGroup;
@@ -2653,8 +2679,10 @@
 		DAC6325F1486805C0075AEA5 /* uicolor-utilities */ = {
 			isa = PBXGroup;
 			children = (
-				DAC6327D148680B10075AEA5 /* UIColor-Expanded.h */,
-				DAC6327E148680B10075AEA5 /* UIColor-Expanded.m */,
+				DAD312B71552977200A3F9ED /* UIColor+Expanded.h */,
+				DAD312B81552977200A3F9ED /* UIColor+Expanded.m */,
+				DAD312B91552977200A3F9ED /* UIColor+HSV.h */,
+				DAD312BA1552977200A3F9ED /* UIColor+HSV.m */,
 			);
 			path = "uicolor-utilities";
 			sourceTree = "<group>";
@@ -2685,6 +2713,42 @@
 				DAC77CB1148291A600BCF976 /* Pearl-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DAD3125E15528C9C00A3F9ED /* Crashlytics */ = {
+			isa = PBXGroup;
+			children = (
+				DAD3125F15528C9C00A3F9ED /* Crashlytics.framework */,
+				DAD3126015528C9C00A3F9ED /* Crashlytics.plist */,
+			);
+			path = Crashlytics;
+			sourceTree = "<group>";
+		};
+		DAD3126115528C9C00A3F9ED /* TestFlight */ = {
+			isa = PBXGroup;
+			children = (
+				DAD3126215528C9C00A3F9ED /* libTestFlight.a */,
+				DAD3126515528C9C00A3F9ED /* TestFlight.h */,
+				DAD3126615528C9C00A3F9ED /* TestFlight.plist */,
+			);
+			path = TestFlight;
+			sourceTree = "<group>";
+		};
+		DAD3127315528CD200A3F9ED /* Localytics */ = {
+			isa = PBXGroup;
+			children = (
+				DAD3127D15528D0F00A3F9ED /* Localytics.plist */,
+				DAD3127E15528D0F00A3F9ED /* LocalyticsDatabase.h */,
+				DAD3127F15528D0F00A3F9ED /* LocalyticsDatabase.m */,
+				DAD3128015528D0F00A3F9ED /* LocalyticsSession.h */,
+				DAD3128115528D0F00A3F9ED /* LocalyticsSession.m */,
+				DAD3128215528D0F00A3F9ED /* LocalyticsUploader.h */,
+				DAD3128315528D0F00A3F9ED /* LocalyticsUploader.m */,
+				DAD3128415528D0F00A3F9ED /* UploaderThread.h */,
+				DAD3128515528D0F00A3F9ED /* UploaderThread.m */,
+				DAD3128615528D0F00A3F9ED /* WebserviceConstants.h */,
+			);
+			path = Localytics;
 			sourceTree = "<group>";
 		};
 		DAFE45D715039823003ABA7C /* Pearl */ = {
@@ -2827,18 +2891,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DABB9806150FF40100B05417 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DAC6325B1486805C0075AEA5 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DAC6327F148680B10075AEA5 /* UIColor-Expanded.h in Headers */,
+				DAD312BB1552977200A3F9ED /* UIColor+Expanded.h in Headers */,
+				DAD312BD1552977200A3F9ED /* UIColor+HSV.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2895,6 +2953,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DAD3126F15528CD200A3F9ED /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAD3128715528D0F00A3F9ED /* LocalyticsDatabase.h in Headers */,
+				DAD3128915528D0F00A3F9ED /* LocalyticsSession.h in Headers */,
+				DAD3128B15528D0F00A3F9ED /* LocalyticsUploader.h in Headers */,
+				DAD3128D15528D0F00A3F9ED /* UploaderThread.h in Headers */,
+				DAD3128F15528D0F00A3F9ED /* WebserviceConstants.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -2905,7 +2975,8 @@
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
 				DA5BFA42147E415C00F98B1E /* Resources */,
-				DA6556E314D55F3000841C99 /* ShellScript */,
+				DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */,
+				DAD3125D155288AA00A3F9ED /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2931,23 +3002,6 @@
 			name = InAppSettingsKit;
 			productName = InAppSettingsKit;
 			productReference = DA95D59C14DF063C008D1B94 /* libInAppSettingsKit.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-		DABB9807150FF40100B05417 /* SendToMac */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DABB9810150FF40100B05417 /* Build configuration list for PBXNativeTarget "SendToMac" */;
-			buildPhases = (
-				DABB9804150FF40100B05417 /* Sources */,
-				DABB9805150FF40100B05417 /* Frameworks */,
-				DABB9806150FF40100B05417 /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = SendToMac;
-			productName = SendToMac;
-			productReference = DABB9808150FF40100B05417 /* libSendToMac.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		DAC6325C1486805C0075AEA5 /* uicolor-utilities */ = {
@@ -3003,6 +3057,23 @@
 			productReference = DAC77CAD148291A600BCF976 /* libPearl.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		DAD3127015528CD200A3F9ED /* Localytics */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DAD3127915528CD200A3F9ED /* Build configuration list for PBXNativeTarget "Localytics" */;
+			buildPhases = (
+				DAD3126D15528CD200A3F9ED /* Sources */,
+				DAD3126E15528CD200A3F9ED /* Frameworks */,
+				DAD3126F15528CD200A3F9ED /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Localytics;
+			productName = Localytics;
+			productReference = DAD3127115528CD200A3F9ED /* libLocalytics.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -3037,7 +3108,7 @@
 				DAC6325C1486805C0075AEA5 /* uicolor-utilities */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
 				DA95D59B14DF063C008D1B94 /* InAppSettingsKit */,
-				DABB9807150FF40100B05417 /* SendToMac */,
+				DAD3127015528CD200A3F9ED /* Localytics */,
 			);
 		};
 /* End PBXProject section */
@@ -3720,13 +3791,31 @@
 				DAB8D97A15036BF700CED3BC /* tip_location_wood.png in Resources */,
 				DAB8D97B15036BF700CED3BC /* tip_location_wood@2x.png in Resources */,
 				DAFE4A5A1503982E003ABA7C /* Pearl.strings in Resources */,
+				DAD3126815528C9C00A3F9ED /* Crashlytics.plist in Resources */,
+				DAD3126C15528C9C00A3F9ED /* TestFlight.plist in Resources */,
+				DAD3129015528D1600A3F9ED /* Localytics.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		DA6556E314D55F3000841C99 /* ShellScript */ = {
+		DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script: GIT version -> Info.plist";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = "/bin/bash -e";
+			shellScript = "PATH+=:/usr/libexec\n\nsetPlistWithKey() {\n    local key=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Set :'$key' $value\" \"$plist\"\n}\ngetPlistWithKey() {\n    local key=$1 plist=${2:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Print :'$key'\" \"$plist\"\n}\nsetSettingWithTitle() {\n    local i title=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Settings.bundle/Root.plist\"}\n    \n    for (( i=0; 1; ++i )); do\n        PlistBuddy -c \"Print :PreferenceSpecifiers:$i\" \"$plist\" &>/dev/null || break\n        echo \"Checking preference specifier $i\"\n    \n        [[ $(PlistBuddy -c \"Print :PreferenceSpecifiers:$i:Title\" \"$plist\" 2>/dev/null) = $title ]] || continue\n    \n        echo \"Correct title, setting value.\"\n        PlistBuddy -c \"Set :PreferenceSpecifiers:$i:DefaultValue $value\" \"$plist\"\n        break\n    done\n}\n\nbuild=$(git describe --tags --always --dirty --long)\ntag=$(git describe --tags | sed 's/-\\([^-]*\\)-[^-]*$/.\\1/')\n\nsetPlistWithKey CFBundleVersion \"$build\"\nsetPlistWithKey CFBundleShortVersionString \"$tag\"\n\nsetSettingWithTitle \"Build\" \"$build\"\nsetSettingWithTitle \"Version\" \"$tag\"\nsetSettingWithTitle \"Copyright\" \"$(getPlistWithKey NSHumanReadableCopyright)\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DAD3125D155288AA00A3F9ED /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3737,7 +3826,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/bash -e";
-			shellScript = "PATH+=:/usr/libexec\n\nsetPlistWithKey() {\n    local key=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n\n    PlistBuddy -c \"Set :$key $value\" \"$plist\"\n}\ngetPlistWithKey() {\n    local key=$1 plist=${2:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Print :$key\" \"$plist\"\n}\nsetSettingWithTitle() {\n    local i title=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Settings.bundle/Root.plist\"}\n    \n    for (( i=0; 1; ++i )); do\n        PlistBuddy -c \"Print :PreferenceSpecifiers:$i\" \"$plist\" &>/dev/null || break\n        echo \"Checking preference specifier $i\"\n    \n        [[ $(PlistBuddy -c \"Print :PreferenceSpecifiers:$i:Title\" \"$plist\" 2>/dev/null) = $title ]] || continue\n\n        echo \"Correct title, setting value.\"\n        PlistBuddy -c \"Set :PreferenceSpecifiers:$i:DefaultValue $value\" \"$plist\"\n        break\n    done\n}\n\nbuild=$(git describe --tags --always --dirty --long)\ntag=$(git describe --tags | sed 's/-\\([^-]*\\)-[^-]*$/.\\1/')\n\nsetPlistWithKey CFBundleVersion \"$build\"\nsetPlistWithKey CFBundleShortVersionString \"$tag\"\n\nsetSettingWithTitle \"Build\" \"$build\"\nsetSettingWithTitle \"Version\" \"$tag\"\nsetSettingWithTitle \"Copyright\" \"$(getPlistWithKey NSHumanReadableCopyright)\"\n";
+			shellScript = "Crashlytics/Crashlytics.framework/run \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" Crashlytics/Crashlytics.plist)\"";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -3787,19 +3876,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DABB9804150FF40100B05417 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DABB980F150FF40100B05417 /* SendToMac.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DAC632591486805C0075AEA5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DAC63280148680B10075AEA5 /* UIColor-Expanded.m in Sources */,
+				DAD312BC1552977200A3F9ED /* UIColor+Expanded.m in Sources */,
+				DAD312BE1552977200A3F9ED /* UIColor+HSV.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3851,6 +3933,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DAD3126D15528CD200A3F9ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAD3128815528D0F00A3F9ED /* LocalyticsDatabase.m in Sources */,
+				DAD3128A15528D0F00A3F9ED /* LocalyticsSession.m in Sources */,
+				DAD3128C15528D0F00A3F9ED /* LocalyticsUploader.m in Sources */,
+				DAD3128E15528D0F00A3F9ED /* UploaderThread.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -3891,131 +3984,226 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_CXX0X_EXTENSIONS = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"TESTFLIGHT=1",
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
+				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = iphoneos;
-				STRIP_INSTALLED_PRODUCT = NO;
+				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		DA5BFA6C147E415C00F98B1E /* Release */ = {
+		DA5BFA6C147E415C00F98B1E /* AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_CXX0X_EXTENSIONS = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"TESTFLIGHT=1",
+					"ADHOC=1",
 					"$(inherited)",
+					"NDEBUG=1",
+					"NS_BLOCK_ASSERTIONS=1",
 				);
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
+				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "${TARGET_NAME}";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
-				STRIP_INSTALLED_PRODUCT = NO;
+				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = AdHoc;
 		};
 		DA5BFA6E147E415C00F98B1E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword/iOS/MasterPassword.entitlements;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Crashlytics\"",
+				);
 				GCC_PREFIX_HEADER = "MasterPassword/iOS/MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword/iOS/MasterPassword-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/External/TestFlightSDK\"",
+					"\"$(SRCROOT)/TestFlight\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};
-		DA5BFA6F147E415C00F98B1E /* Release */ = {
+		DA5BFA6F147E415C00F98B1E /* AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword/iOS/MasterPassword.entitlements;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Crashlytics\"",
+				);
 				GCC_PREFIX_HEADER = "MasterPassword/iOS/MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword/iOS/MasterPassword-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/External/TestFlightSDK\"",
+					"\"$(SRCROOT)/TestFlight\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = app;
 			};
-			name = Release;
+			name = AdHoc;
 		};
 		DA95D5A514DF063C008D1B94 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/InAppSettingsKit.dst;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = InAppSettingsKit;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
-		DA95D5A614DF063C008D1B94 /* Release */ = {
+		DA95D5A614DF063C008D1B94 /* AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/InAppSettingsKit.dst;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = InAppSettingsKit;
 				SKIP_INSTALL = YES;
 			};
-			name = Release;
+			name = AdHoc;
 		};
 		DA95D60914DF3F3B008D1B94 /* AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_CXX0X_EXTENSIONS = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"APPSTORE=1",
 					"$(inherited)",
+					"NDEBUG=1",
+					"NS_BLOCK_ASSERTIONS=1",
 				);
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
+				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "${TARGET_NAME}";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
-				STRIP_INSTALLED_PRODUCT = NO;
+				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -4026,16 +4214,17 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword/iOS/MasterPassword.entitlements;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Crashlytics\"",
+				);
 				GCC_PREFIX_HEADER = "MasterPassword/iOS/MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword/iOS/MasterPassword-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/External/TestFlightSDK\"",
+					"\"$(SRCROOT)/TestFlight\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = app;
 			};
 			name = AppStore;
 		};
@@ -4081,56 +4270,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/InAppSettingsKit.dst;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = InAppSettingsKit;
-				SKIP_INSTALL = YES;
-			};
-			name = AppStore;
-		};
-		DABB9811150FF40100B05417 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				DSTROOT = /tmp/SendToMac.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SendToMac/SendToMac-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		DABB9812150FF40100B05417 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = /tmp/SendToMac.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SendToMac/SendToMac-Prefix.pch";
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		DABB9813150FF40100B05417 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = /tmp/SendToMac.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SendToMac/SendToMac-Prefix.pch";
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = AppStore;
@@ -4147,7 +4289,7 @@
 			};
 			name = Debug;
 		};
-		DAC632671486805C0075AEA5 /* Release */ = {
+		DAC632671486805C0075AEA5 /* AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -4157,7 +4299,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = Release;
+			name = AdHoc;
 		};
 		DAC63275148680650075AEA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -4171,7 +4313,7 @@
 			};
 			name = Debug;
 		};
-		DAC63276148680650075AEA5 /* Release */ = {
+		DAC63276148680650075AEA5 /* AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -4181,7 +4323,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = Release;
+			name = AdHoc;
 		};
 		DAC77CB5148291A600BCF976 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -4197,7 +4339,7 @@
 			};
 			name = Debug;
 		};
-		DAC77CB6148291A600BCF976 /* Release */ = {
+		DAC77CB6148291A600BCF976 /* AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -4209,7 +4351,28 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = Release;
+			name = AdHoc;
+		};
+		DAD3127A15528CD200A3F9ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+			};
+			name = Debug;
+		};
+		DAD3127B15528CD200A3F9ED /* AdHoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+			};
+			name = AdHoc;
+		};
+		DAD3127C15528CD200A3F9ED /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+			};
+			name = AppStore;
 		};
 /* End XCBuildConfiguration section */
 
@@ -4218,70 +4381,71 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA5BFA6B147E415C00F98B1E /* Debug */,
-				DA5BFA6C147E415C00F98B1E /* Release */,
+				DA5BFA6C147E415C00F98B1E /* AdHoc */,
 				DA95D60914DF3F3B008D1B94 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = AdHoc;
 		};
 		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA5BFA6E147E415C00F98B1E /* Debug */,
-				DA5BFA6F147E415C00F98B1E /* Release */,
+				DA5BFA6F147E415C00F98B1E /* AdHoc */,
 				DA95D60A14DF3F3B008D1B94 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = AdHoc;
 		};
 		DA95D5A414DF063C008D1B94 /* Build configuration list for PBXNativeTarget "InAppSettingsKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA95D5A514DF063C008D1B94 /* Debug */,
-				DA95D5A614DF063C008D1B94 /* Release */,
+				DA95D5A614DF063C008D1B94 /* AdHoc */,
 				DA95D60E14DF3F3B008D1B94 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DABB9810150FF40100B05417 /* Build configuration list for PBXNativeTarget "SendToMac" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DABB9811150FF40100B05417 /* Debug */,
-				DABB9812150FF40100B05417 /* Release */,
-				DABB9813150FF40100B05417 /* AppStore */,
-			);
-			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = AdHoc;
 		};
 		DAC632651486805C0075AEA5 /* Build configuration list for PBXNativeTarget "uicolor-utilities" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAC632661486805C0075AEA5 /* Debug */,
-				DAC632671486805C0075AEA5 /* Release */,
+				DAC632671486805C0075AEA5 /* AdHoc */,
 				DA95D60C14DF3F3B008D1B94 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = AdHoc;
 		};
 		DAC63274148680650075AEA5 /* Build configuration list for PBXNativeTarget "jrswizzle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAC63275148680650075AEA5 /* Debug */,
-				DAC63276148680650075AEA5 /* Release */,
+				DAC63276148680650075AEA5 /* AdHoc */,
 				DA95D60D14DF3F3B008D1B94 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = AdHoc;
 		};
 		DAC77CB7148291A600BCF976 /* Build configuration list for PBXNativeTarget "Pearl" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAC77CB5148291A600BCF976 /* Debug */,
-				DAC77CB6148291A600BCF976 /* Release */,
+				DAC77CB6148291A600BCF976 /* AdHoc */,
 				DA95D60B14DF3F3B008D1B94 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = AdHoc;
+		};
+		DAD3127915528CD200A3F9ED /* Build configuration list for PBXNativeTarget "Localytics" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAD3127A15528CD200A3F9ED /* Debug */,
+				DAD3127B15528CD200A3F9ED /* AdHoc */,
+				DAD3127C15528CD200A3F9ED /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = AdHoc;
 		};
 /* End XCConfigurationList section */
 

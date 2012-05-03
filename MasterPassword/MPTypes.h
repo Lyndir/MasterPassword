@@ -32,10 +32,10 @@ typedef enum {
     MPElementTypeStoredDevicePrivate    = MPElementTypeClassStored      | 0x02,
 } MPElementType;
 
-#ifdef TESTFLIGHT
 #define MPTestFlightCheckpointAction                    @"MPTestFlightCheckpointAction"
 #define MPTestFlightCheckpointHelpChapter               @"MPTestFlightCheckpointHelpChapter_%@"
 #define MPTestFlightCheckpointCopyToPasteboard          @"MPTestFlightCheckpointCopyToPasteboard"
+#define MPTestFlightCheckpointResetPasswordCounter      @"MPTestFlightCheckpointResetPasswordCounter"
 #define MPTestFlightCheckpointIncrementPasswordCounter  @"MPTestFlightCheckpointIncrementPasswordCounter"
 #define MPTestFlightCheckpointEditPassword              @"MPTestFlightCheckpointEditPassword"
 #define MPTestFlightCheckpointCloseAlert                @"MPTestFlightCheckpointCloseAlert"
@@ -56,7 +56,6 @@ typedef enum {
 #define MPTestFlightCheckpointMPAsked                   @"MPTestFlightCheckpointMPAsked"
 #define MPTestFlightCheckpointStoreIncompatible         @"MPTestFlightCheckpointStoreIncompatible"
 #define MPTestFlightCheckpointSetKeyphraseLength        @"MPTestFlightCheckpointSetKeyphraseLength_%d"
-#endif
 
 #define MPNotificationStoreUpdated                      @"MPNotificationStoreUpdated"
 #define MPNotificationKeySet                            @"MPNotificationKeySet"
@@ -69,4 +68,4 @@ NSData *keyHashForKey(NSData *key);
 NSString *NSStringFromMPElementType(MPElementType type);
 NSString *ClassNameFromMPElementType(MPElementType type);
 Class ClassFromMPElementType(MPElementType type);
-NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, uint16_t counter);
+NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, int16_t counter);

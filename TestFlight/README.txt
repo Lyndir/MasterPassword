@@ -1,18 +1,19 @@
-Thanks for downloading the TestFlight SDK 0.8.3!
+Thanks for downloading the TestFlight SDK 1.0!
 
 This document is also available on the web at https://www.testflightapp.com/sdk/doc
 
 1. Why use the TestFlight SDK?
 2. Considerations
 3. How do I integrate the SDK into my project?
-4. Using the Checkpoint API
-5. Using the Feedback API
-6. Upload your build
-7. Questions API
-8. View your results
-9. Advanced Exception Handling
-10. Remote Logging
-11. iOS 3
+4. Beta Testing and Release Differentiation
+5. Using the Checkpoint API
+6. Using the Feedback API
+7. Upload your build
+8. Questions API
+9. View your results
+10. Advanced Exception Handling
+11. Remote Logging
+12. iOS 3
 
 START
 
@@ -96,14 +97,26 @@ This SDK can be run from both the iPhone Simulator and Device and has been teste
     2. Strip Debug Symbols During Copy
     3. Strip Linked Product
 
-4. Use the Checkpoint API to create important checkpoints throughout your application.
+
+4. Beta Testing and Release Differentiation
+
+In order to provide more information about your testers while beta testing you will need to provide the device's unique identifier. This identifier is not something that the SDK will collect from the device and we do not recommend using this in production. Here is the recommended code for providing the device unique identifier.
+
+    #define TESTING 1
+    #ifdef TESTING
+        [TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
+    #endif
+
+This will allow you to have the best possible information during testing, but disable getting and sending of the device unique identifier when you release your application. When it is time to release simply comment out #define TESTING 1. If you decide to not include the device's unique identifier during your testing phase TestFlight will still collect all of the information that you send but it may be anonymized.
+
+5. Use the Checkpoint API to create important checkpoints throughout your application.
 
 When a tester does something you care about in your app you can pass a checkpoint.  For example completing a level, adding a todo item, etc.  The checkpoint progress is used to provide insight into how your testers are testing your apps.  The passed checkpoints are also attached to crashes, which can help when creating steps to replicate.
 
 `[TestFlight passCheckpoint:@"CHECKPOINT_NAME"];`
-Use `passCheckpoint:` to track when a user performs certain tasks in your application. This can be useful for making sure testers are hitting all parts of your application, as well as tracking which testers are being thorough.
+Use `+passCheckpoint:` to track when a user performs certain tasks in your application. This can be useful for making sure testers are hitting all parts of your application, as well as tracking which testers are being thorough.
 
-5. Using the Feedback API
+6. Using the Feedback API
 
 To launch unguided feedback call the `openFeedbackView` method. We recommend that you call this from a GUI element. 
 
@@ -122,11 +135,11 @@ The above sample assumes that [self getUserFeedback] is implemented such that it
 
 Once users have submitted feedback from inside of the application you can view it in the feedback area of your build page.
 
-6. Upload your build.
+7. Upload your build.
 
 After you have integrated the SDK into your application you need to upload your build to TestFlight. You can upload from your dashboard or or using the Upload API, full documentation at <https://testflightapp.com/api/doc/>
 
-7. Add Questions to Checkpoints
+8. Add Questions to Checkpoints
 
 In order to ask a question, you'll need to associate it with a checkpoint. Make sure your checkpoints are initialized by running your app and hitting them all yourself before you start adding questions.
 
@@ -138,11 +151,11 @@ After restarting your application on an approved device, when you pass the check
 
 After you upload a new build to TestFlight you will need to associate questions once again. However if your checkpoints and questions have remained the same you can choose "copy questions from an older build" and choose which build to copy the questions from.
 
-8. View your results.
+9. View your results.
 
 As testers install your build and start to test it you will see their session data on the web on the build report page for the build you've uploaded.
 
-9. Advanced Exception Handling
+10. Advanced Exception Handling
 
 An uncaught exception means that your application is in an unknown state and there is not much that you can do but try and exit gracefully. Our SDK does its best to get the data we collect in this situation to you while it is crashing, but it is designed in such a way that the important act of saving the data occurs in as safe way a way as possible before trying to send anything. If you do use uncaught exception or signal handlers install your handlers before calling `takeOff`. Our SDK will then call your handler while ours is running. For example:
 
@@ -182,7 +195,7 @@ An uncaught exception means that your application is in an unknown state and the
 
 You do not need to add the above code if your application does not use exception handling already.
 
-10. Remote Logging
+11. Remote Logging
 
 To perform remote logging you can use the TFLog method which logs in a few different methods described below. In order to make the transition from NSLog to TFLog easy we have used the same method signature for TFLog as NSLog. You can easily switch over to TFLog by adding the following macro to your header
 
@@ -214,9 +227,16 @@ The STDERR logger sends log messages to STDERR so that you can see your log stat
 
 The default option is YES.
 
-11. iOS3
+12. iOS3
 
-We now require that anyone who is writing an application that supports iOS3 add the System.framework as an optional link. In order to provide a better shutdown experience we send any large log files to our servers in the background. To add System.framework as an optional link you can follow
+We now require that anyone who is writing an application that supports iOS3 add the System.framework as an optional link. In order to provide a better shutdown experience we send any large log files to our servers in the background. To add System.framework as an optional link:
+    1. Select your Project in the Project Navigator
+    2. Select the target you want to enable the SDK for
+    3. Select the Build Phases tab
+    4. Open the Link Binary With Libraries Phase
+    5. Click the + to add a new library
+    6. Find libSystem.dylib in the list and add it
+    7. To the right of libSystem.dylib in the Link Binary With Libraries pane change "Required" to "Optional"
 
 END
 

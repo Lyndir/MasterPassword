@@ -102,7 +102,7 @@ NSString *ClassNameFromMPElementType(MPElementType type) {
 }
 
 static NSDictionary *MPTypes_ciphers = nil;
-NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, uint16_t counter) {
+NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, int16_t counter) {
     
     assert(type & MPElementTypeClassCalculated);
     

@@ -22,7 +22,7 @@
         return nil;
     
     if (self.type & MPElementTypeClassCalculated)
-        return MPCalculateContent(self.type, self.name, [MPAppDelegate get].key, self.counter);
+        return MPCalculateContent((unsigned)self.type, self.name, [MPAppDelegate get].key, self.counter);
     
     @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                    reason:[NSString stringWithFormat:@"Unsupported type: %d", self.type] userInfo:nil];

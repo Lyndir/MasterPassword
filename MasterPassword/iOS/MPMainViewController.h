@@ -34,6 +34,7 @@
 
 - (IBAction)copyContent;
 - (IBAction)incrementPasswordCounter;
+- (IBAction)resetPasswordCounter:(UILongPressGestureRecognizer *)sender;
 - (IBAction)editPassword;
 - (IBAction)closeAlert;
 - (IBAction)action:(UIBarButtonItem *)sender;

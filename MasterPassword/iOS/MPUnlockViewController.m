@@ -173,7 +173,7 @@ typedef enum {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self showMessage:@"Success!" state:MPLockscreenSuccess];
                     
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 1.5f), dispatch_get_main_queue(), ^{
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (long)(NSEC_PER_SEC * 1.5f)), dispatch_get_main_queue(), ^{
                         [self dismissModalViewControllerAnimated:YES];
                     });
                 });
@@ -214,9 +214,7 @@ typedef enum {
                      
                      [[MPAppDelegate get] loadKey:YES];
                      
-#ifdef TESTFLIGHT
                      [TestFlight passCheckpoint:MPTestFlightCheckpointMPChanged];
-#endif
                  }
                        cancelTitle:[PearlStrings get].commonButtonAbort
                        otherTitles:[PearlStrings get].commonButtonContinue, nil];

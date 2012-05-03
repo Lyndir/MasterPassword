@@ -42,9 +42,7 @@ static NSDictionary *keyHashQuery() {
     [PearlKeyChain deleteItemForQuery:keyHashQuery()];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyForgotten object:self];
-#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointMPForgotten];
-#endif
 }
 
 - (void)signOut {
@@ -63,9 +61,7 @@ static NSDictionary *keyHashQuery() {
         // Key should not be stored in keychain.  Delete it.
         dbg(@"Deleting key from key chain.");
         [PearlKeyChain deleteItemForQuery:keyQuery()];
-#ifdef TESTFLIGHT
         [TestFlight passCheckpoint:MPTestFlightCheckpointMPUnstored];
-#endif
     }
 }
 
@@ -96,15 +92,11 @@ static NSDictionary *keyHashQuery() {
         if (![keyHash isEqual:tryKeyHash]) {
             dbg(@"Key phrase hash mismatch. Expected: %@, answer: %@.", keyHash, tryKeyHash);
             
-#ifdef TESTFLIGHT
             [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
-#endif
             return NO;
         }
     
-#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointMPAsked];
-#endif
     
     [self updateKey:tryKey];
     return YES;
@@ -142,9 +134,7 @@ static NSDictionary *keyHashQuery() {
                                                     nil]];
         }
         
-#ifdef TESTFLIGHT
         [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointSetKeyphraseLength, key.length]];
-#endif
     }
 }
 

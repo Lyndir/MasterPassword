@@ -21,7 +21,8 @@
 - (void)updateWasAnimated:(BOOL)animated;
 - (void)showContentTip:(NSString *)message withIcon:(UIImageView *)icon;
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message;
-- (void)updateElement:(void (^)(void))updateElement;
+- (void)changeElementWithWarning:(NSString *)warning do:(void (^)(void))task;
+- (void)changeElementWithoutWarningDo:(void (^)(void))task;
 
 @end
 
@@ -163,9 +164,9 @@
     self.passwordIncrementer.alpha = self.activeElement.type & MPElementTypeClassCalculated? 0.5f: 0;
     self.passwordEdit.alpha = self.activeElement.type & MPElementTypeClassStored? 0.5f: 0;
     
-    [self.typeButton setTitle:NSStringFromMPElementType(self.activeElement.type)
+    [self.typeButton setTitle:NSStringFromMPElementType((unsigned)self.activeElement.type)
                      forState:UIControlStateNormal];
-    self.typeButton.alpha = NSStringFromMPElementType(self.activeElement.type).length? 1: 0;
+    self.typeButton.alpha = NSStringFromMPElementType((unsigned)self.activeElement.type).length? 1: 0;
     
     self.contentField.enabled = NO;
     
@@ -212,9 +213,7 @@
 
 - (void)setHelpChapter:(NSString *)chapter {
     
-#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointHelpChapter, chapter]];
-#endif
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.helpView loadRequest:
@@ -227,7 +226,7 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     
     NSString *error = [self.helpView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"setClass('%@');",
-                                                                             ClassNameFromMPElementType(self.activeElement.type)]];
+                                                                             ClassNameFromMPElementType((unsigned)self.activeElement.type)]];
     if (error.length)
         err(@"helpView.setClass: %@", error);
 }
@@ -285,41 +284,75 @@
     
     [self showContentTip:@"Copied!" withIcon:nil];
     
-#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointCopyToPasteboard];
-#endif
 }
 
 - (IBAction)incrementPasswordCounter {
     
     if (![self.activeElement isKindOfClass:[MPElementGeneratedEntity class]])
-        // Not of a type that supports a password counter;
+        // Not of a type that supports a password counter.
         return;
     
-    [self updateElement:^{
-        ++((MPElementGeneratedEntity *) self.activeElement).counter;
-    }];
+    [self changeElementWithWarning:
+     @"You are incrementing the site's password counter.\n\n"
+     @"If you continue, a new password will be generated for this site.  "
+     @"You will then need to update your account's old password to this newly generated password.\n"
+     @"You can reset the counter by holding down on this button."
+                                do:^{
+                                    ++((MPElementGeneratedEntity *) self.activeElement).counter;
+                                }];
     
-#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointIncrementPasswordCounter];
-#endif
 }
 
-- (void)updateElement:(void (^)(void))updateElement {
+- (IBAction)resetPasswordCounter:(UILongPressGestureRecognizer *)sender {
     
-    // Update password counter.
+    if (![self.activeElement isKindOfClass:[MPElementGeneratedEntity class]])
+        // Not of a type that supports a password counter.
+        return;
+    if (((MPElementGeneratedEntity *)self.activeElement).counter == 1)
+        // Counter has initial value, no point resetting.
+        return;
+    
+    [self changeElementWithWarning:
+     @"You are resetting the site's password counter.\n\n"
+     @"If you continue, the site's password will change back to its original value.  "
+     @"You will then need to update your account's password back to this original value."
+                                do:^{
+                                    ((MPElementGeneratedEntity *) self.activeElement).counter = 1;
+                                }];
+    
+    [TestFlight passCheckpoint:MPTestFlightCheckpointResetPasswordCounter];
+}
+
+- (void)changeElementWithWarning:(NSString *)warning do:(void (^)(void))task; {
+    
+    [PearlAlert showAlertWithTitle:@"Password Change" message:warning viewStyle:UIAlertViewStyleDefault
+                 tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                     if (buttonIndex == [alert cancelButtonIndex])
+                         return;
+                     
+                     [self changeElementWithoutWarningDo:task];
+                 } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonContinue, nil];
+}
+
+- (void)changeElementWithoutWarningDo:(void (^)(void))task; {
+    
+    // Update element, keeping track of the old password.
     NSString *oldPassword = self.activeElement.description;
-    updateElement();
+    task();
     NSString *newPassword = self.activeElement.description;
     [self updateAnimated:YES];
     
     // Show new and old password.
     if ([oldPassword length] && ![oldPassword isEqualToString:newPassword])
         [self showAlertWithTitle:@"Password Changed!" message:l(@"The password for %@ has changed.\n\n"
+                                                                @"IMPORTANT:\n"
                                                                 @"Don't forget to update the site with your new password! "
                                                                 @"Your old password was:\n"
                                                                 @"%@", self.activeElement.name, oldPassword)];
 }
+
 
 - (IBAction)editPassword {
     
@@ -328,9 +361,7 @@
         [self.contentField becomeFirstResponder];
     }
     
-#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointEditPassword];
-#endif
 }
 
 - (IBAction)closeAlert {
@@ -342,9 +373,7 @@
             self.alertBody.text = nil;
     }];
     
-#ifdef TESTFLIGHT
     [TestFlight passCheckpoint:MPTestFlightCheckpointCloseAlert];
-#endif
 }
 
 - (IBAction)action:(id)sender {
@@ -371,7 +400,7 @@
                              [self.navigationController pushViewController:settingsVC animated:YES];
                              break;
                          }
-#ifdef TESTFLIGHT
+#ifdef ADHOC
                          case 4:
                              [TestFlight openFeedbackView];
                              break;
@@ -386,13 +415,11 @@
                          }
                      }
                      
-#ifdef TESTFLIGHT
                      [TestFlight passCheckpoint:MPTestFlightCheckpointAction];
-#endif
                  } cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil
                        otherTitles:
      [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings",
-#ifdef TESTFLIGHT
+#ifdef ADHOC
      @"Feedback",
 #endif
      @"Sign Out",
@@ -401,36 +428,38 @@
 
 - (MPElementType)selectedType {
     
-    return self.activeElement.type;
+    return (unsigned)self.activeElement.type;
 }
 
 - (void)didSelectType:(MPElementType)type {
     
-    [self updateElement:^{
-        // Update password type.
-        if (ClassFromMPElementType(type) != ClassFromMPElementType(self.activeElement.type))
-            // Type requires a different class of element.  Recreate the element.
-            [[MPAppDelegate managedObjectContext] performBlockAndWait:^{
-                MPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(type)
-                                                                            inManagedObjectContext:[MPAppDelegate managedObjectContext]];
-                newElement.name = self.activeElement.name;
-                newElement.mpHashHex = self.activeElement.mpHashHex;
-                newElement.uses = self.activeElement.uses;
-                newElement.lastUsed = self.activeElement.lastUsed;
-                
-                [[MPAppDelegate managedObjectContext] deleteObject:self.activeElement];
-                self.activeElement = newElement;
-            }];
-        
-        self.activeElement.type = type;
-        
-#ifdef TESTFLIGHT
-        [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointSelectType, NSStringFromMPElementType(type)]];
-#endif
-        
-        if (type & MPElementTypeClassStored && ![self.activeElement.description length])
-            [self showContentTip:@"Tap        to set a password." withIcon:self.contentTipEditIcon];
-    }];
+    [self changeElementWithWarning:
+     @"You are about to change the type of this password.\n\n"
+     @"If you continue, the password for this site will change.  "
+     @"You will need to update your account's old password to the new one."
+                                do:^{
+                                    // Update password type.
+                                    if (ClassFromMPElementType(type) != ClassFromMPElementType((unsigned)self.activeElement.type))
+                                        // Type requires a different class of element.  Recreate the element.
+                                        [[MPAppDelegate managedObjectContext] performBlockAndWait:^{
+                                            MPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(type)
+                                                                                                        inManagedObjectContext:[MPAppDelegate managedObjectContext]];
+                                            newElement.name = self.activeElement.name;
+                                            newElement.mpHashHex = self.activeElement.mpHashHex;
+                                            newElement.uses = self.activeElement.uses;
+                                            newElement.lastUsed = self.activeElement.lastUsed;
+                                            
+                                            [[MPAppDelegate managedObjectContext] deleteObject:self.activeElement];
+                                            self.activeElement = newElement;
+                                        }];
+                                    
+                                    self.activeElement.type = type;
+                                    
+                                    [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointSelectType, NSStringFromMPElementType(type)]];
+                                    
+                                    if (type & MPElementTypeClassStored && ![self.activeElement.description length])
+                                        [self showContentTip:@"Tap        to set a password." withIcon:self.contentTipEditIcon];
+                                }];
 }
 
 - (void)didSelectElement:(MPElementEntity *)element {
@@ -443,17 +472,14 @@
             [self showAlertWithTitle:@"New Site" message:
              l(@"You've just created a password for %@.\n\n"
                @"IMPORTANT:\n"
-               @"Don't forget to set or change the password for your account at %@ to the password above. "
-               @"It's best to do this right away. If you forget it, may get confusing later on "
-               @"to remember what password you need to use for logging into the site.",
+               @"Go to %@ and set or change the password for your account to the password above.\n"
+               @"Do this right away: if you forget, you may have trouble remembering which password to use to log into the site later on.",
                self.activeElement.name, self.activeElement.name)];
         
         [self.searchDisplayController setActive:NO animated:YES];
         self.searchDisplayController.searchBar.text = self.activeElement.name;
         
-#ifdef TESTFLIGHT
         [TestFlight passCheckpoint:MPTestFlightCheckpointSelectElement];
-#endif
     }
     
     [self updateAnimated:YES];
@@ -479,7 +505,7 @@
             // Content hasn't changed.
             return;
         
-        [self updateElement:^{
+        [self changeElementWithoutWarningDo:^{
             ((MPElementStoredEntity *) self.activeElement).content = self.contentField.text;
         }];
     }
@@ -489,9 +515,7 @@
  navigationType:(UIWebViewNavigationType)navigationType {
     
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
-#ifdef TESTFLIGHT
         [TestFlight passCheckpoint:MPTestFlightCheckpointExternalLink];
-#endif
         
         [[UIApplication sharedApplication] openURL:[request URL]];
         return NO;
