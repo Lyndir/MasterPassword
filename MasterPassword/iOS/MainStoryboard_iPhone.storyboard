@@ -599,7 +599,6 @@ L4m3P4sSw0rD</string>
                 <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="cZr-Fj-eBw">
                     <connections>
                         <action selector="resetPasswordCounter:" destination="PQa-Xl-A3x" id="JL9-Ob-AjQ"/>
-                        <outlet property="delegate" destination="PQa-Xl-A3x" id="PMQ-so-Cj7"/>
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>

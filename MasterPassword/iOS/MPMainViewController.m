@@ -111,6 +111,7 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
                                                       self.activeElement = nil;
+                                                      [self updateWasAnimated:NO];
                                                   }];
     
     self.alertBody.text = nil;
@@ -296,7 +297,7 @@
     [self changeElementWithWarning:
      @"You are incrementing the site's password counter.\n\n"
      @"If you continue, a new password will be generated for this site.  "
-     @"You will then need to update your account's old password to this newly generated password.\n"
+     @"You will then need to update your account's old password to this newly generated password.\n\n"
      @"You can reset the counter by holding down on this button."
                                 do:^{
                                     ++((MPElementGeneratedEntity *) self.activeElement).counter;
@@ -307,6 +308,9 @@
 
 - (IBAction)resetPasswordCounter:(UILongPressGestureRecognizer *)sender {
     
+    if (sender.state != UIGestureRecognizerStateBegan)
+        // Only fire when the gesture was first detected.
+        return;
     if (![self.activeElement isKindOfClass:[MPElementGeneratedEntity class]])
         // Not of a type that supports a password counter.
         return;
