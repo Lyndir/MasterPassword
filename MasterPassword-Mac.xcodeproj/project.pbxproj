@@ -6078,10 +6078,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MasterPassword/MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MasterPassword/Mac/MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword/Mac/MasterPassword-Info.plist";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 			};
 			name = Release;
