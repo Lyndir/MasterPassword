@@ -12,6 +12,7 @@
 @interface MPAppDelegate : NSObject <NSApplicationDelegate>
 
 @property (assign) IBOutlet NSWindow                                    *window;
+@property (strong) NSStatusItem                                         *statusItem;
 
 - (IBAction)saveAction:(id)sender;
 

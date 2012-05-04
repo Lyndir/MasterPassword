@@ -9,16 +9,20 @@
 #import "MPAppDelegate_Key.h"
 #import "MPConfig.h"
 #import "MPElementEntity.h"
+#import <Carbon/Carbon.h>
 
 
 @interface MPAppDelegate ()
 
 @property (readwrite, strong, nonatomic) MPPasswordWindowController     *passwordWindow;
 
+- (void)activate;
+
 @end
 
 @implementation MPAppDelegate
-@synthesize window = _window;
+@synthesize window;
+@synthesize statusItem;
 @synthesize passwordWindow;
 
 @dynamic persistentStoreCoordinator, managedObjectModel, managedObjectContext;
@@ -26,19 +30,57 @@
 @synthesize keyHash;
 @synthesize keyHashHex;
 
+static EventHotKeyID MPShowHotKey = { .signature = 'show', .id = 1 };
+
 + (void)initialize {
     
     [MPConfig get];
     
 #ifdef DEBUG
-    [PearlLogger get].autoprintLevel = PearlLogLevelTrace
-    ;
+    [PearlLogger get].autoprintLevel = PearlLogLevelTrace;
 #endif
+}
+
+static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEvent, void *userData){
+
+    // Extract the hotkey ID.
+	EventHotKeyID hotKeyID;
+	GetEventParameter(theEvent,kEventParamDirectObject,typeEventHotKeyID,
+                      NULL,sizeof(hotKeyID),NULL,&hotKeyID);
+    
+    // Check which hotkey this was.
+    if (hotKeyID.signature == MPShowHotKey.signature && hotKeyID.id == MPShowHotKey.id) {
+        [((__bridge MPAppDelegate *)userData) activate];
+        return noErr;
+    }
+    
+    return eventNotHandledErr;
+}
+
+- (void)activate {
+    
+    [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     
-    [self managedObjectContext];
+    // Status item.
+    self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
+    self.statusItem.title = @"•••";
+    self.statusItem.highlightMode = YES;
+    self.statusItem.target = self;
+    self.statusItem.action = @selector(activate);
+    
+    // Global hotkey.
+    EventHotKeyRef hotKeyRef;
+    EventTypeSpec hotKeyEvents[1] = { { .eventClass = kEventClassKeyboard, .eventKind = kEventHotKeyPressed } };
+    OSStatus status = InstallApplicationEventHandler(NewEventHandlerUPP(MPHotKeyHander), GetEventTypeCount(hotKeyEvents), hotKeyEvents,
+                                                     (__bridge void *)self, NULL);
+	if(status != noErr)
+        err(@"Error installing application event handler: %d", status);
+	status = RegisterEventHotKey(35 /* p */, controlKey + cmdKey, MPShowHotKey, GetApplicationEventTarget(), 0, &hotKeyRef);
+	if(status != noErr)
+        err(@"Error registering hotkey: %d", status);
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
@@ -59,13 +101,16 @@
     if (!self.key)
         // Ask the user to set the key through his master password.
         dispatch_async(dispatch_get_main_queue(), ^{
+            if (self.key)
+                return;
+            
             NSAlert *alert = [NSAlert alertWithMessageText:@"Master Password is locked."
                                              defaultButton:@"Unlock" alternateButton:@"Change" otherButton:@"Quit"
                                  informativeTextWithFormat:@"Your master password is required to unlock the application."];
-            NSTextField *passwordField = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 200, 22)];
+            NSSecureTextField *passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect(0, 0, 200, 22)];
             [alert setAccessoryView:passwordField];
-            [passwordField becomeFirstResponder];
             [alert layout];
+            [passwordField becomeFirstResponder];
             do {
                 NSInteger button = [alert runModal];
                 

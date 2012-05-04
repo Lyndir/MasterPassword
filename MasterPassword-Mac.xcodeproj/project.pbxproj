@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA44255715546C580052177D /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA44255615546C570052177D /* Carbon.framework */; };
 		DA600BEB150420AC008E9AB6 /* MPPasswordWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA600BE9150420AC008E9AB6 /* MPPasswordWindowController.m */; };
 		DA600BEC150420AC008E9AB6 /* MPPasswordWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA600BEA150420AC008E9AB6 /* MPPasswordWindowController.xib */; };
 		DA600C2D150565FC008E9AB6 /* MPConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA600C2A150565FC008E9AB6 /* MPConfig.m */; };
@@ -1430,6 +1431,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DA44255615546C570052177D /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		DA600BE8150420AC008E9AB6 /* MPPasswordWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindowController.h; sourceTree = "<group>"; };
 		DA600BE9150420AC008E9AB6 /* MPPasswordWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordWindowController.m; sourceTree = "<group>"; };
 		DA600BEA150420AC008E9AB6 /* MPPasswordWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPPasswordWindowController.xib; sourceTree = "<group>"; };
@@ -3235,6 +3237,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA44255715546C580052177D /* Carbon.framework in Frameworks */,
 				DADEA5D51503EEDF00FD084E /* Security.framework in Frameworks */,
 				DAFE4A6415039CDC003ABA7C /* Pearl.dylib in Frameworks */,
 				DAB8D98D150374AD00CED3BC /* Cocoa.framework in Frameworks */,
@@ -3982,7 +3985,6 @@
 		DAB8D97D150374AC00CED3BC = {
 			isa = PBXGroup;
 			children = (
-				DADEA5D31503EEA700FD084E /* Security.framework */,
 				DAB8D992150374AD00CED3BC /* MasterPassword */,
 				DA600C5915057F0F008E9AB6 /* Resources */,
 				DAB8D9DA1503940100CED3BC /* Pearl */,
@@ -4007,6 +4009,8 @@
 		DAB8D98B150374AD00CED3BC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA44255615546C570052177D /* Carbon.framework */,
+				DADEA5D31503EEA700FD084E /* Security.framework */,
 				DAB8D98C150374AD00CED3BC /* Cocoa.framework */,
 				DAB8D98E150374AD00CED3BC /* Other Frameworks */,
 			);
