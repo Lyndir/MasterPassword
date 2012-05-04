@@ -8,17 +8,33 @@
 
 #import "MPAppDelegate.h"
 
-@interface MPAppDelegate ()
+@interface MPAppDelegate () {
+    
+    NSPersistentStoreCoordinator                                        *_persistentStoreCoordinator;
+    NSManagedObjectModel                                                *_managedObjectModel;
+    NSManagedObjectContext                                              *_managedObjectContext;
+}
 
-@property (strong, nonatomic) NSData                          *key;
-@property (strong, nonatomic) NSData                          *keyHash;
-@property (strong, nonatomic) NSString                        *keyHashHex;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator    *persistentStoreCoordinator;
+@property (readonly, strong, nonatomic) NSManagedObjectModel            *managedObjectModel;
+@property (readonly, strong, nonatomic) NSManagedObjectContext          *managedObjectContext;
+
+@property (strong, nonatomic) NSData                                    *key;
+@property (strong, nonatomic) NSData                                    *keyHash;
+@property (strong, nonatomic) NSString                                  *keyHashHex;
 
 @end
 
 @interface MPAppDelegate (Key)
 
 + (MPAppDelegate *)get;
+
+- (NSURL *)applicationFilesDirectory;
+
++ (NSManagedObjectModel *)managedObjectModel;
++ (NSManagedObjectContext *)managedObjectContext;
+- (void)saveContext;
+- (void)printStore;
 
 - (void)loadStoredKey;
 - (void)signOut;

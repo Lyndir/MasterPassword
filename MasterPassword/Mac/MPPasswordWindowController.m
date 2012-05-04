@@ -66,8 +66,15 @@
     if (self.siteResults)
         for (MPElementEntity *element in self.siteResults)
             [mutableResults addObject:element.name];
-    [mutableResults addObject:query];
+//    [mutableResults addObject:query]; // For when the app should be able to create new sites.
     return mutableResults;
+}
+
+- (BOOL)control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector {
+    
+    dbg(@"Selector = %@", NSStringFromSelector(commandSelector));
+    
+    return NO;  
 }
 
 - (void)controlTextDidEndEditing:(NSNotification *)obj {
@@ -92,24 +99,37 @@
                 });
             });
         
-        else
-            [[MPAppDelegate get].managedObjectContext performBlock:^{
-                MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPElementGeneratedEntity class])
-                                                                         inManagedObjectContext:[MPAppDelegate get].managedObjectContext];
-                assert([element isKindOfClass:ClassFromMPElementType(element.type)]);
-                assert([MPAppDelegate get].keyHashHex);
-                
-                element.name = siteName;
-                element.mpHashHex = [MPAppDelegate get].keyHashHex;
-                
-                NSString *description = [element description];
-                [element use];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.contentField setStringValue:description? description: @""];
-                });
-            }];
+        // For when the app should be able to create new sites.
+//        else
+//            [[MPAppDelegate get].managedObjectContext performBlock:^{
+//                MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPElementGeneratedEntity class])
+//                                                                         inManagedObjectContext:[MPAppDelegate get].managedObjectContext];
+//                assert([element isKindOfClass:ClassFromMPElementType(element.type)]);
+//                assert([MPAppDelegate get].keyHashHex);
+//                
+//                element.name = siteName;
+//                element.mpHashHex = [MPAppDelegate get].keyHashHex;
+//                
+//                NSString *description = [element description];
+//                [element use];
+//                
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    [self.contentField setStringValue:description? description: @""];
+//                });
+//            }];
     }
 }
 
+- (IBAction)empty:(id)sender {
+
+    for(NSEntityDescription *entity in [[MPAppDelegate managedObjectModel] entities]) {
+        NSFetchRequest *request = [NSFetchRequest new];
+        [request setEntity:entity];
+        NSError *error;
+        NSArray *results = [[MPAppDelegate managedObjectContext] executeFetchRequest:request error:&error];
+        for(NSManagedObject *o in results) {
+            [[MPAppDelegate managedObjectContext] deleteObject:o];
+        }
+    }
+}
 @end

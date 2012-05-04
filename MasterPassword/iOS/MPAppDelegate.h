@@ -10,16 +10,6 @@
 
 @interface MPAppDelegate : PearlAppDelegate
 
-@property (readonly, strong, nonatomic) NSManagedObjectContext          *managedObjectContext;
-@property (readonly, strong, nonatomic) NSManagedObjectModel            *managedObjectModel;
-@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator    *persistentStoreCoordinator;
-
-+ (NSManagedObjectModel *)managedObjectModel;
-+ (NSManagedObjectContext *)managedObjectContext;
-
-- (void)saveContext;
-- (NSURL *)applicationDocumentsDirectory;
-
 - (void)showGuide;
 - (void)loadKey:(BOOL)animated;
 

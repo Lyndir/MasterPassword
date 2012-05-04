@@ -2142,6 +2142,7 @@
 		DAB8DA101503972100CED3BC /* PearlSCrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlSCrypt.h; sourceTree = "<group>"; };
 		DAB8DA111503972100CED3BC /* PearlSCrypt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlSCrypt.m; sourceTree = "<group>"; };
 		DAB8DA121503972100CED3BC /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		DAD312C71553051900A3F9ED /* MasterPassword.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MasterPassword.entitlements; sourceTree = "<group>"; };
 		DADEA5A41503C9DD00FD084E /* e_os.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = e_os.h; sourceTree = "<group>"; };
 		DADEA5A51503C9DD00FD084E /* e_os2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = e_os2.h; sourceTree = "<group>"; };
 		DADEA5A91503CE3000FD084E /* _MWERKS_GUSI_prefix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _MWERKS_GUSI_prefix.h; sourceTree = "<group>"; };
@@ -4025,6 +4026,7 @@
 		DAB8D992150374AD00CED3BC /* MasterPassword */ = {
 			isa = PBXGroup;
 			children = (
+				DAD312C71553051900A3F9ED /* MasterPassword.entitlements */,
 				DAB8D9B2150375C800CED3BC /* MasterPassword.xcdatamodeld */,
 				DAB8D9B4150375C800CED3BC /* Mac */,
 				DA600C2C150565FC008E9AB6 /* MPAppDelegate_Key.h */,
@@ -6064,6 +6066,7 @@
 				DAB8D985150374AD00CED3BC /* Frameworks */,
 				DAB8D986150374AD00CED3BC /* Resources */,
 				DA60116B15060F11008E9AB6 /* CopyFiles */,
+				DAD312C9155305B200A3F9ED /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -6809,6 +6812,23 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		DAD312C9155305B200A3F9ED /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = "/bin/bash -e";
+			shellScript = "PATH+=:/usr/libexec\n\nsetPlistWithKey() {\n    local key=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Set :'$key' $value\" \"$plist\"\n}\ngetPlistWithKey() {\n    local key=$1 plist=${2:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Print :'$key'\" \"$plist\"\n}\nsetSettingWithTitle() {\n    local i title=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Settings.bundle/Root.plist\"}\n    \n    for (( i=0; 1; ++i )); do\n    PlistBuddy -c \"Print :PreferenceSpecifiers:$i\" \"$plist\" &>/dev/null || break\n    echo \"Checking preference specifier $i\"\n    \n    [[ $(PlistBuddy -c \"Print :PreferenceSpecifiers:$i:Title\" \"$plist\" 2>/dev/null) = $title ]] || continue\n    \n    echo \"Correct title, setting value.\"\n    PlistBuddy -c \"Set :PreferenceSpecifiers:$i:DefaultValue $value\" \"$plist\"\n    break\n    done\n}\n\nbuild=$(git describe --tags --always --dirty --long)\ntag=$(git describe --tags | sed 's/-\\([^-]*\\)-[^-]*$/.\\1/')\n\nsetPlistWithKey CFBundleVersion \"$build\"\nsetPlistWithKey CFBundleShortVersionString \"$tag\"\n\nsetSettingWithTitle \"Build\" \"$build\"\nsetSettingWithTitle \"Version\" \"$tag\"\nsetSettingWithTitle \"Copyright\" \"$(getPlistWithKey NSHumanReadableCopyright)\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		DAB8D984150374AD00CED3BC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -7529,6 +7549,8 @@
 		DAB8D9AA150374AD00CED3BC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MasterPassword/MasterPassword.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MasterPassword/Mac/MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword/Mac/MasterPassword-Info.plist";
@@ -7538,6 +7560,8 @@
 		DAB8D9AB150374AD00CED3BC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MasterPassword/MasterPassword.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MasterPassword/Mac/MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword/Mac/MasterPassword-Info.plist";

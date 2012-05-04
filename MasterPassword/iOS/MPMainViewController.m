@@ -479,7 +479,8 @@
                @"Go to %@ and set or change the password for your account to the password above.\n"
                @"Do this right away: if you forget, you may have trouble remembering which password to use to log into the site later on.",
                self.activeElement.name, self.activeElement.name)];
-        
+        [[MPAppDelegate get] saveContext];
+
         [self.searchDisplayController setActive:NO animated:YES];
         self.searchDisplayController.searchBar.text = self.activeElement.name;
         

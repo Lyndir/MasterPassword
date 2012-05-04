@@ -104,14 +104,24 @@ NSString *ClassNameFromMPElementType(MPElementType type) {
 static NSDictionary *MPTypes_ciphers = nil;
 NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, int16_t counter) {
     
-    assert(type & MPElementTypeClassCalculated);
+    if (!name) {
+        err(@"Missing name.");
+        return nil;
+    }
+    if (!(type & MPElementTypeClassCalculated)) {
+        err(@"Incorrect type (is not MPElementTypeClassCalculated): %d, for: %@", type, name);
+        return nil;
+    }
+    if (!key) {
+        err(@"Key not set.");
+        return nil;
+    }
     
     if (MPTypes_ciphers == nil)
         MPTypes_ciphers = [NSDictionary dictionaryWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"ciphers"
                                                                                             withExtension:@"plist"]];
     
     // Determine the hash whose bytes will be used for calculating a password: md4(name-key)
-    assert(name && key);
     uint16_t ncounter = htons(counter);
     trc(@"key hash from: %@-%@-%u", name, key, ncounter);
     NSData *keyHash = [[NSData dataByConcatenatingWithDelimitor:'-' datas:

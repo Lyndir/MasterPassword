@@ -40,12 +40,12 @@
 @synthesize keyHashHex;
 
 + (void)initialize {
-
+    
     [MPiOSConfig get];
-
+    
 #ifdef DEBUG
     [PearlLogger get].autoprintLevel = PearlLogLevelDebug;
-//    [NSClassFromString(@"WebView") performSelector:NSSelectorFromString(@"_enableRemoteInspector")];
+    //    [NSClassFromString(@"WebView") performSelector:NSSelectorFromString(@"_enableRemoteInspector")];
 #endif
 }
 
@@ -186,7 +186,7 @@
                          viewStyle:UIAlertViewStyleDefault tappedButtonBlock:nil
                        cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
 #endif
-
+    
     [[UIApplication sharedApplication] setStatusBarHidden:NO
                                             withAnimation:UIStatusBarAnimationSlide];
     
@@ -246,7 +246,7 @@
     [self saveContext];
     
     [TestFlight passCheckpoint:MPTestFlightCheckpointTerminated];
-
+    
     [[LocalyticsSession sharedLocalyticsSession] close];
     [[LocalyticsSession sharedLocalyticsSession] upload];
     
@@ -262,118 +262,6 @@
     
     [TestFlight passCheckpoint:MPTestFlightCheckpointDeactivated];
 }
-
-+ (NSManagedObjectContext *)managedObjectContext {
-    
-    return [[self get] managedObjectContext];
-}
-
-+ (NSManagedObjectModel *)managedObjectModel {
-    
-    return [[self get] managedObjectModel];
-}
-
-- (void)saveContext {
-    
-    [self.managedObjectContext performBlock:^{
-        NSError *error = nil;
-        if ([self.managedObjectContext hasChanges] && ![self.managedObjectContext save:&error])
-            err(@"Unresolved error %@", error);
-    }];
-}
-
-#pragma mark - Core Data stack
-
-- (NSManagedObjectModel *)managedObjectModel {
-
-    if (__managedObjectModel)
-        return __managedObjectModel;
-    
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"MasterPassword" withExtension:@"momd"];
-    return __managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-}
-
-- (NSManagedObjectContext *)managedObjectContext {
-    
-    if (__managedObjectContext)
-        return __managedObjectContext;
-    
-    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-    if (coordinator) {
-        __managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        __managedObjectContext.persistentStoreCoordinator = coordinator;
-        
-        [[NSNotificationCenter defaultCenter] addObserverForName:NSPersistentStoreDidImportUbiquitousContentChangesNotification
-                                                          object:coordinator
-                                                           queue:nil
-                                                      usingBlock:^(NSNotification *note) {
-                                                          dbg(@"Ubiquitous content change: %@", note);
-                                                          
-                                                          [__managedObjectContext performBlock:^{
-                                                              [__managedObjectContext mergeChangesFromContextDidSaveNotification:note];
-                                                              
-                                                              [[NSNotificationCenter defaultCenter] postNotification:
-                                                               [NSNotification notificationWithName:MPNotificationStoreUpdated
-                                                                                             object:self userInfo:[note userInfo]]];
-                                                          }];
-                                                      }];
-    }
-    
-    return __managedObjectContext;
-}
-
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
-    
-    if (__persistentStoreCoordinator)
-        return __persistentStoreCoordinator;
-    
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"MasterPassword.sqlite"];
-    
-    __persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    [__persistentStoreCoordinator lock];
-    NSError *error = nil;
-    if (![__persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL
-                                                          options:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                   [NSNumber numberWithBool:YES],   NSInferMappingModelAutomaticallyOption,
-                                                                   [NSNumber numberWithBool:YES],   NSMigratePersistentStoresAutomaticallyOption,
-                                                                   [[[NSFileManager defaultManager]
-                                                                     URLForUbiquityContainerIdentifier:nil]
-                                                                    URLByAppendingPathComponent:@"store"
-                                                                    isDirectory:YES],               NSPersistentStoreUbiquitousContentURLKey,
-                                                                   @"MasterPassword.store",         NSPersistentStoreUbiquitousContentNameKey,
-                                                                   nil]
-                                                            error:&error]) {
-        err(@"Unresolved error %@, %@", error, [error userInfo]);
-#if DEBUG
-        wrn(@"Deleted datastore: %@", storeURL);
-        [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];        
-#endif
-        
-        [TestFlight passCheckpoint:MPTestFlightCheckpointStoreIncompatible];
-        
-        @throw [NSException exceptionWithName:error.domain reason:error.localizedDescription
-                                     userInfo:[NSDictionary dictionaryWithObject:error forKey:@"cause"]];
-    }
-    
-    if (![[NSFileManager defaultManager] setAttributes:[NSDictionary dictionaryWithObject:NSFileProtectionComplete
-                                                                                   forKey:NSFileProtectionKey]
-                                          ofItemAtPath:storeURL.path error:&error])
-        err(@"Unresolved error %@, %@", error, [error userInfo]);
-    [__persistentStoreCoordinator unlock];
-    
-    return __persistentStoreCoordinator;
-}
-
-#pragma mark - Application's Documents directory
-
-/**
- Returns the URL to the application's Documents directory.
- */
-- (NSURL *)applicationDocumentsDirectory
-{
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-}
-
 
 #pragma mark - TestFlight
 

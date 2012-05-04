@@ -16,16 +16,15 @@
 
 - (id)content {
 
-    assert(self.type & MPElementTypeClassCalculated);
+    if (!(self.type & MPElementTypeClassCalculated)) {
+        err(@"Corrupt element: %@, type: %d, does not match class: %@", self.name, self.type, [self class]);
+        return nil;
+    }
     
     if (![self.name length])
         return nil;
     
-    if (self.type & MPElementTypeClassCalculated)
-        return MPCalculateContent((unsigned)self.type, self.name, [MPAppDelegate get].key, self.counter);
-    
-    @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                   reason:[NSString stringWithFormat:@"Unsupported type: %d", self.type] userInfo:nil];
+    return MPCalculateContent((unsigned)self.type, self.name, [MPAppDelegate get].key, self.counter);
 }
 
 @end

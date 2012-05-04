@@ -4107,7 +4107,6 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/TestFlight\"",
 				);
-				OTHER_LDFLAGS = "-ObjC";
 			};
 			name = Debug;
 		};
@@ -4126,7 +4125,6 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/TestFlight\"",
 				);
-				OTHER_LDFLAGS = "-ObjC";
 			};
 			name = AdHoc;
 		};
@@ -4224,7 +4222,6 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/TestFlight\"",
 				);
-				OTHER_LDFLAGS = "-ObjC";
 			};
 			name = AppStore;
 		};

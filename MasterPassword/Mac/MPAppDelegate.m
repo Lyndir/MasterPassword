@@ -8,6 +8,7 @@
 
 #import "MPAppDelegate_Key.h"
 #import "MPConfig.h"
+#import "MPElementEntity.h"
 
 
 @interface MPAppDelegate ()
@@ -18,11 +19,9 @@
 
 @implementation MPAppDelegate
 @synthesize window = _window;
-@synthesize persistentStoreCoordinator = __persistentStoreCoordinator;
-@synthesize managedObjectModel = __managedObjectModel;
-@synthesize managedObjectContext = __managedObjectContext;
 @synthesize passwordWindow;
 
+@dynamic persistentStoreCoordinator, managedObjectModel, managedObjectContext;
 @synthesize key;
 @synthesize keyHash;
 @synthesize keyHashHex;
@@ -32,22 +31,14 @@
     [MPConfig get];
     
 #ifdef DEBUG
-    [PearlLogger get].autoprintLevel = PearlLogLevelDebug;
+    [PearlLogger get].autoprintLevel = PearlLogLevelTrace
+    ;
 #endif
-}
-
-+ (NSManagedObjectContext *)managedObjectContext {
-    
-    return [[self get] managedObjectContext];
-}
-
-+ (NSManagedObjectModel *)managedObjectModel {
-    
-    return [[self get] managedObjectModel];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     
+    [self managedObjectContext];
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
@@ -73,6 +64,7 @@
                                  informativeTextWithFormat:@"Your master password is required to unlock the application."];
             NSTextField *passwordField = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 200, 22)];
             [alert setAccessoryView:passwordField];
+            [passwordField becomeFirstResponder];
             [alert layout];
             do {
                 NSInteger button = [alert runModal];
@@ -96,95 +88,9 @@
                     break;
                 }
             } while (![self tryMasterPassword:[passwordField stringValue]]);
+
+            [self printStore];
         });
-}
-
-- (NSURL *)applicationFilesDirectory {
-    
-    NSURL *appSupportURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] lastObject];
-    NSURL *applicationFilesDirectory = [appSupportURL URLByAppendingPathComponent:@"com.lyndir.lhunath.MasterPassword"];
-    
-    NSError *error = nil;
-    [[NSFileManager defaultManager] createDirectoryAtURL:applicationFilesDirectory withIntermediateDirectories:YES attributes:nil error:&error];
-    if (error)
-        [[NSApplication sharedApplication] presentError:error];
-    
-    return applicationFilesDirectory;
-}
-
-#pragma mark - Core Data stack
-
-- (NSManagedObjectModel *)managedObjectModel {
-    
-    if (__managedObjectModel)
-        return __managedObjectModel;
-	
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"MasterPassword" withExtension:@"momd"];
-    return __managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-}
-
-- (NSManagedObjectContext *)managedObjectContext {
-    
-    if (__managedObjectContext)
-        return __managedObjectContext;
-    
-    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-    if (coordinator) {
-        __managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        __managedObjectContext.persistentStoreCoordinator = coordinator;
-        
-        [[NSNotificationCenter defaultCenter] addObserverForName:NSPersistentStoreDidImportUbiquitousContentChangesNotification
-                                                          object:coordinator
-                                                           queue:nil
-                                                      usingBlock:^(NSNotification *note) {
-                                                          dbg(@"Ubiquitous content change: %@", note);
-                                                          
-                                                          [__managedObjectContext performBlock:^{
-                                                              [__managedObjectContext mergeChangesFromContextDidSaveNotification:note];
-                                                              
-                                                              [[NSNotificationCenter defaultCenter] postNotification:
-                                                               [NSNotification notificationWithName:MPNotificationStoreUpdated
-                                                                                             object:self userInfo:[note userInfo]]];
-                                                          }];
-                                                      }];
-    }
-    
-    return __managedObjectContext;
-}
-
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
-    
-    if (__persistentStoreCoordinator)
-        return __persistentStoreCoordinator;
-    
-    NSURL *storeURL = [[self applicationFilesDirectory] URLByAppendingPathComponent:@"MasterPassword.sqlite"];
-    
-    __persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    [__persistentStoreCoordinator lock];
-    NSError *error = nil;
-    if (![__persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL
-                                                          options:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                   [NSNumber numberWithBool:YES],   NSInferMappingModelAutomaticallyOption,
-                                                                   [NSNumber numberWithBool:YES],   NSMigratePersistentStoresAutomaticallyOption,
-                                                                   [[[NSFileManager defaultManager]
-                                                                     URLForUbiquityContainerIdentifier:nil]
-                                                                    URLByAppendingPathComponent:@"store"
-                                                                    isDirectory:YES],               NSPersistentStoreUbiquitousContentURLKey,
-                                                                   @"MasterPassword.store",         NSPersistentStoreUbiquitousContentNameKey,
-                                                                   nil]
-                                                            error:&error]) {
-        err(@"Unresolved error %@, %@", error, [error userInfo]);
-#if DEBUG
-        wrn(@"Deleted datastore: %@", storeURL);
-        [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];        
-#endif
-        
-        [[NSApplication sharedApplication] presentError:error];
-        return nil;
-    }
-    [__persistentStoreCoordinator unlock];
-    
-    return __persistentStoreCoordinator;
 }
 
 - (NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)window {
@@ -210,7 +116,7 @@
 {
     // Save changes in the application's managed object context before the application terminates.
     
-    if (!__managedObjectContext) {
+    if (!_managedObjectContext) {
         return NSTerminateNow;
     }
     
