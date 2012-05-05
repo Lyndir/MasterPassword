@@ -37,7 +37,7 @@
 - (void)printStore;
 
 - (void)loadStoredKey;
-- (void)signOut;
+- (IBAction)signOut:(id)sender;
 
 - (BOOL)tryMasterPassword:(NSString *)tryPassword;
 - (void)updateKey:(NSData *)key;

@@ -11,11 +11,13 @@
 
 @interface MPAppDelegate : NSObject <NSApplicationDelegate>
 
-@property (assign) IBOutlet NSWindow                                    *window;
 @property (strong) NSStatusItem                                         *statusItem;
+@property (weak) IBOutlet NSMenuItem *unlockItem;
+@property (weak) IBOutlet NSMenuItem *lockItem;
+@property (weak) IBOutlet NSMenuItem *showItem;
+@property (strong) IBOutlet NSMenu *statusMenu;
 
-- (IBAction)saveAction:(id)sender;
-
-- (void)loadKey;
+- (IBAction)activate:(id)sender;
+- (IBAction)unlock:(id)sender;
 
 @end

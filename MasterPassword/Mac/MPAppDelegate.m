@@ -16,13 +16,14 @@
 
 @property (readwrite, strong, nonatomic) MPPasswordWindowController     *passwordWindow;
 
-- (void)activate;
-
 @end
 
 @implementation MPAppDelegate
-@synthesize window;
 @synthesize statusItem;
+@synthesize unlockItem;
+@synthesize lockItem;
+@synthesize showItem;
+@synthesize statusMenu;
 @synthesize passwordWindow;
 
 @dynamic persistentStoreCoordinator, managedObjectModel, managedObjectContext;
@@ -50,26 +51,34 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     
     // Check which hotkey this was.
     if (hotKeyID.signature == MPShowHotKey.signature && hotKeyID.id == MPShowHotKey.id) {
-        [((__bridge MPAppDelegate *)userData) activate];
+        [((__bridge MPAppDelegate *)userData) activate:nil];
         return noErr;
     }
     
     return eventNotHandledErr;
 }
 
-- (void)activate {
+- (void)showMenu {
+    
+    [self.showItem setEnabled:![self.passwordWindow.window isVisible]];
+    [self.statusItem popUpStatusItemMenu:self.statusMenu];
+}
+
+- (IBAction)activate:(id)sender {
     
     [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     
+    [self addObserver:self forKeyPath:@"key" options:0 context:nil];
+    
     // Status item.
     self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
     self.statusItem.title = @"•••";
     self.statusItem.highlightMode = YES;
     self.statusItem.target = self;
-    self.statusItem.action = @selector(activate);
+    self.statusItem.action = @selector(showMenu);
     
     // Global hotkey.
     EventHotKeyRef hotKeyRef;
@@ -84,15 +93,27 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
-    
+
     if (!self.passwordWindow)
         self.passwordWindow = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
     [self.passwordWindow showWindow:self];
     
-    [self loadKey];
+    [self unlock:self];
 }
 
-- (void)loadKey {
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    
+    if ([keyPath isEqualToString:@"key"]) {
+        if (self.key)
+            [self.lockItem setEnabled:YES];
+        else {
+            [self.lockItem setEnabled:NO];
+            [self.passwordWindow close];
+        }
+    }
+}
+
+- (IBAction)unlock:(id)sender {
     
     if (!self.key)
         // Try and load the key from the keychain.
@@ -141,20 +162,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)window {
     
     return [[self managedObjectContext] undoManager];
-}
-
-// Performs the save action for the application, which is to send the save: message to the application's managed object context. Any encountered errors are presented to the user.
-- (IBAction)saveAction:(id)sender
-{
-    NSError *error = nil;
-    
-    if (![[self managedObjectContext] commitEditing]) {
-        NSLog(@"%@:%@ unable to commit editing before saving", [self class], NSStringFromSelector(_cmd));
-    }
-    
-    if (![[self managedObjectContext] save:&error]) {
-        [[NSApplication sharedApplication] presentError:error];
-    }
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender

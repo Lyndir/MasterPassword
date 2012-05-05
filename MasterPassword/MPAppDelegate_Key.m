@@ -222,7 +222,7 @@ static NSDictionary *keyHashQuery() {
 #endif
 }
 
-- (void)signOut {
+- (IBAction)signOut:(id)sender {
     
     [self updateKey:nil];
 }
