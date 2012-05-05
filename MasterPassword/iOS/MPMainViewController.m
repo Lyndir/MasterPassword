@@ -413,7 +413,7 @@
                          case 4:
 #endif
                          {
-                             [[MPAppDelegate get] signOut];
+                             [[MPAppDelegate get] signOut:self];
                              [[MPAppDelegate get] loadKey:YES];
                              break;
                          }
