@@ -177,7 +177,7 @@
     self.contentField.text = @"";
     if (self.activeElement.name && ![self.activeElement isDeleted])
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            NSString *description = [self.activeElement description];
+            NSString *description = [self.activeElement.content description];
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.contentField.text = description;
@@ -343,9 +343,9 @@
 - (void)changeElementWithoutWarningDo:(void (^)(void))task; {
     
     // Update element, keeping track of the old password.
-    NSString *oldPassword = self.activeElement.description;
+    NSString *oldPassword = [self.activeElement.content description];
     task();
-    NSString *newPassword = self.activeElement.description;
+    NSString *newPassword = [self.activeElement.content description];
     [self updateAnimated:YES];
     
     // Show new and old password.
@@ -461,7 +461,7 @@
                                     
                                     [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointSelectType, NSStringFromMPElementType(type)]];
                                     
-                                    if (type & MPElementTypeClassStored && ![self.activeElement.description length])
+                                    if (type & MPElementTypeClassStored && ![[self.activeElement.content description] length])
                                         [self showContentTip:@"Tap        to set a password." withIcon:self.contentTipEditIcon];
                                 }];
 }

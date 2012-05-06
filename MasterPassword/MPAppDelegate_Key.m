@@ -81,7 +81,8 @@ static NSDictionary *keyHashQuery() {
     
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (coordinator) {
-        _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        // Put concurrency type on main queue, because otherwise updates break updating the search table UI.
+        _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType/*NSPrivateQueueConcurrencyType*/];
         _managedObjectContext.persistentStoreCoordinator = coordinator;
         
         [[NSNotificationCenter defaultCenter] addObserverForName:NSPersistentStoreDidImportUbiquitousContentChangesNotification

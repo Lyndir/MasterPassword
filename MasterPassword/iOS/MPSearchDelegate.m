@@ -31,9 +31,15 @@
         return nil;
     
     self.dateFormatter = [NSDateFormatter new];
-    self.dateFormatter.timeStyle = NSDateFormatterNoStyle;
     self.dateFormatter.dateStyle = NSDateFormatterShortStyle;
     self.query = @"";
+    
+    NSFetchRequest *fetchRequest    = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
+    fetchRequest.sortDescriptors    = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]];
+    self.fetchedResultsController   = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                        managedObjectContext:[MPAppDelegate managedObjectContext]
+                                                                          sectionNameKeyPath:nil cacheName:nil];
+    self.fetchedResultsController.delegate = self;
     
     return self;
 }
@@ -101,31 +107,21 @@
     
     [self update];
     
-    return YES;
+    return NO;
 }
 
 - (void)update {
     
     assert(self.query);
     assert([MPAppDelegate get].keyHashHex);
-    NSFetchRequest *fetchRequest = [[MPAppDelegate get].managedObjectModel
-                                    fetchRequestFromTemplateWithName:@"MPElements"
-                                    substitutionVariables:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                           self.query,                              @"query",
-                                                           [MPAppDelegate get].keyHashHex,    @"mpHashHex",
-                                                           nil]];
-    [fetchRequest setSortDescriptors:
-     [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]]];
     
-    self.fetchedResultsController.delegate = nil;
-    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                        managedObjectContext:[MPAppDelegate managedObjectContext]
-                                                                          sectionNameKeyPath:nil cacheName:nil];
-    self.fetchedResultsController.delegate = self;
+    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND mpHashHex == %@",
+                                                            self.query, self.query, [MPAppDelegate get].keyHashHex];
     
     NSError *error;
     if (![self.fetchedResultsController performFetch:&error])
         err(@"Couldn't fetch elements: %@", error);
+    [self.searchDisplayController.searchResultsTableView reloadData];
 }
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
@@ -192,8 +188,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    if (section < (signed)[[self.fetchedResultsController sections] count])
-        return (signed)[[[self.fetchedResultsController sections] objectAtIndex:(unsigned)section] numberOfObjects];
+    NSArray *sections = [self.fetchedResultsController sections];
+    if (section < (signed)[sections count])
+        return (signed)[[sections objectAtIndex:(unsigned)section] numberOfObjects];
     
     return 1;
 }
@@ -250,28 +247,28 @@
         // "New" section.
         NSString *siteName = self.query;
         [PearlAlert showAlertWithTitle:@"New Site"
-                                        message:l(@"Do you want to create a new site named:\n%@", siteName)
-                                      viewStyle:UIAlertViewStyleDefault
-                              tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                                  [tableView deselectRowAtIndexPath:indexPath animated:YES];
-                                  
-                                  if (buttonIndex == [alert cancelButtonIndex])
-                                      return;
-                                  
-                                  [self.fetchedResultsController.managedObjectContext performBlock:^{
-                                      MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPElementGeneratedEntity class])
+                               message:l(@"Do you want to create a new site named:\n%@", siteName)
+                             viewStyle:UIAlertViewStyleDefault
+                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                         [tableView deselectRowAtIndexPath:indexPath animated:YES];
+                         
+                         if (buttonIndex == [alert cancelButtonIndex])
+                             return;
+                         
+                         [self.fetchedResultsController.managedObjectContext performBlock:^{
+                             MPElementGeneratedEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPElementGeneratedEntity class])
                                                                                                inManagedObjectContext:self.fetchedResultsController.managedObjectContext];
-                                      assert([element isKindOfClass:ClassFromMPElementType((unsigned)element.type)]);
-                                      assert([MPAppDelegate get].keyHashHex);
-                                      
-                                      element.name = siteName;
-                                      element.mpHashHex = [MPAppDelegate get].keyHashHex;
-                                      
-                                      dispatch_async(dispatch_get_main_queue(), ^{
-                                          [self.delegate didSelectElement:element];
-                                      });
-                                  }];
-                              } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonYes, nil];
+                             assert([element isKindOfClass:ClassFromMPElementType((unsigned)element.type)]);
+                             assert([MPAppDelegate get].keyHashHex);
+                             
+                             element.name = siteName;
+                             element.mpHashHex = [MPAppDelegate get].keyHashHex;
+                             
+                             dispatch_async(dispatch_get_main_queue(), ^{
+                                 [self.delegate didSelectElement:element];
+                             });
+                         }];
+                     } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonYes, nil];
     }
 }
 

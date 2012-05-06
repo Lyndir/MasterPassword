@@ -121,7 +121,7 @@
     }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSString *description = [result description];
+        NSString *description = [result.content description];
         [result use];
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -143,7 +143,7 @@
      element.name = siteName;
      element.mpHashHex = [MPAppDelegate get].keyHashHex;
      
-     NSString *description = [element description];
+     NSString *description = [element.content description];
      [element use];
      
      dispatch_async(dispatch_get_main_queue(), ^{

@@ -30,7 +30,7 @@
 
 - (NSString *)description {
     
-    return [[self content] description];
+    return str(@"%@:%@", [self class], [self name]);
 }
 
 - (NSString *)debugDescription {

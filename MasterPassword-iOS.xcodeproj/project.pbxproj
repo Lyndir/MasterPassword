@@ -770,8 +770,6 @@
 		DAFE4A2E15039824003ABA7C /* PearlStrings.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45F315039823003ABA7C /* PearlStrings.m */; };
 		DAFE4A2F15039824003ABA7C /* PearlStringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45F415039823003ABA7C /* PearlStringUtils.h */; };
 		DAFE4A3015039824003ABA7C /* PearlStringUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45F515039823003ABA7C /* PearlStringUtils.m */; };
-		DAFE4A3115039824003ABA7C /* PearlWebUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45F615039823003ABA7C /* PearlWebUtils.h */; };
-		DAFE4A3215039824003ABA7C /* PearlWebUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45F715039823003ABA7C /* PearlWebUtils.m */; };
 		DAFE4A3315039824003ABA7C /* Pearl-Crypto.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45FD15039823003ABA7C /* Pearl-Crypto.h */; };
 		DAFE4A3415039824003ABA7C /* PearlCryptUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45FE15039823003ABA7C /* PearlCryptUtils.h */; };
 		DAFE4A3515039824003ABA7C /* PearlCryptUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45FF15039823003ABA7C /* PearlCryptUtils.m */; };
@@ -1634,8 +1632,6 @@
 		DAFE45F315039823003ABA7C /* PearlStrings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlStrings.m; sourceTree = "<group>"; };
 		DAFE45F415039823003ABA7C /* PearlStringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlStringUtils.h; sourceTree = "<group>"; };
 		DAFE45F515039823003ABA7C /* PearlStringUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlStringUtils.m; sourceTree = "<group>"; };
-		DAFE45F615039823003ABA7C /* PearlWebUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlWebUtils.h; sourceTree = "<group>"; };
-		DAFE45F715039823003ABA7C /* PearlWebUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlWebUtils.m; sourceTree = "<group>"; };
 		DAFE45F815039823003ABA7C /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		DAFE45FB15039823003ABA7C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Pearl.strings; sourceTree = "<group>"; };
 		DAFE45FD15039823003ABA7C /* Pearl-Crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Pearl-Crypto.h"; sourceTree = "<group>"; };
@@ -2782,8 +2778,6 @@
 				DAFE45F315039823003ABA7C /* PearlStrings.m */,
 				DAFE45F415039823003ABA7C /* PearlStringUtils.h */,
 				DAFE45F515039823003ABA7C /* PearlStringUtils.m */,
-				DAFE45F615039823003ABA7C /* PearlWebUtils.h */,
-				DAFE45F715039823003ABA7C /* PearlWebUtils.m */,
 				DAFE45F815039823003ABA7C /* README */,
 				DAFE45F915039823003ABA7C /* Resources */,
 			);
@@ -2927,7 +2921,6 @@
 				DAFE4A2C15039824003ABA7C /* PearlResettable.h in Headers */,
 				DAFE4A2D15039824003ABA7C /* PearlStrings.h in Headers */,
 				DAFE4A2F15039824003ABA7C /* PearlStringUtils.h in Headers */,
-				DAFE4A3115039824003ABA7C /* PearlWebUtils.h in Headers */,
 				DAFE4A3315039824003ABA7C /* Pearl-Crypto.h in Headers */,
 				DAFE4A3415039824003ABA7C /* PearlCryptUtils.h in Headers */,
 				DAFE4A3615039824003ABA7C /* PearlKeyChain.h in Headers */,
@@ -3910,7 +3903,6 @@
 				DAFE4A2B15039824003ABA7C /* PearlObjectUtils.m in Sources */,
 				DAFE4A2E15039824003ABA7C /* PearlStrings.m in Sources */,
 				DAFE4A3015039824003ABA7C /* PearlStringUtils.m in Sources */,
-				DAFE4A3215039824003ABA7C /* PearlWebUtils.m in Sources */,
 				DAFE4A3515039824003ABA7C /* PearlCryptUtils.m in Sources */,
 				DAFE4A3715039824003ABA7C /* PearlKeyChain.m in Sources */,
 				DAFE4A3915039824003ABA7C /* PearlRSAKey.m in Sources */,
@@ -3987,6 +3979,7 @@
 				CLANG_WARN_CXX0X_EXTENSIONS = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -4043,6 +4036,7 @@
 				CLANG_WARN_CXX0X_EXTENSIONS = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
@@ -4158,6 +4152,7 @@
 				CLANG_WARN_CXX0X_EXTENSIONS = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
@@ -4228,7 +4223,7 @@
 		DA95D60B14DF3F3B008D1B94 /* AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Pearl.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Pearl/Pearl-Prefix.pch";
@@ -4325,7 +4320,7 @@
 		DAC77CB5148291A600BCF976 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Pearl.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Pearl/Pearl-Prefix.pch";
@@ -4339,7 +4334,7 @@
 		DAC77CB6148291A600BCF976 /* AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Pearl.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Pearl/Pearl-Prefix.pch";
