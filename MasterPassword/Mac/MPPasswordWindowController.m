@@ -7,7 +7,7 @@
 //
 
 #import "MPPasswordWindowController.h"
-#import "MPAppDelegate_Key.h"
+#import "MPAppDelegate_Shared.h"
 #import "MPElementEntity.h"
 #import "MPElementGeneratedEntity.h"
 

@@ -6,8 +6,7 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import "MPAppDelegate.h"
-#import "MPAppDelegate_Key.h"
+#import "MPAppDelegate_Shared.h"
 
 #import "MPMainViewController.h"
 #import "IASKSettingsReader.h"
@@ -30,10 +29,6 @@
 
 
 @implementation MPAppDelegate
-
-@synthesize managedObjectModel = __managedObjectModel;
-@synthesize managedObjectContext = __managedObjectContext;
-@synthesize persistentStoreCoordinator = __persistentStoreCoordinator;
 
 @synthesize key;
 @synthesize keyHash;

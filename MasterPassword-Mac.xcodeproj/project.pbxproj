@@ -654,6 +654,12 @@
 		DA60116515057F10008E9AB6 /* tip_location_wood@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA600EE315057F10008E9AB6 /* tip_location_wood@2x.png */; };
 		DA60116715057FDD008E9AB6 /* iTunesArtwork-Rounded.png in Resources */ = {isa = PBXBuildFile; fileRef = DA60116615057FDD008E9AB6 /* iTunesArtwork-Rounded.png */; };
 		DA60116C15060F28008E9AB6 /* Pearl.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = DAB8D9D81503940100CED3BC /* Pearl.dylib */; };
+		DA79A9E3155821BB00BAA07A /* MPAppDelegate_Shared.m in Sources */ = {isa = PBXBuildFile; fileRef = DA79A9E0155821BB00BAA07A /* MPAppDelegate_Shared.m */; };
+		DA79A9E4155821BB00BAA07A /* MPAppDelegate_Store.m in Sources */ = {isa = PBXBuildFile; fileRef = DA79A9E2155821BB00BAA07A /* MPAppDelegate_Store.m */; };
+		DA79A9EC155821E500BAA07A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA79A9EB155821E500BAA07A /* Foundation.framework */; };
+		DA79AA201558221200BAA07A /* UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DA79AA111558221200BAA07A /* UbiquityStoreManager.h */; };
+		DA79AA211558221200BAA07A /* UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA79AA121558221200BAA07A /* UbiquityStoreManager.m */; };
+		DA79AA2415582F3900BAA07A /* libiCloudStoreManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA79A9EA155821E500BAA07A /* libiCloudStoreManager.a */; };
 		DAB8D98D150374AD00CED3BC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB8D98C150374AD00CED3BC /* Cocoa.framework */; };
 		DAB8D9C8150375C800CED3BC /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9B2150375C800CED3BC /* MasterPassword.xcdatamodeld */; };
 		DAB8D9C9150375C800CED3BC /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D9B5150375C800CED3BC /* Credits.rtf */; };
@@ -694,8 +700,6 @@
 		DAB8DA2E1503972100CED3BC /* PearlStrings.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D9FF1503972100CED3BC /* PearlStrings.m */; };
 		DAB8DA2F1503972100CED3BC /* PearlStringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8DA001503972100CED3BC /* PearlStringUtils.h */; };
 		DAB8DA301503972100CED3BC /* PearlStringUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8DA011503972100CED3BC /* PearlStringUtils.m */; };
-		DAB8DA311503972100CED3BC /* PearlWebUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8DA021503972100CED3BC /* PearlWebUtils.h */; };
-		DAB8DA321503972100CED3BC /* PearlWebUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8DA031503972100CED3BC /* PearlWebUtils.m */; };
 		DAB8DA331503972100CED3BC /* Pearl-Crypto.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8DA091503972100CED3BC /* Pearl-Crypto.h */; };
 		DAB8DA341503972100CED3BC /* PearlCryptUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB8DA0A1503972100CED3BC /* PearlCryptUtils.h */; };
 		DAB8DA351503972100CED3BC /* PearlCryptUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8DA0B1503972100CED3BC /* PearlCryptUtils.m */; };
@@ -1374,6 +1378,14 @@
 		DA600EE215057F10008E9AB6 /* tip_location_wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tip_location_wood.png; sourceTree = "<group>"; };
 		DA600EE315057F10008E9AB6 /* tip_location_wood@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tip_location_wood@2x.png"; sourceTree = "<group>"; };
 		DA60116615057FDD008E9AB6 /* iTunesArtwork-Rounded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork-Rounded.png"; sourceTree = "<group>"; };
+		DA79A9DF155821BB00BAA07A /* MPAppDelegate_Shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_Shared.h; sourceTree = "<group>"; };
+		DA79A9E0155821BB00BAA07A /* MPAppDelegate_Shared.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_Shared.m; sourceTree = "<group>"; };
+		DA79A9E1155821BB00BAA07A /* MPAppDelegate_Store.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_Store.h; sourceTree = "<group>"; };
+		DA79A9E2155821BB00BAA07A /* MPAppDelegate_Store.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_Store.m; sourceTree = "<group>"; };
+		DA79A9EA155821E500BAA07A /* libiCloudStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libiCloudStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA79A9EB155821E500BAA07A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		DA79AA111558221200BAA07A /* UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UbiquityStoreManager.h; sourceTree = "<group>"; };
+		DA79AA121558221200BAA07A /* UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UbiquityStoreManager.m; sourceTree = "<group>"; };
 		DAB8D988150374AD00CED3BC /* MasterPassword.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MasterPassword.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAB8D98C150374AD00CED3BC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		DAB8D98F150374AD00CED3BC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -1426,8 +1438,6 @@
 		DAB8D9FF1503972100CED3BC /* PearlStrings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlStrings.m; sourceTree = "<group>"; };
 		DAB8DA001503972100CED3BC /* PearlStringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlStringUtils.h; sourceTree = "<group>"; };
 		DAB8DA011503972100CED3BC /* PearlStringUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlStringUtils.m; sourceTree = "<group>"; };
-		DAB8DA021503972100CED3BC /* PearlWebUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlWebUtils.h; sourceTree = "<group>"; };
-		DAB8DA031503972100CED3BC /* PearlWebUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlWebUtils.m; sourceTree = "<group>"; };
 		DAB8DA041503972100CED3BC /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		DAB8DA071503972100CED3BC /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Pearl.strings; sourceTree = "<group>"; };
 		DAB8DA091503972100CED3BC /* Pearl-Crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Pearl-Crypto.h"; sourceTree = "<group>"; };
@@ -2219,8 +2229,8 @@
 		DAF56D4A1503C74200996D85 /* info.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = info.pem; sourceTree = "<group>"; };
 		DAF56D4B1503C74200996D85 /* infokey.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = infokey.pem; sourceTree = "<group>"; };
 		DAF56D4C1503C74200996D85 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		DAF56D4E1503C74200996D85 /* a1 */ = {isa = PBXFileReference; lastKnownFileType = file; path = a1; sourceTree = "<group>"; };
-		DAF56D4F1503C74200996D85 /* a2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = a2; sourceTree = "<group>"; };
+		DAF56D4E1503C74200996D85 /* a1 */ = {isa = PBXFileReference; lastKnownFileType = text; path = a1; sourceTree = "<group>"; };
+		DAF56D4F1503C74200996D85 /* a2 */ = {isa = PBXFileReference; lastKnownFileType = text; path = a2; sourceTree = "<group>"; };
 		DAF56D501503C74200996D85 /* cert.p7c */ = {isa = PBXFileReference; lastKnownFileType = file; path = cert.p7c; sourceTree = "<group>"; };
 		DAF56D511503C74200996D85 /* smime.p7m */ = {isa = PBXFileReference; lastKnownFileType = file; path = smime.p7m; sourceTree = "<group>"; };
 		DAF56D521503C74200996D85 /* smime.p7s */ = {isa = PBXFileReference; lastKnownFileType = file; path = smime.p7s; sourceTree = "<group>"; };
@@ -2525,10 +2535,19 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		DA79A9E7155821E500BAA07A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA79A9EC155821E500BAA07A /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DAB8D985150374AD00CED3BC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA79AA2415582F3900BAA07A /* libiCloudStoreManager.a in Frameworks */,
 				DA44255715546C580052177D /* Carbon.framework in Frameworks */,
 				DADEA5D51503EEDF00FD084E /* Security.framework in Frameworks */,
 				DAFE4A6415039CDC003ABA7C /* Pearl.dylib in Frameworks */,
@@ -3260,6 +3279,16 @@
 			path = Tooltips;
 			sourceTree = "<group>";
 		};
+		DA79A9F61558221200BAA07A /* iCloudStoreManager */ = {
+			isa = PBXGroup;
+			children = (
+				DA79AA111558221200BAA07A /* UbiquityStoreManager.h */,
+				DA79AA121558221200BAA07A /* UbiquityStoreManager.m */,
+			);
+			name = iCloudStoreManager;
+			path = External/iCloudStoreManager/iCloudStoreManager;
+			sourceTree = "<group>";
+		};
 		DAB8D97D150374AC00CED3BC = {
 			isa = PBXGroup;
 			children = (
@@ -3268,6 +3297,7 @@
 				DAB8D9DA1503940100CED3BC /* Pearl */,
 				DAF56A071503C64400996D85 /* scrypt */,
 				DAF571EE1503C75C00996D85 /* openssl */,
+				DA79A9F61558221200BAA07A /* iCloudStoreManager */,
 				DAB8D98B150374AD00CED3BC /* Frameworks */,
 				DAB8D989150374AD00CED3BC /* Products */,
 			);
@@ -3278,6 +3308,7 @@
 			children = (
 				DAB8D988150374AD00CED3BC /* MasterPassword.app */,
 				DAB8D9D81503940100CED3BC /* Pearl.dylib */,
+				DA79A9EA155821E500BAA07A /* libiCloudStoreManager.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3289,6 +3320,7 @@
 				DA44255615546C570052177D /* Carbon.framework */,
 				DADEA5D31503EEA700FD084E /* Security.framework */,
 				DAB8D98C150374AD00CED3BC /* Cocoa.framework */,
+				DA79A9EB155821E500BAA07A /* Foundation.framework */,
 				DAB8D98E150374AD00CED3BC /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -3312,6 +3344,10 @@
 				DAB8D9B4150375C800CED3BC /* Mac */,
 				DA600C2C150565FC008E9AB6 /* MPAppDelegate_Key.h */,
 				DA600C2B150565FC008E9AB6 /* MPAppDelegate_Key.m */,
+				DA79A9DF155821BB00BAA07A /* MPAppDelegate_Shared.h */,
+				DA79A9E0155821BB00BAA07A /* MPAppDelegate_Shared.m */,
+				DA79A9E1155821BB00BAA07A /* MPAppDelegate_Store.h */,
+				DA79A9E2155821BB00BAA07A /* MPAppDelegate_Store.m */,
 				DA600C29150565FC008E9AB6 /* MPConfig.h */,
 				DA600C2A150565FC008E9AB6 /* MPConfig.m */,
 				DAB8D9C0150375C800CED3BC /* MPElementStoredEntity.m */,
@@ -3401,8 +3437,6 @@
 				DAB8D9FF1503972100CED3BC /* PearlStrings.m */,
 				DAB8DA001503972100CED3BC /* PearlStringUtils.h */,
 				DAB8DA011503972100CED3BC /* PearlStringUtils.m */,
-				DAB8DA021503972100CED3BC /* PearlWebUtils.h */,
-				DAB8DA031503972100CED3BC /* PearlWebUtils.m */,
 				DAB8DA041503972100CED3BC /* README */,
 				DAB8DA051503972100CED3BC /* Resources */,
 			);
@@ -5159,6 +5193,14 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		DA79A9E8155821E500BAA07A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA79AA201558221200BAA07A /* UbiquityStoreManager.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DAB8D9D61503940100CED3BC /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -5178,7 +5220,6 @@
 				DAB8DA2C1503972100CED3BC /* PearlResettable.h in Headers */,
 				DAB8DA2D1503972100CED3BC /* PearlStrings.h in Headers */,
 				DAB8DA2F1503972100CED3BC /* PearlStringUtils.h in Headers */,
-				DAB8DA311503972100CED3BC /* PearlWebUtils.h in Headers */,
 				DAB8DA331503972100CED3BC /* Pearl-Crypto.h in Headers */,
 				DAB8DA341503972100CED3BC /* PearlCryptUtils.h in Headers */,
 				DAB8DA361503972100CED3BC /* PearlKeyChain.h in Headers */,
@@ -5190,6 +5231,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		DA79A9E9155821E500BAA07A /* iCloudStoreManager */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA79A9F3155821E500BAA07A /* Build configuration list for PBXNativeTarget "iCloudStoreManager" */;
+			buildPhases = (
+				DA79A9E6155821E500BAA07A /* Sources */,
+				DA79A9E7155821E500BAA07A /* Frameworks */,
+				DA79A9E8155821E500BAA07A /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = iCloudStoreManager;
+			productName = iCloudStoreManager;
+			productReference = DA79A9EA155821E500BAA07A /* libiCloudStoreManager.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		DAB8D987150374AD00CED3BC /* MasterPassword */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAB8D9A9150374AD00CED3BC /* Build configuration list for PBXNativeTarget "MasterPassword" */;
@@ -5250,6 +5308,7 @@
 			targets = (
 				DAB8D987150374AD00CED3BC /* MasterPassword */,
 				DAB8D9D71503940100CED3BC /* Pearl */,
+				DA79A9E9155821E500BAA07A /* iCloudStoreManager */,
 			);
 		};
 /* End PBXProject section */
@@ -5927,6 +5986,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		DA79A9E6155821E500BAA07A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA79AA211558221200BAA07A /* UbiquityStoreManager.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DAB8D984150374AD00CED3BC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -5941,6 +6008,8 @@
 				DA600BEB150420AC008E9AB6 /* MPPasswordWindowController.m in Sources */,
 				DA600C2D150565FC008E9AB6 /* MPConfig.m in Sources */,
 				DA600C2E150565FC008E9AB6 /* MPAppDelegate_Key.m in Sources */,
+				DA79A9E3155821BB00BAA07A /* MPAppDelegate_Shared.m in Sources */,
+				DA79A9E4155821BB00BAA07A /* MPAppDelegate_Store.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5961,7 +6030,6 @@
 				DAB8DA2B1503972100CED3BC /* PearlObjectUtils.m in Sources */,
 				DAB8DA2E1503972100CED3BC /* PearlStrings.m in Sources */,
 				DAB8DA301503972100CED3BC /* PearlStringUtils.m in Sources */,
-				DAB8DA321503972100CED3BC /* PearlWebUtils.m in Sources */,
 				DAB8DA351503972100CED3BC /* PearlCryptUtils.m in Sources */,
 				DAB8DA371503972100CED3BC /* PearlKeyChain.m in Sources */,
 				DAB8DA391503972100CED3BC /* PearlRSAKey.m in Sources */,
@@ -6007,12 +6075,25 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		DA79A9F4155821E500BAA07A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		DA79A9F5155821E500BAA07A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
 		DAB8D9A7150374AD00CED3BC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -6044,6 +6125,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -6090,7 +6172,6 @@
 		DAB8D9E11503940100CED3BC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -6106,7 +6187,6 @@
 		DAB8D9E21503940100CED3BC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -6122,6 +6202,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		DA79A9F3155821E500BAA07A /* Build configuration list for PBXNativeTarget "iCloudStoreManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA79A9F4155821E500BAA07A /* Debug */,
+				DA79A9F5155821E500BAA07A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		DAB8D982150374AC00CED3BC /* Build configuration list for PBXProject "MasterPassword-Mac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

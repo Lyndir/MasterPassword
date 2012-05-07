@@ -4,3 +4,6 @@
 [submodule "External/InAppSettingsKit"]
 	path = External/InAppSettingsKit
 	url = git://github.com/futuretap/InAppSettingsKit.git
+[submodule "External/iCloudStoreManager"]
+	path = External/iCloudStoreManager
+	url = git://github.com/alekseyn/iCloudStoreManager.git

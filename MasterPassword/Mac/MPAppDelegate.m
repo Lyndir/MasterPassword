@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import "MPAppDelegate_Key.h"
+#import "MPAppDelegate_Shared.h"
 #import "MPConfig.h"
 #import "MPElementEntity.h"
 #import <Carbon/Carbon.h>
@@ -26,7 +26,6 @@
 @synthesize statusMenu;
 @synthesize passwordWindow;
 
-@dynamic persistentStoreCoordinator, managedObjectModel, managedObjectContext;
 @synthesize key;
 @synthesize keyHash;
 @synthesize keyHashHex;
@@ -90,6 +89,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 	status = RegisterEventHotKey(35 /* p */, controlKey + cmdKey, MPShowHotKey, GetApplicationEventTarget(), 0, &hotKeyRef);
 	if(status != noErr)
         err(@"Error registering hotkey: %d", status);
+    
+    [[self storeManager] useiCloudStore:YES];
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
@@ -168,7 +169,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 {
     // Save changes in the application's managed object context before the application terminates.
     
-    if (!_managedObjectContext) {
+    if (![self managedObjectContext]) {
         return NSTerminateNow;
     }
     

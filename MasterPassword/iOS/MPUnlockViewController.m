@@ -9,7 +9,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "MPUnlockViewController.h"
-#import "MPAppDelegate_Key.h"
+#import "MPAppDelegate_Shared.h"
 
 typedef enum {
     MPLockscreenIdle,

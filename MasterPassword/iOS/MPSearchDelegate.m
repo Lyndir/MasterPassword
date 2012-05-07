@@ -7,7 +7,7 @@
 //
 
 #import "MPSearchDelegate.h"
-#import "MPAppDelegate_Key.h"
+#import "MPAppDelegate_Shared.h"
 #import "MPElementGeneratedEntity.h"
 
 @interface MPSearchDelegate (Private)

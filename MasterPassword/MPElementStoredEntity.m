@@ -7,7 +7,7 @@
 //
 
 #import "MPElementStoredEntity.h"
-#import "MPAppDelegate_Key.h"
+#import "MPAppDelegate_Shared.h"
 
 @interface MPElementStoredEntity ()
 

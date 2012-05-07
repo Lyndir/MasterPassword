@@ -7,7 +7,7 @@
 //
 
 #import "MPMainViewController.h"
-#import "MPAppDelegate_Key.h"
+#import "MPAppDelegate_Shared.h"
 #import "MPElementGeneratedEntity.h"
 #import "MPElementStoredEntity.h"
 #import "IASKAppSettingsViewController.h"
@@ -412,6 +412,22 @@
 #else
                          case 4:
 #endif
+#ifdef DEBUG
+                         {
+                             [[MPAppDelegate get].storeManager hardResetCloudStorage];
+                         }
+#ifdef ADHOC
+                         case 6: {
+                             [[MPAppDelegate get].storeManager useiCloudStore:![MPAppDelegate get].storeManager.iCloudEnabled];
+                         }
+                         case 7:
+#else
+                         case 5: {
+                             [[MPAppDelegate get].storeManager useiCloudStore:![MPAppDelegate get].storeManager.iCloudEnabled];
+                         }
+                         case 6:
+#endif
+#endif
                          {
                              [[MPAppDelegate get] signOut:self];
                              [[MPAppDelegate get] loadKey:YES];
@@ -425,6 +441,10 @@
      [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings",
 #ifdef ADHOC
      @"Feedback",
+#endif
+#ifdef DEBUG
+     @"Reset iCloud",
+     @"Toggle iCloud",
 #endif
      @"Sign Out",
      nil]; 
