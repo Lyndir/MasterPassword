@@ -42,7 +42,7 @@ static EventHotKeyID MPShowHotKey = { .signature = 'show', .id = 1 };
 }
 
 static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEvent, void *userData){
-
+    
     // Extract the hotkey ID.
 	EventHotKeyID hotKeyID;
 	GetEventParameter(theEvent,kEventParamDirectObject,typeEventHotKeyID,
@@ -94,7 +94,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
-
+    
     if (!self.passwordWindow)
         self.passwordWindow = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
     [self.passwordWindow showWindow:self];
@@ -133,31 +133,33 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             [alert setAccessoryView:passwordField];
             [alert layout];
             [passwordField becomeFirstResponder];
-            do {
-                NSInteger button = [alert runModal];
-                
-                if (button == 0)
-                    // "Change" button.
-                    if ([[NSAlert alertWithMessageText:@"Changing Master Password"
-                                         defaultButton:nil alternateButton:[PearlStrings get].commonButtonCancel otherButton:nil
-                             informativeTextWithFormat:
-                          @"This will allow you to log in with a different master password.\n\n"
-                          @"Note that you will only see the sites and passwords for the master password you log in with.\n"
-                          @"If you log in with a different master password, your current sites will be unavailable.\n\n"
-                          @"You can always change back to your current master password later.\n"
-                          @"Your current sites and passwords will then become available again."] runModal] == 1) {
-                        [self forgetKey];
-                        continue;
-                    }
-                if (button == -1) {
-                    // "Quit" button.
-                    [[NSApplication sharedApplication] terminate:self];
-                    break;
-                }
-            } while (![self tryMasterPassword:[passwordField stringValue]]);
-
+            [alert beginSheetModalForWindow:self.passwordWindow.window modalDelegate:self
+                             didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:NULL];
+            
             [self printStore];
         });
+}
+
+- (void) alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
+    
+    if (returnCode == NSAlertAlternateReturn)
+        // "Change" button.
+        if ([[NSAlert alertWithMessageText:@"Changing Master Password"
+                             defaultButton:nil alternateButton:[PearlStrings get].commonButtonCancel otherButton:nil
+                 informativeTextWithFormat:
+              @"This will allow you to log in with a different master password.\n\n"
+              @"Note that you will only see the sites and passwords for the master password you log in with.\n"
+              @"If you log in with a different master password, your current sites will be unavailable.\n\n"
+              @"You can always change back to your current master password later.\n"
+              @"Your current sites and passwords will then become available again."] runModal] == 1)
+            [self forgetKey];
+    
+    if (returnCode == NSAlertOtherReturn)
+        // "Quit" button.
+        [[NSApplication sharedApplication] terminate:self];
+    
+    if (![self tryMasterPassword:[(NSSecureTextField *)alert.accessoryView stringValue]])
+        [self unlock:self];
 }
 
 - (NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)window {
