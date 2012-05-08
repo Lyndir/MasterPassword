@@ -160,7 +160,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserverForName:kIASKAppSettingChanged object:nil queue:nil
                                                   usingBlock:^(NSNotification *note) {
-                                                      if ([NSStringFromSelector(@selector(storeKey))
+                                                      if ([NSStringFromSelector(@selector(saveKey))
                                                            isEqualToString:[note.object description]]) {
                                                           [self updateKey:self.key];
                                                           [self loadKey:YES];

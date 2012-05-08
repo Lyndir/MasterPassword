@@ -20,16 +20,19 @@
 
 @implementation MPAppDelegate
 @synthesize statusItem;
-@synthesize unlockItem;
 @synthesize lockItem;
 @synthesize showItem;
 @synthesize statusMenu;
+@synthesize useICloudItem;
+@synthesize rememberPasswordItem;
+@synthesize savePasswordItem;
 @synthesize passwordWindow;
 
 @synthesize key;
 @synthesize keyHash;
 @synthesize keyHashHex;
 
+#pragma GCC diagnostic ignored "-Wfour-char-constants"
 static EventHotKeyID MPShowHotKey = { .signature = 'show', .id = 1 };
 
 + (void)initialize {
@@ -59,18 +62,40 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)showMenu {
     
-    [self.showItem setEnabled:![self.passwordWindow.window isVisible]];
+    self.rememberPasswordItem.state = [[MPConfig get].rememberKey boolValue]? NSOnState: NSOffState;
+    self.savePasswordItem.state = [[MPConfig get].saveKey boolValue]? NSOnState: NSOffState;
+    self.showItem.enabled = ![self.passwordWindow.window isVisible];
+    
     [self.statusItem popUpStatusItemMenu:self.statusMenu];
 }
 
 - (IBAction)activate:(id)sender {
     
-    [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
+    if ([[NSApplication sharedApplication] isActive])
+        [self applicationDidBecomeActive:nil];
+    else
+        [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
+}
+
+- (IBAction)togglePreference:(NSMenuItem *)sender {
+    
+    if (sender == useICloudItem)
+        [self.storeManager useiCloudStore:sender.state == NSOffState];
+    if (sender == rememberPasswordItem)
+        [MPConfig get].rememberKey = [NSNumber numberWithBool:![[MPConfig get].rememberKey boolValue]];
+    if (sender == savePasswordItem)
+        [MPConfig get].saveKey = [NSNumber numberWithBool:![[MPConfig get].saveKey boolValue]];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     
+    // Setup delegates and listeners.
+    [MPConfig get].delegate = self;
     [self addObserver:self forKeyPath:@"key" options:0 context:nil];
+
+    // Initially, use iCloud.
+    if ([[MPConfig get].firstRun boolValue])
+        [[self storeManager] useiCloudStore:YES];
     
     // Status item.
     self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
@@ -89,17 +114,40 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 	status = RegisterEventHotKey(35 /* p */, controlKey + cmdKey, MPShowHotKey, GetApplicationEventTarget(), 0, &hotKeyRef);
 	if(status != noErr)
         err(@"Error registering hotkey: %d", status);
+}
+
+- (void)applicationWillBecomeActive:(NSNotification *)notification {
     
-    [[self storeManager] useiCloudStore:YES];
+    if (!self.passwordWindow)
+        self.passwordWindow = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
     
-    if (!self.passwordWindow)
-        self.passwordWindow = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
-    [self.passwordWindow showWindow:self];
+    static BOOL firstTime = YES;
+    if (firstTime)
+        firstTime = NO;
+    else
+        [self.passwordWindow showWindow:self];
+}
+
+- (void)applicationWillResignActive:(NSNotification *)notification {
     
-    [self unlock:self];
+    if (![[MPConfig get].rememberKey boolValue])
+        self.key = nil;
+}
+
+- (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)oldValue {
+
+    if (configKey == @selector(rememberKey))
+        self.rememberPasswordItem.state = [[MPConfig get].rememberKey boolValue]? NSOnState: NSOffState;
+    if (configKey == @selector(saveKey))
+        self.savePasswordItem.state = [[MPConfig get].saveKey boolValue]? NSOnState: NSOffState;
+}
+
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)didSwitch {
+    
+    self.useICloudItem.state = didSwitch? NSOnState: NSOffState;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -112,54 +160,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             [self.passwordWindow close];
         }
     }
-}
-
-- (IBAction)unlock:(id)sender {
-    
-    if (!self.key)
-        // Try and load the key from the keychain.
-        [self loadStoredKey];
-    
-    if (!self.key)
-        // Ask the user to set the key through his master password.
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (self.key)
-                return;
-            
-            NSAlert *alert = [NSAlert alertWithMessageText:@"Master Password is locked."
-                                             defaultButton:@"Unlock" alternateButton:@"Change" otherButton:@"Quit"
-                                 informativeTextWithFormat:@"Your master password is required to unlock the application."];
-            NSSecureTextField *passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect(0, 0, 200, 22)];
-            [alert setAccessoryView:passwordField];
-            [alert layout];
-            [passwordField becomeFirstResponder];
-            [alert beginSheetModalForWindow:self.passwordWindow.window modalDelegate:self
-                             didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:NULL];
-            
-            [self printStore];
-        });
-}
-
-- (void) alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-    
-    if (returnCode == NSAlertAlternateReturn)
-        // "Change" button.
-        if ([[NSAlert alertWithMessageText:@"Changing Master Password"
-                             defaultButton:nil alternateButton:[PearlStrings get].commonButtonCancel otherButton:nil
-                 informativeTextWithFormat:
-              @"This will allow you to log in with a different master password.\n\n"
-              @"Note that you will only see the sites and passwords for the master password you log in with.\n"
-              @"If you log in with a different master password, your current sites will be unavailable.\n\n"
-              @"You can always change back to your current master password later.\n"
-              @"Your current sites and passwords will then become available again."] runModal] == 1)
-            [self forgetKey];
-    
-    if (returnCode == NSAlertOtherReturn)
-        // "Quit" button.
-        [[NSApplication sharedApplication] terminate:self];
-    
-    if (![self tryMasterPassword:[(NSSecureTextField *)alert.accessoryView stringValue]])
-        [self unlock:self];
 }
 
 - (NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)window {

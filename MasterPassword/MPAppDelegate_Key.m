@@ -17,7 +17,7 @@ static NSDictionary *keyQuery() {
     static NSDictionary *MPKeyQuery = nil;
     if (!MPKeyQuery)
         MPKeyQuery = [PearlKeyChain createQueryForClass:kSecClassGenericPassword
-                                             attributes:[NSDictionary dictionaryWithObject:@"Stored Master Password"
+                                             attributes:[NSDictionary dictionaryWithObject:@"Saved Master Password"
                                                                                     forKey:(__bridge id)kSecAttrService]
                                                 matches:nil];
     
@@ -38,7 +38,7 @@ static NSDictionary *keyHashQuery() {
 
 - (void)forgetKey {
     
-    dbg(@"Deleting master key and hash from key chain.");
+    dbg(@"Deleting key and hash from key chain.");
     [PearlKeyChain deleteItemForQuery:keyQuery()];
     [PearlKeyChain deleteItemForQuery:keyHashQuery()];
     
@@ -55,15 +55,15 @@ static NSDictionary *keyHashQuery() {
 
 - (void)loadStoredKey {
     
-    if ([[MPConfig get].storeKey boolValue]) {
+    if ([[MPConfig get].saveKey boolValue]) {
         // Key is stored in keychain.  Load it.
         dbg(@"Loading key from key chain.");
         [self updateKey:[PearlKeyChain dataOfItemForQuery:keyQuery()]];
         dbg(@" -> Key %@.", self.key? @"found": @"NOT found");
     } else {
         // Key should not be stored in keychain.  Delete it.
-        dbg(@"Deleting key from key chain.");
-        [PearlKeyChain deleteItemForQuery:keyQuery()];
+        if ([PearlKeyChain deleteItemForQuery:keyQuery()] != errSecItemNotFound)
+            dbg(@"Deleted key from key chain.");
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
         [TestFlight passCheckpoint:MPTestFlightCheckpointMPUnstored];
 #endif
@@ -121,7 +121,7 @@ static NSDictionary *keyHashQuery() {
                                                 kSecAttrAccessibleWhenUnlocked,                     (__bridge id)kSecAttrAccessible,
 #endif
                                                 nil]];
-        if ([[MPConfig get].storeKey boolValue]) {
+        if ([[MPConfig get].saveKey boolValue]) {
             dbg(@"Storing key in key chain.");
             [PearlKeyChain addOrUpdateItemForQuery:keyQuery()
                                     withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:

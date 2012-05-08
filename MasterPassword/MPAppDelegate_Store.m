@@ -109,12 +109,6 @@
     return self.managedObjectContext;
 }
 
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)didSwitch {
-    
-    dbg(@"didSwitchToiCloud:%@", [NSNumber numberWithBool:didSwitch]);
-    //[masterViewController.iCloudSwitch setOn:didSwitch animated:YES];
-}
-
 - (void)saveContext {
     
     [self.managedObjectContext performBlock:^{

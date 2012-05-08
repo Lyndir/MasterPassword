@@ -7,20 +7,22 @@
 //
 
 #import "MPConfig.h"
+#import "MPAppDelegate_Shared.h"
 
 @implementation MPConfig
-@dynamic dataStoreError, storeKey, rememberKey;
+@dynamic saveKey, rememberKey;
 
 - (id)init {
     
     if(!(self = [super init]))
-        return self;
+        return nil;
     
     [self.defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-                                     [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(dataStoreError)),
-                                     [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(storeKey)),
-                                     [NSNumber numberWithBool:YES],                                 NSStringFromSelector(@selector(rememberKey)),
+                                     [NSNumber numberWithBool:NO],                          NSStringFromSelector(@selector(saveKey)),
+                                     [NSNumber numberWithBool:YES],                         NSStringFromSelector(@selector(rememberKey)),
                                      nil]];
+    
+    self.delegate = [MPAppDelegate get];
     
     return self;
 }
