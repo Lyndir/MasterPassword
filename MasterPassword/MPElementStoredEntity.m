@@ -34,7 +34,7 @@
     assert(self.type & MPElementTypeClassStored);
     
     NSData *encryptedContent;
-    if (self.type == MPElementTypeStoredDevicePrivate)
+    if (self.type & MPElementFeatureDevicePrivate)
         encryptedContent = [PearlKeyChain dataOfItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]];
     else
         encryptedContent = self.contentObject;
@@ -49,7 +49,7 @@
     NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[[MPAppDelegate get] keyWithLength:PearlCryptKeySize]
                                                                       padding:YES];
     
-    if (self.type == MPElementTypeStoredDevicePrivate) {
+    if (self.type & MPElementFeatureDevicePrivate) {
         [PearlKeyChain addOrUpdateItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]
                            withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                            encryptedContent,                                (__bridge id)kSecValueData,
@@ -60,6 +60,11 @@
         self.contentObject = nil;
     } else
         self.contentObject = encryptedContent;
+}
+
+- (NSString *)exportContent {
+    
+    return [self.contentObject encodeBase64];
 }
 
 @end

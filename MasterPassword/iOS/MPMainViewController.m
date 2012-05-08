@@ -398,34 +398,37 @@
                          case 2:
                              [[MPAppDelegate get] showGuide];
                              break;
-                         case 3: {
+                         case 3:
+                         {
                              IASKAppSettingsViewController *settingsVC = [IASKAppSettingsViewController new];
                              settingsVC.delegate = self;
                              [self.navigationController pushViewController:settingsVC animated:YES];
                              break;
                          }
-#ifdef ADHOC
                          case 4:
+                             [[MPAppDelegate get] export];
+                             break;
+#ifdef ADHOC
+                         case 5:
                              [TestFlight openFeedbackView];
                              break;
-                         case 5:
+                         case 6:
 #else
-                         case 4:
+                         case 5:
 #endif
 #ifdef DEBUG
-                         {
                              [[MPAppDelegate get].storeManager hardResetCloudStorage];
-                         }
+                             break;
 #ifdef ADHOC
-                         case 6: {
-                             [[MPAppDelegate get].storeManager useiCloudStore:![MPAppDelegate get].storeManager.iCloudEnabled];
-                         }
                          case 7:
-#else
-                         case 5: {
                              [[MPAppDelegate get].storeManager useiCloudStore:![MPAppDelegate get].storeManager.iCloudEnabled];
-                         }
+                             break;
+                         case 8:
+#else
                          case 6:
+                             [[MPAppDelegate get].storeManager useiCloudStore:![MPAppDelegate get].storeManager.iCloudEnabled];
+                             break;
+                         case 7:
 #endif
 #endif
                          {
@@ -438,7 +441,7 @@
                      [TestFlight passCheckpoint:MPTestFlightCheckpointAction];
                  } cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil
                        otherTitles:
-     [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings",
+     [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings", @"Export", @"Import",
 #ifdef ADHOC
      @"Feedback",
 #endif

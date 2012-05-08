@@ -21,4 +21,6 @@
 - (void)saveContext;
 - (void)printStore;
 
+- (NSString *)exportSitesShowingPasswords:(BOOL)showPasswords;
+
 @end

@@ -220,6 +220,48 @@
         });
 }
 
+- (void)export {
+    
+    [PearlAlert showNotice:
+     @"This export contains the names of all your sites.  "
+     @"You can even open it in a text editor to view its contents.\n\n"
+     @"If you ever loose your device and don't have iCloud enabled or sync with iTunes, "
+     @"this will help you remember what sites you had an account with.\n"
+     @"Don't worry: Even if you don't have an export of your sites, "
+     @"loosing your device never means loosing your generated passwords."];
+    [PearlAlert showAlertWithTitle:@"Reveal Passwords?" message:
+     @"Would you like to make all your passwords visible in the export?\n\n"
+     @"By default, only your stored passwords are exported, in an encrypted manner, "
+     @"making it safe from falling in the wrong hands.\n"
+     @"If you make all your passwords visible and somebody else finds the file, "
+     @"they can gain access to all your sites with it!"
+                         viewStyle:UIAlertViewStyleDefault tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                             if (buttonIndex == [alert firstOtherButtonIndex] + 0)
+                                 // Safe Export
+                                 [self exportShowPasswords:NO];
+                             if (buttonIndex == [alert firstOtherButtonIndex] + 1)
+                                 // Safe Export
+                                 [self exportShowPasswords:YES];
+                         } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
+}
+
+- (void)exportShowPasswords:(BOOL)showPasswords {
+    
+    NSString *exportedSites = [self exportSitesShowingPasswords:showPasswords];
+    
+    NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
+    [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'DD'T'HH':'mm'.mpsites'"];
+    
+    MFMailComposeViewController *composer = [[MFMailComposeViewController alloc] init];
+    [composer setMailComposeDelegate:self];
+    [composer setSubject:@"Master Password site export"];
+    [composer addAttachmentData:[exportedSites dataUsingEncoding:NSUTF8StringEncoding] mimeType:@"text/plain"
+                       fileName:[exportDateFormatter stringFromDate:[NSDate date]]];
+    [self.window.rootViewController presentModalViewController:composer animated:YES];
+}
+
+#pragma mark - UIApplicationDelegate
+
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
     [[LocalyticsSession sharedLocalyticsSession] close];
@@ -256,6 +298,26 @@
         [self updateKey:nil];
     
     [TestFlight passCheckpoint:MPTestFlightCheckpointDeactivated];
+}
+
+#pragma mark - MFMailComposeViewControllerDelegate
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller
+          didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    
+    if (error)
+        err(@"Error composing mail message: %@", error);
+    
+    switch (result) {
+        case MFMailComposeResultSaved:
+        case MFMailComposeResultSent:
+            break;
+            
+        case MFMailComposeResultFailed:
+            break;
+        case MFMailComposeResultCancelled:
+            break;
+    }
 }
 
 #pragma mark - TestFlight

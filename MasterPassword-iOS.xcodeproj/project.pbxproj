@@ -1854,6 +1854,7 @@
 				DA4426071557C1990052177D /* MPAppDelegate_Store.m */,
 				DA600C2615056427008E9AB6 /* MPConfig.h */,
 				DA600C2715056427008E9AB6 /* MPConfig.m */,
+				DAB8D45C15036BCF00CED3BC /* MPElementStoredEntity.h */,
 				DAB8D45515036BCF00CED3BC /* MPElementStoredEntity.m */,
 				DAB8D45915036BCF00CED3BC /* MPTypes.h */,
 				DAB8D45615036BCF00CED3BC /* MPTypes.m */,
@@ -1861,7 +1862,6 @@
 				DAB8D45815036BCF00CED3BC /* MPElementEntity.m */,
 				DAB8D45A15036BCF00CED3BC /* MPElementGeneratedEntity.h */,
 				DAB8D45B15036BCF00CED3BC /* MPElementGeneratedEntity.m */,
-				DAB8D45C15036BCF00CED3BC /* MPElementStoredEntity.h */,
 			);
 			path = MasterPassword;
 			sourceTree = "<group>";

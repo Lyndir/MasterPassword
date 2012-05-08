@@ -163,5 +163,64 @@
             trc(@"Not printing sites: master password not set.");
     }];
 }
+     
+     - (NSString *)exportSitesShowingPasswords:(BOOL)showPasswords {
+         
+         static NSDateFormatter *rfc3339DateFormatter = nil;
+         if (!rfc3339DateFormatter) {
+             rfc3339DateFormatter = [NSDateFormatter new];
+             NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+             [rfc3339DateFormatter setLocale:enUSPOSIXLocale];
+             [rfc3339DateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+             [rfc3339DateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+         }
+         
+         // Header.
+         NSMutableString *export = [NSMutableString new];
+         [export appendFormat:@"# MasterPassword %@\n", [PearlInfoPlist get].CFBundleVersion];
+         if (showPasswords)
+             [export appendFormat:@"# Export of site names and passwords in clear-text.\n"];
+         else
+             [export appendFormat:@"# Export of site names and stored passwords (unless device-private) encrypted with the master key.\n"];
+         [export appendFormat:@"\n"];
+         [export appendFormat:@"# Key ID: %@\n", self.keyHashHex];
+         [export appendFormat:@"# Date: %@\n", [rfc3339DateFormatter stringFromDate:[NSDate date]]];
+         if (showPasswords)
+             [export appendFormat:@"# Passwords: VISIBLE\n"];
+         else
+             [export appendFormat:@"# Passwords: PROTECTED\n"];
+         [export appendFormat:@"\n"];
+         
+         // Sites.
+         NSFetchRequest *fetchRequest    = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
+         fetchRequest.sortDescriptors    = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]];
+         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"mpHashHex == %@", self.keyHashHex];
+         __autoreleasing NSError *error = nil;
+         NSArray *elements = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+         if (error)
+             err(@"Error fetching sites for export: %@", error);
+         
+         for (MPElementEntity *element in elements) {
+             NSString *name = element.name;
+             MPElementType type = (unsigned)element.type;
+             int16_t uses  = element.uses;
+             NSTimeInterval lastUsed = element.lastUsed;
+             NSString *content = nil;
+             
+             // Determine the content to export.
+             if (!(type & MPElementFeatureDevicePrivate)) {
+                 if (showPasswords)
+                     content = element.content;
+                 else if (type & MPElementFeatureExportContent)
+                     content = element.exportContent;
+             }
+             
+             [export appendFormat:@"%@\t%d\t%d\t%@\t%@\n",
+              name, type, uses, [rfc3339DateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceReferenceDate:lastUsed]], content];
+             
+         }
+         
+         return export;
+     }
 
 @end

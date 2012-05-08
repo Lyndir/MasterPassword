@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
 
-@interface MPAppDelegate : PearlAppDelegate
+@interface MPAppDelegate : PearlAppDelegate <MFMailComposeViewControllerDelegate>
 
 - (void)showGuide;
 - (void)loadKey:(BOOL)animated;
+
+- (void)export;
 
 @end

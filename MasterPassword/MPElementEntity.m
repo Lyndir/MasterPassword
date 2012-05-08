@@ -28,6 +28,11 @@
     @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Content implementation missing." userInfo:nil];
 }
 
+- (NSString *)exportContent {
+    
+    return nil;
+}
+
 - (NSString *)description {
     
     return str(@"%@:%@", [self class], [self name]);
@@ -35,8 +40,8 @@
 
 - (NSString *)debugDescription {
     
-    return [NSString stringWithFormat:@"{%@: name=%@, mpHashHex=%@, type=%d, uses=%d, lastUsed=%@}",
-            NSStringFromClass([self class]), self.name, self.mpHashHex, self.type, self.uses, self.lastUsed];
+    return str(@"{%@: name=%@, mpHashHex=%@, type=%d, uses=%d, lastUsed=%@}",
+               NSStringFromClass([self class]), self.name, self.mpHashHex, self.type, self.uses, self.lastUsed);
 }
 
 @end
