@@ -181,11 +181,6 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     dbg(@"StoreManager: %@", message);
 }
 
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreManagerErrorCause)cause context:(id)context {
-    
-    err(@"StoreManager: cause=%d, context=%@, error=%@", cause, context, error);
-}
-
 #pragma mark - Import / Export
 
 - (void)loadRFC3339DateFormatter {
