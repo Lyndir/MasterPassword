@@ -426,12 +426,12 @@
                              break;
 #ifdef ADHOC
                          case 7:
-                             [[MPAppDelegate get].storeManager useiCloudStore:![MPAppDelegate get].storeManager.iCloudEnabled];
+                             [[MPAppDelegate get].storeManager useiCloudStore:![MPAppDelegate get].storeManager.iCloudEnabled alertUser:YES];
                              break;
                          case 8:
 #else
                          case 6:
-                             [[MPAppDelegate get].storeManager useiCloudStore:![MPAppDelegate get].storeManager.iCloudEnabled];
+                             [[MPAppDelegate get].storeManager useiCloudStore:![MPAppDelegate get].storeManager.iCloudEnabled alertUser:YES];
                              break;
                          case 7:
 #endif

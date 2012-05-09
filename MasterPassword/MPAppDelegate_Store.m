@@ -13,17 +13,7 @@
 
 static NSDateFormatter *rfc3339DateFormatter = nil;
 
-- (void)loadRFC3339DateFormatter {
-    
-    if (rfc3339DateFormatter)
-        return;
-    
-    rfc3339DateFormatter = [NSDateFormatter new];
-    NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-    [rfc3339DateFormatter setLocale:enUSPOSIXLocale];
-    [rfc3339DateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-    [rfc3339DateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-}
+#pragma mark - Core Data setup
 
 + (NSManagedObjectContext *)managedObjectContext {
     
@@ -124,11 +114,6 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     return storeManager;
 }
 
-- (NSManagedObjectContext *)managedObjectContextForUbiquityStoreManager:(UbiquityStoreManager *)usm {
-    
-    return self.managedObjectContext;
-}
-
 - (void)saveContext {
     
     [self.managedObjectContext performBlock:^{
@@ -182,6 +167,37 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         } else
             trc(@"Not printing sites: master password not set.");
     }];
+}
+
+#pragma mark - UbiquityStoreManagerDelegate
+
+- (NSManagedObjectContext *)managedObjectContextForUbiquityStoreManager:(UbiquityStoreManager *)usm {
+    
+    return self.managedObjectContext;
+}
+
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager log:(NSString *)message {
+    
+    dbg(@"StoreManager: %@", message);
+}
+
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreManagerErrorCause)cause context:(id)context {
+    
+    err(@"StoreManager: cause=%d, context=%@, error=%@", cause, context, error);
+}
+
+#pragma mark - Import / Export
+
+- (void)loadRFC3339DateFormatter {
+    
+    if (rfc3339DateFormatter)
+        return;
+    
+    rfc3339DateFormatter = [NSDateFormatter new];
+    NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    [rfc3339DateFormatter setLocale:enUSPOSIXLocale];
+    [rfc3339DateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+    [rfc3339DateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
 }
 
 - (MPImportResult)importSites:(NSString *)importedSitesString withPassword:(NSString *)password

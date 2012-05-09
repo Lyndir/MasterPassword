@@ -394,6 +394,37 @@
     [controller dismissModalViewControllerAnimated:YES];
 }
 
+#pragma mark - UbiquityStoreManagerDelegate
+
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreManagerErrorCause)cause context:(id)context {
+    
+    err(@"StoreManager: cause=%d, context=%@, error=%@", cause, context, error);
+    
+    switch (cause) {
+        case UbiquityStoreManagerErrorCauseDeleteStore:
+        case UbiquityStoreManagerErrorCauseCreateStorePath:
+        case UbiquityStoreManagerErrorCauseClearStore:
+            break;
+        case UbiquityStoreManagerErrorCauseOpenLocalStore: {
+            [PearlAlert showError:@"Could not open your local database.\n\n"
+             @"The database may be too old.  It will be deleted, the application will quit, "
+             @"and on the next launch a fresh database will be created." tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                 wrn(@"Local store could not be opened, deleting it.");
+                 [[NSFileManager defaultManager] removeItemAtURL:context error:nil];
+                 exit(0);
+             } otherTitles:nil];
+            break;
+        }
+        case UbiquityStoreManagerErrorCauseOpenCloudStore: {
+            [PearlAlert showError:@"Could not use iCloud-synced storage.  Will use a local database for now.\n\n"
+             @"If this problem persists, you may need to reset your Master Password database on iCloud."];
+            wrn(@"iCloud store could not be opened, moving to local store.");
+            [manager useiCloudStore:NO alertUser:NO];
+            break;
+        }
+    }
+}
+
 #pragma mark - TestFlight
 
 
