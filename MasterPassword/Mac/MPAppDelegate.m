@@ -80,22 +80,49 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (IBAction)togglePreference:(NSMenuItem *)sender {
     
     if (sender == useICloudItem)
-        [self.storeManager useiCloudStore:sender.state == NSOffState];
+        [self.storeManager useiCloudStore:sender.state == NSOffState alertUser:YES];
     if (sender == rememberPasswordItem)
         [MPConfig get].rememberKey = [NSNumber numberWithBool:![[MPConfig get].rememberKey boolValue]];
     if (sender == savePasswordItem)
         [MPConfig get].saveKey = [NSNumber numberWithBool:![[MPConfig get].saveKey boolValue]];
 }
 
+- (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)oldValue {
+
+    if (configKey == @selector(rememberKey))
+        self.rememberPasswordItem.state = [[MPConfig get].rememberKey boolValue]? NSOnState: NSOffState;
+    if (configKey == @selector(saveKey))
+        self.savePasswordItem.state = [[MPConfig get].saveKey boolValue]? NSOnState: NSOffState;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    
+    if ([keyPath isEqualToString:@"key"]) {
+        if (self.key)
+            [self.lockItem setEnabled:YES];
+        else {
+            [self.lockItem setEnabled:NO];
+            [self.passwordWindow close];
+        }
+    }
+}
+
+- (NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)window {
+    
+    return [[self managedObjectContext] undoManager];
+}
+
+#pragma mark - NSApplicationDelegate
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     
     // Setup delegates and listeners.
     [MPConfig get].delegate = self;
     [self addObserver:self forKeyPath:@"key" options:0 context:nil];
-
+    
     // Initially, use iCloud.
     if ([[MPConfig get].firstRun boolValue])
-        [[self storeManager] useiCloudStore:YES];
+        [[self storeManager] useiCloudStore:YES alertUser:YES];
     
     // Status item.
     self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
@@ -135,36 +162,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     
     if (![[MPConfig get].rememberKey boolValue])
         self.key = nil;
-}
-
-- (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)oldValue {
-
-    if (configKey == @selector(rememberKey))
-        self.rememberPasswordItem.state = [[MPConfig get].rememberKey boolValue]? NSOnState: NSOffState;
-    if (configKey == @selector(saveKey))
-        self.savePasswordItem.state = [[MPConfig get].saveKey boolValue]? NSOnState: NSOffState;
-}
-
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)didSwitch {
-    
-    self.useICloudItem.state = didSwitch? NSOnState: NSOffState;
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    
-    if ([keyPath isEqualToString:@"key"]) {
-        if (self.key)
-            [self.lockItem setEnabled:YES];
-        else {
-            [self.lockItem setEnabled:NO];
-            [self.passwordWindow close];
-        }
-    }
-}
-
-- (NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)window {
-    
-    return [[self managedObjectContext] undoManager];
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
@@ -211,6 +208,13 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }
     
     return NSTerminateNow;
+}
+
+#pragma mark - UbiquityStoreManagerDelegate
+
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)didSwitch {
+    
+    self.useICloudItem.state = didSwitch? NSOnState: NSOffState;
 }
 
 @end

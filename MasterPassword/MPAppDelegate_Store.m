@@ -181,6 +181,34 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     dbg(@"StoreManager: %@", message);
 }
 
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreManagerErrorCause)cause context:(id)context {
+    
+    err(@"StoreManager: cause=%d, context=%@, error=%@", cause, context, error);
+    
+    switch (cause) {
+        case UbiquityStoreManagerErrorCauseDeleteStore:
+        case UbiquityStoreManagerErrorCauseDeleteLogs:
+        case UbiquityStoreManagerErrorCauseCreateStorePath:
+        case UbiquityStoreManagerErrorCauseClearStore:
+            break;
+        case UbiquityStoreManagerErrorCauseOpenLocalStore: {
+            wrn(@"Local store could not be opened, resetting it.");
+            manager.hardResetEnabled = YES;
+            [manager hardResetLocalStorage];
+            
+            [NSException raise:NSGenericException format:@"Local store was reset, application must be restarted to use it."];
+            return;
+        }
+        case UbiquityStoreManagerErrorCauseOpenCloudStore: {
+            wrn(@"iCloud store could not be opened, resetting it.");
+            manager.hardResetEnabled = YES;
+            [manager hardResetCloudStorage];
+            [manager useiCloudStore:YES alertUser:NO];
+            break;
+        }
+    }
+}
+
 #pragma mark - Import / Export
 
 - (void)loadRFC3339DateFormatter {

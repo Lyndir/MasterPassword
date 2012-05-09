@@ -401,33 +401,6 @@
     inf(@"didSwitchToiCloud: %d", didSwitch);
 }
 
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreManagerErrorCause)cause context:(id)context {
-    
-    err(@"StoreManager: cause=%d, context=%@, error=%@", cause, context, error);
-    
-    switch (cause) {
-        case UbiquityStoreManagerErrorCauseDeleteStore:
-        case UbiquityStoreManagerErrorCauseDeleteLogs:
-        case UbiquityStoreManagerErrorCauseCreateStorePath:
-        case UbiquityStoreManagerErrorCauseClearStore:
-            break;
-        case UbiquityStoreManagerErrorCauseOpenLocalStore: {
-            wrn(@"Local store could not be opened, resetting it.");
-            manager.hardResetEnabled = YES;
-            [manager hardResetLocalStorage];
-            exit(1);
-            break;
-        }
-        case UbiquityStoreManagerErrorCauseOpenCloudStore: {
-            wrn(@"iCloud store could not be opened, resetting it.");
-            manager.hardResetEnabled = YES;
-            [manager hardResetCloudStorage];
-            [manager useiCloudStore:YES alertUser:NO];
-            break;
-        }
-    }
-}
-
 #pragma mark - TestFlight
 
 

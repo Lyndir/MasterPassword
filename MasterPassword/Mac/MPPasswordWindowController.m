@@ -113,14 +113,10 @@
     if (![query length] || ![MPAppDelegate get].keyID)
         return nil;
     
-    NSFetchRequest *fetchRequest = [MPAppDelegate.managedObjectModel
-                                    fetchRequestFromTemplateWithName:@"MPElements"
-                                    substitutionVariables:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                           query,                                   @"query",
-                                                           [MPAppDelegate get].keyID,               @"keyID",
-                                                           nil]];
-    [fetchRequest setSortDescriptors:
-     [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]]];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
+    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND keyID == %@",
+                              query, query, [MPAppDelegate get].keyID];
     
     NSError *error = nil;
     self.siteResults = [[MPAppDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
