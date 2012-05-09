@@ -54,7 +54,7 @@
 			<key>DefaultValue</key>
 			<false/>
 			<key>Key</key>
-			<string>rememberKeyPhrase</string>
+			<string>rememberKey</string>
 			<key>Title</key>
 			<string>Remember my password</string>
 			<key>Type</key>
@@ -72,9 +72,9 @@
 			<key>DefaultValue</key>
 			<false/>
 			<key>Key</key>
-			<string>storeKeyPhrase</string>
+			<string>saveKey</string>
 			<key>Title</key>
-			<string>Store my password</string>
+			<string>Save my password</string>
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>

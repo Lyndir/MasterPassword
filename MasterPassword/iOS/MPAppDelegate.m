@@ -32,7 +32,7 @@
 
 @synthesize key;
 @synthesize keyHash;
-@synthesize keyHashHex;
+@synthesize keyID;
 
 + (void)initialize {
     
@@ -43,6 +43,75 @@
     //[NSClassFromString(@"WebView") performSelector:NSSelectorFromString(@"_enableRemoteInspector")];
 #endif
 }
+- (void)showGuide {
+    
+    [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
+    
+    [TestFlight passCheckpoint:MPTestFlightCheckpointShowGuide];
+}
+
+- (void)loadKey:(BOOL)animated {
+    
+    if (!self.key)
+        // Try and load the key from the keychain.
+        [self loadStoredKey];
+    
+    if (!self.key)
+        // Ask the user to set the key through his master password.
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.navigationController presentViewController:
+             [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
+                                                    animated:animated completion:nil];
+        });
+}
+
+- (void)export {
+    
+    [PearlAlert showNotice:
+     @"This will export all your site names.\n\n"
+     @"You can open the export with a text editor to get an overview of all your sites.\n\n"
+     @"The file also acts as a personal backup of your site list in case you don't sync with iCloud/iTunes."
+         tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+             [PearlAlert showAlertWithTitle:@"Reveal Passwords?" message:
+              @"Would you like to make all your passwords visible in the export?\n\n"
+              @"A safe export will only include your stored passwords, in an encrypted manner, "
+              @"making the result safe from falling in the wrong hands.\n\n"
+              @"If all your passwords are shown and somebody else finds the export, "
+              @"they could gain access to all your sites!"
+                                  viewStyle:UIAlertViewStyleDefault tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                      if (buttonIndex == [alert firstOtherButtonIndex] + 0)
+                                          // Safe Export
+                                          [self exportShowPasswords:NO];
+                                      if (buttonIndex == [alert firstOtherButtonIndex] + 1)
+                                          // Safe Export
+                                          [self exportShowPasswords:YES];
+                                  } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
+         } otherTitles:nil];
+}
+
+- (void)exportShowPasswords:(BOOL)showPasswords {
+    
+    NSString *exportedSites = [self exportSitesShowingPasswords:showPasswords];
+    NSString *message;
+    if (showPasswords)
+        message = @"Export of my Master Password sites with passwords visible.\n\nREMINDER: Make sure nobody else sees this file!\n";
+    else
+        message = @"Backup of my Master Password sites.\n";
+    
+    NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
+    [exportDateFormatter setDateFormat:@"'Master Password sites ('yyyy'-'MM'-'DD').mpsites'"];
+    
+    MFMailComposeViewController *composer = [[MFMailComposeViewController alloc] init];
+    [composer setMailComposeDelegate:self];
+    [composer setSubject:@"Master Password site export"];
+    [composer setMessageBody:message isHTML:NO];
+    [composer addAttachmentData:[exportedSites dataUsingEncoding:NSUTF8StringEncoding] mimeType:@"text/plain"
+                       fileName:[exportDateFormatter stringFromDate:[NSDate date]]];
+    [self.window.rootViewController presentModalViewController:composer animated:YES];
+}
+
+#pragma mark - UIApplicationDelegate
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
@@ -188,6 +257,69 @@
     return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    
+    __autoreleasing NSError *error;
+    __autoreleasing NSURLResponse *response;
+    NSData *importedSitesData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
+                                                      returningResponse:&response error:&error];
+    if (error)
+        err(@"While reading imported sites from %@: %@", url, error);
+    if (!importedSitesData)
+        return NO;
+    
+    NSString *importedSitesString = [[NSString alloc] initWithData:importedSitesData encoding:NSUTF8StringEncoding];
+    [PearlAlert showAlertWithTitle:@"Import Password" message:
+     @"Enter the master password for this export:"
+                         viewStyle:UIAlertViewStyleSecureTextInput tappedButtonBlock:
+     ^(UIAlertView *alert, NSInteger buttonIndex) {
+         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+             MPImportResult result = [self importSites:importedSitesString withPassword:[alert textFieldAtIndex:0].text
+                                       askConfirmation:^BOOL(NSUInteger importCount, NSUInteger deleteCount) {
+                                           __block BOOL confirmation = NO;
+                                           
+                                           dispatch_group_t confirmationGroup = dispatch_group_create();
+                                           dispatch_group_enter(confirmationGroup);
+                                           dispatch_async(dispatch_get_main_queue(), ^{
+                                               [PearlAlert showAlertWithTitle:@"Import Sites?"
+                                                                      message:l(@"Import %d sites, overwriting %d existing sites?", importCount, deleteCount)
+                                                                    viewStyle:UIAlertViewStyleDefault
+                                                            tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                                                if (buttonIndex != [alert cancelButtonIndex])
+                                                                    confirmation = YES;
+                                                                
+                                                                dispatch_group_leave(confirmationGroup);
+                                                            }
+                                                                  cancelTitle:[PearlStrings get].commonButtonCancel
+                                                                  otherTitles:@"Import", nil];
+                                           });
+                                           dispatch_group_wait(confirmationGroup, DISPATCH_TIME_FOREVER);
+                                           
+                                           return confirmation;
+                                       }];
+             
+             switch (result) {
+                 case MPImportResultSuccess:
+                 case MPImportResultCancelled:
+                     break;
+                 case MPImportResultInternalError:
+                     [PearlAlert showError:@"Import failed because of an internal error."];
+                     break;
+                 case MPImportResultMalformedInput:
+                     [PearlAlert showError:@"The import doesn't look like a Master Password export."];
+                     break;
+                 case MPImportResultInvalidPassword:
+                     [PearlAlert showError:@"Incorrect master password for the import sites."];
+                     break;
+             }
+         });
+     }
+                       cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Unlock File", nil];
+    
+    return YES;
+}
+
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
     if ([[MPiOSConfig get].showQuickStart boolValue])
@@ -197,70 +329,6 @@
     
     [TestFlight passCheckpoint:MPTestFlightCheckpointActivated];
 }
-
-- (void)showGuide {
-    
-    [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
-    
-    [TestFlight passCheckpoint:MPTestFlightCheckpointShowGuide];
-}
-
-- (void)loadKey:(BOOL)animated {
-    
-    if (!self.key)
-        // Try and load the key from the keychain.
-        [self loadStoredKey];
-    
-    if (!self.key)
-        // Ask the user to set the key through his master password.
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.navigationController presentViewController:
-             [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
-                                                    animated:animated completion:nil];
-        });
-}
-
-- (void)export {
-    
-    [PearlAlert showNotice:
-     @"This export contains the names of all your sites.  "
-     @"You can even open it in a text editor to view its contents.\n\n"
-     @"If you ever loose your device and don't have iCloud enabled or sync with iTunes, "
-     @"this will help you remember what sites you had an account with.\n"
-     @"Don't worry: Even if you don't have an export of your sites, "
-     @"loosing your device never means loosing your generated passwords."];
-    [PearlAlert showAlertWithTitle:@"Reveal Passwords?" message:
-     @"Would you like to make all your passwords visible in the export?\n\n"
-     @"By default, only your stored passwords are exported, in an encrypted manner, "
-     @"making it safe from falling in the wrong hands.\n"
-     @"If you make all your passwords visible and somebody else finds the file, "
-     @"they can gain access to all your sites with it!"
-                         viewStyle:UIAlertViewStyleDefault tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                             if (buttonIndex == [alert firstOtherButtonIndex] + 0)
-                                 // Safe Export
-                                 [self exportShowPasswords:NO];
-                             if (buttonIndex == [alert firstOtherButtonIndex] + 1)
-                                 // Safe Export
-                                 [self exportShowPasswords:YES];
-                         } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
-}
-
-- (void)exportShowPasswords:(BOOL)showPasswords {
-    
-    NSString *exportedSites = [self exportSitesShowingPasswords:showPasswords];
-    
-    NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
-    [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'DD'T'HH':'mm'.mpsites'"];
-    
-    MFMailComposeViewController *composer = [[MFMailComposeViewController alloc] init];
-    [composer setMailComposeDelegate:self];
-    [composer setSubject:@"Master Password site export"];
-    [composer addAttachmentData:[exportedSites dataUsingEncoding:NSUTF8StringEncoding] mimeType:@"text/plain"
-                       fileName:[exportDateFormatter stringFromDate:[NSDate date]]];
-    [self.window.rootViewController presentModalViewController:composer animated:YES];
-}
-
-#pragma mark - UIApplicationDelegate
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
@@ -314,10 +382,16 @@
             break;
             
         case MFMailComposeResultFailed:
-            break;
+            [PearlAlert showError:@"A problem occurred while sending the message." tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                if (buttonIndex == [alert firstOtherButtonIndex])
+                    return;
+            } otherTitles:@"Retry", nil];
+            return;
         case MFMailComposeResultCancelled:
             break;
     }
+    
+    [controller dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark - TestFlight

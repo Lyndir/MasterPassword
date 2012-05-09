@@ -111,9 +111,9 @@ static NSDictionary *keyHashQuery() {
     
     if (key) {
         self.keyHash = keyHashForKey(key);
-        self.keyHashHex = [self.keyHash encodeHex];
+        self.keyID = [self.keyHash encodeHex];
         
-        dbg(@"Updating key hash to: %@.", self.keyHashHex);
+        dbg(@"Updating key ID to: %@.", self.keyID);
         [PearlKeyChain addOrUpdateItemForQuery:keyHashQuery()
                                 withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                 self.keyHash,                                       (__bridge id)kSecValueData,

@@ -15,7 +15,7 @@
 
 @property (strong, nonatomic) NSData                *key;
 @property (strong, nonatomic) NSData                *keyHash;
-@property (strong, nonatomic) NSString              *keyHashHex;
+@property (strong, nonatomic) NSString              *keyID;
 
 @end
 

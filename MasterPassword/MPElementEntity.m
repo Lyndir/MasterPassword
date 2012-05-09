@@ -12,7 +12,7 @@
 @implementation MPElementEntity
 
 @dynamic name;
-@dynamic mpHashHex;
+@dynamic keyID;
 @dynamic type;
 @dynamic uses;
 @dynamic lastUsed;
@@ -33,6 +33,10 @@
     return nil;
 }
 
+- (void)importContent:(NSString *)content {
+    
+}
+
 - (NSString *)description {
     
     return str(@"%@:%@", [self class], [self name]);
@@ -40,8 +44,8 @@
 
 - (NSString *)debugDescription {
     
-    return str(@"{%@: name=%@, mpHashHex=%@, type=%d, uses=%d, lastUsed=%@}",
-               NSStringFromClass([self class]), self.name, self.mpHashHex, self.type, self.uses, self.lastUsed);
+    return str(@"{%@: name=%@, keyID=%@, type=%d, uses=%d, lastUsed=%@}",
+               NSStringFromClass([self class]), self.name, self.keyID, self.type, self.uses, self.lastUsed);
 }
 
 @end

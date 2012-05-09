@@ -113,10 +113,10 @@
 - (void)update {
     
     assert(self.query);
-    assert([MPAppDelegate get].keyHashHex);
+    assert([MPAppDelegate get].keyID);
     
-    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND mpHashHex == %@",
-                                                            self.query, self.query, [MPAppDelegate get].keyHashHex];
+    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND keyID == %@",
+                                                            self.query, self.query, [MPAppDelegate get].keyID];
     
     NSError *error;
     if (![self.fetchedResultsController performFetch:&error])
@@ -259,10 +259,10 @@
                              MPElementGeneratedEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPElementGeneratedEntity class])
                                                                                                inManagedObjectContext:self.fetchedResultsController.managedObjectContext];
                              assert([element isKindOfClass:ClassFromMPElementType((unsigned)element.type)]);
-                             assert([MPAppDelegate get].keyHashHex);
+                             assert([MPAppDelegate get].keyID);
                              
                              element.name = siteName;
-                             element.mpHashHex = [MPAppDelegate get].keyHashHex;
+                             element.keyID = [MPAppDelegate get].keyID;
                              
                              dispatch_async(dispatch_get_main_queue(), ^{
                                  [self.delegate didSelectElement:element];

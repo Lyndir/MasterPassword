@@ -38,19 +38,19 @@ NSString *NSStringFromMPElementType(MPElementType type) {
         return nil;
     
     switch (type) {
-        case MPElementTypeCalculatedLong:
+        case MPElementTypeGeneratedLong:
             return @"Long Password";
             
-        case MPElementTypeCalculatedMedium:
+        case MPElementTypeGeneratedMedium:
             return @"Medium Password";
             
-        case MPElementTypeCalculatedShort:
+        case MPElementTypeGeneratedShort:
             return @"Short Password";
             
-        case MPElementTypeCalculatedBasic:
+        case MPElementTypeGeneratedBasic:
             return @"Basic Password";
             
-        case MPElementTypeCalculatedPIN:
+        case MPElementTypeGeneratedPIN:
             return @"PIN";
             
         case MPElementTypeStoredPersonal:
@@ -70,19 +70,19 @@ Class ClassFromMPElementType(MPElementType type) {
         return nil;
     
     switch (type) {
-        case MPElementTypeCalculatedLong:
+        case MPElementTypeGeneratedLong:
             return [MPElementGeneratedEntity class];
             
-        case MPElementTypeCalculatedMedium:
+        case MPElementTypeGeneratedMedium:
             return [MPElementGeneratedEntity class];
             
-        case MPElementTypeCalculatedShort:
+        case MPElementTypeGeneratedShort:
             return [MPElementGeneratedEntity class];
             
-        case MPElementTypeCalculatedBasic:
+        case MPElementTypeGeneratedBasic:
             return [MPElementGeneratedEntity class];
             
-        case MPElementTypeCalculatedPIN:
+        case MPElementTypeGeneratedPIN:
             return [MPElementGeneratedEntity class];
             
         case MPElementTypeStoredPersonal:
@@ -108,8 +108,8 @@ NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, in
         err(@"Missing name.");
         return nil;
     }
-    if (!(type & MPElementTypeClassCalculated)) {
-        err(@"Incorrect type (is not MPElementTypeClassCalculated): %d, for: %@", type, name);
+    if (!(type & MPElementTypeClassGenerated)) {
+        err(@"Incorrect type (is not MPElementTypeClassGenerated): %d, for: %@", type, name);
         return nil;
     }
     if (!key) {

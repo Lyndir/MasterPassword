@@ -45,6 +45,7 @@
 @synthesize contentTipEditIcon = _contentTipEditIcon;
 @synthesize searchTipContainer = _searchTip;
 @synthesize contentField = _contentField;
+@synthesize contentTipCleanup;
 
 #pragma mark - View lifecycle
 
@@ -161,8 +162,8 @@
     [self setHelpChapter:self.activeElement? @"2": @"1"];
     self.siteName.text = self.activeElement.name;
     
-    self.passwordCounter.alpha = self.activeElement.type & MPElementTypeClassCalculated? 0.5f: 0;
-    self.passwordIncrementer.alpha = self.activeElement.type & MPElementTypeClassCalculated? 0.5f: 0;
+    self.passwordCounter.alpha = self.activeElement.type & MPElementTypeClassGenerated? 0.5f: 0;
+    self.passwordIncrementer.alpha = self.activeElement.type & MPElementTypeClassGenerated? 0.5f: 0;
     self.passwordEdit.alpha = self.activeElement.type & MPElementTypeClassStored? 0.5f: 0;
     
     [self.typeButton setTitle:NSStringFromMPElementType((unsigned)self.activeElement.type)
@@ -235,7 +236,14 @@
 - (void)showContentTip:(NSString *)message withIcon:(UIImageView *)icon {
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.contentTipCleanup)
+            self.contentTipCleanup(NO);
+        
         self.contentTipBody.text = message;
+        self.contentTipCleanup = ^(BOOL finished) {
+            icon.hidden = YES;
+            self.contentTipCleanup = nil;
+        };
         
         icon.hidden = NO;
         [UIView animateWithDuration:0.2f animations:^{
@@ -246,10 +254,7 @@
                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                     [UIView animateWithDuration:0.2f animations:^{
                         self.contentTipContainer.alpha = 0;
-                    } completion:^(BOOL finished) {
-                        if (finished)
-                            icon.hidden = YES;
-                    }];
+                    } completion:self.contentTipCleanup];
                 });
             }
         }];
@@ -441,7 +446,7 @@
                      [TestFlight passCheckpoint:MPTestFlightCheckpointAction];
                  } cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil
                        otherTitles:
-     [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings", @"Export", @"Import",
+     [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings", @"Export",
 #ifdef ADHOC
      @"Feedback",
 #endif
@@ -472,7 +477,7 @@
                                             MPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(type)
                                                                                                         inManagedObjectContext:[MPAppDelegate managedObjectContext]];
                                             newElement.name = self.activeElement.name;
-                                            newElement.mpHashHex = self.activeElement.mpHashHex;
+                                            newElement.keyID = self.activeElement.keyID;
                                             newElement.uses = self.activeElement.uses;
                                             newElement.lastUsed = self.activeElement.lastUsed;
                                             

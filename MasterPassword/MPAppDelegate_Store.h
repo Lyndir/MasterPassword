@@ -10,6 +10,14 @@
 
 #import "UbiquityStoreManager.h"
 
+typedef enum {
+    MPImportResultSuccess,
+    MPImportResultCancelled,
+    MPImportResultInvalidPassword,
+    MPImportResultMalformedInput,
+    MPImportResultInternalError,
+} MPImportResult;
+
 @interface MPAppDelegate (Store) <UbiquityStoreManagerDelegate>
 
 + (NSManagedObjectContext *)managedObjectContext;
@@ -21,6 +29,8 @@
 - (void)saveContext;
 - (void)printStore;
 
+- (MPImportResult)importSites:(NSString *)importedSitesString withPassword:(NSString *)password
+              askConfirmation:(BOOL(^)(NSUInteger importCount, NSUInteger deleteCount))confirmation;
 - (NSString *)exportSitesShowingPasswords:(BOOL)showPasswords;
 
 @end

@@ -110,14 +110,14 @@
 - (NSArray *)control:(NSControl *)control textView:(NSTextView *)textView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger *)index {
     
     NSString *query = [[control stringValue] substringWithRange:charRange];
-    if (![query length] || ![MPAppDelegate get].keyHashHex)
+    if (![query length] || ![MPAppDelegate get].keyID)
         return nil;
     
     NSFetchRequest *fetchRequest = [MPAppDelegate.managedObjectModel
                                     fetchRequestFromTemplateWithName:@"MPElements"
                                     substitutionVariables:[NSDictionary dictionaryWithObjectsAndKeys:
                                                            query,                                   @"query",
-                                                           [MPAppDelegate get].keyHashHex,          @"mpHashHex",
+                                                           [MPAppDelegate get].keyID,               @"keyID",
                                                            nil]];
     [fetchRequest setSortDescriptors:
      [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]]];
@@ -222,10 +222,10 @@
      MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPElementGeneratedEntity class])
      inManagedObjectContext:[MPAppDelegate get].managedObjectContext];
      assert([element isKindOfClass:ClassFromMPElementType(element.type)]);
-     assert([MPAppDelegate get].keyHashHex);
+     assert([MPAppDelegate get].keyID);
      
      element.name = siteName;
-     element.mpHashHex = [MPAppDelegate get].keyHashHex;
+     element.keyID = [MPAppDelegate get].keyID;
      
      NSString *description = [element.content description];
      [element use];

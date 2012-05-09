@@ -67,4 +67,9 @@
     return [self.contentObject encodeBase64];
 }
 
+- (void)importContent:(NSString *)content {
+    
+    self.contentObject = [content decodeBase64];
+}
+
 @end

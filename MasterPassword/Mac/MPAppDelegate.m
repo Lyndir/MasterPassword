@@ -30,7 +30,7 @@
 
 @synthesize key;
 @synthesize keyHash;
-@synthesize keyHashHex;
+@synthesize keyID;
 
 #pragma GCC diagnostic ignored "-Wfour-char-constants"
 static EventHotKeyID MPShowHotKey = { .signature = 'show', .id = 1 };

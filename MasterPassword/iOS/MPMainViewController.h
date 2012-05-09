@@ -32,6 +32,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *contentTipEditIcon;
 @property (weak, nonatomic) IBOutlet UIView *searchTipContainer;
 
+@property (copy) void (^contentTipCleanup)(BOOL finished);
+
 - (IBAction)copyContent;
 - (IBAction)incrementPasswordCounter;
 - (IBAction)resetPasswordCounter:(UILongPressGestureRecognizer *)sender;

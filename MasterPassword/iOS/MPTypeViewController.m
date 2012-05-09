@@ -65,22 +65,22 @@
     
     switch (indexPath.section) {
         case 0: {
-            // Calculated
+            // Generated
             switch (indexPath.row) {
                 case 0:
-                    return MPElementTypeCalculatedLong;
+                    return MPElementTypeGeneratedLong;
                 case 1:
-                    return MPElementTypeCalculatedMedium;
+                    return MPElementTypeGeneratedMedium;
                 case 2:
-                    return MPElementTypeCalculatedShort;
+                    return MPElementTypeGeneratedShort;
                 case 3:
-                    return MPElementTypeCalculatedBasic;
+                    return MPElementTypeGeneratedBasic;
                 case 4:
-                    return MPElementTypeCalculatedPIN;
+                    return MPElementTypeGeneratedPIN;
                     
                 default:
                     [NSException raise:NSInternalInconsistencyException
-                                format:@"Unsupported row: %d, when selecting calculated element type.", indexPath.row];
+                                format:@"Unsupported row: %d, when selecting generated element type.", indexPath.row];
             }
             break;
         }
