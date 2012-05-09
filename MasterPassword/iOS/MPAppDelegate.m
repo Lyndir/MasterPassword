@@ -422,6 +422,7 @@
             wrn(@"iCloud store could not be opened, resetting it.");
             manager.hardResetEnabled = YES;
             [manager hardResetCloudStorage];
+            [manager useiCloudStore:YES alertUser:NO];
             break;
         }
     }
