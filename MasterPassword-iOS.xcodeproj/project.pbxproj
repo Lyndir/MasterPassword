@@ -4201,7 +4201,6 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = AdHoc;
 		};
@@ -4221,6 +4220,7 @@
 					"\"$(SRCROOT)/TestFlight\"",
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto\"",
 				);
+				SKIP_INSTALL = NO;
 			};
 			name = Debug;
 		};
@@ -4240,6 +4240,7 @@
 					"\"$(SRCROOT)/TestFlight\"",
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto\"",
 				);
+				SKIP_INSTALL = NO;
 			};
 			name = AdHoc;
 		};
@@ -4319,7 +4320,6 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = AppStore;
 		};
@@ -4339,6 +4339,7 @@
 					"\"$(SRCROOT)/TestFlight\"",
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto\"",
 				);
+				SKIP_INSTALL = NO;
 			};
 			name = AppStore;
 		};
