@@ -9,7 +9,7 @@
 #import "MPAppDelegate_Store.h"
 #import "MPElementEntity.h"
 
-@implementation MPAppDelegate (Store)
+@implementation MPAppDelegate_Shared (Store)
 
 static NSDateFormatter *rfc3339DateFormatter = nil;
 
@@ -148,13 +148,13 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
             }
         }
         trc(@"---");
-        if ([MPAppDelegate get].keyID) {
+        if ([MPAppDelegate_Shared get].keyID) {
             trc(@"=== Known sites ===");
             NSFetchRequest *fetchRequest = [[self managedObjectModel]
                                             fetchRequestFromTemplateWithName:@"MPElements"
                                             substitutionVariables:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                    @"",                                     @"query",
-                                                                   [MPAppDelegate get].keyID,               @"keyID",
+                                                                   [MPAppDelegate_Shared get].keyID,        @"keyID",
                                                                    nil]];
             [fetchRequest setSortDescriptors:
              [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]]];
@@ -181,9 +181,19 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     dbg(@"StoreManager: %@", message);
 }
 
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)didSwitch {
+    
+#ifdef TESTFLIGHT_SDK_VERSION
+    [TestFlight passCheckpoint:didSwitch? MPTestFlightCheckpointCloudEnabled: MPTestFlightCheckpointCloudDisabled];
+#endif
+    
+    inf(@"Using iCloud? %@", didSwitch? @"YES": @"NO");
+    [MPConfig get].iCloud = [NSNumber numberWithBool:didSwitch];
+}
+
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreManagerErrorCause)cause context:(id)context {
 
-#if TARGET_OS_IPHONE
+#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:str(@"MPTestFlightCheckpointMPErrorUbiquity_%d", cause)];
 #endif
     err(@"StoreManager: cause=%d, context=%@, error=%@", cause, context, error);
@@ -195,7 +205,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         case UbiquityStoreManagerErrorCauseClearStore:
             break;
         case UbiquityStoreManagerErrorCauseOpenLocalStore: {
-#if TARGET_OS_IPHONE
+#ifdef TESTFLIGHT_SDK_VERSION
             [TestFlight passCheckpoint:MPTestFlightCheckpointLocalStoreIncompatible];
 #endif
             wrn(@"Local store could not be opened, resetting it.");
@@ -206,7 +216,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
             return;
         }
         case UbiquityStoreManagerErrorCauseOpenCloudStore: {
-#if TARGET_OS_IPHONE
+#ifdef TESTFLIGHT_SDK_VERSION
             [TestFlight passCheckpoint:MPTestFlightCheckpointCloudStoreIncompatible];
 #endif
             wrn(@"iCloud store could not be opened, resetting it.");
@@ -355,7 +365,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     }
     [self saveContext];
 
-#if TARGET_OS_IPHONE
+#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPTestFlightCheckpointSitesImported];
 #endif
 
@@ -415,7 +425,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
          [rfc3339DateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceReferenceDate:lastUsed]], uses, type, [name cStringUsingEncoding:NSUTF8StringEncoding], content? content: @""];
     }
     
-#if TARGET_OS_IPHONE
+#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPTestFlightCheckpointSitesExported];
 #endif
 

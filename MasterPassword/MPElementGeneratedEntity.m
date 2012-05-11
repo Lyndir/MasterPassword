@@ -7,7 +7,8 @@
 //
 
 #import "MPElementGeneratedEntity.h"
-#import "MPAppDelegate_Shared.h"
+#import "MPAppDelegate.h"
+#import "MPAppDelegate_Key.h"
 
 
 @implementation MPElementGeneratedEntity

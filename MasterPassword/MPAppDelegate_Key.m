@@ -7,10 +7,10 @@
 //
 
 #import "MPConfig.h"
-#import "MPAppDelegate_Shared.h"
+#import "MPAppDelegate_Key.h"
 #import "MPElementEntity.h"
 
-@implementation MPAppDelegate (Key)
+@implementation MPAppDelegate_Shared (Key)
 
 static NSDictionary *keyQuery() {
     
@@ -43,7 +43,7 @@ static NSDictionary *keyHashQuery() {
     [PearlKeyChain deleteItemForQuery:keyHashQuery()];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyForgotten object:self];
-#if TARGET_OS_IPHONE
+#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPTestFlightCheckpointMPForgotten];
 #endif
 }
@@ -64,7 +64,7 @@ static NSDictionary *keyHashQuery() {
         // Key should not be stored in keychain.  Delete it.
         if ([PearlKeyChain deleteItemForQuery:keyQuery()] != errSecItemNotFound)
             dbg(@"Deleted key from key chain.");
-#if TARGET_OS_IPHONE
+#ifdef TESTFLIGHT_SDK_VERSION
         [TestFlight passCheckpoint:MPTestFlightCheckpointMPUnstored];
 #endif
     }
@@ -86,13 +86,13 @@ static NSDictionary *keyHashQuery() {
         if (![keyHash isEqual:tryKeyHash]) {
             dbg(@"Key phrase hash mismatch. Expected: %@, answer: %@.", keyHash, tryKeyHash);
             
-#if TARGET_OS_IPHONE
+#ifdef TESTFLIGHT_SDK_VERSION
             [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
 #endif
             return NO;
         }
     
-#if TARGET_OS_IPHONE
+#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPTestFlightCheckpointMPEntered];
 #endif
     
@@ -102,15 +102,17 @@ static NSDictionary *keyHashQuery() {
 
 - (void)updateKey:(NSData *)key {
     
-    self.key = key;
+    if (self.key != key) {
+        self.key = key;
+        
+        if (key)
+            [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeySet object:self];
+        else
+            [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyUnset object:self];
+    }
     
-    if (key)
-        [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeySet object:self];
-    else
-        [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyUnset object:self];
-    
-    if (key) {
-        self.keyHash = keyHashForKey(key);
+    if (self.key) {
+        self.keyHash = keyHashForKey(self.key);
         self.keyID = [self.keyHash encodeHex];
         
         dbg(@"Updating key ID to: %@.", self.keyID);
@@ -125,14 +127,14 @@ static NSDictionary *keyHashQuery() {
             dbg(@"Storing key in key chain.");
             [PearlKeyChain addOrUpdateItemForQuery:keyQuery()
                                     withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                    key,                                            (__bridge id)kSecValueData,
+                                                    self.key,                                       (__bridge id)kSecValueData,
 #if TARGET_OS_IPHONE
                                                     kSecAttrAccessibleWhenUnlocked,                 (__bridge id)kSecAttrAccessible,
 #endif
                                                     nil]];
         }
         
-#if TARGET_OS_IPHONE
+#ifdef TESTFLIGHT_SDK_VERSION
         [TestFlight passCheckpoint:MPTestFlightCheckpointSetKey];
 #endif
     }

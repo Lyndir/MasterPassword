@@ -7,7 +7,8 @@
 //
 
 #import "MPGuideViewController.h"
-#import "MPAppDelegate_Shared.h"
+#import "MPAppDelegate.h"
+
 
 @implementation MPGuideViewController
 @synthesize scrollView;

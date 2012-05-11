@@ -78,6 +78,24 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string></string>
+			<key>FooterText</key>
+			<string>Makes your sites available to all your Apple devices.  This also works as a way of automatically keeping a back-up of your sites.  Apple cannot see any of your passwords.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>iCloud</string>
+			<key>Key</key>
+			<string>iCloud</string>
+			<key>DefaultValue</key>
+			<true/>
+		</dict>
 	</array>
 	<key>StringsTable</key>
 	<string>Root</string>

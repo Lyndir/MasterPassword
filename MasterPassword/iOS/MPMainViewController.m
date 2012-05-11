@@ -7,7 +7,9 @@
 //
 
 #import "MPMainViewController.h"
-#import "MPAppDelegate_Shared.h"
+#import "MPAppDelegate.h"
+#import "MPAppDelegate_Key.h"
+#import "MPAppDelegate_Store.h"
 #import "MPElementGeneratedEntity.h"
 #import "MPElementStoredEntity.h"
 #import "IASKAppSettingsViewController.h"
@@ -396,10 +398,11 @@
                          case 0:
                              [self toggleHelpAnimated:YES];
                              break;
-                         case 1:
+                         case 1: {
                              [self setHelpChapter:@"faq"];
                              [self setHelpHidden:NO animated:YES];
                              break;
+                         }
                          case 2:
                              [[MPAppDelegate get] showGuide];
                              break;
@@ -426,14 +429,8 @@
                              break;
 #ifdef ADHOC
                          case 7:
-                             [[MPAppDelegate get].storeManager useiCloudStore:![MPAppDelegate get].storeManager.iCloudEnabled alertUser:YES];
-                             break;
-                         case 8:
 #else
                          case 6:
-                             [[MPAppDelegate get].storeManager useiCloudStore:![MPAppDelegate get].storeManager.iCloudEnabled alertUser:YES];
-                             break;
-                         case 7:
 #endif
 #endif
                          {
@@ -447,12 +444,12 @@
                  } cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil
                        otherTitles:
      [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings", @"Export",
+
 #ifdef ADHOC
      @"Feedback",
 #endif
 #ifdef DEBUG
      @"Reset iCloud",
-     @"Toggle iCloud",
 #endif
      @"Sign Out",
      nil]; 

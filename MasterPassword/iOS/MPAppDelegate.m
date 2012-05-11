@@ -6,7 +6,9 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import "MPAppDelegate_Shared.h"
+#import "MPAppDelegate.h"
+#import "MPAppDelegate_Key.h"
+#import "MPAppDelegate_Store.h"
 
 #import "MPMainViewController.h"
 #import "IASKSettingsReader.h"
@@ -30,10 +32,6 @@
 
 @implementation MPAppDelegate
 
-@synthesize key;
-@synthesize keyHash;
-@synthesize keyID;
-
 + (void)initialize {
     
     [MPiOSConfig get];
@@ -43,6 +41,12 @@
     //[NSClassFromString(@"WebView") performSelector:NSSelectorFromString(@"_enableRemoteInspector")];
 #endif
 }
+
++ (MPAppDelegate *)get {
+    
+    return (MPAppDelegate *)[super get];
+}
+
 - (void)showGuide {
     
     [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
@@ -229,14 +233,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserverForName:kIASKAppSettingChanged object:nil queue:nil
                                                   usingBlock:^(NSNotification *note) {
-                                                      if ([NSStringFromSelector(@selector(saveKey))
-                                                           isEqualToString:[note.object description]]) {
-                                                          [self updateKey:self.key];
-                                                          [self loadKey:YES];
-                                                      }
-                                                      if ([NSStringFromSelector(@selector(forgetKey))
-                                                           isEqualToString:[note.object description]])
-                                                          [self loadKey:YES];
+                                                      [self checkConfig];
                                                   }];
     
 #ifdef ADHOC
@@ -324,8 +321,10 @@
     
     if ([[MPiOSConfig get].showQuickStart boolValue])
         [self showGuide];
-    else
+    else {
         [self loadKey:NO];
+        [self checkConfig];
+    }
     
     [TestFlight passCheckpoint:MPTestFlightCheckpointActivated];
 }
@@ -368,6 +367,18 @@
     [TestFlight passCheckpoint:MPTestFlightCheckpointDeactivated];
 }
 
+- (void)checkConfig {
+    
+    if ([[MPConfig get].saveKey boolValue]) {
+        if (self.key)
+            [self updateKey:self.key];
+    } else
+        [self loadStoredKey];
+    
+    if ([[MPConfig get].iCloud boolValue] != [self.storeManager iCloudEnabled])
+        [self.storeManager useiCloudStore:[[MPConfig get].iCloud boolValue] alertUser:YES];
+}
+
 #pragma mark - MFMailComposeViewControllerDelegate
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller
@@ -396,39 +407,54 @@
 
 #pragma mark - UbiquityStoreManagerDelegate
 
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)didSwitch {
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)iCloudEnabled {
     
-#if TARGET_OS_IPHONE
-    [TestFlight passCheckpoint:didSwitch? MPTestFlightCheckpointCloudEnabled: MPTestFlightCheckpointCloudDisabled];
-#endif
+    [super ubiquityStoreManager:manager didSwitchToiCloud:iCloudEnabled];
+    
+    if (![[MPConfig get].iCloudDecided boolValue]) {
+        if (!iCloudEnabled) {
+            [PearlAlert showAlertWithTitle:@"iCloud"
+                                   message:
+             @"iCloud is now disabled.\n\n"
+             @"It is highly recommended you enable iCloud."
+                                 viewStyle:UIAlertViewStyleDefault tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                     [MPConfig get].iCloudDecided = [NSNumber numberWithBool:YES];
 
-    inf(@"Using iCloud? %@", didSwitch? @"YES": @"NO");
-    if (!didSwitch) {
-        [PearlAlert showAlertWithTitle:@"iCloud"
-                               message:
-         @"iCloud is now disabled.\n"
-         @"It is highly recommended you enable iCloud.  "
-         @"Doing so will let you easily access all your sites from any of your devices.  "
-         @"It will also make it easier to recover from the loss of a device.\n\n"
-         @"iCloud only backs up your site names.  If you use stored passwords, "
-         @"those are always encrypted with your master password.  "
-         @"Apple cannot see any of your private information."
-                             viewStyle:UIAlertViewStyleDefault tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                                 if (buttonIndex == [alert cancelButtonIndex])
-                                     return;
-                                 
-                                 [manager useiCloudStore:YES alertUser:YES];
-                             } cancelTitle:@"Leave Off" otherTitles:@"Enable iCloud", nil];
+                                     if (buttonIndex == [alert cancelButtonIndex])
+                                         return;
+                                     
+                                     if (buttonIndex == [alert firstOtherButtonIndex] + 0)
+                                         [PearlAlert showAlertWithTitle:@"About iCloud"
+                                                                message:
+                                          @"iCloud is Apple's solution for saving your data in \"the cloud\" "
+                                          @"and making sure your other iPhones, iPads and Macs are in sync.\n\n"
+                                          @"For Master Password, that means your sites are available on all your "
+                                          @"Apple devices, and you always have a backup of them in case "
+                                          @"you loose one or need to restore.\n\n"
+                                          @"Because of the way Master Password works, it doesn't need to send your "
+                                          @"site's passwords to Apple.  Only their names are saved to make it easier "
+                                          @"for you to find the site you need.  For some sites you may have set "
+                                          @"a user-specified password: these are sent to iCloud after being encrypted "
+                                          @"with your master password.\n\n"
+                                          @"Apple can never see any of your passwords."
+                                                              viewStyle:UIAlertViewStyleDefault
+                                                      tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                                          [self ubiquityStoreManager:manager didSwitchToiCloud:iCloudEnabled];
+                                                      }
+                                                            cancelTitle:[PearlStrings get].commonButtonThanks otherTitles:nil];
+                                     if (buttonIndex == [alert firstOtherButtonIndex] + 1)
+                                         [manager useiCloudStore:YES alertUser:NO];
+                                 } cancelTitle:@"Leave iCloud Off" otherTitles:@"Explain?", @"Enable iCloud", nil];
+        }
     }
 }
 
 #pragma mark - TestFlight
 
 
-static NSDictionary *testFlightInfo = nil;
-
 - (NSDictionary *)testFlightInfo {
     
+    static NSDictionary *testFlightInfo = nil;
     if (testFlightInfo == nil)
         testFlightInfo = [[NSDictionary alloc] initWithContentsOfURL:
                           [[NSBundle mainBundle] URLForResource:@"TestFlight" withExtension:@"plist"]];
@@ -445,10 +471,9 @@ static NSDictionary *testFlightInfo = nil;
 #pragma mark - Crashlytics
 
 
-static NSDictionary *crashlyticsInfo = nil;
-
 - (NSDictionary *)crashlyticsInfo {
     
+    static NSDictionary *crashlyticsInfo = nil;
     if (crashlyticsInfo == nil)
         crashlyticsInfo = [[NSDictionary alloc] initWithContentsOfURL:
                            [[NSBundle mainBundle] URLForResource:@"Crashlytics" withExtension:@"plist"]];
@@ -465,10 +490,9 @@ static NSDictionary *crashlyticsInfo = nil;
 #pragma mark - Localytics
 
 
-static NSDictionary *localyticsInfo = nil;
-
 - (NSDictionary *)localyticsInfo {
     
+    static NSDictionary *localyticsInfo = nil;
     if (localyticsInfo == nil)
         localyticsInfo = [[NSDictionary alloc] initWithContentsOfURL:
                           [[NSBundle mainBundle] URLForResource:@"Localytics" withExtension:@"plist"]];

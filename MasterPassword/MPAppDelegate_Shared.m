@@ -8,14 +8,18 @@
 
 #import "MPAppDelegate_Shared.h"
 
-@implementation MPAppDelegate (Shared)
+@implementation MPAppDelegate_Shared
 
-+ (MPAppDelegate *)get {
+@synthesize key;
+@synthesize keyHash;
+@synthesize keyID;
+
++ (MPAppDelegate_Shared *)get {
     
 #if TARGET_OS_IPHONE
-    return (MPAppDelegate *)[UIApplication sharedApplication].delegate;
+    return (MPAppDelegate_Shared *)[UIApplication sharedApplication].delegate;
 #elif defined (__MAC_OS_X_VERSION_MIN_REQUIRED)
-    return (MPAppDelegate *)[NSApplication sharedApplication].delegate;
+    return (MPAppDelegate_Shared *)[NSApplication sharedApplication].delegate;
 #else
 #error Unsupported OS.
 #endif

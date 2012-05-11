@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
+#import "MPAppDelegate_Shared.h"
 
-@interface MPAppDelegate : PearlAppDelegate <MFMailComposeViewControllerDelegate>
+@interface MPAppDelegate : MPAppDelegate_Shared <MFMailComposeViewControllerDelegate>
+
++ (MPAppDelegate *)get;
 
 - (void)showGuide;
 - (void)loadKey:(BOOL)animated;

@@ -11,6 +11,9 @@
 @property (nonatomic, retain) NSNumber *saveKey;
 @property (nonatomic, retain) NSNumber *rememberKey;
 
+@property (nonatomic, retain) NSNumber *iCloud;
+@property (nonatomic, retain) NSNumber *iCloudDecided;
+
 + (MPConfig *)get;
 
 @end

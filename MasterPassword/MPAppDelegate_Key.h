@@ -6,9 +6,9 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import "MPAppDelegate.h"
+#import "MPAppDelegate_Shared.h"
 
-@interface MPAppDelegate (Key)
+@interface MPAppDelegate_Shared (Key)
 
 - (void)loadStoredKey;
 - (IBAction)signOut:(id)sender;

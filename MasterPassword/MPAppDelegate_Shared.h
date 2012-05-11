@@ -6,22 +6,14 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import "MPAppDelegate.h"
-#import "MPAppDelegate_Key.h"
-#import "MPAppDelegate_Store.h"
-
-@interface MPAppDelegate () {
-}
+@interface MPAppDelegate_Shared : PearlAppDelegate
 
 @property (strong, nonatomic) NSData                *key;
 @property (strong, nonatomic) NSData                *keyHash;
 @property (strong, nonatomic) NSString              *keyID;
 
-@end
++ (MPAppDelegate_Shared *)get;
 
-@interface MPAppDelegate (Shared)
-
-+ (MPAppDelegate *)get;
 - (NSURL *)applicationFilesDirectory;
 
 @end
