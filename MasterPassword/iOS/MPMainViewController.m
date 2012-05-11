@@ -434,6 +434,7 @@
 #endif
 #endif
                          {
+                             [MPConfig get].saveKey = [NSNumber numberWithBool:NO];
                              [[MPAppDelegate get] signOut:self];
                              [[MPAppDelegate get] loadKey:YES];
                              break;

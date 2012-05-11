@@ -114,6 +114,25 @@
     [self.window.rootViewController presentModalViewController:composer animated:YES];
 }
 
+#pragma mark - PearlConfigDelegate
+
+- (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)value {
+    
+    [self checkConfig];
+}
+
+- (void)checkConfig {
+    
+    if ([[MPConfig get].saveKey boolValue]) {
+        if (self.key)
+            [self updateKey:self.key];
+    } else
+        [self loadStoredKey];
+    
+    if ([[MPConfig get].iCloud boolValue] != [self.storeManager iCloudEnabled])
+        [self.storeManager useiCloudStore:[[MPConfig get].iCloud boolValue] alertUser:YES];
+}
+
 #pragma mark - UIApplicationDelegate
 
 
@@ -365,18 +384,6 @@
         [self updateKey:nil];
     
     [TestFlight passCheckpoint:MPTestFlightCheckpointDeactivated];
-}
-
-- (void)checkConfig {
-    
-    if ([[MPConfig get].saveKey boolValue]) {
-        if (self.key)
-            [self updateKey:self.key];
-    } else
-        [self loadStoredKey];
-    
-    if ([[MPConfig get].iCloud boolValue] != [self.storeManager iCloudEnabled])
-        [self.storeManager useiCloudStore:[[MPConfig get].iCloud boolValue] alertUser:YES];
 }
 
 #pragma mark - MFMailComposeViewControllerDelegate
