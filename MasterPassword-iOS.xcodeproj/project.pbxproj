@@ -22,6 +22,8 @@
 		DA600C2815056428008E9AB6 /* MPConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA600C2715056427008E9AB6 /* MPConfig.m */; };
 		DA672D2F14F92C6B004A189C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DA672D2E14F92C6B004A189C /* libz.dylib */; };
 		DA672D3014F9413D004A189C /* libPearl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC77CAD148291A600BCF976 /* libPearl.a */; };
+		DA6E49F7155CF62C00CFF2D5 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6E49F6155CF62C00CFF2D5 /* Default.png */; };
+		DA6E49F9155CF63B00CFF2D5 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6E49F8155CF63A00CFF2D5 /* Default@2x.png */; };
 		DA79A9B91557DB4C00BAA07A /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
 		DA79A9BA1557DB4C00BAA07A /* libuicolor-utilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */; };
 		DA79A9BC1557DB6F00BAA07A /* libscryptenc-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA79A9BB1557DB6F00BAA07A /* libscryptenc-ios.a */; };
@@ -884,6 +886,8 @@
 		DA600C2615056427008E9AB6 /* MPConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPConfig.h; path = MasterPassword/MPConfig.h; sourceTree = SOURCE_ROOT; };
 		DA600C2715056427008E9AB6 /* MPConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPConfig.m; path = MasterPassword/MPConfig.m; sourceTree = SOURCE_ROOT; };
 		DA672D2E14F92C6B004A189C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		DA6E49F6155CF62C00CFF2D5 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../../Default.png; sourceTree = "<group>"; };
+		DA6E49F8155CF63A00CFF2D5 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../../Default@2x.png"; sourceTree = "<group>"; };
 		DA79A9BB1557DB6F00BAA07A /* libscryptenc-ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libscryptenc-ios.a"; sourceTree = "<group>"; };
 		DA79A9BD1557DDC700BAA07A /* scrypt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = scrypt.xcodeproj; path = External/Pearl/External/iOSPorts/ports/security/scrypt/scrypt.xcodeproj; sourceTree = "<group>"; };
 		DA95D59C14DF063C008D1B94 /* libInAppSettingsKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libInAppSettingsKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2691,6 +2695,8 @@
 		DAB8D9B11503757D00CED3BC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				DA6E49F8155CF63A00CFF2D5 /* Default@2x.png */,
+				DA6E49F6155CF62C00CFF2D5 /* Default.png */,
 				DAB8D43F15036BCF00CED3BC /* InfoPlist.strings */,
 				DAB8D44115036BCF00CED3BC /* main.m */,
 				DAB8D44315036BCF00CED3BC /* MasterPassword-Info.plist */,
@@ -3861,6 +3867,8 @@
 				DAD3126815528C9C00A3F9ED /* Crashlytics.plist in Resources */,
 				DAD3126C15528C9C00A3F9ED /* TestFlight.plist in Resources */,
 				DAD3129015528D1600A3F9ED /* Localytics.plist in Resources */,
+				DA6E49F7155CF62C00CFF2D5 /* Default.png in Resources */,
+				DA6E49F9155CF63B00CFF2D5 /* Default@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
