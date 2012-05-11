@@ -182,7 +182,10 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreManagerErrorCause)cause context:(id)context {
-    
+
+#if TARGET_OS_IPHONE
+    [TestFlight passCheckpoint:str(@"MPTestFlightCheckpointMPErrorUbiquity_%d", cause)];
+#endif
     err(@"StoreManager: cause=%d, context=%@, error=%@", cause, context, error);
     
     switch (cause) {
@@ -192,6 +195,9 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         case UbiquityStoreManagerErrorCauseClearStore:
             break;
         case UbiquityStoreManagerErrorCauseOpenLocalStore: {
+#if TARGET_OS_IPHONE
+            [TestFlight passCheckpoint:MPTestFlightCheckpointLocalStoreIncompatible];
+#endif
             wrn(@"Local store could not be opened, resetting it.");
             manager.hardResetEnabled = YES;
             [manager hardResetLocalStorage];
@@ -200,10 +206,12 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
             return;
         }
         case UbiquityStoreManagerErrorCauseOpenCloudStore: {
+#if TARGET_OS_IPHONE
+            [TestFlight passCheckpoint:MPTestFlightCheckpointCloudStoreIncompatible];
+#endif
             wrn(@"iCloud store could not be opened, resetting it.");
             manager.hardResetEnabled = YES;
             [manager hardResetCloudStorage];
-            [manager useiCloudStore:YES alertUser:NO];
             break;
         }
     }
@@ -347,6 +355,10 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     }
     [self saveContext];
 
+#if TARGET_OS_IPHONE
+    [TestFlight passCheckpoint:MPTestFlightCheckpointSitesImported];
+#endif
+
     return MPImportResultSuccess;
 }
 
@@ -403,6 +415,10 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
          [rfc3339DateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceReferenceDate:lastUsed]], uses, type, [name cStringUsingEncoding:NSUTF8StringEncoding], content? content: @""];
     }
     
+#if TARGET_OS_IPHONE
+    [TestFlight passCheckpoint:MPTestFlightCheckpointSitesExported];
+#endif
+
     return export;
 }
 

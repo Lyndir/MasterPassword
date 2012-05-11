@@ -43,7 +43,7 @@ static NSDictionary *keyHashQuery() {
     [PearlKeyChain deleteItemForQuery:keyHashQuery()];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyForgotten object:self];
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if TARGET_OS_IPHONE
     [TestFlight passCheckpoint:MPTestFlightCheckpointMPForgotten];
 #endif
 }
@@ -64,7 +64,7 @@ static NSDictionary *keyHashQuery() {
         // Key should not be stored in keychain.  Delete it.
         if ([PearlKeyChain deleteItemForQuery:keyQuery()] != errSecItemNotFound)
             dbg(@"Deleted key from key chain.");
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if TARGET_OS_IPHONE
         [TestFlight passCheckpoint:MPTestFlightCheckpointMPUnstored];
 #endif
     }
@@ -86,14 +86,14 @@ static NSDictionary *keyHashQuery() {
         if (![keyHash isEqual:tryKeyHash]) {
             dbg(@"Key phrase hash mismatch. Expected: %@, answer: %@.", keyHash, tryKeyHash);
             
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if TARGET_OS_IPHONE
             [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
 #endif
             return NO;
         }
     
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-    [TestFlight passCheckpoint:MPTestFlightCheckpointMPAsked];
+#if TARGET_OS_IPHONE
+    [TestFlight passCheckpoint:MPTestFlightCheckpointMPEntered];
 #endif
     
     [self updateKey:tryKey];
@@ -117,7 +117,7 @@ static NSDictionary *keyHashQuery() {
         [PearlKeyChain addOrUpdateItemForQuery:keyHashQuery()
                                 withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                 self.keyHash,                                       (__bridge id)kSecValueData,
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if TARGET_OS_IPHONE
                                                 kSecAttrAccessibleWhenUnlocked,                     (__bridge id)kSecAttrAccessible,
 #endif
                                                 nil]];
@@ -126,14 +126,14 @@ static NSDictionary *keyHashQuery() {
             [PearlKeyChain addOrUpdateItemForQuery:keyQuery()
                                     withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                     key,                                            (__bridge id)kSecValueData,
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if TARGET_OS_IPHONE
                                                     kSecAttrAccessibleWhenUnlocked,                 (__bridge id)kSecAttrAccessible,
 #endif
                                                     nil]];
         }
         
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-        [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointSetKeyphraseLength, key.length]];
+#if TARGET_OS_IPHONE
+        [TestFlight passCheckpoint:MPTestFlightCheckpointSetKey];
 #endif
     }
 }

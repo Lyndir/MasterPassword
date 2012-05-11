@@ -12,7 +12,7 @@
 
 + (MPAppDelegate *)get {
     
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+#if TARGET_OS_IPHONE
     return (MPAppDelegate *)[UIApplication sharedApplication].delegate;
 #elif defined (__MAC_OS_X_VERSION_MIN_REQUIRED)
     return (MPAppDelegate *)[NSApplication sharedApplication].delegate;
@@ -23,7 +23,7 @@
 
 - (NSURL *)applicationFilesDirectory {
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED
+#if TARGET_OS_IPHONE
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 #else
     NSURL *appSupportURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] lastObject];

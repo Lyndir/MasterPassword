@@ -398,7 +398,28 @@
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)didSwitch {
     
-    inf(@"didSwitchToiCloud: %d", didSwitch);
+#if TARGET_OS_IPHONE
+    [TestFlight passCheckpoint:didSwitch? MPTestFlightCheckpointCloudEnabled: MPTestFlightCheckpointCloudDisabled];
+#endif
+
+    inf(@"Using iCloud? %@", didSwitch? @"YES": @"NO");
+    if (!didSwitch) {
+        [PearlAlert showAlertWithTitle:@"iCloud"
+                               message:
+         @"iCloud is now disabled.\n"
+         @"It is highly recommended you enable iCloud.  "
+         @"Doing so will let you easily access all your sites from any of your devices.  "
+         @"It will also make it easier to recover from the loss of a device.\n\n"
+         @"iCloud only backs up your site names.  If you use stored passwords, "
+         @"those are always encrypted with your master password.  "
+         @"Apple cannot see any of your private information."
+                             viewStyle:UIAlertViewStyleDefault tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                 if (buttonIndex == [alert cancelButtonIndex])
+                                     return;
+                                 
+                                 [manager useiCloudStore:YES alertUser:YES];
+                             } cancelTitle:@"Leave Off" otherTitles:@"Enable iCloud", nil];
+    }
 }
 
 #pragma mark - TestFlight
