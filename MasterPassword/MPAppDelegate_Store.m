@@ -269,13 +269,13 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
             }
             
             // Header
-            if ([headerPattern numberOfMatchesInString:importedSiteLine options:0 range:NSRangeFromString(importedSiteLine)] != 2) {
+            if ([headerPattern numberOfMatchesInString:importedSiteLine options:0 range:NSMakeRange(0, [importedSiteLine length])] != 1) {
                 err(@"Invalid header format in line: %@", importedSiteLine);
                 return MPImportResultMalformedInput;
             }
-            NSArray *headerElements = [headerPattern matchesInString:importedSiteLine options:0 range:NSRangeFromString(importedSiteLine)];
-            NSString *key = [importedSiteLine substringWithRange:[[headerElements objectAtIndex:0] range]];
-            NSString *value = [importedSiteLine substringWithRange:[[headerElements objectAtIndex:1] range]];
+            NSTextCheckingResult *headerElements = [[headerPattern matchesInString:importedSiteLine options:0 range:NSMakeRange(0, [importedSiteLine length])] lastObject];
+            NSString *key = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:1]];
+            NSString *value = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:2]];
             if ([key isEqualToString:@"Key ID"]) {
                 if (![(keyID = value) isEqualToString:[keyHashForPassword(password) encodeHex]])
                     return MPImportResultInvalidPassword;
@@ -291,16 +291,16 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
             continue;
         
         // Site
-        if ([sitePattern numberOfMatchesInString:importedSiteLine options:0 range:NSRangeFromString(importedSiteLine)] != 2) {
+        if ([sitePattern numberOfMatchesInString:importedSiteLine options:0 range:NSMakeRange(0, [importedSiteLine length])] != 1) {
             err(@"Invalid site format in line: %@", importedSiteLine);
             return MPImportResultMalformedInput;
         }
-        NSArray *siteElements   = [headerPattern matchesInString:importedSiteLine options:0 range:NSRangeFromString(importedSiteLine)];
-        NSString *lastUsed      = [importedSiteLine substringWithRange:[[siteElements objectAtIndex:0] range]];
-        NSString *uses          = [importedSiteLine substringWithRange:[[siteElements objectAtIndex:1] range]];
-        NSString *type          = [importedSiteLine substringWithRange:[[siteElements objectAtIndex:2] range]];
-        NSString *name          = [importedSiteLine substringWithRange:[[siteElements objectAtIndex:3] range]];
-        NSString *exportContent = [importedSiteLine substringWithRange:[[siteElements objectAtIndex:4] range]];
+        NSTextCheckingResult *siteElements = [[sitePattern matchesInString:importedSiteLine options:0 range:NSMakeRange(0, [importedSiteLine length])] lastObject];
+        NSString *lastUsed      = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:1]];
+        NSString *uses          = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:2]];
+        NSString *type          = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:3]];
+        NSString *name          = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:4]];
+        NSString *exportContent = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:5]];
         
         // Find existing site.
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND keyID == %@", name, keyID];
@@ -320,9 +320,11 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     
     // Delete existing sites.
     [elementsToDelete enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+        dbg(@"Deleting: %@", [obj name]);
         [self.managedObjectContext deleteObject:obj];
     }];
-    
+    [self saveContext];
+
     // Import new sites.
     for (NSArray *siteElements in importedSiteElements) {
         NSDate *lastUsed        = [rfc3339DateFormatter dateFromString:[siteElements objectAtIndex:0]];
@@ -332,16 +334,19 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         NSString *exportContent = [siteElements objectAtIndex:4];
         
         // Create new site.
+        dbg(@"Creating: name=%@, lastUsed=%@, uses=%d, type=%u, keyID=%@", name, lastUsed, uses, type, keyID);
         MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(type)
                                                                  inManagedObjectContext:self.managedObjectContext];
-        element.lastUsed = [lastUsed timeIntervalSinceReferenceDate];
-        element.uses = uses;
-        element.type = type;
         element.name = name;
+        element.keyID = keyID;
+        element.type = type;
+        element.uses = uses;
+        element.lastUsed = [lastUsed timeIntervalSinceReferenceDate];
         if ([exportContent length])
             [element importContent:exportContent];
     }
-    
+    [self saveContext];
+
     return MPImportResultSuccess;
 }
 
