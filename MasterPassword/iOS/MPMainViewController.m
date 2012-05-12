@@ -424,15 +424,6 @@
 #else
                          case 5:
 #endif
-#ifdef DEBUG
-                             [[MPAppDelegate get].storeManager hardResetCloudStorage];
-                             break;
-#ifdef ADHOC
-                         case 7:
-#else
-                         case 6:
-#endif
-#endif
                          {
                              [MPConfig get].saveKey = [NSNumber numberWithBool:NO];
                              [[MPAppDelegate get] signOut:self];
@@ -448,9 +439,6 @@
 
 #ifdef ADHOC
      @"Feedback",
-#endif
-#ifdef DEBUG
-     @"Reset iCloud",
 #endif
      @"Sign Out",
      nil]; 
