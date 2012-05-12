@@ -9,8 +9,7 @@
 @interface MPAppDelegate_Shared : PearlAppDelegate
 
 @property (strong, nonatomic) NSData                *key;
-@property (strong, nonatomic) NSData                *keyHash;
-@property (strong, nonatomic) NSString              *keyID;
+@property (strong, nonatomic) NSData                *keyID;
 
 + (MPAppDelegate_Shared *)get;
 

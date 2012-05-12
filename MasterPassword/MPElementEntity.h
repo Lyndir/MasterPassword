@@ -13,7 +13,7 @@
 @interface MPElementEntity : NSManagedObject
 
 @property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *keyID;
+@property (nonatomic, retain) NSData *keyID;
 @property (nonatomic, assign) int16_t type;
 @property (nonatomic, assign) int16_t uses;
 @property (nonatomic, assign) NSTimeInterval lastUsed;

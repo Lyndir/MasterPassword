@@ -29,7 +29,6 @@
 @synthesize passwordWindow;
 
 @synthesize key;
-@synthesize keyHash;
 @synthesize keyID;
 
 #pragma GCC diagnostic ignored "-Wfour-char-constants"

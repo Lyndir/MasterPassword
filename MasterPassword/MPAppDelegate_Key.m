@@ -24,23 +24,23 @@ static NSDictionary *keyQuery() {
     return MPKeyQuery;
 }
 
-static NSDictionary *keyHashQuery() {
+static NSDictionary *keyIDQuery() {
     
-    static NSDictionary *MPKeyHashQuery = nil;
-    if (!MPKeyHashQuery)
-        MPKeyHashQuery = [PearlKeyChain createQueryForClass:kSecClassGenericPassword
-                                                 attributes:[NSDictionary dictionaryWithObject:@"Master Password Verification"
-                                                                                        forKey:(__bridge id)kSecAttrService]
-                                                    matches:nil];
+    static NSDictionary *MPKeyIDQuery = nil;
+    if (!MPKeyIDQuery)
+        MPKeyIDQuery = [PearlKeyChain createQueryForClass:kSecClassGenericPassword
+                                               attributes:[NSDictionary dictionaryWithObject:@"Master Password Verification"
+                                                                                      forKey:(__bridge id)kSecAttrService]
+                                                  matches:nil];
     
-    return MPKeyHashQuery;
+    return MPKeyIDQuery;
 }
 
 - (void)forgetKey {
     
-    inf(@"Deleting key and hash from keychain.");
+    inf(@"Deleting key and ID from keychain.");
     [PearlKeyChain deleteItemForQuery:keyQuery()];
-    [PearlKeyChain deleteItemForQuery:keyHashQuery()];
+    [PearlKeyChain deleteItemForQuery:keyIDQuery()];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyForgotten object:self];
 #ifdef TESTFLIGHT_SDK_VERSION
@@ -75,14 +75,14 @@ static NSDictionary *keyHashQuery() {
         return NO;
     
     NSData *tryKey = keyForPassword(tryPassword);
-    NSData *tryKeyHash = keyHashForKey(tryKey);
-    NSData *keyHash = [PearlKeyChain dataOfItemForQuery:keyHashQuery()];
-    inf(@"Key hash known? %@.", keyHash? @"YES": @"NO");
-    if (keyHash)
-        // A key hash is known -> a key is set.
-        // Make sure the user's entered key matches it.
-        if (![keyHash isEqual:tryKeyHash]) {
-            wrn(@"Key ID mismatch. Expected: %@, answer: %@.", [keyHash encodeHex], [tryKeyHash encodeHex]);
+    NSData *tryKeyID = keyIDForKey(tryKey);
+    NSData *keyID = [PearlKeyChain dataOfItemForQuery:keyIDQuery()];
+    inf(@"Key ID known? %@.", keyID? @"YES": @"NO");
+    if (keyID)
+        // A key ID is known -> a password is set.
+        // Make sure the user's entered password matches it.
+        if (![keyID isEqual:tryKeyID]) {
+            wrn(@"Key ID mismatch. Expected: %@, answer: %@.", [keyID encodeHex], [tryKeyID encodeHex]);
             
 #ifdef TESTFLIGHT_SDK_VERSION
             [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
@@ -110,15 +110,14 @@ static NSDictionary *keyHashQuery() {
     }
     
     if (self.key) {
-        self.keyHash = keyHashForKey(self.key);
-        self.keyID = [self.keyHash encodeHex];
+        self.keyID = keyIDForKey(self.key);
         
-        NSData *existingKeyHash = [PearlKeyChain dataOfItemForQuery:keyHashQuery()];
-        if (![existingKeyHash isEqualToData:self.keyHash]) {
+        NSData *existingKeyID = [PearlKeyChain dataOfItemForQuery:keyIDQuery()];
+        if (![existingKeyID isEqualToData:self.keyID]) {
             inf(@"Updating key ID in keychain.");
-            [PearlKeyChain addOrUpdateItemForQuery:keyHashQuery()
+            [PearlKeyChain addOrUpdateItemForQuery:keyIDQuery()
                                     withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                    self.keyHash,                                       (__bridge id)kSecValueData,
+                                                    self.keyID,                                       (__bridge id)kSecValueData,
 #if TARGET_OS_IPHONE
                                                     kSecAttrAccessibleWhenUnlocked,                     (__bridge id)kSecAttrAccessible,
 #endif

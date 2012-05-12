@@ -11,7 +11,6 @@
 @implementation MPAppDelegate_Shared
 
 @synthesize key;
-@synthesize keyHash;
 @synthesize keyID;
 
 + (MPAppDelegate_Shared *)get {

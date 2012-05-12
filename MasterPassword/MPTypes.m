@@ -23,15 +23,15 @@ NSData *keyForPassword(NSString *password) {
     
     NSData *key = [PearlSCrypt deriveKeyWithLength:MP_dkLen fromPassword:[password dataUsingEncoding:NSUTF8StringEncoding]
                                          usingSalt:MP_salt N:MP_N r:MP_r p:MP_p];
-
-    trc(@"Password: %@ derives to key ID: %@", password, [keyHashForKey(key) encodeHex]);
+    
+    trc(@"Password: %@ derives to key ID: %@", password, [keyIDForKey(key) encodeHex]);
     return key;
 }
-NSData *keyHashForPassword(NSString *password) {
+NSData *keyIDForPassword(NSString *password) {
     
-    return keyHashForKey(keyForPassword(password));
+    return keyIDForKey(keyForPassword(password));
 }
-NSData *keyHashForKey(NSData *key) {
+NSData *keyIDForKey(NSData *key) {
     
     return [key hashWith:MP_hash];
 }
@@ -129,29 +129,29 @@ NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, in
         MPTypes_ciphers = [NSDictionary dictionaryWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"ciphers"
                                                                                             withExtension:@"plist"]];
     
-    // Determine the hash whose bytes will be used for calculating a password: md4(name-key)
+    // Determine the seed whose bytes will be used for calculating a password: sha1(name . '\0' . key . '\0' . salt)
     uint32_t nsalt = htonl(salt);
-    trc(@"key hash from: %@-%@-%u", name, key, nsalt);
-    NSData *keyHash = [[NSData dataByConcatenatingWithDelimitor:'-' datas:
-                        [name dataUsingEncoding:NSUTF8StringEncoding],
-                        key,
-                        [NSData dataWithBytes:&nsalt length:sizeof(nsalt)],
-                        nil] hashWith:PearlDigestSHA1];
-    trc(@"key hash is: %@", keyHash);
-    const char *keyBytes = keyHash.bytes;
+    trc(@"seed from: sha1(%@, %@, %u)", name, key, nsalt);
+    NSData *seed = [[NSData dataByConcatenatingWithDelimitor:'\0' datas:
+                     [name dataUsingEncoding:NSUTF8StringEncoding],
+                     key,
+                     [NSData dataWithBytes:&nsalt length:sizeof(nsalt)],
+                     nil] hashWith:PearlDigestSHA1];
+    trc(@"seed is: %@", seed);
+    const char *seedBytes = seed.bytes;
     
-    // Determine the cipher from the first hash byte.
-    assert([keyHash length]);
+    // Determine the cipher from the first seed byte.
+    assert([seed length]);
     NSArray *typeCiphers = [[MPTypes_ciphers valueForKey:ClassNameFromMPElementType(type)]
                             valueForKey:NSStringFromMPElementType(type)];
-    NSString *cipher = [typeCiphers objectAtIndex:htons(keyBytes[0]) % [typeCiphers count]];
+    NSString *cipher = [typeCiphers objectAtIndex:htons(seedBytes[0]) % [typeCiphers count]];
     trc(@"type %d, ciphers: %@, selected: %@", type, typeCiphers, cipher);
     
-    // Encode the content, character by character, using subsequent hash bytes and the cipher.
-    assert([keyHash length] >= [cipher length] + 1);
+    // Encode the content, character by character, using subsequent seed bytes and the cipher.
+    assert([seed length] >= [cipher length] + 1);
     NSMutableString *content = [NSMutableString stringWithCapacity:[cipher length]];
     for (NSUInteger c = 0; c < [cipher length]; ++c) {
-        uint16_t keyByte = htons(keyBytes[c + 1]);
+        uint16_t keyByte = htons(seedBytes[c + 1]);
         NSString *cipherClass = [cipher substringWithRange:NSMakeRange(c, 1)];
         NSString *cipherClassCharacters = [[MPTypes_ciphers valueForKey:@"MPCharacterClasses"] valueForKey:cipherClass];
         NSString *character = [cipherClassCharacters substringWithRange:NSMakeRange(keyByte % [cipherClassCharacters length], 1)];

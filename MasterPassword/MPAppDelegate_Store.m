@@ -265,7 +265,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     if (!headerPattern || !sitePattern)
         return MPImportResultInternalError;
     
-    NSString *keyID = nil;
+    NSString *keyIDHex = nil;
     BOOL headerStarted = NO, headerEnded = NO;
     NSArray *importedSiteLines = [importedSitesString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     NSMutableSet *elementsToDelete = [NSMutableSet set];
@@ -295,7 +295,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
             NSString *key = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:1]];
             NSString *value = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:2]];
             if ([key isEqualToString:@"Key ID"]) {
-                if (![(keyID = value) isEqualToString:[keyHashForPassword(password) encodeHex]])
+                if (![(keyIDHex = value) isEqualToString:[keyIDForPassword(password) encodeHex]])
                     return MPImportResultInvalidPassword;
             }
             
@@ -303,7 +303,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         }
         if (!headerEnded)
             continue;
-        if (!keyID)
+        if (!keyIDHex)
             return MPImportResultMalformedInput;
         if (![importedSiteLine length])
             continue;
@@ -321,7 +321,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         NSString *exportContent = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:5]];
         
         // Find existing site.
-        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND keyID == %@", name, keyID];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND keyID == %@", name, keyIDHex];
         NSArray *existingSites = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
         if (error)
             err(@"Couldn't search existing sites: %@", error);
@@ -352,11 +352,11 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         NSString *exportContent = [siteElements objectAtIndex:4];
         
         // Create new site.
-        inf(@"Importing site: name=%@, lastUsed=%@, uses=%d, type=%u, keyID=%@", name, lastUsed, uses, type, keyID);
+        inf(@"Importing site: name=%@, lastUsed=%@, uses=%d, type=%u, keyID=%@", name, lastUsed, uses, type, keyIDHex);
         MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(type)
                                                                  inManagedObjectContext:self.managedObjectContext];
         element.name = name;
-        element.keyID = keyID;
+        element.keyID = [keyIDHex decodeHex];
         element.type = type;
         element.uses = uses;
         element.lastUsed = [lastUsed timeIntervalSinceReferenceDate];
@@ -386,7 +386,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     [export appendFormat:@"# \n"];
     [export appendFormat:@"##\n"];
     [export appendFormat:@"# Version: %@\n", [PearlInfoPlist get].CFBundleVersion];
-    [export appendFormat:@"# Key ID: %@\n", self.keyID];
+    [export appendFormat:@"# Key ID: %@\n", [self.keyID encodeHex]];
     [export appendFormat:@"# Date: %@\n", [rfc3339DateFormatter stringFromDate:[NSDate date]]];
     if (showPasswords)
         [export appendFormat:@"# Passwords: VISIBLE\n"];
