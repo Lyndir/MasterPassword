@@ -18,7 +18,7 @@
 - (id)content {
 
     if (!(self.type & MPElementTypeClassGenerated)) {
-        err(@"Corrupt element: %@, type: %d, does not match class: %@", self.name, self.type, [self class]);
+        err(@"Corrupt element: %@, type: %d is not in MPElementTypeClassGenerated", self.name, self.type);
         return nil;
     }
     

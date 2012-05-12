@@ -38,7 +38,7 @@ static NSDictionary *keyHashQuery() {
 
 - (void)forgetKey {
     
-    dbg(@"Deleting key and hash from key chain.");
+    inf(@"Deleting key and hash from keychain.");
     [PearlKeyChain deleteItemForQuery:keyQuery()];
     [PearlKeyChain deleteItemForQuery:keyHashQuery()];
     
@@ -57,13 +57,12 @@ static NSDictionary *keyHashQuery() {
     
     if ([[MPConfig get].saveKey boolValue]) {
         // Key is stored in keychain.  Load it.
-        dbg(@"Loading key from key chain.");
         [self updateKey:[PearlKeyChain dataOfItemForQuery:keyQuery()]];
-        dbg(@" -> Key %@.", self.key? @"found": @"NOT found");
+        inf(@"Looking for key in keychain: %@.", self.key? @"found": @"missing");
     } else {
         // Key should not be stored in keychain.  Delete it.
         if ([PearlKeyChain deleteItemForQuery:keyQuery()] != errSecItemNotFound)
-            dbg(@"Deleted key from key chain.");
+            inf(@"Removed key from keychain.");
 #ifdef TESTFLIGHT_SDK_VERSION
         [TestFlight passCheckpoint:MPTestFlightCheckpointMPUnstored];
 #endif
@@ -72,19 +71,18 @@ static NSDictionary *keyHashQuery() {
 
 - (BOOL)tryMasterPassword:(NSString *)tryPassword {
     
-    NSData *keyHash = [PearlKeyChain dataOfItemForQuery:keyHashQuery()];
-    dbg(@"Key hash %@.", keyHash? @"known": @"NOT known");
-    
     if (![tryPassword length])
         return NO;
     
     NSData *tryKey = keyForPassword(tryPassword);
     NSData *tryKeyHash = keyHashForKey(tryKey);
+    NSData *keyHash = [PearlKeyChain dataOfItemForQuery:keyHashQuery()];
+    inf(@"Key hash known? %@.", keyHash? @"YES": @"NO");
     if (keyHash)
         // A key hash is known -> a key is set.
         // Make sure the user's entered key matches it.
         if (![keyHash isEqual:tryKeyHash]) {
-            dbg(@"Key phrase hash mismatch. Expected: %@, answer: %@.", keyHash, tryKeyHash);
+            wrn(@"Key ID mismatch. Expected: %@, answer: %@.", [keyHash encodeHex], [tryKeyHash encodeHex]);
             
 #ifdef TESTFLIGHT_SDK_VERSION
             [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
@@ -115,23 +113,29 @@ static NSDictionary *keyHashQuery() {
         self.keyHash = keyHashForKey(self.key);
         self.keyID = [self.keyHash encodeHex];
         
-        dbg(@"Updating key ID to: %@.", self.keyID);
-        [PearlKeyChain addOrUpdateItemForQuery:keyHashQuery()
-                                withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                self.keyHash,                                       (__bridge id)kSecValueData,
-#if TARGET_OS_IPHONE
-                                                kSecAttrAccessibleWhenUnlocked,                     (__bridge id)kSecAttrAccessible,
-#endif
-                                                nil]];
-        if ([[MPConfig get].saveKey boolValue]) {
-            dbg(@"Storing key in key chain.");
-            [PearlKeyChain addOrUpdateItemForQuery:keyQuery()
+        NSData *existingKeyHash = [PearlKeyChain dataOfItemForQuery:keyHashQuery()];
+        if (![existingKeyHash isEqualToData:self.keyHash]) {
+            inf(@"Updating key ID in keychain.");
+            [PearlKeyChain addOrUpdateItemForQuery:keyHashQuery()
                                     withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                    self.key,                                       (__bridge id)kSecValueData,
+                                                    self.keyHash,                                       (__bridge id)kSecValueData,
 #if TARGET_OS_IPHONE
-                                                    kSecAttrAccessibleWhenUnlocked,                 (__bridge id)kSecAttrAccessible,
+                                                    kSecAttrAccessibleWhenUnlocked,                     (__bridge id)kSecAttrAccessible,
 #endif
                                                     nil]];
+        }
+        if ([[MPConfig get].saveKey boolValue]) {
+            NSData *existingKey = [PearlKeyChain dataOfItemForQuery:keyQuery()];
+            if (![existingKey isEqualToData:self.key]) {
+                inf(@"Updating key in keychain.");
+                [PearlKeyChain addOrUpdateItemForQuery:keyQuery()
+                                        withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                        self.key,                                       (__bridge id)kSecValueData,
+#if TARGET_OS_IPHONE
+                                                        kSecAttrAccessibleWhenUnlocked,                 (__bridge id)kSecAttrAccessible,
+#endif
+                                                        nil]];
+            }
         }
         
 #ifdef TESTFLIGHT_SDK_VERSION

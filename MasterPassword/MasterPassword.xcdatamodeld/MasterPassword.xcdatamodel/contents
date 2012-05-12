@@ -8,7 +8,7 @@
         <attribute name="uses" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
     </entity>
     <entity name="MPElementGeneratedEntity" representedClassName="MPElementGeneratedEntity" parentEntity="MPElementEntity" syncable="YES">
-        <attribute name="counter" optional="YES" attributeType="Integer 16" defaultValueString="1" syncable="YES"/>
+        <attribute name="counter" optional="YES" attributeType="Integer 32" defaultValueString="1" syncable="YES"/>
     </entity>
     <entity name="MPElementStoredEntity" representedClassName="MPElementStoredEntity" parentEntity="MPElementEntity" syncable="YES">
         <attribute name="contentObject" optional="YES" attributeType="Transformable" storedInTruthFile="YES" syncable="YES"/>

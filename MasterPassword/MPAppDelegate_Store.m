@@ -120,7 +120,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         NSError *error = nil;
         if ([self.managedObjectContext hasChanges])
             if (![self.managedObjectContext save:&error])
-                err(@"Unresolved error %@", error);
+                err(@"While saving context: %@", error);
     }];
 }
 
@@ -178,7 +178,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager log:(NSString *)message {
     
-    dbg(@"StoreManager: %@", message);
+    dbg(@"[StoreManager] %@", message);
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)didSwitch {
@@ -192,7 +192,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreManagerErrorCause)cause context:(id)context {
-
+    
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:str(@"MPTestFlightCheckpointMPErrorUbiquity_%d", cause)];
 #endif
@@ -338,11 +338,11 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     
     // Delete existing sites.
     [elementsToDelete enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
-        dbg(@"Deleting: %@", [obj name]);
+        inf(@"Deleting site: %@, it will be replaced by an imported site.", [obj name]);
         [self.managedObjectContext deleteObject:obj];
     }];
     [self saveContext];
-
+    
     // Import new sites.
     for (NSArray *siteElements in importedSiteElements) {
         NSDate *lastUsed        = [rfc3339DateFormatter dateFromString:[siteElements objectAtIndex:0]];
@@ -352,7 +352,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         NSString *exportContent = [siteElements objectAtIndex:4];
         
         // Create new site.
-        dbg(@"Creating: name=%@, lastUsed=%@, uses=%d, type=%u, keyID=%@", name, lastUsed, uses, type, keyID);
+        inf(@"Importing site: name=%@, lastUsed=%@, uses=%d, type=%u, keyID=%@", name, lastUsed, uses, type, keyID);
         MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(type)
                                                                  inManagedObjectContext:self.managedObjectContext];
         element.name = name;
@@ -364,11 +364,11 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
             [element importContent:exportContent];
     }
     [self saveContext];
-
+    
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPTestFlightCheckpointSitesImported];
 #endif
-
+    
     return MPImportResultSuccess;
 }
 
@@ -428,7 +428,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPTestFlightCheckpointSitesExported];
 #endif
-
+    
     return export;
 }
 

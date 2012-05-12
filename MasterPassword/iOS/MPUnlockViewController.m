@@ -98,8 +98,8 @@ typedef enum {
     
     [[NSNotificationCenter defaultCenter] addObserverForName:MPNotificationKeyForgotten
                                                       object:nil queue:nil usingBlock:^(NSNotification *note) {
-        [self.field becomeFirstResponder];
-    }];
+                                                          [self.field becomeFirstResponder];
+                                                      }];
     
     [super viewDidLoad];
 }
@@ -200,7 +200,6 @@ typedef enum {
 
 - (IBAction)changeMP {
     
-    dbg(@"Forgetting key phrase.");
     [PearlAlert showAlertWithTitle:@"Changing Master Password"
                            message:
      @"This will allow you to log in with a different master password.\n\n"
@@ -210,9 +209,10 @@ typedef enum {
      @"Your current sites and passwords will then become available again."
                          viewStyle:UIAlertViewStyleDefault
                  tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                     if (buttonIndex != [alert cancelButtonIndex])
-                         [[MPAppDelegate get] forgetKey];
+                     if (buttonIndex == [alert cancelButtonIndex])
+                         return;
                      
+                     [[MPAppDelegate get] forgetKey];
                      [[MPAppDelegate get] loadKey:YES];
                      
                      [TestFlight passCheckpoint:MPTestFlightCheckpointMPChanged];

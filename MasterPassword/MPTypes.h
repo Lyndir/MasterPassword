@@ -82,4 +82,4 @@ NSData *keyHashForKey(NSData *key);
 NSString *NSStringFromMPElementType(MPElementType type);
 NSString *ClassNameFromMPElementType(MPElementType type);
 Class ClassFromMPElementType(MPElementType type);
-NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, int16_t counter);
+NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, int32_t counter);
