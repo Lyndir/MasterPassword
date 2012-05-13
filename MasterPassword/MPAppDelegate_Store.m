@@ -8,6 +8,7 @@
 
 #import "MPAppDelegate_Store.h"
 #import "MPElementEntity.h"
+#import "MPConfig.h"
 
 @implementation MPAppDelegate_Shared (Store)
 

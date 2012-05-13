@@ -6,17 +6,13 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import "MPAppDelegate_Shared.h"
+#import "MPAppDelegate.h"
+#import "MPAppDelegate_Key.h"
+#import "MPAppDelegate_Store.h"
 #import "MPConfig.h"
 #import "MPElementEntity.h"
 #import <Carbon/Carbon.h>
 
-
-@interface MPAppDelegate ()
-
-@property (readwrite, strong, nonatomic) MPPasswordWindowController     *passwordWindow;
-
-@end
 
 @implementation MPAppDelegate
 @synthesize statusItem;
@@ -41,6 +37,11 @@ static EventHotKeyID MPShowHotKey = { .signature = 'show', .id = 1 };
 #ifdef DEBUG
     [PearlLogger get].autoprintLevel = PearlLogLevelTrace;
 #endif
+}
+
++ (MPAppDelegate *)get {
+    
+    return (MPAppDelegate *)[super get];
 }
 
 static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEvent, void *userData){

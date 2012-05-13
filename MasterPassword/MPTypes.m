@@ -9,7 +9,6 @@
 #import "MPTypes.h"
 #import "MPElementGeneratedEntity.h"
 #import "MPElementStoredEntity.h"
-#include <endian.h>
 
 
 #define MP_salt     nil

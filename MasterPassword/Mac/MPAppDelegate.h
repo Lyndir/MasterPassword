@@ -7,17 +7,21 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "MPAppDelegate_Shared.h"
 #import "MPPasswordWindowController.h"
 
-@interface MPAppDelegate : NSObject <NSApplicationDelegate, PearlConfigDelegate>
+@interface MPAppDelegate : MPAppDelegate_Shared <NSApplicationDelegate>
 
 @property (strong) NSStatusItem                                         *statusItem;
-@property (weak) IBOutlet NSMenuItem *lockItem;
-@property (weak) IBOutlet NSMenuItem *showItem;
-@property (strong) IBOutlet NSMenu *statusMenu;
-@property (weak) IBOutlet NSMenuItem *useICloudItem;
-@property (weak) IBOutlet NSMenuItem *rememberPasswordItem;
-@property (weak) IBOutlet NSMenuItem *savePasswordItem;
+@property (strong) MPPasswordWindowController                           *passwordWindow;
+@property (weak) IBOutlet NSMenuItem                                    *lockItem;
+@property (weak) IBOutlet NSMenuItem                                    *showItem;
+@property (strong) IBOutlet NSMenu                                      *statusMenu;
+@property (weak) IBOutlet NSMenuItem                                    *useICloudItem;
+@property (weak) IBOutlet NSMenuItem                                    *rememberPasswordItem;
+@property (weak) IBOutlet NSMenuItem                                    *savePasswordItem;
+
++ (MPAppDelegate *)get;
 
 - (IBAction)activate:(id)sender;
 - (IBAction)togglePreference:(NSMenuItem *)sender;

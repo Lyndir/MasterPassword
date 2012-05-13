@@ -6,7 +6,11 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
+#if TARGET_OS_IPHONE
 @interface MPAppDelegate_Shared : PearlAppDelegate
+#else
+@interface MPAppDelegate_Shared : NSObject <PearlConfigDelegate>
+#endif
 
 @property (strong, nonatomic) NSData                *key;
 @property (strong, nonatomic) NSData                *keyID;

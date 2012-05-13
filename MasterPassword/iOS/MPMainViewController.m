@@ -436,7 +436,6 @@
                  } cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil
                        otherTitles:
      [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings", @"Export",
-
 #ifdef ADHOC
      @"Feedback",
 #endif
