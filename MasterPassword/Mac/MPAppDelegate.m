@@ -212,9 +212,10 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 #pragma mark - UbiquityStoreManagerDelegate
 
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)didSwitch {
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)iCloudEnabled {
     
-    self.useICloudItem.state = didSwitch? NSOnState: NSOffState;
+    self.useICloudItem.state = iCloudEnabled? NSOnState: NSOffState;
+    self.useICloudItem.enabled = !iCloudEnabled;
 }
 
 @end

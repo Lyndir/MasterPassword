@@ -17,8 +17,10 @@ static NSDictionary *keyQuery() {
     static NSDictionary *MPKeyQuery = nil;
     if (!MPKeyQuery)
         MPKeyQuery = [PearlKeyChain createQueryForClass:kSecClassGenericPassword
-                                             attributes:[NSDictionary dictionaryWithObject:@"Saved Master Password"
-                                                                                    forKey:(__bridge id)kSecAttrService]
+                                             attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                         @"Saved Master Password",      (__bridge id)kSecAttrService,
+                                                         @"default",                    (__bridge id)kSecAttrAccount,
+                                                         nil]
                                                 matches:nil];
     
     return MPKeyQuery;
@@ -29,8 +31,10 @@ static NSDictionary *keyIDQuery() {
     static NSDictionary *MPKeyIDQuery = nil;
     if (!MPKeyIDQuery)
         MPKeyIDQuery = [PearlKeyChain createQueryForClass:kSecClassGenericPassword
-                                               attributes:[NSDictionary dictionaryWithObject:@"Master Password Verification"
-                                                                                      forKey:(__bridge id)kSecAttrService]
+                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                           @"Master Password Check",    (__bridge id)kSecAttrService,
+                                                           @"default",                  (__bridge id)kSecAttrAccount,
+                                                           nil]
                                                   matches:nil];
     
     return MPKeyIDQuery;
@@ -39,8 +43,10 @@ static NSDictionary *keyIDQuery() {
 - (void)forgetKey {
     
     inf(@"Deleting key and ID from keychain.");
-    [PearlKeyChain deleteItemForQuery:keyQuery()];
-    [PearlKeyChain deleteItemForQuery:keyIDQuery()];
+    if ([PearlKeyChain deleteItemForQuery:keyQuery()] != errSecItemNotFound)
+        inf(@"Removed key from keychain.");
+    if ([PearlKeyChain deleteItemForQuery:keyIDQuery()] != errSecItemNotFound)
+        inf(@"Removed key ID from keychain.");
     
     [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyForgotten object:self];
 #ifdef TESTFLIGHT_SDK_VERSION
@@ -49,7 +55,8 @@ static NSDictionary *keyIDQuery() {
 }
 
 - (IBAction)signOut:(id)sender {
-    
+
+    [MPConfig get].saveKey = [NSNumber numberWithBool:NO];
     [self updateKey:nil];
 }
 

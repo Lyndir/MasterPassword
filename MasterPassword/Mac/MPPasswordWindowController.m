@@ -105,8 +105,6 @@
             // "Unlock" button.
             [[MPAppDelegate get] tryMasterPassword:[(NSSecureTextField *)alert.accessoryView stringValue]];
     }
-    
-    [self unlock];
 }
 
 - (NSArray *)control:(NSControl *)control textView:(NSTextView *)textView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger *)index {
