@@ -39,13 +39,13 @@
 
 - (NSString *)description {
     
-    return str(@"%@:%@", [self class], [self name]);
+    return PearlString(@"%@:%@", [self class], [self name]);
 }
 
 - (NSString *)debugDescription {
     
-    return str(@"{%@: name=%@, keyID=%@, type=%d, uses=%d, lastUsed=%@}",
-               NSStringFromClass([self class]), self.name, self.keyID, self.type, self.uses, self.lastUsed);
+    return PearlString(@"{%@: name=%@, keyID=%@, type=%d, uses=%d, lastUsed=%@}",
+                       NSStringFromClass([self class]), self.name, self.keyID, self.type, self.uses, self.lastUsed);
 }
 
 @end

@@ -19,6 +19,7 @@
 @end
 
 @implementation MPSearchDelegate
+@synthesize tipView;
 @synthesize query;
 @synthesize dateFormatter;
 @synthesize fetchedResultsController;
@@ -38,9 +39,25 @@
     NSFetchRequest *fetchRequest    = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
     fetchRequest.sortDescriptors    = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]];
     self.fetchedResultsController   = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                        managedObjectContext:[MPAppDelegate managedObjectContext]
-                                                                          sectionNameKeyPath:nil cacheName:nil];
+                                                                          managedObjectContext:[MPAppDelegate managedObjectContext]
+                                                                            sectionNameKeyPath:nil cacheName:nil];
     self.fetchedResultsController.delegate = self;
+    
+    self.tipView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 170)];
+    self.tipView.textAlignment = UITextAlignmentCenter;
+    self.tipView.backgroundColor = [UIColor clearColor];
+    self.tipView.textColor = [UIColor lightTextColor];
+    self.tipView.shadowColor = [UIColor blackColor];
+    self.tipView.shadowOffset = CGSizeMake(0, -1);
+    self.tipView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+    self.tipView.numberOfLines = 0;
+    self.tipView.font = [UIFont systemFontOfSize:14];
+    self.tipView.text =
+    @"Tip:\n"
+    @"Name your sites by their domain name:\n"
+    @"apple.com, twitter.com\n\n"
+    @"For email accounts, use the address:\n"
+    @"john@apple.com, john@gmail.com";
     
     return self;
 }
@@ -78,7 +95,7 @@
 
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
     
-    controller.searchBar.prompt = @"Enter the site's name (eg. apple.com):";
+    controller.searchBar.prompt = @"Enter the site's name:";
     
     [UIView animateWithDuration:0.2f animations:^{
         self.searchTipContainer.alpha = 0;
@@ -123,6 +140,18 @@
     if (![self.fetchedResultsController performFetch:&error])
         err(@"Couldn't fetch elements: %@", error);
     [self.searchDisplayController.searchResultsTableView reloadData];
+    
+    NSArray *subviews = self.searchDisplayController.searchBar.superview.subviews;
+    UIView *overlay = [subviews objectAtIndex:[subviews indexOfObject:self.searchDisplayController.searchBar] + 1];
+    if (self.tipView.superview != overlay && overlay != self.searchDisplayController.searchResultsTableView) {
+        [self.tipView removeFromSuperview];
+        [overlay addSubview:self.tipView];
+    }
+    
+    //dbg(@"Superviews of superview:");
+    //[self.searchDisplayController.searchBar.superview printSuperHierarchy];
+    //dbg(@"Subviews of superview:");
+    //[self.searchDisplayController.searchBar.superview printChildHierarchy];
 }
 
 // See MP-14, also crashes easily on internal assertions etc..
@@ -181,7 +210,7 @@
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
     
     [self.searchDisplayController.searchResultsTableView reloadData];
-//    [self.searchDisplayController.searchResultsTableView endUpdates];
+    //    [self.searchDisplayController.searchResultsTableView endUpdates];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -271,7 +300,7 @@
         // "New" section.
         NSString *siteName = self.query;
         [PearlAlert showAlertWithTitle:@"New Site"
-                               message:l(@"Do you want to create a new site named:\n%@", siteName)
+                               message:PearlLocalize(@"Do you want to create a new site named:\n%@", siteName)
                              viewStyle:UIAlertViewStyleDefault
                      tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                          [tableView deselectRowAtIndexPath:indexPath animated:YES];

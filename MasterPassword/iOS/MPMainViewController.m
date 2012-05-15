@@ -357,11 +357,11 @@
     
     // Show new and old password.
     if ([oldPassword length] && ![oldPassword isEqualToString:newPassword])
-        [self showAlertWithTitle:@"Password Changed!" message:l(@"The password for %@ has changed.\n\n"
-                                                                @"IMPORTANT:\n"
-                                                                @"Don't forget to update the site with your new password! "
-                                                                @"Your old password was:\n"
-                                                                @"%@", self.activeElement.name, oldPassword)];
+        [self showAlertWithTitle:@"Password Changed!" message:PearlLocalize(@"The password for %@ has changed.\n\n"
+                                                                            @"IMPORTANT:\n"
+                                                                            @"Don't forget to update the site with your new password! "
+                                                                            @"Your old password was:\n"
+                                                                            @"%@", self.activeElement.name, oldPassword)];
 }
 
 
@@ -486,13 +486,13 @@
         self.activeElement = element;
         if ([self.activeElement use] == 1)
             [self showAlertWithTitle:@"New Site" message:
-             l(@"You've just created a password for %@.\n\n"
-               @"IMPORTANT:\n"
-               @"Go to %@ and set or change the password for your account to the password above.\n"
-               @"Do this right away: if you forget, you may have trouble remembering which password to use to log into the site later on.",
-               self.activeElement.name, self.activeElement.name)];
+             PearlLocalize(@"You've just created a password for %@.\n\n"
+                           @"IMPORTANT:\n"
+                           @"Go to %@ and set or change the password for your account to the password above.\n"
+                           @"Do this right away: if you forget, you may have trouble remembering which password to use to log into the site later on.",
+                           self.activeElement.name, self.activeElement.name)];
         [[MPAppDelegate get] saveContext];
-
+        
         [self.searchDisplayController setActive:NO animated:YES];
         self.searchDisplayController.searchBar.text = self.activeElement.name;
         

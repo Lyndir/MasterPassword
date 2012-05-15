@@ -299,7 +299,7 @@
                                            dispatch_group_enter(confirmationGroup);
                                            dispatch_async(dispatch_get_main_queue(), ^{
                                                [PearlAlert showAlertWithTitle:@"Import Sites?"
-                                                                      message:l(@"Import %d sites, overwriting %d existing sites?", importCount, deleteCount)
+                                                                      message:PearlLocalize(@"Import %d sites, overwriting %d existing sites?", importCount, deleteCount)
                                                                     viewStyle:UIAlertViewStyleDefault
                                                             tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                                                                 if (buttonIndex != [alert cancelButtonIndex])
@@ -426,7 +426,7 @@
              @"It is highly recommended you enable iCloud."
                                  viewStyle:UIAlertViewStyleDefault tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                                      [MPConfig get].iCloudDecided = [NSNumber numberWithBool:YES];
-
+                                     
                                      if (buttonIndex == [alert cancelButtonIndex])
                                          return;
                                      
@@ -471,7 +471,7 @@
 
 - (NSString *)testFlightToken {
     
-    return NSNullToNil([[self testFlightInfo] valueForKeyPath:@"Team Token"]);
+    return NullToNil([[self testFlightInfo] valueForKeyPath:@"Team Token"]);
 }
 
 
@@ -490,7 +490,7 @@
 
 - (NSString *)crashlyticsAPIKey {
     
-    return NSNullToNil([[self crashlyticsInfo] valueForKeyPath:@"API Key"]);
+    return NullToNil([[self crashlyticsInfo] valueForKeyPath:@"API Key"]);
 }
 
 
@@ -510,11 +510,11 @@
 - (NSString *)localyticsKey {
     
 #ifdef DEBUG
-    return NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.development"]);
+    return NullToNil([[self localyticsInfo] valueForKeyPath:@"Key.development"]);
 #elif defined(LITE)
-    return NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.distribution.lite"]);
+    return NullToNil([[self localyticsInfo] valueForKeyPath:@"Key.distribution.lite"]);
 #else
-    return NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.distribution"]);
+    return NullToNil([[self localyticsInfo] valueForKeyPath:@"Key.distribution"]);
 #endif
 }
 

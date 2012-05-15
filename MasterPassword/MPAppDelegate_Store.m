@@ -195,7 +195,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreManagerErrorCause)cause context:(id)context {
     
 #ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:str(@"MPTestFlightCheckpointMPErrorUbiquity_%d", cause)];
+    [TestFlight passCheckpoint:PearlString(@"MPTestFlightCheckpointMPErrorUbiquity_%d", cause)];
 #endif
     err(@"StoreManager: cause=%d, context=%@, error=%@", cause, context, error);
     
