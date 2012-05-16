@@ -14,6 +14,9 @@
 		DA4426081557C1990052177D /* MPAppDelegate_Shared.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4426051557C1990052177D /* MPAppDelegate_Shared.m */; };
 		DA4426091557C1990052177D /* MPAppDelegate_Store.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4426071557C1990052177D /* MPAppDelegate_Store.m */; };
 		DA44260A1557D9E40052177D /* libiCloudStoreManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4425CB1557BED40052177D /* libiCloudStoreManager.a */; };
+		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
+		DA4DA1DA1564471F00F6F596 /* libuicolor-utilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */; };
+		DA4DA1DB1564475E00F6F596 /* libscryptenc-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA79A9BB1557DB6F00BAA07A /* libscryptenc-ios.a */; };
 		DA5BFA49147E415C00F98B1E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA48147E415C00F98B1E /* UIKit.framework */; };
 		DA5BFA4B147E415C00F98B1E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA5BFA4D147E415C00F98B1E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */; };
@@ -24,9 +27,6 @@
 		DA672D3014F9413D004A189C /* libPearl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC77CAD148291A600BCF976 /* libPearl.a */; };
 		DA6E49F7155CF62C00CFF2D5 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6E49F6155CF62C00CFF2D5 /* Default.png */; };
 		DA6E49F9155CF63B00CFF2D5 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6E49F8155CF63A00CFF2D5 /* Default@2x.png */; };
-		DA79A9B91557DB4C00BAA07A /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
-		DA79A9BA1557DB4C00BAA07A /* libuicolor-utilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */; };
-		DA79A9BC1557DB6F00BAA07A /* libscryptenc-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA79A9BB1557DB6F00BAA07A /* libscryptenc-ios.a */; };
 		DA95D59D14DF063C008D1B94 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA95D5CF14DF0691008D1B94 /* IASKAppSettingsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = DA95D5A814DF0691008D1B94 /* IASKAppSettingsViewController.h */; };
 		DA95D5D014DF0691008D1B94 /* IASKAppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA95D5A914DF0691008D1B94 /* IASKAppSettingsViewController.m */; };
@@ -823,6 +823,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		DA4DA1D71564470200F6F596 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA79A9BD1557DDC700BAA07A /* scrypt.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A0511DED127788EC00DE46C4;
+			remoteInfo = "Makefile-scrypt";
+		};
 		DA79A9CD1557DDC800BAA07A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DA79A9BD1557DDC700BAA07A /* scrypt.xcodeproj */;
@@ -843,13 +850,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = DA67FE5D14E4834300DB7CC9;
 			remoteInfo = util;
-		};
-		DA79A9D91557DDEB00BAA07A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DA79A9BD1557DDC700BAA07A /* scrypt.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = A0511DED127788EC00DE46C4;
-			remoteInfo = "Makefile-scrypt";
 		};
 		DAC63283148681200075AEA5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1717,8 +1717,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA79A9B91557DB4C00BAA07A /* libjrswizzle.a in Frameworks */,
-				DA79A9BA1557DB4C00BAA07A /* libuicolor-utilities.a in Frameworks */,
 				DA44260A1557D9E40052177D /* libiCloudStoreManager.a in Frameworks */,
 				DAD312C21552A22700A3F9ED /* libsqlite3.dylib in Frameworks */,
 				DAD312BF1552A1BD00A3F9ED /* libLocalytics.a in Frameworks */,
@@ -1736,7 +1734,6 @@
 				DA5BFA4F147E415C00F98B1E /* CoreData.framework in Frameworks */,
 				DAD3126715528C9C00A3F9ED /* Crashlytics.framework in Frameworks */,
 				DAD3126915528C9C00A3F9ED /* libTestFlight.a in Frameworks */,
-				DA79A9BC1557DB6F00BAA07A /* libscryptenc-ios.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1768,7 +1765,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA4DA1DA1564471F00F6F596 /* libuicolor-utilities.a in Frameworks */,
+				DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */,
 				DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */,
+				DA4DA1DB1564475E00F6F596 /* libscryptenc-ios.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3052,7 +3052,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				DA79A9DA1557DDEB00BAA07A /* PBXTargetDependency */,
 			);
 			name = MasterPassword;
 			productName = MasterPassword;
@@ -3121,6 +3120,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				DA4DA1D81564470200F6F596 /* PBXTargetDependency */,
 				DAC63284148681200075AEA5 /* PBXTargetDependency */,
 				DAC63286148681200075AEA5 /* PBXTargetDependency */,
 			);
@@ -4031,10 +4031,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		DA79A9DA1557DDEB00BAA07A /* PBXTargetDependency */ = {
+		DA4DA1D81564470200F6F596 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Makefile-scrypt";
-			targetProxy = DA79A9D91557DDEB00BAA07A /* PBXContainerItemProxy */;
+			targetProxy = DA4DA1D71564470200F6F596 /* PBXContainerItemProxy */;
 		};
 		DAC63284148681200075AEA5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4351,6 +4351,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Pearl/Pearl-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/External/Pearl/External/iOSPorts/include/**";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4448,6 +4452,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Pearl/Pearl-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/External/Pearl/External/iOSPorts/include/**";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4462,6 +4470,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Pearl/Pearl-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/External/Pearl/External/iOSPorts/include/**";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

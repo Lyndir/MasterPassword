@@ -18,6 +18,8 @@
         return nil;
     
     [self.defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+                                     [NSNumber numberWithBool:YES],                         NSStringFromSelector(@selector(askForReviews)),
+                                     
                                      [NSNumber numberWithBool:NO],                          NSStringFromSelector(@selector(saveKey)),
                                      [NSNumber numberWithBool:YES],                         NSStringFromSelector(@selector(rememberKey)),
                                      [NSNumber numberWithBool:NO],                          NSStringFromSelector(@selector(iCloud)),
