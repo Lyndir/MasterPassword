@@ -19,6 +19,7 @@
     [self.defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
                                      [NSNumber numberWithBool:NO],                                  NSStringFromSelector(@selector(helpHidden)),
                                      [NSNumber numberWithBool:YES],                                 NSStringFromSelector(@selector(showQuickStart)),
+                                     @"510296984",                                                  NSStringFromSelector(@selector(iTunesID)),
                                      nil]];
     
     return self;

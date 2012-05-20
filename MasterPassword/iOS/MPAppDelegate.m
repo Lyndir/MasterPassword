@@ -432,12 +432,7 @@
              @"iCloud is now disabled.\n\n"
              @"It is highly recommended you enable iCloud."
                                  viewStyle:UIAlertViewStyleDefault tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                                     [MPConfig get].iCloudDecided = [NSNumber numberWithBool:YES];
-                                     
-                                     if (buttonIndex == [alert cancelButtonIndex])
-                                         return;
-                                     
-                                     if (buttonIndex == [alert firstOtherButtonIndex] + 0)
+                                     if (buttonIndex == [alert firstOtherButtonIndex] + 0) {
                                          [PearlAlert showAlertWithTitle:@"About iCloud"
                                                                 message:
                                           @"iCloud is Apple's solution for saving your data in \"the cloud\" "
@@ -456,6 +451,12 @@
                                                           [self ubiquityStoreManager:manager didSwitchToiCloud:iCloudEnabled];
                                                       }
                                                             cancelTitle:[PearlStrings get].commonButtonThanks otherTitles:nil];
+                                         return;
+                                     }
+
+                                     [MPConfig get].iCloudDecided = [NSNumber numberWithBool:YES];
+                                     if (buttonIndex == [alert cancelButtonIndex])
+                                         return;
                                      if (buttonIndex == [alert firstOtherButtonIndex] + 1)
                                          [manager useiCloudStore:YES alertUser:NO];
                                  } cancelTitle:@"Leave iCloud Off" otherTitles:@"Explain?", @"Enable iCloud", nil];

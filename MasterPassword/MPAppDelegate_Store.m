@@ -182,14 +182,17 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     dbg(@"[StoreManager] %@", message);
 }
 
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)didSwitch {
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)iCloudEnabled {
+    
+    // manager.iCloudEnabled is more reliable (eg. iOS tampers with didSwitch a bit)
+    iCloudEnabled = manager.iCloudEnabled;
     
 #ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:didSwitch? MPTestFlightCheckpointCloudEnabled: MPTestFlightCheckpointCloudDisabled];
+    [TestFlight passCheckpoint:iCloudEnabled? MPTestFlightCheckpointCloudEnabled: MPTestFlightCheckpointCloudDisabled];
 #endif
     
-    inf(@"Using iCloud? %@", didSwitch? @"YES": @"NO");
-    [MPConfig get].iCloud = [NSNumber numberWithBool:didSwitch];
+    inf(@"Using iCloud? %@", iCloudEnabled? @"YES": @"NO");
+    [MPConfig get].iCloud = [NSNumber numberWithBool:iCloudEnabled];
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreManagerErrorCause)cause context:(id)context {
