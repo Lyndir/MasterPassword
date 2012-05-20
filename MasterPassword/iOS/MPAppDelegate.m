@@ -62,11 +62,16 @@
     
     if (!self.key)
         // Ask the user to set the key through his master password.
-        dispatch_async(dispatch_get_main_queue(), ^{
+        if ([NSThread isMainThread])
             [self.navigationController presentViewController:
              [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
                                                     animated:animated completion:nil];
-        });
+        else
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.navigationController presentViewController:
+                 [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
+                                                        animated:animated completion:nil];
+            });
 }
 
 - (void)export {
@@ -206,7 +211,7 @@
       [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],                          UITextAttributeTextColor,
       [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f],                          UITextAttributeTextShadowColor, 
       [NSValue valueWithUIOffset:UIOffsetMake(0, -1)],                                      UITextAttributeTextShadowOffset, 
-      [UIFont fontWithName:@"Helvetica-Neue" size:0.0f],                                    UITextAttributeFont, 
+      [UIFont fontWithName:@"Exo-Bold" size:20.0f],                                         UITextAttributeFont, 
       nil]];
     
     UIImage *navBarButton   = [[UIImage imageNamed:@"ui_navbar_button"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
@@ -380,8 +385,10 @@
     
     [self saveContext];
     
-    if (![[MPiOSConfig get].rememberKey boolValue])
+    if (![[MPiOSConfig get].rememberKey boolValue]) {
         [self updateKey:nil];
+        [self loadKey:NO];
+    }
     
     [TestFlight passCheckpoint:MPTestFlightCheckpointDeactivated];
 }

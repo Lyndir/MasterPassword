@@ -1,36 +1,60 @@
 #! /usr/bin/env bash
 source bashlib
-shopt -s nullglob
-
-emit "Converting iTunesArtwork"
-icons=(
-    [29]="Icon-Small.png"
-    [50]="Icon-Small-50.png"
-    [58]="Icon-Small@2x.png"
-    [57]="Icon.png"
-    [72]="Icon-72.png"
-    [114]="Icon@2x.png"
-)
 cd "${0%/*}/../Resources"
+PATH+=:/Applications/Xcode.app//Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin
+temp="${TMPDIR:-/tmp}/.$$.convertImages"
+mkdir "$temp" || err "Couldn't create temp directory." || return
+trap 'rmdir "$temp"' EXIT
+
+downsize() {
+    local from=$1 to=$2 size=${3:-50%}
+    convert "$from" -filter box -resize "$size" -unsharp 1x1+1+0.4 "$to"
+    pngcrush -d "$temp" -rem gAMA -rem cHRM -rem sRGB -rem iCCP "$to" && mv "$temp/"* "$to"
+}
+
+inf "Converting iTunesArtwork"
+icons=(
+    [57]="Icon.png"
+    [114]="Icon@2x.png"
+    [72]="Icon-72.png"
+    [144]="Icon-72@2x.png"
+    [29]="Icon-Small.png"
+    [58]="Icon-Small@2x.png"
+    [50]="Icon-Small-50.png"
+    [100]="Icon-Small-50@2x.png"
+)
 
 for size in "${!icons[@]}"; do
     file=${icons[size]}
-    [[ iTunesArtwork.png -nt $file ]] || continue
 
-    emit "$file ($size px)" --
-        convert "iTunesArtwork.png" -resize "${size}x${size}" "$file"
-    emit -$?
+    if [[ "iTunesArtwork.png" -nt $file ]]; then
+        pinf "$file ($size px)"
+            downsize "iTunesArtwork.png" "$file" "${size}x${size}"
+        fnip
+    fi
 done
 
 
-echo
-emit "Converting @2x artwork"
-for file in ./{,Guide,Lock,Background}/*@2x.png; do
+hr
+inf "Converting @2x/-hd artwork"
+for file in ./**/*{@2x,-ipadhd,-hd}.png; do
     inArray "${file##*/}" "${icons[@]}" && continue
-    [[ $file -nt ${file/@2x} ]] || continue
+    [[ ! -e $file ]] && continue
 
-    emit "${file/@2x}" --
-        convert "$file" -filter box -resize 50% -unsharp 0x1 "${file/@2x}"
-    emit -$?
+    dest=${file/@(@2x|-hd)}
+    dest=${dest/-ipadhd/-ipad}
+
+    if [[ $file = Default* ]]; then
+        read width height < <(identify -format '%w %h' "$file")
+        if (( width > height )); then
+            emit "Rotating $file" --
+                mogrify -rotate 90 "$file"
+            emit -$?
+        fi
+    fi
+    if [[ ! -e $dest || "$file" -nt "$dest" ]]; then
+        pinf "$file -> $dest"
+            downsize "$file" "$dest"
+        fnip
+    fi
 done
-

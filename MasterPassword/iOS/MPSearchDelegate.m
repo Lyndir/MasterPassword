@@ -131,10 +131,9 @@
 - (void)update {
     
     assert(self.query);
-    assert([MPAppDelegate get].keyID);
     
     self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND keyID == %@",
-                                                            self.query, self.query, [MPAppDelegate get].keyID];
+                                                            self.query, self.query, NilToNull([MPAppDelegate get].keyID)];
     
     NSError *error;
     if (![self.fetchedResultsController performFetch:&error])
@@ -142,16 +141,14 @@
     [self.searchDisplayController.searchResultsTableView reloadData];
     
     NSArray *subviews = self.searchDisplayController.searchBar.superview.subviews;
-    UIView *overlay = [subviews objectAtIndex:[subviews indexOfObject:self.searchDisplayController.searchBar] + 1];
-    if (self.tipView.superview != overlay && overlay != self.searchDisplayController.searchResultsTableView) {
+    NSUInteger overlayIndex = [subviews indexOfObject:self.searchDisplayController.searchBar] + 1;
+    UIView *overlay = [subviews count] > overlayIndex? [subviews objectAtIndex:overlayIndex]: nil;
+    if (overlay == self.searchDisplayController.searchResultsTableView || ![overlay isKindOfClass:[UIControl class]])
+        overlay = nil;
+    if (self.tipView.superview != overlay) {
         [self.tipView removeFromSuperview];
         [overlay addSubview:self.tipView];
     }
-    
-    //dbg(@"Superviews of superview:");
-    //[self.searchDisplayController.searchBar.superview printSuperHierarchy];
-    //dbg(@"Subviews of superview:");
-    //[self.searchDisplayController.searchBar.superview printChildHierarchy];
 }
 
 // See MP-14, also crashes easily on internal assertions etc..

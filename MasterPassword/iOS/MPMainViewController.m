@@ -74,6 +74,10 @@
     
     self.searchTipContainer.hidden = NO;
     
+    if (![self.activeElement.keyID isEqualToData:[MPAppDelegate get].keyID])
+        self.activeElement = nil;
+    self.searchDisplayController.searchBar.text = nil;
+        
     if (!self.activeElement.name)
         [UIView animateWithDuration:animated? 0.2f: 0 animations:^{
             self.searchTipContainer.alpha = 1;
@@ -110,12 +114,6 @@
         self.searchTipContainer.frame = [self.searchTipContainer.window convertRect:frameInWindow
                                                                              toView:self.searchTipContainer.superview];
     }
-    
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:[NSOperationQueue mainQueue]
-                                                  usingBlock:^(NSNotification *note) {
-                                                      self.activeElement = nil;
-                                                      [self updateWasAnimated:NO];
-                                                  }];
     
     self.alertBody.text = nil;
     self.contentTipEditIcon.hidden = YES;

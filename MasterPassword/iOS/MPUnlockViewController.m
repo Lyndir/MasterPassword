@@ -11,6 +11,8 @@
 #import "MPUnlockViewController.h"
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
+#import "MPAppDelegate_Store.h"
+#import "MPElementEntity.h"
 
 typedef enum {
     MPLockscreenIdle,
@@ -174,9 +176,39 @@ typedef enum {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self showMessage:@"Success!" state:MPLockscreenSuccess];
                     
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (long)(NSEC_PER_SEC * 1.5f)), dispatch_get_main_queue(), ^{
-                        [self dismissModalViewControllerAnimated:YES];
-                    });
+                    NSFetchRequest *fetchRequest    = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
+                    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"keyID == %@", [MPAppDelegate get].keyID];
+                    fetchRequest.fetchLimit = 1;
+                    BOOL keyIDHasElements = [[[MPAppDelegate managedObjectContext] executeFetchRequest:fetchRequest error:nil] count] > 0;
+                    if (keyIDHasElements)
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (long)(NSEC_PER_SEC * 1.5f)), dispatch_get_main_queue(), ^{
+                            [self dismissModalViewControllerAnimated:YES];
+                        });
+                    else {
+                        [PearlAlert showAlertWithTitle:@"New Master Password"
+                                               message:
+                         @"Please confirm the spelling of this new master password."
+                                             viewStyle:UIAlertViewStyleSecureTextInput
+                                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                         if (buttonIndex == [alert cancelButtonIndex]) {
+                                             [[MPAppDelegate get] updateKey:nil];
+                                             return;
+                                         }
+                                         if (![[alert textFieldAtIndex:0].text isEqualToString:textField.text]) {
+                                             [PearlAlert showAlertWithTitle:@"Incorrect Master Password"
+                                                                    message:
+                                              @"The password you entered doesn't match with the master password you tried to use.  "
+                                              @"You've probably mistyped one of them.\n\n"
+                                              @"Give it another try."
+                                                                  viewStyle:UIAlertViewStyleDefault tappedButtonBlock:nil
+                                                                cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
+                                             return;
+                                         }
+                                         [self dismissModalViewControllerAnimated:YES];
+                                     }
+                                           cancelTitle:[PearlStrings get].commonButtonCancel
+                                           otherTitles:[PearlStrings get].commonButtonContinue, nil];
+                    }
                 });
             else
                 dispatch_async(dispatch_get_main_queue(), ^{
