@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+
+<html>
+
+    <head>
+        <title>Master Password &mdash; Securing your online life.</title>
+
+        <link rel="icon" href="images/resources/favicon.png" type="image/x-png" />
+        <link rel="shortcut icon" href="images/resources/favicon.png" type="image/x-png" />
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+
+        <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Exo:100,400,600,900,100italic,400italic,600italic' />
+        <link rel="stylesheet" type="text/css" href="css/ml-shadows.css" />
+        <link rel="stylesheet" type="text/css" href="css/screen.css" />
+
+        <script src="js/jquery-1.6.1.min.js" type="text/javascript"></script>
+        <script src="js/functions.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-90535-15']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+        <script type="text/javascript" charset="utf-8">
+          var is_ssl = ("https:" == document.location.protocol);
+          var asset_host = is_ssl ? "https://d3rdqalhjaisuu.cloudfront.net/" : "http://d3rdqalhjaisuu.cloudfront.net/";
+          document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <!--script type="text/javascript" charset="utf-8">
+          var feedback_widget_options = {};
+          feedback_widget_options.display = "overlay";  
+          feedback_widget_options.company = "lyndir";
+          feedback_widget_options.placement = "right";
+          feedback_widget_options.color = "#222";
+          feedback_widget_options.style = "question";
+          var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
+        </script-->
+    </head>
+    <body>
+        <header>
+            
+            <h1><a href="index.html"><img class="logo" src="img/iTunesArtwork-Bare.png" /> Master Password</a></h1>
+            <div class="divider">
+            </div>
+        </header>
+        <!--a href="http://bit.ly/vNN5Zi" onclick="_gaq.push(['_trackPageview', '/outbound/testflight']);" id="ribbon"></a-->
+        <section>
+
+            <h1>So how does it work?</h1>
+
+            <p>
+                The theory behind Master Password is simple.  The user remembers a single, secure password.  The user only ever uses that password to log into the Master Password application.  This master password is then used as a seed to generate a different password based on the name of the site to generate a password for.
+            </p>
+
+            <p>
+                The result is that each master password generates its own unique sequence of passwords for any site name.  Since the only input data is the master password and the site name (along with a password counter, see below), there is no need for any kind of storage to recreate a site's password.  All that's needed is the correct master password and the correct algorithm implementation.  What that does for you is make it almost impossible to lose your passwords.  It also makes it nearly impossible for hackers to steal your online identity.
+            </p>
+
+            <h1>The algorithm</h1>
+            <p>
+                The user chooses a single master password, preferably sufficiently long to harden against brute-force attacks.  The application then creates a <a href="http://www.tarsnap.com/scrypt.html" onclick="_gaq.push(['_trackPageview', '/outbound/tarsnap.com/scrypt.html">scrypt</a> key derivative from the user's password.  This process takes quite a bit of processing time and memory.  It makes brute-forcing the master password <b>far more difficult</b>, to practically infeasible, even for otherwise vulnerable password strings.
+            </p>
+            <code><pre>
+                key   = scrypt( P, S, N, r, p, dkLen )
+                where
+                P     = master password
+                S     = &lt;empty&gt;
+                N     = 16384
+                r     = 8
+                p     = 1
+                dkLen = 64
+            </pre></code>
+            
+            <p>
+            When the user requests a password be generated for a site, the application composes a byte string consisting of the <code>site name</code> (UTF-8 decoded), the <code>key</code>, and a <code>salt</code> (a 32-bit unsigned integer in network byte order. Normally this is the password counter), delimited in that order by a single <code>NUL byte</code>, and hashes it using the <code>SHA-1</code> algorithm.  The result is called the <code>seed</code>.
+            </p>
+            <code><pre>
+                salt = htonl( password counter )
+                seed = sha1( site name . "\0" . key . "\0" . salt )
+            </pre></code>
+            <p>
+                The seed is now combined with the password type the user has chosen for the site.  Password types determine the <q>cipher</q> that will be used to encode the <code>seed</code> bytes into a readable password.  For instance, the standard password type <q>Long Password</q> activates one of three pre-set ciphers: <code>CvcvCvcvnoCvcv</code>, <code>CvcvnoCvcvCvcv</code> or <code>CvcvCvcvCvcvno</code>.  Which of those will be used, depends on the first byte of the <code>seed</code>.  Take the byte value modulo the amount of pre-set ciphers (in this case, three), and the result tells you which of the pre-set ciphers to use.
+            </p>
+            <code><pre>
+                ciphers = [ "CvcvCvcvnoCvcv", "CvcvnoCvcvCvcv", "CvcvCvcvCvcvno" ]
+                cipher  = ciphers[ seed[0] % count( ciphers ) ]
+            </pre></code>
+            <p>
+                Now that we know what cipher to use for building our final password, all that's left is to iterate the
+                cipher, and produce a character of password output for each step.  When you iterate the cipher (<code>i</code>), every
+                character in the cipher represents a set of possible output characters (<code>passChars</code>).  For instance, a <code>C</code>
+                character in the cipher indicates that we need to choose a capital consonant character.  An <code>o</code>
+                character in the cipher indicates that we need to choose an <q>other</q> (symbol) character.  Exactly which
+                character to choose in that set for the password output depends on the next byte from the <code>seed</code>.
+                Like before, take the next unused <code>seed</code> byte value modulo the amount of characters in the
+                set of possible output characters for the cipher iteration and use the result to choose the output
+                character (<code>passChar</code>).  Repeat until you've iterated the whole cipher.
+            </p>
+            <code><pre>
+                passChar  = passChars[ seed[i + 1] % count( passChars ) ]
+                passWord += passChar
+            </pre></code>
+
+            <hr />
+            <a class="next" href="https://github.com/Lyndir/MasterPassword">Show me the code!</a>
+
+        </section>
+        <footer>
+            Master Password is a security and productivity product by <a href="http://www.lyndir.com" onclick="_gaq.push(['_trackPageview', '/outbound/lyndir.com']);">Lyndir</a>, &copy; 2011.
+        </footer>
+    </body>
+
+</html>

@@ -1,8 +1,5 @@
 html {
     background:                 url("../img/back-light.png") center 0;
-    -webkit-box-shadow:         inset 0 0 100px #FFF, inset 0 0 100px #FFF;
-       -moz-box-shadow:         inset 0 0 100px #FFF, inset 0 0 100px #FFF;
-            box-shadow:         inset 0 0 100px #FFF, inset 0 0 100px #FFF;
 }
 body {
     padding:                    0;
@@ -57,6 +54,9 @@ label {
     display:                    inline-block;
     width:                      15em;
 }
+img {
+    border:                     none;
+}
 
 
 /* Classes */
@@ -72,12 +72,16 @@ label {
 /* Page */
 header {
     position:                   relative;
+    z-index:                    99;
     background:                 url("../img/back-dark.png") center 0;
     border-bottom:              1px solid #FFF;
     -webkit-box-shadow:         0 0 50px #666;
        -moz-box-shadow:         0 0 50px #666;
             box-shadow:         0 0 50px #666;
 
+    top:                        0;
+    left:                       0;
+    width:                      100%;
     margin:                     0 0 5em;
     padding:                    1em 0;
 
@@ -91,16 +95,47 @@ header h1 {
 }
 header .logo {
     height:                     128px;
-    vertical-align:middle;
+    vertical-align:             middle;
 }
 header .divider {
     position:                   absolute;
     width:                      100%;
     bottom:                     -90px;
 }
+#fixedheader {
+    position:                   fixed;
+    z-index:                    98;
+    background:                 url("../img/back-dark.png") center 0;
+    border-bottom:              1px solid #FFF;
+    -webkit-box-shadow:         0 0 10px #000;
+       -moz-box-shadow:         0 0 10px #000;
+            box-shadow:         0 0 10px #000;
+
+    top:                        0;
+    left:                       0;
+    width:                      100%;
+    margin:                     0 0 5em;
+    padding:                    0.5em 0;
+
+    text-align:                 center;
+}
+#fixedheader h2 {
+    margin:                     0;
+
+    color:                      white;
+    font-size:                  20px;
+}
+header a, header .link, header :link,
+#fixedheader a, #fixedheader .link, #fixedheader :link {
+    text-decoration:            none;
+}
+header a:hover, header .link:hover,
+#fixedheader a:hover, #fixedheader .link:hover {
+    text-decoration:            underline;
+}
 footer {
     clear:                      both;
-    padding:                    1em 0;
+    padding:                    10em 0 1em;
 
     color:                      #333;
     text-shadow:                #FFF 0 -1px 1px, #999 0 0 5px;
@@ -119,7 +154,8 @@ section {
 hr {
     background:                 url("../img/Dividers/Simple.png") center center no-repeat;
     border:                     none;
-    height:                     5px;
+    height:                     4em;
+    clear:                      both;
 }
 blockquote {
     margin-left:                5em;
@@ -150,40 +186,57 @@ blockquote:before {
     position:                   relative;
     z-index:                    -1;
 }
-.frontpage .sidebox {
-    margin-right:               -100px;
+.appstore {
+    position:                   absolute;
+    right:                      10px;
+    font-size:                  0;
 }
-.frontpage .sidebox .clip {
-    height:                     416px;
-    margin-bottom:              84px;
+.columns {
+    position:                   relative;
+    clear:                      both;
+    text-align:                 center;
+}
+.columns>div {
+    float:                      left;
+    width:                      25%;
+    height:                     22em;
+    margin:                     0 4%;
+    padding:                    3em 0 1em;
+    text-align:                 justify;
+    font-size:                  smaller;
+}
+.columns h2 {
+    font-size:                  120%;
+}
+.columns .columnhead {
+}
+.box {
+    display:                    inline-block;
+    position:                   relative;
+    font-size:                  0;
+}
+.box img {
+    border:                     1px solid white;
 }
 .hoverShow {
     display:                    none;
+}
+.center {
+    text-align:                 center;
+}
+.clear {
+    clear:                      both;
 }
 *:hover>.hoverShow {
     display:                    inline-block;
 }
 
-section {
-    position:                   relative;
-    display:                    none;
-
-    -webkit-transition:         all 0.2s ease-in-out;
-       -moz-transition:         all 0.2s ease-in-out;
-        -ms-transition:         all 0.2s ease-in-out;
-         -o-transition:         all 0.2s ease-in-out;
-            transition:         all 0.2s ease-in-out;
-}
-section.active {
-    display:                    block;
-}
 a.previous, a.next {
     display:                    block;
-    position:                   absolute;
-    margin:                     -2.5em 0 0 0;
 
     font-size:                  150%;
     font-weight:                400;
+    text-align:                 center;
     text-decoration:            none;
 }
 a.previous {
@@ -193,9 +246,6 @@ a.previous:before {
     content:                    "< ";
 }
 a.next {
-    right: 0;
-
-    text-align:                 right;
 }
 a.next:after {
     content:                    " >";
@@ -211,7 +261,11 @@ a.next:after {
     width:                      184px;
     height:                     184px;
 }
-
 #frontpage .sidebox {
-    margin-top:                 -50px;
+    margin-right:               -100px;
 }
+#frontpage .sidebox .clip {
+    height:                     416px;
+    margin-bottom:              84px;
+}
+
