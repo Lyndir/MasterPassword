@@ -15,6 +15,8 @@
 #import "LocalyticsSession.h"
 #import "TestFlight.h"
 #import <Crashlytics/Crashlytics.h>
+#import "ATConnect.h"
+#import "ATAppRatingFlow.h"
 
 @interface MPAppDelegate ()
 
@@ -23,6 +25,9 @@
 
 - (NSString *)crashlyticsInfo;
 - (NSString *)crashlyticsAPIKey;
+
+- (NSString *)apptentiveInfo;
+- (NSString *)apptentiveAPIKey;
 
 - (NSString *)localyticsInfo;
 - (NSString *)localyticsKey;
@@ -143,8 +148,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-#ifndef DEBUG
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+#ifndef DEBUG
         @try {
             NSString *testFlightToken = [self testFlightToken];
             if ([testFlightToken length]) {
@@ -200,9 +205,22 @@
         @catch (NSException *exception) {
             err(@"Localytics exception: %@", exception);
         }
-    });
 #endif
-    
+    });
+
+    @try {
+        NSString *apptentiveAPIKey = [self apptentiveAPIKey];
+        if ([apptentiveAPIKey length]) {
+            dbg(@"Initializing Apptentive");
+            ATConnect *connection = [ATConnect sharedConnection];
+            connection.shouldTakeScreenshot = NO;
+            connection.apiKey = apptentiveAPIKey;
+        }
+    }
+    @catch (NSException *exception) {
+        err(@"Apptentive: %@", exception);
+    }
+
     UIImage *navBarImage = [[UIImage imageNamed:@"ui_navbar_container"]  resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
     [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsLandscapePhone];
@@ -270,11 +288,19 @@
      @"https://youtrack.lyndir.com\n"
                          viewStyle:UIAlertViewStyleDefault tappedButtonBlock:nil
                        cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
+#else
+    @try {
+        ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:[PearlConfig get].iTunesID];
+        [sharedFlow appDidLaunch:YES viewController:self.navigationController];
+    }
+    @catch (NSException *exception) {
+        err(@"Apptentive: %@", exception);
+    }
 #endif
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO
                                             withAnimation:UIStatusBarAnimationSlide];
-    
+
     return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
@@ -351,6 +377,11 @@
     }
     
     [TestFlight passCheckpoint:MPTestFlightCheckpointActivated];
+    
+    ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:[PearlConfig get].iTunesID];
+    [sharedFlow appDidEnterForeground:YES viewController:self.navigationController];
+    
+    [super applicationDidBecomeActive:application];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -499,6 +530,25 @@
 - (NSString *)crashlyticsAPIKey {
     
     return NullToNil([[self crashlyticsInfo] valueForKeyPath:@"API Key"]);
+}
+
+
+#pragma mark - Apptentive
+
+
+- (NSDictionary *)apptentiveInfo {
+    
+    static NSDictionary *apptentiveInfo = nil;
+    if (apptentiveInfo == nil)
+        apptentiveInfo = [[NSDictionary alloc] initWithContentsOfURL:
+                           [[NSBundle mainBundle] URLForResource:@"Apptentive" withExtension:@"plist"]];
+    
+    return apptentiveInfo;
+}
+
+- (NSString *)apptentiveAPIKey {
+    
+    return NullToNil([[self apptentiveInfo] valueForKeyPath:@"API Key"]);
 }
 
 

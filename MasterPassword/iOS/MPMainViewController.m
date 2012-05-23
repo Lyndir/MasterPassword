@@ -13,6 +13,7 @@
 #import "MPElementGeneratedEntity.h"
 #import "MPElementStoredEntity.h"
 #import "IASKAppSettingsViewController.h"
+#import "ATConnect.h"
 
 #import <MobileCoreServices/MobileCoreServices.h>
 
@@ -393,36 +394,43 @@
                          return;
                      
                      switch (buttonIndex - [sheet firstOtherButtonIndex]) {
-                         case 0:
+                         case 0: {
                              [self toggleHelpAnimated:YES];
                              break;
+                         }
                          case 1: {
                              [self setHelpChapter:@"faq"];
                              [self setHelpHidden:NO animated:YES];
                              break;
                          }
-                         case 2:
+                         case 2: {
                              [[MPAppDelegate get] showGuide];
                              break;
-                         case 3:
-                         {
+                         }
+                         case 3: {
                              IASKAppSettingsViewController *settingsVC = [IASKAppSettingsViewController new];
                              settingsVC.delegate = self;
                              [self.navigationController pushViewController:settingsVC animated:YES];
                              break;
                          }
-                         case 4:
+                         case 4: {
                              [[MPAppDelegate get] export];
                              break;
+                         }
 #ifdef ADHOC
-                         case 5:
+                         case 5: {
                              [TestFlight openFeedbackView];
                              break;
-                         case 6:
+                         }
+                         case 6: {
 #else
-                         case 5:
+                         case 5: {
+                             ATConnect *connection = [ATConnect sharedConnection];
+                             [connection presentFeedbackControllerFromViewController:self];
+                             break;
+                         }
+                         case 6: {
 #endif
-                         {
                              [[MPAppDelegate get] signOut:self];
                              [[MPAppDelegate get] loadKey:YES];
                              break;
@@ -433,9 +441,7 @@
                  } cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil
                        otherTitles:
      [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings", @"Export",
-#ifdef ADHOC
      @"Feedback",
-#endif
      @"Sign Out",
      nil]; 
 }

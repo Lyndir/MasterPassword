@@ -7,3 +7,6 @@
 [submodule "External/iCloudStoreManager"]
 	path = External/iCloudStoreManager
 	url = git://github.com/alekseyn/iCloudStoreManager.git
+[submodule "External/apptentive"]
+	path = External/apptentive
+	url = git://github.com/apptentive/apptentive-ios.git
