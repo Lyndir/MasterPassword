@@ -20,5 +20,6 @@
 @interface MPTypeViewController : UITableViewController
 
 @property (nonatomic, weak) id<MPTypeDelegate> delegate;
+@property (weak, nonatomic) IBOutlet UIView *recommendedTipContainer;
 
 @end

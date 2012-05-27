@@ -16,7 +16,6 @@
 #import "TestFlight.h"
 #import <Crashlytics/Crashlytics.h>
 #import "ATConnect.h"
-#import "ATAppRatingFlow.h"
 
 @interface MPAppDelegate ()
 
@@ -148,6 +147,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    [[[NSBundle mainBundle] mutableInfoDictionary] setObject:@"Master Password" forKey:@"CFBundleDisplayName"];
     [[[NSBundle mainBundle] mutableLocalizedInfoDictionary] setObject:@"Master Password" forKey:@"CFBundleDisplayName"];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
@@ -219,23 +219,6 @@
             [connection setApiKey:apptentiveAPIKey];
             [connection setShouldTakeScreenshot:NO];
             [connection addAdditionalInfoToFeedback:[PearlInfoPlist get].CFBundleVersion withKey:@"CFBundleVersion"];
-
-            ATAppRatingFlow *ratingsFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:[PearlConfig get].iTunesID];
-            [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification object:nil queue:nil
-                                                          usingBlock:^(NSNotification *note) {
-                                                              dispatch_async(dispatch_get_main_queue(), ^{
-                                                                  [ratingsFlow appDidEnterForeground:YES
-                                                                                      viewController:self.navigationController];
-                                                              });
-                                                          }];
-            [[NSNotificationCenter defaultCenter] addObserverForName:MPNotificationKeySet object:nil queue:nil
-                                                          usingBlock:^(NSNotification *note) {
-                                                              dispatch_async(dispatch_get_main_queue(), ^{
-                                                                  [ratingsFlow userDidPerformSignificantEvent:YES
-                                                                                               viewController:self.navigationController];
-                                                              });
-                                                          }];
-            [ratingsFlow appDidLaunch:YES viewController:self.navigationController];
         }
     }
     @catch (NSException *exception) {

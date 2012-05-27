@@ -21,7 +21,6 @@
 @interface MPMainViewController (Private)
 
 - (void)updateAnimated:(BOOL)animated;
-- (void)updateWasAnimated:(BOOL)animated;
 - (void)showContentTip:(NSString *)message withIcon:(UIImageView *)icon;
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message;
 - (void)changeElementWithWarning:(NSString *)warning do:(void (^)(void))task;
@@ -46,7 +45,9 @@
 @synthesize alertBody = _alertBody;
 @synthesize contentTipBody = _contentTipBody;
 @synthesize contentTipEditIcon = _contentTipEditIcon;
-@synthesize searchTipContainer = _searchTip;
+@synthesize searchTipContainer = _searchTipContainer;
+@synthesize actionsTipContainer = _actionsTipContainer;
+@synthesize typeTipContainer = _typeTipContainer;
 @synthesize contentField = _contentField;
 @synthesize contentTipCleanup;
 
@@ -73,29 +74,37 @@
     
     [super viewWillAppear:animated];
     
-    self.searchTipContainer.hidden = NO;
-    
     if (![self.activeElement.keyID isEqualToData:[MPAppDelegate get].keyID])
         self.activeElement = nil;
     self.searchDisplayController.searchBar.text = nil;
-        
-    if (!self.activeElement.name)
-        [UIView animateWithDuration:animated? 0.2f: 0 animations:^{
-            self.searchTipContainer.alpha = 1;
-        }];
+    
+    self.searchTipContainer.alpha = 0;
+    self.actionsTipContainer.alpha = 0;
+    self.typeTipContainer.alpha = 0;
     
     [self setHelpHidden:[[MPiOSConfig get].helpHidden boolValue] animated:animated];
     [self updateAnimated:animated];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    
-    [super viewWillDisappear:animated];
-    
-    self.searchTipContainer.hidden = YES;
-}
-
 - (void)viewDidAppear:(BOOL)animated {
+    
+    if ([[MPiOSConfig get].firstRun boolValue])
+        [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
+            self.actionsTipContainer.alpha = 1;
+        } completion:^(BOOL finished) {
+            if (finished) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [UIView animateWithDuration:0.2f animations:^{
+                        self.actionsTipContainer.alpha = 0;
+                    } completion:^(BOOL finished) {
+                        if (![self.activeElement.name length])
+                            [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
+                                self.searchTipContainer.alpha = 1;
+                            }];
+                    }];
+                });
+            }
+        }];
     
     [super viewDidAppear:animated];
 }
@@ -105,16 +114,6 @@
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
     
     self.contentField.font = [UIFont fontWithName:@"Exo-Black" size:self.contentField.font.pointSize];
-    
-    // Put the search tip on the window so it's above the nav bar.
-    if (![self.searchTipContainer.superview isEqual:self.navigationController.navigationBar.superview]) {
-        CGRect frameInWindow = [self.searchTipContainer.window convertRect:self.searchTipContainer.frame
-                                                                  fromView:self.searchTipContainer.superview];
-        [self.searchTipContainer removeFromSuperview];
-        [self.navigationController.navigationBar.superview addSubview:self.searchTipContainer];
-        self.searchTipContainer.frame = [self.searchTipContainer.window convertRect:frameInWindow
-                                                                             toView:self.searchTipContainer.superview];
-    }
     
     self.alertBody.text = nil;
     self.contentTipEditIcon.hidden = YES;
@@ -141,22 +140,19 @@
     [self setContentTipBody:nil];
     [self setContentTipEditIcon:nil];
     [self setSearchTipContainer:nil];
+    [self setActionsTipContainer:nil];
+    [self setTypeTipContainer:nil];
     [super viewDidUnload];
 }
 
 - (void)updateAnimated:(BOOL)animated {
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (animated)
-            [UIView animateWithDuration:0.3f animations:^{
-                [self updateWasAnimated:animated];
-            }];
-        else
-            [self updateWasAnimated:animated];
-    });
-}
-
-- (void)updateWasAnimated:(BOOL)animated {
+    if (animated) {
+        [UIView animateWithDuration:0.3f animations:^{
+            [self updateAnimated:NO];
+        }];
+        return;
+    }
     
     [self setHelpChapter:self.activeElement? @"2": @"1"];
     self.siteName.text = self.activeElement.name;
@@ -245,7 +241,7 @@
         };
         
         icon.hidden = NO;
-        [UIView animateWithDuration:0.2f animations:^{
+        [UIView animateWithDuration:0.3f animations:^{
             self.contentTipContainer.alpha = 1;
         } completion:^(BOOL finished) {
             if (finished) {
@@ -271,7 +267,7 @@
             self.alertBody.text = message;
         [self.alertBody scrollRangeToVisible:scrollRange];
         
-        [UIView animateWithDuration:0.2f animations:^{
+        [UIView animateWithDuration:0.3f animations:^{
             self.alertContainer.alpha = 1;
         }];
     });
@@ -421,15 +417,16 @@
                              [TestFlight openFeedbackView];
                              break;
                          }
-                         case 6: {
+                         case 6:
 #else
                          case 5: {
                              ATConnect *connection = [ATConnect sharedConnection];
                              [connection presentFeedbackControllerFromViewController:self];
                              break;
                          }
-                         case 6: {
+                         case 6:
 #endif
+                         {
                              [[MPAppDelegate get] signOut:self];
                              [[MPAppDelegate get] loadKey:YES];
                              break;
@@ -437,12 +434,9 @@
                      }
                      
                      [TestFlight passCheckpoint:MPTestFlightCheckpointAction];
-                 } cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil
-                       otherTitles:
-     [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings", @"Export",
-     @"Feedback",
-     @"Sign Out",
-     nil]; 
+                 }
+                       cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:
+     [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings", @"Export", @"Feedback", @"Sign Out", nil];
 }
 
 - (MPElementType)selectedType {
@@ -496,10 +490,24 @@
                            self.activeElement.name, self.activeElement.name)];
         [[MPAppDelegate get] saveContext];
         
+        if ([[MPiOSConfig get].firstRun boolValue])
+            [UIView animateWithDuration:0.5f animations:^{
+                self.typeTipContainer.alpha = 1;
+            } completion:^(BOOL finished) {
+                if (finished) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [UIView animateWithDuration:0.2f animations:^{
+                            self.typeTipContainer.alpha = 0;
+                        }];
+                    });
+                }
+            }];
+        
         [self.searchDisplayController setActive:NO animated:YES];
         self.searchDisplayController.searchBar.text = self.activeElement.name;
         
         [TestFlight passCheckpoint:MPTestFlightCheckpointSelectElement];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationElementUsed object:self.activeElement];
     }
     
     [self updateAnimated:YES];

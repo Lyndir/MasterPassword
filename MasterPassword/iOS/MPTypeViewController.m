@@ -17,8 +17,32 @@
 
 @implementation MPTypeViewController
 @synthesize delegate;
+@synthesize recommendedTipContainer;
 
 #pragma mark - View lifecycle
+
+- (void)viewWillAppear:(BOOL)animated {
+    
+    self.recommendedTipContainer.alpha = 0;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    
+    if ([[MPiOSConfig get].firstRun boolValue])
+        [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
+            self.recommendedTipContainer.alpha = 1;
+        } completion:^(BOOL finished) {
+            if (finished) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [UIView animateWithDuration:0.2f animations:^{
+                        self.recommendedTipContainer.alpha = 0;
+                    }];
+                });
+            }
+        }];
+    
+    [super viewDidAppear:animated];
+}
 
 - (void)viewDidLoad {
     
@@ -108,4 +132,8 @@
     @throw nil;
 }
 
+- (void)viewDidUnload {
+    [self setRecommendedTipContainer:nil];
+    [super viewDidUnload];
+}
 @end

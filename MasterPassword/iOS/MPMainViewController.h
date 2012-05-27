@@ -31,6 +31,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *contentTipBody;
 @property (weak, nonatomic) IBOutlet UIImageView *contentTipEditIcon;
 @property (weak, nonatomic) IBOutlet UIView *searchTipContainer;
+@property (weak, nonatomic) IBOutlet UIView *actionsTipContainer;
+@property (weak, nonatomic) IBOutlet UIView *typeTipContainer;
 
 @property (copy) void (^contentTipCleanup)(BOOL finished);
 

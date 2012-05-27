@@ -75,6 +75,7 @@ typedef enum {
 #define MPNotificationKeySet                            @"MPNotificationKeySet"
 #define MPNotificationKeyUnset                          @"MPNotificationKeyUnset"
 #define MPNotificationKeyForgotten                      @"MPNotificationKeyForgotten"
+#define MPNotificationElementUsed                       @"MPNotificationElementUsed"
 
 NSData *keyForPassword(NSString *password);
 NSData *keyIDForPassword(NSString *password);
