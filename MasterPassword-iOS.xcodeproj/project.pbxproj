@@ -18,6 +18,13 @@
 		DA0A1D1215690AD40092735D /* tip_arrow_wood.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0A1D0C15690AD40092735D /* tip_arrow_wood.png */; };
 		DA0A1D1515690AF40092735D /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0A1D1315690AF30092735D /* Icon-72@2x.png */; };
 		DA0A1D1615690AF40092735D /* Icon-Small-50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0A1D1415690AF40092735D /* Icon-Small-50@2x.png */; };
+		DA30E9CE15722ECA00A68B4C /* NSBundle_PearlMutableInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = DA30E9CB15722ECA00A68B4C /* NSBundle_PearlMutableInfo.h */; };
+		DA30E9CF15722ECA00A68B4C /* NSBundle_PearlMutableInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9CC15722ECA00A68B4C /* NSBundle_PearlMutableInfo.m */; };
+		DA30E9D015722ECA00A68B4C /* Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9CD15722ECA00A68B4C /* Pearl.m */; };
+		DA30E9D215722EE500A68B4C /* Pearl-Crypto.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D115722EE500A68B4C /* Pearl-Crypto.m */; };
+		DA30E9D415722EF400A68B4C /* Pearl-UIKit.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D315722EF400A68B4C /* Pearl-UIKit.m */; };
+		DA30E9D715723E6900A68B4C /* PearlLazy.h in Headers */ = {isa = PBXBuildFile; fileRef = DA30E9D515723E6900A68B4C /* PearlLazy.h */; };
+		DA30E9D815723E6900A68B4C /* PearlLazy.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D615723E6900A68B4C /* PearlLazy.m */; };
 		DA4425CC1557BED40052177D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA4426001557BF260052177D /* UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4425F11557BF260052177D /* UbiquityStoreManager.h */; };
 		DA4426011557BF260052177D /* UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4425F21557BF260052177D /* UbiquityStoreManager.m */; };
@@ -925,6 +932,13 @@
 		DA0A1D0C15690AD40092735D /* tip_arrow_wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tip_arrow_wood.png; path = Resources/Tooltips/tip_arrow_wood.png; sourceTree = SOURCE_ROOT; };
 		DA0A1D1315690AF30092735D /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72@2x.png"; sourceTree = "<group>"; };
 		DA0A1D1415690AF40092735D /* Icon-Small-50@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50@2x.png"; sourceTree = "<group>"; };
+		DA30E9CB15722ECA00A68B4C /* NSBundle_PearlMutableInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSBundle_PearlMutableInfo.h; sourceTree = "<group>"; };
+		DA30E9CC15722ECA00A68B4C /* NSBundle_PearlMutableInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSBundle_PearlMutableInfo.m; sourceTree = "<group>"; };
+		DA30E9CD15722ECA00A68B4C /* Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pearl.m; sourceTree = "<group>"; };
+		DA30E9D115722EE500A68B4C /* Pearl-Crypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Pearl-Crypto.m"; sourceTree = "<group>"; };
+		DA30E9D315722EF400A68B4C /* Pearl-UIKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Pearl-UIKit.m"; sourceTree = "<group>"; };
+		DA30E9D515723E6900A68B4C /* PearlLazy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlLazy.h; sourceTree = "<group>"; };
+		DA30E9D615723E6900A68B4C /* PearlLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlLazy.m; sourceTree = "<group>"; };
 		DA4425CB1557BED40052177D /* libiCloudStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libiCloudStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA4425F11557BF260052177D /* UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UbiquityStoreManager.h; sourceTree = "<group>"; };
 		DA4425F21557BF260052177D /* UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UbiquityStoreManager.m; sourceTree = "<group>"; };
@@ -2892,6 +2906,8 @@
 		DAFE45D715039823003ABA7C /* Pearl */ = {
 			isa = PBXGroup;
 			children = (
+				DA30E9CB15722ECA00A68B4C /* NSBundle_PearlMutableInfo.h */,
+				DA30E9CC15722ECA00A68B4C /* NSBundle_PearlMutableInfo.m */,
 				DAFE45D815039823003ABA7C /* NSObject_PearlExport.h */,
 				DAFE45D915039823003ABA7C /* NSObject_PearlExport.m */,
 				DAFE45DA15039823003ABA7C /* NSString_PearlNSArrayFormat.h */,
@@ -2899,6 +2915,7 @@
 				DAFE45DC15039823003ABA7C /* NSString_PearlSEL.h */,
 				DAFE45DD15039823003ABA7C /* NSString_PearlSEL.m */,
 				DAFE45DE15039823003ABA7C /* Pearl.h */,
+				DA30E9CD15722ECA00A68B4C /* Pearl.m */,
 				DAFE45DF15039823003ABA7C /* PearlAbstractStrings.h */,
 				DAFE45E015039823003ABA7C /* PearlAbstractStrings.m */,
 				DAFE45E315039823003ABA7C /* PearlCodeUtils.h */,
@@ -2909,6 +2926,8 @@
 				DAFE45E815039823003ABA7C /* PearlDeviceUtils.m */,
 				DAFE45E915039823003ABA7C /* PearlInfoPlist.h */,
 				DAFE45EA15039823003ABA7C /* PearlInfoPlist.m */,
+				DA30E9D515723E6900A68B4C /* PearlLazy.h */,
+				DA30E9D615723E6900A68B4C /* PearlLazy.m */,
 				DAFE45EB15039823003ABA7C /* PearlLogger.h */,
 				DAFE45EC15039823003ABA7C /* PearlLogger.m */,
 				DAFE45ED15039823003ABA7C /* PearlMathUtils.h */,
@@ -2940,6 +2959,7 @@
 			children = (
 				DA79A9BB1557DB6F00BAA07A /* libscryptenc-ios.a */,
 				DAFE45FD15039823003ABA7C /* Pearl-Crypto.h */,
+				DA30E9D115722EE500A68B4C /* Pearl-Crypto.m */,
 				DAFE45FE15039823003ABA7C /* PearlCryptUtils.h */,
 				DAFE45FF15039823003ABA7C /* PearlCryptUtils.m */,
 				DAFE460015039823003ABA7C /* PearlKeyChain.h */,
@@ -2959,6 +2979,7 @@
 			children = (
 				DAFE460815039823003ABA7C /* Pearl-UIKit-Dependencies.h */,
 				DAFE460915039823003ABA7C /* Pearl-UIKit.h */,
+				DA30E9D315722EF400A68B4C /* Pearl-UIKit.m */,
 				DAFE460A15039823003ABA7C /* PearlAlert.h */,
 				DAFE460B15039823003ABA7C /* PearlAlert.m */,
 				DAFE4A60150399FF003ABA7C /* PearlAppDelegate.m */,
@@ -3094,6 +3115,8 @@
 				DAFE4A5615039824003ABA7C /* PearlWebViewController.h in Headers */,
 				DAFE4A5815039824003ABA7C /* UIImage_PearlScaling.h in Headers */,
 				DAFE4A63150399FF003ABA7C /* PearlAppDelegate.h in Headers */,
+				DA30E9CE15722ECA00A68B4C /* NSBundle_PearlMutableInfo.h in Headers */,
+				DA30E9D715723E6900A68B4C /* PearlLazy.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4141,6 +4164,11 @@
 				DAFE4A5715039824003ABA7C /* PearlWebViewController.m in Sources */,
 				DAFE4A5915039824003ABA7C /* UIImage_PearlScaling.m in Sources */,
 				DAFE4A62150399FF003ABA7C /* PearlAppDelegate.m in Sources */,
+				DA30E9CF15722ECA00A68B4C /* NSBundle_PearlMutableInfo.m in Sources */,
+				DA30E9D015722ECA00A68B4C /* Pearl.m in Sources */,
+				DA30E9D215722EE500A68B4C /* Pearl-Crypto.m in Sources */,
+				DA30E9D415722EF400A68B4C /* Pearl-UIKit.m in Sources */,
+				DA30E9D815723E6900A68B4C /* PearlLazy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

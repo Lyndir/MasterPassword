@@ -152,73 +152,69 @@ typedef enum {
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     
+    CABasicAnimation *rotate = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+    rotate.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    rotate.fromValue = [NSNumber numberWithFloat:0];
+    rotate.toValue = [NSNumber numberWithFloat:2 * M_PI];
+    rotate.repeatCount = MAXFLOAT;
+    rotate.duration = 3.0;
+    
+    [self.spinner.layer removeAllAnimations];
+    [self.spinner.layer addAnimation:rotate forKey:@"transform"];
+    
+    [UIView animateWithDuration:0.3f animations:^{
+        self.spinner.alpha = 1.0f;
+    }];
+    
+    [self showMessage:@"Checking password..." state:MPLockscreenProgress];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @try {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                CABasicAnimation *rotate = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
-                rotate.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-                rotate.fromValue = [NSNumber numberWithFloat:0];
-                rotate.toValue = [NSNumber numberWithFloat:2 * M_PI];
-                rotate.repeatCount = MAXFLOAT;
-                rotate.duration = 3.0;
+        BOOL unlocked = [[MPAppDelegate get] tryMasterPassword:textField.text];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (unlocked) {
+                [self showMessage:@"Success!" state:MPLockscreenSuccess];
                 
-                [self.spinner.layer removeAllAnimations];
-                [self.spinner.layer addAnimation:rotate forKey:@"transform"];
-                
-                [UIView animateWithDuration:0.3f animations:^{
-                    self.spinner.alpha = 1.0f;
-                }];
-                
-                [self showMessage:@"Checking password..." state:MPLockscreenProgress];
-            });
-            
-            if ([[MPAppDelegate get] tryMasterPassword:textField.text])
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self showMessage:@"Success!" state:MPLockscreenSuccess];
-                    
-                    NSFetchRequest *fetchRequest    = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
-                    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"keyID == %@", [MPAppDelegate get].keyID];
-                    fetchRequest.fetchLimit = 1;
-                    BOOL keyIDHasElements = [[[MPAppDelegate managedObjectContext] executeFetchRequest:fetchRequest error:nil] count] > 0;
-                    if (keyIDHasElements)
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (long)(NSEC_PER_SEC * 1.5f)), dispatch_get_main_queue(), ^{
-                            [self dismissModalViewControllerAnimated:YES];
-                        });
-                    else {
-                        [PearlAlert showAlertWithTitle:@"New Master Password"
-                                               message:
-                         @"Please confirm the spelling of this new master password."
-                                             viewStyle:UIAlertViewStyleSecureTextInput
-                                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                                         if (buttonIndex == [alert cancelButtonIndex]) {
-                                             [[MPAppDelegate get] updateKey:nil];
-                                             return;
-                                         }
-                                         if (![[alert textFieldAtIndex:0].text isEqualToString:textField.text]) {
-                                             [PearlAlert showAlertWithTitle:@"Incorrect Master Password"
-                                                                    message:
-                                              @"The password you entered doesn't match with the master password you tried to use.  "
-                                              @"You've probably mistyped one of them.\n\n"
-                                              @"Give it another try."
-                                                                  viewStyle:UIAlertViewStyleDefault tappedButtonBlock:nil
-                                                                cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
-                                             return;
-                                         }
-                                         [self dismissModalViewControllerAnimated:YES];
+                NSFetchRequest *fetchRequest    = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
+                fetchRequest.predicate = [NSPredicate predicateWithFormat:@"keyID == %@", [MPAppDelegate get].keyID];
+                fetchRequest.fetchLimit = 1;
+                BOOL keyIDHasElements = [[[MPAppDelegate managedObjectContext] executeFetchRequest:fetchRequest error:nil] count] > 0;
+                if (keyIDHasElements)
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (long)(NSEC_PER_SEC * 1.5f)), dispatch_get_main_queue(), ^{
+                        [self dismissModalViewControllerAnimated:YES];
+                    });
+                else {
+                    [PearlAlert showAlertWithTitle:@"New Master Password"
+                                           message:
+                     @"Please confirm the spelling of this new master password."
+                                         viewStyle:UIAlertViewStyleSecureTextInput
+                                 tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                     if (buttonIndex == [alert cancelButtonIndex]) {
+                                         [[MPAppDelegate get] updateKey:nil];
+                                         return;
                                      }
-                                           cancelTitle:[PearlStrings get].commonButtonCancel
-                                           otherTitles:[PearlStrings get].commonButtonContinue, nil];
-                    }
-                });
-            else
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self showMessage:@"Not valid." state:MPLockscreenError];
-                    [UIView animateWithDuration:0.5f animations:^{
-                        self.changeMPView.alpha = 1.0f;
-                    }];
-                });
-        }
-        @finally {
+                                     if (![[alert textFieldAtIndex:0].text isEqualToString:textField.text]) {
+                                         [PearlAlert showAlertWithTitle:@"Incorrect Master Password"
+                                                                message:
+                                          @"The password you entered doesn't match with the master password you tried to use.  "
+                                          @"You've probably mistyped one of them.\n\n"
+                                          @"Give it another try."
+                                                              viewStyle:UIAlertViewStyleDefault tappedButtonBlock:nil
+                                                            cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
+                                         return;
+                                     }
+                                     [self dismissModalViewControllerAnimated:YES];
+                                 }
+                                       cancelTitle:[PearlStrings get].commonButtonCancel
+                                       otherTitles:[PearlStrings get].commonButtonContinue, nil];
+                }
+            } else {
+                [self showMessage:@"Not valid." state:MPLockscreenError];
+                
+                [UIView animateWithDuration:0.5f animations:^{
+                    self.changeMPView.alpha = 1.0f;
+                }];
+            }
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [UIView animateWithDuration:0.3f animations:^{
                     self.spinner.alpha = 0.0f;
@@ -226,7 +222,7 @@ typedef enum {
                     [self.spinner.layer removeAllAnimations];
                 }];
             });
-        }
+        });
     });
 }
 

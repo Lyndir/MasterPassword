@@ -146,8 +146,6 @@
 
 - (void)updateAnimated:(BOOL)animated {
     
-    [[MPAppDelegate get] saveContext];
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         if (animated)
             [UIView animateWithDuration:0.3f animations:^{
@@ -352,6 +350,7 @@
     NSString *oldPassword = [self.activeElement.content description];
     task();
     NSString *newPassword = [self.activeElement.content description];
+    [[MPAppDelegate get] saveContext];
     [self updateAnimated:YES];
     
     // Show new and old password.

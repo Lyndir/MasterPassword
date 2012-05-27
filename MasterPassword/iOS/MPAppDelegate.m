@@ -148,6 +148,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    [[[NSBundle mainBundle] mutableLocalizedInfoDictionary] setObject:@"Master Password" forKey:@"CFBundleDisplayName"];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
 #ifndef DEBUG
         @try {
@@ -207,20 +209,39 @@
         }
 #endif
     });
-
+    
     @try {
         NSString *apptentiveAPIKey = [self apptentiveAPIKey];
         if ([apptentiveAPIKey length]) {
             dbg(@"Initializing Apptentive");
+            
             ATConnect *connection = [ATConnect sharedConnection];
-            connection.shouldTakeScreenshot = NO;
-            connection.apiKey = apptentiveAPIKey;
+            [connection setApiKey:apptentiveAPIKey];
+            [connection setShouldTakeScreenshot:NO];
+            [connection addAdditionalInfoToFeedback:[PearlInfoPlist get].CFBundleVersion withKey:@"CFBundleVersion"];
+
+            ATAppRatingFlow *ratingsFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:[PearlConfig get].iTunesID];
+            [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification object:nil queue:nil
+                                                          usingBlock:^(NSNotification *note) {
+                                                              dispatch_async(dispatch_get_main_queue(), ^{
+                                                                  [ratingsFlow appDidEnterForeground:YES
+                                                                                      viewController:self.navigationController];
+                                                              });
+                                                          }];
+            [[NSNotificationCenter defaultCenter] addObserverForName:MPNotificationKeySet object:nil queue:nil
+                                                          usingBlock:^(NSNotification *note) {
+                                                              dispatch_async(dispatch_get_main_queue(), ^{
+                                                                  [ratingsFlow userDidPerformSignificantEvent:YES
+                                                                                               viewController:self.navigationController];
+                                                              });
+                                                          }];
+            [ratingsFlow appDidLaunch:YES viewController:self.navigationController];
         }
     }
     @catch (NSException *exception) {
         err(@"Apptentive: %@", exception);
     }
-
+    
     UIImage *navBarImage = [[UIImage imageNamed:@"ui_navbar_container"]  resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
     [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsLandscapePhone];
@@ -288,19 +309,11 @@
      @"https://youtrack.lyndir.com\n"
                          viewStyle:UIAlertViewStyleDefault tappedButtonBlock:nil
                        cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
-#else
-    @try {
-        ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:[PearlConfig get].iTunesID];
-        [sharedFlow appDidLaunch:YES viewController:self.navigationController];
-    }
-    @catch (NSException *exception) {
-        err(@"Apptentive: %@", exception);
-    }
 #endif
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO
                                             withAnimation:UIStatusBarAnimationSlide];
-
+    
     return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
@@ -377,9 +390,6 @@
     }
     
     [TestFlight passCheckpoint:MPTestFlightCheckpointActivated];
-    
-    ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:[PearlConfig get].iTunesID];
-    [sharedFlow appDidEnterForeground:YES viewController:self.navigationController];
     
     [super applicationDidBecomeActive:application];
 }
@@ -484,7 +494,7 @@
                                                             cancelTitle:[PearlStrings get].commonButtonThanks otherTitles:nil];
                                          return;
                                      }
-
+                                     
                                      [MPConfig get].iCloudDecided = [NSNumber numberWithBool:YES];
                                      if (buttonIndex == [alert cancelButtonIndex])
                                          return;
@@ -541,7 +551,7 @@
     static NSDictionary *apptentiveInfo = nil;
     if (apptentiveInfo == nil)
         apptentiveInfo = [[NSDictionary alloc] initWithContentsOfURL:
-                           [[NSBundle mainBundle] URLForResource:@"Apptentive" withExtension:@"plist"]];
+                          [[NSBundle mainBundle] URLForResource:@"Apptentive" withExtension:@"plist"]];
     
     return apptentiveInfo;
 }

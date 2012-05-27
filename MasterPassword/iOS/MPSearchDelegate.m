@@ -14,7 +14,6 @@
 @interface MPSearchDelegate (Private)
 
 - (void)configureCell:(UITableViewCell *)cell inTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath;
-- (void)update;
 
 @end
 
@@ -38,10 +37,14 @@
     
     NSFetchRequest *fetchRequest    = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
     fetchRequest.sortDescriptors    = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]];
-    self.fetchedResultsController   = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                          managedObjectContext:[MPAppDelegate managedObjectContext]
-                                                                            sectionNameKeyPath:nil cacheName:nil];
-    self.fetchedResultsController.delegate = self;
+    self.fetchedResultsController   = [PearlLazy lazyObjectLoadedFrom:^id{
+        NSFetchedResultsController *controller = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                                     managedObjectContext:[MPAppDelegate managedObjectContext]
+                                                                                       sectionNameKeyPath:nil cacheName:nil];
+        controller.delegate = self;
+        
+        return controller;
+    }];
     
     self.tipView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 170)];
     self.tipView.textAlignment = UITextAlignmentCenter;
@@ -123,12 +126,8 @@
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
     
-    [self update];
-    
-    return NO;
-}
-
-- (void)update {
+    if (!controller.active)
+        return NO;
     
     assert(self.query);
     
@@ -138,7 +137,6 @@
     NSError *error;
     if (![self.fetchedResultsController performFetch:&error])
         err(@"Couldn't fetch elements: %@", error);
-    [self.searchDisplayController.searchResultsTableView reloadData];
     
     NSArray *subviews = self.searchDisplayController.searchBar.superview.subviews;
     NSUInteger overlayIndex = [subviews indexOfObject:self.searchDisplayController.searchBar] + 1;
@@ -149,6 +147,8 @@
         [self.tipView removeFromSuperview];
         [overlay addSubview:self.tipView];
     }
+
+    return YES;
 }
 
 // See MP-14, also crashes easily on internal assertions etc..

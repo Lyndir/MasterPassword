@@ -42,28 +42,37 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     if (managedObjectContext)
         return managedObjectContext;
     
-    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-    assert(coordinator);
-    
-    managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-    [managedObjectContext performBlockAndWait:^{
-        managedObjectContext.persistentStoreCoordinator = coordinator;
-        managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
+    return [PearlLazy lazyObjectLoadedFrom:^id{
+        NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+        assert(coordinator);
+        
+        managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+        [managedObjectContext performBlockAndWait:^{
+            managedObjectContext.persistentStoreCoordinator = coordinator;
+            managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
+        }];
+        
+        return managedObjectContext;
     }];
-    
-    return managedObjectContext;
 }
 
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
+
+    // Start loading the store.
+    [self storeManager];
     
-    // Wait until the storeManager is ready.
-    for(__block BOOL isReady = [self storeManager].isReady; !isReady;)
-        dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            isReady = [self storeManager].isReady;
-        });
-    
-    assert([self storeManager].isReady);
-    return [self storeManager].persistentStoreCoordinator;
+    return [PearlLazy lazyObjectLoadedFrom:^id{
+        // Wait until the storeManager is ready.
+        for(__block BOOL isReady = [self storeManager].isReady; !isReady;) {
+            [NSThread sleepForTimeInterval:0.1];
+            dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                isReady = [self storeManager].isReady;
+            });
+        }
+
+        assert([self storeManager].isReady);
+        return [self storeManager].persistentStoreCoordinator;
+    }];
 }
 
 - (UbiquityStoreManager *)storeManager {
