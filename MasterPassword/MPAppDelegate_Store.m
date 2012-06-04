@@ -7,8 +7,6 @@
 //
 
 #import "MPAppDelegate_Store.h"
-#import "MPEntities.h"
-#import "MPConfig.h"
 
 @implementation MPAppDelegate_Shared (Store)
 
@@ -329,8 +327,8 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     }
     for (NSArray *siteElements in importedSiteElements) {
         NSDate *lastUsed        = [rfc3339DateFormatter dateFromString:[siteElements objectAtIndex:0]];
-        NSInteger uses          = [[siteElements objectAtIndex:1] integerValue];
-        MPElementType type      = (unsigned)[[siteElements objectAtIndex:2] integerValue];
+        NSUInteger uses         = (unsigned)[[siteElements objectAtIndex:1] integerValue];
+        MPElementType type      = (MPElementType)[[siteElements objectAtIndex:2] integerValue];
         NSString *name          = [siteElements objectAtIndex:3];
         NSString *exportContent = [siteElements objectAtIndex:4];
         
@@ -339,8 +337,8 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
                                                                  inManagedObjectContext:self.managedObjectContext];
         element.name = name;
         element.user = user;
-        element.type = [NSNumber numberWithUnsignedInteger:type];
-        element.uses = [NSNumber numberWithUnsignedInteger:uses];
+        element.type = type;
+        element.uses = uses;
         element.lastUsed = lastUsed;
         if ([exportContent length])
             [element importContent:exportContent];
@@ -382,11 +380,11 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     
     // Sites.
     for (MPElementEntity *element in self.activeUser.elements) {
-        NSDate *lastUsed = element.lastUsed;
-        NSNumber *uses  = element.uses;
-        MPElementType type = (unsigned)element.type;
-        NSString *name = element.name;
-        NSString *content = nil;
+        NSDate *lastUsed    = element.lastUsed;
+        NSUInteger uses     = element.uses;
+        MPElementType type  = element.type;
+        NSString *name      = element.name;
+        NSString *content   = nil;
         
         // Determine the content to export.
         if (!(type & MPElementFeatureDevicePrivate)) {

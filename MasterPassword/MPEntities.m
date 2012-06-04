@@ -12,12 +12,31 @@
 
 @implementation MPElementEntity (MP)
 
-- (NSNumber *)use {
+- (MPElementType)type {
+    
+    return (MPElementType)[self.type_ unsignedIntegerValue];
+}
+
+- (void)setType:(MPElementType)type {
+    
+    self.type_ = PearlUnsignedInteger(type);
+}
+
+- (NSUInteger)uses {
+
+    return [self.uses_ unsignedIntegerValue];
+}
+
+- (void)setUses:(NSUInteger)anUses {
+
+    self.uses_ = PearlUnsignedInteger(anUses);
+}
+
+
+- (NSUInteger)use {
     
     self.lastUsed = [NSDate date];
-    self.uses = [NSNumber numberWithUnsignedInteger:[self.uses unsignedIntegerValue] + 1];
-
-    return self.uses;
+    return ++self.uses;
 }
 
 - (id)content {
@@ -49,9 +68,19 @@
 
 @implementation MPElementGeneratedEntity (MP)
 
+- (NSUInteger)counter {
+
+    return [self.counter_ unsignedIntegerValue];
+}
+
+- (void)setCounter:(NSUInteger)aCounter {
+
+    self.counter_ = PearlUnsignedInteger(aCounter);
+}
+
 - (id)content {
 
-    if (!([self.type unsignedIntegerValue] & MPElementTypeClassGenerated)) {
+    if (!(self.type & MPElementTypeClassGenerated)) {
         err(@"Corrupt element: %@, type: %d is not in MPElementTypeClassGenerated", self.name, self.type);
         return nil;
     }
@@ -59,7 +88,7 @@
     if (![self.name length])
         return nil;
     
-    return MPCalculateContent([self.type unsignedIntegerValue], self.name, [MPAppDelegate get].key, [self.counter unsignedIntegerValue]);
+    return MPCalculateContent(self.type, self.name, [MPAppDelegate get].key, self.counter);
 }
 
 @end
@@ -78,10 +107,10 @@
 
 - (id)content {
     
-    assert([self.type unsignedIntegerValue] & MPElementTypeClassStored);
+    assert(self.type & MPElementTypeClassStored);
     
     NSData *encryptedContent;
-    if ([self.type unsignedIntegerValue] & MPElementFeatureDevicePrivate)
+    if (self.type & MPElementFeatureDevicePrivate)
         encryptedContent = [PearlKeyChain dataOfItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]];
     else
         encryptedContent = self.contentObject;
@@ -96,7 +125,7 @@
     NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[[MPAppDelegate get] keyWithLength:PearlCryptKeySize]
                                                                       padding:YES];
     
-    if ([self.type unsignedIntegerValue] & MPElementFeatureDevicePrivate) {
+    if (self.type & MPElementFeatureDevicePrivate) {
         [PearlKeyChain addOrUpdateItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]
                            withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                            encryptedContent,                                (__bridge id)kSecValueData,
@@ -117,6 +146,30 @@
 - (void)importContent:(NSString *)content {
     
     self.contentObject = [content decodeBase64];
+}
+
+@end
+
+@implementation MPUserEntity (MP)
+
+- (NSUInteger)avatar {
+
+    return [self.avatar_ unsignedIntegerValue];
+}
+
+- (void)setAvatar:(NSUInteger)anAvatar {
+
+    self.avatar_ = PearlUnsignedInteger(anAvatar);
+}
+
+- (BOOL)saveKey {
+
+    return [self.saveKey_ boolValue];
+}
+
+- (void)setSaveKey:(BOOL)aSaveKey {
+
+    self.saveKey_ = [NSNumber numberWithBool:aSaveKey];
 }
 
 @end

@@ -9,7 +9,6 @@
 #import "MPSearchDelegate.h"
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Store.h"
-#import "MPElementGeneratedEntity.h"
 
 @interface MPSearchDelegate (Private)
 
@@ -219,10 +218,10 @@
         __block BOOL hasExactQueryMatch = NO;
         [sections enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             id<NSFetchedResultsSectionInfo> sectionInfo = obj;
-            [[sectionInfo objects] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                if ([[obj name] isEqualToString:self.query]) {
+            [[sectionInfo objects] enumerateObjectsUsingBlock:^(id obj_, NSUInteger idx_, BOOL *stop_) {
+                if ([[obj_ name] isEqualToString:self.query]) {
                     hasExactQueryMatch = YES;
-                    *stop = YES;
+                    *stop_ = YES;
                 }
             }];
             if (hasExactQueryMatch)
@@ -233,14 +232,14 @@
             ++sectionCount;
     }
     
-    return (signed)sectionCount;
+    return (NSInteger)sectionCount;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     NSArray *sections = [self.fetchedResultsController sections];
-    if (section < (signed)[sections count])
-        return (signed)[[sections objectAtIndex:(unsigned)section] numberOfObjects];
+    if (section < (NSInteger)[sections count])
+        return (NSInteger)[[sections objectAtIndex:(unsigned)section] numberOfObjects];
     
     return 1;
 }
@@ -275,7 +274,7 @@
 
 - (void)configureCell:(UITableViewCell *)cell inTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section < (signed)[[self.fetchedResultsController sections] count]) {
+    if (indexPath.section < (NSInteger)[[self.fetchedResultsController sections] count]) {
         MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
         
         cell.textLabel.text = element.name;
@@ -290,14 +289,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section < (signed)[[self.fetchedResultsController sections] count])
+    if (indexPath.section < (NSInteger)[[self.fetchedResultsController sections] count])
         [self.delegate didSelectElement:[self.fetchedResultsController objectAtIndexPath:indexPath]];
     
     else {
         // "New" section.
         NSString *siteName = self.query;
         [PearlAlert showAlertWithTitle:@"New Site"
-                               message:PearlLocalize(@"Do you want to create a new site named:\n%@", siteName)
+                               message:PearlString(@"Do you want to create a new site named:\n%@", siteName)
                              viewStyle:UIAlertViewStyleDefault
                              initAlert:nil
                      tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
@@ -309,7 +308,7 @@
                          [self.fetchedResultsController.managedObjectContext performBlock:^{
                              MPElementGeneratedEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPElementGeneratedEntity class])
                                                                                                inManagedObjectContext:self.fetchedResultsController.managedObjectContext];
-                             assert([element isKindOfClass:ClassFromMPElementType((unsigned)element.type)]);
+                             assert([element isKindOfClass:ClassFromMPElementType(element.type)]);
                              assert([MPAppDelegate get].activeUser.keyID);
                              
                              element.name = siteName;
@@ -325,7 +324,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     
-    if (section < (signed)[[self.fetchedResultsController sections] count])
+    if (section < (NSInteger)[[self.fetchedResultsController sections] count])
         return [[[self.fetchedResultsController sections] objectAtIndex:(unsigned)section] name];
     
     return @"";
@@ -343,7 +342,7 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section < (signed)[[self.fetchedResultsController sections] count]) {
+    if (indexPath.section < (NSInteger)[[self.fetchedResultsController sections] count]) {
         if (editingStyle == UITableViewCellEditingStyleDelete)
             [self.fetchedResultsController.managedObjectContext performBlock:^{
                 MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];

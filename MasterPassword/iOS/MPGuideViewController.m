@@ -22,7 +22,7 @@
     
     [super viewDidLoad];
 
-    [PearlUIUtils autoSizeContent:self.scrollView];
+    [self.scrollView autoSizeContent];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

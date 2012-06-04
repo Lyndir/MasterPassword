@@ -13,6 +13,6 @@
 
 @interface MPElementGeneratedEntity : MPElementEntity
 
-@property (nonatomic, retain) NSNumber * counter;
+@property (nonatomic, retain) NSNumber * counter_;
 
 @end

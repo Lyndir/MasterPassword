@@ -6,7 +6,6 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import "MPConfig.h"
 #import "MPAppDelegate_Key.h"
 
 @implementation MPAppDelegate_Shared (Key)
@@ -41,7 +40,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
 - (void)loadSavedKey {
     
-    if ([self.activeUser.saveKey boolValue]) {
+    if (self.activeUser.saveKey) {
         // Key should be saved in keychain.  Load it.
         self.key = [PearlKeyChain dataOfItemForQuery:keyQuery(self.activeUser)];
         inf(@"Looking for key in keychain: %@.", self.key? @"found": @"missing");
@@ -97,7 +96,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
 - (void)storeSavedKey {
     
-    if ([self.activeUser.saveKey boolValue]) {
+    if (self.activeUser.saveKey) {
         NSData *existingKey = [PearlKeyChain dataOfItemForQuery:keyQuery(self.activeUser)];
         
         if (![existingKey isEqualToData:self.key]) {

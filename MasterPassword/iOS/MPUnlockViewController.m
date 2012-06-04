@@ -12,7 +12,6 @@
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-#import "MPEntities.h"
 
 @interface MPUnlockViewController ()
 
@@ -107,11 +106,11 @@
 
     // Create avatars.
     for (MPUserEntity *user in users)
-        [self setupAvatar:[PearlUIUtils copyOf:self.userButtonTemplate] forUser:user];
-    [self setupAvatar:[PearlUIUtils copyOf:self.userButtonTemplate] forUser:nil];
+        [self setupAvatar:[self.userButtonTemplate clone] forUser:user];
+    [self setupAvatar:[self.userButtonTemplate clone] forUser:nil];
 
     // Scroll view's content changed, update its content size.
-    [PearlUIUtils autoSizeContent:self.usersView ignoreHidden:YES ignoreInvisible:YES limitPadding:NO ignoreSubviews:nil];
+    [self.usersView autoSizeContentIgnoreHidden:YES ignoreInvisible:YES limitPadding:NO ignoreSubviews:nil];
 
     [self updateLayoutAnimated:YES allowScroll:YES completion:nil];
 
@@ -338,7 +337,7 @@
     CABasicAnimation *rotate = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
     rotate.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     rotate.fromValue = [NSNumber numberWithFloat:0];
-    rotate.toValue = [NSNumber numberWithFloat:2 * M_PI];
+    rotate.toValue = [NSNumber numberWithDouble:2 * M_PI];
     rotate.repeatCount = MAXFLOAT;
     rotate.duration = 3.0;
     

@@ -62,7 +62,7 @@ NSString *NSStringFromMPElementType(MPElementType type) {
             return @"Device Private Password";
             
         default:
-            [NSException raise:NSInternalInconsistencyException format:@"Type not supported: %d", type];
+            Throw(@"Type not supported: %d", type);
     }
 }
 
@@ -94,7 +94,7 @@ Class ClassFromMPElementType(MPElementType type) {
             return [MPElementStoredEntity class];
             
         default:
-            [NSException raise:NSInternalInconsistencyException format:@"Type not supported: %d", type];
+            Throw(@"Type not supported: %d", type);
     }
 }
 

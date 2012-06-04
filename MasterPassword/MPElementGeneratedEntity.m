@@ -11,6 +11,6 @@
 
 @implementation MPElementGeneratedEntity
 
-@dynamic counter;
+@dynamic counter_;
 
 @end

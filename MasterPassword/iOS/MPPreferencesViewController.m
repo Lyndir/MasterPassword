@@ -25,10 +25,10 @@
         avatar.tag = avatarIndex++;
         
         [avatar onSelect:^(BOOL selected) {
-            [MPAppDelegate get].activeUser.avatar = PearlInteger(avatar.tag);
-            [self.avatarScrollView enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
-                UIButton *avatar = (UIButton *)subview;
-                avatar.selected = ([[MPAppDelegate get].activeUser.avatar integerValue] == avatar.tag);
+            [MPAppDelegate get].activeUser.avatar = (unsigned)avatar.tag;
+            [self.avatarScrollView enumerateSubviews:^(UIView *subview_, BOOL *stop_, BOOL *recurse_) {
+                UIButton *avatar_ = (UIButton *)subview_;
+                avatar_.selected = ([MPAppDelegate get].activeUser.avatar == (unsigned)avatar_.tag);
             } recurse:NO];
         } options:0];
     } recurse:NO];
@@ -38,7 +38,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
-    [PearlUIUtils autoSizeContent:self.avatarScrollView];
+    [self.avatarScrollView autoSizeContent];
     
     [super viewWillAppear:animated];
 }

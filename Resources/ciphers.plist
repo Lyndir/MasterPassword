@@ -4,10 +4,15 @@
 <dict>
 	<key>MPElementGeneratedEntity</key>
 	<dict>
+		<key>Secure Password</key>
+		<array>
+			<string>aonxxxxxxxxxxxxxxxxx</string>
+			<string>axxxxxxxxxxxxxxxxxon</string>
+		</array>
 		<key>Long Password</key>
 		<array>
+            <string>CvcvnoCvcvCvcv</string>
 			<string>CvcvCvcvnoCvcv</string>
-			<string>CvcvnoCvcvCvcv</string>
 			<string>CvcvCvcvCvcvno</string>
 		</array>
 		<key>Medium Password</key>
@@ -48,7 +53,7 @@
 		<string>0123456789</string>
 		<key>o</key>
 		<string>!@#$%^&amp;*()</string>
-		<key>X</key>
+		<key>x</key>
 		<string>AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789!@#$%^&amp;*()</string>
 	</dict>
 </dict>

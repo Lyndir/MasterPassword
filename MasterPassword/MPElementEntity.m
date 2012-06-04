@@ -15,8 +15,8 @@
 @dynamic content;
 @dynamic lastUsed;
 @dynamic name;
-@dynamic type;
-@dynamic uses;
+@dynamic type_;
+@dynamic uses_;
 @dynamic user;
 
 @end

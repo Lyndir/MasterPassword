@@ -101,10 +101,8 @@
                     return MPElementTypeGeneratedPIN;
                     
                 default:
-                    [NSException raise:NSInternalInconsistencyException
-                                format:@"Unsupported row: %d, when selecting generated element type.", indexPath.row];
+                    Throw(@"Unsupported row: %d, when selecting generated element type.", indexPath.row);
             }
-            break;
         }
             
         case 1: {
@@ -116,18 +114,13 @@
                     return MPElementTypeStoredDevicePrivate;
                     
                 default:
-                    [NSException raise:NSInternalInconsistencyException
-                                format:@"Unsupported row: %d, when selecting stored element type.", indexPath.row];
+                    Throw(@"Unsupported row: %d, when selecting stored element type.", indexPath.row);
             }
-            break;
         }
             
         default:
-            [NSException raise:NSInternalInconsistencyException
-                        format:@"Unsupported section: %d, when selecting element type.", indexPath.section];
+            Throw(@"Unsupported section: %d, when selecting element type.", indexPath.section);
     }
-    
-    @throw nil;
 }
 
 - (void)viewDidUnload {

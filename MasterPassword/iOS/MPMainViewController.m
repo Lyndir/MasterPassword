@@ -10,8 +10,6 @@
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-#import "MPEntities.h"
-#import "IASKAppSettingsViewController.h"
 #import "ATConnect.h"
 
 #import <MobileCoreServices/MobileCoreServices.h>
@@ -95,7 +93,7 @@
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [UIView animateWithDuration:0.2f animations:^{
                         self.actionsTipContainer.alpha = 0;
-                    } completion:^(BOOL finished) {
+                    } completion:^(BOOL finished_) {
                         if (![self.activeElement.name length])
                             [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
                                 self.searchTipContainer.alpha = 1;
@@ -156,18 +154,18 @@
     [self setHelpChapter:self.activeElement? @"2": @"1"];
     self.siteName.text = self.activeElement.name;
     
-    self.passwordCounter.alpha = [self.activeElement.type unsignedIntegerValue] & MPElementTypeClassGenerated? 0.5f: 0;
-    self.passwordIncrementer.alpha = [self.activeElement.type unsignedIntegerValue] & MPElementTypeClassGenerated? 0.5f: 0;
-    self.passwordEdit.alpha = [self.activeElement.type unsignedIntegerValue] & MPElementTypeClassStored? 0.5f: 0;
+    self.passwordCounter.alpha = self.activeElement.type & MPElementTypeClassGenerated? 0.5f: 0;
+    self.passwordIncrementer.alpha = self.activeElement.type & MPElementTypeClassGenerated? 0.5f: 0;
+    self.passwordEdit.alpha = self.activeElement.type & MPElementTypeClassStored? 0.5f: 0;
     
-    [self.typeButton setTitle:NSStringFromMPElementType((unsigned)self.activeElement.type)
+    [self.typeButton setTitle:NSStringFromMPElementType(self.activeElement.type)
                      forState:UIControlStateNormal];
-    self.typeButton.alpha = NSStringFromMPElementType((unsigned)self.activeElement.type).length? 1: 0;
+    self.typeButton.alpha = NSStringFromMPElementType(self.activeElement.type).length? 1: 0;
     
     self.contentField.enabled = NO;
     
     if ([self.activeElement isKindOfClass:[MPElementGeneratedEntity class]])
-        self.passwordCounter.text = [NSString stringWithFormat:@"%u", ((MPElementGeneratedEntity *) self.activeElement).counter];
+        self.passwordCounter.text = PearlString(@"%u", ((MPElementGeneratedEntity *) self.activeElement).counter);
     
     self.contentField.text = @"";
     if (self.activeElement.name && ![self.activeElement isDeleted])
@@ -221,8 +219,8 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     
-    NSString *error = [self.helpView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"setClass('%@');",
-                                                                             ClassNameFromMPElementType((unsigned)self.activeElement.type)]];
+    NSString *error = [self.helpView stringByEvaluatingJavaScriptFromString:
+            PearlString(@"setClass('%@');", ClassNameFromMPElementType(self.activeElement.type))];
     if (error.length)
         err(@"helpView.setClass: %@", error);
 }
@@ -279,8 +277,7 @@
     if (!self.activeElement)
         return;
     
-    [[UIPasteboard generalPasteboard] setValue:self.activeElement.content
-                             forPasteboardType:(id)kUTTypeUTF8PlainText];
+    [UIPasteboard generalPasteboard].string = [self.activeElement.content description];
     
     [self showContentTip:@"Copied!" withIcon:nil];
     
@@ -299,7 +296,7 @@
      @"You will then need to update your account's old password to this newly generated password.\n\n"
      @"You can reset the counter by holding down on this button."
                                 do:^{
-                                    PearlUnsignedIntegerOp([((MPElementGeneratedEntity *) self.activeElement) counter], +1);
+                                    ++((MPElementGeneratedEntity *) self.activeElement).counter;
                                 }];
     
     [TestFlight passCheckpoint:MPTestFlightCheckpointIncrementPasswordCounter];
@@ -313,7 +310,7 @@
     if (![self.activeElement isKindOfClass:[MPElementGeneratedEntity class]])
         // Not of a type that supports a password counter.
         return;
-    if ([((MPElementGeneratedEntity *)self.activeElement).counter unsignedIntegerValue] == 1)
+    if (((MPElementGeneratedEntity *)self.activeElement).counter == 1)
         // Counter has initial value, no point resetting.
         return;
     
@@ -322,7 +319,7 @@
      @"If you continue, the site's password will change back to its original value.  "
      @"You will then need to update your account's password back to this original value."
                                 do:^{
-                                    ((MPElementGeneratedEntity *) self.activeElement).counter = PearlUnsignedInteger(1);
+                                    ((MPElementGeneratedEntity *) self.activeElement).counter = 1;
                                 }];
     
     [TestFlight passCheckpoint:MPTestFlightCheckpointResetPasswordCounter];
@@ -351,17 +348,18 @@
     
     // Show new and old password.
     if ([oldPassword length] && ![oldPassword isEqualToString:newPassword])
-        [self showAlertWithTitle:@"Password Changed!" message:PearlLocalize(@"The password for %@ has changed.\n\n"
-                                                                            @"IMPORTANT:\n"
-                                                                            @"Don't forget to update the site with your new password! "
-                                                                            @"Your old password was:\n"
-                                                                            @"%@", self.activeElement.name, oldPassword)];
+        [self showAlertWithTitle:@"Password Changed!"
+                         message:PearlString(@"The password for %@ has changed.\n\n"
+                                             @"IMPORTANT:\n"
+                                             @"Don't forget to update the site with your new password! "
+                                             @"Your old password was:\n"
+                                             @"%@", self.activeElement.name, oldPassword)];
 }
 
 
 - (IBAction)editPassword {
     
-    if ([self.activeElement.type unsignedIntegerValue] & MPElementTypeClassStored) {
+    if (self.activeElement.type & MPElementTypeClassStored) {
         self.contentField.enabled = YES;
         [self.contentField becomeFirstResponder];
     }
@@ -439,7 +437,7 @@
 
 - (MPElementType)selectedType {
     
-    return (unsigned)self.activeElement.type;
+    return self.activeElement.type;
 }
 
 - (void)didSelectType:(MPElementType)type {
@@ -450,7 +448,7 @@
      @"You will need to update your account's old password to the new one."
                                 do:^{
                                     // Update password type.
-                                    if (ClassFromMPElementType(type) != ClassFromMPElementType((unsigned)self.activeElement.type))
+                                    if (ClassFromMPElementType(type) != ClassFromMPElementType(self.activeElement.type))
                                         // Type requires a different class of element.  Recreate the element.
                                         [[MPAppDelegate managedObjectContext] performBlockAndWait:^{
                                             MPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(type)
@@ -464,7 +462,7 @@
                                             self.activeElement = newElement;
                                         }];
                                     
-                                    self.activeElement.type = PearlUnsignedInteger(type);
+                                    self.activeElement.type = type;
                                     
                                     [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointSelectType, NSStringFromMPElementType(type)]];
                                     
@@ -479,13 +477,13 @@
     
     if (element) {
         self.activeElement = element;
-        if ([[self.activeElement use] unsignedIntegerValue] == 1)
+        if ([self.activeElement use] == 1)
             [self showAlertWithTitle:@"New Site" message:
-             PearlLocalize(@"You've just created a password for %@.\n\n"
-                           @"IMPORTANT:\n"
-                           @"Go to %@ and set or change the password for your account to the password above.\n"
-                           @"Do this right away: if you forget, you may have trouble remembering which password to use to log into the site later on.",
-                           self.activeElement.name, self.activeElement.name)];
+             PearlString(@"You've just created a password for %@.\n\n"
+                         @"IMPORTANT:\n"
+                         @"Go to %@ and set or change the password for your account to the password above.\n"
+                         @"Do this right away: if you forget, you may have trouble remembering which password to use to log into the site later on.",
+                         self.activeElement.name, self.activeElement.name)];
         [[MPAppDelegate get] saveContext];
         
         if ([[MPiOSConfig get].firstRun boolValue])

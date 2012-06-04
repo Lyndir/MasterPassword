@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
+#import "Pearl.h"
+
 @interface MPConfig : PearlConfig
 
 @property (nonatomic, retain) NSNumber *rememberLogin;

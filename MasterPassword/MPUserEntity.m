@@ -12,11 +12,11 @@
 
 @implementation MPUserEntity
 
+@dynamic avatar_;
 @dynamic keyID;
 @dynamic lastUsed;
 @dynamic name;
-@dynamic saveKey;
-@dynamic avatar;
+@dynamic saveKey_;
 @dynamic elements;
 
 @end

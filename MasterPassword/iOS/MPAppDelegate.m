@@ -10,7 +10,6 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 
-#import "MPMainViewController.h"
 #import "IASKSettingsReader.h"
 #import "LocalyticsSession.h"
 #import "TestFlight.h"
@@ -19,16 +18,16 @@
 
 @interface MPAppDelegate ()
 
-- (NSString *)testFlightInfo;
+- (NSDictionary *)testFlightInfo;
 - (NSString *)testFlightToken;
 
-- (NSString *)crashlyticsInfo;
+- (NSDictionary *)crashlyticsInfo;
 - (NSString *)crashlyticsAPIKey;
 
-- (NSString *)apptentiveInfo;
+- (NSDictionary *)apptentiveInfo;
 - (NSString *)apptentiveAPIKey;
 
-- (NSString *)localyticsInfo;
+- (NSDictionary *)localyticsInfo;
 - (NSString *)localyticsKey;
 
 @end
@@ -86,11 +85,11 @@
               @"making the result safe from falling in the wrong hands.\n\n"
               @"If all your passwords are shown and somebody else finds the export, "
               @"they could gain access to all your sites!"
-                                  viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                                      if (buttonIndex == [alert firstOtherButtonIndex] + 0)
+                                  viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                                      if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 0)
                                           // Safe Export
                                           [self exportShowPasswords:NO];
-                                      if (buttonIndex == [alert firstOtherButtonIndex] + 1)
+                                      if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
                                           // Safe Export
                                           [self exportShowPasswords:YES];
                                   } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
@@ -315,11 +314,11 @@
                                            dispatch_group_enter(confirmationGroup);
                                            dispatch_async(dispatch_get_main_queue(), ^{
                                                [PearlAlert showAlertWithTitle:@"Import Sites?"
-                                                                      message:PearlLocalize(@"Import %d sites, overwriting %d existing sites?", importCount, deleteCount)
+                                                                      message:PearlString(@"Import %d sites, overwriting %d existing sites?", importCount, deleteCount)
                                                                     viewStyle:UIAlertViewStyleDefault
                                                                     initAlert:nil
-                                                            tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                                                                if (buttonIndex != [alert cancelButtonIndex])
+                                                            tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                                                                if (buttonIndex_ != [alert_ cancelButtonIndex])
                                                                     confirmation = YES;
                                                                 
                                                                 dispatch_group_leave(confirmationGroup);
@@ -462,7 +461,7 @@
                                           @"Apple can never see any of your passwords."
                                                               viewStyle:UIAlertViewStyleDefault
                                                               initAlert:nil
-                                                      tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                                      tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                                                           [self ubiquityStoreManager:manager didSwitchToiCloud:iCloudEnabled];
                                                       }
                                                             cancelTitle:[PearlStrings get].commonButtonThanks otherTitles:nil];
@@ -553,8 +552,6 @@
     
 #ifdef DEBUG
     return NullToNil([[self localyticsInfo] valueForKeyPath:@"Key.development"]);
-#elif defined(LITE)
-    return NullToNil([[self localyticsInfo] valueForKeyPath:@"Key.distribution.lite"]);
 #else
     return NullToNil([[self localyticsInfo] valueForKeyPath:@"Key.distribution"]);
 #endif
