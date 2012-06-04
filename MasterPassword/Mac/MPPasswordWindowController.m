@@ -115,8 +115,8 @@
     
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
     fetchRequest.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND keyID == %@",
-                              query, query, [MPAppDelegate get].keyID];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@",
+                              query, query, [MPAppDelegate get].activeUser];
     
     NSError *error = nil;
     self.siteResults = [[MPAppDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];

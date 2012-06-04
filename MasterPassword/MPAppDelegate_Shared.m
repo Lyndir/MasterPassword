@@ -11,7 +11,7 @@
 @implementation MPAppDelegate_Shared
 
 @synthesize key;
-@synthesize keyID;
+@synthesize activeUser;
 
 + (MPAppDelegate_Shared *)get {
     

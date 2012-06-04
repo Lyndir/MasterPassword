@@ -104,7 +104,7 @@ NSString *ClassNameFromMPElementType(MPElementType type) {
 }
 
 static NSDictionary *MPTypes_ciphers = nil;
-NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, int32_t counter) {
+NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, uint32_t counter) {
     
     if (!(type & MPElementTypeClassGenerated)) {
         err(@"Incorrect type (is not MPElementTypeClassGenerated): %d, for: %@", type, name);
@@ -118,7 +118,7 @@ NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, in
         err(@"Key not set.");
         return nil;
     }
-    uint32_t salt = (unsigned)counter;
+    uint32_t salt = counter;
     if (!counter)
         // Counter unset, go into OTP mode.
         // Get the UNIX timestamp of the start of the interval of 5 minutes that the current time is in.

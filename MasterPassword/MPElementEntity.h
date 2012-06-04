@@ -1,27 +1,23 @@
 //
 //  MPElementEntity.h
-//  MasterPassword
+//  MasterPassword-iOS
 //
-//  Created by Maarten Billemont on 02/01/12.
+//  Created by Maarten Billemont on 04/06/12.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+@class MPUserEntity;
 
 @interface MPElementEntity : NSManagedObject
 
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSData *keyID;
-@property (nonatomic, assign) int16_t type;
-@property (nonatomic, assign) int16_t uses;
-@property (nonatomic, assign) NSTimeInterval lastUsed;
-
-@property (nonatomic, retain, readonly) id content;
-
-- (int16_t)use;
-- (NSString *)exportContent;
-- (void)importContent:(NSString *)content;
+@property (nonatomic, retain) id content;
+@property (nonatomic, retain) NSDate * lastUsed;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSNumber * type;
+@property (nonatomic, retain) NSNumber * uses;
+@property (nonatomic, retain) MPUserEntity *user;
 
 @end

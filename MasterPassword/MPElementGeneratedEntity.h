@@ -1,8 +1,8 @@
 //
 //  MPElementGeneratedEntity.h
-//  MasterPassword
+//  MasterPassword-iOS
 //
-//  Created by Maarten Billemont on 16/01/12.
+//  Created by Maarten Billemont on 04/06/12.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
@@ -13,6 +13,6 @@
 
 @interface MPElementGeneratedEntity : MPElementEntity
 
-@property (nonatomic, assign) int32_t counter;
+@property (nonatomic, retain) NSNumber * counter;
 
 @end

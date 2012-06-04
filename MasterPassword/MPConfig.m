@@ -10,7 +10,7 @@
 #import "MPAppDelegate.h"
 
 @implementation MPConfig
-@dynamic saveKey, rememberKey, iCloud, iCloudDecided;
+@dynamic rememberLogin, iCloud, iCloudDecided;
 
 - (id)init {
     
@@ -20,8 +20,7 @@
     [self.defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
                                      [NSNumber numberWithBool:YES],                         NSStringFromSelector(@selector(askForReviews)),
                                      
-                                     [NSNumber numberWithBool:NO],                          NSStringFromSelector(@selector(saveKey)),
-                                     [NSNumber numberWithBool:YES],                         NSStringFromSelector(@selector(rememberKey)),
+                                     [NSNumber numberWithBool:NO],                          NSStringFromSelector(@selector(rememberLogin)),
                                      [NSNumber numberWithBool:NO],                          NSStringFromSelector(@selector(iCloud)),
                                      [NSNumber numberWithBool:NO],                          NSStringFromSelector(@selector(iCloudDecided)),
                                      nil]];

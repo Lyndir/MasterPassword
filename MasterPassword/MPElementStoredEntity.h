@@ -1,8 +1,8 @@
 //
 //  MPElementStoredEntity.h
-//  MasterPassword
+//  MasterPassword-iOS
 //
-//  Created by Maarten Billemont on 02/01/12.
+//  Created by Maarten Billemont on 04/06/12.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
@@ -13,6 +13,6 @@
 
 @interface MPElementStoredEntity : MPElementEntity
 
-@property (nonatomic, retain, readwrite) id content;
+@property (nonatomic, retain) id contentObject;
 
 @end

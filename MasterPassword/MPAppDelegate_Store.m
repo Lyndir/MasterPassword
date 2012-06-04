@@ -7,7 +7,7 @@
 //
 
 #import "MPAppDelegate_Store.h"
-#import "MPElementEntity.h"
+#import "MPEntities.h"
 #import "MPConfig.h"
 
 @implementation MPAppDelegate_Shared (Store)
@@ -57,7 +57,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
 }
 
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
-
+    
     // Start loading the store.
     [self storeManager];
     
@@ -69,7 +69,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
                 isReady = [self storeManager].isReady;
             });
         }
-
+        
         assert([self storeManager].isReady);
         return [self storeManager].persistentStoreCoordinator;
     }];
@@ -131,51 +131,6 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         if ([self.managedObjectContext hasChanges])
             if (![self.managedObjectContext save:&error])
                 err(@"While saving context: %@", error);
-    }];
-}
-
-- (void)printStore {
-    
-    if (![self managedObjectModel] || ![self managedObjectContext]) {
-        trc(@"Not printing store: store not initialized.");
-        return;
-    }
-    
-    [self.managedObjectContext performBlock:^{
-        trc(@"=== All entities ===");
-        for(NSEntityDescription *entity in [[self managedObjectModel] entities]) {
-            NSFetchRequest *request = [NSFetchRequest new];
-            [request setEntity:entity];
-            NSError *error;
-            NSArray *results = [[self managedObjectContext] executeFetchRequest:request error:&error];
-            for(NSManagedObject *o in results) {
-                if ([o isKindOfClass:[MPElementEntity class]]) {
-                    MPElementEntity *e = (MPElementEntity *)o;
-                    trc(@"For descriptor: %@, found: %@: %@ (%@)", entity.name, [o class], e.name, e.keyID);
-                } else {
-                    trc(@"For descriptor: %@, found: %@", entity.name, [o class]);
-                }
-            }
-        }
-        trc(@"---");
-        if ([MPAppDelegate_Shared get].keyID) {
-            trc(@"=== Known sites ===");
-            NSFetchRequest *fetchRequest = [[self managedObjectModel]
-                                            fetchRequestFromTemplateWithName:@"MPElements"
-                                            substitutionVariables:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                   @"",                                     @"query",
-                                                                   [MPAppDelegate_Shared get].keyID,        @"keyID",
-                                                                   nil]];
-            [fetchRequest setSortDescriptors:
-             [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]]];
-            
-            NSError *error = nil;
-            for (MPElementEntity *e in [[self managedObjectContext] executeFetchRequest:fetchRequest error:&error]) {
-                trc(@"Found site: %@ (%@): %@", e.name, e.keyID, e);
-            }
-            trc(@"---");
-        } else
-            trc(@"Not printing sites: master password not set.");
     }];
 }
 
@@ -278,7 +233,8 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     if (!headerPattern || !sitePattern)
         return MPImportResultInternalError;
     
-    NSString *keyIDHex = nil;
+    NSString *keyIDHex = nil, *userName = nil;
+    MPUserEntity *user = nil;
     BOOL headerStarted = NO, headerEnded = NO;
     NSArray *importedSiteLines = [importedSitesString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     NSMutableSet *elementsToDelete = [NSMutableSet set];
@@ -307,6 +263,13 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
             NSTextCheckingResult *headerElements = [[headerPattern matchesInString:importedSiteLine options:0 range:NSMakeRange(0, [importedSiteLine length])] lastObject];
             NSString *key = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:1]];
             NSString *value = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:2]];
+            if ([key isEqualToString:@"User Name"]) {
+                userName = value;
+                
+                NSFetchRequest *userFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPUserEntity class])];
+                userFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", userName];
+                user = [[self.managedObjectContext executeFetchRequest:fetchRequest error:&error] lastObject];
+            }
             if ([key isEqualToString:@"Key ID"]) {
                 if (![(keyIDHex = value) isEqualToString:[keyIDForPassword(password) encodeHex]])
                     return MPImportResultInvalidPassword;
@@ -316,7 +279,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         }
         if (!headerEnded)
             continue;
-        if (!keyIDHex)
+        if (!keyIDHex || ![userName length])
             return MPImportResultMalformedInput;
         if (![importedSiteLine length])
             continue;
@@ -334,15 +297,17 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         NSString *exportContent = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:5]];
         
         // Find existing site.
-        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND keyID == %@", name, keyIDHex];
-        NSArray *existingSites = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-        if (error)
-            err(@"Couldn't search existing sites: %@", error);
-        if (!existingSites)
-            return MPImportResultInternalError;
-        
-        [elementsToDelete addObjectsFromArray:existingSites];
-        [importedSiteElements addObject:[NSArray arrayWithObjects:lastUsed, uses, type, name, exportContent, nil]];
+        if (user) {
+            fetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND user == %@", name, user];
+            NSArray *existingSites = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+            if (error)
+                err(@"Couldn't search existing sites: %@", error);
+            if (!existingSites)
+                return MPImportResultInternalError;
+            
+            [elementsToDelete addObjectsFromArray:existingSites];
+            [importedSiteElements addObject:[NSArray arrayWithObjects:lastUsed, uses, type, name, exportContent, nil]];
+        }
     }
     
     // Ask for confirmation to import these sites.
@@ -357,6 +322,11 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     [self saveContext];
     
     // Import new sites.
+    if (!user) {
+        user = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class]) inManagedObjectContext:self.managedObjectContext];
+        user.name = userName;
+        user.keyID = [keyIDHex decodeHex];
+    }
     for (NSArray *siteElements in importedSiteElements) {
         NSDate *lastUsed        = [rfc3339DateFormatter dateFromString:[siteElements objectAtIndex:0]];
         NSInteger uses          = [[siteElements objectAtIndex:1] integerValue];
@@ -365,14 +335,13 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         NSString *exportContent = [siteElements objectAtIndex:4];
         
         // Create new site.
-        inf(@"Importing site: name=%@, lastUsed=%@, uses=%d, type=%u, keyID=%@", name, lastUsed, uses, type, keyIDHex);
         MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(type)
                                                                  inManagedObjectContext:self.managedObjectContext];
         element.name = name;
-        element.keyID = [keyIDHex decodeHex];
-        element.type = type;
-        element.uses = uses;
-        element.lastUsed = [lastUsed timeIntervalSinceReferenceDate];
+        element.user = user;
+        element.type = [NSNumber numberWithUnsignedInteger:type];
+        element.uses = [NSNumber numberWithUnsignedInteger:uses];
+        element.lastUsed = lastUsed;
         if ([exportContent length])
             [element importContent:exportContent];
     }
@@ -399,7 +368,8 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     [export appendFormat:@"# \n"];
     [export appendFormat:@"##\n"];
     [export appendFormat:@"# Version: %@\n", [PearlInfoPlist get].CFBundleVersion];
-    [export appendFormat:@"# Key ID: %@\n", [self.keyID encodeHex]];
+    [export appendFormat:@"# User Name: %@\n", self.activeUser.name];
+    [export appendFormat:@"# Key ID: %@\n", [self.activeUser.keyID encodeHex]];
     [export appendFormat:@"# Date: %@\n", [rfc3339DateFormatter stringFromDate:[NSDate date]]];
     if (showPasswords)
         [export appendFormat:@"# Passwords: VISIBLE\n"];
@@ -411,17 +381,9 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     [export appendFormat:@"#               used      used      type                  name\tpassword\n"];
     
     // Sites.
-    NSFetchRequest *fetchRequest    = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
-    fetchRequest.sortDescriptors    = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses" ascending:NO]];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"keyID == %@", self.keyID];
-    __autoreleasing NSError *error = nil;
-    NSArray *elements = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    if (error)
-        err(@"Error fetching sites for export: %@", error);
-    
-    for (MPElementEntity *element in elements) {
-        NSTimeInterval lastUsed = element.lastUsed;
-        int16_t uses  = element.uses;
+    for (MPElementEntity *element in self.activeUser.elements) {
+        NSDate *lastUsed = element.lastUsed;
+        NSNumber *uses  = element.uses;
         MPElementType type = (unsigned)element.type;
         NSString *name = element.name;
         NSString *content = nil;
@@ -435,7 +397,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         }
         
         [export appendFormat:@"%@  %8d  %8d  %20s\t%@\n",
-         [rfc3339DateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceReferenceDate:lastUsed]], uses, type, [name cStringUsingEncoding:NSUTF8StringEncoding], content? content: @""];
+         [rfc3339DateFormatter stringFromDate:lastUsed], uses, type, [name cStringUsingEncoding:NSUTF8StringEncoding], content? content: @""];
     }
     
 #ifdef TESTFLIGHT_SDK_VERSION

@@ -10,8 +10,7 @@
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-#import "MPElementGeneratedEntity.h"
-#import "MPElementStoredEntity.h"
+#import "MPEntities.h"
 #import "IASKAppSettingsViewController.h"
 #import "ATConnect.h"
 
@@ -74,7 +73,7 @@
     
     [super viewWillAppear:animated];
     
-    if (![self.activeElement.keyID isEqualToData:[MPAppDelegate get].keyID])
+    if (self.activeElement.user != [MPAppDelegate get].activeUser)
         self.activeElement = nil;
     self.searchDisplayController.searchBar.text = nil;
     
@@ -157,9 +156,9 @@
     [self setHelpChapter:self.activeElement? @"2": @"1"];
     self.siteName.text = self.activeElement.name;
     
-    self.passwordCounter.alpha = self.activeElement.type & MPElementTypeClassGenerated? 0.5f: 0;
-    self.passwordIncrementer.alpha = self.activeElement.type & MPElementTypeClassGenerated? 0.5f: 0;
-    self.passwordEdit.alpha = self.activeElement.type & MPElementTypeClassStored? 0.5f: 0;
+    self.passwordCounter.alpha = [self.activeElement.type unsignedIntegerValue] & MPElementTypeClassGenerated? 0.5f: 0;
+    self.passwordIncrementer.alpha = [self.activeElement.type unsignedIntegerValue] & MPElementTypeClassGenerated? 0.5f: 0;
+    self.passwordEdit.alpha = [self.activeElement.type unsignedIntegerValue] & MPElementTypeClassStored? 0.5f: 0;
     
     [self.typeButton setTitle:NSStringFromMPElementType((unsigned)self.activeElement.type)
                      forState:UIControlStateNormal];
@@ -300,7 +299,7 @@
      @"You will then need to update your account's old password to this newly generated password.\n\n"
      @"You can reset the counter by holding down on this button."
                                 do:^{
-                                    ++((MPElementGeneratedEntity *) self.activeElement).counter;
+                                    PearlUnsignedIntegerOp([((MPElementGeneratedEntity *) self.activeElement) counter], +1);
                                 }];
     
     [TestFlight passCheckpoint:MPTestFlightCheckpointIncrementPasswordCounter];
@@ -314,7 +313,7 @@
     if (![self.activeElement isKindOfClass:[MPElementGeneratedEntity class]])
         // Not of a type that supports a password counter.
         return;
-    if (((MPElementGeneratedEntity *)self.activeElement).counter == 1)
+    if ([((MPElementGeneratedEntity *)self.activeElement).counter unsignedIntegerValue] == 1)
         // Counter has initial value, no point resetting.
         return;
     
@@ -323,7 +322,7 @@
      @"If you continue, the site's password will change back to its original value.  "
      @"You will then need to update your account's password back to this original value."
                                 do:^{
-                                    ((MPElementGeneratedEntity *) self.activeElement).counter = 1;
+                                    ((MPElementGeneratedEntity *) self.activeElement).counter = PearlUnsignedInteger(1);
                                 }];
     
     [TestFlight passCheckpoint:MPTestFlightCheckpointResetPasswordCounter];
@@ -332,6 +331,7 @@
 - (void)changeElementWithWarning:(NSString *)warning do:(void (^)(void))task; {
     
     [PearlAlert showAlertWithTitle:@"Password Change" message:warning viewStyle:UIAlertViewStyleDefault
+                         initAlert:nil
                  tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                      if (buttonIndex == [alert cancelButtonIndex])
                          return;
@@ -361,7 +361,7 @@
 
 - (IBAction)editPassword {
     
-    if (self.activeElement.type & MPElementTypeClassStored) {
+    if ([self.activeElement.type unsignedIntegerValue] & MPElementTypeClassStored) {
         self.contentField.enabled = YES;
         [self.contentField becomeFirstResponder];
     }
@@ -403,9 +403,7 @@
                              break;
                          }
                          case 3: {
-                             IASKAppSettingsViewController *settingsVC = [IASKAppSettingsViewController new];
-                             settingsVC.delegate = self;
-                             [self.navigationController pushViewController:settingsVC animated:YES];
+                             [self performSegueWithIdentifier:@"UserProfile" sender:self];
                              break;
                          }
                          case 4: {
@@ -436,7 +434,7 @@
                      [TestFlight passCheckpoint:MPTestFlightCheckpointAction];
                  }
                        cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:
-     [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Settings", @"Export", @"Feedback", @"Sign Out", nil];
+     [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Preferences", @"Feedback", @"Sign Out", nil];
 }
 
 - (MPElementType)selectedType {
@@ -458,7 +456,7 @@
                                             MPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(type)
                                                                                                         inManagedObjectContext:[MPAppDelegate managedObjectContext]];
                                             newElement.name = self.activeElement.name;
-                                            newElement.keyID = self.activeElement.keyID;
+                                            newElement.user = self.activeElement.user;
                                             newElement.uses = self.activeElement.uses;
                                             newElement.lastUsed = self.activeElement.lastUsed;
                                             
@@ -466,7 +464,7 @@
                                             self.activeElement = newElement;
                                         }];
                                     
-                                    self.activeElement.type = type;
+                                    self.activeElement.type = PearlUnsignedInteger(type);
                                     
                                     [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointSelectType, NSStringFromMPElementType(type)]];
                                     
@@ -481,7 +479,7 @@
     
     if (element) {
         self.activeElement = element;
-        if ([self.activeElement use] == 1)
+        if ([[self.activeElement use] unsignedIntegerValue] == 1)
             [self showAlertWithTitle:@"New Site" message:
              PearlLocalize(@"You've just created a password for %@.\n\n"
                            @"IMPORTANT:\n"
@@ -550,12 +548,6 @@
     }
     
     return YES;
-}
-
-- (void)settingsViewControllerDidEnd:(IASKAppSettingsViewController *)sender {
-    
-    while ([self.navigationController.viewControllers containsObject:sender])
-        [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

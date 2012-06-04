@@ -10,12 +10,13 @@
 
 @interface MPAppDelegate_Shared (Key)
 
-- (void)loadStoredKey;
+- (void)loadSavedKey;
 - (IBAction)signOut:(id)sender;
 
-- (BOOL)tryMasterPassword:(NSString *)tryPassword;
-- (void)updateKey:(NSData *)key;
-- (void)forgetKey;
+- (BOOL)tryMasterPassword:(NSString *)tryPassword forUser:(MPUserEntity *)user;
+- (void)storeSavedKey;
+- (void)forgetSavedKey;
+- (void)unsetKey;
 
 - (NSData *)keyWithLength:(NSUInteger)keyLength;
 

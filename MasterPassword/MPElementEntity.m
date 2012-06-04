@@ -1,51 +1,22 @@
 //
 //  MPElementEntity.m
-//  MasterPassword
+//  MasterPassword-iOS
 //
-//  Created by Maarten Billemont on 02/01/12.
+//  Created by Maarten Billemont on 04/06/12.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
 #import "MPElementEntity.h"
+#import "MPUserEntity.h"
 
 
 @implementation MPElementEntity
 
+@dynamic content;
+@dynamic lastUsed;
 @dynamic name;
-@dynamic keyID;
 @dynamic type;
 @dynamic uses;
-@dynamic lastUsed;
-
-- (int16_t)use {
-    
-    self.lastUsed = [[NSDate date] timeIntervalSinceReferenceDate];
-    return ++self.uses;
-}
-
-- (id)content {
-    
-    @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Content implementation missing." userInfo:nil];
-}
-
-- (NSString *)exportContent {
-    
-    return nil;
-}
-
-- (void)importContent:(NSString *)content {
-    
-}
-
-- (NSString *)description {
-    
-    return PearlString(@"%@:%@", [self class], [self name]);
-}
-
-- (NSString *)debugDescription {
-    
-    return PearlString(@"{%@: name=%@, keyID=%@, type=%d, uses=%d, lastUsed=%@}",
-                       NSStringFromClass([self class]), self.name, self.keyID, self.type, self.uses, self.lastUsed);
-}
+@dynamic user;
 
 @end

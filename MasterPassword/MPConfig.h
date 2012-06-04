@@ -8,8 +8,7 @@
 
 @interface MPConfig : PearlConfig
 
-@property (nonatomic, retain) NSNumber *saveKey;
-@property (nonatomic, retain) NSNumber *rememberKey;
+@property (nonatomic, retain) NSNumber *rememberLogin;
 
 @property (nonatomic, retain) NSNumber *iCloud;
 @property (nonatomic, retain) NSNumber *iCloudDecided;

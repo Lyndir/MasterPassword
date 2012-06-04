@@ -62,20 +62,15 @@
     
     if (!self.key)
         // Try and load the key from the keychain.
-        [self loadStoredKey];
+        [self loadSavedKey];
     
     if (!self.key)
         // Ask the user to set the key through his master password.
-        if ([NSThread isMainThread])
+        PearlMainThread(^{
             [self.navigationController presentViewController:
              [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
                                                     animated:animated completion:nil];
-        else
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.navigationController presentViewController:
-                 [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
-                                                        animated:animated completion:nil];
-            });
+        });
 }
 
 - (void)export {
@@ -91,7 +86,7 @@
               @"making the result safe from falling in the wrong hands.\n\n"
               @"If all your passwords are shown and somebody else finds the export, "
               @"they could gain access to all your sites!"
-                                  viewStyle:UIAlertViewStyleDefault tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                  viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                                       if (buttonIndex == [alert firstOtherButtonIndex] + 0)
                                           // Safe Export
                                           [self exportShowPasswords:NO];
@@ -131,12 +126,6 @@
 }
 
 - (void)checkConfig {
-    
-    if ([[MPConfig get].saveKey boolValue]) {
-        if (self.key)
-            [self updateKey:self.key];
-    } else
-        [self loadStoredKey];
     
     if ([[MPConfig get].iCloud boolValue] != [self.storeManager iCloudEnabled])
         [self.storeManager useiCloudStore:[[MPConfig get].iCloud boolValue] alertUser:YES];
@@ -315,7 +304,7 @@
     NSString *importedSitesString = [[NSString alloc] initWithData:importedSitesData encoding:NSUTF8StringEncoding];
     [PearlAlert showAlertWithTitle:@"Import Password" message:
      @"Enter the master password for this export:"
-                         viewStyle:UIAlertViewStyleSecureTextInput tappedButtonBlock:
+                         viewStyle:UIAlertViewStyleSecureTextInput initAlert:nil tappedButtonBlock:
      ^(UIAlertView *alert, NSInteger buttonIndex) {
          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
              MPImportResult result = [self importSites:importedSitesString withPassword:[alert textFieldAtIndex:0].text
@@ -328,6 +317,7 @@
                                                [PearlAlert showAlertWithTitle:@"Import Sites?"
                                                                       message:PearlLocalize(@"Import %d sites, overwriting %d existing sites?", importCount, deleteCount)
                                                                     viewStyle:UIAlertViewStyleDefault
+                                                                    initAlert:nil
                                                             tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                                                                 if (buttonIndex != [alert cancelButtonIndex])
                                                                     confirmation = YES;
@@ -409,8 +399,8 @@
     
     [self saveContext];
     
-    if (![[MPiOSConfig get].rememberKey boolValue]) {
-        [self updateKey:nil];
+    if (![[MPiOSConfig get].rememberLogin boolValue]) {
+        [self unsetKey];
         [self loadKey:NO];
     }
     
@@ -455,7 +445,7 @@
                                    message:
              @"iCloud is now disabled.\n\n"
              @"It is highly recommended you enable iCloud."
-                                 viewStyle:UIAlertViewStyleDefault tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                 viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                                      if (buttonIndex == [alert firstOtherButtonIndex] + 0) {
                                          [PearlAlert showAlertWithTitle:@"About iCloud"
                                                                 message:
@@ -471,6 +461,7 @@
                                           @"with your master password.\n\n"
                                           @"Apple can never see any of your passwords."
                                                               viewStyle:UIAlertViewStyleDefault
+                                                              initAlert:nil
                                                       tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                                                           [self ubiquityStoreManager:manager didSwitchToiCloud:iCloudEnabled];
                                                       }

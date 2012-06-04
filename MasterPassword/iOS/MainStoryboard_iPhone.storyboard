@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11E53" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
     <dependencies>
-        <deployment defaultVersion="1296" identifier="iOS"/>
         <development defaultVersion="4200" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1181"/>
     </dependencies>
@@ -659,6 +658,7 @@ L4m3P4sSw0rD</string>
                         <outlet property="siteName" destination="gSK-aB-wNI" id="IIe-z8-zy8"/>
                         <outlet property="typeButton" destination="Cei-5z-uWE" id="4M1-d7-5Bh"/>
                         <outlet property="typeTipContainer" destination="g55-0m-WjS" id="KZ9-KV-NMh"/>
+                        <segue destination="oLN-6u-GLb" kind="push" identifier="UserProfile" id="tKN-Sw-S5J"/>
                     </connections>
                 </viewController>
                 <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="cZr-Fj-eBw">
@@ -735,7 +735,7 @@ L4m3P4sSw0rD</string>
         <scene sceneID="HkH-JR-Fhy">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OGA-5j-IcQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController storyboardIdentifier="MPUnlockViewController" modalTransitionStyle="flipHorizontal" id="Nbn-Rv-sP1" customClass="MPUnlockViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MPUnlockViewController" wantsFullScreenLayout="YES" modalTransitionStyle="flipHorizontal" id="Nbn-Rv-sP1" customClass="MPUnlockViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PHH-XC-9QQ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -744,96 +744,111 @@ L4m3P4sSw0rD</string>
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
-                            <view contentMode="scaleToFill" id="OP6-72-eij">
-                                <rect key="frame" x="0.0" y="157" width="320" height="130"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="Tap and hold to delete." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="DBJ-Qi-ZcF">
+                                <rect key="frame" x="32" y="460" width="256" height="20"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </label>
+                            <view contentMode="scaleToFill" id="7cc-yu-i0m">
+                                <rect key="frame" x="20" y="168" width="280" height="88"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" image="lock_idle.png" id="tyv-qJ-bKR">
-                                        <rect key="frame" x="110" y="15" width="100" height="100"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                    </imageView>
-                                    <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="center" image="lock_idle.png" id="Lpf-KA-3CV">
-                                        <rect key="frame" x="110" y="15" width="100" height="100"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                    </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_spinner.png" id="27q-lX-0vy">
-                                        <rect key="frame" x="122" y="28" width="75" height="75"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                    </imageView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Checking password..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="oU9-lf-nnJ">
-                                        <rect key="frame" x="20" y="115" width="280" height="15"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <fontDescription key="fontDescription" name="Copperplate-Bold" family="Copperplate" pointSize="13"/>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Enter your master password:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="RhX-bA-EhC">
+                                        <rect key="frame" x="12" y="0.0" width="256" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_textfield.png" id="ivR-Xl-NrT">
+                                        <rect key="frame" x="0.0" y="28" width="280" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <rect key="contentStretch" x="0.25" y="0.25" width="0.49999999999999961" height="0.49999999999999961"/>
+                                    </imageView>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" id="rTR-7Q-X8o">
+                                        <rect key="frame" x="0.0" y="28" width="280" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="36"/>
+                                        <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="Nbn-Rv-sP1" id="Y0T-cI-gF1"/>
+                                        </connections>
+                                    </textField>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_textfield.png" id="ivR-Xl-NrT">
-                                <rect key="frame" x="20" y="89" width="280" height="60"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <rect key="contentStretch" x="0.25" y="0.25" width="0.49999999999999961" height="0.49999999999999961"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_spinner.png" id="27q-lX-0vy">
+                                <rect key="frame" x="105" y="29" width="110" height="110"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" id="rTR-7Q-X8o">
-                                <rect key="frame" x="20" y="89" width="280" height="60"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="36"/>
-                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
-                                <connections>
-                                    <outlet property="delegate" destination="Nbn-Rv-sP1" id="Y0T-cI-gF1"/>
-                                </connections>
-                            </textField>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Enter your master password:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="RhX-bA-EhC">
-                                <rect key="frame" x="32" y="61" width="256" height="20"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <view contentMode="scaleToFill" id="Wu7-Mg-9SD">
-                                <rect key="frame" x="0.0" y="391" width="320" height="89"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" delaysContentTouches="NO" id="Blg-F1-9NA">
+                                <rect key="frame" x="0.0" y="20" width="320" height="160"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Trying to log in with another master password?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="vnS-n6-NZI">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="15"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <fontDescription key="fontDescription" name="Copperplate-Bold" family="Copperplate" pointSize="11"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" id="wad-V1-K3f">
-                                        <rect key="frame" x="10" y="23" width="300" height="46"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="Ten-ig-gog">
+                                        <rect key="frame" x="105" y="10" width="110" height="110"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.40000000596046448" green="0.80000001192092896" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <size key="titleShadowOffset" width="0.0" height="1"/>
-                                        <state key="normal" title="Change master password" backgroundImage="ui_button_standard_large.png">
-                                            <color key="titleColor" cocoaTouchSystemColor="lightTextColor"/>
-                                            <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        <state key="normal" backgroundImage="avatar-male-1.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <connections>
-                                            <action selector="changeMP" destination="Nbn-Rv-sP1" eventType="touchUpInside" id="7RI-hu-SiS"/>
-                                        </connections>
                                     </button>
                                 </subviews>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outlet property="delegate" destination="Nbn-Rv-sP1" id="E1h-WA-PYV"/>
+                                    <outletCollection property="gestureRecognizers" destination="9WS-yS-aqQ" appends="YES" id="B9k-bg-gqA"/>
+                                </connections>
+                            </scrollView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="left" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="8s0-nT-Aoq">
+                                <rect key="frame" x="90" y="289" width="140" height="15"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
+                                <fontDescription key="fontDescription" name="Copperplate-Bold" family="Copperplate" pointSize="13"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="0NM-NI-7UR">
+                                <rect key="frame" x="90" y="76.5" width="140" height="15"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="Copperplate-Bold" family="Copperplate" pointSize="13"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="keypad.png" id="4tz-l4-4Kj">
+                                <rect key="frame" x="0.0" y="264" width="320" height="216"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
-                        <outlet property="changeMPView" destination="Wu7-Mg-9SD" id="84H-HT-5ml"/>
-                        <outlet property="field" destination="rTR-7Q-X8o" id="DHg-gg-MVD"/>
-                        <outlet property="lock" destination="Lpf-KA-3CV" id="6cE-2g-4XQ"/>
-                        <outlet property="messageLabel" destination="oU9-lf-nnJ" id="Ahc-hl-KnJ"/>
+                        <outlet property="deleteTip" destination="DBJ-Qi-ZcF" id="VXD-Zc-UYi"/>
+                        <outlet property="oldUsernameLabel" destination="8s0-nT-Aoq" id="mXR-VG-2js"/>
+                        <outlet property="passwordField" destination="rTR-7Q-X8o" id="CDA-iP-kCm"/>
+                        <outlet property="passwordView" destination="7cc-yu-i0m" id="WoF-Ab-PPC"/>
                         <outlet property="spinner" destination="27q-lX-0vy" id="jUx-GK-Lgf"/>
+                        <outlet property="userButtonTemplate" destination="Ten-ig-gog" id="hSM-hh-ofy"/>
+                        <outlet property="usernameLabel" destination="0NM-NI-7UR" id="Sa4-pY-87O"/>
+                        <outlet property="usersView" destination="Blg-F1-9NA" id="SsC-1H-fIB"/>
                     </connections>
                 </viewController>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="9WS-yS-aqQ">
+                    <connections>
+                        <action selector="deleteTargetedUser:" destination="Nbn-Rv-sP1" id="cBQ-oQ-c7g"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="455" y="1425"/>
         </scene>
@@ -857,9 +872,319 @@ L4m3P4sSw0rD</string>
             </objects>
             <point key="canvasLocation" x="-85" y="182"/>
         </scene>
+        <!--App Settings View Controller-->
+        <scene sceneID="4E1-FA-zP1">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Xkt-gh-nAq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="Ypi-Ct-X6S" customClass="IASKAppSettingsViewController" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="u18-ao-KIy"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1537" y="785"/>
+        </scene>
+        <!--Preferences View Controller - User Profile-->
+        <scene sceneID="cMu-Lq-D10">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CEl-jQ-l9k" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tableViewController id="oLN-6u-GLb" customClass="MPPreferencesViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="oSh-Ap-kLt">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="63M-7L-M7o">
+                            <rect key="frame" x="0.0" y="508" width="320" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
+                        <sections>
+                            <tableViewSection id="OJv-8V-W2l">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="226" id="9gC-Vq-Ta8">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="226"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="225"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Avatar" lineBreakMode="tailTruncation" minimumFontSize="10" id="0Wd-wn-t6z">
+                                                    <rect key="frame" x="20" y="20" width="280" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="GillSans-Bold" family="Gill Sans" pointSize="17"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="This is the icon that represents you on the Master Password unlock screen." lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" id="DgX-yc-sKT">
+                                                    <rect key="frame" x="20" y="49" width="280" height="38"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="GillSans-LightItalic" family="Gill Sans" pointSize="14"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
+                                                </label>
+                                                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="TMH-Xt-EnD">
+                                                    <rect key="frame" x="0.0" y="95" width="320" height="130"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <view contentMode="scaleToFill" id="jEL-UA-da6">
+                                                            <rect key="frame" x="0.0" y="0.0" width="614" height="130"/>
+                                                            <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
+                                                            <subviews>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="6ap-Xw-Ubd">
+                                                                    <rect key="frame" x="20" y="10" width="110" height="110"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                                    <state key="normal" image="avatar-male-1.png">
+                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
+                                                                    <state key="highlighted">
+                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
+                                                                </button>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="DwC-Fa-yaI">
+                                                                    <rect key="frame" x="138" y="10" width="110" height="110"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                                    <state key="normal" image="avatar-female-1.png">
+                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
+                                                                    <state key="highlighted">
+                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
+                                                                </button>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="TF1-Zi-jZK">
+                                                                    <rect key="frame" x="256" y="10" width="110" height="110"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                                    <state key="normal" image="avatar-male-2.png">
+                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
+                                                                    <state key="highlighted">
+                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
+                                                                </button>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="32d-Yo-SGt">
+                                                                    <rect key="frame" x="366" y="10" width="110" height="110"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                                    <state key="normal" image="avatar-female-2.png">
+                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
+                                                                    <state key="highlighted">
+                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
+                                                                </button>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="LTD-gI-8bH">
+                                                                    <rect key="frame" x="484" y="10" width="110" height="110"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                                    <state key="normal" image="avatar-male-3.png">
+                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
+                                                                    <state key="highlighted">
+                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </state>
+                                                                </button>
+                                                            </subviews>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        </view>
+                                                    </subviews>
+                                                </scrollView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection id="TRa-Gy-tG5">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="119" id="n1H-sG-HDc">
+                                        <rect key="frame" x="0.0" y="226" width="320" height="119"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="118"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Preferences" lineBreakMode="tailTruncation" minimumFontSize="10" id="ylz-i5-tem">
+                                                    <rect key="frame" x="20" y="20" width="280" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="GillSans-Bold" family="Gill Sans" pointSize="17"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="These are user-specific configuration settings." lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" id="WCm-A3-a1a">
+                                                    <rect key="frame" x="20" y="49" width="280" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="GillSans-LightItalic" family="Gill Sans" pointSize="14"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="top" image="ui_list_first.png" id="tK4-bL-QK1">
+                                                    <rect key="frame" x="10" y="75" width="300" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
+                                                </imageView>
+                                                <imageView userInteractionEnabled="NO" contentMode="bottom" image="ui_list_last.png" id="fAY-fK-Uzn">
+                                                    <rect key="frame" x="10" y="109" width="300" height="10"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
+                                                </imageView>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Save Password" lineBreakMode="tailTruncation" minimumFontSize="10" id="mmP-r2-iNF">
+                                                    <rect key="frame" x="20" y="75" width="280" height="23"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="18"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Stores your password on the device." lineBreakMode="tailTruncation" minimumFontSize="10" id="LRv-ac-sdH">
+                                                    <rect key="frame" x="20" y="98" width="280" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    <fontDescription key="fontDescription" name="GillSans-LightItalic" family="Gill Sans" pointSize="14"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="seh-qE-k6P">
+                                                    <rect key="frame" x="221" y="83" width="79" height="27"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="onTintColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                </switch>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection id="dN3-cJ-9WA">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="119" id="xBt-OT-BYA">
+                                        <rect key="frame" x="0.0" y="345" width="320" height="119"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="118"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Operations" lineBreakMode="tailTruncation" minimumFontSize="10" id="VI9-uT-nrJ">
+                                                    <rect key="frame" x="20" y="20" width="280" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="GillSans-Bold" family="Gill Sans" pointSize="17"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Advanced operations for managing your passwords." lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" id="blC-Mc-59X">
+                                                    <rect key="frame" x="20" y="49" width="280" height="18"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="GillSans-LightItalic" family="Gill Sans" pointSize="14"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_first.png" id="zeK-qR-5wK">
+                                                    <rect key="frame" x="10" y="75" width="300" height="44"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
+                                                </imageView>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Export" lineBreakMode="tailTruncation" minimumFontSize="10" id="DTP-qu-VqT">
+                                                    <rect key="frame" x="20" y="75" width="280" height="23"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="18"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Save all your sites to a file." lineBreakMode="tailTruncation" minimumFontSize="10" id="oi9-2Y-2KM">
+                                                    <rect key="frame" x="20" y="98" width="280" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    <fontDescription key="fontDescription" name="GillSans-LightItalic" family="Gill Sans" pointSize="14"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="glr-eJ-qKq">
+                                        <rect key="frame" x="0.0" y="464" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_last.png" id="rbd-L8-fSm">
+                                                    <rect key="frame" x="10" y="0.0" width="300" height="44"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
+                                                </imageView>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Change Master Password" lineBreakMode="tailTruncation" minimumFontSize="10" id="M38-26-Zzv">
+                                                    <rect key="frame" x="20" y="0.0" width="280" height="24"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="18"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="1"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Change your user's login master password." lineBreakMode="tailTruncation" minimumFontSize="10" id="tUk-yd-cyq">
+                                                    <rect key="frame" x="20" y="23" width="280" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    <fontDescription key="fontDescription" name="GillSans-LightItalic" family="Gill Sans" pointSize="14"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="oLN-6u-GLb" id="a6n-fI-h3l"/>
+                            <outlet property="delegate" destination="oLN-6u-GLb" id="MM9-S2-8rf"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="User Profile" id="reg-hh-9Ra">
+                        <barButtonItem key="rightBarButtonItem" title="Settings" id="Bac-IA-e0Z">
+                            <connections>
+                                <segue destination="Ypi-Ct-X6S" kind="push" id="vLK-dS-gos"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="avatarScrollView" destination="TMH-Xt-EnD" id="zdf-xt-piZ"/>
+                    </connections>
+                </tableViewController>
+            </objects>
+            <point key="canvasLocation" x="996" y="785"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Square-bottom.png" width="551" height="58"/>
+        <image name="avatar-female-1.png" width="110" height="110"/>
+        <image name="avatar-female-2.png" width="110" height="110"/>
+        <image name="avatar-male-1.png" width="110" height="110"/>
+        <image name="avatar-male-2.png" width="110" height="110"/>
+        <image name="avatar-male-3.png" width="110" height="110"/>
         <image name="background.png" width="480" height="480"/>
         <image name="guide_page_0.png" width="320" height="480"/>
         <image name="guide_page_1.png" width="320" height="480"/>
@@ -872,7 +1197,7 @@ L4m3P4sSw0rD</string>
         <image name="icon_cancel.png" width="32" height="32"/>
         <image name="icon_edit.png" width="32" height="32"/>
         <image name="icon_plus.png" width="32" height="32"/>
-        <image name="lock_idle.png" width="100" height="100"/>
+        <image name="keypad.png" width="320" height="216"/>
         <image name="tip_alert_black.png" width="235" height="81"/>
         <image name="tip_basic_black.png" width="210" height="60"/>
         <image name="tip_basic_black_top.png" width="210" height="60"/>
@@ -887,6 +1212,86 @@ L4m3P4sSw0rD</string>
         <image name="ui_spinner.png" width="75" height="75"/>
         <image name="ui_textfield.png" width="158" height="34"/>
     </resources>
+    <classes>
+        <class className="IASKAppSettingsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/IASKAppSettingsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="dismiss:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MPGuideViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPGuideViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="close"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
+        <class className="MPMainViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPMainViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="action:" candidateClass="UIBarButtonItem"/>
+                <relationship kind="action" name="closeAlert"/>
+                <relationship kind="action" name="copyContent"/>
+                <relationship kind="action" name="editPassword"/>
+                <relationship kind="action" name="incrementPasswordCounter"/>
+                <relationship kind="action" name="resetPasswordCounter:" candidateClass="UILongPressGestureRecognizer"/>
+                <relationship kind="outlet" name="actionsTipContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="alertBody" candidateClass="UITextView"/>
+                <relationship kind="outlet" name="alertContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="alertTitle" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="contentContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="contentField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="contentTipBody" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="contentTipContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="contentTipEditIcon" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="helpContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="helpView" candidateClass="UIWebView"/>
+                <relationship kind="outlet" name="passwordCounter" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="passwordEdit" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="passwordIncrementer" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="searchResultsController" candidateClass="MPSearchDelegate"/>
+                <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="siteName" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="typeButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="typeTipContainer" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="MPPreferencesViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPPreferencesViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="avatarScrollView" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
+        <class className="MPSearchDelegate" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPSearchDelegate.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="searchDisplayController" candidateClass="UISearchDisplayController"/>
+                <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="MPTypeViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPTypeViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="recommendedTipContainer" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="MPUnlockViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPUnlockViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="deleteTargetedUser:" candidateClass="UILongPressGestureRecognizer"/>
+                <relationship kind="outlet" name="deleteTip" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="oldUsernameLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="passwordView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="spinner" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="userButtonTemplate" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="usernameLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="usersView" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <nil key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

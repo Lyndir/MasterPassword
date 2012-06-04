@@ -131,8 +131,8 @@
     
     assert(self.query);
     
-    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND keyID == %@",
-                                                            self.query, self.query, NilToNull([MPAppDelegate get].keyID)];
+    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@",
+                                                            self.query, self.query, NilToNull([MPAppDelegate get].activeUser)];
     
     NSError *error;
     if (![self.fetchedResultsController performFetch:&error])
@@ -147,7 +147,7 @@
         [self.tipView removeFromSuperview];
         [overlay addSubview:self.tipView];
     }
-
+    
     return YES;
 }
 
@@ -280,7 +280,7 @@
         
         cell.textLabel.text = element.name;
         cell.detailTextLabel.text = [NSString stringWithFormat:@"Used %d times, last on %@",
-                                     element.uses, [self.dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceReferenceDate:element.lastUsed]]];
+                                     element.uses, [self.dateFormatter stringFromDate:element.lastUsed]];
     } else {
         // "New" section
         cell.textLabel.text = self.query;
@@ -299,6 +299,7 @@
         [PearlAlert showAlertWithTitle:@"New Site"
                                message:PearlLocalize(@"Do you want to create a new site named:\n%@", siteName)
                              viewStyle:UIAlertViewStyleDefault
+                             initAlert:nil
                      tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                          [tableView deselectRowAtIndexPath:indexPath animated:YES];
                          
@@ -309,10 +310,10 @@
                              MPElementGeneratedEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPElementGeneratedEntity class])
                                                                                                inManagedObjectContext:self.fetchedResultsController.managedObjectContext];
                              assert([element isKindOfClass:ClassFromMPElementType((unsigned)element.type)]);
-                             assert([MPAppDelegate get].keyID);
+                             assert([MPAppDelegate get].activeUser.keyID);
                              
                              element.name = siteName;
-                             element.keyID = [MPAppDelegate get].keyID;
+                             element.user = [MPAppDelegate get].activeUser;
                              
                              dispatch_async(dispatch_get_main_queue(), ^{
                                  [self.delegate didSelectElement:element];

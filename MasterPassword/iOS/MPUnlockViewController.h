@@ -8,14 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MPUnlockViewController : UIViewController <UITextFieldDelegate>
+@interface MPUnlockViewController : UIViewController <UITextFieldDelegate, UIScrollViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIImageView *lock;
 @property (weak, nonatomic) IBOutlet UIImageView *spinner;
-@property (weak, nonatomic) IBOutlet UITextField *field;
-@property (weak, nonatomic) IBOutlet UILabel *messageLabel;
-@property (weak, nonatomic) IBOutlet UIView *changeMPView;
+@property (weak, nonatomic) IBOutlet UITextField *passwordField;
+@property (weak, nonatomic) IBOutlet UIView *passwordView;
+@property (weak, nonatomic) IBOutlet UIScrollView *usersView;
+@property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *oldUsernameLabel;
+@property (weak, nonatomic) IBOutlet UIButton *userButtonTemplate;
+@property (weak, nonatomic) IBOutlet UILabel *deleteTip;
 
-- (IBAction)changeMP;
+- (IBAction)deleteTargetedUser:(UILongPressGestureRecognizer *)sender;
 
 @end

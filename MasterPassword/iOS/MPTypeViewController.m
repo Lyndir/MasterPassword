@@ -62,17 +62,15 @@
     
     if ([delegate respondsToSelector:@selector(selectedType)])
         if ([delegate selectedType] == [self typeAtIndexPath:indexPath])
-            [cell iterateSubviewsContinueAfter:^BOOL(UIView *subview) {
+            [cell enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
                 if ([subview isKindOfClass:[UIImageView class]]) {
                     UIImageView *imageView = ((UIImageView *)subview);
                     if (!imageView.highlightedImage)
                         imageView.highlightedImage = [imageView.image highlightedImage];
                     imageView.highlighted = YES;
-                    return NO;
+                    *stop = YES;
                 }
-                
-                return YES;
-            }];
+            } recurse:NO];
     
     return cell;
 }
