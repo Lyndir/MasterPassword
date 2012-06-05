@@ -7,6 +7,7 @@
 //
 
 #import "MPAppDelegate_Key.h"
+#import "MPAppDelegate_Store.h"
 
 @implementation MPAppDelegate_Shared (Key)
 
@@ -63,10 +64,10 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     
     NSData *tryKey = keyForPassword(tryPassword);
     NSData *tryKeyID = keyIDForKey(tryKey);
-    inf(@"Key ID known? %@.", user.keyID? @"YES": @"NO");
-    if (user.keyID)
-        // A key ID is known -> a password is set.
-        // Make sure the user's entered password matches it.
+    inf(@"Key ID was known? %@.", user.keyID? @"YES": @"NO");
+    if (user.keyID) {
+        // A key ID is known -> a master password is set.
+        // Make sure the user's entered master password matches it.
         if (![user.keyID isEqual:tryKeyID]) {
             wrn(@"Key ID mismatch. Expected: %@, answer: %@.", [user.keyID encodeHex], [tryKeyID encodeHex]);
             
@@ -75,7 +76,12 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 #endif
             return NO;
         }
-    
+    } else {
+        // A key ID is not known -> recording a new master password.
+        user.keyID = tryKeyID;
+        [[MPAppDelegate_Shared get] saveContext];
+    }
+
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPTestFlightCheckpointMPEntered];
 #endif

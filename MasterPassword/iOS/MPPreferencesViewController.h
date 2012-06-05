@@ -11,6 +11,12 @@
 
 @interface MPPreferencesViewController : UITableViewController <IASKSettingsDelegate>
 
-@property (weak, nonatomic) IBOutlet UIScrollView *avatarScrollView;
+@property (weak, nonatomic) IBOutlet UIScrollView *avatarsView;
+@property (weak, nonatomic) IBOutlet UIButton *avatarTemplate;
+@property (weak, nonatomic) IBOutlet UISwitch *savePasswordSwitch;
+@property (weak, nonatomic) IBOutlet UITableViewCell *exportCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *changeMPCell;
+
+- (IBAction)didToggleSwitch:(UISwitch *)sender;
 
 @end

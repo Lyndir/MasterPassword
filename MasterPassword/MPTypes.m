@@ -12,7 +12,7 @@
 
 
 #define MP_salt     nil
-#define MP_N        16384
+#define MP_N        131072
 #define MP_r        8
 #define MP_p        1
 #define MP_dkLen    64

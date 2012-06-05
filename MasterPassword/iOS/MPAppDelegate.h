@@ -18,5 +18,6 @@
 - (void)loadKey:(BOOL)animated;
 
 - (void)export;
+- (void)changeMP;
 
 @end

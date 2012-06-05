@@ -117,6 +117,29 @@
     [self.window.rootViewController presentModalViewController:composer animated:YES];
 }
 
+- (void)changeMP {
+
+    [PearlAlert showAlertWithTitle:@"Changing Master Password"
+                           message:
+     @"This will allow you to log in with a different master password.\n\n"
+     @"Note that you will only see the sites and passwords for the master password you log in with.\n"
+     @"If you log in with a different master password, your current sites will be unavailable.\n\n"
+     @"You can always change back to your current master password later.\n"
+     @"Your current sites and passwords will then become available again."
+                         viewStyle:UIAlertViewStyleDefault
+                         initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                             if (buttonIndex == [alert cancelButtonIndex])
+                                 return;
+
+                             [[MPAppDelegate get] forgetSavedKey];
+                             [[MPAppDelegate get] loadKey:YES];
+
+                             [TestFlight passCheckpoint:MPTestFlightCheckpointMPChanged];
+                         }
+                       cancelTitle:[PearlStrings get].commonButtonAbort
+                       otherTitles:[PearlStrings get].commonButtonContinue, nil];
+}
+
 #pragma mark - PearlConfigDelegate
 
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)value {

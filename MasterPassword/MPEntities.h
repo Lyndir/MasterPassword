@@ -12,6 +12,8 @@
 #import "MPElementGeneratedEntity.h"
 #import "MPUserEntity.h"
 
+#define MPAvatarCount 19
+
 @interface MPElementEntity (MP)
 
 @property (assign) MPElementType type;

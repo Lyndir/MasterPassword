@@ -404,23 +404,19 @@
                              [self performSegueWithIdentifier:@"UserProfile" sender:self];
                              break;
                          }
-                         case 4: {
-                             [[MPAppDelegate get] export];
-                             break;
-                         }
 #ifdef ADHOC
-                         case 5: {
+                         case 4: {
                              [TestFlight openFeedbackView];
                              break;
                          }
-                         case 6:
+                         case 5:
 #else
-                         case 5: {
+                         case 4: {
                              ATConnect *connection = [ATConnect sharedConnection];
                              [connection presentFeedbackControllerFromViewController:self];
                              break;
                          }
-                         case 6:
+                         case 5:
 #endif
                          {
                              [[MPAppDelegate get] signOut:self];

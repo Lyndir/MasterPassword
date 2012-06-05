@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11E53" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
     <dependencies>
+        <deployment defaultVersion="1296" identifier="iOS"/>
         <development defaultVersion="4200" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1181"/>
     </dependencies>
@@ -782,7 +783,7 @@ L4m3P4sSw0rD</string>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_spinner.png" id="27q-lX-0vy">
-                                <rect key="frame" x="105" y="29" width="110" height="110"/>
+                                <rect key="frame" x="105" y="30" width="110" height="110"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" delaysContentTouches="NO" id="Blg-F1-9NA">
@@ -792,9 +793,9 @@ L4m3P4sSw0rD</string>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="Ten-ig-gog">
                                         <rect key="frame" x="105" y="10" width="110" height="110"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" red="0.40000000596046448" green="0.80000001192092896" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" backgroundImage="avatar-male-1.png">
+                                        <state key="normal" backgroundImage="avatar-0.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -834,14 +835,14 @@ L4m3P4sSw0rD</string>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
+                        <outlet property="avatarTemplate" destination="Ten-ig-gog" id="0ZZ-z5-d5m"/>
+                        <outlet property="avatarsView" destination="Blg-F1-9NA" id="2NL-jU-IMI"/>
                         <outlet property="deleteTip" destination="DBJ-Qi-ZcF" id="VXD-Zc-UYi"/>
-                        <outlet property="oldUsernameLabel" destination="8s0-nT-Aoq" id="mXR-VG-2js"/>
+                        <outlet property="nameLabel" destination="0NM-NI-7UR" id="GBg-Ry-sqj"/>
+                        <outlet property="oldNameLabel" destination="8s0-nT-Aoq" id="plu-1H-MVc"/>
                         <outlet property="passwordField" destination="rTR-7Q-X8o" id="CDA-iP-kCm"/>
                         <outlet property="passwordView" destination="7cc-yu-i0m" id="WoF-Ab-PPC"/>
-                        <outlet property="spinner" destination="27q-lX-0vy" id="jUx-GK-Lgf"/>
-                        <outlet property="userButtonTemplate" destination="Ten-ig-gog" id="hSM-hh-ofy"/>
-                        <outlet property="usernameLabel" destination="0NM-NI-7UR" id="Sa4-pY-87O"/>
-                        <outlet property="usersView" destination="Blg-F1-9NA" id="SsC-1H-fIB"/>
+                        <outlet property="spinner" destination="27q-lX-0vy" id="CGK-G9-PRI"/>
                     </connections>
                 </viewController>
                 <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="9WS-yS-aqQ">
@@ -892,14 +893,14 @@ L4m3P4sSw0rD</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="63M-7L-M7o">
-                            <rect key="frame" x="0.0" y="508" width="320" height="20"/>
+                            <rect key="frame" x="0.0" y="492" width="320" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
                         <sections>
                             <tableViewSection id="OJv-8V-W2l">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="226" id="9gC-Vq-Ta8">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="226" id="9gC-Vq-Ta8">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="226"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -924,77 +925,23 @@ L4m3P4sSw0rD</string>
                                                     <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
-                                                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="TMH-Xt-EnD">
+                                                <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" id="TMH-Xt-EnD">
                                                     <rect key="frame" x="0.0" y="95" width="320" height="130"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <view contentMode="scaleToFill" id="jEL-UA-da6">
-                                                            <rect key="frame" x="0.0" y="0.0" width="614" height="130"/>
-                                                            <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="6ap-Xw-Ubd">
-                                                                    <rect key="frame" x="20" y="10" width="110" height="110"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                                    <state key="normal" image="avatar-male-1.png">
-                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    </state>
-                                                                    <state key="highlighted">
-                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    </state>
-                                                                </button>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="DwC-Fa-yaI">
-                                                                    <rect key="frame" x="138" y="10" width="110" height="110"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                                    <state key="normal" image="avatar-female-1.png">
-                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    </state>
-                                                                    <state key="highlighted">
-                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    </state>
-                                                                </button>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="TF1-Zi-jZK">
-                                                                    <rect key="frame" x="256" y="10" width="110" height="110"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                                    <state key="normal" image="avatar-male-2.png">
-                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    </state>
-                                                                    <state key="highlighted">
-                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    </state>
-                                                                </button>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="32d-Yo-SGt">
-                                                                    <rect key="frame" x="366" y="10" width="110" height="110"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                                    <state key="normal" image="avatar-female-2.png">
-                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    </state>
-                                                                    <state key="highlighted">
-                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    </state>
-                                                                </button>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" lineBreakMode="middleTruncation" id="LTD-gI-8bH">
-                                                                    <rect key="frame" x="484" y="10" width="110" height="110"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                                    <state key="normal" image="avatar-male-3.png">
-                                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    </state>
-                                                                    <state key="highlighted">
-                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    </state>
-                                                                </button>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        </view>
+                                                        <button opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="top" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="6ap-Xw-Ubd">
+                                                            <rect key="frame" x="20" y="10" width="110" height="110"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <color key="backgroundColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                            <state key="normal" backgroundImage="avatar-0.png">
+                                                                <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <state key="highlighted">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                        </button>
                                                     </subviews>
                                                 </scrollView>
                                             </subviews>
@@ -1006,11 +953,11 @@ L4m3P4sSw0rD</string>
                             </tableViewSection>
                             <tableViewSection id="TRa-Gy-tG5">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="119" id="n1H-sG-HDc">
-                                        <rect key="frame" x="0.0" y="226" width="320" height="119"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="66" id="n1H-sG-HDc">
+                                        <rect key="frame" x="0.0" y="226" width="320" height="66"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="118"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="65"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Preferences" lineBreakMode="tailTruncation" minimumFontSize="10" id="ylz-i5-tem">
@@ -1031,18 +978,30 @@ L4m3P4sSw0rD</string>
                                                     <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="top" image="ui_list_first.png" id="tK4-bL-QK1">
-                                                    <rect key="frame" x="10" y="75" width="300" height="50"/>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="44" id="0jz-0D-ggZ">
+                                        <rect key="frame" x="0.0" y="292" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="top" image="ui_list_first.png" id="8dk-FW-Tse">
+                                                    <rect key="frame" x="10" y="0.0" width="300" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="bottom" image="ui_list_last.png" id="fAY-fK-Uzn">
-                                                    <rect key="frame" x="10" y="109" width="300" height="10"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="bottom" image="ui_list_last.png" id="5oz-I2-Nos">
+                                                    <rect key="frame" x="10" y="34" width="300" height="10"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Save Password" lineBreakMode="tailTruncation" minimumFontSize="10" id="mmP-r2-iNF">
-                                                    <rect key="frame" x="20" y="75" width="280" height="23"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Save Password" lineBreakMode="tailTruncation" minimumFontSize="10" id="0Mf-7e-quo">
+                                                    <rect key="frame" x="20" y="0.0" width="280" height="23"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="18"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1050,17 +1009,20 @@ L4m3P4sSw0rD</string>
                                                     <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Stores your password on the device." lineBreakMode="tailTruncation" minimumFontSize="10" id="LRv-ac-sdH">
-                                                    <rect key="frame" x="20" y="98" width="280" height="20"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Stores your password on the device." lineBreakMode="tailTruncation" minimumFontSize="10" id="Hfj-40-OHR">
+                                                    <rect key="frame" x="20" y="23" width="280" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="GillSans-LightItalic" family="Gill Sans" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="seh-qE-k6P">
-                                                    <rect key="frame" x="221" y="83" width="79" height="27"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="ilG-0h-SOb">
+                                                    <rect key="frame" x="221" y="8" width="79" height="27"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <color key="onTintColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <connections>
+                                                        <action selector="didToggleSwitch:" destination="oLN-6u-GLb" eventType="valueChanged" id="e5q-mf-XK7"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1071,11 +1033,11 @@ L4m3P4sSw0rD</string>
                             </tableViewSection>
                             <tableViewSection id="dN3-cJ-9WA">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="119" id="xBt-OT-BYA">
-                                        <rect key="frame" x="0.0" y="345" width="320" height="119"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="68" id="xBt-OT-BYA">
+                                        <rect key="frame" x="0.0" y="336" width="320" height="68"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="118"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="67"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Operations" lineBreakMode="tailTruncation" minimumFontSize="10" id="VI9-uT-nrJ">
@@ -1096,13 +1058,25 @@ L4m3P4sSw0rD</string>
                                                     <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_first.png" id="zeK-qR-5wK">
-                                                    <rect key="frame" x="10" y="75" width="300" height="44"/>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="44" id="X2m-92-Qzh">
+                                        <rect key="frame" x="0.0" y="404" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_first.png" id="s1D-Yv-FNl">
+                                                    <rect key="frame" x="10" y="0.0" width="300" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Export" lineBreakMode="tailTruncation" minimumFontSize="10" id="DTP-qu-VqT">
-                                                    <rect key="frame" x="20" y="75" width="280" height="23"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Export" lineBreakMode="tailTruncation" minimumFontSize="10" id="Sw0-Yj-Xh0">
+                                                    <rect key="frame" x="20" y="0.0" width="280" height="23"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="18"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1110,8 +1084,8 @@ L4m3P4sSw0rD</string>
                                                     <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Save all your sites to a file." lineBreakMode="tailTruncation" minimumFontSize="10" id="oi9-2Y-2KM">
-                                                    <rect key="frame" x="20" y="98" width="280" height="20"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Save all your sites to a file." lineBreakMode="tailTruncation" minimumFontSize="10" id="DwF-cT-vUT">
+                                                    <rect key="frame" x="20" y="23" width="280" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" name="GillSans-LightItalic" family="Gill Sans" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -1123,7 +1097,7 @@ L4m3P4sSw0rD</string>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="glr-eJ-qKq">
-                                        <rect key="frame" x="0.0" y="464" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="448" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -1171,7 +1145,11 @@ L4m3P4sSw0rD</string>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="avatarScrollView" destination="TMH-Xt-EnD" id="zdf-xt-piZ"/>
+                        <outlet property="avatarTemplate" destination="6ap-Xw-Ubd" id="WW7-3k-5QJ"/>
+                        <outlet property="avatarsView" destination="TMH-Xt-EnD" id="zdf-xt-piZ"/>
+                        <outlet property="changeMPCell" destination="glr-eJ-qKq" id="EpZ-xu-JGh"/>
+                        <outlet property="exportCell" destination="X2m-92-Qzh" id="zjs-9C-uKX"/>
+                        <outlet property="savePasswordSwitch" destination="ilG-0h-SOb" id="iZD-gQ-pve"/>
                     </connections>
                 </tableViewController>
             </objects>
@@ -1180,11 +1158,7 @@ L4m3P4sSw0rD</string>
     </scenes>
     <resources>
         <image name="Square-bottom.png" width="551" height="58"/>
-        <image name="avatar-female-1.png" width="110" height="110"/>
-        <image name="avatar-female-2.png" width="110" height="110"/>
-        <image name="avatar-male-1.png" width="110" height="110"/>
-        <image name="avatar-male-2.png" width="110" height="110"/>
-        <image name="avatar-male-3.png" width="110" height="110"/>
+        <image name="avatar-0.png" width="110" height="110"/>
         <image name="background.png" width="480" height="480"/>
         <image name="guide_page_0.png" width="320" height="480"/>
         <image name="guide_page_1.png" width="320" height="480"/>
@@ -1260,7 +1234,12 @@ L4m3P4sSw0rD</string>
         <class className="MPPreferencesViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MPPreferencesViewController.h"/>
             <relationships>
-                <relationship kind="outlet" name="avatarScrollView" candidateClass="UIScrollView"/>
+                <relationship kind="action" name="didToggleSwitch:" candidateClass="UISwitch"/>
+                <relationship kind="outlet" name="avatarTemplate" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="avatarsView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="changeMPCell" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="exportCell" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="savePasswordSwitch" candidateClass="UISwitch"/>
             </relationships>
         </class>
         <class className="MPSearchDelegate" superclassName="NSObject">
@@ -1281,14 +1260,14 @@ L4m3P4sSw0rD</string>
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MPUnlockViewController.h"/>
             <relationships>
                 <relationship kind="action" name="deleteTargetedUser:" candidateClass="UILongPressGestureRecognizer"/>
+                <relationship kind="outlet" name="avatarTemplate" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="avatarsView" candidateClass="UIScrollView"/>
                 <relationship kind="outlet" name="deleteTip" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="oldUsernameLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="nameLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="oldNameLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="passwordView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="spinner" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="userButtonTemplate" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="usernameLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="usersView" candidateClass="UIScrollView"/>
             </relationships>
         </class>
     </classes>
