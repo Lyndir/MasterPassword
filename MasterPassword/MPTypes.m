@@ -40,9 +40,12 @@ NSString *NSStringFromMPElementType(MPElementType type) {
         return nil;
     
     switch (type) {
+        case MPElementTypeGeneratedSecure:
+            return @"Secure Password";
+            
         case MPElementTypeGeneratedLong:
             return @"Long Password";
-            
+
         case MPElementTypeGeneratedMedium:
             return @"Medium Password";
             
@@ -72,9 +75,12 @@ Class ClassFromMPElementType(MPElementType type) {
         return nil;
     
     switch (type) {
-        case MPElementTypeGeneratedLong:
+        case MPElementTypeGeneratedSecure:
             return [MPElementGeneratedEntity class];
             
+        case MPElementTypeGeneratedLong:
+            return [MPElementGeneratedEntity class];
+
         case MPElementTypeGeneratedMedium:
             return [MPElementGeneratedEntity class];
             
@@ -135,7 +141,7 @@ NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, ui
                      [name dataUsingEncoding:NSUTF8StringEncoding],
                      key,
                      [NSData dataWithBytes:&nsalt length:sizeof(nsalt)],
-                     nil] hashWith:PearlDigestSHA1];
+                     nil] hashWith:PearlDigestSHA256];
     trc(@"seed is: %@", seed);
     const char *seedBytes = seed.bytes;
     

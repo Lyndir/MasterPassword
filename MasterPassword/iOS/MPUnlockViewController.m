@@ -30,6 +30,8 @@
 @synthesize nameLabel, oldNameLabel;
 @synthesize avatarTemplate;
 @synthesize deleteTip;
+@synthesize passwordTipView;
+@synthesize passwordTipLabel;
 @synthesize avatarShadowColor = _avatarShadowColor;
 
 
@@ -52,6 +54,7 @@
     self.nameLabel.layer.cornerRadius = 5;
     self.avatarTemplate.hidden = YES;
     self.spinner.alpha = 0;
+    self.passwordTipView.alpha = 0;
 
     [self updateLayoutAnimated:NO allowScroll:YES completion:nil];
     
@@ -67,6 +70,8 @@
     [self setNameLabel:nil];
     [self setAvatarTemplate:nil];
     [self setDeleteTip:nil];
+    [self setPasswordTipView:nil];
+    [self setPasswordTipLabel:nil];
     [super viewDidUnload];
 }
 
@@ -93,22 +98,23 @@
 }
 
 - (void)updateUsers {
-    
+
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPUserEntity class])];
     fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO]];
     NSArray *users = [[MPAppDelegate managedObjectContext] executeFetchRequest:fetchRequest error:nil];
     
     // Clean up avatars.
-    for (UIView *view in [self.avatarsView subviews])
-        if (view != self.avatarTemplate)
-            [view removeFromSuperview];
+    for (UIView *subview in [self.avatarsView subviews])
+        if ([[self.avatarToUser allKeys] containsObject:[NSValue valueWithNonretainedObject:subview]])
+            // This subview is a former avatar.
+            [subview removeFromSuperview];
     [self.avatarToUser removeAllObjects];
-    
+
     // Create avatars.
     for (MPUserEntity *user in users)
         [self setupAvatar:[self.avatarTemplate clone] forUser:user];
     [self setupAvatar:[self.avatarTemplate clone] forUser:nil];
-    
+
     // Scroll view's content changed, update its content size.
     [self.avatarsView autoSizeContentIgnoreHidden:YES ignoreInvisible:YES limitPadding:NO ignoreSubviews:nil];
     
@@ -147,11 +153,11 @@
     avatar.backgroundColor = [UIColor clearColor];
     
     dbg(@"User: %@, avatar: %d", user.name, user.avatar);
+    avatar.tag = user.avatar;
     [avatar setBackgroundImage:[UIImage imageNamed:PearlString(@"avatar-%u", user.avatar)]
                       forState:UIControlStateNormal];
     
-    if (user)
-        [self.avatarToUser setObject:user forKey:[NSValue valueWithNonretainedObject:avatar]];
+    [self.avatarToUser setObject:NilToNSNull(user) forKey:[NSValue valueWithNonretainedObject:avatar]];
     
     if (self.selectedUser && user == self.selectedUser)
         avatar.selected = YES;
@@ -165,8 +171,9 @@
         [self.passwordField resignFirstResponder];
     
     [self updateLayoutAnimated:YES allowScroll:YES completion:^(BOOL finished) {
-        if (finished) if (self.selectedUser)
-            [self.passwordField becomeFirstResponder];
+        if (finished)
+            if (self.selectedUser)
+                [self.passwordField becomeFirstResponder];
     }];
 }
 
@@ -197,7 +204,7 @@
 }
 
 - (void)updateLayoutAnimated:(BOOL)animated allowScroll:(BOOL)allowScroll completion:(void (^)(BOOL finished))completion {
-    
+
     if (animated) {
         self.oldNameLabel.text = self.nameLabel.text;
         self.oldNameLabel.alpha = 1;
@@ -232,7 +239,7 @@
         self.oldNameLabel.center = self.nameLabel.center;
         self.avatarShadowColor = [UIColor lightGrayColor];
     }
-    
+
     MPUserEntity *targetedUser = self.selectedUser;
     UIButton *selectedAvatar = [self avatarForUser:self.selectedUser];
     UIButton *targetedAvatar = selectedAvatar;
@@ -242,20 +249,26 @@
     }
     
     [self.avatarsView enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
-        const BOOL isTargeted = subview == targetedAvatar;
+        if (![[self.avatarToUser allKeys] containsObject:[NSValue valueWithNonretainedObject:subview]])
+            // This subview is not one of the user avatars.
+            return;
+        UIButton *avatar = (UIButton *)subview;
+
+        BOOL isTargeted = avatar == targetedAvatar;
+
+        avatar.userInteractionEnabled = isTargeted;
+        avatar.alpha = isTargeted ? 1 : self.selectedUser ? 0.1 : 0.4;
         
-        subview.userInteractionEnabled = isTargeted;
-        subview.alpha = isTargeted ? 1 : self.selectedUser ? 0.1 : 0.4;
-        
-        [self updateAvatarShadowColor:subview isTargeted:isTargeted];
+        [self updateAvatarShadowColor:avatar isTargeted:isTargeted];
     } recurse:NO];
     
     if (allowScroll) {
-        CGPoint targetContentOffset = CGPointMake(targetedAvatar.center.x - self.avatarsView.bounds.size.width / 2, self.avatarsView.contentOffset.y);
+        CGPoint targetContentOffset = CGPointMake(MAX(0, targetedAvatar.center.x - self.avatarsView.bounds.size.width / 2),
+                self.avatarsView.contentOffset.y);
         if (!CGPointEqualToPoint(self.avatarsView.contentOffset, targetContentOffset))
             [self.avatarsView setContentOffset:targetContentOffset animated:animated];
     }
-    
+
     self.nameLabel.text = targetedUser ? targetedUser.name : @"New User";
     self.nameLabel.bounds = CGRectSetHeight(self.nameLabel.bounds,
                                             [self.nameLabel.text sizeWithFont:self.nameLabel.font
@@ -266,23 +279,30 @@
         completion(YES);
 }
 
+- (void)setPasswordTip:(NSString *)string {
+
+    if (string.length)
+        self.passwordTipLabel.text = string;
+
+    [UIView animateWithDuration:0.3f animations:^{
+        self.passwordTipView.alpha = string.length? 1: 0;
+    }];
+}
+
 - (void)tryMasterPassword {
     
     [self setSpinnerActive:YES];
-    [self changeAvatarShadowColorTo:[UIColor colorWithName:@"lightskyblue"]];
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         BOOL unlocked = [[MPAppDelegate get] tryMasterPassword:self.passwordField.text forUser:self.selectedUser];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (unlocked) {
-                [self changeAvatarShadowColorTo:[UIColor colorWithName:@"greenyellow"]];
-                
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (long) (NSEC_PER_SEC * 1.5f)), dispatch_get_main_queue(), ^{
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (long) (NSEC_PER_SEC * 0.5f)), dispatch_get_main_queue(), ^{
                     [self dismissModalViewControllerAnimated:YES];
                 });
             } else
-                [self changeAvatarShadowColorTo:[UIColor colorWithName:@"crimson"]];
+                [self setPasswordTip:@"Incorrect password."];
             
             [self setSpinnerActive:NO];
         });
@@ -309,7 +329,7 @@
 
 - (MPUserEntity *)userForAvatar:(UIButton *)avatar {
     
-    return NullToNil([self.avatarToUser objectForKey:[NSValue valueWithNonretainedObject:avatar]]);
+    return NSNullToNil([self.avatarToUser objectForKey:[NSValue valueWithNonretainedObject:avatar]]);
 }
 
 - (void)setSpinnerActive:(BOOL)active {
@@ -342,23 +362,12 @@
     });
 }
 
-- (void)changeAvatarShadowColorTo:(UIColor *)color {
-    
-    self.avatarShadowColor = color;
-    
-    if (self.selectedUser) {
-        UIButton *selectedAvatar = [self avatarForUser:self.selectedUser];
-        [selectedAvatar.layer removeAnimationForKey:@"targetedShadow"];
-        [self updateAvatarShadowColor:selectedAvatar isTargeted:YES];
-    }
-}
-
-- (void)updateAvatarShadowColor:(UIView *)avatar isTargeted:(BOOL)targeted {
+- (void)updateAvatarShadowColor:(UIButton *)avatar isTargeted:(BOOL)targeted {
     
     if (targeted) {
         if (![avatar.layer animationForKey:@"targetedShadow"]) {
             CABasicAnimation *toShadowColorAnimation = [CABasicAnimation animationWithKeyPath:@"shadowColor"];
-            toShadowColorAnimation.toValue = (__bridge id) self.avatarShadowColor.CGColor;
+            toShadowColorAnimation.toValue = (__bridge id) (avatar.selected? self.avatarTemplate.backgroundColor: [UIColor whiteColor]).CGColor;
             toShadowColorAnimation.beginTime = 0.0f;
             toShadowColorAnimation.duration = 0.5f;
             toShadowColorAnimation.fillMode = kCAFillModeForwards;
@@ -404,13 +413,17 @@
 
 #pragma mark - UITextFieldDelegate
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+
+    [self setPasswordTip:nil];
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
     [textField resignFirstResponder];
     
     [self setSpinnerActive:YES];
-    [self changeAvatarShadowColorTo:[UIColor colorWithName:@"lightskyblue"]];
-    
+
     if (self.selectedUser.keyID)
         [self tryMasterPassword];
     
@@ -463,11 +476,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    //    CGFloat xOfMiddle = scrollView.contentOffset.x + scrollView.bounds.size.width / 2;
-    //    UIButton *middleAvatar = (UIButton *)[PearlUIUtils viewClosestTo:CGPointMake(xOfMiddle, scrollView.contentOffset.y) ofArray:scrollView.subviews];
-    //
     [self updateLayoutAnimated:NO allowScroll:NO completion:nil];
-    //    [self scrollToAvatar:middleAvatar animated:NO];
 }
 
 #pragma mark - IBActions

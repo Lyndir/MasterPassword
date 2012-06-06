@@ -31,11 +31,12 @@ typedef enum {
 } MPElementFeature;
 
 typedef enum {
-    MPElementTypeGeneratedLong          = 0x0 | MPElementTypeClassGenerated   | 0x0,
-    MPElementTypeGeneratedMedium        = 0x1 | MPElementTypeClassGenerated   | 0x0,
-    MPElementTypeGeneratedShort         = 0x2 | MPElementTypeClassGenerated   | 0x0,
-    MPElementTypeGeneratedBasic         = 0x3 | MPElementTypeClassGenerated   | 0x0,
-    MPElementTypeGeneratedPIN           = 0x4 | MPElementTypeClassGenerated   | 0x0,
+    MPElementTypeGeneratedSecure        = 0x0 | MPElementTypeClassGenerated   | 0x0,
+    MPElementTypeGeneratedLong          = 0x1 | MPElementTypeClassGenerated   | 0x0,
+    MPElementTypeGeneratedMedium        = 0x2 | MPElementTypeClassGenerated   | 0x0,
+    MPElementTypeGeneratedShort         = 0x3 | MPElementTypeClassGenerated   | 0x0,
+    MPElementTypeGeneratedBasic         = 0x4 | MPElementTypeClassGenerated   | 0x0,
+    MPElementTypeGeneratedPIN           = 0x5 | MPElementTypeClassGenerated   | 0x0,
     
     MPElementTypeStoredPersonal         = 0x0 | MPElementTypeClassStored      | MPElementFeatureExportContent,
     MPElementTypeStoredDevicePrivate    = 0x1 | MPElementTypeClassStored      | MPElementFeatureDevicePrivate,

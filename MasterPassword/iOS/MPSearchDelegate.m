@@ -131,7 +131,7 @@
     assert(self.query);
     
     self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@",
-                                                            self.query, self.query, NilToNull([MPAppDelegate get].activeUser)];
+                                                            self.query, self.query, NilToNSNull([MPAppDelegate get].activeUser)];
     
     NSError *error;
     if (![self.fetchedResultsController performFetch:&error])

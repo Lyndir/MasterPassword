@@ -98,6 +98,8 @@
 
     else if (cell == self.changeMPCell)
         [[MPAppDelegate get] changeMP];
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - IASKSettingsDelegate

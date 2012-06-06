@@ -516,7 +516,7 @@
 
 - (NSString *)testFlightToken {
     
-    return NullToNil([[self testFlightInfo] valueForKeyPath:@"Team Token"]);
+    return NSNullToNil([[self testFlightInfo] valueForKeyPath:@"Team Token"]);
 }
 
 
@@ -535,7 +535,7 @@
 
 - (NSString *)crashlyticsAPIKey {
     
-    return NullToNil([[self crashlyticsInfo] valueForKeyPath:@"API Key"]);
+    return NSNullToNil([[self crashlyticsInfo] valueForKeyPath:@"API Key"]);
 }
 
 
@@ -554,7 +554,7 @@
 
 - (NSString *)apptentiveAPIKey {
     
-    return NullToNil([[self apptentiveInfo] valueForKeyPath:@"API Key"]);
+    return NSNullToNil([[self apptentiveInfo] valueForKeyPath:@"API Key"]);
 }
 
 
@@ -574,7 +574,7 @@
 - (NSString *)localyticsKey {
     
 #ifdef DEBUG
-    return NullToNil([[self localyticsInfo] valueForKeyPath:@"Key.development"]);
+    return NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.development"]);
 #else
     return NullToNil([[self localyticsInfo] valueForKeyPath:@"Key.distribution"]);
 #endif

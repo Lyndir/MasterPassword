@@ -18,6 +18,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *oldNameLabel;
 @property (weak, nonatomic) IBOutlet UIButton *avatarTemplate;
 @property (weak, nonatomic) IBOutlet UILabel *deleteTip;
+@property (weak, nonatomic) IBOutlet UIView *passwordTipView;
+@property (weak, nonatomic) IBOutlet UILabel *passwordTipLabel;
 
 @property(nonatomic, strong) UIColor *avatarShadowColor;
 

@@ -90,14 +90,18 @@
             // Generated
             switch (indexPath.row) {
                 case 0:
-                    return MPElementTypeGeneratedLong;
+                    return NSNotFound;
                 case 1:
-                    return MPElementTypeGeneratedMedium;
+                    return MPElementTypeGeneratedSecure;
                 case 2:
-                    return MPElementTypeGeneratedShort;
+                    return MPElementTypeGeneratedLong;
                 case 3:
-                    return MPElementTypeGeneratedBasic;
+                    return MPElementTypeGeneratedMedium;
                 case 4:
+                    return MPElementTypeGeneratedShort;
+                case 5:
+                    return MPElementTypeGeneratedBasic;
+                case 6:
                     return MPElementTypeGeneratedPIN;
                     
                 default:
@@ -109,8 +113,10 @@
             // Stored
             switch (indexPath.row) {
                 case 0:
-                    return MPElementTypeStoredPersonal;
+                    return NSNotFound;
                 case 1:
+                    return MPElementTypeStoredPersonal;
+                case 2:
                     return MPElementTypeStoredDevicePrivate;
                     
                 default:

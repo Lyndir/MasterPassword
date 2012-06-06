@@ -81,6 +81,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
         user.keyID = tryKeyID;
         [[MPAppDelegate_Shared get] saveContext];
     }
+    user.lastUsed = [NSDate date];
 
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPTestFlightCheckpointMPEntered];
