@@ -269,7 +269,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
                 user = [[self.managedObjectContext executeFetchRequest:fetchRequest error:&error] lastObject];
             }
             if ([key isEqualToString:@"Key ID"]) {
-                if (![(keyIDHex = value) isEqualToString:[keyIDForPassword(password) encodeHex]])
+                if (![(keyIDHex = value) isEqualToString:[keyIDForPassword(password, userName) encodeHex]])
                     return MPImportResultInvalidPassword;
             }
             

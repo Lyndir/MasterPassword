@@ -11,24 +11,28 @@
 #import "MPElementStoredEntity.h"
 
 
-#define MP_salt     nil
 #define MP_N        131072
 #define MP_r        8
 #define MP_p        1
 #define MP_dkLen    64
-#define MP_hash     PearlDigestSHA256
+#define MP_hash     PearlHashSHA256
 
-NSData *keyForPassword(NSString *password) {
-    
+NSData *keyForPassword(NSString *password, NSString *username) {
+
+    uint32_t nusernameLength = htonl(username.length);
     NSData *key = [PearlSCrypt deriveKeyWithLength:MP_dkLen fromPassword:[password dataUsingEncoding:NSUTF8StringEncoding]
-                                         usingSalt:MP_salt N:MP_N r:MP_r p:MP_p];
+                                         usingSalt:[NSData dataByConcatenatingDatas:
+                                                    [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
+                                                    [NSData dataWithBytes:&nusernameLength length:sizeof(nusernameLength)],
+                                                    [username dataUsingEncoding:NSUTF8StringEncoding],
+                                                    nil] N:MP_N r:MP_r p:MP_p];
     
-    trc(@"Password: %@ derives to key ID: %@", password, [keyIDForKey(key) encodeHex]);
+    trc(@"User: %@, password: %@ derives to key ID: %@", username, password, [keyIDForKey(key) encodeHex]);
     return key;
 }
-NSData *keyIDForPassword(NSString *password) {
+NSData *keyIDForPassword(NSString *password, NSString *username) {
     
-    return keyIDForKey(keyForPassword(password));
+    return keyIDForKey(keyForPassword(password, username));
 }
 NSData *keyIDForKey(NSData *key) {
     
@@ -116,32 +120,33 @@ NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, ui
         err(@"Incorrect type (is not MPElementTypeClassGenerated): %d, for: %@", type, name);
         return nil;
     }
-    if (!name) {
+    if (!name.length) {
         err(@"Missing name.");
         return nil;
     }
-    if (!key) {
-        err(@"Key not set.");
+    if (!key.length) {
+        err(@"Missing key.");
         return nil;
     }
-    uint32_t salt = counter;
     if (!counter)
         // Counter unset, go into OTP mode.
         // Get the UNIX timestamp of the start of the interval of 5 minutes that the current time is in.
-        salt = ((uint32_t)([[NSDate date] timeIntervalSince1970] / 300)) * 300;
+        counter = ((uint32_t)([[NSDate date] timeIntervalSince1970] / 300)) * 300;
     
     if (MPTypes_ciphers == nil)
         MPTypes_ciphers = [NSDictionary dictionaryWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"ciphers"
                                                                                             withExtension:@"plist"]];
     
-    // Determine the seed whose bytes will be used for calculating a password: sha1(name . '\0' . key . '\0' . salt)
-    uint32_t nsalt = htonl(salt);
-    trc(@"seed from: sha1(%@, %@, %u)", name, key, nsalt);
-    NSData *seed = [[NSData dataByConcatenatingWithDelimitor:'\0' datas:
+    // Determine the seed whose bytes will be used for calculating a password
+    trc(@"seed from: hmac-sha256(key, 'com.lyndir.masterpassword' | %u | %@ | %u)", key, name.length, name, counter);
+    uint32_t ncounter = htonl(counter), nnameLength = htonl(name.length);
+    NSData *seed = [[NSData dataByConcatenatingDatas:
+                     [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
+                     [NSData dataWithBytes:&nnameLength length:sizeof(nnameLength)],
                      [name dataUsingEncoding:NSUTF8StringEncoding],
-                     key,
-                     [NSData dataWithBytes:&nsalt length:sizeof(nsalt)],
-                     nil] hashWith:PearlDigestSHA256];
+                     [NSData dataWithBytes:&ncounter length:sizeof(ncounter)],
+                     nil]
+            hmacWith:PearlHashSHA256 key:key];
     trc(@"seed is: %@", seed);
     const char *seedBytes = seed.bytes;
     

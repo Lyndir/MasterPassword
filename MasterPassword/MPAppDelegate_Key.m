@@ -62,7 +62,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     if (![tryPassword length])
         return NO;
     
-    NSData *tryKey = keyForPassword(tryPassword);
+    NSData *tryKey = keyForPassword(tryPassword, user.name);
     NSData *tryKeyID = keyIDForKey(tryKey);
     inf(@"Key ID was known? %@.", user.keyID? @"YES": @"NO");
     if (user.keyID) {
