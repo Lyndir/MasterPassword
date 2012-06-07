@@ -71,6 +71,8 @@
     
     [super viewWillAppear:animated];
     
+    if (![MPAppDelegate get].activeUser)
+        [self.navigationController performSegueWithIdentifier:@"MP_Unlock" sender:self];
     if (self.activeElement.user != [MPAppDelegate get].activeUser)
         self.activeElement = nil;
     self.searchDisplayController.searchBar.text = nil;
@@ -102,6 +104,8 @@
                 });
             }
         }];
+    
+    [[MPAppDelegate get] checkConfig];
     
     [super viewDidAppear:animated];
 }
@@ -220,7 +224,7 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     
     NSString *error = [self.helpView stringByEvaluatingJavaScriptFromString:
-            PearlString(@"setClass('%@');", ClassNameFromMPElementType(self.activeElement.type))];
+                       PearlString(@"setClass('%@');", ClassNameFromMPElementType(self.activeElement.type))];
     if (error.length)
         err(@"helpView.setClass: %@", error);
 }
@@ -419,8 +423,8 @@
                          case 5:
 #endif
                          {
-                             [[MPAppDelegate get] signOut:self];
-                             [[MPAppDelegate get] loadKey:YES];
+                             [[MPAppDelegate get] forgetSavedKeyFor:[MPAppDelegate get].activeUser];
+                             [[MPAppDelegate get] signOut];
                              break;
                          }
                      }

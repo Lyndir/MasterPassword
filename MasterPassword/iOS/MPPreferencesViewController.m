@@ -9,6 +9,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MPPreferencesViewController.h"
 #import "MPAppDelegate.h"
+#import "MPAppDelegate_Key.h"
 
 @interface MPPreferencesViewController ()
 
@@ -114,7 +115,10 @@
 
 - (IBAction)didToggleSwitch:(UISwitch *)sender {
     
-    [MPAppDelegate get].activeUser.saveKey = sender.on;
+    if (([MPAppDelegate get].activeUser.saveKey = sender.on))
+        [[MPAppDelegate get] storeSavedKeyFor:[MPAppDelegate get].activeUser];
+    else
+        [[MPAppDelegate get] forgetSavedKeyFor:[MPAppDelegate get].activeUser];
 }
 
 @end

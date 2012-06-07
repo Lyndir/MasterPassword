@@ -3,7 +3,7 @@
     <entity name="MPElementEntity" representedClassName="MPElementEntity" isAbstract="YES" syncable="YES">
         <attribute name="content" optional="YES" transient="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="lastUsed" attributeType="Date" syncable="YES"/>
-        <attribute name="name" attributeType="String" minValueString="1" indexed="YES" syncable="YES" isSyncIdentityProperty="YES"/>
+        <attribute name="name" attributeType="String" minValueString="1" indexed="YES" syncable="YES"/>
         <attribute name="type_" attributeType="Integer 16" defaultValueString="17" syncable="YES"/>
         <attribute name="uses_" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="user" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MPUserEntity" inverseName="elements" inverseEntity="MPUserEntity" syncable="YES"/>
@@ -18,8 +18,8 @@
         <attribute name="avatar_" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="keyID" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="lastUsed" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="name" attributeType="String" syncable="YES" isSyncIdentityProperty="YES"/>
-        <attribute name="saveKey_" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="saveKey_" attributeType="Boolean" defaultValueString="NO"/>
         <relationship name="elements" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MPElementEntity" inverseName="user" inverseEntity="MPElementEntity" syncable="YES"/>
     </entity>
     <elements>

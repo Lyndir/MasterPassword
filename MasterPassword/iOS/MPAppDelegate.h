@@ -14,8 +14,8 @@
 
 + (MPAppDelegate *)get;
 
+- (void)checkConfig;
 - (void)showGuide;
-- (void)loadKey:(BOOL)animated;
 
 - (void)export;
 - (void)changeMP;

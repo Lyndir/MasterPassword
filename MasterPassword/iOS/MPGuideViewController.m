@@ -32,14 +32,6 @@
     [MPiOSConfig get].showQuickStart = [NSNumber numberWithBool:NO];
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-
-    [super viewDidDisappear:animated];
-
-    [[MPAppDelegate get] loadKey:animated];
-}
-
-
 - (void)viewDidUnload {
 
     [self setScrollView:nil];

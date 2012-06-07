@@ -12,7 +12,7 @@
 @implementation MPAppDelegate_Shared (Key)
 
 static NSDictionary *keyQuery(MPUserEntity *user) {
-    
+
     return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
                                    attributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                @"Saved Master Password",      (__bridge id)kSecAttrService,
@@ -21,113 +21,131 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                                       matches:nil];
 }
 
-- (void)forgetSavedKey {
-    
-    if ([PearlKeyChain deleteItemForQuery:keyQuery(self.activeUser)] != errSecItemNotFound) {
-        inf(@"Removed key from keychain.");
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyForgotten object:self];
-#ifdef TESTFLIGHT_SDK_VERSION
-        [TestFlight passCheckpoint:MPTestFlightCheckpointMPForgotten];
-#endif
+- (NSData *)loadSavedKeyFor:(MPUserEntity *)user {
+
+    NSData *key = [PearlKeyChain dataOfItemForQuery:keyQuery(user)];
+    if (key)
+        inf(@"Found key (for: %@) in keychain.", user.name);
+
+    else {
+        user.saveKey = NO;
+        inf(@"No key found (for: %@) in keychain.", user.name);
     }
+
+    return key;
 }
 
-- (IBAction)signOut:(id)sender {
+- (void)storeSavedKeyFor:(MPUserEntity *)user {
 
-    [self forgetSavedKey];
-    [self unsetKey];
-}
+    if (user.saveKey) {
+        NSData *existingKey = [PearlKeyChain dataOfItemForQuery:keyQuery(user)];
 
-- (void)loadSavedKey {
-    
-    if (self.activeUser.saveKey) {
-        // Key should be saved in keychain.  Load it.
-        self.key = [PearlKeyChain dataOfItemForQuery:keyQuery(self.activeUser)];
-        inf(@"Looking for key in keychain: %@.", self.key? @"found": @"missing");
-        if (self.key)
-            [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeySet object:self];
-    } else {
-        // Key should not be stored in keychain.  Delete it.
-        if ([PearlKeyChain deleteItemForQuery:keyQuery(self.activeUser)] != errSecItemNotFound)
-            inf(@"Removed key from keychain.");
-#ifdef TESTFLIGHT_SDK_VERSION
-        [TestFlight passCheckpoint:MPTestFlightCheckpointMPUnstored];
+        if (![existingKey isEqualToData:self.key]) {
+            inf(@"Updating key in keychain.");
+            [PearlKeyChain addOrUpdateItemForQuery:keyQuery(user)
+                                    withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                            self.key, (__bridge id) kSecValueData,
+#if TARGET_OS_IPHONE
+                                            kSecAttrAccessibleWhenUnlockedThisDeviceOnly, (__bridge id) kSecAttrAccessible,
 #endif
-    }
-}
-
-- (BOOL)tryMasterPassword:(NSString *)tryPassword forUser:(MPUserEntity *)user {
-    
-    if (![tryPassword length])
-        return NO;
-    
-    NSData *tryKey = keyForPassword(tryPassword, user.name);
-    NSData *tryKeyID = keyIDForKey(tryKey);
-    inf(@"Key ID was known? %@.", user.keyID? @"YES": @"NO");
-    if (user.keyID) {
-        // A key ID is known -> a master password is set.
-        // Make sure the user's entered master password matches it.
-        if (![user.keyID isEqual:tryKeyID]) {
-            wrn(@"Key ID mismatch. Expected: %@, answer: %@.", [user.keyID encodeHex], [tryKeyID encodeHex]);
-            
-#ifdef TESTFLIGHT_SDK_VERSION
-            [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
-#endif
-            return NO;
+                                            nil]];
         }
-    } else {
-        // A key ID is not known -> recording a new master password.
-        user.keyID = tryKeyID;
-        [[MPAppDelegate_Shared get] saveContext];
     }
-    user.lastUsed = [NSDate date];
+}
+
+- (void)forgetSavedKeyFor:(MPUserEntity *)user {
+
+    OSStatus result = [PearlKeyChain deleteItemForQuery:keyQuery(user)];
+    if (result == noErr || result == errSecItemNotFound) {
+        user.saveKey = NO;
+
+        if (result == noErr) {
+            inf(@"Removed key (for: %@) from keychain.", user.name);
+
+            [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyForgotten object:self];
+#ifdef TESTFLIGHT_SDK_VERSION
+            [TestFlight passCheckpoint:MPTestFlightCheckpointForgetSavedKey];
+#endif
+        }
+    }
+}
+
+- (void)signOut {
+
+    self.key = nil;
+    self.activeUser = nil;
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationSignedOut object:self];
+}
+
+- (BOOL)signInAsUser:(MPUserEntity *)user usingMasterPassword:(NSString *)password {
+
+    NSData *tryKey = nil;
+
+    // Method 1: When the user has no keyID set, set a new key from the given master password.
+    if (!user.keyID) {
+        if ([password length])
+            if ((tryKey = keyForPassword(password, user.name))) {
+                user.keyID = keyIDForKey(tryKey);
+                [[MPAppDelegate_Shared get] saveContext];
+            }
+    }
+
+    // Method 2: Depending on the user's saveKey, load or remove the key from the keychain.
+    if (!user.saveKey)
+            // Key should not be stored in keychain.  Delete it.
+        [self forgetSavedKeyFor:user];
+
+    else if (!tryKey) {
+        // Key should be saved in keychain.  Load it.
+        if ((tryKey = [self loadSavedKeyFor:user]))
+            if (![user.keyID isEqual:keyIDForKey(tryKey)]) {
+                // Loaded password doesn't match user's keyID.  Forget saved password: it is incorrect.
+                tryKey = nil;
+                [self forgetSavedKeyFor:user];
 
 #ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPTestFlightCheckpointMPEntered];
+                [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
 #endif
-    
-    if (self.key != tryKey) {
-        self.key = tryKey;
-        [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeySet object:self];
+            }
     }
-    
+
+    // Method 3: Check the given master password string.
+    if (!tryKey) {
+        if ([password length])
+            if ((tryKey = keyForPassword(password, user.name)))
+                if (![user.keyID isEqual:keyIDForKey(tryKey)]) {
+                    tryKey = nil;
+
+    #ifdef TESTFLIGHT_SDK_VERSION
+                    [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
+    #endif
+                }
+    }
+
+    // No more methods left, fail if key still not known.
+    if (!tryKey)
+        return NO;
+
+    if (![self.key isEqualToData:tryKey]) {
+        self.key = tryKey;
+        [self storeSavedKeyFor:user];
+    }
+
+    user.lastUsed = [NSDate date];
     self.activeUser = user;
-    
+    [[MPAppDelegate_Shared get] saveContext];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationSignedIn object:self];
 #ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPTestFlightCheckpointSetKey];
+    [TestFlight passCheckpoint:MPTestFlightCheckpointSignedIn];
 #endif
-    
+
     return YES;
 }
 
-- (void)storeSavedKey {
-    
-    if (self.activeUser.saveKey) {
-        NSData *existingKey = [PearlKeyChain dataOfItemForQuery:keyQuery(self.activeUser)];
-        
-        if (![existingKey isEqualToData:self.key]) {
-            inf(@"Updating key in keychain.");
-            [PearlKeyChain addOrUpdateItemForQuery:keyQuery(self.activeUser)
-                                    withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                    self.key,                                       (__bridge id)kSecValueData,
-#if TARGET_OS_IPHONE
-                                                    kSecAttrAccessibleWhenUnlockedThisDeviceOnly,   (__bridge id)kSecAttrAccessible,
-#endif
-                                                    nil]];
-        }
-    }
-}
-
-- (void)unsetKey {
-    
-    self.key = nil;
-    self.activeUser = nil;
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyUnset object:self];
-}
-
 - (NSData *)keyWithLength:(NSUInteger)keyLength {
-    
+
     return [self.key subdataWithRange:NSMakeRange(0, MIN(keyLength, self.key.length))];
 }
 

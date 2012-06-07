@@ -119,12 +119,6 @@
     [self.avatarsView autoSizeContentIgnoreHidden:YES ignoreInvisible:YES limitPadding:NO ignoreSubviews:nil];
     
     [self updateLayoutAnimated:YES allowScroll:YES completion:nil];
-    
-    self.deleteTip.alpha = 0;
-    if ([users count] > 1)
-        [UIView animateWithDuration:0.5f animations:^{
-            self.deleteTip.alpha = 1;
-        }];
 }
 
 - (UIButton *)setupAvatar:(UIButton *)avatar forUser:(MPUserEntity *)user {
@@ -169,7 +163,11 @@
     
     if (!self.selectedUser)
         [self.passwordField resignFirstResponder];
-    
+    else if ([[MPAppDelegate get] signInAsUser:self.selectedUser usingMasterPassword:nil]) {
+        [self dismissModalViewControllerAnimated:YES];
+        return;
+    }
+
     [self updateLayoutAnimated:YES allowScroll:YES completion:^(BOOL finished) {
         if (finished)
             if (self.selectedUser)
@@ -230,6 +228,7 @@
         self.nameLabel.backgroundColor = [UIColor blackColor];
         self.oldNameLabel.center = self.nameLabel.center;
         self.avatarShadowColor = [UIColor whiteColor];
+        self.deleteTip.alpha = 0;
     } else if (!self.selectedUser && self.passwordView.alpha == 1) {
         self.passwordView.alpha = 0;
         self.avatarsView.center = CGPointMake(160, 240);
@@ -238,6 +237,7 @@
         self.nameLabel.backgroundColor = [UIColor clearColor];
         self.oldNameLabel.center = self.nameLabel.center;
         self.avatarShadowColor = [UIColor lightGrayColor];
+        self.deleteTip.alpha = [self.avatarToUser count] > 2? 1: 0;
     }
 
     MPUserEntity *targetedUser = self.selectedUser;
@@ -294,14 +294,14 @@
     [self setSpinnerActive:YES];
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        BOOL unlocked = [[MPAppDelegate get] tryMasterPassword:self.passwordField.text forUser:self.selectedUser];
+        BOOL unlocked = [[MPAppDelegate get] signInAsUser:self.selectedUser usingMasterPassword:self.passwordField.text];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (unlocked) {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (long) (NSEC_PER_SEC * 0.5f)), dispatch_get_main_queue(), ^{
                     [self dismissModalViewControllerAnimated:YES];
                 });
-            } else
+            } else if (self.passwordField.text.length)
                 [self setPasswordTip:@"Incorrect password."];
             
             [self setSpinnerActive:NO];

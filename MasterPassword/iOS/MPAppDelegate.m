@@ -50,26 +50,17 @@
     return (MPAppDelegate *)[super get];
 }
 
+- (void)checkConfig {
+
+    if ([[MPConfig get].iCloud boolValue] != [self.storeManager iCloudEnabled])
+        [self.storeManager useiCloudStore:[[MPConfig get].iCloud boolValue] alertUser:YES];
+}
+
 - (void)showGuide {
     
     [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
     
     [TestFlight passCheckpoint:MPTestFlightCheckpointShowGuide];
-}
-
-- (void)loadKey:(BOOL)animated {
-    
-    if (!self.key)
-        // Try and load the key from the keychain.
-        [self loadSavedKey];
-    
-    if (!self.key)
-        // Ask the user to set the key through his master password.
-        PearlMainThread(^{
-            [self.navigationController presentViewController:
-             [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
-                                                    animated:animated completion:nil];
-        });
 }
 
 - (void)export {
@@ -131,10 +122,10 @@
                              if (buttonIndex == [alert cancelButtonIndex])
                                  return;
 
-                             [[MPAppDelegate get] forgetSavedKey];
-                             [[MPAppDelegate get] loadKey:YES];
+                             self.activeUser.keyID = nil;
+                             [self signOut];
 
-                             [TestFlight passCheckpoint:MPTestFlightCheckpointMPChanged];
+                             [TestFlight passCheckpoint:MPTestFlightCheckpointChangeMP];
                          }
                        cancelTitle:[PearlStrings get].commonButtonAbort
                        otherTitles:[PearlStrings get].commonButtonContinue, nil];
@@ -145,12 +136,6 @@
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)value {
     
     [self checkConfig];
-}
-
-- (void)checkConfig {
-    
-    if ([[MPConfig get].iCloud boolValue] != [self.storeManager iCloudEnabled])
-        [self.storeManager useiCloudStore:[[MPConfig get].iCloud boolValue] alertUser:YES];
 }
 
 #pragma mark - UIApplicationDelegate
@@ -287,7 +272,11 @@
      [[UISegmentedControl appearance] setDividerImage:segmentUnselectedUnselected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
      [[UISegmentedControl appearance] setDividerImage:segmentSelectedUnselected forLeftSegmentState:UIControlStateSelected rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
      [[UISegmentedControl appearance] setDividerImage:segUnselectedSelected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateSelected barMetrics:UIBarMetricsDefault];*/
-    
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPNotificationSignedOut object:nil queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [self.navigationController performSegueWithIdentifier:@"MP_Unlock" sender:nil];
+                                                  }];
     [[NSNotificationCenter defaultCenter] addObserverForName:kIASKAppSettingChanged object:nil queue:nil
                                                   usingBlock:^(NSNotification *note) {
                                                       [self checkConfig];
@@ -379,11 +368,7 @@
     
     if ([[MPiOSConfig get].showQuickStart boolValue])
         [self showGuide];
-    else {
-        [self loadKey:NO];
-        [self checkConfig];
-    }
-    
+
     [TestFlight passCheckpoint:MPTestFlightCheckpointActivated];
     
     [super applicationDidBecomeActive:application];
@@ -421,11 +406,9 @@
     
     [self saveContext];
     
-    if (![[MPiOSConfig get].rememberLogin boolValue]) {
-        [self unsetKey];
-        [self loadKey:NO];
-    }
-    
+    if (![[MPiOSConfig get].rememberLogin boolValue])
+        [self signOut];
+
     [TestFlight passCheckpoint:MPTestFlightCheckpointDeactivated];
 }
 

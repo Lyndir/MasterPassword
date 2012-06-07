@@ -925,6 +925,7 @@ L4m3P4sSw0rD</string>
                     <connections>
                         <segue destination="PQa-Xl-A3x" kind="relationship" relationship="rootViewController" id="LUg-eF-JQd"/>
                         <segue destination="qz3-eG-aEi" kind="modal" identifier="MP_Guide" id="vyG-wN-8hU"/>
+                        <segue destination="Nbn-Rv-sP1" kind="modal" identifier="MP_Unlock" id="6s2-3H-q5S"/>
                     </connections>
                 </navigationController>
             </objects>

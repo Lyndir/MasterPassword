@@ -14,6 +14,19 @@
         <link rel="stylesheet" type="text/css" href="css/screen.css" />
 
         <script src="js/jquery-1.6.1.min.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $(window).scroll(function() {
+                    if ($(window).scrollTop() > 100) {
+                        $(".appstore").show();
+                        $("header .appstore").hide();
+                    } else {
+                        $(".appstore").hide();
+                        $("header .appstore").show();
+                    }
+                })
+            });
+        </script>
         <script src="js/functions.js" type="text/javascript"></script>
         <script type="text/javascript">
             var _gaq = _gaq || [];
@@ -67,6 +80,7 @@
         </script>
     </head>
     <body id="frontpage">
+        <a class="appstore" href="http://itunes.com/apps/MasterPassword"><img src="img/appstore.png" /></a>
         <header>
             
             <a class="appstore" href="http://itunes.com/apps/MasterPassword"><img src="img/appstore.png" /></a>
@@ -75,7 +89,6 @@
 
         </header>
         <div id="fixedheader">
-            <a class="appstore" href="http://itunes.com/apps/MasterPassword"><img src="img/appstore-small.png" /></a>
             <h2><a href="index.html">Master Password</a></h2>
         </div>
         <!--a href="http://bit.ly/vNN5Zi" onclick="_gaq.push(['_trackPageview', '/outbound/testflight']);" id="ribbon"></a-->
@@ -87,19 +100,23 @@
                 </div>
             </div>
 
-            <h1>Stop worrying about <em>passwords</em></h1>
+            <h1>Stop worrying<br />
+                about passwords</h1>
 
-            <h2>Memorizing passwords or even saving them in our browser, an application or the cloud just isn't good enough.</h2>
+            <h2>Admit it, you're terrible at memorizing passwords.</h2>
 
-            <p>
-                Master Password is a solution that <strong>voids the need to <em>keep</em> your passwords anywhere</strong>.  Not in your head, not on your computer and not in the cloud.
-            </p>
-            <p>
-                Nothing to store means nothing to lose.  At the same time it makes sure that your accounts are adequately protected with <em>exclusive</em> passwords.
-            </p>
-            <p>
-                Learn how <a href="#how">below</a>.
-            </p>
+            <p>Just like the rest of the world, your passwords are too simple or reused between many sites.  To security specialists or hackers, <em>your accounts are like empty houses with the door wide open</em>.</p>
+            <p>Even the sites you use that hold nothing of value can easily be used by attackers to impersonate you.</p>
+
+            <p><b>Master Password</b> is a <em>stateless solution</em>, which means <strong>your passwords don't need to be saved <em>anywhere</em></strong>.  Not in your head, not on your computer and not in the cloud.<br />
+            Nothing to store means nothing to lose.  At the same time it makes sure that your accounts are adequately protected with secure and <em>unique</em> passwords.</p>
+
+            <p>Master Password is <b>different</b> from other vault-like password solutions.  It helps you set <b>secure passwords</b> for your sites, and at the same time makes <b>losing your passwords almost impossible</b>.</p>
+
+            <p>Built on algorithms such as <a href="http://www.bsdcan.org/2009/schedule/events/147.en.html">scrypt</a> and <a href="http://en.wikipedia.org/wiki/HMAC">HMAC-SHA256</a>, your master password is kept safe even if websites you use get hacked.</p>
+
+            <p>On that topic, if you're not using Master Password yet and <a href="http://www.washingtonpost.com/business/technology/linkedin-eharmony-deal-with-breach-aftermath/2012/06/07/gJQAwqs5KV_story.html">you have a <b>LinkedIn</b> account, you should <em>worry</em> (click for details)</a>.<br />
+            Change your password <em>now</em>, and change it into something secure and unique.</p>
 
             <hr class="clear" />
             <!--p>
@@ -127,7 +144,7 @@
                         </div>
                         <br />
                     </div>
-                    <h2>Generates secure passwords</h2>
+                    <h2>Creates secure passwords</h2>
                     The application <strong>generates secure, random and unique passwords</strong> in a format that's easy for you to copy.
                 </div>
                 <div>

@@ -7,13 +7,18 @@ body {
 
     color:                      black;
 
-    font:                       105% Exo, sans-serif;
+    font:                       105% "Hoefler Text", Garamond, Baskerville, "Baskerville Old Face", "Times New Roman", serif;
     font-weight:                100;
 }
 h1, h2, h3, h4 {
     text-shadow:                #FFF 0 -1px 1px, #AAA 0 0 5px;
 
     font-weight:                600;
+}
+h1 {
+    font-family:                "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Liberation Sans", sans-serif;
+
+    font-weight:                100;
 }
 strong {
     font-weight:                400;
@@ -62,11 +67,27 @@ img {
 /* Classes */
 .stripe {
     background:                 rgba(255, 255, 255, 0.3);
-    border:                     1px solid rgba(255, 255, 255, 0.7);
+    border:                     1px solid rgba(255, 255, 255, 0.5);
     border-width:               1px 0;
     -webkit-box-shadow:         inset 0 0 15px rgba(255, 255, 255, 0.5), 2px 2px 6px rgba(200, 200, 200, 0.5);
        -moz-box-shadow:         inset 0 0 15px rgba(255, 255, 255, 0.5), 2px 2px 6px rgba(200, 200, 200, 0.5);
             box-shadow:         inset 0 0 15px rgba(255, 255, 255, 0.5), 2px 2px 6px rgba(200, 200, 200, 0.5);
+}
+.button {
+    display:                    inline-block;
+    background:                 rgba(255, 255, 255, 0.7);
+    border:                     1px solid rgba(255, 255, 255, 1);
+    border-radius:              5px;
+    -webkit-box-shadow:         1px 1px 6px rgba(200, 200, 200, 0.5);
+       -moz-box-shadow:         1px 1px 6px rgba(200, 200, 200, 0.5);
+            box-shadow:         1px 1px 6px rgba(200, 200, 200, 0.5);
+    padding:                    1em;
+
+    text-decoration:            none;
+}
+.button:hover {
+    background:                 rgba(240, 240, 240, 0.5);
+    border-color:               white;
 }
 
 /* Page */
@@ -79,11 +100,15 @@ header {
        -moz-box-shadow:         0 0 50px #666;
             box-shadow:         0 0 50px #666;
 
+    -webkit-box-sizing:         border-box;
+       -moz-box-sizing:         border-box;
+            box-sizing:         border-box;
     top:                        0;
     left:                       0;
     width:                      100%;
+    height:                     150px;
     margin:                     0 0 5em;
-    padding:                    1em 0;
+    padding:                    1em 0 0;
 
     text-align:                 center;
 }
@@ -111,11 +136,15 @@ header .divider {
        -moz-box-shadow:         0 0 10px #000;
             box-shadow:         0 0 10px #000;
 
+    -webkit-box-sizing:         border-box;
+       -moz-box-sizing:         border-box;
+            box-sizing:         border-box;
     top:                        0;
     left:                       0;
     width:                      100%;
+    height:                     50px;
     margin:                     0 0 5em;
-    padding:                    0.5em 0;
+    padding:                    10px 0 0;
 
     text-align:                 center;
 }
@@ -127,6 +156,8 @@ header .divider {
 }
 header a, header .link, header :link,
 #fixedheader a, #fixedheader .link, #fixedheader :link {
+    font-family:                Exo;
+    font-weight:                700;
     text-decoration:            none;
 }
 header a:hover, header .link:hover,
@@ -187,9 +218,40 @@ blockquote:before {
     z-index:                    -1;
 }
 .appstore {
-    position:                   absolute;
-    right:                      10px;
+    position:                   fixed;
+    display:                    none;
+    z-index:                    100;
     font-size:                  0;
+
+    /* appstore-bubble.png *
+    top:                        8px;
+    right:                      5px;
+    */
+    /* appstore.png */
+    top:                        25px;
+    right:                      25px;
+}
+.appstore img {
+    border-radius:              5px;
+    -webkit-box-shadow:         0 0 30px #AAA;
+       -moz-box-shadow:         0 0 30px #AAA;
+            box-shadow:         0 0 30px #AAA;
+}
+.appstore:hover img {
+    -webkit-box-shadow:         0 0 30px #FFF;
+       -moz-box-shadow:         0 0 30px #FFF;
+            box-shadow:         0 0 30px #FFF;
+}
+header .appstore {
+    position:                   absolute;
+    display:                    block;
+
+    top:                        auto;
+    /* appstore-bubble.png *
+    bottom:                     -73px;
+    */
+    /* appstore.png */
+    bottom:                     -25px;
 }
 .columns {
     position:                   relative;
