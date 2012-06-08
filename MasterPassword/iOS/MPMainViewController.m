@@ -52,7 +52,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     
-    return [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad || interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
+    return interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -214,10 +214,9 @@
     [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointHelpChapter, chapter]];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.helpView loadRequest:
-         [NSURLRequest requestWithURL:
-          [NSURL URLWithString:[NSString stringWithFormat:@"#%@", chapter] relativeToURL:
-           [[NSBundle mainBundle] URLForResource:@"help" withExtension:@"html"]]]];
+        NSURL *url = [NSURL URLWithString:[@"#" stringByAppendingString:chapter]
+                            relativeToURL:[[NSBundle mainBundle] URLForResource:@"help" withExtension:@"html"]];
+        [self.helpView loadRequest:[NSURLRequest requestWithURL:url]];
     });
 }
 
