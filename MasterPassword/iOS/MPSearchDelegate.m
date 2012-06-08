@@ -26,52 +26,53 @@
 @synthesize searchTipContainer;
 
 - (id)init {
-    
+
     if (!([super init]))
         return nil;
-    
-    self.dateFormatter = [NSDateFormatter new];
+
+    self.dateFormatter           = [NSDateFormatter new];
     self.dateFormatter.dateStyle = NSDateFormatterShortStyle;
-    self.query = @"";
-    
-    NSFetchRequest *fetchRequest    = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
-    fetchRequest.sortDescriptors    = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses_" ascending:NO]];
-    self.fetchedResultsController   = [PearlLazy lazyObjectLoadedFrom:^id{
+    self.query                   = @"";
+
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
+    fetchRequest.sortDescriptors  = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses_" ascending:NO]];
+    self.fetchedResultsController = [PearlLazy lazyObjectLoadedFrom:^id {
         NSFetchedResultsController *controller = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                      managedObjectContext:[MPAppDelegate managedObjectContext]
-                                                                                       sectionNameKeyPath:nil cacheName:nil];
-        controller.delegate = self;
-        
+                                                                                     sectionNameKeyPath:nil cacheName:nil];
+        controller.delegate                    = self;
+
         return controller;
     }];
-    
-    self.tipView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 170)];
-    self.tipView.textAlignment = UITextAlignmentCenter;
-    self.tipView.backgroundColor = [UIColor clearColor];
-    self.tipView.textColor = [UIColor lightTextColor];
-    self.tipView.shadowColor = [UIColor blackColor];
-    self.tipView.shadowOffset = CGSizeMake(0, -1);
-    self.tipView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
-    self.tipView.numberOfLines = 0;
-    self.tipView.font = [UIFont systemFontOfSize:14];
+
+    self.tipView                  = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 170)];
+    self.tipView.textAlignment    = UITextAlignmentCenter;
+    self.tipView.backgroundColor  = [UIColor clearColor];
+    self.tipView.textColor        = [UIColor lightTextColor];
+    self.tipView.shadowColor      = [UIColor blackColor];
+    self.tipView.shadowOffset     = CGSizeMake(0, -1);
+    self.tipView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight
+     | UIViewAutoresizingFlexibleBottomMargin;
+    self.tipView.numberOfLines    = 0;
+    self.tipView.font             = [UIFont systemFontOfSize:14];
     self.tipView.text =
-    @"Tip:\n"
-    @"Name your sites by their domain name:\n"
-    @"apple.com, twitter.com\n\n"
-    @"For email accounts, use the address:\n"
-    @"john@apple.com, john@gmail.com";
-    
+     @"Tip:\n"
+      @"Name your sites by their domain name:\n"
+      @"apple.com, twitter.com\n\n"
+      @"For email accounts, use the address:\n"
+      @"john@apple.com, john@gmail.com";
+
     return self;
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    
+
     UITableView *tableView = self.searchDisplayController.searchResultsTableView;
     for (NSInteger section = 0; section < [self numberOfSectionsInTableView:tableView]; ++section) {
         NSInteger rowCount = [self tableView:tableView numberOfRowsInSection:section];
         if (!rowCount)
             continue;
-        
+
         if (rowCount == 1)
             [self tableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section]];
         break;
@@ -79,64 +80,64 @@
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    
+
     [TestFlight passCheckpoint:MPTestFlightCheckpointCancelSearch];
-    
+
     [self.delegate didSelectElement:nil];
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    
+
     if (searchBar.searchResultsButtonSelected && !searchText.length)
         searchBar.text = @" ";
-    
-    self.query = [searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+
+    self.query     = [searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (!self.query)
         self.query = @"";
 }
 
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
-    
+
     controller.searchBar.prompt = @"Enter the site's name:";
-    
+
     [UIView animateWithDuration:0.2f animations:^{
         self.searchTipContainer.alpha = 0;
     }];
 }
 
 - (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller {
-    
+
     controller.searchBar.text = controller.searchBar.searchResultsButtonSelected? @" ": @"";
-    self.query = @"";
+    self.query                = @"";
 }
 
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
-    
-    controller.searchBar.prompt = nil;
+
+    controller.searchBar.prompt                      = nil;
     controller.searchBar.searchResultsButtonSelected = NO;
 }
 
 - (void)searchDisplayController:(UISearchDisplayController *)controller didLoadSearchResultsTableView:(UITableView *)tableView {
-    
+
     tableView.backgroundColor = [UIColor blackColor];
-    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    tableView.rowHeight = 48.0f;
+    tableView.separatorStyle  = UITableViewCellSeparatorStyleNone;
+    tableView.rowHeight       = 48.0f;
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
-    
+
     if (!controller.active)
         return NO;
-    
+
     assert(self.query);
-    
+
     self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@",
-                                                            self.query, self.query, NilToNSNull([MPAppDelegate get].activeUser)];
-    
+                                                                                            self.query, self.query, NilToNSNull([MPAppDelegate get].activeUser)];
+
     NSError *error;
     if (![self.fetchedResultsController performFetch:&error])
-        err(@"Couldn't fetch elements: %@", error);
-    
+    err(@"Couldn't fetch elements: %@", error);
+
     NSArray *subviews = self.searchDisplayController.searchBar.superview.subviews;
     NSUInteger overlayIndex = [subviews indexOfObject:self.searchDisplayController.searchBar] + 1;
     UIView *overlay = [subviews count] > overlayIndex? [subviews objectAtIndex:overlayIndex]: nil;
@@ -146,7 +147,7 @@
         [self.tipView removeFromSuperview];
         [overlay addSubview:self.tipView];
     }
-    
+
     return YES;
 }
 
@@ -204,16 +205,16 @@
 //}
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    
+
     [self.searchDisplayController.searchResultsTableView reloadData];
     //    [self.searchDisplayController.searchResultsTableView endUpdates];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    
+
     NSArray *sections = [self.fetchedResultsController sections];
     NSUInteger sectionCount = [sections count];
-    
+
     if ([self.query length]) {
         __block BOOL hasExactQueryMatch = NO;
         [sections enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -225,129 +226,130 @@
                 }
             }];
             if (hasExactQueryMatch)
-                *stop = YES;
+                *stop                                   = YES;
         }];
         if (!hasExactQueryMatch)
-            // Add a section for "new site".
+         // Add a section for "new site".
             ++sectionCount;
     }
-    
+
     return (NSInteger)sectionCount;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
+
     NSArray *sections = [self.fetchedResultsController sections];
     if (section < (NSInteger)[sections count])
         return (NSInteger)[[sections objectAtIndex:(unsigned)section] numberOfObjects];
-    
+
     return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MPElementSearch"];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"MPElementSearch"];
-        
+
         UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ui_list_middle"]];
-        backgroundImageView.frame = CGRectMake(-5, 0, 330, 34);
+        backgroundImageView.frame            = CGRectMake(-5, 0, 330, 34);
         backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        backgroundImageView.contentStretch = CGRectMake(0.2f, 0.2f, 0.6f, 0.6f);
+        backgroundImageView.contentStretch   = CGRectMake(0.2f, 0.2f, 0.6f, 0.6f);
         UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 34)];
         [backgroundView addSubview:backgroundImageView];
         backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        
-        cell.backgroundView = backgroundView;
-        cell.textLabel.backgroundColor = [UIColor clearColor];
-        cell.textLabel.textColor = [UIColor whiteColor];
+
+        cell.backgroundView                  = backgroundView;
+        cell.textLabel.backgroundColor       = [UIColor clearColor];
+        cell.textLabel.textColor             = [UIColor whiteColor];
         cell.detailTextLabel.backgroundColor = [UIColor clearColor];
-        cell.detailTextLabel.textColor = [UIColor lightGrayColor];
-        cell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        cell.clipsToBounds = YES;
+        cell.detailTextLabel.textColor       = [UIColor lightGrayColor];
+        cell.autoresizingMask                = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        cell.clipsToBounds                   = YES;
     }
-    
+
     [self configureCell:cell inTableView:tableView atIndexPath:indexPath];
-    
+
     return cell;
 }
 
 - (void)configureCell:(UITableViewCell *)cell inTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
-    
+
     if (indexPath.section < (NSInteger)[[self.fetchedResultsController sections] count]) {
         MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        
-        cell.textLabel.text = element.name;
+
+        cell.textLabel.text       = element.name;
         cell.detailTextLabel.text = [NSString stringWithFormat:@"Used %d times, last on %@",
-                                     element.uses, [self.dateFormatter stringFromDate:element.lastUsed]];
+                                                               element.uses, [self.dateFormatter stringFromDate:element.lastUsed]];
     } else {
         // "New" section
-        cell.textLabel.text = self.query;
+        cell.textLabel.text       = self.query;
         cell.detailTextLabel.text = @"Create a new site.";
     }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+
     if (indexPath.section < (NSInteger)[[self.fetchedResultsController sections] count])
         [self.delegate didSelectElement:[self.fetchedResultsController objectAtIndexPath:indexPath]];
-    
+
     else {
         // "New" section.
         NSString *siteName = self.query;
         [PearlAlert showAlertWithTitle:@"New Site"
                                message:PearlString(@"Do you want to create a new site named:\n%@", siteName)
                              viewStyle:UIAlertViewStyleDefault
-                             initAlert:nil
-                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                         [tableView deselectRowAtIndexPath:indexPath animated:YES];
-                         
-                         if (buttonIndex == [alert cancelButtonIndex])
-                             return;
-                         
-                         [self.fetchedResultsController.managedObjectContext performBlock:^{
-                             MPElementGeneratedEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPElementGeneratedEntity class])
-                                                                                               inManagedObjectContext:self.fetchedResultsController.managedObjectContext];
-                             assert([element isKindOfClass:ClassFromMPElementType(element.type)]);
-                             assert([MPAppDelegate get].activeUser.keyID);
-                             
-                             element.name = siteName;
-                             element.user = [MPAppDelegate get].activeUser;
-                             
-                             dispatch_async(dispatch_get_main_queue(), ^{
-                                 [self.delegate didSelectElement:element];
-                             });
-                         }];
-                     } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonYes, nil];
+                             initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+            if (buttonIndex == [alert cancelButtonIndex])
+                return;
+
+            [self.fetchedResultsController.managedObjectContext performBlock:^{
+                MPElementGeneratedEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass(
+                 [MPElementGeneratedEntity class])
+                                                                         inManagedObjectContext:self.fetchedResultsController.managedObjectContext];
+                assert([element isKindOfClass:ClassFromMPElementType(element.type)]);
+                assert([MPAppDelegate get].activeUser.keyID);
+
+                element.name = siteName;
+                element.user = [MPAppDelegate get].activeUser;
+
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.delegate didSelectElement:element];
+                });
+            }];
+        } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonYes, nil];
     }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    
+
     if (section < (NSInteger)[[self.fetchedResultsController sections] count])
         return [[[self.fetchedResultsController sections] objectAtIndex:(unsigned)section] name];
-    
+
     return @"";
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    
+
     return [self.fetchedResultsController sectionIndexTitles];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
-    
+
     return [self.fetchedResultsController sectionForSectionIndexTitle:title atIndex:index];
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+forRowAtIndexPath:(NSIndexPath *)indexPath {
+
     if (indexPath.section < (NSInteger)[[self.fetchedResultsController sections] count]) {
         if (editingStyle == UITableViewCellEditingStyleDelete)
             [self.fetchedResultsController.managedObjectContext performBlock:^{
                 MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
                 [self.fetchedResultsController.managedObjectContext deleteObject:element];
-                
+
                 [TestFlight passCheckpoint:MPTestFlightCheckpointDeleteElement];
             }];
     }

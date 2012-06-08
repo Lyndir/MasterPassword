@@ -13,12 +13,12 @@
 @implementation MPElementEntity (MP)
 
 - (MPElementType)type {
-    
+
     return (MPElementType)[self.type_ unsignedIntegerValue];
 }
 
 - (void)setType:(MPElementType)type {
-    
+
     self.type_ = PearlUnsignedInteger(type);
 }
 
@@ -34,32 +34,32 @@
 
 
 - (NSUInteger)use {
-    
+
     self.lastUsed = [NSDate date];
     return ++self.uses;
 }
 
 - (id)content {
-    
+
     @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Content implementation missing." userInfo:nil];
 }
 
 - (NSString *)exportContent {
-    
+
     return nil;
 }
 
 - (void)importContent:(NSString *)content {
-    
+
 }
 
 - (NSString *)description {
-    
+
     return PearlString(@"%@:%@", [self class], [self name]);
 }
 
 - (NSString *)debugDescription {
-    
+
     return PearlString(@"{%@: name=%@, user=%@, type=%d, uses=%d, lastUsed=%@}",
                        NSStringFromClass([self class]), self.name, self.user.name, self.type, self.uses, self.lastUsed);
 }
@@ -84,10 +84,10 @@
         err(@"Corrupt element: %@, type: %d is not in MPElementTypeClassGenerated", self.name, self.type);
         return nil;
     }
-    
+
     if (![self.name length])
         return nil;
-    
+
     return MPCalculateContent(self.type, self.name, [MPAppDelegate get].key, self.counter);
 }
 
@@ -96,55 +96,55 @@
 @implementation MPElementStoredEntity (MP)
 
 + (NSDictionary *)queryForDevicePrivateElementNamed:(NSString *)name {
-    
+
     return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
-                              attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                          @"DevicePrivate",  (__bridge id)kSecAttrService,
-                                          name,              (__bridge id)kSecAttrAccount,
-                                          nil]
-                                 matches:nil];
+                                   attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                             @"DevicePrivate", (__bridge id)kSecAttrService,
+                                                             name, (__bridge id)kSecAttrAccount,
+                                                             nil]
+                                   matches:nil];
 }
 
 - (id)content {
-    
+
     assert(self.type & MPElementTypeClassStored);
-    
+
     NSData *encryptedContent;
     if (self.type & MPElementFeatureDevicePrivate)
         encryptedContent = [PearlKeyChain dataOfItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]];
     else
         encryptedContent = self.contentObject;
-    
+
     NSData *decryptedContent = [encryptedContent decryptWithSymmetricKey:[[MPAppDelegate get] keyWithLength:PearlCryptKeySize]
-                                                                 padding:YES];
+                                                 padding:YES];
     return [[NSString alloc] initWithBytes:decryptedContent.bytes length:decryptedContent.length encoding:NSUTF8StringEncoding];
 }
 
 - (void)setContent:(id)content {
-    
+
     NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[[MPAppDelegate get] keyWithLength:PearlCryptKeySize]
-                                                                      padding:YES];
-    
+                                         padding:YES];
+
     if (self.type & MPElementFeatureDevicePrivate) {
         [PearlKeyChain addOrUpdateItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]
-                           withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                           encryptedContent,                                (__bridge id)kSecValueData,
-#if TARGET_OS_IPHONE
-                                           kSecAttrAccessibleWhenUnlockedThisDeviceOnly,    (__bridge id)kSecAttrAccessible,
-#endif
-                                           nil]];
+                       withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                     encryptedContent, (__bridge id)kSecValueData,
+                                                     #if TARGET_OS_IPHONE
+                                                     kSecAttrAccessibleWhenUnlockedThisDeviceOnly, (__bridge id)kSecAttrAccessible,
+                                                     #endif
+                                                     nil]];
         self.contentObject = nil;
     } else
         self.contentObject = encryptedContent;
 }
 
 - (NSString *)exportContent {
-    
+
     return [self.contentObject encodeBase64];
 }
 
 - (void)importContent:(NSString *)content {
-    
+
     self.contentObject = [content decodeBase64];
 }
 

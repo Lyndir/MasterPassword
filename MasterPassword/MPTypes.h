@@ -18,28 +18,28 @@ typedef enum {
 
 typedef enum {
     /** Generate the password. */
-    MPElementTypeClassGenerated         = 1 << 4,
+     MPElementTypeClassGenerated = 1 << 4,
     /** Store the password. */
-    MPElementTypeClassStored            = 1 << 5,
+     MPElementTypeClassStored    = 1 << 5,
 } MPElementTypeClass;
 
 typedef enum {
     /** Export the key-protected content data. */
-    MPElementFeatureExportContent       = 1 << 10,
+     MPElementFeatureExportContent = 1 << 10,
     /** Never export content. */
-    MPElementFeatureDevicePrivate       = 1 << 11,
+     MPElementFeatureDevicePrivate = 1 << 11,
 } MPElementFeature;
 
 typedef enum {
-    MPElementTypeGeneratedSecure        = 0x0 | MPElementTypeClassGenerated   | 0x0,
-    MPElementTypeGeneratedLong          = 0x1 | MPElementTypeClassGenerated   | 0x0,
-    MPElementTypeGeneratedMedium        = 0x2 | MPElementTypeClassGenerated   | 0x0,
-    MPElementTypeGeneratedShort         = 0x3 | MPElementTypeClassGenerated   | 0x0,
-    MPElementTypeGeneratedBasic         = 0x4 | MPElementTypeClassGenerated   | 0x0,
-    MPElementTypeGeneratedPIN           = 0x5 | MPElementTypeClassGenerated   | 0x0,
-    
-    MPElementTypeStoredPersonal         = 0x0 | MPElementTypeClassStored      | MPElementFeatureExportContent,
-    MPElementTypeStoredDevicePrivate    = 0x1 | MPElementTypeClassStored      | MPElementFeatureDevicePrivate,
+    MPElementTypeGeneratedSecure = 0x0 | MPElementTypeClassGenerated | 0x0,
+    MPElementTypeGeneratedLong   = 0x1 | MPElementTypeClassGenerated | 0x0,
+    MPElementTypeGeneratedMedium = 0x2 | MPElementTypeClassGenerated | 0x0,
+    MPElementTypeGeneratedShort  = 0x3 | MPElementTypeClassGenerated | 0x0,
+    MPElementTypeGeneratedBasic  = 0x4 | MPElementTypeClassGenerated | 0x0,
+    MPElementTypeGeneratedPIN    = 0x5 | MPElementTypeClassGenerated | 0x0,
+
+    MPElementTypeStoredPersonal      = 0x0 | MPElementTypeClassStored | MPElementFeatureExportContent,
+    MPElementTypeStoredDevicePrivate = 0x1 | MPElementTypeClassStored | MPElementFeatureDevicePrivate,
 } MPElementType;
 
 #define MPTestFlightCheckpointAction                    @"MPTestFlightCheckpointAction"
@@ -77,9 +77,9 @@ typedef enum {
 #define MPNotificationKeyForgotten                      @"MPNotificationKeyForgotten"
 #define MPNotificationElementUsed                       @"MPNotificationElementUsed"
 
-NSData *keyForPassword(NSString *password, NSString *username);
-NSData *keyIDForPassword(NSString *password, NSString *username);
-NSData *keyIDForKey(NSData *key);
+NSData   *keyForPassword(NSString *password, NSString *username);
+NSData   *keyIDForPassword(NSString *password, NSString *username);
+NSData   *keyIDForKey(NSData *key);
 NSString *NSStringFromMPElementType(MPElementType type);
 NSString *ClassNameFromMPElementType(MPElementType type);
 Class ClassFromMPElementType(MPElementType type);

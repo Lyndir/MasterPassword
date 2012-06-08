@@ -24,25 +24,25 @@
 
 
 - (void)viewDidLoad {
-    
+
     self.avatarTemplate.hidden = YES;
 
     for (int a = 0; a < MPAvatarCount; ++a) {
         UIButton *avatar = [self.avatarTemplate clone];
         avatar.togglesSelectionInSuperview = YES;
-        avatar.tag = a;
-        avatar.hidden = NO;
-        avatar.center = CGPointMake(
-                self.avatarTemplate.center.x * (a + 1) + self.avatarTemplate.bounds.size.width / 2 * a,
-                self.avatarTemplate.center.y);
+        avatar.tag                         = a;
+        avatar.hidden                      = NO;
+        avatar.center                      = CGPointMake(
+         self.avatarTemplate.center.x * (a + 1) + self.avatarTemplate.bounds.size.width / 2 * a,
+         self.avatarTemplate.center.y);
         [avatar setBackgroundImage:[UIImage imageNamed:PearlString(@"avatar-%d", a)]
                 forState:UIControlStateNormal];
 
-        avatar.layer.cornerRadius = avatar.bounds.size.height / 2;
-        avatar.layer.shadowColor = [UIColor blackColor].CGColor;
+        avatar.layer.cornerRadius  = avatar.bounds.size.height / 2;
+        avatar.layer.shadowColor   = [UIColor blackColor].CGColor;
         avatar.layer.shadowOpacity = 1;
-        avatar.layer.shadowRadius = 5;
-        avatar.backgroundColor = [UIColor clearColor];
+        avatar.layer.shadowRadius  = 5;
+        avatar.backgroundColor     = [UIColor clearColor];
 
         [avatar onHighlightOrSelect:^(BOOL highlighted, BOOL selected) {
             if (highlighted || selected)
@@ -54,32 +54,33 @@
             if (selected)
                 [MPAppDelegate get].activeUser.avatar = (unsigned)avatar.tag;
         } options:0];
-        avatar.selected = (a == [MPAppDelegate get].activeUser.avatar);
+        avatar.selected            = (a == [MPAppDelegate get].activeUser.avatar);
     }
 
     [super viewDidLoad];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    
+
     [self.avatarsView autoSizeContent];
     [self.avatarsView enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
-        if (subview.tag && ((UIControl *) subview).selected) {
+        if (subview.tag && ((UIControl *)subview).selected) {
             [self.avatarsView setContentOffset:CGPointMake(subview.center.x - self.avatarsView.bounds.size.width / 2, 0) animated:animated];
         }
     } recurse:NO];
 
     self.savePasswordSwitch.on = [MPAppDelegate get].activeUser.saveKey;
-    
+
     [super viewWillAppear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    
+
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 - (void)viewDidUnload {
+
     [self setAvatarsView:nil];
     [self setAvatarTemplate:nil];
     [self setAvatarsView:nil];
@@ -92,13 +93,14 @@
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
     if (cell == self.exportCell)
         [[MPAppDelegate get] export];
 
-    else if (cell == self.changeMPCell)
-        [[MPAppDelegate get] changeMP];
+    else
+        if (cell == self.changeMPCell)
+            [[MPAppDelegate get] changeMP];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -106,7 +108,7 @@
 #pragma mark - IASKSettingsDelegate
 
 - (void)settingsViewControllerDidEnd:(IASKAppSettingsViewController *)sender {
-    
+
     while ([self.navigationController.viewControllers containsObject:sender])
         [self.navigationController popViewControllerAnimated:YES];
 }
@@ -114,7 +116,7 @@
 #pragma mark - IBActions
 
 - (IBAction)didToggleSwitch:(UISwitch *)sender {
-    
+
     if (([MPAppDelegate get].activeUser.saveKey = sender.on))
         [[MPAppDelegate get] storeSavedKeyFor:[MPAppDelegate get].activeUser];
     else

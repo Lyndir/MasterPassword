@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol MPTypeDelegate <NSObject>
+@protocol MPTypeDelegate<NSObject>
 
 - (void)didSelectType:(MPElementType)type;
 

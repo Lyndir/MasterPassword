@@ -15,17 +15,17 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
                                    attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                               @"Saved Master Password",      (__bridge id)kSecAttrService,
-                                               user.name,                     (__bridge id)kSecAttrAccount,
-                                               nil]
-                                      matches:nil];
+                                                             @"Saved Master Password", (__bridge id)kSecAttrService,
+                                                             user.name, (__bridge id)kSecAttrAccount,
+                                                             nil]
+                                   matches:nil];
 }
 
 - (NSData *)loadSavedKeyFor:(MPUserEntity *)user {
 
     NSData *key = [PearlKeyChain dataOfItemForQuery:keyQuery(user)];
     if (key)
-        inf(@"Found key (for: %@) in keychain.", user.name);
+    inf(@"Found key (for: %@) in keychain.", user.name);
 
     else {
         user.saveKey = NO;
@@ -44,11 +44,11 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
             inf(@"Updating key in keychain.");
             [PearlKeyChain addOrUpdateItemForQuery:keyQuery(user)
                                     withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                            self.key, (__bridge id) kSecValueData,
-#if TARGET_OS_IPHONE
-                                            kSecAttrAccessibleWhenUnlockedThisDeviceOnly, (__bridge id) kSecAttrAccessible,
-#endif
-                                            nil]];
+                                                                  self.key, (__bridge id)kSecValueData,
+                                                                  #if TARGET_OS_IPHONE
+                                                                  kSecAttrAccessibleWhenUnlockedThisDeviceOnly, (__bridge id)kSecAttrAccessible,
+                                                                  #endif
+                                                                  nil]];
         }
     }
 }
@@ -72,7 +72,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
 - (void)signOut {
 
-    self.key = nil;
+    self.key        = nil;
     self.activeUser = nil;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationSignedOut object:self];
@@ -93,22 +93,23 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     // Method 2: Depending on the user's saveKey, load or remove the key from the keychain.
     if (!user.saveKey)
-            // Key should not be stored in keychain.  Delete it.
+     // Key should not be stored in keychain.  Delete it.
         [self forgetSavedKeyFor:user];
 
-    else if (!tryKey) {
-        // Key should be saved in keychain.  Load it.
-        if ((tryKey = [self loadSavedKeyFor:user]))
-            if (![user.keyID isEqual:keyIDForKey(tryKey)]) {
-                // Loaded password doesn't match user's keyID.  Forget saved password: it is incorrect.
-                tryKey = nil;
-                [self forgetSavedKeyFor:user];
+    else
+        if (!tryKey) {
+            // Key should be saved in keychain.  Load it.
+            if ((tryKey = [self loadSavedKeyFor:user]))
+                if (![user.keyID isEqual:keyIDForKey(tryKey)]) {
+                    // Loaded password doesn't match user's keyID.  Forget saved password: it is incorrect.
+                    tryKey = nil;
+                    [self forgetSavedKeyFor:user];
 
 #ifdef TESTFLIGHT_SDK_VERSION
-                [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
+                    [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
 #endif
-            }
-    }
+                }
+        }
 
     // Method 3: Check the given master password string.
     if (!tryKey) {
@@ -117,9 +118,9 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                 if (![user.keyID isEqual:keyIDForKey(tryKey)]) {
                     tryKey = nil;
 
-    #ifdef TESTFLIGHT_SDK_VERSION
+#ifdef TESTFLIGHT_SDK_VERSION
                     [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
-    #endif
+#endif
                 }
     }
 
@@ -132,7 +133,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
         [self storeSavedKeyFor:user];
     }
 
-    user.lastUsed = [NSDate date];
+    user.lastUsed   = [NSDate date];
     self.activeUser = user;
     [[MPAppDelegate_Shared get] saveContext];
 

@@ -10,7 +10,7 @@
 #import <MessageUI/MessageUI.h>
 #import "MPAppDelegate_Shared.h"
 
-@interface MPAppDelegate : MPAppDelegate_Shared <MFMailComposeViewControllerDelegate>
+@interface MPAppDelegate : MPAppDelegate_Shared<MFMailComposeViewControllerDelegate>
 
 + (MPAppDelegate *)get;
 

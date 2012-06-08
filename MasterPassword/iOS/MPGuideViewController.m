@@ -7,28 +7,27 @@
 //
 
 #import "MPGuideViewController.h"
-#import "MPAppDelegate.h"
 
 
 @implementation MPGuideViewController
 @synthesize scrollView;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    
+
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 - (void)viewDidLoad {
-    
+
     [super viewDidLoad];
 
     [self.scrollView autoSizeContent];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    
+
     [super viewWillDisappear:animated];
-    
+
     [MPiOSConfig get].showQuickStart = [NSNumber numberWithBool:NO];
 }
 

@@ -13,12 +13,12 @@
 
 @interface MPUserEntity : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * avatar_;
-@property (nonatomic, retain) NSData * keyID;
-@property (nonatomic, retain) NSDate * lastUsed;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * saveKey_;
-@property (nonatomic, retain) NSSet *elements;
+@property (nonatomic, retain) NSNumber *avatar_;
+@property (nonatomic, retain) NSData   *keyID;
+@property (nonatomic, retain) NSDate   *lastUsed;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSNumber *saveKey_;
+@property (nonatomic, retain) NSSet    *elements;
 @end
 
 @interface MPUserEntity (CoreDataGeneratedAccessors)

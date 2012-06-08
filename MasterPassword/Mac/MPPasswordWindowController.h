@@ -8,8 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface MPPasswordWindowController : NSWindowController <NSTextFieldDelegate> {
-    
+@interface MPPasswordWindowController : NSWindowController<NSTextFieldDelegate> {
+
     NSString *_content;
 }
 

@@ -17,7 +17,7 @@
 @interface MPElementEntity (MP)
 
 @property (assign) MPElementType type;
-@property (assign) NSUInteger uses;
+@property (assign) NSUInteger    uses;
 
 - (NSUInteger)use;
 - (NSString *)exportContent;
@@ -34,6 +34,6 @@
 @interface MPUserEntity (MP)
 
 @property (assign) NSUInteger avatar;
-@property (assign) BOOL saveKey;
+@property (assign) BOOL       saveKey;
 
 @end
