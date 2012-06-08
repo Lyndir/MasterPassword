@@ -1,5 +1,5 @@
 html {
-    background:                 url("../img/back-light.png") center 0;
+    background:                 url("../img/back2-light.png") center 0;
 }
 body {
     padding:                    0;
@@ -65,14 +65,6 @@ img {
 
 
 /* Classes */
-.stripe {
-    background:                 rgba(255, 255, 255, 0.3);
-    border:                     1px solid rgba(255, 255, 255, 0.5);
-    border-width:               1px 0;
-    -webkit-box-shadow:         inset 0 0 15px rgba(255, 255, 255, 0.5), 2px 2px 6px rgba(200, 200, 200, 0.5);
-       -moz-box-shadow:         inset 0 0 15px rgba(255, 255, 255, 0.5), 2px 2px 6px rgba(200, 200, 200, 0.5);
-            box-shadow:         inset 0 0 15px rgba(255, 255, 255, 0.5), 2px 2px 6px rgba(200, 200, 200, 0.5);
-}
 .button {
     display:                    inline-block;
     background:                 rgba(255, 255, 255, 0.7);
@@ -94,7 +86,7 @@ img {
 header {
     position:                   relative;
     z-index:                    99;
-    background:                 url("../img/back-dark.png") center 0;
+    background:                 url("../img/back2-dark.png") center 0;
     border-bottom:              1px solid #FFF;
     -webkit-box-shadow:         0 0 50px #666;
        -moz-box-shadow:         0 0 50px #666;
@@ -107,7 +99,7 @@ header {
     left:                       0;
     width:                      100%;
     height:                     150px;
-    margin:                     0 0 5em;
+    margin:                     0;
     padding:                    1em 0 0;
 
     text-align:                 center;
@@ -130,7 +122,7 @@ header .divider {
 #fixedheader {
     position:                   fixed;
     z-index:                    98;
-    background:                 url("../img/back-dark.png") center 0;
+    background:                 url("../img/back2-dark.png") center 0;
     border-bottom:              1px solid #FFF;
     -webkit-box-shadow:         0 0 10px #000;
        -moz-box-shadow:         0 0 10px #000;
@@ -143,7 +135,6 @@ header .divider {
     left:                       0;
     width:                      100%;
     height:                     50px;
-    margin:                     0 0 5em;
     padding:                    10px 0 0;
 
     text-align:                 center;
@@ -175,12 +166,25 @@ footer {
     font-size:                  80%;
 }
 section {
-    width:                      900px;
-    margin:                     0 auto;
+    width:                      950px;
+    margin:                     0 auto 2em;
+    padding:                    1em 0 0;
 }
-#content section.current {
-    opacity:                    1;
-    z-index:                    1;
+section.heading {
+    background:                 rgba(200, 200, 200, 0.3);
+    border:                     1px solid rgba(200, 200, 200, 0.5);
+    border-width:               0 0 1px;
+    -webkit-box-shadow:         inset 0 0 15px rgba(255, 255, 255, 0.5), 2px 2px 6px rgba(200, 200, 200, 0.5);
+       -moz-box-shadow:         inset 0 0 15px rgba(255, 255, 255, 0.5), 2px 2px 6px rgba(200, 200, 200, 0.5);
+            box-shadow:         inset 0 0 15px rgba(255, 255, 255, 0.5), 2px 2px 6px rgba(200, 200, 200, 0.5);
+
+    width:                      100%;
+    padding:                    0;
+}
+section.heading>div {
+    width:                      950px;
+    margin:                     0 auto;
+    padding:                    1em 0;
 }
 hr {
     background:                 url("../img/Dividers/Simple.png") center center no-repeat;
@@ -207,6 +211,7 @@ blockquote:before {
 .sidebox {
     background:                 url("../img/Dividers/Divider_H.png") center bottom no-repeat;
     position:                   relative;
+    z-index:                    2;
     float:                      right;
     margin:                     1em;
     width:                      546px;
@@ -215,7 +220,7 @@ blockquote:before {
 .sidebox .clip {
     overflow:                   hidden;
     position:                   relative;
-    z-index:                    -1;
+    z-index:                    1;
 }
 .appstore {
     position:                   fixed;
@@ -319,7 +324,7 @@ a.next:after {
     display:                    block;
     position:                   absolute;
     left:                       0;
-    margin-top:                 -5em;
+    margin-top:                 -1em;
     width:                      184px;
     height:                     184px;
 }
