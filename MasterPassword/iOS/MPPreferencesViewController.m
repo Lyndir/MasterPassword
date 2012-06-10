@@ -123,4 +123,9 @@
         [[MPAppDelegate get] forgetSavedKeyFor:[MPAppDelegate get].activeUser];
 }
 
+- (IBAction)settings:(UIBarButtonItem *)sender {
+    
+    [self.navigationController pushViewController:[IASKAppSettingsViewController new] animated:YES];
+}
+
 @end

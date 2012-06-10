@@ -18,5 +18,6 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *changeMPCell;
 
 - (IBAction)didToggleSwitch:(UISwitch *)sender;
+- (IBAction)settings:(id)sender;
 
 @end

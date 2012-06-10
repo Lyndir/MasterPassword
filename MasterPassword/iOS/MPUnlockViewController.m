@@ -192,8 +192,10 @@
                 [self didToggleUserSelection];
             else
                 [self didSelectNewUserAvatar:avatar];
-        } else
+        } else {
+            self.selectedUser = nil;
             [self didToggleUserSelection];
+        }
     } options:0];
 
     [self.avatarToUser setObject:NilToNSNull(user) forKey:[NSValue valueWithNonretainedObject:avatar]];
@@ -210,7 +212,7 @@
         [self.passwordField resignFirstResponder];
     else
         if ([[MPAppDelegate get] signInAsUser:self.selectedUser usingMasterPassword:nil]) {
-            [self performSegueWithIdentifier:@"MP_Unlock_Dismiss" sender:self];
+            [self dismissViewControllerAnimated:YES completion:nil];
             return;
         }
 
@@ -352,7 +354,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (unlocked) {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (long)(NSEC_PER_SEC * 0.5f)), dispatch_get_main_queue(), ^{
-                    [self performSegueWithIdentifier:@"MP_Unlock_Dismiss" sender:self];
+                    [self dismissViewControllerAnimated:YES completion:nil];
                 });
             } else
                 if (self.passwordField.text.length)

@@ -925,20 +925,11 @@ L4m3P4sSw0rD</string>
                     <connections>
                         <segue destination="PQa-Xl-A3x" kind="relationship" relationship="rootViewController" id="LUg-eF-JQd"/>
                         <segue destination="qz3-eG-aEi" kind="modal" identifier="MP_Guide" id="vyG-wN-8hU"/>
+                        <segue destination="Nbn-Rv-sP1" kind="modal" identifier="MP_Unlock" id="Dnr-C0-ZtN"/>
                     </connections>
                 </navigationController>
             </objects>
             <point key="canvasLocation" x="-85" y="182"/>
-        </scene>
-        <!--App Settings View Controller-->
-        <scene sceneID="4E1-FA-zP1">
-            <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Xkt-gh-nAq" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="Ypi-Ct-X6S" customClass="IASKAppSettingsViewController" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="u18-ao-KIy"/>
-                </viewController>
-            </objects>
-            <point key="canvasLocation" x="1537" y="785"/>
         </scene>
         <!--Preferences View Controller - User Profile-->
         <scene sceneID="cMu-Lq-D10">
@@ -1197,7 +1188,7 @@ L4m3P4sSw0rD</string>
                     <navigationItem key="navigationItem" title="User Profile" id="reg-hh-9Ra">
                         <barButtonItem key="rightBarButtonItem" title="Settings" id="Bac-IA-e0Z">
                             <connections>
-                                <segue destination="Ypi-Ct-X6S" kind="push" id="vLK-dS-gos"/>
+                                <action selector="settings:" destination="oLN-6u-GLb" id="OqP-a1-tpq"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1244,13 +1235,6 @@ L4m3P4sSw0rD</string>
         <image name="ui_textfield.png" width="158" height="34"/>
     </resources>
     <classes>
-        <class className="IASKAppSettingsViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/IASKAppSettingsViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="dismiss:"/>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
         <class className="MPGuideViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MPGuideViewController.h"/>
             <relationships>
@@ -1292,6 +1276,7 @@ L4m3P4sSw0rD</string>
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MPPreferencesViewController.h"/>
             <relationships>
                 <relationship kind="action" name="didToggleSwitch:" candidateClass="UISwitch"/>
+                <relationship kind="action" name="settings:"/>
                 <relationship kind="outlet" name="avatarTemplate" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="avatarsView" candidateClass="UIScrollView"/>
                 <relationship kind="outlet" name="changeMPCell" candidateClass="UITableViewCell"/>
