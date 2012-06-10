@@ -39,7 +39,7 @@
     [MPiOSConfig get];
 
 #ifdef DEBUG
-    [PearlLogger get].autoprintLevel = PearlLogLevelTrace;
+    [PearlLogger get].autoprintLevel = PearlLogLevelDebug;
     //[NSClassFromString(@"WebView") performSelector:NSSelectorFromString(@"_enableRemoteInspector")];
 #endif
 }
@@ -167,7 +167,7 @@
                 dbg(@"Initializing TestFlight");
                 [TestFlight addCustomEnvironmentInformation:@"Anonymous" forKey:@"username"];
 #ifdef ADHOC
-                [TestFlight setDeviceIdentifier:[UIDevice currentDevice].uniqueIdentifier];
+                [TestFlight setDeviceIdentifier:[(id)[UIDevice currentDevice] uniqueIdentifier]];
 #else
                 [TestFlight setDeviceIdentifier:[PearlKeyChain deviceIdentifier]];
 #endif
@@ -326,7 +326,7 @@ UIImage *segmentUnselectedUnselected = [UIImage imageNamed:@"segcontrol_uns-uns.
      @"lhunath@lyndir.com\n"
      @"Or report detailed issues at:\n"
      @"https://youtrack.lyndir.com\n"
-                         viewStyle:UIAlertViewStyleDefault tappedButtonBlock:nil
+                         viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:nil
                        cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
 #endif
 
@@ -601,7 +601,7 @@ UIImage *segmentUnselectedUnselected = [UIImage imageNamed:@"segcontrol_uns-uns.
 #ifdef DEBUG
     return NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.development"]);
 #else
-    return NullToNil([[self localyticsInfo] valueForKeyPath:@"Key.distribution"]);
+    return NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.distribution"]);
 #endif
 }
 

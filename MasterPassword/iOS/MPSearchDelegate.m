@@ -35,15 +35,11 @@
     self.query                   = @"";
 
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
-    fetchRequest.sortDescriptors  = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses_" ascending:NO]];
-    self.fetchedResultsController = [PearlLazy lazyObjectLoadedFrom:^id {
-        NSFetchedResultsController *controller = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                     managedObjectContext:[MPAppDelegate managedObjectContext]
-                                                                                     sectionNameKeyPath:nil cacheName:nil];
-        controller.delegate                    = self;
-
-        return controller;
-    }];
+    fetchRequest.sortDescriptors           = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses_" ascending:NO]];
+    self.fetchedResultsController          = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                                 managedObjectContext:[MPAppDelegate managedObjectContext]
+                                                                                 sectionNameKeyPath:nil cacheName:nil];
+    self.fetchedResultsController.delegate = self;
 
     self.tipView                  = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 170)];
     self.tipView.textAlignment    = UITextAlignmentCenter;

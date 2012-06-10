@@ -167,20 +167,6 @@
 
 - (UIButton *)setupAvatar:(UIButton *)avatar forUser:(MPUserEntity *)user {
 
-    [avatar onHighlightOrSelect:^(BOOL highlighted, BOOL selected) {
-        if (highlighted || selected)
-            avatar.backgroundColor = self.avatarTemplate.backgroundColor;
-        else
-            avatar.backgroundColor = [UIColor clearColor];
-    } options:0];
-    [avatar onSelect:^(BOOL selected) {
-        self.selectedUser = selected? user: nil;
-        if (user)
-            [self didToggleUserSelection];
-        else
-            if (selected)
-                [self didSelectNewUserAvatar:avatar];
-    } options:0];
     avatar.center                      = CGPointMake(avatar.center.x + [self.avatarToUser count] * 160, avatar.center.y);
     avatar.hidden                      = NO;
     avatar.layer.cornerRadius          = avatar.bounds.size.height / 2;
@@ -189,12 +175,26 @@
     avatar.layer.shadowRadius          = 20;
     avatar.layer.masksToBounds         = NO;
     avatar.backgroundColor             = [UIColor clearColor];
-
-    dbg(@"User: %@, avatar: %d", user.name, user.avatar);
     avatar.tag = user.avatar;
+
     [avatar setBackgroundImage:[UIImage imageNamed:PearlString(@"avatar-%u", user.avatar)]
             forState:UIControlStateNormal];
     [avatar setSelectionInSuperviewCandidate:YES isClearable:YES];
+    [avatar onHighlightOrSelect:^(BOOL highlighted, BOOL selected) {
+        if (highlighted || selected)
+            avatar.backgroundColor = self.avatarTemplate.backgroundColor;
+        else
+            avatar.backgroundColor = [UIColor clearColor];
+    } options:0];
+    [avatar onSelect:^(BOOL selected) {
+        if (selected) {
+            if ((self.selectedUser = user))
+                [self didToggleUserSelection];
+            else
+                [self didSelectNewUserAvatar:avatar];
+        } else
+            [self didToggleUserSelection];
+    } options:0];
 
     [self.avatarToUser setObject:NilToNSNull(user) forKey:[NSValue valueWithNonretainedObject:avatar]];
 
@@ -210,7 +210,7 @@
         [self.passwordField resignFirstResponder];
     else
         if ([[MPAppDelegate get] signInAsUser:self.selectedUser usingMasterPassword:nil]) {
-            [self dismissModalViewControllerAnimated:YES];
+            [self performSegueWithIdentifier:@"MP_Unlock_Dismiss" sender:self];
             return;
         }
 
@@ -352,7 +352,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (unlocked) {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (long)(NSEC_PER_SEC * 0.5f)), dispatch_get_main_queue(), ^{
-                    [self dismissModalViewControllerAnimated:YES];
+                    [self performSegueWithIdentifier:@"MP_Unlock_Dismiss" sender:self];
                 });
             } else
                 if (self.passwordField.text.length)

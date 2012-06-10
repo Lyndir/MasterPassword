@@ -925,7 +925,6 @@ L4m3P4sSw0rD</string>
                     <connections>
                         <segue destination="PQa-Xl-A3x" kind="relationship" relationship="rootViewController" id="LUg-eF-JQd"/>
                         <segue destination="qz3-eG-aEi" kind="modal" identifier="MP_Guide" id="vyG-wN-8hU"/>
-                        <segue destination="Nbn-Rv-sP1" kind="modal" identifier="MP_Unlock" id="6s2-3H-q5S"/>
                     </connections>
                 </navigationController>
             </objects>
@@ -1244,6 +1243,93 @@ L4m3P4sSw0rD</string>
         <image name="ui_spinner.png" width="75" height="75"/>
         <image name="ui_textfield.png" width="158" height="34"/>
     </resources>
+    <classes>
+        <class className="IASKAppSettingsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/IASKAppSettingsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="dismiss:"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MPGuideViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPGuideViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="close"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
+        <class className="MPMainViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPMainViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="action:" candidateClass="UIBarButtonItem"/>
+                <relationship kind="action" name="closeAlert"/>
+                <relationship kind="action" name="copyContent"/>
+                <relationship kind="action" name="editPassword"/>
+                <relationship kind="action" name="incrementPasswordCounter"/>
+                <relationship kind="action" name="resetPasswordCounter:" candidateClass="UILongPressGestureRecognizer"/>
+                <relationship kind="outlet" name="actionsTipContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="alertBody" candidateClass="UITextView"/>
+                <relationship kind="outlet" name="alertContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="alertTitle" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="contentContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="contentField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="contentTipBody" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="contentTipContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="contentTipEditIcon" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="helpContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="helpView" candidateClass="UIWebView"/>
+                <relationship kind="outlet" name="passwordCounter" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="passwordEdit" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="passwordIncrementer" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="searchResultsController" candidateClass="MPSearchDelegate"/>
+                <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="siteName" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="typeButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="typeTipContainer" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="MPPreferencesViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPPreferencesViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="didToggleSwitch:" candidateClass="UISwitch"/>
+                <relationship kind="outlet" name="avatarTemplate" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="avatarsView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="changeMPCell" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="exportCell" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="savePasswordSwitch" candidateClass="UISwitch"/>
+            </relationships>
+        </class>
+        <class className="MPSearchDelegate" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPSearchDelegate.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+                <relationship kind="outlet" name="searchDisplayController" candidateClass="UISearchDisplayController"/>
+                <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="MPTypeViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPTypeViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="recommendedTipContainer" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="MPUnlockViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPUnlockViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="deleteTargetedUser:" candidateClass="UILongPressGestureRecognizer"/>
+                <relationship kind="outlet" name="avatarTemplate" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="avatarsView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="deleteTip" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="nameLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="oldNameLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="passwordTipLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="passwordTipView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="passwordView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="spinner" candidateClass="UIImageView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <nil key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
