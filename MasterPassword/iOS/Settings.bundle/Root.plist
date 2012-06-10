@@ -6,7 +6,7 @@
 	<array>
 		<dict>
 			<key>FooterText</key>
-			<string>http://masterpassword.lyndir.com</string>
+			<string>If you&apos;re experiencing problems, enabling this will send us details that can help diagnose and resolve them.  Great care has been taken to guarantee no private information is ever sent.</string>
 			<key>Title</key>
 			<string></string>
 			<key>Type</key>
@@ -41,6 +41,16 @@
 			<string>PSTitleValueSpecifier</string>
 			<key>Key</key>
 			<string>unset</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Send Diagnostic Info</string>
+			<key>Key</key>
+			<string>sendDebugInfo</string>
+			<key>DefaultValue</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>FooterText</key>

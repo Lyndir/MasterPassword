@@ -6,8 +6,10 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
+#import <Crashlytics/Crashlytics.h>
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
+#import "ATConnect.h"
 
 @implementation MPAppDelegate_Shared (Key)
 
@@ -132,6 +134,18 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
         self.key = tryKey;
         [self storeSavedKeyFor:user];
     }
+
+    @try {
+        if ([[MPiOSConfig get].sendDebugInfo boolValue]) {
+            [TestFlight addCustomEnvironmentInformation:user.name forKey:@"username"];
+            [[Crashlytics sharedInstance] setValue:user.name forKey:@"username"];
+            [[ATConnect sharedConnection] addAdditionalInfoToFeedback:user.name withKey:@"username"];
+        }
+    }
+    @catch (id exception) {
+        err(@"While setting username: %@", exception);
+    }
+
 
     user.lastUsed   = [NSDate date];
     self.activeUser = user;

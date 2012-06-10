@@ -6,6 +6,7 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
+#import <Crashlytics/Crashlytics.h>
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
@@ -38,7 +39,7 @@
     [MPiOSConfig get];
 
 #ifdef DEBUG
-    [PearlLogger get].autoprintLevel = PearlLogLevelDebug;
+    [PearlLogger get].autoprintLevel = PearlLogLevelTrace;
     //[NSClassFromString(@"WebView") performSelector:NSSelectorFromString(@"_enableRemoteInspector")];
 #endif
 }
@@ -52,6 +53,19 @@
 
     if ([[MPConfig get].iCloud boolValue] != [self.storeManager iCloudEnabled])
         [self.storeManager useiCloudStore:[[MPConfig get].iCloud boolValue] alertUser:YES];
+    if ([[MPiOSConfig get].sendDebugInfo boolValue]) {
+        [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].rememberLogin boolValue] forKey:@"rememberLogin"];
+        [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].iCloud boolValue] forKey:@"iCloud"];
+        [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].iCloudDecided boolValue] forKey:@"iCloudDecided"];
+        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].sendDebugInfo boolValue] forKey:@"sendDebugInfo"];
+        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].helpHidden boolValue] forKey:@"helpHidden"];
+        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].showQuickStart boolValue] forKey:@"showQuickStart"];
+        [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].firstRun boolValue] forKey:@"firstRun"];
+        [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].launchCount intValue] forKey:@"launchCount"];
+        [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].askForReviews boolValue] forKey:@"askForReviews"];
+        [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].reviewAfterLaunches intValue] forKey:@"reviewAfterLaunches"];
+        [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
+    }
 }
 
 - (void)showGuide {
@@ -146,19 +160,28 @@
     [[[NSBundle mainBundle] mutableLocalizedInfoDictionary] setObject:@"Master Password" forKey:@"CFBundleDisplayName"];
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-#ifndef DEBUG
+//#ifndef DEBUG
         @try {
             NSString *testFlightToken = [self testFlightToken];
             if ([testFlightToken length]) {
                 dbg(@"Initializing TestFlight");
                 [TestFlight addCustomEnvironmentInformation:@"Anonymous" forKey:@"username"];
+#ifdef ADHOC
+                [TestFlight setDeviceIdentifier:[UIDevice currentDevice].uniqueIdentifier];
+#else
+                [TestFlight setDeviceIdentifier:[PearlKeyChain deviceIdentifier]];
+#endif
                 [TestFlight setOptions:[NSDictionary dictionaryWithObjectsAndKeys:
                                         [NSNumber numberWithBool:NO],   @"logToConsole",
                                         [NSNumber numberWithBool:NO],   @"logToSTDERR",
                                         nil]];
                 [TestFlight takeOff:testFlightToken];
                 [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
-                    if (message.level >= PearlLogLevelInfo)
+                    PearlLogLevel level = PearlLogLevelInfo;
+                    if ([[MPiOSConfig get].sendDebugInfo boolValue])
+                        level = PearlLogLevelDebug;
+
+                    if (message.level >= level)
                         TFLog(@"%@", message);
                     
                     return YES;
@@ -166,7 +189,7 @@
                 [TestFlight passCheckpoint:MPTestFlightCheckpointLaunched];
             }
         }
-        @catch (NSException *exception) {
+        @catch (id exception) {
             err(@"TestFlight: %@", exception);
         }
         @try {
@@ -174,10 +197,22 @@
             if ([crashlyticsAPIKey length]) {
                 dbg(@"Initializing Crashlytics");
                 //[Crashlytics sharedInstance].debugMode = YES;
+                [[Crashlytics sharedInstance] setObjectValue:@"Anonymous" forKey:@"username"];
+                [[Crashlytics sharedInstance] setObjectValue:[PearlKeyChain deviceIdentifier] forKey:@"deviceIdentifier"];
                 [Crashlytics startWithAPIKey:crashlyticsAPIKey afterDelay:0];
+                [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
+                    PearlLogLevel level = PearlLogLevelInfo;
+                    if ([[MPiOSConfig get].sendDebugInfo boolValue])
+                        level = PearlLogLevelDebug;
+
+                    if (message.level >= level)
+                        CLSLog(@"%@", message);
+
+                    return YES;
+                }];
             }
         }
-        @catch (NSException *exception) {
+        @catch (id exception) {
             err(@"Crashlytics: %@", exception);
         }
         @try {
@@ -199,10 +234,10 @@
                 }];
             }
         }
-        @catch (NSException *exception) {
+        @catch (id exception) {
             err(@"Localytics exception: %@", exception);
         }
-#endif
+//#endif
     });
 
     @try {
@@ -214,6 +249,8 @@
             [connection setApiKey:apptentiveAPIKey];
             [connection setShouldTakeScreenshot:NO];
             [connection addAdditionalInfoToFeedback:[PearlInfoPlist get].CFBundleVersion withKey:@"CFBundleVersion"];
+            [connection addAdditionalInfoToFeedback:[PearlKeyChain deviceIdentifier] withKey:@"deviceIdentifier"];
+            [connection addAdditionalInfoToFeedback:@"Anonymous" withKey:@"username"];
         }
     }
     @catch (NSException *exception) {
@@ -367,6 +404,8 @@ UIImage *segmentUnselectedUnselected = [UIImage imageNamed:@"segcontrol_uns-uns.
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+
+    [[MPAppDelegate get] checkConfig];
 
     if ([[MPiOSConfig get].showQuickStart boolValue])
         [self showGuide];

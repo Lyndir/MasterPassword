@@ -7,7 +7,7 @@
 //
 
 #import "MPTypes.h"
-#import "MPElementStoredEntity.h"
+#import "MPEntities.h"
 
 
 #define MP_N        131072

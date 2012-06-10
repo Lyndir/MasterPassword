@@ -7,7 +7,7 @@
 //
 
 @implementation MPiOSConfig
-@dynamic helpHidden, showQuickStart;
+@dynamic sendDebugInfo, helpHidden, showQuickStart;
 
 - (id)init {
 
@@ -15,6 +15,7 @@
         return self;
 
     [self.defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                   [NSNumber numberWithBool:NO], NSStringFromSelector(@selector(sendDebugInfo)),
                                                    [NSNumber numberWithBool:NO], NSStringFromSelector(@selector(helpHidden)),
                                                    [NSNumber numberWithBool:YES], NSStringFromSelector(@selector(showQuickStart)),
                                                    @"510296984", NSStringFromSelector(@selector(iTunesID)),

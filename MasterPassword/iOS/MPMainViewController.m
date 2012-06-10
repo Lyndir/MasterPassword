@@ -103,8 +103,6 @@
             }
         }];
 
-    [[MPAppDelegate get] checkConfig];
-
     [super viewDidAppear:animated];
 }
 

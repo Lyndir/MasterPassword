@@ -29,7 +29,6 @@
 
     for (int a = 0; a < MPAvatarCount; ++a) {
         UIButton *avatar = [self.avatarTemplate clone];
-        avatar.togglesSelectionInSuperview = YES;
         avatar.tag                         = a;
         avatar.hidden                      = NO;
         avatar.center                      = CGPointMake(
@@ -37,6 +36,7 @@
          self.avatarTemplate.center.y);
         [avatar setBackgroundImage:[UIImage imageNamed:PearlString(@"avatar-%d", a)]
                 forState:UIControlStateNormal];
+        [avatar setSelectionInSuperviewCandidate:YES isClearable:NO];
 
         avatar.layer.cornerRadius  = avatar.bounds.size.height / 2;
         avatar.layer.shadowColor   = [UIColor blackColor].CGColor;

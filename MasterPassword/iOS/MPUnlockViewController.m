@@ -39,6 +39,50 @@
 //        self.lock.alpha = 0.5f;
 //    } completion:nil];
 
+- (void)initAvatarAlert:(UIAlertView *)alert forUser:(MPUserEntity *)user {
+
+    UIScrollView *alertAvatarScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(12, 30, 260, 150)];
+    alertAvatarScrollView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
+    [alertAvatarScrollView flashScrollIndicatorsContinuously];
+    [alert addSubview:alertAvatarScrollView];
+
+    CGPoint  selectedOffset = CGPointZero;
+    for (int a              = 0; a < MPAvatarCount; ++a) {
+        UIButton *avatar = [self.avatarTemplate cloneAddedTo:alertAvatarScrollView];
+
+        avatar.tag                         = a;
+        avatar.hidden                      = NO;
+        avatar.center                      = CGPointMake(
+         (20 + self.avatarTemplate.bounds.size.width / 2) * (a + 1) + self.avatarTemplate.bounds.size.width / 2 * a,
+         20 + self.avatarTemplate.bounds.size.height / 2);
+        [avatar setBackgroundImage:[UIImage imageNamed:PearlString(@"avatar-%d", a)] forState:UIControlStateNormal];
+        [avatar setSelectionInSuperviewCandidate:YES isClearable:NO];
+
+        avatar.layer.cornerRadius  = avatar.bounds.size.height / 2;
+        avatar.layer.shadowColor   = [UIColor blackColor].CGColor;
+        avatar.layer.shadowOpacity = 1;
+        avatar.layer.shadowRadius  = 5;
+        avatar.backgroundColor     = [UIColor clearColor];
+
+        [avatar onHighlightOrSelect:^(BOOL highlighted, BOOL selected) {
+            if (highlighted || selected)
+                avatar.backgroundColor = self.avatarTemplate.backgroundColor;
+            else
+                avatar.backgroundColor = [UIColor clearColor];
+        } options:0];
+        [avatar onSelect:^(BOOL selected) {
+            if (selected)
+                user.avatar = (unsigned)avatar.tag;
+        }        options:0];
+        avatar.selected            = (a == user.avatar);
+        if (avatar.selected)
+            selectedOffset = CGPointMake(avatar.center.x - alertAvatarScrollView.bounds.size.width / 2, 0);
+    }
+
+    [alertAvatarScrollView autoSizeContent];
+    [alertAvatarScrollView setContentOffset:selectedOffset animated:YES];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
@@ -137,7 +181,6 @@
             if (selected)
                 [self didSelectNewUserAvatar:avatar];
     } options:0];
-    avatar.togglesSelectionInSuperview = YES;
     avatar.center                      = CGPointMake(avatar.center.x + [self.avatarToUser count] * 160, avatar.center.y);
     avatar.hidden                      = NO;
     avatar.layer.cornerRadius          = avatar.bounds.size.height / 2;
@@ -151,6 +194,7 @@
     avatar.tag = user.avatar;
     [avatar setBackgroundImage:[UIImage imageNamed:PearlString(@"avatar-%u", user.avatar)]
             forState:UIControlStateNormal];
+    [avatar setSelectionInSuperviewCandidate:YES isClearable:YES];
 
     [self.avatarToUser setObject:NilToNSNull(user) forKey:[NSValue valueWithNonretainedObject:avatar]];
 
@@ -179,26 +223,32 @@
 
 - (void)didSelectNewUserAvatar:(UIButton *)newUserAvatar {
 
-    [PearlAlert showAlertWithTitle:@"New User"
-                           message:@"Enter your name:" viewStyle:UIAlertViewStylePlainTextInput
+    [PearlAlert showAlertWithTitle:@"Enter Your Name"
+                           message:nil viewStyle:UIAlertViewStylePlainTextInput
                          initAlert:^(UIAlertView *alert, UITextField *firstField) {
                              firstField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-                             firstField.autocorrectionType     = UITextAutocorrectionTypeYes;
-                             firstField.spellCheckingType      = UITextSpellCheckingTypeYes;
                              firstField.keyboardType           = UIKeyboardTypeAlphabet;
                          }
                  tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                     newUserAvatar.selected = NO;
-
                      if (buttonIndex == [alert cancelButtonIndex])
                          return;
 
                      MPUserEntity *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class])
                                                                   inManagedObjectContext:[MPAppDelegate managedObjectContext]];
                      newUser.name      = [alert textFieldAtIndex:0].text;
+
+                     [PearlAlert showAlertWithTitle:@"Choose Your Avatar"
+                                            message:@"\n\n\n\n\n\n" viewStyle:UIAlertViewStyleDefault
+                                          initAlert:^(UIAlertView *_alert, UITextField *firstField) {
+                                              [self initAvatarAlert:_alert forUser:newUser];
+                                          }
+                                  tappedButtonBlock:^(UIAlertView *_alert, NSInteger _buttonIndex) {
+
+                     newUserAvatar.selected = NO;
                      self.selectedUser = newUser;
 
                      [self updateUsers];
+                                  } cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
                  }
                  cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonSave, nil];
 }

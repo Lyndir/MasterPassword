@@ -7,6 +7,46 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ *
+ * The CLS_LOG macro provides as easy way to gather more information in your log messages that are 
+ * sent with your crash data. CLS_LOG prepends your custom log message with the function name and 
+ * line number where the macro was used. If your app was built with the DEBUG preprocessor macro 
+ * defined CLS_LOG uses the CLSNSLog function which forwards your log message to NSLog and CLSLog. 
+ * If the DEBUG preprocessor macro is not defined CLS_LOG uses CLSLog only.
+ *
+ * Example output:
+ * -[AppDelegate login:] line 134 $ login start
+ *
+ * If you would like to change this macro, create a new header file, unset our define and then define
+ * your own version. Make sure this new header file is imported after the Crashlytics header file.
+ *
+ * #undef CLS_LOG
+ * #define CLS_LOG(__FORMAT__, ...) CLSNSLog...
+ *
+ **/
+#ifdef DEBUG
+	#define CLS_LOG(__FORMAT__, ...) CLSNSLog((@"%s line %d $ " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+	#define CLS_LOG(__FORMAT__, ...) CLSLog((@"%s line %d $ " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#endif
+
+/**
+ * 
+ * Add logging that will be sent with your crash data. This logging will not show up in the system.log
+ * and will only be visible in your Crashlytics dashboard.
+ *
+ **/
+void CLSLog(NSString *format, ...);
+
+/**
+ *
+ * Add logging that will be sent with your crash data. This logging will show up in the system.log
+ * and your Crashlytics dashboard. It is not reccomended for Release builds.
+ *
+ **/
+void CLSNSLog(NSString *format, ...);
+
 @protocol CrashlyticsDelegate;
 
 @interface Crashlytics : NSObject {
@@ -63,6 +103,49 @@
  **/
 - (void)crash;
 
+/**
+ *
+ * Many of our customers have requested the ability to tie crashes to specific end-users of their 
+ * application in order to facilitate responses to support requests or permit the ability to reach 
+ * out for more information. We allow you to specify up to three separate values for display within 
+ * the Crashlytics UI - but please be mindful of your end-user's privacy.
+ *
+ * We recommend specifying a user identifier - an arbitrary string that ties an end-user to a record 
+ * in your system. This could be a database id, hash, or other value that is meaningless to a 
+ * third-party observer but can be indexed and queried by you.
+ *
+ * Optionally, you may also specify the end-user's name or username, as well as email address if you 
+ * do not have a system that works well with obscured identifiers.
+ *
+ * Pursuant to our EULA, this data is transferred securely throughout our system and we will not 
+ * disseminate end-user data unless required to by law. That said, if you choose to provide end-user 
+ * contact information, we strongly recommend that you disclose this in your application's privacy 
+ * policy. Data privacy is of our utmost concern.
+ *
+ **/
+- (void)setUserIdentifier:(NSString *)identifier;
+- (void)setUserName:(NSString *)name;
+- (void)setUserEmail:(NSString *)email;
+
++ (void)setUserIdentifier:(NSString *)identifier;
++ (void)setUserName:(NSString *)name;
++ (void)setUserEmail:(NSString *)email;
+
+/**
+ *
+ * Set a value for a key to be associated with your crash data.
+ *
+ **/
+- (void)setObjectValue:(id)value forKey:(NSString *)key;
+- (void)setIntValue:(int)value forKey:(NSString *)key;
+- (void)setBoolValue:(BOOL)value forKey:(NSString *)key;
+- (void)setFloatValue:(float)value forKey:(NSString *)key;
+
++ (void)setObjectValue:(id)value forKey:(NSString *)key;
++ (void)setIntValue:(int)value forKey:(NSString *)key;
++ (void)setBoolValue:(BOOL)value forKey:(NSString *)key;
++ (void)setFloatValue:(float)value forKey:(NSString *)key;
+
 @end
 
 /**
@@ -80,7 +163,7 @@
  *
  * Called once a Crashlytics instance has determined that the last execution of the 
  * application ended in a crash.  This is called some time after the crash reporting
- * process has begun.  If you have specififed a delay in one of the
+ * process has begun.  If you have specified a delay in one of the
  * startWithAPIKey:... calls, this will take at least that long to be invoked.
  *
  **/

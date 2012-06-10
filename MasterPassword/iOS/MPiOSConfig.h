@@ -10,6 +10,7 @@
 
 @interface MPiOSConfig : MPConfig
 
+@property (nonatomic, retain) NSNumber *sendDebugInfo;
 @property (nonatomic, retain) NSNumber *helpHidden;
 @property (nonatomic, retain) NSNumber *showQuickStart;
 
