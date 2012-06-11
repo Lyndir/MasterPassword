@@ -8,10 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */; };
-		DA076C75157D58E5008968D7 /* MPElementGeneratedEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA076C74157D58E5008968D7 /* MPElementGeneratedEntity.m */; };
-		DA076C78157D58E5008968D7 /* MPElementEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA076C77157D58E5008968D7 /* MPElementEntity.m */; };
-		DA076C7B157D58E5008968D7 /* MPElementStoredEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA076C7A157D58E5008968D7 /* MPElementStoredEntity.m */; };
-		DA076C7E157D58E6008968D7 /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA076C7D157D58E6008968D7 /* MPUserEntity.m */; };
 		DA0A1D0515690A9A0092735D /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0A1D0315690A9A0092735D /* Default.png */; };
 		DA0A1D0615690A9A0092735D /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0A1D0415690A9A0092735D /* Default@2x.png */; };
 		DA0A1D1515690AF40092735D /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0A1D1315690AF30092735D /* Icon-72@2x.png */; };
@@ -24,6 +20,10 @@
 		DA30E9D415722EF400A68B4C /* Pearl-UIKit.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D315722EF400A68B4C /* Pearl-UIKit.m */; };
 		DA30E9D715723E6900A68B4C /* PearlLazy.h in Headers */ = {isa = PBXBuildFile; fileRef = DA30E9D515723E6900A68B4C /* PearlLazy.h */; };
 		DA30E9D815723E6900A68B4C /* PearlLazy.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D615723E6900A68B4C /* PearlLazy.m */; };
+		DA40C2611586099D0079CE6E /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA40C2601586099D0079CE6E /* MPUserEntity.m */; };
+		DA40C2641586099E0079CE6E /* MPElementEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA40C2631586099E0079CE6E /* MPElementEntity.m */; };
+		DA40C2671586099E0079CE6E /* MPElementGeneratedEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA40C2661586099E0079CE6E /* MPElementGeneratedEntity.m */; };
+		DA40C26A1586099E0079CE6E /* MPElementStoredEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA40C2691586099E0079CE6E /* MPElementStoredEntity.m */; };
 		DA4425CC1557BED40052177D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA4426001557BF260052177D /* UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4425F11557BF260052177D /* UbiquityStoreManager.h */; };
 		DA4426011557BF260052177D /* UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4425F21557BF260052177D /* UbiquityStoreManager.m */; };
@@ -908,14 +908,6 @@
 
 /* Begin PBXFileReference section */
 		DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		DA076C73157D58E5008968D7 /* MPElementGeneratedEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementGeneratedEntity.h; sourceTree = "<group>"; };
-		DA076C74157D58E5008968D7 /* MPElementGeneratedEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementGeneratedEntity.m; sourceTree = "<group>"; };
-		DA076C76157D58E5008968D7 /* MPElementEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementEntity.h; sourceTree = "<group>"; };
-		DA076C77157D58E5008968D7 /* MPElementEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementEntity.m; sourceTree = "<group>"; };
-		DA076C79157D58E5008968D7 /* MPElementStoredEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementStoredEntity.h; sourceTree = "<group>"; };
-		DA076C7A157D58E5008968D7 /* MPElementStoredEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementStoredEntity.m; sourceTree = "<group>"; };
-		DA076C7C157D58E6008968D7 /* MPUserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUserEntity.h; sourceTree = "<group>"; };
-		DA076C7D157D58E6008968D7 /* MPUserEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUserEntity.m; sourceTree = "<group>"; };
 		DA0A1D0315690A9A0092735D /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Default.png; sourceTree = SOURCE_ROOT; };
 		DA0A1D0415690A9A0092735D /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Default@2x.png"; sourceTree = SOURCE_ROOT; };
 		DA0A1D0715690AD40092735D /* tip_arrow_banana.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tip_arrow_banana.png; path = Resources/Tooltips/tip_arrow_banana.png; sourceTree = SOURCE_ROOT; };
@@ -935,6 +927,14 @@
 		DA30E9D315722EF400A68B4C /* Pearl-UIKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Pearl-UIKit.m"; sourceTree = "<group>"; };
 		DA30E9D515723E6900A68B4C /* PearlLazy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlLazy.h; sourceTree = "<group>"; };
 		DA30E9D615723E6900A68B4C /* PearlLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlLazy.m; sourceTree = "<group>"; };
+		DA40C25F1586099D0079CE6E /* MPUserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUserEntity.h; sourceTree = "<group>"; };
+		DA40C2601586099D0079CE6E /* MPUserEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUserEntity.m; sourceTree = "<group>"; };
+		DA40C2621586099E0079CE6E /* MPElementEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementEntity.h; sourceTree = "<group>"; };
+		DA40C2631586099E0079CE6E /* MPElementEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementEntity.m; sourceTree = "<group>"; };
+		DA40C2651586099E0079CE6E /* MPElementGeneratedEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementGeneratedEntity.h; sourceTree = "<group>"; };
+		DA40C2661586099E0079CE6E /* MPElementGeneratedEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementGeneratedEntity.m; sourceTree = "<group>"; };
+		DA40C2681586099E0079CE6E /* MPElementStoredEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementStoredEntity.h; sourceTree = "<group>"; };
+		DA40C2691586099E0079CE6E /* MPElementStoredEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementStoredEntity.m; sourceTree = "<group>"; };
 		DA4425CB1557BED40052177D /* libiCloudStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libiCloudStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA4425F11557BF260052177D /* UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UbiquityStoreManager.h; sourceTree = "<group>"; };
 		DA4425F21557BF260052177D /* UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UbiquityStoreManager.m; sourceTree = "<group>"; };
@@ -1968,17 +1968,17 @@
 		DA5BFA50147E415C00F98B1E /* MasterPassword */ = {
 			isa = PBXGroup;
 			children = (
-				DAB8D43C15036BCF00CED3BC /* MasterPassword.xcdatamodeld */,
-				DA076C7C157D58E6008968D7 /* MPUserEntity.h */,
-				DA076C7D157D58E6008968D7 /* MPUserEntity.m */,
-				DA076C79157D58E5008968D7 /* MPElementStoredEntity.h */,
-				DA076C7A157D58E5008968D7 /* MPElementStoredEntity.m */,
-				DA076C76157D58E5008968D7 /* MPElementEntity.h */,
-				DA076C77157D58E5008968D7 /* MPElementEntity.m */,
-				DA076C73157D58E5008968D7 /* MPElementGeneratedEntity.h */,
-				DA076C74157D58E5008968D7 /* MPElementGeneratedEntity.m */,
+				DA40C2681586099E0079CE6E /* MPElementStoredEntity.h */,
+				DA40C2691586099E0079CE6E /* MPElementStoredEntity.m */,
+				DA40C2651586099E0079CE6E /* MPElementGeneratedEntity.h */,
+				DA40C2661586099E0079CE6E /* MPElementGeneratedEntity.m */,
+				DA40C2621586099E0079CE6E /* MPElementEntity.h */,
+				DA40C2631586099E0079CE6E /* MPElementEntity.m */,
+				DA40C25F1586099D0079CE6E /* MPUserEntity.h */,
+				DA40C2601586099D0079CE6E /* MPUserEntity.m */,
 				DA0E07941577FE490008A67E /* MPEntities.h */,
 				DA0E07951577FE490008A67E /* MPEntities.m */,
+				DAB8D43C15036BCF00CED3BC /* MasterPassword.xcdatamodeld */,
 				DA600C2415054F3A008E9AB6 /* MPAppDelegate_Key.h */,
 				DA600C2315054F3A008E9AB6 /* MPAppDelegate_Key.m */,
 				DA4426041557C1990052177D /* MPAppDelegate_Shared.h */,
@@ -4171,10 +4171,10 @@
 				DA4426091557C1990052177D /* MPAppDelegate_Store.m in Sources */,
 				DA0E07961577FE490008A67E /* MPEntities.m in Sources */,
 				DAC728CA157C247B00889EF2 /* MPPreferencesViewController.m in Sources */,
-				DA076C75157D58E5008968D7 /* MPElementGeneratedEntity.m in Sources */,
-				DA076C78157D58E5008968D7 /* MPElementEntity.m in Sources */,
-				DA076C7B157D58E5008968D7 /* MPElementStoredEntity.m in Sources */,
-				DA076C7E157D58E6008968D7 /* MPUserEntity.m in Sources */,
+				DA40C2611586099D0079CE6E /* MPUserEntity.m in Sources */,
+				DA40C2641586099E0079CE6E /* MPElementEntity.m in Sources */,
+				DA40C2671586099E0079CE6E /* MPElementGeneratedEntity.m in Sources */,
+				DA40C26A1586099E0079CE6E /* MPElementStoredEntity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

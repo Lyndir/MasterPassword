@@ -16,6 +16,7 @@
     </entity>
     <entity name="MPUserEntity" representedClassName="MPUserEntity" syncable="YES">
         <attribute name="avatar_" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="defaultType_" attributeType="Integer 16" defaultValueString="17" syncable="YES"/>
         <attribute name="keyID" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="lastUsed" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
@@ -26,6 +27,6 @@
         <element name="MPElementEntity" positionX="160" positionY="192" width="128" height="135"/>
         <element name="MPElementGeneratedEntity" positionX="160" positionY="192" width="128" height="60"/>
         <element name="MPElementStoredEntity" positionX="160" positionY="192" width="128" height="60"/>
-        <element name="MPUserEntity" positionX="160" positionY="192" width="128" height="135"/>
+        <element name="MPUserEntity" positionX="160" positionY="192" width="128" height="150"/>
     </elements>
 </model>

@@ -35,10 +35,6 @@
 @synthesize avatarShadowColor = _avatarShadowColor;
 
 
-//    [UIView animateWithDuration:1.0f delay:0 options:UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse animations:^{
-//        self.lock.alpha = 0.5f;
-//    } completion:nil];
-
 - (void)initAvatarAlert:(UIAlertView *)alert forUser:(MPUserEntity *)user {
 
     UIScrollView *alertAvatarScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(12, 30, 260, 150)];
@@ -50,9 +46,9 @@
     for (int a              = 0; a < MPAvatarCount; ++a) {
         UIButton *avatar = [self.avatarTemplate cloneAddedTo:alertAvatarScrollView];
 
-        avatar.tag                         = a;
-        avatar.hidden                      = NO;
-        avatar.center                      = CGPointMake(
+        avatar.tag    = a;
+        avatar.hidden = NO;
+        avatar.center = CGPointMake(
          (20 + self.avatarTemplate.bounds.size.width / 2) * (a + 1) + self.avatarTemplate.bounds.size.width / 2 * a,
          20 + self.avatarTemplate.bounds.size.height / 2);
         [avatar setBackgroundImage:[UIImage imageNamed:PearlString(@"avatar-%d", a)] forState:UIControlStateNormal];
@@ -81,6 +77,32 @@
 
     [alertAvatarScrollView autoSizeContent];
     [alertAvatarScrollView setContentOffset:selectedOffset animated:YES];
+}
+
+- (void)initConfirmationAlert:(UIAlertView *)alert forUser:(MPUserEntity *)user {
+
+    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(12, 70, 260, 110)];
+    [alert addSubview:container];
+
+    UIButton *alertAvatar = [self.avatarTemplate cloneAddedTo:container];
+    alertAvatar.center              = CGPointMake(130, 55);
+    alertAvatar.hidden              = NO;
+    alertAvatar.layer.shadowColor   = [UIColor blackColor].CGColor;
+    alertAvatar.layer.shadowOpacity = 1;
+    alertAvatar.layer.shadowRadius  = 5;
+    alertAvatar.backgroundColor     = [UIColor clearColor];
+    [alertAvatar setBackgroundImage:[UIImage imageNamed:PearlString(@"avatar-%d", user.avatar)] forState:UIControlStateNormal];
+
+    UILabel *alertNameLabel = [self.nameLabel cloneAddedTo:container];
+    alertNameLabel.center             = alertAvatar.center;
+    alertNameLabel.text               = user.name;
+    alertNameLabel.bounds             = CGRectSetHeight(alertNameLabel.bounds,
+                                                        [alertNameLabel.text sizeWithFont:self.nameLabel.font
+                                                                        constrainedToSize:CGSizeMake(alertNameLabel.bounds.size.width - 10,
+                                                                                                     100)
+                                                                            lineBreakMode:self.nameLabel.lineBreakMode].height);
+    alertNameLabel.layer.cornerRadius = 5;
+    alertNameLabel.backgroundColor    = [UIColor blackColor];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -167,15 +189,15 @@
 
 - (UIButton *)setupAvatar:(UIButton *)avatar forUser:(MPUserEntity *)user {
 
-    avatar.center                      = CGPointMake(avatar.center.x + [self.avatarToUser count] * 160, avatar.center.y);
-    avatar.hidden                      = NO;
-    avatar.layer.cornerRadius          = avatar.bounds.size.height / 2;
-    avatar.layer.shadowColor           = [UIColor blackColor].CGColor;
-    avatar.layer.shadowOpacity         = 1;
-    avatar.layer.shadowRadius          = 20;
-    avatar.layer.masksToBounds         = NO;
-    avatar.backgroundColor             = [UIColor clearColor];
-    avatar.tag = user.avatar;
+    avatar.center              = CGPointMake(avatar.center.x + [self.avatarToUser count] * 160, avatar.center.y);
+    avatar.hidden              = NO;
+    avatar.layer.cornerRadius  = avatar.bounds.size.height / 2;
+    avatar.layer.shadowColor   = [UIColor blackColor].CGColor;
+    avatar.layer.shadowOpacity = 1;
+    avatar.layer.shadowRadius  = 20;
+    avatar.layer.masksToBounds = NO;
+    avatar.backgroundColor     = [UIColor clearColor];
+    avatar.tag                 = user.avatar;
 
     [avatar setBackgroundImage:[UIImage imageNamed:PearlString(@"avatar-%u", user.avatar)]
             forState:UIControlStateNormal];
@@ -225,34 +247,76 @@
 
 - (void)didSelectNewUserAvatar:(UIButton *)newUserAvatar {
 
+    MPUserEntity *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class])
+                                                 inManagedObjectContext:[MPAppDelegate managedObjectContext]];
+
+    [self showNewUserNameAlertFor:newUser completion:^(BOOL finished){
+        newUserAvatar.selected = NO;
+        if (!finished)
+            [[MPAppDelegate managedObjectContext] deleteObject:newUser];
+    }];
+}
+
+- (void)showNewUserNameAlertFor:(MPUserEntity *)newUser completion:(void (^)(BOOL finished))completion {
+
     [PearlAlert showAlertWithTitle:@"Enter Your Name"
                            message:nil viewStyle:UIAlertViewStylePlainTextInput
                          initAlert:^(UIAlertView *alert, UITextField *firstField) {
                              firstField.autocapitalizationType = UITextAutocapitalizationTypeWords;
                              firstField.keyboardType           = UIKeyboardTypeAlphabet;
+                             firstField.text                   = newUser.name;
+                             firstField.placeholder            = @"eg. Robert Lee Mitchell";
                          }
                  tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                     if (buttonIndex == [alert cancelButtonIndex])
+                     if (buttonIndex == [alert cancelButtonIndex]) {
+                         completion(NO);
                          return;
+                     }
 
-                     MPUserEntity *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class])
-                                                                  inManagedObjectContext:[MPAppDelegate managedObjectContext]];
-                     newUser.name      = [alert textFieldAtIndex:0].text;
-
-                     [PearlAlert showAlertWithTitle:@"Choose Your Avatar"
-                                            message:@"\n\n\n\n\n\n" viewStyle:UIAlertViewStyleDefault
-                                          initAlert:^(UIAlertView *_alert, UITextField *firstField) {
-                                              [self initAvatarAlert:_alert forUser:newUser];
-                                          }
-                                  tappedButtonBlock:^(UIAlertView *_alert, NSInteger _buttonIndex) {
-
-                     newUserAvatar.selected = NO;
-                     self.selectedUser = newUser;
-
-                     [self updateUsers];
-                                  } cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
+                     // Save
+                     newUser.name = [alert textFieldAtIndex:0].text;
+                     [self showNewUserAvatarAlertFor:newUser completion:completion];
                  }
                  cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonSave, nil];
+}
+
+- (void)showNewUserAvatarAlertFor:(MPUserEntity *)newUser completion:(void (^)(BOOL finished))completion {
+
+    [PearlAlert showAlertWithTitle:@"Choose Your Avatar"
+                           message:@"\n\n\n\n\n\n" viewStyle:UIAlertViewStyleDefault
+                         initAlert:^(UIAlertView *_alert, UITextField *_firstField) {
+                             [self initAvatarAlert:_alert forUser:newUser];
+                         }
+                         tappedButtonBlock:^(UIAlertView *_alert, NSInteger _buttonIndex) {
+
+                             // Okay
+                             [self showNewUserConfirmationAlertFor:newUser completion:completion];
+                         } cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
+}
+
+- (void)showNewUserConfirmationAlertFor:(MPUserEntity *)newUser completion:(void (^)(BOOL finished))completion {
+
+    [PearlAlert showAlertWithTitle:@"Is this correct?"
+                           message:
+                            @"Please double-check your name.\n"
+                             @"\n\n\n\n\n\n"
+                         viewStyle:UIAlertViewStyleDefault
+                         initAlert:^void(UIAlertView *__alert, UITextField *__firstField) {
+                             [self initConfirmationAlert:__alert forUser:newUser];
+                         }
+                         tappedButtonBlock:^void(UIAlertView *__alert, NSInteger __buttonIndex) {
+                             if (__buttonIndex == [__alert cancelButtonIndex]) {
+                                 [self showNewUserNameAlertFor:newUser completion:completion];
+                                 return;
+                             }
+
+                             // Confirm
+                             completion(YES);
+                             self.selectedUser = newUser;
+
+                             [self updateUsers];
+                         }
+                         cancelTitle:@"Change" otherTitles:@"Confirm", nil];
 }
 
 - (void)updateLayoutAnimated:(BOOL)animated allowScroll:(BOOL)allowScroll completion:(void (^)(BOOL finished))completion {
@@ -276,7 +340,7 @@
 
     if (self.selectedUser && !self.passwordView.alpha) {
         self.passwordView.alpha        = 1;
-        self.avatarsView.center        = CGPointMake(160, 100);
+        self.avatarsView.center        = CGPointMake(160, 170);
         self.avatarsView.scrollEnabled = NO;
         self.nameLabel.center          = CGPointMake(160, 84);
         self.nameLabel.backgroundColor = [UIColor blackColor];
@@ -286,7 +350,7 @@
     } else
         if (!self.selectedUser && self.passwordView.alpha == 1) {
             self.passwordView.alpha        = 0;
-            self.avatarsView.center        = CGPointMake(160, 240);
+            self.avatarsView.center        = CGPointMake(160, 310);
             self.avatarsView.scrollEnabled = YES;
             self.nameLabel.center          = CGPointMake(160, 296);
             self.nameLabel.backgroundColor = [UIColor clearColor];

@@ -92,7 +92,7 @@
                 case 0:
                     return NSNotFound;
                 case 1:
-                    return MPElementTypeGeneratedSecure;
+                    return MPElementTypeGeneratedMaximum;
                 case 2:
                     return MPElementTypeGeneratedLong;
                 case 3:

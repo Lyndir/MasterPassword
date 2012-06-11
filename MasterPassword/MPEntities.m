@@ -9,6 +9,7 @@
 #import "MPEntities.h"
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
+#import "MPUserEntity.h"
 
 @implementation MPElementEntity (MP)
 
@@ -17,9 +18,9 @@
     return (MPElementType)[self.type_ unsignedIntegerValue];
 }
 
-- (void)setType:(MPElementType)type {
+- (void)setType:(MPElementType)aType {
 
-    self.type_ = PearlUnsignedInteger(type);
+    self.type_ = PearlUnsignedInteger(aType);
 }
 
 - (NSUInteger)uses {
@@ -170,6 +171,16 @@
 - (void)setSaveKey:(BOOL)aSaveKey {
 
     self.saveKey_ = [NSNumber numberWithBool:aSaveKey];
+}
+
+- (MPElementType)defaultType {
+
+    return (MPElementType)[self.defaultType_ unsignedIntegerValue];
+}
+
+- (void)setDefaultType:(MPElementType)aDefaultType {
+
+    self.defaultType_ = PearlUnsignedInteger(aDefaultType);
 }
 
 @end

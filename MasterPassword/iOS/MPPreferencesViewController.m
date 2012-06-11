@@ -10,6 +10,7 @@
 #import "MPPreferencesViewController.h"
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
+#import "MPAppDelegate_Store.h"
 
 @interface MPPreferencesViewController ()
 
@@ -21,6 +22,7 @@
 @synthesize savePasswordSwitch;
 @synthesize exportCell;
 @synthesize changeMPCell;
+@synthesize defaultTypeLabel;
 
 
 - (void)viewDidLoad {
@@ -51,8 +53,10 @@
                 avatar.backgroundColor = [UIColor clearColor];
         } options:0];
         [avatar onSelect:^(BOOL selected) {
-            if (selected)
+            if (selected) {
                 [MPAppDelegate get].activeUser.avatar = (unsigned)avatar.tag;
+                [[MPAppDelegate get] saveContext];
+            }
         } options:0];
         avatar.selected            = (a == [MPAppDelegate get].activeUser.avatar);
     }
@@ -70,6 +74,7 @@
     } recurse:NO];
 
     self.savePasswordSwitch.on = [MPAppDelegate get].activeUser.saveKey;
+    self.defaultTypeLabel.text = NSStringShortFromMPElementType([MPAppDelegate get].activeUser.defaultType);
 
     [super viewWillAppear:animated];
 }
@@ -87,7 +92,14 @@
     [self setSavePasswordSwitch:nil];
     [self setExportCell:nil];
     [self setChangeMPCell:nil];
+    [self setDefaultTypeLabel:nil];
     [super viewDidUnload];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+
+    if ([[segue identifier] isEqualToString:@"MP_ChooseType"])
+        ((MPTypeViewController *)[segue destinationViewController]).delegate = self;
 }
 
 #pragma mark - UITableViewDelegate
@@ -113,6 +125,21 @@
         [self.navigationController popViewControllerAnimated:YES];
 }
 
+#pragma mark - MPTypeDelegate
+
+- (void)didSelectType:(MPElementType)type {
+
+    [MPAppDelegate get].activeUser.defaultType = type;
+    [[MPAppDelegate get] saveContext];
+
+    self.defaultTypeLabel.text = NSStringShortFromMPElementType([MPAppDelegate get].activeUser.defaultType);
+}
+
+- (MPElementType)selectedType {
+
+    return [MPAppDelegate get].activeUser.defaultType;
+}
+
 #pragma mark - IBActions
 
 - (IBAction)didToggleSwitch:(UISwitch *)sender {
@@ -121,6 +148,7 @@
         [[MPAppDelegate get] storeSavedKeyFor:[MPAppDelegate get].activeUser];
     else
         [[MPAppDelegate get] forgetSavedKeyFor:[MPAppDelegate get].activeUser];
+    [[MPAppDelegate get] saveContext];
 }
 
 - (IBAction)settings:(UIBarButtonItem *)sender {

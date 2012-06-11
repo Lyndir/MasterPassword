@@ -302,14 +302,14 @@
                 return;
 
             [self.fetchedResultsController.managedObjectContext performBlock:^{
-                MPElementGeneratedEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass(
-                 [MPElementGeneratedEntity class])
+                MPElementType type = [MPAppDelegate get].activeUser.defaultType;
+                MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(type)
                                                                          inManagedObjectContext:self.fetchedResultsController.managedObjectContext];
-                assert([element isKindOfClass:ClassFromMPElementType(element.type)]);
-                assert([MPAppDelegate get].activeUser.keyID);
+                assert([MPAppDelegate get].activeUser);
 
                 element.name = siteName;
                 element.user = [MPAppDelegate get].activeUser;
+                element.type = type;
 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.delegate didSelectElement:element];

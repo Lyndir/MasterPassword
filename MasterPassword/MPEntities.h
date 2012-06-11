@@ -35,5 +35,6 @@
 
 @property (assign) NSUInteger avatar;
 @property (assign) BOOL       saveKey;
+@property (assign) MPElementType defaultType;
 
 @end

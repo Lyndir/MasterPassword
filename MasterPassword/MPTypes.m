@@ -46,8 +46,8 @@ NSString *NSStringFromMPElementType(MPElementType type) {
         return nil;
 
     switch (type) {
-        case MPElementTypeGeneratedSecure:
-            return @"Secure Password";
+        case MPElementTypeGeneratedMaximum:
+            return @"Maximum Security Password";
 
         case MPElementTypeGeneratedLong:
             return @"Long Password";
@@ -75,13 +75,48 @@ NSString *NSStringFromMPElementType(MPElementType type) {
     }
 }
 
+NSString *NSStringShortFromMPElementType(MPElementType type) {
+
+    if (!type)
+        return nil;
+
+    switch (type) {
+        case MPElementTypeGeneratedMaximum:
+            return @"Maximum";
+
+        case MPElementTypeGeneratedLong:
+            return @"Long";
+
+        case MPElementTypeGeneratedMedium:
+            return @"Medium";
+
+        case MPElementTypeGeneratedShort:
+            return @"Short";
+
+        case MPElementTypeGeneratedBasic:
+            return @"Basic";
+
+        case MPElementTypeGeneratedPIN:
+            return @"PIN";
+
+        case MPElementTypeStoredPersonal:
+            return @"Personal";
+
+        case MPElementTypeStoredDevicePrivate:
+            return @"Device";
+
+        default:
+            Throw(@"Type not supported: %d", type);
+    }
+}
+
 Class ClassFromMPElementType(MPElementType type) {
 
     if (!type)
         return nil;
 
     switch (type) {
-        case MPElementTypeGeneratedSecure:
+        case MPElementTypeGeneratedMaximum:
             return [MPElementGeneratedEntity class];
 
         case MPElementTypeGeneratedLong:
@@ -141,7 +176,7 @@ NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, ui
                                                                                             withExtension:@"plist"]];
 
     // Determine the seed whose bytes will be used for calculating a password
-    trc(@"seed from: hmac-sha256(key, 'com.lyndir.masterpassword' | %u | %@ | %u)", key, name.length, name, counter);
+    trc(@"seed from: hmac-sha256(%@, 'com.lyndir.masterpassword' | %u | %@ | %u)", key, name.length, name, counter);
     uint32_t ncounter = htonl(counter), nnameLength = htonl(name.length);
     NSData *seed = [[NSData dataByConcatenatingDatas:
                              [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],

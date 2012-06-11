@@ -4,16 +4,34 @@
 <dict>
 	<key>MPElementGeneratedEntity</key>
 	<dict>
-		<key>Secure Password</key>
+		<key>Maximum Security Password</key>
 		<array>
-			<string>aonxxxxxxxxxxxxxxxxx</string>
-			<string>axxxxxxxxxxxxxxxxxon</string>
+			<string>anoxxxxxxxxxxxxxxxxx</string>
+			<string>axxxxxxxxxxxxxxxxxno</string>
 		</array>
 		<key>Long Password</key>
 		<array>
             <string>CvcvnoCvcvCvcv</string>
 			<string>CvcvCvcvnoCvcv</string>
 			<string>CvcvCvcvCvcvno</string>
+            <string>CvccnoCvcvCvcv</string>
+			<string>CvccCvcvnoCvcv</string>
+			<string>CvccCvcvCvcvno</string>
+            <string>CvcvnoCvccCvcv</string>
+			<string>CvcvCvccnoCvcv</string>
+			<string>CvcvCvccCvcvno</string>
+            <string>CvcvnoCvcvCvcc</string>
+			<string>CvcvCvcvnoCvcc</string>
+			<string>CvcvCvcvCvccno</string>
+            <string>CvccnoCvccCvcv</string>
+			<string>CvccCvccnoCvcv</string>
+			<string>CvccCvccCvcvno</string>
+            <string>CvcvnoCvccCvcc</string>
+			<string>CvcvCvccnoCvcc</string>
+			<string>CvcvCvccCvccno</string>
+            <string>CvccnoCvcvCvcc</string>
+			<string>CvccCvcvnoCvcc</string>
+			<string>CvccCvcvCvccno</string>
 		</array>
 		<key>Medium Password</key>
 		<array>
@@ -52,7 +70,7 @@
 		<key>n</key>
 		<string>0123456789</string>
 		<key>o</key>
-		<string>!@#$%^&amp;*()</string>
+        <string>@&amp;%?,=[]_:-+*$#!'^~;()/.</string>
 		<key>x</key>
 		<string>AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789!@#$%^&amp;*()</string>
 	</dict>

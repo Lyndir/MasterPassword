@@ -2,7 +2,7 @@
 //  MPUserEntity.h
 //  MasterPassword-iOS
 //
-//  Created by Maarten Billemont on 04/06/12.
+//  Created by Maarten Billemont on 11/06/12.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
@@ -13,12 +13,13 @@
 
 @interface MPUserEntity : NSManagedObject
 
-@property (nonatomic, retain) NSNumber *avatar_;
-@property (nonatomic, retain) NSData   *keyID;
-@property (nonatomic, retain) NSDate   *lastUsed;
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSNumber *saveKey_;
-@property (nonatomic, retain) NSSet    *elements;
+@property (nonatomic, retain) NSNumber * avatar_;
+@property (nonatomic, retain) NSData * keyID;
+@property (nonatomic, retain) NSDate * lastUsed;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSNumber * saveKey_;
+@property (nonatomic, retain) NSNumber * defaultType_;
+@property (nonatomic, retain) NSSet *elements;
 @end
 
 @interface MPUserEntity (CoreDataGeneratedAccessors)

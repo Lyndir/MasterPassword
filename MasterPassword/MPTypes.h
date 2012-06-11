@@ -31,17 +31,18 @@ typedef enum {
 } MPElementFeature;
 
 typedef enum {
-    MPElementTypeGeneratedSecure = 0x0 | MPElementTypeClassGenerated | 0x0,
-    MPElementTypeGeneratedLong   = 0x1 | MPElementTypeClassGenerated | 0x0,
-    MPElementTypeGeneratedMedium = 0x2 | MPElementTypeClassGenerated | 0x0,
-    MPElementTypeGeneratedShort  = 0x3 | MPElementTypeClassGenerated | 0x0,
-    MPElementTypeGeneratedBasic  = 0x4 | MPElementTypeClassGenerated | 0x0,
-    MPElementTypeGeneratedPIN    = 0x5 | MPElementTypeClassGenerated | 0x0,
+    MPElementTypeGeneratedMaximum = 0x0 | MPElementTypeClassGenerated | 0x0,
+    MPElementTypeGeneratedLong    = 0x1 | MPElementTypeClassGenerated | 0x0,
+    MPElementTypeGeneratedMedium  = 0x2 | MPElementTypeClassGenerated | 0x0,
+    MPElementTypeGeneratedShort   = 0x3 | MPElementTypeClassGenerated | 0x0,
+    MPElementTypeGeneratedBasic   = 0x4 | MPElementTypeClassGenerated | 0x0,
+    MPElementTypeGeneratedPIN     = 0x5 | MPElementTypeClassGenerated | 0x0,
 
     MPElementTypeStoredPersonal      = 0x0 | MPElementTypeClassStored | MPElementFeatureExportContent,
     MPElementTypeStoredDevicePrivate = 0x1 | MPElementTypeClassStored | MPElementFeatureDevicePrivate,
 } MPElementType;
 
+// TODO: Review checkpoints
 #define MPTestFlightCheckpointAction                    @"MPTestFlightCheckpointAction"
 #define MPTestFlightCheckpointHelpChapter               @"MPTestFlightCheckpointHelpChapter_%@"
 #define MPTestFlightCheckpointCopyToPasteboard          @"MPTestFlightCheckpointCopyToPasteboard"
@@ -81,6 +82,7 @@ NSData   *keyForPassword(NSString *password, NSString *username);
 NSData   *keyIDForPassword(NSString *password, NSString *username);
 NSData   *keyIDForKey(NSData *key);
 NSString *NSStringFromMPElementType(MPElementType type);
+NSString *NSStringShortFromMPElementType(MPElementType type);
 NSString *ClassNameFromMPElementType(MPElementType type);
 Class ClassFromMPElementType(MPElementType type);
 NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, uint32_t counter);

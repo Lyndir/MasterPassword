@@ -61,7 +61,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
-    if ([[segue identifier] isEqualToString:@"MP_Main_ChooseType"])
+    if ([[segue identifier] isEqualToString:@"MP_ChooseType"])
         ((MPTypeViewController *)[segue destinationViewController]).delegate = self;
 }
 
