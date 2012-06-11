@@ -476,9 +476,6 @@
 
                                     self.activeElement.type = type;
 
-                                    [TestFlight passCheckpoint:[NSString stringWithFormat:MPCheckpointSelectType, NSStringFromMPElementType(
-                                     type)]];
-
                                     if (type & MPElementTypeClassStored && ![[self.activeElement.content description] length])
                                         [self showContentTip:@"Tap        to set a password." withIcon:self.contentTipEditIcon];
                                 }];
