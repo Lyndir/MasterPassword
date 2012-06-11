@@ -499,7 +499,7 @@
         [self.searchDisplayController setActive:NO animated:YES];
         self.searchDisplayController.searchBar.text = self.activeElement.name;
 
-        [TestFlight passCheckpoint:MPTestFlightCheckpointSelectElement];
+        [TestFlight passCheckpoint:PearlString(MPTestFlightCheckpointUseType, NSStringFromMPElementType(self.activeElement.type))];
         [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationElementUsed object:self.activeElement];
     }
 
