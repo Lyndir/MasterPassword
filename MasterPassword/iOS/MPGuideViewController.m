@@ -24,6 +24,13 @@
     [self.scrollView autoSizeContent];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:animated? UIStatusBarAnimationSlide: UIStatusBarAnimationNone];
+    
+    [super viewDidAppear:animated];
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
 
     [super viewWillDisappear:animated];

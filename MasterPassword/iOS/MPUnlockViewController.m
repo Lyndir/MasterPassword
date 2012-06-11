@@ -114,7 +114,6 @@
 
     self.avatarToUser = [NSMutableDictionary dictionaryWithCapacity:3];
 
-    self.passwordField.text           = nil;
     self.avatarsView.decelerationRate = UIScrollViewDecelerationRateFast;
     self.avatarsView.clipsToBounds    = NO;
     self.nameLabel.layer.cornerRadius = 5;
@@ -349,6 +348,7 @@
         self.deleteTip.alpha           = 0;
     } else
         if (!self.selectedUser && self.passwordView.alpha == 1) {
+            self.passwordField.text        = nil;
             self.passwordView.alpha        = 0;
             self.avatarsView.center        = CGPointMake(160, 310);
             self.avatarsView.scrollEnabled = YES;

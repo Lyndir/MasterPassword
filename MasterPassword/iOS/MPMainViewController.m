@@ -11,6 +11,7 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "ATConnect.h"
+#import "MPUnlockViewController.h"
 
 
 @interface MPMainViewController (Private)
@@ -70,7 +71,8 @@
     [super viewWillAppear:animated];
 
     if (![MPAppDelegate get].activeUser)
-        [self.navigationController performSegueWithIdentifier:@"MP_Unlock" sender:self];
+        [self.navigationController presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
+                                   animated:animated completion:nil];
     if (self.activeElement.user != [MPAppDelegate get].activeUser)
         self.activeElement                      = nil;
     self.searchDisplayController.searchBar.text = nil;
@@ -417,7 +419,6 @@
                          case 5:
 #endif
                          {
-                             [[MPAppDelegate get] forgetSavedKeyFor:[MPAppDelegate get].activeUser];
                              [[MPAppDelegate get] signOut];
                              break;
                          }

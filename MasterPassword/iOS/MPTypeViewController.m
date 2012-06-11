@@ -61,16 +61,7 @@
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
 
     if ([delegate respondsToSelector:@selector(selectedType)])
-        if ([delegate selectedType] == [self typeAtIndexPath:indexPath])
-            [cell enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
-                if ([subview isKindOfClass:[UIImageView class]]) {
-                    UIImageView *imageView = ((UIImageView *)subview);
-                    if (!imageView.highlightedImage)
-                        imageView.highlightedImage = [imageView.image highlightedImage];
-                    imageView.highlighted          = YES;
-                    *stop = YES;
-                }
-            } recurse:NO];
+        cell.selected = ([delegate selectedType] == [self typeAtIndexPath:indexPath]);
 
     return cell;
 }

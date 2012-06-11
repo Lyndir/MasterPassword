@@ -54,7 +54,7 @@
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>This causes your master password to be remembered while your device is powered on.  Similar to your phone&apos;s SIM lock, you only need to enter the password once after powering on.</string>
+			<string>When enabled, closing the application will not log out the user.  Similar to your phone&apos;s SIM lock, you only need to log in once after powering on.</string>
 			<key>Title</key>
 			<string>Master Password</string>
 			<key>Type</key>
@@ -64,9 +64,9 @@
 			<key>DefaultValue</key>
 			<false/>
 			<key>Key</key>
-			<string>rememberKey</string>
+			<string>rememberLogin</string>
 			<key>Title</key>
-			<string>Remember my password</string>
+			<string>Stay logged in</string>
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
@@ -77,16 +77,6 @@
 			<string></string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>DefaultValue</key>
-			<false/>
-			<key>Key</key>
-			<string>saveKey</string>
-			<key>Title</key>
-			<string>Save my password</string>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
 		</dict>
 		<dict>
 			<key>Type</key>
