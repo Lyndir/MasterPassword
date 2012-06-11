@@ -10,6 +10,7 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "ATConnect.h"
+#import "LocalyticsSession.h"
 
 @implementation MPAppDelegate_Shared (Key)
 
@@ -66,7 +67,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
             [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyForgotten object:self];
 #ifdef TESTFLIGHT_SDK_VERSION
-            [TestFlight passCheckpoint:MPTestFlightCheckpointForgetSavedKey];
+            [TestFlight passCheckpoint:MPCheckpointForgetSavedKey];
 #endif
         }
     }
@@ -108,8 +109,10 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                     [self forgetSavedKeyFor:user];
 
 #ifdef TESTFLIGHT_SDK_VERSION
-                    [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
+                    [TestFlight passCheckpoint:MPCheckpointSignInFailed];
 #endif
+                    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSignInFailed
+                                                               attributes:nil];
                 }
         }
 
@@ -121,8 +124,10 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                     tryKey = nil;
 
 #ifdef TESTFLIGHT_SDK_VERSION
-                    [TestFlight passCheckpoint:MPTestFlightCheckpointMPMismatch];
+                    [TestFlight passCheckpoint:MPCheckpointSignInFailed];
 #endif
+                    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSignInFailed
+                                                               attributes:nil];
                 }
     }
 
@@ -153,8 +158,10 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationSignedIn object:self];
 #ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPTestFlightCheckpointSignedIn];
+    [TestFlight passCheckpoint:MPCheckpointSignedIn];
 #endif
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSignedIn
+                                               attributes:nil];
 
     return YES;
 }

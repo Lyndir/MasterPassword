@@ -72,7 +72,7 @@
 
     [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
 
-    [TestFlight passCheckpoint:MPTestFlightCheckpointShowGuide];
+    [TestFlight passCheckpoint:MPCheckpointShowGuide];
 }
 
 - (void)export {
@@ -138,7 +138,9 @@
         self.activeUser.keyID = nil;
         [self signOut];
 
-        [TestFlight passCheckpoint:MPTestFlightCheckpointChangeMP];
+        [TestFlight passCheckpoint:MPCheckpointChangeMP];
+        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointChangeMP
+                                                   attributes:nil];
     }
                          cancelTitle:[PearlStrings get].commonButtonAbort
                          otherTitles:[PearlStrings get].commonButtonContinue, nil];
@@ -186,7 +188,7 @@
                     
                     return YES;
                 }];
-                [TestFlight passCheckpoint:MPTestFlightCheckpointLaunched];
+                [TestFlight passCheckpoint:MPCheckpointLaunched];
             }
         }
         @catch (id exception) {
@@ -410,7 +412,7 @@ UIImage *segmentUnselectedUnselected = [UIImage imageNamed:@"segcontrol_uns-uns.
     if ([[MPiOSConfig get].showQuickStart boolValue])
         [self showGuide];
 
-    [TestFlight passCheckpoint:MPTestFlightCheckpointActivated];
+    [TestFlight passCheckpoint:MPCheckpointActivated];
 
     [super applicationDidBecomeActive:application];
 }
@@ -435,7 +437,7 @@ UIImage *segmentUnselectedUnselected = [UIImage imageNamed:@"segcontrol_uns-uns.
 
     [self saveContext];
 
-    [TestFlight passCheckpoint:MPTestFlightCheckpointTerminated];
+    [TestFlight passCheckpoint:MPCheckpointTerminated];
 
     [[LocalyticsSession sharedLocalyticsSession] close];
     [[LocalyticsSession sharedLocalyticsSession] upload];
@@ -450,7 +452,7 @@ UIImage *segmentUnselectedUnselected = [UIImage imageNamed:@"segcontrol_uns-uns.
     if (![[MPiOSConfig get].rememberLogin boolValue])
         [self signOut];
 
-    [TestFlight passCheckpoint:MPTestFlightCheckpointDeactivated];
+    [TestFlight passCheckpoint:MPCheckpointDeactivated];
 }
 
 #pragma mark - MFMailComposeViewControllerDelegate

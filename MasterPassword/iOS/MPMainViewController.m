@@ -11,7 +11,7 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "ATConnect.h"
-#import "MPUnlockViewController.h"
+#import "LocalyticsSession.h"
 
 
 @interface MPMainViewController (Private)
@@ -209,7 +209,7 @@
 
 - (void)setHelpChapter:(NSString *)chapter {
 
-    [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointHelpChapter, chapter]];
+    [TestFlight passCheckpoint:PearlString(MPCheckpointHelpChapter @"_%@", chapter)];
 
     dispatch_async(dispatch_get_main_queue(), ^{
         NSURL *url = [NSURL URLWithString:[@"#" stringByAppendingString:chapter]
@@ -282,7 +282,11 @@
 
     [self showContentTip:@"Copied!" withIcon:nil];
 
-    [TestFlight passCheckpoint:MPTestFlightCheckpointCopyToPasteboard];
+    [TestFlight passCheckpoint:MPCheckpointCopyToPasteboard];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyToPasteboard
+                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                         NSStringFromMPElementType(self.activeElement.type), @"type",
+                                                                         nil]];
 }
 
 - (IBAction)incrementPasswordCounter {
@@ -300,7 +304,11 @@
                                     ++((MPElementGeneratedEntity *)self.activeElement).counter;
                                 }];
 
-    [TestFlight passCheckpoint:MPTestFlightCheckpointIncrementPasswordCounter];
+    [TestFlight passCheckpoint:MPCheckpointIncrementPasswordCounter];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointIncrementPasswordCounter
+                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                         NSStringFromMPElementType(self.activeElement.type), @"type",
+                                                                         nil]];
 }
 
 - (IBAction)resetPasswordCounter:(UILongPressGestureRecognizer *)sender {
@@ -323,7 +331,11 @@
                                     ((MPElementGeneratedEntity *)self.activeElement).counter = 1;
                                 }];
 
-    [TestFlight passCheckpoint:MPTestFlightCheckpointResetPasswordCounter];
+    [TestFlight passCheckpoint:MPCheckpointResetPasswordCounter];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointResetPasswordCounter
+                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                         NSStringFromMPElementType(self.activeElement.type), @"type",
+                                                                         nil]];
 }
 
 - (void)changeElementWithWarning:(NSString *)warning do:(void (^)(void))task; {
@@ -364,7 +376,11 @@
         [self.contentField becomeFirstResponder];
     }
 
-    [TestFlight passCheckpoint:MPTestFlightCheckpointEditPassword];
+    [TestFlight passCheckpoint:MPCheckpointEditPassword];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditPassword
+                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                         NSStringFromMPElementType(self.activeElement.type), @"type",
+                                                                         nil]];
 }
 
 - (IBAction)closeAlert {
@@ -376,7 +392,7 @@
             self.alertBody.text = nil;
     }];
 
-    [TestFlight passCheckpoint:MPTestFlightCheckpointCloseAlert];
+    [TestFlight passCheckpoint:MPCheckpointCloseAlert];
 }
 
 - (IBAction)action:(id)sender {
@@ -424,7 +440,7 @@
                          }
                      }
 
-                     [TestFlight passCheckpoint:MPTestFlightCheckpointAction];
+                     [TestFlight passCheckpoint:MPCheckpointAction];
                  }
                  cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:
      [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Preferences", @"Feedback", @"Sign Out", nil];
@@ -460,7 +476,7 @@
 
                                     self.activeElement.type = type;
 
-                                    [TestFlight passCheckpoint:[NSString stringWithFormat:MPTestFlightCheckpointSelectType, NSStringFromMPElementType(
+                                    [TestFlight passCheckpoint:[NSString stringWithFormat:MPCheckpointSelectType, NSStringFromMPElementType(
                                      type)]];
 
                                     if (type & MPElementTypeClassStored && ![[self.activeElement.content description] length])
@@ -499,8 +515,12 @@
         [self.searchDisplayController setActive:NO animated:YES];
         self.searchDisplayController.searchBar.text = self.activeElement.name;
 
-        [TestFlight passCheckpoint:PearlString(MPTestFlightCheckpointUseType, NSStringFromMPElementType(self.activeElement.type))];
         [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationElementUsed object:self.activeElement];
+        [TestFlight passCheckpoint:PearlString(MPCheckpointUseType @"_%@", NSStringFromMPElementType(self.activeElement.type))];
+        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointUseType
+                                                   attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                             NSStringFromMPElementType(self.activeElement.type), @"type",
+                                                                             nil]];
     }
 
     [self updateAnimated:YES];
@@ -536,7 +556,7 @@
  navigationType:(UIWebViewNavigationType)navigationType {
 
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
-        [TestFlight passCheckpoint:MPTestFlightCheckpointExternalLink];
+        [TestFlight passCheckpoint:MPCheckpointExternalLink];
 
         [[UIApplication sharedApplication] openURL:[request URL]];
         return NO;

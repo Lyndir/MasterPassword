@@ -9,6 +9,7 @@
 #import "MPSearchDelegate.h"
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Store.h"
+#import "LocalyticsSession.h"
 
 @interface MPSearchDelegate (Private)
 
@@ -77,7 +78,7 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
 
-    [TestFlight passCheckpoint:MPTestFlightCheckpointCancelSearch];
+    [TestFlight passCheckpoint:MPCheckpointCancelSearch];
 
     [self.delegate didSelectElement:nil];
 }
@@ -346,7 +347,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
                 MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
                 [self.fetchedResultsController.managedObjectContext deleteObject:element];
 
-                [TestFlight passCheckpoint:MPTestFlightCheckpointDeleteElement];
+                [TestFlight passCheckpoint:MPCheckpointDeleteElement];
+                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointDeleteElement
+                                                           attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                                     NSStringFromMPElementType(element.type), @"type",
+                                                                                     nil]];
             }];
     }
 }

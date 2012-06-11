@@ -7,6 +7,7 @@
 //
 
 #import "MPAppDelegate_Store.h"
+#import "LocalyticsSession.h"
 
 @implementation MPAppDelegate_Shared (Store)
 
@@ -139,8 +140,10 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     iCloudEnabled = manager.iCloudEnabled;
 
 #ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:iCloudEnabled? MPTestFlightCheckpointCloudEnabled: MPTestFlightCheckpointCloudDisabled];
+    [TestFlight passCheckpoint:iCloudEnabled? MPCheckpointCloudEnabled: MPCheckpointCloudDisabled];
 #endif
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:iCloudEnabled? MPCheckpointCloudEnabled: MPCheckpointCloudDisabled
+                                               attributes:nil];
 
     inf(@"Using iCloud? %@", iCloudEnabled? @"YES": @"NO");
     [MPConfig get].iCloud = [NSNumber numberWithBool:iCloudEnabled];
@@ -150,7 +153,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
                      context:(id)context {
 
 #ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:PearlString(@"MPTestFlightCheckpointMPErrorUbiquity_%d", cause)];
+    [TestFlight passCheckpoint:PearlString(@"MPCheckpointMPErrorUbiquity_%d", cause)];
 #endif
     err(@"StoreManager: cause=%d, context=%@, error=%@", cause, context, error);
 
@@ -162,8 +165,10 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
             break;
         case UbiquityStoreManagerErrorCauseOpenLocalStore: {
 #ifdef TESTFLIGHT_SDK_VERSION
-            [TestFlight passCheckpoint:MPTestFlightCheckpointLocalStoreIncompatible];
+            [TestFlight passCheckpoint:MPCheckpointLocalStoreIncompatible];
 #endif
+            [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointLocalStoreIncompatible
+                                                       attributes:nil];
             wrn(@"Local store could not be opened, resetting it.");
             manager.hardResetEnabled = YES;
             [manager hardResetLocalStorage];
@@ -173,8 +178,10 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         }
         case UbiquityStoreManagerErrorCauseOpenCloudStore: {
 #ifdef TESTFLIGHT_SDK_VERSION
-            [TestFlight passCheckpoint:MPTestFlightCheckpointCloudStoreIncompatible];
+            [TestFlight passCheckpoint:MPCheckpointCloudStoreIncompatible];
 #endif
+            [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloudStoreIncompatible
+                                                       attributes:nil];
             wrn(@"iCloud store could not be opened, resetting it.");
             manager.hardResetEnabled = YES;
             [manager hardResetCloudStorage];
@@ -339,8 +346,10 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     [self saveContext];
 
 #ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPTestFlightCheckpointSitesImported];
+    [TestFlight passCheckpoint:MPCheckpointSitesImported];
 #endif
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSitesImported
+                                               attributes:nil];
 
     return MPImportResultSuccess;
 }
@@ -394,8 +403,10 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     }
 
 #ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPTestFlightCheckpointSitesExported];
+    [TestFlight passCheckpoint:MPCheckpointSitesExported];
 #endif
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSitesExported
+                                               attributes:nil];
 
     return export;
 }
