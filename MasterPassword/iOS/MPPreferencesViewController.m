@@ -153,7 +153,10 @@
 
 - (IBAction)settings:(UIBarButtonItem *)sender {
     
-    [self.navigationController pushViewController:[IASKAppSettingsViewController new] animated:YES];
+    IASKAppSettingsViewController *vc = [IASKAppSettingsViewController new];
+    vc.showDoneButton = NO;
+    
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end

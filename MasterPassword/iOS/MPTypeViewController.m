@@ -94,6 +94,8 @@
                     return MPElementTypeGeneratedBasic;
                 case 6:
                     return MPElementTypeGeneratedPIN;
+                case 7:
+                    return NSNotFound;
 
                 default:
                     Throw(@"Unsupported row: %d, when selecting generated element type.", indexPath.row);
@@ -109,6 +111,8 @@
                     return MPElementTypeStoredPersonal;
                 case 2:
                     return MPElementTypeStoredDevicePrivate;
+                case 3:
+                    return NSNotFound;
 
                 default:
                     Throw(@"Unsupported row: %d, when selecting stored element type.", indexPath.row);

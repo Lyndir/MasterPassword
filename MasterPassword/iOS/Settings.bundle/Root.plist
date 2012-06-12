@@ -71,14 +71,6 @@
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
 		<dict>
-			<key>FooterText</key>
-			<string>Use this to save your master password in the key chain.  This is somewhat less secure should your device get stolen, but it means you won&apos;t need to enter the master password anymore.  You can compensate for the reduced security by going into General-&gt;Passcode Lock, disabling &quot;Simple Passcode&quot;, and setting a more secure passcode for your device.</string>
-			<key>Title</key>
-			<string></string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>

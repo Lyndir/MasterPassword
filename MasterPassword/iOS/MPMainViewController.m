@@ -67,8 +67,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-
-    [super viewWillAppear:animated];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:animated? UIStatusBarAnimationSlide: UIStatusBarAnimationNone];
 
     if (![MPAppDelegate get].activeUser)
         [self.navigationController presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
@@ -83,6 +83,8 @@
 
     [self setHelpHidden:[[MPiOSConfig get].helpHidden boolValue] animated:animated];
     [self updateAnimated:animated];
+    
+    [super viewWillAppear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
