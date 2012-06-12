@@ -16,6 +16,19 @@
         <script src="js/jquery-1.6.1.min.js" type="text/javascript"></script>
         <script src="js/functions.js" type="text/javascript"></script>
         <script type="text/javascript">
+            $(document).ready(function() {
+                $(window).scroll(function() {
+                    if ($(window).scrollTop() > 100) {
+                        $(".appstore").show();
+                        $("header .appstore").hide();
+                    } else {
+                        $(".appstore").hide();
+                        $("header .appstore").show();
+                    }
+                })
+            });
+        </script>
+        <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-90535-15']);
             _gaq.push(['_trackPageview']);
@@ -72,6 +85,7 @@
         </script>
     </head>
     <body>
+        <a class="appstore" href="http://itunes.com/apps/MasterPassword"><img src="img/appstore.png" /></a>
         <header>
             
             <a class="appstore" href="http://itunes.com/apps/MasterPassword"><img src="img/appstore.png" /></a>
@@ -80,22 +94,25 @@
 
         </header>
         <div id="fixedheader">
-            <a class="appstore" href="http://itunes.com/apps/MasterPassword"><img src="img/appstore-small.png" /></a>
             <h2><a href="index.html">Master Password</a></h2>
         </div>
         <!--a href="http://bit.ly/vNN5Zi" onclick="_gaq.push(['_trackPageview', '/outbound/testflight']);" id="ribbon"></a-->
+        
+        <section class="heading">
+            <div>
+                <h1>So how does it work?</h1>
+
+                <p>
+                    The theory behind Master Password is simple.  The user remembers a single, secure password.  The user only ever uses that password to log into the Master Password application.  This master password is then used as a seed to generate a different password based on the name of the site to generate a password for.
+                </p>
+
+                <p>
+                    The result is that each master password generates its own unique sequence of passwords for any site name.  Since the only input data is the master password and the site name (along with a password counter, see below), there is no need for any kind of storage to recreate a site's password.  All that's needed is the correct master password and the correct algorithm implementation.  What that does for you is make it almost impossible to lose your passwords.  It also makes it nearly impossible for hackers to steal your online identity.
+                </p>
+            </div>
+        </section>
+
         <section>
-
-            <h1>So how does it work?</h1>
-
-            <p>
-                The theory behind Master Password is simple.  The user remembers a single, secure password.  The user only ever uses that password to log into the Master Password application.  This master password is then used as a seed to generate a different password based on the name of the site to generate a password for.
-            </p>
-
-            <p>
-                The result is that each master password generates its own unique sequence of passwords for any site name.  Since the only input data is the master password and the site name (along with a password counter, see below), there is no need for any kind of storage to recreate a site's password.  All that's needed is the correct master password and the correct algorithm implementation.  What that does for you is make it almost impossible to lose your passwords.  It also makes it nearly impossible for hackers to steal your online identity.
-            </p>
-
             <h1>The Algorithm</h1>
 
             <p>
