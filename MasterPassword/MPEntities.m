@@ -178,9 +178,20 @@
     return (MPElementType)[self.defaultType_ unsignedIntegerValue];
 }
 
+- (NSString *)userID {
+
+    return [MPUserEntity idFor:self.name];
+}
+
+
 - (void)setDefaultType:(MPElementType)aDefaultType {
 
     self.defaultType_ = PearlUnsignedInteger(aDefaultType);
+}
+
++ (NSString *)idFor:(NSString *)userName {
+
+    return [[userName hashWith:PearlHashSHA1] encodeHex];
 }
 
 @end

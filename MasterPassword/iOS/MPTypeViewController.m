@@ -23,7 +23,10 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 
+    inf(@"Type selection will appear");
     self.recommendedTipContainer.alpha = 0;
+
+    [super viewWillAppear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -49,6 +52,12 @@
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
 
     [super viewDidLoad];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+
+    inf(@"Type selection will disappear");
+    [super viewWillDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

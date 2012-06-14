@@ -80,9 +80,6 @@
 		DA95D5F614DF0B9F008D1B94 /* IASKPSTextFieldSpecifierViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA95D5CC14DF0691008D1B94 /* IASKPSTextFieldSpecifierViewCell.xib */; };
 		DA95D5F714DF0B9F008D1B94 /* IASKPSToggleSwitchSpecifierViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA95D5CD14DF0691008D1B94 /* IASKPSToggleSwitchSpecifierViewCell.xib */; };
 		DA95D5F814DF0B9F008D1B94 /* IASKSpecifierValuesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA95D5CE14DF0691008D1B94 /* IASKSpecifierValuesView.xib */; };
-		DAAC35DB156BD62F00C5FD93 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAAC35D2156BD51600C5FD93 /* libApptentiveConnect.a */; };
-		DAAC35DE156BD77D00C5FD93 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAAC35DD156BD77D00C5FD93 /* CoreTelephony.framework */; };
-		DAAC35E4156BDBA700C5FD93 /* Apptentive.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAAC35E2156BDBA700C5FD93 /* Apptentive.plist */; };
 		DAB8D45D15036BCF00CED3BC /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D43C15036BCF00CED3BC /* MasterPassword.xcdatamodeld */; };
 		DAB8D45E15036BCF00CED3BC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D43F15036BCF00CED3BC /* InfoPlist.strings */; };
 		DAB8D45F15036BCF00CED3BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D44115036BCF00CED3BC /* main.m */; };
@@ -676,7 +673,6 @@
 		DAC632891486D9690075AEA5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC632871486D95D0075AEA5 /* Security.framework */; };
 		DAC728CA157C247B00889EF2 /* MPPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC728C9157C247B00889EF2 /* MPPreferencesViewController.m */; };
 		DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
-		DACABB8515729E80008BA211 /* ApptentiveResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DAAC35D6156BD51600C5FD93 /* ApptentiveResources.bundle */; };
 		DACABB861572A2A7008BA211 /* tip_alert_black.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D6BA15036BF600CED3BC /* tip_alert_black.png */; };
 		DACABB871572A2A7008BA211 /* tip_alert_black@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D6BB15036BF600CED3BC /* tip_alert_black@2x.png */; };
 		DACABB881572A2A7008BA211 /* tip_basic_black.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D6CC15036BF600CED3BC /* tip_basic_black.png */; };
@@ -824,6 +820,8 @@
 		DAFE4A63150399FF003ABA8C /* UIControl+PearlSelect.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE4A63150399FF003ABA8B /* UIControl+PearlSelect.h */; };
 		DAFE4A63150399FF003ABA8E /* UIScrollView+PearlFlashingIndicators.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE4A63150399FF003ABA8D /* UIScrollView+PearlFlashingIndicators.m */; };
 		DAFE4A63150399FF003ABA90 /* UIScrollView+PearlFlashingIndicators.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE4A63150399FF003ABA8F /* UIScrollView+PearlFlashingIndicators.h */; };
+		DAFE4A63150399FF003ABA92 /* NSDateFormatter+RFC3339.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE4A63150399FF003ABA91 /* NSDateFormatter+RFC3339.m */; };
+		DAFE4A63150399FF003ABA94 /* NSDateFormatter+RFC3339.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE4A63150399FF003ABA93 /* NSDateFormatter+RFC3339.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -854,41 +852,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = DA67FE5D14E4834300DB7CC9;
 			remoteInfo = util;
-		};
-		DAAC35D1156BD51600C5FD93 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DAAC35C8156BD51500C5FD93 /* ApptentiveConnect.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 496DC37F1333D35600743F65;
-			remoteInfo = ApptentiveConnect;
-		};
-		DAAC35D3156BD51600C5FD93 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DAAC35C8156BD51500C5FD93 /* ApptentiveConnect.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 496DC38C1333D35600743F65;
-			remoteInfo = ApptentiveConnectTests;
-		};
-		DAAC35D5156BD51600C5FD93 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DAAC35C8156BD51500C5FD93 /* ApptentiveConnect.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 49D1118C13341A7C00603373;
-			remoteInfo = ApptentiveResources;
-		};
-		DAAC35D7156BD61D00C5FD93 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DAAC35C8156BD51500C5FD93 /* ApptentiveConnect.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 496DC37E1333D35600743F65;
-			remoteInfo = ApptentiveConnect;
-		};
-		DAAC35D9156BD61D00C5FD93 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DAAC35C8156BD51500C5FD93 /* ApptentiveConnect.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 49D1118B13341A7C00603373;
-			remoteInfo = ApptentiveResources;
 		};
 		DAC63283148681200075AEA5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -993,11 +956,7 @@
 		DA95D5CD14DF0691008D1B94 /* IASKPSToggleSwitchSpecifierViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IASKPSToggleSwitchSpecifierViewCell.xib; sourceTree = "<group>"; };
 		DA95D5CE14DF0691008D1B94 /* IASKSpecifierValuesView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IASKSpecifierValuesView.xib; sourceTree = "<group>"; };
 		DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		DAAC35C8156BD51500C5FD93 /* ApptentiveConnect.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ApptentiveConnect.xcodeproj; path = External/apptentive/ApptentiveConnect/ApptentiveConnect.xcodeproj; sourceTree = "<group>"; };
 		DAAC35DD156BD77D00C5FD93 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		DAAC35E2156BDBA700C5FD93 /* Apptentive.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Apptentive.plist; sourceTree = "<group>"; };
-		DAAC35E5156BDBC100C5FD93 /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATConnect.h; path = ../External/apptentive/ApptentiveConnect/source/ATConnect.h; sourceTree = "<group>"; };
-		DAAC35E6156BDF0E00C5FD93 /* ATAppRatingFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATAppRatingFlow.h; path = "../External/apptentive/ApptentiveConnect/source/Rating Flow/ATAppRatingFlow.h"; sourceTree = "<group>"; };
 		DAB8D43D15036BCF00CED3BC /* MasterPassword.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MasterPassword.xcdatamodel; sourceTree = "<group>"; };
 		DAB8D44015036BCF00CED3BC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DAB8D44115036BCF00CED3BC /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -1817,6 +1776,8 @@
 		DAFE4A63150399FF003ABA8B /* UIControl+PearlSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+PearlSelect.h"; sourceTree = "<group>"; };
 		DAFE4A63150399FF003ABA8D /* UIScrollView+PearlFlashingIndicators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+PearlFlashingIndicators.m"; sourceTree = "<group>"; };
 		DAFE4A63150399FF003ABA8F /* UIScrollView+PearlFlashingIndicators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+PearlFlashingIndicators.h"; sourceTree = "<group>"; };
+		DAFE4A63150399FF003ABA91 /* NSDateFormatter+RFC3339.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+RFC3339.m"; sourceTree = "<group>"; };
+		DAFE4A63150399FF003ABA93 /* NSDateFormatter+RFC3339.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+RFC3339.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1832,8 +1793,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DAAC35DE156BD77D00C5FD93 /* CoreTelephony.framework in Frameworks */,
-				DAAC35DB156BD62F00C5FD93 /* libApptentiveConnect.a in Frameworks */,
 				DA44260A1557D9E40052177D /* libiCloudStoreManager.a in Frameworks */,
 				DAD312C21552A22700A3F9ED /* libsqlite3.dylib in Frameworks */,
 				DAD312BF1552A1BD00A3F9ED /* libLocalytics.a in Frameworks */,
@@ -1913,7 +1872,6 @@
 		DA5BFA39147E415C00F98B1E = {
 			isa = PBXGroup;
 			children = (
-				DAAC35C8156BD51500C5FD93 /* ApptentiveConnect.xcodeproj */,
 				DA79A9BD1557DDC700BAA07A /* scrypt.xcodeproj */,
 				DA5BFA50147E415C00F98B1E /* MasterPassword */,
 				DAB8D46F15036BF600CED3BC /* Resources */,
@@ -1925,7 +1883,6 @@
 				DAD3125E15528C9C00A3F9ED /* Crashlytics */,
 				DAD3126115528C9C00A3F9ED /* TestFlight */,
 				DAD3127315528CD200A3F9ED /* Localytics */,
-				DAAC35E0156BDBA700C5FD93 /* Apptentive */,
 				DA4425D71557BF260052177D /* iCloudStoreManager */,
 				DA5BFA47147E415C00F98B1E /* Frameworks */,
 				DA5BFA45147E415C00F98B1E /* Products */,
@@ -2127,26 +2084,6 @@
 			name = Xibs;
 			path = External/InAppSettingsKit/InAppSettingsKit/Xibs;
 			sourceTree = SOURCE_ROOT;
-		};
-		DAAC35C9156BD51500C5FD93 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				DAAC35D2156BD51600C5FD93 /* libApptentiveConnect.a */,
-				DAAC35D4156BD51600C5FD93 /* ApptentiveConnectTests.octest */,
-				DAAC35D6156BD51600C5FD93 /* ApptentiveResources.bundle */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		DAAC35E0156BDBA700C5FD93 /* Apptentive */ = {
-			isa = PBXGroup;
-			children = (
-				DAAC35E6156BDF0E00C5FD93 /* ATAppRatingFlow.h */,
-				DAAC35E5156BDBC100C5FD93 /* ATConnect.h */,
-				DAAC35E2156BDBA700C5FD93 /* Apptentive.plist */,
-			);
-			path = Apptentive;
-			sourceTree = "<group>";
 		};
 		DAB8D43E15036BCF00CED3BC /* iOS */ = {
 			isa = PBXGroup;
@@ -3006,6 +2943,8 @@
 		DAFE45D715039823003ABA7C /* Pearl */ = {
 			isa = PBXGroup;
 			children = (
+				DAFE4A63150399FF003ABA93 /* NSDateFormatter+RFC3339.h */,
+				DAFE4A63150399FF003ABA91 /* NSDateFormatter+RFC3339.m */,
 				DAFE4A63150399FF003ABA87 /* NSObject+PearlKVO.h */,
 				DAFE4A63150399FF003ABA85 /* NSObject+PearlKVO.m */,
 				DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */,
@@ -3229,6 +3168,7 @@
 				DAFE4A63150399FF003ABA88 /* NSObject+PearlKVO.h in Headers */,
 				DAFE4A63150399FF003ABA8C /* UIControl+PearlSelect.h in Headers */,
 				DAFE4A63150399FF003ABA90 /* UIScrollView+PearlFlashingIndicators.h in Headers */,
+				DAFE4A63150399FF003ABA94 /* NSDateFormatter+RFC3339.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3277,8 +3217,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				DAAC35D8156BD61D00C5FD93 /* PBXTargetDependency */,
-				DAAC35DA156BD61D00C5FD93 /* PBXTargetDependency */,
 			);
 			name = MasterPassword;
 			productName = MasterPassword;
@@ -3396,10 +3334,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = DAAC35C9156BD51500C5FD93 /* Products */;
-					ProjectRef = DAAC35C8156BD51500C5FD93 /* ApptentiveConnect.xcodeproj */;
-				},
-				{
 					ProductGroup = DA79A9BE1557DDC700BAA07A /* Products */;
 					ProjectRef = DA79A9BD1557DDC700BAA07A /* scrypt.xcodeproj */;
 				},
@@ -3437,27 +3371,6 @@
 			fileType = archive.ar;
 			path = libutil.a;
 			remoteRef = DA79A9D11557DDC800BAA07A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DAAC35D2156BD51600C5FD93 /* libApptentiveConnect.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libApptentiveConnect.a;
-			remoteRef = DAAC35D1156BD51600C5FD93 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DAAC35D4156BD51600C5FD93 /* ApptentiveConnectTests.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = ApptentiveConnectTests.octest;
-			remoteRef = DAAC35D3156BD51600C5FD93 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DAAC35D6156BD51600C5FD93 /* ApptentiveResources.bundle */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = ApptentiveResources.bundle;
-			remoteRef = DAAC35D5156BD51600C5FD93 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -4056,8 +3969,6 @@
 				DA0A1D0615690A9A0092735D /* Default@2x.png in Resources */,
 				DA0A1D1515690AF40092735D /* Icon-72@2x.png in Resources */,
 				DA0A1D1615690AF40092735D /* Icon-Small-50@2x.png in Resources */,
-				DAAC35E4156BDBA700C5FD93 /* Apptentive.plist in Resources */,
-				DACABB8515729E80008BA211 /* ApptentiveResources.bundle in Resources */,
 				DACABB861572A2A7008BA211 /* tip_alert_black.png in Resources */,
 				DACABB871572A2A7008BA211 /* tip_alert_black@2x.png in Resources */,
 				DACABB881572A2A7008BA211 /* tip_basic_black.png in Resources */,
@@ -4263,6 +4174,7 @@
 				DAFE4A63150399FF003ABA86 /* NSObject+PearlKVO.m in Sources */,
 				DAFE4A63150399FF003ABA8A /* UIControl+PearlSelect.m in Sources */,
 				DAFE4A63150399FF003ABA8E /* UIScrollView+PearlFlashingIndicators.m in Sources */,
+				DAFE4A63150399FF003ABA92 /* NSDateFormatter+RFC3339.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4284,16 +4196,6 @@
 			isa = PBXTargetDependency;
 			name = "Makefile-scrypt";
 			targetProxy = DA4DA1D71564470200F6F596 /* PBXContainerItemProxy */;
-		};
-		DAAC35D8156BD61D00C5FD93 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = ApptentiveConnect;
-			targetProxy = DAAC35D7156BD61D00C5FD93 /* PBXContainerItemProxy */;
-		};
-		DAAC35DA156BD61D00C5FD93 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = ApptentiveResources;
-			targetProxy = DAAC35D9156BD61D00C5FD93 /* PBXContainerItemProxy */;
 		};
 		DAC63284148681200075AEA5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

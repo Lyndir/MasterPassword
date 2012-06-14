@@ -11,8 +11,6 @@
 
 @implementation MPAppDelegate_Shared (Store)
 
-static NSDateFormatter *rfc3339DateFormatter = nil;
-
 #pragma mark - Core Data setup
 
 + (NSManagedObjectContext *)managedObjectContext {
@@ -136,26 +134,27 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)iCloudEnabled {
 
-    // manager.iCloudEnabled is more reliable (eg. iOS tampers with didSwitch a bit)
+    // manager.iCloudEnabled is more reliable (eg. iOS' MPAppDelegate tampers with didSwitch a bit)
     iCloudEnabled = manager.iCloudEnabled;
+    inf(@"Using iCloud? %@", iCloudEnabled? @"YES": @"NO");
 
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:iCloudEnabled? MPCheckpointCloudEnabled: MPCheckpointCloudDisabled];
 #endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:iCloudEnabled? MPCheckpointCloudEnabled: MPCheckpointCloudDisabled
-                                               attributes:nil];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloud
+                                               attributes:[NSDictionary dictionaryWithObject:iCloudEnabled? @"YES": @"NO" forKey:@"enabled"]];
 
-    inf(@"Using iCloud? %@", iCloudEnabled? @"YES": @"NO");
     [MPConfig get].iCloud = [NSNumber numberWithBool:iCloudEnabled];
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreManagerErrorCause)cause
                      context:(id)context {
 
+    err(@"StoreManager: cause=%d, context=%@, error=%@", cause, context, error);
+
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:PearlString(@"MPCheckpointMPErrorUbiquity_%d", cause)];
 #endif
-    err(@"StoreManager: cause=%d, context=%@, error=%@", cause, context, error);
 
     switch (cause) {
         case UbiquityStoreManagerErrorCauseDeleteStore:
@@ -164,12 +163,13 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         case UbiquityStoreManagerErrorCauseClearStore:
             break;
         case UbiquityStoreManagerErrorCauseOpenLocalStore: {
+            wrn(@"Local store could not be opened, resetting it.");
+
 #ifdef TESTFLIGHT_SDK_VERSION
             [TestFlight passCheckpoint:MPCheckpointLocalStoreIncompatible];
 #endif
             [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointLocalStoreIncompatible
                                                        attributes:nil];
-            wrn(@"Local store could not be opened, resetting it.");
             manager.hardResetEnabled = YES;
             [manager hardResetLocalStorage];
 
@@ -177,12 +177,13 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
             return;
         }
         case UbiquityStoreManagerErrorCauseOpenCloudStore: {
+            wrn(@"iCloud store could not be opened, resetting it.");
+
 #ifdef TESTFLIGHT_SDK_VERSION
             [TestFlight passCheckpoint:MPCheckpointCloudStoreIncompatible];
 #endif
             [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloudStoreIncompatible
                                                        attributes:nil];
-            wrn(@"iCloud store could not be opened, resetting it.");
             manager.hardResetEnabled = YES;
             [manager hardResetCloudStorage];
             break;
@@ -192,22 +193,10 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
 
 #pragma mark - Import / Export
 
-- (void)loadRFC3339DateFormatter {
-
-    if (rfc3339DateFormatter)
-        return;
-
-    rfc3339DateFormatter = [NSDateFormatter new];
-    NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-    [rfc3339DateFormatter setLocale:enUSPOSIXLocale];
-    [rfc3339DateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-    [rfc3339DateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-}
-
 - (MPImportResult)importSites:(NSString *)importedSitesString withPassword:(NSString *)password
               askConfirmation:(BOOL(^)(NSUInteger importCount, NSUInteger deleteCount))confirmation {
 
-    [self loadRFC3339DateFormatter];
+    inf(@"Importing sites.");
 
     static NSRegularExpression *headerPattern, *sitePattern;
     __autoreleasing NSError *error;
@@ -299,17 +288,24 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
             NSArray *existingSites = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
             if (error)
             err(@"Couldn't search existing sites: %@", error);
-            if (!existingSites)
+            if (!existingSites) {
+                err(@"Lookup of existing sites failed for site: %@, user: %@", name, user.userID);
                 return MPImportResultInternalError;
+            }
 
             [elementsToDelete addObjectsFromArray:existingSites];
             [importedSiteElements addObject:[NSArray arrayWithObjects:lastUsed, uses, type, name, exportContent, nil]];
         }
     }
 
+    inf(@"Importing %u sites, deleting %u sites, for user: %@",
+    [importedSiteElements count], [elementsToDelete count], [MPUserEntity idFor:userName]);
+
     // Ask for confirmation to import these sites.
-    if (!confirmation([importedSiteElements count], [elementsToDelete count]))
+    if (!confirmation([importedSiteElements count], [elementsToDelete count])) {
+        inf(@"Import cancelled.");
         return MPImportResultCancelled;
+    }
 
     // Delete existing sites.
     [elementsToDelete enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
@@ -326,7 +322,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         user.keyID = [keyIDHex decodeHex];
     }
     for (NSArray *siteElements in importedSiteElements) {
-        NSDate *lastUsed = [rfc3339DateFormatter dateFromString:[siteElements objectAtIndex:0]];
+        NSDate *lastUsed = [[NSDateFormatter rfc3339DateFormatter] dateFromString:[siteElements objectAtIndex:0]];
         NSUInteger    uses = (unsigned)[[siteElements objectAtIndex:1] integerValue];
         MPElementType type = (MPElementType)[[siteElements objectAtIndex:2] integerValue];
         NSString *name          = [siteElements objectAtIndex:3];
@@ -345,6 +341,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     }
     [self saveContext];
 
+    inf(@"Import completed successfully.");
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPCheckpointSitesImported];
 #endif
@@ -356,7 +353,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
 
 - (NSString *)exportSitesShowingPasswords:(BOOL)showPasswords {
 
-    [self loadRFC3339DateFormatter];
+    inf(@"Exporting sites, %@, for: %@", showPasswords? @"showing passwords": @"omitting passwords", self.activeUser.userID);
 
     // Header.
     NSMutableString *export = [NSMutableString new];
@@ -370,7 +367,7 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
     [export appendFormat:@"# Version: %@\n", [PearlInfoPlist get].CFBundleVersion];
     [export appendFormat:@"# User Name: %@\n", self.activeUser.name];
     [export appendFormat:@"# Key ID: %@\n", [self.activeUser.keyID encodeHex]];
-    [export appendFormat:@"# Date: %@\n", [rfc3339DateFormatter stringFromDate:[NSDate date]]];
+    [export appendFormat:@"# Date: %@\n", [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]]];
     if (showPasswords)
         [export appendFormat:@"# Passwords: VISIBLE\n"];
     else
@@ -398,15 +395,14 @@ static NSDateFormatter *rfc3339DateFormatter = nil;
         }
 
         [export appendFormat:@"%@  %8d  %8d  %20s\t%@\n",
-                             [rfc3339DateFormatter stringFromDate:lastUsed], uses, type, [name cStringUsingEncoding:NSUTF8StringEncoding], content
+                             [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed], uses, type, [name cStringUsingEncoding:NSUTF8StringEncoding], content
          ? content: @""];
     }
 
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPCheckpointSitesExported];
 #endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSitesExported
-                                               attributes:nil];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSitesExported attributes:nil];
 
     return export;
 }

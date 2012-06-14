@@ -36,5 +36,8 @@
 @property (assign) NSUInteger avatar;
 @property (assign) BOOL       saveKey;
 @property (assign) MPElementType defaultType;
+@property (readonly) NSString *userID;
+
++ (NSString *)idFor:(NSString *)userName;
 
 @end

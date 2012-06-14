@@ -48,7 +48,7 @@
 			<key>Title</key>
 			<string>Send Diagnostic Info</string>
 			<key>Key</key>
-			<string>sendDebugInfo</string>
+            <string>sendInfo</string>
 			<key>DefaultValue</key>
 			<false/>
 		</dict>

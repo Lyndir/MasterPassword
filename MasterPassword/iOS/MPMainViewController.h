@@ -6,11 +6,12 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
+#import <MessageUI/MessageUI.h>
 #import "MPTypeViewController.h"
 #import "MPElementEntity.h"
 #import "MPSearchDelegate.h"
 
-@interface MPMainViewController : UIViewController<MPTypeDelegate, UITextFieldDelegate, MPSearchResultsDelegate, UIWebViewDelegate>
+@interface MPMainViewController : UIViewController<MPTypeDelegate, UITextFieldDelegate, MPSearchResultsDelegate, UIWebViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (strong, nonatomic) MPElementEntity           *activeElement;
 @property (strong, nonatomic) IBOutlet MPSearchDelegate *searchResultsController;

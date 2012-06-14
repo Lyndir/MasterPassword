@@ -66,6 +66,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 
+    inf(@"Preferences will appear");
     [self.avatarsView autoSizeContent];
     [self.avatarsView enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
         if (subview.tag && ((UIControl *)subview).selected) {
@@ -77,6 +78,12 @@
     self.defaultTypeLabel.text = NSStringShortFromMPElementType([MPAppDelegate get].activeUser.defaultType);
 
     [super viewWillAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+
+    inf(@"Preferences will disappear");
+    [super viewWillDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

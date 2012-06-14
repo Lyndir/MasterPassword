@@ -142,6 +142,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 
+    inf(@"Lock screen will appear");
     self.selectedUser = nil;
     [self updateUsers];
 
@@ -157,6 +158,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
 
+    inf(@"Lock screen will disappear");
     [super viewWillDisappear:animated];
 }
 

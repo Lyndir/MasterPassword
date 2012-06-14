@@ -9,7 +9,6 @@
 #import <Crashlytics/Crashlytics.h>
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-#import "ATConnect.h"
 #import "LocalyticsSession.h"
 
 @implementation MPAppDelegate_Shared (Key)
@@ -28,11 +27,11 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     NSData *key = [PearlKeyChain dataOfItemForQuery:keyQuery(user)];
     if (key)
-    inf(@"Found key (for: %@) in keychain.", user.name);
+    inf(@"Found key in keychain for: %@", user.userID);
 
     else {
         user.saveKey = NO;
-        inf(@"No key found (for: %@) in keychain.", user.name);
+        inf(@"No key found in keychain for: %@", user.userID);
     }
 
     return key;
@@ -44,7 +43,8 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
         NSData *existingKey = [PearlKeyChain dataOfItemForQuery:keyQuery(user)];
 
         if (![existingKey isEqualToData:self.key]) {
-            inf(@"Updating key in keychain.");
+            inf(@"Saving key in keychain for: %@", user.userID);
+
             [PearlKeyChain addOrUpdateItemForQuery:keyQuery(user)
                                     withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                   self.key, (__bridge id)kSecValueData,
@@ -63,7 +63,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
         user.saveKey = NO;
 
         if (result == noErr) {
-            inf(@"Removed key (for: %@) from keychain.", user.name);
+            inf(@"Removed key from keychain for: %@", user.userID);
 
             [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyForgotten object:self];
 #ifdef TESTFLIGHT_SDK_VERSION
@@ -105,14 +105,10 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
             if ((tryKey = [self loadSavedKeyFor:user]))
                 if (![user.keyID isEqual:keyIDForKey(tryKey)]) {
                     // Loaded password doesn't match user's keyID.  Forget saved password: it is incorrect.
+                    inf(@"Saved password doesn't match keyID for: %@", user.userID);
+                    
                     tryKey = nil;
                     [self forgetSavedKeyFor:user];
-
-#ifdef TESTFLIGHT_SDK_VERSION
-                    [TestFlight passCheckpoint:MPCheckpointSignInFailed];
-#endif
-                    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSignInFailed
-                                                               attributes:nil];
                 }
         }
 
@@ -121,19 +117,24 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
         if ([password length])
             if ((tryKey = keyForPassword(password, user.name)))
                 if (![user.keyID isEqual:keyIDForKey(tryKey)]) {
-                    tryKey = nil;
+                    inf(@"Key derived from password doesn't match keyID for: %@", user.userID);
 
-#ifdef TESTFLIGHT_SDK_VERSION
-                    [TestFlight passCheckpoint:MPCheckpointSignInFailed];
-#endif
-                    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSignInFailed
-                                                               attributes:nil];
+                    tryKey = nil;
                 }
     }
 
     // No more methods left, fail if key still not known.
-    if (!tryKey)
+    if (!tryKey) {
+        inf(@"Login failed for: %@", user.userID);
+
+#ifdef TESTFLIGHT_SDK_VERSION
+        [TestFlight passCheckpoint:MPCheckpointSignInFailed];
+#endif
+        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSignInFailed attributes:nil];
+
         return NO;
+    }
+    inf(@"Logged in: %@", user.userID);
 
     if (![self.key isEqualToData:tryKey]) {
         self.key = tryKey;
@@ -141,10 +142,9 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     }
 
     @try {
-        if ([[MPiOSConfig get].sendDebugInfo boolValue]) {
-            [TestFlight addCustomEnvironmentInformation:user.name forKey:@"username"];
-            [[Crashlytics sharedInstance] setObjectValue:user.name forKey:@"username"];
-            [[ATConnect sharedConnection] addAdditionalInfoToFeedback:user.name withKey:@"username"];
+        if ([[MPiOSConfig get].sendInfo boolValue]) {
+            [TestFlight addCustomEnvironmentInformation:user.userID forKey:@"username"];
+            [[Crashlytics sharedInstance] setObjectValue:user.userID forKey:@"username"];
         }
     }
     @catch (id exception) {

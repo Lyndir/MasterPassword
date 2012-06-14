@@ -110,6 +110,7 @@
 
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
 
+    dbg(@"Search ended with: %@", controller.searchBar.text);
     controller.searchBar.prompt                      = nil;
     controller.searchBar.searchResultsButtonSelected = NO;
 }
@@ -345,6 +346,8 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         if (editingStyle == UITableViewCellEditingStyleDelete)
             [self.fetchedResultsController.managedObjectContext performBlock:^{
                 MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
+
+                inf(@"Deleting element: %@", element.name);
                 [self.fetchedResultsController.managedObjectContext deleteObject:element];
 
                 [TestFlight passCheckpoint:MPCheckpointDeleteElement];

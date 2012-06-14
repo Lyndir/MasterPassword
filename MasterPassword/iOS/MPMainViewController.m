@@ -10,7 +10,6 @@
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-#import "ATConnect.h"
 #import "LocalyticsSession.h"
 
 
@@ -66,8 +65,21 @@
         ((MPTypeViewController *)[segue destinationViewController]).delegate = self;
 }
 
+- (void)viewDidLoad {
+
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
+
+    self.contentField.font = [UIFont fontWithName:@"Exo-Black" size:self.contentField.font.pointSize];
+
+    self.alertBody.text            = nil;
+    self.contentTipEditIcon.hidden = YES;
+
+    [super viewDidLoad];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
-    
+
+    inf(@"Main will appear.");
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:animated? UIStatusBarAnimationSlide: UIStatusBarAnimationNone];
 
     if (![MPAppDelegate get].activeUser)
@@ -83,7 +95,7 @@
 
     [self setHelpHidden:[[MPiOSConfig get].helpHidden boolValue] animated:animated];
     [self updateAnimated:animated];
-    
+
     [super viewWillAppear:animated];
 }
 
@@ -110,16 +122,10 @@
     [super viewDidAppear:animated];
 }
 
-- (void)viewDidLoad {
+- (void)viewWillDisappear:(BOOL)animated {
 
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
-
-    self.contentField.font = [UIFont fontWithName:@"Exo-Black" size:self.contentField.font.pointSize];
-
-    self.alertBody.text            = nil;
-    self.contentTipEditIcon.hidden = YES;
-
-    [super viewDidLoad];
+    inf(@"Main will disappear.");
+    [super viewWillDisappear:animated];
 }
 
 - (void)viewDidUnload {
@@ -280,6 +286,7 @@
     if (!self.activeElement)
         return;
 
+    inf(@"Copying password for: %@", self.activeElement.name);
     [UIPasteboard generalPasteboard].string = [self.activeElement.content description];
 
     [self showContentTip:@"Copied!" withIcon:nil];
@@ -303,14 +310,15 @@
             @"You will then need to update your account's old password to this newly generated password.\n\n"
             @"You can reset the counter by holding down on this button."
                                 do:^{
+                                    inf(@"Incrementing password counter for: %@", self.activeElement.name);
                                     ++((MPElementGeneratedEntity *)self.activeElement).counter;
-                                }];
 
-    [TestFlight passCheckpoint:MPCheckpointIncrementPasswordCounter];
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointIncrementPasswordCounter
-                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                         NSStringFromMPElementType(self.activeElement.type), @"type",
-                                                                         nil]];
+                                    [TestFlight passCheckpoint:MPCheckpointIncrementPasswordCounter];
+                                    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointIncrementPasswordCounter
+                                                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                                                         NSStringFromMPElementType(self.activeElement.type), @"type",
+                                                                                                         nil]];
+                                }];
 }
 
 - (IBAction)resetPasswordCounter:(UILongPressGestureRecognizer *)sender {
@@ -330,14 +338,15 @@
             @"If you continue, the site's password will change back to its original value.  "
             @"You will then need to update your account's password back to this original value."
                                 do:^{
+                                    inf(@"Resetting password counter for: %@", self.activeElement.name);
                                     ((MPElementGeneratedEntity *)self.activeElement).counter = 1;
-                                }];
 
-    [TestFlight passCheckpoint:MPCheckpointResetPasswordCounter];
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointResetPasswordCounter
-                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                         NSStringFromMPElementType(self.activeElement.type), @"type",
-                                                                         nil]];
+                                    [TestFlight passCheckpoint:MPCheckpointResetPasswordCounter];
+                                    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointResetPasswordCounter
+                                                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                                                         NSStringFromMPElementType(self.activeElement.type), @"type",
+                                                                                                         nil]];
+                                }];
 }
 
 - (void)changeElementWithWarning:(NSString *)warning do:(void (^)(void))task; {
@@ -376,13 +385,14 @@
     if (self.activeElement.type & MPElementTypeClassStored) {
         self.contentField.enabled = YES;
         [self.contentField becomeFirstResponder];
-    }
 
-    [TestFlight passCheckpoint:MPCheckpointEditPassword];
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditPassword
-                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                         NSStringFromMPElementType(self.activeElement.type), @"type",
-                                                                         nil]];
+        [TestFlight passCheckpoint:MPCheckpointEditPassword];
+        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditPassword
+                                                   attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                             NSStringFromMPElementType(
+                                                                              self.activeElement.type), @"type",
+                                                                             nil]];
+    }
 }
 
 - (IBAction)closeAlert {
@@ -406,37 +416,88 @@
 
                      switch (buttonIndex - [sheet firstOtherButtonIndex]) {
                          case 0: {
+                             inf(@"Action: Toggle Help");
                              [self toggleHelpAnimated:YES];
                              break;
                          }
                          case 1: {
+                             inf(@"Action: FAQ");
                              [self setHelpChapter:@"faq"];
                              [self setHelpHidden:NO animated:YES];
                              break;
                          }
                          case 2: {
+                             inf(@"Action: Guide");
                              [[MPAppDelegate get] showGuide];
                              break;
                          }
                          case 3: {
+                             inf(@"Action: Preferences");
                              [self performSegueWithIdentifier:@"UserProfile" sender:self];
                              break;
                          }
 #ifdef ADHOC
                          case 4: {
+                             inf(@"Action: Feedback via TestFlight");
                              [TestFlight openFeedbackView];
                              break;
                          }
                          case 5:
 #else
                          case 4: {
-                             ATConnect *connection = [ATConnect sharedConnection];
-                             [connection presentFeedbackControllerFromViewController:self];
+                             inf(@"Action: Feedback via Mail");
+                             if (![MFMailComposeViewController canSendMail])
+                                 [PearlAlert showAlertWithTitle:@"Feedback"
+                                                        message:
+                                                         @"We'd love to hear what you think!\n\n"
+                                                          @"Please send any comments or reports to:\n"
+                                                          @"masterpassword@lyndir.com"
+                                                      viewStyle:UIAlertViewStyleDefault
+                                                      initAlert:nil tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay
+                                                      otherTitles:nil];
+
+                             else {
+                                 [PearlAlert showAlertWithTitle:@"Feedback"
+                                                        message:
+                                                         @"We'd love to hear what you think!\n\n"
+                                                          @"If you're having trouble, it may help us if you can first reproduce the problem "
+                                                          @"and then include log files in your message."
+                                                      viewStyle:UIAlertViewStyleDefault
+                                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                                     MFMailComposeViewController *composer = [MFMailComposeViewController new];
+                                     [composer setMailComposeDelegate:self];
+                                     [composer setToRecipients:[NSArray arrayWithObject:@"Master Password Development <masterpassword@lyndir.com>"]];
+                                     [composer setSubject:PearlString(@"Feedback for Master Password [%@]", [[PearlKeyChain deviceIdentifier] stringByDeletingMatchesOf:@"-.*"])];
+                                     [composer setMessageBody:
+                                                PearlString(
+                                                 @"\n\n\n"
+                                                  @"--\n"
+                                                  @"%@\n"
+                                                  @"Master Password %@, build %@",
+                                                 [MPAppDelegate get].activeUser.name,
+                                                 [PearlInfoPlist get].CFBundleShortVersionString,
+                                                 [PearlInfoPlist get].CFBundleVersion)
+                                               isHTML:NO];
+
+                                     if (buttonIndex_ == [alert_ firstOtherButtonIndex]) {
+                                         PearlLogLevel logLevel = [[MPiOSConfig get].sendInfo boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
+                                         [composer addAttachmentData:[[[PearlLogger get] formatMessagesWithLevel:logLevel] dataUsingEncoding:NSUTF8StringEncoding]
+                                                   mimeType:@"text/plain"
+                                                   fileName:PearlString(@"%@-%@.log",
+                                                                        [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
+                                                                        [PearlKeyChain deviceIdentifier])];
+                                     }
+
+                                     [self presentModalViewController:composer animated:YES];
+                                 }
+                                                      cancelTitle:nil otherTitles:@"Include Logs", @"No Logs", nil];
+                             }
                              break;
                          }
                          case 5:
 #endif
                          {
+                             inf(@"Action: Sign out");
                              [[MPAppDelegate get] signOut];
                              break;
                          }
@@ -446,6 +507,17 @@
                  }
                  cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:
      [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Preferences", @"Feedback", @"Sign Out", nil];
+}
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result
+                        error:(NSError *)error {
+
+    if (error)
+    err(@"Feedback composer error: %@, result: %d", error, result);
+    else
+     inf(@"Feedback composer result: %d", result);
+
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (MPElementType)selectedType {
@@ -485,6 +557,8 @@
 
 - (void)didSelectElement:(MPElementEntity *)element {
 
+    inf(@"Selected: %@", element.name);
+
     [self closeAlert];
 
     if (element) {
@@ -516,10 +590,10 @@
 
         [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationElementUsed object:self.activeElement];
         [TestFlight passCheckpoint:PearlString(MPCheckpointUseType @"_%@", NSStringFromMPElementType(self.activeElement.type))];
-        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointUseType
-                                                   attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                             NSStringFromMPElementType(self.activeElement.type), @"type",
-                                                                             nil]];
+        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointUseType attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                                                            NSStringFromMPElementType(
+                                                                                                             self.activeElement.type), @"type",
+                                                                                                            nil]];
     }
 
     [self updateAnimated:YES];
@@ -555,6 +629,7 @@
  navigationType:(UIWebViewNavigationType)navigationType {
 
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
+        inf(@"External link: %@", [request URL]);
         [TestFlight passCheckpoint:MPCheckpointExternalLink];
 
         [[UIApplication sharedApplication] openURL:[request URL]];

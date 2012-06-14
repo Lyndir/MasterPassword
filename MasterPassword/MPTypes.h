@@ -64,6 +64,8 @@ typedef enum {
 #define MPCheckpointCloudStoreIncompatible    @"MPCheckpointCloudStoreIncompatible"
 #define MPCheckpointSignInFailed              @"MPCheckpointSignInFailed"
 #define MPCheckpointSignedIn                  @"MPCheckpointSignedIn"
+#define MPCheckpointConfig                    @"MPCheckpointConfig"
+#define MPCheckpointCloud                     @"MPCheckpointCloud"
 #define MPCheckpointCloudEnabled              @"MPCheckpointCloudEnabled"
 #define MPCheckpointCloudDisabled             @"MPCheckpointCloudDisabled"
 #define MPCheckpointSitesImported             @"MPCheckpointSitesImported"
