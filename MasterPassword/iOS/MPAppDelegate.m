@@ -84,7 +84,9 @@
         NSString *crashlyticsAPIKey = [self crashlyticsAPIKey];
         if ([crashlyticsAPIKey length]) {
             inf(@"Initializing Crashlytics");
+#if defined (DEBUG) || defined (ADHOC)
             [Crashlytics sharedInstance].debugMode = YES;
+#endif
             [[Crashlytics sharedInstance] setObjectValue:@"Anonymous" forKey:@"username"];
             [[Crashlytics sharedInstance] setObjectValue:[PearlKeyChain deviceIdentifier] forKey:@"deviceIdentifier"];
             [Crashlytics startWithAPIKey:crashlyticsAPIKey afterDelay:0];
