@@ -33,6 +33,7 @@
 @property (weak, nonatomic) IBOutlet UIView             *searchTipContainer;
 @property (weak, nonatomic) IBOutlet UIView             *actionsTipContainer;
 @property (weak, nonatomic) IBOutlet UIView             *typeTipContainer;
+@property (strong, nonatomic) IBOutlet UILongPressGestureRecognizer *resetPasswordCounterGesture;
 
 @property (copy) void (^contentTipCleanup)(BOOL finished);
 

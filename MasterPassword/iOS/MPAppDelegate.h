@@ -18,6 +18,6 @@
 - (void)showGuide;
 
 - (void)export;
-- (void)changeMP;
+- (void)changeMasterPasswordFor:(MPUserEntity *)user;
 
 @end

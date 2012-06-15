@@ -734,6 +734,7 @@ L4m3P4sSw0rD</string>
                         <outlet property="passwordCounter" destination="Iuf-np-e9C" id="CIm-Mk-nJh"/>
                         <outlet property="passwordEdit" destination="9FS-fS-xH6" id="YeB-HF-ZPk"/>
                         <outlet property="passwordIncrementer" destination="jec-mu-nPt" id="i9B-lX-zzX"/>
+                        <outlet property="resetPasswordCounterGesture" destination="cZr-Fj-eBw" id="St3-9p-J86"/>
                         <outlet property="searchDisplayController" destination="P8c-gf-nN3" id="CLs-YI-7NC"/>
                         <outlet property="searchResultsController" destination="0QO-2P-OhD" id="xEC-gV-lHp"/>
                         <outlet property="searchTipContainer" destination="zOR-Du-qRL" id="X7h-Vh-iCE"/>
@@ -919,9 +920,9 @@ L4m3P4sSw0rD</string>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="Tap and hold to delete." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="DBJ-Qi-ZcF">
-                                <rect key="frame" x="32" y="460" width="256" height="20"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="Tap and hold to delete or reset." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="DBJ-Qi-ZcF">
+                                <rect key="frame" x="20" y="460" width="280" height="20"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -946,11 +947,12 @@ L4m3P4sSw0rD</string>
                         <outlet property="passwordTipView" destination="NvG-0R-eTZ" id="4Mx-TL-yfu"/>
                         <outlet property="passwordView" destination="7cc-yu-i0m" id="WoF-Ab-PPC"/>
                         <outlet property="spinner" destination="27q-lX-0vy" id="CGK-G9-PRI"/>
+                        <outlet property="targetedUserActionGesture" destination="9WS-yS-aqQ" id="y74-cg-eat"/>
                     </connections>
                 </viewController>
                 <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="9WS-yS-aqQ">
                     <connections>
-                        <action selector="deleteTargetedUser:" destination="Nbn-Rv-sP1" id="cBQ-oQ-c7g"/>
+                        <action selector="targetedUserAction:" destination="Nbn-Rv-sP1" id="mgC-0X-heO"/>
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
@@ -1372,6 +1374,7 @@ L4m3P4sSw0rD</string>
                 <relationship kind="outlet" name="passwordCounter" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="passwordEdit" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="passwordIncrementer" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="resetPasswordCounterGesture" candidateClass="UILongPressGestureRecognizer"/>
                 <relationship kind="outlet" name="searchResultsController" candidateClass="MPSearchDelegate"/>
                 <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
                 <relationship kind="outlet" name="siteName" candidateClass="UILabel"/>
@@ -1409,7 +1412,7 @@ L4m3P4sSw0rD</string>
         <class className="MPUnlockViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MPUnlockViewController.h"/>
             <relationships>
-                <relationship kind="action" name="deleteTargetedUser:" candidateClass="UILongPressGestureRecognizer"/>
+                <relationship kind="action" name="targetedUserAction:" candidateClass="UILongPressGestureRecognizer"/>
                 <relationship kind="outlet" name="avatarTemplate" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="avatarsView" candidateClass="UIScrollView"/>
                 <relationship kind="outlet" name="deleteTip" candidateClass="UILabel"/>
@@ -1420,6 +1423,7 @@ L4m3P4sSw0rD</string>
                 <relationship kind="outlet" name="passwordTipView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="passwordView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="spinner" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="targetedUserActionGesture" candidateClass="UILongPressGestureRecognizer"/>
             </relationships>
         </class>
     </classes>

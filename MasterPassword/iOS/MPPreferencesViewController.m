@@ -119,7 +119,7 @@
 
     else
         if (cell == self.changeMPCell)
-            [[MPAppDelegate get] changeMP];
+            [[MPAppDelegate get] changeMasterPasswordFor:[MPAppDelegate get].activeUser];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

@@ -32,6 +32,7 @@
 @synthesize deleteTip;
 @synthesize passwordTipView;
 @synthesize passwordTipLabel;
+@synthesize targetedUserActionGesture;
 @synthesize avatarShadowColor = _avatarShadowColor;
 
 
@@ -137,6 +138,7 @@
     [self setDeleteTip:nil];
     [self setPasswordTipView:nil];
     [self setPasswordTipLabel:nil];
+    [self setTargetedUserActionGesture:nil];
     [super viewDidUnload];
 }
 
@@ -356,7 +358,7 @@
             self.nameLabel.backgroundColor = [UIColor clearColor];
             self.oldNameLabel.center       = self.nameLabel.center;
             self.avatarShadowColor         = [UIColor lightGrayColor];
-            self.deleteTip.alpha           = [self.avatarToUser count] > 2? 1: 0;
+            self.deleteTip.alpha           = 0.5;
         }
 
     MPUserEntity *targetedUser   = self.selectedUser;
@@ -590,13 +592,11 @@
     *targetContentOffset = CGPointMake(middleAvatar.center.x - scrollView.bounds.size.width / 2, targetContentOffset->y);
 
     [self updateLayoutAnimated:NO allowScroll:NO completion:nil];
-    //    [self scrollToAvatar:middleAvatar animated:YES];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
 
     [self updateLayoutAnimated:YES allowScroll:YES completion:nil];
-    //    [self scrollToAvatar:middleAvatar animated:YES];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -606,7 +606,7 @@
 
 #pragma mark - IBActions
 
-- (IBAction)deleteTargetedUser:(UILongPressGestureRecognizer *)sender {
+- (IBAction)targetedUserAction:(UILongPressGestureRecognizer *)sender {
 
     if (sender.state != UIGestureRecognizerStateBegan)
         return;
@@ -617,19 +617,24 @@
     MPUserEntity *targetedUser = [self userForAvatar:[self findTargetedAvatar]];
     if (!targetedUser)
         return;
-
-    [PearlAlert showAlertWithTitle:@"Delete User" message:
-                                                   PearlString(@"Do you want to delete all record of the following user?\n\n%@",
-                                                               targetedUser.name)
+    
+    [PearlAlert showAlertWithTitle:@"Delete Or Reset User"
+                           message:
+     PearlString(@"Do you want to reset the master password or delete all record of the following user?\n\n%@",
+                 targetedUser.name)
                          viewStyle:UIAlertViewStyleDefault
                          initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-        if (buttonIndex == [alert cancelButtonIndex])
-            return;
-
-        [[MPAppDelegate get].managedObjectContext deleteObject:targetedUser];
-        [[MPAppDelegate get] saveContext];
-
-        [self updateUsers];
-    } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Delete", nil];
+                             if (buttonIndex == [alert cancelButtonIndex])
+                                 return;
+                             
+                             if (buttonIndex == [alert firstOtherButtonIndex]) {
+                                 [[MPAppDelegate get].managedObjectContext deleteObject:targetedUser];
+                                 [[MPAppDelegate get] saveContext];
+                                 [self updateUsers];
+                             } else if (buttonIndex == [alert firstOtherButtonIndex] + 1) {
+                                 [[MPAppDelegate get] changeMasterPasswordFor:targetedUser];
+                             }
+                             
+                         } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Delete", @"Reset", nil];
 }
 @end

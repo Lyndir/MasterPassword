@@ -43,6 +43,7 @@
 @synthesize searchTipContainer = _searchTipContainer;
 @synthesize actionsTipContainer = _actionsTipContainer;
 @synthesize typeTipContainer = _typeTipContainer;
+@synthesize resetPasswordCounterGesture = _resetPasswordCounterGesture;
 @synthesize contentField = _contentField;
 @synthesize contentTipCleanup;
 
@@ -149,6 +150,7 @@
     [self setSearchTipContainer:nil];
     [self setActionsTipContainer:nil];
     [self setTypeTipContainer:nil];
+    [self setResetPasswordCounterGesture:nil];
     [super viewDidUnload];
 }
 

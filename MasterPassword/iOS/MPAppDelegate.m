@@ -331,7 +331,7 @@
     [TestFlight passCheckpoint:MPCheckpointDeactivated];
 }
 
-#pragma - mark Behavior
+#pragma mark - Behavior
 
 - (void)checkConfig {
 
@@ -452,7 +452,7 @@
     [self.window.rootViewController presentModalViewController:composer animated:YES];
 }
 
-- (void)changeMP {
+- (void)changeMasterPasswordFor:(MPUserEntity *)user {
 
     [PearlAlert showAlertWithTitle:@"Changing Master Password"
                            message:
@@ -464,9 +464,9 @@
         if (buttonIndex == [alert cancelButtonIndex])
             return;
 
-        inf(@"Unsetting master password for: %@.", self.activeUser.userID);
-        self.activeUser.keyID = nil;
-        [self forgetSavedKeyFor:self.activeUser];
+        inf(@"Unsetting master password for: %@.", user.userID);
+        user.keyID = nil;
+        [self forgetSavedKeyFor:user];
         [self signOut];
 
         [TestFlight passCheckpoint:MPCheckpointChangeMP];

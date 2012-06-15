@@ -75,10 +75,13 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
 - (void)signOut {
 
-    self.key        = nil;
-    self.activeUser = nil;
+    if (self.key)
+        self.key = nil;
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationSignedOut object:self];
+    if (self.activeUser) {
+        self.activeUser = nil;
+        [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationSignedOut object:self];
+    }
 }
 
 - (BOOL)signInAsUser:(MPUserEntity *)user usingMasterPassword:(NSString *)password {

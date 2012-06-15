@@ -20,9 +20,10 @@
 @property (weak, nonatomic) IBOutlet UILabel      *deleteTip;
 @property (weak, nonatomic) IBOutlet UIView       *passwordTipView;
 @property (weak, nonatomic) IBOutlet UILabel      *passwordTipLabel;
+@property (strong, nonatomic) IBOutlet UILongPressGestureRecognizer *targetedUserActionGesture;
 
 @property (nonatomic, strong) UIColor *avatarShadowColor;
 
-- (IBAction)deleteTargetedUser:(UILongPressGestureRecognizer *)sender;
+- (IBAction)targetedUserAction:(UILongPressGestureRecognizer *)sender;
 
 @end
