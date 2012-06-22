@@ -30,6 +30,13 @@ NSData *keyForPassword(NSString *password, NSString *username) {
     return key;
 }
 
+
+NSData *subkeyForKey(NSData *key, NSUInteger subkeyLength) {
+
+    return [key subdataWithRange:NSMakeRange(0, MIN(subkeyLength, key.length))];
+}
+
+
 NSData *keyIDForPassword(NSString *password, NSString *username) {
 
     return keyIDForKey(keyForPassword(password, username));

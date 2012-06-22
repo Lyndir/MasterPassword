@@ -169,9 +169,4 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     return YES;
 }
 
-- (NSData *)keyWithLength:(NSUInteger)keyLength {
-
-    return [self.key subdataWithRange:NSMakeRange(0, MIN(keyLength, self.key.length))];
-}
-
 @end

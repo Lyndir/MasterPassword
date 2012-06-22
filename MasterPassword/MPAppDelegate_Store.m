@@ -217,9 +217,10 @@
     if (!headerPattern || !sitePattern)
         return MPImportResultInternalError;
 
+    NSData *key = nil;
     NSString *keyIDHex = nil, *userName = nil;
     MPUserEntity *user = nil;
-    BOOL headerStarted = NO, headerEnded = NO;
+    BOOL headerStarted = NO, headerEnded = NO, clearText = NO;
     NSArray        *importedSiteLines    = [importedSitesString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     NSMutableSet   *elementsToDelete     = [NSMutableSet set];
     NSMutableArray *importedSiteElements = [NSMutableArray arrayWithCapacity:[importedSiteLines count]];
@@ -246,18 +247,23 @@
             }
             NSTextCheckingResult *headerElements = [[headerPattern matchesInString:importedSiteLine options:0
                                                                              range:NSMakeRange(0, [importedSiteLine length])] lastObject];
-            NSString             *key            = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:1]];
-            NSString             *value          = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:2]];
-            if ([key isEqualToString:@"User Name"]) {
-                userName = value;
+            NSString             *headerName            = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:1]];
+            NSString             *headerValue          = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:2]];
+            if ([headerName isEqualToString:@"User Name"]) {
+                userName = headerValue;
+                key = keyForPassword(password, userName);
 
                 NSFetchRequest *userFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPUserEntity class])];
                 userFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", userName];
                 user = [[self.managedObjectContext executeFetchRequest:fetchRequest error:&error] lastObject];
             }
-            if ([key isEqualToString:@"Key ID"]) {
-                if (![(keyIDHex = value) isEqualToString:[keyIDForPassword(password, userName) encodeHex]])
+            if ([headerName isEqualToString:@"Key ID"]) {
+                if (![(keyIDHex = headerValue) isEqualToString:[keyIDForKey(key) encodeHex]])
                     return MPImportResultInvalidPassword;
+            }
+            if ([headerName isEqualToString:@"Passwords"]) {
+                if ([headerValue isEqualToString:@"VISIBLE"])
+                    clearText = YES;
             }
 
             continue;
@@ -337,7 +343,10 @@
         element.uses     = uses;
         element.lastUsed = lastUsed;
         if ([exportContent length])
-            [element importContent:exportContent];
+            if (clearText)
+                [element importClearTextContent:exportContent usingKey:key];
+            else
+                [element importProtectedContent:exportContent];
     }
     [self saveContext];
 

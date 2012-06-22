@@ -78,6 +78,7 @@ typedef enum {
 #define MPNotificationElementUsed             @"MPNotificationElementUsed"
 
 NSData   *keyForPassword(NSString *password, NSString *username);
+NSData   *subkeyForKey(NSData *key, NSUInteger subkeyLength);
 NSData   *keyIDForPassword(NSString *password, NSString *username);
 NSData   *keyIDForKey(NSData *key);
 NSString *NSStringFromMPElementType(MPElementType type);

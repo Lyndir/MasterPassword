@@ -50,8 +50,12 @@
     return nil;
 }
 
-- (void)importContent:(NSString *)content {
+- (void)importProtectedContent:(NSString *)content {
 
+}
+
+- (void)importClearTextContent:(NSString *)content usingKey:(NSData *)key {
+    
 }
 
 - (NSString *)description {
@@ -107,8 +111,19 @@
 }
 
 - (id)content {
+    
+    return [self contentUsingKey:[MPAppDelegate get].key];
+}
+
+- (void)setContent:(id)content {
+    
+    [self setContent:content usingKey:[MPAppDelegate get].key];
+}
+
+- (id)contentUsingKey:(NSData *)key {
 
     assert(self.type & MPElementTypeClassStored);
+    assert([keyIDForKey(key) isEqualToData:self.user.keyID]);
 
     NSData *encryptedContent;
     if (self.type & MPElementFeatureDevicePrivate)
@@ -116,15 +131,16 @@
     else
         encryptedContent = self.contentObject;
 
-    NSData *decryptedContent = [encryptedContent decryptWithSymmetricKey:[[MPAppDelegate get] keyWithLength:PearlCryptKeySize]
-                                                 padding:YES];
+    NSData *decryptedContent = [encryptedContent decryptWithSymmetricKey:subkeyForKey(key, PearlCryptKeySize) padding:YES];
     return [[NSString alloc] initWithBytes:decryptedContent.bytes length:decryptedContent.length encoding:NSUTF8StringEncoding];
 }
 
-- (void)setContent:(id)content {
+- (void)setContent:(id)content usingKey:(NSData *)key {
 
-    NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[[MPAppDelegate get] keyWithLength:PearlCryptKeySize]
-                                         padding:YES];
+    assert(self.type & MPElementTypeClassStored);
+    assert([keyIDForKey(key) isEqualToData:self.user.keyID]);
+
+    NSData *encryptedContent = [[content description] encryptWithSymmetricKey:subkeyForKey(key, PearlCryptKeySize) padding:YES];
 
     if (self.type & MPElementFeatureDevicePrivate) {
         [PearlKeyChain addOrUpdateItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]
@@ -144,9 +160,14 @@
     return [self.contentObject encodeBase64];
 }
 
-- (void)importContent:(NSString *)content {
+- (void)importProtectedContent:(NSString *)protectedContent {
 
-    self.contentObject = [content decodeBase64];
+    self.contentObject = [protectedContent decodeBase64];
+}
+
+- (void)importClearTextContent:(NSString *)clearContent usingKey:(NSData *)key {
+    
+    [self setContent:clearContent usingKey:key];
 }
 
 @end

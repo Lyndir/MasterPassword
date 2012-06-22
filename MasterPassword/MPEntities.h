@@ -21,7 +21,8 @@
 
 - (NSUInteger)use;
 - (NSString *)exportContent;
-- (void)importContent:(NSString *)content;
+- (void)importProtectedContent:(NSString *)protectedContent;
+- (void)importClearTextContent:(NSString *)clearContent usingKey:(NSData *)key;
 
 @end
 

@@ -16,6 +16,4 @@
 - (void)storeSavedKeyFor:(MPUserEntity *)user;
 - (void)forgetSavedKeyFor:(MPUserEntity *)user;
 
-- (NSData *)keyWithLength:(NSUInteger)keyLength;
-
 @end

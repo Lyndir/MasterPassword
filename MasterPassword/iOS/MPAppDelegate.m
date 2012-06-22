@@ -202,8 +202,6 @@
                        cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
 #endif
 
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-
     [super application:application didFinishLaunchingWithOptions:launchOptions];
 
     inf(@"Started up with device identifier: %@", [PearlKeyChain deviceIdentifier]);
@@ -419,26 +417,47 @@
                                // Safe Export
                                   [self exportShowPasswords:NO];
                               if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
-                               // Safe Export
+                               // Show Passwords
                                   [self exportShowPasswords:YES];
                           } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
          } otherTitles:nil];
 }
 
 - (void)exportShowPasswords:(BOOL)showPasswords {
+    
+    if (![MFMailComposeViewController canSendMail]) {
+        [PearlAlert showAlertWithTitle:@"Cannot Send Mail"
+                               message:
+         @"Your device is not yet set up for sending mail.\n"
+         @"Close Master Password, go into Settings and add a Mail account."
+                             viewStyle:UIAlertViewStyleDefault
+                             initAlert:nil tappedButtonBlock:nil
+                           cancelTitle:[PearlStrings get].commonButtonOkay
+                           otherTitles:nil];
+        return;
+    }
 
     NSString *exportedSites = [self exportSitesShowingPasswords:showPasswords];
     NSString *message;
-    if (showPasswords)
-        message = PearlString(
-         @"Export of %@'s Master Password sites with passwords visible.\n"
-          @"REMINDER: Make sure nobody else sees this file!  All passwords are visible!\n",
-         self.activeUser.name);
-    else
-        message = PearlString(
-         @"Backup of %@'s Master Password sites.\n",
-         self.activeUser.name);
 
+    if (showPasswords)
+        message = PearlString(@"Export of Master Password sites with passwords included.\n"
+                              @"REMINDER: Make sure nobody else sees this file!  Passwords are visible!\n\n\n"
+                              @"--\n"
+                              @"%@\n"
+                              @"Master Password %@, build %@",
+                              self.activeUser.name,
+                              [PearlInfoPlist get].CFBundleShortVersionString,
+                              [PearlInfoPlist get].CFBundleVersion);
+    else
+        message = PearlString(@"Backup of Master Password sites.\n\n\n"
+                              @"--\n"
+                              @"%@\n"
+                              @"Master Password %@, build %@",
+                              self.activeUser.name,
+                              [PearlInfoPlist get].CFBundleShortVersionString,
+                              [PearlInfoPlist get].CFBundleVersion);
+    
     NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
     [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'DD"];
 

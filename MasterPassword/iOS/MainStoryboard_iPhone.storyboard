@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11E53" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
     <dependencies>
-        <deployment defaultVersion="1296" identifier="iOS"/>
         <development defaultVersion="4200" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1181"/>
     </dependencies>
@@ -828,54 +827,6 @@ L4m3P4sSw0rD</string>
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
-                            <view contentMode="scaleToFill" id="7cc-yu-i0m">
-                                <rect key="frame" x="20" y="168" width="280" height="88"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Enter your master password:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="RhX-bA-EhC">
-                                        <rect key="frame" x="12" y="0.0" width="256" height="20"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="17"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_textfield.png" id="ivR-Xl-NrT">
-                                        <rect key="frame" x="0.0" y="28" width="280" height="60"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <rect key="contentStretch" x="0.25" y="0.25" width="0.49999999999999961" height="0.49999999999999961"/>
-                                    </imageView>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" id="rTR-7Q-X8o">
-                                        <rect key="frame" x="0.0" y="28" width="280" height="60"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="36"/>
-                                        <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
-                                        <connections>
-                                            <outlet property="delegate" destination="Nbn-Rv-sP1" id="Y0T-cI-gF1"/>
-                                        </connections>
-                                    </textField>
-                                    <view userInteractionEnabled="NO" contentMode="scaleToFill" id="NvG-0R-eTZ">
-                                        <rect key="frame" x="35" y="0.0" width="210" height="60"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="3se-By-a9W">
-                                                <rect key="frame" x="0.0" y="0.0" width="210" height="60"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            </imageView>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Incorrect password." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="gQ2-mB-BP4">
-                                                <rect key="frame" x="15" y="0.5" width="180" height="40"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                            </label>
-                                        </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_spinner.png" id="27q-lX-0vy">
                                 <rect key="frame" x="105" y="30" width="110" height="110"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -904,6 +855,54 @@ L4m3P4sSw0rD</string>
                                     <outletCollection property="gestureRecognizers" destination="9WS-yS-aqQ" appends="YES" id="B9k-bg-gqA"/>
                                 </connections>
                             </scrollView>
+                            <view contentMode="scaleToFill" id="7cc-yu-i0m">
+                                <rect key="frame" x="20" y="168" width="280" height="88"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Enter your master password:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="RhX-bA-EhC">
+                                        <rect key="frame" x="12" y="0.0" width="256" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_textfield.png" id="ivR-Xl-NrT">
+                                        <rect key="frame" x="0.0" y="28" width="280" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <rect key="contentStretch" x="0.25" y="0.25" width="0.49999999999999961" height="0.49999999999999961"/>
+                                    </imageView>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" id="rTR-7Q-X8o">
+                                        <rect key="frame" x="10" y="28" width="260" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="36"/>
+                                        <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="Nbn-Rv-sP1" id="Y0T-cI-gF1"/>
+                                        </connections>
+                                    </textField>
+                                    <view userInteractionEnabled="NO" contentMode="scaleToFill" id="NvG-0R-eTZ">
+                                        <rect key="frame" x="35" y="0.0" width="210" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="3se-By-a9W">
+                                                <rect key="frame" x="0.0" y="0.0" width="210" height="60"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            </imageView>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Incorrect password." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="gQ2-mB-BP4">
+                                                <rect key="frame" x="15" y="0.5" width="180" height="40"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="left" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="8s0-nT-Aoq">
                                 <rect key="frame" x="90" y="289" width="140" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -942,7 +941,7 @@ L4m3P4sSw0rD</string>
                         <outlet property="deleteTip" destination="DBJ-Qi-ZcF" id="VXD-Zc-UYi"/>
                         <outlet property="nameLabel" destination="0NM-NI-7UR" id="GBg-Ry-sqj"/>
                         <outlet property="oldNameLabel" destination="8s0-nT-Aoq" id="plu-1H-MVc"/>
-                        <outlet property="passwordField" destination="rTR-7Q-X8o" id="CDA-iP-kCm"/>
+                        <outlet property="passwordField" destination="rTR-7Q-X8o" id="Vsn-uO-4lO"/>
                         <outlet property="passwordTipLabel" destination="gQ2-mB-BP4" id="aHU-tn-duI"/>
                         <outlet property="passwordTipView" destination="NvG-0R-eTZ" id="4Mx-TL-yfu"/>
                         <outlet property="passwordView" destination="7cc-yu-i0m" id="WoF-Ab-PPC"/>
