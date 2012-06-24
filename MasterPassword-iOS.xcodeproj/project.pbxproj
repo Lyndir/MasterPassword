@@ -811,7 +811,6 @@
 		DAFE4A5A1503982E003ABA7C /* Pearl.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAFE45FA15039823003ABA7C /* Pearl.strings */; };
 		DAFE4A62150399FF003ABA7C /* PearlAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE4A60150399FF003ABA7C /* PearlAppDelegate.m */; };
 		DAFE4A63150399FF003ABA7C /* PearlAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE4A61150399FF003ABA7C /* PearlAppDelegate.h */; };
-		DAFE4A63150399FF003ABA7E /* (null) in Sources */ = {isa = PBXBuildFile; };
 		DAFE4A63150399FF003ABA82 /* UIControl+PearlBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE4A63150399FF003ABA81 /* UIControl+PearlBlocks.m */; };
 		DAFE4A63150399FF003ABA84 /* UIControl+PearlBlocks.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE4A63150399FF003ABA83 /* UIControl+PearlBlocks.h */; };
 		DAFE4A63150399FF003ABA86 /* NSObject+PearlKVO.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE4A63150399FF003ABA85 /* NSObject+PearlKVO.m */; };
@@ -4169,7 +4168,6 @@
 				DA30E9D215722EE500A68B4C /* Pearl-Crypto.m in Sources */,
 				DA30E9D415722EF400A68B4C /* Pearl-UIKit.m in Sources */,
 				DA30E9D815723E6900A68B4C /* PearlLazy.m in Sources */,
-				DAFE4A63150399FF003ABA7E /* (null) in Sources */,
 				DAFE4A63150399FF003ABA82 /* UIControl+PearlBlocks.m in Sources */,
 				DAFE4A63150399FF003ABA86 /* NSObject+PearlKVO.m in Sources */,
 				DAFE4A63150399FF003ABA8A /* UIControl+PearlSelect.m in Sources */,

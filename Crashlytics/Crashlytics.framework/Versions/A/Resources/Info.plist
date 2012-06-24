@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1.1</string>
+	<string>1.1.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleSupportedPlatforms</key>
@@ -25,7 +25,7 @@
 		<string>iPhoneOS</string>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>0101.01.00</string>
+	<string>0101.02.00</string>
 	<key>CrashlyticsAPIKey</key>
 	<string>0d10c90776f5ef5acd01ddbeaca9a6cba4814560</string>
 	<key>DTCompiler</key>
