@@ -6,7 +6,6 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import <Crashlytics/Crashlytics.h>
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
