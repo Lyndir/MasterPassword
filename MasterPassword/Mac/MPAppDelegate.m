@@ -27,8 +27,10 @@
 @synthesize key;
 @synthesize keyID;
 
-#pragma GCC diagnostic ignored "-Wfour-char-constants"
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wfour-char-constants"
 static EventHotKeyID MPShowHotKey = {.signature = 'show', .id = 1};
+#pragma clang diagnostic pop
 
 + (void)initialize {
 
