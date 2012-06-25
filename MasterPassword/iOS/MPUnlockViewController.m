@@ -618,23 +618,19 @@
     if (!targetedUser)
         return;
     
-    [PearlAlert showAlertWithTitle:@"Delete Or Reset User"
-                           message:
-     PearlString(@"Do you want to reset the master password or delete all record of the following user?\n\n%@",
-                 targetedUser.name)
-                         viewStyle:UIAlertViewStyleDefault
-                         initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                             if (buttonIndex == [alert cancelButtonIndex])
-                                 return;
-                             
-                             if (buttonIndex == [alert firstOtherButtonIndex]) {
-                                 [[MPAppDelegate get].managedObjectContext deleteObject:targetedUser];
-                                 [[MPAppDelegate get] saveContext];
-                                 [self updateUsers];
-                             } else if (buttonIndex == [alert firstOtherButtonIndex] + 1) {
-                                 [[MPAppDelegate get] changeMasterPasswordFor:targetedUser];
-                             }
-                             
-                         } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Delete", @"Reset", nil];
+    [PearlSheet showSheetWithTitle:targetedUser.name
+                           message:nil
+                         viewStyle:UIActionSheetStyleBlackTranslucent
+                 tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
+                     if (buttonIndex == [sheet cancelButtonIndex])
+                         return;
+                     
+                     if (buttonIndex == [sheet destructiveButtonIndex]) {
+                         [[MPAppDelegate get].managedObjectContext deleteObject:targetedUser];
+                         [[MPAppDelegate get] saveContext];
+                         [self updateUsers];
+                     } else if (buttonIndex == [sheet firstOtherButtonIndex])
+                         [[MPAppDelegate get] changeMasterPasswordFor:targetedUser];
+                 } cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];
 }
 @end

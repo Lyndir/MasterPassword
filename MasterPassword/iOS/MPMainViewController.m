@@ -449,7 +449,7 @@
                          case 4: {
                              inf(@"Action: Feedback via Mail");
                              if (![MFMailComposeViewController canSendMail])
-                                 [PearlAlert showAlertWithTitle:@"Feedback"
+                                 [PearlAlert showAlertWithTitle:@"Sending Feedback"
                                                         message:
                                                          @"We'd love to hear what you think!\n\n"
                                                           @"Please send any comments or reports to:\n"
@@ -459,7 +459,7 @@
                                                       otherTitles:nil];
 
                              else {
-                                 [PearlAlert showAlertWithTitle:@"Feedback"
+                                 [PearlAlert showAlertWithTitle:@"Sending Feedback"
                                                         message:
                                                          @"We'd love to hear what you think!\n\n"
                                                           @"If you're having trouble, it may help us if you can first reproduce the problem "
