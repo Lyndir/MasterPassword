@@ -73,14 +73,15 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     }
 }
 
-- (void)signOut {
+- (void)signOutAnimated:(BOOL)animated {
 
     if (self.key)
         self.key = nil;
 
     if (self.activeUser) {
         self.activeUser = nil;
-        [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationSignedOut object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationSignedOut object:self userInfo:
+         [NSDictionary dictionaryWithObject:PearlBool(animated) forKey:@"animated"]];
     }
 }
 

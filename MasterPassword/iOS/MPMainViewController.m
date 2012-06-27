@@ -512,7 +512,7 @@
 #endif
                          {
                              inf(@"Action: Sign out");
-                             [[MPAppDelegate get] signOut];
+                             [[MPAppDelegate get] signOutAnimated:YES];
                              break;
                          }
                      }

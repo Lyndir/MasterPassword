@@ -182,7 +182,11 @@
 
     [[NSNotificationCenter defaultCenter] addObserverForName:MPNotificationSignedOut object:nil queue:nil
                                                   usingBlock:^(NSNotification *note) {
-                                                      [self.navigationController performSegueWithIdentifier:@"MP_Unlock" sender:nil];
+                                                      if ([[note.userInfo objectForKey:@"animated"] boolValue])
+                                                          [self.navigationController performSegueWithIdentifier:@"MP_Unlock" sender:nil];
+                                                      else
+                                                          [self.navigationController presentViewController:[self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
+                                                                                     animated:NO completion:nil];
                                                   }];
     [[NSNotificationCenter defaultCenter] addObserverForName:kIASKAppSettingChanged object:nil queue:nil
                                                   usingBlock:^(NSNotification *note) {
@@ -325,7 +329,7 @@
     [self saveContext];
 
     if (![[MPiOSConfig get].rememberLogin boolValue])
-        [self signOut];
+        [self signOutAnimated:NO];
 
     [TestFlight passCheckpoint:MPCheckpointDeactivated];
 }
@@ -487,7 +491,7 @@
         inf(@"Unsetting master password for: %@.", user.userID);
         user.keyID = nil;
         [self forgetSavedKeyFor:user];
-        [self signOut];
+        [self signOutAnimated:YES];
 
         [TestFlight passCheckpoint:MPCheckpointChangeMP];
         [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointChangeMP

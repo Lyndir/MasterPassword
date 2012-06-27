@@ -11,7 +11,7 @@
 @interface MPAppDelegate_Shared (Key)
 
 - (BOOL)signInAsUser:(MPUserEntity *)user usingMasterPassword:(NSString *)password;
-- (void)signOut;
+- (void)signOutAnimated:(BOOL)animated;
 
 - (void)storeSavedKeyFor:(MPUserEntity *)user;
 - (void)forgetSavedKeyFor:(MPUserEntity *)user;
