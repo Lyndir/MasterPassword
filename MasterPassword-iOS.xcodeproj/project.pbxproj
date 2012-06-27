@@ -41,6 +41,10 @@
 		DA600C2815056428008E9AB6 /* MPConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA600C2715056427008E9AB6 /* MPConfig.m */; };
 		DA672D2F14F92C6B004A189C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DA672D2E14F92C6B004A189C /* libz.dylib */; };
 		DA672D3014F9413D004A189C /* libPearl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC77CAD148291A600BCF976 /* libPearl.a */; };
+		DA829E52159847E0002417D3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
+		DA829E6015984813002417D3 /* UIFont+Replacement.h in Headers */ = {isa = PBXBuildFile; fileRef = DA829E5E15984812002417D3 /* UIFont+Replacement.h */; };
+		DA829E6115984813002417D3 /* UIFont+Replacement.m in Sources */ = {isa = PBXBuildFile; fileRef = DA829E5F15984812002417D3 /* UIFont+Replacement.m */; };
+		DA829E6215984832002417D3 /* libFontReplacer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA829E51159847E0002417D3 /* libFontReplacer.a */; };
 		DA95D59D14DF063C008D1B94 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA95D5CF14DF0691008D1B94 /* IASKAppSettingsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = DA95D5A814DF0691008D1B94 /* IASKAppSettingsViewController.h */; };
 		DA95D5D014DF0691008D1B94 /* IASKAppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA95D5A914DF0691008D1B94 /* IASKAppSettingsViewController.m */; };
@@ -916,6 +920,9 @@
 		DA672D2E14F92C6B004A189C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		DA79A9BB1557DB6F00BAA07A /* libscryptenc-ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libscryptenc-ios.a"; sourceTree = "<group>"; };
 		DA79A9BD1557DDC700BAA07A /* scrypt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = scrypt.xcodeproj; path = External/Pearl/External/iOSPorts/ports/security/scrypt/scrypt.xcodeproj; sourceTree = "<group>"; };
+		DA829E51159847E0002417D3 /* libFontReplacer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFontReplacer.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA829E5E15984812002417D3 /* UIFont+Replacement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+Replacement.h"; sourceTree = "<group>"; };
+		DA829E5F15984812002417D3 /* UIFont+Replacement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+Replacement.m"; sourceTree = "<group>"; };
 		DA902BD01576CA4A00C38161 /* keypad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = keypad.png; sourceTree = "<group>"; };
 		DA95D59C14DF063C008D1B94 /* libInAppSettingsKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libInAppSettingsKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA95D5A814DF0691008D1B94 /* IASKAppSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsViewController.h; sourceTree = "<group>"; };
@@ -1792,6 +1799,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA829E6215984832002417D3 /* libFontReplacer.a in Frameworks */,
 				DA44260A1557D9E40052177D /* libiCloudStoreManager.a in Frameworks */,
 				DAD312C21552A22700A3F9ED /* libsqlite3.dylib in Frameworks */,
 				DAD312BF1552A1BD00A3F9ED /* libLocalytics.a in Frameworks */,
@@ -1809,6 +1817,14 @@
 				DA5BFA4F147E415C00F98B1E /* CoreData.framework in Frameworks */,
 				DAD3126715528C9C00A3F9ED /* Crashlytics.framework in Frameworks */,
 				DAD3126915528C9C00A3F9ED /* libTestFlight.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA829E4E159847E0002417D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA829E52159847E0002417D3 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1883,6 +1899,7 @@
 				DAD3126115528C9C00A3F9ED /* TestFlight */,
 				DAD3127315528CD200A3F9ED /* Localytics */,
 				DA4425D71557BF260052177D /* iCloudStoreManager */,
+				DA829E5D15984812002417D3 /* FontReplacer */,
 				DA5BFA47147E415C00F98B1E /* Frameworks */,
 				DA5BFA45147E415C00F98B1E /* Products */,
 			);
@@ -1898,6 +1915,7 @@
 				DA95D59C14DF063C008D1B94 /* libInAppSettingsKit.a */,
 				DAD3127115528CD200A3F9ED /* libLocalytics.a */,
 				DA4425CB1557BED40052177D /* libiCloudStoreManager.a */,
+				DA829E51159847E0002417D3 /* libFontReplacer.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1958,6 +1976,16 @@
 				DA79A9D21557DDC800BAA07A /* libutil.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		DA829E5D15984812002417D3 /* FontReplacer */ = {
+			isa = PBXGroup;
+			children = (
+				DA829E5E15984812002417D3 /* UIFont+Replacement.h */,
+				DA829E5F15984812002417D3 /* UIFont+Replacement.m */,
+			);
+			name = FontReplacer;
+			path = "External/FontReplacer/UIFont+Replacement";
 			sourceTree = "<group>";
 		};
 		DA902B931576C0FB00C38161 /* Avatars */ = {
@@ -3081,6 +3109,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DA829E4F159847E0002417D3 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA829E6015984813002417D3 /* UIFont+Replacement.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DA95D59A14DF063C008D1B94 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -3222,6 +3258,23 @@
 			productReference = DA5BFA44147E415C00F98B1E /* MasterPassword.app */;
 			productType = "com.apple.product-type.application";
 		};
+		DA829E50159847E0002417D3 /* FontReplacer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA829E59159847E0002417D3 /* Build configuration list for PBXNativeTarget "FontReplacer" */;
+			buildPhases = (
+				DA829E4D159847E0002417D3 /* Sources */,
+				DA829E4E159847E0002417D3 /* Frameworks */,
+				DA829E4F159847E0002417D3 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FontReplacer;
+			productName = FontReplacer;
+			productReference = DA829E51159847E0002417D3 /* libFontReplacer.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		DA95D59B14DF063C008D1B94 /* InAppSettingsKit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DA95D5A414DF063C008D1B94 /* Build configuration list for PBXNativeTarget "InAppSettingsKit" */;
@@ -3346,6 +3399,7 @@
 				DA95D59B14DF063C008D1B94 /* InAppSettingsKit */,
 				DAD3127015528CD200A3F9ED /* Localytics */,
 				DA4425CA1557BED40052177D /* iCloudStoreManager */,
+				DA829E50159847E0002417D3 /* FontReplacer */,
 			);
 		};
 /* End PBXProject section */
@@ -4088,6 +4142,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DA829E4D159847E0002417D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA829E6115984813002417D3 /* UIFont+Replacement.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DA95D59814DF063C008D1B94 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4260,7 +4322,9 @@
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Maarten Billemont (DWGU95U4ZD)";
+				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -4318,7 +4382,9 @@
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Maarten Billemont";
+				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"ADHOC=1",
@@ -4360,6 +4426,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = AdHoc;
 		};
@@ -4372,6 +4439,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Crashlytics\"",
 				);
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_PREFIX_HEADER = "MasterPassword/iOS/MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword/iOS/MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -4394,6 +4462,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Crashlytics\"",
 				);
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_PREFIX_HEADER = "MasterPassword/iOS/MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword/iOS/MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -4406,6 +4475,27 @@
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = AdHoc;
+		};
+		DA829E5A159847E0002417D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+			};
+			name = Debug;
+		};
+		DA829E5B159847E0002417D3 /* AdHoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+			};
+			name = AdHoc;
+		};
+		DA829E5C159847E0002417D3 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+			};
+			name = AppStore;
 		};
 		DA95D5A514DF063C008D1B94 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -4441,7 +4531,9 @@
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Maarten Billemont";
+				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"APPSTORE=1",
@@ -4483,6 +4575,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = AppStore;
 		};
@@ -4495,6 +4588,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Crashlytics\"",
 				);
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_PREFIX_HEADER = "MasterPassword/iOS/MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword/iOS/MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -4695,6 +4789,16 @@
 				DA5BFA6E147E415C00F98B1E /* Debug */,
 				DA5BFA6F147E415C00F98B1E /* AdHoc */,
 				DA95D60A14DF3F3B008D1B94 /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = AdHoc;
+		};
+		DA829E59159847E0002417D3 /* Build configuration list for PBXNativeTarget "FontReplacer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA829E5A159847E0002417D3 /* Debug */,
+				DA829E5B159847E0002417D3 /* AdHoc */,
+				DA829E5C159847E0002417D3 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = AdHoc;
