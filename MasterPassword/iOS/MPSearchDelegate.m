@@ -110,7 +110,6 @@
 
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
 
-    dbg(@"Search ended with: %@", controller.searchBar.text);
     controller.searchBar.prompt                      = nil;
     controller.searchBar.searchResultsButtonSelected = NO;
 }

@@ -416,20 +416,10 @@ Your passwords will be AES-encrypted with your master password.</string>
         <scene sceneID="U26-Zf-euQ">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mK2-p1-3zC" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <customObject id="0QO-2P-OhD" customClass="MPSearchDelegate">
-                    <connections>
-                        <outlet property="delegate" destination="PQa-Xl-A3x" id="O2f-mW-ab8"/>
-                        <outlet property="searchDisplayController" destination="P8c-gf-nN3" id="exk-dS-Ui3"/>
-                        <outlet property="searchTipContainer" destination="zOR-Du-qRL" id="lk6-2X-lIb"/>
-                    </connections>
-                </customObject>
                 <searchDisplayController id="P8c-gf-nN3">
                     <connections>
-                        <outlet property="delegate" destination="0QO-2P-OhD" id="gst-Hm-5ja"/>
                         <outlet property="searchBar" destination="qeo-n2-WVh" id="bFO-FC-Xdj"/>
                         <outlet property="searchContentsController" destination="PQa-Xl-A3x" id="iEu-t3-hJY"/>
-                        <outlet property="searchResultsDataSource" destination="0QO-2P-OhD" id="XJh-rC-kId"/>
-                        <outlet property="searchResultsDelegate" destination="0QO-2P-OhD" id="Bm8-Q3-lLA"/>
                     </connections>
                 </searchDisplayController>
                 <viewController id="PQa-Xl-A3x" customClass="MPMainViewController" sceneMemberID="viewController">
@@ -621,9 +611,6 @@ L4m3P4sSw0rD</string>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <gestureRecognizers/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
-                                <connections>
-                                    <outlet property="delegate" destination="0QO-2P-OhD" id="Maj-Iz-6Hb"/>
-                                </connections>
                             </searchBar>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" id="zOR-Du-qRL">
                                 <rect key="frame" x="10" y="15" width="300" height="60"/>
@@ -734,7 +721,6 @@ L4m3P4sSw0rD</string>
                         <outlet property="passwordEdit" destination="9FS-fS-xH6" id="YeB-HF-ZPk"/>
                         <outlet property="passwordIncrementer" destination="jec-mu-nPt" id="i9B-lX-zzX"/>
                         <outlet property="searchDisplayController" destination="P8c-gf-nN3" id="CLs-YI-7NC"/>
-                        <outlet property="searchResultsController" destination="0QO-2P-OhD" id="xEC-gV-lHp"/>
                         <outlet property="searchTipContainer" destination="zOR-Du-qRL" id="X7h-Vh-iCE"/>
                         <outlet property="siteName" destination="gSK-aB-wNI" id="IIe-z8-zy8"/>
                         <outlet property="typeButton" destination="Cei-5z-uWE" id="4M1-d7-5Bh"/>
@@ -1379,6 +1365,7 @@ L4m3P4sSw0rD</string>
                 <relationship kind="outlet" name="passwordEdit" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="passwordIncrementer" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="resetPasswordCounterGesture" candidateClass="UILongPressGestureRecognizer"/>
+                <relationship kind="outlet" name="searchDelegate" candidateClass="MPSearchDelegate"/>
                 <relationship kind="outlet" name="searchResultsController" candidateClass="MPSearchDelegate"/>
                 <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
                 <relationship kind="outlet" name="siteName" candidateClass="UILabel"/>

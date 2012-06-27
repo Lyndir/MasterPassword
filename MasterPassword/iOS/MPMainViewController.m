@@ -25,7 +25,7 @@
 
 @implementation MPMainViewController
 @synthesize activeElement = _activeElement;
-@synthesize searchResultsController = _searchResultsController;
+@synthesize searchDelegate = _searchDelegate;
 @synthesize typeButton = _typeButton;
 @synthesize helpView = _helpView;
 @synthesize siteName = _siteName;
@@ -67,6 +67,15 @@
 }
 
 - (void)viewDidLoad {
+    
+    self.searchDelegate = [MPSearchDelegate new];
+    self.searchDelegate.delegate = self;
+    self.searchDelegate.searchDisplayController = self.searchDisplayController;
+    self.searchDelegate.searchTipContainer = self.searchTipContainer;
+    self.searchDisplayController.searchBar.delegate = self.searchDelegate;
+    self.searchDisplayController.delegate = self.searchDelegate;
+    self.searchDisplayController.searchResultsDelegate = self.searchDelegate;
+    self.searchDisplayController.searchResultsDataSource = self.searchDelegate;
 
     self.resetPasswordCounterGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(resetPasswordCounter:)];
     [self.passwordIncrementer addGestureRecognizer:self.resetPasswordCounterGesture];
@@ -136,7 +145,6 @@
 
     [self setContentField:nil];
     [self setTypeButton:nil];
-    [self setSearchResultsController:nil];
     [self setHelpView:nil];
     [self setSiteName:nil];
     [self setPasswordCounter:nil];
@@ -153,6 +161,7 @@
     [self setSearchTipContainer:nil];
     [self setActionsTipContainer:nil];
     [self setTypeTipContainer:nil];
+    [self setSearchDelegate:nil];
     [self setResetPasswordCounterGesture:nil];
     [super viewDidUnload];
 }

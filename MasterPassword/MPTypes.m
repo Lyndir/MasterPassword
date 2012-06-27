@@ -9,9 +9,9 @@
 #import "MPEntities.h"
 
 
-#define MP_N        131072
+#define MP_N        32768
 #define MP_r        8
-#define MP_p        1
+#define MP_p        2
 #define MP_dkLen    64
 #define MP_hash     PearlHashSHA256
 

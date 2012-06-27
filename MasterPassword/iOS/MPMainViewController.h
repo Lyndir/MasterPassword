@@ -14,7 +14,8 @@
 @interface MPMainViewController : UIViewController<MPTypeDelegate, UITextFieldDelegate, MPSearchResultsDelegate, UIWebViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (strong, nonatomic) MPElementEntity           *activeElement;
-@property (strong, nonatomic) IBOutlet MPSearchDelegate *searchResultsController;
+@property (strong, nonatomic) IBOutlet MPSearchDelegate *searchDelegate;
+@property (strong, nonatomic) IBOutlet UILongPressGestureRecognizer *resetPasswordCounterGesture;
 @property (weak, nonatomic) IBOutlet UITextField        *contentField;
 @property (weak, nonatomic) IBOutlet UIButton           *typeButton;
 @property (weak, nonatomic) IBOutlet UIWebView          *helpView;
@@ -33,7 +34,6 @@
 @property (weak, nonatomic) IBOutlet UIView             *searchTipContainer;
 @property (weak, nonatomic) IBOutlet UIView             *actionsTipContainer;
 @property (weak, nonatomic) IBOutlet UIView             *typeTipContainer;
-@property (strong, nonatomic) IBOutlet UILongPressGestureRecognizer *resetPasswordCounterGesture;
 
 @property (copy) void (^contentTipCleanup)(BOOL finished);
 
