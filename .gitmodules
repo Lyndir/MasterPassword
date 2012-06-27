@@ -7,3 +7,6 @@
 [submodule "External/iCloudStoreManager"]
 	path = External/iCloudStoreManager
 	url = git://github.com/lhunath/iCloudStoreManager.git
+[submodule "External/FontReplacer"]
+	path = External/FontReplacer
+	url = git://github.com/0xced/FontReplacer.git

@@ -624,7 +624,7 @@
                  tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
                      if (buttonIndex == [sheet cancelButtonIndex])
                          return;
-                     
+
                      if (buttonIndex == [sheet destructiveButtonIndex]) {
                          [[MPAppDelegate get].managedObjectContext deleteObject:targetedUser];
                          [[MPAppDelegate get] saveContext];

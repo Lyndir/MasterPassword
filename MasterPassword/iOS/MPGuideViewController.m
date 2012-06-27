@@ -11,6 +11,7 @@
 
 @implementation MPGuideViewController
 @synthesize scrollView;
+@synthesize pageControl;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 
@@ -48,12 +49,21 @@
 - (void)viewDidUnload {
 
     [self setScrollView:nil];
+    [self setPageControl:nil];
     [super viewDidUnload];
 }
 
 - (IBAction)close {
 
     [self.presentingViewController dismissModalViewControllerAnimated:YES];
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView_ {
+    
+    NSInteger page = (NSInteger)(self.scrollView.contentOffset.x / self.scrollView.bounds.size.width);
+
+    self.pageControl.currentPage = page;
+    self.pageControl.hidden = (page == self.pageControl.numberOfPages - 1);
 }
 
 @end
