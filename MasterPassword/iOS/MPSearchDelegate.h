@@ -23,7 +23,7 @@
 @property (strong, nonatomic) UILabel                    *tipView;
 
 @property (weak, nonatomic) IBOutlet id<MPSearchResultsDelegate> delegate;
-@property (weak, nonatomic) IBOutlet UISearchDisplayController *searchDisplayController;
+@property (strong, nonatomic) IBOutlet UISearchDisplayController *searchDisplayController;
 @property (weak, nonatomic) IBOutlet UIView                    *searchTipContainer;
 
 @end

@@ -18,6 +18,7 @@
 NSData *keyForPassword(NSString *password, NSString *username) {
 
     uint32_t nusernameLength = htonl(username.length);
+    NSDate *start = [NSDate date];
     NSData *key = [PearlSCrypt deriveKeyWithLength:MP_dkLen fromPassword:[password dataUsingEncoding:NSUTF8StringEncoding]
                                                             usingSalt:[NSData dataByConcatenatingDatas:
                                                                                [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
@@ -26,7 +27,7 @@ NSData *keyForPassword(NSString *password, NSString *username) {
                                                                                [username dataUsingEncoding:NSUTF8StringEncoding],
                                                                                nil] N:MP_N r:MP_r p:MP_p];
 
-    trc(@"User: %@, password: %@ derives to key ID: %@", username, password, [keyIDForKey(key) encodeHex]);
+    trc(@"User: %@, password: %@ derives to key ID: %@ (took %0.2f)", username, password, [keyIDForKey(key) encodeHex], -[start timeIntervalSinceNow]);
     return key;
 }
 

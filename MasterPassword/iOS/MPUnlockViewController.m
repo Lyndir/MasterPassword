@@ -418,15 +418,15 @@
         BOOL unlocked = [[MPAppDelegate get] signInAsUser:self.selectedUser usingMasterPassword:self.passwordField.text];
 
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (unlocked) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (long)(NSEC_PER_SEC * 0.5f)), dispatch_get_main_queue(), ^{
-                    [self dismissViewControllerAnimated:YES completion:nil];
-                });
-            } else
+            if (unlocked)
+                [self dismissViewControllerAnimated:YES completion:nil];
+            
+            else {
                 if (self.passwordField.text.length)
                     [self setPasswordTip:@"Incorrect password."];
 
-            [self setSpinnerActive:NO];
+                [self setSpinnerActive:NO];
+            }
         });
     });
 }

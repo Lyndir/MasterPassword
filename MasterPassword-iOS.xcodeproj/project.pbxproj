@@ -4324,7 +4324,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Maarten Billemont (DWGU95U4ZD)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -4384,7 +4383,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Maarten Billemont";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"ADHOC=1",
@@ -4439,7 +4437,6 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Crashlytics\"",
 				);
-				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_PREFIX_HEADER = "MasterPassword/iOS/MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword/iOS/MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -4462,7 +4459,6 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Crashlytics\"",
 				);
-				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_PREFIX_HEADER = "MasterPassword/iOS/MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword/iOS/MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -4533,7 +4529,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Maarten Billemont";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"APPSTORE=1",
@@ -4588,7 +4583,6 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Crashlytics\"",
 				);
-				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_PREFIX_HEADER = "MasterPassword/iOS/MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword/iOS/MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;

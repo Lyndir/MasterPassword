@@ -936,10 +936,6 @@ L4m3P4sSw0rD</string>
                                 <nil key="highlightedColor"/>
                                 <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
-                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="keypad.png" id="4tz-l4-4Kj">
-                                <rect key="frame" x="0.0" y="264" width="320" height="216"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -1336,7 +1332,6 @@ L4m3P4sSw0rD</string>
         <image name="icon_cancel.png" width="32" height="32"/>
         <image name="icon_edit.png" width="32" height="32"/>
         <image name="icon_plus.png" width="32" height="32"/>
-        <image name="keypad.png" width="320" height="216"/>
         <image name="tip_alert_black.png" width="235" height="81"/>
         <image name="tip_basic_black.png" width="210" height="60"/>
         <image name="tip_basic_black_top.png" width="210" height="60"/>

@@ -128,12 +128,14 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     // No more methods left, fail if key still not known.
     if (!tryKey) {
-        inf(@"Login failed for: %@", user.userID);
-
+        if (password) {
+            inf(@"Login failed for: %@", user.userID);
+            
 #ifdef TESTFLIGHT_SDK_VERSION
-        [TestFlight passCheckpoint:MPCheckpointSignInFailed];
+            [TestFlight passCheckpoint:MPCheckpointSignInFailed];
 #endif
-        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSignInFailed attributes:nil];
+            [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSignInFailed attributes:nil];
+        }
 
         return NO;
     }
