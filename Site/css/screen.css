@@ -21,7 +21,7 @@ h1 {
     font-weight:                100;
 }
 strong {
-    font-weight:                400;
+    font-weight:                600;
 }
 h1 .sub {
     font-size:                  0.5em;
@@ -148,7 +148,7 @@ header .divider {
 header a, header .link, header :link,
 #fixedheader a, #fixedheader .link, #fixedheader :link {
     font-family:                Exo;
-    font-weight:                700;
+    font-weight:                600;
     text-decoration:            none;
 }
 header a:hover, header .link:hover,

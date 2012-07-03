@@ -85,10 +85,10 @@
         </script>
     </head>
     <body>
-        <a class="appstore" href="http://itunes.com/apps/MasterPassword"><img src="img/appstore.png" /></a>
+        <a class="appstore" href="http://itunes.apple.com/app/id510296984"><img src="img/appstore.png" /></a>
         <header>
             
-            <a class="appstore" href="http://itunes.com/apps/MasterPassword"><img src="img/appstore.png" /></a>
+            <a class="appstore" href="http://itunes.apple.com/app/id510296984"><img src="img/appstore.png" /></a>
             <h1><a href="index.html"><img class="logo" src="img/iTunesArtwork-Bare.png" /> Master Password</a></h1>
             <div class="divider"></div>
 
@@ -118,13 +118,13 @@
             <p>
                 Master Password uses a stateless algorithm that relies solely on its implementation and the user's inputs.  The user is expected to remember the following information:
                 <ul>
-                    <li><b>The master password</b> (eg. <em>pink fluffy door frame</em>):<br />
+                    <li><strong>The master password</strong> (eg. <em>pink fluffy door frame</em>):<br />
                     This is a secret that the user shares with nobody.</li>
-                    <li><b>The site name</b> (eg. <em>apple.com</em>):<br />
+                    <li><strong>The site name</strong> (eg. <em>apple.com</em>):<br />
                     The user chooses a name for each site.  Its domain name is an ideal choice, since it needn't necessarily be remembered.</li>
-                    <li><b>The site's password counter</b> (default: <em>0</em>):<br />
+                    <li><strong>The site's password counter</strong> (default: <em>0</em>):<br />
                     This is an integer that can be incremented when the user needs a new password for the site.</li>
-                    <li><b>The site's password type</b> (default: <em>Long Password</em>):<br />
+                    <li><strong>The site's password type</strong> (default: <em>Long Password</em>):<br />
                     This type determines the format of the output password.  It can be changed if the site's password policy does not accept passwords of this format.</li>
                 </ul>
             </p>
@@ -132,26 +132,33 @@
                 In short, the algorithm is comprised of the following steps:
                 <ul>
                     <li>Determining the master <code>key</code></li>
-                    <li>Determining the cipher <code>seed</code></li>
+                    <li>Determining the template <code>seed</code></li>
                     <li>Encoding a user-friendly <code>password</code></li>
+                </ul>
+            </p>
+            <p>
+                A note on types:
+                <ul>
+                    <li>Any character string is UTF-8 de- or encoded, depending on context.</li>
+                    <li>Any number is converted to 32-bit network byte order.</li>
                 </ul>
             </p>
 
             <h2>The Master Password</h2>
             <p>
-                The user chooses a single master password, preferably sufficiently long to harden against brute-force attacks.  Master Password recommends absurd two or three-word sentences as they're easily remembered and generally sufficiently high in entropy.
+                The user chooses a single master password, preferably sufficiently long to harden against brute-force attacks.  Master Password recommends absurd three or four-word sentences as they're easily remembered and generally sufficiently high in entropy.
             </p>
             <p>
-                The application then creates a <a href="http://www.tarsnap.com/scrypt.html" onclick="_gaq.push(['_trackPageview', '/outbound/tarsnap.com/scrypt.html">scrypt</a> key derivative from the user's password.  This process takes quite a bit of processing time and memory.  This step exists to make brute-force attempts at guessing the master password from a given output password <b>far more difficult</b>, to practically infeasible, even for otherwise vulnerable password strings.
+                The application then creates a <a href="http://www.tarsnap.com/scrypt.html" onclick="_gaq.push(['_trackPageview', '/outbound/tarsnap.com/scrypt.html">scrypt</a> key derivative from the user's password.  This process takes quite a bit of processing time and memory.  This step exists to make brute-force attempts at guessing the master password from a given output password <strong>far more difficult</strong>, to practically infeasible, even for otherwise vulnerable password strings.
             </p>
             <code><pre>
                 key   = scrypt( P, S, N, r, p, dkLen )
                 where
-                P     = master password (UTF-8)
-                S     = &lt;empty&gt;
-                N     = 16384
+                P     = master password
+                S     = "com.lyndir.masterpassword" . name length . name
+                N     = 32768
                 r     = 8
-                p     = 1
+                p     = 2
                 dkLen = 64
             </pre></code>
 
@@ -167,8 +174,7 @@
                 These input values are combined in a byte array, separated by a single <code>NUL</code> byte.  In order, the input values are the <code>site name</code> (UTF-8 decoded), the master <code>key</code>, and a <code>salt</code> (this is the password counter, a 32-bit unsigned integer in network byte order).  The byte array is hashed using the SHA-1 algorithm to yield the <code>seed</code> as a result.
             </p>
             <code><pre>
-                salt = htonl( password counter )
-                seed = sha1( site name . "\0" . key . "\0" . salt )
+                seed = hmac-sha256( key, "com.lyndir.masterpassword" . site name length . site name . counter )
             </pre></code>
 
             <h2>Generating The Output</h2>
@@ -180,33 +186,58 @@
             </p>
             <p>
                 Since the idea is that the output password can be used directly as a password to protect the user's account on the site, it needs to be able to pass the site's password policy.
-                Master Password addresses this problem by introducing <em>password types</em>.  Each password type describes what an output password must look like and maps to a set of <code>ciphers</code>.  Ciphers describe the resulting output password using a series of characters that map to character groups of candidate output characters.  A cipher has the same length as the output password it yields.  Each character in the cipher maps to a specific character group.  At each position of the output password, a character is chosen from the character group identified by the character in the cipher at the same position.
+                Master Password addresses this problem by introducing <em>password types</em>.  Each password type describes what an output password must look like and maps to a set of <code>templates</code>.  Templates describe the resulting output password using a series of characters that map to character groups of candidate output characters.  A template has the same length as the output password it yields.  Each character in the template maps to a specific character group.  At each position of the output password, a character is chosen from the character group identified by the character in the template at the same position.
             </p>
             <p>
-                The following ciphers are defined:
+                The following templates are defined:
                 <ul>
-                    <li>Type: <b>Long Password</b></li>
+                    <li>Type: <strong>Maximum Security Password</strong></li>
                     <li>
                         <ul>
-                            <li><code>CvcvCvcvnoCvcv</code></li>
-                            <li><code>CvcvnoCvcvCvcv</code></li>
-                            <li><code>CvcvCvcvCvcvno</code></li>
+                            <li><code>anoxxxxxxxxxxxxxxxxx</li></code>
+                            <li><code>axxxxxxxxxxxxxxxxxno</li></code>
                         </ul>
                     </li>
-                    <li>Type: <b>Medium Password</b></li>
+                    <li>Type: <strong>Long Password</strong></li>
+                    <li>
+                        <ul>
+                            <li><code>CvcvnoCvcvCvcv</li></code>
+                            <li><code>CvcvCvcvnoCvcv</li></code>
+                            <li><code>CvcvCvcvCvcvno</li></code>
+                            <li><code>CvccnoCvcvCvcv</li></code>
+                            <li><code>CvccCvcvnoCvcv</li></code>
+                            <li><code>CvccCvcvCvcvno</li></code>
+                            <li><code>CvcvnoCvccCvcv</li></code>
+                            <li><code>CvcvCvccnoCvcv</li></code>
+                            <li><code>CvcvCvccCvcvno</li></code>
+                            <li><code>CvcvnoCvcvCvcc</li></code>
+                            <li><code>CvcvCvcvnoCvcc</li></code>
+                            <li><code>CvcvCvcvCvccno</li></code>
+                            <li><code>CvccnoCvccCvcv</li></code>
+                            <li><code>CvccCvccnoCvcv</li></code>
+                            <li><code>CvccCvccCvcvno</li></code>
+                            <li><code>CvcvnoCvccCvcc</li></code>
+                            <li><code>CvcvCvccnoCvcc</li></code>
+                            <li><code>CvcvCvccCvccno</li></code>
+                            <li><code>CvccnoCvcvCvcc</li></code>
+                            <li><code>CvccCvcvnoCvcc</li></code>
+                            <li><code>CvccCvcvCvccno</li></code>
+                        </ul>
+                    </li>
+                    <li>Type: <strong>Medium Password</strong></li>
                     <li>
                         <ul>
                             <li><code>CvcnoCvc</code></li>
                             <li><code>CvcCvcno</code></li>
                         </ul>
                     </li>
-                    <li>Type: <b>Short Password</b></li>
+                    <li>Type: <strong>Short Password</strong></li>
                     <li>
                         <ul>
                             <li><code>Cvcn</code></li>
                         </ul>
                     </li>
-                    <li>Type: <b>Basic Password</b></li>
+                    <li>Type: <strong>Basic Password</strong></li>
                     <li>
                         <ul>
                             <li><code>aaanaaan</code></li>
@@ -214,7 +245,7 @@
                             <li><code>aaannaaa</code></li>
                         </ul>
                     </li>
-                    <li>Type: <b>PIN</b></li>
+                    <li>Type: <strong>PIN</strong></li>
                     <li>
                         <ul>
                             <li><code>nnnn</code></li>
@@ -226,70 +257,70 @@
                 By default, Master Password uses the <em>Long Password</em> type for any new passwords.  The user is able to choose a different password type, which is normally only done if the site's password policy is incompatible with the output password produced by this type.
             </p>
             <p>
-                To create the create the output password, the bytes in the <code>seed</code> are encoded according to the cipher.  The first <code>seed</code> byte is used to determine which of the type's ciphers to use for encoding an output password.  We take the byte value of the first <code>seed</code> byte modulo the amount of ciphers set for the chosen password type and use the result as a zero-based index in the cipher list for the password type.
+                To create the create the output password, the bytes in the <code>seed</code> are encoded according to the template.  The first <code>seed</code> byte is used to determine which of the type's templates to use for encoding an output password.  We take the byte value of the first <code>seed</code> byte modulo the amount of templates set for the chosen password type and use the result as a zero-based index in the template list for the password type.
             </p>
             <code><pre>
-                ciphers = [ "CvcvCvcvnoCvcv", "CvcvnoCvcvCvcv", "CvcvCvcvCvcvno" ]
-                cipher  = ciphers[ seed[0] % count( ciphers ) ]
+                templates = [ "CvcvCvcvnoCvcv", "CvcvnoCvcvCvcv", "CvcvCvcvCvcvno", ... ]
+                template  = templates[ seed[0] % count( templates ) ]
             </pre></code>
             <p>
-                Now that we know what cipher to use for building our output password, all that's left is to iterate the cipher, and produce a character of password output for each step.  When we iterate the cipher (index <code>i</code>), we look in the character group identified by the character (string <code>passChars</code>) in the cipher at index <code>i</code>.
+                Now that we know what template to use for building our output password, all that's left is to iterate the template, and produce a character of password output for each step.  When we iterate the template (index <code>i</code>), we look in the character group identified by the character (string <code>passChars</code>) in the template at index <code>i</code>.
             </p>
             <p>
                 The following character groups (<code>passChars</code>) are defined:
                 <ul>
-                    <li>Cipher character: <code>V</code></li>
+                    <li>Template character: <code>V</code></li>
                     <li>
                         <ul>
                             <li><code>AEIOU</code></li>
                         </ul>
                     </li>
-                    <li>Cipher character: <code>C</code></li>
+                    <li>Template character: <code>C</code></li>
                     <li>
                         <ul>
                             <li><code>BCDFGHJKLMNPQRSTVWXYZ</code></li>
                         </ul>
                     </li>
-                    <li>Cipher character: <code>v</code></li>
+                    <li>Template character: <code>v</code></li>
                     <li>
                         <ul>
                             <li><code>aeiou</code></li>
                         </ul>
                     </li>
-                    <li>Cipher character: <code>c</code></li>
+                    <li>Template character: <code>c</code></li>
                     <li>
                         <ul>
                             <li><code>bcdfghjklmnpqrstvwxyz</code></li>
                         </ul>
                     </li>
-                    <li>Cipher character: <code>A</code> (<code>= V . C</code>)</li>
+                    <li>Template character: <code>A</code> (<code>= V . C</code>)</li>
                     <li>
                         <ul>
                             <li><code>AEIOUBCDFGHJKLMNPQRSTVWXYZ</code></li>
                         </ul>
                     </li>
-                    <li>Cipher character: <code>a</code> (<code>= V . v . C . c</code>)</li>
+                    <li>Template character: <code>a</code> (<code>= V . v . C . c</code>)</li>
                     <li>
                         <ul>
                             <li><code>AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz</code></li>
                         </ul>
                     </li>
-                    <li>Cipher character: <code>n</code></li>
+                    <li>Template character: <code>n</code></li>
                     <li>
                         <ul>
                             <li><code>0123456789</code></li>
                         </ul>
                     </li>
-                    <li>Cipher character: <code>o</code></li>
+                    <li>Template character: <code>o</code></li>
                     <li>
                         <ul>
-                            <li><code>!@#$%^&amp;*()</code></li>
+                            <li><code>@&amp;%?,=[]_:-+*$#!'^~;()/.</code></li>
                         </ul>
                     </li>
-                    <li>Cipher character: <code>X</code> (<code>= a . n . o</code>)</li>
+                    <li>Template character: <code>X</code> (<code>= a . n . o</code>)</li>
                     <li>
                         <ul>
-                            <li><code>AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789!@#$%^&amp;*()</code></li>
+                            <li><code>AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789@&amp;%?,=[]_:-+*$#!'^~;()/.</code></li>
                         </ul>
                     </li>
                 </ul>
