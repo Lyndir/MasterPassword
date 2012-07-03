@@ -79,7 +79,12 @@
 
     assert(self.navigationController.topViewController == self);
 
-    [delegate didSelectType:[self typeAtIndexPath:indexPath]];
+    MPElementType type = [self typeAtIndexPath:indexPath];
+    if (type == NSNotFound)
+        // Selected a non-type row.
+        return;
+
+    [delegate didSelectType:type];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
