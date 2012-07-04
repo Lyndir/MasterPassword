@@ -20,6 +20,11 @@
 !/*.xcodeproj/project.xcworkspace/*
 /*.xcodeproj/project.xcworkspace/xcuserdata
 
+# Media
+Press/Background.png
+Press/Front-Page.png
+Press/MasterPassword_PressKit/MasterPassword_pressrelease_*.pdf
+
 # IPA
 /sendipa/*
 !/sendipa/sendipa.conf
