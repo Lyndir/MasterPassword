@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- PROJECT METADATA -->
+    <parent>
+        <groupId>com.lyndir.lhunath.masterpassword</groupId>
+        <artifactId>masterpassword</artifactId>
+        <version>GIT-SNAPSHOT</version>
+    </parent>
+
+    <name>Master Password Algorithm Implementation</name>
+    <description>The implementation of the Master Password algorithm</description>
+
+    <groupId>com.lyndir.lhunath.masterpassword</groupId>
+    <artifactId>masterpassword-algorithm</artifactId>
+    <packaging>jar</packaging>
+
+    <!-- DEPENDENCY MANAGEMENT -->
+    <dependencies>
+
+        <!-- PROJECT REFERENCES -->
+        <dependency>
+            <groupId>com.lyndir.lhunath.opal</groupId>
+            <artifactId>opal-system</artifactId>
+            <version>GIT-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lyndir.lhunath.opal</groupId>
+            <artifactId>opal-crypto</artifactId>
+            <version>GIT-SNAPSHOT</version>
+        </dependency>
+
+        <!-- EXTERNAL DEPENDENCIES -->
+        <dependency>
+            <groupId>net.sf.plist</groupId>
+            <artifactId>property-list</artifactId>
+            <version>svn-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lambdaworks</groupId>
+            <artifactId>scrypt</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- PROJECT METADATA -->
+    <parent>
+        <groupId>com.lyndir.lhunath.masterpassword</groupId>
+        <artifactId>masterpassword</artifactId>
+        <version>GIT-SNAPSHOT</version>
+    </parent>
+
+    <name>Master Password CLI</name>
+    <description>A CLI interface to the Master Password algorithm</description>
+
+    <groupId>com.lyndir.lhunath.masterpassword</groupId>
+    <artifactId>masterpassword-cli</artifactId>
+    <packaging>jar</packaging>
+
+    <!-- BUILD CONFIGURATION -->
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/scripts</directory>
+                <filtering>true</filtering>
+                <targetPath>${project.build.directory}</targetPath>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.lyndir.lhunath.masterpassword.CLI</mainClass>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- DEPENDENCY MANAGEMENT -->
+    <dependencies>
+
+        <!-- PROJECT REFERENCES -->
+        <dependency>
+            <groupId>com.lyndir.lhunath.masterpassword</groupId>
+            <artifactId>masterpassword-algorithm</artifactId>
+            <version>GIT-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>

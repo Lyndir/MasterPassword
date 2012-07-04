@@ -1,0 +1,19 @@
+<configuration scan="true">
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%-8relative %22c{0} [%-5level] %msg%n</Pattern>
+        </layout>
+    </appender>
+
+    <logger name="com.lyndir" level="TRACE" />
+
+    <!--
+    <logger name="org.apache.wicket" level="DEBUG" />
+    -->
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>
