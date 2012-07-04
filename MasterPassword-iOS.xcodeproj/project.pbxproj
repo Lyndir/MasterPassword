@@ -20,6 +20,11 @@
 		DA30E9D415722EF400A68B4C /* Pearl-UIKit.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D315722EF400A68B4C /* Pearl-UIKit.m */; };
 		DA30E9D715723E6900A68B4C /* PearlLazy.h in Headers */ = {isa = PBXBuildFile; fileRef = DA30E9D515723E6900A68B4C /* PearlLazy.h */; };
 		DA30E9D815723E6900A68B4C /* PearlLazy.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D615723E6900A68B4C /* PearlLazy.m */; };
+		DA3EF17B15A47744003ABF4E /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA3EF17A15A47744003ABF4E /* SenTestingKit.framework */; };
+		DA3EF17C15A47744003ABF4E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA48147E415C00F98B1E /* UIKit.framework */; };
+		DA3EF17D15A47744003ABF4E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
+		DA3EF18315A47744003ABF4E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA3EF18115A47744003ABF4E /* InfoPlist.strings */; };
+		DA3EF18615A47744003ABF4E /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3EF18515A47744003ABF4E /* Tests.m */; };
 		DA40C2611586099D0079CE6E /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA40C2601586099D0079CE6E /* MPUserEntity.m */; };
 		DA40C2641586099E0079CE6E /* MPElementEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA40C2631586099E0079CE6E /* MPElementEntity.m */; };
 		DA40C2671586099E0079CE6E /* MPElementGeneratedEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA40C2661586099E0079CE6E /* MPElementGeneratedEntity.m */; };
@@ -828,6 +833,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		DA3EF19D15A47AEB003ABF4E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA5BFA43147E415C00F98B1E;
+			remoteInfo = MasterPassword;
+		};
 		DA4DA1D71564470200F6F596 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DA79A9BD1557DDC700BAA07A /* scrypt.xcodeproj */;
@@ -893,6 +905,13 @@
 		DA30E9D315722EF400A68B4C /* Pearl-UIKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Pearl-UIKit.m"; sourceTree = "<group>"; };
 		DA30E9D515723E6900A68B4C /* PearlLazy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlLazy.h; sourceTree = "<group>"; };
 		DA30E9D615723E6900A68B4C /* PearlLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlLazy.m; sourceTree = "<group>"; };
+		DA3EF17915A47744003ABF4E /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA3EF17A15A47744003ABF4E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		DA3EF18015A47744003ABF4E /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
+		DA3EF18215A47744003ABF4E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DA3EF18415A47744003ABF4E /* Tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tests.h; sourceTree = "<group>"; };
+		DA3EF18515A47744003ABF4E /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
+		DA3EF18715A47744003ABF4E /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		DA40C25F1586099D0079CE6E /* MPUserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUserEntity.h; sourceTree = "<group>"; };
 		DA40C2601586099D0079CE6E /* MPUserEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUserEntity.m; sourceTree = "<group>"; };
 		DA40C2621586099E0079CE6E /* MPElementEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementEntity.h; sourceTree = "<group>"; };
@@ -1787,6 +1806,16 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		DA3EF17515A47744003ABF4E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA3EF17B15A47744003ABF4E /* SenTestingKit.framework in Frameworks */,
+				DA3EF17C15A47744003ABF4E /* UIKit.framework in Frameworks */,
+				DA3EF17D15A47744003ABF4E /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DA4425C81557BED40052177D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1874,6 +1903,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DA3EF17E15A47744003ABF4E /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				DA3EF18415A47744003ABF4E /* Tests.h */,
+				DA3EF18515A47744003ABF4E /* Tests.m */,
+				DA3EF17F15A47744003ABF4E /* Supporting Files */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		DA3EF17F15A47744003ABF4E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DA3EF18015A47744003ABF4E /* Tests-Info.plist */,
+				DA3EF18115A47744003ABF4E /* InfoPlist.strings */,
+				DA3EF18715A47744003ABF4E /* Tests-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		DA4425D71557BF260052177D /* iCloudStoreManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -1900,6 +1949,7 @@
 				DAD3127315528CD200A3F9ED /* Localytics */,
 				DA4425D71557BF260052177D /* iCloudStoreManager */,
 				DA829E5D15984812002417D3 /* FontReplacer */,
+				DA3EF17E15A47744003ABF4E /* Tests */,
 				DA5BFA47147E415C00F98B1E /* Frameworks */,
 				DA5BFA45147E415C00F98B1E /* Products */,
 			);
@@ -1916,6 +1966,7 @@
 				DAD3127115528CD200A3F9ED /* libLocalytics.a */,
 				DA4425CB1557BED40052177D /* libiCloudStoreManager.a */,
 				DA829E51159847E0002417D3 /* libFontReplacer.a */,
+				DA3EF17915A47744003ABF4E /* Tests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1935,6 +1986,7 @@
 				DA5BFA4A147E415C00F98B1E /* Foundation.framework */,
 				DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */,
 				DA5BFA4E147E415C00F98B1E /* CoreData.framework */,
+				DA3EF17A15A47744003ABF4E /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3222,6 +3274,25 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		DA3EF17815A47744003ABF4E /* Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA3EF18815A47744003ABF4E /* Build configuration list for PBXNativeTarget "Tests" */;
+			buildPhases = (
+				DA3EF17415A47744003ABF4E /* Sources */,
+				DA3EF17515A47744003ABF4E /* Frameworks */,
+				DA3EF17615A47744003ABF4E /* Resources */,
+				DA3EF17715A47744003ABF4E /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DA3EF19E15A47AEB003ABF4E /* PBXTargetDependency */,
+			);
+			name = Tests;
+			productName = Tests;
+			productReference = DA3EF17915A47744003ABF4E /* Tests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
 		DA4425CA1557BED40052177D /* iCloudStoreManager */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DA4425D31557BED40052177D /* Build configuration list for PBXNativeTarget "iCloudStoreManager" */;
@@ -3400,6 +3471,7 @@
 				DAD3127015528CD200A3F9ED /* Localytics */,
 				DA4425CA1557BED40052177D /* iCloudStoreManager */,
 				DA829E50159847E0002417D3 /* FontReplacer */,
+				DA3EF17815A47744003ABF4E /* Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -3429,6 +3501,14 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		DA3EF17615A47744003ABF4E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA3EF18315A47744003ABF4E /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DA5BFA42147E415C00F98B1E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4074,6 +4154,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		DA3EF17715A47744003ABF4E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
 		DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -4107,6 +4200,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		DA3EF17415A47744003ABF4E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA3EF18615A47744003ABF4E /* Tests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DA4425C71557BED40052177D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4252,6 +4353,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		DA3EF19E15A47AEB003ABF4E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA5BFA43147E415C00F98B1E /* MasterPassword */;
+			targetProxy = DA3EF19D15A47AEB003ABF4E /* PBXContainerItemProxy */;
+		};
 		DA4DA1D81564470200F6F596 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Makefile-scrypt";
@@ -4270,6 +4376,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		DA3EF18115A47744003ABF4E /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DA3EF18215A47744003ABF4E /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		DAB8D43F15036BCF00CED3BC /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -4289,6 +4403,88 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		DA3EF18915A47744003ABF4E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MasterPassword.app/MasterPassword";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"\"$(SRCROOT)/Crashlytics\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		DA3EF18A15A47744003ABF4E /* AdHoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MasterPassword.app/MasterPassword";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"\"$(SRCROOT)/Crashlytics\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = AdHoc;
+		};
+		DA3EF18B15A47744003ABF4E /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MasterPassword.app/MasterPassword";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"\"$(SRCROOT)/Crashlytics\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = AppStore;
+		};
 		DA4425D41557BED40052177D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4757,6 +4953,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		DA3EF18815A47744003ABF4E /* Build configuration list for PBXNativeTarget "Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA3EF18915A47744003ABF4E /* Debug */,
+				DA3EF18A15A47744003ABF4E /* AdHoc */,
+				DA3EF18B15A47744003ABF4E /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		DA4425D31557BED40052177D /* Build configuration list for PBXNativeTarget "iCloudStoreManager" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

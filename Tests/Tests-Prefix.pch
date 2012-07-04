@@ -1,0 +1,10 @@
+//
+// Prefix header for all source files of the 'Tests' target in the 'Tests' project
+//
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+#endif
+
+#import "MasterPassword-Prefix.pch"
