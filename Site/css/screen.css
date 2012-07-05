@@ -258,6 +258,48 @@ header .appstore {
     /* appstore.png */
     bottom:                     -25px;
 }
+.tip {
+    background:                 url("../img/tip.png") no-repeat;
+    color:                      white;
+
+    position:                   absolute;
+    display:                    block;
+    right:                      0;
+    width:                      410px;
+    height:                     60px;
+    padding:                    12px 20px;
+    margin-top:                 -60px;
+
+    -webkit-box-sizing:         border-box;
+       -moz-box-sizing:         border-box;
+            box-sizing:         border-box;
+
+    font:                       14px "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Liberation Sans", sans-serif;
+}
+.footnote {
+    color:                      #444;
+
+    position:                   absolute;
+    width:                      100%;
+    bottom:                     2px;
+
+    font:                       14px "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Liberation Sans", sans-serif !important;
+}
+.footnote:hover {
+    color:                      #666;
+}
+*>.nothover {
+    display:                    inline-block;
+}
+*:hover>.nothover {
+    display:                    none;
+}
+*>.hover {
+    display:                    none;
+}
+*:hover>.hover {
+    display:                    inline-block;
+}
 .columns {
     position:                   relative;
     clear:                      both;
