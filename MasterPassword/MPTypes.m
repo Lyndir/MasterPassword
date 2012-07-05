@@ -27,7 +27,7 @@ NSData *keyForPassword(NSString *password, NSString *username) {
                                                                                [username dataUsingEncoding:NSUTF8StringEncoding],
                                                                                nil] N:MP_N r:MP_r p:MP_p];
 
-    trc(@"User: %@, password: %@ derives to key ID: %@ (took %0.2f)", username, password, [keyIDForKey(key) encodeHex], -[start timeIntervalSinceNow]);
+    trc(@"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", username, password, [keyIDForKey(key) encodeHex], -[start timeIntervalSinceNow]);
     return key;
 }
 
@@ -184,16 +184,18 @@ NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, ui
                                                                                             withExtension:@"plist"]];
 
     // Determine the seed whose bytes will be used for calculating a password
-    trc(@"seed from: hmac-sha256(%@, 'com.lyndir.masterpassword' | %u | %@ | %u)", key, name.length, name, counter);
     uint32_t ncounter = htonl(counter), nnameLength = htonl(name.length);
+    NSData *counterBytes = [NSData dataWithBytes:&ncounter length:sizeof(ncounter)];
+    NSData *nameLengthBytes = [NSData dataWithBytes:&nnameLength length:sizeof(nnameLength)];
+    trc(@"seed from: hmac-sha256(%@, 'com.lyndir.masterpassword' | %@ | %@ | %@)", [key encodeBase64], [nameLengthBytes encodeHex], name, [counterBytes encodeHex]);
     NSData *seed = [[NSData dataByConcatenatingDatas:
                              [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
-                             [NSData dataWithBytes:&nnameLength length:sizeof(nnameLength)],
+                             nameLengthBytes,
                              [name dataUsingEncoding:NSUTF8StringEncoding],
-                             [NSData dataWithBytes:&ncounter length:sizeof(ncounter)],
+                             counterBytes,
                              nil]
                              hmacWith:PearlHashSHA256 key:key];
-    trc(@"seed is: %@", seed);
+    trc(@"seed is: %@", [seed encodeBase64]);
     const char *seedBytes = seed.bytes;
 
     // Determine the cipher from the first seed byte.
@@ -213,7 +215,7 @@ NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, ui
         NSString *character             = [cipherClassCharacters substringWithRange:NSMakeRange(keyByte % [cipherClassCharacters length],
                                                                                                 1)];
 
-        trc(@"class %@ has characters: %@, selected: %@", cipherClass, cipherClassCharacters, character);
+        trc(@"class %@ has characters: %@, index: %u, selected: %@", cipherClass, cipherClassCharacters, keyByte, character);
         [content appendString:character];
     }
 
