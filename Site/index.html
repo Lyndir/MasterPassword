@@ -83,7 +83,8 @@
                         $(".appstore").hide();
                         $("header .appstore").show();
                     }
-                })
+                });
+                $("header .appstore .tip").hide().delay(1000).fadeIn();
             });
         </script>
 
@@ -93,14 +94,11 @@
         <header>
             
             <a class="appstore" href="http://itunes.apple.com/app/id510296984">
-                <span class="tip">
-                    <span class="nothover">Tell us what you thought and get a free copy for a friend!</span>
-                    <span class="hover">The most constructive feedback earns a promo code.</span>
-                </span>
+                <span class="tip">Great feedback may earn you a free copy for a friend!</span>
                 <img src="img/appstore.png" />
             </a>
             <h1><a href="index.html"><img class="logo" src="img/iTunesArtwork-Bare.png" /> Master Password</a></h1>
-            <a class="footnote" href="mailto:masterpassword@lyndir.com">masterpassword@lyndir.com</a>
+            <div class="footnote"><a href="mailto:masterpassword+remove_this@lyndir.com">Contact</a> | <a href="http://www.lyndir.com">Lyndir</a></div>
             <div class="divider"></div>
 
         </header>
@@ -130,8 +128,10 @@
             <div>
                 <div class="sidebox">
                     <div class="clip">
+                        <img class="badge" src="img/price.png" />
                         <img src="img/frontpage_phone.png" />
                     </div>
+                    <div class="footnote">Psst.  There is also a <a href="https://github.com/Lyndir/MasterPassword/tree/master/MasterPassword/Java">Java library and CLI tool</a>.</div>
                 </div>
 
                 <h1>Stop worrying<br />

@@ -166,6 +166,7 @@ footer {
     font-size:                  80%;
 }
 section {
+    position:                   relative;
     width:                      950px;
     margin:                     0 auto 2em;
     padding:                    1em 0 0;
@@ -276,16 +277,22 @@ header .appstore {
 
     font:                       14px "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Liberation Sans", sans-serif;
 }
+.badge {
+    position:                   absolute;
+    right:                      20px;
+    top:                        20px;
+}
 .footnote {
     color:                      #444;
 
     position:                   absolute;
-    width:                      100%;
+    width:                      inherit;
     bottom:                     2px;
 
-    font:                       14px "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Liberation Sans", sans-serif !important;
+    text-align:                 center;
+    font-size:                  14px;
 }
-.footnote:hover {
+.footnote a:hover {
     color:                      #666;
 }
 *>.nothover {
