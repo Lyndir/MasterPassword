@@ -3,7 +3,7 @@
 <html>
 
     <head>
-        <title>Master Password &mdash; Securing your online life.</title>
+        <title>Master Password &mdash; Secure your online identity and privacy.</title>
 
         <link rel="icon" href="img/favicon.png" type="image/x-png" />
         <link rel="shortcut icon" href="img/favicon.png" type="image/x-png" />
@@ -88,17 +88,45 @@
             });
         </script>
 
+        <!-- AdWords -->
+        <script type="text/javascript">
+            /* <![CDATA[ */
+            goog_snippet_vars = function() {
+                var w = window;
+                w.google_conversion_id = 1015576061;
+                w.google_conversion_label = "PcXqCPPz5AIQ_euh5AM";
+                w.google_conversion_value = 4;
+            }
+            goog_report_conversion = function(url) {
+                goog_snippet_vars();
+                window.google_conversion_format = "3";
+                window.google_is_call = true;
+                var opt = new Object();
+                opt.onload_callback = function() {
+                    if (typeof(url) != 'undefined') {
+                        window.location = url;
+                    }
+                }
+                var conv_handler = window['google_trackConversion'];
+                if (typeof(conv_handler) == 'function') {
+                    conv_handler(opt);
+                }
+            }
+            /* ]]> */
+        </script>
+        <script type="text/javascript" src="http://www.googleadservices.com/pagead/conversion_async.js"></script>
+
     </head>
     <body id="frontpage">
-        <a class="appstore" href="http://itunes.apple.com/app/id510296984"><img src="img/appstore.png" /></a>
+        <a class="appstore" href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-fixed-header')"><img src="img/appstore.png" /></a>
         <header>
             
-            <a class="appstore" href="http://itunes.apple.com/app/id510296984">
+            <a class="appstore" href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-top-header')">
                 <span class="tip">Great feedback may earn you a free copy for a friend!</span>
                 <img src="img/appstore.png" />
             </a>
             <h1><a href="index.html"><img class="logo" src="img/iTunesArtwork-Bare.png" /> Master Password</a></h1>
-            <div class="footnote"><a href="mailto:masterpassword+remove_this@lyndir.com">Contact</a> | <a href="http://www.lyndir.com">Lyndir</a></div>
+            <div class="footnote"><a href="mailto:masterpassword+remove_this@lyndir.com">Contact</a> | <a href="http://www.lyndir.com">Lyndir</a> | <a href="https://plus.google.com/116256327773442623984/about" rel="publisher">Google+</a></div>
             <div class="divider"></div>
 
         </header>
@@ -267,8 +295,29 @@
             <a class="next" href="what.html">What is this thing and why do I need it?</a>
         </section>
 
+        <span itemscope itemtype="http://schema.org/MobileSoftwareApplication">
+            <meta itemprop="image"  content="http://masterpassword.lyndir.com/img/iTunesArtwork-Rounded.png" />
+            <meta itemprop="name" content="Master Password" />
+            <meta itemprop="operatingsystems" content="iOS" />
+            <meta itemprop="softwareversion" content="5.0" />
+
+            <span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                <meta itemprop="name" content="iOS" />
+                <meta itemprop="price" content="5.99" />
+                <meta itemprop="priceCurrency" content="USD" />
+                <span itemprop="seller" itemscope itemtype="http://schema.org/Organization">
+                    <meta itemprop="name" content="Apple" />
+                    <meta itemprop="url" content="http://itunes.apple.com/app/id510296984" />
+                </span>
+            </span>
+            <span itemprop="author" itemscope itemtype="http://schema.org/Organization">
+                <meta itemprop="name" content="Lyndir" />
+                <meta itemprop="url" content="http://www.lyndir.com" />
+            </span>
+        </span>
+
         <footer>
-            Master Password is a security and productivity product by <a href="http://www.lyndir.com" onclick="_gaq.push(['_trackPageview', '/outbound/lyndir.com']);">Lyndir</a>, &copy; 2011.
+            Master Password is a security and productivity product by <a href="http://www.lyndir.com" rel="author" onclick="_gaq.push(['_trackPageview', '/outbound/lyndir.com']);">Lyndir</a>, &copy; 2011.
         </footer>
     </body>
 
