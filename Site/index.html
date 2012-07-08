@@ -11,6 +11,7 @@
 
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Exo:100,400,600,900,100italic,400italic,600italic" />
         <link rel="stylesheet" type="text/css" href="css/ml-shadows.css" />
+        <link rel="stylesheet" type="text/css" href="css/buttons/buttons.css" />
         <link rel="stylesheet" type="text/css" href="css/screen.css" />
 
         <!-- Google Analytics -->
@@ -118,15 +119,15 @@
 
     </head>
     <body id="frontpage">
-        <a class="appstore" href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-fixed-header')"><img src="img/appstore.png" /></a>
+        <a class="appstore" href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-fixed-header');_gaq.push(['_trackPageview', '/outbound/itunes']);"><img src="img/appstore.png" /></a>
         <header>
             
-            <a class="appstore" href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-top-header')">
+            <a class="appstore" href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-top-header');_gaq.push(['_trackPageview', '/outbound/itunes']);">
                 <span class="tip">Great feedback may earn you a free copy for a friend!</span>
                 <img src="img/appstore.png" />
             </a>
             <h1><a href="index.html"><img class="logo" src="img/iTunesArtwork-Bare.png" /> Master Password</a></h1>
-            <div class="footnote"><a href="mailto:masterpassword+remove_this@lyndir.com">Contact</a> | <a href="http://www.lyndir.com">Lyndir</a> | <a href="https://plus.google.com/116256327773442623984/about" rel="publisher">Google+</a></div>
+            <div class="footnote"><a href="mailto:masterpassword+remove_this@lyndir.com" onclick="_gaq.push(['_trackPageview', '/outbound/mail']);">Contact</a> | <a href="http://www.lyndir.com" onclick="_gaq.push(['_trackPageview', '/outbound/lyndir.com']);">Lyndir</a> | <a href="https://plus.google.com/116256327773442623984/about" rel="publisher" onclick="_gaq.push(['_trackPageview', '/outbound/google+']);">Google+</a></div>
             <div class="divider"></div>
 
         </header>
@@ -159,7 +160,7 @@
                         <img class="badge" src="img/price.png" />
                         <img src="img/frontpage_phone.png" />
                     </div>
-                    <div class="footnote">Psst.  There is also a <a href="https://github.com/Lyndir/MasterPassword/tree/master/MasterPassword/Java">Java library and CLI tool</a>.</div>
+                    <a href="MasterPassword_PressKit.zip" class="btn_largeblack ico_down" onclick="_gaq.push(['_trackPageview', '/outbound/presskit']);">Press Kit</a>
                 </div>
 
                 <h1>Stop worrying<br />
@@ -183,9 +184,9 @@
         <section>
             <p>Master Password is <strong>different</strong> from other vault-like password solutions.  It helps you set <strong>secure passwords</strong> for your sites, and at the same time makes <strong>losing your passwords almost impossible</strong>.</p>
 
-            <p>Built on algorithms such as <a href="http://www.bsdcan.org/2009/schedule/events/147.en.html">scrypt</a> and <a href="http://en.wikipedia.org/wiki/HMAC">HMAC-SHA256</a>, your master password is kept safe even if websites you use get hacked.</p>
+            <p>Built on algorithms such as <a href="http://www.bsdcan.org/2009/schedule/events/147.en.html" onclick="_gaq.push(['_trackPageview', '/outbound/scrypt']);">scrypt</a> and <a href="http://en.wikipedia.org/wiki/HMAC" onclick="_gaq.push(['_trackPageview', '/outbound/HMAC']);">HMAC-SHA256</a>, your master password is kept safe even if websites you use get hacked.</p>
 
-            <p>As to prove a point, <a href="http://www.washingtonpost.com/business/technology/linkedin-eharmony-deal-with-breach-aftermath/2012/06/07/gJQAwqs5KV_story.html"><strong>LinkedIn</strong>, <strong>eHarmony</strong></a>, and <a href="http://securitywatch.pcmag.com/none/298865-last-fm-joins-eharmony-linkedin-to-celebrate-breach-week"><strong>Last.FM</strong></a> have announced breaches that compromise millions of passwords in the past month alone.  These breaches have leaked "<em>hashes</em>" of people's passwords, which make it trivial for attackers to find out the actual passwords <em>if they're not secure enough</em>.</p>
+            <p>As to prove a point, <a href="http://www.washingtonpost.com/business/technology/linkedin-eharmony-deal-with-breach-aftermath/2012/06/07/gJQAwqs5KV_story.html" onclick="_gaq.push(['_trackPageview', '/outbound/linkedin-breach']);"><strong>LinkedIn</strong>, <strong>eHarmony</strong></a>, and <a href="http://securitywatch.pcmag.com/none/298865-last-fm-joins-eharmony-linkedin-to-celebrate-breach-week" onclick="_gaq.push(['_trackPageview', '/outbound/lastfm-breach']);"><strong>Last.FM</strong></a> have announced breaches that compromise millions of passwords in the past month alone.  These breaches have leaked "<em>hashes</em>" of people's passwords, which make it trivial for attackers to find out the actual passwords <em>if they're not secure enough</em>.</p>
 
             <hr class="clear" />
             <!--p>

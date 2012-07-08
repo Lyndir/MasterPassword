@@ -378,6 +378,7 @@ a.next:after {
     height:                     184px;
 }
 #frontpage .sidebox {
+    background-position:        center 397px;
     margin-right:               -100px;
 }
 #frontpage .sidebox .clip {
