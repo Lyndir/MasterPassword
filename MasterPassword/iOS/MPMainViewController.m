@@ -17,6 +17,7 @@
 
 - (void)updateAnimated:(BOOL)animated;
 - (void)showContentTip:(NSString *)message withIcon:(UIImageView *)icon;
+- (void)showToolTip:(NSString *)message withIcon:(UIImageView *)icon;
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message;
 - (void)changeElementWithWarning:(NSString *)warning do:(void (^)(void))task;
 - (void)changeElementWithoutWarningDo:(void (^)(void))task;
@@ -39,13 +40,15 @@
 @synthesize alertTitle = _alertTitle;
 @synthesize alertBody = _alertBody;
 @synthesize contentTipBody = _contentTipBody;
-@synthesize contentTipEditIcon = _contentTipEditIcon;
+@synthesize toolTipEditIcon = _contentTipEditIcon;
 @synthesize searchTipContainer = _searchTipContainer;
 @synthesize actionsTipContainer = _actionsTipContainer;
 @synthesize typeTipContainer = _typeTipContainer;
+@synthesize toolTipContainer = _toolTipContainer;
+@synthesize toolTipBody = _toolTipBody;
 @synthesize resetPasswordCounterGesture = _resetPasswordCounterGesture;
 @synthesize contentField = _contentField;
-@synthesize contentTipCleanup;
+@synthesize contentTipCleanup = _contentTipCleanup, toolTipCleanup = _toolTipCleanup;
 
 #pragma mark - View lifecycle
 
@@ -85,7 +88,7 @@
     self.contentField.font = [UIFont fontWithName:@"Exo-Black" size:self.contentField.font.pointSize];
 
     self.alertBody.text            = nil;
-    self.contentTipEditIcon.hidden = YES;
+    self.toolTipEditIcon.hidden = YES;
 
     [super viewDidLoad];
 }
@@ -157,12 +160,14 @@
     [self setAlertTitle:nil];
     [self setAlertBody:nil];
     [self setContentTipBody:nil];
-    [self setContentTipEditIcon:nil];
+    [self setToolTipEditIcon:nil];
     [self setSearchTipContainer:nil];
     [self setActionsTipContainer:nil];
     [self setTypeTipContainer:nil];
     [self setSearchDelegate:nil];
     [self setResetPasswordCounterGesture:nil];
+    [self setToolTipContainer:nil];
+    [self setToolTipBody:nil];
     [super viewDidUnload];
 }
 
@@ -249,17 +254,17 @@
 }
 
 - (void)showContentTip:(NSString *)message withIcon:(UIImageView *)icon {
-
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.contentTipCleanup)
             self.contentTipCleanup(NO);
-
+        
         self.contentTipBody.text = message;
         self.contentTipCleanup   = ^(BOOL finished) {
             icon.hidden            = YES;
             self.contentTipCleanup = nil;
         };
-
+        
         icon.hidden = NO;
         [UIView animateWithDuration:0.3f animations:^{
             self.contentTipContainer.alpha = 1;
@@ -270,6 +275,34 @@
                     [UIView animateWithDuration:0.2f animations:^{
                         self.contentTipContainer.alpha = 0;
                     }                completion:self.contentTipCleanup];
+                });
+            }
+        }];
+    });
+}
+
+- (void)showToolTip:(NSString *)message withIcon:(UIImageView *)icon {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.toolTipCleanup)
+            self.toolTipCleanup(NO);
+        
+        self.toolTipBody.text = message;
+        self.toolTipCleanup   = ^(BOOL finished) {
+            icon.hidden            = YES;
+            self.toolTipCleanup = nil;
+        };
+        
+        icon.hidden = NO;
+        [UIView animateWithDuration:0.3f animations:^{
+            self.toolTipContainer.alpha = 1;
+        }                completion:^(BOOL finished) {
+            if (finished) {
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                    [UIView animateWithDuration:0.2f animations:^{
+                        self.toolTipContainer.alpha = 0;
+                    }                completion:self.toolTipCleanup];
                 });
             }
         }];
@@ -565,13 +598,13 @@
                                     self.activeElement.type = type;
 
                                     if (type & MPElementTypeClassStored && ![[self.activeElement.content description] length])
-                                        [self showContentTip:@"Tap        to set a password." withIcon:self.contentTipEditIcon];
+                                        [self showToolTip:@"Tap        to set a password." withIcon:self.toolTipEditIcon];
                                 }];
 }
 
 - (void)didSelectElement:(MPElementEntity *)element {
 
-    inf(@"Selected: %@", element.name);
+    inf(@"Selected: %@, version: %@", element.name, element.version_);
 
     [self closeAlert];
 

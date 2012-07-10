@@ -30,12 +30,15 @@
 @property (weak, nonatomic) IBOutlet UILabel            *alertTitle;
 @property (weak, nonatomic) IBOutlet UITextView         *alertBody;
 @property (weak, nonatomic) IBOutlet UILabel            *contentTipBody;
-@property (weak, nonatomic) IBOutlet UIImageView        *contentTipEditIcon;
+@property (weak, nonatomic) IBOutlet UIImageView        *toolTipEditIcon;
 @property (weak, nonatomic) IBOutlet UIView             *searchTipContainer;
 @property (weak, nonatomic) IBOutlet UIView             *actionsTipContainer;
 @property (weak, nonatomic) IBOutlet UIView             *typeTipContainer;
+@property (weak, nonatomic) IBOutlet UIView *toolTipContainer;
+@property (weak, nonatomic) IBOutlet UILabel *toolTipBody;
 
 @property (copy) void (^contentTipCleanup)(BOOL finished);
+@property (copy) void (^toolTipCleanup)(BOOL finished);
 
 - (IBAction)copyContent;
 - (IBAction)incrementPasswordCounter;

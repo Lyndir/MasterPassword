@@ -26,7 +26,6 @@
 		DA3EF18315A47744003ABF4E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA3EF18115A47744003ABF4E /* InfoPlist.strings */; };
 		DA3EF18615A47744003ABF4E /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3EF18515A47744003ABF4E /* Tests.m */; };
 		DA40C2611586099D0079CE6E /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA40C2601586099D0079CE6E /* MPUserEntity.m */; };
-		DA40C2641586099E0079CE6E /* MPElementEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA40C2631586099E0079CE6E /* MPElementEntity.m */; };
 		DA40C2671586099E0079CE6E /* MPElementGeneratedEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA40C2661586099E0079CE6E /* MPElementGeneratedEntity.m */; };
 		DA40C26A1586099E0079CE6E /* MPElementStoredEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA40C2691586099E0079CE6E /* MPElementStoredEntity.m */; };
 		DA4425CC1557BED40052177D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
@@ -35,6 +34,9 @@
 		DA4426081557C1990052177D /* MPAppDelegate_Shared.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4426051557C1990052177D /* MPAppDelegate_Shared.m */; };
 		DA4426091557C1990052177D /* MPAppDelegate_Store.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4426071557C1990052177D /* MPAppDelegate_Store.m */; };
 		DA44260A1557D9E40052177D /* libiCloudStoreManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4425CB1557BED40052177D /* libiCloudStoreManager.a */; };
+		DA46826F15AB843200FB09E7 /* tip_basic_black_bottom_right.png in Resources */ = {isa = PBXBuildFile; fileRef = DA46826D15AB843200FB09E7 /* tip_basic_black_bottom_right.png */; };
+		DA46827015AB843200FB09E7 /* tip_basic_black_bottom_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA46826E15AB843200FB09E7 /* tip_basic_black_bottom_right@2x.png */; };
+		DA46827315ABF00100FB09E7 /* MPElementEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA46827215ABF00100FB09E7 /* MPElementEntity.m */; };
 		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
 		DA4DA1DA1564471F00F6F596 /* libuicolor-utilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */; };
 		DA4DA1DB1564475E00F6F596 /* libscryptenc-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA79A9BB1557DB6F00BAA07A /* libscryptenc-ios.a */; };
@@ -914,8 +916,6 @@
 		DA3EF18715A47744003ABF4E /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		DA40C25F1586099D0079CE6E /* MPUserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUserEntity.h; sourceTree = "<group>"; };
 		DA40C2601586099D0079CE6E /* MPUserEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUserEntity.m; sourceTree = "<group>"; };
-		DA40C2621586099E0079CE6E /* MPElementEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementEntity.h; sourceTree = "<group>"; };
-		DA40C2631586099E0079CE6E /* MPElementEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementEntity.m; sourceTree = "<group>"; };
 		DA40C2651586099E0079CE6E /* MPElementGeneratedEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementGeneratedEntity.h; sourceTree = "<group>"; };
 		DA40C2661586099E0079CE6E /* MPElementGeneratedEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementGeneratedEntity.m; sourceTree = "<group>"; };
 		DA40C2681586099E0079CE6E /* MPElementStoredEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementStoredEntity.h; sourceTree = "<group>"; };
@@ -927,6 +927,11 @@
 		DA4426051557C1990052177D /* MPAppDelegate_Shared.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_Shared.m; sourceTree = "<group>"; };
 		DA4426061557C1990052177D /* MPAppDelegate_Store.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_Store.h; sourceTree = "<group>"; };
 		DA4426071557C1990052177D /* MPAppDelegate_Store.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_Store.m; sourceTree = "<group>"; };
+		DA46826C15AB48F100FB09E7 /* MasterPassword 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 2.xcdatamodel"; sourceTree = "<group>"; };
+		DA46826D15AB843200FB09E7 /* tip_basic_black_bottom_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tip_basic_black_bottom_right.png; sourceTree = "<group>"; };
+		DA46826E15AB843200FB09E7 /* tip_basic_black_bottom_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tip_basic_black_bottom_right@2x.png"; sourceTree = "<group>"; };
+		DA46827115ABF00100FB09E7 /* MPElementEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementEntity.h; sourceTree = "<group>"; };
+		DA46827215ABF00100FB09E7 /* MPElementEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementEntity.m; sourceTree = "<group>"; };
 		DA5BFA44147E415C00F98B1E /* MasterPassword.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MasterPassword.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5BFA48147E415C00F98B1E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DA5BFA4A147E415C00F98B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -982,7 +987,7 @@
 		DA95D5CE14DF0691008D1B94 /* IASKSpecifierValuesView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IASKSpecifierValuesView.xib; sourceTree = "<group>"; };
 		DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		DAAC35DD156BD77D00C5FD93 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		DAB8D43D15036BCF00CED3BC /* MasterPassword.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MasterPassword.xcdatamodel; sourceTree = "<group>"; };
+		DAB8D43D15036BCF00CED3BC /* MasterPassword 1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 1.xcdatamodel"; sourceTree = "<group>"; };
 		DAB8D44015036BCF00CED3BC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DAB8D44115036BCF00CED3BC /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DAB8D44215036BCF00CED3BC /* MainStoryboard_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
@@ -1998,13 +2003,13 @@
 				DA40C2691586099E0079CE6E /* MPElementStoredEntity.m */,
 				DA40C2651586099E0079CE6E /* MPElementGeneratedEntity.h */,
 				DA40C2661586099E0079CE6E /* MPElementGeneratedEntity.m */,
-				DA40C2621586099E0079CE6E /* MPElementEntity.h */,
-				DA40C2631586099E0079CE6E /* MPElementEntity.m */,
 				DA40C25F1586099D0079CE6E /* MPUserEntity.h */,
 				DA40C2601586099D0079CE6E /* MPUserEntity.m */,
 				DA0E07941577FE490008A67E /* MPEntities.h */,
 				DA0E07951577FE490008A67E /* MPEntities.m */,
 				DAB8D43C15036BCF00CED3BC /* MasterPassword.xcdatamodeld */,
+				DA46827115ABF00100FB09E7 /* MPElementEntity.h */,
+				DA46827215ABF00100FB09E7 /* MPElementEntity.m */,
 				DA600C2415054F3A008E9AB6 /* MPAppDelegate_Key.h */,
 				DA600C2315054F3A008E9AB6 /* MPAppDelegate_Key.m */,
 				DA4426041557C1990052177D /* MPAppDelegate_Shared.h */,
@@ -2832,6 +2837,8 @@
 		DAB8D6B715036BF600CED3BC /* Tooltips */ = {
 			isa = PBXGroup;
 			children = (
+				DA46826D15AB843200FB09E7 /* tip_basic_black_bottom_right.png */,
+				DA46826E15AB843200FB09E7 /* tip_basic_black_bottom_right@2x.png */,
 				DACABB8E1572B769008BA211 /* tip_basic_black_top.png */,
 				DACABB8F1572B769008BA211 /* tip_basic_black_top@2x.png */,
 				DACABB8A1572A4A4008BA211 /* tip_basic_black_top_right.png */,
@@ -4148,6 +4155,8 @@
 				DAE4C98C157E63BE00EFE047 /* avatar-17@2x.png in Resources */,
 				DAE4C98D157E63BE00EFE047 /* avatar-18.png in Resources */,
 				DAE4C98E157E63BE00EFE047 /* avatar-18@2x.png in Resources */,
+				DA46826F15AB843200FB09E7 /* tip_basic_black_bottom_right.png in Resources */,
+				DA46827015AB843200FB09E7 /* tip_basic_black_bottom_right@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4237,9 +4246,9 @@
 				DA0E07961577FE490008A67E /* MPEntities.m in Sources */,
 				DAC728CA157C247B00889EF2 /* MPPreferencesViewController.m in Sources */,
 				DA40C2611586099D0079CE6E /* MPUserEntity.m in Sources */,
-				DA40C2641586099E0079CE6E /* MPElementEntity.m in Sources */,
 				DA40C2671586099E0079CE6E /* MPElementGeneratedEntity.m in Sources */,
 				DA40C26A1586099E0079CE6E /* MPElementStoredEntity.m in Sources */,
+				DA46827315ABF00100FB09E7 /* MPElementEntity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5059,9 +5068,10 @@
 		DAB8D43C15036BCF00CED3BC /* MasterPassword.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				DAB8D43D15036BCF00CED3BC /* MasterPassword.xcdatamodel */,
+				DA46826C15AB48F100FB09E7 /* MasterPassword 2.xcdatamodel */,
+				DAB8D43D15036BCF00CED3BC /* MasterPassword 1.xcdatamodel */,
 			);
-			currentVersion = DAB8D43D15036BCF00CED3BC /* MasterPassword.xcdatamodel */;
+			currentVersion = DA46826C15AB48F100FB09E7 /* MasterPassword 2.xcdatamodel */;
 			path = MasterPassword.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
