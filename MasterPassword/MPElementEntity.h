@@ -19,6 +19,7 @@
 @property (nonatomic, retain) NSNumber * type_;
 @property (nonatomic, retain) NSNumber * uses_;
 @property (nonatomic, retain) NSNumber * version_;
+@property (nonatomic, retain) NSNumber * requiresExplicitMigration_;
 @property (nonatomic, retain) MPUserEntity *user;
 
 @end

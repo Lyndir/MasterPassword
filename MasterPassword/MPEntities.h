@@ -18,6 +18,8 @@
 
 @property (assign) MPElementType type;
 @property (assign) NSUInteger    uses;
+@property (assign) NSUInteger    version;
+@property (assign) BOOL          requiresExplicitMigration;
 
 - (NSUInteger)use;
 - (NSString *)exportContent;

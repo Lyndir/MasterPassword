@@ -13,6 +13,8 @@
 #import "LocalyticsSession.h"
 
 
+void MPElementMigrate(MPElementEntity *entity, BOOL i);
+
 @interface MPMainViewController (Private)
 
 - (void)updateAnimated:(BOOL)animated;
@@ -33,6 +35,7 @@
 @synthesize passwordCounter = _passwordCounter;
 @synthesize passwordIncrementer = _passwordIncrementer;
 @synthesize passwordEdit = _passwordEdit;
+@synthesize passwordUpgrade = _passwordUpgrade;
 @synthesize contentContainer = _contentContainer;
 @synthesize helpContainer = _helpContainer;
 @synthesize contentTipContainer = _copiedContainer;
@@ -70,25 +73,38 @@
 }
 
 - (void)viewDidLoad {
-    
-    self.searchDelegate = [MPSearchDelegate new];
-    self.searchDelegate.delegate = self;
-    self.searchDelegate.searchDisplayController = self.searchDisplayController;
-    self.searchDelegate.searchTipContainer = self.searchTipContainer;
-    self.searchDisplayController.searchBar.delegate = self.searchDelegate;
-    self.searchDisplayController.delegate = self.searchDelegate;
-    self.searchDisplayController.searchResultsDelegate = self.searchDelegate;
+
+    self.searchDelegate                                  = [MPSearchDelegate new];
+    self.searchDelegate.delegate                         = self;
+    self.searchDelegate.searchDisplayController          = self.searchDisplayController;
+    self.searchDelegate.searchTipContainer               = self.searchTipContainer;
+    self.searchDisplayController.searchBar.delegate      = self.searchDelegate;
+    self.searchDisplayController.delegate                = self.searchDelegate;
+    self.searchDisplayController.searchResultsDelegate   = self.searchDelegate;
     self.searchDisplayController.searchResultsDataSource = self.searchDelegate;
 
     self.resetPasswordCounterGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(resetPasswordCounter:)];
     [self.passwordIncrementer addGestureRecognizer:self.resetPasswordCounterGesture];
-    
+
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
 
     self.contentField.font = [UIFont fontWithName:@"Exo-Black" size:self.contentField.font.pointSize];
 
-    self.alertBody.text            = nil;
+    self.alertBody.text         = nil;
     self.toolTipEditIcon.hidden = YES;
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPNotificationElementUpdated object:nil queue:nil
+                                                  usingBlock:^void(NSNotification *note) {
+                                                      if (self.activeElement.type & MPElementTypeClassStored
+                                                       && ![[self.activeElement.content description] length])
+                                                          [self showToolTip:@"Tap        to set a password." withIcon:self.toolTipEditIcon];
+                                                      if (self.activeElement.requiresExplicitMigration)
+                                                          [self showToolTip:@"Password is outdated. Tap      to upgrade it." withIcon:nil];
+                                                  }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPNotificationSignedOut object:nil queue:nil
+                                                  usingBlock:^void(NSNotification *note) {
+                                                      self.activeElement = nil;
+                                                  }];
 
     [super viewDidLoad];
 }
@@ -100,7 +116,7 @@
 
     if (![MPAppDelegate get].activeUser)
         [self.navigationController presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
-                                   animated:animated completion:nil];
+                                                animated:animated completion:nil];
     if (self.activeElement.user != [MPAppDelegate get].activeUser)
         self.activeElement                      = nil;
     self.searchDisplayController.searchBar.text = nil;
@@ -108,6 +124,7 @@
     self.searchTipContainer.alpha  = 0;
     self.actionsTipContainer.alpha = 0;
     self.typeTipContainer.alpha    = 0;
+    self.toolTipContainer.alpha    = 0;
 
     [self setHelpHidden:[[MPiOSConfig get].helpHidden boolValue] animated:animated];
     [self updateAnimated:animated];
@@ -117,11 +134,13 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 
-    if ([[MPiOSConfig get].firstRun boolValue])
+    if (![[MPiOSConfig get].actionsTipShown boolValue])
         [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
             self.actionsTipContainer.alpha = 1;
         }                completion:^(BOOL finished) {
             if (finished) {
+                [MPiOSConfig get].actionsTipShown = PearlBool(YES);
+
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [UIView animateWithDuration:0.2f animations:^{
                         self.actionsTipContainer.alpha = 0;
@@ -153,6 +172,7 @@
     [self setPasswordCounter:nil];
     [self setPasswordIncrementer:nil];
     [self setPasswordEdit:nil];
+    [self setPasswordUpgrade:nil];
     [self setContentContainer:nil];
     [self setHelpContainer:nil];
     [self setContentTipContainer:nil];
@@ -183,9 +203,22 @@
     [self setHelpChapter:self.activeElement? @"2": @"1"];
     self.siteName.text = self.activeElement.name;
 
-    self.passwordCounter.alpha     = self.activeElement.type & MPElementTypeClassGenerated? 0.5f: 0;
-    self.passwordIncrementer.alpha = self.activeElement.type & MPElementTypeClassGenerated? 0.5f: 0;
-    self.passwordEdit.alpha        = self.activeElement.type & MPElementTypeClassStored? 0.5f: 0;
+    self.passwordCounter.alpha     = 0;
+    self.passwordIncrementer.alpha = 0;
+    self.passwordEdit.alpha        = 0;
+    self.passwordUpgrade.alpha     = 0;
+
+    if (self.activeElement.requiresExplicitMigration)
+        self.passwordUpgrade.alpha = 0.5f;
+
+    else {
+        if (self.activeElement.type & MPElementTypeClassGenerated) {
+            self.passwordCounter.alpha     = 0.5f;
+            self.passwordIncrementer.alpha = 0.5f;
+        } else
+            if (self.activeElement.type & MPElementTypeClassStored)
+                self.passwordEdit.alpha = 0.5f;
+    }
 
     [self.typeButton setTitle:NSStringFromMPElementType(self.activeElement.type)
                      forState:UIControlStateNormal];
@@ -254,17 +287,17 @@
 }
 
 - (void)showContentTip:(NSString *)message withIcon:(UIImageView *)icon {
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.contentTipCleanup)
             self.contentTipCleanup(NO);
-        
+
         self.contentTipBody.text = message;
         self.contentTipCleanup   = ^(BOOL finished) {
             icon.hidden            = YES;
             self.contentTipCleanup = nil;
         };
-        
+
         icon.hidden = NO;
         [UIView animateWithDuration:0.3f animations:^{
             self.contentTipContainer.alpha = 1;
@@ -282,17 +315,17 @@
 }
 
 - (void)showToolTip:(NSString *)message withIcon:(UIImageView *)icon {
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.toolTipCleanup)
             self.toolTipCleanup(NO);
-        
+
         self.toolTipBody.text = message;
         self.toolTipCleanup   = ^(BOOL finished) {
-            icon.hidden            = YES;
+            icon.hidden         = YES;
             self.toolTipCleanup = nil;
         };
-        
+
         icon.hidden = NO;
         [UIView animateWithDuration:0.3f animations:^{
             self.toolTipContainer.alpha = 1;
@@ -363,7 +396,8 @@
                                     [TestFlight passCheckpoint:MPCheckpointIncrementPasswordCounter];
                                     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointIncrementPasswordCounter
                                                                                attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                         NSStringFromMPElementType(self.activeElement.type), @"type",
+                                                                                                         NSStringFromMPElementType(
+                                                                                                          self.activeElement.type), @"type",
                                                                                                          nil]];
                                 }];
 }
@@ -391,7 +425,8 @@
                                     [TestFlight passCheckpoint:MPCheckpointResetPasswordCounter];
                                     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointResetPasswordCounter
                                                                                attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                         NSStringFromMPElementType(self.activeElement.type), @"type",
+                                                                                                         NSStringFromMPElementType(
+                                                                                                          self.activeElement.type), @"type",
                                                                                                          nil]];
                                 }];
 }
@@ -404,7 +439,7 @@
             return;
 
         [self changeElementWithoutWarningDo:task];
-    } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonContinue, nil];
+    }                  cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonContinue, nil];
 }
 
 - (void)changeElementWithoutWarningDo:(void (^)(void))task; {
@@ -440,6 +475,31 @@
                                                                               self.activeElement.type), @"type",
                                                                              nil]];
     }
+}
+
+- (IBAction)upgradePassword {
+
+    [self changeElementWithWarning:
+           self.activeElement.type & MPElementTypeClassGenerated?
+            @"You are upgrading the site.\n\n"
+             @"This upgrade improves the site's compatibility with the latest version of Master Password.\n\n"
+             @"Your password will change and you will need to update your site's account."
+            :
+            @"You are upgrading the site.\n\n"
+             @"This upgrade improves the site's compatibility with the latest version of Master Password."
+                                do:^{
+                                    inf(@"Explicitly migrating element: %@", self.activeElement);
+                                    MPElementMigrate(self.activeElement, YES);
+
+                                    [TestFlight passCheckpoint:MPCheckpointExplicitMigration];
+                                    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointExplicitMigration
+                                                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                                                         NSStringFromMPElementType(
+                                                                                                          self.activeElement.type), @"type",
+                                                                                                         PearlUnsignedInteger(self.activeElement.version),
+                                                                                                         @"version",
+                                                                                                         nil]];
+                                }];
 }
 
 - (IBAction)closeAlert {
@@ -501,7 +561,7 @@
                                                           @"masterpassword@lyndir.com"
                                                       viewStyle:UIAlertViewStyleDefault
                                                       initAlert:nil tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay
-                                                      otherTitles:nil];
+                                                    otherTitles:nil];
 
                              else {
                                  [PearlAlert showAlertWithTitle:@"Sending Feedback"
@@ -514,7 +574,8 @@
                                      MFMailComposeViewController *composer = [MFMailComposeViewController new];
                                      [composer setMailComposeDelegate:self];
                                      [composer setToRecipients:[NSArray arrayWithObject:@"Master Password Development <masterpassword@lyndir.com>"]];
-                                     [composer setSubject:PearlString(@"Feedback for Master Password [%@]", [[PearlKeyChain deviceIdentifier] stringByDeletingMatchesOf:@"-.*"])];
+                                     [composer setSubject:PearlString(@"Feedback for Master Password [%@]",
+                                                                      [[PearlKeyChain deviceIdentifier] stringByDeletingMatchesOf:@"-.*"])];
                                      [composer setMessageBody:
                                                 PearlString(
                                                  @"\n\n\n"
@@ -524,20 +585,21 @@
                                                  [MPAppDelegate get].activeUser.name,
                                                  [PearlInfoPlist get].CFBundleShortVersionString,
                                                  [PearlInfoPlist get].CFBundleVersion)
-                                               isHTML:NO];
+                                                       isHTML:NO];
 
                                      if (buttonIndex_ == [alert_ firstOtherButtonIndex]) {
-                                         PearlLogLevel logLevel = [[MPiOSConfig get].sendInfo boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
+                                         PearlLogLevel logLevel = [[MPiOSConfig get].sendInfo boolValue]? PearlLogLevelDebug
+                                          : PearlLogLevelInfo;
                                          [composer addAttachmentData:[[[PearlLogger get] formatMessagesWithLevel:logLevel] dataUsingEncoding:NSUTF8StringEncoding]
-                                                   mimeType:@"text/plain"
-                                                   fileName:PearlString(@"%@-%@.log",
-                                                                        [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
-                                                                        [PearlKeyChain deviceIdentifier])];
+                                                            mimeType:@"text/plain"
+                                                            fileName:PearlString(@"%@-%@.log",
+                                                                                 [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
+                                                                                 [PearlKeyChain deviceIdentifier])];
                                      }
 
                                      [self presentModalViewController:composer animated:YES];
                                  }
-                                                      cancelTitle:nil otherTitles:@"Include Logs", @"No Logs", nil];
+                                                    cancelTitle:nil otherTitles:@"Include Logs", @"No Logs", nil];
                              }
                              break;
                          }
@@ -552,7 +614,7 @@
 
                      [TestFlight passCheckpoint:MPCheckpointAction];
                  }
-                 cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:
+                       cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:
      [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Preferences", @"Feedback", @"Sign Out", nil];
 }
 
@@ -597,14 +659,14 @@
 
                                     self.activeElement.type = type;
 
-                                    if (type & MPElementTypeClassStored && ![[self.activeElement.content description] length])
-                                        [self showToolTip:@"Tap        to set a password." withIcon:self.toolTipEditIcon];
+                                    [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationElementUpdated
+                                                                                        object:self.activeElement];
                                 }];
 }
 
 - (void)didSelectElement:(MPElementEntity *)element {
 
-    inf(@"Selected: %@, version: %@", element.name, element.version_);
+    inf(@"Selected: %@", element.name);
 
     [self closeAlert];
 
@@ -619,27 +681,31 @@
                                                               self.activeElement.name, self.activeElement.name)];
         [[MPAppDelegate get] saveContext];
 
-        if ([[MPiOSConfig get].firstRun boolValue])
+        if (![[MPiOSConfig get].typeTipShown boolValue])
             [UIView animateWithDuration:0.5f animations:^{
                 self.typeTipContainer.alpha = 1;
             }                completion:^(BOOL finished) {
                 if (finished) {
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [UIView animateWithDuration:0.2f animations:^{
-                            self.typeTipContainer.alpha = 0;
-                        }];
-                    });
+                    [MPiOSConfig get].typeTipShown = PearlBool(YES);
+
+                    dispatch_after(
+                     dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                         [UIView animateWithDuration:0.2f animations:^{
+                             self.typeTipContainer.alpha = 0;
+                         }];
+                     });
                 }
             }];
 
         [self.searchDisplayController setActive:NO animated:YES];
         self.searchDisplayController.searchBar.text = self.activeElement.name;
 
-        [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationElementUsed object:self.activeElement];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationElementUpdated object:self.activeElement];
         [TestFlight passCheckpoint:PearlString(MPCheckpointUseType @"_%@", NSStringFromMPElementType(self.activeElement.type))];
         [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointUseType attributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                                                             NSStringFromMPElementType(
-                                                                                                             self.activeElement.type), @"type",
+                                                                                                             self.activeElement.type),
+                                                                                                            @"type",
                                                                                                             nil]];
     }
 

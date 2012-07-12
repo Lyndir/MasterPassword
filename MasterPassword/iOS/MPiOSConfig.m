@@ -7,7 +7,7 @@
 //
 
 @implementation MPiOSConfig
-@dynamic sendInfo, helpHidden, showQuickStart;
+@dynamic sendInfo, helpHidden, showQuickStart, actionsTipShown, typeTipShown;
 
 - (id)init {
 
@@ -19,6 +19,8 @@
                                                    [NSNumber numberWithBool:NO], NSStringFromSelector(@selector(helpHidden)),
                                                    [NSNumber numberWithBool:YES], NSStringFromSelector(@selector(showQuickStart)),
                                                    @"510296984", NSStringFromSelector(@selector(iTunesID)),
+                                                   PearlBoolNot(self.firstRun), NSStringFromSelector(@selector(actionsTipShown)),
+                                                   PearlBoolNot(self.firstRun), NSStringFromSelector(@selector(typeTipShown)),
                                                    nil]];
 
     return self;

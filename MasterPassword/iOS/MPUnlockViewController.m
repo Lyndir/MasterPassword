@@ -155,6 +155,9 @@
 
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:animated? UIStatusBarAnimationSlide: UIStatusBarAnimationNone];
 
+    if (!animated)
+        [[self findTargetedAvatar] setSelected:YES];
+
     [super viewDidAppear:animated];
 }
 
@@ -617,10 +620,9 @@
     MPUserEntity *targetedUser = [self userForAvatar:[self findTargetedAvatar]];
     if (!targetedUser)
         return;
-    
+
     [PearlSheet showSheetWithTitle:targetedUser.name
-                           message:nil
-                         viewStyle:UIActionSheetStyleBlackTranslucent
+                           message:nil viewStyle:UIActionSheetStyleBlackTranslucent
                  tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
                      if (buttonIndex == [sheet cancelButtonIndex])
                          return;
@@ -629,8 +631,11 @@
                          [[MPAppDelegate get].managedObjectContext deleteObject:targetedUser];
                          [[MPAppDelegate get] saveContext];
                          [self updateUsers];
-                     } else if (buttonIndex == [sheet firstOtherButtonIndex])
-                         [[MPAppDelegate get] changeMasterPasswordFor:targetedUser];
+                     } else
+                         if (buttonIndex == [sheet firstOtherButtonIndex]) {
+                             [[MPAppDelegate get] changeMasterPasswordFor:targetedUser];
+                             [[self avatarForUser:targetedUser] setSelected:YES];
+                         }
                  } cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];
 }
 @end

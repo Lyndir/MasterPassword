@@ -74,6 +74,8 @@
 
                 return YES;
             }];
+            TFLog(@"TestFlight (%@) initialized for: %@ v%@.", //
+             TESTFLIGHT_SDK_VERSION, [PearlInfoPlist get].CFBundleName, [PearlInfoPlist get].CFBundleVersion);
         }
     }
     @catch (id exception) {
@@ -99,6 +101,8 @@
 
                 return YES;
             }];
+            CLSLog(@"Crashlytics (%@) initialized for: %@ v%@.", //
+                   [Crashlytics sharedInstance].version, [PearlInfoPlist get].CFBundleName, [PearlInfoPlist get].CFBundleVersion);
         }
     }
     @catch (id exception) {
@@ -427,7 +431,7 @@
 }
 
 - (void)exportShowPasswords:(BOOL)showPasswords {
-    
+
     if (![MFMailComposeViewController canSendMail]) {
         [PearlAlert showAlertWithTitle:@"Cannot Send Mail"
                                message:
@@ -460,7 +464,7 @@
                               self.activeUser.name,
                               [PearlInfoPlist get].CFBundleShortVersionString,
                               [PearlInfoPlist get].CFBundleVersion);
-    
+
     NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
     [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'DD"];
 

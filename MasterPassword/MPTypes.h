@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define MPPersistentStoreDidChangeNotification @"MPPersistentStoreDidChange"
+@class MPElementEntity;
 
 typedef enum {
     MPElementContentTypePassword,
@@ -70,12 +70,12 @@ typedef enum {
 #define MPCheckpointCloudDisabled             @"MPCheckpointCloudDisabled"
 #define MPCheckpointSitesImported             @"MPCheckpointSitesImported"
 #define MPCheckpointSitesExported             @"MPCheckpointSitesExported"
+#define MPCheckpointExplicitMigration         @"MPCheckpointExplicitMigration"
 
-#define MPNotificationStoreUpdated            @"MPNotificationStoreUpdated"
 #define MPNotificationSignedIn                @"MPNotificationKeySet"
 #define MPNotificationSignedOut               @"MPNotificationKeyUnset"
 #define MPNotificationKeyForgotten            @"MPNotificationKeyForgotten"
-#define MPNotificationElementUsed             @"MPNotificationElementUsed"
+#define MPNotificationElementUpdated          @"MPNotificationElementUpdated"
 
 NSData   *keyForPassword(NSString *password, NSString *username);
 NSData   *subkeyForKey(NSData *key, NSUInteger subkeyLength);
@@ -84,5 +84,6 @@ NSData   *keyIDForKey(NSData *key);
 NSString *NSStringFromMPElementType(MPElementType type);
 NSString *NSStringShortFromMPElementType(MPElementType type);
 NSString *ClassNameFromMPElementType(MPElementType type);
-Class ClassFromMPElementType(MPElementType type);
+Class    ClassFromMPElementType(MPElementType type);
 NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, uint32_t counter);
+void     MPElementMigrate(MPElementEntity *element, BOOL explicit);

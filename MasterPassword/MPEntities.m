@@ -33,6 +33,25 @@
     self.uses_ = PearlUnsignedInteger(anUses);
 }
 
+- (NSUInteger)version {
+
+    return [self.version_ unsignedIntegerValue];
+}
+
+- (void)setVersion:(NSUInteger)version {
+
+    self.version_ = PearlUnsignedInteger(version);
+}
+
+- (BOOL)requiresExplicitMigration {
+
+    return [self.requiresExplicitMigration_ boolValue];
+}
+
+- (void)setRequiresExplicitMigration:(BOOL)requiresExplicitMigration {
+
+    self.requiresExplicitMigration_ = PearlBool(requiresExplicitMigration);
+}
 
 - (NSUInteger)use {
 

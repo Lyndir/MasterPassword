@@ -23,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UILabel            *passwordCounter;
 @property (weak, nonatomic) IBOutlet UIButton           *passwordIncrementer;
 @property (weak, nonatomic) IBOutlet UIButton           *passwordEdit;
+@property (weak, nonatomic) IBOutlet UIButton           *passwordUpgrade;
 @property (weak, nonatomic) IBOutlet UIView             *contentContainer;
 @property (weak, nonatomic) IBOutlet UIView             *helpContainer;
 @property (weak, nonatomic) IBOutlet UIView             *contentTipContainer;
@@ -34,8 +35,8 @@
 @property (weak, nonatomic) IBOutlet UIView             *searchTipContainer;
 @property (weak, nonatomic) IBOutlet UIView             *actionsTipContainer;
 @property (weak, nonatomic) IBOutlet UIView             *typeTipContainer;
-@property (weak, nonatomic) IBOutlet UIView *toolTipContainer;
-@property (weak, nonatomic) IBOutlet UILabel *toolTipBody;
+@property (weak, nonatomic) IBOutlet UIView             *toolTipContainer;
+@property (weak, nonatomic) IBOutlet UILabel            *toolTipBody;
 
 @property (copy) void (^contentTipCleanup)(BOOL finished);
 @property (copy) void (^toolTipCleanup)(BOOL finished);
@@ -45,6 +46,7 @@
 - (IBAction)resetPasswordCounter:(UILongPressGestureRecognizer *)sender;
 - (IBAction)editPassword;
 - (IBAction)closeAlert;
+- (IBAction)upgradePassword;
 - (IBAction)action:(UIBarButtonItem *)sender;
 
 - (BOOL)isHelpVisible;

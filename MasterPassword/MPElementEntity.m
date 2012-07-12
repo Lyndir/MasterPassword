@@ -18,6 +18,7 @@
 @dynamic type_;
 @dynamic uses_;
 @dynamic version_;
+@dynamic requiresExplicitMigration_;
 @dynamic user;
 
 @end

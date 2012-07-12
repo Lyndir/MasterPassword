@@ -480,7 +480,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                             <outlet property="delegate" destination="PQa-Xl-A3x" id="qOM-gq-c6g"/>
                                         </connections>
                                     </textField>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.50000000000000011" contentMode="left" text="1" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="Iuf-np-e9C">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.50000000000000011" contentMode="left" text="1" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="Iuf-np-e9C" userLabel="Label - Counter">
                                         <rect key="frame" x="230" y="31" width="41" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="Copperplate-Bold" family="Copperplate" pointSize="17"/>
@@ -489,7 +489,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                         <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <size key="shadowOffset" width="0.0" height="1"/>
                                     </label>
-                                    <button opaque="NO" alpha="0.50000000000000011" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jec-mu-nPt" userLabel="Button - Counter">
+                                    <button opaque="NO" alpha="0.50000000000000011" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jec-mu-nPt" userLabel="Button - Incrementer">
                                         <rect key="frame" x="265" y="18.5" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <gestureRecognizers/>
@@ -522,7 +522,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                             <action selector="editPassword" destination="PQa-Xl-A3x" eventType="touchUpInside" id="jZC-Jm-ZZ0"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="zbY-EJ-Yiu" userLabel="Button - Upgrade">
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="zbY-EJ-Yiu" userLabel="Button - Upgrade">
                                         <rect key="frame" x="265" y="18" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -536,6 +536,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                         </state>
                                         <connections>
                                             <action selector="editPassword" destination="PQa-Xl-A3x" eventType="touchUpInside" id="SSO-oQ-WBa"/>
+                                            <action selector="upgradePassword" destination="PQa-Xl-A3x" eventType="touchUpInside" id="0dr-HU-goH"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" id="Cei-5z-uWE">
@@ -683,7 +684,11 @@ L4m3P4sSw0rD</string>
                                         <rect key="frame" x="93" y="10" width="24" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                     </imageView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Password is outdated.  Tap to upgrade it." textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="MtZ-N7-CYD">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_up.png" id="Xxd-3E-PLb">
+                                        <rect key="frame" x="180" y="10" width="24" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Password is outdated. Tap      to upgrade it." textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="MtZ-N7-CYD">
                                         <rect key="frame" x="-20" y="10" width="340" height="21"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -754,6 +759,7 @@ L4m3P4sSw0rD</string>
                         <outlet property="passwordCounter" destination="Iuf-np-e9C" id="CIm-Mk-nJh"/>
                         <outlet property="passwordEdit" destination="9FS-fS-xH6" id="YeB-HF-ZPk"/>
                         <outlet property="passwordIncrementer" destination="jec-mu-nPt" id="i9B-lX-zzX"/>
+                        <outlet property="passwordUpgrade" destination="zbY-EJ-Yiu" id="KAX-Wk-DC4"/>
                         <outlet property="searchDisplayController" destination="P8c-gf-nN3" id="CLs-YI-7NC"/>
                         <outlet property="searchTipContainer" destination="zOR-Du-qRL" id="X7h-Vh-iCE"/>
                         <outlet property="siteName" destination="gSK-aB-wNI" id="IIe-z8-zy8"/>
@@ -1389,6 +1395,7 @@ L4m3P4sSw0rD</string>
                 <relationship kind="action" name="editPassword"/>
                 <relationship kind="action" name="incrementPasswordCounter"/>
                 <relationship kind="action" name="resetPasswordCounter:" candidateClass="UILongPressGestureRecognizer"/>
+                <relationship kind="action" name="upgradePassword"/>
                 <relationship kind="outlet" name="actionsTipContainer" candidateClass="UIView"/>
                 <relationship kind="outlet" name="alertBody" candidateClass="UITextView"/>
                 <relationship kind="outlet" name="alertContainer" candidateClass="UIView"/>
@@ -1402,6 +1409,7 @@ L4m3P4sSw0rD</string>
                 <relationship kind="outlet" name="passwordCounter" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="passwordEdit" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="passwordIncrementer" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="passwordUpgrade" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="resetPasswordCounterGesture" candidateClass="UILongPressGestureRecognizer"/>
                 <relationship kind="outlet" name="searchDelegate" candidateClass="MPSearchDelegate"/>
                 <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>

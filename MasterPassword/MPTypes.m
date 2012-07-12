@@ -221,3 +221,11 @@ NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, ui
 
     return content;
 }
+
+void MPElementMigrate(MPElementEntity *element, BOOL explicit) {
+
+    if (element.version == 0 && explicit) {
+        // 0 -> 1
+        element.version = 1;
+    }
+}
