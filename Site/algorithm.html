@@ -200,10 +200,10 @@
 
             <h2>Combining The Inputs</h2>
             <p>
-                The theory behind Master Password requires that all inputs are given by the user.  The two main inputs are the master password that we used to determine the <code>key</code> and the site's name.  There is a third input value, the password counter, which is a 32-bit unsigned integer value that is used to salt the input.  Initially, the password counter should be zero, but a user may specify a non-zero counter value in case he wants to force the algorithm to produce a new output password for the site.
+                The theory behind Master Password requires that all inputs are given by the user.  The two main inputs are the master password that we used to determine the <code>key</code> and the site's name.  There is a third input value, the password counter, which is a 32-bit unsigned integer value.  Initially, the password counter should be zero, but a user may specify a non-zero counter value in case he wants to force the algorithm to produce a new output password for the site.
             </p>
             <p>
-                These input values are combined in a byte array, separated by a single <code>NUL</code> byte.  In order, the input values are the <code>site name</code> (UTF-8 decoded), the master <code>key</code>, and a <code>salt</code> (this is the password counter, a 32-bit unsigned integer in network byte order).  The byte array is hashed using the SHA-1 algorithm to yield the <code>seed</code> as a result.
+                These input values are combined in a byte array, separated by a single <code>NUL</code> byte.  In order, the input values are the <code>site name</code>, the master <code>key</code>, and a <code>counter</code>.  The byte array is hashed using the HMAC-SHA-256 algorithm to yield the <code>seed</code> as a result.
             </p>
             <code><pre>
                 seed = hmac-sha256( key, "com.lyndir.masterpassword" . site name length . site name . counter )
@@ -211,7 +211,7 @@
 
             <h2>Generating The Output</h2>
             <p>
-                We now have a <code>seed</code> which is a sufficiently long seemingly-arbitrary string of bytes that is unique to the site and the user.  This string of bytes, however, is not very useful for a user to use as a password.  We have two additional problems that need to be solved: The output password must be easy for a user to read and copy, but it should also be compatible with most password policies. 
+                We now have a <code>seed</code> which is a sufficiently long seemingly-arbitrary string of bytes that is unique to the site and the user.  This string of bytes, however, is not very useful for a user to use as a password.  We have two additional problems that need to be solved: The output password must be easy for a user to read and type in using a keyboard or smartphone, but it should also be compatible with most site's password policies. 
             </p>
             <p>
                 Password policies are strict rules imposed by applications on their users, designed to limit the types of passwords these users are allowed to use with the application.  Usually, these policies exist to force users into thinking about passwords with a healthy entropy.  Often, they exist purely as a side-effect of bad password handling such as storing the clear-text passwords in a database.
@@ -223,15 +223,14 @@
             <p>
                 The following templates are defined:
                 <ul>
-                    <li>Type: <strong>Maximum Security Password</strong></li>
-                    <li>
+                    <li><p>
+                        Type: <strong>Maximum Security Password</strong>
                         <ul>
                             <li><code>anoxxxxxxxxxxxxxxxxx</li></code>
                             <li><code>axxxxxxxxxxxxxxxxxno</li></code>
                         </ul>
-                    </li>
-                    <li>Type: <strong>Long Password</strong></li>
-                    <li>
+                    </p></li>
+                    <li><p>Type: <strong>Long Password</strong>
                         <ul>
                             <li><code>CvcvnoCvcvCvcv</li></code>
                             <li><code>CvcvCvcvnoCvcv</li></code>
@@ -255,34 +254,30 @@
                             <li><code>CvccCvcvnoCvcc</li></code>
                             <li><code>CvccCvcvCvccno</li></code>
                         </ul>
-                    </li>
-                    <li>Type: <strong>Medium Password</strong></li>
-                    <li>
+                    </p></li>
+                    <li><p>Type: <strong>Medium Password</strong>
                         <ul>
                             <li><code>CvcnoCvc</code></li>
                             <li><code>CvcCvcno</code></li>
                         </ul>
-                    </li>
-                    <li>Type: <strong>Short Password</strong></li>
-                    <li>
+                    </p></li>
+                    <li><p>Type: <strong>Short Password</strong>
                         <ul>
                             <li><code>Cvcn</code></li>
                         </ul>
-                    </li>
-                    <li>Type: <strong>Basic Password</strong></li>
-                    <li>
+                    </p></li>
+                    <li><p>Type: <strong>Basic Password</strong>
                         <ul>
                             <li><code>aaanaaan</code></li>
                             <li><code>aannaaan</code></li>
                             <li><code>aaannaaa</code></li>
                         </ul>
-                    </li>
-                    <li>Type: <strong>PIN</strong></li>
-                    <li>
+                    </p></li>
+                    <li><p>Type: <strong>PIN</strong>
                         <ul>
                             <li><code>nnnn</code></li>
                         </ul>
-                    </li>
+                    </p></li>
                 </ul>
             </p>
             <p>
@@ -301,60 +296,51 @@
             <p>
                 The following character groups (<code>passChars</code>) are defined:
                 <ul>
-                    <li>Template character: <code>V</code></li>
-                    <li>
+                    <li><p>Template character: <code>V</code>
                         <ul>
                             <li><code>AEIOU</code></li>
                         </ul>
-                    </li>
-                    <li>Template character: <code>C</code></li>
-                    <li>
+                    </p></li>
+                    <li><p>Template character: <code>C</code>
                         <ul>
                             <li><code>BCDFGHJKLMNPQRSTVWXYZ</code></li>
                         </ul>
-                    </li>
-                    <li>Template character: <code>v</code></li>
-                    <li>
+                    </p></li>
+                    <li><p>Template character: <code>v</code>
                         <ul>
                             <li><code>aeiou</code></li>
                         </ul>
-                    </li>
-                    <li>Template character: <code>c</code></li>
-                    <li>
+                    </p></li>
+                    <li><p>Template character: <code>c</code>
                         <ul>
                             <li><code>bcdfghjklmnpqrstvwxyz</code></li>
                         </ul>
-                    </li>
-                    <li>Template character: <code>A</code> (<code>= V . C</code>)</li>
-                    <li>
+                    </p></li>
+                    <li><p>Template character: <code>A</code> (<code>= V . C</code>)
                         <ul>
                             <li><code>AEIOUBCDFGHJKLMNPQRSTVWXYZ</code></li>
                         </ul>
-                    </li>
-                    <li>Template character: <code>a</code> (<code>= V . v . C . c</code>)</li>
-                    <li>
+                    </p></li>
+                    <li><p>Template character: <code>a</code> (<code>= V . v . C . c</code>)
                         <ul>
                             <li><code>AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz</code></li>
                         </ul>
-                    </li>
-                    <li>Template character: <code>n</code></li>
-                    <li>
+                    </p></li>
+                    <li><p>Template character: <code>n</code>
                         <ul>
                             <li><code>0123456789</code></li>
                         </ul>
-                    </li>
-                    <li>Template character: <code>o</code></li>
-                    <li>
+                    </p></li>
+                    <li><p>Template character: <code>o</code>
                         <ul>
                             <li><code>@&amp;%?,=[]_:-+*$#!'^~;()/.</code></li>
                         </ul>
-                    </li>
-                    <li>Template character: <code>X</code> (<code>= a . n . o</code>)</li>
-                    <li>
+                    </p></li>
+                    <li><p>Template character: <code>X</code> (<code>= a . n . o</code>)
                         <ul>
                             <li><code>AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789@&amp;%?,=[]_:-+*$#!'^~;()/.</code></li>
                         </ul>
-                    </li>
+                    </p></li>
                 </ul>
             </p>
             <p>

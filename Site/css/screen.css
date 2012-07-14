@@ -42,6 +42,9 @@ ul {
     font-size:                  90%;
     font-weight:                400;
 }
+ul.clean {
+    list-style:                 none;
+}
 blockquote {
     font-size:                  90%;
     font-weight:                400;
