@@ -342,11 +342,12 @@
         element.type     = type;
         element.uses     = uses;
         element.lastUsed = lastUsed;
-        if ([exportContent length])
+        if ([exportContent length]) {
             if (clearText)
                 [element importClearTextContent:exportContent usingKey:key];
             else
                 [element importProtectedContent:exportContent];
+        }
     }
     [self saveContext];
 

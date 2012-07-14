@@ -122,8 +122,6 @@
     self.spinner.alpha                = 0;
     self.passwordTipView.alpha        = 0;
 
-    [self updateLayoutAnimated:NO allowScroll:YES completion:nil];
-
     [super viewDidLoad];
 }
 
