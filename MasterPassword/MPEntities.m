@@ -103,6 +103,10 @@
 }
 
 - (id)content {
+    
+    NSData *key = [MPAppDelegate get].key;
+    if (!key)
+        return nil;
 
     if (!(self.type & MPElementTypeClassGenerated)) {
         err(@"Corrupt element: %@, type: %d is not in MPElementTypeClassGenerated", self.name, self.type);
@@ -112,7 +116,7 @@
     if (![self.name length])
         return nil;
 
-    return MPCalculateContent(self.type, self.name, [MPAppDelegate get].key, self.counter);
+    return MPCalculateContent(self.type, self.name, key, self.counter);
 }
 
 @end
@@ -131,12 +135,20 @@
 
 - (id)content {
     
-    return [self contentUsingKey:[MPAppDelegate get].key];
+    NSData *key = [MPAppDelegate get].key;
+    if (!key)
+        return nil;
+
+    return [self contentUsingKey:key];
 }
 
 - (void)setContent:(id)content {
     
-    [self setContent:content usingKey:[MPAppDelegate get].key];
+    NSData *key = [MPAppDelegate get].key;
+    if (!key)
+        return;
+    
+    [self setContent:content usingKey:key];
 }
 
 - (id)contentUsingKey:(NSData *)key {
