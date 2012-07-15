@@ -1,14 +1,16 @@
 <!DOCTYPE HTML>
 
-<html>
+<html itemscope itemtype="http://schema.org/Product">
 
     <head>
-        <title>Master Password &mdash; Secure your online identity and privacy.</title>
+        <title itemprop="name">Master Password &mdash; Secure your online identity and privacy.</title>
 
-        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
         <link rel="icon" href="img/favicon.png" type="image/x-png" />
         <link rel="shortcut icon" href="img/favicon.png" type="image/x-png" />
-        <link rel="publisher" href="https://plus.google.com/116256327773442623984/about" />
+
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+        <meta itemprop="description" content="Do you also reuse simple passwords?  Master Password makes secure passwords for you.  What's more: they aren't saved and cannot get lost!" />
+        <meta itemprop="image" content="http://masterpassword.lyndir.com/img/iTunesArtwork-Rounded.png" />
 
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Exo:100,400,600,900,100italic,400italic,600italic" />
         <link rel="stylesheet" type="text/css" href="css/ml-shadows.css" />
@@ -117,9 +119,13 @@
             /* ]]> */
         </script>
         <script type="text/javascript" src="http://www.googleadservices.com/pagead/conversion_async.js"></script>
+
+        <!-- Google +1 -->
+        <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+
     </head>
 
-    <body id="frontpage">
+    <body id="frontpage" itemscope itemtype="http://schema.org/MobileSoftwareApplication">
         <a class="appstore" href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-fixed-header');_gaq.push(['_trackPageview', '/outbound/itunes']);"><img src="img/appstore.png" /></a>
         <header>
             
@@ -127,13 +133,13 @@
                 <span class="tip">Great feedback may earn you a free copy for a friend!</span>
                 <img src="img/appstore.png" />
             </a>
-            <h1><a href="index.html"><img class="logo" src="img/iTunesArtwork-Bare.png" /> Master Password</a></h1>
+            <h1><a href="."><img class="logo" src="img/iTunesArtwork-Bare.png" /> Master Password</a></h1>
             <div class="footnote"><a href="mailto:masterpassword+remove_this@lyndir.com" onclick="_gaq.push(['_trackPageview', '/outbound/mail']);">Contact</a> | <a href="http://www.lyndir.com" onclick="_gaq.push(['_trackPageview', '/outbound/lyndir.com']);">Lyndir</a> | <a href="https://plus.google.com/116256327773442623984/about" rel="publisher" onclick="_gaq.push(['_trackPageview', '/outbound/google+']);">Google+</a></div>
             <div class="divider"></div>
 
         </header>
         <div id="fixedheader">
-            <h2><a href="index.html">Master Password</a></h2>
+            <h2><a href=".">Master Password</a></h2>
         </div>
         <!--a href="http://bit.ly/vNN5Zi" onclick="_gaq.push(['_trackPageview', '/outbound/testflight']);" id="ribbon"></a-->
         
@@ -157,15 +163,26 @@
         <section class="heading">
             <div>
                 <div class="sidebox">
-                    <div class="clip">
-                        <img class="badge" src="img/price.png" />
+                    <div class="clip" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                        <meta itemprop="name" content="iOS" />
+                        <meta itemprop="price" content="5.99" />
+                        <meta itemprop="priceCurrency" content="USD" />
+                        <a itemprop="url" href="http://itunes.apple.com/app/id510296984">
+                            <img itemprop="image" class="badge" src="img/price.png" />
+                        </a>
+                        </span>
                         <img src="img/frontpage_phone.png" />
                     </div>
                     <a href="MasterPassword_PressKit.zip" class="btn_largeblack ico_down" onclick="_gaq.push(['_trackPageview', '/outbound/presskit']);">Press Kit</a>
                 </div>
 
-                <h1>Stop worrying<br />
-                    about passwords</h1>
+                <h1>
+                    Stop worrying<br />
+                    about passwords
+
+                    <div class="g-plusone" data-annotation="none" data-href="http://masterpassword.lyndir.com"></div>
+                </h1>
+
 
                 <h2>Admit it, you're terrible at memorizing passwords.</h2>
 
@@ -183,7 +200,7 @@
         </section>
 
         <section>
-            <p>Master Password is <strong>different</strong> from other vault-like password solutions.  It helps you set <strong>secure passwords</strong> for your sites, and at the same time makes <strong>losing your passwords almost impossible</strong>.</p>
+            <p>Master Password is <strong>different</strong> from other vault-like password solutions.  It helps you set <strong>secure passwords</strong> for your sites, and at the same time makes <strong>losing your passwords almost impossible</strong>.  It requires <span itemprop="operatingsystems">iOS</span> <span itemprop="softwareversion">5.0</span>, but a <a href="https://github.com/Lyndir/MasterPassword/tree/master/MasterPassword/Java">Java & CLI</a> version exists too.  A <a href="https://github.com/Lyndir/MasterPassword/tree/master/MasterPassword/Mac">Mac</a> version is under development.</p>
 
             <p>Built on algorithms such as <a href="http://www.bsdcan.org/2009/schedule/events/147.en.html" onclick="_gaq.push(['_trackPageview', '/outbound/scrypt']);">scrypt</a> and <a href="http://en.wikipedia.org/wiki/HMAC" onclick="_gaq.push(['_trackPageview', '/outbound/HMAC']);">HMAC-SHA256</a>, your master password is kept safe even if websites you use get hacked.</p>
 
@@ -298,21 +315,6 @@
 
         </section>
 
-        <span itemscope itemtype="http://schema.org/MobileSoftwareApplication">
-            <meta itemprop="image"  content="http://masterpassword.lyndir.com/img/iTunesArtwork-Rounded.png" />
-            <meta itemprop="name" content="Master Password" />
-            <meta itemprop="operatingsystems" content="iOS" />
-            <meta itemprop="softwareversion" content="5.0" />
-
-            <span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-                <meta itemprop="name" content="iOS" />
-                <meta itemprop="price" content="5.99" />
-                <meta itemprop="priceCurrency" content="USD" />
-                <span itemprop="seller" itemscope itemtype="http://schema.org/Organization">
-                    <meta itemprop="name" content="Apple" />
-                    <meta itemprop="url" content="http://itunes.apple.com/app/id510296984" />
-                </span>
-            </span>
             <span itemprop="author" itemscope itemtype="http://schema.org/Organization">
                 <meta itemprop="name" content="Lyndir" />
                 <meta itemprop="url" content="http://www.lyndir.com" />

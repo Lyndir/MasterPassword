@@ -121,6 +121,7 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
         self.activeElement                      = nil;
     self.searchDisplayController.searchBar.text = nil;
 
+    self.alertContainer.alpha      = 0;
     self.searchTipContainer.alpha  = 0;
     self.actionsTipContainer.alpha = 0;
     self.typeTipContainer.alpha    = 0;
