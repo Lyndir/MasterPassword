@@ -481,13 +481,13 @@ Your passwords will be AES-encrypted with your master password.</string>
                                                     <outlet property="delegate" destination="PQa-Xl-A3x" id="qOM-gq-c6g"/>
                                                 </connections>
                                             </textField>
-                                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="TZ0-1K-Vvw" userLabel="Button - Settings">
+                                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="TZ0-1K-Vvw" userLabel="Button - User">
                                                 <rect key="frame" x="266" y="-2" width="44" height="44"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                 <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                 <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
-                                                <state key="normal" image="icon_settings.png">
+                                                <state key="normal" image="icon_person.png">
                                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -495,7 +495,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="toggleSettings" destination="PQa-Xl-A3x" eventType="touchUpInside" id="Rqn-Ui-4CJ"/>
+                                                    <action selector="toggleUser" destination="PQa-Xl-A3x" eventType="touchUpInside" id="Ptc-dI-g2A"/>
                                                 </connections>
                                             </button>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.50000000000000011" contentMode="left" text="1" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="Iuf-np-e9C" userLabel="Label - Counter">
@@ -564,7 +564,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                                 <rect key="frame" x="20" y="94" width="280" height="31"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Press and hold to save a user name." textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="tj6-Ot-Fuh">
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Tap and hold to save a user name." textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="tj6-Ot-Fuh">
                                                         <rect key="frame" x="0.0" y="0.0" width="280" height="31"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -713,24 +713,20 @@ L4m3P4sSw0rD</string>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" id="UM8-56-kAO" userLabel="View - Tool Tip">
-                                <rect key="frame" x="10" y="15" width="300" height="60"/>
+                                <rect key="frame" x="10" y="15" width="266" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_bottom_right.png" id="LqX-rO-rep">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="60"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="266" height="60"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <rect key="contentStretch" x="0.15000000000000002" y="0.15000000000000002" width="0.69999999999999973" height="0.69999999999999973"/>
                                     </imageView>
-                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_edit.png" id="KEn-n3-qhX">
-                                        <rect key="frame" x="93" y="10" width="24" height="24"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_edit.png" id="KEn-n3-qhX">
+                                        <rect key="frame" x="78" y="9" width="24" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_up.png" id="Xxd-3E-PLb">
-                                        <rect key="frame" x="180" y="10" width="24" height="24"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                    </imageView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Password is outdated. Tap      to upgrade it." textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="MtZ-N7-CYD">
-                                        <rect key="frame" x="-20" y="10" width="340" height="21"/>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Tap        to set a password." textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="MtZ-N7-CYD">
+                                        <rect key="frame" x="-20" y="9" width="306" height="21"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -767,7 +763,7 @@ L4m3P4sSw0rD</string>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     </imageView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Copied!" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="ieN-QQ-PyR">
-                                        <rect key="frame" x="19" y="10" width="171" height="21"/>
+                                        <rect key="frame" x="19" y="9" width="171" height="21"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -785,7 +781,7 @@ L4m3P4sSw0rD</string>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     </imageView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Copied!" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="coX-1P-dqm">
-                                        <rect key="frame" x="19" y="10" width="171" height="21"/>
+                                        <rect key="frame" x="19" y="9" width="171" height="21"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -819,8 +815,8 @@ L4m3P4sSw0rD</string>
                         <outlet property="passwordCounter" destination="Iuf-np-e9C" id="CIm-Mk-nJh"/>
                         <outlet property="passwordEdit" destination="9FS-fS-xH6" id="YeB-HF-ZPk"/>
                         <outlet property="passwordIncrementer" destination="jec-mu-nPt" id="i9B-lX-zzX"/>
-                        <outlet property="passwordSettings" destination="TZ0-1K-Vvw" id="QCC-Ne-qYv"/>
                         <outlet property="passwordUpgrade" destination="zbY-EJ-Yiu" id="KAX-Wk-DC4"/>
+                        <outlet property="passwordUser" destination="TZ0-1K-Vvw" id="QCC-Ne-qYv"/>
                         <outlet property="searchDisplayController" destination="P8c-gf-nN3" id="CLs-YI-7NC"/>
                         <outlet property="searchTipContainer" destination="zOR-Du-qRL" id="X7h-Vh-iCE"/>
                         <outlet property="siteName" destination="gSK-aB-wNI" id="IIe-z8-zy8"/>
@@ -1557,8 +1553,8 @@ Pink fluffy door frame.</string>
         <image name="icon_action.png" width="32" height="32"/>
         <image name="icon_cancel.png" width="32" height="32"/>
         <image name="icon_edit.png" width="32" height="32"/>
+        <image name="icon_person.png" width="32" height="32"/>
         <image name="icon_plus.png" width="32" height="32"/>
-        <image name="icon_settings.png" width="32" height="32"/>
         <image name="icon_up.png" width="32" height="32"/>
         <image name="tip_alert_black.png" width="235" height="81"/>
         <image name="tip_basic_black.png" width="210" height="60"/>
@@ -1594,7 +1590,7 @@ Pink fluffy door frame.</string>
                 <relationship kind="action" name="editUserName:" candidateClass="UILongPressGestureRecognizer"/>
                 <relationship kind="action" name="incrementPasswordCounter"/>
                 <relationship kind="action" name="resetPasswordCounter:" candidateClass="UILongPressGestureRecognizer"/>
-                <relationship kind="action" name="toggleSettings"/>
+                <relationship kind="action" name="toggleUser"/>
                 <relationship kind="action" name="upgradePassword"/>
                 <relationship kind="outlet" name="actionsTipContainer" candidateClass="UIView"/>
                 <relationship kind="outlet" name="alertBody" candidateClass="UITextView"/>
@@ -1610,8 +1606,8 @@ Pink fluffy door frame.</string>
                 <relationship kind="outlet" name="passwordCounter" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="passwordEdit" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="passwordIncrementer" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="passwordSettings" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="passwordUpgrade" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="passwordUser" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="searchDelegate" candidateClass="MPSearchDelegate"/>
                 <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
                 <relationship kind="outlet" name="siteName" candidateClass="UILabel"/>

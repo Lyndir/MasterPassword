@@ -15,19 +15,8 @@
 
 void MPElementMigrate(MPElementEntity *entity, BOOL i);
 
-@interface MPMainViewController (Private)
-
-- (void)updateAnimated:(BOOL)animated;
-- (void)showContentTip:(NSString *)message withIcon:(UIImageView *)icon;
-- (void)showToolTip:(NSString *)message withIcon:(UIImageView *)icon;
-- (void)showAlertWithTitle:(NSString *)title message:(NSString *)message;
-- (void)changeElementWithWarning:(NSString *)warning do:(void (^)(void))task;
-- (void)changeElementWithoutWarningDo:(void (^)(void))task;
-
-@end
-
 @implementation MPMainViewController
-@synthesize showSettings = _showSettings;
+@synthesize userNameHidden = _userNameHidden;
 @synthesize activeElement = _activeElement;
 @synthesize searchDelegate = _searchDelegate;
 @synthesize typeButton = _typeButton;
@@ -55,7 +44,7 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
 @synthesize toolTipBody = _toolTipBody;
 @synthesize userNameContainer = _userNameContainer;
 @synthesize userNameField = _userNameField;
-@synthesize passwordSettings = _passwordSettings;
+@synthesize passwordUser = _passwordUser;
 @synthesize contentField = _contentField;
 @synthesize contentTipCleanup = _contentTipCleanup, toolTipCleanup = _toolTipCleanup;
 
@@ -69,7 +58,7 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 
     [self updateHelpHiddenAnimated:NO];
-    [self updateSettingsHiddenAnimated:NO];
+    [self updateUserHiddenAnimated:NO];
 }
 
 
@@ -135,8 +124,6 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     self.typeTipContainer.alpha    = 0;
     self.toolTipContainer.alpha    = 0;
 
-    [self updateHelpHiddenAnimated:NO];
-    [self updateSettingsHiddenAnimated:NO];
     [self updateAnimated:animated];
 
     [super viewWillAppear:animated];
@@ -201,7 +188,7 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     [self setUserNameTipContainer:nil];
     [self setUserNameTipBody:nil];
     [self setUserNameContainer:nil];
-    [self setPasswordSettings:nil];
+    [self setPasswordUser:nil];
     [super viewDidUnload];
 }
 
@@ -215,16 +202,16 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     }
 
     [self setHelpChapter:self.activeElement? @"2": @"1"];
-    self.siteName.text = self.activeElement.name;
+    [self updateHelpHiddenAnimated:NO];
 
     self.passwordCounter.alpha     = 0;
     self.passwordIncrementer.alpha = 0;
     self.passwordEdit.alpha        = 0;
     self.passwordUpgrade.alpha     = 0;
-    self.passwordSettings.alpha    = 0;
+    self.passwordUser.alpha    = 0;
 
     if (self.activeElement)
-        self.passwordSettings.alpha = 0.5f;
+        self.passwordUser.alpha = 0.5f;
 
     if (self.activeElement.requiresExplicitMigration)
         self.passwordUpgrade.alpha = 0.5f;
@@ -237,17 +224,17 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
             if (self.activeElement.type & MPElementTypeClassStored)
                 self.passwordEdit.alpha = 0.5f;
     }
+    
+    self.siteName.text = self.activeElement.name;
 
     [self.typeButton setTitle:NSStringFromMPElementType(self.activeElement.type)
                      forState:UIControlStateNormal];
     self.typeButton.alpha = NSStringFromMPElementType(self.activeElement.type).length? 1: 0;
 
-    self.contentField.enabled  = NO;
-    self.userNameField.enabled = NO;
-
     if ([self.activeElement isKindOfClass:[MPElementGeneratedEntity class]])
         self.passwordCounter.text = PearlString(@"%u", ((MPElementGeneratedEntity *)self.activeElement).counter);
 
+    self.contentField.enabled  = NO;
     self.contentField.text = @"";
     if (self.activeElement.name && ![self.activeElement isDeleted])
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
@@ -257,6 +244,11 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
                 self.contentField.text = description;
             });
         });
+
+    self.userNameField.enabled = NO;
+    self.userNameField.text = self.activeElement.userName;
+    self.userNameHidden = !self.activeElement || ([[MPiOSConfig get].userNameHidden boolValue] && (self.activeElement.userName == nil));
+    [self updateUserHiddenAnimated:NO];
 }
 
 - (void)toggleHelpAnimated:(BOOL)animated {
@@ -288,31 +280,31 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     }
 }
 
-- (IBAction)toggleSettings {
-    
-    [self toggleSettingsAnimated:YES];
+- (IBAction)toggleUser {
+
+    [self toggleUserAnimated:YES];
 }
 
-- (void)toggleSettingsAnimated:(BOOL)animated {
+- (void)toggleUserAnimated:(BOOL)animated {
 
-    [MPiOSConfig get].settingsHidden = PearlBoolNot([MPiOSConfig get].settingsHidden);
-    self.showSettings = ![[MPiOSConfig get].settingsHidden boolValue];
-    [self updateSettingsHiddenAnimated:animated];
+    [MPiOSConfig get].userNameHidden = PearlBool(!self.userNameHidden);
+    self.userNameHidden              = [[MPiOSConfig get].userNameHidden boolValue];
+    [self updateUserHiddenAnimated:animated];
 }
 
-- (void)updateSettingsHiddenAnimated:(BOOL)animated {
+- (void)updateUserHiddenAnimated:(BOOL)animated {
 
     if (animated) {
         [UIView animateWithDuration:0.3f animations:^{
-            [self updateSettingsHiddenAnimated:NO];
+            [self updateUserHiddenAnimated:NO];
         }];
         return;
     }
 
-    if (self.showSettings) {
-        self.displayContainer.frame      = CGRectSetHeight(self.displayContainer.frame, 137);
-    } else {
+    if (self.userNameHidden) {
         self.displayContainer.frame      = CGRectSetHeight(self.displayContainer.frame, 87);
+    } else {
+        self.displayContainer.frame      = CGRectSetHeight(self.displayContainer.frame, 137);
     }
 
 }
@@ -831,7 +823,6 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
                                                                                                             nil]];
     }
 
-    self.showSettings = ![[MPiOSConfig get].settingsHidden boolValue] || (element.userName != nil);
     [self updateAnimated:YES];
 }
 

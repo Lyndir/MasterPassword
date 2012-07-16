@@ -13,7 +13,7 @@
 
 @interface MPMainViewController : UIViewController<MPTypeDelegate, UITextFieldDelegate, MPSearchResultsDelegate, UIWebViewDelegate, MFMailComposeViewControllerDelegate, UIGestureRecognizerDelegate>
 
-@property (nonatomic, assign) BOOL                      showSettings;
+@property (nonatomic, assign) BOOL userNameHidden;
 @property (strong, nonatomic) MPElementEntity           *activeElement;
 @property (strong, nonatomic) IBOutlet MPSearchDelegate *searchDelegate;
 @property (weak, nonatomic) IBOutlet UITextField        *contentField;
@@ -42,7 +42,7 @@
 @property (weak, nonatomic) IBOutlet UILabel            *toolTipBody;
 @property (weak, nonatomic) IBOutlet UIView             *userNameContainer;
 @property (weak, nonatomic) IBOutlet UITextField        *userNameField;
-@property (weak, nonatomic) IBOutlet UIButton           *passwordSettings;
+@property (weak, nonatomic) IBOutlet UIButton           *passwordUser;
 
 @property (copy) void (^contentTipCleanup)(BOOL finished);
 @property (copy) void (^toolTipCleanup)(BOOL finished);
@@ -55,7 +55,7 @@
 - (IBAction)closeAlert;
 - (IBAction)upgradePassword;
 - (IBAction)action:(UIBarButtonItem *)sender;
-- (IBAction)toggleSettings;
+- (IBAction)toggleUser;
 
 - (void)toggleHelpAnimated:(BOOL)animated;
 - (void)setHelpHidden:(BOOL)hidden animated:(BOOL)animated;
