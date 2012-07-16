@@ -27,6 +27,7 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
 @end
 
 @implementation MPMainViewController
+@synthesize showSettings = _showSettings;
 @synthesize activeElement = _activeElement;
 @synthesize searchDelegate = _searchDelegate;
 @synthesize typeButton = _typeButton;
@@ -37,19 +38,23 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
 @synthesize passwordEdit = _passwordEdit;
 @synthesize passwordUpgrade = _passwordUpgrade;
 @synthesize contentContainer = _contentContainer;
+@synthesize displayContainer = _displayContainer;
 @synthesize helpContainer = _helpContainer;
 @synthesize contentTipContainer = _copiedContainer;
+@synthesize userNameTipContainer = _userNameTipContainer;
 @synthesize alertContainer = _alertContainer;
 @synthesize alertTitle = _alertTitle;
 @synthesize alertBody = _alertBody;
 @synthesize contentTipBody = _contentTipBody;
+@synthesize userNameTipBody = _userNameTipBody;
 @synthesize toolTipEditIcon = _contentTipEditIcon;
 @synthesize searchTipContainer = _searchTipContainer;
 @synthesize actionsTipContainer = _actionsTipContainer;
 @synthesize typeTipContainer = _typeTipContainer;
 @synthesize toolTipContainer = _toolTipContainer;
 @synthesize toolTipBody = _toolTipBody;
-@synthesize resetPasswordCounterGesture = _resetPasswordCounterGesture;
+@synthesize userNameContainer = _userNameContainer;
+@synthesize userNameField = _userNameField;
 @synthesize contentField = _contentField;
 @synthesize contentTipCleanup = _contentTipCleanup, toolTipCleanup = _toolTipCleanup;
 
@@ -62,7 +67,8 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 
-    [self setHelpHidden:![self isHelpVisible] animated:NO];
+    [self updateHelpHiddenAnimated:NO];
+    [self updateSettingsHiddenAnimated:NO];
 }
 
 
@@ -83,8 +89,9 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     self.searchDisplayController.searchResultsDelegate   = self.searchDelegate;
     self.searchDisplayController.searchResultsDataSource = self.searchDelegate;
 
-    self.resetPasswordCounterGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(resetPasswordCounter:)];
-    [self.passwordIncrementer addGestureRecognizer:self.resetPasswordCounterGesture];
+    [self.passwordIncrementer addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(resetPasswordCounter:)]];
+    [self.userNameContainer addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(editUserName:)]];
+    [self.userNameContainer addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(copyUserName)]];
 
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
 
@@ -127,7 +134,8 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     self.typeTipContainer.alpha    = 0;
     self.toolTipContainer.alpha    = 0;
 
-    [self setHelpHidden:[[MPiOSConfig get].helpHidden boolValue] animated:animated];
+    [self updateHelpHiddenAnimated:NO];
+    [self updateSettingsHiddenAnimated:NO];
     [self updateAnimated:animated];
 
     [super viewWillAppear:animated];
@@ -185,10 +193,13 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     [self setSearchTipContainer:nil];
     [self setActionsTipContainer:nil];
     [self setTypeTipContainer:nil];
-    [self setSearchDelegate:nil];
-    [self setResetPasswordCounterGesture:nil];
     [self setToolTipContainer:nil];
     [self setToolTipBody:nil];
+    [self setDisplayContainer:nil];
+    [self setUserNameField:nil];
+    [self setUserNameTipContainer:nil];
+    [self setUserNameTipBody:nil];
+    [self setUserNameContainer:nil];
     [super viewDidUnload];
 }
 
@@ -225,7 +236,8 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
                      forState:UIControlStateNormal];
     self.typeButton.alpha = NSStringFromMPElementType(self.activeElement.type).length? 1: 0;
 
-    self.contentField.enabled = NO;
+    self.contentField.enabled  = NO;
+    self.userNameField.enabled = NO;
 
     if ([self.activeElement isKindOfClass:[MPElementGeneratedEntity class]])
         self.passwordCounter.text = PearlString(@"%u", ((MPElementGeneratedEntity *)self.activeElement).counter);
@@ -241,31 +253,62 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
         });
 }
 
-- (BOOL)isHelpVisible {
-
-    return self.helpContainer.frame.origin.y == 216;
-}
-
 - (void)toggleHelpAnimated:(BOOL)animated {
 
-    [self setHelpHidden:[self isHelpVisible] animated:animated];
+    [self setHelpHidden:![[MPiOSConfig get].helpHidden boolValue] animated:animated];
 }
 
 - (void)setHelpHidden:(BOOL)hidden animated:(BOOL)animated {
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
-            if (hidden) {
-                self.contentContainer.frame  = CGRectSetHeight(self.contentContainer.frame, self.view.bounds.size.height - 44);
-                self.helpContainer.frame     = CGRectSetY(self.helpContainer.frame, self.view.bounds.size.height);
-                [MPiOSConfig get].helpHidden = [NSNumber numberWithBool:YES];
-            } else {
-                self.contentContainer.frame  = CGRectSetHeight(self.contentContainer.frame, 175);
-                self.helpContainer.frame     = CGRectSetY(self.helpContainer.frame, 216);
-                [MPiOSConfig get].helpHidden = [NSNumber numberWithBool:NO];
-            }
+    [MPiOSConfig get].helpHidden = PearlBool(hidden);
+    [self updateHelpHiddenAnimated:animated];
+}
+
+- (void)updateHelpHiddenAnimated:(BOOL)animated {
+    
+    if (animated) {
+        [UIView animateWithDuration:0.3f animations:^{
+            [self updateHelpHiddenAnimated:NO];
         }];
-    });
+        return;
+    }
+    
+    if ([[MPiOSConfig get].helpHidden boolValue]) {
+        self.contentContainer.frame  = CGRectSetHeight(self.contentContainer.frame, self.view.bounds.size.height - 44);
+        self.helpContainer.frame     = CGRectSetY(self.helpContainer.frame, self.view.bounds.size.height);
+    } else {
+        self.contentContainer.frame  = CGRectSetHeight(self.contentContainer.frame, 225);
+        self.helpContainer.frame     = CGRectSetY(self.helpContainer.frame, 266);
+    }
+}
+
+- (IBAction)toggleSettings {
+    
+    [self toggleSettingsAnimated:YES];
+}
+
+- (void)toggleSettingsAnimated:(BOOL)animated {
+
+    [MPiOSConfig get].settingsHidden = PearlBoolNot([MPiOSConfig get].settingsHidden);
+    self.showSettings = ![[MPiOSConfig get].settingsHidden boolValue];
+    [self updateSettingsHiddenAnimated:animated];
+}
+
+- (void)updateSettingsHiddenAnimated:(BOOL)animated {
+
+    if (animated) {
+        [UIView animateWithDuration:0.3f animations:^{
+            [self updateSettingsHiddenAnimated:NO];
+        }];
+        return;
+    }
+
+    if (self.showSettings) {
+        self.displayContainer.frame      = CGRectSetHeight(self.displayContainer.frame, 137);
+    } else {
+        self.displayContainer.frame      = CGRectSetHeight(self.displayContainer.frame, 87);
+    }
+
 }
 
 - (void)setHelpChapter:(NSString *)chapter {
@@ -309,6 +352,26 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
                     [UIView animateWithDuration:0.2f animations:^{
                         self.contentTipContainer.alpha = 0;
                     }                completion:self.contentTipCleanup];
+                });
+            }
+        }];
+    });
+}
+
+- (void)showUserNameTip:(NSString *)message {
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.userNameTipBody.text = message;
+
+        [UIView animateWithDuration:0.3f animations:^{
+            self.userNameTipContainer.alpha = 1;
+        }                completion:^(BOOL finished) {
+            if (finished) {
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                    [UIView animateWithDuration:0.2f animations:^{
+                        self.userNameTipContainer.alpha = 0;
+                    }];
                 });
             }
         }];
@@ -376,6 +439,27 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyToPasteboard
                                                attributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                          NSStringFromMPElementType(self.activeElement.type), @"type",
+                                                                         PearlUnsignedInteger(self.activeElement.version),
+                                                                         @"version",
+                                                                         nil]];
+}
+
+- (IBAction)copyUserName {
+
+    if (!self.activeElement.userName)
+        return;
+
+    inf(@"Copying user name for: %@", self.activeElement.name);
+    [UIPasteboard generalPasteboard].string = [self.activeElement.content description];
+
+    [self showUserNameTip:@"Copied!"];
+
+    [TestFlight passCheckpoint:MPCheckpointCopyUserNameToPasteboard];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyUserNameToPasteboard
+                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                         NSStringFromMPElementType(self.activeElement.type), @"type",
+                                                                         PearlUnsignedInteger(self.activeElement.version),
+                                                                         @"version",
                                                                          nil]];
 }
 
@@ -399,6 +483,8 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
                                                                                attributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                                                          NSStringFromMPElementType(
                                                                                                           self.activeElement.type), @"type",
+                                                                                                         PearlUnsignedInteger(self.activeElement.version),
+                                                                                                         @"version",
                                                                                                          nil]];
                                 }];
 }
@@ -428,8 +514,32 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
                                                                                attributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                                                          NSStringFromMPElementType(
                                                                                                           self.activeElement.type), @"type",
+                                                                                                         PearlUnsignedInteger(self.activeElement.version),
+                                                                                                         @"version",
                                                                                                          nil]];
                                 }];
+}
+
+- (IBAction)editUserName:(UILongPressGestureRecognizer *)sender {
+
+    if (sender.state != UIGestureRecognizerStateBegan)
+     // Only fire when the gesture was first detected.
+        return;
+    
+    if (!self.activeElement)
+        return;
+
+    self.userNameField.enabled = YES;
+    [self.userNameField becomeFirstResponder];
+
+    [TestFlight passCheckpoint:MPCheckpointEditUserName];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditUserName attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                                                             NSStringFromMPElementType(
+                                                                                                              self.activeElement.type),
+                                                                                                             @"type",
+                                                                                                             PearlUnsignedInteger(self.activeElement.version),
+                                                                                                             @"version",
+                                                                                                             nil]];
 }
 
 - (void)changeElementWithWarning:(NSString *)warning do:(void (^)(void))task; {
@@ -474,6 +584,8 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
                                                    attributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                              NSStringFromMPElementType(
                                                                               self.activeElement.type), @"type",
+                                                                             PearlUnsignedInteger(self.activeElement.version),
+                                                                             @"version",
                                                                              nil]];
     }
 }
@@ -616,7 +728,8 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
                      [TestFlight passCheckpoint:MPCheckpointAction];
                  }
                        cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:
-     [self isHelpVisible]? @"Hide Help": @"Show Help", @"FAQ", @"Tutorial", @"Preferences", @"Feedback", @"Sign Out", nil];
+     [[MPiOSConfig get].helpHidden boolValue]? @"Show Help": @"Hide Help", @"FAQ", @"Tutorial", @"Preferences", @"Feedback", @"Sign Out",
+     nil];
 }
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result
@@ -707,9 +820,12 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
                                                                                                             NSStringFromMPElementType(
                                                                                                              self.activeElement.type),
                                                                                                             @"type",
+                                                                                                            PearlUnsignedInteger(self.activeElement.version),
+                                                                                                            @"version",
                                                                                                             nil]];
     }
 
+    self.showSettings = ![[MPiOSConfig get].settingsHidden boolValue] || (element.userName != nil);
     [self updateAnimated:YES];
 }
 
@@ -717,6 +833,8 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
 
     if (textField == self.contentField)
         [self.contentField resignFirstResponder];
+    if (textField == self.userNameField)
+        [self.userNameField resignFirstResponder];
 
     return YES;
 }
@@ -736,6 +854,21 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
         [self changeElementWithoutWarningDo:^{
             ((MPElementStoredEntity *)self.activeElement).content = self.contentField.text;
         }];
+    }
+
+    if (textField == self.userNameField) {
+        self.userNameField.enabled  = NO;
+        if (![[MPiOSConfig get].userNameTipShown boolValue]) {
+            [self showUserNameTip:@"Tap to copy or hold to edit."];
+            [MPiOSConfig get].userNameTipShown = PearlBool(YES);
+        }
+
+        if ([self.userNameField.text length])
+            self.activeElement.userName = self.userNameField.text;
+        else
+            self.activeElement.userName = nil;
+        
+        [[MPAppDelegate get] saveContext];
     }
 }
 

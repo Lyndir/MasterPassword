@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */; };
+		DA0757EA15B3681200613FAA /* MPElementEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0757E915B3681200613FAA /* MPElementEntity.m */; };
 		DA0A1D0515690A9A0092735D /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0A1D0315690A9A0092735D /* Default.png */; };
 		DA0A1D0615690A9A0092735D /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0A1D0415690A9A0092735D /* Default@2x.png */; };
 		DA0A1D1515690AF40092735D /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0A1D1315690AF30092735D /* Icon-72@2x.png */; };
@@ -675,7 +676,6 @@
 		DAB9FE1C15AC00C0007A7E5C /* MPElementGeneratedEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB9FE1B15AC00C0007A7E5C /* MPElementGeneratedEntity.m */; };
 		DAB9FE1F15AC00C0007A7E5C /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB9FE1E15AC00C0007A7E5C /* MPUserEntity.m */; };
 		DAB9FE2215AC00C0007A7E5C /* MPElementStoredEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB9FE2115AC00C0007A7E5C /* MPElementStoredEntity.m */; };
-		DAB9FE2515AC00C0007A7E5C /* MPElementEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB9FE2415AC00C0007A7E5C /* MPElementEntity.m */; };
 		DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABB981515100B4000B05417 /* SystemConfiguration.framework */; };
 		DAC6325E1486805C0075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC6326D148680650075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
@@ -888,6 +888,8 @@
 
 /* Begin PBXFileReference section */
 		DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		DA0757E815B3681200613FAA /* MPElementEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementEntity.h; sourceTree = "<group>"; };
+		DA0757E915B3681200613FAA /* MPElementEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementEntity.m; sourceTree = "<group>"; };
 		DA0A1D0315690A9A0092735D /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Default.png; sourceTree = SOURCE_ROOT; };
 		DA0A1D0415690A9A0092735D /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Default@2x.png"; sourceTree = SOURCE_ROOT; };
 		DA0A1D0715690AD40092735D /* tip_arrow_banana.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tip_arrow_banana.png; path = Resources/Tooltips/tip_arrow_banana.png; sourceTree = SOURCE_ROOT; };
@@ -1646,8 +1648,6 @@
 		DAB9FE1E15AC00C0007A7E5C /* MPUserEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUserEntity.m; sourceTree = "<group>"; };
 		DAB9FE2015AC00C0007A7E5C /* MPElementStoredEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementStoredEntity.h; sourceTree = "<group>"; };
 		DAB9FE2115AC00C0007A7E5C /* MPElementStoredEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementStoredEntity.m; sourceTree = "<group>"; };
-		DAB9FE2315AC00C0007A7E5C /* MPElementEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementEntity.h; sourceTree = "<group>"; };
-		DAB9FE2415AC00C0007A7E5C /* MPElementEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementEntity.m; sourceTree = "<group>"; };
 		DABB980C150FF40100B05417 /* SendToMac-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SendToMac-Prefix.pch"; sourceTree = "<group>"; };
 		DABB980D150FF40100B05417 /* SendToMac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SendToMac.h; sourceTree = "<group>"; };
 		DABB980E150FF40100B05417 /* SendToMac.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SendToMac.m; sourceTree = "<group>"; };
@@ -1999,8 +1999,6 @@
 		DA5BFA50147E415C00F98B1E /* MasterPassword */ = {
 			isa = PBXGroup;
 			children = (
-				DAB9FE2315AC00C0007A7E5C /* MPElementEntity.h */,
-				DAB9FE2415AC00C0007A7E5C /* MPElementEntity.m */,
 				DAB9FE2015AC00C0007A7E5C /* MPElementStoredEntity.h */,
 				DAB9FE2115AC00C0007A7E5C /* MPElementStoredEntity.m */,
 				DAB9FE1D15AC00C0007A7E5C /* MPUserEntity.h */,
@@ -2010,6 +2008,8 @@
 				DA0E07941577FE490008A67E /* MPEntities.h */,
 				DA0E07951577FE490008A67E /* MPEntities.m */,
 				DAB8D43C15036BCF00CED3BC /* MasterPassword.xcdatamodeld */,
+				DA0757E815B3681200613FAA /* MPElementEntity.h */,
+				DA0757E915B3681200613FAA /* MPElementEntity.m */,
 				DA600C2415054F3A008E9AB6 /* MPAppDelegate_Key.h */,
 				DA600C2315054F3A008E9AB6 /* MPAppDelegate_Key.m */,
 				DA4426041557C1990052177D /* MPAppDelegate_Shared.h */,
@@ -4248,7 +4248,7 @@
 				DAB9FE1C15AC00C0007A7E5C /* MPElementGeneratedEntity.m in Sources */,
 				DAB9FE1F15AC00C0007A7E5C /* MPUserEntity.m in Sources */,
 				DAB9FE2215AC00C0007A7E5C /* MPElementStoredEntity.m in Sources */,
-				DAB9FE2515AC00C0007A7E5C /* MPElementEntity.m in Sources */,
+				DA0757EA15B3681200613FAA /* MPElementEntity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

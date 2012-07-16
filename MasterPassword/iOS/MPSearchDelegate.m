@@ -39,7 +39,7 @@
     fetchRequest.sortDescriptors           = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses_" ascending:NO]];
     self.fetchedResultsController          = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                  managedObjectContext:[MPAppDelegate managedObjectContext]
-                                                                                 sectionNameKeyPath:nil cacheName:nil];
+                                                                                   sectionNameKeyPath:nil cacheName:nil];
     self.fetchedResultsController.delegate = self;
 
     self.tipView                  = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 170)];
@@ -129,7 +129,8 @@
     assert(self.query);
 
     self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@",
-                                                                                            self.query, self.query, NilToNSNull([MPAppDelegate get].activeUser)];
+                                                                                            self.query, self.query,
+                                                                                            NilToNSNull([MPAppDelegate get].activeUser)];
 
     NSError *error;
     if (![self.fetchedResultsController performFetch:&error])
@@ -316,7 +317,7 @@
                     [self.delegate didSelectElement:element];
                 });
             }];
-        } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonYes, nil];
+        }                  cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonYes, nil];
     }
 }
 
@@ -353,6 +354,8 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
                 [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointDeleteElement
                                                            attributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                                      NSStringFromMPElementType(element.type), @"type",
+                                                                                     PearlUnsignedInteger(element.version),
+                                                                                     @"version",
                                                                                      nil]];
             }];
     }

@@ -2,7 +2,7 @@
 //  MPElementEntity.m
 //  MasterPassword-iOS
 //
-//  Created by Maarten Billemont on 10/07/12.
+//  Created by Maarten Billemont on 15/07/12.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
@@ -15,10 +15,11 @@
 @dynamic content;
 @dynamic lastUsed;
 @dynamic name;
+@dynamic requiresExplicitMigration_;
 @dynamic type_;
 @dynamic uses_;
 @dynamic version_;
-@dynamic requiresExplicitMigration_;
+@dynamic userName;
 @dynamic user;
 
 @end
