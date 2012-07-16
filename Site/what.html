@@ -84,6 +84,50 @@
               })();
         </script>
 
+        <!-- jQuery -->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+        <!-- Page JS -->
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $(window).scroll(function() {
+                    if ($(window).scrollTop() > 100) {
+                        $(".appstore").show();
+                        $("header .appstore").hide();
+                    } else {
+                        $(".appstore").hide();
+                        $("header .appstore").show();
+                    }
+                });
+                $(".tip.appstore").hide().delay(1000).fadeIn();
+                $(".tip.phone").hide();
+                $("#sendtophone").mouseenter(function() {
+                    $(".tip.phone").fadeIn();
+                });
+                $("#sendtophone").mouseleave(function() {
+                    $(".tip.phone").fadeOut();
+                });
+                $("#sendtophone").submit(function() {
+                    $.ajax({
+                        url: "http://masterpassword.lyndir.com/send.php",
+                        data: {
+                            destination: $(this).find("input[type='text']").val(),
+                        },
+                        cache: false,
+                    });
+
+                    goog_report_conversion('index-sendtophone');
+                    _gaq.push(['_trackPageview', '/outbound/sendtophone']);
+
+                    $("#sendtophone .field").hide();
+                    $("#sendtophone .confirm").show();
+                    return false;
+                });
+                $("#sendtophone .field").show();
+                $("#sendtophone .confirm").hide();
+            });
+        </script>
+
         <!-- AdWords -->
         <script type="text/javascript">
             /* <![CDATA[ */
@@ -116,13 +160,25 @@
         <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
     </head>
     <body>
-        <a class="appstore" href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-fixed-header');_gaq.push(['_trackPageview', '/outbound/itunes']);"><img src="img/appstore.png" /></a>
+        <a class="badge appstore" href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-fixed-header');_gaq.push(['_trackPageview', '/outbound/itunes']);"><img src="img/appstore.png" /></a>
         <header>
             
-            <a class="appstore" href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-top-header');_gaq.push(['_trackPageview', '/outbound/itunes']);">
-                <span class="tip">Great feedback may earn you a free copy for a friend!</span>
-                <img src="img/appstore.png" />
-            </a>
+            <div class="badge appstore">
+                <a href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-top-header');_gaq.push(['_trackPageview', '/outbound/itunes']);">
+                    <!--span class="tip appstore">Great feedback may earn you a free copy for a friend!</span-->
+                    <img src="img/appstore.png" />
+                </a><br />
+                <form id="sendtophone">
+                    <span class="field">
+                        Or send to your phone:<br />
+                        <input type="text" name="email" placeholder="E-mail or phone number" />
+                        <span class="tip phone">Phone needs country code (eg. +1 for US/CA, +44 for UK)</span>
+                    </span>
+                    <span class="confirm">
+                        Message sent!
+                    </span>
+                </form>
+            </div>
             <h1><a href="."><img class="logo" src="img/iTunesArtwork-Bare.png" /> Master Password</a></h1>
             <div class="footnote"><a href="mailto:masterpassword+remove_this@lyndir.com" onclick="_gaq.push(['_trackPageview', '/outbound/mail']);">Contact</a> | <a href="http://www.lyndir.com" onclick="_gaq.push(['_trackPageview', '/outbound/lyndir.com']);">Lyndir</a> | <a href="https://plus.google.com/116256327773442623984/about" rel="publisher" onclick="_gaq.push(['_trackPageview', '/outbound/google+']);">Google+</a></div>
             <div class="divider"></div>

@@ -1,5 +1,6 @@
 html {
     background:                 url("../img/back2-light.png") center 0;
+    height:                     100%;
 }
 body {
     padding:                    0;
@@ -9,6 +10,8 @@ body {
 
     font:                       105% "Hoefler Text", Garamond, Baskerville, "Baskerville Old Face", "Times New Roman", serif;
     font-weight:                100;
+
+    height:                     100%;
 }
 h1, h2, h3, h4 {
     text-shadow:                #FFF 0 -1px 1px, #AAA 0 0 5px;
@@ -206,6 +209,15 @@ blockquote:before {
     font-size:                  300%;
     font-weight:                100;
 }
+#sendtophone input[type=text] {
+    border:                     1px solid #666;
+    border-radius:              5px;
+    width:                      15em;
+
+    -webkit-box-shadow:         0 0 5px #AAA;
+       -moz-box-shadow:         0 0 5px #AAA;
+            box-shadow:         0 0 5px #AAA;
+}
 
 /* Utilities */
 .side {
@@ -226,11 +238,10 @@ blockquote:before {
     position:                   relative;
     z-index:                    1;
 }
-.appstore {
+.badge.appstore {
     position:                   fixed;
     display:                    none;
     z-index:                    100;
-    font-size:                  0;
 
     /* appstore-bubble.png *
     top:                        8px;
@@ -239,19 +250,22 @@ blockquote:before {
     /* appstore.png */
     top:                        25px;
     right:                      25px;
+    width:                      200px;
+
+    text-align:                 center;
 }
-.appstore img {
+.badge.appstore img {
     border-radius:              5px;
     -webkit-box-shadow:         0 0 30px #AAA;
        -moz-box-shadow:         0 0 30px #AAA;
             box-shadow:         0 0 30px #AAA;
 }
-.appstore:hover img {
+.badge.appstore:hover img {
     -webkit-box-shadow:         0 0 30px #FFF;
        -moz-box-shadow:         0 0 30px #FFF;
             box-shadow:         0 0 30px #FFF;
 }
-header .appstore {
+header .badge.appstore {
     position:                   absolute;
     display:                    block;
 
@@ -259,16 +273,18 @@ header .appstore {
     /* appstore-bubble.png *
     bottom:                     -73px;
     */
-    /* appstore.png */
+    /* appstore.png
     bottom:                     -25px;
+    */
+    top:                        125px;
 }
 .tip {
-    background:                 url("../img/tip.png") no-repeat;
+    background:                 url("../img/tip-above.png") no-repeat;
     color:                      white;
 
     position:                   absolute;
     display:                    block;
-    right:                      0;
+    right:                      65px;
     width:                      410px;
     height:                     60px;
     padding:                    12px 20px;
@@ -279,6 +295,11 @@ header .appstore {
             box-sizing:         border-box;
 
     font:                       14px "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Liberation Sans", sans-serif;
+}
+.tip.phone {
+    background:                 url("../img/tip-below.png") no-repeat;
+    padding:                    23px 20px;
+    margin-top:                 0px;
 }
 .badge {
     position:                   absolute;
@@ -380,12 +401,19 @@ a.next:after {
     width:                      184px;
     height:                     184px;
 }
+#frontpage .heading {
+    height:                     100% !important;
+    padding-top:                100px;
+}
+#frontpage #about {
+    padding-top:                 4em;
+}
 #frontpage .sidebox {
     background-position:        center 397px;
     margin-right:               -100px;
 }
 #frontpage .sidebox .clip {
     height:                     416px;
-    margin-bottom:              84px;
+    margin-bottom:              2em;
 }
 

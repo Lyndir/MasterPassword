@@ -72,10 +72,6 @@
         <!-- jQuery -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
-        <!-- Nivo Slider -->
-        <link rel="stylesheet" href="js/nivo-slider/nivo-slider.css" type="text/css" media="screen" />
-        <script src="js/nivo-slider/jquery.nivo.slider.pack.js" type="text/javascript"></script>
-
         <!-- Page JS -->
         <script type="text/javascript">
             $(document).ready(function() {
@@ -88,7 +84,32 @@
                         $("header .appstore").show();
                     }
                 });
-                $("header .appstore .tip").hide().delay(1000).fadeIn();
+                $(".tip.appstore").hide().delay(1000).fadeIn();
+                $(".tip.phone").hide();
+                $("#sendtophone").mouseenter(function() {
+                    $(".tip.phone").fadeIn();
+                });
+                $("#sendtophone").mouseleave(function() {
+                    $(".tip.phone").fadeOut();
+                });
+                $("#sendtophone").submit(function() {
+                    $.ajax({
+                        url: "http://masterpassword.lyndir.com/send.php",
+                        data: {
+                            destination: $(this).find("input[type='text']").val(),
+                        },
+                        cache: false,
+                    });
+
+                    goog_report_conversion('index-sendtophone');
+                    _gaq.push(['_trackPageview', '/outbound/sendtophone']);
+
+                    $("#sendtophone .field").hide();
+                    $("#sendtophone .confirm").show();
+                    return false;
+                });
+                $("#sendtophone .field").show();
+                $("#sendtophone .confirm").hide();
             });
         </script>
 
@@ -126,13 +147,25 @@
     </head>
 
     <body id="frontpage" itemscope itemtype="http://schema.org/MobileSoftwareApplication">
-        <a class="appstore" href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-fixed-header');_gaq.push(['_trackPageview', '/outbound/itunes']);"><img src="img/appstore.png" /></a>
+        <a class="badge appstore" href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-fixed-header');_gaq.push(['_trackPageview', '/outbound/itunes']);"><img src="img/appstore.png" /></a>
         <header>
             
-            <a class="appstore" href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-top-header');_gaq.push(['_trackPageview', '/outbound/itunes']);">
-                <span class="tip">Great feedback may earn you a free copy for a friend!</span>
-                <img src="img/appstore.png" />
-            </a>
+            <div class="badge appstore">
+                <a href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-top-header');_gaq.push(['_trackPageview', '/outbound/itunes']);">
+                    <!--span class="tip appstore">Great feedback may earn you a free copy for a friend!</span-->
+                    <img src="img/appstore.png" />
+                </a><br />
+                <form id="sendtophone">
+                    <span class="field">
+                        Or send to your phone:<br />
+                        <input type="text" name="email" placeholder="E-mail or phone number" />
+                        <span class="tip phone">Phone needs country code (eg. +1 for US/CA, +44 for UK)</span>
+                    </span>
+                    <span class="confirm">
+                        Message sent!
+                    </span>
+                </form>
+            </div>
             <h1><a href="."><img class="logo" src="img/iTunesArtwork-Bare.png" /> Master Password</a></h1>
             <div class="footnote"><a href="mailto:masterpassword+remove_this@lyndir.com" onclick="_gaq.push(['_trackPageview', '/outbound/mail']);">Contact</a> | <a href="http://www.lyndir.com" onclick="_gaq.push(['_trackPageview', '/outbound/lyndir.com']);">Lyndir</a> | <a href="https://plus.google.com/116256327773442623984/about" rel="publisher" onclick="_gaq.push(['_trackPageview', '/outbound/google+']);">Google+</a></div>
             <div class="divider"></div>
@@ -143,24 +176,21 @@
         </div>
         <!--a href="http://bit.ly/vNN5Zi" onclick="_gaq.push(['_trackPageview', '/outbound/testflight']);" id="ribbon"></a-->
         
-        <!--section class="heading">
-            <div>
+        <section class="heading">
+            <div class="center">
 
-                <div class="slider-wrapper">
-                    <div id="slider" class="nivoSlider">
-                        <img src="images/slide1.jpg" alt="" />
-                        <a href="http://dev7studios.com"><img src="images/slide2.jpg" alt="" title="#htmlcaption" /></a>
-                        <img src="images/slide3.jpg" alt="" title="This is an example of a caption" />
-                        <img src="images/slide4.jpg" alt="" />
-                    </div>
+                <div class="box effect-8">
+                    <!--iframe id="ytplayer" type="text/html" width="640" height="360" frameborder="0"
+                            src="http://www.youtube.com/embed/QTfA0O7YnHQ?origin=http://masterpassword.lyndir.com&autohide=1&autoplay=0&rel=0&showinfo=0&theme=light&color=white"></iframe-->
+                    <iframe width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen
+                            src="http://player.vimeo.com/video/45803664?title=0&amp;byline=0&amp;portrait=0&amp;color=ffffff"></iframe>
                 </div>
-                <div id="htmlcaption" class="nivo-html-caption">
-                    <strong>This</strong> is an example of a <em>HTML</em> caption with <a href="#">a link</a>.
-                </div>
+
+                <h1><a href="#about" onclick="_gaq.push(['_trackPageview', '/anchor/about']);"><img src="img/arrow-down.png" height="100" /></a></h1>
 
             </div>
-        </section-->
-        <section class="heading">
+        </section>
+        <section id="about">
             <div>
                 <div class="sidebox">
                     <div class="clip" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
@@ -204,16 +234,11 @@
 
             <p>Built on algorithms such as <a href="http://www.bsdcan.org/2009/schedule/events/147.en.html" onclick="_gaq.push(['_trackPageview', '/outbound/scrypt']);">scrypt</a> and <a href="http://en.wikipedia.org/wiki/HMAC" onclick="_gaq.push(['_trackPageview', '/outbound/HMAC']);">HMAC-SHA256</a>, your master password is kept safe even if websites you use get hacked.</p>
 
-            <p>As to prove a point, <a href="http://www.washingtonpost.com/business/technology/linkedin-eharmony-deal-with-breach-aftermath/2012/06/07/gJQAwqs5KV_story.html" onclick="_gaq.push(['_trackPageview', '/outbound/linkedin-breach']);"><strong>LinkedIn</strong>, <strong>eHarmony</strong></a>, and <a href="http://securitywatch.pcmag.com/none/298865-last-fm-joins-eharmony-linkedin-to-celebrate-breach-week" onclick="_gaq.push(['_trackPageview', '/outbound/lastfm-breach']);"><strong>Last.FM</strong></a> have announced breaches that compromise millions of passwords in the past month alone.  These breaches have leaked "<em>hashes</em>" of people's passwords, which make it trivial for attackers to find out the actual passwords <em>if they're not secure enough</em>.</p>
+            <p>As to prove a point, <a href="http://www.washingtonpost.com/business/technology/linkedin-eharmony-deal-with-breach-aftermath/2012/06/07/gJQAwqs5KV_story.html" onclick="_gaq.push(['_trackPageview', '/outbound/linkedin-breach']);"><strong>LinkedIn</strong>, <strong>eHarmony</strong></a>, <a href="http://securitywatch.pcmag.com/none/298865-last-fm-joins-eharmony-linkedin-to-celebrate-breach-week" onclick="_gaq.push(['_trackPageview', '/outbound/lastfm-breach']);"><strong>Last.FM</strong></a> and <a href="http://www.switchfast.com/switchfast-blog/2012/7/13/latest-password-leak-affects-yahoo,-gmail,-and-aol-users.aspx" onclick="_gaq.push(['_trackPageview', '/outbound/yahoo-breach']);"><strong>Yahoo!</strong></a> have announced breaches that compromise millions of passwords in the past few months alone.  These breaches usually leak "<em>hashes</em>" of people's passwords, which make it trivial for attackers to find out the actual passwords <em>if they're not secure enough</em>.</p>
 
             <hr class="clear" />
-            <!--p>
-                Using Master Password, you will <strong>remember <em>only one</em> secure password</strong> and use that with the application to <strong>generate <em>any</em> password you might need</strong>: sites, email addresses, gaming accounts, or even your bike lock.<br />
-                Today, it's time to <em>stop worrying</em> about our passwords and get on with what we need to get done.
-            </p-->
 
-            <a name="how"></a>
-            <div class="columns">
+            <div class="columns" id="how">
                 <div>
                     <div class="columnhead">
                         <div class="box effect-7">
@@ -314,12 +339,6 @@
             <a class="next" href="what.html">What is this thing and why do I need it?</a>
 
         </section>
-
-            <span itemprop="author" itemscope itemtype="http://schema.org/Organization">
-                <meta itemprop="name" content="Lyndir" />
-                <meta itemprop="url" content="http://www.lyndir.com" />
-            </span>
-        </span>
 
         <footer>
             Master Password is a security and productivity product by <a href="http://www.lyndir.com" rel="author" onclick="_gaq.push(['_trackPageview', '/outbound/lyndir.com']);">Lyndir</a>, &copy; 2011.
