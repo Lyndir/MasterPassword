@@ -819,6 +819,7 @@ L4m3P4sSw0rD</string>
                         <outlet property="passwordCounter" destination="Iuf-np-e9C" id="CIm-Mk-nJh"/>
                         <outlet property="passwordEdit" destination="9FS-fS-xH6" id="YeB-HF-ZPk"/>
                         <outlet property="passwordIncrementer" destination="jec-mu-nPt" id="i9B-lX-zzX"/>
+                        <outlet property="passwordSettings" destination="TZ0-1K-Vvw" id="QCC-Ne-qYv"/>
                         <outlet property="passwordUpgrade" destination="zbY-EJ-Yiu" id="KAX-Wk-DC4"/>
                         <outlet property="searchDisplayController" destination="P8c-gf-nN3" id="CLs-YI-7NC"/>
                         <outlet property="searchTipContainer" destination="zOR-Du-qRL" id="X7h-Vh-iCE"/>
@@ -1609,6 +1610,7 @@ Pink fluffy door frame.</string>
                 <relationship kind="outlet" name="passwordCounter" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="passwordEdit" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="passwordIncrementer" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="passwordSettings" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="passwordUpgrade" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="searchDelegate" candidateClass="MPSearchDelegate"/>
                 <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>

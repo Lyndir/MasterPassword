@@ -42,6 +42,7 @@
 @property (weak, nonatomic) IBOutlet UILabel            *toolTipBody;
 @property (weak, nonatomic) IBOutlet UIView             *userNameContainer;
 @property (weak, nonatomic) IBOutlet UITextField        *userNameField;
+@property (weak, nonatomic) IBOutlet UIButton           *passwordSettings;
 
 @property (copy) void (^contentTipCleanup)(BOOL finished);
 @property (copy) void (^toolTipCleanup)(BOOL finished);

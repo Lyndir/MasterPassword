@@ -55,6 +55,7 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
 @synthesize toolTipBody = _toolTipBody;
 @synthesize userNameContainer = _userNameContainer;
 @synthesize userNameField = _userNameField;
+@synthesize passwordSettings = _passwordSettings;
 @synthesize contentField = _contentField;
 @synthesize contentTipCleanup = _contentTipCleanup, toolTipCleanup = _toolTipCleanup;
 
@@ -200,6 +201,7 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     [self setUserNameTipContainer:nil];
     [self setUserNameTipBody:nil];
     [self setUserNameContainer:nil];
+    [self setPasswordSettings:nil];
     [super viewDidUnload];
 }
 
@@ -219,6 +221,10 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     self.passwordIncrementer.alpha = 0;
     self.passwordEdit.alpha        = 0;
     self.passwordUpgrade.alpha     = 0;
+    self.passwordSettings.alpha    = 0;
+
+    if (self.activeElement)
+        self.passwordSettings.alpha = 0.5f;
 
     if (self.activeElement.requiresExplicitMigration)
         self.passwordUpgrade.alpha = 0.5f;
