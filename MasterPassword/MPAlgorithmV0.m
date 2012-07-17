@@ -1,13 +1,22 @@
+/**
+ * Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
+ *
+ * See the enclosed file LICENSE for license information (LGPLv3). If you did
+ * not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * @author   Maarten Billemont <lhunath@lyndir.com>
+ * @license  http://www.gnu.org/licenses/lgpl-3.0.txt
+ */
+
 //
-//  MPTypes.m
-//  MasterPassword
+//  MPAlgorithmV0
 //
-//  Created by Maarten Billemont on 02/01/12.
-//  Copyright (c) 2012 Lyndir. All rights reserved.
+//  Created by Maarten Billemont on 16/07/12.
+//  Copyright 2012 lhunath (Maarten Billemont). All rights reserved.
 //
 
+#import "MPAlgorithmV0.h"
 #import "MPEntities.h"
-
 
 #define MP_N        32768
 #define MP_r        8
@@ -15,40 +24,60 @@
 #define MP_dkLen    64
 #define MP_hash     PearlHashSHA256
 
-NSData *keyForPassword(NSString *password, NSString *username) {
+@implementation MPAlgorithmV0
 
-    uint32_t nusernameLength = htonl(username.length);
-    NSDate *start = [NSDate date];
-    NSData *key = [PearlSCrypt deriveKeyWithLength:MP_dkLen fromPassword:[password dataUsingEncoding:NSUTF8StringEncoding]
-                                                            usingSalt:[NSData dataByConcatenatingDatas:
-                                                                               [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
-                                                                               [NSData dataWithBytes:&nusernameLength
-                                                                                              length:sizeof(nusernameLength)],
-                                                                               [username dataUsingEncoding:NSUTF8StringEncoding],
-                                                                               nil] N:MP_N r:MP_r p:MP_p];
+- (NSUInteger)version {
 
-    trc(@"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", username, password, [keyIDForKey(key) encodeHex], -[start timeIntervalSinceNow]);
+    return 0;
+}
+
+- (BOOL)migrateElement:(MPElementEntity *)element explicit:(BOOL)explicit {
+
+    if (element.version != [self version] - 1)
+     // Only migrate from previous version.
+        return NO;
+
+    if (!explicit) {
+        // This migration requires explicit permission.
+        element.requiresExplicitMigration = YES;
+        return NO;
+    }
+
+    // Apply migration.
+    element.requiresExplicitMigration = NO;
+    element.version                   = [self version];
+    return YES;
+}
+
+- (MPKey *)keyForPassword:(NSString *)password ofUserNamed:(NSString *)userName {
+
+    uint32_t nuserNameLength = htonl(userName.length);
+    NSDate *start   = [NSDate date];
+    NSData *keyData = [PearlSCrypt deriveKeyWithLength:MP_dkLen fromPassword:[password dataUsingEncoding:NSUTF8StringEncoding]
+     usingSalt:[NSData dataByConcatenatingDatas:
+                        [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
+                        [NSData dataWithBytes:&nuserNameLength
+                                       length:sizeof(nuserNameLength)],
+                        [userName dataUsingEncoding:NSUTF8StringEncoding],
+                        nil] N:MP_N r:MP_r p:MP_p];
+
+    MPKey *key = [self keyFromKeyData:keyData];
+    trc(@"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", userName, password, [key.keyID encodeHex], -[start timeIntervalSinceNow]);
+
     return key;
 }
 
+- (MPKey *)keyFromKeyData:(NSData *)keyData {
 
-NSData *subkeyForKey(NSData *key, NSUInteger subkeyLength) {
-
-    return [key subdataWithRange:NSMakeRange(0, MIN(subkeyLength, key.length))];
+    return [[MPKey alloc] initWithKeyData:keyData algorithm:self];
 }
 
+- (NSData *)keyIDForKeyData:(NSData *)keyData {
 
-NSData *keyIDForPassword(NSString *password, NSString *username) {
-
-    return keyIDForKey(keyForPassword(password, username));
+    return [keyData hashWith:MP_hash];
 }
 
-NSData *keyIDForKey(NSData *key) {
-
-    return [key hashWith:MP_hash];
-}
-
-NSString *NSStringFromMPElementType(MPElementType type) {
+- (NSString *)nameOfType:(MPElementType)type {
 
     if (!type)
         return nil;
@@ -77,13 +106,12 @@ NSString *NSStringFromMPElementType(MPElementType type) {
 
         case MPElementTypeStoredDevicePrivate:
             return @"Device Private Password";
-
-        default:
-            Throw(@"Type not supported: %d", type);
     }
+
+    Throw(@"Type not supported: %d", type);
 }
 
-NSString *NSStringShortFromMPElementType(MPElementType type) {
+- (NSString *)shortNameOfType:(MPElementType)type {
 
     if (!type)
         return nil;
@@ -112,13 +140,17 @@ NSString *NSStringShortFromMPElementType(MPElementType type) {
 
         case MPElementTypeStoredDevicePrivate:
             return @"Device";
-
-        default:
-            Throw(@"Type not supported: %d", type);
     }
+
+    Throw(@"Type not supported: %d", type);
 }
 
-Class ClassFromMPElementType(MPElementType type) {
+- (NSString *)classNameOfType:(MPElementType)type {
+
+    return NSStringFromClass([self classOfType:type]);
+}
+
+- (Class)classOfType:(MPElementType)type {
 
     if (!type)
         return nil;
@@ -147,63 +179,56 @@ Class ClassFromMPElementType(MPElementType type) {
 
         case MPElementTypeStoredDevicePrivate:
             return [MPElementStoredEntity class];
-
-        default:
-            Throw(@"Type not supported: %d", type);
     }
+
+    Throw(@"Type not supported: %d", type);
 }
 
-NSString *ClassNameFromMPElementType(MPElementType type) {
+- (NSString *)generateContentForElement:(MPElementGeneratedEntity *)element usingKey:(MPKey *)key {
 
-    return NSStringFromClass(ClassFromMPElementType(type));
-}
+    static NSDictionary *MPTypes_ciphers = nil;
 
-static NSDictionary *MPTypes_ciphers = nil;
+    if (!element)
+        return nil;
 
-NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, uint32_t counter) {
-
-    if (!(type & MPElementTypeClassGenerated)) {
-        err(@"Incorrect type (is not MPElementTypeClassGenerated): %d, for: %@", type, name);
+    if (!(element.type & MPElementTypeClassGenerated)) {
+        err(@"Incorrect type (is not MPElementTypeClassGenerated): %d, for: %@", [self nameOfType:element.type], element.name);
         return nil;
     }
-    if (!name.length) {
+    if (!element.name.length) {
         err(@"Missing name.");
         return nil;
     }
-    if (!key.length) {
+    if (!key.keyData.length) {
         err(@"Missing key.");
         return nil;
     }
-    if (!counter)
-     // Counter unset, go into OTP mode.
-     // Get the UNIX timestamp of the start of the interval of 5 minutes that the current time is in.
-        counter = ((uint32_t)([[NSDate date] timeIntervalSince1970] / 300)) * 300;
 
     if (MPTypes_ciphers == nil)
         MPTypes_ciphers = [NSDictionary dictionaryWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"ciphers"
                                                                                             withExtension:@"plist"]];
 
     // Determine the seed whose bytes will be used for calculating a password
-    uint32_t ncounter = htonl(counter), nnameLength = htonl(name.length);
-    NSData *counterBytes = [NSData dataWithBytes:&ncounter length:sizeof(ncounter)];
+    uint32_t ncounter = htonl(element.counter), nnameLength = htonl(element.name.length);
+    NSData *counterBytes    = [NSData dataWithBytes:&ncounter length:sizeof(ncounter)];
     NSData *nameLengthBytes = [NSData dataWithBytes:&nnameLength length:sizeof(nnameLength)];
-    trc(@"seed from: hmac-sha256(%@, 'com.lyndir.masterpassword' | %@ | %@ | %@)", [key encodeBase64], [nameLengthBytes encodeHex], name, [counterBytes encodeHex]);
+    trc(@"seed from: hmac-sha256(%@, 'com.lyndir.masterpassword' | %@ | %@ | %@)", [key.keyData encodeBase64], [nameLengthBytes encodeHex], element.name, [counterBytes encodeHex]);
     NSData *seed = [[NSData dataByConcatenatingDatas:
                              [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
                              nameLengthBytes,
-                             [name dataUsingEncoding:NSUTF8StringEncoding],
+                             [element.name dataUsingEncoding:NSUTF8StringEncoding],
                              counterBytes,
                              nil]
-                             hmacWith:PearlHashSHA256 key:key];
+                             hmacWith:PearlHashSHA256 key:key.keyData];
     trc(@"seed is: %@", [seed encodeBase64]);
     const char *seedBytes = seed.bytes;
 
     // Determine the cipher from the first seed byte.
     assert([seed length]);
-    NSArray  *typeCiphers = [[MPTypes_ciphers valueForKey:ClassNameFromMPElementType(type)]
-                                              valueForKey:NSStringFromMPElementType(type)];
+    NSArray  *typeCiphers = [[MPTypes_ciphers valueForKey:[self classNameOfType:element.type]]
+                                              valueForKey:[self nameOfType:element.type]];
     NSString *cipher      = [typeCiphers objectAtIndex:htons(seedBytes[0]) % [typeCiphers count]];
-    trc(@"type %d, ciphers: %@, selected: %@", type, typeCiphers, cipher);
+    trc(@"type %@, ciphers: %@, selected: %@", [self nameOfType:element.type], typeCiphers, cipher);
 
     // Encode the content, character by character, using subsequent seed bytes and the cipher.
     assert([seed length] >= [cipher length] + 1);
@@ -222,10 +247,4 @@ NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, ui
     return content;
 }
 
-void MPElementMigrate(MPElementEntity *element, BOOL explicit) {
-
-    if (element.version == 0 && explicit) {
-        // 0 -> 1
-        element.version = 1;
-    }
-}
+@end

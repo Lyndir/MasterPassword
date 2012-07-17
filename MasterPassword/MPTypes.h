@@ -6,9 +6,7 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
-@class MPElementEntity;
+#import "MPKey.h"
 
 typedef enum {
     MPElementContentTypePassword,
@@ -51,6 +49,7 @@ typedef enum {
 #define MPCheckpointEditPassword              @"MPCheckpointEditPassword"
 #define MPCheckpointEditUserName              @"MPCheckpointEditUserName"
 #define MPCheckpointCloseAlert                @"MPCheckpointCloseAlert"
+#define MPCheckpointCloseOutdatedAlert        @"MPCheckpointCloseOutdatedAlert"
 #define MPCheckpointUseType                   @"MPCheckpointUseType"
 #define MPCheckpointDeleteElement             @"MPCheckpointDeleteElement"
 #define MPCheckpointCancelSearch              @"MPCheckpointCancelSearch"
@@ -78,14 +77,3 @@ typedef enum {
 #define MPNotificationSignedOut               @"MPNotificationKeyUnset"
 #define MPNotificationKeyForgotten            @"MPNotificationKeyForgotten"
 #define MPNotificationElementUpdated          @"MPNotificationElementUpdated"
-
-NSData   *keyForPassword(NSString *password, NSString *username);
-NSData   *subkeyForKey(NSData *key, NSUInteger subkeyLength);
-NSData   *keyIDForPassword(NSString *password, NSString *username);
-NSData   *keyIDForKey(NSData *key);
-NSString *NSStringFromMPElementType(MPElementType type);
-NSString *NSStringShortFromMPElementType(MPElementType type);
-NSString *ClassNameFromMPElementType(MPElementType type);
-Class    ClassFromMPElementType(MPElementType type);
-NSString *MPCalculateContent(MPElementType type, NSString *name, NSData *key, uint32_t counter);
-void     MPElementMigrate(MPElementEntity *element, BOOL explicit);

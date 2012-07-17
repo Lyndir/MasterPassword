@@ -16,7 +16,7 @@
 #endif
 
 @property (strong, nonatomic) MPUserEntity *activeUser;
-@property (strong, nonatomic) NSData       *key;
+@property (strong, nonatomic) MPKey        *key;
 
 + (MPAppDelegate_Shared *)get;
 

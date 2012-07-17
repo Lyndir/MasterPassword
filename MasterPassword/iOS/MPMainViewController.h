@@ -43,6 +43,9 @@
 @property (weak, nonatomic) IBOutlet UIView             *userNameContainer;
 @property (weak, nonatomic) IBOutlet UITextField        *userNameField;
 @property (weak, nonatomic) IBOutlet UIButton           *passwordUser;
+@property (weak, nonatomic) IBOutlet UIView *outdatedAlertContainer;
+@property (weak, nonatomic) IBOutlet UIImageView *outdatedAlertBack;
+@property (weak, nonatomic) IBOutlet UIButton *outdatedAlertCloseButton;
 
 @property (copy) void (^contentTipCleanup)(BOOL finished);
 @property (copy) void (^toolTipCleanup)(BOOL finished);
@@ -56,6 +59,8 @@
 - (IBAction)upgradePassword;
 - (IBAction)action:(UIBarButtonItem *)sender;
 - (IBAction)toggleUser;
+- (IBAction)closeOutdatedAlert;
+- (IBAction)infoOutdatedAlert;
 
 - (void)toggleHelpAnimated:(BOOL)animated;
 - (void)setHelpHidden:(BOOL)hidden animated:(BOOL)animated;

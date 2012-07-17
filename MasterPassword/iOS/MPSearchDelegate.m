@@ -96,6 +96,11 @@
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
 
     controller.searchBar.prompt = @"Enter the site's name:";
+    controller.searchBar.showsScopeBar = controller.searchBar.selectedScopeButtonIndex != MPSearchScopeAll;
+    if (controller.searchBar.showsScopeBar)
+        controller.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:@"All", @"Outdated", nil];
+    else
+        controller.searchBar.scopeButtonTitles = nil;
 
     [UIView animateWithDuration:0.2f animations:^{
         self.searchTipContainer.alpha = 0;
@@ -104,14 +109,16 @@
 
 - (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller {
 
-    controller.searchBar.text = controller.searchBar.searchResultsButtonSelected? @" ": @"";
-    self.query                = @"";
+    controller.searchBar.text          = controller.searchBar.searchResultsButtonSelected? @" ": @"";
+    self.query                         = @"";
 }
 
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
 
     controller.searchBar.prompt                      = nil;
     controller.searchBar.searchResultsButtonSelected = NO;
+    controller.searchBar.selectedScopeButtonIndex    = MPSearchScopeAll;
+    controller.searchBar.showsScopeBar               = NO;
 }
 
 - (void)searchDisplayController:(UISearchDisplayController *)controller didLoadSearchResultsTableView:(UITableView *)tableView {
@@ -126,11 +133,41 @@
     if (!controller.active)
         return NO;
 
+    [self fetchData];
+
+    return YES;
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
+
+    if (!controller.active)
+        return NO;
+
+    [self fetchData];
+
+    return YES;
+}
+
+- (void)fetchData {
+
     assert(self.query);
 
-    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@",
-                                                                                            self.query, self.query,
-                                                                                            NilToNSNull([MPAppDelegate get].activeUser)];
+    switch ((MPSearchScope)self.searchDisplayController.searchBar.selectedScopeButtonIndex) {
+
+        case MPSearchScopeAll:
+            self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:
+                                                                                 @"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@",
+                                                                                 self.query, self.query,
+                                                                                 NilToNSNull([MPAppDelegate get].activeUser)];
+            break;
+        case MPSearchScopeOutdated:
+            self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:
+                                                                                 @"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@ AND requiresExplicitMigration_ == YES",
+                                                                                 self.query, self.query,
+                                                                                 NilToNSNull([MPAppDelegate get].activeUser)];
+
+            break;
+    }
 
     NSError *error;
     if (![self.fetchedResultsController performFetch:&error])
@@ -145,8 +182,6 @@
         [self.tipView removeFromSuperview];
         [overlay addSubview:self.tipView];
     }
-
-    return YES;
 }
 
 // See MP-14, also crashes easily on internal assertions etc..
@@ -305,13 +340,14 @@
 
             [self.fetchedResultsController.managedObjectContext performBlock:^{
                 MPElementType type = [MPAppDelegate get].activeUser.defaultType;
-                MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(type)
+                MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmDefault classNameOfType:type]
                                                                          inManagedObjectContext:self.fetchedResultsController.managedObjectContext];
                 assert([MPAppDelegate get].activeUser);
 
-                element.name = siteName;
-                element.user = [MPAppDelegate get].activeUser;
-                element.type = type;
+                element.name    = siteName;
+                element.user    = [MPAppDelegate get].activeUser;
+                element.type    = type;
+                element.version = MPAlgorithmDefaultVersion;
 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.delegate didSelectElement:element];
@@ -353,9 +389,8 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
                 [TestFlight passCheckpoint:MPCheckpointDeleteElement];
                 [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointDeleteElement
                                                            attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                     NSStringFromMPElementType(element.type), @"type",
-                                                                                     PearlUnsignedInteger(element.version),
-                                                                                     @"version",
+                                                                                     element.typeName, @"type",
+                                                                                     PearlUnsignedInteger(element.version), @"version",
                                                                                      nil]];
             }];
     }

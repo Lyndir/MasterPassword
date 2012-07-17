@@ -23,7 +23,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                                    matches:nil];
 }
 
-- (NSData *)loadSavedKeyFor:(MPUserEntity *)user {
+- (MPKey *)loadSavedKeyFor:(MPUserEntity *)user {
 
     NSData *key = [PearlKeyChain dataOfItemForQuery:keyQuery(user)];
     if (key)
@@ -34,7 +34,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
         inf(@"No key found in keychain for: %@", user.userID);
     }
 
-    return key;
+    return [MPAlgorithmDefault keyFromKeyData:key];
 }
 
 - (void)storeSavedKeyFor:(MPUserEntity *)user {
@@ -42,14 +42,14 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     if (user.saveKey) {
         NSData *existingKey = [PearlKeyChain dataOfItemForQuery:keyQuery(user)];
 
-        if (![existingKey isEqualToData:self.key]) {
+        if (![existingKey isEqualToData:self.key.keyData]) {
             inf(@"Saving key in keychain for: %@", user.userID);
 
             [PearlKeyChain addOrUpdateItemForQuery:keyQuery(user)
                                     withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                   self.key, (__bridge id)kSecValueData,
                                                                   #if TARGET_OS_IPHONE
-                                                                  kSecAttrAccessibleWhenUnlockedThisDeviceOnly, (__bridge id)kSecAttrAccessible,
+                                                                   (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly, (__bridge id)kSecAttrAccessible,
                                                                   #endif
                                                                   nil]];
         }
@@ -87,13 +87,13 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
 - (BOOL)signInAsUser:(MPUserEntity *)user usingMasterPassword:(NSString *)password {
 
-    NSData *tryKey = nil;
+    MPKey *tryKey = nil;
 
     // Method 1: When the user has no keyID set, set a new key from the given master password.
     if (!user.keyID) {
         if ([password length])
-            if ((tryKey = keyForPassword(password, user.name))) {
-                user.keyID = keyIDForKey(tryKey);
+            if ((tryKey = [MPAlgorithmDefault keyForPassword:password ofUserNamed:user.name])) {
+                user.keyID = tryKey.keyID;
                 [[MPAppDelegate_Shared get] saveContext];
             }
     }
@@ -107,7 +107,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
         if (!tryKey) {
             // Key should be saved in keychain.  Load it.
             if ((tryKey = [self loadSavedKeyFor:user]))
-                if (![user.keyID isEqual:keyIDForKey(tryKey)]) {
+                if (![user.keyID isEqual:tryKey.keyID]) {
                     // Loaded password doesn't match user's keyID.  Forget saved password: it is incorrect.
                     inf(@"Saved password doesn't match keyID for: %@", user.userID);
                     
@@ -119,8 +119,8 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     // Method 3: Check the given master password string.
     if (!tryKey) {
         if ([password length])
-            if ((tryKey = keyForPassword(password, user.name)))
-                if (![user.keyID isEqual:keyIDForKey(tryKey)]) {
+            if ((tryKey = [MPAlgorithmDefault keyForPassword:password ofUserNamed:user.name]))
+                if (![user.keyID isEqual:tryKey.keyID]) {
                     inf(@"Key derived from password doesn't match keyID for: %@", user.userID);
 
                     tryKey = nil;
@@ -142,7 +142,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     }
     inf(@"Logged in: %@", user.userID);
 
-    if (![self.key isEqualToData:tryKey]) {
+    if (![self.key isEqualToKey:tryKey]) {
         self.key = tryKey;
         [self storeSavedKeyFor:user];
     }
@@ -160,6 +160,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     user.lastUsed   = [NSDate date];
     self.activeUser = user;
+    self.activeUser.requiresExplicitMigration = NO;
     [[MPAppDelegate_Shared get] saveContext];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationSignedIn object:self];

@@ -67,11 +67,11 @@
         return storeManager;
 
     storeManager = [[UbiquityStoreManager alloc] initWithManagedObjectModel:[self managedObjectModel]
-                                          localStoreURL:[[self applicationFilesDirectory] URLByAppendingPathComponent:@"MasterPassword.sqlite"]
-                                          containerIdentifier:@"HL3Q45LX9N.com.lyndir.lhunath.MasterPassword.shared"
+                                                              localStoreURL:[[self applicationFilesDirectory] URLByAppendingPathComponent:@"MasterPassword.sqlite"]
+                                                        containerIdentifier:@"HL3Q45LX9N.com.lyndir.lhunath.MasterPassword.shared"
 #if TARGET_OS_IPHONE
-                                       additionalStoreOptions:[NSDictionary dictionaryWithObject:NSFileProtectionComplete
-                                                                                          forKey:NSPersistentStoreFileProtectionKey]
+                                                     additionalStoreOptions:[NSDictionary dictionaryWithObject:NSFileProtectionComplete
+                                                                                                        forKey:NSPersistentStoreFileProtectionKey]
 #else
                                                      additionalStoreOptions:nil
 #endif
@@ -83,9 +83,9 @@
 #if TARGET_OS_IPHONE
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
                                                       object:[UIApplication sharedApplication] queue:nil
-                                                                                          usingBlock:^(NSNotification *note) {
-                                                                                              [storeManager checkiCloudStatus];
-                                                                                          }];
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [storeManager checkiCloudStatus];
+                                                  }];
 #else
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillBecomeActiveNotification
                                                       object:[NSApplication sharedApplication] queue:nil
@@ -96,9 +96,9 @@
 #if TARGET_OS_IPHONE
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification
                                                       object:[UIApplication sharedApplication] queue:nil
-                                                                                          usingBlock:^(NSNotification *note) {
-                                                                                              [self saveContext];
-                                                                                          }];
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [self saveContext];
+                                                  }];
 #else
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillTerminateNotification
                                                       object:[NSApplication sharedApplication] queue:nil
@@ -142,7 +142,8 @@
     [TestFlight passCheckpoint:iCloudEnabled? MPCheckpointCloudEnabled: MPCheckpointCloudDisabled];
 #endif
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloud
-                                               attributes:[NSDictionary dictionaryWithObject:iCloudEnabled? @"YES": @"NO" forKey:@"enabled"]];
+                                               attributes:[NSDictionary dictionaryWithObject:iCloudEnabled? @"YES": @"NO"
+                                                                                      forKey:@"enabled"]];
 
     [MPConfig get].iCloud = [NSNumber numberWithBool:iCloudEnabled];
 }
@@ -168,13 +169,11 @@
 #ifdef TESTFLIGHT_SDK_VERSION
             [TestFlight passCheckpoint:MPCheckpointLocalStoreIncompatible];
 #endif
-            [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointLocalStoreIncompatible
-                                                       attributes:nil];
+            [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointLocalStoreIncompatible attributes:nil];
             manager.hardResetEnabled = YES;
             [manager hardResetLocalStorage];
 
-            [NSException raise:NSGenericException format:@"Local store was reset, application must be restarted to use it."];
-            return;
+            Throw(@"Local store was reset, application must be restarted to use it.");
         }
         case UbiquityStoreManagerErrorCauseOpenCloudStore: {
             wrn(@"iCloud store could not be opened, resetting it.");
@@ -182,8 +181,7 @@
 #ifdef TESTFLIGHT_SDK_VERSION
             [TestFlight passCheckpoint:MPCheckpointCloudStoreIncompatible];
 #endif
-            [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloudStoreIncompatible
-                                                       attributes:nil];
+            [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloudStoreIncompatible attributes:nil];
             manager.hardResetEnabled = YES;
             [manager hardResetCloudStorage];
             break;
@@ -209,7 +207,7 @@
     }
     if (!sitePattern) {
         sitePattern = [[NSRegularExpression alloc]
-                                            initWithPattern:@"^([^[:space:]]+)[[:space:]]+([[:digit:]]+)[[:space:]]+([[:digit:]]+)[[:space:]]+([^\t]+)\t(.*)"
+                                            initWithPattern:@"^([^[:space:]]+)[[:space:]]+([[:digit:]]+)[[:space:]]+([[:digit:]]+)(:[[:digit:]]+)?[[:space:]]+([^\t]+)\t(.*)"
                                                     options:0 error:&error];
         if (error)
         err(@"Error loading the site pattern: %@", error);
@@ -217,10 +215,10 @@
     if (!headerPattern || !sitePattern)
         return MPImportResultInternalError;
 
-    NSData *key = nil;
-    NSString *keyIDHex = nil, *userName = nil;
-    MPUserEntity *user = nil;
-    BOOL headerStarted = NO, headerEnded = NO, clearText = NO;
+    MPKey        *key           = nil;
+    MPUserEntity *user          = nil;
+    NSString     *bundleVersion = nil, *keyIDHex     = nil, *userName = nil;
+    BOOL                               headerStarted = NO, headerEnded = NO, clearText = NO;
     NSArray        *importedSiteLines    = [importedSitesString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     NSMutableSet   *elementsToDelete     = [NSMutableSet set];
     NSMutableArray *importedSiteElements = [NSMutableArray arrayWithCapacity:[importedSiteLines count]];
@@ -247,20 +245,19 @@
             }
             NSTextCheckingResult *headerElements = [[headerPattern matchesInString:importedSiteLine options:0
                                                                              range:NSMakeRange(0, [importedSiteLine length])] lastObject];
-            NSString             *headerName            = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:1]];
-            NSString             *headerValue          = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:2]];
+            NSString             *headerName     = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:1]];
+            NSString             *headerValue    = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:2]];
             if ([headerName isEqualToString:@"User Name"]) {
                 userName = headerValue;
-                key = keyForPassword(password, userName);
 
                 NSFetchRequest *userFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPUserEntity class])];
                 userFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", userName];
                 user = [[self.managedObjectContext executeFetchRequest:fetchRequest error:&error] lastObject];
             }
-            if ([headerName isEqualToString:@"Key ID"]) {
-                if (![(keyIDHex = headerValue) isEqualToString:[keyIDForKey(key) encodeHex]])
-                    return MPImportResultInvalidPassword;
-            }
+            if ([headerName isEqualToString:@"Key ID"])
+                keyIDHex                         = headerValue;
+            if ([headerName isEqualToString:@"Version"])
+                bundleVersion                    = headerValue;
             if ([headerName isEqualToString:@"Passwords"]) {
                 if ([headerValue isEqualToString:@"VISIBLE"])
                     clearText = YES;
@@ -272,6 +269,9 @@
             continue;
         if (!keyIDHex || ![userName length])
             return MPImportResultMalformedInput;
+        key = [MPAlgorithmDefaultForBundleVersion(bundleVersion) keyForPassword:password ofUserNamed:userName];
+        if (![keyIDHex isEqualToString:[key.keyID encodeHex]])
+            return MPImportResultInvalidPassword;
         if (![importedSiteLine length])
             continue;
 
@@ -285,8 +285,9 @@
         NSString             *lastUsed      = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:1]];
         NSString             *uses          = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:2]];
         NSString             *type          = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:3]];
-        NSString             *name          = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:4]];
-        NSString             *exportContent = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:5]];
+        NSString             *version       = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:4]];
+        NSString             *name          = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:5]];
+        NSString             *exportContent = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:6]];
 
         // Find existing site.
         if (user) {
@@ -300,7 +301,7 @@
             }
 
             [elementsToDelete addObjectsFromArray:existingSites];
-            [importedSiteElements addObject:[NSArray arrayWithObjects:lastUsed, uses, type, name, exportContent, nil]];
+            [importedSiteElements addObject:[NSArray arrayWithObjects:lastUsed, uses, type, version, name, exportContent, nil]];
         }
     }
 
@@ -323,25 +324,27 @@
     // Import new sites.
     if (!user) {
         user = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class])
-                                    inManagedObjectContext:self.managedObjectContext];
+                                             inManagedObjectContext:self.managedObjectContext];
         user.name  = userName;
         user.keyID = [keyIDHex decodeHex];
     }
     for (NSArray *siteElements in importedSiteElements) {
         NSDate *lastUsed = [[NSDateFormatter rfc3339DateFormatter] dateFromString:[siteElements objectAtIndex:0]];
-        NSUInteger    uses = (unsigned)[[siteElements objectAtIndex:1] integerValue];
-        MPElementType type = (MPElementType)[[siteElements objectAtIndex:2] integerValue];
-        NSString *name          = [siteElements objectAtIndex:3];
-        NSString *exportContent = [siteElements objectAtIndex:4];
+        NSUInteger    uses    = (unsigned)[[siteElements objectAtIndex:1] integerValue];
+        MPElementType type    = (MPElementType)[[siteElements objectAtIndex:2] integerValue];
+        NSUInteger    version = (unsigned)[[siteElements objectAtIndex:3] integerValue];
+        NSString *name          = [siteElements objectAtIndex:4];
+        NSString *exportContent = [siteElements objectAtIndex:5];
 
         // Create new site.
-        MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(type)
+        MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:[key.algorithm classNameOfType:type]
                                                                  inManagedObjectContext:self.managedObjectContext];
         element.name     = name;
         element.user     = user;
         element.type     = type;
         element.uses     = uses;
         element.lastUsed = lastUsed;
+        element.version  = version;
         if ([exportContent length]) {
             if (clearText)
                 [element importClearTextContent:exportContent usingKey:key];
@@ -355,8 +358,7 @@
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPCheckpointSitesImported];
 #endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSitesImported
-                                               attributes:nil];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSitesImported attributes:nil];
 
     return MPImportResultSuccess;
 }
@@ -405,7 +407,8 @@
         }
 
         [export appendFormat:@"%@  %8d  %8d  %20s\t%@\n",
-                             [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed], uses, type, [name cStringUsingEncoding:NSUTF8StringEncoding], content
+                             [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed], uses, type,
+                             [name cStringUsingEncoding:NSUTF8StringEncoding], content
          ? content: @""];
     }
 

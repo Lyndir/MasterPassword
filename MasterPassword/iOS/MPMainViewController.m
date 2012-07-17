@@ -13,8 +13,6 @@
 #import "LocalyticsSession.h"
 
 
-void MPElementMigrate(MPElementEntity *entity, BOOL i);
-
 @implementation MPMainViewController
 @synthesize userNameHidden = _userNameHidden;
 @synthesize activeElement = _activeElement;
@@ -45,6 +43,9 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
 @synthesize userNameContainer = _userNameContainer;
 @synthesize userNameField = _userNameField;
 @synthesize passwordUser = _passwordUser;
+@synthesize outdatedAlertContainer = _outdatedAlertContainer;
+@synthesize outdatedAlertBack = _outdatedAlertBack;
+@synthesize outdatedAlertCloseButton = _outdatedAlertCloseButton;
 @synthesize contentField = _contentField;
 @synthesize contentTipCleanup = _contentTipCleanup, toolTipCleanup = _toolTipCleanup;
 
@@ -81,7 +82,8 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
 
     [self.passwordIncrementer addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(resetPasswordCounter:)]];
     [self.userNameContainer addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(editUserName:)]];
-    [self.userNameContainer addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(copyUserName)]];
+    [self.userNameContainer addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(copyUserName:)]];
+    [self.outdatedAlertBack addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(searchOutdatedElements:)]];
 
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
 
@@ -90,13 +92,17 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     self.alertBody.text         = nil;
     self.toolTipEditIcon.hidden = YES;
 
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification object:self queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [MPAppDelegate get].activeUser.requiresExplicitMigration = NO;
+                                                  }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPNotificationElementUpdated object:nil queue:nil
                                                   usingBlock:^void(NSNotification *note) {
                                                       if (self.activeElement.type & MPElementTypeClassStored
                                                        && ![[self.activeElement.content description] length])
                                                           [self showToolTip:@"Tap        to set a password." withIcon:self.toolTipEditIcon];
                                                       if (self.activeElement.requiresExplicitMigration)
-                                                          [self showToolTip:@"Password is outdated. Tap      to upgrade it." withIcon:nil];
+                                                          [self showToolTip:@"Password outdated. Tap to upgrade it." withIcon:nil];
                                                   }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPNotificationSignedOut object:nil queue:nil
                                                   usingBlock:^void(NSNotification *note) {
@@ -118,13 +124,40 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
         self.activeElement                      = nil;
     self.searchDisplayController.searchBar.text = nil;
 
-    self.alertContainer.alpha      = 0;
-    self.searchTipContainer.alpha  = 0;
-    self.actionsTipContainer.alpha = 0;
-    self.typeTipContainer.alpha    = 0;
-    self.toolTipContainer.alpha    = 0;
+    self.alertContainer.alpha         = 0;
+    self.outdatedAlertContainer.alpha = 0;
+    self.searchTipContainer.alpha     = 0;
+    self.actionsTipContainer.alpha    = 0;
+    self.typeTipContainer.alpha       = 0;
+    self.toolTipContainer.alpha       = 0;
 
     [self updateAnimated:animated];
+
+    if ([MPAppDelegate get].activeUser)
+        [[MPAppDelegate get].managedObjectContext performBlock:^void() {
+            NSError        *error            = nil;
+            NSFetchRequest *migrationRequest = [NSFetchRequest
+             fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
+            migrationRequest.predicate = [NSPredicate predicateWithFormat:@"version_ < %d", MPAlgorithmDefaultVersion];
+            NSArray *migrationElements = [[MPAppDelegate get].managedObjectContext executeFetchRequest:migrationRequest error:&error];
+            if (!migrationElements) {
+                err(@"While looking for elements to migrate: %@", error);
+                return;
+            }
+
+            BOOL didRequireExplicitMigration = [MPAppDelegate_Shared get].activeUser.requiresExplicitMigration;
+            if (didRequireExplicitMigration)
+                [MPAppDelegate_Shared get].activeUser.requiresExplicitMigration     = NO;
+            for (MPElementEntity *migrationElement in migrationElements)
+                if (![migrationElement migrateExplicitly:NO])
+                    [MPAppDelegate_Shared get].activeUser.requiresExplicitMigration = YES;
+
+            if (!didRequireExplicitMigration && [MPAppDelegate_Shared get].activeUser.requiresExplicitMigration)
+                [UIView animateWithDuration:0.3f animations:^{
+                    self.outdatedAlertContainer.alpha = 1;
+                }];
+
+        }];
 
     [super viewWillAppear:animated];
 }
@@ -189,6 +222,9 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     [self setUserNameTipBody:nil];
     [self setUserNameContainer:nil];
     [self setPasswordUser:nil];
+    [self setOutdatedAlertContainer:nil];
+    [self setOutdatedAlertCloseButton:nil];
+    [self setOutdatedAlertBack:nil];
     [super viewDidUnload];
 }
 
@@ -208,7 +244,7 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     self.passwordIncrementer.alpha = 0;
     self.passwordEdit.alpha        = 0;
     self.passwordUpgrade.alpha     = 0;
-    self.passwordUser.alpha    = 0;
+    self.passwordUser.alpha        = 0;
 
     if (self.activeElement)
         self.passwordUser.alpha = 0.5f;
@@ -224,18 +260,18 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
             if (self.activeElement.type & MPElementTypeClassStored)
                 self.passwordEdit.alpha = 0.5f;
     }
-    
+
     self.siteName.text = self.activeElement.name;
 
-    [self.typeButton setTitle:NSStringFromMPElementType(self.activeElement.type)
+    self.typeButton.alpha = self.activeElement? 1: 0;
+    [self.typeButton setTitle:self.activeElement.typeName
                      forState:UIControlStateNormal];
-    self.typeButton.alpha = NSStringFromMPElementType(self.activeElement.type).length? 1: 0;
 
     if ([self.activeElement isKindOfClass:[MPElementGeneratedEntity class]])
         self.passwordCounter.text = PearlString(@"%u", ((MPElementGeneratedEntity *)self.activeElement).counter);
 
-    self.contentField.enabled  = NO;
-    self.contentField.text = @"";
+    self.contentField.enabled = NO;
+    self.contentField.text    = @"";
     if (self.activeElement.name && ![self.activeElement isDeleted])
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
             NSString *description = [self.activeElement.content description];
@@ -246,8 +282,9 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
         });
 
     self.userNameField.enabled = NO;
-    self.userNameField.text = self.activeElement.userName;
-    self.userNameHidden = !self.activeElement || ([[MPiOSConfig get].userNameHidden boolValue] && (self.activeElement.userName == nil));
+    self.userNameField.text    = self.activeElement.userName;
+    self.userNameHidden        = !self.activeElement || ([[MPiOSConfig get].userNameHidden boolValue] && (self.activeElement.userName
+     == nil));
     [self updateUserHiddenAnimated:NO];
 }
 
@@ -263,20 +300,20 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
 }
 
 - (void)updateHelpHiddenAnimated:(BOOL)animated {
-    
+
     if (animated) {
         [UIView animateWithDuration:0.3f animations:^{
             [self updateHelpHiddenAnimated:NO];
         }];
         return;
     }
-    
+
     if ([[MPiOSConfig get].helpHidden boolValue]) {
-        self.contentContainer.frame  = CGRectSetHeight(self.contentContainer.frame, self.view.bounds.size.height - 44);
-        self.helpContainer.frame     = CGRectSetY(self.helpContainer.frame, self.view.bounds.size.height);
+        self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, self.view.bounds.size.height - 44);
+        self.helpContainer.frame    = CGRectSetY(self.helpContainer.frame, self.view.bounds.size.height);
     } else {
-        self.contentContainer.frame  = CGRectSetHeight(self.contentContainer.frame, 225);
-        self.helpContainer.frame     = CGRectSetY(self.helpContainer.frame, 266);
+        self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 225);
+        self.helpContainer.frame    = CGRectSetY(self.helpContainer.frame, 266);
     }
 }
 
@@ -302,9 +339,9 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     }
 
     if (self.userNameHidden) {
-        self.displayContainer.frame      = CGRectSetHeight(self.displayContainer.frame, 87);
+        self.displayContainer.frame = CGRectSetHeight(self.displayContainer.frame, 87);
     } else {
-        self.displayContainer.frame      = CGRectSetHeight(self.displayContainer.frame, 137);
+        self.displayContainer.frame = CGRectSetHeight(self.displayContainer.frame, 137);
     }
 
 }
@@ -323,7 +360,7 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
 
     NSString *error = [self.helpView stringByEvaluatingJavaScriptFromString:
-                                      PearlString(@"setClass('%@');", ClassNameFromMPElementType(self.activeElement.type))];
+                                      PearlString(@"setClass('%@');", self.activeElement.typeClassName)];
     if (error.length)
     err(@"helpView.setClass: %@", error);
 }
@@ -436,13 +473,13 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     [TestFlight passCheckpoint:MPCheckpointCopyToPasteboard];
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyToPasteboard
                                                attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                         NSStringFromMPElementType(self.activeElement.type), @"type",
+                                                                         self.activeElement.typeName, @"type",
                                                                          PearlUnsignedInteger(self.activeElement.version),
                                                                          @"version",
                                                                          nil]];
 }
 
-- (IBAction)copyUserName {
+- (IBAction)copyUserName:(UITapGestureRecognizer *)sender {
 
     if (!self.activeElement.userName)
         return;
@@ -455,7 +492,7 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     [TestFlight passCheckpoint:MPCheckpointCopyUserNameToPasteboard];
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyUserNameToPasteboard
                                                attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                         NSStringFromMPElementType(self.activeElement.type), @"type",
+                                                                         self.activeElement.typeName, @"type",
                                                                          PearlUnsignedInteger(self.activeElement.version),
                                                                          @"version",
                                                                          nil]];
@@ -479,8 +516,8 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
                                     [TestFlight passCheckpoint:MPCheckpointIncrementPasswordCounter];
                                     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointIncrementPasswordCounter
                                                                                attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                         NSStringFromMPElementType(
-                                                                                                          self.activeElement.type), @"type",
+                                                                                                         self.activeElement.typeName,
+                                                                                                         @"type",
                                                                                                          PearlUnsignedInteger(self.activeElement.version),
                                                                                                          @"version",
                                                                                                          nil]];
@@ -510,8 +547,8 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
                                     [TestFlight passCheckpoint:MPCheckpointResetPasswordCounter];
                                     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointResetPasswordCounter
                                                                                attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                         NSStringFromMPElementType(
-                                                                                                          self.activeElement.type), @"type",
+                                                                                                         self.activeElement.typeName,
+                                                                                                         @"type",
                                                                                                          PearlUnsignedInteger(self.activeElement.version),
                                                                                                          @"version",
                                                                                                          nil]];
@@ -523,7 +560,7 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     if (sender.state != UIGestureRecognizerStateBegan)
      // Only fire when the gesture was first detected.
         return;
-    
+
     if (!self.activeElement)
         return;
 
@@ -532,8 +569,7 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
 
     [TestFlight passCheckpoint:MPCheckpointEditUserName];
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditUserName attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                             NSStringFromMPElementType(
-                                                                                                              self.activeElement.type),
+                                                                                                             self.activeElement.typeName,
                                                                                                              @"type",
                                                                                                              PearlUnsignedInteger(self.activeElement.version),
                                                                                                              @"version",
@@ -580,8 +616,7 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
         [TestFlight passCheckpoint:MPCheckpointEditPassword];
         [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditPassword
                                                    attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                             NSStringFromMPElementType(
-                                                                              self.activeElement.type), @"type",
+                                                                             self.activeElement.typeName, @"type",
                                                                              PearlUnsignedInteger(self.activeElement.version),
                                                                              @"version",
                                                                              nil]];
@@ -600,17 +635,24 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
              @"This upgrade improves the site's compatibility with the latest version of Master Password."
                                 do:^{
                                     inf(@"Explicitly migrating element: %@", self.activeElement);
-                                    MPElementMigrate(self.activeElement, YES);
+                                    [self.activeElement migrateExplicitly:YES];
 
                                     [TestFlight passCheckpoint:MPCheckpointExplicitMigration];
                                     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointExplicitMigration
                                                                                attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                         NSStringFromMPElementType(
-                                                                                                          self.activeElement.type), @"type",
+                                                                                                         self.activeElement.typeName,
+                                                                                                         @"type",
                                                                                                          PearlUnsignedInteger(self.activeElement.version),
                                                                                                          @"version",
                                                                                                          nil]];
                                 }];
+}
+
+- (IBAction)searchOutdatedElements:(UITapGestureRecognizer *)sender {
+
+    self.searchDisplayController.searchBar.selectedScopeButtonIndex = MPSearchScopeOutdated;
+    self.searchDisplayController.searchBar.searchResultsButtonSelected = YES;
+    [self.searchDisplayController.searchBar becomeFirstResponder];
 }
 
 - (IBAction)closeAlert {
@@ -623,6 +665,23 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     }];
 
     [TestFlight passCheckpoint:MPCheckpointCloseAlert];
+}
+
+- (IBAction)closeOutdatedAlert {
+
+    [UIView animateWithDuration:0.3f animations:^{
+        self.outdatedAlertContainer.alpha = 0;
+    }];
+
+    [TestFlight passCheckpoint:MPCheckpointCloseOutdatedAlert];
+}
+
+- (IBAction)infoOutdatedAlert {
+
+    [self setHelpChapter:@"outdated"];
+    [self setHelpHidden:NO animated:YES];
+    [self closeOutdatedAlert];
+    [MPAppDelegate get].activeUser.requiresExplicitMigration = NO;
 }
 
 - (IBAction)action:(id)sender {
@@ -721,6 +780,11 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
                              [[MPAppDelegate get] signOutAnimated:YES];
                              break;
                          }
+
+                         default: {
+                             wrn(@"Unsupported action: %u", buttonIndex - [sheet firstOtherButtonIndex]);
+                             break;
+                         }
                      }
 
                      [TestFlight passCheckpoint:MPCheckpointAction];
@@ -754,16 +818,16 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
             @"You will need to update your account's old password to the new one."
                                 do:^{
                                     // Update password type.
-                                    if (ClassFromMPElementType(type) != ClassFromMPElementType(self.activeElement.type))
+                                    if ([self.activeElement.algorithm classOfType:type] != self.activeElement.typeClass)
                                      // Type requires a different class of element.  Recreate the element.
                                         [[MPAppDelegate managedObjectContext] performBlockAndWait:^{
-                                            MPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:ClassNameFromMPElementType(
-                                             type)
+                                            MPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:[self.activeElement.algorithm classNameOfType:type]
                                                                                                         inManagedObjectContext:[MPAppDelegate managedObjectContext]];
                                             newElement.name     = self.activeElement.name;
                                             newElement.user     = self.activeElement.user;
                                             newElement.uses     = self.activeElement.uses;
                                             newElement.lastUsed = self.activeElement.lastUsed;
+                                            newElement.version  = self.activeElement.version;
 
                                             [[MPAppDelegate managedObjectContext] deleteObject:self.activeElement];
                                             self.activeElement = newElement;
@@ -813,10 +877,9 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
         self.searchDisplayController.searchBar.text = self.activeElement.name;
 
         [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationElementUpdated object:self.activeElement];
-        [TestFlight passCheckpoint:PearlString(MPCheckpointUseType @"_%@", NSStringFromMPElementType(self.activeElement.type))];
+        [TestFlight passCheckpoint:PearlString(MPCheckpointUseType @"_%@", self.activeElement.typeShortName)];
         [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointUseType attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                            NSStringFromMPElementType(
-                                                                                                             self.activeElement.type),
+                                                                                                            self.activeElement.typeName,
                                                                                                             @"type",
                                                                                                             PearlUnsignedInteger(self.activeElement.version),
                                                                                                             @"version",
@@ -854,7 +917,7 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
     }
 
     if (textField == self.userNameField) {
-        self.userNameField.enabled  = NO;
+        self.userNameField.enabled = NO;
         if (![[MPiOSConfig get].userNameTipShown boolValue]) {
             [self showUserNameTip:@"Tap to copy or hold to edit."];
             [MPiOSConfig get].userNameTipShown = PearlBool(YES);
@@ -864,7 +927,7 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
             self.activeElement.userName = self.userNameField.text;
         else
             self.activeElement.userName = nil;
-        
+
         [[MPAppDelegate get] saveContext];
     }
 }
@@ -873,7 +936,11 @@ void MPElementMigrate(MPElementEntity *entity, BOOL i);
  navigationType:(UIWebViewNavigationType)navigationType {
 
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
-        inf(@"External link: %@", [request URL]);
+        if ([[[request URL] query] isEqualToString:@"outdated"]) {
+            [self searchOutdatedElements:nil];
+            return NO;
+        }
+        
         [TestFlight passCheckpoint:MPCheckpointExternalLink];
 
         [[UIApplication sharedApplication] openURL:[request URL]];

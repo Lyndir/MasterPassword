@@ -11,20 +11,27 @@
 #import "MPElementStoredEntity.h"
 #import "MPElementGeneratedEntity.h"
 #import "MPUserEntity.h"
+#import "MPAlgorithm.h"
 
 #define MPAvatarCount 19
 
 @interface MPElementEntity (MP)
 
 @property (assign) MPElementType type;
+@property (readonly) NSString *typeName;
+@property (readonly) NSString *typeShortName;
+@property (readonly) NSString *typeClassName;
+@property (readonly) Class typeClass;
 @property (assign) NSUInteger    uses;
 @property (assign) NSUInteger    version;
 @property (assign) BOOL          requiresExplicitMigration;
+@property (readonly) id<MPAlgorithm> algorithm;
 
 - (NSUInteger)use;
 - (NSString *)exportContent;
 - (void)importProtectedContent:(NSString *)protectedContent;
-- (void)importClearTextContent:(NSString *)clearContent usingKey:(NSData *)key;
+- (void)importClearTextContent:(NSString *)clearContent usingKey:(MPKey *)key;
+- (BOOL)migrateExplicitly:(BOOL)explicit;
 
 @end
 
@@ -39,6 +46,7 @@
 @property (assign) NSUInteger avatar;
 @property (assign) BOOL       saveKey;
 @property (assign) MPElementType defaultType;
+@property (assign) BOOL          requiresExplicitMigration;
 @property (readonly) NSString *userID;
 
 + (NSString *)idFor:(NSString *)userName;

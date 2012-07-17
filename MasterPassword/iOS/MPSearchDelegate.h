@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "MPElementEntity.h"
 
+typedef enum {
+    MPSearchScopeAll,
+    MPSearchScopeOutdated,
+} MPSearchScope;
+
 @protocol MPSearchResultsDelegate<NSObject>
 
 - (void)didSelectElement:(MPElementEntity *)element;

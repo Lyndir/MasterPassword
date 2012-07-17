@@ -75,7 +75,7 @@
     } recurse:NO];
 
     self.savePasswordSwitch.on = [MPAppDelegate get].activeUser.saveKey;
-    self.defaultTypeLabel.text = NSStringShortFromMPElementType([MPAppDelegate get].activeUser.defaultType);
+    self.defaultTypeLabel.text = [[MPAppDelegate get].key.algorithm shortNameOfType:[MPAppDelegate get].activeUser.defaultType];
 
     [super viewWillAppear:animated];
 }
@@ -139,7 +139,7 @@
     [MPAppDelegate get].activeUser.defaultType = type;
     [[MPAppDelegate get] saveContext];
 
-    self.defaultTypeLabel.text = NSStringShortFromMPElementType([MPAppDelegate get].activeUser.defaultType);
+    self.defaultTypeLabel.text = [[MPAppDelegate get].key.algorithm shortNameOfType:[MPAppDelegate get].activeUser.defaultType];
 }
 
 - (MPElementType)selectedType {

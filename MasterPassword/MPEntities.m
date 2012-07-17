@@ -8,8 +8,6 @@
 
 #import "MPEntities.h"
 #import "MPAppDelegate.h"
-#import "MPAppDelegate_Key.h"
-#import "MPUserEntity.h"
 
 @implementation MPElementEntity (MP)
 
@@ -21,6 +19,26 @@
 - (void)setType:(MPElementType)aType {
 
     self.type_ = PearlUnsignedInteger(aType);
+}
+
+- (NSString *)typeName {
+
+    return [self.algorithm nameOfType:self.type];
+}
+
+- (NSString *)typeShortName {
+
+    return [self.algorithm shortNameOfType:self.type];
+}
+
+- (NSString *)typeClassName {
+
+    return [self.algorithm classNameOfType:self.type];
+}
+
+- (Class)typeClass {
+
+    return [self.algorithm classOfType:self.type];
 }
 
 - (NSUInteger)uses {
@@ -53,6 +71,11 @@
     self.requiresExplicitMigration_ = PearlBool(requiresExplicitMigration);
 }
 
+- (id<MPAlgorithm>)algorithm {
+
+    return MPAlgorithmForVersion(self.version);
+}
+
 - (NSUInteger)use {
 
     self.lastUsed = [NSDate date];
@@ -73,8 +96,8 @@
 
 }
 
-- (void)importClearTextContent:(NSString *)content usingKey:(NSData *)key {
-    
+- (void)importClearTextContent:(NSString *)clearContent usingKey:(MPKey *)key {
+
 }
 
 - (NSString *)description {
@@ -84,8 +107,22 @@
 
 - (NSString *)debugDescription {
 
-    return PearlString(@"{%@: name=%@, user=%@, type=%d, uses=%d, lastUsed=%@}",
-                       NSStringFromClass([self class]), self.name, self.user.name, self.type, self.uses, self.lastUsed);
+    return PearlString(@"{%@: name=%@, user=%@, type=%d, uses=%d, lastUsed=%@, version=%d, userName=%@, requiresExplicitMigration=%d}",
+                       NSStringFromClass([self class]), self.name, self.user.name, self.type, self.uses, self.lastUsed, self.version,
+                       self.userName, self.requiresExplicitMigration);
+}
+
+- (BOOL)migrateExplicitly:(BOOL)explicit {
+
+    while (self.version < MPAlgorithmDefaultVersion)
+        if ([MPAlgorithmForVersion(self.version + 1) migrateElement:self explicit:explicit])
+        inf(@"%@ migration to version: %d succeeded for element: %@", explicit? @"Explicit": @"Automatic", self.version + 1, self);
+        else {
+            wrn(@"%@ migration to version: %d failed for element: %@", explicit? @"Explicit": @"Automatic", self.version + 1, self);
+            return NO;
+        }
+
+    return YES;
 }
 
 @end
@@ -103,8 +140,8 @@
 }
 
 - (id)content {
-    
-    NSData *key = [MPAppDelegate get].key;
+
+    MPKey *key = [MPAppDelegate get].key;
     if (!key)
         return nil;
 
@@ -116,7 +153,7 @@
     if (![self.name length])
         return nil;
 
-    return MPCalculateContent(self.type, self.name, key, self.counter);
+    return [self.algorithm generateContentForElement:self usingKey:key];
 }
 
 @end
@@ -130,12 +167,12 @@
                                                              @"DevicePrivate", (__bridge id)kSecAttrService,
                                                              name, (__bridge id)kSecAttrAccount,
                                                              nil]
-                                   matches:nil];
+                                      matches:nil];
 }
 
 - (id)content {
-    
-    NSData *key = [MPAppDelegate get].key;
+
+    MPKey *key = [MPAppDelegate get].key;
     if (!key)
         return nil;
 
@@ -143,18 +180,18 @@
 }
 
 - (void)setContent:(id)content {
-    
-    NSData *key = [MPAppDelegate get].key;
+
+    MPKey *key = [MPAppDelegate get].key;
     if (!key)
         return;
-    
+
     [self setContent:content usingKey:key];
 }
 
-- (id)contentUsingKey:(NSData *)key {
+- (id)contentUsingKey:(MPKey *)key {
 
     assert(self.type & MPElementTypeClassStored);
-    assert([keyIDForKey(key) isEqualToData:self.user.keyID]);
+    assert([key.keyID isEqualToData:self.user.keyID]);
 
     NSData *encryptedContent;
     if (self.type & MPElementFeatureDevicePrivate)
@@ -162,25 +199,29 @@
     else
         encryptedContent = self.contentObject;
 
-    NSData *decryptedContent = [encryptedContent decryptWithSymmetricKey:subkeyForKey(key, PearlCryptKeySize) padding:YES];
+    NSData *decryptedContent = nil;
+    if ([encryptedContent length])
+        decryptedContent = [encryptedContent decryptWithSymmetricKey:[key subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
+
     return [[NSString alloc] initWithBytes:decryptedContent.bytes length:decryptedContent.length encoding:NSUTF8StringEncoding];
 }
 
-- (void)setContent:(id)content usingKey:(NSData *)key {
+- (void)setContent:(id)content usingKey:(MPKey *)key {
 
     assert(self.type & MPElementTypeClassStored);
-    assert([keyIDForKey(key) isEqualToData:self.user.keyID]);
+    assert([key.keyID isEqualToData:self.user.keyID]);
 
-    NSData *encryptedContent = [[content description] encryptWithSymmetricKey:subkeyForKey(key, PearlCryptKeySize) padding:YES];
+    NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[key subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
 
     if (self.type & MPElementFeatureDevicePrivate) {
         [PearlKeyChain addOrUpdateItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]
-                       withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                     encryptedContent, (__bridge id)kSecValueData,
-                                                     #if TARGET_OS_IPHONE
-                                                     kSecAttrAccessibleWhenUnlockedThisDeviceOnly, (__bridge id)kSecAttrAccessible,
-                                                     #endif
-                                                     nil]];
+                                withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                              encryptedContent, (__bridge id)kSecValueData,
+                                                              #if TARGET_OS_IPHONE
+                                                              (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+                                                              (__bridge id)kSecAttrAccessible,
+                                                              #endif
+                                                              nil]];
         self.contentObject = nil;
     } else
         self.contentObject = encryptedContent;
@@ -196,8 +237,8 @@
     self.contentObject = [protectedContent decodeBase64];
 }
 
-- (void)importClearTextContent:(NSString *)clearContent usingKey:(NSData *)key {
-    
+- (void)importClearTextContent:(NSString *)clearContent usingKey:(MPKey *)key {
+
     [self setContent:clearContent usingKey:key];
 }
 
@@ -230,15 +271,24 @@
     return (MPElementType)[self.defaultType_ unsignedIntegerValue];
 }
 
-- (NSString *)userID {
-
-    return [MPUserEntity idFor:self.name];
-}
-
-
 - (void)setDefaultType:(MPElementType)aDefaultType {
 
     self.defaultType_ = PearlUnsignedInteger(aDefaultType);
+}
+
+- (BOOL)requiresExplicitMigration {
+
+    return [self.requiresExplicitMigration_ boolValue];
+}
+
+- (void)setRequiresExplicitMigration:(BOOL)requiresExplicitMigration {
+
+    self.requiresExplicitMigration_ = PearlBool(requiresExplicitMigration);
+}
+
+- (NSString *)userID {
+
+    return [MPUserEntity idFor:self.name];
 }
 
 + (NSString *)idFor:(NSString *)userName {

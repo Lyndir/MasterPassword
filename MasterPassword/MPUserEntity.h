@@ -2,7 +2,7 @@
 //  MPUserEntity.h
 //  MasterPassword-iOS
 //
-//  Created by Maarten Billemont on 10/07/12.
+//  Created by Maarten Billemont on 17/07/12.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
@@ -19,6 +19,7 @@
 @property (nonatomic, retain) NSDate * lastUsed;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * saveKey_;
+@property (nonatomic, retain) NSNumber * requiresExplicitMigration_;
 @property (nonatomic, retain) NSSet *elements;
 @end
 

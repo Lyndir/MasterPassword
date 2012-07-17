@@ -2,7 +2,9 @@
   <profile version="1.0" is_locked="false">
     <option name="myName" value="Project Default" />
     <option name="myLocal" value="false" />
+    <inspection_tool class="FunctionImplicitDeclarationInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="LossyEncoding" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="MethodIsLaterInTheScope" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="OCUnusedMethodInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UnusedLocalVariable" enabled="false" level="WARNING" enabled_by_default="false" />
   </profile>

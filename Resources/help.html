@@ -55,7 +55,7 @@
                 $(".Class").css("display", "none");
                 if (!$(".Class." + activeClass).length)
                     return "Not found: " + activeClass;
-                
+
                 $(".Class." + activeClass).css("display", "block");
             }
         </script>
@@ -75,13 +75,13 @@
             <b>While searching</b>, the names of previously used sites will be listed.<br />
             Tap one of these results to go straight to its password.
         </p>
-        
+
         <h2 id="2">&mdash; 2 &mdash;</h2>
         <p>
             <b>The site</b>'s password is now displayed.<br />
             Tap it to <i>copy the password</i>.  Once copied, you can switch to another application and paste it into a password field.
         </p>
-        
+
         <p class="Class MPElementStoredEntity">
             <b>To change</b> the password for this site, tap the <i>edit icon</i> <img src="icon_edit.png" />.
         </p>
@@ -90,7 +90,7 @@
             <b>Below the password</b> you can set the <i>password type</i>.  Some types <i>create a password for you</i>,
             others let you <i>choose your own</i>.
         </p>
-        
+
         <p class="Class MPElementGeneratedEntity">
             <b>If the site complains</b> when you try to set or update the password, try changing the password type.
         </p>
@@ -173,7 +173,7 @@
             share the password with anyone else.  Instead, the app creates secure passwords for use with whatever site
             or purpose you might need a password for.
         </p>
-        
+
         <h3 id="custom">I can't change all my passwords.<br />
             Some of them were assigned to me.</h3>
         <p>
@@ -295,6 +295,34 @@
             I invite anyone with a technical background to go through these resources to make certain of the trustworthiness of Master Password.
         </p>
 
+        <h3 id="outdated">Is the algorithm stable?<br />
+            Will my passwords ever change?</h3>
+        <p>
+            While we're very confident of the strength of the Master Password algorithm, we're also constantly keeping an eye out
+            for what the evolutions are of hackers' tools and capabilities.  To give you the best possible protection, there is
+            always the possibility that we'll have to make tweaks to the Master Password algorithm in order to fend off any
+            attempts at breaking in.
+        </p>
+        <p>
+            Usually, these tweaks will be automatically applied when you install the latest version.  In this case, you will notice
+            nothing and all you need to take away from this is that it's best to always be running the latest version of Master Password.
+        </p>
+        <p>
+            It is possible, however, that to apply an upgrade to your passwords, a new password will need to be set for your site's
+            account.  In this case, Master Password will leave your passwords the way they are but give you the <em>option</em> of
+            upgrading your passwords when it's convenient to you.  Whenever you're ready, just tap the upgrade password icon and
+            Master Password will show you the old password and the new one so that you can easily update your site's account.
+        </p>
+        <p>
+            <em>Please note</em>: if Master Password warns you that you have outdated passwords, it's best to upgrade them all
+            as soon as convenient.  If you lose your device or data and recreate your Master Password user on another device,
+            Master Password can only regenerate the passwords for you that you've upgraded.  iCloud/iTunes sync or exports are not
+            affected, so these are good ways to safely back up your passwords.
+        </p>
+        <p>
+            <a href="?outdated">Tap here</a> to check if you have any outdated passwords.
+        </p>
+
         <h3 id="branded">This stuff is gold.<br />
             I want one branded for our company.</h3>
         <p>
@@ -304,7 +332,7 @@
         <p>
             Master Password can also be used as a One-Time Password token generator to secure your infrastructure and client access.
         </p>
-    
+
         <footer>
             <a href="http://masterpassword.lyndir.com">Homepage</a> | <a href="http://www.lyndir.com">Lyndir</a> |
             <a href="http://www.lyndir.com/contact">Contact</a>
