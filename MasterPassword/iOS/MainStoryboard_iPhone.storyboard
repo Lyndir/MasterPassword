@@ -600,7 +600,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                             </view>
                             <view clipsSubviews="YES" contentMode="scaleToFill" id="61G-By-qLB" userLabel="View - Help">
                                 <rect key="frame" x="0.0" y="266" width="320" height="150"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="bottom" image="Square-bottom.png" id="lbm-A0-3PK">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="58"/>

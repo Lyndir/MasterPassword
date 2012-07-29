@@ -80,10 +80,13 @@
     self.searchDisplayController.searchResultsDelegate   = self.searchDelegate;
     self.searchDisplayController.searchResultsDataSource = self.searchDelegate;
 
-    [self.passwordIncrementer addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(resetPasswordCounter:)]];
-    [self.userNameContainer addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(editUserName:)]];
+    [self.passwordIncrementer addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                                 action:@selector(resetPasswordCounter:)]];
+    [self.userNameContainer addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                               action:@selector(editUserName:)]];
     [self.userNameContainer addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(copyUserName:)]];
-    [self.outdatedAlertBack addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(searchOutdatedElements:)]];
+    [self.outdatedAlertBack addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                         action:@selector(searchOutdatedElements:)]];
 
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
 
@@ -309,8 +312,9 @@
     }
 
     if ([[MPiOSConfig get].helpHidden boolValue]) {
-        self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, self.view.bounds.size.height - 44);
-        self.helpContainer.frame    = CGRectSetY(self.helpContainer.frame, self.view.bounds.size.height);
+        self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, self.view.bounds.size.height - 44 /* search bar */);
+        self.helpContainer.frame    = CGRectSetY(self.helpContainer.frame,
+                                                 self.view.bounds.size.height + 20 /* view moves up a bit when search appears. */);
     } else {
         self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 225);
         self.helpContainer.frame    = CGRectSetY(self.helpContainer.frame, 266);
@@ -650,7 +654,7 @@
 
 - (IBAction)searchOutdatedElements:(UITapGestureRecognizer *)sender {
 
-    self.searchDisplayController.searchBar.selectedScopeButtonIndex = MPSearchScopeOutdated;
+    self.searchDisplayController.searchBar.selectedScopeButtonIndex    = MPSearchScopeOutdated;
     self.searchDisplayController.searchBar.searchResultsButtonSelected = YES;
     [self.searchDisplayController.searchBar becomeFirstResponder];
 }
@@ -873,9 +877,6 @@
                 }
             }];
 
-        [self.searchDisplayController setActive:NO animated:YES];
-        self.searchDisplayController.searchBar.text = self.activeElement.name;
-
         [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationElementUpdated object:self.activeElement];
         [TestFlight passCheckpoint:PearlString(MPCheckpointUseType @"_%@", self.activeElement.typeShortName)];
         [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointUseType attributes:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -885,6 +886,9 @@
                                                                                                             @"version",
                                                                                                             nil]];
     }
+
+    [self.searchDisplayController setActive:NO animated:YES];
+    self.searchDisplayController.searchBar.text = self.activeElement.name;
 
     [self updateAnimated:YES];
 }
@@ -940,7 +944,7 @@
             [self searchOutdatedElements:nil];
             return NO;
         }
-        
+
         [TestFlight passCheckpoint:MPCheckpointExternalLink];
 
         [[UIApplication sharedApplication] openURL:[request URL]];
