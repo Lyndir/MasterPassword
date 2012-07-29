@@ -18,6 +18,6 @@
 - (void)showGuide;
 
 - (void)export;
-- (void)changeMasterPasswordFor:(MPUserEntity *)user;
+- (void)changeMasterPasswordFor:(MPUserEntity *)user didResetBlock:(void(^)(void))didReset;
 
 @end

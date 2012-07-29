@@ -394,6 +394,7 @@
         NSDate *lastUsed = element.lastUsed;
         NSUInteger    uses = element.uses;
         MPElementType type = element.type;
+        NSUInteger version = element.version;
         NSString *name    = element.name;
         NSString *content = nil;
 
@@ -406,9 +407,9 @@
                     content = element.exportContent;
         }
 
-        [export appendFormat:@"%@  %8d  %8d  %20s\t%@\n",
-                             [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed], uses, type,
-                             [name cStringUsingEncoding:NSUTF8StringEncoding], content
+        [export appendFormat:@"%@  %8d  %8s  %20s\t%@\n",
+                             [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed], uses,
+                             [PearlString(@"%u:%u", type, version) UTF8String], [name UTF8String], content
          ? content: @""];
     }
 

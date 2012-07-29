@@ -111,8 +111,9 @@
                 case 7:
                     return NSNotFound;
 
-                default:
+                default: {
                     Throw(@"Unsupported row: %d, when selecting generated element type.", indexPath.row);
+                }
             }
         }
 
@@ -128,8 +129,9 @@
                 case 3:
                     return NSNotFound;
 
-                default:
+                default: {
                     Throw(@"Unsupported row: %d, when selecting stored element type.", indexPath.row);
+                }
             }
         }
 

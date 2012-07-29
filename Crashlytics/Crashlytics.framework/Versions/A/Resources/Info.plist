@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>BuildMachineOSBuild</key>
-	<string>11C74</string>
+	<string>11E53</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1.3</string>
+	<string>1.1.5</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleSupportedPlatforms</key>
@@ -25,7 +25,7 @@
 		<string>iPhoneOS</string>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>0101.03.00</string>
+	<string>0101.05.00</string>
 	<key>CrashlyticsAPIKey</key>
 	<string>0d10c90776f5ef5acd01ddbeaca9a6cba4814560</string>
 	<key>DTCompiler</key>

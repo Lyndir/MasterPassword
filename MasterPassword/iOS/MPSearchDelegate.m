@@ -8,8 +8,8 @@
 
 #import "MPSearchDelegate.h"
 #import "MPAppDelegate.h"
-#import "MPAppDelegate_Store.h"
 #import "LocalyticsSession.h"
+#import "MPAppDelegate_Store.h"
 
 @interface MPSearchDelegate (Private)
 
@@ -95,8 +95,8 @@
 
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
 
-    controller.searchBar.prompt = @"Enter the site's name:";
-    controller.searchBar.showsScopeBar = controller.searchBar.selectedScopeButtonIndex != MPSearchScopeAll;
+    controller.searchBar.prompt                = @"Enter the site's name:";
+    controller.searchBar.showsScopeBar         = controller.searchBar.selectedScopeButtonIndex != MPSearchScopeAll;
     if (controller.searchBar.showsScopeBar)
         controller.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:@"All", @"Outdated", nil];
     else
@@ -109,8 +109,8 @@
 
 - (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller {
 
-    controller.searchBar.text          = controller.searchBar.searchResultsButtonSelected? @" ": @"";
-    self.query                         = @"";
+    controller.searchBar.text = controller.searchBar.searchResultsButtonSelected? @" ": @"";
+    self.query                = @"";
 }
 
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
@@ -151,23 +151,25 @@
 - (void)fetchData {
 
     assert(self.query);
+    assert([MPAppDelegate get].activeUser);
+
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user == %@", [MPAppDelegate get].activeUser];
+    if (self.query.length)
+        predicate = [NSCompoundPredicate
+         andPredicateWithSubpredicates:[NSArray arrayWithObjects:[NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", self.query],
+                                                                 predicate, nil]];
 
     switch ((MPSearchScope)self.searchDisplayController.searchBar.selectedScopeButtonIndex) {
 
         case MPSearchScopeAll:
-            self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:
-                                                                                 @"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@",
-                                                                                 self.query, self.query,
-                                                                                 NilToNSNull([MPAppDelegate get].activeUser)];
             break;
         case MPSearchScopeOutdated:
-            self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:
-                                                                                 @"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@ AND requiresExplicitMigration_ == YES",
-                                                                                 self.query, self.query,
-                                                                                 NilToNSNull([MPAppDelegate get].activeUser)];
-
+            predicate = [NSCompoundPredicate
+             andPredicateWithSubpredicates:[NSArray arrayWithObjects:[NSPredicate predicateWithFormat:@"requiresExplicitMigration_ == YES"],
+                                                                     predicate, nil]];
             break;
     }
+    self.fetchedResultsController.fetchRequest.predicate = predicate;
 
     NSError *error;
     if (![self.fetchedResultsController performFetch:&error])
@@ -239,6 +241,7 @@
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
 
+    dbg(@"controllerDidChangeContent on thread: %@", [NSThread currentThread].name);
     [self.searchDisplayController.searchResultsTableView reloadData];
     //    [self.searchDisplayController.searchResultsTableView endUpdates];
 }

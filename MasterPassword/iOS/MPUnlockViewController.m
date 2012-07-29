@@ -17,6 +17,9 @@
 
 @property (strong, nonatomic) MPUserEntity        *selectedUser;
 @property (strong, nonatomic) NSMutableDictionary *avatarToUser;
+@property (nonatomic) BOOL wordWallAnimating;
+@property (nonatomic, strong) NSArray *wordList;
+
 
 @end
 
@@ -24,16 +27,21 @@
 @synthesize selectedUser;
 @synthesize avatarToUser;
 @synthesize spinner;
+@synthesize passwordFieldLabel;
 @synthesize passwordField;
 @synthesize passwordView;
 @synthesize avatarsView;
 @synthesize nameLabel, oldNameLabel;
 @synthesize avatarTemplate;
+@synthesize createPasswordTipView;
 @synthesize deleteTip;
 @synthesize passwordTipView;
 @synthesize passwordTipLabel;
+@synthesize wordWall;
 @synthesize targetedUserActionGesture;
 @synthesize avatarShadowColor = _avatarShadowColor;
+@synthesize wordWallAnimating = _wordWallAnimating;
+@synthesize wordList = _wordList;
 
 
 - (void)initAvatarAlert:(UIAlertView *)alert forUser:(MPUserEntity *)user {
@@ -66,7 +74,7 @@
                 avatar.backgroundColor = self.avatarTemplate.backgroundColor;
             else
                 avatar.backgroundColor = [UIColor clearColor];
-        } options:0];
+        }                   options:0];
         [avatar onSelect:^(BOOL selected) {
             if (selected)
                 user.avatar = (unsigned)avatar.tag;
@@ -121,6 +129,21 @@
     self.avatarTemplate.hidden        = YES;
     self.spinner.alpha                = 0;
     self.passwordTipView.alpha        = 0;
+    self.createPasswordTipView.alpha  = 0;
+
+    NSMutableArray *wordListLines = [NSMutableArray arrayWithCapacity:27413];
+    [[[NSString alloc] initWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"dictionary" withExtension:@"lst"]]
+                           encoding:NSUTF8StringEncoding] enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
+        [wordListLines addObject:line];
+    }];
+    self.wordList = wordListLines;
+
+    self.wordWall.alpha = 0;
+    [self.wordWall enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+        UILabel *wordLabel = (UILabel *)subview;
+
+        [self initializeWordLabel:wordLabel];
+    }                        recurse:NO];
 
     [super viewDidLoad];
 }
@@ -137,6 +160,9 @@
     [self setPasswordTipView:nil];
     [self setPasswordTipLabel:nil];
     [self setTargetedUserActionGesture:nil];
+    [self setWordWall:nil];
+    [self setCreatePasswordTipView:nil];
+    [self setPasswordFieldLabel:nil];
     [super viewDidUnload];
 }
 
@@ -202,14 +228,14 @@
     avatar.tag                 = user.avatar;
 
     [avatar setBackgroundImage:[UIImage imageNamed:PearlString(@"avatar-%u", user.avatar)]
-            forState:UIControlStateNormal];
+                      forState:UIControlStateNormal];
     [avatar setSelectionInSuperviewCandidate:YES isClearable:YES];
     [avatar onHighlightOrSelect:^(BOOL highlighted, BOOL selected) {
         if (highlighted || selected)
             avatar.backgroundColor = self.avatarTemplate.backgroundColor;
         else
             avatar.backgroundColor = [UIColor clearColor];
-    } options:0];
+    }                   options:0];
     [avatar onSelect:^(BOOL selected) {
         if (selected) {
             if ((self.selectedUser = user))
@@ -220,7 +246,7 @@
             self.selectedUser = nil;
             [self didToggleUserSelection];
         }
-    } options:0];
+    }        options:0];
 
     [self.avatarToUser setObject:NilToNSNull(user) forKey:[NSValue valueWithNonretainedObject:avatar]];
 
@@ -250,9 +276,9 @@
 - (void)didSelectNewUserAvatar:(UIButton *)newUserAvatar {
 
     MPUserEntity *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class])
-                                                 inManagedObjectContext:[MPAppDelegate managedObjectContext]];
+                                                          inManagedObjectContext:[MPAppDelegate managedObjectContext]];
 
-    [self showNewUserNameAlertFor:newUser completion:^(BOOL finished){
+    [self showNewUserNameAlertFor:newUser completion:^(BOOL finished) {
         newUserAvatar.selected = NO;
         if (!finished)
             [[MPAppDelegate managedObjectContext] deleteObject:newUser];
@@ -279,7 +305,7 @@
                      newUser.name = [alert textFieldAtIndex:0].text;
                      [self showNewUserAvatarAlertFor:newUser completion:completion];
                  }
-                 cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonSave, nil];
+                       cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonSave, nil];
 }
 
 - (void)showNewUserAvatarAlertFor:(MPUserEntity *)newUser completion:(void (^)(BOOL finished))completion {
@@ -289,11 +315,11 @@
                          initAlert:^(UIAlertView *_alert, UITextField *_firstField) {
                              [self initAvatarAlert:_alert forUser:newUser];
                          }
-                         tappedButtonBlock:^(UIAlertView *_alert, NSInteger _buttonIndex) {
+                 tappedButtonBlock:^(UIAlertView *_alert, NSInteger _buttonIndex) {
 
-                             // Okay
-                             [self showNewUserConfirmationAlertFor:newUser completion:completion];
-                         } cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
+                     // Okay
+                     [self showNewUserConfirmationAlertFor:newUser completion:completion];
+                 }     cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
 }
 
 - (void)showNewUserConfirmationAlertFor:(MPUserEntity *)newUser completion:(void (^)(BOOL finished))completion {
@@ -306,19 +332,19 @@
                          initAlert:^void(UIAlertView *__alert, UITextField *__firstField) {
                              [self initConfirmationAlert:__alert forUser:newUser];
                          }
-                         tappedButtonBlock:^void(UIAlertView *__alert, NSInteger __buttonIndex) {
-                             if (__buttonIndex == [__alert cancelButtonIndex]) {
-                                 [self showNewUserNameAlertFor:newUser completion:completion];
-                                 return;
-                             }
+                 tappedButtonBlock:^void(UIAlertView *__alert, NSInteger __buttonIndex) {
+                     if (__buttonIndex == [__alert cancelButtonIndex]) {
+                         [self showNewUserNameAlertFor:newUser completion:completion];
+                         return;
+                     }
 
-                             // Confirm
-                             completion(YES);
-                             self.selectedUser = newUser;
+                     // Confirm
+                     completion(YES);
+                     self.selectedUser = newUser;
 
-                             [self updateUsers];
-                         }
-                         cancelTitle:@"Change" otherTitles:@"Confirm", nil];
+                     [self updateUsers];
+                 }
+                       cancelTitle:@"Change" otherTitles:@"Confirm", nil];
 }
 
 - (void)updateLayoutAnimated:(BOOL)animated allowScroll:(BOOL)allowScroll completion:(void (^)(BOOL finished))completion {
@@ -333,14 +359,16 @@
 
             self.oldNameLabel.alpha = 0;
             self.nameLabel.alpha    = 1;
-        } completion:^(BOOL finished) {
+        }                completion:^(BOOL finished) {
             if (completion)
                 completion(finished);
         }];
         return;
     }
 
+    // Lay out password entry and user selection views.
     if (self.selectedUser && !self.passwordView.alpha) {
+        // User was just selected.
         self.passwordView.alpha        = 1;
         self.avatarsView.center        = CGPointMake(160, 170);
         self.avatarsView.scrollEnabled = NO;
@@ -351,6 +379,7 @@
         self.deleteTip.alpha           = 0;
     } else
         if (!self.selectedUser && self.passwordView.alpha == 1) {
+            // User was just deselected.
             self.passwordField.text        = nil;
             self.passwordView.alpha        = 0;
             self.avatarsView.center        = CGPointMake(160, 310);
@@ -362,6 +391,34 @@
             self.deleteTip.alpha           = 0.5;
         }
 
+    // Lay out the word wall.
+    if (!self.selectedUser || self.selectedUser.keyID) {
+        self.passwordFieldLabel.text = @"Enter your master password:";
+
+        self.wordWall.alpha              = 0;
+        self.createPasswordTipView.alpha = 0;
+        self.wordWallAnimating           = NO;
+    } else {
+        self.passwordFieldLabel.text = @"Create your master password:";
+
+        if (!self.wordWallAnimating) {
+            self.wordWallAnimating           = YES;
+            self.wordWall.alpha              = 1;
+            self.createPasswordTipView.alpha = 1;
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // Jump out of our UIView animation block.
+                [self beginWordWallAnimation];
+            });
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 15 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                [UIView animateWithDuration:1 animations:^{
+                    self.createPasswordTipView.alpha = 0;
+                }];
+            });
+        }
+    }
+
+    // Lay out user targeting.
     MPUserEntity *targetedUser   = self.selectedUser;
     UIButton     *selectedAvatar = [self avatarForUser:self.selectedUser];
     UIButton     *targetedAvatar = selectedAvatar;
@@ -382,7 +439,7 @@
         avatar.alpha                  = isTargeted? 1: self.selectedUser? 0.1: 0.4;
 
         [self updateAvatarShadowColor:avatar isTargeted:isTargeted];
-    } recurse:NO];
+    }                           recurse:NO];
 
     if (allowScroll) {
         CGPoint targetContentOffset = CGPointMake(MAX(0, targetedAvatar.center.x - self.avatarsView.bounds.size.width / 2),
@@ -391,6 +448,7 @@
             [self.avatarsView setContentOffset:targetContentOffset animated:animated];
     }
 
+    // Lay out user name label.
     self.nameLabel.text      = targetedUser? targetedUser.name: @"New User";
     self.nameLabel.bounds    = CGRectSetHeight(self.nameLabel.bounds,
                                                [self.nameLabel.text sizeWithFont:self.nameLabel.font
@@ -399,6 +457,36 @@
     self.oldNameLabel.bounds = self.nameLabel.bounds;
     if (completion)
         completion(YES);
+}
+
+- (void)beginWordWallAnimation {
+
+    [self.wordWall enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+        UILabel *wordLabel = (UILabel *)subview;
+
+        if (wordLabel.frame.origin.x < -self.wordWall.frame.size.width / 3) {
+            wordLabel.frame = CGRectSetX(wordLabel.frame, wordLabel.frame.origin.x + self.wordWall.frame.size.width);
+            [self initializeWordLabel:wordLabel];
+        }
+    }                        recurse:NO];
+
+    if (self.wordWallAnimating)
+        [UIView animateWithDuration:15 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+            [self.wordWall enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+                UILabel *wordLabel = (UILabel *)subview;
+
+                wordLabel.frame = CGRectSetX(wordLabel.frame, wordLabel.frame.origin.x - self.wordWall.frame.size.width / 3);
+            }                        recurse:NO];
+        }                completion:^(BOOL finished) {
+            if (finished)
+                [self beginWordWallAnimation];
+        }];
+}
+
+- (void)initializeWordLabel:(UILabel *)wordLabel {
+
+    wordLabel.alpha = 0.05 + (random() % 35) / 100.0F;
+    wordLabel.text  = [self.wordList objectAtIndex:(NSUInteger)random() % [self.wordList count]];
 }
 
 - (void)setPasswordTip:(NSString *)string {
@@ -421,7 +509,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (unlocked)
                 [self dismissViewControllerAnimated:YES completion:nil];
-            
+
             else {
                 if (self.passwordField.text.length)
                     [self setPasswordTip:@"Incorrect password."];
@@ -510,7 +598,8 @@
             pulseShadowOpacityAnimation.repeatCount  = MAXFLOAT;
 
             CAAnimationGroup *group = [[CAAnimationGroup alloc] init];
-            group.animations = [NSArray arrayWithObjects:toShadowColorAnimation, toShadowOpacityAnimation, pulseShadowOpacityAnimation, nil];
+            group.animations = [NSArray arrayWithObjects:toShadowColorAnimation, toShadowOpacityAnimation, pulseShadowOpacityAnimation,
+                                                         nil];
             group.duration   = MAXFLOAT;
 
             [avatar.layer removeAnimationForKey:@"inactiveShadow"];
@@ -575,8 +664,8 @@
 
             [self tryMasterPassword];
         }
-                             cancelTitle:[PearlStrings get].commonButtonCancel
-                             otherTitles:[PearlStrings get].commonButtonContinue, nil];
+                           cancelTitle:[PearlStrings get].commonButtonCancel
+                           otherTitles:[PearlStrings get].commonButtonContinue, nil];
 
 
     return YES;
@@ -631,9 +720,11 @@
                          [self updateUsers];
                      } else
                          if (buttonIndex == [sheet firstOtherButtonIndex]) {
-                             [[MPAppDelegate get] changeMasterPasswordFor:targetedUser];
-                             [[self avatarForUser:targetedUser] setSelected:YES];
+                             [[MPAppDelegate get] changeMasterPasswordFor:targetedUser didResetBlock:^{
+                                 [[self avatarForUser:targetedUser] setSelected:YES];
+                             }];
                          }
-                 } cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];
+                 }     cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:@"Delete User" otherTitles:@"Reset Password",
+                                                                                                                     nil];
 }
 @end

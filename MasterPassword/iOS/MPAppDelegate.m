@@ -286,6 +286,13 @@
     return YES;
 }
 
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
+    
+    wrn(@"Received memory warning.");
+    
+    [super applicationDidReceiveMemoryWarning:application];
+}
+
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 
     inf(@"Re-activated");
@@ -466,7 +473,7 @@
                               [PearlInfoPlist get].CFBundleVersion);
 
     NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
-    [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'DD"];
+    [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
 
     MFMailComposeViewController *composer = [MFMailComposeViewController new];
     [composer setMailComposeDelegate:self];
@@ -480,7 +487,7 @@
     [self.window.rootViewController presentModalViewController:composer animated:YES];
 }
 
-- (void)changeMasterPasswordFor:(MPUserEntity *)user {
+- (void)changeMasterPasswordFor:(MPUserEntity *)user didResetBlock:(void(^)(void))didReset {
 
     [PearlAlert showAlertWithTitle:@"Changing Master Password"
                            message:
@@ -496,6 +503,9 @@
         user.keyID = nil;
         [self forgetSavedKeyFor:user];
         [self signOutAnimated:YES];
+
+        if (didReset)
+            didReset();
 
         [TestFlight passCheckpoint:MPCheckpointChangeMP];
         [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointChangeMP

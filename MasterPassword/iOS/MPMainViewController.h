@@ -47,6 +47,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *outdatedAlertBack;
 @property (weak, nonatomic) IBOutlet UIButton *outdatedAlertCloseButton;
 
+
 @property (copy) void (^contentTipCleanup)(BOOL finished);
 @property (copy) void (^toolTipCleanup)(BOOL finished);
 

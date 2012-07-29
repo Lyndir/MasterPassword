@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11E53" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2549" systemVersion="12A269" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
     <dependencies>
         <deployment defaultVersion="1296" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1181"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1498"/>
     </dependencies>
     <scenes>
         <!--Type View Controller - Type-->
@@ -617,6 +617,136 @@ Your passwords will be AES-encrypted with your master password.</string>
                                 </subviews>
                                 <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                             </view>
+                            <searchBar contentMode="redraw" barStyle="blackOpaque" placeholder="Site name" showsSearchResultsButton="YES" id="qeo-n2-WVh">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <gestureRecognizers/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
+                                <scopeButtonTitles>
+                                    <string>All</string>
+                                    <string>Outdated</string>
+                                </scopeButtonTitles>
+                            </searchBar>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="zOR-Du-qRL" userLabel="View - Search Tip">
+                                <rect key="frame" x="10" y="15" width="300" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_top.png" id="ORD-Xv-bOQ">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <rect key="contentStretch" x="0.15000000000000002" y="0.15000000000000002" width="0.69999999999999973" height="0.69999999999999973"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Begin by entering the name of your site." textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="21b-bH-lR9">
+                                        <rect key="frame" x="-20" y="26" width="340" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="foz-tW-xGw" userLabel="View - Action Tip">
+                                <rect key="frame" x="10" y="0.0" width="300" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_top_right.png" id="4T8-Xf-5E2">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <rect key="contentStretch" x="0.15000000000000002" y="0.15000000000000002" width="0.69999999999999973" height="0.69999999999999973"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Tap        for actions or sending feedback." textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="aSg-lm-MVe">
+                                        <rect key="frame" x="-20" y="20" width="340" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_action.png" id="shE-7F-5So">
+                                        <rect key="frame" x="50" y="18" width="24" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="UM8-56-kAO" userLabel="View - Tool Tip">
+                                <rect key="frame" x="10" y="15" width="266" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_bottom_right.png" id="LqX-rO-rep">
+                                        <rect key="frame" x="0.0" y="0.0" width="266" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <rect key="contentStretch" x="0.15000000000000002" y="0.15000000000000002" width="0.69999999999999973" height="0.69999999999999973"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_edit.png" id="KEn-n3-qhX">
+                                        <rect key="frame" x="77" y="9" width="24" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Tap        to set a password." textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="MtZ-N7-CYD">
+                                        <rect key="frame" x="-20" y="9" width="306" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="g55-0m-WjS" userLabel="View - Type Tip">
+                                <rect key="frame" x="10" y="228" width="300" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_top.png" id="ZR6-xT-bv8">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <rect key="contentStretch" x="0.15000000000000002" y="0.15000000000000002" width="0.69999999999999973" height="0.69999999999999973"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Tap if you need another kind of password." textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="2Iw-KQ-O8t">
+                                        <rect key="frame" x="-20" y="26" width="340" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="v2m-Gf-pEV" userLabel="View - Content Tip">
+                                <rect key="frame" x="55" y="50" width="210" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="fdm-NG-GFC">
+                                        <rect key="frame" x="0.0" y="0.0" width="210" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Copied!" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="ieN-QQ-PyR">
+                                        <rect key="frame" x="19" y="9" width="171" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="b9W-aA-93r" userLabel="View - User Name Tip">
+                                <rect key="frame" x="55" y="110" width="210" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="BQk-Kb-98d">
+                                        <rect key="frame" x="0.0" y="0.0" width="210" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Copied!" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="coX-1P-dqm">
+                                        <rect key="frame" x="19" y="9" width="171" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                             <view alpha="0.0" contentMode="scaleToFill" id="yRY-qt-gz8" userLabel="View - Alert">
                                 <rect key="frame" x="10" y="230" width="300" height="180"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -726,136 +856,6 @@ You should upgrade these sites and update their account's passwords as soon as c
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <searchBar contentMode="redraw" barStyle="blackOpaque" placeholder="Site name" showsSearchResultsButton="YES" id="qeo-n2-WVh">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <gestureRecognizers/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
-                                <scopeButtonTitles>
-                                    <string>All</string>
-                                    <string>Outdated</string>
-                                </scopeButtonTitles>
-                            </searchBar>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="zOR-Du-qRL" userLabel="View - Search Tip">
-                                <rect key="frame" x="10" y="15" width="300" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_top.png" id="ORD-Xv-bOQ">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="60"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <rect key="contentStretch" x="0.15000000000000002" y="0.15000000000000002" width="0.69999999999999973" height="0.69999999999999973"/>
-                                    </imageView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Begin by entering the name of your site." textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="21b-bH-lR9">
-                                        <rect key="frame" x="-20" y="26" width="340" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="foz-tW-xGw" userLabel="View - Action Tip">
-                                <rect key="frame" x="10" y="0.0" width="300" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_top_right.png" id="4T8-Xf-5E2">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="60"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <rect key="contentStretch" x="0.15000000000000002" y="0.15000000000000002" width="0.69999999999999973" height="0.69999999999999973"/>
-                                    </imageView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Tap        for actions or sending feedback." textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="aSg-lm-MVe">
-                                        <rect key="frame" x="-20" y="20" width="340" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_action.png" id="shE-7F-5So">
-                                        <rect key="frame" x="50" y="18" width="24" height="24"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="UM8-56-kAO" userLabel="View - Tool Tip">
-                                <rect key="frame" x="10" y="15" width="266" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_bottom_right.png" id="LqX-rO-rep">
-                                        <rect key="frame" x="0.0" y="0.0" width="266" height="60"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <rect key="contentStretch" x="0.15000000000000002" y="0.15000000000000002" width="0.69999999999999973" height="0.69999999999999973"/>
-                                    </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_edit.png" id="KEn-n3-qhX">
-                                        <rect key="frame" x="78" y="9" width="24" height="24"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                    </imageView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Tap        to set a password." textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="MtZ-N7-CYD">
-                                        <rect key="frame" x="-20" y="9" width="306" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="g55-0m-WjS" userLabel="View - Type Tip">
-                                <rect key="frame" x="10" y="228" width="300" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_top.png" id="ZR6-xT-bv8">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="60"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <rect key="contentStretch" x="0.15000000000000002" y="0.15000000000000002" width="0.69999999999999973" height="0.69999999999999973"/>
-                                    </imageView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Tap if you need another kind of password." textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="2Iw-KQ-O8t">
-                                        <rect key="frame" x="-20" y="26" width="340" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
-                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="v2m-Gf-pEV" userLabel="View - Content Tip">
-                                <rect key="frame" x="55" y="50" width="210" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="fdm-NG-GFC">
-                                        <rect key="frame" x="0.0" y="0.0" width="210" height="60"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    </imageView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Copied!" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="ieN-QQ-PyR">
-                                        <rect key="frame" x="19" y="9" width="171" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
-                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="b9W-aA-93r" userLabel="View - User Name Tip">
-                                <rect key="frame" x="55" y="110" width="210" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="BQk-Kb-98d">
-                                        <rect key="frame" x="0.0" y="0.0" width="210" height="60"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    </imageView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Copied!" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="coX-1P-dqm">
-                                        <rect key="frame" x="19" y="9" width="171" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.14901960784313725" green="0.16470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
@@ -924,7 +924,7 @@ You should upgrade these sites and update their account's passwords as soon as c
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" id="97c-0y-Gcd">
-                                        <rect key="frame" x="-1920" y="0.0" width="2240" height="480"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="2240" height="480"/>
                                         <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="bottom" image="guide_page_0.png" id="Sth-tH-klC">
@@ -1097,7 +1097,7 @@ Pink fluffy door frame.</string>
                                     <outlet property="delegate" destination="qz3-eG-aEi" id="nGi-wL-vBc"/>
                                 </connections>
                             </scrollView>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="6" id="wdw-50-FUU">
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="7" id="wdw-50-FUU">
                                 <rect key="frame" x="141" y="444" width="38" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </pageControl>
@@ -1130,6 +1130,165 @@ Pink fluffy door frame.</string>
                                 <rect key="frame" x="105" y="30" width="110" height="110"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <view contentMode="scaleToFill" id="JTj-nh-BWs" userLabel="Word Wall">
+                                <rect key="frame" x="0.0" y="0.0" width="960" height="200"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="artist" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="N3f-1F-8HL">
+                                        <rect key="frame" x="20" y="10" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="fried" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="5Xl-Wu-xcw">
+                                        <rect key="frame" x="250" y="50" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="aerodrome" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="MYf-Mu-Oal">
+                                        <rect key="frame" x="70" y="80" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="blackmail" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="gVJ-n6-bb6">
+                                        <rect key="frame" x="180" y="110" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="porthole" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="FlX-l9-Jqx">
+                                        <rect key="frame" x="-20" y="140" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="victual" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="mZu-Mg-WHM">
+                                        <rect key="frame" x="220" y="180" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="artist" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="K0A-gc-k9n">
+                                        <rect key="frame" x="500" y="10" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="fried" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="ByX-UQ-PWP">
+                                        <rect key="frame" x="350" y="30" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="aerodrome" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="WRL-vs-tmT">
+                                        <rect key="frame" x="360" y="80" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="blackmail" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="Jex-Kw-Plq">
+                                        <rect key="frame" x="450" y="140" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="porthole" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="MnE-4j-9CP">
+                                        <rect key="frame" x="520" y="110" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="victual" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="S4t-FF-hgt">
+                                        <rect key="frame" x="350" y="183" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="artist" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="XoL-h8-dyb">
+                                        <rect key="frame" x="700" y="15" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="aerodrome" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="YfK-gU-1g3">
+                                        <rect key="frame" x="650" y="40" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="blackmail" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="NhB-hP-Sfl">
+                                        <rect key="frame" x="800" y="100" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="porthole" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="Acu-NC-64u">
+                                        <rect key="frame" x="640" y="120" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="fried" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="bNC-2J-H2d">
+                                        <rect key="frame" x="870" y="150" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="victual" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" enabled="NO" adjustsFontSizeToFit="NO" id="Dbx-W3-Xra">
+                                        <rect key="frame" x="920" y="170" width="320" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="Tap and hold to delete or reset." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="DBJ-Qi-ZcF">
+                                <rect key="frame" x="20" y="460" width="280" height="20"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </label>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="white" delaysContentTouches="NO" id="Blg-F1-9NA">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="340"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -1154,6 +1313,44 @@ Pink fluffy door frame.</string>
                                     <outletCollection property="gestureRecognizers" destination="9WS-yS-aqQ" appends="YES" id="B9k-bg-gqA"/>
                                 </connections>
                             </scrollView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="left" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="8s0-nT-Aoq">
+                                <rect key="frame" x="90" y="289" width="140" height="15"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="13"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="0NM-NI-7UR">
+                                <rect key="frame" x="90" y="77" width="140" height="15"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="13"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="xWL-xQ-KjX">
+                                <rect key="frame" x="20" y="60" width="280" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="Xrk-S4-ZN5">
+                                        <rect key="frame" x="0.0" y="0.0" width="280" height="100"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <rect key="contentStretch" x="0.20000000000000001" y="0.20000000000000001" width="0.59999999999999964" height="0.20000000000000001"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="QBM-XG-Tdb">
+                                        <rect key="frame" x="15" y="0.0" width="250" height="80"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <string key="text">Short phrases make good passwords.
+You could use the word wall for  inspiration in finding a memorable master password.</string>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                             <view contentMode="scaleToFill" id="7cc-yu-i0m">
                                 <rect key="frame" x="20" y="168" width="280" height="88"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -1202,30 +1399,6 @@ Pink fluffy door frame.</string>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="left" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="8s0-nT-Aoq">
-                                <rect key="frame" x="90" y="289" width="140" height="15"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="13"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="0NM-NI-7UR">
-                                <rect key="frame" x="90" y="76.5" width="140" height="15"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="13"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="Tap and hold to delete or reset." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="DBJ-Qi-ZcF">
-                                <rect key="frame" x="20" y="460" width="280" height="20"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -1233,15 +1406,18 @@ Pink fluffy door frame.</string>
                     <connections>
                         <outlet property="avatarTemplate" destination="Ten-ig-gog" id="0ZZ-z5-d5m"/>
                         <outlet property="avatarsView" destination="Blg-F1-9NA" id="2NL-jU-IMI"/>
+                        <outlet property="createPasswordTipView" destination="xWL-xQ-KjX" id="Pa1-Bk-pW2"/>
                         <outlet property="deleteTip" destination="DBJ-Qi-ZcF" id="VXD-Zc-UYi"/>
                         <outlet property="nameLabel" destination="0NM-NI-7UR" id="GBg-Ry-sqj"/>
                         <outlet property="oldNameLabel" destination="8s0-nT-Aoq" id="plu-1H-MVc"/>
                         <outlet property="passwordField" destination="rTR-7Q-X8o" id="Vsn-uO-4lO"/>
+                        <outlet property="passwordFieldLabel" destination="RhX-bA-EhC" id="8Wq-OV-OlS"/>
                         <outlet property="passwordTipLabel" destination="gQ2-mB-BP4" id="aHU-tn-duI"/>
                         <outlet property="passwordTipView" destination="NvG-0R-eTZ" id="4Mx-TL-yfu"/>
                         <outlet property="passwordView" destination="7cc-yu-i0m" id="WoF-Ab-PPC"/>
                         <outlet property="spinner" destination="27q-lX-0vy" id="CGK-G9-PRI"/>
                         <outlet property="targetedUserActionGesture" destination="9WS-yS-aqQ" id="y74-cg-eat"/>
+                        <outlet property="wordWall" destination="JTj-nh-BWs" id="Mdy-OW-ouS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OGA-5j-IcQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1657,11 +1833,13 @@ Pink fluffy door frame.</string>
                 <relationship kind="action" name="closeAlert"/>
                 <relationship kind="action" name="closeOutdatedAlert"/>
                 <relationship kind="action" name="copyContent"/>
+                <relationship kind="action" name="copyUserName:" candidateClass="UITapGestureRecognizer"/>
                 <relationship kind="action" name="editPassword"/>
                 <relationship kind="action" name="editUserName:" candidateClass="UILongPressGestureRecognizer"/>
                 <relationship kind="action" name="incrementPasswordCounter"/>
                 <relationship kind="action" name="infoOutdatedAlert"/>
                 <relationship kind="action" name="resetPasswordCounter:" candidateClass="UILongPressGestureRecognizer"/>
+                <relationship kind="action" name="searchOutdatedElements:" candidateClass="UITapGestureRecognizer"/>
                 <relationship kind="action" name="toggleUser"/>
                 <relationship kind="action" name="upgradePassword"/>
                 <relationship kind="outlet" name="actionsTipContainer" candidateClass="UIView"/>
@@ -1730,15 +1908,18 @@ Pink fluffy door frame.</string>
                 <relationship kind="action" name="targetedUserAction:" candidateClass="UILongPressGestureRecognizer"/>
                 <relationship kind="outlet" name="avatarTemplate" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="avatarsView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="createPasswordTipView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="deleteTip" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="nameLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="oldNameLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="passwordFieldLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="passwordTipLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="passwordTipView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="passwordView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="spinner" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="targetedUserActionGesture" candidateClass="UILongPressGestureRecognizer"/>
+                <relationship kind="outlet" name="wordWall" candidateClass="UIView"/>
             </relationships>
         </class>
     </classes>
