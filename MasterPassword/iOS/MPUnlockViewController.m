@@ -275,13 +275,18 @@
 
 - (void)didSelectNewUserAvatar:(UIButton *)newUserAvatar {
 
-    MPUserEntity *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class])
-                                                          inManagedObjectContext:[MPAppDelegate managedObjectContext]];
+    __block MPUserEntity *newUser = nil;
+    [[MPAppDelegate managedObjectContext] performBlockAndWait:^{
+        newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class])
+                                                inManagedObjectContext:[MPAppDelegate managedObjectContext]];
+    }];
 
     [self showNewUserNameAlertFor:newUser completion:^(BOOL finished) {
         newUserAvatar.selected = NO;
         if (!finished)
-            [[MPAppDelegate managedObjectContext] deleteObject:newUser];
+            [[MPAppDelegate managedObjectContext] performBlock:^{
+                [[MPAppDelegate managedObjectContext] deleteObject:newUser];
+            }];
     }];
 }
 
@@ -715,7 +720,9 @@
                          return;
 
                      if (buttonIndex == [sheet destructiveButtonIndex]) {
-                         [[MPAppDelegate get].managedObjectContext deleteObject:targetedUser];
+                         [[MPAppDelegate get].managedObjectContext performBlockAndWait:^{
+                             [[MPAppDelegate get].managedObjectContext deleteObject:targetedUser];
+                         }];
                          [[MPAppDelegate get] saveContext];
                          [self updateUsers];
                      } else
@@ -724,7 +731,10 @@
                                  [[self avatarForUser:targetedUser] setSelected:YES];
                              }];
                          }
+                         else
+                             [[MPAppDelegate get] saveContext];
                  }     cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:@"Delete User" otherTitles:@"Reset Password",
+                                                                                                                     @"Save",
                                                                                                                      nil];
 }
 @end
