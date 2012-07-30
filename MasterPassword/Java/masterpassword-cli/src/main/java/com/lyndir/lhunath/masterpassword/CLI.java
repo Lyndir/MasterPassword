@@ -18,7 +18,8 @@ package com.lyndir.lhunath.masterpassword;
 import com.google.common.io.LineReader;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 
 
@@ -30,14 +31,19 @@ import java.util.Arrays;
 public class CLI {
 
     static final Logger logger = Logger.get( CLI.class );
+    private static final String ENV_USERNAME = "MP_USERNAME";
+    private static final String ENV_PASSWORD = "MP_PASSWORD";
 
     public static void main(final String[] args)
             throws IOException {
 
-        InputStream in = System.in;
+        String userName, masterPassword, siteName = null;
+
+        /* Environment. */
+        userName = System.getenv().get( ENV_USERNAME );
+        masterPassword = System.getenv().get( ENV_PASSWORD );
 
         /* Arguments. */
-        String userName = null, siteName = null;
         int counter = 1;
         MPElementType type = MPElementType.GeneratedLong;
         boolean typeArg = false, counterArg = false, userNameArg = false;
@@ -72,6 +78,7 @@ public class CLI {
                 System.out.println( "[options] [site name]" );
                 System.out.println();
                 System.out.println( "Available options:" );
+
                 System.out.println( "\t-t | --type [site password type]" );
                 System.out.format( "\t\tDefault: %s.  The password type to use for this site.\n", type.getName() );
                 System.out.println( "\t\tUse 'list' to see the available types." );
@@ -83,26 +90,44 @@ public class CLI {
 
                 System.out.println();
                 System.out.println( "\t-u | --username [user's name]" );
-                System.out.println( "\t\tDefault: asked.  The name of the current user." );
+                System.out.println( "\t\tDefault: asked.  The name of the user." );
+
+                System.out.println();
+                System.out.println( "Available environment variables:" );
+
+                System.out.format( "\t%s\n", ENV_USERNAME );
+                System.out.println( "\t\tThe name of the user." );
+
+                System.out.format( "\t%s\n", ENV_PASSWORD );
+                System.out.println( "\t\tThe master password of the user." );
 
                 System.out.println();
                 return;
             } else
                 siteName = arg;
-        LineReader lineReader = new LineReader( new InputStreamReader( System.in ) );
-        if (siteName == null) {
-            System.out.print( "Site name: " );
-            siteName = lineReader.readLine();
-        }
-        if (userName == null) {
-            System.out.print( "User's name: " );
-            userName = lineReader.readLine();
-        }
-        System.out.print( "User's master password: " );
-        String masterPassword = lineReader.readLine();
 
-        String sitePassword = MasterPassword.generateContent( type, siteName, MasterPassword.keyForPassword( masterPassword, userName ),
-                                                              counter );
-        System.out.println( sitePassword );
+        InputStreamReader inReader = new InputStreamReader( System.in );
+        try {
+            LineReader lineReader = new LineReader( inReader );
+            if (siteName == null) {
+                System.err.format( "Site name: " );
+                siteName = lineReader.readLine();
+            }
+            if (userName == null) {
+                System.err.format( "User's name: " );
+                userName = lineReader.readLine();
+            }
+            if (masterPassword == null) {
+                System.err.format( "%s's master password: ", userName );
+                masterPassword = lineReader.readLine();
+            }
+
+            byte[] masterKey = MasterPassword.keyForPassword( masterPassword, userName );
+            String sitePassword = MasterPassword.generateContent( type, siteName, masterKey, counter );
+            System.out.println( sitePassword );
+        }
+        finally {
+            inReader.close();
+        }
     }
 }
