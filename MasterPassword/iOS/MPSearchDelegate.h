@@ -22,13 +22,13 @@ typedef enum {
 
 @interface MPSearchDelegate : NSObject<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchDisplayDelegate, NSFetchedResultsControllerDelegate>
 
-@property (strong, nonatomic) NSDateFormatter            *dateFormatter;
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-@property (strong, nonatomic) NSString                   *query;
-@property (strong, nonatomic) UILabel                    *tipView;
+@property (strong, nonatomic) NSDateFormatter           *dateFormatter;
+@property (strong, readonly) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic) NSString                  *query;
+@property (strong, nonatomic) UILabel                   *tipView;
 
 @property (weak, nonatomic) IBOutlet id<MPSearchResultsDelegate> delegate;
 @property (strong, nonatomic) IBOutlet UISearchDisplayController *searchDisplayController;
-@property (weak, nonatomic) IBOutlet UIView                    *searchTipContainer;
+@property (weak, nonatomic) IBOutlet UIView                      *searchTipContainer;
 
 @end

@@ -724,6 +724,7 @@
 
     [PearlSheet showSheetWithTitle:targetedUser.name
                            message:nil viewStyle:UIActionSheetStyleBlackTranslucent
+                         initSheet:nil
                  tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
                      if (buttonIndex == [sheet cancelButtonIndex])
                          return;

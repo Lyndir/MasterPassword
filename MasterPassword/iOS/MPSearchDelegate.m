@@ -17,11 +17,13 @@
 
 @end
 
-@implementation MPSearchDelegate
+@implementation MPSearchDelegate {
+
+    NSFetchedResultsController *_fetchedResultsController;
+}
 @synthesize tipView;
 @synthesize query;
 @synthesize dateFormatter;
-@synthesize fetchedResultsController;
 @synthesize delegate;
 @synthesize searchDisplayController;
 @synthesize searchTipContainer;
@@ -34,13 +36,6 @@
     self.dateFormatter           = [NSDateFormatter new];
     self.dateFormatter.dateStyle = NSDateFormatterShortStyle;
     self.query                   = @"";
-
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
-    fetchRequest.sortDescriptors           = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses_" ascending:NO]];
-    self.fetchedResultsController          = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                 managedObjectContext:[MPAppDelegate managedObjectContextIfReady]
-                                                                                   sectionNameKeyPath:nil cacheName:nil];
-    self.fetchedResultsController.delegate = self;
 
     self.tipView                  = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 170)];
     self.tipView.textAlignment    = UITextAlignmentCenter;
@@ -60,6 +55,23 @@
       @"john@apple.com, john@gmail.com";
 
     return self;
+}
+
+- (NSFetchedResultsController *)fetchedResultsController {
+
+    if (!_fetchedResultsController) {
+        NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextIfReady];
+        if (!moc)
+            return nil;
+
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
+        fetchRequest.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses_" ascending:NO]];
+        _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:moc
+                                                                          sectionNameKeyPath:nil cacheName:nil];
+        _fetchedResultsController.delegate = self;
+    }
+
+    return _fetchedResultsController;
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
@@ -175,15 +187,17 @@
     if (![self.fetchedResultsController performFetch:&error])
     err(@"Couldn't fetch elements: %@", error);
 
-    NSArray *subviews = self.searchDisplayController.searchBar.superview.subviews;
-    NSUInteger overlayIndex = [subviews indexOfObject:self.searchDisplayController.searchBar] + 1;
-    UIView *overlay = [subviews count] > overlayIndex? [subviews objectAtIndex:overlayIndex]: nil;
-    if (overlay == self.searchDisplayController.searchResultsTableView || ![overlay isKindOfClass:[UIControl class]])
-        overlay = nil;
-    if (self.tipView.superview != overlay) {
-        [self.tipView removeFromSuperview];
-        [overlay addSubview:self.tipView];
-    }
+    [self.searchDisplayController.searchBar.superview enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+        CGRect searchBarFrame = self.searchDisplayController.searchBar.frame;
+        if ([subview isKindOfClass:[UIControl class]] &&
+         CGPointEqualToPoint(
+          CGPointDistanceBetweenCGPoints(searchBarFrame.origin, subview.frame.origin),
+          CGPointMake(0, searchBarFrame.size.height))) {
+            [self.tipView removeFromSuperview];
+            [subview addSubview:self.tipView];
+            *stop = YES;
+        }
+    }                                                           recurse:NO];
 }
 
 // See MP-14, also crashes easily on internal assertions etc..

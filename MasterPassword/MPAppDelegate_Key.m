@@ -25,8 +25,8 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
 - (MPKey *)loadSavedKeyFor:(MPUserEntity *)user {
 
-    NSData *key = [PearlKeyChain dataOfItemForQuery:keyQuery(user)];
-    if (key)
+    NSData *keyData = [PearlKeyChain dataOfItemForQuery:keyQuery(user)];
+    if (keyData)
     inf(@"Found key in keychain for: %@", user.userID);
 
     else {
@@ -34,20 +34,20 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
         inf(@"No key found in keychain for: %@", user.userID);
     }
 
-    return [MPAlgorithmDefault keyFromKeyData:key];
+    return [MPAlgorithmDefault keyFromKeyData:keyData];
 }
 
 - (void)storeSavedKeyFor:(MPUserEntity *)user {
 
     if (user.saveKey) {
-        NSData *existingKey = [PearlKeyChain dataOfItemForQuery:keyQuery(user)];
+        NSData *existingKeyData = [PearlKeyChain dataOfItemForQuery:keyQuery(user)];
 
-        if (![existingKey isEqualToData:self.key.keyData]) {
+        if (![existingKeyData isEqualToData:self.key.keyData]) {
             inf(@"Saving key in keychain for: %@", user.userID);
 
             [PearlKeyChain addOrUpdateItemForQuery:keyQuery(user)
                                     withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                  self.key, (__bridge id)kSecValueData,
+                                                                  self.key.keyData, (__bridge id)kSecValueData,
                                                                   #if TARGET_OS_IPHONE
                                                                    (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly, (__bridge id)kSecAttrAccessible,
                                                                   #endif
