@@ -1414,6 +1414,10 @@ You could use the word wall for  inspiration in finding a memorable master passw
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" animating="YES" style="whiteLarge" id="XuP-pi-ygN">
+                                <rect key="frame" x="142" y="415" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -1422,7 +1426,8 @@ You could use the word wall for  inspiration in finding a memorable master passw
                         <outlet property="avatarTemplate" destination="Ten-ig-gog" id="0ZZ-z5-d5m"/>
                         <outlet property="avatarsView" destination="Blg-F1-9NA" id="2NL-jU-IMI"/>
                         <outlet property="createPasswordTipView" destination="xWL-xQ-KjX" id="Pa1-Bk-pW2"/>
-                        <outlet property="deleteTip" destination="DBJ-Qi-ZcF" id="VXD-Zc-UYi"/>
+                        <outlet property="tip" destination="DBJ-Qi-ZcF" id="VXD-Zc-UYi"/>
+                        <outlet property="loadingUsersIndicator" destination="XuP-pi-ygN" id="idh-aH-sDL"/>
                         <outlet property="nameLabel" destination="0NM-NI-7UR" id="GBg-Ry-sqj"/>
                         <outlet property="oldNameLabel" destination="8s0-nT-Aoq" id="plu-1H-MVc"/>
                         <outlet property="passwordField" destination="rTR-7Q-X8o" id="Vsn-uO-4lO"/>
@@ -1853,6 +1858,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
                 <relationship kind="action" name="incrementPasswordCounter"/>
                 <relationship kind="action" name="infoOutdatedAlert"/>
                 <relationship kind="action" name="resetPasswordCounter:" candidateClass="UILongPressGestureRecognizer"/>
+                <relationship kind="action" name="searchOutdatedElements"/>
                 <relationship kind="action" name="toggleUser"/>
                 <relationship kind="action" name="upgradePassword"/>
                 <relationship kind="outlet" name="actionsTipContainer" candidateClass="UIView"/>
@@ -1922,7 +1928,8 @@ You could use the word wall for  inspiration in finding a memorable master passw
                 <relationship kind="outlet" name="avatarTemplate" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="avatarsView" candidateClass="UIScrollView"/>
                 <relationship kind="outlet" name="createPasswordTipView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="deleteTip" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="tip" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="loadingUsersIndicator" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="nameLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="oldNameLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>

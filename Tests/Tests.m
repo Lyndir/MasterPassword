@@ -13,7 +13,7 @@
 - (void)setUp
 {
     dbg(@"======================= TEST SET-UP ======================");
-    [PearlLogger get].autoprintLevel = PearlLogLevelTrace;
+    [PearlLogger get].printLevel = PearlLogLevelTrace;
 
     [super setUp];
     

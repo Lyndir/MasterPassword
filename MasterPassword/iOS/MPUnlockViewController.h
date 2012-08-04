@@ -19,11 +19,12 @@
 @property (weak, nonatomic) IBOutlet UILabel      *oldNameLabel;
 @property (weak, nonatomic) IBOutlet UIButton     *avatarTemplate;
 @property (weak, nonatomic) IBOutlet UIView *createPasswordTipView;
-@property (weak, nonatomic) IBOutlet UILabel      *deleteTip;
+@property (weak, nonatomic) IBOutlet UILabel      *tip;
 @property (weak, nonatomic) IBOutlet UIView       *passwordTipView;
 @property (weak, nonatomic) IBOutlet UILabel      *passwordTipLabel;
 @property (weak, nonatomic) IBOutlet UIView *wordWall;
 @property (strong, nonatomic) IBOutlet UILongPressGestureRecognizer *targetedUserActionGesture;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingUsersIndicator;
 
 @property (nonatomic, strong) UIColor *avatarShadowColor;
 

@@ -34,7 +34,7 @@
     [MPiOSConfig get];
 
 #ifdef DEBUG
-    [PearlLogger get].autoprintLevel = PearlLogLevelDebug;
+    [PearlLogger get].printLevel = PearlLogLevelDebug;
     //[NSClassFromString(@"WebView") performSelector:NSSelectorFromString(@"_enableRemoteInspector")];
 #endif
 }
@@ -49,16 +49,14 @@
     [[[NSBundle mainBundle] mutableInfoDictionary] setObject:@"Master Password" forKey:@"CFBundleDisplayName"];
     [[[NSBundle mainBundle] mutableLocalizedInfoDictionary] setObject:@"Master Password" forKey:@"CFBundleDisplayName"];
 
+#ifdef ADHOC
     @try {
         NSString *testFlightToken = [self testFlightToken];
         if ([testFlightToken length]) {
             inf(@"Initializing TestFlight");
             [TestFlight addCustomEnvironmentInformation:@"Anonymous" forKey:@"username"];
-#ifdef ADHOC
             [TestFlight setDeviceIdentifier:[(id)[UIDevice currentDevice] uniqueIdentifier]];
-#else
-            [TestFlight setDeviceIdentifier:[PearlKeyChain deviceIdentifier]];
-#endif
+//            [TestFlight setDeviceIdentifier:[PearlKeyChain deviceIdentifier]];
             [TestFlight setOptions:[NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithBool:NO],   @"logToConsole",
                                     [NSNumber numberWithBool:NO],   @"logToSTDERR",
@@ -81,6 +79,7 @@
     @catch (id exception) {
         err(@"TestFlight: %@", exception);
     }
+#endif
     @try {
         NSString *crashlyticsAPIKey = [self crashlyticsAPIKey];
         if ([crashlyticsAPIKey length]) {
@@ -115,13 +114,13 @@
             [[LocalyticsSession sharedLocalyticsSession] startSession:localyticsKey];
             [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
                 if (message.level >= PearlLogLevelWarn)
-                    [[LocalyticsSession sharedLocalyticsSession] tagEvent:@"Problem" attributes:
-                     [NSDictionary dictionaryWithObjectsAndKeys:
-                      [message levelDescription],
-                      @"level",
-                      message.message,
-                      @"message",
-                      nil]];
+                    [[LocalyticsSession sharedLocalyticsSession] tagEvent:@"Problem"
+                                                               attributes:[NSDictionary
+                                                                dictionaryWithObjectsAndKeys:
+                                                                 [NSString stringWithCString:PearlLogLevelStr(message.level)
+                                                                                    encoding:NSASCIIStringEncoding], @"level",
+                                                                 message.message, @"message",
+                                                                 nil]];
 
                 return YES;
             }];
@@ -155,7 +154,7 @@
                     [NSValue valueWithUIOffset:UIOffsetMake(0, 1)], UITextAttributeTextShadowOffset,
                     [UIFont fontWithName:@"Helvetica-Neue" size:0.0f], UITextAttributeFont,
                     nil]
-                      forState:UIControlStateNormal];
+                                                forState:UIControlStateNormal];
 
     UIImage *toolBarImage = [[UIImage imageNamed:@"ui_toolbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake(25, 5, 5, 5)];
     [[UISearchBar appearance] setBackgroundImage:toolBarImage];
@@ -190,7 +189,7 @@
                                                           [self.navigationController performSegueWithIdentifier:@"MP_Unlock" sender:nil];
                                                       else
                                                           [self.navigationController presentViewController:[self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
-                                                                                     animated:NO completion:nil];
+                                                                                                  animated:NO completion:nil];
                                                   }];
     [[NSNotificationCenter defaultCenter] addObserverForName:kIASKAppSettingChanged object:nil queue:nil
                                                   usingBlock:^(NSNotification *note) {
@@ -224,7 +223,7 @@
     __autoreleasing NSError       *error;
     __autoreleasing NSURLResponse *response;
     NSData                        *importedSitesData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
-                                                                        returningResponse:&response error:&error];
+                                                                             returningResponse:&response error:&error];
     if (error)
     err(@"While reading imported sites from %@: %@", url, error);
     if (!importedSitesData)
@@ -237,33 +236,33 @@
      ^(UIAlertView *alert, NSInteger buttonIndex) {
          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
              MPImportResult result = [self importSites:importedSitesString withPassword:[alert textFieldAtIndex:0].text
-                                                                           askConfirmation:^BOOL(NSUInteger importCount, NSUInteger deleteCount) {
-                                                                               __block BOOL confirmation = NO;
+                                       askConfirmation:^BOOL(NSUInteger importCount, NSUInteger deleteCount) {
+                                           __block BOOL confirmation = NO;
 
-                                                                               dispatch_group_t confirmationGroup = dispatch_group_create();
-                                                                               dispatch_group_enter(confirmationGroup);
-                                                                               dispatch_async(dispatch_get_main_queue(), ^{
-                                                                                   [PearlAlert showAlertWithTitle:@"Import Sites?"
-                                                                                                          message:PearlString(
-                                                                                                           @"Import %d sites, overwriting %d existing sites?",
-                                                                                                           importCount, deleteCount)
-                                                                                                        viewStyle:UIAlertViewStyleDefault
-                                                                                                        initAlert:nil
-                                                                                                tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                                                                                                    if (buttonIndex_
-                                                                                                     != [alert_ cancelButtonIndex])
-                                                                                                        confirmation = YES;
+                                           dispatch_group_t confirmationGroup = dispatch_group_create();
+                                           dispatch_group_enter(confirmationGroup);
+                                           dispatch_async(dispatch_get_main_queue(), ^{
+                                               [PearlAlert showAlertWithTitle:@"Import Sites?"
+                                                                      message:PearlString(
+                                                                       @"Import %d sites, overwriting %d existing sites?",
+                                                                       importCount, deleteCount)
+                                                                    viewStyle:UIAlertViewStyleDefault
+                                                                    initAlert:nil
+                                                            tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                                                                if (buttonIndex_
+                                                                 != [alert_ cancelButtonIndex])
+                                                                    confirmation = YES;
 
-                                                                                                    dispatch_group_leave(confirmationGroup);
-                                                                                                }
-                                                                                                cancelTitle:[PearlStrings get].commonButtonCancel
-                                                                                                otherTitles:@"Import", nil];
-                                                                               });
-                                                                               dispatch_group_wait(
-                                                                                confirmationGroup, DISPATCH_TIME_FOREVER);
+                                                                dispatch_group_leave(confirmationGroup);
+                                                            }
+                                                                  cancelTitle:[PearlStrings get].commonButtonCancel
+                                                                  otherTitles:@"Import", nil];
+                                           });
+                                           dispatch_group_wait(
+                                            confirmationGroup, DISPATCH_TIME_FOREVER);
 
-                                                                               return confirmation;
-                                                                           }];
+                                           return confirmation;
+                                       }];
 
              switch (result) {
                  case MPImportResultSuccess:
@@ -281,15 +280,15 @@
              }
          });
      }
-                         cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Unlock File", nil];
+                       cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Unlock File", nil];
 
     return YES;
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
-    
+
     wrn(@"Received memory warning.");
-    
+
     [super applicationDidReceiveMemoryWarning:application];
 }
 
@@ -352,8 +351,8 @@
     if ([[MPConfig get].iCloud boolValue] != [self.storeManager iCloudEnabled])
         [self.storeManager useiCloudStore:[[MPConfig get].iCloud boolValue] alertUser:YES];
     if ([[MPiOSConfig get].sendInfo boolValue]) {
-        if ([PearlLogger get].autoprintLevel > PearlLogLevelInfo)
-            [PearlLogger get].autoprintLevel = PearlLogLevelInfo;
+        if ([PearlLogger get].printLevel > PearlLogLevelInfo)
+            [PearlLogger get].printLevel = PearlLogLevelInfo;
 
         [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].rememberLogin boolValue] forKey:@"rememberLogin"];
         [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].iCloud boolValue] forKey:@"iCloud"];
@@ -396,11 +395,14 @@
                                                                                                   ? @"YES": @"NO", @"showQuickStart",
                                                                                                  [[PearlConfig get].firstRun boolValue]
                                                                                                   ? @"YES": @"NO", @"firstRun",
-                                                                                                 [[PearlConfig get].launchCount description], @"launchCount",
+                                                                                                 [[PearlConfig get].launchCount description],
+                                                                                                 @"launchCount",
                                                                                                  [[PearlConfig get].askForReviews boolValue]
                                                                                                   ? @"YES": @"NO", @"askForReviews",
-                                                                                                 [[PearlConfig get].reviewAfterLaunches description], @"reviewAfterLaunches",
-                                                                                                 [PearlConfig get].reviewedVersion, @"reviewedVersion",
+                                                                                                 [[PearlConfig get].reviewAfterLaunches description],
+                                                                                                 @"reviewAfterLaunches",
+                                                                                                 [PearlConfig get].reviewedVersion,
+                                                                                                 @"reviewedVersion",
                                                                                                  nil]];
     }
 }
@@ -433,8 +435,8 @@
                               if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
                                // Show Passwords
                                   [self exportShowPasswords:YES];
-                          } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
-         } otherTitles:nil];
+                          }     cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
+         }     otherTitles:nil];
 }
 
 - (void)exportShowPasswords:(BOOL)showPasswords {
@@ -442,11 +444,10 @@
     if (![MFMailComposeViewController canSendMail]) {
         [PearlAlert showAlertWithTitle:@"Cannot Send Mail"
                                message:
-         @"Your device is not yet set up for sending mail.\n"
-         @"Close Master Password, go into Settings and add a Mail account."
+                                @"Your device is not yet set up for sending mail.\n"
+                                 @"Close Master Password, go into Settings and add a Mail account."
                              viewStyle:UIAlertViewStyleDefault
-                             initAlert:nil tappedButtonBlock:nil
-                           cancelTitle:[PearlStrings get].commonButtonOkay
+                             initAlert:nil tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay
                            otherTitles:nil];
         return;
     }
@@ -456,18 +457,18 @@
 
     if (showPasswords)
         message = PearlString(@"Export of Master Password sites with passwords included.\n"
-                              @"REMINDER: Make sure nobody else sees this file!  Passwords are visible!\n\n\n"
-                              @"--\n"
-                              @"%@\n"
-                              @"Master Password %@, build %@",
+                               @"REMINDER: Make sure nobody else sees this file!  Passwords are visible!\n\n\n"
+                               @"--\n"
+                               @"%@\n"
+                               @"Master Password %@, build %@",
                               self.activeUser.name,
                               [PearlInfoPlist get].CFBundleShortVersionString,
                               [PearlInfoPlist get].CFBundleVersion);
     else
         message = PearlString(@"Backup of Master Password sites.\n\n\n"
-                              @"--\n"
-                              @"%@\n"
-                              @"Master Password %@, build %@",
+                               @"--\n"
+                               @"%@\n"
+                               @"Master Password %@, build %@",
                               self.activeUser.name,
                               [PearlInfoPlist get].CFBundleShortVersionString,
                               [PearlInfoPlist get].CFBundleVersion);
@@ -481,13 +482,13 @@
     [composer setMessageBody:message isHTML:NO];
     [composer addAttachmentData:
                [exportedSites dataUsingEncoding:NSUTF8StringEncoding] mimeType:@"text/plain"
-                                                                      fileName:PearlString(@"%@ (%@).mpsites",
-                                                                                           self.activeUser.name,
-                                                                                           [exportDateFormatter stringFromDate:[NSDate date]])];
+     fileName:PearlString(@"%@ (%@).mpsites",
+                          self.activeUser.name,
+                          [exportDateFormatter stringFromDate:[NSDate date]])];
     [self.window.rootViewController presentModalViewController:composer animated:YES];
 }
 
-- (void)changeMasterPasswordFor:(MPUserEntity *)user didResetBlock:(void(^)(void))didReset {
+- (void)changeMasterPasswordFor:(MPUserEntity *)user didResetBlock:(void (^)(void))didReset {
 
     [PearlAlert showAlertWithTitle:@"Changing Master Password"
                            message:
@@ -508,11 +509,10 @@
             didReset();
 
         [TestFlight passCheckpoint:MPCheckpointChangeMP];
-        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointChangeMP
-                                                   attributes:nil];
+        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointChangeMP attributes:nil];
     }
-                         cancelTitle:[PearlStrings get].commonButtonAbort
-                         otherTitles:[PearlStrings get].commonButtonContinue, nil];
+                       cancelTitle:[PearlStrings get].commonButtonAbort
+                       otherTitles:[PearlStrings get].commonButtonContinue, nil];
 }
 
 #pragma mark - PearlConfigDelegate
@@ -540,7 +540,7 @@
                 tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                     if (buttonIndex == [alert firstOtherButtonIndex])
                         return;
-                } otherTitles:@"Retry", nil];
+                }     otherTitles:@"Retry", nil];
             return;
         case MFMailComposeResultCancelled:
             break;
@@ -581,7 +581,7 @@
                                                       initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                                      [self ubiquityStoreManager:manager didSwitchToiCloud:iCloudEnabled];
                                  }
-                                                      cancelTitle:[PearlStrings get].commonButtonThanks otherTitles:nil];
+                                                    cancelTitle:[PearlStrings get].commonButtonThanks otherTitles:nil];
                                  return;
                              }
 
@@ -590,7 +590,7 @@
                                  return;
                              if (buttonIndex == [alert firstOtherButtonIndex] + 1)
                                  [manager useiCloudStore:YES alertUser:NO];
-                         } cancelTitle:@"Leave iCloud Off" otherTitles:@"Explain?", @"Enable iCloud", nil];
+                         }     cancelTitle:@"Leave iCloud Off" otherTitles:@"Explain?", @"Enable iCloud", nil];
         }
     }
 }

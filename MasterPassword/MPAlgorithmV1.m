@@ -54,7 +54,7 @@
         return nil;
 
     if (!(element.type & MPElementTypeClassGenerated)) {
-        err(@"Incorrect type (is not MPElementTypeClassGenerated): %d, for: %@", [self nameOfType:element.type], element.name);
+        err(@"Incorrect type (is not MPElementTypeClassGenerated): %@, for: %@", [self nameOfType:element.type], element.name);
         return nil;
     }
     if (!element.name.length) {

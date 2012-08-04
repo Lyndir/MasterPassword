@@ -34,11 +34,12 @@
 @synthesize nameLabel, oldNameLabel;
 @synthesize avatarTemplate;
 @synthesize createPasswordTipView;
-@synthesize deleteTip;
+@synthesize tip;
 @synthesize passwordTipView;
 @synthesize passwordTipLabel;
 @synthesize wordWall;
 @synthesize targetedUserActionGesture;
+@synthesize loadingUsersIndicator;
 @synthesize avatarShadowColor = _avatarShadowColor;
 @synthesize wordWallAnimating = _wordWallAnimating;
 @synthesize wordList = _wordList;
@@ -154,6 +155,8 @@
          [self updateUsers];
      }];
 
+    [self updateLayoutAnimated:NO allowScroll:YES completion:nil];
+
     [super viewDidLoad];
 }
 
@@ -165,13 +168,14 @@
     [self setAvatarsView:nil];
     [self setNameLabel:nil];
     [self setAvatarTemplate:nil];
-    [self setDeleteTip:nil];
+    [self setTip:nil];
     [self setPasswordTipView:nil];
     [self setPasswordTipLabel:nil];
     [self setTargetedUserActionGesture:nil];
     [self setWordWall:nil];
     [self setCreatePasswordTipView:nil];
     [self setPasswordFieldLabel:nil];
+    [self setLoadingUsersIndicator:nil];
     [super viewDidUnload];
 }
 
@@ -202,9 +206,19 @@
 
 - (void)updateUsers {
 
+    NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextIfReady];
+    if (!moc) {
+        self.tip.text = @"Loading...";
+        [self.loadingUsersIndicator startAnimating];
+        return;
+    }
+
+    self.tip.text = @"Tap and hold to delete or reset.";
+    [self.loadingUsersIndicator stopAnimating];
+
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPUserEntity class])];
     fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO]];
-    NSArray *users = [[MPAppDelegate managedObjectContextIfReady] executeFetchRequest:fetchRequest error:nil];
+    NSArray *users = [moc executeFetchRequest:fetchRequest error:nil];
 
     // Clean up avatars.
     for (UIView *subview in [self.avatarsView subviews])
@@ -390,7 +404,6 @@
         self.nameLabel.backgroundColor = [UIColor blackColor];
         self.oldNameLabel.center       = self.nameLabel.center;
         self.avatarShadowColor         = [UIColor whiteColor];
-        self.deleteTip.alpha           = 0;
     } else
         if (!self.selectedUser && self.passwordView.alpha == 1) {
             // User was just deselected.
@@ -402,7 +415,6 @@
             self.nameLabel.backgroundColor = [UIColor clearColor];
             self.oldNameLabel.center       = self.nameLabel.center;
             self.avatarShadowColor         = [UIColor lightGrayColor];
-            self.deleteTip.alpha           = 0.5;
         }
 
     // Lay out the word wall.
@@ -463,7 +475,7 @@
     }
 
     // Lay out user name label.
-    self.nameLabel.text      = targetedUser? targetedUser.name: @"New User";
+    self.nameLabel.text      = targetedAvatar? targetedUser? targetedUser.name: @"New User": nil;
     self.nameLabel.bounds    = CGRectSetHeight(self.nameLabel.bounds,
                                                [self.nameLabel.text sizeWithFont:self.nameLabel.font
                                                                constrainedToSize:CGSizeMake(self.nameLabel.bounds.size.width - 10, 100)
