@@ -86,7 +86,7 @@
                                                                                                action:@selector(editUserName:)]];
     [self.userNameContainer addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(copyUserName:)]];
     [self.outdatedAlertBack addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                                         action:@selector(searchOutdatedElements:)]];
+                                                                                         action:@selector(infoOutdatedAlert)]];
 
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
 
@@ -137,12 +137,13 @@
     [self updateAnimated:animated];
 
     if ([MPAppDelegate get].activeUser)
-        [[MPAppDelegate get].managedObjectContext performBlock:^void() {
+        [[MPAppDelegate get].managedObjectContextIfReady performBlock:^void() {
             NSError        *error            = nil;
             NSFetchRequest *migrationRequest = [NSFetchRequest
              fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
             migrationRequest.predicate = [NSPredicate predicateWithFormat:@"version_ < %d", MPAlgorithmDefaultVersion];
-            NSArray *migrationElements = [[MPAppDelegate get].managedObjectContext executeFetchRequest:migrationRequest error:&error];
+            NSArray *migrationElements = [[MPAppDelegate get].managedObjectContextIfReady executeFetchRequest:migrationRequest
+                                                                                                        error:&error];
             if (!migrationElements) {
                 err(@"While looking for elements to migrate: %@", error);
                 return;
@@ -652,7 +653,7 @@
                                 }];
 }
 
-- (IBAction)searchOutdatedElements:(UITapGestureRecognizer *)sender {
+- (IBAction)searchOutdatedElements {
 
     self.searchDisplayController.searchBar.selectedScopeButtonIndex    = MPSearchScopeOutdated;
     self.searchDisplayController.searchBar.searchResultsButtonSelected = YES;
@@ -824,16 +825,16 @@
                                     // Update password type.
                                     if ([self.activeElement.algorithm classOfType:type] != self.activeElement.typeClass)
                                      // Type requires a different class of element.  Recreate the element.
-                                        [[MPAppDelegate managedObjectContext] performBlockAndWait:^{
+                                        [[MPAppDelegate managedObjectContextIfReady] performBlockAndWait:^{
                                             MPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:[self.activeElement.algorithm classNameOfType:type]
-                                                                                                        inManagedObjectContext:[MPAppDelegate managedObjectContext]];
+                                                                                                        inManagedObjectContext:[MPAppDelegate managedObjectContextIfReady]];
                                             newElement.name     = self.activeElement.name;
                                             newElement.user     = self.activeElement.user;
                                             newElement.uses     = self.activeElement.uses;
                                             newElement.lastUsed = self.activeElement.lastUsed;
                                             newElement.version  = self.activeElement.version;
 
-                                            [[MPAppDelegate managedObjectContext] deleteObject:self.activeElement];
+                                            [[MPAppDelegate managedObjectContextIfReady] deleteObject:self.activeElement];
                                             self.activeElement = newElement;
                                         }];
 
@@ -941,7 +942,7 @@
 
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
         if ([[[request URL] query] isEqualToString:@"outdated"]) {
-            [self searchOutdatedElements:nil];
+            [self searchOutdatedElements];
             return NO;
         }
 

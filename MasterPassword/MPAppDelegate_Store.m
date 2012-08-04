@@ -13,9 +13,9 @@
 
 #pragma mark - Core Data setup
 
-+ (NSManagedObjectContext *)managedObjectContext {
++ (NSManagedObjectContext *)managedObjectContextIfReady {
 
-    return [[self get] managedObjectContext];
+    return [[self get] managedObjectContextIfReady];
 }
 
 + (NSManagedObjectModel *)managedObjectModel {
@@ -33,7 +33,10 @@
     return managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
 }
 
-- (NSManagedObjectContext *)managedObjectContext {
+- (NSManagedObjectContext *)managedObjectContextIfReady {
+
+    if (![self storeManager].isReady)
+        return nil;
 
     static NSManagedObjectContext *managedObjectContext = nil;
     if (managedObjectContext)
@@ -41,23 +44,12 @@
 
     managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     [managedObjectContext performBlockAndWait:^{
-        managedObjectContext.persistentStoreCoordinator = [self persistentStoreCoordinator];
         managedObjectContext.mergePolicy                = NSMergeByPropertyObjectTrumpMergePolicy;
+        managedObjectContext.persistentStoreCoordinator = [self storeManager].persistentStoreCoordinator;
+        managedObjectContext.undoManager                = [NSUndoManager new];
     }];
 
     return managedObjectContext;
-}
-
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
-
-    // Start loading the store.
-    [self storeManager];
-
-    // Wait until the storeManager is ready.
-    while (![self storeManager].isReady)
-        [NSThread sleepForTimeInterval:0.1];
-
-    return [self storeManager].persistentStoreCoordinator;
 }
 
 - (UbiquityStoreManager *)storeManager {
@@ -112,10 +104,10 @@
 
 - (void)saveContext {
 
-    [self.managedObjectContext performBlock:^{
+    [self.managedObjectContextIfReady performBlock:^{
         NSError *error = nil;
-        if ([self.managedObjectContext hasChanges])
-            if (![self.managedObjectContext save:&error])
+        if ([self.managedObjectContextIfReady hasChanges])
+            if (![self.managedObjectContextIfReady save:&error])
             err(@"While saving context: %@", error);
     }];
 }
@@ -124,7 +116,7 @@
 
 - (NSManagedObjectContext *)managedObjectContextForUbiquityStoreManager:(UbiquityStoreManager *)usm {
 
-    return self.managedObjectContext;
+    return self.managedObjectContextIfReady;
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager log:(NSString *)message {
@@ -197,18 +189,16 @@
     inf(@"Importing sites.");
 
     static NSRegularExpression *headerPattern, *sitePattern;
-    __autoreleasing __block NSError *error;
+    __block NSError *error = nil;
     if (!headerPattern) {
-        headerPattern = [[NSRegularExpression alloc]
-                                              initWithPattern:@"^#[[:space:]]*([^:]+): (.*)"
-                                                      options:0 error:&error];
+        headerPattern = [[NSRegularExpression alloc] initWithPattern:@"^#[[:space:]]*([^:]+): (.*)"
+                                                             options:0 error:&error];
         if (error)
         err(@"Error loading the header pattern: %@", error);
     }
     if (!sitePattern) {
-        sitePattern = [[NSRegularExpression alloc]
-                                            initWithPattern:@"^([^[:space:]]+)[[:space:]]+([[:digit:]]+)[[:space:]]+([[:digit:]]+)(:[[:digit:]]+)?[[:space:]]+([^\t]+)\t(.*)"
-                                                    options:0 error:&error];
+        sitePattern = [[NSRegularExpression alloc] initWithPattern:@"^([^[:space:]]+)[[:space:]]+([[:digit:]]+)[[:space:]]+([[:digit:]]+)(:[[:digit:]]+)?[[:space:]]+([^\t]+)\t(.*)"
+                                                           options:0 error:&error];
         if (error)
         err(@"Error loading the site pattern: %@", error);
     }
@@ -252,9 +242,20 @@
 
                 NSFetchRequest *userFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPUserEntity class])];
                 userFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", userName];
-                [self.managedObjectContext performBlockAndWait:^{
-                    user = [[self.managedObjectContext executeFetchRequest:userFetchRequest error:&error] lastObject];
+                __block NSArray *users = nil;
+                [self.managedObjectContextIfReady performBlockAndWait:^{
+                    users = [self.managedObjectContextIfReady executeFetchRequest:userFetchRequest error:&error];
                 }];
+                if (!users) {
+                    err(@"While looking for user: %@, error: %@", userName, error);
+                    return MPImportResultInternalError;
+                }
+                if ([users count] > 1) {
+                    err(@"While looking for user: %@, found more than one: %u", userName, [users count]);
+                    return MPImportResultInternalError;
+                }
+
+                user = [users count]? [users lastObject]: nil;
                 dbg(@"Found user: %@", [user debugDescription]);
             }
             if ([headerName isEqualToString:@"Key ID"])
@@ -298,8 +299,8 @@
         if (user) {
             fetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND user == %@", name, user];
             __block NSArray *existingSites = nil;
-            [self.managedObjectContext performBlockAndWait:^{
-                existingSites = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+            [self.managedObjectContextIfReady performBlockAndWait:^{
+                existingSites = [self.managedObjectContextIfReady executeFetchRequest:fetchRequest error:&error];
             }];
             if (!existingSites) {
                 err(@"Lookup of existing sites failed for site: %@, user: %@, error: %@", name, user.userID, error);
@@ -323,24 +324,24 @@
     }
 
     BOOL success = NO;
-    [self.managedObjectContext.undoManager beginUndoGrouping];
+    [self.managedObjectContextIfReady.undoManager beginUndoGrouping];
     @try {
 
         // Delete existing sites.
         if (elementsToDelete.count)
-            [self.managedObjectContext performBlockAndWait:^{
+            [self.managedObjectContextIfReady performBlockAndWait:^{
                 [elementsToDelete enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
                     inf(@"Deleting site: %@, it will be replaced by an imported site.", [obj name]);
                     dbg(@"Deleted Element: %@", [obj debugDescription]);
-                    [self.managedObjectContext deleteObject:obj];
+                    [self.managedObjectContextIfReady deleteObject:obj];
                 }];
             }];
 
         // Import new sites.
         if (!user) {
-            [self.managedObjectContext performBlockAndWait:^{
+            [self.managedObjectContextIfReady performBlockAndWait:^{
                 user = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class])
-                                                     inManagedObjectContext:self.managedObjectContext];
+                                                     inManagedObjectContext:self.managedObjectContextIfReady];
                 user.name  = userName;
                 user.keyID = [keyIDHex decodeHex];
             }];
@@ -355,9 +356,9 @@
             NSString *exportContent = [siteElements objectAtIndex:5];
 
             // Create new site.
-            [self.managedObjectContext performBlockAndWait:^{
+            [self.managedObjectContextIfReady performBlockAndWait:^{
                 MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:[key.algorithm classNameOfType:type]
-                                                                         inManagedObjectContext:self.managedObjectContext];
+                                                                         inManagedObjectContext:self.managedObjectContextIfReady];
                 element.name     = name;
                 element.user     = user;
                 element.type     = type;
@@ -385,10 +386,10 @@
         return MPImportResultSuccess;
     }
     @finally {
-        [self.managedObjectContext.undoManager endUndoGrouping];
+        [self.managedObjectContextIfReady.undoManager endUndoGrouping];
 
         if (!success)
-            [self.managedObjectContext.undoManager undoNestedGroup];
+            [self.managedObjectContextIfReady.undoManager undoNestedGroup];
     }
 }
 

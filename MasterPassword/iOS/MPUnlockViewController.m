@@ -44,7 +44,7 @@
 @synthesize wordList = _wordList;
 
 
-- (void)initAvatarAlert:(UIAlertView *)alert forUser:(MPUserEntity *)user {
+- (void)initializeAvatarAlert:(UIAlertView *)alert forUser:(MPUserEntity *)user {
 
     UIScrollView *alertAvatarScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(12, 30, 260, 150)];
     alertAvatarScrollView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
@@ -88,7 +88,7 @@
     [alertAvatarScrollView setContentOffset:selectedOffset animated:YES];
 }
 
-- (void)initConfirmationAlert:(UIAlertView *)alert forUser:(MPUserEntity *)user {
+- (void)initializeConfirmationAlert:(UIAlertView *)alert forUser:(MPUserEntity *)user {
 
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(12, 70, 260, 110)];
     [alert addSubview:container];
@@ -145,6 +145,15 @@
         [self initializeWordLabel:wordLabel];
     }                        recurse:NO];
 
+    [[NSNotificationCenter defaultCenter] addObserverForName:PersistentStoreDidChange object:nil queue:nil usingBlock:
+     ^(NSNotification *note) {
+         [self updateUsers];
+     }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:PersistentStoreDidMergeChanges object:nil queue:nil usingBlock:
+     ^(NSNotification *note) {
+         [self updateUsers];
+     }];
+
     [super viewDidLoad];
 }
 
@@ -195,7 +204,7 @@
 
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPUserEntity class])];
     fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO]];
-    NSArray *users = [[MPAppDelegate managedObjectContext] executeFetchRequest:fetchRequest error:nil];
+    NSArray *users = [[MPAppDelegate managedObjectContextIfReady] executeFetchRequest:fetchRequest error:nil];
 
     // Clean up avatars.
     for (UIView *subview in [self.avatarsView subviews])
@@ -276,16 +285,16 @@
 - (void)didSelectNewUserAvatar:(UIButton *)newUserAvatar {
 
     __block MPUserEntity *newUser = nil;
-    [[MPAppDelegate managedObjectContext] performBlockAndWait:^{
+    [[MPAppDelegate managedObjectContextIfReady] performBlockAndWait:^{
         newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class])
-                                                inManagedObjectContext:[MPAppDelegate managedObjectContext]];
+                                                inManagedObjectContext:[MPAppDelegate managedObjectContextIfReady]];
     }];
 
     [self showNewUserNameAlertFor:newUser completion:^(BOOL finished) {
         newUserAvatar.selected = NO;
         if (!finished)
-            [[MPAppDelegate managedObjectContext] performBlock:^{
-                [[MPAppDelegate managedObjectContext] deleteObject:newUser];
+            [[MPAppDelegate managedObjectContextIfReady] performBlock:^{
+                [[MPAppDelegate managedObjectContextIfReady] deleteObject:newUser];
             }];
     }];
 }
@@ -318,7 +327,7 @@
     [PearlAlert showAlertWithTitle:@"Choose Your Avatar"
                            message:@"\n\n\n\n\n\n" viewStyle:UIAlertViewStyleDefault
                          initAlert:^(UIAlertView *_alert, UITextField *_firstField) {
-                             [self initAvatarAlert:_alert forUser:newUser];
+                             [self initializeAvatarAlert:_alert forUser:newUser];
                          }
                  tappedButtonBlock:^(UIAlertView *_alert, NSInteger _buttonIndex) {
 
@@ -335,7 +344,7 @@
                              @"\n\n\n\n\n\n"
                          viewStyle:UIAlertViewStyleDefault
                          initAlert:^void(UIAlertView *__alert, UITextField *__firstField) {
-                             [self initConfirmationAlert:__alert forUser:newUser];
+                             [self initializeConfirmationAlert:__alert forUser:newUser];
                          }
                  tappedButtonBlock:^void(UIAlertView *__alert, NSInteger __buttonIndex) {
                      if (__buttonIndex == [__alert cancelButtonIndex]) {
@@ -720,8 +729,8 @@
                          return;
 
                      if (buttonIndex == [sheet destructiveButtonIndex]) {
-                         [[MPAppDelegate get].managedObjectContext performBlockAndWait:^{
-                             [[MPAppDelegate get].managedObjectContext deleteObject:targetedUser];
+                         [[MPAppDelegate get].managedObjectContextIfReady performBlockAndWait:^{
+                             [[MPAppDelegate get].managedObjectContextIfReady deleteObject:targetedUser];
                          }];
                          [[MPAppDelegate get] saveContext];
                          [self updateUsers];

@@ -28,3 +28,6 @@ Press/MasterPassword_PressKit/MasterPassword_pressrelease_*.pdf
 # IPA
 /sendipa/*
 !/sendipa/sendipa.conf
+
+# Java
+MasterPassword/Java/**/target

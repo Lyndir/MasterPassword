@@ -38,7 +38,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
     fetchRequest.sortDescriptors           = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses_" ascending:NO]];
     self.fetchedResultsController          = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                 managedObjectContext:[MPAppDelegate managedObjectContext]
+                                                                                 managedObjectContext:[MPAppDelegate managedObjectContextIfReady]
                                                                                    sectionNameKeyPath:nil cacheName:nil];
     self.fetchedResultsController.delegate = self;
 

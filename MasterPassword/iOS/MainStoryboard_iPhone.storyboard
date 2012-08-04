@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2549" systemVersion="12A269" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
     <dependencies>
-        <deployment defaultVersion="1296" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1498"/>
     </dependencies>
     <scenes>
@@ -564,7 +563,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                                 <rect key="frame" x="20" y="94" width="280" height="31"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Tap and hold to save a user name." textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="tj6-Ot-Fuh">
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Tap and hold to save a login name." textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="tj6-Ot-Fuh">
                                                         <rect key="frame" x="0.0" y="0.0" width="280" height="31"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -814,9 +813,9 @@ L4m3P4sSw0rD</string>
                                         <rect key="frame" x="20" y="60" width="260" height="130"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <string key="text">Some of your sites have outdated passwords.  Tap this alert to see them.
+                                        <string key="text">Some of your sites have outdated passwords.  Tap this alert for more info or       to find them.
 
-You should upgrade these sites and update their account's passwords as soon as convenient.</string>
+You should upgrade these sites and update their account's passwords as soon as is convenient.</string>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -842,7 +841,7 @@ You should upgrade these sites and update their account's passwords as soon as c
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <accessibility key="accessibilityConfiguration" hint="" label="Close"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" image="icon_info.png">
+                                        <state key="normal" image="icon_find.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -850,7 +849,23 @@ You should upgrade these sites and update their account's passwords as soon as c
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="infoOutdatedAlert" destination="PQa-Xl-A3x" eventType="touchUpInside" id="U2G-GA-wT2"/>
+                                            <action selector="searchOutdatedElements" destination="PQa-Xl-A3x" eventType="touchUpInside" id="7Wz-49-RQe"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Sfy-hx-kVU">
+                                        <rect key="frame" x="184" y="81" width="22" height="22"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        <accessibility key="accessibilityConfiguration" hint="" label="Close"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" image="icon_find.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="searchOutdatedElements" destination="PQa-Xl-A3x" eventType="touchUpInside" id="4jj-PA-b0I"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -1798,7 +1813,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
         <image name="icon_action.png" width="32" height="32"/>
         <image name="icon_cancel.png" width="32" height="32"/>
         <image name="icon_edit.png" width="32" height="32"/>
-        <image name="icon_info.png" width="32" height="32"/>
+        <image name="icon_find.png" width="32" height="32"/>
         <image name="icon_person.png" width="32" height="32"/>
         <image name="icon_plus.png" width="32" height="32"/>
         <image name="icon_up.png" width="32" height="32"/>
@@ -1833,13 +1848,11 @@ You could use the word wall for  inspiration in finding a memorable master passw
                 <relationship kind="action" name="closeAlert"/>
                 <relationship kind="action" name="closeOutdatedAlert"/>
                 <relationship kind="action" name="copyContent"/>
-                <relationship kind="action" name="copyUserName:" candidateClass="UITapGestureRecognizer"/>
                 <relationship kind="action" name="editPassword"/>
                 <relationship kind="action" name="editUserName:" candidateClass="UILongPressGestureRecognizer"/>
                 <relationship kind="action" name="incrementPasswordCounter"/>
                 <relationship kind="action" name="infoOutdatedAlert"/>
                 <relationship kind="action" name="resetPasswordCounter:" candidateClass="UILongPressGestureRecognizer"/>
-                <relationship kind="action" name="searchOutdatedElements:" candidateClass="UITapGestureRecognizer"/>
                 <relationship kind="action" name="toggleUser"/>
                 <relationship kind="action" name="upgradePassword"/>
                 <relationship kind="outlet" name="actionsTipContainer" candidateClass="UIView"/>

@@ -60,6 +60,7 @@
 - (IBAction)upgradePassword;
 - (IBAction)action:(UIBarButtonItem *)sender;
 - (IBAction)toggleUser;
+- (IBAction)searchOutdatedElements;
 - (IBAction)closeOutdatedAlert;
 - (IBAction)infoOutdatedAlert;
 

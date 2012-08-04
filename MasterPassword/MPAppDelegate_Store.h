@@ -20,9 +20,9 @@ typedef enum {
 
 @interface MPAppDelegate_Shared (Store)<UbiquityStoreManagerDelegate>
 
-+ (NSManagedObjectContext *)managedObjectContext;
++ (NSManagedObjectContext *)managedObjectContextIfReady;
 + (NSManagedObjectModel *)managedObjectModel;
-- (NSManagedObjectContext *)managedObjectContext;
+- (NSManagedObjectContext *)managedObjectContextIfReady;
 - (NSManagedObjectModel *)managedObjectModel;
 
 - (UbiquityStoreManager *)storeManager;
