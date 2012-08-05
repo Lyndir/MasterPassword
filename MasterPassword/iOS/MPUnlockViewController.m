@@ -292,9 +292,8 @@
         }
 
     [self updateLayoutAnimated:YES allowScroll:YES completion:^(BOOL finished) {
-        if (finished)
-            if (self.selectedUser)
-                [self.passwordField becomeFirstResponder];
+        if (self.selectedUser)
+            [self.passwordField becomeFirstResponder];
     }];
 }
 
@@ -738,27 +737,24 @@
 
     [PearlSheet showSheetWithTitle:targetedUser.name
                            message:nil viewStyle:UIActionSheetStyleBlackTranslucent
-                         initSheet:nil
-                 tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
-                     if (buttonIndex == [sheet cancelButtonIndex])
-                         return;
+                         initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
+        if (buttonIndex == [sheet cancelButtonIndex])
+            return;
 
-                     if (buttonIndex == [sheet destructiveButtonIndex]) {
-                         [[MPAppDelegate get].managedObjectContextIfReady performBlockAndWait:^{
-                             [[MPAppDelegate get].managedObjectContextIfReady deleteObject:targetedUser];
-                         }];
-                         [[MPAppDelegate get] saveContext];
-                         [self updateUsers];
-                     } else
-                         if (buttonIndex == [sheet firstOtherButtonIndex]) {
-                             [[MPAppDelegate get] changeMasterPasswordFor:targetedUser didResetBlock:^{
-                                 [[self avatarForUser:targetedUser] setSelected:YES];
-                             }];
-                         }
-                         else
-                             [[MPAppDelegate get] saveContext];
-                 }     cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:@"Delete User" otherTitles:@"Reset Password",
-                                                                                                                     @"Save",
-                                                                                                                     nil];
+        if (buttonIndex == [sheet destructiveButtonIndex]) {
+            [[MPAppDelegate get].managedObjectContextIfReady performBlockAndWait:^{
+                [[MPAppDelegate get].managedObjectContextIfReady deleteObject:targetedUser];
+            }];
+            [[MPAppDelegate get] saveContext];
+            [self updateUsers];
+            return;
+        }
+
+        if (buttonIndex == [sheet firstOtherButtonIndex])
+            [[MPAppDelegate get] changeMasterPasswordFor:targetedUser didResetBlock:^{
+                [[self avatarForUser:targetedUser] setSelected:YES];
+            }];
+    }                  cancelTitle:[PearlStrings get].commonButtonCancel
+                  destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];
 }
 @end
