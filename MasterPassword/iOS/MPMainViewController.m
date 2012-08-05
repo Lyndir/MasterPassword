@@ -120,9 +120,9 @@
     inf(@"Main will appear.");
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:animated? UIStatusBarAnimationSlide: UIStatusBarAnimationNone];
 
-    if (![MPAppDelegate get].activeUser)
-        [self.navigationController presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
-                                                animated:animated completion:nil];
+    if ([[MPiOSConfig get].showQuickStart boolValue])
+        [[MPAppDelegate get] showGuide];
+
     if (self.activeElement.user != [MPAppDelegate get].activeUser)
         self.activeElement                      = nil;
     self.searchDisplayController.searchBar.text = nil;
@@ -135,6 +135,35 @@
     self.toolTipContainer.alpha       = 0;
 
     [self updateAnimated:animated];
+
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+
+    if (![MPAppDelegate get].activeUser)
+        [self.navigationController presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
+                                                animated:animated completion:nil];
+
+    if (![[MPiOSConfig get].actionsTipShown boolValue])
+        [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
+            self.actionsTipContainer.alpha = 1;
+        }                completion:^(BOOL finished) {
+            if (finished) {
+                [MPiOSConfig get].actionsTipShown = PearlBool(YES);
+
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [UIView animateWithDuration:0.2f animations:^{
+                        self.actionsTipContainer.alpha = 0;
+                    }                completion:^(BOOL finished_) {
+                        if (![self.activeElement.name length])
+                            [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
+                                self.searchTipContainer.alpha = 1;
+                            }];
+                    }];
+                });
+            }
+        }];
 
     if ([MPAppDelegate get].activeUser)
         [[MPAppDelegate get].managedObjectContextIfReady performBlock:^void() {
@@ -161,31 +190,6 @@
                     self.outdatedAlertContainer.alpha = 1;
                 }];
 
-        }];
-
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-
-    if (![[MPiOSConfig get].actionsTipShown boolValue])
-        [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
-            self.actionsTipContainer.alpha = 1;
-        }                completion:^(BOOL finished) {
-            if (finished) {
-                [MPiOSConfig get].actionsTipShown = PearlBool(YES);
-
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [UIView animateWithDuration:0.2f animations:^{
-                        self.actionsTipContainer.alpha = 0;
-                    }                completion:^(BOOL finished_) {
-                        if (![self.activeElement.name length])
-                            [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
-                                self.searchTipContainer.alpha = 1;
-                            }];
-                    }];
-                });
-            }
         }];
 
     [super viewDidAppear:animated];

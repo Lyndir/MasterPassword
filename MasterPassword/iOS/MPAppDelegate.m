@@ -297,9 +297,6 @@
     inf(@"Re-activated");
     [[MPAppDelegate get] checkConfig];
 
-    if ([[MPiOSConfig get].showQuickStart boolValue])
-        [self showGuide];
-
     [TestFlight passCheckpoint:MPCheckpointActivated];
 
     [super applicationDidBecomeActive:application];

@@ -194,6 +194,8 @@
 
     if (!animated)
         [[self findTargetedAvatar] setSelected:YES];
+    else
+        [self updateLayoutAnimated:YES allowScroll:YES completion:nil];
 
     [super viewDidAppear:animated];
 }
