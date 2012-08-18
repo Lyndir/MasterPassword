@@ -185,6 +185,7 @@
     if (!key)
         return;
 
+    assert([key.keyID isEqualToData:self.user.keyID]);
     [self setContent:content usingKey:key];
 }
 
@@ -209,7 +210,7 @@
 - (void)setContent:(id)content usingKey:(MPKey *)key {
 
     assert(self.type & MPElementTypeClassStored);
-    assert([key.keyID isEqualToData:self.user.keyID]);
+    assert(key);
 
     NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[key subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
 

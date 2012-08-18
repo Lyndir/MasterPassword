@@ -26,9 +26,9 @@
  *
  **/
 #ifdef DEBUG
-	#define CLS_LOG(__FORMAT__, ...) CLSNSLog((@"%s line %d $ " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+	#define CLS_LOG(__FORMAT__, ...) CLSNSLog((@"%s line %d $ " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 #else
-	#define CLS_LOG(__FORMAT__, ...) CLSLog((@"%s line %d $ " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+	#define CLS_LOG(__FORMAT__, ...) CLSLog((@"%s line %d $ " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 #endif
 
 /**
@@ -37,15 +37,15 @@
  * and will only be visible in your Crashlytics dashboard.
  *
  **/
-void CLSLog(NSString *format, ...);
+OBJC_EXTERN void CLSLog(NSString *format, ...);
 
 /**
  *
  * Add logging that will be sent with your crash data. This logging will show up in the system.log
- * and your Crashlytics dashboard. It is not reccomended for Release builds.
+ * and your Crashlytics dashboard. It is not recommended for Release builds.
  *
  **/
-void CLSNSLog(NSString *format, ...);
+OBJC_EXTERN void CLSNSLog(NSString *format, ...);
 
 @protocol CrashlyticsDelegate;
 

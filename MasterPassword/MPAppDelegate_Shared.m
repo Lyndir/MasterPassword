@@ -7,11 +7,15 @@
 //
 
 #import "MPAppDelegate_Shared.h"
+#import "MPAppDelegate_Store.h"
+
+@interface MPAppDelegate_Shared ()
+
+@property (strong) NSManagedObjectID *activeUserID;
+
+@end
 
 @implementation MPAppDelegate_Shared
-
-@synthesize key;
-@synthesize activeUser;
 
 + (MPAppDelegate_Shared *)get {
 
@@ -39,6 +43,16 @@
     
     return applicationFilesDirectory;
 #endif
+}
+
+- (MPUserEntity *)activeUser {
+
+    return (MPUserEntity *)[self.managedObjectContextIfReady objectWithID:self.activeUserID];
+}
+
+- (void)setActiveUser:(MPUserEntity *)activeUser {
+
+    self.activeUserID = activeUser.objectID;
 }
 
 @end
