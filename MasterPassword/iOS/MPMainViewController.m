@@ -303,7 +303,7 @@
 
 - (void)setHelpHidden:(BOOL)hidden animated:(BOOL)animated {
 
-    [MPiOSConfig get].helpHidden = PearlBool(hidden);
+    [MPiOSConfig get].helpHidden = @(hidden);
     [self updateHelpHiddenAnimated:animated];
 }
 
@@ -481,11 +481,8 @@
 
     [TestFlight passCheckpoint:MPCheckpointCopyToPasteboard];
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyToPasteboard
-                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                         self.activeElement.typeName, @"type",
-                                                                         PearlUnsignedInteger(self.activeElement.version),
-                                                                         @"version",
-                                                                         nil]];
+                                               attributes:@{@"type": self.activeElement.typeName,
+                                                                         @"version": @(self.activeElement.version)}];
 }
 
 - (IBAction)copyLoginName:(UITapGestureRecognizer *)sender {
@@ -500,11 +497,8 @@
 
     [TestFlight passCheckpoint:MPCheckpointCopyLoginNameToPasteboard];
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyLoginNameToPasteboard
-                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                         self.activeElement.typeName, @"type",
-                                                                         PearlUnsignedInteger(self.activeElement.version),
-                                                                         @"version",
-                                                                         nil]];
+                                               attributes:@{@"type": self.activeElement.typeName,
+                                                                         @"version": @(self.activeElement.version)}];
 }
 
 - (IBAction)incrementPasswordCounter {
@@ -524,12 +518,8 @@
 
                                     [TestFlight passCheckpoint:MPCheckpointIncrementPasswordCounter];
                                     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointIncrementPasswordCounter
-                                                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                         self.activeElement.typeName,
-                                                                                                         @"type",
-                                                                                                         PearlUnsignedInteger(self.activeElement.version),
-                                                                                                         @"version",
-                                                                                                         nil]];
+                                                                               attributes:@{@"type": self.activeElement.typeName,
+                                                                                                         @"version": @(self.activeElement.version)}];
                                 }];
 }
 
@@ -555,12 +545,8 @@
 
                                     [TestFlight passCheckpoint:MPCheckpointResetPasswordCounter];
                                     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointResetPasswordCounter
-                                                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                         self.activeElement.typeName,
-                                                                                                         @"type",
-                                                                                                         PearlUnsignedInteger(self.activeElement.version),
-                                                                                                         @"version",
-                                                                                                         nil]];
+                                                                               attributes:@{@"type": self.activeElement.typeName,
+                                                                                                         @"version": @(self.activeElement.version)}];
                                 }];
 }
 
@@ -577,12 +563,8 @@
     [self.loginNameField becomeFirstResponder];
 
     [TestFlight passCheckpoint:MPCheckpointEditLoginName];
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditLoginName attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                             self.activeElement.typeName,
-                                                                                                             @"type",
-                                                                                                             PearlUnsignedInteger(self.activeElement.version),
-                                                                                                             @"version",
-                                                                                                             nil]];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditLoginName attributes:@{@"type": self.activeElement.typeName,
+                                                                                                             @"version": @(self.activeElement.version)}];
 }
 
 - (void)changeElementWithWarning:(NSString *)warning do:(void (^)(void))task; {
@@ -624,11 +606,8 @@
 
         [TestFlight passCheckpoint:MPCheckpointEditPassword];
         [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditPassword
-                                                   attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                             self.activeElement.typeName, @"type",
-                                                                             PearlUnsignedInteger(self.activeElement.version),
-                                                                             @"version",
-                                                                             nil]];
+                                                   attributes:@{@"type": self.activeElement.typeName,
+                                                                             @"version": @(self.activeElement.version)}];
     }
 }
 
@@ -648,12 +627,8 @@
 
                                     [TestFlight passCheckpoint:MPCheckpointExplicitMigration];
                                     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointExplicitMigration
-                                                                               attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                         self.activeElement.typeName,
-                                                                                                         @"type",
-                                                                                                         PearlUnsignedInteger(self.activeElement.version),
-                                                                                                         @"version",
-                                                                                                         nil]];
+                                                                               attributes:@{@"type": self.activeElement.typeName,
+                                                                                                         @"version": @(self.activeElement.version)}];
                                 }];
 }
 
@@ -753,7 +728,7 @@
                                                       initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                                      MFMailComposeViewController *composer = [MFMailComposeViewController new];
                                      [composer setMailComposeDelegate:self];
-                                     [composer setToRecipients:[NSArray arrayWithObject:@"Master Password Development <masterpassword@lyndir.com>"]];
+                                     [composer setToRecipients:@[@"Master Password Development <masterpassword@lyndir.com>"]];
                                      [composer setSubject:PearlString(@"Feedback for Master Password [%@]",
                                                                       [[PearlKeyChain deviceIdentifier] stringByDeletingMatchesOf:@"-.*"])];
                                      [composer setMessageBody:
@@ -885,12 +860,8 @@
 
         [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationElementUpdated object:self.activeElement];
         [TestFlight passCheckpoint:PearlString(MPCheckpointUseType @"_%@", self.activeElement.typeShortName)];
-        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointUseType attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                            self.activeElement.typeName,
-                                                                                                            @"type",
-                                                                                                            PearlUnsignedInteger(self.activeElement.version),
-                                                                                                            @"version",
-                                                                                                            nil]];
+        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointUseType attributes:@{@"type": self.activeElement.typeName,
+                                                                                                            @"version": @(self.activeElement.version)}];
     }
 
     [self.searchDisplayController setActive:NO animated:YES];

@@ -24,10 +24,10 @@ id<MPAlgorithm> MPAlgorithmForVersion(NSUInteger version) {
     if (!versionToAlgorithm)
         versionToAlgorithm = [NSMutableDictionary dictionary];
 
-    id<MPAlgorithm> algorithm = [versionToAlgorithm objectForKey:PearlUnsignedInteger(version)];
+    id<MPAlgorithm> algorithm = [versionToAlgorithm objectForKey:@(version)];
     if (!algorithm)
         if ((algorithm = [NSClassFromString(PearlString(@"MPAlgorithmV%u", version)) new]))
-            [versionToAlgorithm setObject:algorithm forKey:PearlUnsignedInteger(version)];
+            [versionToAlgorithm setObject:algorithm forKey:@(version)];
 
     return algorithm;
 }

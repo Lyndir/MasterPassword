@@ -14,16 +14,14 @@
     if (!(self = [super init]))
         return self;
 
-    [self.defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                   [NSNumber numberWithBool:NO], NSStringFromSelector(@selector(sendInfo)),
-                                                   [NSNumber numberWithBool:NO], NSStringFromSelector(@selector(helpHidden)),
-                                                   [NSNumber numberWithBool:YES], NSStringFromSelector(@selector(siteInfoHidden)),
-                                                   [NSNumber numberWithBool:YES], NSStringFromSelector(@selector(showQuickStart)),
-                                                   @"510296984", NSStringFromSelector(@selector(iTunesID)),
-                                                   PearlBoolNot(self.firstRun), NSStringFromSelector(@selector(actionsTipShown)),
-                                                   PearlBoolNot(self.firstRun), NSStringFromSelector(@selector(typeTipShown)),
-                                                   PearlBool(NO), NSStringFromSelector(@selector(loginNameTipShown)),
-                                                   nil]];
+    [self.defaults registerDefaults:@{NSStringFromSelector(@selector(sendInfo)): @NO,
+                                                   NSStringFromSelector(@selector(helpHidden)): @NO,
+                                                   NSStringFromSelector(@selector(siteInfoHidden)): @YES,
+                                                   NSStringFromSelector(@selector(showQuickStart)): @YES,
+                                                   NSStringFromSelector(@selector(iTunesID)): @"510296984",
+                                                   NSStringFromSelector(@selector(actionsTipShown)): PearlBoolNot(self.firstRun),
+                                                   NSStringFromSelector(@selector(typeTipShown)): PearlBoolNot(self.firstRun),
+                                                   NSStringFromSelector(@selector(loginNameTipShown)): PearlBool(NO)}];
 
     return self;
 }

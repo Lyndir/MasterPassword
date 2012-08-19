@@ -65,7 +65,7 @@
             return nil;
 
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
-        fetchRequest.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses_" ascending:NO]];
+        fetchRequest.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"uses_" ascending:NO]];
         _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:moc
                                                                           sectionNameKeyPath:nil cacheName:nil];
         _fetchedResultsController.delegate = self;
@@ -110,7 +110,7 @@
     controller.searchBar.prompt                = @"Enter the site's name:";
     controller.searchBar.showsScopeBar         = controller.searchBar.selectedScopeButtonIndex != MPSearchScopeAll;
     if (controller.searchBar.showsScopeBar)
-        controller.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:@"All", @"Outdated", nil];
+        controller.searchBar.scopeButtonTitles = @[@"All", @"Outdated"];
     else
         controller.searchBar.scopeButtonTitles = nil;
 
@@ -168,8 +168,8 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user == %@", [MPAppDelegate get].activeUser];
     if (self.query.length)
         predicate = [NSCompoundPredicate
-         andPredicateWithSubpredicates:[NSArray arrayWithObjects:[NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", self.query],
-                                                                 predicate, nil]];
+         andPredicateWithSubpredicates:@[[NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", self.query],
+                                                                 predicate]];
 
     switch ((MPSearchScope)self.searchDisplayController.searchBar.selectedScopeButtonIndex) {
 
@@ -177,8 +177,8 @@
             break;
         case MPSearchScopeOutdated:
             predicate = [NSCompoundPredicate
-             andPredicateWithSubpredicates:[NSArray arrayWithObjects:[NSPredicate predicateWithFormat:@"requiresExplicitMigration_ == YES"],
-                                                                     predicate, nil]];
+             andPredicateWithSubpredicates:@[[NSPredicate predicateWithFormat:@"requiresExplicitMigration_ == YES"],
+                                                                     predicate]];
             break;
     }
     self.fetchedResultsController.fetchRequest.predicate = predicate;
@@ -405,10 +405,8 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
                 [TestFlight passCheckpoint:MPCheckpointDeleteElement];
                 [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointDeleteElement
-                                                           attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                     element.typeName, @"type",
-                                                                                     PearlUnsignedInteger(element.version), @"version",
-                                                                                     nil]];
+                                                           attributes:@{@"type": element.typeName,
+                                                                                     @"version": @(element.version)}];
             }];
     }
 }

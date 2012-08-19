@@ -222,7 +222,7 @@
     [moc performBlockAndWait:^{
         NSError        *error        = nil;
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPUserEntity class])];
-        fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO]];
+        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO]];
         users = [moc executeFetchRequest:fetchRequest error:&error];
         if (!users)
         err(@"Failed to load users: %@", error);
@@ -633,8 +633,7 @@
             pulseShadowOpacityAnimation.repeatCount  = MAXFLOAT;
 
             CAAnimationGroup *group = [[CAAnimationGroup alloc] init];
-            group.animations = [NSArray arrayWithObjects:toShadowColorAnimation, toShadowOpacityAnimation, pulseShadowOpacityAnimation,
-                                                         nil];
+            group.animations = @[toShadowColorAnimation, toShadowOpacityAnimation, pulseShadowOpacityAnimation];
             group.duration   = MAXFLOAT;
 
             [avatar.layer removeAnimationForKey:@"inactiveShadow"];
@@ -651,7 +650,7 @@
             toShadowOpacityAnimation.duration = 0.5f;
 
             CAAnimationGroup *group = [[CAAnimationGroup alloc] init];
-            group.animations = [NSArray arrayWithObjects:toShadowColorAnimation, toShadowOpacityAnimation, nil];
+            group.animations = @[toShadowColorAnimation, toShadowOpacityAnimation];
             group.duration   = 0.5f;
 
             [avatar.layer removeAnimationForKey:@"targetedShadow"];

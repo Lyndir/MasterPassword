@@ -115,12 +115,8 @@
             [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
                 if (message.level >= PearlLogLevelWarn)
                     [[LocalyticsSession sharedLocalyticsSession] tagEvent:@"Problem"
-                                                               attributes:[NSDictionary
-                                                                dictionaryWithObjectsAndKeys:
-                                                                 [NSString stringWithCString:PearlLogLevelStr(message.level)
-                                                                                    encoding:NSASCIIStringEncoding], @"level",
-                                                                 message.message, @"message",
-                                                                 nil]];
+                                                               attributes:@{@"level": @(PearlLogLevelStr(message.level)),
+                                                                 @"message": message.message}];
 
                 return YES;
             }];
@@ -134,12 +130,10 @@
     [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsLandscapePhone];
     [[UINavigationBar appearance] setTitleTextAttributes:
-     [NSDictionary dictionaryWithObjectsAndKeys:
-                    [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f], UITextAttributeTextColor,
-                    [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f], UITextAttributeTextShadowColor,
-                    [NSValue valueWithUIOffset:UIOffsetMake(0, -1)], UITextAttributeTextShadowOffset,
-                    [UIFont fontWithName:@"Exo-Bold" size:20.0f], UITextAttributeFont,
-                    nil]];
+     @{UITextAttributeTextColor: [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
+                    UITextAttributeTextShadowColor: [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f],
+                    UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, -1)],
+                    UITextAttributeFont: [UIFont fontWithName:@"Exo-Bold" size:20.0f]}];
 
     UIImage *navBarButton = [[UIImage imageNamed:@"ui_navbar_button"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
     UIImage *navBarBack   = [[UIImage imageNamed:@"ui_navbar_back"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 13, 0, 5)];
@@ -148,12 +142,10 @@
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:navBarBack forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
     [[UIBarButtonItem appearance] setTitleTextAttributes:
-     [NSDictionary dictionaryWithObjectsAndKeys:
-                    [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f], UITextAttributeTextColor,
-                    [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f], UITextAttributeTextShadowColor,
-                    [NSValue valueWithUIOffset:UIOffsetMake(0, 1)], UITextAttributeTextShadowOffset,
-                    [UIFont fontWithName:@"Helvetica-Neue" size:0.0f], UITextAttributeFont,
-                    nil]
+     @{UITextAttributeTextColor: [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
+                    UITextAttributeTextShadowColor: [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f],
+                    UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
+                    UITextAttributeFont: [UIFont fontWithName:@"Helvetica-Neue" size:0.0f]}
                                                 forState:UIControlStateNormal];
 
     UIImage *toolBarImage = [[UIImage imageNamed:@"ui_toolbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake(25, 5, 5, 5)];
@@ -408,30 +400,25 @@
 
         [TestFlight passCheckpoint:MPCheckpointConfig];
         [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointConfig attributes:
-                                                                                  [NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                 [[MPConfig get].rememberLogin boolValue]
-                                                                                                  ? @"YES": @"NO", @"rememberLogin",
-                                                                                                 [[MPConfig get].iCloud boolValue]? @"YES"
-                                                                                                  : @"NO", @"iCloud",
-                                                                                                 [[MPConfig get].iCloudDecided boolValue]
-                                                                                                  ? @"YES": @"NO", @"iCloudDecided",
-                                                                                                 [[MPiOSConfig get].sendInfo boolValue]
-                                                                                                  ? @"YES": @"NO", @"sendInfo",
-                                                                                                 [[MPiOSConfig get].helpHidden boolValue]
-                                                                                                  ? @"YES": @"NO", @"helpHidden",
-                                                                                                 [[MPiOSConfig get].showQuickStart boolValue]
-                                                                                                  ? @"YES": @"NO", @"showQuickStart",
-                                                                                                 [[PearlConfig get].firstRun boolValue]
-                                                                                                  ? @"YES": @"NO", @"firstRun",
-                                                                                                 [[PearlConfig get].launchCount description],
-                                                                                                 @"launchCount",
-                                                                                                 [[PearlConfig get].askForReviews boolValue]
-                                                                                                  ? @"YES": @"NO", @"askForReviews",
-                                                                                                 [[PearlConfig get].reviewAfterLaunches description],
-                                                                                                 @"reviewAfterLaunches",
-                                                                                                 [PearlConfig get].reviewedVersion,
-                                                                                                 @"reviewedVersion",
-                                                                                                 nil]];
+                                                                                  @{@"rememberLogin": [[MPConfig get].rememberLogin boolValue]
+                                                                                                  ? @"YES": @"NO",
+                                                                                                 @"iCloud": [[MPConfig get].iCloud boolValue]? @"YES"
+                                                                                                  : @"NO",
+                                                                                                 @"iCloudDecided": [[MPConfig get].iCloudDecided boolValue]
+                                                                                                  ? @"YES": @"NO",
+                                                                                                 @"sendInfo": [[MPiOSConfig get].sendInfo boolValue]
+                                                                                                  ? @"YES": @"NO",
+                                                                                                 @"helpHidden": [[MPiOSConfig get].helpHidden boolValue]
+                                                                                                  ? @"YES": @"NO",
+                                                                                                 @"showQuickStart": [[MPiOSConfig get].showQuickStart boolValue]
+                                                                                                  ? @"YES": @"NO",
+                                                                                                 @"firstRun": [[PearlConfig get].firstRun boolValue]
+                                                                                                  ? @"YES": @"NO",
+                                                                                                 @"launchCount": [[PearlConfig get].launchCount description],
+                                                                                                 @"askForReviews": [[PearlConfig get].askForReviews boolValue]
+                                                                                                  ? @"YES": @"NO",
+                                                                                                 @"reviewAfterLaunches": [[PearlConfig get].reviewAfterLaunches description],
+                                                                                                 @"reviewedVersion": [PearlConfig get].reviewedVersion}];
     }
 }
 
@@ -613,7 +600,7 @@
                                  return;
                              }
 
-                             [MPConfig get].iCloudDecided = [NSNumber numberWithBool:YES];
+                             [MPConfig get].iCloudDecided = @YES;
                              if (buttonIndex == [alert cancelButtonIndex])
                                  return;
                              if (buttonIndex == [alert firstOtherButtonIndex] + 1)

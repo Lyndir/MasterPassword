@@ -62,8 +62,7 @@
                                                               localStoreURL:[[self applicationFilesDirectory] URLByAppendingPathComponent:@"MasterPassword.sqlite"]
                                                         containerIdentifier:@"HL3Q45LX9N.com.lyndir.lhunath.MasterPassword.shared"
 #if TARGET_OS_IPHONE
-                                                     additionalStoreOptions:[NSDictionary dictionaryWithObject:NSFileProtectionComplete
-                                                                                                        forKey:NSPersistentStoreFileProtectionKey]
+                                                     additionalStoreOptions:@{NSPersistentStoreFileProtectionKey: NSFileProtectionComplete}
 #else
                                                      additionalStoreOptions:nil
 #endif
@@ -134,10 +133,9 @@
     [TestFlight passCheckpoint:iCloudEnabled? MPCheckpointCloudEnabled: MPCheckpointCloudDisabled];
 #endif
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloud
-                                               attributes:[NSDictionary dictionaryWithObject:iCloudEnabled? @"YES": @"NO"
-                                                                                      forKey:@"enabled"]];
+                                               attributes:@{@"enabled": iCloudEnabled? @"YES": @"NO"}];
 
-    [MPConfig get].iCloud = [NSNumber numberWithBool:iCloudEnabled];
+    [MPConfig get].iCloud = @(iCloudEnabled);
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreManagerErrorCause)cause
@@ -312,7 +310,7 @@
                 dbg(@"Existing sites: %@", existingSites);
 
             [elementsToDelete addObjectsFromArray:existingSites];
-            [importedSiteElements addObject:[NSArray arrayWithObjects:lastUsed, uses, type, version, name, exportContent, nil]];
+            [importedSiteElements addObject:@[lastUsed, uses, type, version, name, exportContent]];
         }
     }
 

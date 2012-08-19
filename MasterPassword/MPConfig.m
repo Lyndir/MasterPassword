@@ -16,13 +16,11 @@
     if (!(self = [super init]))
         return nil;
 
-    [self.defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                   [NSNumber numberWithBool:YES], NSStringFromSelector(@selector(askForReviews)),
+    [self.defaults registerDefaults:@{NSStringFromSelector(@selector(askForReviews)): @YES,
 
-                                                   [NSNumber numberWithBool:NO], NSStringFromSelector(@selector(rememberLogin)),
-                                                   [NSNumber numberWithBool:NO], NSStringFromSelector(@selector(iCloud)),
-                                                   [NSNumber numberWithBool:NO], NSStringFromSelector(@selector(iCloudDecided)),
-                                                   nil]];
+                                                   NSStringFromSelector(@selector(rememberLogin)): @NO,
+                                                   NSStringFromSelector(@selector(iCloud)): @NO,
+                                                   NSStringFromSelector(@selector(iCloudDecided)): @NO}];
 
     self.delegate = [MPAppDelegate get];
 

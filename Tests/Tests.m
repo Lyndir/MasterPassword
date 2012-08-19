@@ -30,16 +30,16 @@
 
 - (void)testAlgorithm
 {
-    NSString *masterPassword = @"test-mp";
-    NSString *username = @"test-user";
-    NSString *siteName = @"test-site";
-    MPElementType siteType = MPElementTypeGeneratedLong;
-    uint32_t siteCounter = 42;
+    //NSString *masterPassword = @"test-mp";
+    //NSString *username = @"test-user";
+    //NSString *siteName = @"test-site";
+    //MPElementType siteType = MPElementTypeGeneratedLong;
+    //uint32_t siteCounter = 42;
     
-    NSString *sitePassword = MPCalculateContent( siteType, siteName, keyForPassword( masterPassword, username ), siteCounter );
+    //NSString *sitePassword = MPCalculateContent( siteType, siteName, keyForPassword( masterPassword, username ), siteCounter );
     
-    inf( @"master password: %@, username: %@\nsite name: %@, site type: %@, site counter: %d\n    => site password: %@",
-               masterPassword, username, siteName, NSStringFromMPElementType(siteType), siteCounter, sitePassword );
+    //inf( @"master password: %@, username: %@\nsite name: %@, site type: %@, site counter: %d\n    => site password: %@",
+    //           masterPassword, username, siteName, NSStringFromMPElementType(siteType), siteCounter, sitePassword );
 }
 
 @end

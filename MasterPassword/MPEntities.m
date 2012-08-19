@@ -18,7 +18,7 @@
 
 - (void)setType:(MPElementType)aType {
 
-    self.type_ = PearlUnsignedInteger(aType);
+    self.type_ = @(aType);
 }
 
 - (NSString *)typeName {
@@ -48,7 +48,7 @@
 
 - (void)setUses:(NSUInteger)anUses {
 
-    self.uses_ = PearlUnsignedInteger(anUses);
+    self.uses_ = @(anUses);
 }
 
 - (NSUInteger)version {
@@ -58,7 +58,7 @@
 
 - (void)setVersion:(NSUInteger)version {
 
-    self.version_ = PearlUnsignedInteger(version);
+    self.version_ = @(version);
 }
 
 - (BOOL)requiresExplicitMigration {
@@ -68,7 +68,7 @@
 
 - (void)setRequiresExplicitMigration:(BOOL)requiresExplicitMigration {
 
-    self.requiresExplicitMigration_ = PearlBool(requiresExplicitMigration);
+    self.requiresExplicitMigration_ = @(requiresExplicitMigration);
 }
 
 - (id<MPAlgorithm>)algorithm {
@@ -136,7 +136,7 @@
 
 - (void)setCounter:(NSUInteger)aCounter {
 
-    self.counter_ = PearlUnsignedInteger(aCounter);
+    self.counter_ = @(aCounter);
 }
 
 - (id)content {
@@ -163,10 +163,8 @@
 + (NSDictionary *)queryForDevicePrivateElementNamed:(NSString *)name {
 
     return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
-                                   attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                             @"DevicePrivate", (__bridge id)kSecAttrService,
-                                                             name, (__bridge id)kSecAttrAccount,
-                                                             nil]
+                                   attributes:@{(__bridge id)kSecAttrService: @"DevicePrivate",
+                                                             (__bridge id)kSecAttrAccount: name}
                                       matches:nil];
 }
 
@@ -268,7 +266,7 @@
 
 - (void)setAvatar:(NSUInteger)anAvatar {
 
-    self.avatar_ = PearlUnsignedInteger(anAvatar);
+    self.avatar_ = @(anAvatar);
 }
 
 - (BOOL)saveKey {
@@ -278,7 +276,7 @@
 
 - (void)setSaveKey:(BOOL)aSaveKey {
 
-    self.saveKey_ = [NSNumber numberWithBool:aSaveKey];
+    self.saveKey_ = @(aSaveKey);
 }
 
 - (MPElementType)defaultType {
@@ -288,7 +286,7 @@
 
 - (void)setDefaultType:(MPElementType)aDefaultType {
 
-    self.defaultType_ = PearlUnsignedInteger(aDefaultType);
+    self.defaultType_ = @(aDefaultType);
 }
 
 - (BOOL)requiresExplicitMigration {
@@ -298,7 +296,7 @@
 
 - (void)setRequiresExplicitMigration:(BOOL)requiresExplicitMigration {
 
-    self.requiresExplicitMigration_ = PearlBool(requiresExplicitMigration);
+    self.requiresExplicitMigration_ = @(requiresExplicitMigration);
 }
 
 - (NSString *)userID {

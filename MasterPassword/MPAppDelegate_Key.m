@@ -16,10 +16,8 @@
 static NSDictionary *keyQuery(MPUserEntity *user) {
 
     return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
-                                   attributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                             @"Saved Master Password", (__bridge id)kSecAttrService,
-                                                             user.name, (__bridge id)kSecAttrAccount,
-                                                             nil]
+                                   attributes:@{(__bridge id)kSecAttrService: @"Saved Master Password",
+                                                             (__bridge id)kSecAttrAccount: user.name}
                                    matches:nil];
 }
 
@@ -81,7 +79,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     if (self.activeUser) {
         self.activeUser = nil;
         [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationSignedOut object:self userInfo:
-         [NSDictionary dictionaryWithObject:PearlBool(animated) forKey:@"animated"]];
+         @{@"animated": @(animated)}];
     }
 }
 

@@ -43,7 +43,7 @@
     inf(@"Guide will disappear.");
     [super viewWillDisappear:animated];
 
-    [MPiOSConfig get].showQuickStart = [NSNumber numberWithBool:NO];
+    [MPiOSConfig get].showQuickStart = @NO;
 }
 
 - (void)viewDidUnload {
