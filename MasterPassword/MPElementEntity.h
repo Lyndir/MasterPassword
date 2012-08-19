@@ -2,7 +2,7 @@
 //  MPElementEntity.h
 //  MasterPassword-iOS
 //
-//  Created by Maarten Billemont on 17/07/12.
+//  Created by Maarten Billemont on 2012-08-19.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
@@ -15,10 +15,10 @@
 
 @property (nonatomic, retain) id content;
 @property (nonatomic, retain) NSDate * lastUsed;
+@property (nonatomic, retain) NSString * loginName;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * requiresExplicitMigration_;
 @property (nonatomic, retain) NSNumber * type_;
-@property (nonatomic, retain) NSString * userName;
 @property (nonatomic, retain) NSNumber * uses_;
 @property (nonatomic, retain) NSNumber * version_;
 @property (nonatomic, retain) MPUserEntity *user;

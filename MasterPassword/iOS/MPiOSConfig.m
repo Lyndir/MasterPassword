@@ -7,7 +7,7 @@
 //
 
 @implementation MPiOSConfig
-@dynamic sendInfo, helpHidden, userNameHidden, showQuickStart, actionsTipShown, typeTipShown, userNameTipShown;
+@dynamic sendInfo, helpHidden, siteInfoHidden, showQuickStart, actionsTipShown, typeTipShown, loginNameTipShown;
 
 - (id)init {
 
@@ -17,12 +17,12 @@
     [self.defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
                                                    [NSNumber numberWithBool:NO], NSStringFromSelector(@selector(sendInfo)),
                                                    [NSNumber numberWithBool:NO], NSStringFromSelector(@selector(helpHidden)),
-                                                   [NSNumber numberWithBool:YES], NSStringFromSelector(@selector(userNameHidden)),
+                                                   [NSNumber numberWithBool:YES], NSStringFromSelector(@selector(siteInfoHidden)),
                                                    [NSNumber numberWithBool:YES], NSStringFromSelector(@selector(showQuickStart)),
                                                    @"510296984", NSStringFromSelector(@selector(iTunesID)),
                                                    PearlBoolNot(self.firstRun), NSStringFromSelector(@selector(actionsTipShown)),
                                                    PearlBoolNot(self.firstRun), NSStringFromSelector(@selector(typeTipShown)),
-                                                   PearlBool(NO), NSStringFromSelector(@selector(userNameTipShown)),
+                                                   PearlBool(NO), NSStringFromSelector(@selector(loginNameTipShown)),
                                                    nil]];
 
     return self;

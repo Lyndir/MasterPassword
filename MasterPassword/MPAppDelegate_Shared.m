@@ -47,6 +47,9 @@
 
 - (MPUserEntity *)activeUser {
 
+    if (!self.activeUserID)
+        return nil;
+
     return (MPUserEntity *)[self.managedObjectContextIfReady objectWithID:self.activeUserID];
 }
 

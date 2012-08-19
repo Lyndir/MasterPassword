@@ -17,10 +17,6 @@
 		DA0A1D1515690AF40092735D /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0A1D1315690AF30092735D /* Icon-72@2x.png */; };
 		DA0A1D1615690AF40092735D /* Icon-Small-50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0A1D1415690AF40092735D /* Icon-Small-50@2x.png */; };
 		DA0E07961577FE490008A67E /* MPEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0E07951577FE490008A67E /* MPEntities.m */; };
-		DA0F9F3315B55397007ED9BC /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0F9F3215B55397007ED9BC /* MPUserEntity.m */; };
-		DA0F9F3615B55397007ED9BC /* MPElementGeneratedEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0F9F3515B55397007ED9BC /* MPElementGeneratedEntity.m */; };
-		DA0F9F3915B55397007ED9BC /* MPElementStoredEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0F9F3815B55397007ED9BC /* MPElementStoredEntity.m */; };
-		DA0F9F3C15B55397007ED9BC /* MPElementEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0F9F3B15B55397007ED9BC /* MPElementEntity.m */; };
 		DA30E9CE15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */; };
 		DA30E9CF15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9CC15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m */; };
 		DA30E9D015722ECA00A68B4C /* Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9CD15722ECA00A68B4C /* Pearl.m */; };
@@ -95,6 +91,10 @@
 		DA95D5F614DF0B9F008D1B94 /* IASKPSTextFieldSpecifierViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA95D5CC14DF0691008D1B94 /* IASKPSTextFieldSpecifierViewCell.xib */; };
 		DA95D5F714DF0B9F008D1B94 /* IASKPSToggleSwitchSpecifierViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA95D5CD14DF0691008D1B94 /* IASKPSToggleSwitchSpecifierViewCell.xib */; };
 		DA95D5F814DF0B9F008D1B94 /* IASKSpecifierValuesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA95D5CE14DF0691008D1B94 /* IASKSpecifierValuesView.xib */; };
+		DAA096FC15E0C59B00912D63 /* MPElementEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA096FB15E0C59B00912D63 /* MPElementEntity.m */; };
+		DAA096FF15E0C59B00912D63 /* MPElementGeneratedEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA096FE15E0C59B00912D63 /* MPElementGeneratedEntity.m */; };
+		DAA0970215E0C59B00912D63 /* MPElementStoredEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA0970115E0C59B00912D63 /* MPElementStoredEntity.m */; };
+		DAA0970515E0C59B00912D63 /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA0970415E0C59B00912D63 /* MPUserEntity.m */; };
 		DAB8D45D15036BCF00CED3BC /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D43C15036BCF00CED3BC /* MasterPassword.xcdatamodeld */; };
 		DAB8D45E15036BCF00CED3BC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D43F15036BCF00CED3BC /* InfoPlist.strings */; };
 		DAB8D45F15036BCF00CED3BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB8D44115036BCF00CED3BC /* main.m */; };
@@ -912,14 +912,6 @@
 		DA0A1D1415690AF40092735D /* Icon-Small-50@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50@2x.png"; sourceTree = "<group>"; };
 		DA0E07941577FE490008A67E /* MPEntities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEntities.h; sourceTree = "<group>"; };
 		DA0E07951577FE490008A67E /* MPEntities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEntities.m; sourceTree = "<group>"; };
-		DA0F9F3115B55397007ED9BC /* MPUserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUserEntity.h; sourceTree = "<group>"; };
-		DA0F9F3215B55397007ED9BC /* MPUserEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUserEntity.m; sourceTree = "<group>"; };
-		DA0F9F3415B55397007ED9BC /* MPElementGeneratedEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementGeneratedEntity.h; sourceTree = "<group>"; };
-		DA0F9F3515B55397007ED9BC /* MPElementGeneratedEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementGeneratedEntity.m; sourceTree = "<group>"; };
-		DA0F9F3715B55397007ED9BC /* MPElementStoredEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementStoredEntity.h; sourceTree = "<group>"; };
-		DA0F9F3815B55397007ED9BC /* MPElementStoredEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementStoredEntity.m; sourceTree = "<group>"; };
-		DA0F9F3A15B55397007ED9BC /* MPElementEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementEntity.h; sourceTree = "<group>"; };
-		DA0F9F3B15B55397007ED9BC /* MPElementEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementEntity.m; sourceTree = "<group>"; };
 		DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+PearlMutableInfo.h"; sourceTree = "<group>"; };
 		DA30E9CC15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+PearlMutableInfo.m"; sourceTree = "<group>"; };
 		DA30E9CD15722ECA00A68B4C /* Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pearl.m; sourceTree = "<group>"; };
@@ -998,6 +990,14 @@
 		DA95D5CD14DF0691008D1B94 /* IASKPSToggleSwitchSpecifierViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IASKPSToggleSwitchSpecifierViewCell.xib; sourceTree = "<group>"; };
 		DA95D5CE14DF0691008D1B94 /* IASKSpecifierValuesView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IASKSpecifierValuesView.xib; sourceTree = "<group>"; };
 		DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		DAA096FA15E0C59B00912D63 /* MPElementEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementEntity.h; sourceTree = "<group>"; };
+		DAA096FB15E0C59B00912D63 /* MPElementEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementEntity.m; sourceTree = "<group>"; };
+		DAA096FD15E0C59B00912D63 /* MPElementGeneratedEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementGeneratedEntity.h; sourceTree = "<group>"; };
+		DAA096FE15E0C59B00912D63 /* MPElementGeneratedEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementGeneratedEntity.m; sourceTree = "<group>"; };
+		DAA0970015E0C59B00912D63 /* MPElementStoredEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementStoredEntity.h; sourceTree = "<group>"; };
+		DAA0970115E0C59B00912D63 /* MPElementStoredEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementStoredEntity.m; sourceTree = "<group>"; };
+		DAA0970315E0C59B00912D63 /* MPUserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUserEntity.h; sourceTree = "<group>"; };
+		DAA0970415E0C59B00912D63 /* MPUserEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUserEntity.m; sourceTree = "<group>"; };
 		DAAC35DD156BD77D00C5FD93 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		DAB8D43D15036BCF00CED3BC /* MasterPassword 1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 1.xcdatamodel"; sourceTree = "<group>"; };
 		DAB8D44015036BCF00CED3BC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1737,6 +1737,7 @@
 		DAE4C967157E63BE00EFE047 /* avatar-18.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-18.png"; sourceTree = "<group>"; };
 		DAE4C968157E63BE00EFE047 /* avatar-18@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-18@2x.png"; sourceTree = "<group>"; };
 		DAEBC45214F6364500987BF6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		DAF83D6B15E02E04009C8D49 /* MasterPassword 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 3.xcdatamodel"; sourceTree = "<group>"; };
 		DAFE45D815039823003ABA7C /* NSObject+PearlExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PearlExport.h"; sourceTree = "<group>"; };
 		DAFE45D915039823003ABA7C /* NSObject+PearlExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PearlExport.m"; sourceTree = "<group>"; };
 		DAFE45DA15039823003ABA7C /* NSString+PearlNSArrayFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PearlNSArrayFormat.h"; sourceTree = "<group>"; };
@@ -2022,14 +2023,14 @@
 				DA0E07941577FE490008A67E /* MPEntities.h */,
 				DA0E07951577FE490008A67E /* MPEntities.m */,
 				DAB8D43C15036BCF00CED3BC /* MasterPassword.xcdatamodeld */,
-				DA0F9F3115B55397007ED9BC /* MPUserEntity.h */,
-				DA0F9F3215B55397007ED9BC /* MPUserEntity.m */,
-				DA0F9F3415B55397007ED9BC /* MPElementGeneratedEntity.h */,
-				DA0F9F3515B55397007ED9BC /* MPElementGeneratedEntity.m */,
-				DA0F9F3715B55397007ED9BC /* MPElementStoredEntity.h */,
-				DA0F9F3A15B55397007ED9BC /* MPElementEntity.h */,
-				DA0F9F3B15B55397007ED9BC /* MPElementEntity.m */,
-				DA0F9F3815B55397007ED9BC /* MPElementStoredEntity.m */,
+				DAA096FA15E0C59B00912D63 /* MPElementEntity.h */,
+				DAA096FB15E0C59B00912D63 /* MPElementEntity.m */,
+				DAA096FD15E0C59B00912D63 /* MPElementGeneratedEntity.h */,
+				DAA096FE15E0C59B00912D63 /* MPElementGeneratedEntity.m */,
+				DAA0970015E0C59B00912D63 /* MPElementStoredEntity.h */,
+				DAA0970115E0C59B00912D63 /* MPElementStoredEntity.m */,
+				DAA0970315E0C59B00912D63 /* MPUserEntity.h */,
+				DAA0970415E0C59B00912D63 /* MPUserEntity.m */,
 				DA600C2415054F3A008E9AB6 /* MPAppDelegate_Key.h */,
 				DA600C2315054F3A008E9AB6 /* MPAppDelegate_Key.m */,
 				DA4426041557C1990052177D /* MPAppDelegate_Shared.h */,
@@ -4269,10 +4270,10 @@
 				93D390BC6AE7A1C9B91A3668 /* MPKey.m in Sources */,
 				93D394744B5485303B326ECB /* MPAlgorithm.m in Sources */,
 				93D39DC7A7282137B08C8D82 /* MPAlgorithmV1.m in Sources */,
-				DA0F9F3315B55397007ED9BC /* MPUserEntity.m in Sources */,
-				DA0F9F3615B55397007ED9BC /* MPElementGeneratedEntity.m in Sources */,
-				DA0F9F3915B55397007ED9BC /* MPElementStoredEntity.m in Sources */,
-				DA0F9F3C15B55397007ED9BC /* MPElementEntity.m in Sources */,
+				DAA096FC15E0C59B00912D63 /* MPElementEntity.m in Sources */,
+				DAA096FF15E0C59B00912D63 /* MPElementGeneratedEntity.m in Sources */,
+				DAA0970215E0C59B00912D63 /* MPElementStoredEntity.m in Sources */,
+				DAA0970515E0C59B00912D63 /* MPUserEntity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5092,10 +5093,11 @@
 		DAB8D43C15036BCF00CED3BC /* MasterPassword.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				DAF83D6B15E02E04009C8D49 /* MasterPassword 3.xcdatamodel */,
 				DA46826C15AB48F100FB09E7 /* MasterPassword 2.xcdatamodel */,
 				DAB8D43D15036BCF00CED3BC /* MasterPassword 1.xcdatamodel */,
 			);
-			currentVersion = DA46826C15AB48F100FB09E7 /* MasterPassword 2.xcdatamodel */;
+			currentVersion = DAF83D6B15E02E04009C8D49 /* MasterPassword 3.xcdatamodel */;
 			path = MasterPassword.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

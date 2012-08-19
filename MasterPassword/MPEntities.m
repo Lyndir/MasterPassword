@@ -92,7 +92,7 @@
     return nil;
 }
 
-- (void)importProtectedContent:(NSString *)content {
+- (void)importProtectedContent:(NSString *)protectedContent protectedByKey:(MPKey *)contentProtectionKey usingKey:(MPKey *)key {
 
 }
 
@@ -107,9 +107,9 @@
 
 - (NSString *)debugDescription {
 
-    return PearlString(@"{%@: name=%@, user=%@, type=%d, uses=%d, lastUsed=%@, version=%d, userName=%@, requiresExplicitMigration=%d}",
+    return PearlString(@"{%@: name=%@, user=%@, type=%d, uses=%d, lastUsed=%@, version=%d, loginName=%@, requiresExplicitMigration=%d}",
                        NSStringFromClass([self class]), self.name, self.user.name, self.type, self.uses, self.lastUsed, self.version,
-                       self.userName, self.requiresExplicitMigration);
+                       self.loginName, self.requiresExplicitMigration);
 }
 
 - (BOOL)migrateExplicitly:(BOOL)explicit {
@@ -185,7 +185,6 @@
     if (!key)
         return;
 
-    assert([key.keyID isEqualToData:self.user.keyID]);
     [self setContent:content usingKey:key];
 }
 
@@ -202,17 +201,23 @@
 
     NSData *decryptedContent = nil;
     if ([encryptedContent length])
-        decryptedContent = [encryptedContent decryptWithSymmetricKey:[key subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
+        decryptedContent = [self decryptContent:encryptedContent usingKey:key];
 
     return [[NSString alloc] initWithBytes:decryptedContent.bytes length:decryptedContent.length encoding:NSUTF8StringEncoding];
+}
+
+- (NSData *)decryptContent:(NSData *)encryptedContent usingKey:(MPKey *)key {
+
+    return [encryptedContent decryptWithSymmetricKey:[key subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
 }
 
 - (void)setContent:(id)content usingKey:(MPKey *)key {
 
     assert(self.type & MPElementTypeClassStored);
-    assert(key);
+    assert([key.keyID isEqualToData:self.user.keyID]);
 
-    NSData *encryptedContent = [[content description] encryptWithSymmetricKey:[key subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
+    NSData *encryptedContent = [[[content description] dataUsingEncoding:NSUTF8StringEncoding]
+                                          encryptWithSymmetricKey:[key subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
 
     if (self.type & MPElementFeatureDevicePrivate) {
         [PearlKeyChain addOrUpdateItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]
@@ -233,9 +238,18 @@
     return [self.contentObject encodeBase64];
 }
 
-- (void)importProtectedContent:(NSString *)protectedContent {
+- (void)importProtectedContent:(NSString *)protectedContent protectedByKey:(MPKey *)contentProtectionKey usingKey:(MPKey *)key {
 
-    self.contentObject = [protectedContent decodeBase64];
+    if ([contentProtectionKey.keyID isEqualToData:key.keyID])
+        self.contentObject = [protectedContent decodeBase64];
+
+    else {
+        NSString *clearContent = [[NSString alloc] initWithData:[self decryptContent:[protectedContent decodeBase64]
+                                                                            usingKey:contentProtectionKey]
+         encoding:NSUTF8StringEncoding];
+
+        [self importClearTextContent:clearContent usingKey:key];
+    }
 }
 
 - (void)importClearTextContent:(NSString *)clearContent usingKey:(MPKey *)key {

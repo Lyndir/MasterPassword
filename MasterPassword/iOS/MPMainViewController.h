@@ -13,7 +13,7 @@
 
 @interface MPMainViewController : UIViewController<MPTypeDelegate, UITextFieldDelegate, MPSearchResultsDelegate, UIWebViewDelegate, MFMailComposeViewControllerDelegate, UIGestureRecognizerDelegate>
 
-@property (nonatomic, assign) BOOL userNameHidden;
+@property (nonatomic, assign) BOOL siteInfoHidden;
 @property (strong, nonatomic) MPElementEntity           *activeElement;
 @property (strong, nonatomic) IBOutlet MPSearchDelegate *searchDelegate;
 @property (weak, nonatomic) IBOutlet UITextField        *contentField;
@@ -28,20 +28,20 @@
 @property (weak, nonatomic) IBOutlet UIView             *displayContainer;
 @property (weak, nonatomic) IBOutlet UIView             *helpContainer;
 @property (weak, nonatomic) IBOutlet UIView             *contentTipContainer;
-@property (weak, nonatomic) IBOutlet UIView             *userNameTipContainer;
+@property (weak, nonatomic) IBOutlet UIView             *loginNameTipContainer;
 @property (weak, nonatomic) IBOutlet UIView             *alertContainer;
 @property (weak, nonatomic) IBOutlet UILabel            *alertTitle;
 @property (weak, nonatomic) IBOutlet UITextView         *alertBody;
 @property (weak, nonatomic) IBOutlet UILabel            *contentTipBody;
-@property (weak, nonatomic) IBOutlet UILabel            *userNameTipBody;
+@property (weak, nonatomic) IBOutlet UILabel            *loginNameTipBody;
 @property (weak, nonatomic) IBOutlet UIImageView        *toolTipEditIcon;
 @property (weak, nonatomic) IBOutlet UIView             *searchTipContainer;
 @property (weak, nonatomic) IBOutlet UIView             *actionsTipContainer;
 @property (weak, nonatomic) IBOutlet UIView             *typeTipContainer;
 @property (weak, nonatomic) IBOutlet UIView             *toolTipContainer;
 @property (weak, nonatomic) IBOutlet UILabel            *toolTipBody;
-@property (weak, nonatomic) IBOutlet UIView             *userNameContainer;
-@property (weak, nonatomic) IBOutlet UITextField        *userNameField;
+@property (weak, nonatomic) IBOutlet UIView             *loginNameContainer;
+@property (weak, nonatomic) IBOutlet UITextField        *loginNameField;
 @property (weak, nonatomic) IBOutlet UIButton           *passwordUser;
 @property (weak, nonatomic) IBOutlet UIView *outdatedAlertContainer;
 @property (weak, nonatomic) IBOutlet UIImageView *outdatedAlertBack;
@@ -54,7 +54,7 @@
 - (IBAction)copyContent;
 - (IBAction)incrementPasswordCounter;
 - (IBAction)resetPasswordCounter:(UILongPressGestureRecognizer *)sender;
-- (IBAction)editUserName:(UILongPressGestureRecognizer *)sender;
+- (IBAction)editLoginName:(UILongPressGestureRecognizer *)sender;
 - (IBAction)editPassword;
 - (IBAction)closeAlert;
 - (IBAction)upgradePassword;

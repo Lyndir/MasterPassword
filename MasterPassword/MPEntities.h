@@ -29,7 +29,7 @@
 
 - (NSUInteger)use;
 - (NSString *)exportContent;
-- (void)importProtectedContent:(NSString *)protectedContent;
+- (void)importProtectedContent:(NSString *)protectedContent protectedByKey:(MPKey *)contentProtectionKey usingKey:(MPKey *)key2;
 - (void)importClearTextContent:(NSString *)clearContent usingKey:(MPKey *)key;
 - (BOOL)migrateExplicitly:(BOOL)explicit;
 

@@ -183,8 +183,12 @@
 
 #pragma mark - Import / Export
 
-- (MPImportResult)importSites:(NSString *)importedSitesString withPassword:(NSString *)password
-              askConfirmation:(BOOL(^)(NSUInteger importCount, NSUInteger deleteCount))confirmation {
+- (MPImportResult)importSites:(NSString *)importedSitesString
+            askImportPassword:(NSString *(^)(NSString *userName))importPassword
+              askUserPassword:(NSString *(^)(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword {
+
+    while (![self managedObjectContextIfReady])
+        usleep((useconds_t)(USEC_PER_SEC * 0.2));
 
     inf(@"Importing sites.");
 
@@ -205,14 +209,15 @@
     if (!headerPattern || !sitePattern)
         return MPImportResultInternalError;
 
-    MPKey                *key           = nil;
-    __block MPUserEntity *user          = nil;
-    NSString             *bundleVersion = nil, *keyIDHex     = nil, *userName = nil;
-    BOOL                                       headerStarted = NO, headerEnded = NO, clearText = NO;
+    __block MPUserEntity *user = nil;
+    id<MPAlgorithm> importAlgorithm = nil;
+    NSString *importBundleVersion = nil, *importUserName = nil;
+    NSData *importKeyID = nil;
+    BOOL headerStarted = NO, headerEnded = NO, clearText = NO;
     NSArray        *importedSiteLines    = [importedSitesString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     NSMutableSet   *elementsToDelete     = [NSMutableSet set];
     NSMutableArray *importedSiteElements = [NSMutableArray arrayWithCapacity:[importedSiteLines count]];
-    NSFetchRequest *fetchRequest         = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
+    NSFetchRequest *elementFetchRequest  = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
     for (NSString  *importedSiteLine in importedSiteLines) {
         if ([importedSiteLine hasPrefix:@"#"]) {
             // Comment or header
@@ -238,20 +243,20 @@
             NSString             *headerName     = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:1]];
             NSString             *headerValue    = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:2]];
             if ([headerName isEqualToString:@"User Name"]) {
-                userName = headerValue;
+                importUserName = headerValue;
 
                 NSFetchRequest *userFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPUserEntity class])];
-                userFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", userName];
+                userFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", importUserName];
                 __block NSArray *users = nil;
                 [self.managedObjectContextIfReady performBlockAndWait:^{
                     users = [self.managedObjectContextIfReady executeFetchRequest:userFetchRequest error:&error];
                 }];
                 if (!users) {
-                    err(@"While looking for user: %@, error: %@", userName, error);
+                    err(@"While looking for user: %@, error: %@", importUserName, error);
                     return MPImportResultInternalError;
                 }
                 if ([users count] > 1) {
-                    err(@"While looking for user: %@, found more than one: %u", userName, [users count]);
+                    err(@"While looking for user: %@, found more than one: %u", importUserName, [users count]);
                     return MPImportResultInternalError;
                 }
 
@@ -259,9 +264,11 @@
                 dbg(@"Found user: %@", [user debugDescription]);
             }
             if ([headerName isEqualToString:@"Key ID"])
-                keyIDHex                         = headerValue;
-            if ([headerName isEqualToString:@"Version"])
-                bundleVersion                    = headerValue;
+                importKeyID                      = [headerValue decodeHex];
+            if ([headerName isEqualToString:@"Version"]) {
+                importBundleVersion = headerValue;
+                importAlgorithm     = MPAlgorithmDefaultForBundleVersion(importBundleVersion);
+            }
             if ([headerName isEqualToString:@"Passwords"]) {
                 if ([headerValue isEqualToString:@"VISIBLE"])
                     clearText = YES;
@@ -271,13 +278,8 @@
         }
         if (!headerEnded)
             continue;
-        if (!keyIDHex || ![userName length])
+        if (!importKeyID || ![importUserName length])
             return MPImportResultMalformedInput;
-        if (!key) {
-            key = [MPAlgorithmDefaultForBundleVersion(bundleVersion) keyForPassword:password ofUserNamed:userName];
-            if (![keyIDHex isEqualToString:[key.keyID encodeHex]])
-                return MPImportResultInvalidPassword;
-        }
         if (![importedSiteLine length])
             continue;
 
@@ -297,10 +299,10 @@
 
         // Find existing site.
         if (user) {
-            fetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND user == %@", name, user];
+            elementFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND user == %@", name, user];
             __block NSArray *existingSites = nil;
             [self.managedObjectContextIfReady performBlockAndWait:^{
-                existingSites = [self.managedObjectContextIfReady executeFetchRequest:fetchRequest error:&error];
+                existingSites = [self.managedObjectContextIfReady executeFetchRequest:elementFetchRequest error:&error];
             }];
             if (!existingSites) {
                 err(@"Lookup of existing sites failed for site: %@, user: %@, error: %@", name, user.userID, error);
@@ -314,14 +316,19 @@
         }
     }
 
-    inf(@"Importing %u sites, deleting %u sites, for user: %@",
-    [importedSiteElements count], [elementsToDelete count], [MPUserEntity idFor:userName]);
-
-    // Ask for confirmation to import these sites.
-    if (!confirmation([importedSiteElements count], [elementsToDelete count])) {
+    // Ask for confirmation to import these sites and the master password of the user.
+    inf(@"Importing %u sites, deleting %u sites, for user: %@", [importedSiteElements count], [elementsToDelete count], [MPUserEntity idFor:importUserName]);
+    NSString *userMasterPassword = userPassword(user.name, [importedSiteElements count], [elementsToDelete count]);
+    if (!userMasterPassword) {
         inf(@"Import cancelled.");
         return MPImportResultCancelled;
     }
+    MPKey *userKey = [MPAlgorithmDefault keyForPassword:userMasterPassword ofUserNamed:user.name];
+    if (![userKey.keyID isEqualToData:user.keyID])
+        return MPImportResultInvalidPassword;
+    __block MPKey *importKey = userKey;
+    if ([importKey.keyID isEqualToData:importKeyID])
+        importKey = nil;
 
     BOOL success = NO;
     [self.managedObjectContextIfReady.undoManager beginUndoGrouping];
@@ -337,16 +344,19 @@
                 }];
             }];
 
-        // Import new sites.
+        // Make sure there is a user.
         if (!user) {
             [self.managedObjectContextIfReady performBlockAndWait:^{
                 user = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class])
                                                      inManagedObjectContext:self.managedObjectContextIfReady];
-                user.name  = userName;
-                user.keyID = [keyIDHex decodeHex];
+                user.name  = importUserName;
+                user.keyID = importKeyID;
             }];
             dbg(@"Created User: %@", [user debugDescription]);
         }
+        [self saveContext];
+
+        // Import new sites.
         for (NSArray *siteElements in importedSiteElements) {
             NSDate *lastUsed = [[NSDateFormatter rfc3339DateFormatter] dateFromString:[siteElements objectAtIndex:0]];
             NSUInteger    uses    = (unsigned)[[siteElements objectAtIndex:1] integerValue];
@@ -356,9 +366,10 @@
             NSString *exportContent = [siteElements objectAtIndex:5];
 
             // Create new site.
+            __block MPImportResult result = MPImportResultSuccess;
             [self.managedObjectContextIfReady performBlockAndWait:^{
-                MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:[key.algorithm classNameOfType:type]
-                                                                         inManagedObjectContext:self.managedObjectContextIfReady];
+                MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmForVersion(version) classNameOfType:type]
+                                                        inManagedObjectContext:self.managedObjectContextIfReady];
                 element.name     = name;
                 element.user     = user;
                 element.type     = type;
@@ -367,12 +378,23 @@
                 element.version  = version;
                 if ([exportContent length]) {
                     if (clearText)
-                        [element importClearTextContent:exportContent usingKey:key];
-                    else
-                        [element importProtectedContent:exportContent];
+                        [element importClearTextContent:exportContent usingKey:userKey];
+                    else {
+                        if (!importKey)
+                            importKey = [importAlgorithm keyForPassword:importPassword(user.name) ofUserNamed:user.name];
+                        if (![importKey.keyID isEqualToData:importKeyID]) {
+                            result = MPImportResultInvalidPassword;
+                            return;
+                        }
+                        
+                        [element importProtectedContent:exportContent protectedByKey:importKey usingKey:userKey];
+                    }
                 }
+                
                 dbg(@"Created Element: %@", [element debugDescription]);
             }];
+            if (result != MPImportResultSuccess)
+                return result;
         }
 
         [self saveContext];

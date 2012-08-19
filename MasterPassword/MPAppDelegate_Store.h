@@ -28,8 +28,9 @@ typedef enum {
 - (UbiquityStoreManager *)storeManager;
 - (void)saveContext;
 
-- (MPImportResult)importSites:(NSString *)importedSitesString withPassword:(NSString *)password
-              askConfirmation:(BOOL(^)(NSUInteger importCount, NSUInteger deleteCount))confirmation;
+- (MPImportResult)importSites:(NSString *)importedSitesString
+            askImportPassword:(NSString *(^)(NSString *userName))importPassword
+              askUserPassword:(NSString *(^)(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword;
 - (NSString *)exportSitesShowingPasswords:(BOOL)showPasswords;
 
 @end

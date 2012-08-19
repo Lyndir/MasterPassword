@@ -12,11 +12,11 @@
 
 @property (nonatomic, retain) NSNumber *sendInfo;
 @property (nonatomic, retain) NSNumber *helpHidden;
-@property (nonatomic, retain) NSNumber *userNameHidden;
+@property (nonatomic, retain) NSNumber *siteInfoHidden;
 @property (nonatomic, retain) NSNumber *showQuickStart;
 @property (nonatomic, retain) NSNumber *actionsTipShown;
 @property (nonatomic, retain) NSNumber *typeTipShown;
-@property (nonatomic, retain) NSNumber *userNameTipShown;
+@property (nonatomic, retain) NSNumber *loginNameTipShown;
 
 + (MPiOSConfig *)get;
 

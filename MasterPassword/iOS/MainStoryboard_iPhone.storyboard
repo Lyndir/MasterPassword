@@ -811,12 +811,12 @@ L4m3P4sSw0rD</string>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" id="HPZ-qz-fpL">
-                                        <rect key="frame" x="20" y="60" width="260" height="130"/>
+                                        <rect key="frame" x="20" y="52" width="260" height="108"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <string key="text">Some of your sites have outdated passwords.  Tap this alert for more info or       to find them.
+                                        <string key="text">Some of your sites use outdated passwords.  Tap this alert for more info or      to find them.
 
-You should upgrade these sites and update their account's passwords as soon as is convenient.</string>
+These sites should be upgraded and their account's passwords updated as soon as convenient.</string>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -854,7 +854,7 @@ You should upgrade these sites and update their account's passwords as soon as i
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Sfy-hx-kVU">
-                                        <rect key="frame" x="184" y="81" width="22" height="22"/>
+                                        <rect key="frame" x="183" y="73" width="22" height="22"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <accessibility key="accessibilityConfiguration" hint="" label="Close"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -911,10 +911,10 @@ You should upgrade these sites and update their account's passwords as soon as i
                         <outlet property="toolTipEditIcon" destination="KEn-n3-qhX" id="zEV-tR-Egq"/>
                         <outlet property="typeButton" destination="xYM-e3-BMg" id="xvn-nR-MRV"/>
                         <outlet property="typeTipContainer" destination="g55-0m-WjS" id="KZ9-KV-NMh"/>
-                        <outlet property="userNameContainer" destination="lrZ-PV-rgu" id="tTh-fp-qaN"/>
-                        <outlet property="userNameField" destination="tj6-Ot-Fuh" id="oFa-xd-UEm"/>
-                        <outlet property="userNameTipBody" destination="coX-1P-dqm" id="MRt-A5-ZMH"/>
-                        <outlet property="userNameTipContainer" destination="b9W-aA-93r" id="heZ-Gu-obO"/>
+                        <outlet property="loginNameContainer" destination="lrZ-PV-rgu" id="tTh-fp-qaN"/>
+                        <outlet property="loginNameField" destination="tj6-Ot-Fuh" id="oFa-xd-UEm"/>
+                        <outlet property="loginNameTipBody" destination="coX-1P-dqm" id="MRt-A5-ZMH"/>
+                        <outlet property="loginNameTipContainer" destination="b9W-aA-93r" id="heZ-Gu-obO"/>
                         <segue destination="oLN-6u-GLb" kind="push" identifier="UserProfile" id="tKN-Sw-S5J"/>
                     </connections>
                 </viewController>
@@ -1890,10 +1890,10 @@ You could use the word wall for  inspiration in finding a memorable master passw
                 <relationship kind="outlet" name="toolTipEditIcon" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="typeButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="typeTipContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="userNameContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="userNameField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="userNameTipBody" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="userNameTipContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="loginNameContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="loginNameField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="loginNameTipBody" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="loginNameTipContainer" candidateClass="UIView"/>
             </relationships>
         </class>
         <class className="MPPreferencesViewController" superclassName="UITableViewController">
@@ -1951,6 +1951,6 @@ You could use the word wall for  inspiration in finding a memorable master passw
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="KIl-ZW-M7G"/>
+        <segue reference="9Bs-cD-ddF"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -2,7 +2,7 @@
 //  MPElementGeneratedEntity.m
 //  MasterPassword-iOS
 //
-//  Created by Maarten Billemont on 17/07/12.
+//  Created by Maarten Billemont on 2012-08-19.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 

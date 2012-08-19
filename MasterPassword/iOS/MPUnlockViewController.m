@@ -218,9 +218,15 @@
     self.tip.text = @"Tap and hold to delete or reset.";
     [self.loadingUsersIndicator stopAnimating];
 
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPUserEntity class])];
-    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO]];
-    NSArray *users = [moc executeFetchRequest:fetchRequest error:nil];
+    __block NSArray *users = nil;
+    [moc performBlockAndWait:^{
+        NSError        *error        = nil;
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPUserEntity class])];
+        fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO]];
+        users = [moc executeFetchRequest:fetchRequest error:&error];
+        if (!users)
+        err(@"Failed to load users: %@", error);
+    }];
 
     // Clean up avatars.
     for (UIView *subview in [self.avatarsView subviews])
@@ -275,8 +281,10 @@
 
     [self.avatarToUser setObject:NilToNSNull(user) forKey:[NSValue valueWithNonretainedObject:avatar]];
 
-    if (self.selectedUser && user == self.selectedUser)
+    if ([self.selectedUser.objectID isEqual:user.objectID]) {
+        self.selectedUser = user;
         avatar.selected = YES;
+    }
 
     return avatar;
 }
