@@ -54,9 +54,10 @@
         NSString *testFlightToken = [self testFlightToken];
         if ([testFlightToken length]) {
             inf(@"Initializing TestFlight");
-            [TestFlight addCustomEnvironmentInformation:@"Anonymous" forKey:@"username"];
             [TestFlight setDeviceIdentifier:[(id)[UIDevice currentDevice] uniqueIdentifier]];
-//            [TestFlight setDeviceIdentifier:[PearlKeyChain deviceIdentifier]];
+            //[TestFlight setDeviceIdentifier[PearlKeyChain deviceIdentifier]];
+            [TestFlight addCustomEnvironmentInformation:@"Anonymous" forKey:@"username"];
+            [TestFlight addCustomEnvironmentInformation:[PearlKeyChain deviceIdentifier] forKey:@"deviceIdentifier"];
             [TestFlight setOptions:[NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithBool:NO],   @"logToConsole",
                                     [NSNumber numberWithBool:NO],   @"logToSTDERR",
@@ -68,7 +69,7 @@
                     level = PearlLogLevelInfo;
 
                 if (message.level >= level)
-                    TFLog(@"%@", message);
+                    TFLog(@"%@", [message messageDescription]);
 
                 return YES;
             }];
@@ -87,16 +88,18 @@
 #if defined (DEBUG) || defined (ADHOC)
             [Crashlytics sharedInstance].debugMode = YES;
 #endif
-            [[Crashlytics sharedInstance] setObjectValue:@"Anonymous" forKey:@"username"];
-            [[Crashlytics sharedInstance] setObjectValue:[PearlKeyChain deviceIdentifier] forKey:@"deviceIdentifier"];
-            [Crashlytics startWithAPIKey:crashlyticsAPIKey afterDelay:0];
+            [Crashlytics setUserIdentifier:[PearlKeyChain deviceIdentifier]];
+            [Crashlytics setObjectValue:[PearlKeyChain deviceIdentifier] forKey:@"deviceIdentifier"];
+            [Crashlytics setUserName:@"Anonymous"];
+            [Crashlytics setObjectValue:@"Anonymous" forKey:@"username"];
+            [Crashlytics startWithAPIKey:crashlyticsAPIKey];
             [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
                 PearlLogLevel level = PearlLogLevelWarn;
                 if ([[MPiOSConfig get].sendInfo boolValue])
                     level = PearlLogLevelInfo;
 
                 if (message.level >= level)
-                    CLSLog(@"%@", message);
+                    CLSLog(@"%@", [message messageDescription]);
 
                 return YES;
             }];

@@ -357,6 +357,11 @@
 
             [self.fetchedResultsController.managedObjectContext performBlock:^{
                 MPElementType type = [MPAppDelegate get].activeUser.defaultType;
+                if (!type) {
+                    // Really shouldn't happen, but a few people crashed on this anyway.  Uhh.  Data store corruption?  Old bugs?
+                    type = [MPAppDelegate get].activeUser.defaultType = MPElementTypeGeneratedLong;
+                }
+
                 MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmDefault classNameOfType:type]
                                                                          inManagedObjectContext:self.fetchedResultsController.managedObjectContext];
                 assert([MPAppDelegate get].activeUser);

@@ -29,8 +29,7 @@
     if (managedObjectModel)
         return managedObjectModel;
 
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"MasterPassword" withExtension:@"momd"];
-    return managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    return managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
 }
 
 - (NSManagedObjectContext *)managedObjectContextIfReady {
@@ -39,15 +38,21 @@
         return nil;
 
     static NSManagedObjectContext *managedObjectContext = nil;
-    if (managedObjectContext)
-        return managedObjectContext;
+    if (!managedObjectContext) {
+        managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+        [managedObjectContext performBlockAndWait:^{
+            managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
+            managedObjectContext.undoManager = [NSUndoManager new];
+        }];
+    }
 
-    managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-    [managedObjectContext performBlockAndWait:^{
-        managedObjectContext.mergePolicy                = NSMergeByPropertyObjectTrumpMergePolicy;
-        managedObjectContext.persistentStoreCoordinator = [self storeManager].persistentStoreCoordinator;
-        managedObjectContext.undoManager                = [NSUndoManager new];
-    }];
+    if (![managedObjectContext.persistentStoreCoordinator.persistentStores count])
+        [managedObjectContext performBlockAndWait:^{
+            managedObjectContext.persistentStoreCoordinator = [self storeManager].persistentStoreCoordinator;
+        }];
+
+    if (![self storeManager].isReady)
+        return nil;
 
     return managedObjectContext;
 }
@@ -62,7 +67,9 @@
                                                               localStoreURL:[[self applicationFilesDirectory] URLByAppendingPathComponent:@"MasterPassword.sqlite"]
                                                         containerIdentifier:@"HL3Q45LX9N.com.lyndir.lhunath.MasterPassword.shared"
 #if TARGET_OS_IPHONE
-                                                     additionalStoreOptions:@{NSPersistentStoreFileProtectionKey: NSFileProtectionComplete}
+                                                     additionalStoreOptions:@{
+                                                     NSPersistentStoreFileProtectionKey: NSFileProtectionComplete
+                                                     }
 #else
                                                      additionalStoreOptions:nil
 #endif
@@ -132,8 +139,9 @@
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:iCloudEnabled? MPCheckpointCloudEnabled: MPCheckpointCloudDisabled];
 #endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloud
-                                               attributes:@{@"enabled": iCloudEnabled? @"YES": @"NO"}];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloud attributes:@{
+    @"enabled": iCloudEnabled? @"YES": @"NO"
+    }];
 
     [MPConfig get].iCloud = @(iCloudEnabled);
 }
@@ -154,27 +162,39 @@
         case UbiquityStoreManagerErrorCauseClearStore:
             break;
         case UbiquityStoreManagerErrorCauseOpenLocalStore: {
-            wrn(@"Local store could not be opened, resetting it.");
+            wrn(@"Local store could not be opened: %@", error);
+
+            if (error.code == NSMigrationMissingSourceModelError) {
+                wrn(@"Resetting the local store.");
 
 #ifdef TESTFLIGHT_SDK_VERSION
-            [TestFlight passCheckpoint:MPCheckpointLocalStoreIncompatible];
+                [TestFlight passCheckpoint:MPCheckpointLocalStoreIncompatible];
 #endif
-            [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointLocalStoreIncompatible attributes:nil];
-            manager.hardResetEnabled = YES;
-            [manager hardResetLocalStorage];
+                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointLocalStoreIncompatible attributes:nil];
+                manager.hardResetEnabled = YES;
+                [manager hardResetLocalStorage];
 
-            Throw(@"Local store was reset, application must be restarted to use it.");
+                Throw(@"Local store was reset, application must be restarted to use it.");
+            } else
+                // Try again.
+                [self storeManager].persistentStoreCoordinator;
         }
         case UbiquityStoreManagerErrorCauseOpenCloudStore: {
-            wrn(@"iCloud store could not be opened, resetting it.");
+            wrn(@"iCloud store could not be opened: %@", error);
+
+            if (error.code == NSMigrationMissingSourceModelError) {
+                wrn(@"Resetting the iCloud store.");
 
 #ifdef TESTFLIGHT_SDK_VERSION
-            [TestFlight passCheckpoint:MPCheckpointCloudStoreIncompatible];
+                [TestFlight passCheckpoint:MPCheckpointCloudStoreIncompatible];
 #endif
-            [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloudStoreIncompatible attributes:nil];
-            manager.hardResetEnabled = YES;
-            [manager hardResetCloudStorage];
-            break;
+                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloudStoreIncompatible attributes:nil];
+                manager.hardResetEnabled = YES;
+                [manager hardResetCloudStorage];
+                break;
+            } else
+                // Try again.
+                [self storeManager].persistentStoreCoordinator;
         }
     }
 }
@@ -366,8 +386,9 @@
             // Create new site.
             __block MPImportResult result = MPImportResultSuccess;
             [self.managedObjectContextIfReady performBlockAndWait:^{
-                MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmForVersion(version) classNameOfType:type]
-                                                        inManagedObjectContext:self.managedObjectContextIfReady];
+                MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmForVersion(
+                 version) classNameOfType:type]
+                                                                         inManagedObjectContext:self.managedObjectContextIfReady];
                 element.name     = name;
                 element.user     = user;
                 element.type     = type;
@@ -384,11 +405,11 @@
                             result = MPImportResultInvalidPassword;
                             return;
                         }
-                        
+
                         [element importProtectedContent:exportContent protectedByKey:importKey usingKey:userKey];
                     }
                 }
-                
+
                 dbg(@"Created Element: %@", [element debugDescription]);
             }];
             if (result != MPImportResultSuccess)

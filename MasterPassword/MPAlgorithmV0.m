@@ -153,7 +153,7 @@
 - (Class)classOfType:(MPElementType)type {
 
     if (!type)
-        return nil;
+        Throw(@"No type given.");
 
     switch (type) {
         case MPElementTypeGeneratedMaximum:

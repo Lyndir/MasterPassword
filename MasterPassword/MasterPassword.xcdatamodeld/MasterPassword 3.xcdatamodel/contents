@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1487" systemVersion="12A269" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1807" systemVersion="12A269" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="MPElementEntity" representedClassName="MPElementEntity" isAbstract="YES" syncable="YES">
         <attribute name="content" optional="YES" transient="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="lastUsed" attributeType="Date" indexed="YES" syncable="YES"/>
@@ -32,9 +32,9 @@
         <relationship name="elements" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MPElementEntity" inverseName="user" inverseEntity="MPElementEntity" syncable="YES"/>
     </entity>
     <elements>
-        <element name="MPElementEntity" positionX="160" positionY="192" width="128" height="180"/>
-        <element name="MPElementGeneratedEntity" positionX="160" positionY="192" width="128" height="60"/>
-        <element name="MPElementStoredEntity" positionX="160" positionY="192" width="128" height="60"/>
-        <element name="MPUserEntity" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="MPElementEntity" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="MPElementGeneratedEntity" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="MPElementStoredEntity" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="MPUserEntity" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

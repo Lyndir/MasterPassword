@@ -6,7 +6,7 @@
 	<array>
 		<dict>
 			<key>FooterText</key>
-			<string>If you&apos;re experiencing problems, enabling this will send us details that can help diagnose and resolve them.  Great care has been taken to guarantee no private information is ever sent.</string>
+			<string>If you&apos;re experiencing problems, enabling this will send us details that can help diagnose and resolve them.  You will remain completely anonymous amongst the other thousands of users.  No sensitive information is ever sent.</string>
 			<key>Title</key>
 			<string></string>
 			<key>Type</key>
@@ -48,7 +48,7 @@
 			<key>Title</key>
 			<string>Send Diagnostic Info</string>
 			<key>Key</key>
-            <string>sendInfo</string>
+			<string>sendInfo</string>
 			<key>DefaultValue</key>
 			<false/>
 		</dict>

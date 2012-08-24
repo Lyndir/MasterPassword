@@ -148,7 +148,8 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     @try {
         if ([[MPiOSConfig get].sendInfo boolValue]) {
             [TestFlight addCustomEnvironmentInformation:user.userID forKey:@"username"];
-            [[Crashlytics sharedInstance] setObjectValue:user.userID forKey:@"username"];
+            [Crashlytics setObjectValue:user.userID forKey:@"username"];
+            [Crashlytics setUserName:user.userID];
         }
     }
     @catch (id exception) {
