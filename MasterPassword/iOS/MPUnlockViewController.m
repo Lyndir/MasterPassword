@@ -7,6 +7,10 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
+#import <Twitter/Twitter.h>
+
+#import "Facebook.h"
+#import "GooglePlusShare.h"
 
 #import "MPUnlockViewController.h"
 #import "MPAppDelegate.h"
@@ -18,7 +22,8 @@
 @property (strong, nonatomic) MPUserEntity        *selectedUser;
 @property (strong, nonatomic) NSMutableDictionary *avatarToUser;
 @property (nonatomic) BOOL wordWallAnimating;
-@property (nonatomic, strong) NSArray *wordList;
+@property (nonatomic, strong) NSArray          *wordList;
+@property (nonatomic, strong) NSOperationQueue *fbOperationQueue;
 
 
 @end
@@ -43,6 +48,7 @@
 @synthesize avatarShadowColor = _avatarShadowColor;
 @synthesize wordWallAnimating = _wordWallAnimating;
 @synthesize wordList = _wordList;
+@synthesize fbOperationQueue = _fbOperationQueue;
 
 
 - (void)initializeAvatarAlert:(UIAlertView *)alert forUser:(MPUserEntity *)user {
@@ -122,7 +128,9 @@
 
 - (void)viewDidLoad {
 
-    self.avatarToUser = [NSMutableDictionary dictionaryWithCapacity:3];
+    self.avatarToUser     = [NSMutableDictionary dictionaryWithCapacity:3];
+    self.fbOperationQueue = [NSOperationQueue new];
+    [self.fbOperationQueue setSuspended:YES];
 
     self.avatarsView.decelerationRate = UIScrollViewDecelerationRateFast;
     self.avatarsView.clipsToBounds    = NO;
@@ -283,7 +291,7 @@
 
     if ([self.selectedUser.objectID isEqual:user.objectID]) {
         self.selectedUser = user;
-        avatar.selected = YES;
+        avatar.selected   = YES;
     }
 
     return avatar;
@@ -407,9 +415,9 @@
     if (self.selectedUser && !self.passwordView.alpha) {
         // User was just selected.
         self.passwordView.alpha        = 1;
-        self.avatarsView.center        = CGPointMake(160, 170);
+        self.avatarsView.center        = CGPointMake(160, 180);
         self.avatarsView.scrollEnabled = NO;
-        self.nameLabel.center          = CGPointMake(160, 84);
+        self.nameLabel.center          = CGPointMake(160, 94);
         self.nameLabel.backgroundColor = [UIColor blackColor];
         self.oldNameLabel.center       = self.nameLabel.center;
         self.avatarShadowColor         = [UIColor whiteColor];
@@ -764,4 +772,81 @@
     }                  cancelTitle:[PearlStrings get].commonButtonCancel
                   destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];
 }
+
+- (IBAction)facebook:(UIButton *)sender {
+
+    [self.fbOperationQueue addOperationWithBlock:^{
+        Facebook *facebook = [[Facebook alloc] initWithAppId:FBSession.activeSession.appID andDelegate:nil];
+        facebook.accessToken    = FBSession.activeSession.accessToken;
+        facebook.expirationDate = FBSession.activeSession.expirationDate;
+
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [[self.view findFirstResponderInHierarchy] resignFirstResponder];
+            [facebook           dialog:@"feed" andParams:[@{
+            @"link": @"http://masterpasswordapp.com",
+            @"picture": @"http://masterpasswordapp.com/img/iTunesArtwork-Rounded.png",
+            @"name": @"Master Password",
+            @"description": @"Actually secure passwords that cannot get lost.",
+            @"ref": @"iOS_Unlock"
+            } mutableCopy] andDelegate:nil];
+        }];
+    }];
+    if ([self.fbOperationQueue isSuspended])
+        [self openSessionWithAllowLoginUI:YES];
+}
+
+- (IBAction)twitter:(UIButton *)sender {
+
+    if (![TWTweetComposeViewController canSendTweet]) {
+        [PearlAlert showAlertWithTitle:@"Twitter Not Enabled" message:@"To send tweets, configure Twitter from Settings."
+                             viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:nil cancelTitle:nil otherTitles:@"OK", nil];
+        return;
+    }
+
+    TWTweetComposeViewController *vc = [TWTweetComposeViewController new];
+    [vc addImage:[UIImage imageNamed:@"iTunesArtwork-Rounded-73"]];
+    [vc setInitialText:@"I've secured my accounts with Master Password: masterpasswordapp.com"];
+    [self presentViewController:vc animated:YES completion:nil];
+}
+
+- (IBAction)google:(UIButton *)sender {
+
+    GooglePlusShare *share = [[GooglePlusShare alloc] initWithClientID:[[PearlInfoPlist get] objectForKeyPath:@"GooglePlusClientID"]];
+    [[[[share shareDialog]
+              setURLToShare:[NSURL URLWithString:@"http://masterpasswordapp.com"]]
+              setPrefillText:@"I've secured my accounts with Master Password: Actually secure passwords that cannot get lost."]
+              open];
+}
+
+- (void)sessionStateChanged:(FBSession *)session state:(FBSessionState)state error:(NSError *)error {
+
+    switch (state) {
+        case FBSessionStateOpen:
+            if (!error) {
+                [self.fbOperationQueue setSuspended:NO];
+                return;
+            }
+
+            break;
+        case FBSessionStateClosed:
+        case FBSessionStateClosedLoginFailed:
+            [FBSession.activeSession closeAndClearTokenInformation];
+            break;
+        default:
+            break;
+    }
+    [self.fbOperationQueue setSuspended:YES];
+
+    if (error)
+        [PearlAlert showError:error.localizedDescription];
+}
+
+- (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI {
+
+    return [FBSession openActiveSessionWithPermissions:nil allowLoginUI:allowLoginUI
+                                     completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
+                                         [self sessionStateChanged:session state:state error:error];
+                                     }];
+}
+
 @end

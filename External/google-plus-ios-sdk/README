@@ -1,0 +1,39 @@
+This Google+ iOS SDK allows users to sign in with Google+, share with Google+,
+and write moments to Google+ history from third-party apps. The SDK contains the
+following files:
+
+README  -- This file.
+
+Changelog  -- The versions and changes of the SDK.
+
+lib/  -- Header files and libraries.
+  GooglePlusShare.h -- Header file to include for sharing with Google+.
+  GooglePlusSignIn.h -- Header file to include for signing into Google+.
+  GooglePlusSignInButton.h -- Header file to include for showing a button to
+                              sign in with Google+.
+  libGooglePlus.a -- Static library built for iOS device to link into your app.
+  libGooglePlusUniversal.a -- Static library built for both iOS device and
+                              simulator to link into your app.
+
+OpenSource/  -- Google open source files used by the SDK. Add all files in this
+                directory into your project if you're not already using them.
+                Also see comments for the subdirectory below.
+  GTL/ -- Google open source files only used by the sample app. Include them
+          into your project if you're going to use the same functionality,
+          e.g. Add Moments.
+
+Resources/  -- Resources that can be used in your app.
+               For |GooglePlusSignInButton|, the google_plus_sign_in*.png images
+               are required.
+  google_plus_share.png -- 82x24 Google+ share button image.
+  google_plus_share_large.png -- 112x32 Google+ share button image.
+  google_plus_share@2x.png -- 164x48 Google+ share button image.
+  google_plus_share_large@2x.png -- 224x64 Google+ share button image.
+  google_plus_sign_in.png -- 120x32 Google+ sign-in button image.
+  google_plus_sign_in_wide.png --220x32 Wide Google+ sign-in button image.
+  google_plus_sign_in@2x.png -- 240x64 Google+ sign-in button image.
+  google_plus_sign_in_wide@2x.png -- 440x64 Wide Google+ sign-in button image.
+
+SampleCode/  -- Sample code for your reference only.
+                Do not include this in your project.
+   GooglePlusSample.xcodeproj/  -- The Xcode project.

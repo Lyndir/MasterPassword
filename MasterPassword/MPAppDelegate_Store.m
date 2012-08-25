@@ -177,7 +177,7 @@
                 Throw(@"Local store was reset, application must be restarted to use it.");
             } else
                 // Try again.
-                [self storeManager].persistentStoreCoordinator;
+                [[self storeManager] persistentStoreCoordinator];
         }
         case UbiquityStoreManagerErrorCauseOpenCloudStore: {
             wrn(@"iCloud store could not be opened: %@", error);
@@ -194,7 +194,7 @@
                 break;
             } else
                 // Try again.
-                [self storeManager].persistentStoreCoordinator;
+                [[self storeManager] persistentStoreCoordinator];
         }
     }
 }

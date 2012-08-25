@@ -10,3 +10,6 @@
 [submodule "External/FontReplacer"]
 	path = External/FontReplacer
 	url = git://github.com/0xced/FontReplacer.git
+[submodule "External/facebook-ios-sdk"]
+	path = External/facebook-ios-sdk
+	url = https://github.com/facebook/facebook-ios-sdk

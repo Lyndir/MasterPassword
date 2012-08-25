@@ -11,7 +11,7 @@
 
 @interface MPAppDelegate_Shared ()
 
-@property (strong) NSManagedObjectID *activeUserID;
+@property (strong, nonatomic) NSManagedObjectID *activeUserID;
 
 @end
 

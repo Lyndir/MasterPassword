@@ -13,7 +13,7 @@
 
 @interface MPMainViewController : UIViewController<MPTypeDelegate, UITextFieldDelegate, MPSearchResultsDelegate, UIWebViewDelegate, MFMailComposeViewControllerDelegate, UIGestureRecognizerDelegate>
 
-@property (nonatomic, assign) BOOL siteInfoHidden;
+@property (assign, nonatomic) BOOL siteInfoHidden;
 @property (strong, nonatomic) MPElementEntity           *activeElement;
 @property (strong, nonatomic) IBOutlet MPSearchDelegate *searchDelegate;
 @property (weak, nonatomic) IBOutlet UITextField        *contentField;
@@ -48,8 +48,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *outdatedAlertCloseButton;
 
 
-@property (copy) void (^contentTipCleanup)(BOOL finished);
-@property (copy) void (^toolTipCleanup)(BOOL finished);
+@property (copy, nonatomic) void (^contentTipCleanup)(BOOL finished);
+@property (copy, nonatomic) void (^toolTipCleanup)(BOOL finished);
 
 - (IBAction)copyContent;
 - (IBAction)incrementPasswordCounter;

@@ -6,6 +6,8 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
+#import <FacebookSDK/FacebookSDK.h>
+
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
@@ -148,7 +150,7 @@
      @{UITextAttributeTextColor: [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
                     UITextAttributeTextShadowColor: [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f],
                     UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
-                    UITextAttributeFont: [UIFont fontWithName:@"Helvetica-Neue" size:0.0f]}
+                    UITextAttributeFont: [UIFont fontWithName:@"HelveticaNeue" size:0.0f]}
                                                 forState:UIControlStateNormal];
 
     UIImage *toolBarImage = [[UIImage imageNamed:@"ui_toolbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake(25, 5, 5, 5)];
@@ -215,7 +217,25 @@
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
 
+    // No URL?
+    if (!url)
+        return NO;
+
+    // Check if this is a Facebook login URL.
+    if ([FBSession.activeSession handleOpenURL:url])
+        return YES;
+
+    // Arbitrary URL to mpsites data.
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSError       *error;
+        NSURLResponse *response;
+        NSData        *importedSitesData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
+                                                                 returningResponse:&response error:&error];
+        if (error)
+        err(@"While reading imported sites from %@: %@", url, error);
+        if (!importedSitesData)
+            return;
+
         PearlAlert *activityAlert        = [PearlAlert showAlertWithTitle:@"Importing" message:@"\n\n"
                                                                 viewStyle:UIAlertViewStyleDefault initAlert:
           ^(UIAlertView *alert, UITextField *firstField) {
@@ -225,15 +245,6 @@
               [alert addSubview:activityIndicator];
           }
                                                         tappedButtonBlock:nil cancelTitle:nil otherTitles:nil];
-
-        NSError       *error;
-        NSURLResponse *response;
-        NSData        *importedSitesData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
-                                                                 returningResponse:&response error:&error];
-        if (error)
-        err(@"While reading imported sites from %@: %@", url, error);
-        if (!importedSitesData)
-            return;
 
         NSString *importedSitesString = [[NSString alloc] initWithData:importedSitesData encoding:NSUTF8StringEncoding];
         MPImportResult result = [self importSites:importedSitesString askImportPassword:^NSString *(NSString *userName) {
@@ -325,6 +336,10 @@
 
     [TestFlight passCheckpoint:MPCheckpointActivated];
 
+    if (FBSession.activeSession.state == FBSessionStateCreatedOpening)
+        // An old Facebook Login session that wasn't finished.  Clean it up.
+        [FBSession.activeSession close];
+
     [super applicationDidBecomeActive:application];
 }
 
@@ -352,6 +367,8 @@
 
     [[LocalyticsSession sharedLocalyticsSession] close];
     [[LocalyticsSession sharedLocalyticsSession] upload];
+
+    [FBSession.activeSession close];
 
     [super applicationWillTerminate:application];
 }

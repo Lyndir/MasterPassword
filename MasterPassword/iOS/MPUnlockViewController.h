@@ -29,5 +29,8 @@
 @property (nonatomic, strong) UIColor *avatarShadowColor;
 
 - (IBAction)targetedUserAction:(UILongPressGestureRecognizer *)sender;
+- (IBAction)facebook:(UIButton *)sender;
+- (IBAction)twitter:(UIButton *)sender;
+- (IBAction)google:(UIButton *)sender;
 
 @end
