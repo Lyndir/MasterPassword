@@ -32,5 +32,7 @@
 - (IBAction)facebook:(UIButton *)sender;
 - (IBAction)twitter:(UIButton *)sender;
 - (IBAction)google:(UIButton *)sender;
+- (IBAction)mail:(UIButton *)sender;
+- (IBAction)add:(UIButton *)sender;
 
 @end

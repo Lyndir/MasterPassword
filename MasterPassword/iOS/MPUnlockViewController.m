@@ -818,6 +818,68 @@
               open];
 }
 
+- (IBAction)mail:(UIButton *)sender {
+
+    [[MPAppDelegate get] showFeedbackWithLogs:NO forVC:self];
+}
+
+- (IBAction)add:(UIButton *)sender {
+
+    [PearlSheet showSheetWithTitle:@"Follow Master Password" message:nil viewStyle:UIActionSheetStyleBlackTranslucent
+                         initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
+        if (buttonIndex == [sheet cancelButtonIndex])
+            return;
+
+        if (buttonIndex == [sheet firstOtherButtonIndex]) {
+            // Google+
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://plus.google.com/116256327773442623984/about"]];
+            return;
+        }
+        if (buttonIndex == [sheet firstOtherButtonIndex] + 1) {
+            // Facebook
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.facebook.com/masterpasswordapp"]];
+            return;
+        }
+        if (buttonIndex == [sheet firstOtherButtonIndex] + 2) {
+            // Twitter
+            UIApplication *application = [UIApplication sharedApplication];
+            for (NSString *candidate in @[
+            @"twitter://user?screen_name=%@", // Twitter
+            @"tweetbot:///user_profile/%@", // TweetBot
+            @"echofon:///user_timeline?%@", // Echofon
+            @"twit:///user?screen_name=%@", // Twittelator Pro
+            @"x-seesmic://twitter_profile?twitter_screen_name=%@", // Seesmic
+            @"x-birdfeed://user?screen_name=%@", // Birdfeed
+            @"tweetings:///user?screen_name=%@", // Tweetings
+            @"simplytweet:?link=http://twitter.com/%@", // SimplyTweet
+            @"icebird://user?screen_name=%@", // IceBird
+            @"fluttr://user/%@", // Fluttr
+            @"http://twitter.com/%@"]) {
+                NSURL *url = [NSURL URLWithString:PearlString(candidate, @"master_password")];
+
+                if ([application canOpenURL:url]) {
+                    [application openURL:url];
+                    break;
+                }
+            }
+            return;
+        }
+        if (buttonIndex == [sheet firstOtherButtonIndex] + 3) {
+            // Mailing List
+            [PearlEMail sendEMailTo:@"masterpassword-join@lists.lyndir.com" subject:@"Subscribe"
+                               body:@"Press 'Send' now to subscribe to the Master Password mailing list.\n\n"
+                                @"You'll be kept up-to-date on the evolution of and discussions revolving Master Password."];
+            return;
+        }
+        if (buttonIndex == [sheet firstOtherButtonIndex] + 4) {
+            // GitHub
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/Lyndir/MasterPassword"]];
+            return;
+        }
+    }                  cancelTitle:[PearlStrings get].commonButtonCancel
+                  destructiveTitle:nil otherTitles:@"Google+", @"Facebook", @"Twitter", @"Mailing List", @"GitHub", nil];
+}
+
 - (void)sessionStateChanged:(FBSession *)session state:(FBSessionState)state error:(NSError *)error {
 
     switch (state) {

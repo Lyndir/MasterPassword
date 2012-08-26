@@ -10,12 +10,13 @@
 #import <MessageUI/MessageUI.h>
 #import "MPAppDelegate_Shared.h"
 
-@interface MPAppDelegate : MPAppDelegate_Shared<MFMailComposeViewControllerDelegate>
+@interface MPAppDelegate : MPAppDelegate_Shared
 
 + (MPAppDelegate *)get;
 
 - (void)checkConfig;
 - (void)showGuide;
+- (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController;
 
 - (void)export;
 - (void)changeMasterPasswordFor:(MPUserEntity *)user didResetBlock:(void(^)(void))didReset;

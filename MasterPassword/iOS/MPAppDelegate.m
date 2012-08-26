@@ -120,8 +120,10 @@
             [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
                 if (message.level >= PearlLogLevelWarn)
                     [[LocalyticsSession sharedLocalyticsSession] tagEvent:@"Problem"
-                                                               attributes:@{@"level": @(PearlLogLevelStr(message.level)),
-                                                                 @"message": message.message}];
+                                                               attributes:@{
+                                                               @"level": @(PearlLogLevelStr(message.level)),
+                                                               @"message": message.message
+                                                               }];
 
                 return YES;
             }];
@@ -135,10 +137,12 @@
     [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsLandscapePhone];
     [[UINavigationBar appearance] setTitleTextAttributes:
-     @{UITextAttributeTextColor: [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
-                    UITextAttributeTextShadowColor: [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f],
-                    UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, -1)],
-                    UITextAttributeFont: [UIFont fontWithName:@"Exo-Bold" size:20.0f]}];
+     @{
+     UITextAttributeTextColor: [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
+     UITextAttributeTextShadowColor: [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f],
+     UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, -1)],
+     UITextAttributeFont: [UIFont fontWithName:@"Exo-Bold" size:20.0f]
+     }];
 
     UIImage *navBarButton = [[UIImage imageNamed:@"ui_navbar_button"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
     UIImage *navBarBack   = [[UIImage imageNamed:@"ui_navbar_back"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 13, 0, 5)];
@@ -147,10 +151,12 @@
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:navBarBack forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
     [[UIBarButtonItem appearance] setTitleTextAttributes:
-     @{UITextAttributeTextColor: [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
-                    UITextAttributeTextShadowColor: [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f],
-                    UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
-                    UITextAttributeFont: [UIFont fontWithName:@"HelveticaNeue" size:0.0f]}
+     @{
+     UITextAttributeTextColor: [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
+     UITextAttributeTextShadowColor: [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f],
+     UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
+     UITextAttributeFont: [UIFont fontWithName:@"HelveticaNeue" size:0.0f]
+     }
                                                 forState:UIControlStateNormal];
 
     UIImage *toolBarImage = [[UIImage imageNamed:@"ui_toolbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake(25, 5, 5, 5)];
@@ -236,15 +242,15 @@
         if (!importedSitesData)
             return;
 
-        PearlAlert *activityAlert        = [PearlAlert showAlertWithTitle:@"Importing" message:@"\n\n"
-                                                                viewStyle:UIAlertViewStyleDefault initAlert:
+        PearlAlert *activityAlert = [PearlAlert showAlertWithTitle:@"Importing" message:@"\n\n"
+                                                         viewStyle:UIAlertViewStyleDefault initAlert:
           ^(UIAlertView *alert, UITextField *firstField) {
               UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
               activityIndicator.center = CGPointMake(140, 90);
               [activityIndicator startAnimating];
               [alert addSubview:activityIndicator];
           }
-                                                        tappedButtonBlock:nil cancelTitle:nil otherTitles:nil];
+                                                 tappedButtonBlock:nil cancelTitle:nil otherTitles:nil];
 
         NSString *importedSitesString = [[NSString alloc] initWithData:importedSitesData encoding:NSUTF8StringEncoding];
         MPImportResult result = [self importSites:importedSitesString askImportPassword:^NSString *(NSString *userName) {
@@ -337,7 +343,7 @@
     [TestFlight passCheckpoint:MPCheckpointActivated];
 
     if (FBSession.activeSession.state == FBSessionStateCreatedOpening)
-        // An old Facebook Login session that wasn't finished.  Clean it up.
+     // An old Facebook Login session that wasn't finished.  Clean it up.
         [FBSession.activeSession close];
 
     [super applicationDidBecomeActive:application];
@@ -420,25 +426,27 @@
 
         [TestFlight passCheckpoint:MPCheckpointConfig];
         [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointConfig attributes:
-                                                                                  @{@"rememberLogin": [[MPConfig get].rememberLogin boolValue]
-                                                                                                  ? @"YES": @"NO",
-                                                                                                 @"iCloud": [[MPConfig get].iCloud boolValue]? @"YES"
-                                                                                                  : @"NO",
-                                                                                                 @"iCloudDecided": [[MPConfig get].iCloudDecided boolValue]
-                                                                                                  ? @"YES": @"NO",
-                                                                                                 @"sendInfo": [[MPiOSConfig get].sendInfo boolValue]
-                                                                                                  ? @"YES": @"NO",
-                                                                                                 @"helpHidden": [[MPiOSConfig get].helpHidden boolValue]
-                                                                                                  ? @"YES": @"NO",
-                                                                                                 @"showQuickStart": [[MPiOSConfig get].showQuickStart boolValue]
-                                                                                                  ? @"YES": @"NO",
-                                                                                                 @"firstRun": [[PearlConfig get].firstRun boolValue]
-                                                                                                  ? @"YES": @"NO",
-                                                                                                 @"launchCount": [[PearlConfig get].launchCount description],
-                                                                                                 @"askForReviews": [[PearlConfig get].askForReviews boolValue]
-                                                                                                  ? @"YES": @"NO",
-                                                                                                 @"reviewAfterLaunches": [[PearlConfig get].reviewAfterLaunches description],
-                                                                                                 @"reviewedVersion": [PearlConfig get].reviewedVersion}];
+                                                                                  @{
+                                                                                  @"rememberLogin": [[MPConfig get].rememberLogin boolValue]
+                                                                                   ? @"YES": @"NO",
+                                                                                  @"iCloud": [[MPConfig get].iCloud boolValue]? @"YES"
+                                                                                   : @"NO",
+                                                                                  @"iCloudDecided": [[MPConfig get].iCloudDecided boolValue]
+                                                                                   ? @"YES": @"NO",
+                                                                                  @"sendInfo": [[MPiOSConfig get].sendInfo boolValue]
+                                                                                   ? @"YES": @"NO",
+                                                                                  @"helpHidden": [[MPiOSConfig get].helpHidden boolValue]
+                                                                                   ? @"YES": @"NO",
+                                                                                  @"showQuickStart": [[MPiOSConfig get].showQuickStart boolValue]
+                                                                                   ? @"YES": @"NO",
+                                                                                  @"firstRun": [[PearlConfig get].firstRun boolValue]
+                                                                                   ? @"YES": @"NO",
+                                                                                  @"launchCount": [[PearlConfig get].launchCount description],
+                                                                                  @"askForReviews": [[PearlConfig get].askForReviews boolValue]
+                                                                                   ? @"YES": @"NO",
+                                                                                  @"reviewAfterLaunches": [[PearlConfig get].reviewAfterLaunches description],
+                                                                                  @"reviewedVersion": [PearlConfig get].reviewedVersion
+                                                                                  }];
     }
 }
 
@@ -447,6 +455,59 @@
     [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
 
     [TestFlight passCheckpoint:MPCheckpointShowGuide];
+}
+
+- (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController {
+
+    if (![PearlEMail canSendMail])
+        [PearlAlert showAlertWithTitle:@"Feedback"
+                               message:
+                                @"Have a question, comment, issue or just saying thanks?\n\n"
+                                 @"We'd love to hear what you think!\n"
+                                 @"masterpassword@lyndir.com"
+                             viewStyle:UIAlertViewStyleDefault
+                             initAlert:nil tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay
+                           otherTitles:nil];
+
+    else
+        if (logs)
+            [PearlAlert showAlertWithTitle:@"Feedback"
+                                   message:
+                                    @"Have a question, comment, issue or just saying thanks?\n\n"
+                                     @"If you're having trouble, it may help us if you can first reproduce the problem "
+                                     @"and then include log files in your message."
+                                 viewStyle:UIAlertViewStyleDefault
+                                 initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                [self openFeedbackWithLogs:(buttonIndex_ == [alert_ firstOtherButtonIndex]) forVC:viewController];
+            }                  cancelTitle:nil otherTitles:@"Include Logs", @"No Logs", nil];
+        else
+            [self openFeedbackWithLogs:NO forVC:viewController];
+}
+
+- (void)openFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController {
+
+    NSString *userName = [MPAppDelegate get].activeUser.name;
+    PearlLogLevel logLevel = [[MPiOSConfig get].sendInfo boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
+
+    [[[PearlEMail alloc] initForEMailTo:@"Master Password Development <masterpassword@lyndir.com>"
+                                subject:PearlString(@"Feedback for Master Password [%@]",
+                                                    [[PearlKeyChain deviceIdentifier] stringByDeletingMatchesOf:@"-.*"])
+                                   body:PearlString(@"\n\n\n"
+                                                     @"--\n"
+                                                     @"%@"
+                                                     @"Master Password %@, build %@",
+                                                    userName? ([userName stringByAppendingString:@"\n"]): @"",
+                                                    [PearlInfoPlist get].CFBundleShortVersionString,
+                                                    [PearlInfoPlist get].CFBundleVersion)
+
+                            attachments:logs
+                                         ? [[PearlEMailAttachment alloc] initWithContent:[[[PearlLogger get] formatMessagesWithLevel:logLevel] dataUsingEncoding:NSUTF8StringEncoding]
+                                                                                mimeType:@"text/plain"
+                                                                                fileName:PearlString(@"%@-%@.log",
+                                                                                                     [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
+                                                                                                     [PearlKeyChain deviceIdentifier])]
+                                         : nil, nil]
+                  showComposerForVC:viewController];
 }
 
 - (void)export {
@@ -476,7 +537,7 @@
 
 - (void)exportShowPasswords:(BOOL)showPasswords {
 
-    if (![MFMailComposeViewController canSendMail]) {
+    if (![PearlEMail canSendMail]) {
         [PearlAlert showAlertWithTitle:@"Cannot Send Mail"
                                message:
                                 @"Your device is not yet set up for sending mail.\n"
@@ -511,16 +572,11 @@
     NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
     [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
 
-    MFMailComposeViewController *composer = [MFMailComposeViewController new];
-    [composer setMailComposeDelegate:self];
-    [composer setSubject:@"Master Password Export"];
-    [composer setMessageBody:message isHTML:NO];
-    [composer addAttachmentData:
-               [exportedSites dataUsingEncoding:NSUTF8StringEncoding] mimeType:@"text/plain"
-     fileName:PearlString(@"%@ (%@).mpsites",
-                          self.activeUser.name,
-                          [exportDateFormatter stringFromDate:[NSDate date]])];
-    [self.window.rootViewController presentModalViewController:composer animated:YES];
+    [PearlEMail sendEMailTo:nil subject:@"Master Password Export" body:message
+                attachments:[[PearlEMailAttachment alloc] initWithContent:[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
+                                                                 mimeType:@"text/plain" fileName:
+                  PearlString(@"%@ (%@).mpsites", self.activeUser.name, [exportDateFormatter stringFromDate:[NSDate date]])],
+                            nil];
 }
 
 - (void)changeMasterPasswordFor:(MPUserEntity *)user didResetBlock:(void (^)(void))didReset {
@@ -555,33 +611,6 @@
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)value {
 
     [self checkConfig];
-}
-
-#pragma mark - MFMailComposeViewControllerDelegate
-
-- (void)mailComposeController:(MFMailComposeViewController *)controller
-          didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-
-    if (error)
-    err(@"Error composing mail message: %@", error);
-
-    switch (result) {
-        case MFMailComposeResultSaved:
-        case MFMailComposeResultSent:
-            break;
-
-        case MFMailComposeResultFailed:
-            [PearlAlert showError:@"A problem occurred while sending the message."
-                tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                    if (buttonIndex == [alert firstOtherButtonIndex])
-                        return;
-                }     otherTitles:@"Retry", nil];
-            return;
-        case MFMailComposeResultCancelled:
-            break;
-    }
-
-    [controller dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark - UbiquityStoreManagerDelegate

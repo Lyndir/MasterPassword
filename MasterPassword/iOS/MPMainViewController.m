@@ -713,54 +713,7 @@
 #else
                          case 4: {
                              inf(@"Action: Feedback via Mail");
-                             if (![MFMailComposeViewController canSendMail])
-                                 [PearlAlert showAlertWithTitle:@"Sending Feedback"
-                                                        message:
-                                                         @"We'd love to hear what you think!\n\n"
-                                                          @"Please send any comments or reports to:\n"
-                                                          @"masterpassword@lyndir.com"
-                                                      viewStyle:UIAlertViewStyleDefault
-                                                      initAlert:nil tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay
-                                                    otherTitles:nil];
-
-                             else {
-                                 [PearlAlert showAlertWithTitle:@"Sending Feedback"
-                                                        message:
-                                                         @"We'd love to hear what you think!\n\n"
-                                                          @"If you're having trouble, it may help us if you can first reproduce the problem "
-                                                          @"and then include log files in your message."
-                                                      viewStyle:UIAlertViewStyleDefault
-                                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                                     MFMailComposeViewController *composer = [MFMailComposeViewController new];
-                                     [composer setMailComposeDelegate:self];
-                                     [composer setToRecipients:@[@"Master Password Development <masterpassword@lyndir.com>"]];
-                                     [composer setSubject:PearlString(@"Feedback for Master Password [%@]",
-                                                                      [[PearlKeyChain deviceIdentifier] stringByDeletingMatchesOf:@"-.*"])];
-                                     [composer setMessageBody:
-                                                PearlString(
-                                                 @"\n\n\n"
-                                                  @"--\n"
-                                                  @"%@\n"
-                                                  @"Master Password %@, build %@",
-                                                 [MPAppDelegate get].activeUser.name,
-                                                 [PearlInfoPlist get].CFBundleShortVersionString,
-                                                 [PearlInfoPlist get].CFBundleVersion)
-                                                       isHTML:NO];
-
-                                     if (buttonIndex_ == [alert_ firstOtherButtonIndex]) {
-                                         PearlLogLevel logLevel = [[MPiOSConfig get].sendInfo boolValue]? PearlLogLevelDebug
-                                          : PearlLogLevelInfo;
-                                         [composer addAttachmentData:[[[PearlLogger get] formatMessagesWithLevel:logLevel] dataUsingEncoding:NSUTF8StringEncoding]
-                                                            mimeType:@"text/plain"
-                                                            fileName:PearlString(@"%@-%@.log",
-                                                                                 [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
-                                                                                 [PearlKeyChain deviceIdentifier])];
-                                     }
-
-                                     [self presentModalViewController:composer animated:YES];
-                                 }
-                                                    cancelTitle:nil otherTitles:@"Include Logs", @"No Logs", nil];
-                             }
+                             [[MPAppDelegate get] showFeedbackWithLogs:YES forVC:self];
                              break;
                          }
                          case 5:
@@ -782,17 +735,6 @@
                        cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:
      [[MPiOSConfig get].helpHidden boolValue]? @"Show Help": @"Hide Help", @"FAQ", @"Tutorial", @"Preferences", @"Feedback", @"Sign Out",
      nil];
-}
-
-- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result
-                        error:(NSError *)error {
-
-    if (error)
-    err(@"Feedback composer error: %@, result: %d", error, result);
-    else
-     inf(@"Feedback composer result: %d", result);
-
-    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (MPElementType)selectedType {

@@ -8,8 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		93D390BC6AE7A1C9B91A3668 /* MPKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39E81EFABC6085AC8AE69 /* MPKey.m */; };
+		93D39262A8A97DB748213309 /* PearlEMail.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D393BB973253D4BAAC84AA /* PearlEMail.m */; };
 		93D392B30CE6C58A9A905E0A /* MPAlgorithmV0.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3938863322199C3E7E2E3 /* MPAlgorithmV0.m */; };
 		93D392EC39DA43C46C692C12 /* NSDictionary+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */; };
+		93D3932889B6B4206E66A6D6 /* PearlEMail.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */; };
 		93D394744B5485303B326ECB /* MPAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39B0DF5E3C56355186738 /* MPAlgorithm.m */; };
 		93D395F08A087F8A24689347 /* NSArray+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */; };
 		93D399433EA75E50656040CB /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93D394077F8FAB8167647187 /* Twitter.framework */; };
@@ -89,7 +91,6 @@
 		DA5587EF15E83C3200860B4F /* social-twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5587E915E83C3200860B4F /* social-twitter.png */; };
 		DA5587F015E83C3200860B4F /* social-twitter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5587EA15E83C3200860B4F /* social-twitter@2x.png */; };
 		DA5587F415E8418200860B4F /* iTunesArtwork-Rounded-73@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5587F115E8418200860B4F /* iTunesArtwork-Rounded-73@2x.png */; };
-		DA5587F515E8418200860B4F /* iTunesArtwork-Rounded-256.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5587F215E8418200860B4F /* iTunesArtwork-Rounded-256.png */; };
 		DA5587F615E8418200860B4F /* iTunesArtwork-Rounded.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5587F315E8418200860B4F /* iTunesArtwork-Rounded.png */; };
 		DA55888415E8C0BA00860B4F /* google_plus_share.png in Resources */ = {isa = PBXBuildFile; fileRef = DA55887C15E8C0BA00860B4F /* google_plus_share.png */; };
 		DA55888515E8C0BA00860B4F /* google_plus_share@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA55887D15E8C0BA00860B4F /* google_plus_share@2x.png */; };
@@ -965,6 +966,7 @@
 		93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Indexing.m"; sourceTree = "<group>"; };
 		93D3938863322199C3E7E2E3 /* MPAlgorithmV0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAlgorithmV0.m; sourceTree = "<group>"; };
 		93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Indexing.h"; sourceTree = "<group>"; };
+		93D393BB973253D4BAAC84AA /* PearlEMail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlEMail.m; sourceTree = "<group>"; };
 		93D394077F8FAB8167647187 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
 		93D398E394E311C545E0A057 /* MPAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAlgorithm.h; sourceTree = "<group>"; };
@@ -975,6 +977,7 @@
 		93D39D0EF77FEC36EA0FB334 /* MPAlgorithmV1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAlgorithmV1.h; sourceTree = "<group>"; };
 		93D39E81EFABC6085AC8AE69 /* MPKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPKey.m; sourceTree = "<group>"; };
 		93D39E9D7B9005211E7D5262 /* MPAlgorithmV1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAlgorithmV1.m; sourceTree = "<group>"; };
+		93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlEMail.h; sourceTree = "<group>"; };
 		DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		DA0A1D0315690A9A0092735D /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Default.png; sourceTree = SOURCE_ROOT; };
 		DA0A1D0415690A9A0092735D /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Default@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -1124,7 +1127,6 @@
 		DA5587E915E83C3200860B4F /* social-twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "social-twitter.png"; sourceTree = "<group>"; };
 		DA5587EA15E83C3200860B4F /* social-twitter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "social-twitter@2x.png"; sourceTree = "<group>"; };
 		DA5587F115E8418200860B4F /* iTunesArtwork-Rounded-73@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork-Rounded-73@2x.png"; sourceTree = "<group>"; };
-		DA5587F215E8418200860B4F /* iTunesArtwork-Rounded-256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork-Rounded-256.png"; sourceTree = "<group>"; };
 		DA5587F315E8418200860B4F /* iTunesArtwork-Rounded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork-Rounded.png"; sourceTree = "<group>"; };
 		DA5587F815E8B7B200860B4F /* GooglePlusShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GooglePlusShare.h; sourceTree = "<group>"; };
 		DA5587F915E8B7B200860B4F /* GooglePlusSignIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GooglePlusSignIn.h; sourceTree = "<group>"; };
@@ -2603,8 +2605,8 @@
 		DAB8D46F15036BF600CED3BC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DA55873E15E81D9E00860B4F /* iTunesArtwork-Rounded-73.png */,
 				DA5587F115E8418200860B4F /* iTunesArtwork-Rounded-73@2x.png */,
-				DA5587F215E8418200860B4F /* iTunesArtwork-Rounded-256.png */,
 				DA5587F315E8418200860B4F /* iTunesArtwork-Rounded.png */,
 				DA5587E515E83C3200860B4F /* social-facebook.png */,
 				DA5587E615E83C3200860B4F /* social-facebook@2x.png */,
@@ -2612,7 +2614,6 @@
 				DA5587E815E83C3200860B4F /* social-google+@2x.png */,
 				DA5587E915E83C3200860B4F /* social-twitter.png */,
 				DA5587EA15E83C3200860B4F /* social-twitter@2x.png */,
-				DA55873E15E81D9E00860B4F /* iTunesArtwork-Rounded-73.png */,
 				DAC4149115C53C48007A716E /* dictionary.lst */,
 				DA902BD01576CA4A00C38161 /* keypad.png */,
 				DA902B931576C0FB00C38161 /* Avatars */,
@@ -3524,6 +3525,8 @@
 		DAFE460715039823003ABA7C /* Pearl-UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */,
+				93D393BB973253D4BAAC84AA /* PearlEMail.m */,
 				DAFE4A63150399FF003ABA8F /* UIScrollView+PearlFlashingIndicators.h */,
 				DAFE4A63150399FF003ABA8D /* UIScrollView+PearlFlashingIndicators.m */,
 				DAFE4A63150399FF003ABA8B /* UIControl+PearlSelect.h */,
@@ -3685,6 +3688,7 @@
 				DAFE4A63150399FF003ABA94 /* NSDateFormatter+RFC3339.h in Headers */,
 				93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */,
 				93D392EC39DA43C46C692C12 /* NSDictionary+Indexing.h in Headers */,
+				93D3932889B6B4206E66A6D6 /* PearlEMail.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4608,7 +4612,6 @@
 				DA5587EF15E83C3200860B4F /* social-twitter.png in Resources */,
 				DA5587F015E83C3200860B4F /* social-twitter@2x.png in Resources */,
 				DA5587F415E8418200860B4F /* iTunesArtwork-Rounded-73@2x.png in Resources */,
-				DA5587F515E8418200860B4F /* iTunesArtwork-Rounded-256.png in Resources */,
 				DA5587F615E8418200860B4F /* iTunesArtwork-Rounded.png in Resources */,
 				DA55888415E8C0BA00860B4F /* google_plus_share.png in Resources */,
 				DA55888515E8C0BA00860B4F /* google_plus_share@2x.png in Resources */,
@@ -4864,6 +4867,7 @@
 				DAFE4A63150399FF003ABA92 /* NSDateFormatter+RFC3339.m in Sources */,
 				93D395F08A087F8A24689347 /* NSArray+Indexing.m in Sources */,
 				93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */,
+				93D39262A8A97DB748213309 /* PearlEMail.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5557,6 +5561,7 @@
 				DA497BA315E8C90E00B52167 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = AdHoc;
 		};
 		DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-iOS" */ = {
 			isa = XCConfigurationList;

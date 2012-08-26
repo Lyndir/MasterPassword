@@ -11,7 +11,7 @@
 #import "MPElementEntity.h"
 #import "MPSearchDelegate.h"
 
-@interface MPMainViewController : UIViewController<MPTypeDelegate, UITextFieldDelegate, MPSearchResultsDelegate, UIWebViewDelegate, MFMailComposeViewControllerDelegate, UIGestureRecognizerDelegate>
+@interface MPMainViewController : UIViewController<MPTypeDelegate, UITextFieldDelegate, MPSearchResultsDelegate, UIWebViewDelegate, UIGestureRecognizerDelegate>
 
 @property (assign, nonatomic) BOOL siteInfoHidden;
 @property (strong, nonatomic) MPElementEntity           *activeElement;
