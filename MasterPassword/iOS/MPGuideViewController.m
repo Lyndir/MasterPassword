@@ -28,12 +28,12 @@
 - (void)viewWillAppear:(BOOL)animated {
 
     inf(@"Guide will appear.");
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+
     [super viewWillAppear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:animated? UIStatusBarAnimationSlide: UIStatusBarAnimationNone];
 
     [super viewDidAppear:animated];
 }
@@ -41,9 +41,11 @@
 - (void)viewWillDisappear:(BOOL)animated {
 
     inf(@"Guide will disappear.");
-    [super viewWillDisappear:animated];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
 
     [MPiOSConfig get].showQuickStart = @NO;
+
+    [super viewWillDisappear:animated];
 }
 
 - (void)viewDidUnload {

@@ -117,14 +117,12 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 
-    inf(@"Main will appear.");
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:animated? UIStatusBarAnimationSlide: UIStatusBarAnimationNone];
-
     if ([[MPiOSConfig get].showQuickStart boolValue])
         [[MPAppDelegate get] showGuide];
     if (![MPAppDelegate get].activeUser)
-        [self.navigationController presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
-                                                animated:animated completion:nil];
+        [self presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
+                           animated:animated completion:nil];
+
 
     if (self.activeElement.user != [MPAppDelegate get].activeUser)
         self.activeElement                      = nil;
@@ -144,10 +142,12 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 
+    inf(@"Main will appear");
+
     // Needed for when we appear after a modal VC dismisses:
     // We can't present until the other modal VC has been fully dismissed and presenting in viewDidAppear will fail.
     if (![MPAppDelegate get].activeUser)
-        [self.navigationController presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
+        [self presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
                                                 animated:animated completion:nil];
 
     if (![[MPiOSConfig get].actionsTipShown boolValue])

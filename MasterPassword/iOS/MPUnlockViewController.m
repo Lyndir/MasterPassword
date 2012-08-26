@@ -189,6 +189,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+
     inf(@"Lock screen will appear");
     self.selectedUser = nil;
     [self updateUsers];
@@ -197,8 +199,6 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:animated? UIStatusBarAnimationSlide: UIStatusBarAnimationNone];
 
     if (!animated)
         [[self findTargetedAvatar] setSelected:YES];
@@ -211,6 +211,8 @@
 - (void)viewWillDisappear:(BOOL)animated {
 
     inf(@"Lock screen will disappear");
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+
     [super viewWillDisappear:animated];
 }
 

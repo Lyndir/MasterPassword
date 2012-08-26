@@ -457,6 +457,11 @@
     [TestFlight passCheckpoint:MPCheckpointShowGuide];
 }
 
+- (void)showFeedback {
+
+    [self showFeedbackWithLogs:YES forVC:nil];
+}
+
 - (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController {
 
     if (![PearlEMail canSendMail])
