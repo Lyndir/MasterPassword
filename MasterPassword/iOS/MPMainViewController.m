@@ -143,6 +143,9 @@
 - (void)viewDidAppear:(BOOL)animated {
 
     inf(@"Main will appear");
+    
+    // Sometimes, the search bar gets stuck in some sort of first-responder mode that it can't get out of...
+    [self.searchDisplayController.searchBar resignFirstResponder];
 
     // Needed for when we appear after a modal VC dismisses:
     // We can't present until the other modal VC has been fully dismissed and presenting in viewDidAppear will fail.

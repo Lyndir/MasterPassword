@@ -45,6 +45,7 @@
 @synthesize wordWall;
 @synthesize targetedUserActionGesture;
 @synthesize loadingUsersIndicator;
+@synthesize uiContainer;
 @synthesize avatarShadowColor = _avatarShadowColor;
 @synthesize wordWallAnimating = _wordWallAnimating;
 @synthesize wordList = _wordList;
@@ -184,6 +185,7 @@
     [self setCreatePasswordTipView:nil];
     [self setPasswordFieldLabel:nil];
     [self setLoadingUsersIndicator:nil];
+    [self setUiContainer:nil];
     [super viewDidUnload];
 }
 
@@ -195,6 +197,8 @@
     self.selectedUser = nil;
     [self updateUsers];
 
+    self.uiContainer.alpha = 0;
+
     [super viewWillAppear:animated];
 }
 
@@ -204,6 +208,10 @@
         [[self findTargetedAvatar] setSelected:YES];
     else
         [self updateLayoutAnimated:YES allowScroll:YES completion:nil];
+
+    [UIView animateWithDuration:0.3 animations:^{
+        self.uiContainer.alpha = 1;
+    }];
 
     [super viewDidAppear:animated];
 }
