@@ -349,10 +349,18 @@
                              firstField.keyboardType           = UIKeyboardTypeAlphabet;
                              firstField.text                   = newUser.name;
                              firstField.placeholder            = @"eg. Robert Lee Mitchell";
+                             firstField.enablesReturnKeyAutomatically = YES;
                          }
                  tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                      if (buttonIndex == [alert cancelButtonIndex]) {
                          completion(NO);
+                         return;
+                     }
+                     if (![alert textFieldAtIndex:0].text.length) {
+                         [PearlAlert showAlertWithTitle:@"Name Is Required" message:nil viewStyle:UIAlertViewStyleDefault initAlert:nil
+                                      tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                             [self showNewUserNameAlertFor:newUser completion:completion];
+                         } cancelTitle:@"Try Again" otherTitles:nil];
                          return;
                      }
 
