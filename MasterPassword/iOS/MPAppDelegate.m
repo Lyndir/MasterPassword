@@ -154,8 +154,9 @@
      @{
      UITextAttributeTextColor: [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
      UITextAttributeTextShadowColor: [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f],
-     UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
-     UITextAttributeFont: [UIFont fontWithName:@"HelveticaNeue" size:0.0f]
+     UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 1)]//,
+     // Causes a bug in iOS where image views get oddly stretched... or something.
+     //UITextAttributeFont: [UIFont fontWithName:@"HelveticaNeue" size:13.0f]
      }
                                                 forState:UIControlStateNormal];
 
