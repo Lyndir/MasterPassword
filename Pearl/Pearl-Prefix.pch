@@ -7,6 +7,7 @@
 #endif
 
 #define PEARL_WITH_SCRYPT
+#define PEARL_WITH_MESSAGEUI
 
 #define PEARL
 #define PEARL_CRYPTO
