@@ -136,9 +136,7 @@
     iCloudEnabled = manager.iCloudEnabled;
     inf(@"Using iCloud? %@", iCloudEnabled? @"YES": @"NO");
 
-#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:iCloudEnabled? MPCheckpointCloudEnabled: MPCheckpointCloudDisabled];
-#endif
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloud attributes:@{
     @"enabled": iCloudEnabled? @"YES": @"NO"
     }];
@@ -151,9 +149,12 @@
 
     err(@"StoreManager: cause=%d, context=%@, error=%@", cause, context, error);
 
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:PearlString(@"MPCheckpointMPErrorUbiquity_%d", cause)];
-#endif
+    [TestFlight passCheckpoint:PearlString(MPCheckpointMPErrorUbiquity @"_%d", cause)];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointMPErrorUbiquity attributes:@{
+    @"cause": @(cause),
+    @"error.domain": error.domain,
+    @"error.code": @(error.code)
+    }];
 
     switch (cause) {
         case UbiquityStoreManagerErrorCauseDeleteStore:
@@ -167,16 +168,14 @@
             if (error.code == NSMigrationMissingSourceModelError) {
                 wrn(@"Resetting the local store.");
 
-#ifdef TESTFLIGHT_SDK_VERSION
-                [TestFlight passCheckpoint:MPCheckpointLocalStoreIncompatible];
-#endif
-                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointLocalStoreIncompatible attributes:nil];
+                [TestFlight passCheckpoint:MPCheckpointLocalStoreReset];
+                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointLocalStoreReset attributes:nil];
                 manager.hardResetEnabled = YES;
                 [manager hardResetLocalStorage];
 
                 Throw(@"Local store was reset, application must be restarted to use it.");
             } else
-                // Try again.
+             // Try again.
                 [[self storeManager] persistentStoreCoordinator];
         }
         case UbiquityStoreManagerErrorCauseOpenCloudStore: {
@@ -185,15 +184,13 @@
             if (error.code == NSMigrationMissingSourceModelError) {
                 wrn(@"Resetting the iCloud store.");
 
-#ifdef TESTFLIGHT_SDK_VERSION
-                [TestFlight passCheckpoint:MPCheckpointCloudStoreIncompatible];
-#endif
-                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloudStoreIncompatible attributes:nil];
+                [TestFlight passCheckpoint:MPCheckpointCloudStoreReset];
+                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloudStoreReset attributes:nil];
                 manager.hardResetEnabled = YES;
                 [manager hardResetCloudStorage];
                 break;
             } else
-                // Try again.
+             // Try again.
                 [[self storeManager] persistentStoreCoordinator];
         }
     }
@@ -419,9 +416,7 @@
         [self saveContext];
         success = YES;
         inf(@"Import completed successfully.");
-#ifdef TESTFLIGHT_SDK_VERSION
         [TestFlight passCheckpoint:MPCheckpointSitesImported];
-#endif
         [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSitesImported attributes:nil];
 
         return MPImportResultSuccess;
@@ -484,9 +479,7 @@
          ? content: @""];
     }
 
-#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPCheckpointSitesExported];
-#endif
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSitesExported attributes:nil];
 
     return export;

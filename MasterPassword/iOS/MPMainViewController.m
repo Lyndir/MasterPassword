@@ -46,6 +46,8 @@
 @synthesize outdatedAlertContainer = _outdatedAlertContainer;
 @synthesize outdatedAlertBack = _outdatedAlertBack;
 @synthesize outdatedAlertCloseButton = _outdatedAlertCloseButton;
+@synthesize pullUpView = _pullUpView;
+@synthesize pullDownView = _pullDownView;
 @synthesize contentField = _contentField;
 @synthesize contentTipCleanup = _contentTipCleanup, toolTipCleanup = _toolTipCleanup;
 
@@ -241,6 +243,8 @@
     [self setOutdatedAlertContainer:nil];
     [self setOutdatedAlertCloseButton:nil];
     [self setOutdatedAlertBack:nil];
+    [self setPullUpView:nil];
+    [self setPullDownView:nil];
     [super viewDidUnload];
 }
 
@@ -324,13 +328,15 @@
         return;
     }
 
+    self.pullUpView.hidden = ![[MPiOSConfig get].helpHidden boolValue];
+    self.pullDownView.hidden = [[MPiOSConfig get].helpHidden boolValue];
+
     if ([[MPiOSConfig get].helpHidden boolValue]) {
         self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, self.view.bounds.size.height - 44 /* search bar */);
-        self.helpContainer.frame    = CGRectSetY(self.helpContainer.frame,
-                                                 self.view.bounds.size.height + 20 /* view moves up a bit when search appears. */);
+        self.helpContainer.frame    = CGRectSetY(self.helpContainer.frame, self.view.bounds.size.height - 20);
     } else {
         self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 225);
-        self.helpContainer.frame    = CGRectSetY(self.helpContainer.frame, 266);
+        self.helpContainer.frame    = CGRectSetY(self.helpContainer.frame, 246);
     }
 }
 
@@ -366,12 +372,43 @@
 - (void)setHelpChapter:(NSString *)chapter {
 
     [TestFlight passCheckpoint:PearlString(MPCheckpointHelpChapter @"_%@", chapter)];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointHelpChapter attributes:@{@"chapter": chapter}];
 
     dispatch_async(dispatch_get_main_queue(), ^{
         NSURL *url = [NSURL URLWithString:[@"#" stringByAppendingString:chapter]
                             relativeToURL:[[NSBundle mainBundle] URLForResource:@"help" withExtension:@"html"]];
         [self.helpView loadRequest:[NSURLRequest requestWithURL:url]];
     });
+}
+
+- (IBAction)panHelpDown:(UIPanGestureRecognizer *)sender {
+
+    CGFloat targetY = MIN(self.view.bounds.size.height - 20, 246 + [sender translationInView:self.helpContainer].y);
+    BOOL hideHelp = YES;
+    if (targetY <= 246) {
+        hideHelp = NO;
+        targetY = 246;
+    }
+
+    self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, targetY);
+
+    if (sender.state == UIGestureRecognizerStateEnded)
+        [self setHelpHidden:hideHelp animated:YES];
+}
+
+- (IBAction)panHelpUp:(UIPanGestureRecognizer *)sender {
+
+    CGFloat targetY = MAX(246, self.view.bounds.size.height - 20 + [sender translationInView:self.helpContainer].y);
+    BOOL hideHelp = NO;
+    if (targetY >= self.view.bounds.size.height - 20) {
+        hideHelp = YES;
+        targetY = self.view.bounds.size.height - 20 ;
+    }
+
+    self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, targetY);
+
+    if (sender.state == UIGestureRecognizerStateEnded)
+        [self setHelpHidden:hideHelp animated:YES];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
@@ -655,8 +692,6 @@
         if (finished)
             self.alertBody.text = nil;
     }];
-
-    [TestFlight passCheckpoint:MPCheckpointCloseAlert];
 }
 
 - (IBAction)closeOutdatedAlert {
@@ -664,8 +699,6 @@
     [UIView animateWithDuration:0.3f animations:^{
         self.outdatedAlertContainer.alpha = 0;
     }];
-
-    [TestFlight passCheckpoint:MPCheckpointCloseOutdatedAlert];
 }
 
 - (IBAction)infoOutdatedAlert {
@@ -686,24 +719,24 @@
 
                      switch (buttonIndex - [sheet firstOtherButtonIndex]) {
                          case 0: {
-                             inf(@"Action: Toggle Help");
-                             [self toggleHelpAnimated:YES];
-                             break;
-                         }
-                         case 1: {
                              inf(@"Action: FAQ");
                              [self setHelpChapter:@"faq"];
                              [self setHelpHidden:NO animated:YES];
                              break;
                          }
-                         case 2: {
+                         case 1: {
                              inf(@"Action: Guide");
                              [[MPAppDelegate get] showGuide];
                              break;
                          }
-                         case 3: {
+                         case 2: {
                              inf(@"Action: Preferences");
                              [self performSegueWithIdentifier:@"UserProfile" sender:self];
+                             break;
+                         }
+                         case 3: {
+                             inf(@"Action: Other Apps");
+                             [self performSegueWithIdentifier:@"OtherApps" sender:self];
                              break;
                          }
 #ifdef ADHOC
@@ -732,11 +765,9 @@
                              break;
                          }
                      }
-
-                     [TestFlight passCheckpoint:MPCheckpointAction];
                  }
                        cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:
-     [[MPiOSConfig get].helpHidden boolValue]? @"Show Help": @"Hide Help", @"FAQ", @"Tutorial", @"Preferences", @"Feedback", @"Sign Out",
+     @"FAQ", @"Tutorial", @"Preferences", @"Other Apps", @"Feedback", @"Sign Out",
      nil];
 }
 
@@ -871,8 +902,6 @@
             [self searchOutdatedElements];
             return NO;
         }
-
-        [TestFlight passCheckpoint:MPCheckpointExternalLink];
 
         [[UIApplication sharedApplication] openURL:[request URL]];
         return NO;

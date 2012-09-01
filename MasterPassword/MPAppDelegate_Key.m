@@ -64,9 +64,6 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
             inf(@"Removed key from keychain for: %@", user.userID);
 
             [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyForgotten object:self];
-#ifdef TESTFLIGHT_SDK_VERSION
-            [TestFlight passCheckpoint:MPCheckpointForgetSavedKey];
-#endif
         }
     }
 }
@@ -130,9 +127,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
         if (password) {
             inf(@"Login failed for: %@", user.userID);
             
-#ifdef TESTFLIGHT_SDK_VERSION
             [TestFlight passCheckpoint:MPCheckpointSignInFailed];
-#endif
             [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSignInFailed attributes:nil];
         }
 
@@ -163,11 +158,8 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     [[MPAppDelegate_Shared get] saveContext];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationSignedIn object:self];
-#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPCheckpointSignedIn];
-#endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSignedIn
-                                               attributes:nil];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSignedIn attributes:nil];
 
     return YES;
 }

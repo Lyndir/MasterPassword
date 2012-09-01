@@ -215,8 +215,6 @@
     [super application:application didFinishLaunchingWithOptions:launchOptions];
 
     inf(@"Started up with device identifier: %@", [PearlKeyChain deviceIdentifier]);
-    [TestFlight passCheckpoint:MPCheckpointLaunched];
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointLaunched];
 
     return YES;
 }
@@ -341,8 +339,6 @@
     inf(@"Re-activated");
     [[MPAppDelegate get] checkConfig];
 
-    [TestFlight passCheckpoint:MPCheckpointActivated];
-
     if (FBSession.activeSession.state == FBSessionStateCreatedOpening)
      // An old Facebook Login session that wasn't finished.  Clean it up.
         [FBSession.activeSession close];
@@ -370,8 +366,6 @@
 
     [self saveContext];
 
-    [TestFlight passCheckpoint:MPCheckpointTerminated];
-
     [[LocalyticsSession sharedLocalyticsSession] close];
     [[LocalyticsSession sharedLocalyticsSession] upload];
 
@@ -387,8 +381,6 @@
 
     if (![[MPiOSConfig get].rememberLogin boolValue])
         [self signOutAnimated:NO];
-
-    [TestFlight passCheckpoint:MPCheckpointDeactivated];
 }
 
 #pragma mark - Behavior
@@ -456,11 +448,20 @@
     [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
 
     [TestFlight passCheckpoint:MPCheckpointShowGuide];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointShowGuide attributes:nil];
 }
 
 - (void)showFeedback {
 
-    [self showFeedbackWithLogs:YES forVC:nil];
+    [self showFeedbackWithLogs:NO forVC:nil];
+}
+
+- (void)showReview {
+
+    [TestFlight passCheckpoint:MPCheckpointReview];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointReview attributes:nil];
+
+    [super showReview];
 }
 
 - (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController {

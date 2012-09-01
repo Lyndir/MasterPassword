@@ -46,6 +46,8 @@
 @property (weak, nonatomic) IBOutlet UIView *outdatedAlertContainer;
 @property (weak, nonatomic) IBOutlet UIImageView *outdatedAlertBack;
 @property (weak, nonatomic) IBOutlet UIButton *outdatedAlertCloseButton;
+@property (weak, nonatomic) IBOutlet UIImageView *pullUpView;
+@property (weak, nonatomic) IBOutlet UIImageView *pullDownView;
 
 
 @property (copy, nonatomic) void (^contentTipCleanup)(BOOL finished);
@@ -67,5 +69,7 @@
 - (void)toggleHelpAnimated:(BOOL)animated;
 - (void)setHelpHidden:(BOOL)hidden animated:(BOOL)animated;
 - (void)setHelpChapter:(NSString *)chapter;
+- (IBAction)panHelpDown:(UIPanGestureRecognizer *)sender;
+- (IBAction)panHelpUp:(UIPanGestureRecognizer *)sender;
 
 @end

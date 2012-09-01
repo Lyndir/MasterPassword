@@ -90,8 +90,6 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
 
-    [TestFlight passCheckpoint:MPCheckpointCancelSearch];
-
     [self.delegate didSelectElement:nil];
 }
 
