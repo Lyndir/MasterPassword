@@ -84,7 +84,32 @@
 
 - (id)content {
 
-    @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Content implementation missing." userInfo:nil];
+    MPKey *key = [MPAppDelegate get].key;
+    if (!key)
+        return nil;
+
+    assert([key.keyID isEqualToData:self.user.keyID]);
+    return [self contentUsingKey:key];
+}
+
+- (void)setContent:(id)content {
+
+    MPKey *key = [MPAppDelegate get].key;
+    if (!key)
+        return;
+
+    assert([key.keyID isEqualToData:self.user.keyID]);
+    [self setContent:content usingKey:key];
+}
+
+- (id)contentUsingKey:(MPKey *)key {
+
+    Throw(@"Content retrieval implementation missing for: %@", [self class]);
+}
+
+- (void)setContent:(id)content usingKey:(MPKey *)key {
+
+    Throw(@"Content assignment implementation missing for: %@", [self class]);
 }
 
 - (NSString *)exportContent {
@@ -139,11 +164,7 @@
     self.counter_ = @(aCounter);
 }
 
-- (id)content {
-
-    MPKey *key = [MPAppDelegate get].key;
-    if (!key)
-        return nil;
+- (id)contentUsingKey:(MPKey *)key {
 
     if (!(self.type & MPElementTypeClassGenerated)) {
         err(@"Corrupt element: %@, type: %d is not in MPElementTypeClassGenerated", self.name, self.type);
@@ -155,6 +176,7 @@
 
     return [self.algorithm generateContentForElement:self usingKey:key];
 }
+
 
 @end
 
@@ -168,28 +190,9 @@
                                       matches:nil];
 }
 
-- (id)content {
-
-    MPKey *key = [MPAppDelegate get].key;
-    if (!key)
-        return nil;
-
-    return [self contentUsingKey:key];
-}
-
-- (void)setContent:(id)content {
-
-    MPKey *key = [MPAppDelegate get].key;
-    if (!key)
-        return;
-
-    [self setContent:content usingKey:key];
-}
-
 - (id)contentUsingKey:(MPKey *)key {
 
     assert(self.type & MPElementTypeClassStored);
-    assert([key.keyID isEqualToData:self.user.keyID]);
 
     NSData *encryptedContent;
     if (self.type & MPElementFeatureDevicePrivate)
@@ -200,6 +203,9 @@
     NSData *decryptedContent = nil;
     if ([encryptedContent length])
         decryptedContent = [self decryptContent:encryptedContent usingKey:key];
+
+    if (!decryptedContent)
+        return nil;
 
     return [[NSString alloc] initWithBytes:decryptedContent.bytes length:decryptedContent.length encoding:NSUTF8StringEncoding];
 }

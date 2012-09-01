@@ -28,7 +28,9 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     inf(@"Found key in keychain for: %@", user.userID);
 
     else {
-        user.saveKey = NO;
+        [user.managedObjectContext performBlockAndWait:^{
+            user.saveKey = NO;
+        }];
         inf(@"No key found in keychain for: %@", user.userID);
     }
 
@@ -58,7 +60,9 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     OSStatus result = [PearlKeyChain deleteItemForQuery:keyQuery(user)];
     if (result == noErr || result == errSecItemNotFound) {
-        user.saveKey = NO;
+        [user.managedObjectContext performBlockAndWait:^{
+            user.saveKey = NO;
+        }];
 
         if (result == noErr) {
             inf(@"Removed key from keychain for: %@", user.userID);
@@ -82,14 +86,68 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
 - (BOOL)signInAsUser:(MPUserEntity *)user usingMasterPassword:(NSString *)password {
 
+    assert(!password || ![NSThread isMainThread]); // If we need to computing a key, this operation shouldn't be on the main thread.
     MPKey *tryKey = nil;
 
     // Method 1: When the user has no keyID set, set a new key from the given master password.
     if (!user.keyID) {
         if ([password length])
             if ((tryKey = [MPAlgorithmDefault keyForPassword:password ofUserNamed:user.name])) {
-                user.keyID = tryKey.keyID;
+                [user.managedObjectContext performBlockAndWait:^{
+                    user.keyID = tryKey.keyID;
+                }];
+
+                // Migrate existing elements.
+                MPKey *recoverKey = nil;
+                PearlAlert *activityAlert = [PearlAlert showActivityWithTitle:PearlString(@"Migrating %d sites...", [user.elements count])];
+
+                for (MPElementEntity *element in user.elements) {
+                    if (element.type & MPElementTypeClassStored && ![element contentUsingKey:tryKey]) {
+                        id content = nil;
+                        if (recoverKey)
+                            content = [element contentUsingKey:recoverKey];
+
+                        while (!content) {
+                            __block NSString *masterPassword = nil;
+                            dispatch_group_t recoverPasswordGroup = dispatch_group_create();
+                            dispatch_group_enter(recoverPasswordGroup);
+                            [PearlAlert showAlertWithTitle:@"Enter Old Master Password"
+                                                   message:PearlString(@"Your old master password is required to migrate the stored password for %@", element.name)
+                                                 viewStyle:UIAlertViewStyleSecureTextInput
+                                                 initAlert:nil
+                                         tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                                             @try {
+                                                 if (buttonIndex_ == [alert_ cancelButtonIndex])
+                                                     // Don't Migrate
+                                                     return;
+
+                                                 masterPassword = [alert_ textFieldAtIndex:0].text;
+                                             }
+                                             @finally {
+                                                 dispatch_group_leave(recoverPasswordGroup);
+                                             }
+                                         } cancelTitle:@"Don't Migrate" otherTitles:@"Migrate", nil];
+                            dispatch_group_wait(recoverPasswordGroup, DISPATCH_TIME_FOREVER);
+
+                            if (!masterPassword)
+                                // Don't Migrate
+                                break;
+
+                            recoverKey = [element.algorithm keyForPassword:masterPassword ofUserNamed:user.name];
+                            content = [element contentUsingKey:recoverKey];
+                        }
+
+                        if (!content)
+                            // Don't Migrate
+                            break;
+
+                        [element.managedObjectContext performBlockAndWait:^{
+                            [element setContent:content usingKey:tryKey];
+                        }];
+                    }
+                }
                 [[MPAppDelegate_Shared get] saveContext];
+                [activityAlert dismissAlert];
             }
     }
 
@@ -152,9 +210,11 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     }
 
 
-    user.lastUsed   = [NSDate date];
-    self.activeUser = user;
-    self.activeUser.requiresExplicitMigration = NO;
+    [user.managedObjectContext performBlockAndWait:^{
+        user.lastUsed   = [NSDate date];
+        self.activeUser = user;
+        self.activeUser.requiresExplicitMigration = NO;
+    }];
     [[MPAppDelegate_Shared get] saveContext];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationSignedIn object:self];

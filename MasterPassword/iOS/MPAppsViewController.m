@@ -96,9 +96,7 @@
        viewControllerAfterViewController:(UIViewController *)viewController {
 
     NSUInteger vcIndex = [self.pageVCs indexOfObject:viewController];
-    UIPageViewController *vc = [self.pageVCs objectAtIndex:(vcIndex + 1) % self.pageVCs.count];
-
-    return vc;
+    return [self.pageVCs objectAtIndex:(vcIndex + 1) % self.pageVCs.count];
 }
 
 - (void)viewDidUnload {

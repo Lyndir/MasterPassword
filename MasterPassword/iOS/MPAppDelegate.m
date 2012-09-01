@@ -241,15 +241,7 @@
         if (!importedSitesData)
             return;
 
-        PearlAlert *activityAlert = [PearlAlert showAlertWithTitle:@"Importing" message:@"\n\n"
-                                                         viewStyle:UIAlertViewStyleDefault initAlert:
-          ^(UIAlertView *alert, UITextField *firstField) {
-              UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-              activityIndicator.center = CGPointMake(140, 90);
-              [activityIndicator startAnimating];
-              [alert addSubview:activityIndicator];
-          }
-                                                 tappedButtonBlock:nil cancelTitle:nil otherTitles:nil];
+        PearlAlert *activityAlert = [PearlAlert showActivityWithTitle:@"Importing"];
 
         NSString *importedSitesString = [[NSString alloc] initWithData:importedSitesData encoding:NSUTF8StringEncoding];
         MPImportResult result = [self importSites:importedSitesString askImportPassword:^NSString *(NSString *userName) {

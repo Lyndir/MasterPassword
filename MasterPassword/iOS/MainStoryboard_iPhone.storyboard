@@ -1167,11 +1167,11 @@ Pink fluffy door frame.</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hkm-U7-Dm7" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="MPAppViewController_0" id="yIx-9U-bOF" customClass="MPAppViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Yea-s2-C8N">
-                        <rect key="frame" x="0.0" y="0.0" width="305" height="399"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <rect key="frame" x="0.0" y="0.0" width="305" height="400"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Wrz-tq-o1S">
-                                <rect key="frame" x="0.0" y="0.0" width="305" height="399"/>
+                                <rect key="frame" x="0.0" y="0.0" width="305" height="400"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" image="page-gorillas.png">
@@ -1186,7 +1186,7 @@ Pink fluffy door frame.</string>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" id="JN1-cA-6yZ">
-                                <rect key="frame" x="0.0" y="330" width="305" height="60"/>
+                                <rect key="frame" x="0.0" y="331" width="305" height="60"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Gorillas At Large On Metropolis Rooftops" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="Ypg-Yc-UK3">
@@ -1632,7 +1632,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="page-gorillas.png" id="QQT-37-azo">
-                                <rect key="frame" x="0.0" y="38" width="305" height="399"/>
+                                <rect key="frame" x="0.0" y="38" width="305" height="400"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="drq-47-KK9">
@@ -2021,11 +2021,11 @@ You could use the word wall for  inspiration in finding a memorable master passw
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LHv-Mk-8Kp" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="MPAppViewController_1" id="vOg-Xq-hKm" customClass="MPAppViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jzQ-Oa-Gdj">
-                        <rect key="frame" x="0.0" y="0.0" width="305" height="399"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <rect key="frame" x="0.0" y="0.0" width="305" height="400"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="x6i-3e-0Rb">
-                                <rect key="frame" x="0.0" y="0.0" width="305" height="399"/>
+                                <rect key="frame" x="0.0" y="0.0" width="305" height="400"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" image="page-deblock.png">
@@ -2040,7 +2040,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" id="AC5-4y-ftd">
-                                <rect key="frame" x="0.0" y="330" width="305" height="60"/>
+                                <rect key="frame" x="0.0" y="331" width="305" height="60"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Block Destruction Puzzle" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="11H-1K-20G">
