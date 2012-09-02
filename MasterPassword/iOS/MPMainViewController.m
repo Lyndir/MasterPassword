@@ -536,7 +536,7 @@
         return;
 
     inf(@"Copying user name for: %@", self.activeElement.name);
-    [UIPasteboard generalPasteboard].string = [self.activeElement.content description];
+    [UIPasteboard generalPasteboard].string = self.activeElement.loginName;
 
     [self showLoginNameTip:@"Copied!"];
 
