@@ -17,6 +17,8 @@
 @synthesize siteInfoHidden = _siteInfoHidden;
 @synthesize activeElement = _activeElement;
 @synthesize searchDelegate = _searchDelegate;
+@synthesize pullDownGesture = _pullDownGesture;
+@synthesize pullUpGesture = _pullUpGesture;
 @synthesize typeButton = _typeButton;
 @synthesize helpView = _helpView;
 @synthesize siteName = _siteName;
@@ -209,43 +211,6 @@
 
     inf(@"Main will disappear.");
     [super viewWillDisappear:animated];
-}
-
-- (void)viewDidUnload {
-
-    [self setContentField:nil];
-    [self setTypeButton:nil];
-    [self setHelpView:nil];
-    [self setSiteName:nil];
-    [self setPasswordCounter:nil];
-    [self setPasswordIncrementer:nil];
-    [self setPasswordEdit:nil];
-    [self setPasswordUpgrade:nil];
-    [self setContentContainer:nil];
-    [self setHelpContainer:nil];
-    [self setContentTipContainer:nil];
-    [self setAlertContainer:nil];
-    [self setAlertTitle:nil];
-    [self setAlertBody:nil];
-    [self setContentTipBody:nil];
-    [self setToolTipEditIcon:nil];
-    [self setSearchTipContainer:nil];
-    [self setActionsTipContainer:nil];
-    [self setTypeTipContainer:nil];
-    [self setToolTipContainer:nil];
-    [self setToolTipBody:nil];
-    [self setDisplayContainer:nil];
-    [self setLoginNameField:nil];
-    [self setLoginNameTipContainer:nil];
-    [self setLoginNameTipBody:nil];
-    [self setLoginNameContainer:nil];
-    [self setPasswordUser:nil];
-    [self setOutdatedAlertContainer:nil];
-    [self setOutdatedAlertCloseButton:nil];
-    [self setOutdatedAlertBack:nil];
-    [self setPullUpView:nil];
-    [self setPullDownView:nil];
-    [super viewDidUnload];
 }
 
 - (void)updateAnimated:(BOOL)animated {

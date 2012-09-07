@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2549" systemVersion="12B19" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
     <dependencies>
+        <deployment defaultVersion="1296" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1498"/>
     </dependencies>
     <scenes>
@@ -923,7 +924,9 @@ L4m3P4sSw0rD</string>
                         <outlet property="passwordIncrementer" destination="jec-mu-nPt" id="i9B-lX-zzX"/>
                         <outlet property="passwordUpgrade" destination="zbY-EJ-Yiu" id="KAX-Wk-DC4"/>
                         <outlet property="passwordUser" destination="TZ0-1K-Vvw" id="QCC-Ne-qYv"/>
+                        <outlet property="pullDownGesture" destination="O19-XO-q6s" id="Hb1-fJ-96l"/>
                         <outlet property="pullDownView" destination="qgs-1p-CRh" id="XWn-9h-aYM"/>
+                        <outlet property="pullUpGesture" destination="D0R-Cc-rG7" id="v3L-Nf-bIC"/>
                         <outlet property="pullUpView" destination="dId-fW-MRd" id="JED-fJ-VfH"/>
                         <outlet property="searchDisplayController" destination="P8c-gf-nN3" id="CLs-YI-7NC"/>
                         <outlet property="searchTipContainer" destination="zOR-Du-qRL" id="X7h-Vh-iCE"/>
@@ -2140,6 +2143,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
                 <relationship kind="action" name="closeAlert"/>
                 <relationship kind="action" name="closeOutdatedAlert"/>
                 <relationship kind="action" name="copyContent"/>
+                <relationship kind="action" name="copyLoginName:" candidateClass="UITapGestureRecognizer"/>
                 <relationship kind="action" name="editLoginName:" candidateClass="UILongPressGestureRecognizer"/>
                 <relationship kind="action" name="editPassword"/>
                 <relationship kind="action" name="incrementPasswordCounter"/>
@@ -2173,7 +2177,9 @@ You could use the word wall for  inspiration in finding a memorable master passw
                 <relationship kind="outlet" name="passwordIncrementer" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="passwordUpgrade" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="passwordUser" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="pullDownGesture" candidateClass="UIPanGestureRecognizer"/>
                 <relationship kind="outlet" name="pullDownView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="pullUpGesture" candidateClass="UIPanGestureRecognizer"/>
                 <relationship kind="outlet" name="pullUpView" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="searchDelegate" candidateClass="MPSearchDelegate"/>
                 <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>

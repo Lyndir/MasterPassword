@@ -140,9 +140,4 @@
     }
 }
 
-- (void)viewDidUnload {
-
-    [self setRecommendedTipContainer:nil];
-    [super viewDidUnload];
-}
 @end

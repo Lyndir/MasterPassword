@@ -99,12 +99,6 @@
     return [self.pageVCs objectAtIndex:(vcIndex + 1) % self.pageVCs.count];
 }
 
-- (void)viewDidUnload {
-
-    [self setPagePositionView:nil];
-    [super viewDidUnload];
-}
-
 - (IBAction)exit {
 
     [self dismissViewControllerAnimated:YES completion:nil];

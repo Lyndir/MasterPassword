@@ -48,13 +48,6 @@
     [super viewWillDisappear:animated];
 }
 
-- (void)viewDidUnload {
-
-    [self setScrollView:nil];
-    [self setPageControl:nil];
-    [super viewDidUnload];
-}
-
 - (IBAction)close {
 
     [self.presentingViewController dismissModalViewControllerAnimated:YES];

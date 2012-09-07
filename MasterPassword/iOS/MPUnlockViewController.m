@@ -169,26 +169,6 @@
     [super viewDidLoad];
 }
 
-- (void)viewDidUnload {
-
-    [self setSpinner:nil];
-    [self setPasswordField:nil];
-    [self setPasswordView:nil];
-    [self setAvatarsView:nil];
-    [self setNameLabel:nil];
-    [self setAvatarTemplate:nil];
-    [self setTip:nil];
-    [self setPasswordTipView:nil];
-    [self setPasswordTipLabel:nil];
-    [self setTargetedUserActionGesture:nil];
-    [self setWordWall:nil];
-    [self setCreatePasswordTipView:nil];
-    [self setPasswordFieldLabel:nil];
-    [self setLoadingUsersIndicator:nil];
-    [self setUiContainer:nil];
-    [super viewDidUnload];
-}
-
 - (void)viewWillAppear:(BOOL)animated {
 
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];

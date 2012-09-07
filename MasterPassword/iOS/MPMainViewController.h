@@ -16,6 +16,8 @@
 @property (assign, nonatomic) BOOL siteInfoHidden;
 @property (strong, nonatomic) MPElementEntity           *activeElement;
 @property (strong, nonatomic) IBOutlet MPSearchDelegate *searchDelegate;
+@property (strong, nonatomic) IBOutlet UIPanGestureRecognizer *pullDownGesture;
+@property (strong, nonatomic) IBOutlet UIPanGestureRecognizer *pullUpGesture;
 @property (weak, nonatomic) IBOutlet UITextField        *contentField;
 @property (weak, nonatomic) IBOutlet UIButton           *typeButton;
 @property (weak, nonatomic) IBOutlet UIWebView          *helpView;

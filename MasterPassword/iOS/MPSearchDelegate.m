@@ -30,7 +30,7 @@
 
 - (id)init {
 
-    if (!([super init]))
+    if (!(self = [super init]))
         return nil;
 
     self.dateFormatter           = [NSDateFormatter new];

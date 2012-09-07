@@ -91,18 +91,6 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (void)viewDidUnload {
-
-    [self setAvatarsView:nil];
-    [self setAvatarTemplate:nil];
-    [self setAvatarsView:nil];
-    [self setSavePasswordSwitch:nil];
-    [self setExportCell:nil];
-    [self setChangeMPCell:nil];
-    [self setDefaultTypeLabel:nil];
-    [super viewDidUnload];
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
     if ([[segue identifier] isEqualToString:@"MP_ChooseType"])
