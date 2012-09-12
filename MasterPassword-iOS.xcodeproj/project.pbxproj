@@ -120,6 +120,13 @@
 		DA6061D715F20C0900097266 /* page-deblock@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6061D115F20C0900097266 /* page-deblock@2x.png */; };
 		DA6061D815F20C0900097266 /* page-gorillas.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6061D215F20C0900097266 /* page-gorillas.png */; };
 		DA6061D915F20C0900097266 /* page-gorillas@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6061D315F20C0900097266 /* page-gorillas@2x.png */; };
+		DA609F581600CE980030AE31 /* LocalyticsDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = DA609F511600CE980030AE31 /* LocalyticsDatabase.h */; };
+		DA609F591600CE980030AE31 /* LocalyticsDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = DA609F521600CE980030AE31 /* LocalyticsDatabase.m */; };
+		DA609F5A1600CE980030AE31 /* LocalyticsSession.h in Headers */ = {isa = PBXBuildFile; fileRef = DA609F531600CE980030AE31 /* LocalyticsSession.h */; };
+		DA609F5B1600CE980030AE31 /* LocalyticsSession.m in Sources */ = {isa = PBXBuildFile; fileRef = DA609F541600CE980030AE31 /* LocalyticsSession.m */; };
+		DA609F5C1600CE980030AE31 /* LocalyticsUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = DA609F551600CE980030AE31 /* LocalyticsUploader.h */; };
+		DA609F5D1600CE980030AE31 /* LocalyticsUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = DA609F561600CE980030AE31 /* LocalyticsUploader.m */; };
+		DA609F5E1600CE980030AE31 /* WebserviceConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = DA609F571600CE980030AE31 /* WebserviceConstants.h */; };
 		DA672D2F14F92C6B004A189C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DA672D2E14F92C6B004A189C /* libz.dylib */; };
 		DA672D3014F9413D004A189C /* libPearl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC77CAD148291A600BCF976 /* libPearl.a */; };
 		DA829E52159847E0002417D3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
@@ -775,15 +782,6 @@
 		DAD3126915528C9C00A3F9ED /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD3126215528C9C00A3F9ED /* libTestFlight.a */; };
 		DAD3126C15528C9C00A3F9ED /* TestFlight.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAD3126615528C9C00A3F9ED /* TestFlight.plist */; };
 		DAD3127215528CD200A3F9ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
-		DAD3128715528D0F00A3F9ED /* LocalyticsDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD3127E15528D0F00A3F9ED /* LocalyticsDatabase.h */; };
-		DAD3128815528D0F00A3F9ED /* LocalyticsDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD3127F15528D0F00A3F9ED /* LocalyticsDatabase.m */; };
-		DAD3128915528D0F00A3F9ED /* LocalyticsSession.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD3128015528D0F00A3F9ED /* LocalyticsSession.h */; };
-		DAD3128A15528D0F00A3F9ED /* LocalyticsSession.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD3128115528D0F00A3F9ED /* LocalyticsSession.m */; };
-		DAD3128B15528D0F00A3F9ED /* LocalyticsUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD3128215528D0F00A3F9ED /* LocalyticsUploader.h */; };
-		DAD3128C15528D0F00A3F9ED /* LocalyticsUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD3128315528D0F00A3F9ED /* LocalyticsUploader.m */; };
-		DAD3128D15528D0F00A3F9ED /* UploaderThread.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD3128415528D0F00A3F9ED /* UploaderThread.h */; };
-		DAD3128E15528D0F00A3F9ED /* UploaderThread.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD3128515528D0F00A3F9ED /* UploaderThread.m */; };
-		DAD3128F15528D0F00A3F9ED /* WebserviceConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD3128615528D0F00A3F9ED /* WebserviceConstants.h */; };
 		DAD3129015528D1600A3F9ED /* Localytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAD3127D15528D0F00A3F9ED /* Localytics.plist */; };
 		DAD312BB1552977200A3F9ED /* UIColor+Expanded.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD312B71552977200A3F9ED /* UIColor+Expanded.h */; };
 		DAD312BC1552977200A3F9ED /* UIColor+Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD312B81552977200A3F9ED /* UIColor+Expanded.m */; };
@@ -1180,6 +1178,13 @@
 		DA6061D115F20C0900097266 /* page-deblock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "page-deblock@2x.png"; sourceTree = "<group>"; };
 		DA6061D215F20C0900097266 /* page-gorillas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "page-gorillas.png"; sourceTree = "<group>"; };
 		DA6061D315F20C0900097266 /* page-gorillas@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "page-gorillas@2x.png"; sourceTree = "<group>"; };
+		DA609F511600CE980030AE31 /* LocalyticsDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsDatabase.h; sourceTree = "<group>"; };
+		DA609F521600CE980030AE31 /* LocalyticsDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsDatabase.m; sourceTree = "<group>"; };
+		DA609F531600CE980030AE31 /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsSession.h; sourceTree = "<group>"; };
+		DA609F541600CE980030AE31 /* LocalyticsSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsSession.m; sourceTree = "<group>"; };
+		DA609F551600CE980030AE31 /* LocalyticsUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsUploader.h; sourceTree = "<group>"; };
+		DA609F561600CE980030AE31 /* LocalyticsUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsUploader.m; sourceTree = "<group>"; };
+		DA609F571600CE980030AE31 /* WebserviceConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebserviceConstants.h; sourceTree = "<group>"; };
 		DA672D2E14F92C6B004A189C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		DA79A9BB1557DB6F00BAA07A /* libscryptenc-ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libscryptenc-ios.a"; sourceTree = "<group>"; };
 		DA79A9BD1557DDC700BAA07A /* scrypt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = scrypt.xcodeproj; path = External/Pearl/External/iOSPorts/ports/security/scrypt/scrypt.xcodeproj; sourceTree = "<group>"; };
@@ -1919,15 +1924,6 @@
 		DAD3126615528C9C00A3F9ED /* TestFlight.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = TestFlight.plist; sourceTree = "<group>"; };
 		DAD3127115528CD200A3F9ED /* libLocalytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLocalytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAD3127D15528D0F00A3F9ED /* Localytics.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Localytics.plist; sourceTree = "<group>"; };
-		DAD3127E15528D0F00A3F9ED /* LocalyticsDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsDatabase.h; sourceTree = "<group>"; };
-		DAD3127F15528D0F00A3F9ED /* LocalyticsDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsDatabase.m; sourceTree = "<group>"; };
-		DAD3128015528D0F00A3F9ED /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsSession.h; sourceTree = "<group>"; };
-		DAD3128115528D0F00A3F9ED /* LocalyticsSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsSession.m; sourceTree = "<group>"; };
-		DAD3128215528D0F00A3F9ED /* LocalyticsUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsUploader.h; sourceTree = "<group>"; };
-		DAD3128315528D0F00A3F9ED /* LocalyticsUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsUploader.m; sourceTree = "<group>"; };
-		DAD3128415528D0F00A3F9ED /* UploaderThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploaderThread.h; sourceTree = "<group>"; };
-		DAD3128515528D0F00A3F9ED /* UploaderThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploaderThread.m; sourceTree = "<group>"; };
-		DAD3128615528D0F00A3F9ED /* WebserviceConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebserviceConstants.h; sourceTree = "<group>"; };
 		DAD312B71552977200A3F9ED /* UIColor+Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Expanded.h"; path = "External/Pearl/External/uicolor-utilities/UIColor+Expanded.h"; sourceTree = SOURCE_ROOT; };
 		DAD312B81552977200A3F9ED /* UIColor+Expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Expanded.m"; path = "External/Pearl/External/uicolor-utilities/UIColor+Expanded.m"; sourceTree = SOURCE_ROOT; };
 		DAD312B91552977200A3F9ED /* UIColor+HSV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+HSV.h"; path = "External/Pearl/External/uicolor-utilities/UIColor+HSV.h"; sourceTree = SOURCE_ROOT; };
@@ -3473,16 +3469,14 @@
 		DAD3127315528CD200A3F9ED /* Localytics */ = {
 			isa = PBXGroup;
 			children = (
+				DA609F511600CE980030AE31 /* LocalyticsDatabase.h */,
+				DA609F521600CE980030AE31 /* LocalyticsDatabase.m */,
+				DA609F531600CE980030AE31 /* LocalyticsSession.h */,
+				DA609F541600CE980030AE31 /* LocalyticsSession.m */,
+				DA609F551600CE980030AE31 /* LocalyticsUploader.h */,
+				DA609F561600CE980030AE31 /* LocalyticsUploader.m */,
+				DA609F571600CE980030AE31 /* WebserviceConstants.h */,
 				DAD3127D15528D0F00A3F9ED /* Localytics.plist */,
-				DAD3127E15528D0F00A3F9ED /* LocalyticsDatabase.h */,
-				DAD3127F15528D0F00A3F9ED /* LocalyticsDatabase.m */,
-				DAD3128015528D0F00A3F9ED /* LocalyticsSession.h */,
-				DAD3128115528D0F00A3F9ED /* LocalyticsSession.m */,
-				DAD3128215528D0F00A3F9ED /* LocalyticsUploader.h */,
-				DAD3128315528D0F00A3F9ED /* LocalyticsUploader.m */,
-				DAD3128415528D0F00A3F9ED /* UploaderThread.h */,
-				DAD3128515528D0F00A3F9ED /* UploaderThread.m */,
-				DAD3128615528D0F00A3F9ED /* WebserviceConstants.h */,
 			);
 			path = Localytics;
 			sourceTree = "<group>";
@@ -3743,11 +3737,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DAD3128715528D0F00A3F9ED /* LocalyticsDatabase.h in Headers */,
-				DAD3128915528D0F00A3F9ED /* LocalyticsSession.h in Headers */,
-				DAD3128B15528D0F00A3F9ED /* LocalyticsUploader.h in Headers */,
-				DAD3128D15528D0F00A3F9ED /* UploaderThread.h in Headers */,
-				DAD3128F15528D0F00A3F9ED /* WebserviceConstants.h in Headers */,
+				DA609F581600CE980030AE31 /* LocalyticsDatabase.h in Headers */,
+				DA609F5A1600CE980030AE31 /* LocalyticsSession.h in Headers */,
+				DA609F5C1600CE980030AE31 /* LocalyticsUploader.h in Headers */,
+				DA609F5E1600CE980030AE31 /* WebserviceConstants.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4935,10 +4928,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DAD3128815528D0F00A3F9ED /* LocalyticsDatabase.m in Sources */,
-				DAD3128A15528D0F00A3F9ED /* LocalyticsSession.m in Sources */,
-				DAD3128C15528D0F00A3F9ED /* LocalyticsUploader.m in Sources */,
-				DAD3128E15528D0F00A3F9ED /* UploaderThread.m in Sources */,
+				DA609F591600CE980030AE31 /* LocalyticsDatabase.m in Sources */,
+				DA609F5B1600CE980030AE31 /* LocalyticsSession.m in Sources */,
+				DA609F5D1600CE980030AE31 /* LocalyticsUploader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5572,6 +5564,7 @@
 		DAD3127A15528CD200A3F9ED /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_OBJCPP_ARC_ABI = NO;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
 			name = Debug;
@@ -5579,6 +5572,7 @@
 		DAD3127B15528CD200A3F9ED /* AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_OBJCPP_ARC_ABI = NO;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
 			name = AdHoc;
@@ -5586,6 +5580,7 @@
 		DAD3127C15528CD200A3F9ED /* AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_OBJCPP_ARC_ABI = NO;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
 			name = AppStore;
