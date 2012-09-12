@@ -116,8 +116,10 @@
         NSString *localyticsKey = [self localyticsKey];
         if ([localyticsKey length]) {
             inf(@"Initializing Localytics");
+            [[LocalyticsSession sharedLocalyticsSession] LocalyticsSession:localyticsKey];
+           	[[LocalyticsSession sharedLocalyticsSession] open];
             [LocalyticsSession sharedLocalyticsSession].enableHTTPS = YES;
-            [[LocalyticsSession sharedLocalyticsSession] startSession:localyticsKey];
+           	[[LocalyticsSession sharedLocalyticsSession] upload];
             [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
                 if (message.level >= PearlLogLevelWarn)
                     [[LocalyticsSession sharedLocalyticsSession] tagEvent:@"Problem"

@@ -190,7 +190,7 @@
     else
         [self updateLayoutAnimated:YES allowScroll:YES completion:nil];
 
-    [UIView animateWithDuration:0.3 animations:^{
+    [UIView animateWithDuration:0.5 animations:^{
         self.uiContainer.alpha = 1;
     }];
 

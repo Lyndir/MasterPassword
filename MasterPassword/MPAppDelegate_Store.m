@@ -43,6 +43,7 @@
         [managedObjectContext performBlockAndWait:^{
             managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
             managedObjectContext.undoManager = [NSUndoManager new];
+            managedObjectContext.persistentStoreCoordinator = self.storeManager.persistentStoreCoordinator;
         }];
     }
 
