@@ -149,6 +149,26 @@ OBJC_EXTERN void CLSNSLog(NSString *format, ...);
 @end
 
 /**
+ * The CLSCrashReport protocol exposes methods that you can call on crash report objects passed 
+ * to delegate methods. If you want these values or the entire object to stay in memory retain 
+ * them or copy them.
+ **/
+@protocol CLSCrashReport <NSObject>
+@optional
+
+/**
+ * Returns the session identifier for the crash report.
+ **/
+- (NSString *)identifier;
+
+/**
+ * Returns the custom key value data for the crash report.
+ **/
+- (NSDictionary *)customKeys;
+
+@end
+
+/**
  *
  * The CrashlyticsDelegate protocol provides a mechanism for your application to take
  * action on events that occur in the Crashlytics crash reporting system.  You can make 
@@ -168,5 +188,16 @@ OBJC_EXTERN void CLSNSLog(NSString *format, ...);
  *
  **/
 - (void)crashlyticsDidDetectCrashDuringPreviousExecution:(Crashlytics *)crashlytics;
+
+/**
+ *
+ * Just like crashlyticsDidDetectCrashDuringPreviousExecution this delegate method is 
+ * called once a Crashlytics instance has determined that the last execution of the
+ * application ended in a crash. A CLSCrashReport is passed back that contains data about
+ * the last crash report that was generated. See the CLSCrashReport protocol for method details.
+ * This method is called after crashlyticsDidDetectCrashDuringPreviousExecution.
+ *
+ **/
+- (void)crashlytics:(Crashlytics *)crashlytics didDetectCrashDuringPreviousExecution:(id <CLSCrashReport>)crash;
 
 @end

@@ -46,11 +46,7 @@
         }];
     }
 
-    if (![managedObjectContext.persistentStoreCoordinator.persistentStores count])
-        [managedObjectContext performBlockAndWait:^{
-            managedObjectContext.persistentStoreCoordinator = [self storeManager].persistentStoreCoordinator;
-        }];
-
+    [[self storeManager] persistentStoreCoordinator];
     if (![self storeManager].isReady)
         return nil;
 

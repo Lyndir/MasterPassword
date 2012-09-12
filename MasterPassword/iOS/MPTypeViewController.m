@@ -7,6 +7,7 @@
 //
 
 #import "MPTypeViewController.h"
+#import "LocalyticsSession.h"
 
 
 @interface MPTypeViewController ()
@@ -43,6 +44,8 @@
                 });
             }
         }];
+
+    [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Type Selection"];
 
     [super viewDidAppear:animated];
 }

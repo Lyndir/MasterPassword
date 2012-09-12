@@ -149,7 +149,7 @@
     inf(@"Main will appear");
     
     // Sometimes, the search bar gets stuck in some sort of first-responder mode that it can't get out of...
-    [self.searchDisplayController.searchBar resignFirstResponder];
+    [[self.view.window findFirstResponderInHierarchy] resignFirstResponder];
 
     // Needed for when we appear after a modal VC dismisses:
     // We can't present until the other modal VC has been fully dismissed and presenting in viewDidAppear will fail.
@@ -203,6 +203,8 @@
                 }];
 
         }];
+
+    [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Main"];
 
     [super viewDidAppear:animated];
 }
@@ -676,7 +678,7 @@
 
 - (IBAction)action:(id)sender {
 
-    [PearlSheet showSheetWithTitle:nil message:nil viewStyle:UIActionSheetStyleAutomatic
+    [PearlSheet showSheetWithTitle:nil viewStyle:UIActionSheetStyleAutomatic
                          initSheet:nil
                  tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
                      if (buttonIndex == [sheet cancelButtonIndex])

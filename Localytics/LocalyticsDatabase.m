@@ -1,10 +1,12 @@
 //
 //  LocalyticsDatabase.m
-//  LocalyticsDemo
-//
-//  Created by jkaufman on 5/26/11.
-//  Copyright 2011 Localytics. All rights reserved.
-//
+//  Copyright (C) 2012 Char Software Inc., DBA Localytics
+// 
+//  This code is provided under the Localytics Modified BSD License.
+//  A copy of this license has been distributed in a file called LICENSE
+//  with this source code.  
+// 
+// Please visit www.localytics.com for more information.
 
 #import "LocalyticsDatabase.h"
 
@@ -17,6 +19,10 @@
     - (void)createSchema;
     - (void)upgradeToSchemaV2;
     - (void)upgradeToSchemaV3;
+    - (void)upgradeToSchemaV4;
+    - (void)upgradeToSchemaV5;
+    - (void)upgradeToSchemaV6;
+- (void)upgradeToSchemaV7;
     - (void)moveDbToCaches;
     - (NSString *)randomUUID;
 @end
@@ -67,6 +73,12 @@ static LocalyticsDatabase *_sharedLocalyticsDatabase = nil;
             [[NSFileManager defaultManager] removeItemAtPath:dbPath error:nil];
             code =  sqlite3_open([dbPath UTF8String], &_databaseConnection);
         }
+      
+        // Enable foreign key constraints.
+        if (code == SQLITE_OK) {
+           const char *sql = [@"PRAGMA foreign_keys = ON;" cStringUsingEncoding:NSUTF8StringEncoding];
+           code = sqlite3_exec(_databaseConnection, sql, NULL, NULL, NULL);
+        }
 
         // Check db connection, creating schema if necessary.
         if (code == SQLITE_OK) {
@@ -83,6 +95,18 @@ static LocalyticsDatabase *_sharedLocalyticsDatabase = nil;
         if ([self schemaVersion] < 3) {
             [self upgradeToSchemaV3];
         }
+       if ([self schemaVersion] < 4) {
+            [self upgradeToSchemaV4];
+       }
+       if ([self schemaVersion] < 5) {
+            [self upgradeToSchemaV5];
+       }
+       if ([self schemaVersion] < 6) {
+            [self upgradeToSchemaV6];
+       }
+    if ([self schemaVersion] < 7) {
+      [self upgradeToSchemaV7];
+    }
     }
     
 	return self;
@@ -286,9 +310,153 @@ static LocalyticsDatabase *_sharedLocalyticsDatabase = nil;
 
 // V3 adds a field for the last app key and patches a V2 migration issue.
 - (void)upgradeToSchemaV3 {
-    sqlite3_exec(_databaseConnection,
-                 "ALTER TABLE localytics_info ADD app_key CHAR(64)",
-                 NULL, NULL, NULL);
+   int code = sqlite3_exec(_databaseConnection, "BEGIN", NULL, NULL, NULL);
+
+   if (code == SQLITE_OK) {
+      sqlite3_exec(_databaseConnection,
+                    "ALTER TABLE localytics_info ADD app_key CHAR(64)",
+                    NULL, NULL, NULL);
+   }
+
+   if (code == SQLITE_OK) {
+      code = sqlite3_exec(_databaseConnection,
+                "UPDATE localytics_info set schema_version = 3",
+                NULL, NULL, NULL);
+   }
+   
+   // Commit transaction.
+   if (code == SQLITE_OK || code == SQLITE_DONE) {
+      sqlite3_exec(_databaseConnection, "COMMIT", NULL, NULL, NULL);
+   } else {
+      sqlite3_exec(_databaseConnection, "ROLLBACK", NULL, NULL, NULL);
+   }
+}
+
+// V4 adds a field for the customer id.
+- (void)upgradeToSchemaV4 {
+   int code = sqlite3_exec(_databaseConnection, "BEGIN", NULL, NULL, NULL);
+
+   if (code == SQLITE_OK) {
+      sqlite3_exec(_databaseConnection,
+                   "ALTER TABLE localytics_info ADD customer_id CHAR(64)",
+                   NULL, NULL, NULL);
+   }
+   
+   if (code == SQLITE_OK) {
+      code = sqlite3_exec(_databaseConnection,
+                           "UPDATE localytics_info set schema_version = 4",
+                           NULL, NULL, NULL);
+   }
+   
+   // Commit transaction.
+   if (code == SQLITE_OK || code == SQLITE_DONE) {
+      sqlite3_exec(_databaseConnection, "COMMIT", NULL, NULL, NULL);
+   } else {
+      sqlite3_exec(_databaseConnection, "ROLLBACK", NULL, NULL, NULL);
+   }
+}
+
+// V5 adds AMP related tables.
+- (void)upgradeToSchemaV5 {
+
+   int code = sqlite3_exec(_databaseConnection, "BEGIN", NULL, NULL, NULL);
+	
+	//The AMP DB table was initially created here. in Version 7 it will be dropped and re-added with the correct data types. 
+	//therefore the code that creates it is no longer going to be called here.
+   
+	//we still want to change the schema version
+
+   
+   if (code == SQLITE_OK) {
+      code = sqlite3_exec(_databaseConnection,
+                          "UPDATE localytics_info set schema_version = 5",
+                          NULL, NULL, NULL);
+   }
+   
+   // Commit transaction.
+   if (code == SQLITE_OK || code == SQLITE_DONE) {
+      sqlite3_exec(_databaseConnection, "COMMIT", NULL, NULL, NULL);
+   } else {
+      sqlite3_exec(_databaseConnection, "ROLLBACK", NULL, NULL, NULL);
+   }
+}
+
+// V6 adds a field for the queued close event blob string.
+- (void)upgradeToSchemaV6 {
+   int code = sqlite3_exec(_databaseConnection, "BEGIN", NULL, NULL, NULL);
+   
+   if (code == SQLITE_OK) {
+      sqlite3_exec(_databaseConnection,
+                   "ALTER TABLE localytics_info ADD queued_close_event_blob TEXT",
+                   NULL, NULL, NULL);
+   }
+   
+   if (code == SQLITE_OK) {
+      code = sqlite3_exec(_databaseConnection,
+                          "UPDATE localytics_info set schema_version = 6",
+                          NULL, NULL, NULL);
+   }
+   
+   // Commit transaction.
+   if (code == SQLITE_OK || code == SQLITE_DONE) {
+      sqlite3_exec(_databaseConnection, "COMMIT", NULL, NULL, NULL);
+   } else {
+      sqlite3_exec(_databaseConnection, "ROLLBACK", NULL, NULL, NULL);
+   }
+}
+
+-(void)upgradeToSchemaV7 {
+  int code = sqlite3_exec(_databaseConnection, "BEGIN", NULL, NULL, NULL);
+  
+	if (code == SQLITE_OK) {
+		code = sqlite3_exec(_databaseConnection, "DROP TABLE IF EXISTS localytics_amp_rule", NULL, NULL, NULL);
+	}
+
+	if (code == SQLITE_OK) {
+		code = sqlite3_exec(_databaseConnection,
+												"CREATE TABLE IF NOT EXISTS localytics_amp_rule ("
+												"rule_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+												"rule_name TEXT UNIQUE,  "
+												"expiration INTEGER, "
+												"phone_location TEXT, "
+												"phone_size_width INTEGER, "
+												"phone_size_height INTEGER, "
+												"tablet_location TEXT, "
+												"tablet_size_width INTEGER, "
+												"tablet_size_height INTEGER, "
+												"display_seconds INTEGER, "
+												"display_session INTEGER, "
+												"version INTEGER, "
+												"did_display INTEGER, "
+												"times_to_display INTEGER, "
+												"internet_required INTEGER, "
+                        "ab_test TEXT"
+												")",
+												NULL, NULL, NULL);
+	}
+
+	if (code == SQLITE_OK) {
+		code = sqlite3_exec(_databaseConnection,
+												"CREATE TABLE IF NOT EXISTS localytics_amp_ruleevent ("
+												"rule_id INTEGER, "
+												"event_name TEXT, "
+												"FOREIGN KEY(rule_id) REFERENCES localytics_amp_rule(rule_id) ON DELETE CASCADE "
+												")",
+												NULL, NULL, NULL);
+	}
+	
+  if (code == SQLITE_OK) {
+    code = sqlite3_exec(_databaseConnection,
+                        "UPDATE localytics_info set schema_version = 7",
+                        NULL, NULL, NULL);
+  }
+  
+  // Commit transaction.
+  if (code == SQLITE_OK || code == SQLITE_DONE) {
+    sqlite3_exec(_databaseConnection, "COMMIT", NULL, NULL, NULL);
+  } else {
+    sqlite3_exec(_databaseConnection, "ROLLBACK", NULL, NULL, NULL);
+  }
 }
 
 - (NSUInteger)databaseSize {
@@ -333,7 +501,7 @@ static LocalyticsDatabase *_sharedLocalyticsDatabase = nil;
     sqlite3_prepare_v2(_databaseConnection, "SELECT last_session_start FROM localytics_info", -1, &selectLastSessionStart, NULL);
     int code = sqlite3_step(selectLastSessionStart);
     if (code == SQLITE_ROW) {
-        lastSessionStart = sqlite3_column_double(selectLastSessionStart, 0) == 1;
+        lastSessionStart = sqlite3_column_double(selectLastSessionStart, 0);
     }
     sqlite3_finalize(selectLastSessionStart);
         
@@ -517,6 +685,46 @@ static LocalyticsDatabase *_sharedLocalyticsDatabase = nil;
     return success;
 }
 
+- (BOOL)queueCloseEventWithBlobString:(NSString *)blob {
+   NSString *t = @"queue_close_event";
+   BOOL success = [self beginTransaction:t];
+   
+   // Queue close event.
+   if (success) {
+      sqlite3_stmt *queueCloseEvent;
+      sqlite3_prepare_v2(_databaseConnection, "UPDATE localytics_info SET queued_close_event_blob = ?", -1, &queueCloseEvent, NULL);
+      sqlite3_bind_text(queueCloseEvent, 1, [blob UTF8String], -1, SQLITE_TRANSIENT); 
+      int code = sqlite3_step(queueCloseEvent);        
+      sqlite3_finalize(queueCloseEvent);
+      success = code == SQLITE_DONE;
+   }
+   
+   if (success) {
+      [self releaseTransaction:t];
+   } else {
+      [self rollbackTransaction:t];
+   }
+   return success;
+}
+
+- (NSString *)dequeueCloseEventBlobString {
+   NSString *value = nil;
+   NSString *query = @"SELECT queued_close_event_blob FROM localytics_info";
+   
+   sqlite3_stmt *selectStmt;
+   sqlite3_prepare_v2(_databaseConnection, [query UTF8String], -1, &selectStmt, NULL);
+   int code = sqlite3_step(selectStmt);
+   if (code == SQLITE_ROW && sqlite3_column_text(selectStmt, 0)) {
+      value = [NSString stringWithUTF8String:(char *)sqlite3_column_text(selectStmt, 0)];
+   }
+   sqlite3_finalize(selectStmt);
+   
+   // Clear the queued close event blob.
+   [self queueCloseEventWithBlobString:nil];
+   
+   return value;
+}
+
 - (BOOL)addFlowEventWithBlobString:(NSString *)blob {
     NSString *t = @"add_flow_event";
     BOOL success = [self beginTransaction:t];
@@ -669,12 +877,22 @@ static LocalyticsDatabase *_sharedLocalyticsDatabase = nil;
         code = sqlite3_exec(_databaseConnection, "DELETE FROM upload_headers", NULL, NULL, NULL);
     }
     
-    if (code == SQLITE_OK) {
+  if (code == SQLITE_OK) {
+    code = sqlite3_exec(_databaseConnection, "DELETE FROM localytics_amp_rule", NULL, NULL, NULL);
+  }
+
+  if (code == SQLITE_OK) {
+    code = sqlite3_exec(_databaseConnection, "DELETE FROM localytics_amp_ruleevent", NULL, NULL, NULL);
+  }
+
+  if (code == SQLITE_OK) {
         code = sqlite3_exec(_databaseConnection,"UPDATE localytics_info SET last_session_number = 0, last_upload_number = 0,"
                                                 "last_close_event = null, last_flow_event = null, last_session_start = null, "
-                                                "custom_d0 = null, custom_d1 = null, custom_d2 = null, custom_d3 = null", 
+                                                "custom_d0 = null, custom_d1 = null, custom_d2 = null, custom_d3 = null, "
+                                                "customer_id = null, queued_close_event_blob = null ", 
                                                 NULL, NULL, NULL);
     }
+  
     
     if (code == SQLITE_OK) {
         [self releaseTransaction:t];
@@ -699,6 +917,82 @@ static LocalyticsDatabase *_sharedLocalyticsDatabase = nil;
 	CFStringRef stringUUID = CFUUIDCreateString(NULL, theUUID);
 	CFRelease(theUUID);
 	return [(NSString *)stringUUID autorelease];
+}
+
+- (NSString *)customerId {
+   NSString *customerId = nil;
+   
+   sqlite3_stmt *selectCustomerId;
+   sqlite3_prepare_v2(_databaseConnection, "SELECT customer_id FROM localytics_info", -1, &selectCustomerId, NULL);
+   int code = sqlite3_step(selectCustomerId);
+   if (code == SQLITE_ROW && sqlite3_column_text(selectCustomerId, 0)) {                
+      customerId = [NSString stringWithUTF8String:(char *)sqlite3_column_text(selectCustomerId, 0)];
+   }
+   sqlite3_finalize(selectCustomerId);
+   
+   return customerId;
+}
+
+- (BOOL)setCustomerId:(NSString *)newCustomerId
+{
+   sqlite3_stmt *updateCustomerId;
+   sqlite3_prepare_v2(_databaseConnection, "UPDATE localytics_info set customer_id = ?", -1, &updateCustomerId, NULL);
+   sqlite3_bind_text (updateCustomerId, 1, [newCustomerId UTF8String], -1, SQLITE_TRANSIENT); 
+   int code = sqlite3_step(updateCustomerId);
+   sqlite3_finalize(updateCustomerId);
+   BOOL success = (code == SQLITE_DONE);
+   
+   return success;
+}
+
+#pragma mark - Safe NSDictionary value methods
+
+- (NSInteger)safeIntegerValueFromDictionary:(NSDictionary *)dict forKey:(NSString *)key
+{
+   NSInteger integerValue = 0;
+   id value = [dict objectForKey:key];
+   if ([value isKindOfClass:[NSNumber class]] || [value isKindOfClass:[NSString class]]) {
+      integerValue = [value integerValue];
+   } else if ([value isKindOfClass:[NSNull class]]) {
+      integerValue = 0;
+   }
+       
+   return integerValue;
+}
+
+- (NSString *)safeStringValueFromDictionary:(NSDictionary *)dict forKey:(NSString *)key
+{
+   NSString *stringValue = nil;
+   id value = [dict objectForKey:key];
+   if ([value isKindOfClass:[NSString class]]) {
+      stringValue = value;
+   } else if ([value isKindOfClass:[NSNumber class]]) {
+      stringValue = [value stringValue];
+   } else if ([value isKindOfClass:[NSNull class]]) {
+      stringValue = nil;
+   }
+   
+   return stringValue;
+}
+
+- (NSDictionary *)safeDictionaryFromDictionary:(NSDictionary *)dict forKey:(NSString *)key
+{
+   NSDictionary *dictValue = nil;
+   id value = [dict objectForKey:key];
+   if ([value isKindOfClass:[NSDictionary class]]) {
+      dictValue = value;
+   }
+   return dictValue;
+}
+
+- (NSArray *)safeListFromDictionary:(NSDictionary *)dict forKey:(NSString *)key
+{
+    NSArray *arrayValue = nil;
+    id value = [dict objectForKey:key];
+    if ([value isKindOfClass:[NSArray class]]) {
+        arrayValue = value;
+    }
+    return arrayValue;
 }
 
 #pragma mark - Lifecycle

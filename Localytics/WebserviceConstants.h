@@ -1,5 +1,5 @@
 //  WebserviceConstants.h
-//  Copyright (C) 2009 Char Software Inc., DBA Localytics
+//  Copyright (C) 2012 Char Software Inc., DBA Localytics
 // 
 //  This code is provided under the Localytics Modified BSD License.
 //  A copy of this license has been distributed in a file called LICENSE
@@ -10,6 +10,12 @@
 // The constants which are used to make up the JSON blob
 // To save disk space and network bandwidth all the keywords have been
 // abbreviated and are exploded by the server.  
+
+/*****************
+ * Upload Header *
+ *****************/
+#define HEADER_CLIENT_TIME @"x-upload-time"
+#define HEADER_INSTALL_ID  @"x-install-id"
 
 /*********************
  * Shared Attributes *
@@ -22,6 +28,7 @@
 #define PARAM_SESSION_UUID          @"su"       // UUID for an existing session
 #define PARAM_NEW_SESSION_UUID      @"u"        // UUID for a new session
 #define PARAM_ATTRIBUTES            @"attrs"    // Attributes (dictionary)
+#define PARAM_SESSION_ELAPSE_TIME   @"sl"       // Number of seconds since the previous session start
 
 /***************
  * Blob Header *
@@ -42,9 +49,8 @@
 
 // PARAM_DATA_TYPE
 #define PARAM_APP_KEY               @"au"		// Localytics Application ID
-#define PARAM_DEVICE_UUID           @"du"		// Device UUID
 #define PARAM_DEVICE_UUID_HASHED    @"udid"     // Hashed version of the UUID
-#define PARAM_DEVICE_MAC            @"wmac"     // Hashed version of the device Mac
+#define PARAM_DEVICE_ADID           @"adid"     // Advertising Identifier
 #define PARAM_INSTALL_ID            @"iu"       // Install ID
 #define PARAM_JAILBROKEN            @"j"        // Jailbroken (boolean)
 #define PARAM_LIBRARY_VERSION       @"lv"		// Client Version
@@ -52,14 +58,11 @@
 #define PARAM_DEVICE_PLATFORM       @"dp"		// Device Platform
 #define PARAM_LOCALE_LANGUAGE       @"dll"		// Locale Language
 #define PARAM_LOCALE_COUNTRY        @"dlc"		// Locale Country
-#define PARAM_NETWORK_COUNTRY       @"nc"       // Network Country (iso code)   // ???: Never used on iPhone.
 #define PARAM_DEVICE_COUNTRY        @"dc"       // Device Country (iso code)
-#define PARAM_DEVICE_MANUFACTURER	@"dma"      // Device Manufacturer          // ???: Never used on iPhone. Used to be "Device Make".
 #define PARAM_DEVICE_MODEL          @"dmo"      // Device Model
 #define PARAM_DEVICE_OS_VERSION     @"dov"      // Device OS Version
 #define PARAM_NETWORK_CARRIER       @"nca"      // Network Carrier
-#define PARAM_DATA_CONNECTION       @"dac"      // Data Connection Type         // ???: Never used on iPhone.
-#define PARAM_OPT_VALUE             @"optin"	// Opt In (boolean)
+#define PARAM_OPT_VALUE             @"out"	// Opt Out (boolean)
 #define PARAM_DEVICE_MEMORY         @"dmem"     // Device Memory
 
 /*****************

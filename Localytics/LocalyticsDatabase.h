@@ -1,10 +1,12 @@
 //
 //  LocalyticsDatabase.h
-//  LocalyticsDemo
-//
-//  Created by jkaufman on 5/26/11.
-//  Copyright 2011 Localytics. All rights reserved.
-//
+//  Copyright (C) 2012 Char Software Inc., DBA Localytics
+// 
+//  This code is provided under the Localytics Modified BSD License.
+//  A copy of this license has been distributed in a file called LICENSE
+//  with this source code.  
+// 
+// Please visit www.localytics.com for more information.
 
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
@@ -31,6 +33,8 @@
 
 - (BOOL)addEventWithBlobString:(NSString *)blob;
 - (BOOL)addCloseEventWithBlobString:(NSString *)blob;
+- (BOOL)queueCloseEventWithBlobString:(NSString *)blob;
+- (NSString *)dequeueCloseEventBlobString;
 - (BOOL)addFlowEventWithBlobString:(NSString *)blob;
 - (BOOL)removeLastCloseAndFlowEvents;
 
@@ -53,5 +57,14 @@
 
 - (NSString *)customDimension:(int)dimension;
 - (BOOL)setCustomDimension:(int)dimension value:(NSString *)value;
+
+- (NSString *)customerId;
+- (BOOL)setCustomerId:(NSString *)newCustomerId;
+
+- (NSInteger)safeIntegerValueFromDictionary:(NSDictionary *)dict forKey:(NSString *)key;
+- (NSString *)safeStringValueFromDictionary:(NSDictionary *)dict forKey:(NSString *)key;
+- (NSDictionary *)safeDictionaryFromDictionary:(NSDictionary *)dict forKey:(NSString *)key;
+- (NSArray *)safeListFromDictionary:(NSDictionary *)dict forKey:(NSString *)key;
+
 
 @end

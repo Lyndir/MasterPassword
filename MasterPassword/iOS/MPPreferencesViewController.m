@@ -11,6 +11,7 @@
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
+#import "LocalyticsSession.h"
 
 @interface MPPreferencesViewController ()
 
@@ -78,6 +79,13 @@
     self.defaultTypeLabel.text = [[MPAppDelegate get].key.algorithm shortNameOfType:[MPAppDelegate get].activeUser.defaultType];
 
     [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+
+    [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Preferences"];
+
+    [super viewDidAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -152,6 +160,7 @@
     vc.showDoneButton = NO;
     
     [self.navigationController pushViewController:vc animated:YES];
+    [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Settings"];
 }
 
 @end

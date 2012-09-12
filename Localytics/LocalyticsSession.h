@@ -1,5 +1,5 @@
 //  LocalyticsSession.h
-//  Copyright (C) 2009 Char Software Inc., DBA Localytics
+//  Copyright (C) 2012 Char Software Inc., DBA Localytics
 // 
 //  This code is provided under the Localytics Modified BSD License.
 //  A copy of this license has been distributed in a file called LICENSE
@@ -8,6 +8,7 @@
 // Please visit www.localytics.com for more information.
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
 
 // Set this to true to enable localytics traces (useful for debugging)
 #define DO_LOCALYTICS_LOGGING false
@@ -38,6 +39,7 @@
  
  @author Localytics
  */
+
 @interface LocalyticsSession : NSObject {
 
 	BOOL _hasInitialized;               // Whether or not the session object has been initialized.
@@ -63,11 +65,23 @@
 	BOOL _sessionHasBeenOpen;               // Whether or not this session has ever been open.
 }
 
-@property dispatch_queue_t queue;
-@property dispatch_group_t criticalGroup;
+@property (nonatomic,readonly) dispatch_queue_t queue;
+@property (nonatomic,readonly) dispatch_group_t criticalGroup;
 @property BOOL isSessionOpen;
 @property BOOL hasInitialized;		
 @property float backgroundSessionTimeout;
+
+- (void)logMessage:(NSString *)message;
+@property (nonatomic, assign, readonly) NSTimeInterval lastSessionStartTimestamp;
+@property (nonatomic, assign, readonly) NSInteger sessionNumber;
+
+
+/*!
+ @property enableHTTPS
+ @abstract Determines whether or not HTTPS is used when calling the Localytics 
+ post URL. The default is NO.
+ */
+@property (nonatomic, assign) BOOL enableHTTPS; // Defaults to NO.
 
 #pragma mark Public Methods
 /*!
@@ -140,9 +154,11 @@
  closed and the time of closing is recorded.  When the app returns to the foreground, the session 
  is resumed.  If the time since closing is greater than BACKGROUND_SESSION_TIMEOUT, (15 seconds
  by default) a new session is created, and uploading is triggered.  Otherwise, the previous session 
- is reopened.
-*/
-- (void)resume;
+ is reopened. It is possible to use the return value to determine whether or not a session was resumed.
+ This may be useful to some customers looking to do conditional instrumentation at the close of a session.
+ It is perfectly reasonable to ignore the return value.
+ @result YES if the sesion was resumed NO if it wasn't (suggesting a new session was created instead).*/
+- (BOOL)resume;
 
 /*!
  @method close
@@ -212,5 +228,24 @@
  never be changed without changing the App Key otherwise old installs of the application will pollute new data.
  */
 - (void)setCustomDimension:(int)dimension value:(NSString *)value;
+
+/*!
+ @method setLocation
+ @abstract Stores the user's location.  This will be used in all event and session calls.
+ If your application has already collected the user's location, it may be passed to Localytics
+ via this function.  This will cause all events and the session close to include the locatin
+ information.  It is not required that you call this function. 
+ @param deviceLocation The user's location.
+ */
+- (void)setLocation:(CLLocationCoordinate2D)deviceLocation;
+
+/*!
+ @method ampTrigger
+ @abstract Displays the AMP message for the specific event.
+ Is a stub implementation here to prevent crashes if this class is accidentally used inplace of
+ the LocalyticsAmpSession
+ @param event Name of the event.
+ */
+- (void)ampTrigger:(NSString *)event;
 
 @end

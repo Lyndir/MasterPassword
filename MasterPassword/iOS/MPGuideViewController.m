@@ -7,6 +7,7 @@
 //
 
 #import "MPGuideViewController.h"
+#import "LocalyticsSession.h"
 
 
 @implementation MPGuideViewController
@@ -34,6 +35,8 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+
+    [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Guide"];
 
     [super viewDidAppear:animated];
 }

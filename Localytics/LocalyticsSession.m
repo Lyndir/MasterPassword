@@ -1,5 +1,5 @@
 //  LocalyticsSession.m
-//  Copyright (C) 2009 Char Software Inc., DBA Localytics
+//  Copyright (C) 2012 Char Software Inc., DBA Localytics
 // 
 //  This code is provided under the Localytics Modified BSD License.
 //  A copy of this license has been distributed in a file called LICENSE
@@ -22,7 +22,7 @@
 
 #pragma mark Constants
 #define PREFERENCES_KEY             @"_localytics_install_id" // The randomly generated ID for each install of the app
-#define CLIENT_VERSION              @"iOS_2.6"      // The version of this library
+#define CLIENT_VERSION              @"iOS_2.12"      // The version of this library
 #define LOCALYTICS_DIR              @".localytics"	// The directory in which the Localytics database is stored
 #define IFT_ETHER                   0x6             // Ethernet CSMACD
 #define PATH_TO_APT                 @"/private/var/lib/apt/"
@@ -44,6 +44,7 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
 @property (nonatomic, retain) NSMutableString *screens;
 @property (nonatomic, assign) NSTimeInterval sessionActiveDuration;
 @property (nonatomic, assign) BOOL sessionHasBeenOpen;
+@property (nonatomic, assign) NSInteger sessionNumber;
 
 // Private methods.
 - (void)ll_open;
@@ -56,22 +57,23 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
 - (BOOL)saveApplicationFlowAndRemoveOnResume:(BOOL)removeOnResume;
 - (NSString *)formatAttributeWithName:(NSString *)paramName value:(NSString *)paramValue;
 - (NSString *)formatAttributeWithName:(NSString *)paramName value:(NSString *)paramValue first:(BOOL)firstAttribute;
-- (void)logMessage:(NSString *)message;
+-(void) uploadCallback:(NSDictionary*)info;
 
 // Datapoint methods.
 - (NSString *)customDimensions;
-- (NSString *)macAddress;
+- (NSString *)locationDimensions;
 - (NSString *)hashString:(NSString *)input;
 - (NSString *)randomUUID;
 - (NSString *)escapeString:(NSString *)input;
 - (NSString *)installationId;
-- (NSString *)uniqueDeviceIdentifier;
 - (NSString *)appVersion;
 - (NSTimeInterval)currentTimestamp;
 - (BOOL)isDeviceJailbroken;
 - (NSString *)deviceModel;
 - (NSString *)modelSizeString;
 - (double)availableMemory;
+- (NSString *)advertisingIdentifier;
+- (NSString *)uniqueDeviceIdentifier;
 
 @end
 
@@ -92,6 +94,11 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
 @synthesize screens                     = _screens;
 @synthesize sessionActiveDuration       = _sessionActiveDuration;
 @synthesize sessionHasBeenOpen          = _sessionHasBeenOpen;
+@synthesize sessionNumber               = _sessionNumber;
+@synthesize enableHTTPS                 = _enableHTTPS;
+
+// Stores the last location passed in to the app.
+CLLocationCoordinate2D lastDeviceLocation = {0};
 
 #pragma mark Singleton
 
@@ -112,6 +119,7 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
         _sessionHasBeenOpen = NO;
         _queue = dispatch_queue_create("com.Localytics.operations", DISPATCH_QUEUE_SERIAL);
         _criticalGroup = dispatch_group_create();
+        _enableHTTPS = NO;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
         
@@ -171,6 +179,15 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
 }
 
 - (void)startSession:(NSString *)appKey {
+  //check app key
+  NSPredicate *matchPred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"[A-Fa-f0-9-]+"];
+	BOOL matches = [matchPred evaluateWithObject:appKey];
+  if (matches == NO) {
+    //generate exception
+    NSException *exception = [NSException exceptionWithName:@"Invalid Localytics App Key" reason:@"Application key is not valid. Please look at the iOS integration guidlines at http://www.localytics.com/docs/iphone-integration/" userInfo:nil];
+    [exception raise];
+  }
+  
 	[self LocalyticsSession:appKey];
 	[self open];
 	[self upload];
@@ -183,35 +200,48 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
     });
 }
 
-- (void)resume {
-    dispatch_async(_queue, ^{
-      // Do nothing if session is already open
-      if(self.isSessionOpen == YES)
-        return;
 
-      if([self ll_isOptedIn] == false) {
-        [self logMessage:@"Can't resume session because user is opted out."];
-        return;
-      }  
-
-      // conditions for resuming previous session
-      if(self.sessionHasBeenOpen &&
-         (!self.sessionCloseTime ||
-          [self.sessionCloseTime timeIntervalSinceNow]*-1 <= self.backgroundSessionTimeout)) {
-             // Note that we allow the session to be resumed even if the database size exceeds the
-             // maximum. This is because we don't want to create incomplete sessions. If the DB was large
-             // enough that the previous session could not be opened, there will be nothing to resume. But 
-             // if this session caused it to go over it is better to let it complete and stop the next one
-             // from being created.
-             [self logMessage:@"Resume called - Resuming previous session."];
-             [self reopenPreviousSession];
-      } else {
-        // otherwise open new session and upload
-        [self logMessage:@"Resume called - Opening a new session."];
-        [self ll_open];
-      }
-      self.sessionCloseTime = nil;
-    });
+- (BOOL)resume {
+	__block BOOL resumed = NO;
+	
+	dispatch_sync(_queue,^{
+		@try {
+    // Do nothing if session is already open
+    if(self.isSessionOpen == YES) {
+      resumed = YES;
+			return;
+		}
+		
+    if([self ll_isOptedIn] == false) {
+      [self logMessage:@"Can't resume session because user is opted out."];
+      resumed = NO;
+			return;
+    }
+		
+    // conditions for resuming previous session
+    if(self.sessionHasBeenOpen &&
+       (!self.sessionCloseTime ||
+        [self.sessionCloseTime timeIntervalSinceNow]*-1 <= self.backgroundSessionTimeout)) {
+				 // Note that we allow the session to be resumed even if the database size exceeds the
+				 // maximum. This is because we don't want to create incomplete sessions. If the DB was large
+				 // enough that the previous session could not be opened, there will be nothing to resume. But
+				 // if this session caused it to go over it is better to let it complete and stop the next one
+				 // from being created.
+					 [self logMessage:@"Resume called - Resuming previous session."];
+					 [self reopenPreviousSession];
+				 
+				 resumed = YES;
+			 } else {
+				 // otherwise open new session and upload
+					 [self logMessage:@"Resume called - Opening a new session."];
+					 [self ll_open];
+				 
+				 resumed = NO;
+			 }
+    self.sessionCloseTime = nil;
+		} @catch (NSException *e) {}
+	});
+	return resumed;
 }
 
 - (void)close {
@@ -237,13 +267,13 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
             [closeEventString appendString:[self formatAttributeWithName:PARAM_DATA_TYPE         value:@"c"                      first:YES]];
             [closeEventString appendString:[self formatAttributeWithName:PARAM_SESSION_UUID      value:self.sessionUUID]];
             [closeEventString appendString:[self formatAttributeWithName:PARAM_UUID              value:[self randomUUID] ]];
-            [closeEventString appendFormat:@",\"%@\":%u", PARAM_SESSION_START, (long)self.lastSessionStartTimestamp];
-            [closeEventString appendFormat:@",\"%@\":%u", PARAM_SESSION_ACTIVE, (long)self.sessionActiveDuration];
-            [closeEventString appendFormat:@",\"%@\":%u", PARAM_CLIENT_TIME, (long)[self currentTimestamp]];
+            [closeEventString appendFormat:@",\"%@\":%ld", PARAM_SESSION_START, (long)self.lastSessionStartTimestamp];
+            [closeEventString appendFormat:@",\"%@\":%ld", PARAM_SESSION_ACTIVE, (long)self.sessionActiveDuration];
+            [closeEventString appendFormat:@",\"%@\":%ld", PARAM_CLIENT_TIME, (long)[self currentTimestamp]];
             
             // Avoid recording session lengths of users with unreasonable client times (usually caused by developers testing clock change attacks)
             if(sessionLength > 0 && sessionLength < 400000) {
-                [closeEventString appendFormat:@",\"%@\":%u", PARAM_SESSION_TOTAL, sessionLength];
+                [closeEventString appendFormat:@",\"%@\":%d", PARAM_SESSION_TOTAL, sessionLength];
             }
 
             // Open second level - screen flow
@@ -252,23 +282,20 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
 
             // Close second level - screen flow
             [closeEventString appendString:@"]"];
-
+            
             // Append the custom dimensions
             [closeEventString appendString:[self customDimensions]];
+            
+            // Append the location
+            [closeEventString appendString:[self locationDimensions]];
             
             // Close first level - close blob 
             [closeEventString appendString:@"}\n"];
             
-            BOOL success = [[LocalyticsDatabase sharedLocalyticsDatabase] addCloseEventWithBlobString:[[closeEventString copy] autorelease]];
+            BOOL success = [[LocalyticsDatabase sharedLocalyticsDatabase] queueCloseEventWithBlobString:[[closeEventString copy] autorelease]];
             
             self.isSessionOpen = NO;  // Session is no longer open.
 
-            if (success) {
-                // Record final session flow, opting to remove it from the database if the session happens to resume.
-                // This is safe now that the session has closed because no new events can be added.
-                success = [self saveApplicationFlowAndRemoveOnResume:YES];
-            }
-            
             if (success) {
                 [self logMessage:@"Session succesfully closed."];
             } else {
@@ -358,10 +385,13 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
             [eventString appendString:[self formatAttributeWithName:PARAM_APP_KEY       value:self.applicationKey ]];
             [eventString appendString:[self formatAttributeWithName:PARAM_SESSION_UUID  value:self.sessionUUID ]];
             [eventString appendString:[self formatAttributeWithName:PARAM_EVENT_NAME    value:[self escapeString:event] ]];
-            [eventString appendFormat:@",\"%@\":%u", PARAM_CLIENT_TIME, (long)[self currentTimestamp]];
+            [eventString appendFormat:@",\"%@\":%ld", PARAM_CLIENT_TIME, (long)[self currentTimestamp]];
 
             // Append the custom dimensions
             [eventString appendString:[self customDimensions]];
+            
+            // Append the location
+            [eventString appendString:[self locationDimensions]];
             
             // If there are any attributes for this event, add them as a hash
             int attrIndex = 0;
@@ -405,6 +435,8 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
             if (success) {
                 // User-originated events should be tracked as application flow.
                 [self addFlowEventWithName:event type:@"e"]; // "e" for Event.
+                
+                [self ampTrigger:event];
 
                 [self logMessage:[@"Tagged event: " stringByAppendingString:event]];
             } else {
@@ -435,6 +467,11 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
 
         [self logMessage:[@"Tagged screen: " stringByAppendingString:screenName]];
     });
+}
+
+- (void)setLocation:(CLLocationCoordinate2D)deviceLocation {
+    lastDeviceLocation = deviceLocation;
+    [self logMessage:@"Setting Location"];
 }
 
 - (void)setCustomDimension:(int)dimension value:(NSString *)value {
@@ -503,7 +540,7 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
                 }
                 
                 // Begin upload.
-                [[LocalyticsUploader sharedLocalyticsUploader] uploaderWithApplicationKey:self.applicationKey];     
+               [[LocalyticsUploader sharedLocalyticsUploader] uploaderWithApplicationKey:self.applicationKey useHTTPS:[self enableHTTPS] installId:[self installationId] resultTarget:self callback:@selector(uploadCallback:)];     
             } else {
                 [db rollbackTransaction:t];
                 [self logMessage:@"Failed to start upload."];
@@ -514,6 +551,26 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
 }
 
 #pragma mark Private Methods
+
+-(NSString*)libraryVersion {
+	return CLIENT_VERSION;
+}
+
+-(void) uploadCallback:(NSDictionary*)info{
+}
+
+- (void)dequeueCloseEventBlobString
+{
+   LocalyticsDatabase *db = [LocalyticsDatabase sharedLocalyticsDatabase];
+   NSString *closeEventString = [db dequeueCloseEventBlobString];
+   if (closeEventString) {
+      BOOL success = [db addCloseEventWithBlobString:closeEventString];
+      if (!success) {
+         // Re-queue the close event.
+         [db queueCloseEventWithBlobString:closeEventString];
+      }
+   }
+}
 
 - (void)ll_open {
     // There are a number of conditions in which nothing should be done:
@@ -538,6 +595,8 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
             return;
         }
         
+        [self dequeueCloseEventBlobString];
+       
         self.sessionActiveDuration = 0;
         self.sessionResumeTime = [NSDate date];
         self.unstagedFlowEvents = [NSMutableString string];
@@ -548,6 +607,12 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
         NSString *t = @"open_session";
         BOOL success = [db beginTransaction:t];
         
+        // lastSessionStartTimestamp isn't really the last session start time.
+        // It's the sessionResumeTime which is [NSDate date] or now. Therefore,
+        // save the current lastSessionTimestamp value from the database so it 
+        // can be used to calculate the elapsed time between session start times.
+        NSTimeInterval previousSessionStartTimeInterval = [db lastSessionStartTimestamp];
+       
         // Save session start time.
         self.lastSessionStartTimestamp = [self.sessionResumeTime timeIntervalSince1970];
         if (success) {
@@ -559,6 +624,7 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
         if (success) {
             success = [db incrementLastSessionNumber:&sessionNumber];
         }
+       [self setSessionNumber:sessionNumber];
         
         if (success) {
             // Prepare session open event.          
@@ -569,10 +635,18 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
             [openEventString appendString:@"{"];
             [openEventString appendString:[self formatAttributeWithName:PARAM_DATA_TYPE              value:@"s"              first:YES]];
             [openEventString appendString:[self formatAttributeWithName:PARAM_NEW_SESSION_UUID           value:self.sessionUUID]];
-            [openEventString appendFormat:@",\"%@\":%u", PARAM_CLIENT_TIME, (long)self.lastSessionStartTimestamp];
-            [openEventString appendFormat:@",\"%@\":%d", PARAM_SESSION_NUMBER, sessionNumber];            
+            [openEventString appendFormat:@",\"%@\":%ld", PARAM_CLIENT_TIME, (long)self.lastSessionStartTimestamp];
+            [openEventString appendFormat:@",\"%@\":%d", PARAM_SESSION_NUMBER, sessionNumber]; 
+           
+            double elapsedTime = 0.0;
+            if (previousSessionStartTimeInterval > 0) {
+               elapsedTime = [self lastSessionStartTimestamp] - previousSessionStartTimeInterval;
+            }
+            NSString *elapsedTimeString = [NSString stringWithFormat:@"%.0f", elapsedTime];
+            [openEventString appendString:[self formatAttributeWithName:PARAM_SESSION_ELAPSE_TIME value:elapsedTimeString]];
             
             [openEventString appendString:[self customDimensions]];
+            [openEventString appendString:[self locationDimensions]];
             
             [openEventString appendString:@"}\n"];
             
@@ -667,12 +741,13 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
     NSString *device_language = [english displayNameForKey:NSLocaleIdentifier value:device_locale];
 	NSString *locale_country = [english displayNameForKey:NSLocaleCountryCode value:[locale objectForKey:NSLocaleCountryCode]];
     NSString *uuid = [self randomUUID];
-    NSString *device_uuid = [self uniqueDeviceIdentifier];
+	NSString *device_uuid = [self uniqueDeviceIdentifier];
+  NSString *device_adid = [self advertisingIdentifier];
 
     // Open first level - blob information
     [headerString appendString:@"{"];
     [headerString appendFormat:@"\"%@\":%d", PARAM_SEQUENCE_NUMBER, nextSequenceNumber];
-    [headerString appendFormat:@",\"%@\":%u", PARAM_PERSISTED_AT, (long)[[LocalyticsDatabase sharedLocalyticsDatabase] createdTimestamp]];
+    [headerString appendFormat:@",\"%@\":%ld", PARAM_PERSISTED_AT, (long)[[LocalyticsDatabase sharedLocalyticsDatabase] createdTimestamp]];
     [headerString appendString:[self formatAttributeWithName:PARAM_DATA_TYPE    value:@"h" ]];
     [headerString appendString:[self formatAttributeWithName:PARAM_UUID         value:uuid ]];
 
@@ -684,18 +759,22 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
     [headerString appendString:[self formatAttributeWithName:PARAM_INSTALL_ID       value:[self installationId] ]];
 	[headerString appendString:[self formatAttributeWithName:PARAM_APP_KEY          value:self.applicationKey ]];
 	[headerString appendString:[self formatAttributeWithName:PARAM_APP_VERSION      value:[self appVersion]  ]];
-	[headerString appendString:[self formatAttributeWithName:PARAM_LIBRARY_VERSION  value:CLIENT_VERSION        ]];
-     
+	[headerString appendString:[self formatAttributeWithName:PARAM_LIBRARY_VERSION  value:[self libraryVersion]        ]];
+
     // >>  Device Information
-//	[headerString appendString:[self formatAttributeWithName:PARAM_DEVICE_UUID          value:device_uuid ]];
-    [headerString appendString:[self formatAttributeWithName:PARAM_DEVICE_UUID_HASHED   value:[self hashString:device_uuid] ]];
+	if (device_uuid) {
+		[headerString appendString:[self formatAttributeWithName:PARAM_DEVICE_UUID_HASHED   value:[self hashString:device_uuid] ]];
+	}
+  if (device_adid) {
+    [headerString appendString:[self formatAttributeWithName:PARAM_DEVICE_ADID value:device_adid]];    
+  }
 	[headerString appendString:[self formatAttributeWithName:PARAM_DEVICE_PLATFORM      value:[thisDevice model]            ]];
 	[headerString appendString:[self formatAttributeWithName:PARAM_DEVICE_OS_VERSION    value:[thisDevice systemVersion]    ]];
 	[headerString appendString:[self formatAttributeWithName:PARAM_DEVICE_MODEL         value:[self deviceModel]         ]];
 
 // MAC Address collection. Uncomment the following line to add Mac address to the mix of collected identifiers
 //    [headerString appendString:[self formatAttributeWithName:PARAM_DEVICE_MAC value:[self hashString:[self macAddress]]     ]];    
-	[headerString appendString:[NSString stringWithFormat:@",\"%@\":%d", PARAM_DEVICE_MEMORY, (long)[self availableMemory]  ]];	
+	[headerString appendString:[NSString stringWithFormat:@",\"%@\":%ld", PARAM_DEVICE_MEMORY, (long)[self availableMemory]  ]];	
 	[headerString appendString:[self formatAttributeWithName:PARAM_LOCALE_LANGUAGE   value:device_language]];
 	[headerString appendString:[self formatAttributeWithName:PARAM_LOCALE_COUNTRY    value:locale_country]];
 	[headerString appendString:[self formatAttributeWithName:PARAM_DEVICE_COUNTRY    value:[locale objectForKey:NSLocaleCountryCode]]];
@@ -723,9 +802,9 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
 	NSMutableString *optEventString = [NSMutableString string];
     [optEventString appendString:@"{"];
     [optEventString appendString:[self formatAttributeWithName:PARAM_DATA_TYPE  value:@"o"                  first:YES]];
-	[optEventString appendString:[self formatAttributeWithName:PARAM_APP_KEY    value:self.applicationKey   first:NO]];
-	[optEventString appendString:[NSString stringWithFormat:@",\"%@\":%@", PARAM_OPT_VALUE, (optState ? @"true" : @"false") ]];	
-    [optEventString appendFormat:@",\"%@\":%u", PARAM_CLIENT_TIME, (long)[self currentTimestamp]];
+	[optEventString appendString:[self formatAttributeWithName:PARAM_UUID         value:[self randomUUID] first:NO ]];
+	[optEventString appendString:[NSString stringWithFormat:@",\"%@\":%@", PARAM_OPT_VALUE, (optState ? @"false" : @"true") ]];	//this actually transmits the opposite of the opt state. The JSON contains whether the user is opted out, not whether the user is opted in.
+    [optEventString appendFormat:@",\"%@\":%ld", PARAM_CLIENT_TIME, (long)[self currentTimestamp]];
 	[optEventString appendString:@"}\n"];
 
     BOOL success = [[LocalyticsDatabase sharedLocalyticsDatabase] addEventWithBlobString:[[optEventString copy] autorelease]];
@@ -752,7 +831,7 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
         [flowEventString appendString:@"{"];
         [flowEventString appendString:[self formatAttributeWithName:PARAM_DATA_TYPE value:@"f"                  first:YES]];
         [flowEventString appendString:[self formatAttributeWithName:PARAM_UUID      value:[self randomUUID] ]];
-        [flowEventString appendFormat:@",\"%@\":%u", PARAM_SESSION_START, (long)self.lastSessionStartTimestamp];
+        [flowEventString appendFormat:@",\"%@\":%ld", PARAM_SESSION_START, (long)self.lastSessionStartTimestamp];
         
         // Open second level - new flow events
         [flowEventString appendFormat:@",\"%@\":[", PARAM_NEW_FLOW_EVENTS];
@@ -814,8 +893,14 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
 {		
 	NSString *output = [input stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
 	output = [output stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
-    output = [output stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
-    return output;
+	output = [output stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"];
+  output = [output stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+  output = [output stringByReplacingOccurrencesOfString:@"\t" withString:@"\\t"];
+  output = [output stringByReplacingOccurrencesOfString:@"\b" withString:@"\\b"];
+  output = [output stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
+  output = [output stringByReplacingOccurrencesOfString:@"\f" withString:@"\\f"];
+  output = [output stringByReplacingOccurrencesOfString:@"\v" withString:@"\\v"];
+   return output;
 }
 
 - (void)applicationDidEnterBackground:(NSNotification *)notification
@@ -875,6 +960,24 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
     }
     
     return [[dimensions copy] autorelease];
+}
+
+/*!
+ @method locationDimensions
+ @abstract Returns the json blob containing the current location if available or nil if no location is available.
+ */
+- (NSString *)locationDimensions
+{        
+    if(lastDeviceLocation.latitude == 0 || lastDeviceLocation.longitude == 0) {
+        return @"";
+    }
+    
+    return [NSString stringWithFormat:@",\"lat\":%f,\"lng\":%f", 
+            lastDeviceLocation.latitude, 
+            lastDeviceLocation.longitude];
+    
+    
+    return [NSString stringWithFormat:@"%lf", lastDeviceLocation.latitude];
 }
 
 /*!
@@ -983,6 +1086,7 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
     return installId;
 }
 
+
 /*!
  @method uniqueDeviceIdentifier
  @abstract A unique device identifier is a hash value composed from various hardware identifiers such
@@ -991,18 +1095,38 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
  @return An 1-way hashed identifier unique to this device.
  */
 - (NSString *)uniqueDeviceIdentifier {
-
-// Supress the warning for uniqueIdentifier being deprecated.
-// We collect it as long as it is available along with a randomly generated ID.
-// This way, when this becomes unavailable we can map existing users so the
-// new vs returning counts do not break. This will be removed before it causes grief.
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-	NSString *systemId = [[UIDevice currentDevice] uniqueIdentifier];
-#pragma clang diagnostic pop    
-    
+	
+	NSString *systemId = nil;
+	// We collect it as long as it is available along with a randomly generated ID.
+	// This way, when this becomes unavailable we can map existing users so the
+	// new vs returning counts do not break.
+	//only do this if the OS is less than 6.0
+  if (([[[UIDevice currentDevice] systemVersion] floatValue] < 6.0f)) {
+		SEL udidSelector = NSSelectorFromString(@"uniqueIdentifier");
+		if ([[UIDevice currentDevice] respondsToSelector:udidSelector]) {
+			systemId = [[UIDevice currentDevice] performSelector:udidSelector];
+		}
+	}
 	return systemId;
 }
+
+
+/*!
+ @method advertisingIdentifier
+ @abstract An alphanumeric string unique to each device, used for advertising only.
+ From UIDevice documentation.
+ 
+ @return An identifier unique to this device.
+ */
+- (NSString *)advertisingIdentifier {
+  NSString *adId = nil;
+  SEL adidSelector = NSSelectorFromString(@"identifierForAdvertising");
+  if ([[UIDevice currentDevice] respondsToSelector:adidSelector]) {
+    adId = [[[UIDevice currentDevice] performSelector:adidSelector] performSelector:NSSelectorFromString(@"UUIDString")];
+  }
+	return adId;
+}
+
 
 /*!
  @method appVersion
@@ -1144,5 +1268,11 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
 
 	[super dealloc];
 }
+
+#pragma mark - AMP stub
+- (void)ampTrigger:(NSString *)event {
+  //do nothing
+}
+
 
 @end

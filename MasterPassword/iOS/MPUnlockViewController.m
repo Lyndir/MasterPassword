@@ -16,6 +16,7 @@
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
+#import "LocalyticsSession.h"
 
 @interface MPUnlockViewController ()
 
@@ -192,6 +193,8 @@
     [UIView animateWithDuration:0.3 animations:^{
         self.uiContainer.alpha = 1;
     }];
+
+    [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Unlock"];
 
     [super viewDidAppear:animated];
 }
@@ -749,7 +752,7 @@
         return;
 
     [PearlSheet showSheetWithTitle:targetedUser.name
-                           message:nil viewStyle:UIActionSheetStyleBlackTranslucent
+                           viewStyle:UIActionSheetStyleBlackTranslucent
                          initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
         if (buttonIndex == [sheet cancelButtonIndex])
             return;
@@ -823,7 +826,7 @@
 
 - (IBAction)add:(UIButton *)sender {
 
-    [PearlSheet showSheetWithTitle:@"Follow Master Password" message:nil viewStyle:UIActionSheetStyleBlackTranslucent
+    [PearlSheet showSheetWithTitle:@"Follow Master Password" viewStyle:UIActionSheetStyleBlackTranslucent
                          initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
         if (buttonIndex == [sheet cancelButtonIndex])
             return;

@@ -1,5 +1,5 @@
 //  LocalyticsUploader.m
-//  Copyright (C) 2009 Char Software Inc., DBA Localytics
+//  Copyright (C) 2012 Char Software Inc., DBA Localytics
 // 
 //  This code is provided under the Localytics Modified BSD License.
 //  A copy of this license has been distributed in a file called LICENSE
@@ -10,16 +10,25 @@
 #import "LocalyticsUploader.h"
 #import "LocalyticsSession.h"
 #import "LocalyticsDatabase.h"
+#import "WebserviceConstants.h"
 #import <zlib.h>
 
-#define LOCALYTICS_URL    @"http://analytics.localytics.com/api/v2/applications/%@/uploads"
+#ifndef LOCALYTICS_URL
+#define LOCALYTICS_URL           @"http://analytics.localytics.com/api/v2/applications/%@/uploads"
+#endif
 
+#ifndef LOCALYTICS_URL_SECURED
+#define LOCALYTICS_URL_SECURED   @"https://analytics.localytics.com/api/v2/applications/%@/uploads"
+#endif
 static LocalyticsUploader *_sharedUploader = nil;
+
+NSString * const kLocalyticsKeyResponseBody = @"localytics.key.responseBody";
 
 @interface LocalyticsUploader ()
 - (void)finishUpload;
 - (NSData *)gzipDeflatedDataWithData:(NSData *)data;
 - (void)logMessage:(NSString *)message;
+- (NSString *)uploadTimeStamp;
 
 @property (readwrite) BOOL isUploading;
 
@@ -40,7 +49,13 @@ static LocalyticsUploader *_sharedUploader = nil;
 
 #pragma mark - Class Methods
 
-- (void)uploaderWithApplicationKey:(NSString *)localyticsApplicationKey {
+- (void)uploaderWithApplicationKey:(NSString *)localyticsApplicationKey useHTTPS:(BOOL)useHTTPS installId:(NSString *)installId
+{
+  [self uploaderWithApplicationKey:localyticsApplicationKey useHTTPS:useHTTPS installId:installId resultTarget:nil callback:NULL];
+}
+
+- (void)uploaderWithApplicationKey:(NSString *)localyticsApplicationKey useHTTPS:(BOOL)useHTTPS installId:(NSString *)installId resultTarget:(id)target callback:(SEL)callbackMethod;
+{
 	
 	// Do nothing if already uploading.
 	if (self.isUploading == true) 
@@ -77,17 +92,26 @@ static LocalyticsUploader *_sharedUploader = nil;
 	NSData *requestData = [blobString dataUsingEncoding:NSUTF8StringEncoding];
     NSString *myString = [[[NSString alloc] initWithData:requestData encoding:NSUTF8StringEncoding] autorelease];
     [self logMessage:[NSString  stringWithFormat:@"Uploading data (length: %u)", [myString length]]];
+    [self logMessage:myString];
     
     // Step 2
     NSData *deflatedRequestData = [[self gzipDeflatedDataWithData:requestData] retain];
     
     [pool drain];
 
-    NSString *apiUrlString = [NSString stringWithFormat:LOCALYTICS_URL, [localyticsApplicationKey stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    NSString *urlStringFormat;
+    if (useHTTPS) {
+       urlStringFormat = LOCALYTICS_URL_SECURED;
+    } else {
+       urlStringFormat = LOCALYTICS_URL;
+    }
+    NSString *apiUrlString = [NSString stringWithFormat:urlStringFormat, [localyticsApplicationKey stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	NSMutableURLRequest *submitRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiUrlString]
 																			 cachePolicy:NSURLRequestReloadIgnoringCacheData 
 																			 timeoutInterval:60.0];
 	[submitRequest setHTTPMethod:@"POST"];
+   [submitRequest setValue:[self uploadTimeStamp] forHTTPHeaderField:HEADER_CLIENT_TIME];
+   [submitRequest setValue:installId forHTTPHeaderField:HEADER_INSTALL_ID];
 	[submitRequest setValue:@"application/x-gzip" forHTTPHeaderField:@"Content-Type"];
     [submitRequest setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
 	[submitRequest setValue:[NSString stringWithFormat:@"%d", [deflatedRequestData length]] forHTTPHeaderField:@"Content-Length"];
@@ -100,7 +124,7 @@ static LocalyticsUploader *_sharedUploader = nil;
         @try  {
             NSURLResponse *response = nil;
             NSError *responseError = nil;
-            [NSURLConnection sendSynchronousRequest:submitRequest returningResponse:&response error:&responseError];
+            NSData  *responseData = [NSURLConnection sendSynchronousRequest:submitRequest returningResponse:&response error:&responseError];
             NSInteger responseStatusCode = [(NSHTTPURLResponse *)response statusCode];
             
             if (responseError) {
@@ -123,6 +147,18 @@ static LocalyticsUploader *_sharedUploader = nil;
                     [[LocalyticsDatabase sharedLocalyticsDatabase] deleteUploadedData];
                 }
             }
+           
+           if ([responseData length] > 0) {
+              if (DO_LOCALYTICS_LOGGING) {
+                 NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+                 [self logMessage:[NSString stringWithFormat:@"Response body: %@", responseString]];
+                 [responseString release];
+              }
+              NSDictionary *userInfo = [NSDictionary dictionaryWithObject:responseData forKey:kLocalyticsKeyResponseBody];
+             if (target) {
+               [target performSelector:callbackMethod withObject:userInfo];
+             }
+           }
         }
         @catch (NSException * e) {}
         
@@ -193,6 +229,15 @@ static LocalyticsUploader *_sharedUploader = nil;
     if(DO_LOCALYTICS_LOGGING) {
 		NSLog(@"(localytics uploader) %s\n", [message UTF8String]);
     }
+}
+
+/*!
+ @method uploadTimeStamp
+ @abstract Gets the current time, along with local timezone, formatted as a DateTime for the webservice. 
+ @return a DateTime of the current local time and timezone.
+ */
+- (NSString *)uploadTimeStamp {
+    return [ NSString stringWithFormat:@"%ld", (long)[[NSDate date] timeIntervalSince1970] ];
 }
 
 #pragma mark - System Functions

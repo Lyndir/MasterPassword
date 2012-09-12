@@ -77,6 +77,13 @@
     [super viewWillAppear:animated];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+
+    [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Apps"];
+
+    [super viewDidAppear:animated];
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
 
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];

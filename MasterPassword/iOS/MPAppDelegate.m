@@ -116,6 +116,7 @@
         NSString *localyticsKey = [self localyticsKey];
         if ([localyticsKey length]) {
             inf(@"Initializing Localytics");
+            [LocalyticsSession sharedLocalyticsSession].enableHTTPS = YES;
             [[LocalyticsSession sharedLocalyticsSession] startSession:localyticsKey];
             [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
                 if (message.level >= PearlLogLevelWarn)
@@ -321,21 +322,9 @@
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
 
-    wrn(@"Received memory warning.");
+    inf(@"Received memory warning.");
 
     [super applicationDidReceiveMemoryWarning:application];
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-
-    inf(@"Re-activated");
-    [[MPAppDelegate get] checkConfig];
-
-    if (FBSession.activeSession.state == FBSessionStateCreatedOpening)
-     // An old Facebook Login session that wasn't finished.  Clean it up.
-        [FBSession.activeSession close];
-
-    [super applicationDidBecomeActive:application];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -369,10 +358,31 @@
 - (void)applicationWillResignActive:(UIApplication *)application {
 
     inf(@"Will deactivate");
+
     [self saveContext];
 
     if (![[MPiOSConfig get].rememberLogin boolValue])
         [self signOutAnimated:NO];
+
+    [[LocalyticsSession sharedLocalyticsSession] close];
+    [[LocalyticsSession sharedLocalyticsSession] upload];
+
+    [super applicationWillResignActive:application];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+
+    inf(@"Re-activated");
+    [[MPAppDelegate get] checkConfig];
+
+    if (FBSession.activeSession.state == FBSessionStateCreatedOpening)
+     // An old Facebook Login session that wasn't finished.  Clean it up.
+        [FBSession.activeSession close];
+
+    [[LocalyticsSession sharedLocalyticsSession] resume];
+    [[LocalyticsSession sharedLocalyticsSession] upload];
+
+    [super applicationDidBecomeActive:application];
 }
 
 #pragma mark - Behavior
