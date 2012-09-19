@@ -779,6 +779,7 @@
 		DACABB8D1572A4A5008BA211 /* tip_basic_black_top_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACABB8B1572A4A4008BA211 /* tip_basic_black_top_right@2x.png */; };
 		DACABB901572B76A008BA211 /* tip_basic_black_top.png in Resources */ = {isa = PBXBuildFile; fileRef = DACABB8E1572B769008BA211 /* tip_basic_black_top.png */; };
 		DACABB911572B76A008BA211 /* tip_basic_black_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACABB8F1572B769008BA211 /* tip_basic_black_top@2x.png */; };
+		DAD18EF4160A760600D15088 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD3126215528C9C00A3F9ED /* libTestFlight.a */; };
 		DAD3126715528C9C00A3F9ED /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD3125F15528C9C00A3F9ED /* Crashlytics.framework */; };
 		DAD3126815528C9C00A3F9ED /* Crashlytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAD3126015528C9C00A3F9ED /* Crashlytics.plist */; };
 		DAD3126C15528C9C00A3F9ED /* TestFlight.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAD3126615528C9C00A3F9ED /* TestFlight.plist */; };
@@ -2109,6 +2110,7 @@
 				DAD3126715528C9C00A3F9ED /* Crashlytics.framework in Frameworks */,
 				93D399433EA75E50656040CB /* Twitter.framework in Frameworks */,
 				DA55878015E82C0300860B4F /* FacebookSDK.framework in Frameworks */,
+				DAD18EF4160A760600D15088 /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
