@@ -54,7 +54,7 @@
     [[[NSBundle mainBundle] mutableInfoDictionary] setObject:@"Master Password" forKey:@"CFBundleDisplayName"];
     [[[NSBundle mainBundle] mutableLocalizedInfoDictionary] setObject:@"Master Password" forKey:@"CFBundleDisplayName"];
 
-#ifdef ADHOC
+#ifdef TESTFLIGHT_SDK_VERSION
     @try {
         NSString *testFlightToken = [self testFlightToken];
         if ([testFlightToken length]) {
