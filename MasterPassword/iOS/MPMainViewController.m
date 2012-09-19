@@ -722,7 +722,7 @@
                              [self performSegueWithIdentifier:@"OtherApps" sender:self];
                              break;
                          }
-#ifdef ADHOC
+#if defined(ADHOC) && defined(TESTFLIGHT_SDK_VERSION)
                          case 4: {
                              inf(@"Action: Feedback via TestFlight");
                              [TestFlight openFeedbackView];
