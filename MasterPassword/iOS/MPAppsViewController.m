@@ -71,7 +71,9 @@
 
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 
+#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPCheckpointApps];
+#endif
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointApps attributes:nil];
 
     [super viewWillAppear:animated];

@@ -6,7 +6,10 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnewline-eof"
 #import <FacebookSDK/FacebookSDK.h>
+#pragma clang diagnostic pop
 
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
@@ -409,6 +412,7 @@
         [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].reviewAfterLaunches intValue] forKey:@"reviewAfterLaunches"];
         [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
 
+#ifdef TESTFLIGHT_SDK_VERSION
         [TestFlight addCustomEnvironmentInformation:[[MPConfig get].rememberLogin boolValue]? @"YES": @"NO" forKey:@"rememberLogin"];
         [TestFlight addCustomEnvironmentInformation:[[MPConfig get].iCloud boolValue]? @"YES": @"NO" forKey:@"iCloud"];
         [TestFlight addCustomEnvironmentInformation:[[MPConfig get].iCloudDecided boolValue]? @"YES": @"NO" forKey:@"iCloudDecided"];
@@ -422,6 +426,7 @@
         [TestFlight addCustomEnvironmentInformation:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
 
         [TestFlight passCheckpoint:MPCheckpointConfig];
+#endif
         [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointConfig attributes:
                                                                                   @{
                                                                                   @"rememberLogin": [[MPConfig get].rememberLogin boolValue]
@@ -451,7 +456,9 @@
 
     [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
 
+#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPCheckpointShowGuide];
+#endif
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointShowGuide attributes:nil];
 }
 
@@ -462,7 +469,9 @@
 
 - (void)showReview {
 
+#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPCheckpointReview];
+#endif
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointReview attributes:nil];
 
     [super showReview];
@@ -610,7 +619,9 @@
         if (didReset)
             didReset();
 
+#ifdef TESTFLIGHT_SDK_VERSION
         [TestFlight passCheckpoint:MPCheckpointChangeMP];
+#endif
         [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointChangeMP attributes:nil];
     }
                        cancelTitle:[PearlStrings get].commonButtonAbort

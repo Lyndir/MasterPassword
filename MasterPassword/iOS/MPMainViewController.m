@@ -338,7 +338,9 @@
 
 - (void)setHelpChapter:(NSString *)chapter {
 
+#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:PearlString(MPCheckpointHelpChapter @"_%@", chapter)];
+#endif
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointHelpChapter attributes:@{@"chapter": chapter}];
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -491,7 +493,9 @@
 
     [self showContentTip:@"Copied!" withIcon:nil];
 
+#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPCheckpointCopyToPasteboard];
+#endif
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyToPasteboard
                                                attributes:@{@"type": self.activeElement.typeName,
                                                                          @"version": @(self.activeElement.version)}];
@@ -507,7 +511,9 @@
 
     [self showLoginNameTip:@"Copied!"];
 
+#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPCheckpointCopyLoginNameToPasteboard];
+#endif
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyLoginNameToPasteboard
                                                attributes:@{@"type": self.activeElement.typeName,
                                                                          @"version": @(self.activeElement.version)}];
@@ -528,7 +534,9 @@
                                     inf(@"Incrementing password counter for: %@", self.activeElement.name);
                                     ++((MPElementGeneratedEntity *)self.activeElement).counter;
 
+#ifdef TESTFLIGHT_SDK_VERSION
                                     [TestFlight passCheckpoint:MPCheckpointIncrementPasswordCounter];
+#endif
                                     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointIncrementPasswordCounter
                                                                                attributes:@{@"type": self.activeElement.typeName,
                                                                                                          @"version": @(self.activeElement.version)}];
@@ -555,7 +563,9 @@
                                     inf(@"Resetting password counter for: %@", self.activeElement.name);
                                     ((MPElementGeneratedEntity *)self.activeElement).counter = 1;
 
+#ifdef TESTFLIGHT_SDK_VERSION
                                     [TestFlight passCheckpoint:MPCheckpointResetPasswordCounter];
+#endif
                                     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointResetPasswordCounter
                                                                                attributes:@{@"type": self.activeElement.typeName,
                                                                                                          @"version": @(self.activeElement.version)}];
@@ -574,7 +584,9 @@
     self.loginNameField.enabled = YES;
     [self.loginNameField becomeFirstResponder];
 
+#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPCheckpointEditLoginName];
+#endif
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditLoginName attributes:@{@"type": self.activeElement.typeName,
                                                                                                              @"version": @(self.activeElement.version)}];
 }
@@ -616,7 +628,9 @@
         self.contentField.enabled = YES;
         [self.contentField becomeFirstResponder];
 
+#ifdef TESTFLIGHT_SDK_VERSION
         [TestFlight passCheckpoint:MPCheckpointEditPassword];
+#endif
         [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditPassword
                                                    attributes:@{@"type": self.activeElement.typeName,
                                                                              @"version": @(self.activeElement.version)}];
@@ -637,7 +651,9 @@
                                     inf(@"Explicitly migrating element: %@", self.activeElement);
                                     [self.activeElement migrateExplicitly:YES];
 
+#ifdef TESTFLIGHT_SDK_VERSION
                                     [TestFlight passCheckpoint:MPCheckpointExplicitMigration];
+#endif
                                     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointExplicitMigration
                                                                                attributes:@{@"type": self.activeElement.typeName,
                                                                                                          @"version": @(self.activeElement.version)}];
@@ -807,7 +823,9 @@
             }];
 
         [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationElementUpdated object:self.activeElement];
+#ifdef TESTFLIGHT_SDK_VERSION
         [TestFlight passCheckpoint:PearlString(MPCheckpointUseType @"_%@", self.activeElement.typeShortName)];
+#endif
         [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointUseType attributes:@{@"type": self.activeElement.typeName,
                                                                                                             @"version": @(self.activeElement.version)}];
     }

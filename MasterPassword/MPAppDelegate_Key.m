@@ -185,7 +185,9 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
         if (password) {
             inf(@"Login failed for: %@", user.userID);
             
+#ifdef TESTFLIGHT_SDK_VERSION
             [TestFlight passCheckpoint:MPCheckpointSignInFailed];
+#endif
             [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSignInFailed attributes:nil];
         }
 
@@ -200,7 +202,9 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     @try {
         if ([[MPiOSConfig get].sendInfo boolValue]) {
+#ifdef TESTFLIGHT_SDK_VERSION
             [TestFlight addCustomEnvironmentInformation:user.userID forKey:@"username"];
+#endif
             [Crashlytics setObjectValue:user.userID forKey:@"username"];
             [Crashlytics setUserName:user.userID];
         }
@@ -218,7 +222,9 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     [[MPAppDelegate_Shared get] saveContext];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationSignedIn object:self];
+#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPCheckpointSignedIn];
+#endif
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSignedIn attributes:nil];
 
     return YES;

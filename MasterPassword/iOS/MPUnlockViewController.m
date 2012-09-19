@@ -9,7 +9,10 @@
 #import <QuartzCore/QuartzCore.h>
 #import <Twitter/Twitter.h>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnewline-eof"
 #import "Facebook.h"
+#pragma clang diagnostic pop
 #import "GooglePlusShare.h"
 
 #import "MPUnlockViewController.h"
@@ -86,7 +89,9 @@
         }                   options:0];
         [avatar onSelect:^(BOOL selected) {
             if (selected)
-                user.avatar = (unsigned)avatar.tag;
+                [user.managedObjectContext performBlock:^{
+                    user.avatar = (unsigned)avatar.tag;
+                }];
         }        options:0];
         avatar.selected            = (a == user.avatar);
         if (avatar.selected)
@@ -237,9 +242,11 @@
     [self.avatarToUser removeAllObjects];
 
     // Create avatars.
-    for (MPUserEntity *user in users)
-        [self setupAvatar:[self.avatarTemplate clone] forUser:user];
-    [self setupAvatar:[self.avatarTemplate clone] forUser:nil];
+    [moc performBlockAndWait:^{
+        for (MPUserEntity *user in users)
+            [self setupAvatar:[self.avatarTemplate clone] forUser:user];
+        [self setupAvatar:[self.avatarTemplate clone] forUser:nil];
+    }];
 
     // Scroll view's content changed, update its content size.
     [self.avatarsView autoSizeContentIgnoreHidden:YES ignoreInvisible:YES limitPadding:NO ignoreSubviews:nil];
@@ -348,7 +355,9 @@
                      }
 
                      // Save
-                     newUser.name = [alert textFieldAtIndex:0].text;
+                     [newUser.managedObjectContext performBlock:^{
+                         newUser.name = [alert textFieldAtIndex:0].text;
+                     }];
                      [self showNewUserAvatarAlertFor:newUser completion:completion];
                  }
                        cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonSave, nil];

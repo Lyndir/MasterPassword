@@ -781,7 +781,6 @@
 		DACABB911572B76A008BA211 /* tip_basic_black_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACABB8F1572B769008BA211 /* tip_basic_black_top@2x.png */; };
 		DAD3126715528C9C00A3F9ED /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD3125F15528C9C00A3F9ED /* Crashlytics.framework */; };
 		DAD3126815528C9C00A3F9ED /* Crashlytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAD3126015528C9C00A3F9ED /* Crashlytics.plist */; };
-		DAD3126915528C9C00A3F9ED /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD3126215528C9C00A3F9ED /* libTestFlight.a */; };
 		DAD3126C15528C9C00A3F9ED /* TestFlight.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAD3126615528C9C00A3F9ED /* TestFlight.plist */; };
 		DAD3127215528CD200A3F9ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAD3129015528D1600A3F9ED /* Localytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAD3127D15528D0F00A3F9ED /* Localytics.plist */; };
@@ -2108,7 +2107,6 @@
 				DA5BFA4D147E415C00F98B1E /* CoreGraphics.framework in Frameworks */,
 				DA5BFA4F147E415C00F98B1E /* CoreData.framework in Frameworks */,
 				DAD3126715528C9C00A3F9ED /* Crashlytics.framework in Frameworks */,
-				DAD3126915528C9C00A3F9ED /* libTestFlight.a in Frameworks */,
 				93D399433EA75E50656040CB /* Twitter.framework in Frameworks */,
 				DA55878015E82C0300860B4F /* FacebookSDK.framework in Frameworks */,
 			);
@@ -2168,6 +2166,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DA3EE95B1601C06000C68F6D /* Facebook */ = {
+			isa = PBXGroup;
+			children = (
+				DA5587B715E838CD00860B4F /* DeprecatedHeaders */,
+				DA55878115E82C2B00860B4F /* FacebookSDKResources.bundle */,
+				DA55877F15E82C0300860B4F /* FacebookSDK.framework */,
+			);
+			name = Facebook;
+			sourceTree = "<group>";
+		};
 		DA3EF17E15A47744003ABF4E /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -2377,6 +2385,7 @@
 				DAD3126115528C9C00A3F9ED /* TestFlight */,
 				DAD3127315528CD200A3F9ED /* Localytics */,
 				DA5587F715E8B7B200860B4F /* Google+ */,
+				DA3EE95B1601C06000C68F6D /* Facebook */,
 				DA4425D71557BF260052177D /* iCloudStoreManager */,
 				DA829E5D15984812002417D3 /* FontReplacer */,
 				DA3EF17E15A47744003ABF4E /* Tests */,
@@ -2405,9 +2414,6 @@
 		DA5BFA47147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DA5587B715E838CD00860B4F /* DeprecatedHeaders */,
-				DA55878115E82C2B00860B4F /* FacebookSDKResources.bundle */,
-				DA55877F15E82C0300860B4F /* FacebookSDK.framework */,
 				93D394077F8FAB8167647187 /* Twitter.framework */,
 				DAAC35DD156BD77D00C5FD93 /* CoreTelephony.framework */,
 				DAD312C01552A20800A3F9ED /* libsqlite3.dylib */,
@@ -4704,13 +4710,15 @@
 			files = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/External/facebook-ios-sdk/src",
 			);
 			name = "Run Script: FacebookSDK";
 			outputPaths = (
+				"$(SRCROOT)/External/facebook-ios-sdk/build",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "[ -d External/facebook-ios-sdk/build ] || env -i PATH=\"$PATH\" ./External/facebook-ios-sdk/scripts/build_framework.sh";
+			shellScript = "env -i PATH=\"$PATH\" ./External/facebook-ios-sdk/scripts/build_framework.sh";
 			showEnvVarsInLog = 0;
 		};
 		DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */ = {
@@ -5138,7 +5146,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = armv7;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_WARN_CXX0X_EXTENSIONS = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -5199,7 +5207,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = armv7;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_WARN_CXX0X_EXTENSIONS = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -5351,7 +5359,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = armv7;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_WARN_CXX0X_EXTENSIONS = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;

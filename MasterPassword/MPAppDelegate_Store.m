@@ -133,7 +133,9 @@
     iCloudEnabled = manager.iCloudEnabled;
     inf(@"Using iCloud? %@", iCloudEnabled? @"YES": @"NO");
 
+#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:iCloudEnabled? MPCheckpointCloudEnabled: MPCheckpointCloudDisabled];
+#endif
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloud attributes:@{
     @"enabled": iCloudEnabled? @"YES": @"NO"
     }];
@@ -146,7 +148,9 @@
 
     err(@"StoreManager: cause=%d, context=%@, error=%@", cause, context, error);
 
+#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:PearlString(MPCheckpointMPErrorUbiquity @"_%d", cause)];
+#endif
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointMPErrorUbiquity attributes:@{
     @"cause": @(cause),
     @"error.domain": error.domain,
@@ -165,7 +169,9 @@
             if (error.code == NSMigrationMissingSourceModelError) {
                 wrn(@"Resetting the local store.");
 
+#ifdef TESTFLIGHT_SDK_VERSION
                 [TestFlight passCheckpoint:MPCheckpointLocalStoreReset];
+#endif
                 [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointLocalStoreReset attributes:nil];
                 manager.hardResetEnabled = YES;
                 [manager hardResetLocalStorage];
@@ -181,7 +187,9 @@
             if (error.code == NSMigrationMissingSourceModelError) {
                 wrn(@"Resetting the iCloud store.");
 
+#ifdef TESTFLIGHT_SDK_VERSION
                 [TestFlight passCheckpoint:MPCheckpointCloudStoreReset];
+#endif
                 [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloudStoreReset attributes:nil];
                 manager.hardResetEnabled = YES;
                 [manager hardResetCloudStorage];
@@ -413,7 +421,9 @@
         [self saveContext];
         success = YES;
         inf(@"Import completed successfully.");
+#ifdef TESTFLIGHT_SDK_VERSION
         [TestFlight passCheckpoint:MPCheckpointSitesImported];
+#endif
         [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSitesImported attributes:nil];
 
         return MPImportResultSuccess;
@@ -476,7 +486,9 @@
          ? content: @""];
     }
 
+#ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPCheckpointSitesExported];
+#endif
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSitesExported attributes:nil];
 
     return export;

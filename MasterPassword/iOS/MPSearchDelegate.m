@@ -406,7 +406,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
                 inf(@"Deleting element: %@", element.name);
                 [self.fetchedResultsController.managedObjectContext deleteObject:element];
 
+#ifdef TESTFLIGHT_SDK_VERSION
                 [TestFlight passCheckpoint:MPCheckpointDeleteElement];
+#endif
                 [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointDeleteElement
                                                            attributes:@{@"type": element.typeName,
                                                                                      @"version": @(element.version)}];
