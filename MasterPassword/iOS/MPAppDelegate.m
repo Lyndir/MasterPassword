@@ -520,13 +520,13 @@
                                                     [PearlInfoPlist get].CFBundleShortVersionString,
                                                     [PearlInfoPlist get].CFBundleVersion)
 
-                            attachments:logs
+                            attachments:(logs
                                          ? [[PearlEMailAttachment alloc] initWithContent:[[[PearlLogger get] formatMessagesWithLevel:logLevel] dataUsingEncoding:NSUTF8StringEncoding]
                                                                                 mimeType:@"text/plain"
                                                                                 fileName:PearlString(@"%@-%@.log",
                                                                                                      [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
                                                                                                      [PearlKeyChain deviceIdentifier])]
-                                         : nil, nil]
+                                         : nil), nil]
                   showComposerForVC:viewController];
 }
 
