@@ -485,11 +485,13 @@
 
 - (IBAction)copyContent {
 
-    if (!self.activeElement)
+    id content = self.activeElement.content;
+    if (!content)
+        // Nothing to copy.
         return;
 
     inf(@"Copying password for: %@", self.activeElement.name);
-    [UIPasteboard generalPasteboard].string = [self.activeElement.content description];
+    [UIPasteboard generalPasteboard].string = [content description];
 
     [self showContentTip:@"Copied!" withIcon:nil];
 
