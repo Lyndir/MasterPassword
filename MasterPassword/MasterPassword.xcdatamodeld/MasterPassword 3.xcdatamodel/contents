@@ -3,7 +3,7 @@
     <entity name="MPElementEntity" representedClassName="MPElementEntity" isAbstract="YES" syncable="YES">
         <attribute name="content" optional="YES" transient="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="lastUsed" attributeType="Date" indexed="YES" syncable="YES"/>
-        <attribute name="loginName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="loginName" optional="YES" attributeType="String" elementID="A1B9F981-D33C-4BFE-9F94-C9D3E1F78E51" syncable="YES"/>
         <attribute name="name" attributeType="String" minValueString="1" indexed="YES" syncable="YES"/>
         <attribute name="requiresExplicitMigration_" attributeType="Boolean" defaultValueString="NO">
             <userInfo/>

@@ -139,6 +139,7 @@
     self.fbOperationQueue = [NSOperationQueue new];
     [self.fbOperationQueue setSuspended:YES];
 
+    [self.avatarsView addGestureRecognizer:self.targetedUserActionGesture];
     self.avatarsView.decelerationRate = UIScrollViewDecelerationRateFast;
     self.avatarsView.clipsToBounds    = NO;
     self.nameLabel.layer.cornerRadius = 5;
@@ -426,7 +427,7 @@
         // User was just selected.
         self.passwordView.alpha        = 1;
         self.avatarsView.center        = CGPointMake(160, 180);
-        //self.avatarsView.scrollEnabled = NO;
+        self.avatarsView.scrollEnabled = NO;
         self.nameLabel.center          = CGPointMake(160, 94);
         self.nameLabel.backgroundColor = [UIColor blackColor];
         self.oldNameLabel.center       = self.nameLabel.center;
@@ -437,7 +438,7 @@
             self.passwordField.text        = nil;
             self.passwordView.alpha        = 0;
             self.avatarsView.center        = CGPointMake(160, 310);
-            //self.avatarsView.scrollEnabled = YES;
+            self.avatarsView.scrollEnabled = YES;
             self.nameLabel.center          = CGPointMake(160, 296);
             self.nameLabel.backgroundColor = [UIColor clearColor];
             self.oldNameLabel.center       = self.nameLabel.center;
