@@ -5310,7 +5310,7 @@
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto\"",
 					"\"$(SRCROOT)/External/google-plus-ios-sdk/lib\"",
 				);
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1D59446F-0568-458A-96A3-B4226BC94A20";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E0621374-3E4C-483D-A3F3-46D151712A4F";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

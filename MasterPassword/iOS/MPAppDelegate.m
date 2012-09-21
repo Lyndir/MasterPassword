@@ -59,14 +59,17 @@
         NSString *testFlightToken = [self testFlightToken];
         if ([testFlightToken length]) {
             inf(@"Initializing TestFlight");
+#ifdef ADHOC
             [TestFlight setDeviceIdentifier:[(id)[UIDevice currentDevice] uniqueIdentifier]];
-            //[TestFlight setDeviceIdentifier[PearlKeyChain deviceIdentifier]];
+#else
+            [TestFlight setDeviceIdentifier:[PearlKeyChain deviceIdentifier]];
+#endif
             [TestFlight addCustomEnvironmentInformation:@"Anonymous" forKey:@"username"];
             [TestFlight addCustomEnvironmentInformation:[PearlKeyChain deviceIdentifier] forKey:@"deviceIdentifier"];
             [TestFlight setOptions:[NSDictionary dictionaryWithObjectsAndKeys:
-                                    [NSNumber numberWithBool:NO],   @"logToConsole",
-                                    [NSNumber numberWithBool:NO],   @"logToSTDERR",
-                                    nil]];
+                                                  [NSNumber numberWithBool:NO], @"logToConsole",
+                                                  [NSNumber numberWithBool:NO], @"logToSTDERR",
+                                                  nil]];
             [TestFlight takeOff:testFlightToken];
             [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
                 PearlLogLevel level = PearlLogLevelWarn;
@@ -120,9 +123,9 @@
         if ([localyticsKey length]) {
             inf(@"Initializing Localytics");
             [[LocalyticsSession sharedLocalyticsSession] LocalyticsSession:localyticsKey];
-           	[[LocalyticsSession sharedLocalyticsSession] open];
+            [[LocalyticsSession sharedLocalyticsSession] open];
             [LocalyticsSession sharedLocalyticsSession].enableHTTPS = YES;
-           	[[LocalyticsSession sharedLocalyticsSession] upload];
+            [[LocalyticsSession sharedLocalyticsSession] upload];
             [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
                 if (message.level >= PearlLogLevelWarn)
                     [[LocalyticsSession sharedLocalyticsSession] tagEvent:@"Problem"
@@ -427,28 +430,19 @@
 
         [TestFlight passCheckpoint:MPCheckpointConfig];
 #endif
-        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointConfig attributes:
-                                                                                  @{
-                                                                                  @"rememberLogin": [[MPConfig get].rememberLogin boolValue]
-                                                                                   ? @"YES": @"NO",
-                                                                                  @"iCloud": [[MPConfig get].iCloud boolValue]? @"YES"
-                                                                                   : @"NO",
-                                                                                  @"iCloudDecided": [[MPConfig get].iCloudDecided boolValue]
-                                                                                   ? @"YES": @"NO",
-                                                                                  @"sendInfo": [[MPiOSConfig get].sendInfo boolValue]
-                                                                                   ? @"YES": @"NO",
-                                                                                  @"helpHidden": [[MPiOSConfig get].helpHidden boolValue]
-                                                                                   ? @"YES": @"NO",
-                                                                                  @"showQuickStart": [[MPiOSConfig get].showQuickStart boolValue]
-                                                                                   ? @"YES": @"NO",
-                                                                                  @"firstRun": [[PearlConfig get].firstRun boolValue]
-                                                                                   ? @"YES": @"NO",
-                                                                                  @"launchCount": [[PearlConfig get].launchCount description],
-                                                                                  @"askForReviews": [[PearlConfig get].askForReviews boolValue]
-                                                                                   ? @"YES": @"NO",
-                                                                                  @"reviewAfterLaunches": [[PearlConfig get].reviewAfterLaunches description],
-                                                                                  @"reviewedVersion": [PearlConfig get].reviewedVersion
-                                                                                  }];
+        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointConfig attributes:@{
+        @"rememberLogin": [[MPConfig get].rememberLogin boolValue]? @"YES": @"NO",
+        @"iCloud": [[MPConfig get].iCloud boolValue]? @"YES": @"NO",
+        @"iCloudDecided": [[MPConfig get].iCloudDecided boolValue]? @"YES": @"NO",
+        @"sendInfo": [[MPiOSConfig get].sendInfo boolValue]? @"YES": @"NO",
+        @"helpHidden": [[MPiOSConfig get].helpHidden boolValue]? @"YES": @"NO",
+        @"showQuickStart": [[MPiOSConfig get].showQuickStart boolValue]? @"YES": @"NO",
+        @"firstRun": [[PearlConfig get].firstRun boolValue]? @"YES": @"NO",
+        @"launchCount": NilToNSNull([[PearlConfig get].launchCount description]),
+        @"askForReviews": [[PearlConfig get].askForReviews boolValue]? @"YES": @"NO",
+        @"reviewAfterLaunches": NilToNSNull([[PearlConfig get].reviewAfterLaunches description]),
+        @"reviewedVersion": NilToNSNull([PearlConfig get].reviewedVersion)
+        }];
     }
 }
 
@@ -521,12 +515,12 @@
                                                     [PearlInfoPlist get].CFBundleVersion)
 
                             attachments:(logs
-                                         ? [[PearlEMailAttachment alloc] initWithContent:[[[PearlLogger get] formatMessagesWithLevel:logLevel] dataUsingEncoding:NSUTF8StringEncoding]
-                                                                                mimeType:@"text/plain"
-                                                                                fileName:PearlString(@"%@-%@.log",
-                                                                                                     [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
-                                                                                                     [PearlKeyChain deviceIdentifier])]
-                                         : nil), nil]
+                             ? [[PearlEMailAttachment alloc] initWithContent:[[[PearlLogger get] formatMessagesWithLevel:logLevel] dataUsingEncoding:NSUTF8StringEncoding]
+                                                                    mimeType:@"text/plain"
+                                                                    fileName:PearlString(@"%@-%@.log",
+                                                                                         [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
+                                                                                         [PearlKeyChain deviceIdentifier])]
+                             : nil), nil]
                   showComposerForVC:viewController];
 }
 
