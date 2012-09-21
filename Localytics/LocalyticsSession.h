@@ -154,10 +154,10 @@
  closed and the time of closing is recorded.  When the app returns to the foreground, the session 
  is resumed.  If the time since closing is greater than BACKGROUND_SESSION_TIMEOUT, (15 seconds
  by default) a new session is created, and uploading is triggered.  Otherwise, the previous session 
- is reopened. It is possible to use the return value to determine whether or not a session was resumed.
- This may be useful to some customers looking to do conditional instrumentation at the close of a session.
- It is perfectly reasonable to ignore the return value.
- @result YES if the sesion was resumed NO if it wasn't (suggesting a new session was created instead).*/
+ is reopened.
+ @return Returns whether the session was resumed or a new session was started. If the user has opted 
+ out of analytics then the return from this method is undefined.
+*/
 - (BOOL)resume;
 
 /*!

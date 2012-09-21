@@ -22,7 +22,7 @@
 
 #pragma mark Constants
 #define PREFERENCES_KEY             @"_localytics_install_id" // The randomly generated ID for each install of the app
-#define CLIENT_VERSION              @"iOS_2.12"      // The version of this library
+#define CLIENT_VERSION              @"iOS_2.14"      // The version of this library
 #define LOCALYTICS_DIR              @".localytics"	// The directory in which the Localytics database is stored
 #define IFT_ETHER                   0x6             // Ethernet CSMACD
 #define PATH_TO_APT                 @"/private/var/lib/apt/"
@@ -200,48 +200,54 @@ CLLocationCoordinate2D lastDeviceLocation = {0};
     });
 }
 
-
 - (BOOL)resume {
-	__block BOOL resumed = NO;
 	
-	dispatch_sync(_queue,^{
-		@try {
-    // Do nothing if session is already open
-    if(self.isSessionOpen == YES) {
-      resumed = YES;
-			return;
-		}
-		
-    if([self ll_isOptedIn] == false) {
-      [self logMessage:@"Can't resume session because user is opted out."];
-      resumed = NO;
-			return;
-    }
-		
-    // conditions for resuming previous session
-    if(self.sessionHasBeenOpen &&
-       (!self.sessionCloseTime ||
-        [self.sessionCloseTime timeIntervalSinceNow]*-1 <= self.backgroundSessionTimeout)) {
-				 // Note that we allow the session to be resumed even if the database size exceeds the
-				 // maximum. This is because we don't want to create incomplete sessions. If the DB was large
-				 // enough that the previous session could not be opened, there will be nothing to resume. But
-				 // if this session caused it to go over it is better to let it complete and stop the next one
-				 // from being created.
-					 [self logMessage:@"Resume called - Resuming previous session."];
-					 [self reopenPreviousSession];
-				 
-				 resumed = YES;
-			 } else {
-				 // otherwise open new session and upload
-					 [self logMessage:@"Resume called - Opening a new session."];
-					 [self ll_open];
-				 
-				 resumed = NO;
-			 }
-    self.sessionCloseTime = nil;
-		} @catch (NSException *e) {}
-	});
-	return resumed;
+	
+	// Do nothing if session is already open
+	if(self.isSessionOpen == YES)
+		return YES;
+	
+	BOOL ret = NO;
+	// conditions for resuming previous session
+	if(self.sessionHasBeenOpen &&
+		 (!self.sessionCloseTime ||
+			[self.sessionCloseTime timeIntervalSinceNow]*-1 <= self.backgroundSessionTimeout)) {
+			 // Note that we allow the session to be resumed even if the database size exceeds the
+			 // maximum. This is because we don't want to create incomplete sessions. If the DB was large
+			 // enough that the previous session could not be opened, there will be nothing to resume. But
+			 // if this session caused it to go over it is better to let it complete and stop the next one
+			 // from being created.
+			 ret = YES;
+			 dispatch_async(_queue, ^{
+				 @try {
+					 if([self ll_isOptedIn] == false) {
+						 [self logMessage:@"Can't resume session because user is opted out."];
+					 } else {
+						 [self logMessage:@"Resume called - Resuming previous session."];
+						 [self reopenPreviousSession];
+					 }
+				 }
+				 @catch (NSException * e) {}
+			 });
+			 
+		 } else {
+			 ret = NO;
+			 dispatch_async(_queue, ^{
+				 @try {
+					 if([self ll_isOptedIn] == false) {
+						 [self logMessage:@"Can't resume session because user is opted out."];
+					 } else {
+						 // otherwise open new session and upload
+						 [self logMessage:@"Resume called - Opening a new session."];
+						 [self ll_open];
+					 }
+				 }
+				 @catch (NSException * e) {}
+			 });
+			 
+		 }
+	self.sessionCloseTime = nil;
+	return ret;
 }
 
 - (void)close {
@@ -1120,10 +1126,11 @@ CLLocationCoordinate2D lastDeviceLocation = {0};
  */
 - (NSString *)advertisingIdentifier {
   NSString *adId = nil;
-  SEL adidSelector = NSSelectorFromString(@"identifierForAdvertising");
-  if ([[UIDevice currentDevice] respondsToSelector:adidSelector]) {
-    adId = [[[UIDevice currentDevice] performSelector:adidSelector] performSelector:NSSelectorFromString(@"UUIDString")];
-  }
+	Class advertisingClass = NSClassFromString(@"ASIdentifierManager");
+	if (advertisingClass) {
+		SEL adidSelector = NSSelectorFromString(@"advertisingIdentifier");
+    adId = [[[advertisingClass performSelector:NSSelectorFromString(@"sharedManager")] performSelector:adidSelector] performSelector:NSSelectorFromString(@"UUIDString")];
+	}
 	return adId;
 }
 
