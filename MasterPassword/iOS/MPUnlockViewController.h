@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MPUnlockViewController : UIViewController<UITextFieldDelegate, UIScrollViewDelegate>
+@interface MPUnlockViewController : UIViewController<UITextFieldDelegate, UIScrollViewDelegate, UIWebViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView  *spinner;
 @property (weak, nonatomic) IBOutlet UILabel *passwordFieldLabel;
@@ -26,6 +26,7 @@
 @property (strong, nonatomic) IBOutlet UILongPressGestureRecognizer *targetedUserActionGesture;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingUsersIndicator;
 @property (weak, nonatomic) IBOutlet UIView *uiContainer;
+@property (weak, nonatomic) IBOutlet UIWebView *newsView;
 
 @property (nonatomic, strong) UIColor *avatarShadowColor;
 

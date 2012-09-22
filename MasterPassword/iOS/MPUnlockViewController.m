@@ -134,6 +134,8 @@
 }
 
 - (void)viewDidLoad {
+    
+    [self.newsView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"file://localhost/Users/lhunath/Documents/workspace/lyndir/MasterPassword/Site/news.html"]]];
 
     self.avatarToUser     = [NSMutableDictionary dictionaryWithCapacity:3];
     self.fbOperationQueue = [NSOperationQueue new];
@@ -751,6 +753,19 @@
     [self updateLayoutAnimated:NO allowScroll:NO completion:nil];
 }
 
+#pragma mark - UIWebViewDelegate
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request
+ navigationType:(UIWebViewNavigationType)navigationType {
+    
+    if (navigationType == UIWebViewNavigationTypeLinkClicked) {
+        [[UIApplication sharedApplication] openURL:[request URL]];
+        return NO;
+    }
+    
+    return YES;
+}
+
 #pragma mark - IBActions
 
 - (IBAction)targetedUserAction:(UILongPressGestureRecognizer *)sender {
@@ -926,4 +941,8 @@
                                      }];
 }
 
+- (void)viewDidUnload {
+    [self setNewsView:nil];
+    [super viewDidUnload];
+}
 @end
