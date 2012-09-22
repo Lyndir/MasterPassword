@@ -91,6 +91,8 @@
 		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
 		DA4DA1DA1564471F00F6F596 /* libuicolor-utilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */; };
 		DA4DA1DB1564475E00F6F596 /* libscryptenc-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA79A9BB1557DB6F00BAA07A /* libscryptenc-ios.a */; };
+		DA4ECA2B160D94A80012ABB9 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4ECA26160D94A80012ABB9 /* libTestFlight.a */; };
+		DA4ECA2E160D94A80012ABB9 /* TestFlight.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA4ECA2A160D94A80012ABB9 /* TestFlight.plist */; };
 		DA55873F15E81D9E00860B4F /* iTunesArtwork-Rounded-73.png in Resources */ = {isa = PBXBuildFile; fileRef = DA55873E15E81D9E00860B4F /* iTunesArtwork-Rounded-73.png */; };
 		DA55878015E82C0300860B4F /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA55877F15E82C0300860B4F /* FacebookSDK.framework */; };
 		DA55878215E82C2B00860B4F /* FacebookSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DA55878115E82C2B00860B4F /* FacebookSDKResources.bundle */; };
@@ -779,10 +781,8 @@
 		DACABB8D1572A4A5008BA211 /* tip_basic_black_top_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACABB8B1572A4A4008BA211 /* tip_basic_black_top_right@2x.png */; };
 		DACABB901572B76A008BA211 /* tip_basic_black_top.png in Resources */ = {isa = PBXBuildFile; fileRef = DACABB8E1572B769008BA211 /* tip_basic_black_top.png */; };
 		DACABB911572B76A008BA211 /* tip_basic_black_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACABB8F1572B769008BA211 /* tip_basic_black_top@2x.png */; };
-		DAD18EF4160A760600D15088 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD3126215528C9C00A3F9ED /* libTestFlight.a */; };
 		DAD3126715528C9C00A3F9ED /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD3125F15528C9C00A3F9ED /* Crashlytics.framework */; };
 		DAD3126815528C9C00A3F9ED /* Crashlytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAD3126015528C9C00A3F9ED /* Crashlytics.plist */; };
-		DAD3126C15528C9C00A3F9ED /* TestFlight.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAD3126615528C9C00A3F9ED /* TestFlight.plist */; };
 		DAD3127215528CD200A3F9ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAD3129015528D1600A3F9ED /* Localytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAD3127D15528D0F00A3F9ED /* Localytics.plist */; };
 		DAD312BB1552977200A3F9ED /* UIColor+Expanded.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD312B71552977200A3F9ED /* UIColor+Expanded.h */; };
@@ -1110,6 +1110,11 @@
 		DA497BEA15E8C94300B52167 /* GTMOAuth2ViewTouch.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GTMOAuth2ViewTouch.xib; sourceTree = "<group>"; };
 		DA497BEB15E8C94300B52167 /* GTMObjC2Runtime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMObjC2Runtime.h; sourceTree = "<group>"; };
 		DA497BEC15E8C94300B52167 /* GTMObjC2Runtime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMObjC2Runtime.m; sourceTree = "<group>"; };
+		DA4ECA26160D94A80012ABB9 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		DA4ECA27160D94A80012ABB9 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		DA4ECA28160D94A80012ABB9 /* release_notes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.md; sourceTree = "<group>"; };
+		DA4ECA29160D94A80012ABB9 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		DA4ECA2A160D94A80012ABB9 /* TestFlight.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = TestFlight.plist; sourceTree = "<group>"; };
 		DA55873E15E81D9E00860B4F /* iTunesArtwork-Rounded-73.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork-Rounded-73.png"; sourceTree = "<group>"; };
 		DA55877F15E82C0300860B4F /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = "External/facebook-ios-sdk/build/FacebookSDK.framework"; sourceTree = "<group>"; };
 		DA55878115E82C2B00860B4F /* FacebookSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = FacebookSDKResources.bundle; path = "External/facebook-ios-sdk/build/FacebookSDK.framework/Versions/A/Resources/FacebookSDKResources.bundle"; sourceTree = "<group>"; };
@@ -1923,9 +1928,6 @@
 		DACABB8F1572B769008BA211 /* tip_basic_black_top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tip_basic_black_top@2x.png"; sourceTree = "<group>"; };
 		DAD3125F15528C9C00A3F9ED /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DAD3126015528C9C00A3F9ED /* Crashlytics.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Crashlytics.plist; sourceTree = "<group>"; };
-		DAD3126215528C9C00A3F9ED /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
-		DAD3126515528C9C00A3F9ED /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
-		DAD3126615528C9C00A3F9ED /* TestFlight.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = TestFlight.plist; sourceTree = "<group>"; };
 		DAD3127115528CD200A3F9ED /* libLocalytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLocalytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAD3127D15528D0F00A3F9ED /* Localytics.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Localytics.plist; sourceTree = "<group>"; };
 		DAD312B71552977200A3F9ED /* UIColor+Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Expanded.h"; path = "External/Pearl/External/uicolor-utilities/UIColor+Expanded.h"; sourceTree = SOURCE_ROOT; };
@@ -2110,7 +2112,7 @@
 				DAD3126715528C9C00A3F9ED /* Crashlytics.framework in Frameworks */,
 				93D399433EA75E50656040CB /* Twitter.framework in Frameworks */,
 				DA55878015E82C0300860B4F /* FacebookSDK.framework in Frameworks */,
-				DAD18EF4160A760600D15088 /* libTestFlight.a in Frameworks */,
+				DA4ECA2B160D94A80012ABB9 /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3473,9 +3475,11 @@
 		DAD3126115528C9C00A3F9ED /* TestFlight */ = {
 			isa = PBXGroup;
 			children = (
-				DAD3126215528C9C00A3F9ED /* libTestFlight.a */,
-				DAD3126515528C9C00A3F9ED /* TestFlight.h */,
-				DAD3126615528C9C00A3F9ED /* TestFlight.plist */,
+				DA4ECA26160D94A80012ABB9 /* libTestFlight.a */,
+				DA4ECA27160D94A80012ABB9 /* README.md */,
+				DA4ECA28160D94A80012ABB9 /* release_notes.md */,
+				DA4ECA29160D94A80012ABB9 /* TestFlight.h */,
+				DA4ECA2A160D94A80012ABB9 /* TestFlight.plist */,
 			);
 			path = TestFlight;
 			sourceTree = "<group>";
@@ -4602,7 +4606,6 @@
 				DAB8D93915036BF700CED3BC /* logo-bare.png in Resources */,
 				DAFE4A5A1503982E003ABA7C /* Pearl.strings in Resources */,
 				DAD3126815528C9C00A3F9ED /* Crashlytics.plist in Resources */,
-				DAD3126C15528C9C00A3F9ED /* TestFlight.plist in Resources */,
 				DAD3129015528D1600A3F9ED /* Localytics.plist in Resources */,
 				DA0A1D0515690A9A0092735D /* Default.png in Resources */,
 				DA0A1D0615690A9A0092735D /* Default@2x.png in Resources */,
@@ -4687,6 +4690,7 @@
 				DA6061D915F20C0900097266 /* page-gorillas@2x.png in Resources */,
 				DA3EE946160145C700C68F6D /* Default-568h.png in Resources */,
 				DA3EE947160145C700C68F6D /* Default-568h@2x.png in Resources */,
+				DA4ECA2E160D94A80012ABB9 /* TestFlight.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
