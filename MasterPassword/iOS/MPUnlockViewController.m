@@ -135,7 +135,7 @@
 
 - (void)viewDidLoad {
     
-    [self.newsView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"file://localhost/Users/lhunath/Documents/workspace/lyndir/MasterPassword/Site/news.html"]]];
+    [self.newsView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.masterpasswordapp.com/news.html"]]];
 
     self.avatarToUser     = [NSMutableDictionary dictionaryWithCapacity:3];
     self.fbOperationQueue = [NSOperationQueue new];
