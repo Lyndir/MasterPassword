@@ -724,21 +724,21 @@
                              [self performSegueWithIdentifier:@"OtherApps" sender:self];
                              break;
                          }
-#if defined(ADHOC) && defined(TESTFLIGHT_SDK_VERSION)
-                         case 4: {
-                             inf(@"Action: Feedback via TestFlight");
-                             [TestFlight openFeedbackView];
-                             break;
-                         }
-                         case 5:
-#else
+//#if defined(ADHOC) && defined(TESTFLIGHT_SDK_VERSION)
+//                         case 4: {
+//                             inf(@"Action: Feedback via TestFlight");
+//                             [TestFlight openFeedbackView];
+//                             break;
+//                         }
+//                         case 5:
+//#else
                          case 4: {
                              inf(@"Action: Feedback via Mail");
                              [[MPAppDelegate get] showFeedbackWithLogs:YES forVC:self];
                              break;
                          }
                          case 5:
-#endif
+//#endif
                          {
                              inf(@"Action: Sign out");
                              [[MPAppDelegate get] signOutAnimated:YES];
