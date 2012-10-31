@@ -6,10 +6,8 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import <Crashlytics/Crashlytics.h>
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-#import "LocalyticsSession.h"
 
 @implementation MPAppDelegate_Shared (Key)
 
@@ -101,7 +99,9 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
                 // Migrate existing elements.
                 MPKey *recoverKey = nil;
+#ifdef PEARL_UIKIT
                 PearlAlert *activityAlert = [PearlAlert showActivityWithTitle:PearlString(@"Migrating %d sites...", [user.elements count])];
+#endif
 
                 for (MPElementEntity *element in user.elements) {
                     if (element.type & MPElementTypeClassStored && ![element contentUsingKey:tryKey]) {
@@ -111,6 +111,8 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
                         while (!content) {
                             __block NSString *masterPassword = nil;
+                            
+#ifdef PEARL_UIKIT
                             dispatch_group_t recoverPasswordGroup = dispatch_group_create();
                             dispatch_group_enter(recoverPasswordGroup);
                             [PearlAlert showAlertWithTitle:@"Enter Old Master Password"
@@ -130,6 +132,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                                              }
                                          } cancelTitle:@"Don't Migrate" otherTitles:@"Migrate", nil];
                             dispatch_group_wait(recoverPasswordGroup, DISPATCH_TIME_FOREVER);
+#endif
 
                             if (!masterPassword)
                                 // Don't Migrate
@@ -149,7 +152,9 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                     }
                 }
                 [[MPAppDelegate_Shared get] saveContext];
+#ifdef PEARL_UIKIT
                 [activityAlert dismissAlert];
+#endif
             }
     }
 
@@ -190,7 +195,9 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 #ifdef TESTFLIGHT_SDK_VERSION
             [TestFlight passCheckpoint:MPCheckpointSignInFailed];
 #endif
+#ifdef LOCALYTICS
             [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSignInFailed attributes:nil];
+#endif
         }
 
         return NO;
@@ -203,12 +210,14 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     }
 
     @try {
-        if ([[MPiOSConfig get].sendInfo boolValue]) {
+        if ([[MPConfig get].sendInfo boolValue]) {
 #ifdef TESTFLIGHT_SDK_VERSION
             [TestFlight addCustomEnvironmentInformation:user.userID forKey:@"username"];
 #endif
+#ifdef CRASHLYTICS
             [Crashlytics setObjectValue:user.userID forKey:@"username"];
             [Crashlytics setUserName:user.userID];
+#endif
         }
     }
     @catch (id exception) {
@@ -227,7 +236,9 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPCheckpointSignedIn];
 #endif
+#ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSignedIn attributes:nil];
+#endif
 
     return YES;
 }

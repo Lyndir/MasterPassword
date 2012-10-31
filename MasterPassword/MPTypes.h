@@ -68,7 +68,7 @@ typedef enum {
 #define MPCheckpointAppGorillas               @"MPCheckpointAppGorillas"
 #define MPCheckpointAppDeBlock                @"MPCheckpointAppDeBlock"
 
-#define MPNotificationSignedIn                @"MPNotificationKeySet"
-#define MPNotificationSignedOut               @"MPNotificationKeyUnset"
+#define MPNotificationSignedIn                @"MPNotificationSignedIn"
+#define MPNotificationSignedOut               @"MPNotificationSignedOut"
 #define MPNotificationKeyForgotten            @"MPNotificationKeyForgotten"
 #define MPNotificationElementUpdated          @"MPNotificationElementUpdated"

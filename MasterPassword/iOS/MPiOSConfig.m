@@ -14,8 +14,7 @@
     if (!(self = [super init]))
         return self;
 
-    [self.defaults registerDefaults:@{NSStringFromSelector(@selector(sendInfo)): @NO,
-                                                   NSStringFromSelector(@selector(helpHidden)): @NO,
+    [self.defaults registerDefaults:@{             NSStringFromSelector(@selector(helpHidden)): @NO,
                                                    NSStringFromSelector(@selector(siteInfoHidden)): @YES,
                                                    NSStringFromSelector(@selector(showQuickStart)): @YES,
                                                    NSStringFromSelector(@selector(iTunesID)): @"510296984",

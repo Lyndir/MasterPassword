@@ -13,11 +13,13 @@
     NSString *_content;
 }
 
-@property (strong) NSString *content;
+@property (nonatomic, strong) NSString *content;
 
-@property (weak) IBOutlet NSTextField *siteField;
-@property (weak) IBOutlet NSTextField *contentField;
-@property (weak) IBOutlet NSTextField *tipField;
+@property (nonatomic, weak) IBOutlet NSTextField *siteField;
+@property (nonatomic, weak) IBOutlet NSTextField *contentField;
+@property (nonatomic, weak) IBOutlet NSTextField *tipField;
+@property (nonatomic, weak) IBOutlet NSView *contentContainer;
+@property (nonatomic, weak) IBOutlet NSProgressIndicator *progressView;
 
 - (void)unlock;
 

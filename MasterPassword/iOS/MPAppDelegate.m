@@ -383,9 +383,7 @@
     inf(@"Re-activated");
     [[MPAppDelegate get] checkConfig];
 
-    if (FBSession.activeSession.state == FBSessionStateCreatedOpening)
-     // An old Facebook Login session that wasn't finished.  Clean it up.
-        [FBSession.activeSession close];
+    [FBSession.activeSession handleDidBecomeActive];
 
     [[LocalyticsSession sharedLocalyticsSession] resume];
     [[LocalyticsSession sharedLocalyticsSession] upload];

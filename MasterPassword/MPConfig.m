@@ -6,10 +6,11 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
+#import "MPConfig.h"
 #import "MPAppDelegate.h"
 
 @implementation MPConfig
-@dynamic rememberLogin, iCloud, iCloudDecided;
+@dynamic sendInfo, rememberLogin, iCloud, iCloudDecided;
 
 - (id)init {
 
@@ -18,6 +19,7 @@
 
     [self.defaults registerDefaults:@{NSStringFromSelector(@selector(askForReviews)): @YES,
 
+                                                   NSStringFromSelector(@selector(sendInfo)): @NO,
                                                    NSStringFromSelector(@selector(rememberLogin)): @NO,
                                                    NSStringFromSelector(@selector(iCloud)): @NO,
                                                    NSStringFromSelector(@selector(iCloudDecided)): @NO}];

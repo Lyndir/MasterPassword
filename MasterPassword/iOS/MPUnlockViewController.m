@@ -935,8 +935,10 @@
 
 - (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI {
 
-    return [FBSession openActiveSessionWithPermissions:nil allowLoginUI:allowLoginUI
-                                     completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
+    return [FBSession openActiveSessionWithPublishPermissions:nil
+                                              defaultAudience:FBSessionDefaultAudienceEveryone
+                                                 allowLoginUI:YES
+                                            completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
                                          [self sessionStateChanged:session state:state error:error];
                                      }];
 }

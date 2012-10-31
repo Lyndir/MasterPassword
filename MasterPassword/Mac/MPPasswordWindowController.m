@@ -58,9 +58,9 @@
 
 - (void)unlock {
 
-    if (![MPAppDelegate get].key)
-     // Try and load the key from the keychain.
-        [[MPAppDelegate get] loadStoredKey];
+    if ([[MPAppDelegate get] signInAsUser:[MPAppDelegate get].activeUser usingMasterPassword:nil])
+        // Load the key from the keychain.
+        return;
 
     if (![MPAppDelegate get].key)
      // Ask the user to set the key through his master password.
@@ -69,8 +69,8 @@
                 return;
 
             NSAlert           *alert         = [NSAlert alertWithMessageText:@"Master Password is locked."
-                                                               defaultButton:@"Unlock" alternateButton:@"Change" otherButton:@"Quit"
-                                                   informativeTextWithFormat:@"Your master password is required to unlock the application."];
+                                                               defaultButton:@"Unlock" alternateButton:@"Change" otherButton:@"Cancel"
+                                                   informativeTextWithFormat:@"The master password is required to unlock the application for:\n\n%@", [MPAppDelegate get].activeUser.name];
             NSSecureTextField *passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect(0, 0, 200, 22)];
             [alert setAccessoryView:passwordField];
             [alert layout];
@@ -94,17 +94,31 @@
                                                                                              @"You can always change back to your current master password later.\n"
                                                                                              @"Your current sites and passwords will then become available again."] runModal]
              == 1)
-                [[MPAppDelegate get] forgetKey];
+                [[MPAppDelegate get] forgetSavedKeyFor:[MPAppDelegate get].activeUser];
             break;
 
         case NSAlertOtherReturn:
-            // "Quit" button.
-            [[NSApplication sharedApplication] terminate:self];
+            // "Cancel" button.
+            [self.window close];
             return;
 
-        case NSAlertDefaultReturn:
+        case NSAlertDefaultReturn: {
             // "Unlock" button.
-            [[MPAppDelegate get] tryMasterPassword:[(NSSecureTextField *)alert.accessoryView stringValue]];
+            self.contentContainer.alphaValue = 0;
+            [self.progressView startAnimation:nil];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                BOOL success = [[MPAppDelegate get] signInAsUser:[MPAppDelegate get].activeUser usingMasterPassword:[(NSSecureTextField *)alert.accessoryView stringValue]];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.progressView stopAnimation:nil];
+
+                    if (success)
+                        self.contentContainer.alphaValue = 1;
+                    else
+                        [self.window close];
+                });
+            });
+        }
     }
 }
 
@@ -112,7 +126,7 @@
  forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger *)index {
 
     NSString *query = [[control stringValue] substringWithRange:charRange];
-    if (![query length] || ![MPAppDelegate get].keyID)
+    if (![query length] || ![MPAppDelegate get].key)
         return nil;
 
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
@@ -121,7 +135,7 @@
                                                                     query, query, [MPAppDelegate get].activeUser];
 
     NSError *error = nil;
-    self.siteResults = [[MPAppDelegate managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+    self.siteResults = [[MPAppDelegate managedObjectContextIfReady] executeFetchRequest:fetchRequest error:&error];
     if (error)
     err(@"Couldn't fetch elements: %@", error);
 

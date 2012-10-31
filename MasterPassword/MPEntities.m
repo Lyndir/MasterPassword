@@ -132,8 +132,8 @@
 
 - (NSString *)debugDescription {
 
-    return PearlString(@"{%@: name=%@, user=%@, type=%d, uses=%d, lastUsed=%@, version=%d, loginName=%@, requiresExplicitMigration=%d}",
-                       NSStringFromClass([self class]), self.name, self.user.name, self.type, self.uses, self.lastUsed, self.version,
+    return PearlString(@"{%@: name=%@, user=%@, type=%d, uses=%ld, lastUsed=%@, version=%ld, loginName=%@, requiresExplicitMigration=%d}",
+                       NSStringFromClass([self class]), self.name, self.user.name, self.type, (long)self.uses, self.lastUsed, (long)self.version,
                        self.loginName, self.requiresExplicitMigration);
 }
 
@@ -141,9 +141,9 @@
 
     while (self.version < MPAlgorithmDefaultVersion)
         if ([MPAlgorithmForVersion(self.version + 1) migrateElement:self explicit:explicit])
-        inf(@"%@ migration to version: %d succeeded for element: %@", explicit? @"Explicit": @"Automatic", self.version + 1, self);
+        inf(@"%@ migration to version: %ld succeeded for element: %@", explicit? @"Explicit": @"Automatic", (long)self.version + 1, self);
         else {
-            wrn(@"%@ migration to version: %d failed for element: %@", explicit? @"Explicit": @"Automatic", self.version + 1, self);
+            wrn(@"%@ migration to version: %ld failed for element: %@", explicit? @"Explicit": @"Automatic", (long)self.version + 1, self);
             return NO;
         }
 

@@ -26,7 +26,7 @@ id<MPAlgorithm> MPAlgorithmForVersion(NSUInteger version) {
 
     id<MPAlgorithm> algorithm = [versionToAlgorithm objectForKey:@(version)];
     if (!algorithm)
-        if ((algorithm = [NSClassFromString(PearlString(@"MPAlgorithmV%u", version)) new]))
+        if ((algorithm = [NSClassFromString(PearlString(@"MPAlgorithmV%lu", (unsigned long)version)) new]))
             [versionToAlgorithm setObject:algorithm forKey:@(version)];
 
     return algorithm;

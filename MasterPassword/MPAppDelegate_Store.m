@@ -7,7 +7,6 @@
 //
 
 #import "MPAppDelegate_Store.h"
-#import "LocalyticsSession.h"
 
 @implementation MPAppDelegate_Shared (Store)
 
@@ -136,9 +135,11 @@
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:iCloudEnabled? MPCheckpointCloudEnabled: MPCheckpointCloudDisabled];
 #endif
+#ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloud attributes:@{
     @"enabled": iCloudEnabled? @"YES": @"NO"
     }];
+#endif
 
     [MPConfig get].iCloud = @(iCloudEnabled);
 }
@@ -151,11 +152,13 @@
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:PearlString(MPCheckpointMPErrorUbiquity @"_%d", cause)];
 #endif
+#ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointMPErrorUbiquity attributes:@{
     @"cause": @(cause),
     @"error.domain": error.domain,
     @"error.code": @(error.code)
     }];
+#endif
 
     switch (cause) {
         case UbiquityStoreManagerErrorCauseDeleteStore:
@@ -172,7 +175,9 @@
 #ifdef TESTFLIGHT_SDK_VERSION
                 [TestFlight passCheckpoint:MPCheckpointLocalStoreReset];
 #endif
+#ifdef LOCALYTICS
                 [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointLocalStoreReset attributes:nil];
+#endif
                 manager.hardResetEnabled = YES;
                 [manager hardResetLocalStorage];
 
@@ -190,7 +195,9 @@
 #ifdef TESTFLIGHT_SDK_VERSION
                 [TestFlight passCheckpoint:MPCheckpointCloudStoreReset];
 #endif
+#ifdef LOCALYTICS
                 [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloudStoreReset attributes:nil];
+#endif
                 manager.hardResetEnabled = YES;
                 [manager hardResetCloudStorage];
                 break;
@@ -276,7 +283,7 @@
                     return MPImportResultInternalError;
                 }
                 if ([users count] > 1) {
-                    err(@"While looking for user: %@, found more than one: %u", importUserName, [users count]);
+                    err(@"While looking for user: %@, found more than one: %lu", importUserName, (unsigned long)[users count]);
                     return MPImportResultInternalError;
                 }
 
@@ -337,7 +344,7 @@
     }
 
     // Ask for confirmation to import these sites and the master password of the user.
-    inf(@"Importing %u sites, deleting %u sites, for user: %@", [importedSiteElements count], [elementsToDelete count], [MPUserEntity idFor:importUserName]);
+    inf(@"Importing %lu sites, deleting %lu sites, for user: %@", (unsigned long)[importedSiteElements count], (unsigned long)[elementsToDelete count], [MPUserEntity idFor:importUserName]);
     NSString *userMasterPassword = userPassword(user.name, [importedSiteElements count], [elementsToDelete count]);
     if (!userMasterPassword) {
         inf(@"Import cancelled.");
@@ -424,7 +431,9 @@
 #ifdef TESTFLIGHT_SDK_VERSION
         [TestFlight passCheckpoint:MPCheckpointSitesImported];
 #endif
+#ifdef LOCALYTICS
         [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSitesImported attributes:nil];
+#endif
 
         return MPImportResultSuccess;
     }
@@ -480,16 +489,18 @@
                     content = element.exportContent;
         }
 
-        [export appendFormat:@"%@  %8d  %8s  %20s\t%@\n",
-                             [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed], uses,
-                             [PearlString(@"%u:%u", type, version) UTF8String], [name UTF8String], content
+        [export appendFormat:@"%@  %8ld  %8s  %20s\t%@\n",
+                             [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed], (long)uses,
+                             [PearlString(@"%u:%lu", type, (unsigned long)version) UTF8String], [name UTF8String], content
          ? content: @""];
     }
 
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPCheckpointSitesExported];
 #endif
+#ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSitesExported attributes:nil];
+#endif
 
     return export;
 }

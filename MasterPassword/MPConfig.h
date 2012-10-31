@@ -10,6 +10,7 @@
 
 @interface MPConfig : PearlConfig
 
+@property (nonatomic, retain) NSNumber *sendInfo;
 @property (nonatomic, retain) NSNumber *rememberLogin;
 
 @property (nonatomic, retain) NSNumber *iCloud;
