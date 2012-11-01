@@ -1,5 +1,5 @@
 //
-//  MPConfig.h
+//  MPMacConfig.h
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 02/01/12.
@@ -9,6 +9,8 @@
 #import "MPConfig.h"
 
 @interface MPMacConfig : MPConfig
+
+@property (nonatomic, retain) NSString *usedUserName;
 
 + (MPMacConfig *)get;
 

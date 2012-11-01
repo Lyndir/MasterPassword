@@ -33,7 +33,7 @@ static EventHotKeyID MPShowHotKey = {.signature = 'show', .id = 1};
 
 + (void)initialize {
 
-    [MPConfig get];
+    [MPMacConfig get];
 
 #ifdef DEBUG
     [PearlLogger get].printLevel = PearlLogLevelTrace;
@@ -71,12 +71,15 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextIfReady];
     if (!moc) {
         [self.createUserItem setEnabled:NO];
+        self.createUserItem.toolTip = @"Please wait until the app is fully loaded.";
         [[self.usersItem.submenu addItemWithTitle:@"Loading..." action:NULL keyEquivalent:@""] setEnabled:NO];
         
         return;
     }
 
     [self.createUserItem setEnabled:YES];
+    self.createUserItem.toolTip = nil;
+
     [moc performBlockAndWait:^{
         NSArray        *users = nil;
         NSError        *error        = nil;
@@ -91,6 +94,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             [userItem setTarget:self];
             [userItem setRepresentedObject:user];
             [[self.usersItem submenu] addItem:userItem];
+
+            if ([user.name isEqualToString:[MPMacConfig get].usedUserName])
+                [self selectUser:userItem];
         }
     }];
 }
@@ -100,18 +106,16 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     NSAssert1([[item representedObject] isKindOfClass:[MPUserEntity class]], @"Not a user: %@", item.representedObject);
     
     self.activeUser = item.representedObject;
-
-    [[[self.usersItem submenu] itemArray] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [obj setState:NSOffState];
-    }];
-    item.state = NSOnState;
 }
 
 - (void)showMenu {
 
     self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
     self.savePasswordItem.state     = [MPAppDelegate get].activeUser.saveKey? NSOnState: NSOffState;
-    self.showItem.enabled           = ![self.passwordWindow.window isVisible];
+    if (!(self.showItem.enabled = ![self.passwordWindow.window isVisible]))
+        self.showItem.toolTip = @"Master Password is already showing.";
+    else
+        self.showItem.toolTip = nil;
 
     [self.statusItem popUpStatusItemMenu:self.statusMenu];
 }
@@ -130,8 +134,13 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         [self.storeManager useiCloudStore:sender.state == NSOffState alertUser:YES];
     if (sender == rememberPasswordItem)
         [MPConfig get].rememberLogin = [NSNumber numberWithBool:![[MPConfig get].rememberLogin boolValue]];
-    if (sender == savePasswordItem)
-        [MPAppDelegate get].activeUser.saveKey = ![MPAppDelegate get].activeUser.saveKey;
+    if (sender == savePasswordItem) {
+        if (([MPAppDelegate get].activeUser.saveKey = ![MPAppDelegate get].activeUser.saveKey))
+            [[MPAppDelegate get] storeSavedKeyFor:[MPAppDelegate get].activeUser];
+        else
+            [[MPAppDelegate get] forgetSavedKeyFor:[MPAppDelegate get].activeUser];
+        [[MPAppDelegate get] saveContext];
+    }
 }
 
 - (IBAction)newUser:(NSMenuItem *)sender {
@@ -150,30 +159,29 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         self.savePasswordItem.state     = [MPAppDelegate get].activeUser.saveKey? NSOnState: NSOffState;
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-
-    if ([keyPath isEqualToString:@"key"]) {
-        if (self.key)
-            [self.lockItem setEnabled:YES];
-        else {
-            [self.lockItem setEnabled:NO];
-            [self.passwordWindow close];
-        }
-    }
-}
-
-- (NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)window {
-
-    return [[self managedObjectContextIfReady] undoManager];
-}
-
 #pragma mark - NSApplicationDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
     // Setup delegates and listeners.
     [MPConfig get].delegate = self;
-    [self addObserver:self forKeyPath:@"key" options:0 context:nil];
+    [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
+        if (self.key) {
+            [self.lockItem setEnabled:YES];
+            self.lockItem.toolTip = nil;
+
+            [self.savePasswordItem setEnabled:YES];
+            self.savePasswordItem.toolTip = nil;
+        } else {
+            [self.lockItem setEnabled:NO];
+            self.lockItem.toolTip = @"Master Password is currently locked.";
+
+            [self.savePasswordItem setEnabled:NO];
+            self.savePasswordItem.toolTip = @"First unlock by selecting your user and showing the Master Password window.";
+
+            [self.passwordWindow close];
+        }
+    } forKeyPath:@"key" options:NSKeyValueObservingOptionInitial context:nil];
 
     // Initially, use iCloud.
     if ([[MPConfig get].firstRun boolValue])
@@ -185,7 +193,17 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     self.statusItem.highlightMode  = YES;
     self.statusItem.target         = self;
     self.statusItem.action         = @selector(showMenu);
-    
+
+    [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
+        [[[self.usersItem submenu] itemArray] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if ([obj representedObject] && [obj representedObject] == self.activeUser)
+                [obj setState:NSOnState];
+            else
+                [obj setState:NSOffState];
+        }];
+
+        [MPMacConfig get].usedUserName = self.activeUser.name;
+    }           forKeyPath:@"activeUser" options:0 context:nil];
     [[NSNotificationCenter defaultCenter] addObserverForName:PersistentStoreDidChange object:nil queue:nil usingBlock:
      ^(NSNotification *note) {
          [self updateUsers];
@@ -217,11 +235,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
 
-    static BOOL firstTime = YES;
-    if (firstTime)
-        firstTime = NO;
-    else
-        [self.passwordWindow showWindow:self];
+    [self.passwordWindow showWindow:self];
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification {
@@ -282,7 +296,10 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     [super ubiquityStoreManager:manager didSwitchToiCloud:iCloudEnabled];
 
     self.useICloudItem.state   = iCloudEnabled? NSOnState: NSOffState;
-    self.useICloudItem.enabled = !iCloudEnabled;
+    if (!(self.useICloudItem.enabled = !iCloudEnabled))
+        self.useICloudItem.toolTip = @"iCloud is required in this version.  Future versions will work without iCloud as well.";
+    else
+        self.useICloudItem.toolTip = nil;
     
     if (![[MPConfig get].iCloudDecided boolValue]) {
         if (iCloudEnabled)

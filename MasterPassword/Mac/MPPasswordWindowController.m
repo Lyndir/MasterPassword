@@ -17,6 +17,8 @@
 
 @property (nonatomic, strong) NSString                      *oldSiteName;
 @property (nonatomic, strong) NSArray /* MPElementEntity */ *siteResults;
+@property (nonatomic) BOOL inProgress;
+
 
 @end
 
@@ -25,6 +27,8 @@
 @synthesize siteField;
 @synthesize contentField;
 @synthesize tipField;
+@synthesize inProgress = _inProgress;
+
 
 - (void)windowDidLoad {
 
@@ -33,7 +37,8 @@
 
     [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:self.window queue:nil
                                                   usingBlock:^(NSNotification *note) {
-                                                      [self unlock];
+                                                      if (!self.inProgress)
+                                                          [self unlock];
                                                       [self.siteField selectText:self];
                                                   }];
     [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillCloseNotification object:self.window queue:nil
@@ -106,9 +111,11 @@
             // "Unlock" button.
             self.contentContainer.alphaValue = 0;
             [self.progressView startAnimation:nil];
+            self.inProgress = YES;
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
                 BOOL success = [[MPAppDelegate get] signInAsUser:[MPAppDelegate get].activeUser usingMasterPassword:[(NSSecureTextField *)alert.accessoryView stringValue]];
-                
+                self.inProgress = NO;
+
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.progressView stopAnimation:nil];
 

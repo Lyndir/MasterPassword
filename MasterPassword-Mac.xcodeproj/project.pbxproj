@@ -6115,7 +6115,7 @@
 				DAF2369B163B24D5008AF5B5 /* MasterPassword 2.xcdatamodel */,
 				DAF2369C163B24D5008AF5B5 /* MasterPassword 3.xcdatamodel */,
 			);
-			currentVersion = DAF2369A163B24D5008AF5B5 /* MasterPassword 1.xcdatamodel */;
+			currentVersion = DAF2369C163B24D5008AF5B5 /* MasterPassword 3.xcdatamodel */;
 			path = MasterPassword.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

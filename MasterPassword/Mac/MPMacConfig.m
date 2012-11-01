@@ -1,5 +1,5 @@
 //
-//  MPConfig.m
+//  MPMacConfig.m
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 02/01/12.
@@ -7,6 +7,8 @@
 //
 
 @implementation MPMacConfig
+
+@dynamic usedUserName;
 
 - (id)init {
 
