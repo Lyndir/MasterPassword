@@ -31,6 +31,31 @@
     return 0;
 }
 
+- (void)migrateUser:(MPUserEntity *)user completion:(void(^)(BOOL userRequiresNewMigration))completion {
+    
+    BOOL didRequireExplicitMigration = user.requiresExplicitMigration;
+    [user.managedObjectContext performBlock:^void() {
+        NSError        *error            = nil;
+        NSFetchRequest *migrationRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
+        migrationRequest.predicate = [NSPredicate predicateWithFormat:@"version_ < %d", MPAlgorithmDefaultVersion];
+        NSArray *migrationElements = [user.managedObjectContext executeFetchRequest:migrationRequest error:&error];
+        if (!migrationElements) {
+            err(@"While looking for elements to migrate: %@", error);
+            return;
+        }
+        
+        if (didRequireExplicitMigration)
+            user.requiresExplicitMigration     = NO;
+        for (MPElementEntity *migrationElement in migrationElements)
+            if (![migrationElement migrateExplicitly:NO])
+                user.requiresExplicitMigration = YES;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completion(!didRequireExplicitMigration && user.requiresExplicitMigration);
+        });
+    }];
+}
+
 - (BOOL)migrateElement:(MPElementEntity *)element explicit:(BOOL)explicit {
 
     if (element.version != [self version] - 1)

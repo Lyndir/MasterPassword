@@ -178,30 +178,11 @@
         }];
 
     if ([MPAppDelegate get].activeUser)
-        [[MPAppDelegate get].managedObjectContextIfReady performBlock:^void() {
-            NSError        *error            = nil;
-            NSFetchRequest *migrationRequest = [NSFetchRequest
-             fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
-            migrationRequest.predicate = [NSPredicate predicateWithFormat:@"version_ < %d", MPAlgorithmDefaultVersion];
-            NSArray *migrationElements = [[MPAppDelegate get].managedObjectContextIfReady executeFetchRequest:migrationRequest
-                                                                                                        error:&error];
-            if (!migrationElements) {
-                err(@"While looking for elements to migrate: %@", error);
-                return;
-            }
-
-            BOOL didRequireExplicitMigration = [MPAppDelegate_Shared get].activeUser.requiresExplicitMigration;
-            if (didRequireExplicitMigration)
-                [MPAppDelegate_Shared get].activeUser.requiresExplicitMigration     = NO;
-            for (MPElementEntity *migrationElement in migrationElements)
-                if (![migrationElement migrateExplicitly:NO])
-                    [MPAppDelegate_Shared get].activeUser.requiresExplicitMigration = YES;
-
-            if (!didRequireExplicitMigration && [MPAppDelegate_Shared get].activeUser.requiresExplicitMigration)
+        [MPAlgorithmDefault migrateUser:[MPAppDelegate get].activeUser completion:^(BOOL userRequiresNewMigration) {
+            if (userRequiresNewMigration)
                 [UIView animateWithDuration:0.3f animations:^{
                     self.outdatedAlertContainer.alpha = 1;
                 }];
-
         }];
 
     [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Main"];
@@ -794,6 +775,7 @@
 - (void)didSelectElement:(MPElementEntity *)element {
 
     inf(@"Selected: %@", element.name);
+    dbg(@"Element:\n%@", [element debugDescription]);
 
     [self closeAlert];
 

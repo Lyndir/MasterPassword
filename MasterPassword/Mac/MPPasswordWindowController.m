@@ -10,8 +10,6 @@
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-#import "MPElementEntity.h"
-#import "MPElementGeneratedEntity.h"
 
 @interface MPPasswordWindowController ()
 
@@ -35,6 +33,19 @@
     [self setContent:@""];
     [self.tipField setStringValue:@""];
 
+    [[MPAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
+        [self.userLabel setStringValue:PearlString(@"%@'s password for:", [MPAppDelegate get].activeUser.name)];
+    }                          forKeyPath:@"activeUser" options:NSKeyValueObservingOptionInitial context:nil];
+    [[MPAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
+        if ([MPAppDelegate get].activeUser && [MPAppDelegate get].key)
+            [MPAlgorithmDefault migrateUser:[MPAppDelegate get].activeUser completion:^(BOOL userRequiresNewMigration) {
+                if (userRequiresNewMigration)
+                    [NSAlert alertWithMessageText:@"Migration Needed" defaultButton:@"OK" alternateButton:nil otherButton:nil
+                        informativeTextWithFormat:@"Certain sites require explicit migration to get updated to the latest version of the "
+                         @"Master Password algorithm.  For these sites, a migration button will appear.  Migrating these sites will cause "
+                         @"their passwords to change.  You'll need to update your profile for that site with the new password."];
+            }];
+    }                          forKeyPath:@"key" options:NSKeyValueObservingOptionInitial context:nil];
     [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:self.window queue:nil
                                                   usingBlock:^(NSNotification *note) {
                                                       if (!self.inProgress)
@@ -56,6 +67,10 @@
 
                                                       if (shouldComplete)
                                                           [[[note userInfo] objectForKey:@"NSFieldEditor"] complete:nil];
+                                                  }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPNotificationSignedOut object:nil queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [self.window close];
                                                   }];
 
     [super windowDidLoad];
@@ -98,8 +113,11 @@
                                                                                              @"If you log in with a different master password, your current sites will be unavailable.\n\n"
                                                                                              @"You can always change back to your current master password later.\n"
                                                                                              @"Your current sites and passwords will then become available again."] runModal]
-             == 1)
+             == 1) {
+                [MPAppDelegate get].activeUser.keyID = nil;
                 [[MPAppDelegate get] forgetSavedKeyFor:[MPAppDelegate get].activeUser];
+                [[MPAppDelegate get] signOutAnimated:YES];
+            }
             break;
 
         case NSAlertOtherReturn:
@@ -126,6 +144,9 @@
                 });
             });
         }
+
+        default:
+            break;
     }
 }
 
@@ -164,8 +185,8 @@
         [[NSPasteboard generalPasteboard] declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
         if ([[NSPasteboard generalPasteboard] setString:self.content forType:NSPasteboardTypeString]) {
             self.tipField.alphaValue = 1;
-            [self.tipField setStringValue:@"Copied!"];
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0f * NSEC_PER_SEC));
+            [self.tipField setStringValue:@"Copied!  Hit ⎋ (ESC) to close window."];
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC));
             dispatch_after(popTime, dispatch_get_main_queue(), ^{
                 [NSAnimationContext beginGrouping];
                 [[NSAnimationContext currentContext] setDuration:0.2f];
@@ -197,18 +218,12 @@
 
     _content = content;
 
-    NSShadow *shadow = [NSShadow new];
-    shadow.shadowColor      = [NSColor colorWithDeviceWhite:0.0f alpha:0.6f];
-    shadow.shadowOffset     = NSMakeSize(1.0f, -1.0f);
-    shadow.shadowBlurRadius = 1.2f;
-
     NSMutableParagraphStyle *paragraph = [NSMutableParagraphStyle new];
     paragraph.alignment = NSCenterTextAlignment;
 
     [self.contentField setAttributedStringValue:
                         [[NSAttributedString alloc] initWithString:_content
                                                         attributes:[[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                                         shadow, NSShadowAttributeName,
                                                          paragraph, NSParagraphStyleAttributeName,
                                                          nil]]];
 }
@@ -222,6 +237,8 @@
         return NO;
     }
 
+    dbg(@"element:\n%@", [result debugDescription]);
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSString *description = [result.content description];
         if (!description)
@@ -229,7 +246,7 @@
 
         dispatch_async(dispatch_get_main_queue(), ^{
             [self setContent:description];
-            [self.tipField setStringValue:@"Hit enter to copy the password."];
+            [self.tipField setStringValue:@"Hit ⌤ (ENTER) to copy the password."];
             self.tipField.alphaValue = 1;
         });
     });

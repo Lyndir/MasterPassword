@@ -20,6 +20,4 @@
 
 + (MPAppDelegate_Shared *)get;
 
-- (NSURL *)applicationFilesDirectory;
-
 @end

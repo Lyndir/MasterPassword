@@ -47,27 +47,19 @@
 			<object class="NSMenu" id="764588027">
 				<string key="NSTitle"/>
 				<array class="NSMutableArray" key="NSMenuItems">
-					<object class="NSMenuItem" id="846612332">
-						<reference key="NSMenu" ref="764588027"/>
-						<string key="NSTitle">Show</string>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<object class="NSCustomResource" key="NSOnImage" id="552246001">
-							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">NSMenuCheckmark</string>
-						</object>
-						<object class="NSCustomResource" key="NSMixedImage" id="752047669">
-							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">NSMenuMixedState</string>
-						</object>
-					</object>
 					<object class="NSMenuItem" id="11982480">
 						<reference key="NSMenu" ref="764588027"/>
 						<string key="NSTitle">Users</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="552246001"/>
-						<reference key="NSMixedImage" ref="752047669"/>
+						<object class="NSCustomResource" key="NSOnImage" id="269450960">
+							<string key="NSClassName">NSImage</string>
+							<string key="NSResourceName">NSMenuCheckmark</string>
+						</object>
+						<object class="NSCustomResource" key="NSMixedImage" id="977440657">
+							<string key="NSClassName">NSImage</string>
+							<string key="NSResourceName">NSMenuMixedState</string>
+						</object>
 						<string key="NSAction">submenuAction:</string>
 						<object class="NSMenu" key="NSSubmenu" id="934187555">
 							<string key="NSTitle">Users</string>
@@ -78,8 +70,8 @@
 									<string key="NSTitle">New User</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="552246001"/>
-									<reference key="NSMixedImage" ref="752047669"/>
+									<reference key="NSOnImage" ref="269450960"/>
+									<reference key="NSMixedImage" ref="977440657"/>
 								</object>
 								<object class="NSMenuItem" id="925131766">
 									<reference key="NSMenu" ref="934187555"/>
@@ -88,8 +80,8 @@
 									<string key="NSTitle"/>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="552246001"/>
-									<reference key="NSMixedImage" ref="752047669"/>
+									<reference key="NSOnImage" ref="269450960"/>
+									<reference key="NSMixedImage" ref="977440657"/>
 								</object>
 							</array>
 						</object>
@@ -99,8 +91,8 @@
 						<string key="NSTitle">Preferences</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="552246001"/>
-						<reference key="NSMixedImage" ref="752047669"/>
+						<reference key="NSOnImage" ref="269450960"/>
+						<reference key="NSMixedImage" ref="977440657"/>
 						<string key="NSAction">submenuAction:</string>
 						<object class="NSMenu" key="NSSubmenu" id="800575174">
 							<string key="NSTitle">Preferences</string>
@@ -110,8 +102,8 @@
 									<string key="NSTitle">Use iCloud</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="552246001"/>
-									<reference key="NSMixedImage" ref="752047669"/>
+									<reference key="NSOnImage" ref="269450960"/>
+									<reference key="NSMixedImage" ref="977440657"/>
 								</object>
 								<object class="NSMenuItem" id="461686112">
 									<reference key="NSMenu" ref="800575174"/>
@@ -119,8 +111,8 @@
 									<string key="NSTitle">Synchronize available sites from your iCloud account.</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="552246001"/>
-									<reference key="NSMixedImage" ref="752047669"/>
+									<reference key="NSOnImage" ref="269450960"/>
+									<reference key="NSMixedImage" ref="977440657"/>
 									<object class="NSAttributedString" key="NSAttributedTitle">
 										<string key="NSString">Synchronize available sites from your iCloud account.</string>
 										<dictionary key="NSAttributes" id="583461090">
@@ -141,8 +133,8 @@
 									<string key="NSTitle">Remember Password</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="552246001"/>
-									<reference key="NSMixedImage" ref="752047669"/>
+									<reference key="NSOnImage" ref="269450960"/>
+									<reference key="NSMixedImage" ref="977440657"/>
 								</object>
 								<object class="NSMenuItem" id="907921953">
 									<reference key="NSMenu" ref="800575174"/>
@@ -150,8 +142,8 @@
 									<string key="NSTitle">Remember the password while the application is running.</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="552246001"/>
-									<reference key="NSMixedImage" ref="752047669"/>
+									<reference key="NSOnImage" ref="269450960"/>
+									<reference key="NSMixedImage" ref="977440657"/>
 									<object class="NSAttributedString" key="NSAttributedTitle">
 										<string key="NSString">Remember the password while the application is running.</string>
 										<reference key="NSAttributes" ref="583461090"/>
@@ -162,8 +154,8 @@
 									<string key="NSTitle">Save Password</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="552246001"/>
-									<reference key="NSMixedImage" ref="752047669"/>
+									<reference key="NSOnImage" ref="269450960"/>
+									<reference key="NSMixedImage" ref="977440657"/>
 								</object>
 								<object class="NSMenuItem" id="123831322">
 									<reference key="NSMenu" ref="800575174"/>
@@ -171,8 +163,8 @@
 									<string key="NSTitle">Save the password in your keychain so you don't need to enter it again.</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="552246001"/>
-									<reference key="NSMixedImage" ref="752047669"/>
+									<reference key="NSOnImage" ref="269450960"/>
+									<reference key="NSMixedImage" ref="977440657"/>
 									<object class="NSAttributedString" key="NSAttributedTitle">
 										<string key="NSString">Save the password in your keychain so you don't need to enter it again.</string>
 										<reference key="NSAttributes" ref="583461090"/>
@@ -189,25 +181,35 @@
 						<string key="NSTitle"/>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="552246001"/>
-						<reference key="NSMixedImage" ref="752047669"/>
+						<reference key="NSOnImage" ref="269450960"/>
+						<reference key="NSMixedImage" ref="977440657"/>
+					</object>
+					<object class="NSMenuItem" id="846612332">
+						<reference key="NSMenu" ref="764588027"/>
+						<string key="NSTitle">Show</string>
+						<string key="NSKeyEquiv">p</string>
+						<int key="NSKeyEquivModMask">1310720</int>
+						<int key="NSMnemonicLoc">2147483647</int>
+						<reference key="NSOnImage" ref="269450960"/>
+						<reference key="NSMixedImage" ref="977440657"/>
 					</object>
 					<object class="NSMenuItem" id="229948989">
 						<reference key="NSMenu" ref="764588027"/>
 						<bool key="NSIsDisabled">YES</bool>
 						<string key="NSTitle">Lock</string>
-						<string key="NSKeyEquiv"/>
+						<string key="NSKeyEquiv">p</string>
+						<int key="NSKeyEquivModMask">1835008</int>
 						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="552246001"/>
-						<reference key="NSMixedImage" ref="752047669"/>
+						<reference key="NSOnImage" ref="269450960"/>
+						<reference key="NSMixedImage" ref="977440657"/>
 					</object>
 					<object class="NSMenuItem" id="291035877">
 						<reference key="NSMenu" ref="764588027"/>
 						<string key="NSTitle">Quit</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="552246001"/>
-						<reference key="NSMixedImage" ref="752047669"/>
+						<reference key="NSOnImage" ref="269450960"/>
+						<reference key="NSMixedImage" ref="977440657"/>
 					</object>
 				</array>
 				<bool key="NSNoAutoenable">YES</bool>
@@ -392,9 +394,9 @@
 						<array class="NSMutableArray" key="children">
 							<reference ref="291035877"/>
 							<reference ref="466252869"/>
-							<reference ref="846612332"/>
 							<reference ref="229948989"/>
 							<reference ref="851296005"/>
+							<reference ref="846612332"/>
 							<reference ref="11982480"/>
 						</array>
 						<reference key="parent" ref="0"/>

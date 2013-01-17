@@ -28,23 +28,6 @@
 #endif
 }
 
-- (NSURL *)applicationFilesDirectory {
-
-#if TARGET_OS_IPHONE
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-#else
-    NSURL *appSupportURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] lastObject];
-    NSURL *applicationFilesDirectory = [appSupportURL URLByAppendingPathComponent:@"com.lyndir.lhunath.MasterPassword"];
-    
-    NSError *error = nil;
-    [[NSFileManager defaultManager] createDirectoryAtURL:applicationFilesDirectory withIntermediateDirectories:YES attributes:nil error:&error];
-    if (error)
-        err(@"Couldn't create application directory: %@, error occurred: %@", applicationFilesDirectory, error);
-    
-    return applicationFilesDirectory;
-#endif
-}
-
 - (MPUserEntity *)activeUser {
 
     if (!self.activeUserID)

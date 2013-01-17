@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		93D39C24C655D0FD48DCA1C3 /* menu-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 93D39E6D20434649192464E0 /* menu-icon.png */; };
+		93D39DEE2F9E55DAA206FD6E /* menu-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 93D39F808A2C83E35C5C0411 /* menu-icon@2x.png */; };
 		DA34F0CC163B8C31006FFC95 /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = DA34F08D163B8C31006FFC95 /* NSArray+Indexing.h */; };
 		DA34F0CD163B8C31006FFC95 /* NSArray+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = DA34F08E163B8C31006FFC95 /* NSArray+Indexing.m */; };
 		DA34F0CE163B8C31006FFC95 /* NSBundle+PearlMutableInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = DA34F08F163B8C31006FFC95 /* NSBundle+PearlMutableInfo.h */; };
@@ -662,6 +664,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		93D39E6D20434649192464E0 /* menu-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-icon.png"; sourceTree = "<group>"; };
+		93D39F808A2C83E35C5C0411 /* menu-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-icon@2x.png"; sourceTree = "<group>"; };
 		DA34F08D163B8C31006FFC95 /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
 		DA34F08E163B8C31006FFC95 /* NSArray+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Indexing.m"; sourceTree = "<group>"; };
 		DA34F08F163B8C31006FFC95 /* NSBundle+PearlMutableInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+PearlMutableInfo.h"; sourceTree = "<group>"; };
@@ -2565,6 +2569,8 @@
 				DA600E9615057F10008E9AB6 /* Lock */,
 				DA600EA015057F10008E9AB6 /* logo-bare.png */,
 				DA600EA115057F10008E9AB6 /* Tooltips */,
+				93D39E6D20434649192464E0 /* menu-icon.png */,
+				93D39F808A2C83E35C5C0411 /* menu-icon@2x.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -5719,6 +5725,8 @@
 				DAF236BA163B24D5008AF5B5 /* MainMenu.xib in Resources */,
 				DAF236BD163B24D5008AF5B5 /* MasterPassword.entitlements in Resources */,
 				DAF236C0163B24D5008AF5B5 /* MPPasswordWindowController.xib in Resources */,
+				93D39C24C655D0FD48DCA1C3 /* menu-icon.png in Resources */,
+				93D39DEE2F9E55DAA206FD6E /* menu-icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5935,7 +5943,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -5994,7 +6002,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
