@@ -9,12 +9,6 @@
 #import "MPAppDelegate_Shared.h"
 #import "MPAppDelegate_Store.h"
 
-@interface MPAppDelegate_Shared ()
-
-@property (strong, nonatomic) NSManagedObjectID *activeUserID;
-
-@end
-
 @implementation MPAppDelegate_Shared
 
 + (MPAppDelegate_Shared *)get {
@@ -30,15 +24,15 @@
 
 - (MPUserEntity *)activeUser {
 
-    if (!self.activeUserID)
+    if (!self.activeUserObjectID)
         return nil;
 
-    return (MPUserEntity *)[self.managedObjectContextIfReady objectWithID:self.activeUserID];
+    return (MPUserEntity *)[self.managedObjectContextIfReady objectWithID:self.activeUserObjectID];
 }
 
 - (void)setActiveUser:(MPUserEntity *)activeUser {
 
-    self.activeUserID = activeUser.objectID;
+    self.activeUserObjectID = activeUser.objectID;
 }
 
 @end

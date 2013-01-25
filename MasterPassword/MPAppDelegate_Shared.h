@@ -15,8 +15,9 @@
 @interface MPAppDelegate_Shared : NSObject <PearlConfigDelegate>
 #endif
 
-@property (strong, nonatomic) MPUserEntity *activeUser;
-@property (strong, nonatomic) MPKey        *key;
+@property (strong, nonatomic) MPUserEntity      *activeUser;
+@property (strong, nonatomic) NSManagedObjectID *activeUserObjectID;
+@property (strong, nonatomic) MPKey             *key;
 
 + (MPAppDelegate_Shared *)get;
 

@@ -8,8 +8,6 @@
 
 #import <objc/runtime.h>
 #import "MPAppDelegate_Store.h"
-#import
-#import
 
 @implementation MPAppDelegate_Shared (Store)
 
@@ -42,6 +40,105 @@ static char managedObjectContextKey;
     return managedObjectContext;
 }
 
+- (void)migrateStoreForManager:(UbiquityStoreManager *)storeManager {
+
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"iCloudEnabledKey"];
+    NSNumber *cloudEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:@"iCloudEnabledKey"];
+    if (!cloudEnabled)
+        return;
+
+    if ([cloudEnabled boolValue]) {
+        NSURL *newCloudContentURL = [storeManager URLForCloudContent];
+        NSURL *newCloudStoreURL   = [storeManager URLForCloudStore];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:newCloudStoreURL.path isDirectory:NO])
+         // New store already exists, migration has already been done.
+            return;
+
+        NSString *uuid                      = [[NSUserDefaults standardUserDefaults] stringForKey:@"LocalUUIDKey"];
+        NSURL    *cloudContainerURL         = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:@"HL3Q45LX9N.com.lyndir.lhunath.MasterPassword.shared"];
+        //NSURL  *oldCloudContentURL        = [[cloudContainerURL URLByAppendingPathComponent:@"Data" isDirectory:YES]
+        //                                                        URLByAppendingPathComponent:uuid isDirectory:YES];
+        NSURL    *oldCloudStoreDirectoryURL = [cloudContainerURL URLByAppendingPathComponent:@"Database.nosync" isDirectory:YES];
+        NSURL    *oldCloudStoreURL          = [[oldCloudStoreDirectoryURL URLByAppendingPathComponent:uuid isDirectory:NO]
+                                                                          URLByAppendingPathExtension:@"sqlite"];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:oldCloudStoreURL.path isDirectory:NO]) {
+            // No old store to migrate from, cannot migrate.
+            wrn(@"Cannot migrate cloud store, old store not found at: %@", oldCloudStoreURL.path);
+            return;
+        }
+
+        NSError      *error                = nil;
+        NSDictionary *oldCloudStoreOptions = @{
+         // This is here in an attempt to have iCloud recreate the old store file from
+         // the baseline and transaction logs from the iCloud account.
+         // In my tests however only the baseline was used to recreate the store which then ended up being empty.
+         /*NSPersistentStoreUbiquitousContentNameKey    : uuid,
+         NSPersistentStoreUbiquitousContentURLKey     : oldCloudContentURL,*/
+         // So instead, we'll just open up the old store as read-only, if it exists.
+         NSReadOnlyPersistentStoreOption              : @YES,
+         NSMigratePersistentStoresAutomaticallyOption : @YES,
+         NSInferMappingModelAutomaticallyOption       : @YES};
+        NSDictionary *newCloudStoreOptions = @{
+         NSPersistentStoreUbiquitousContentNameKey    : [storeManager valueForKey:@"contentName"],
+         NSPersistentStoreUbiquitousContentURLKey     : newCloudContentURL,
+         NSMigratePersistentStoresAutomaticallyOption : @YES,
+         NSInferMappingModelAutomaticallyOption       : @YES};
+
+        // This is only necessary if we want to try to rebuild the old store.  See comment above about how that failed.
+        //if (![[NSFileManager defaultManager] createDirectoryAtPath:oldCloudStoreDirectoryURL.path
+        //                               withIntermediateDirectories:YES attributes:nil error:&error])
+        //err(@"While creating directory for old cloud store: %@", error);
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:[storeManager URLForCloudStoreDirectory].path
+                                       withIntermediateDirectories:YES attributes:nil error:&error])
+        err(@"While creating directory for new cloud store: %@", error);
+
+        NSManagedObjectModel         *model    = [NSManagedObjectModel mergedModelFromBundles:nil];
+        NSPersistentStoreCoordinator *psc      = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+        NSPersistentStore            *oldStore = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:oldCloudStoreURL
+                                                                         options:oldCloudStoreOptions error:&error];
+        if (!oldStore) {
+            err(@"While opening old store for migration %@: %@", oldCloudStoreURL.path, error);
+            return;
+        }
+
+        if (![psc migratePersistentStore:oldStore toURL:newCloudStoreURL options:newCloudStoreOptions withType:NSSQLiteStoreType
+                                   error:&error]) {
+            err(@"While migrating cloud store from %@ -> %@: %@", oldCloudStoreURL.path, newCloudStoreURL.path, error);
+            return;
+        }
+        if (![psc removePersistentStore:[psc.persistentStores lastObject] error:&error])
+        err(@"While removing the migrated store from the store context: %@", error);
+        if (![[NSFileManager defaultManager] removeItemAtURL:oldCloudStoreURL error:&error])
+        err(@"While deleting the old cloud store: %@", error);
+    } else {
+        NSURL *applicationFilesDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                                                   inDomains:NSUserDomainMask] lastObject];
+        NSURL *oldLocalStoreURL          = [[applicationFilesDirectory URLByAppendingPathComponent:@"MasterPassword" isDirectory:NO]
+                                                                       URLByAppendingPathExtension:@"sqlite"];
+        NSURL *newLocalStoreURL          = [storeManager URLForLocalStore];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:oldLocalStoreURL.path isDirectory:NO] &&
+         ![[NSFileManager defaultManager] fileExistsAtPath:newLocalStoreURL.path isDirectory:NO]) {
+            NSError                      *error    = nil;
+            NSDictionary                 *options  = @{
+             NSMigratePersistentStoresAutomaticallyOption : @YES,
+             NSInferMappingModelAutomaticallyOption       : @YES};
+            NSManagedObjectModel         *model    = [NSManagedObjectModel mergedModelFromBundles:nil];
+            NSPersistentStoreCoordinator *psc      = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+            NSPersistentStore            *oldStore = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil
+                                                                                 URL:oldLocalStoreURL options:options error:&error];
+            if (oldStore)
+                [psc migratePersistentStore:oldStore toURL:newLocalStoreURL options:options withType:NSSQLiteStoreType error:&error];
+            if (error)
+            err(@"While migrating local store from %@ -> %@: %@", oldLocalStoreURL, newLocalStoreURL, error);
+            else {
+                [psc removePersistentStore:[psc.persistentStores lastObject] error:nil];
+                [[NSFileManager defaultManager] removeItemAtURL:oldLocalStoreURL error:nil];
+            }
+        }
+    }
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"iCloudEnabledKey"];
+}
+
 - (UbiquityStoreManager *)storeManager {
 
     static UbiquityStoreManager *storeManager = nil;
@@ -60,68 +157,7 @@ static char managedObjectContextKey;
     storeManager.delegate = self;
 
     // Migrate old store to new store location.
-    NSNumber *cloudEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:@"iCloudEnabledKey"];
-    if (cloudEnabled) {
-        if ([cloudEnabled boolValue]) {
-            NSString *uuid               = [[NSUserDefaults standardUserDefaults] stringForKey:@"LocalUUIDKey"];
-            NSURL    *cloudContainerURL  = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:@"HL3Q45LX9N.com.lyndir.lhunath.MasterPassword.shared"];
-            NSURL    *oldCloudContentURL = [[cloudContainerURL URLByAppendingPathComponent:@"Data" isDirectory:YES]
-                                                               URLByAppendingPathComponent:uuid isDirectory:YES];
-            NSURL    *oldCloudStoreURL   = [[[cloudContainerURL URLByAppendingPathComponent:@"Database.nosync" isDirectory:YES]
-                                                                URLByAppendingPathComponent:uuid isDirectory:NO]
-                                                                URLByAppendingPathExtension:@"sqlite"];
-            NSURL    *newCloudContentURL = [storeManager URLForCloudContent];
-            NSURL    *newCloudStoreURL   = [storeManager URLForCloudStore];
-
-            if ([[NSFileManager defaultManager] fileExistsAtPath:oldCloudStoreURL.path isDirectory:NO] &&
-             ![[NSFileManager defaultManager] fileExistsAtPath:newCloudStoreURL.path isDirectory:NO]) {
-                NSError                      *error   = nil;
-                NSDictionary                 *options = @{
-                 NSPersistentStoreUbiquitousContentNameKey    : uuid,
-                 NSPersistentStoreUbiquitousContentURLKey     : oldCloudContentURL,
-                 NSMigratePersistentStoresAutomaticallyOption : @YES,
-                 NSInferMappingModelAutomaticallyOption       : @YES};
-                NSManagedObjectModel         *model   = [NSManagedObjectModel mergedModelFromBundles:nil];
-                NSPersistentStoreCoordinator *psc     = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
-                NSPersistentStore *oldStore = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil
-                                                                          URL:oldCloudStoreURL options:options error:&error];
-                if (oldStore)
-                    [psc migratePersistentStore:oldStore toURL:newCloudStoreURL options:options withType:NSSQLiteStoreType error:&error];
-                if (error)
-                err(@"While migrating cloud store from %@ -> %@: %@", oldCloudStoreURL, newCloudStoreURL, error);
-                else {
-                    [psc removePersistentStore:[psc.persistentStores lastObject] error:nil];
-                    [[NSFileManager defaultManager] removeItemAtURL:oldCloudStoreURL error:nil];
-                }
-            }
-        } else {
-            NSURL *applicationFilesDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
-                                                                                       inDomains:NSUserDomainMask] lastObject];
-            NSURL    *oldLocalStoreURL = [[applicationFilesDirectory URLByAppendingPathComponent:@"MasterPassword" isDirectory:NO]
-                                                                     URLByAppendingPathExtension:@"sqlite"];
-            NSURL    *newLocalStoreURL   = [storeManager URLForLocalStore];
-            if ([[NSFileManager defaultManager] fileExistsAtPath:oldLocalStoreURL.path isDirectory:NO] &&
-             ![[NSFileManager defaultManager] fileExistsAtPath:newLocalStoreURL.path isDirectory:NO]) {
-                NSError                      *error   = nil;
-                NSDictionary                 *options = @{
-                 NSMigratePersistentStoresAutomaticallyOption : @YES,
-                 NSInferMappingModelAutomaticallyOption       : @YES};
-                NSManagedObjectModel         *model   = [NSManagedObjectModel mergedModelFromBundles:nil];
-                NSPersistentStoreCoordinator *psc     = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
-                NSPersistentStore *oldStore = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil
-                                                                          URL:oldLocalStoreURL options:options error:&error];
-                if (oldStore)
-                    [psc migratePersistentStore:oldStore toURL:newLocalStoreURL options:options withType:NSSQLiteStoreType error:&error];
-                if (error)
-                err(@"While migrating local store from %@ -> %@: %@", oldLocalStoreURL, newLocalStoreURL, error);
-                else {
-                    [psc removePersistentStore:[psc.persistentStores lastObject] error:nil];
-                    [[NSFileManager defaultManager] removeItemAtURL:oldLocalStoreURL error:nil];
-                }
-            }
-        }
-    }
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"iCloudEnabledKey"];
+    [self migrateStoreForManager:storeManager];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidChangeNotification
                                                       object:storeManager queue:nil

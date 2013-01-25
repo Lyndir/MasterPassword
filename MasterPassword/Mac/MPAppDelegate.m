@@ -107,7 +107,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         for (MPUserEntity *user in users) {
             NSMenuItem *userItem = [[NSMenuItem alloc] initWithTitle:user.name action:@selector(selectUser:) keyEquivalent:@""];
             [userItem setTarget:self];
-            [userItem setRepresentedObject:user];
+            [userItem setRepresentedObject:user.objectID];
             [[self.usersItem submenu] addItem:userItem];
 
             if ([user.name isEqualToString:[MPMacConfig get].usedUserName])
@@ -118,9 +118,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)selectUser:(NSMenuItem *)item {
     
-    NSAssert1([[item representedObject] isKindOfClass:[MPUserEntity class]], @"Not a user: %@", item.representedObject);
-    
-    self.activeUser = item.representedObject;
+    self.activeUserObjectID = item.representedObject;
 }
 
 - (void)showMenu {
@@ -200,14 +198,14 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
         [[[self.usersItem submenu] itemArray] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if ([obj representedObject] && [obj representedObject] == self.activeUser)
+            if ([[obj representedObject] isEqual:self.activeUserObjectID])
                 [obj setState:NSOnState];
             else
                 [obj setState:NSOffState];
         }];
 
         [MPMacConfig get].usedUserName = self.activeUser.name;
-    }           forKeyPath:@"activeUser" options:0 context:nil];
+    }           forKeyPath:@"activeUserObjectID" options:0 context:nil];
     [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidChangeNotification object:nil queue:nil usingBlock:
      ^(NSNotification *note) {
          [self updateUsers];
