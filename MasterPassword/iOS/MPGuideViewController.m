@@ -7,12 +7,9 @@
 //
 
 #import "MPGuideViewController.h"
-#import "LocalyticsSession.h"
 
 
 @implementation MPGuideViewController
-@synthesize scrollView;
-@synthesize pageControl;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 

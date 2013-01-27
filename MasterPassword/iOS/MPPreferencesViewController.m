@@ -11,20 +11,12 @@
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-#import "LocalyticsSession.h"
 
 @interface MPPreferencesViewController ()
 
 @end
 
 @implementation MPPreferencesViewController
-@synthesize avatarsView;
-@synthesize avatarTemplate;
-@synthesize savePasswordSwitch;
-@synthesize exportCell;
-@synthesize changeMPCell;
-@synthesize defaultTypeLabel;
-
 
 - (void)viewDidLoad {
 

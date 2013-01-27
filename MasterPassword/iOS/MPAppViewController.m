@@ -16,7 +16,6 @@
 //
 
 #import "MPAppViewController.h"
-#import "LocalyticsSession.h"
 
 
 @implementation MPAppViewController {

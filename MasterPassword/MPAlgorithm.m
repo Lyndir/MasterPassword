@@ -16,7 +16,6 @@
 //
 
 #import "MPAlgorithm.h"
-#import "MPEntities.h"
 
 id<MPAlgorithm> MPAlgorithmForVersion(NSUInteger version) {
 

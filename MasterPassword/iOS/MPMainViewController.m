@@ -10,7 +10,6 @@
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-#import "LocalyticsSession.h"
 
 
 @implementation MPMainViewController

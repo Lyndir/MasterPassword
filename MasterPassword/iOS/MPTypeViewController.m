@@ -7,7 +7,6 @@
 //
 
 #import "MPTypeViewController.h"
-#import "LocalyticsSession.h"
 
 
 @interface MPTypeViewController ()
@@ -17,8 +16,6 @@
 @end
 
 @implementation MPTypeViewController
-@synthesize delegate;
-@synthesize recommendedTipContainer;
 
 #pragma mark - View lifecycle
 
@@ -72,8 +69,8 @@
 
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
 
-    if ([delegate respondsToSelector:@selector(selectedType)])
-        cell.selected = ([delegate selectedType] == [self typeAtIndexPath:indexPath]);
+    if ([self.delegate respondsToSelector:@selector(selectedType)])
+        cell.selected = ([self.delegate selectedType] == [self typeAtIndexPath:indexPath]);
 
     return cell;
 }
@@ -87,7 +84,7 @@
         // Selected a non-type row.
         return;
 
-    [delegate didSelectType:type];
+    [self.delegate didSelectType:type];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -98,7 +95,7 @@
             // Generated
             switch (indexPath.row) {
                 case 0:
-                    return NSNotFound;
+                    return (MPElementType)NSNotFound;
                 case 1:
                     return MPElementTypeGeneratedMaximum;
                 case 2:
@@ -112,7 +109,7 @@
                 case 6:
                     return MPElementTypeGeneratedPIN;
                 case 7:
-                    return NSNotFound;
+                    return (MPElementType)NSNotFound;
 
                 default: {
                     Throw(@"Unsupported row: %d, when selecting generated element type.", indexPath.row);
@@ -124,13 +121,13 @@
             // Stored
             switch (indexPath.row) {
                 case 0:
-                    return NSNotFound;
+                    return (MPElementType)NSNotFound;
                 case 1:
                     return MPElementTypeStoredPersonal;
                 case 2:
                     return MPElementTypeStoredDevicePrivate;
                 case 3:
-                    return NSNotFound;
+                    return (MPElementType)NSNotFound;
 
                 default: {
                     Throw(@"Unsupported row: %d, when selecting stored element type.", indexPath.row);

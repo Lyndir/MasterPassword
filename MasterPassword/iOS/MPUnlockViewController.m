@@ -19,7 +19,6 @@
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-#import "LocalyticsSession.h"
 
 @interface MPUnlockViewController ()
 
@@ -29,32 +28,9 @@
 @property (nonatomic, strong) NSArray          *wordList;
 @property (nonatomic, strong) NSOperationQueue *fbOperationQueue;
 
-
 @end
 
 @implementation MPUnlockViewController
-@synthesize selectedUser;
-@synthesize avatarToUser;
-@synthesize spinner;
-@synthesize passwordFieldLabel;
-@synthesize passwordField;
-@synthesize passwordView;
-@synthesize avatarsView;
-@synthesize nameLabel, oldNameLabel;
-@synthesize avatarTemplate;
-@synthesize createPasswordTipView;
-@synthesize tip;
-@synthesize passwordTipView;
-@synthesize passwordTipLabel;
-@synthesize wordWall;
-@synthesize targetedUserActionGesture;
-@synthesize loadingUsersIndicator;
-@synthesize uiContainer;
-@synthesize avatarShadowColor = _avatarShadowColor;
-@synthesize wordWallAnimating = _wordWallAnimating;
-@synthesize wordList = _wordList;
-@synthesize fbOperationQueue = _fbOperationQueue;
-
 
 - (void)initializeAvatarAlert:(UIAlertView *)alert forUser:(MPUserEntity *)user {
 
@@ -351,7 +327,7 @@
                      }
                      if (![alert textFieldAtIndex:0].text.length) {
                          [PearlAlert showAlertWithTitle:@"Name Is Required" message:nil viewStyle:UIAlertViewStyleDefault initAlert:nil
-                                      tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                      tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                              [self showNewUserNameAlertFor:newUser completion:completion];
                          } cancelTitle:@"Try Again" otherTitles:nil];
                          return;

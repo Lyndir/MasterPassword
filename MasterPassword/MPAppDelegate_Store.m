@@ -42,13 +42,12 @@ static char managedObjectContextKey;
 
 - (void)migrateStoreForManager:(UbiquityStoreManager *)storeManager {
 
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"iCloudEnabledKey"];
     NSNumber *cloudEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:@"iCloudEnabledKey"];
     if (!cloudEnabled)
+        // No old data to migrate.
         return;
 
     if ([cloudEnabled boolValue]) {
-        NSURL *newCloudContentURL = [storeManager URLForCloudContent];
         NSURL *newCloudStoreURL   = [storeManager URLForCloudStore];
         if ([[NSFileManager defaultManager] fileExistsAtPath:newCloudStoreURL.path isDirectory:NO])
          // New store already exists, migration has already been done.
@@ -56,6 +55,7 @@ static char managedObjectContextKey;
 
         NSString *uuid                      = [[NSUserDefaults standardUserDefaults] stringForKey:@"LocalUUIDKey"];
         NSURL    *cloudContainerURL         = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:@"HL3Q45LX9N.com.lyndir.lhunath.MasterPassword.shared"];
+        NSURL    *newCloudContentURL        = [storeManager URLForCloudContent];
         //NSURL  *oldCloudContentURL        = [[cloudContainerURL URLByAppendingPathComponent:@"Data" isDirectory:YES]
         //                                                        URLByAppendingPathComponent:uuid isDirectory:YES];
         NSURL    *oldCloudStoreDirectoryURL = [cloudContainerURL URLByAppendingPathComponent:@"Database.nosync" isDirectory:YES];
@@ -136,6 +136,7 @@ static char managedObjectContextKey;
             }
         }
     }
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"LocalUUIDKey"];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"iCloudEnabledKey"];
 }
 

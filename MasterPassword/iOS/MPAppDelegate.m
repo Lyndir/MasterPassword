@@ -16,7 +16,6 @@
 #import "MPAppDelegate_Store.h"
 
 #import "IASKSettingsReader.h"
-#import "LocalyticsSession.h"
 
 @interface MPAppDelegate ()
 

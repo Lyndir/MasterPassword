@@ -8,7 +8,6 @@
 
 #import "MPSearchDelegate.h"
 #import "MPAppDelegate.h"
-#import "LocalyticsSession.h"
 #import "MPAppDelegate_Store.h"
 
 @interface MPSearchDelegate (Private)
@@ -21,12 +20,6 @@
 
     NSFetchedResultsController *_fetchedResultsController;
 }
-@synthesize tipView;
-@synthesize query;
-@synthesize dateFormatter;
-@synthesize delegate;
-@synthesize searchDisplayController;
-@synthesize searchTipContainer;
 
 - (id)init {
 
@@ -38,7 +31,7 @@
     self.query                   = @"";
 
     self.tipView                  = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 170)];
-    self.tipView.textAlignment    = UITextAlignmentCenter;
+    self.tipView.textAlignment    = NSTextAlignmentCenter;
     self.tipView.backgroundColor  = [UIColor clearColor];
     self.tipView.textColor        = [UIColor lightTextColor];
     self.tipView.shadowColor      = [UIColor blackColor];
