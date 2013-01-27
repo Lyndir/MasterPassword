@@ -11,22 +11,19 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 
+#define MPAlertUnlockMP     @"MPAlertUnlockMP"
+#define MPAlertIncorrectMP  @"MPAlertIncorrectMP"
+
+
 @interface MPPasswordWindowController ()
 
-@property (nonatomic, strong) NSString                      *oldSiteName;
 @property (nonatomic, strong) NSArray /* MPElementEntity */ *siteResults;
 @property (nonatomic) BOOL inProgress;
-
+@property (nonatomic) BOOL siteFieldPreventCompletion;
 
 @end
 
 @implementation MPPasswordWindowController
-@synthesize oldSiteName, siteResults;
-@synthesize siteField;
-@synthesize contentField;
-@synthesize tipField;
-@synthesize inProgress = _inProgress;
-
 
 - (void)windowDidLoad {
 
@@ -37,6 +34,8 @@
         [self.userLabel setStringValue:PearlString(@"%@'s password for:", [MPAppDelegate get].activeUser.name)];
     }                          forKeyPath:@"activeUser" options:NSKeyValueObservingOptionInitial context:nil];
     [[MPAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
+        if (![MPAppDelegate get].key)
+            [self unlock];
         if ([MPAppDelegate get].activeUser && [MPAppDelegate get].key)
             [MPAlgorithmDefault migrateUser:[MPAppDelegate get].activeUser completion:^(BOOL userRequiresNewMigration) {
                 if (userRequiresNewMigration)
@@ -56,18 +55,6 @@
                                                   usingBlock:^(NSNotification *note) {
                                                       [[NSApplication sharedApplication] hide:self];
                                                   }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSControlTextDidChangeNotification object:self.siteField queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      NSString *newSiteName = [self.siteField stringValue];
-                                                      BOOL shouldComplete = [self.oldSiteName length] < [newSiteName length];
-                                                      self.oldSiteName = newSiteName;
-
-                                                      if ([self trySite])
-                                                          shouldComplete = NO;
-
-                                                      if (shouldComplete)
-                                                          [[[note userInfo] objectForKey:@"NSFieldEditor"] complete:nil];
-                                                  }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPNotificationSignedOut object:nil queue:nil
                                                   usingBlock:^(NSNotification *note) {
                                                       [self.window close];
@@ -78,6 +65,12 @@
 
 - (void)unlock {
 
+    if (![MPAppDelegate get].activeUser)
+        // No user to sign in with.
+        return;
+    if ([MPAppDelegate get].key)
+        // Already logged in.
+        return;
     if ([[MPAppDelegate get] signInAsUser:[MPAppDelegate get].activeUser usingMasterPassword:nil])
         // Load the key from the keychain.
         return;
@@ -88,6 +81,10 @@
             if ([MPAppDelegate get].key)
                 return;
 
+            self.content = @"";
+            [self.siteField setStringValue:@""];
+            [self.tipField setStringValue:@""];
+
             NSAlert           *alert         = [NSAlert alertWithMessageText:@"Master Password is locked."
                                                                defaultButton:@"Unlock" alternateButton:@"Change" otherButton:@"Cancel"
                                                    informativeTextWithFormat:@"The master password is required to unlock the application for:\n\n%@", [MPAppDelegate get].activeUser.name];
@@ -96,57 +93,71 @@
             [alert layout];
             [passwordField becomeFirstResponder];
             [alert beginSheetModalForWindow:self.window modalDelegate:self
-                             didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:NULL];
+                             didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertUnlockMP];
         });
 }
 
 - (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 
-    switch (returnCode) {
-        case NSAlertAlternateReturn:
-            // "Change" button.
-            if ([[NSAlert alertWithMessageText:@"Changing Master Password"
-                                 defaultButton:nil alternateButton:[PearlStrings get].commonButtonCancel otherButton:nil
-                                                                                           informativeTextWithFormat:
-                                                                                            @"This will allow you to log in with a different master password.\n\n"
-                                                                                             @"Note that you will only see the sites and passwords for the master password you log in with.\n"
-                                                                                             @"If you log in with a different master password, your current sites will be unavailable.\n\n"
-                                                                                             @"You can always change back to your current master password later.\n"
-                                                                                             @"Your current sites and passwords will then become available again."] runModal]
-             == 1) {
-                [MPAppDelegate get].activeUser.keyID = nil;
-                [[MPAppDelegate get] forgetSavedKeyFor:[MPAppDelegate get].activeUser];
-                [[MPAppDelegate get] signOutAnimated:YES];
-            }
-            break;
+    if (contextInfo == MPAlertIncorrectMP) {
+        [self.window close];
+        return;
+    }
+    if (contextInfo == MPAlertUnlockMP) {
+        switch (returnCode) {
+            case NSAlertAlternateReturn:
+                // "Change" button.
+                if ([[NSAlert alertWithMessageText:@"Changing Master Password"
+                                     defaultButton:nil alternateButton:[PearlStrings get].commonButtonCancel otherButton:nil
+                         informativeTextWithFormat:
+                          @"This will allow you to log in with a different master password.\n\n"
+                           @"Note that you will only see the sites and passwords for the master password you log in with.\n"
+                           @"If you log in with a different master password, your current sites will be unavailable.\n\n"
+                           @"You can always change back to your current master password later.\n"
+                           @"Your current sites and passwords will then become available again."] runModal]
+                 == 1) {
+                    [MPAppDelegate get].activeUser.keyID = nil;
+                    [[MPAppDelegate get] forgetSavedKeyFor:[MPAppDelegate get].activeUser];
+                    [[MPAppDelegate get] signOutAnimated:YES];
+                }
+                break;
 
-        case NSAlertOtherReturn:
-            // "Cancel" button.
-            [self.window close];
-            return;
+            case NSAlertOtherReturn:
+                // "Cancel" button.
+                [self.window close];
+                return;
 
-        case NSAlertDefaultReturn: {
-            // "Unlock" button.
-            self.contentContainer.alphaValue = 0;
-            [self.progressView startAnimation:nil];
-            self.inProgress = YES;
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-                BOOL success = [[MPAppDelegate get] signInAsUser:[MPAppDelegate get].activeUser usingMasterPassword:[(NSSecureTextField *)alert.accessoryView stringValue]];
-                self.inProgress = NO;
+            case NSAlertDefaultReturn: {
+                // "Unlock" button.
+                self.contentContainer.alphaValue = 0;
+                [self.progressView startAnimation:nil];
+                self.inProgress = YES;
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                    BOOL success    = [[MPAppDelegate get] signInAsUser:[MPAppDelegate get].activeUser
+                                                    usingMasterPassword:[(NSSecureTextField *)alert.accessoryView stringValue]];
+                    self.inProgress = NO;
 
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.progressView stopAnimation:nil];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.progressView stopAnimation:nil];
 
-                    if (success)
-                        self.contentContainer.alphaValue = 1;
-                    else
-                        [self.window close];
+                        if (success)
+                            self.contentContainer.alphaValue = 1;
+                        else {
+                            [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
+                             NSLocalizedDescriptionKey : PearlString(@"Incorrect master password for user %@",
+                                                                     [MPAppDelegate get].activeUser.name)
+                            }]] beginSheetModalForWindow:self.window modalDelegate:self
+                                          didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertIncorrectMP];
+                        }
+                    });
                 });
-            });
+            }
+
+            default:
+                break;
         }
 
-        default:
-            break;
+        return;
     }
 }
 
@@ -159,19 +170,27 @@
 
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
     fetchRequest.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses_" ascending:NO]];
-    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@",
-                                                                    query, query, [MPAppDelegate get].activeUser];
+    fetchRequest.predicate       = [NSPredicate predicateWithFormat:@"(name BEGINSWITH[cd] %@) AND user == %@",
+                                                                    query, [MPAppDelegate get].activeUser];
 
     NSError *error = nil;
     self.siteResults = [[MPAppDelegate managedObjectContextIfReady] executeFetchRequest:fetchRequest error:&error];
     if (error)
-    err(@"Couldn't fetch elements: %@", error);
+    err(@"While fetching elements for completion: %@", error);
+
+    if ([self.siteResults count] == 1) {
+        [textView setString:[(MPElementEntity *)[self.siteResults objectAtIndex:0] name]];
+        [textView setSelectedRange:NSMakeRange([query length], [[textView string] length] - [query length])];
+        if ([self trySite])
+            return nil;
+    }
 
     NSMutableArray           *mutableResults = [NSMutableArray arrayWithCapacity:[self.siteResults count] + 1];
     if (self.siteResults)
         for (MPElementEntity *element in self.siteResults)
             [mutableResults addObject:element.name];
     //    [mutableResults addObject:query]; // For when the app should be able to create new sites.
+
     return mutableResults;
 }
 
@@ -181,32 +200,70 @@
         [self.window close];
         return YES;
     }
+    if ((self.siteFieldPreventCompletion = [NSStringFromSelector(commandSelector) hasPrefix:@"delete"]))
+        return NO;
     if (commandSelector == @selector(insertNewline:) && [self.content length]) {
-        [[NSPasteboard generalPasteboard] declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
-        if ([[NSPasteboard generalPasteboard] setString:self.content forType:NSPasteboardTypeString]) {
-            self.tipField.alphaValue = 1;
-            [self.tipField setStringValue:@"Copied!  Hit ⎋ (ESC) to close window."];
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC));
-            dispatch_after(popTime, dispatch_get_main_queue(), ^{
-                [NSAnimationContext beginGrouping];
-                [[NSAnimationContext currentContext] setDuration:0.2f];
-                [self.tipField.animator setAlphaValue:0];
-                [NSAnimationContext endGrouping];
-            });
-
-            [[self findElement] use];
-            return YES;
-        } else
-         wrn(@"Couldn't copy password to pasteboard.");
+        if ([self trySite])
+            [self copyContents];
+        return YES;
     }
 
     return NO;
 }
 
-- (void)controlTextDidEndEditing:(NSNotification *)obj {
+- (void)copyContents {
 
-    if (obj.object == self.siteField)
-        [self trySite];
+    [[NSPasteboard generalPasteboard] declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
+    if (![[NSPasteboard generalPasteboard] setString:self.content forType:NSPasteboardTypeString]) {
+        wrn(@"Couldn't copy password to pasteboard.");
+        return;
+    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.tipField.alphaValue = 1;
+        [self.tipField setStringValue:@"Copied!  Hit ⎋ (ESC) to close window."];
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^{
+            [NSAnimationContext beginGrouping];
+            [[NSAnimationContext currentContext] setDuration:0.2f];
+            [self.tipField.animator setAlphaValue:0];
+            [NSAnimationContext endGrouping];
+        });
+    });
+
+    [[self findElement] use];
+}
+
+- (void)controlTextDidEndEditing:(NSNotification *)note {
+
+    if (note.object != self.siteField)
+        return;
+
+    [self trySite];
+}
+
+- (void)controlTextDidChange:(NSNotification *)note {
+
+    if (note.object != self.siteField)
+        return;
+
+    // Update the site content as the site name changes.
+    BOOL hasValidSite = [self trySite];
+
+    if ([[NSApp currentEvent] type] == NSKeyDown && [[[NSApp currentEvent] charactersIgnoringModifiers] isEqualToString:@"\r"]) {
+        if (hasValidSite)
+            [self copyContents];
+        return;
+    }
+
+    if (self.siteFieldPreventCompletion) {
+        self.siteFieldPreventCompletion = NO;
+        return;
+    }
+
+    self.siteFieldPreventCompletion = YES;
+    [(NSText *)[note.userInfo objectForKey:@"NSFieldEditor"] complete:self];
+    self.siteFieldPreventCompletion = NO;
 }
 
 - (NSString *)content {
@@ -236,8 +293,6 @@
         [self.tipField setStringValue:@""];
         return NO;
     }
-
-    dbg(@"element:\n%@", [result debugDescription]);
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSString *description = [result.content description];

@@ -37,7 +37,7 @@ static EventHotKeyID MPLockHotKey = {.signature = 'lock', .id = 1};
         [MPMacConfig get];
 
     #ifdef DEBUG
-        [PearlLogger get].printLevel = PearlLogLevelTrace;
+        [PearlLogger get].printLevel = PearlLogLevelDebug;//Trace;
     #endif
     });
 }
@@ -60,7 +60,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         return noErr;
     }
     if (hotKeyID.signature == MPLockHotKey.signature && hotKeyID.id == MPLockHotKey.id) {
-        [((__bridge MPAppDelegate *)userData) signOut:nil];
+        [((__bridge MPAppDelegate *)userData) lock:nil];
         return noErr;
     }
 
@@ -161,6 +161,11 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (IBAction)signOut:(id)sender {
     
     [self signOutAnimated:YES];
+}
+
+- (IBAction)lock:(id)sender {
+
+    self.key = nil;
 }
 
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)oldValue {

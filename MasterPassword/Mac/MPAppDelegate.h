@@ -29,5 +29,6 @@
 - (IBAction)togglePreference:(NSMenuItem *)sender;
 - (IBAction)newUser:(NSMenuItem *)sender;
 - (IBAction)signOut:(id)sender;
+- (IBAction)lock:(id)sender;
 
 @end

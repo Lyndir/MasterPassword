@@ -40,6 +40,8 @@ typedef enum {
     MPElementTypeStoredDevicePrivate = 0x1 | MPElementTypeClassStored | MPElementFeatureDevicePrivate,
 } MPElementType;
 
+#define MPErrorDomain                         @"MPErrorDomain"
+
 #define MPCheckpointHelpChapter               @"MPCheckpointHelpChapter"
 #define MPCheckpointCopyToPasteboard          @"MPCheckpointCopyToPasteboard"
 #define MPCheckpointCopyLoginNameToPasteboard @"MPCheckpointCopyLoginNameToPasteboard"
