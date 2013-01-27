@@ -203,11 +203,11 @@ static char managedObjectContextKey;
     dbg(@"[StoreManager] %@", message);
 }
 
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)iCloudEnabled {
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToCloud:(BOOL)cloudEnabled {
 
     // manager.cloudEnabled is more reliable (eg. iOS' MPAppDelegate tampers with didSwitch a bit)
-    iCloudEnabled = manager.cloudEnabled;
-    inf(@"Using iCloud? %@", iCloudEnabled? @"YES": @"NO");
+    cloudEnabled = manager.cloudEnabled;
+    inf(@"Using iCloud? %@", cloudEnabled? @"YES": @"NO");
 
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:cloudEnabled? MPCheckpointCloudEnabled: MPCheckpointCloudDisabled];
@@ -218,7 +218,7 @@ static char managedObjectContextKey;
     }];
 #endif
 
-    [MPConfig get].iCloud = @(iCloudEnabled);
+    [MPConfig get].iCloud = @(cloudEnabled);
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreManagerErrorCause)cause

@@ -395,8 +395,8 @@
 
 - (void)checkConfig {
 
-    if ([[MPConfig get].iCloud boolValue] != [self.storeManager iCloudEnabled])
-        [self.storeManager useiCloudStore:[[MPConfig get].iCloud boolValue] alertUser:YES];
+    if ([[MPConfig get].iCloud boolValue] != [self.storeManager cloudEnabled])
+        self.storeManager.cloudEnabled = [[MPConfig get].iCloud boolValue];
     if ([[MPiOSConfig get].sendInfo boolValue]) {
         if ([PearlLogger get].printLevel > PearlLogLevelInfo)
             [PearlLogger get].printLevel = PearlLogLevelInfo;
@@ -629,12 +629,12 @@
 
 #pragma mark - UbiquityStoreManagerDelegate
 
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)iCloudEnabled {
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToCloud:(BOOL)cloudEnabled {
 
-    [super ubiquityStoreManager:manager didSwitchToiCloud:iCloudEnabled];
+    [super ubiquityStoreManager:manager didSwitchToCloud:cloudEnabled];
 
     if (![[MPConfig get].iCloudDecided boolValue]) {
-        if (!iCloudEnabled) {
+        if (!cloudEnabled) {
             [PearlAlert showAlertWithTitle:@"iCloud"
                                    message:
                                     @"iCloud is now disabled.\n\n"
@@ -657,7 +657,7 @@
                                                           @"Apple can never see any of your passwords."
                                                       viewStyle:UIAlertViewStyleDefault
                                                       initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                                     [self ubiquityStoreManager:manager didSwitchToiCloud:iCloudEnabled];
+                                     [self ubiquityStoreManager:manager didSwitchToCloud:cloudEnabled];
                                  }
                                                     cancelTitle:[PearlStrings get].commonButtonThanks otherTitles:nil];
                                  return;
@@ -667,7 +667,7 @@
                              if (buttonIndex == [alert cancelButtonIndex])
                                  return;
                              if (buttonIndex == [alert firstOtherButtonIndex] + 1)
-                                 [manager useiCloudStore:YES alertUser:NO];
+                                 manager.cloudEnabled = YES;
                          }     cancelTitle:@"Leave iCloud Off" otherTitles:@"Explain?", @"Enable iCloud", nil];
         }
     }

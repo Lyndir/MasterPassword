@@ -164,15 +164,15 @@
         [self initializeWordLabel:wordLabel];
     }                        recurse:NO];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:PersistentStoreDidChange object:nil queue:nil usingBlock:
-     ^(NSNotification *note) {
-         [self updateUsers];
-     }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:PersistentStoreDidMergeChanges object:nil queue:nil usingBlock:
-     ^(NSNotification *note) {
-         [self updateUsers];
-     }];
-
+    [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidChangeNotification object:nil queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [self updateUsers];
+                                                  }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidImportChangesNotification object:nil queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [self updateUsers];
+                                                  }];
+    
     [self updateLayoutAnimated:NO allowScroll:YES completion:nil];
 
     [super viewDidLoad];

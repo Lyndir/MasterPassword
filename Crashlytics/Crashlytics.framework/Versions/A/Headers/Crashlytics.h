@@ -9,10 +9,10 @@
 
 /**
  *
- * The CLS_LOG macro provides as easy way to gather more information in your log messages that are 
- * sent with your crash data. CLS_LOG prepends your custom log message with the function name and 
- * line number where the macro was used. If your app was built with the DEBUG preprocessor macro 
- * defined CLS_LOG uses the CLSNSLog function which forwards your log message to NSLog and CLSLog. 
+ * The CLS_LOG macro provides as easy way to gather more information in your log messages that are
+ * sent with your crash data. CLS_LOG prepends your custom log message with the function name and
+ * line number where the macro was used. If your app was built with the DEBUG preprocessor macro
+ * defined CLS_LOG uses the CLSNSLog function which forwards your log message to NSLog and CLSLog.
  * If the DEBUG preprocessor macro is not defined CLS_LOG uses CLSLog only.
  *
  * Example output:
@@ -26,18 +26,18 @@
  *
  **/
 #ifdef DEBUG
-	#define CLS_LOG(__FORMAT__, ...) CLSNSLog((@"%s line %d $ " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#define CLS_LOG(__FORMAT__, ...) CLSNSLog((@"%s line %d $ " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 #else
-	#define CLS_LOG(__FORMAT__, ...) CLSLog((@"%s line %d $ " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#define CLS_LOG(__FORMAT__, ...) CLSLog((@"%s line %d $ " __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 #endif
 
 /**
- * 
+ *
  * Add logging that will be sent with your crash data. This logging will not show up in the system.log
  * and will only be visible in your Crashlytics dashboard.
  *
  **/
-OBJC_EXTERN void CLSLog(NSString *format, ...);
+OBJC_EXTERN void CLSLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
 
 /**
  *
@@ -45,22 +45,11 @@ OBJC_EXTERN void CLSLog(NSString *format, ...);
  * and your Crashlytics dashboard. It is not recommended for Release builds.
  *
  **/
-OBJC_EXTERN void CLSNSLog(NSString *format, ...);
+OBJC_EXTERN void CLSNSLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
 
 @protocol CrashlyticsDelegate;
 
-@interface Crashlytics : NSObject {
-@private
-	NSString *_apiKey;
-	NSString *_dataDirectory;
-	NSString *_bundleIdentifier;
-	BOOL _installed;
-	NSMutableDictionary *_customAttributes;
-	id _user;
-	NSInteger _sendButtonIndex;
-	NSInteger _alwaysSendButtonIndex;
-	NSObject <CrashlyticsDelegate> *_delegate;
-}
+@interface Crashlytics : NSObject
 
 @property (nonatomic, readonly, copy) NSString *apiKey;
 @property (nonatomic, readonly, copy) NSString *version;
@@ -73,7 +62,7 @@ OBJC_EXTERN void CLSNSLog(NSString *format, ...);
  * The recommended way to install Crashlytics into your application is to place a call
  * to +startWithAPIKey: in your -application:didFinishLaunchingWithOptions: method.
  *
- * This delay defaults to 1 second in order to generally give the application time to 
+ * This delay defaults to 1 second in order to generally give the application time to
  * fully finish launching.
  *
  **/
@@ -105,21 +94,21 @@ OBJC_EXTERN void CLSNSLog(NSString *format, ...);
 
 /**
  *
- * Many of our customers have requested the ability to tie crashes to specific end-users of their 
- * application in order to facilitate responses to support requests or permit the ability to reach 
- * out for more information. We allow you to specify up to three separate values for display within 
+ * Many of our customers have requested the ability to tie crashes to specific end-users of their
+ * application in order to facilitate responses to support requests or permit the ability to reach
+ * out for more information. We allow you to specify up to three separate values for display within
  * the Crashlytics UI - but please be mindful of your end-user's privacy.
  *
- * We recommend specifying a user identifier - an arbitrary string that ties an end-user to a record 
- * in your system. This could be a database id, hash, or other value that is meaningless to a 
+ * We recommend specifying a user identifier - an arbitrary string that ties an end-user to a record
+ * in your system. This could be a database id, hash, or other value that is meaningless to a
  * third-party observer but can be indexed and queried by you.
  *
- * Optionally, you may also specify the end-user's name or username, as well as email address if you 
+ * Optionally, you may also specify the end-user's name or username, as well as email address if you
  * do not have a system that works well with obscured identifiers.
  *
- * Pursuant to our EULA, this data is transferred securely throughout our system and we will not 
- * disseminate end-user data unless required to by law. That said, if you choose to provide end-user 
- * contact information, we strongly recommend that you disclose this in your application's privacy 
+ * Pursuant to our EULA, this data is transferred securely throughout our system and we will not
+ * disseminate end-user data unless required to by law. That said, if you choose to provide end-user
+ * contact information, we strongly recommend that you disclose this in your application's privacy
  * policy. Data privacy is of our utmost concern.
  *
  **/
@@ -149,12 +138,12 @@ OBJC_EXTERN void CLSNSLog(NSString *format, ...);
 @end
 
 /**
- * The CLSCrashReport protocol exposes methods that you can call on crash report objects passed 
- * to delegate methods. If you want these values or the entire object to stay in memory retain 
+ * The CLSCrashReport protocol exposes methods that you can call on crash report objects passed
+ * to delegate methods. If you want these values or the entire object to stay in memory retain
  * them or copy them.
  **/
 @protocol CLSCrashReport <NSObject>
-@optional
+@required
 
 /**
  * Returns the session identifier for the crash report.
@@ -171,7 +160,7 @@ OBJC_EXTERN void CLSNSLog(NSString *format, ...);
 /**
  *
  * The CrashlyticsDelegate protocol provides a mechanism for your application to take
- * action on events that occur in the Crashlytics crash reporting system.  You can make 
+ * action on events that occur in the Crashlytics crash reporting system.  You can make
  * use of these calls by assigning an object to the Crashlytics' delegate property directly,
  * or through the convenience startWithAPIKey:delegate:... methods.
  *
@@ -181,7 +170,7 @@ OBJC_EXTERN void CLSNSLog(NSString *format, ...);
 
 /**
  *
- * Called once a Crashlytics instance has determined that the last execution of the 
+ * Called once a Crashlytics instance has determined that the last execution of the
  * application ended in a crash.  This is called some time after the crash reporting
  * process has begun.  If you have specified a delay in one of the
  * startWithAPIKey:... calls, this will take at least that long to be invoked.
@@ -191,7 +180,7 @@ OBJC_EXTERN void CLSNSLog(NSString *format, ...);
 
 /**
  *
- * Just like crashlyticsDidDetectCrashDuringPreviousExecution this delegate method is 
+ * Just like crashlyticsDidDetectCrashDuringPreviousExecution this delegate method is
  * called once a Crashlytics instance has determined that the last execution of the
  * application ended in a crash. A CLSCrashReport is passed back that contains data about
  * the last crash report that was generated. See the CLSCrashReport protocol for method details.
