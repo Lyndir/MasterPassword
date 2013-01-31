@@ -1,3 +1,12 @@
+##1.2 BETA 2 - October 9, 2012
+
+* Resolved an instance of close_file being called on a bad file descriptor
+
+##1.2 BETA 1 - October 1, 2012
+
+* Removed support for armv6
+* Exception handler now returns instead of raising a SIGTRAP
+
 ##1.1 - September 13, 2012
 
 * armv7s and iOS 6 support
