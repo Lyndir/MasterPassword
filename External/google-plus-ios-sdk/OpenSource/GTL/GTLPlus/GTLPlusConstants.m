@@ -24,14 +24,13 @@
 // Description:
 //   The Google+ API enables developers to build on top of the Google+ platform.
 // Documentation:
-//   http://developers.google.com/+/api/
+//   https://developers.google.com/+/history/
 
 #import "GTLPlusConstants.h"
 
 // Authorization scope
-NSString * const kGTLAuthScopePlusMe            = @"https://www.googleapis.com/auth/plus.me";
-NSString * const kGTLAuthScopePlusMomentsWrite  = @"https://www.googleapis.com/auth/plus.moments.write";
-NSString * const kGTLAuthScopePlusUserinfoEmail = @"https://www.googleapis.com/auth/userinfo.email";
+NSString * const kGTLAuthScopePlusMe           = @"https://www.googleapis.com/auth/plus.me";
+NSString * const kGTLAuthScopePlusMomentsWrite = @"https://www.googleapis.com/auth/plus.moments.write";
 
 // Collection
 NSString * const kGTLPlusCollectionVault = @"vault";

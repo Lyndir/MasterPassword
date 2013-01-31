@@ -17,6 +17,9 @@
 //  GTLUploadParameters.h
 //
 
+// Uploading documentation:
+// https://code.google.com/p/google-api-objectivec-client/wiki/Introduction#Uploading_Files
+
 #import <Foundation/Foundation.h>
 
 #import "GTLDefines.h"

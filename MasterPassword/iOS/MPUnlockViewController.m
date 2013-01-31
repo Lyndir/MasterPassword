@@ -8,7 +8,6 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import <Social/Social.h>
-#import "GooglePlusShare.h"
 
 #import "MPUnlockViewController.h"
 #import "MPAppDelegate.h"
@@ -837,11 +836,9 @@
 
 - (IBAction)google:(UIButton *)sender {
 
-    GooglePlusShare *share = [[GooglePlusShare alloc] initWithClientID:[[PearlInfoPlist get] objectForKeyPath:@"GooglePlusClientID"]];
-    [[[[share shareDialog]
-              setURLToShare:[NSURL URLWithString:@"http://masterpasswordapp.com"]]
-              setPrefillText:@"I've secured my accounts with Master Password: Actually secure passwords that cannot get lost."]
-              open];
+    id<GPPShareBuilder> shareDialog = [[MPAppDelegate get].googlePlus shareDialog];
+    [[[shareDialog setURLToShare:[NSURL URLWithString:@"http://masterpasswordapp.com"]]
+                   setPrefillText:@"I've started doing passwords properly thanks to Master Password for iOS."] open];
 }
 
 - (IBAction)mail:(UIButton *)sender {

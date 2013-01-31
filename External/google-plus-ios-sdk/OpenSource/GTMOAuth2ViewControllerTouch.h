@@ -53,6 +53,7 @@ _EXTERN NSString* const kGTMOAuth2KeychainErrorDomain       _INITIALIZE_AS(@"com
  @private
   UIButton *backButton_;
   UIButton *forwardButton_;
+  UIActivityIndicatorView *initialActivityIndicator_;
   UIView *navButtonsView_;
   UIBarButtonItem *rightBarButtonItem_;
   UIWebView *webView_;
@@ -73,6 +74,8 @@ _EXTERN NSString* const kGTMOAuth2KeychainErrorDomain       _INITIALIZE_AS(@"com
 
 #if NS_BLOCKS_AVAILABLE
   void (^completionBlock_)(GTMOAuth2ViewControllerTouch *, GTMOAuth2Authentication *, NSError *);
+
+  void (^popViewBlock_)(void);
 #endif
 
   NSString *keychainItemName_;
@@ -82,6 +85,10 @@ _EXTERN NSString* const kGTMOAuth2KeychainErrorDomain       _INITIALIZE_AS(@"com
   // of the web view
   NSString *initialHTMLString_;
 
+  // set to 1 or -1 if the user sets the showsInitialActivityIndicator
+  // property
+  int mustShowActivityIndicator_;
+
   // if non-nil, the URL for which cookies will be deleted when the
   // browser view is dismissed
   NSURL *browserCookiesURL_;
@@ -89,10 +96,12 @@ _EXTERN NSString* const kGTMOAuth2KeychainErrorDomain       _INITIALIZE_AS(@"com
   id userData_;
   NSMutableDictionary *properties_;
 
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < 60000
   // We delegate the decision to our owning NavigationController (if any).
   // But, the NavigationController will call us back, and ask us.
   // BOOL keeps us from infinite looping.
   BOOL isInsideShouldAutorotateToInterfaceOrientation_;
+#endif
 
   // YES, when view first shown in this signIn session.
   BOOL isViewShown_;
@@ -132,6 +141,11 @@ _EXTERN NSString* const kGTMOAuth2KeychainErrorDomain       _INITIALIZE_AS(@"com
 // initial view color
 @property (nonatomic, copy) NSString *initialHTMLString;
 
+// an activity indicator shows during initial webview load when no initial HTML
+// string is specified, but the activity indicator can be forced to be shown
+// with this property
+@property (nonatomic, assign) BOOL showsInitialActivityIndicator;
+
 // the underlying object to hold authentication tokens and authorize http
 // requests
 @property (nonatomic, retain, readonly) GTMOAuth2Authentication *authentication;
@@ -142,9 +156,16 @@ _EXTERN NSString* const kGTMOAuth2KeychainErrorDomain       _INITIALIZE_AS(@"com
 // user interface elements
 @property (nonatomic, retain) IBOutlet UIButton *backButton;
 @property (nonatomic, retain) IBOutlet UIButton *forwardButton;
+@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *initialActivityIndicator;
 @property (nonatomic, retain) IBOutlet UIView *navButtonsView;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *rightBarButtonItem;
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
+
+#if NS_BLOCKS_AVAILABLE
+// An optional block to be called when the view should be popped. If not set,
+// the view controller will use its navigation controller to pop the view.
+@property (nonatomic, copy) void (^popViewBlock)(void);
+#endif
 
 // the default timeout for an unreachable network during display of the
 // sign-in page is 10 seconds; set this to 0 to have no timeout
@@ -243,10 +264,6 @@ _EXTERN NSString* const kGTMOAuth2KeychainErrorDomain       _INITIALIZE_AS(@"com
             keychainItemName:(NSString *)keychainItemName
            completionHandler:(void (^)(GTMOAuth2ViewControllerTouch *viewController, GTMOAuth2Authentication *auth, NSError *error))handler;
 #endif
-
-// Override default in UIViewController. If we have a navigationController, ask
-// it. else default result (i.e., Portrait mode only).
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 
 // subclasses may override authNibName to specify a custom name
 + (NSString *)authNibName;

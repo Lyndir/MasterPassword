@@ -17,6 +17,9 @@
 //  GTLQuery.h
 //
 
+// Query documentation:
+// https://code.google.com/p/google-api-objectivec-client/wiki/Introduction#Query_Operations
+
 #import "GTLObject.h"
 #import "GTLUploadParameters.h"
 

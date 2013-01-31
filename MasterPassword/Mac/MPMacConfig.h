@@ -12,6 +12,4 @@
 
 @property (nonatomic, retain) NSString *usedUserName;
 
-+ (MPMacConfig *)get;
-
 @end

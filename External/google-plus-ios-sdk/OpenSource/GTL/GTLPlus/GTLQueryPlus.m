@@ -24,14 +24,13 @@
 // Description:
 //   The Google+ API enables developers to build on top of the Google+ platform.
 // Documentation:
-//   http://developers.google.com/+/api/
+//   https://developers.google.com/+/history/
 // Classes:
-//   GTLQueryPlus (2 custom class methods, 4 custom properties)
+//   GTLQueryPlus (1 custom class methods, 4 custom properties)
 
 #import "GTLQueryPlus.h"
 
 #import "GTLPlusMoment.h"
-#import "GTLPlusPerson.h"
 
 @implementation GTLQueryPlus
 
@@ -54,18 +53,6 @@
   query.userId = userId;
   query.collection = collection;
   query.expectedObjectClass = [GTLPlusMoment class];
-  return query;
-}
-
-#pragma mark -
-#pragma mark "people" methods
-// These create a GTLQueryPlus object.
-
-+ (id)queryForPeopleGetWithUserId:(NSString *)userId {
-  NSString *methodName = @"plus.people.get";
-  GTLQueryPlus *query = [self queryWithMethodName:methodName];
-  query.userId = userId;
-  query.expectedObjectClass = [GTLPlusPerson class];
   return query;
 }
 

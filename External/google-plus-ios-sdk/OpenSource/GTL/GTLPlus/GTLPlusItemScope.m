@@ -24,7 +24,7 @@
 // Description:
 //   The Google+ API enables developers to build on top of the Google+ platform.
 // Documentation:
-//   http://developers.google.com/+/api/
+//   https://developers.google.com/+/history/
 // Classes:
 //   GTLPlusItemScope (0 custom class methods, 55 custom properties)
 
@@ -66,7 +66,6 @@
       [GTLPlusItemScope class], @"author",
       [GTLPlusItemScope class], @"contributor",
       [GTLPlusItemScope class], @"performers",
-      [GTLPlusItemScope class], @"reviewRating",
       nil];
   return map;
 }

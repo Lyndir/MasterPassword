@@ -24,10 +24,9 @@
 // Description:
 //   The Google+ API enables developers to build on top of the Google+ platform.
 // Documentation:
-//   http://developers.google.com/+/api/
+//   https://developers.google.com/+/history/
 // Classes:
 //   GTLPlusMoment (0 custom class methods, 6 custom properties)
-//   GTLPlusMomentVerb (0 custom class methods, 1 custom properties)
 
 #import "GTLPlusMoment.h"
 
@@ -39,20 +38,17 @@
 //
 
 @implementation GTLPlusMoment
-@dynamic kind, result, startDate, target, type, verb;
+@dynamic identifier, kind, result, startDate, target, type;
+
++ (NSDictionary *)propertyToJSONKeyMap {
+  NSDictionary *map =
+    [NSDictionary dictionaryWithObject:@"id"
+                                forKey:@"identifier"];
+  return map;
+}
 
 + (void)load {
   [self registerObjectClassForKind:@"plus#moment"];
 }
 
-@end
-
-
-// ----------------------------------------------------------------------------
-//
-//   GTLPlusMomentVerb
-//
-
-@implementation GTLPlusMomentVerb
-@dynamic url;
 @end

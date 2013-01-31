@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
+
 #import "MPAppDelegate_Shared.h"
+#import "GPPShare.h"
 
 @interface MPAppDelegate : MPAppDelegate_Shared
 
-+ (MPAppDelegate *)get;
+@property (nonatomic, readonly) GPPShare *googlePlus;
 
 - (void)showGuide;
 - (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController;

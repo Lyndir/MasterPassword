@@ -55,7 +55,8 @@ finishedWithAuth:(GTMOAuth2Authentication *)auth
             forwardButton = forwardButton_,
             navButtonsView = navButtonsView_,
             rightBarButtonItem = rightBarButtonItem_,
-            webView = webView_;
+            webView = webView_,
+            initialActivityIndicator = initialActivityIndicator_;
 
 @synthesize keychainItemName = keychainItemName_,
             keychainItemAccessibility = keychainItemAccessibility_,
@@ -64,6 +65,10 @@ finishedWithAuth:(GTMOAuth2Authentication *)auth
             signIn = signIn_,
             userData = userData_,
             properties = properties_;
+
+#if NS_BLOCKS_AVAILABLE
+@synthesize popViewBlock = popViewBlock_;
+#endif
 
 #if !GTM_OAUTH2_SKIP_GOOGLE_SUPPORT
 + (id)controllerWithScope:(NSString *)scope
@@ -153,7 +158,7 @@ finishedWithAuth:(GTMOAuth2Authentication *)auth
                               authorizationURL:authorizationURL
                               keychainItemName:keychainItemName
                                       delegate:delegate
-                              finishedSelector:finishedSelector] autorelease];  
+                              finishedSelector:finishedSelector] autorelease];
 }
 
 - (id)initWithAuthentication:(GTMOAuth2Authentication *)auth
@@ -178,7 +183,7 @@ finishedWithAuth:(GTMOAuth2Authentication *)auth
                                                  delegate:self
                                        webRequestSelector:@selector(signIn:displayRequest:)
                                          finishedSelector:@selector(signIn:finishedWithAuth:error:)];
-    
+
     // if the user is signing in to a Google service, we'll delete the
     // Google authentication browser cookies upon completion
     //
@@ -230,6 +235,7 @@ finishedWithAuth:(GTMOAuth2Authentication *)auth
 
   [backButton_ release];
   [forwardButton_ release];
+  [initialActivityIndicator_ release];
   [navButtonsView_ release];
   [rightBarButtonItem_ release];
   [webView_ release];
@@ -238,6 +244,7 @@ finishedWithAuth:(GTMOAuth2Authentication *)auth
   [delegate_ release];
 #if NS_BLOCKS_AVAILABLE
   [completionBlock_ release];
+  [popViewBlock_ release];
 #endif
   [keychainItemName_ release];
   [initialHTMLString_ release];
@@ -358,26 +365,32 @@ finishedWithAuth:(GTMOAuth2Authentication *)auth
 
 
 - (void)viewDidLoad {
-  // the app may prefer some html other than blank white to be displayed
-  // before the sign-in web page loads
-  NSString *html = self.initialHTMLString;
-  if ([html length] > 0) {
-    [[self webView] loadHTMLString:html baseURL:nil];
-  }
-
   rightBarButtonItem_.customView = navButtonsView_;
   self.navigationItem.rightBarButtonItem = rightBarButtonItem_;
 }
 
 - (void)popView {
-  if (self.navigationController.topViewController == self) {
-    if (!self.view.isHidden) {
+#if NS_BLOCKS_AVAILABLE
+  void (^popViewBlock)() = self.popViewBlock;
+#else
+  id popViewBlock = nil;
+#endif
+
+  if (popViewBlock || self.navigationController.topViewController == self) {
+    if (!self.view.hidden) {
       // Set the flag to our viewWillDisappear method so it knows
       // this is a disappearance initiated by the sign-in object,
       // not the user cancelling via the navigation controller
       didDismissSelf_ = YES;
 
-      [self.navigationController popViewControllerAnimated:YES];
+      if (popViewBlock) {
+#if NS_BLOCKS_AVAILABLE
+        popViewBlock();
+        self.popViewBlock = nil;
+#endif
+      } else {
+        [self.navigationController popViewControllerAnimated:YES];
+      }
       self.view.hidden = YES;
     }
   }
@@ -488,6 +501,14 @@ static Class gSignInClass = Nil;
   return ([name length] > 0);
 }
 
+- (BOOL)showsInitialActivityIndicator {
+  return (mustShowActivityIndicator_ == 1 || initialHTMLString_ == nil);
+}
+
+- (void)setShowsInitialActivityIndicator:(BOOL)flag {
+  mustShowActivityIndicator_ = (flag ? 1 : -1);
+}
+
 #pragma mark User Properties
 
 - (void)setProperty:(id)obj forKey:(NSString *)key {
@@ -514,8 +535,9 @@ static Class gSignInClass = Nil;
 #pragma mark SignIn callbacks
 
 - (void)signIn:(GTMOAuth2SignIn *)signIn displayRequest:(NSURLRequest *)request {
-  // this is the signIn object's webRequest method, telling the controller
-  // to either display the request in the webview, or close the window
+  // This is the signIn object's webRequest method, telling the controller
+  // to either display the request in the webview, or if the request is nil,
+  // to close the window.
   //
   // All web requests and all window closing goes through this routine
 
@@ -535,12 +557,24 @@ static Class gSignInClass = Nil;
     if (isDateValid) {
       // Display the request.
       self.request = request;
-      BOOL shouldWaitForHTML = ([self.initialHTMLString length] > 0);
-      if (shouldWaitForHTML) {
-        [self.webView performSelector:@selector(loadRequest:)
-                           withObject:request
-                           afterDelay:0.05];
+      // The app may prefer some html other than blank white to be displayed
+      // before the sign-in web page loads.
+      // The first fetch might be slow, so the client programmer may want
+      // to show a local "loading" message.
+      // On iOS 5+, UIWebView will ignore loadHTMLString: if it's followed by
+      // a loadRequest: call, so if there is a "loading" message we defer
+      // the loadRequest: until after after we've drawn the "loading" message.
+      //
+      // If there is no initial html string, we show the activity indicator
+      // unless the user set showsInitialActivityIndicator to NO; if there
+      // is an initial html string, we hide the indicator unless the user set
+      // showsInitialActivityIndicator to YES.
+      NSString *html = self.initialHTMLString;
+      if ([html length] > 0) {
+        [initialActivityIndicator_ setHidden:(mustShowActivityIndicator_ < 1)];
+        [self.webView loadHTMLString:html baseURL:nil];
       } else {
+        [initialActivityIndicator_ setHidden:(mustShowActivityIndicator_ < 0)];
         [self.webView loadRequest:request];
       }
     } else {
@@ -673,6 +707,10 @@ static Class gSignInClass = Nil;
     // this will indirectly call our signIn:finishedWithAuth:error: method
     // for us
     [signIn_ windowWasClosed];
+
+#if NS_BLOCKS_AVAILABLE
+    self.popViewBlock = nil;
+#endif
   }
 
   // prevent the next sign-in from showing in the WebView that the user is
@@ -724,9 +762,16 @@ static Class gSignInClass = Nil;
 #endif
   }
 
-  [signIn_ cookiesChanged:[NSHTTPCookieStorage sharedHTTPCookieStorage]];
+  if (self.request && [self.initialHTMLString length] > 0) {
+    // The request was pending.
+    [self setInitialHTMLString:nil];
+    [self.webView loadRequest:self.request];
+  } else {
+    [initialActivityIndicator_ setHidden:YES];
+    [signIn_ cookiesChanged:[NSHTTPCookieStorage sharedHTTPCookieStorage]];
 
-  [self updateUI];
+    [self updateUI];
+  }
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
@@ -762,6 +807,17 @@ static Class gSignInClass = Nil;
   }
 }
 
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < 60000
+// When running on a device with an OS version < 6, this gets called.
+//
+// Since it is never called in iOS 6 or greater, if your min deployment
+// target is iOS6 or greater, then you don't need to have this method compiled
+// into your app.
+//
+// When running on a device with an OS version 6 or greater, this code is
+// not called. - (NSUInteger)supportedInterfaceOrientations; would be called,
+// if it existed. Since it is absent,
+// Allow the default orientations: All for iPad, all but upside down for iPhone.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
   BOOL value = YES;
   if (!isInsideShouldAutorotateToInterfaceOrientation_) {
@@ -776,6 +832,8 @@ static Class gSignInClass = Nil;
   }
   return value;
 }
+#endif
+
 
 @end
 

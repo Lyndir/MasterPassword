@@ -40,10 +40,13 @@
 @end
 
 // If GTMNSJSONSerialization is available, it is used for formatting JSON
+#if (TARGET_OS_MAC && !TARGET_OS_IPHONE && (MAC_OS_X_VERSION_MAX_ALLOWED < 1070)) || \
+  (TARGET_OS_IPHONE && (__IPHONE_OS_VERSION_MAX_ALLOWED < 50000))
 @interface GTMNSJSONSerialization : NSObject
 + (NSData *)dataWithJSONObject:(id)obj options:(NSUInteger)opt error:(NSError **)error;
 + (id)JSONObjectWithData:(NSData *)data options:(NSUInteger)opt error:(NSError **)error;
 @end
+#endif
 
 // Otherwise, if SBJSON is available, it is used for formatting JSON
 @interface GTMFetcherSBJSON

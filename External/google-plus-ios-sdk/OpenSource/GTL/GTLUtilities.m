@@ -300,41 +300,6 @@ const CFStringRef kCharsToForceEscape = CFSTR("!*'();:@&=+$,/?%#[]");
   return result;
 }
 
-#pragma mark MIME Types
-
-// Utility routine to convert a file path to the file's MIME type using
-// Mac OS X's UTI database
-#if !GTL_FOUNDATION_ONLY
-+ (NSString *)MIMETypeForFileAtPath:(NSString *)path
-                    defaultMIMEType:(NSString *)defaultType {
-  NSString *result = defaultType;
-
-  // Convert the path to an FSRef
-  FSRef fileFSRef;
-  Boolean isDirectory;
-  OSStatus err = FSPathMakeRef((UInt8 *) [path fileSystemRepresentation],
-                               &fileFSRef, &isDirectory);
-  if (err == noErr) {
-    // Get the UTI (content type) for the FSRef
-    CFStringRef fileUTI;
-    err = LSCopyItemAttribute(&fileFSRef, kLSRolesAll, kLSItemContentType,
-                              (CFTypeRef *)&fileUTI);
-    if (err == noErr) {
-      // Get the MIME type for the UTI
-      CFStringRef mimeTypeTag;
-      mimeTypeTag = UTTypeCopyPreferredTagWithClass(fileUTI,
-                                                    kUTTagClassMIMEType);
-      if (mimeTypeTag) {
-        // Convert the CFStringRef to an autoreleased NSString
-        result = [(id)CFMakeCollectable(mimeTypeTag) autorelease];
-      }
-      CFRelease(fileUTI);
-    }
-  }
-  return result;
-}
-#endif
-
 @end
 
 // isEqual: has the fatal flaw that it doesn't deal well with the receiver

@@ -17,6 +17,4 @@
 @property (nonatomic, retain) NSNumber *typeTipShown;
 @property (nonatomic, retain) NSNumber *loginNameTipShown;
 
-+ (MPiOSConfig *)get;
-
 @end

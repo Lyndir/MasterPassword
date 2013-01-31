@@ -44,9 +44,12 @@ static NSString *const kTokenFetchSelectorKey = @"sel";
 static NSString *const kRefreshFetchArgsKey = @"requestArgs";
 
 // If GTMNSJSONSerialization is available, it is used for formatting JSON
+#if (TARGET_OS_MAC && !TARGET_OS_IPHONE && (MAC_OS_X_VERSION_MAX_ALLOWED < 1070)) || \
+  (TARGET_OS_IPHONE && (__IPHONE_OS_VERSION_MAX_ALLOWED < 50000))
 @interface GTMNSJSONSerialization : NSObject
 + (id)JSONObjectWithData:(NSData *)data options:(NSUInteger)opt error:(NSError **)error;
 @end
+#endif
 
 @interface GTMOAuth2ParserClass : NSObject
 // just enough of SBJSON to be able to parse
@@ -524,10 +527,24 @@ finishedRefreshWithFetcher:(GTMHTTPFetcher *)fetcher
     NSThread *targetThread = args.thread;
     BOOL isSameThread = [targetThread isEqual:[NSThread currentThread]];
 
-    [self performSelector:@selector(invokeCallbackArgs:)
-                 onThread:targetThread
-               withObject:args
-            waitUntilDone:isSameThread];
+    if (isSameThread) {
+      [self invokeCallbackArgs:args];
+    } else {
+      SEL sel = @selector(invokeCallbackArgs:);
+      NSOperationQueue *delegateQueue = self.fetcherService.delegateQueue;
+      if (delegateQueue) {
+        NSInvocationOperation *op;
+        op = [[[NSInvocationOperation alloc] initWithTarget:self
+                                                   selector:sel
+                                                     object:args] autorelease];
+        [delegateQueue addOperation:op];
+      } else {
+        [self performSelector:sel
+                     onThread:targetThread
+                   withObject:args
+                waitUntilDone:NO];
+      }
+    }
   }
 
   BOOL didAuth = (args.error == nil);

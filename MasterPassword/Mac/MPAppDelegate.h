@@ -23,8 +23,6 @@
 @property (nonatomic, weak) IBOutlet NSMenuItem          *createUserItem;
 @property (nonatomic, weak) IBOutlet NSMenuItem          *usersItem;
 
-+ (MPAppDelegate *)get;
-
 - (IBAction)activate:(id)sender;
 - (IBAction)togglePreference:(NSMenuItem *)sender;
 - (IBAction)newUser:(NSMenuItem *)sender;

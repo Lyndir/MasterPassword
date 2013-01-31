@@ -24,9 +24,9 @@
 // Description:
 //   The Google+ API enables developers to build on top of the Google+ platform.
 // Documentation:
-//   http://developers.google.com/+/api/
+//   https://developers.google.com/+/history/
 // Classes:
-//   GTLQueryPlus (2 custom class methods, 4 custom properties)
+//   GTLQueryPlus (1 custom class methods, 4 custom properties)
 
 #if GTL_BUILT_AS_FRAMEWORK
   #import "GTL/GTLQuery.h"
@@ -59,32 +59,18 @@
 // Method: plus.moments.insert
 // Record a user activity (e.g Bill watched a video on Youtube)
 //  Required:
-//   userId: The ID of the user to get activities for. The special value "me"
-//     can be used to indicate the authenticated user.
+//   userId: The ID of the user to record activities for. The only valid values
+//     are "me" and the ID of the authenticated user.
 //   collection: The collection to which to write moments.
 //      kGTLPlusCollectionVault: The default collection for writing new moments.
 //  Optional:
 //   debug: Return the moment as written. Should be used only for debugging.
 //  Authorization scope(s):
+//   kGTLAuthScopePlusMe
 //   kGTLAuthScopePlusMomentsWrite
 // Fetches a GTLPlusMoment.
 + (id)queryForMomentsInsertWithObject:(GTLPlusMoment *)object
                                userId:(NSString *)userId
                            collection:(NSString *)collection;
-
-#pragma mark -
-#pragma mark "people" methods
-// These create a GTLQueryPlus object.
-
-// Method: plus.people.get
-// Get a person's profile.
-//  Required:
-//   userId: The ID of the person to get the profile for. The special value "me"
-//     can be used to indicate the authenticated user.
-//  Authorization scope(s):
-//   kGTLAuthScopePlusMe
-//   kGTLAuthScopePlusUserinfoEmail
-// Fetches a GTLPlusPerson.
-+ (id)queryForPeopleGetWithUserId:(NSString *)userId;
 
 @end

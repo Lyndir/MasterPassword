@@ -14,14 +14,7 @@
 
 @interface MPAppDelegate ()
 
-- (NSDictionary *)testFlightInfo;
-- (NSString *)testFlightToken;
-
-- (NSDictionary *)crashlyticsInfo;
-- (NSString *)crashlyticsAPIKey;
-
-- (NSDictionary *)localyticsInfo;
-- (NSString *)localyticsKey;
+@property (nonatomic, readwrite) GPPShare *googlePlus;
 
 @end
 
@@ -36,11 +29,6 @@
     [PearlLogger get].printLevel = PearlLogLevelDebug;
     //[NSClassFromString(@"WebView") performSelector:NSSelectorFromString(@"_enableRemoteInspector")];
 #endif
-}
-
-+ (MPAppDelegate *)get {
-
-    return (MPAppDelegate *)[super get];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -83,6 +71,16 @@
         err(@"TestFlight: %@", exception);
     }
 #endif
+    @try {
+        NSString *googlePlusClientID = [self googlePlusClientID];
+        if ([googlePlusClientID length]) {
+            inf(@"Initializing Google+");
+            self.googlePlus = [[GPPShare alloc] initWithClientID:googlePlusClientID];
+        }
+    }
+    @catch (id exception) {
+        err(@"Google+: %@", exception);
+    }
     @try {
         NSString *crashlyticsAPIKey = [self crashlyticsAPIKey];
         if ([crashlyticsAPIKey length]) {
@@ -280,6 +278,10 @@
     if (!url)
         return NO;
 
+    // Google+
+    if ([self.googlePlus handleURL:url sourceApplication:sourceApplication annotation:annotation])
+        return YES;
+    
     // Arbitrary URL to mpsites data.
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSError       *error;
@@ -658,8 +660,26 @@
     }
 }
 
-#pragma mark - TestFlight
 
+#pragma mark - Google+
+
+- (NSDictionary *)googlePlusInfo {
+    
+    static NSDictionary *googlePlusInfo = nil;
+    if (googlePlusInfo == nil)
+        googlePlusInfo = [[NSDictionary alloc] initWithContentsOfURL:
+                          [[NSBundle mainBundle] URLForResource:@"Google+" withExtension:@"plist"]];
+    
+    return googlePlusInfo;
+}
+
+- (NSString *)googlePlusClientID {
+    
+    return NSNullToNil([[self googlePlusInfo] valueForKeyPath:@"ClientID"]);
+}
+
+
+#pragma mark - TestFlight
 
 - (NSDictionary *)testFlightInfo {
 
@@ -679,7 +699,6 @@
 
 #pragma mark - Crashlytics
 
-
 - (NSDictionary *)crashlyticsInfo {
 
     static NSDictionary *crashlyticsInfo = nil;
@@ -697,7 +716,6 @@
 
 
 #pragma mark - Localytics
-
 
 - (NSDictionary *)localyticsInfo {
 

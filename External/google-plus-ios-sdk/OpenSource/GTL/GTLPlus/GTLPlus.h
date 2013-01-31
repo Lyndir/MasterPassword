@@ -24,13 +24,12 @@
 // Description:
 //   The Google+ API enables developers to build on top of the Google+ platform.
 // Documentation:
-//   http://developers.google.com/+/api/
+//   https://developers.google.com/+/history/
 
 #import "GTLPlusConstants.h"
 
 #import "GTLPlusItemScope.h"
 #import "GTLPlusMoment.h"
-#import "GTLPlusPerson.h"
 
 #import "GTLQueryPlus.h"
 #import "GTLServicePlus.h"

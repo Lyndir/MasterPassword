@@ -24,7 +24,7 @@
 // Description:
 //   The Google+ API enables developers to build on top of the Google+ platform.
 // Documentation:
-//   http://developers.google.com/+/api/
+//   https://developers.google.com/+/history/
 
 #import <Foundation/Foundation.h>
 
@@ -36,11 +36,9 @@
 
 // Authorization scope
 // Know who you are on Google
-GTL_EXTERN NSString * const kGTLAuthScopePlusMe;             // "https://www.googleapis.com/auth/plus.me"
-// View and manage user activity information in Google+
-GTL_EXTERN NSString * const kGTLAuthScopePlusMomentsWrite;   // "https://www.googleapis.com/auth/plus.moments.write"
-// View your email address
-GTL_EXTERN NSString * const kGTLAuthScopePlusUserinfoEmail;  // "https://www.googleapis.com/auth/userinfo.email"
+GTL_EXTERN NSString * const kGTLAuthScopePlusMe;            // "https://www.googleapis.com/auth/plus.me"
+// Send your activity to your private Google+ history
+GTL_EXTERN NSString * const kGTLAuthScopePlusMomentsWrite;  // "https://www.googleapis.com/auth/plus.moments.write"
 
 // Collection
 GTL_EXTERN NSString * const kGTLPlusCollectionVault;  // "vault"

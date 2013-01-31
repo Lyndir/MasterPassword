@@ -80,7 +80,7 @@ static NSData *DecodeBase64StringCommon(NSString *base64Str,
   const char *cString = [base64Str cStringUsingEncoding:NSASCIIStringEncoding];
   if (cString == nil) return nil;
 
-  NSUInteger inputLength = strlen(cString);
+  NSInteger inputLength = strlen(cString);
   if (inputLength % 4 != 0) return nil;
   if (inputLength == 0) return [NSData data];
 

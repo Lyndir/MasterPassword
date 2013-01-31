@@ -1,5 +1,5 @@
 //
-//  GooglePlusSignIn.h
+//  GPPSignIn.h
 //  Google+ iOS SDK
 //
 //  Copyright 2012 Google Inc.
@@ -13,10 +13,10 @@
 @class GTMOAuth2Authentication;
 @class GTMOAuth2ViewControllerTouch;
 
-// Protocol implemented by the client of GooglePlusSignIn to receive a refresh
+// Protocol implemented by the client of GPPSignIn to receive a refresh
 // token or an error. It is up to the client to present the OAuth 2.0 view
 // controller if single sign-on is disabled via |attemptSSO| in |authenticate|.
-@protocol GooglePlusSignInDelegate
+@protocol GPPSignInDelegate
 
 // Authorization has finished and is successful if |error| is |nil|.
 - (void)finishedWithAuth:(GTMOAuth2Authentication *)auth
@@ -24,11 +24,11 @@
 
 @end
 
-// |GooglePlusSignIn| signs the user in with Google+. It provides single sign-on
+// |GPPSignIn| signs the user in with Google+. It provides single sign-on
 // via the Google+ app, if installed, or Mobile Safari.
-// Here is sample code to use GooglePlusSignIn:
-//   1) GooglePlusSignIn *signIn =
-//         [[GooglePlusSignIn alloc] initForClientID:clientID
+// Here is sample code to use GPPSignIn:
+//   1) GPPSignIn *signIn =
+//         [[GPPSignIn alloc] initForClientID:clientID
 //             language:@"en"
 //                scope:@"https://www.googleapis.com/auth/plus.me"
 //         keychainName:nil];
@@ -36,10 +36,14 @@
 //   2) Setup delegate methods |finishedWithAuth|, etc.
 //   3) Call |handleURL| from |application:openUrl:...| in your app delegate.
 //   4) [auth authenticate:YES];
-@interface GooglePlusSignIn : NSObject
+@interface GPPSignIn : NSObject
 
 // The object to be notified when authentication is finished.
-@property (nonatomic, assign) id<GooglePlusSignInDelegate> delegate;
+@property (nonatomic, assign) id<GPPSignInDelegate> delegate;
+
+// Whether or not to fetch user email after signing in. The email is saved in
+// the |GTMOAuth2Authentication| object.
+@property (nonatomic, assign) BOOL shouldFetchGoogleUserEmail;
 
 // Initializes with your |clientID| from the Google APIs console. Set |scope| to
 // an array of your API scopes. Set |keychainName| to |nil| to use the default
@@ -56,7 +60,7 @@
 
 // This method should be called from your |UIApplicationDelegate|'s
 // |application:openURL:sourceApplication:annotation|. Returns |YES| if
-// |GooglePlusSignIn| handled this URL.
+// |GPPSignIn| handled this URL.
 - (BOOL)handleURL:(NSURL *)url
     sourceApplication:(NSString *)sourceApplication
            annotation:(id)annotation;

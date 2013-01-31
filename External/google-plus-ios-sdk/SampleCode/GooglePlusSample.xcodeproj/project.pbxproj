@@ -17,7 +17,6 @@
 		D973B402158ABC1F0083A4B5 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D973B401158ABC1F0083A4B5 /* MessageUI.framework */; };
 		D98254A815990D8D0060CA47 /* Icon_2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D98254A615990D8D0060CA47 /* Icon_2x.png */; };
 		D98254A915990D8D0060CA47 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D98254A715990D8D0060CA47 /* Icon.png */; };
-		D98254F2159937730060CA47 /* GTLPlusPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = D98254F1159937730060CA47 /* GTLPlusPerson.m */; };
 		D9EE743D158A8BD400EC1D05 /* google_plus_share_large.png in Resources */ = {isa = PBXBuildFile; fileRef = D9EE7435158A8BD400EC1D05 /* google_plus_share_large.png */; };
 		D9EE743E158A8BD400EC1D05 /* google_plus_share_large@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D9EE7436158A8BD400EC1D05 /* google_plus_share_large@2x.png */; };
 		D9EE743F158A8BD400EC1D05 /* google_plus_share.png in Resources */ = {isa = PBXBuildFile; fileRef = D9EE7437158A8BD400EC1D05 /* google_plus_share.png */; };
@@ -79,14 +78,13 @@
 		00F70E98158007D90077799E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		00F70E9A158008040077799E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		0C52D6F7158BAB1F001510E6 /* button_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = button_background.png; path = Resources/button_background.png; sourceTree = SOURCE_ROOT; };
+		294FD685163B67F500A9D5CA /* GPPDeepLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPPDeepLink.h; path = ../lib/GPPDeepLink.h; sourceTree = "<group>"; };
 		D973B401158ABC1F0083A4B5 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		D98254A615990D8D0060CA47 /* Icon_2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon_2x.png; path = Resources/Icon_2x.png; sourceTree = SOURCE_ROOT; };
 		D98254A715990D8D0060CA47 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = SOURCE_ROOT; };
-		D98254F0159937730060CA47 /* GTLPlusPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLPlusPerson.h; sourceTree = "<group>"; };
-		D98254F1159937730060CA47 /* GTLPlusPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLPlusPerson.m; sourceTree = "<group>"; };
-		D9EE7431158A8BAE00EC1D05 /* GooglePlusShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GooglePlusShare.h; path = ../lib/GooglePlusShare.h; sourceTree = "<group>"; };
-		D9EE7432158A8BAE00EC1D05 /* GooglePlusSignIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GooglePlusSignIn.h; path = ../lib/GooglePlusSignIn.h; sourceTree = "<group>"; };
-		D9EE7433158A8BAE00EC1D05 /* GooglePlusSignInButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GooglePlusSignInButton.h; path = ../lib/GooglePlusSignInButton.h; sourceTree = "<group>"; };
+		D9EE7431158A8BAE00EC1D05 /* GPPShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPPShare.h; path = ../lib/GPPShare.h; sourceTree = "<group>"; };
+		D9EE7432158A8BAE00EC1D05 /* GPPSignIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPPSignIn.h; path = ../lib/GPPSignIn.h; sourceTree = "<group>"; };
+		D9EE7433158A8BAE00EC1D05 /* GPPSignInButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPPSignInButton.h; path = ../lib/GPPSignInButton.h; sourceTree = "<group>"; };
 		D9EE7435158A8BD400EC1D05 /* google_plus_share_large.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = google_plus_share_large.png; path = ../Resources/google_plus_share_large.png; sourceTree = "<group>"; };
 		D9EE7436158A8BD400EC1D05 /* google_plus_share_large@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "google_plus_share_large@2x.png"; path = "../Resources/google_plus_share_large@2x.png"; sourceTree = "<group>"; };
 		D9EE7437158A8BD400EC1D05 /* google_plus_share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = google_plus_share.png; path = ../Resources/google_plus_share.png; sourceTree = "<group>"; };
@@ -279,9 +277,10 @@
 		D9EE7434158A8BB500EC1D05 /* GooglePlusSDK */ = {
 			isa = PBXGroup;
 			children = (
-				D9EE7431158A8BAE00EC1D05 /* GooglePlusShare.h */,
-				D9EE7432158A8BAE00EC1D05 /* GooglePlusSignIn.h */,
-				D9EE7433158A8BAE00EC1D05 /* GooglePlusSignInButton.h */,
+				D9EE7431158A8BAE00EC1D05 /* GPPShare.h */,
+				294FD685163B67F500A9D5CA /* GPPDeepLink.h */,
+				D9EE7432158A8BAE00EC1D05 /* GPPSignIn.h */,
+				D9EE7433158A8BAE00EC1D05 /* GPPSignInButton.h */,
 				D9EE74AD158A8D1E00EC1D05 /* libGooglePlus.a */,
 				D9EE74AE158A8D1E00EC1D05 /* libGooglePlusUniversal.a */,
 				D9EE7445158A8BDB00EC1D05 /* Resources */,
@@ -386,8 +385,6 @@
 				D9EE745E158A8C0E00EC1D05 /* GTLPlusItemScope.m */,
 				D9EE745F158A8C0E00EC1D05 /* GTLPlusMoment.h */,
 				D9EE7460158A8C0E00EC1D05 /* GTLPlusMoment.m */,
-				D98254F0159937730060CA47 /* GTLPlusPerson.h */,
-				D98254F1159937730060CA47 /* GTLPlusPerson.m */,
 				D9EE7463158A8C0E00EC1D05 /* GTLQueryPlus.h */,
 				D9EE7464158A8C0E00EC1D05 /* GTLQueryPlus.m */,
 				D9EE7465158A8C0E00EC1D05 /* GTLServicePlus.h */,
@@ -510,7 +507,6 @@
 				D9EE74C5158A8E0500EC1D05 /* GooglePlusSampleMomentsViewController.m in Sources */,
 				D9EE74C7158A8E0500EC1D05 /* GooglePlusSampleShareViewController.m in Sources */,
 				D9EE74C9158A8E0500EC1D05 /* GooglePlusSampleSignInViewController.m in Sources */,
-				D98254F2159937730060CA47 /* GTLPlusPerson.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

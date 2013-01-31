@@ -17,6 +17,8 @@
 //  GTLObject.h
 //
 
+// GTLObject documentation:
+// https://code.google.com/p/google-api-objectivec-client/wiki/Introduction#Objects_and_Queries
 
 #import <Foundation/Foundation.h>
 
@@ -51,7 +53,7 @@
 
   // Used when creating the subobjects from this one.
   NSDictionary *surrogates_;
-  
+
   // Any complex object hung off this object goes into the cache so the
   // next fetch will get the same object back instead of having to recreate
   // it.
@@ -156,14 +158,38 @@
 @end
 
 // Collection objects with an "items" property should derive from GTLCollection
-// object.  This provides support for fast object enumeration and the
-// itemAtIndex: convenience method.
+// object.  This provides support for fast object enumeration, the
+// itemAtIndex: convenience method, and indexed subscripts.
 //
 // Subclasses must implement the items method dynamically.
-@interface GTLCollectionObject : GTLObject <GTLCollectionProtocol, NSFastEnumeration>
+@interface GTLCollectionObject : GTLObject <GTLCollectionProtocol, NSFastEnumeration> {
+ @private
+  NSDictionary *identifierMap_;
+}
 
-// itemAtIndex: returns nil when the index exceeds the bounds of the items array
+// itemAtIndex: and objectAtIndexedSubscript: return nil when the index exceeds
+// the bounds of the items array.
 - (id)itemAtIndex:(NSUInteger)idx;
+
+- (id)objectAtIndexedSubscript:(NSInteger)idx;
+
+// itemForIdentifier: looks up items from the collection object by identifier,
+// and returns the first one.
+//
+// Typically, items will have a unique identifier (with key "id" in the
+// object's JSON).  This method returns the first item found in the collection
+// with the specified identifier.
+//
+// The first time this method is used, the collection will cache a map of
+// identifiers to items.  If the items list for the instance somehow changes,
+// use the reset method below to force a new cache to be created for this
+// collection.
+- (id)itemForIdentifier:(NSString *)key;
+
+// Identifiers for all items are cached when the first one is obtained.
+// This method resets the cache.  It is needed only if the item list has
+// changed.
+- (void)resetIdentifierMap;
 
 @end
 

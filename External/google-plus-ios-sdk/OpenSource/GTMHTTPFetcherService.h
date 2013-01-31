@@ -42,6 +42,7 @@
   NSUInteger maxRunningFetchersPerHost_;
 
   GTMHTTPFetchHistory *fetchHistory_;
+  NSOperationQueue *delegateQueue_;
   NSArray *runLoopModes_;
   NSString *userAgent_;
   NSTimeInterval timeout_;
@@ -83,12 +84,18 @@
 - (NSUInteger)numberOfRunningFetchers;
 - (NSUInteger)numberOfDelayedFetchers;
 
+// Search for running or delayed fetchers with the specified URL.
+//
+// Returns an array of fetcher objects found, or nil if none found.
+- (NSArray *)issuedFetchersWithRequestURL:(NSURL *)requestURL;
+
 - (void)stopAllFetchers;
 
 // Properties to be applied to each fetcher;
 // see GTMHTTPFetcher.h for descriptions
 @property (copy) NSString *userAgent;
 @property (assign) NSTimeInterval timeout;
+@property (retain) NSOperationQueue *delegateQueue;
 @property (retain) NSArray *runLoopModes;
 @property (retain) NSURLCredential *credential;
 @property (retain) NSURLCredential *proxyCredential;

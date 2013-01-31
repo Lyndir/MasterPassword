@@ -24,7 +24,7 @@
 // Description:
 //   The Google+ API enables developers to build on top of the Google+ platform.
 // Documentation:
-//   http://developers.google.com/+/api/
+//   https://developers.google.com/+/history/
 // Classes:
 //   GTLPlusItemScope (0 custom class methods, 55 custom properties)
 
@@ -169,11 +169,11 @@
 // belongs to.
 @property (retain) GTLPlusItemScope *partOfTVSeries;
 
-// The main performer or performers of the event—for example, a presenter,
+// The main performer or performers of the event-for example, a presenter,
 // musician, or actor.
 @property (retain) NSArray *performers;  // of GTLPlusItemScope
 
-// Player type required—for example, Flash or Silverlight.
+// Player type required-for example, Flash or Silverlight.
 @property (copy) NSString *playerType;
 
 // Postal code.
@@ -186,7 +186,7 @@
 @property (copy) NSString *ratingValue;
 
 // Review rating.
-@property (retain) NSArray *reviewRating;  // of GTLPlusItemScope
+@property (retain) GTLPlusItemScope *reviewRating;
 
 // The start date and time of the event (in ISO 8601 date format).
 @property (copy) NSString *startDate;
@@ -213,7 +213,7 @@
 // The item type.
 @property (copy) NSString *type;
 
-// A url for this scope.
+// A URL for the item upon which the action was performed.
 @property (copy) NSString *url;
 
 // The width of the media object.

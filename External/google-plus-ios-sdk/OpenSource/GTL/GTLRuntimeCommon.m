@@ -108,6 +108,12 @@ static NSString *const kJSONKey = @"jsonKey";
       canBeCached = NO;
   } else if ([obj isKindOfClass:[GTLObject class]]) {
     result = [obj JSON];
+    if (result == nil) {
+      // adding an empty object; it should have a JSON dictionary so it can
+      // hold future assignments
+      [obj setJSON:[NSMutableDictionary dictionary]];
+      result = [obj JSON];
+    }
   } else if ([obj isKindOfClass:[NSArray class]]) {
     checkExpected = NO;
     NSArray *array = obj;

@@ -539,21 +539,14 @@ finishedWithFetcher:(GTMHTTPFetcher *)fetcher
 }
 
 #if !GTM_OAUTH2_SKIP_GOOGLE_SUPPORT
-- (void)fetchGoogleUserInfo {
-  // fetch the user's email address
++ (GTMHTTPFetcher *)userInfoFetcherWithAuth:(GTMOAuth2Authentication *)auth {
+  // create a fetcher for obtaining the user's email or profile
   NSURL *infoURL = [[self class] googleUserInfoURL];
   NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:infoURL];
 
-  GTMOAuth2Authentication *auth = self.authentication;
-
   NSString *userAgent = [auth userAgent];
   [request setValue:userAgent forHTTPHeaderField:@"User-Agent"];
-
   [request setValue:@"no-cache" forHTTPHeaderField:@"Cache-Control"];
-
-  // we can do a synchronous authorization since this method is called
-  // only immediately after a fresh access token has been obtained
-  [auth authorizeRequest:request];
 
   GTMHTTPFetcher *fetcher;
   id <GTMHTTPFetcherServiceProtocol> fetcherService = auth.fetcherService;
@@ -562,10 +555,17 @@ finishedWithFetcher:(GTMHTTPFetcher *)fetcher
   } else {
     fetcher = [GTMHTTPFetcher fetcherWithRequest:request];
   }
+  fetcher.authorizer = auth;
   fetcher.retryEnabled = YES;
   fetcher.maxRetryInterval = 15.0;
   fetcher.comment = @"user info";
+  return fetcher;
+}
 
+- (void)fetchGoogleUserInfo {
+  // fetch the user's email address or profile
+  GTMOAuth2Authentication *auth = self.authentication;
+  GTMHTTPFetcher *fetcher = [[self class] userInfoFetcherWithAuth:auth];
   [fetcher beginFetchWithDelegate:self
                 didFinishSelector:@selector(infoFetcher:finishedWithData:error:)];
 

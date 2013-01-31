@@ -1159,20 +1159,29 @@ totalBytesExpectedToSend:(NSInteger)totalBytesExpected {
 
   SEL parseDoneSel = @selector(handleParsedObjectForFetcher:);
   NSArray *runLoopModes = [properties valueForKey:kFetcherCallbackRunLoopModesKey];
-  if (runLoopModes) {
+  // If this callback was enqueued, then the fetcher has already released
+  // its delegateQueue.  We'll use our own delegateQueue to determine how to
+  // invoke the callbacks.
+  NSOperationQueue *delegateQueue = self.delegateQueue;
+  if (delegateQueue) {
+    NSInvocationOperation *op;
+    op = [[[NSInvocationOperation alloc] initWithTarget:self
+                                               selector:parseDoneSel
+                                                 object:fetcher] autorelease];
+    [delegateQueue addOperation:op];
+  } else if (runLoopModes) {
     [self performSelector:parseDoneSel
                  onThread:callbackThread
                withObject:fetcher
             waitUntilDone:NO
                     modes:runLoopModes];
   } else {
-    // defaults to common modes
+    // Defaults to common modes
     [self performSelector:parseDoneSel
                  onThread:callbackThread
                withObject:fetcher
             waitUntilDone:NO];
   }
-
   // the fetcher now belongs to the callback thread
 }
 
@@ -2029,6 +2038,14 @@ totalBytesExpectedToSend:(NSInteger)totalBytesExpected {
 
 - (BOOL)shouldFetchInBackground {
   return self.fetcherService.shouldFetchInBackground;
+}
+
+- (void)setDelegateQueue:(NSOperationQueue *)delegateQueue {
+  self.fetcherService.delegateQueue = delegateQueue;
+}
+
+- (NSOperationQueue *)delegateQueue {
+  return self.fetcherService.delegateQueue;
 }
 
 - (void)setRunLoopModes:(NSArray *)array {

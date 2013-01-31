@@ -18,6 +18,7 @@
 
 #import "GooglePlusSampleMasterViewController.h"
 
+#import "GooglePlusSampleAppDelegate.h"
 #import "GooglePlusSampleShareViewController.h"
 #import "GooglePlusSampleSignInViewController.h"
 #import "GooglePlusSampleMomentsViewController.h"
@@ -25,10 +26,19 @@
 static const int kNumViewControllers = 3;
 static NSString * const kMenuOptions[kNumViewControllers] = {
     @"Sign In", @"Share", @"Moments" };
+static NSString * const kUnselectableMenuOptions[kNumViewControllers] = {
+    @"", @"", @"Sign in to use moments" };
 static NSString * const kNibNames[kNumViewControllers] = {
     @"GooglePlusSampleSignInViewController",
     @"GooglePlusSampleShareViewController",
     @"GooglePlusSampleMomentsViewController" };
+static const int kMomentsIndex = 2;
+
+@interface GooglePlusSampleMasterViewController () {
+  NSIndexPath *momentsIndexPath_;
+}
+- (BOOL)isSelectable:(NSIndexPath *)indexPath;
+@end
 
 @implementation GooglePlusSampleMasterViewController
 
@@ -47,6 +57,11 @@ static NSString * const kNibNames[kNumViewControllers] = {
   return self;
 }
 
+- (void)dealloc {
+  [momentsIndexPath_ release];
+  [super dealloc];
+}
+
 #pragma mark - View lifecycle
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)
@@ -56,6 +71,15 @@ static NSString * const kNibNames[kNumViewControllers] = {
     return interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
   }
   return YES;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  if (momentsIndexPath_) {
+    [self.tableView
+        reloadRowsAtIndexPaths:[NSArray arrayWithObject:momentsIndexPath_]
+              withRowAnimation:UITableViewRowAnimationFade];
+  }
 }
 
 #pragma mark - UITableViewDelegate/UITableViewDataSource
@@ -71,28 +95,53 @@ static NSString * const kNibNames[kNumViewControllers] = {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  static NSString * const kCellIdentifier = @"Cell";
+  BOOL selectable = [self isSelectable:indexPath];
+  NSString * const kCellIdentifier = selectable ? @"Cell" : @"GreyCell";
   UITableViewCell *cell =
       [tableView dequeueReusableCellWithIdentifier:kCellIdentifier];
   if (cell == nil) {
     cell =
         [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                 reuseIdentifier:kCellIdentifier] autorelease];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    if (selectable) {
+      cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    } else {
+      cell.selectionStyle = UITableViewCellSelectionStyleNone;
+      cell.textLabel.textColor = [UIColor lightGrayColor];
+    }
   }
+  cell.textLabel.text = (selectable ? kMenuOptions : kUnselectableMenuOptions)
+      [indexPath.row];
 
-  cell.textLabel.text = kMenuOptions[indexPath.row];
   return cell;
 }
 
 - (void)tableView:(UITableView *)tableView
     didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+  if (![self isSelectable:indexPath]) {
+    return;
+  }
   Class nibClass = NSClassFromString(kNibNames[indexPath.row]);
   UIViewController *controller =
       [[[nibClass alloc] initWithNibName:nil bundle:nil] autorelease];
   controller.navigationItem.title = kMenuOptions[indexPath.row];
 
   [self.navigationController pushViewController:controller animated:YES];
+}
+
+#pragma mark - Helper methods
+
+- (BOOL)isSelectable:(NSIndexPath *)indexPath {
+  if (indexPath.row == kMomentsIndex) {
+    if (!momentsIndexPath_) {
+      momentsIndexPath_ = [indexPath retain];
+    }
+    // To use Google+ History API, you need to sign in.
+    GooglePlusSampleAppDelegate *appDelegate = (GooglePlusSampleAppDelegate *)
+        [[UIApplication sharedApplication] delegate];
+    return appDelegate.auth && appDelegate.plusMomentsWriteScope;
+  }
+  return YES;
 }
 
 @end

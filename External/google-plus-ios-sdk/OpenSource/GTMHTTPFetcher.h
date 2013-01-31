@@ -77,6 +77,33 @@
 //        Status codes are at <http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html>
 //
 //
+// Threading and queue support:
+//
+// Callbacks require either that the thread used to start the fetcher have a run
+// loop spinning (typically the main thread), or that an NSOperationQueue be
+// provided upon which the delegate callbacks will be called.  Starting with
+// iOS 6 and Mac OS X 10.7, clients may simply create an operation queue for
+// callbacks on a background thread:
+//
+//   fetcher.delegateQueue = [[[NSOperationQueue alloc] init] autorelease];
+//
+// or specify the main queue for callbacks on the main thread:
+//
+//   fetcher.delegateQueue = [NSOperationQueue mainQueue];
+//
+// The client may also re-dispatch from the callbacks and notifications to
+// a known dispatch queue:
+//
+//  [myFetcher beginFetchWithCompletionHandler:^(NSData *retrievedData, NSError *error) {
+//    if (error == nil) {
+//      dispatch_async(myDispatchQueue, ^{
+//        ...
+//     });
+//    }
+//  }];
+//
+//
+//
 // Downloading to disk:
 //
 // To have downloaded data saved directly to disk, specify either a path for the
@@ -343,6 +370,9 @@ NSString *GTMApplicationIdentifier(NSBundle *bundle);
 @protocol GTMHTTPFetcherServiceProtocol <NSObject>
 // This protocol allows us to call into the service without requiring
 // GTMHTTPFetcherService sources in this project
+
+@property (retain) NSOperationQueue *delegateQueue;
+
 - (BOOL)fetcherShouldBeginFetching:(GTMHTTPFetcher *)fetcher;
 - (void)fetcherDidStop:(GTMHTTPFetcher *)fetcher;
 
@@ -416,7 +446,8 @@ NSString *GTMApplicationIdentifier(NSBundle *bundle);
 #endif
   id userData_;                     // retained, if set by caller
   NSMutableDictionary *properties_; // more data retained for caller
-  NSArray *runLoopModes_;           // optional, for 10.5 and later
+  NSArray *runLoopModes_;           // optional
+  NSOperationQueue *delegateQueue_; // optional; available iOS 6/10.7 and later
   id <GTMHTTPFetchHistoryProtocol> fetchHistory_; // if supplied by the caller, used for Last-Modified-Since checks and cookies
   NSInteger cookieStorageMethod_;   // constant from above
   id <GTMCookieStorageProtocol> cookieStorage_;
@@ -502,7 +533,8 @@ NSString *GTMApplicationIdentifier(NSBundle *bundle);
 // fetchers that are being delayed by a fetcher service.
 @property (assign) NSInteger servicePriority;
 
-// The thread used to run this fetcher in the fetcher service
+// The thread used to run this fetcher in the fetcher service when no operation
+// queue is provided.
 @property (retain) NSThread *thread;
 
 // The delegate is retained during the connection
@@ -676,6 +708,11 @@ NSString *GTMApplicationIdentifier(NSBundle *bundle);
 
 // Log of request and response, if logging is enabled
 @property (copy) NSString *log;
+
+// Callbacks can be invoked on an operation queue rather than via the run loop,
+// starting on 10.7 and iOS 6.  If a delegate queue is supplied. the run loop
+// modes are ignored.
+@property (retain) NSOperationQueue *delegateQueue;
 
 // Using the fetcher while a modal dialog is displayed requires setting the
 // run-loop modes to include NSModalPanelRunLoopMode

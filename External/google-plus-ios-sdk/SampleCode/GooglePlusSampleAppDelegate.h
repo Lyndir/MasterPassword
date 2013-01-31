@@ -18,8 +18,8 @@
 
 #import <UIKit/UIKit.h>
 
-@class GooglePlusShare;
-@class GooglePlusSignInButton;
+@class GPPShare;
+@class GPPSignInButton;
 @class GTMOAuth2Authentication;
 
 @interface GooglePlusSampleAppDelegate : UIResponder<UIApplicationDelegate>
@@ -29,11 +29,14 @@
 // The navigation controller.
 @property (retain, nonatomic) UINavigationController *navigationController;
 // The Google+ sign-in button to handle the URL redirect.
-@property (retain, nonatomic) GooglePlusSignInButton *signInButton;
+@property (retain, nonatomic) GPPSignInButton *signInButton;
 // The OAuth 2.0 authentication used in the application.
 @property (retain, nonatomic) GTMOAuth2Authentication *auth;
 // The Google+ share object to handle the URL redirect.
-@property (retain, nonatomic) GooglePlusShare *share;
+@property (retain, nonatomic) GPPShare *share;
+// Whether or not to use Google+ history's
+// https://www.googleapis.com/auth/plus.moments.write scope.
+@property (assign, nonatomic) BOOL plusMomentsWriteScope;
 
 // The OAuth 2.0 client ID to be used for Google+ sign-in, share, and moments.
 + (NSString *)clientID;

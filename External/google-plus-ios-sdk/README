@@ -7,10 +7,12 @@ README  -- This file.
 Changelog  -- The versions and changes of the SDK.
 
 lib/  -- Header files and libraries.
-  GooglePlusShare.h -- Header file to include for sharing with Google+.
-  GooglePlusSignIn.h -- Header file to include for signing into Google+.
-  GooglePlusSignInButton.h -- Header file to include for showing a button to
-                              sign in with Google+.
+  GPPDeepLink.h -- Header file to include for sharing with Google+ with content
+                   deep linking.
+  GPPShare.h -- Header file to include for sharing with Google+.
+  GPPSignIn.h -- Header file to include for signing into Google+.
+  GPPSignInButton.h -- Header file to include for showing a button to
+                       sign in with Google+.
   libGooglePlus.a -- Static library built for iOS device to link into your app.
   libGooglePlusUniversal.a -- Static library built for both iOS device and
                               simulator to link into your app.
@@ -23,7 +25,7 @@ OpenSource/  -- Google open source files used by the SDK. Add all files in this
           e.g. Add Moments.
 
 Resources/  -- Resources that can be used in your app.
-               For |GooglePlusSignInButton|, the google_plus_sign_in*.png images
+               For |GPPSignInButton|, the google_plus_sign_in*.png images
                are required.
   google_plus_share.png -- 82x24 Google+ share button image.
   google_plus_share_large.png -- 112x32 Google+ share button image.

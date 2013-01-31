@@ -90,16 +90,4 @@ NSNumber *GTL_EnsureNSNumber(NSNumber *num);
                                         startClass:(Class)startClass
                                      ancestorClass:(Class)ancestorClass
                                              cache:(NSMutableDictionary *)cache;
-
-//
-// MIME Types
-//
-
-// Utility routine to convert a file path to the file's MIME type using
-// Mac OS X's UTI database
-#if !GTL_FOUNDATION_ONLY
-+ (NSString *)MIMETypeForFileAtPath:(NSString *)path
-                    defaultMIMEType:(NSString *)defaultType;
-#endif
-
 @end

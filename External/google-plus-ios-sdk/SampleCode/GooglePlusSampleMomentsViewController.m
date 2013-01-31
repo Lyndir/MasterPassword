@@ -19,6 +19,7 @@
 #import "GooglePlusSampleMomentsViewController.h"
 
 #import <QuartzCore/QuartzCore.h>
+#import "GooglePlusSampleAppDelegate.h"
 #import "GTLPlus.h"
 #import "GTLPlusConstants.h"
 #import "GTLPlusItemScope.h"
@@ -27,7 +28,6 @@
 #import "GTLServicePlus.h"
 #import "GTMLogger.h"
 #import "GTMOAuth2Authentication.h"
-#import "GooglePlusSampleAppDelegate.h"
 
 @interface GooglePlusSampleMomentsViewController ()
 - (GTLPlusItemScope *)resultFor:(NSString *)selectedMoment;
@@ -162,7 +162,7 @@ static NSString * const kMomentURLFormat =
   NSString *selectedMoment = kMomentTypes[selectedRow];
 
   GTLPlusMoment *moment = [[[GTLPlusMoment alloc] init] autorelease];
-  moment.type = [NSString stringWithFormat:@"https://schemas.google.com/%@",
+  moment.type = [NSString stringWithFormat:@"http://schemas.google.com/%@",
                                            selectedMoment];
   GTLPlusItemScope *target = [[[GTLPlusItemScope alloc] init] autorelease];
   target.url = momentURL_.text;
@@ -258,8 +258,8 @@ static NSString * const kMomentURLFormat =
   GTLPlusItemScope *result = [[[GTLPlusItemScope alloc] init] autorelease];
   if ([selectedMoment isEqualToString:@"CommentActivity"]) {
     result.type = @"http://schema.org/Comment";
-    result.url =
-    @"https://developers.google.com/+/plugins/snippet/examples/blog-entry#comment-1";
+    result.url = @"https://developers.google.com/+/plugins/snippet/"
+        @"examples/blog-entry#comment-1";
     result.name = @"This is amazing!";
     result.text = @"I can't wait to use it on my site :)";
     return result;
@@ -272,16 +272,15 @@ static NSString * const kMomentURLFormat =
     result.type = @"http://schema.org/Review";
     result.name = @"A Humble Review of Widget";
     result.url =
-    @"https://developers.google.com/+/plugins/snippet/examples/review";
+        @"https://developers.google.com/+/plugins/snippet/examples/review";
     result.text =
-    @"It's amazingly effective at whatever it is that it's supposed to do.";
+        @"It's amazingly effective at whatever it is that it's supposed to do.";
     GTLPlusItemScope *rating = [[[GTLPlusItemScope alloc] init] autorelease];
     rating.type = @"http://schema.org/Rating";
     rating.ratingValue = @"100";
     rating.bestRating = @"100";
     rating.worstRating = @"0";
-    result.reviewRating =
-    [[[NSArray alloc] initWithObjects:rating, nil] autorelease];
+    result.reviewRating = rating;
     return result;
   }
   return nil;

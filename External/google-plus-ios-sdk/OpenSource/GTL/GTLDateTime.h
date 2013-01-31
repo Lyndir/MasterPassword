@@ -16,6 +16,9 @@
 //
 //  GTLDateTime.h
 //
+//  This is an immutable class representing a date and optionally a
+//  time with time zone.
+//
 
 #import <Foundation/Foundation.h>
 #import "GTLDefines.h"
@@ -28,14 +31,16 @@
   NSTimeZone *timeZone_; // specific time zone by name, if known
 }
 
-// Note: nil can be passed for time zone arguments when the time zone is not
-//       known.
-
 + (GTLDateTime *)dateTimeWithRFC3339String:(NSString *)str;
+
+// timeZone may be nil if the time zone is not known.
 + (GTLDateTime *)dateTimeWithDate:(NSDate *)date timeZone:(NSTimeZone *)tz;
 
-- (void)setFromDate:(NSDate *)date timeZone:(NSTimeZone *)tz;
-- (void)setFromRFC3339String:(NSString *)str;
+// Use this method to make a dateTime for an all-day event (date only, so
+// hasTime is NO.)
++ (GTLDateTime *)dateTimeForAllDayWithDate:(NSDate *)date;
+
++ (GTLDateTime *)dateTimeWithDateComponents:(NSDateComponents *)date;
 
 @property (nonatomic, readonly) NSDate *date;
 @property (nonatomic, readonly) NSCalendar *calendar;
@@ -43,14 +48,13 @@
 @property (nonatomic, readonly) NSString *RFC3339String;
 @property (nonatomic, readonly) NSString *stringValue; // same as RFC3339String
 
-@property (nonatomic, retain) NSTimeZone *timeZone;
-@property (nonatomic, copy) NSDateComponents *dateComponents;
-@property (nonatomic, assign) NSInteger milliseconds; // This is only for the fraction of a second 0-999
+@property (nonatomic, readonly, retain) NSTimeZone *timeZone;
+@property (nonatomic, readonly, copy) NSDateComponents *dateComponents;
+@property (nonatomic, readonly) NSInteger milliseconds; // This is only for the fraction of a second 0-999
 
-@property (nonatomic, assign) BOOL hasTime;
-@property (nonatomic, assign) NSInteger offsetSeconds;
-@property (nonatomic, assign, getter=isUniversalTime) BOOL universalTime;
+@property (nonatomic, readonly) BOOL hasTime;
+@property (nonatomic, readonly) NSInteger offsetSeconds;
+@property (nonatomic, readonly, getter=isUniversalTime) BOOL universalTime;
 
-- (void)setTimeZone:(NSTimeZone *)timeZone withOffsetSeconds:(NSInteger)val;
 
 @end

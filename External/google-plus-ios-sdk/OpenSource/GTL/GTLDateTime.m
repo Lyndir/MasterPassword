@@ -19,6 +19,20 @@
 
 #import "GTLDateTime.h"
 
+@interface GTLDateTime ()
+
+- (void)setFromDate:(NSDate *)date timeZone:(NSTimeZone *)tz;
+- (void)setFromRFC3339String:(NSString *)str;
+
+@property (nonatomic, retain, readwrite) NSTimeZone *timeZone;
+@property (nonatomic, copy, readwrite) NSDateComponents *dateComponents;
+@property (nonatomic, assign, readwrite) NSInteger milliseconds;
+
+@property (nonatomic, assign, readwrite) BOOL hasTime;
+@property (nonatomic, assign, readwrite) NSInteger offsetSeconds;
+@property (nonatomic, assign, getter=isUniversalTime, readwrite) BOOL universalTime;
+
+@end
 
 @implementation GTLDateTime
 
@@ -60,6 +74,30 @@
   return result;
 }
 
++ (GTLDateTime *)dateTimeForAllDayWithDate:(NSDate *)date {
+  if (date == nil) return nil;
+
+  GTLDateTime *result = [[[self alloc] init] autorelease];
+  [result setFromDate:date timeZone:nil];
+  result.hasTime = NO;
+  return result;
+}
+
++ (GTLDateTime *)dateTimeWithDateComponents:(NSDateComponents *)components {
+  NSCalendar *cal = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
+  NSDate *date = [cal dateFromComponents:components];
+#if GTL_IPHONE
+  NSTimeZone *tz = [components timeZone];
+#else
+  // NSDateComponents added timeZone: in Mac OS X 10.7.
+  NSTimeZone *tz = nil;
+  if ([components respondsToSelector:@selector(timeZone)]) {
+    tz = [components timeZone];
+  }
+#endif
+  return [self dateTimeWithDate:date timeZone:tz];
+}
+
 - (void)dealloc {
   [dateComponents_ release];
   [timeZone_ release];
@@ -67,15 +105,8 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-
-  GTLDateTime *newObj = [[GTLDateTime alloc] init];
-
-  newObj.universalTime = self.isUniversalTime;
-  [newObj setTimeZone:self.timeZone withOffsetSeconds:self.offsetSeconds];
-  newObj.dateComponents = self.dateComponents;
-  newObj.milliseconds = self.milliseconds;
-
-  return newObj;
+  // Object is immutable
+  return [self retain];
 }
 
 // until NSDateComponent implements isEqual, we'll use this
@@ -146,13 +177,6 @@
   } else {
     self.offsetSeconds = NSUndefinedDateComponent;
   }
-}
-
-- (void)setTimeZone:(NSTimeZone *)timeZone withOffsetSeconds:(NSInteger)val {
-  [timeZone_ release];
-  timeZone_ = [timeZone retain];
-
-  offsetSeconds_ = val;
 }
 
 - (NSCalendar *)calendar {
