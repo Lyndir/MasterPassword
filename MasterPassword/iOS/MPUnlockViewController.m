@@ -145,7 +145,18 @@
                                                   usingBlock:^(NSNotification *note) {
                                                       [self updateUsers];
                                                   }];
-    
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      self.uiContainer.alpha = 0;
+                                                  }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [self updateLayoutAnimated:NO allowScroll:NO completion:nil];
+                                                      [UIView animateWithDuration:1 animations:^{
+                                                          self.uiContainer.alpha = 1;
+                                                      }];
+                                                  }];
+
     [self updateLayoutAnimated:NO allowScroll:YES completion:nil];
 
     [super viewDidLoad];
