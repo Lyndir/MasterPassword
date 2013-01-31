@@ -53,7 +53,8 @@
 - (NSFetchedResultsController *)fetchedResultsController {
 
     if (!_fetchedResultsController) {
-        NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextIfReady];
+        NSAssert([[NSThread currentThread] isMainThread], @"The fetchedResultsController must run on the main thread.");
+        NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
         if (!moc)
             return nil;
 
@@ -153,10 +154,11 @@
 
 - (void)fetchData {
 
+    MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
     assert(self.query);
-    assert([MPAppDelegate get].activeUser);
+    assert(activeUser);
 
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user == %@", [MPAppDelegate get].activeUser];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user == %@", activeUser];
     if (self.query.length)
         predicate = [NSCompoundPredicate
          andPredicateWithSubpredicates:@[[NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", self.query],
@@ -292,10 +294,11 @@
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"MPElementSearch"];
 
-        UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ui_list_middle"]];
+        UIImage *backgroundImage = [[UIImage imageNamed:@"ui_list_middle"] resizableImageWithCapInsets:UIEdgeInsetsMake(3, 3, 3, 3)
+                                                                                          resizingMode:UIImageResizingModeStretch];
+        UIImageView *backgroundImageView     = [[UIImageView alloc] initWithImage:backgroundImage];
         backgroundImageView.frame            = CGRectMake(-5, 0, 330, 34);
         backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        backgroundImageView.contentStretch   = CGRectMake(0.2f, 0.2f, 0.6f, 0.6f);
         UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 34)];
         [backgroundView addSubview:backgroundImageView];
         backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -346,24 +349,30 @@
             if (buttonIndex == [alert cancelButtonIndex])
                 return;
 
-            [self.fetchedResultsController.managedObjectContext performBlock:^{
-                MPElementType type = [MPAppDelegate get].activeUser.defaultType;
+            [MPAppDelegate managedObjectContextPerform:^(NSManagedObjectContext *moc) {
+                MPUserEntity *activeUser = [[MPAppDelegate get] activeUserInContext:moc];
+                assert(activeUser);
+
+                MPElementType type = activeUser.defaultType;
                 if (!type) {
                     // Really shouldn't happen, but a few people crashed on this anyway.  Uhh.  Data store corruption?  Old bugs?
-                    type = [MPAppDelegate get].activeUser.defaultType = MPElementTypeGeneratedLong;
+                    type = activeUser.defaultType = MPElementTypeGeneratedLong;
                 }
 
                 MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmDefault classNameOfType:type]
-                                                                         inManagedObjectContext:self.fetchedResultsController.managedObjectContext];
-                assert([MPAppDelegate get].activeUser);
+                                                                         inManagedObjectContext:moc];
 
                 element.name    = siteName;
-                element.user    = [MPAppDelegate get].activeUser;
+                element.user    = activeUser;
                 element.type    = type;
                 element.version = MPAlgorithmDefaultVersion;
+                [element saveContext];
 
+                NSManagedObjectID *elementOID = [element objectID];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.delegate didSelectElement:element];
+                    MPElementEntity *element_ = (MPElementEntity *)[[MPAppDelegate managedObjectContextForThreadIfReady]
+                                                                                   objectRegisteredForID:elementOID];
+                    [self.delegate didSelectElement:element_];
                 });
             }];
         }                  cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonYes, nil];
@@ -402,9 +411,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 #ifdef TESTFLIGHT_SDK_VERSION
                 [TestFlight passCheckpoint:MPCheckpointDeleteElement];
 #endif
-                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointDeleteElement
-                                                           attributes:@{@"type": element.typeName,
-                                                                                     @"version": @(element.version)}];
+                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointDeleteElement attributes:@{
+                 @"type"    : element.typeName,
+                 @"version" : @(element.version)}];
             }];
     }
 }

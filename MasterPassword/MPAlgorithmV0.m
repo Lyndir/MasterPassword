@@ -31,29 +31,23 @@
     return 0;
 }
 
-- (void)migrateUser:(MPUserEntity *)user completion:(void(^)(BOOL userRequiresNewMigration))completion {
+- (BOOL)migrateUser:(MPUserEntity *)user {
     
-    BOOL didRequireExplicitMigration = user.requiresExplicitMigration;
-    [user.managedObjectContext performBlock:^void() {
-        NSError        *error            = nil;
-        NSFetchRequest *migrationRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
-        migrationRequest.predicate = [NSPredicate predicateWithFormat:@"version_ < %d", MPAlgorithmDefaultVersion];
-        NSArray *migrationElements = [user.managedObjectContext executeFetchRequest:migrationRequest error:&error];
-        if (!migrationElements) {
-            err(@"While looking for elements to migrate: %@", error);
-            return;
-        }
-        
-        if (didRequireExplicitMigration)
-            user.requiresExplicitMigration     = NO;
-        for (MPElementEntity *migrationElement in migrationElements)
-            if (![migrationElement migrateExplicitly:NO])
-                user.requiresExplicitMigration = YES;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completion(!didRequireExplicitMigration && user.requiresExplicitMigration);
-        });
-    }];
+    NSError        *error            = nil;
+    NSFetchRequest *migrationRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
+    migrationRequest.predicate = [NSPredicate predicateWithFormat:@"version_ < %d AND user == %@", MPAlgorithmDefaultVersion, user];
+    NSArray *migrationElements = [user.managedObjectContext executeFetchRequest:migrationRequest error:&error];
+    if (!migrationElements) {
+        err(@"While looking for elements to migrate: %@", error);
+        return NO;
+    }
+
+    BOOL requiresExplicitMigration     = NO;
+    for (MPElementEntity *migrationElement in migrationElements)
+        if (![migrationElement migrateExplicitly:NO])
+            requiresExplicitMigration = YES;
+
+    return requiresExplicitMigration;
 }
 
 - (BOOL)migrateElement:(MPElementEntity *)element explicit:(BOOL)explicit {

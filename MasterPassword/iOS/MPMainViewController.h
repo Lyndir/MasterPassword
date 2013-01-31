@@ -8,13 +8,11 @@
 
 #import <MessageUI/MessageUI.h>
 #import "MPTypeViewController.h"
-#import "MPElementEntity.h"
 #import "MPSearchDelegate.h"
 
 @interface MPMainViewController : UIViewController<MPTypeDelegate, UITextFieldDelegate, MPSearchResultsDelegate, UIWebViewDelegate, UIGestureRecognizerDelegate>
 
 @property (assign, nonatomic) BOOL siteInfoHidden;
-@property (strong, nonatomic) MPElementEntity           *activeElement;
 @property (strong, nonatomic) IBOutlet MPSearchDelegate *searchDelegate;
 @property (strong, nonatomic) IBOutlet UIPanGestureRecognizer *pullDownGesture;
 @property (strong, nonatomic) IBOutlet UIPanGestureRecognizer *pullUpGesture;

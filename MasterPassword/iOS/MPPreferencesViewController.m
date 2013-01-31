@@ -47,8 +47,9 @@
         } options:0];
         [avatar onSelect:^(BOOL selected) {
             if (selected) {
-                [MPAppDelegate get].activeUser.avatar = (unsigned)avatar.tag;
-                [[MPAppDelegate get] saveContext];
+                MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
+                activeUser.avatar        = (unsigned)avatar.tag;
+                [activeUser saveContext];
             }
         } options:0];
         avatar.selected            = (a == [MPAppDelegate get].activeUser.avatar);
@@ -86,9 +87,14 @@
     [super viewWillDisappear:animated];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotate {
+    
+    return NO;
+}
 
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    
+    return UIInterfaceOrientationPortrait;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -106,8 +112,11 @@
         [[MPAppDelegate get] export];
 
     else
-        if (cell == self.changeMPCell)
-            [[MPAppDelegate get] changeMasterPasswordFor:[MPAppDelegate get].activeUser didResetBlock:nil];
+        if (cell == self.changeMPCell) {
+            MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
+            [[MPAppDelegate get] changeMasterPasswordFor:activeUser didResetBlock:nil];
+            [activeUser saveContext];
+        }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -124,10 +133,11 @@
 
 - (void)didSelectType:(MPElementType)type {
 
-    [MPAppDelegate get].activeUser.defaultType = type;
-    [[MPAppDelegate get] saveContext];
+    MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
+    activeUser.defaultType = type;
+    [activeUser saveContext];
 
-    self.defaultTypeLabel.text = [[MPAppDelegate get].key.algorithm shortNameOfType:[MPAppDelegate get].activeUser.defaultType];
+    self.defaultTypeLabel.text = [[MPAppDelegate get].key.algorithm shortNameOfType:activeUser.defaultType];
 }
 
 - (MPElementType)selectedType {
@@ -139,11 +149,12 @@
 
 - (IBAction)didToggleSwitch:(UISwitch *)sender {
 
-    if (([MPAppDelegate get].activeUser.saveKey = sender.on))
-        [[MPAppDelegate get] storeSavedKeyFor:[MPAppDelegate get].activeUser];
+    MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
+    if ((activeUser.saveKey = sender.on))
+        [[MPAppDelegate get] storeSavedKeyFor:activeUser];
     else
-        [[MPAppDelegate get] forgetSavedKeyFor:[MPAppDelegate get].activeUser];
-    [[MPAppDelegate get] saveContext];
+        [[MPAppDelegate get] forgetSavedKeyFor:activeUser];
+    [activeUser saveContext];
 }
 
 - (IBAction)settings:(UIBarButtonItem *)sender {

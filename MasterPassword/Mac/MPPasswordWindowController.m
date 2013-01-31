@@ -34,16 +34,20 @@
         [self.userLabel setStringValue:PearlString(@"%@'s password for:", [MPAppDelegate get].activeUser.name)];
     }                          forKeyPath:@"activeUser" options:NSKeyValueObservingOptionInitial context:nil];
     [[MPAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        if (![MPAppDelegate get].key)
+        if (![MPAppDelegate get].key) {
             [self unlock];
-        if ([MPAppDelegate get].activeUser && [MPAppDelegate get].key)
-            [MPAlgorithmDefault migrateUser:[MPAppDelegate get].activeUser completion:^(BOOL userRequiresNewMigration) {
-                if (userRequiresNewMigration)
-                    [NSAlert alertWithMessageText:@"Migration Needed" defaultButton:@"OK" alternateButton:nil otherButton:nil
-                        informativeTextWithFormat:@"Certain sites require explicit migration to get updated to the latest version of the "
-                         @"Master Password algorithm.  For these sites, a migration button will appear.  Migrating these sites will cause "
-                         @"their passwords to change.  You'll need to update your profile for that site with the new password."];
-            }];
+            return;
+        }
+        
+        [MPAppDelegate managedObjectContextPerform:^(NSManagedObjectContext *moc) {
+            MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
+            if (![MPAlgorithmDefault migrateUser:activeUser])
+                [NSAlert alertWithMessageText:@"Migration Needed" defaultButton:@"OK" alternateButton:nil otherButton:nil
+                    informativeTextWithFormat:@"Certain sites require explicit migration to get updated to the latest version of the "
+                 @"Master Password algorithm.  For these sites, a migration button will appear.  Migrating these sites will cause "
+                 @"their passwords to change.  You'll need to update your profile for that site with the new password."];
+            [activeUser saveContext];
+        }];
     }                          forKeyPath:@"key" options:NSKeyValueObservingOptionInitial context:nil];
     [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:self.window queue:nil
                                                   usingBlock:^(NSNotification *note) {
@@ -55,7 +59,7 @@
                                                   usingBlock:^(NSNotification *note) {
                                                       [[NSApplication sharedApplication] hide:self];
                                                   }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:MPNotificationSignedOut object:nil queue:nil
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil queue:nil
                                                   usingBlock:^(NSNotification *note) {
                                                       [self.window close];
                                                   }];
@@ -174,7 +178,7 @@
                                                                     query, [MPAppDelegate get].activeUser];
 
     NSError *error = nil;
-    self.siteResults = [[MPAppDelegate managedObjectContextIfReady] executeFetchRequest:fetchRequest error:&error];
+    self.siteResults = [[MPAppDelegate managedObjectContextForThreadIfReady] executeFetchRequest:fetchRequest error:&error];
     if (error)
     err(@"While fetching elements for completion: %@", error);
 

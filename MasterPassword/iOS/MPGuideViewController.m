@@ -11,9 +11,14 @@
 
 @implementation MPGuideViewController
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotate {
+    
+    return NO;
+}
 
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    
+    return UIInterfaceOrientationPortrait;
 }
 
 - (void)viewDidLoad {
@@ -50,7 +55,7 @@
 
 - (IBAction)close {
 
-    [self.presentingViewController dismissModalViewControllerAnimated:YES];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView_ {

@@ -9,6 +9,22 @@
 #import "MPEntities.h"
 #import "MPAppDelegate.h"
 
+@implementation NSManagedObject (MP)
+
+- (BOOL)saveContext {
+
+    NSError *error;
+    NSManagedObjectContext *moc = [self managedObjectContext];
+    if (![moc save:&error]) {
+        err(@"While saving %@: %@", NSStringFromClass([self class]), error);
+        return NO;
+    }
+
+    return YES;
+}
+
+@end
+
 @implementation MPElementEntity (MP)
 
 - (MPElementType)type {
@@ -293,16 +309,6 @@
 - (void)setDefaultType:(MPElementType)aDefaultType {
 
     self.defaultType_ = @(aDefaultType);
-}
-
-- (BOOL)requiresExplicitMigration {
-
-    return [self.requiresExplicitMigration_ boolValue];
-}
-
-- (void)setRequiresExplicitMigration:(BOOL)requiresExplicitMigration {
-
-    self.requiresExplicitMigration_ = @(requiresExplicitMigration);
 }
 
 - (NSString *)userID {

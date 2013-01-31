@@ -7,12 +7,7 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
-#import <Twitter/Twitter.h>
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnewline-eof"
-#import "Facebook.h"
-#pragma clang diagnostic pop
+#import <Social/Social.h>
 #import "GooglePlusShare.h"
 
 #import "MPUnlockViewController.h"
@@ -22,15 +17,15 @@
 
 @interface MPUnlockViewController ()
 
-@property (strong, nonatomic) MPUserEntity        *selectedUser;
-@property (strong, nonatomic) NSMutableDictionary *avatarToUser;
+@property (strong, nonatomic) NSMutableDictionary *avatarToUserOID;
 @property (nonatomic) BOOL wordWallAnimating;
 @property (nonatomic, strong) NSArray          *wordList;
-@property (nonatomic, strong) NSOperationQueue *fbOperationQueue;
 
 @end
 
-@implementation MPUnlockViewController
+@implementation MPUnlockViewController {
+    NSManagedObjectID *_selectedUserOID;
+}
 
 - (void)initializeAvatarAlert:(UIAlertView *)alert forUser:(MPUserEntity *)user {
 
@@ -104,18 +99,21 @@
     alertNameLabel.backgroundColor    = [UIColor blackColor];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotate {
 
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return NO;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    
+    return UIInterfaceOrientationPortrait;
 }
 
 - (void)viewDidLoad {
     
     [self.newsView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.masterpasswordapp.com/news.html"]]];
 
-    self.avatarToUser     = [NSMutableDictionary dictionaryWithCapacity:3];
-    self.fbOperationQueue = [NSOperationQueue new];
-    [self.fbOperationQueue setSuspended:YES];
+    self.avatarToUserOID = [NSMutableDictionary dictionaryWithCapacity:3];
 
     [self.avatarsView addGestureRecognizer:self.targetedUserActionGesture];
     self.avatarsView.decelerationRate = UIScrollViewDecelerationRateFast;
@@ -159,7 +157,7 @@
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 
     inf(@"Lock screen will appear");
-    self.selectedUser = nil;
+    _selectedUserOID = nil;
     [self updateUsers];
 
     self.uiContainer.alpha = 0;
@@ -169,6 +167,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 
+    dbg(@"Lock screen did appear: %@", animated? @"animated": @"not animated");
     if (!animated)
         [[self findTargetedAvatar] setSelected:YES];
     else
@@ -193,7 +192,7 @@
 
 - (void)updateUsers {
 
-    NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextIfReady];
+    NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
     if (!moc) {
         self.tip.text = @"Loading...";
         [self.loadingUsersIndicator startAnimating];
@@ -215,10 +214,10 @@
 
     // Clean up avatars.
     for (UIView *subview in [self.avatarsView subviews])
-        if ([[self.avatarToUser allKeys] containsObject:[NSValue valueWithNonretainedObject:subview]])
+        if ([[self.avatarToUserOID allKeys] containsObject:[NSValue valueWithNonretainedObject:subview]])
          // This subview is a former avatar.
             [subview removeFromSuperview];
-    [self.avatarToUser removeAllObjects];
+    [self.avatarToUserOID removeAllObjects];
 
     // Create avatars.
     [moc performBlockAndWait:^{
@@ -235,7 +234,7 @@
 
 - (UIButton *)setupAvatar:(UIButton *)avatar forUser:(MPUserEntity *)user {
 
-    avatar.center              = CGPointMake(avatar.center.x + [self.avatarToUser count] * 160, avatar.center.y);
+    avatar.center              = CGPointMake(avatar.center.x + [self.avatarToUserOID count] * 160, avatar.center.y);
     avatar.hidden              = NO;
     avatar.layer.cornerRadius  = avatar.bounds.size.height / 2;
     avatar.layer.shadowColor   = [UIColor blackColor].CGColor;
@@ -266,9 +265,9 @@
         }
     }        options:0];
 
-    [self.avatarToUser setObject:NilToNSNull(user) forKey:[NSValue valueWithNonretainedObject:avatar]];
+    [self.avatarToUserOID setObject:NilToNSNull([user objectID]) forKey:[NSValue valueWithNonretainedObject:avatar]];
 
-    if ([self.selectedUser.objectID isEqual:user.objectID]) {
+    if ([_selectedUserOID isEqual:[user objectID]]) {
         self.selectedUser = user;
         avatar.selected   = YES;
     }
@@ -278,10 +277,11 @@
 
 - (void)didToggleUserSelection {
 
-    if (!self.selectedUser)
+    MPUserEntity *selectedUser = self.selectedUser;
+    if (!selectedUser)
         [self.passwordField resignFirstResponder];
     else
-        if ([[MPAppDelegate get] signInAsUser:self.selectedUser usingMasterPassword:nil]) {
+        if ([[MPAppDelegate get] signInAsUser:selectedUser usingMasterPassword:nil]) {
             [self dismissViewControllerAnimated:YES completion:nil];
             return;
         }
@@ -294,18 +294,16 @@
 
 - (void)didSelectNewUserAvatar:(UIButton *)newUserAvatar {
 
-    __block MPUserEntity *newUser = nil;
-    [[MPAppDelegate managedObjectContextIfReady] performBlockAndWait:^{
-        newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class])
-                                                inManagedObjectContext:[MPAppDelegate managedObjectContextIfReady]];
-    }];
+    [MPAppDelegate managedObjectContextPerform:^(NSManagedObjectContext *moc) {
+        MPUserEntity *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class])
+                                                              inManagedObjectContext:moc];
 
-    [self showNewUserNameAlertFor:newUser completion:^(BOOL finished) {
-        newUserAvatar.selected = NO;
-        if (!finished)
-            [[MPAppDelegate managedObjectContextIfReady] performBlock:^{
-                [[MPAppDelegate managedObjectContextIfReady] deleteObject:newUser];
-            }];
+        [self showNewUserNameAlertFor:newUser completion:^(BOOL finished) {
+            newUserAvatar.selected = NO;
+
+            if (finished)
+                [newUser saveContext];
+        }];
     }];
 }
 
@@ -328,16 +326,18 @@
                      if (![alert textFieldAtIndex:0].text.length) {
                          [PearlAlert showAlertWithTitle:@"Name Is Required" message:nil viewStyle:UIAlertViewStyleDefault initAlert:nil
                                       tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                             [self showNewUserNameAlertFor:newUser completion:completion];
-                         } cancelTitle:@"Try Again" otherTitles:nil];
+                                          [newUser.managedObjectContext performBlock:^{
+                                              [self showNewUserNameAlertFor:newUser completion:completion];
+                                          }];
+                                      } cancelTitle:@"Try Again" otherTitles:nil];
                          return;
                      }
 
                      // Save
                      [newUser.managedObjectContext performBlock:^{
                          newUser.name = [alert textFieldAtIndex:0].text;
+                         [self showNewUserAvatarAlertFor:newUser completion:completion];
                      }];
-                     [self showNewUserAvatarAlertFor:newUser completion:completion];
                  }
                        cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonSave, nil];
 }
@@ -352,7 +352,9 @@
                  tappedButtonBlock:^(UIAlertView *_alert, NSInteger _buttonIndex) {
 
                      // Okay
-                     [self showNewUserConfirmationAlertFor:newUser completion:completion];
+                     [newUser.managedObjectContext performBlock:^{
+                         [self showNewUserConfirmationAlertFor:newUser completion:completion];
+                     }];
                  }     cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
 }
 
@@ -368,7 +370,9 @@
                          }
                  tappedButtonBlock:^void(UIAlertView *__alert, NSInteger __buttonIndex) {
                      if (__buttonIndex == [__alert cancelButtonIndex]) {
-                         [self showNewUserNameAlertFor:newUser completion:completion];
+                         [newUser.managedObjectContext performBlock:^{
+                             [self showNewUserNameAlertFor:newUser completion:completion];
+                         }];
                          return;
                      }
 
@@ -460,7 +464,7 @@
     }
 
     [self.avatarsView enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
-        if (![[self.avatarToUser allKeys] containsObject:[NSValue valueWithNonretainedObject:subview]])
+        if (![[self.avatarToUserOID allKeys] containsObject:[NSValue valueWithNonretainedObject:subview]])
          // This subview is not one of the user avatars.
             return;
         UIButton *avatar = (UIButton *)subview;
@@ -481,7 +485,8 @@
     }
 
     // Lay out user name label.
-    self.nameLabel.text      = targetedAvatar? targetedUser? targetedUser.name: @"New User": nil;
+    self.nameLabel.text      = targetedAvatar? (targetedUser? targetedUser.name: @"New User"): nil;
+    dbg(@"targetedAvatar: %@, targetedUser: %@, nameLabel: %@", targetedAvatar, targetedUser, self.nameLabel.text);
     self.nameLabel.bounds    = CGRectSetHeight(self.nameLabel.bounds,
                                                [self.nameLabel.text sizeWithFont:self.nameLabel.font
                                                                constrainedToSize:CGSizeMake(self.nameLabel.bounds.size.width - 10, 100)
@@ -565,10 +570,11 @@
 
 - (UIButton *)avatarForUser:(MPUserEntity *)user {
 
+    NSManagedObjectID *userOID = [user objectID];
     __block UIButton *avatar = nil;
-    if (user)
-        [self.avatarToUser enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            if (obj == user)
+    if (userOID)
+        [self.avatarToUserOID enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            if ([obj isEqual:userOID])
                 avatar = [key nonretainedObjectValue];
         }];
 
@@ -577,7 +583,20 @@
 
 - (MPUserEntity *)userForAvatar:(UIButton *)avatar {
 
-    return NSNullToNil([self.avatarToUser objectForKey:[NSValue valueWithNonretainedObject:avatar]]);
+    NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
+    if (!moc)
+        return nil;
+
+    NSManagedObjectID *userOID = NSNullToNil([self.avatarToUserOID objectForKey:[NSValue valueWithNonretainedObject:avatar]]);
+    if (!userOID)
+        return nil;
+
+    NSError *error;
+    MPUserEntity *user = (MPUserEntity *)[moc existingObjectWithID:userOID error:&error];
+    if (!user)
+        err(@"Failed retrieving user for avatar: %@", error);
+
+    return user;
 }
 
 - (void)setSpinnerActive:(BOOL)active {
@@ -763,17 +782,24 @@
             return;
 
         if (buttonIndex == [sheet destructiveButtonIndex]) {
-            [[MPAppDelegate get].managedObjectContextIfReady performBlockAndWait:^{
-                [[MPAppDelegate get].managedObjectContextIfReady deleteObject:targetedUser];
+            [targetedUser.managedObjectContext performBlock:^{
+                [targetedUser.managedObjectContext deleteObject:targetedUser];
+                [targetedUser saveContext];
+
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self updateUsers];
+                });
             }];
-            [[MPAppDelegate get] saveContext];
-            [self updateUsers];
             return;
         }
 
         if (buttonIndex == [sheet firstOtherButtonIndex])
-            [[MPAppDelegate get] changeMasterPasswordFor:targetedUser didResetBlock:^{
-                [[self avatarForUser:targetedUser] setSelected:YES];
+            [targetedUser.managedObjectContext performBlock:^{
+                [[MPAppDelegate get] changeMasterPasswordFor:targetedUser didResetBlock:^{
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [[self avatarForUser:targetedUser] setSelected:YES];
+                    });
+                }];
             }];
     }                  cancelTitle:[PearlStrings get].commonButtonCancel
                   destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];
@@ -781,37 +807,31 @@
 
 - (IBAction)facebook:(UIButton *)sender {
 
-    [self.fbOperationQueue addOperationWithBlock:^{
-        Facebook *facebook = [[Facebook alloc] initWithAppId:FBSession.activeSession.appID andDelegate:nil];
-        facebook.accessToken    = FBSession.activeSession.accessToken;
-        facebook.expirationDate = FBSession.activeSession.expirationDate;
-
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [[self.view findFirstResponderInHierarchy] resignFirstResponder];
-            [facebook           dialog:@"feed" andParams:[@{
-            @"link": @"http://masterpasswordapp.com",
-            @"picture": @"http://masterpasswordapp.com/img/iTunesArtwork-Rounded.png",
-            @"name": @"Master Password",
-            @"description": @"Actually secure passwords that cannot get lost.",
-            @"ref": @"iOS_Unlock"
-            } mutableCopy] andDelegate:nil];
-        }];
-    }];
-    if ([self.fbOperationQueue isSuspended])
-        [self openSessionWithAllowLoginUI:YES];
+    if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
+        [PearlAlert showAlertWithTitle:@"Facebook Not Enabled" message:@"To send tweets, configure Facebook from Settings."
+                             viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:nil cancelTitle:nil otherTitles:@"OK", nil];
+        return;
+    }
+    
+    SLComposeViewController *vc = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+    [vc setInitialText:@"I've started doing passwords properly thanks to Master Password for iOS."];
+    [vc addImage:[UIImage imageNamed:@"iTunesArtwork-Rounded"]];
+    [vc addURL:[NSURL URLWithString:@"http://masterpasswordapp.com"]];
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 - (IBAction)twitter:(UIButton *)sender {
 
-    if (![TWTweetComposeViewController canSendTweet]) {
+    if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
         [PearlAlert showAlertWithTitle:@"Twitter Not Enabled" message:@"To send tweets, configure Twitter from Settings."
                              viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:nil cancelTitle:nil otherTitles:@"OK", nil];
         return;
     }
 
-    TWTweetComposeViewController *vc = [TWTweetComposeViewController new];
-    [vc addImage:[UIImage imageNamed:@"iTunesArtwork-Rounded-73"]];
-    [vc setInitialText:@"I've secured my accounts with Master Password: masterpasswordapp.com"];
+    SLComposeViewController *vc = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+    [vc setInitialText:@"I've started doing passwords properly thanks to Master Password for iOS."];
+    [vc addImage:[UIImage imageNamed:@"iTunesArtwork-Rounded"]];
+    [vc addURL:[NSURL URLWithString:@"http://masterpasswordapp.com"]];
     [self presentViewController:vc animated:YES completion:nil];
 }
 
@@ -886,41 +906,28 @@
                   destructiveTitle:nil otherTitles:@"Google+", @"Facebook", @"Twitter", @"Mailing List", @"GitHub", nil];
 }
 
-- (void)sessionStateChanged:(FBSession *)session state:(FBSessionState)state error:(NSError *)error {
+#pragma mark - Core Data
 
-    switch (state) {
-        case FBSessionStateOpen:
-            if (!error) {
-                [self.fbOperationQueue setSuspended:NO];
-                return;
-            }
+- (MPUserEntity *)selectedUser {
 
-            break;
-        case FBSessionStateClosed:
-        case FBSessionStateClosedLoginFailed:
-            [FBSession.activeSession closeAndClearTokenInformation];
-            break;
-        default:
-            break;
-    }
-    [self.fbOperationQueue setSuspended:YES];
+    if (!_selectedUserOID)
+        return nil;
 
-    if (error)
-        [PearlAlert showError:error.localizedDescription];
+    NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
+    if (!moc)
+        return nil;
+
+    NSError *error;
+    MPUserEntity *selectedUser = (MPUserEntity *)[moc existingObjectWithID:_selectedUserOID error:&error];
+    if (!selectedUser)
+        err(@"Failed to retrieve selected user: %@", error);
+    
+    return selectedUser;
 }
 
-- (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI {
+- (void)setSelectedUser:(MPUserEntity *)selectedUser {
 
-    return [FBSession openActiveSessionWithPublishPermissions:nil
-                                              defaultAudience:FBSessionDefaultAudienceEveryone
-                                                 allowLoginUI:YES
-                                            completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
-                                         [self sessionStateChanged:session state:state error:error];
-                                     }];
+    _selectedUserOID = selectedUser.objectID;
 }
 
-- (void)viewDidUnload {
-    [self setNewsView:nil];
-    [super viewDidUnload];
-}
 @end

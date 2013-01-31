@@ -16,9 +16,10 @@
 #endif
 
 @property (strong, nonatomic) MPUserEntity      *activeUser;
-@property (strong, nonatomic) NSManagedObjectID *activeUserObjectID;
 @property (strong, nonatomic) MPKey             *key;
 
 + (MPAppDelegate_Shared *)get;
+
+- (MPUserEntity *)activeUserInContext:(NSManagedObjectContext *)moc;
 
 @end

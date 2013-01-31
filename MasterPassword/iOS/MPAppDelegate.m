@@ -6,11 +6,6 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnewline-eof"
-#import <FacebookSDK/FacebookSDK.h>
-#pragma clang diagnostic pop
-
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
@@ -195,7 +190,7 @@
      [[UISegmentedControl appearance] setDividerImage:segUnselectedSelected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
      */
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:MPNotificationSignedOut object:nil queue:nil
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil queue:nil
                                                   usingBlock:^(NSNotification *note) {
                                                       if ([[note.userInfo objectForKey:@"animated"] boolValue])
                                                           [self.navigationController performSegueWithIdentifier:@"MP_Unlock" sender:nil];
@@ -203,9 +198,60 @@
                                                           [self.navigationController presentViewController:[self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
                                                                                                   animated:NO completion:nil];
                                                   }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
+     ^(NSNotification *note) {
+         if ([[MPiOSConfig get].sendInfo boolValue]) {
+             if ([PearlLogger get].printLevel > PearlLogLevelInfo)
+                 [PearlLogger get].printLevel = PearlLogLevelInfo;
+
+             [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].rememberLogin boolValue] forKey:@"rememberLogin"];
+             [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].iCloud boolValue] forKey:@"iCloud"];
+             [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].iCloudDecided boolValue] forKey:@"iCloudDecided"];
+             [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].sendInfo boolValue] forKey:@"sendInfo"];
+             [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].helpHidden boolValue] forKey:@"helpHidden"];
+             [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].showQuickStart boolValue] forKey:@"showQuickStart"];
+             [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].firstRun boolValue] forKey:@"firstRun"];
+             [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].launchCount intValue] forKey:@"launchCount"];
+             [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].askForReviews boolValue] forKey:@"askForReviews"];
+             [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].reviewAfterLaunches intValue] forKey:@"reviewAfterLaunches"];
+             [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
+
+#ifdef TESTFLIGHT_SDK_VERSION
+             [TestFlight addCustomEnvironmentInformation:[[MPConfig get].rememberLogin boolValue]? @"YES": @"NO" forKey:@"rememberLogin"];
+             [TestFlight addCustomEnvironmentInformation:[[MPConfig get].iCloud boolValue]? @"YES": @"NO" forKey:@"iCloud"];
+             [TestFlight addCustomEnvironmentInformation:[[MPConfig get].iCloudDecided boolValue]? @"YES": @"NO" forKey:@"iCloudDecided"];
+             [TestFlight addCustomEnvironmentInformation:[[MPiOSConfig get].sendInfo boolValue]? @"YES": @"NO" forKey:@"sendInfo"];
+             [TestFlight addCustomEnvironmentInformation:[[MPiOSConfig get].helpHidden boolValue]? @"YES": @"NO" forKey:@"helpHidden"];
+             [TestFlight addCustomEnvironmentInformation:[[MPiOSConfig get].showQuickStart boolValue]? @"YES": @"NO"
+                                                  forKey:@"showQuickStart"];
+             [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].firstRun boolValue]? @"YES": @"NO" forKey:@"firstRun"];
+             [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].launchCount description] forKey:@"launchCount"];
+             [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].askForReviews boolValue]? @"YES": @"NO"
+                                                  forKey:@"askForReviews"];
+             [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].reviewAfterLaunches description] forKey:@"reviewAfterLaunches"];
+             [TestFlight addCustomEnvironmentInformation:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
+
+             [TestFlight passCheckpoint:MPCheckpointConfig];
+#endif
+             [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointConfig attributes:@{
+              @"rememberLogin"       : [[MPConfig get].rememberLogin boolValue]? @"YES": @"NO",
+              @"iCloud"              : [[MPConfig get].iCloud boolValue]? @"YES": @"NO",
+              @"iCloudDecided"       : [[MPConfig get].iCloudDecided boolValue]? @"YES": @"NO",
+              @"sendInfo"            : [[MPiOSConfig get].sendInfo boolValue]? @"YES": @"NO",
+              @"helpHidden"          : [[MPiOSConfig get].helpHidden boolValue]? @"YES": @"NO",
+              @"showQuickStart"      : [[MPiOSConfig get].showQuickStart boolValue]? @"YES": @"NO",
+              @"firstRun"            : [[PearlConfig get].firstRun boolValue]? @"YES": @"NO",
+              @"launchCount"         : NilToNSNull([[PearlConfig get].launchCount description]),
+              @"askForReviews"       : [[PearlConfig get].askForReviews boolValue]? @"YES": @"NO",
+              @"reviewAfterLaunches" : NilToNSNull([[PearlConfig get].reviewAfterLaunches description]),
+              @"reviewedVersion"     : NilToNSNull([PearlConfig get].reviewedVersion)
+             }];
+         }
+     }];
     [[NSNotificationCenter defaultCenter] addObserverForName:kIASKAppSettingChanged object:nil queue:nil
                                                   usingBlock:^(NSNotification *note) {
-                                                      [self checkConfig];
+                                                      [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification
+                                                                                                          object:note userInfo:nil];
                                                   }];
 
 #ifdef ADHOC
@@ -233,10 +279,6 @@
     // No URL?
     if (!url)
         return NO;
-
-    // Check if this is a Facebook login URL.
-    if ([FBSession.activeSession handleOpenURL:url])
-        return YES;
 
     // Arbitrary URL to mpsites data.
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -352,12 +394,8 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
 
-    [self saveContext];
-
     [[LocalyticsSession sharedLocalyticsSession] close];
     [[LocalyticsSession sharedLocalyticsSession] upload];
-
-    [FBSession.activeSession close];
 
     [super applicationWillTerminate:application];
 }
@@ -365,9 +403,6 @@
 - (void)applicationWillResignActive:(UIApplication *)application {
 
     inf(@"Will deactivate");
-
-    [self saveContext];
-
     if (![[MPiOSConfig get].rememberLogin boolValue])
         [self signOutAnimated:NO];
 
@@ -380,9 +415,8 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 
     inf(@"Re-activated");
-    [[MPAppDelegate get] checkConfig];
-
-    [FBSession.activeSession handleDidBecomeActive];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification
+                                                        object:application userInfo:nil];
 
     [[LocalyticsSession sharedLocalyticsSession] resume];
     [[LocalyticsSession sharedLocalyticsSession] upload];
@@ -391,57 +425,6 @@
 }
 
 #pragma mark - Behavior
-
-- (void)checkConfig {
-
-    if ([[MPConfig get].iCloud boolValue] != [self.storeManager cloudEnabled])
-        self.storeManager.cloudEnabled = [[MPConfig get].iCloud boolValue];
-    if ([[MPiOSConfig get].sendInfo boolValue]) {
-        if ([PearlLogger get].printLevel > PearlLogLevelInfo)
-            [PearlLogger get].printLevel = PearlLogLevelInfo;
-
-        [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].rememberLogin boolValue] forKey:@"rememberLogin"];
-        [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].iCloud boolValue] forKey:@"iCloud"];
-        [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].iCloudDecided boolValue] forKey:@"iCloudDecided"];
-        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].sendInfo boolValue] forKey:@"sendInfo"];
-        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].helpHidden boolValue] forKey:@"helpHidden"];
-        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].showQuickStart boolValue] forKey:@"showQuickStart"];
-        [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].firstRun boolValue] forKey:@"firstRun"];
-        [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].launchCount intValue] forKey:@"launchCount"];
-        [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].askForReviews boolValue] forKey:@"askForReviews"];
-        [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].reviewAfterLaunches intValue] forKey:@"reviewAfterLaunches"];
-        [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
-
-#ifdef TESTFLIGHT_SDK_VERSION
-        [TestFlight addCustomEnvironmentInformation:[[MPConfig get].rememberLogin boolValue]? @"YES": @"NO" forKey:@"rememberLogin"];
-        [TestFlight addCustomEnvironmentInformation:[[MPConfig get].iCloud boolValue]? @"YES": @"NO" forKey:@"iCloud"];
-        [TestFlight addCustomEnvironmentInformation:[[MPConfig get].iCloudDecided boolValue]? @"YES": @"NO" forKey:@"iCloudDecided"];
-        [TestFlight addCustomEnvironmentInformation:[[MPiOSConfig get].sendInfo boolValue]? @"YES": @"NO" forKey:@"sendInfo"];
-        [TestFlight addCustomEnvironmentInformation:[[MPiOSConfig get].helpHidden boolValue]? @"YES": @"NO" forKey:@"helpHidden"];
-        [TestFlight addCustomEnvironmentInformation:[[MPiOSConfig get].showQuickStart boolValue]? @"YES": @"NO" forKey:@"showQuickStart"];
-        [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].firstRun boolValue]? @"YES": @"NO" forKey:@"firstRun"];
-        [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].launchCount description] forKey:@"launchCount"];
-        [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].askForReviews boolValue]? @"YES": @"NO" forKey:@"askForReviews"];
-        [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].reviewAfterLaunches description] forKey:@"reviewAfterLaunches"];
-        [TestFlight addCustomEnvironmentInformation:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
-
-        [TestFlight passCheckpoint:MPCheckpointConfig];
-#endif
-        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointConfig attributes:@{
-        @"rememberLogin": [[MPConfig get].rememberLogin boolValue]? @"YES": @"NO",
-        @"iCloud": [[MPConfig get].iCloud boolValue]? @"YES": @"NO",
-        @"iCloudDecided": [[MPConfig get].iCloudDecided boolValue]? @"YES": @"NO",
-        @"sendInfo": [[MPiOSConfig get].sendInfo boolValue]? @"YES": @"NO",
-        @"helpHidden": [[MPiOSConfig get].helpHidden boolValue]? @"YES": @"NO",
-        @"showQuickStart": [[MPiOSConfig get].showQuickStart boolValue]? @"YES": @"NO",
-        @"firstRun": [[PearlConfig get].firstRun boolValue]? @"YES": @"NO",
-        @"launchCount": NilToNSNull([[PearlConfig get].launchCount description]),
-        @"askForReviews": [[PearlConfig get].askForReviews boolValue]? @"YES": @"NO",
-        @"reviewAfterLaunches": NilToNSNull([[PearlConfig get].reviewAfterLaunches description]),
-        @"reviewedVersion": NilToNSNull([PearlConfig get].reviewedVersion)
-        }];
-    }
-}
 
 - (void)showGuide {
 
@@ -602,18 +585,20 @@
         if (buttonIndex == [alert cancelButtonIndex])
             return;
 
-        inf(@"Unsetting master password for: %@.", user.userID);
-        user.keyID = nil;
-        [self forgetSavedKeyFor:user];
-        [self signOutAnimated:YES];
+        [user.managedObjectContext performBlock:^{
+            inf(@"Unsetting master password for: %@.", user.userID);
+            user.keyID = nil;
+            [self forgetSavedKeyFor:user];
+            [self signOutAnimated:YES];
 
-        if (didReset)
-            didReset();
+            if (didReset)
+                didReset();
 
 #ifdef TESTFLIGHT_SDK_VERSION
-        [TestFlight passCheckpoint:MPCheckpointChangeMP];
+            [TestFlight passCheckpoint:MPCheckpointChangeMP];
 #endif
-        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointChangeMP attributes:nil];
+            [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointChangeMP attributes:nil];
+        }];
     }
                        cancelTitle:[PearlStrings get].commonButtonAbort
                        otherTitles:[PearlStrings get].commonButtonContinue, nil];
@@ -623,7 +608,8 @@
 
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)value {
 
-    [self checkConfig];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification
+                                                        object:NSStringFromSelector(configKey) userInfo:nil];
 }
 
 #pragma mark - UbiquityStoreManagerDelegate

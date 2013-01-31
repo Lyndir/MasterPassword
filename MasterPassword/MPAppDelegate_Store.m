@@ -11,33 +11,67 @@
 
 @implementation MPAppDelegate_Shared (Store)
 
-static char managedObjectContextKey;
+static char privateManagedObjectContextKey, mainManagedObjectContextKey;
 
 #pragma mark - Core Data setup
 
-+ (NSManagedObjectContext *)managedObjectContextIfReady {
++ (NSManagedObjectContext *)managedObjectContextForThreadIfReady {
 
-    return [[self get] managedObjectContextIfReady];
+    NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
+    if ([[NSThread currentThread] isMainThread])
+        return mainManagedObjectContext;
+    
+    NSManagedObjectContext *threadManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
+    threadManagedObjectContext.parentContext = mainManagedObjectContext;
+
+    return threadManagedObjectContext;
 }
 
-- (NSManagedObjectContext *)managedObjectContextIfReady {
++ (BOOL)managedObjectContextPerform:(void (^)(NSManagedObjectContext *))mocBlock {
 
-    NSManagedObjectContext *managedObjectContext = objc_getAssociatedObject(self, &managedObjectContextKey);
-    if (!managedObjectContext) {
-        managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-        [managedObjectContext performBlockAndWait:^{
-            managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
-            managedObjectContext.persistentStoreCoordinator = self.storeManager.persistentStoreCoordinator;
+    NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
+    if (!mainManagedObjectContext)
+        return NO;
+
+    NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    moc.parentContext = mainManagedObjectContext;
+    [moc performBlock:^{
+        mocBlock(moc);
+    }];
+
+    return YES;
+}
+
+- (NSManagedObjectContext *)mainManagedObjectContextIfReady {
+    
+    if (![self privateManagedObjectContextIfReady])
+        return nil;
+    
+    return objc_getAssociatedObject(self, &mainManagedObjectContextKey);
+}
+
+- (NSManagedObjectContext *)privateManagedObjectContextIfReady {
+
+    NSManagedObjectContext *privateManagedObjectContext = objc_getAssociatedObject(self, &privateManagedObjectContextKey);
+    if (!privateManagedObjectContext) {
+        privateManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [privateManagedObjectContext performBlockAndWait:^{
+            privateManagedObjectContext.mergePolicy                = NSMergeByPropertyObjectTrumpMergePolicy;
+            privateManagedObjectContext.persistentStoreCoordinator = self.storeManager.persistentStoreCoordinator;
         }];
 
-        objc_setAssociatedObject(self, &managedObjectContextKey, managedObjectContext, OBJC_ASSOCIATION_RETAIN);
+        NSManagedObjectContext *mainManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+        mainManagedObjectContext.parentContext = privateManagedObjectContext;
+
+        objc_setAssociatedObject(self, &privateManagedObjectContextKey, privateManagedObjectContext, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, &mainManagedObjectContextKey, mainManagedObjectContext, OBJC_ASSOCIATION_RETAIN);
     }
 
-    if (![managedObjectContext.persistentStoreCoordinator.persistentStores count])
+    if (![privateManagedObjectContext.persistentStoreCoordinator.persistentStores count])
         // Store not available yet.
         return nil;
 
-    return managedObjectContext;
+    return privateManagedObjectContext;
 }
 
 - (void)migrateStoreForManager:(UbiquityStoreManager *)storeManager {
@@ -48,68 +82,74 @@ static char managedObjectContextKey;
         return;
 
     if ([cloudEnabled boolValue]) {
-        NSURL *newCloudStoreURL   = [storeManager URLForCloudStore];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:newCloudStoreURL.path isDirectory:NO])
-         // New store already exists, migration has already been done.
-            return;
+        if ([storeManager cloudSafeForSeeding]) {
+            NSString *uuid                      = [[NSUserDefaults standardUserDefaults] stringForKey:@"LocalUUIDKey"];
+            NSURL    *cloudContainerURL         = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:@"HL3Q45LX9N.com.lyndir.lhunath.MasterPassword.shared"];
+            NSURL    *newCloudStoreURL          = [storeManager URLForCloudStore];
+            NSURL    *newCloudContentURL        = [storeManager URLForCloudContent];
+            //NSURL  *oldCloudContentURL        = [[cloudContainerURL URLByAppendingPathComponent:@"Data" isDirectory:YES]
+            //                                                        URLByAppendingPathComponent:uuid isDirectory:YES];
+            NSURL    *oldCloudStoreDirectoryURL = [cloudContainerURL URLByAppendingPathComponent:@"Database.nosync" isDirectory:YES];
+            NSURL    *oldCloudStoreURL          = [[oldCloudStoreDirectoryURL URLByAppendingPathComponent:uuid isDirectory:NO]
+                                                                              URLByAppendingPathExtension:@"sqlite"];
+            if (![[NSFileManager defaultManager] fileExistsAtPath:oldCloudStoreURL.path isDirectory:NO]) {
+                // No old store to migrate from, cannot migrate.
+                wrn(@"Cannot migrate cloud store, old store not found at: %@", oldCloudStoreURL.path);
+                return;
+            }
 
-        NSString *uuid                      = [[NSUserDefaults standardUserDefaults] stringForKey:@"LocalUUIDKey"];
-        NSURL    *cloudContainerURL         = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:@"HL3Q45LX9N.com.lyndir.lhunath.MasterPassword.shared"];
-        NSURL    *newCloudContentURL        = [storeManager URLForCloudContent];
-        //NSURL  *oldCloudContentURL        = [[cloudContainerURL URLByAppendingPathComponent:@"Data" isDirectory:YES]
-        //                                                        URLByAppendingPathComponent:uuid isDirectory:YES];
-        NSURL    *oldCloudStoreDirectoryURL = [cloudContainerURL URLByAppendingPathComponent:@"Database.nosync" isDirectory:YES];
-        NSURL    *oldCloudStoreURL          = [[oldCloudStoreDirectoryURL URLByAppendingPathComponent:uuid isDirectory:NO]
-                                                                          URLByAppendingPathExtension:@"sqlite"];
-        if (![[NSFileManager defaultManager] fileExistsAtPath:oldCloudStoreURL.path isDirectory:NO]) {
-            // No old store to migrate from, cannot migrate.
-            wrn(@"Cannot migrate cloud store, old store not found at: %@", oldCloudStoreURL.path);
-            return;
+            NSError      *error                = nil;
+            NSDictionary *oldCloudStoreOptions = @{
+             // This is here in an attempt to have iCloud recreate the old store file from
+             // the baseline and transaction logs from the iCloud account.
+             // In my tests however only the baseline was used to recreate the store which then ended up being empty.
+             /*NSPersistentStoreUbiquitousContentNameKey    : uuid,
+             NSPersistentStoreUbiquitousContentURLKey     : oldCloudContentURL,*/
+             // So instead, we'll just open up the old store as read-only, if it exists.
+             NSReadOnlyPersistentStoreOption              : @YES,
+             NSMigratePersistentStoresAutomaticallyOption : @YES,
+             NSInferMappingModelAutomaticallyOption       : @YES};
+            NSDictionary *newCloudStoreOptions = @{
+             NSPersistentStoreUbiquitousContentNameKey    : [storeManager valueForKey:@"contentName"],
+             NSPersistentStoreUbiquitousContentURLKey     : newCloudContentURL,
+             NSMigratePersistentStoresAutomaticallyOption : @YES,
+             NSInferMappingModelAutomaticallyOption       : @YES};
+
+            // Create the directory to hold the new cloud store.
+            // This is only necessary if we want to try to rebuild the old store.  See comment above about how that failed.
+            //if (![[NSFileManager defaultManager] createDirectoryAtPath:oldCloudStoreDirectoryURL.path
+            //                               withIntermediateDirectories:YES attributes:nil error:&error])
+            //err(@"While creating directory for old cloud store: %@", error);
+            if (![[NSFileManager defaultManager] createDirectoryAtPath:[storeManager URLForCloudStoreDirectory].path
+                                           withIntermediateDirectories:YES attributes:nil error:&error]) {
+                err(@"While creating directory for new cloud store: %@", error);
+                return;
+            }
+
+            NSManagedObjectModel         *model = [NSManagedObjectModel mergedModelFromBundles:nil];
+            NSPersistentStoreCoordinator *psc   = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+
+            // Open the old cloud store.
+            NSPersistentStore *oldStore = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:oldCloudStoreURL
+                                                                  options:oldCloudStoreOptions error:&error];
+            if (!oldStore) {
+                err(@"While opening old store for migration %@: %@", oldCloudStoreURL.path, error);
+                return;
+            }
+
+            // Migrate to the new cloud store.
+            if (![psc migratePersistentStore:oldStore toURL:newCloudStoreURL options:newCloudStoreOptions withType:NSSQLiteStoreType
+                                       error:&error]) {
+                err(@"While migrating cloud store from %@ -> %@: %@", oldCloudStoreURL.path, newCloudStoreURL.path, error);
+                return;
+            }
+
+            // Clean-up.
+            if (![psc removePersistentStore:[psc.persistentStores lastObject] error:&error])
+                err(@"While removing the migrated store from the store context: %@", error);
+            if (![[NSFileManager defaultManager] removeItemAtURL:oldCloudStoreURL error:&error])
+                err(@"While deleting the old cloud store: %@", error);
         }
-
-        NSError      *error                = nil;
-        NSDictionary *oldCloudStoreOptions = @{
-         // This is here in an attempt to have iCloud recreate the old store file from
-         // the baseline and transaction logs from the iCloud account.
-         // In my tests however only the baseline was used to recreate the store which then ended up being empty.
-         /*NSPersistentStoreUbiquitousContentNameKey    : uuid,
-         NSPersistentStoreUbiquitousContentURLKey     : oldCloudContentURL,*/
-         // So instead, we'll just open up the old store as read-only, if it exists.
-         NSReadOnlyPersistentStoreOption              : @YES,
-         NSMigratePersistentStoresAutomaticallyOption : @YES,
-         NSInferMappingModelAutomaticallyOption       : @YES};
-        NSDictionary *newCloudStoreOptions = @{
-         NSPersistentStoreUbiquitousContentNameKey    : [storeManager valueForKey:@"contentName"],
-         NSPersistentStoreUbiquitousContentURLKey     : newCloudContentURL,
-         NSMigratePersistentStoresAutomaticallyOption : @YES,
-         NSInferMappingModelAutomaticallyOption       : @YES};
-
-        // This is only necessary if we want to try to rebuild the old store.  See comment above about how that failed.
-        //if (![[NSFileManager defaultManager] createDirectoryAtPath:oldCloudStoreDirectoryURL.path
-        //                               withIntermediateDirectories:YES attributes:nil error:&error])
-        //err(@"While creating directory for old cloud store: %@", error);
-        if (![[NSFileManager defaultManager] createDirectoryAtPath:[storeManager URLForCloudStoreDirectory].path
-                                       withIntermediateDirectories:YES attributes:nil error:&error])
-        err(@"While creating directory for new cloud store: %@", error);
-
-        NSManagedObjectModel         *model    = [NSManagedObjectModel mergedModelFromBundles:nil];
-        NSPersistentStoreCoordinator *psc      = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
-        NSPersistentStore            *oldStore = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:oldCloudStoreURL
-                                                                         options:oldCloudStoreOptions error:&error];
-        if (!oldStore) {
-            err(@"While opening old store for migration %@: %@", oldCloudStoreURL.path, error);
-            return;
-        }
-
-        if (![psc migratePersistentStore:oldStore toURL:newCloudStoreURL options:newCloudStoreOptions withType:NSSQLiteStoreType
-                                   error:&error]) {
-            err(@"While migrating cloud store from %@ -> %@: %@", oldCloudStoreURL.path, newCloudStoreURL.path, error);
-            return;
-        }
-        if (![psc removePersistentStore:[psc.persistentStores lastObject] error:&error])
-        err(@"While removing the migrated store from the store context: %@", error);
-        if (![[NSFileManager defaultManager] removeItemAtURL:oldCloudStoreURL error:&error])
-        err(@"While deleting the old cloud store: %@", error);
     } else {
         NSURL *applicationFilesDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
                                                                                    inDomains:NSUserDomainMask] lastObject];
@@ -124,16 +164,34 @@ static char managedObjectContextKey;
              NSInferMappingModelAutomaticallyOption       : @YES};
             NSManagedObjectModel         *model    = [NSManagedObjectModel mergedModelFromBundles:nil];
             NSPersistentStoreCoordinator *psc      = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+            
+            // Create the directory to hold the new local store.
+            if (![[NSFileManager defaultManager] createDirectoryAtPath:[storeManager URLForLocalStoreDirectory].path
+                                           withIntermediateDirectories:YES attributes:nil error:&error]) {
+                err(@"While creating directory for new local store: %@", error);
+                return;
+            }
+
+            // Open the old local store.
             NSPersistentStore            *oldStore = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil
                                                                                  URL:oldLocalStoreURL options:options error:&error];
-            if (oldStore)
-                [psc migratePersistentStore:oldStore toURL:newLocalStoreURL options:options withType:NSSQLiteStoreType error:&error];
-            if (error)
-            err(@"While migrating local store from %@ -> %@: %@", oldLocalStoreURL, newLocalStoreURL, error);
-            else {
-                [psc removePersistentStore:[psc.persistentStores lastObject] error:nil];
-                [[NSFileManager defaultManager] removeItemAtURL:oldLocalStoreURL error:nil];
+            if (!oldStore) {
+                err(@"While opening old store for migration %@: %@", oldLocalStoreURL.path, error);
+                return;
             }
+            
+            // Migrate to the new local store.
+            if (![psc migratePersistentStore:oldStore toURL:newLocalStoreURL options:options withType:NSSQLiteStoreType error:&error]) {
+                err(@"While migrating local store from %@ -> %@: %@", oldLocalStoreURL, newLocalStoreURL, error);
+                return;
+            }
+            
+            // Clean-up.
+            if (![psc removePersistentStore:[psc.persistentStores lastObject] error:&error])
+                err(@"While removing the migrated store from the store context: %@", error);
+
+            if (![[NSFileManager defaultManager] removeItemAtURL:oldLocalStoreURL error:&error])
+                err(@"While deleting the old local store: %@", error);
         }
     }
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"LocalUUIDKey"];
@@ -163,32 +221,49 @@ static char managedObjectContextKey;
     [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidChangeNotification
                                                       object:storeManager queue:nil
                                                   usingBlock:^(NSNotification *note) {
-                                                      objc_setAssociatedObject(self, &managedObjectContextKey, nil, OBJC_ASSOCIATION_RETAIN);
+                                                      objc_setAssociatedObject(self, &privateManagedObjectContextKey, nil, OBJC_ASSOCIATION_RETAIN);
                                                   }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
+     ^(NSNotification *note) {
+         if ([[MPConfig get].iCloud boolValue] != [self.storeManager cloudEnabled])
+             self.storeManager.cloudEnabled = [[MPConfig get].iCloud boolValue];
+     }];
 #if TARGET_OS_IPHONE
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification
                                                       object:[UIApplication sharedApplication] queue:nil
                                                   usingBlock:^(NSNotification *note) {
-                                                      [self saveContext];
+                                                      [self saveContexts];
+                                                  }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification
+                                                      object:[UIApplication sharedApplication] queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [self saveContexts];
                                                   }];
 #else
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillTerminateNotification
                                                       object:[NSApplication sharedApplication] queue:nil
                                                   usingBlock:^(NSNotification *note) {
-                                                      [self saveContext];
+                                                      [self saveContexts];
                                                   }];
 #endif
 
     return storeManager;
 }
 
-- (void)saveContext {
+- (void)saveContexts {
 
-    [self.managedObjectContextIfReady performBlock:^{
+    NSManagedObjectContext *mainManagedObjectContext = objc_getAssociatedObject(self, &mainManagedObjectContextKey);
+    [mainManagedObjectContext performBlockAndWait:^{
         NSError *error = nil;
-        if ([self.managedObjectContextIfReady hasChanges])
-            if (![self.managedObjectContextIfReady save:&error])
-            err(@"While saving context: %@", error);
+        if (![mainManagedObjectContext save:&error])
+            err(@"While saving main context: %@", error);
+    }];
+
+    NSManagedObjectContext *privateManagedObjectContext = [self privateManagedObjectContextIfReady];
+    [privateManagedObjectContext performBlockAndWait:^{
+        NSError *error = nil;
+        if (![privateManagedObjectContext save:&error])
+        err(@"While saving private context: %@", error);
     }];
 }
 
@@ -196,7 +271,7 @@ static char managedObjectContextKey;
 
 - (NSManagedObjectContext *)managedObjectContextForUbiquityStoreManager:(UbiquityStoreManager *)usm {
 
-    return self.managedObjectContextIfReady;
+    return [self privateManagedObjectContextIfReady];
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager log:(NSString *)message {
@@ -294,28 +369,34 @@ static char managedObjectContextKey;
             askImportPassword:(NSString *(^)(NSString *userName))importPassword
               askUserPassword:(NSString *(^)(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword {
 
-    while (![self managedObjectContextIfReady])
-        usleep((useconds_t)(USEC_PER_SEC * 0.2));
-
-    inf(@"Importing sites.");
-
+    // Compile patterns.
     static NSRegularExpression *headerPattern, *sitePattern;
-    __block NSError *error = nil;
+    NSError *error = nil;
     if (!headerPattern) {
         headerPattern = [[NSRegularExpression alloc] initWithPattern:@"^#[[:space:]]*([^:]+): (.*)"
                                                              options:0 error:&error];
-        if (error)
-        err(@"Error loading the header pattern: %@", error);
+        if (error) {
+            err(@"Error loading the header pattern: %@", error);
+            return MPImportResultInternalError;
+        }
     }
     if (!sitePattern) {
         sitePattern = [[NSRegularExpression alloc] initWithPattern:@"^([^[:space:]]+)[[:space:]]+([[:digit:]]+)[[:space:]]+([[:digit:]]+)(:[[:digit:]]+)?[[:space:]]+([^\t]+)\t(.*)"
                                                            options:0 error:&error];
-        if (error)
-        err(@"Error loading the site pattern: %@", error);
+        if (error) {
+            err(@"Error loading the site pattern: %@", error);
+            return MPImportResultInternalError;
+        }
     }
-    if (!headerPattern || !sitePattern)
-        return MPImportResultInternalError;
 
+    // Get a MOC.
+    NSAssert(![[NSThread currentThread] isMainThread], @"This method should not be invoked from the main thread.");
+    NSManagedObjectContext *moc;
+    while (!(moc = [MPAppDelegate_Shared managedObjectContextForThreadIfReady]))
+        usleep((useconds_t)(USEC_PER_SEC * 0.2));
+
+    // Parse import data.
+    inf(@"Importing sites.");
     __block MPUserEntity *user = nil;
     id<MPAlgorithm> importAlgorithm = nil;
     NSString *importBundleVersion = nil, *importUserName = nil;
@@ -354,10 +435,7 @@ static char managedObjectContextKey;
 
                 NSFetchRequest *userFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPUserEntity class])];
                 userFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", importUserName];
-                __block NSArray *users = nil;
-                [self.managedObjectContextIfReady performBlockAndWait:^{
-                    users = [self.managedObjectContextIfReady executeFetchRequest:userFetchRequest error:&error];
-                }];
+                NSArray *users = [moc executeFetchRequest:userFetchRequest error:&error];
                 if (!users) {
                     err(@"While looking for user: %@, error: %@", importUserName, error);
                     return MPImportResultInternalError;
@@ -407,10 +485,7 @@ static char managedObjectContextKey;
         // Find existing site.
         if (user) {
             elementFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND user == %@", name, user];
-            __block NSArray *existingSites = nil;
-            [self.managedObjectContextIfReady performBlockAndWait:^{
-                existingSites = [self.managedObjectContextIfReady executeFetchRequest:elementFetchRequest error:&error];
-            }];
+            NSArray *existingSites = [moc executeFetchRequest:elementFetchRequest error:&error];
             if (!existingSites) {
                 err(@"Lookup of existing sites failed for site: %@, user: %@, error: %@", name, user.userID, error);
                 return MPImportResultInternalError;
@@ -437,97 +512,77 @@ static char managedObjectContextKey;
     if ([importKey.keyID isEqualToData:importKeyID])
         importKey = nil;
 
-    BOOL success = NO;
-    [self.managedObjectContextIfReady.undoManager beginUndoGrouping];
-    @try {
+    // Delete existing sites.
+    if (elementsToDelete.count)
+        [elementsToDelete enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+            inf(@"Deleting site: %@, it will be replaced by an imported site.", [obj name]);
+            [moc deleteObject:obj];
+        }];
 
-        // Delete existing sites.
-        if (elementsToDelete.count)
-            [self.managedObjectContextIfReady performBlockAndWait:^{
-                [elementsToDelete enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
-                    inf(@"Deleting site: %@, it will be replaced by an imported site.", [obj name]);
-                    dbg(@"Deleted Element: %@", [obj debugDescription]);
-                    [self.managedObjectContextIfReady deleteObject:obj];
-                }];
-            }];
+    // Make sure there is a user.
+    if (!user) {
+        user = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class])
+                                             inManagedObjectContext:moc];
+        user.name  = importUserName;
+        user.keyID = importKeyID;
+        dbg(@"Created User: %@", [user debugDescription]);
+    }
 
-        // Make sure there is a user.
-        if (!user) {
-            [self.managedObjectContextIfReady performBlockAndWait:^{
-                user = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class])
-                                                     inManagedObjectContext:self.managedObjectContextIfReady];
-                user.name  = importUserName;
-                user.keyID = importKeyID;
-            }];
-            dbg(@"Created User: %@", [user debugDescription]);
-        }
-        [self saveContext];
+    // Import new sites.
+    for (NSArray *siteElements in importedSiteElements) {
+        NSDate *lastUsed = [[NSDateFormatter rfc3339DateFormatter] dateFromString:[siteElements objectAtIndex:0]];
+        NSUInteger    uses    = (unsigned)[[siteElements objectAtIndex:1] integerValue];
+        MPElementType type    = (MPElementType)[[siteElements objectAtIndex:2] integerValue];
+        NSUInteger    version = (unsigned)[[siteElements objectAtIndex:3] integerValue];
+        NSString *name          = [siteElements objectAtIndex:4];
+        NSString *exportContent = [siteElements objectAtIndex:5];
 
-        // Import new sites.
-        for (NSArray *siteElements in importedSiteElements) {
-            NSDate *lastUsed = [[NSDateFormatter rfc3339DateFormatter] dateFromString:[siteElements objectAtIndex:0]];
-            NSUInteger    uses    = (unsigned)[[siteElements objectAtIndex:1] integerValue];
-            MPElementType type    = (MPElementType)[[siteElements objectAtIndex:2] integerValue];
-            NSUInteger    version = (unsigned)[[siteElements objectAtIndex:3] integerValue];
-            NSString *name          = [siteElements objectAtIndex:4];
-            NSString *exportContent = [siteElements objectAtIndex:5];
+        // Create new site.
+        MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmForVersion(
+         version) classNameOfType:type]
+                                                                 inManagedObjectContext:moc];
+        element.name     = name;
+        element.user     = user;
+        element.type     = type;
+        element.uses     = uses;
+        element.lastUsed = lastUsed;
+        element.version  = version;
+        if ([exportContent length]) {
+            if (clearText)
+                [element importClearTextContent:exportContent usingKey:userKey];
+            else {
+                if (!importKey)
+                    importKey = [importAlgorithm keyForPassword:importPassword(user.name) ofUserNamed:user.name];
+                if (![importKey.keyID isEqualToData:importKeyID])
+                    return MPImportResultInvalidPassword;
 
-            // Create new site.
-            __block MPImportResult result = MPImportResultSuccess;
-            [self.managedObjectContextIfReady performBlockAndWait:^{
-                MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmForVersion(
-                 version) classNameOfType:type]
-                                                                         inManagedObjectContext:self.managedObjectContextIfReady];
-                element.name     = name;
-                element.user     = user;
-                element.type     = type;
-                element.uses     = uses;
-                element.lastUsed = lastUsed;
-                element.version  = version;
-                if ([exportContent length]) {
-                    if (clearText)
-                        [element importClearTextContent:exportContent usingKey:userKey];
-                    else {
-                        if (!importKey)
-                            importKey = [importAlgorithm keyForPassword:importPassword(user.name) ofUserNamed:user.name];
-                        if (![importKey.keyID isEqualToData:importKeyID]) {
-                            result = MPImportResultInvalidPassword;
-                            return;
-                        }
-
-                        [element importProtectedContent:exportContent protectedByKey:importKey usingKey:userKey];
-                    }
-                }
-
-                dbg(@"Created Element: %@", [element debugDescription]);
-            }];
-            if (result != MPImportResultSuccess)
-                return result;
+                [element importProtectedContent:exportContent protectedByKey:importKey usingKey:userKey];
+            }
         }
 
-        [self saveContext];
-        success = YES;
-        inf(@"Import completed successfully.");
+        dbg(@"Created Element: %@", [element debugDescription]);
+    }
+
+    if (![moc save:&error]) {
+        err(@"While saving imported sites: %@", error);
+        return MPImportResultInternalError;
+    }
+
+    inf(@"Import completed successfully.");
 #ifdef TESTFLIGHT_SDK_VERSION
-        [TestFlight passCheckpoint:MPCheckpointSitesImported];
+    [TestFlight passCheckpoint:MPCheckpointSitesImported];
 #endif
 #ifdef LOCALYTICS
-        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSitesImported attributes:nil];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSitesImported attributes:nil];
 #endif
 
-        return MPImportResultSuccess;
-    }
-    @finally {
-        [self.managedObjectContextIfReady.undoManager endUndoGrouping];
-
-        if (!success)
-            [self.managedObjectContextIfReady.undoManager undoNestedGroup];
-    }
+    return MPImportResultSuccess;
 }
 
 - (NSString *)exportSitesShowingPasswords:(BOOL)showPasswords {
 
-    inf(@"Exporting sites, %@, for: %@", showPasswords? @"showing passwords": @"omitting passwords", self.activeUser.userID);
+    MPUserEntity *activeUser = self.activeUser;
+    inf(@"Exporting sites, %@, for: %@", showPasswords? @"showing passwords": @"omitting passwords", activeUser.userID);
 
     // Header.
     NSMutableString *export = [NSMutableString new];
@@ -539,8 +594,8 @@ static char managedObjectContextKey;
     [export appendFormat:@"# \n"];
     [export appendFormat:@"##\n"];
     [export appendFormat:@"# Version: %@\n", [PearlInfoPlist get].CFBundleVersion];
-    [export appendFormat:@"# User Name: %@\n", self.activeUser.name];
-    [export appendFormat:@"# Key ID: %@\n", [self.activeUser.keyID encodeHex]];
+    [export appendFormat:@"# User Name: %@\n", activeUser.name];
+    [export appendFormat:@"# Key ID: %@\n", [activeUser.keyID encodeHex]];
     [export appendFormat:@"# Date: %@\n", [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]]];
     if (showPasswords)
         [export appendFormat:@"# Passwords: VISIBLE\n"];
@@ -552,7 +607,7 @@ static char managedObjectContextKey;
     [export appendFormat:@"#               used      used      type                  name\tpassword\n"];
 
     // Sites.
-    for (MPElementEntity *element in self.activeUser.elements) {
+    for (MPElementEntity *element in activeUser.elements) {
         NSDate *lastUsed = element.lastUsed;
         NSUInteger    uses    = element.uses;
         MPElementType type    = element.type;

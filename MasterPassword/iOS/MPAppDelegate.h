@@ -14,7 +14,6 @@
 
 + (MPAppDelegate *)get;
 
-- (void)checkConfig;
 - (void)showGuide;
 - (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController;
 

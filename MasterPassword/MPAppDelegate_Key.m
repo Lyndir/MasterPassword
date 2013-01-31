@@ -28,9 +28,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     inf(@"Found key in keychain for: %@", user.userID);
 
     else {
-        [user.managedObjectContext performBlockAndWait:^{
-            user.saveKey = NO;
-        }];
+        user.saveKey = NO;
         inf(@"No key found in keychain for: %@", user.userID);
     }
 
@@ -46,12 +44,12 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
             inf(@"Saving key in keychain for: %@", user.userID);
 
             [PearlKeyChain addOrUpdateItemForQuery:keyQuery(user)
-                                    withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                  self.key.keyData, (__bridge id)kSecValueData,
-                                                                  #if TARGET_OS_IPHONE
-                                                                   (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly, (__bridge id)kSecAttrAccessible,
-                                                                  #endif
-                                                                  nil]];
+                                    withAttributes:@{
+                                     (__bridge id)kSecValueData      : self.key.keyData,
+#if TARGET_OS_IPHONE
+                                     (__bridge id)kSecAttrAccessible : (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+#endif
+                                    }];
         }
     }
 }
@@ -60,14 +58,12 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     OSStatus result = [PearlKeyChain deleteItemForQuery:keyQuery(user)];
     if (result == noErr || result == errSecItemNotFound) {
-        [user.managedObjectContext performBlockAndWait:^{
-            user.saveKey = NO;
-        }];
+        user.saveKey = NO;
 
         if (result == noErr) {
             inf(@"Removed key from keychain for: %@", user.userID);
 
-            [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationKeyForgotten object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:MPKeyForgottenNotification object:self];
         }
     }
 }
@@ -79,7 +75,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     if (self.activeUser) {
         self.activeUser = nil;
-        [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationSignedOut object:self userInfo:
+        [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedOutNotification object:self userInfo:
          @{@"animated": @(animated)}];
     }
 }
@@ -93,9 +89,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     if (!user.keyID) {
         if ([password length])
             if ((tryKey = [MPAlgorithmDefault keyForPassword:password ofUserNamed:user.name])) {
-                [user.managedObjectContext performBlockAndWait:^{
-                    user.keyID = tryKey.keyID;
-                }];
+                user.keyID = tryKey.keyID;
 
                 // Migrate existing elements.
                 MPKey *recoverKey = nil;
@@ -133,7 +127,6 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                                          } cancelTitle:@"Don't Migrate" otherTitles:@"Migrate", nil];
                             dispatch_group_wait(recoverPasswordGroup, DISPATCH_TIME_FOREVER);
 #endif
-
                             if (!masterPassword)
                                 // Don't Migrate
                                 break;
@@ -146,12 +139,10 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                             // Don't Migrate
                             break;
 
-                        [element.managedObjectContext performBlockAndWait:^{
-                            [element setContent:content usingKey:tryKey];
-                        }];
+                        [element setContent:content usingKey:tryKey];
                     }
                 }
-                [[MPAppDelegate_Shared get] saveContext];
+                [user saveContext];
 #ifdef PEARL_UIKIT
                 [activityAlert dismissAlert];
 #endif
@@ -224,15 +215,11 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
         err(@"While setting username: %@", exception);
     }
 
+    user.lastUsed = [NSDate date];
+    [user saveContext];
+    self.activeUser = user;
 
-    [user.managedObjectContext performBlockAndWait:^{
-        user.lastUsed   = [NSDate date];
-        self.activeUser = user;
-        self.activeUser.requiresExplicitMigration = NO;
-    }];
-    [[MPAppDelegate_Shared get] saveContext];
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPNotificationSignedIn object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedInNotification object:self];
 #ifdef TESTFLIGHT_SDK_VERSION
     [TestFlight passCheckpoint:MPCheckpointSignedIn];
 #endif

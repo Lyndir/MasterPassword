@@ -15,6 +15,12 @@
 
 #define MPAvatarCount 19
 
+@interface NSManagedObject (MP)
+
+- (BOOL)saveContext;
+
+@end
+
 @interface MPElementEntity (MP)
 
 @property (assign) MPElementType type;
@@ -49,7 +55,6 @@
 @property (assign) NSUInteger avatar;
 @property (assign) BOOL       saveKey;
 @property (assign) MPElementType defaultType;
-@property (assign) BOOL          requiresExplicitMigration;
 @property (readonly) NSString *userID;
 
 + (NSString *)idFor:(NSString *)userName;

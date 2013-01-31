@@ -20,11 +20,8 @@ typedef enum {
 
 @interface MPAppDelegate_Shared (Store)<UbiquityStoreManagerDelegate>
 
-+ (NSManagedObjectContext *)managedObjectContextIfReady;
-- (NSManagedObjectContext *)managedObjectContextIfReady;
-
-- (UbiquityStoreManager *)storeManager;
-- (void)saveContext;
++ (NSManagedObjectContext *)managedObjectContextForThreadIfReady;
++ (BOOL)managedObjectContextPerform:(void (^)(NSManagedObjectContext *moc))mocBlock;
 
 - (MPImportResult)importSites:(NSString *)importedSitesString
             askImportPassword:(NSString *(^)(NSString *userName))importPassword

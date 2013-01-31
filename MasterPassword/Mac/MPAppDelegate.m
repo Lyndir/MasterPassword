@@ -74,7 +74,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             [[self.usersItem submenu] removeItem:obj];
     }];
 
-    NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextIfReady];
+    NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
     if (!moc) {
         self.createUserItem.title = @"New User (Not ready)";
         self.createUserItem.enabled = NO;
@@ -87,38 +87,35 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     self.createUserItem.title = @"New User";
     self.createUserItem.enabled = YES;
     self.createUserItem.toolTip = nil;
-
-    [moc performBlockAndWait:^{
-        NSArray        *users = nil;
-        NSError        *error        = nil;
-        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPUserEntity class])];
-        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO]];
-        users = [moc executeFetchRequest:fetchRequest error:&error];
-        if (!users)
-            err(@"Failed to load users: %@", error);
+    
+    NSError        *error        = nil;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPUserEntity class])];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO]];
+    NSArray        *users = [moc executeFetchRequest:fetchRequest error:&error];
+    if (!users)
+        err(@"Failed to load users: %@", error);
+    
+    if (![users count]) {
+        NSMenuItem *noUsersItem = [self.usersItem.submenu addItemWithTitle:@"No users" action:NULL keyEquivalent:@""];
+        noUsersItem.enabled = NO;
+        noUsersItem.toolTip = @"Use the iOS app to create users and make sure iCloud is enabled in its preferences as well.  "
+        @"Then give iCloud some time to sync the new user to your Mac.";
+    }
+    
+    for (MPUserEntity *user in users) {
+        NSMenuItem *userItem = [[NSMenuItem alloc] initWithTitle:user.name action:@selector(selectUser:) keyEquivalent:@""];
+        [userItem setTarget:self];
+        [userItem setRepresentedObject:[user objectID]];
+        [[self.usersItem submenu] addItem:userItem];
         
-        if (![users count]) {
-            NSMenuItem *noUsersItem = [self.usersItem.submenu addItemWithTitle:@"No users" action:NULL keyEquivalent:@""];
-            noUsersItem.enabled = NO;
-            noUsersItem.toolTip = @"Use the iOS app to create users and make sure iCloud is enabled in its preferences as well.  "
-             @"Then give iCloud some time to sync the new user to your Mac.";
-        }
-
-        for (MPUserEntity *user in users) {
-            NSMenuItem *userItem = [[NSMenuItem alloc] initWithTitle:user.name action:@selector(selectUser:) keyEquivalent:@""];
-            [userItem setTarget:self];
-            [userItem setRepresentedObject:user.objectID];
-            [[self.usersItem submenu] addItem:userItem];
-
-            if ([user.name isEqualToString:[MPMacConfig get].usedUserName])
-                [self selectUser:userItem];
-        }
-    }];
+        if ([user.name isEqualToString:[MPMacConfig get].usedUserName])
+            [self selectUser:userItem];
+    }
 }
 
 - (void)selectUser:(NSMenuItem *)item {
     
-    self.activeUserObjectID = item.representedObject;
+    self.activeUser = (MPUserEntity *)[[MPAppDelegate managedObjectContextForThreadIfReady] objectRegisteredForID:[item representedObject]];
 }
 
 - (void)showMenu {
@@ -143,15 +140,16 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (IBAction)togglePreference:(NSMenuItem *)sender {
 
     if (sender == useICloudItem)
-        self.storeManager.cloudEnabled = (sender.state == NSOnState);
+        [MPConfig get].iCloud = @(sender.state == NSOnState);
     if (sender == rememberPasswordItem)
         [MPConfig get].rememberLogin = [NSNumber numberWithBool:![[MPConfig get].rememberLogin boolValue]];
     if (sender == savePasswordItem) {
-        if (([MPAppDelegate get].activeUser.saveKey = ![MPAppDelegate get].activeUser.saveKey))
-            [[MPAppDelegate get] storeSavedKeyFor:[MPAppDelegate get].activeUser];
+        MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
+        if ((activeUser.saveKey = !activeUser.saveKey))
+            [[MPAppDelegate get] storeSavedKeyFor:activeUser];
         else
-            [[MPAppDelegate get] forgetSavedKeyFor:[MPAppDelegate get].activeUser];
-        [[MPAppDelegate get] saveContext];
+            [[MPAppDelegate get] forgetSavedKeyFor:activeUser];
+        [activeUser saveContext];
     }
 }
 
@@ -170,10 +168,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)oldValue {
 
-    if (configKey == @selector(rememberLogin))
-        self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
-    if (configKey == @selector(saveKey))
-        self.savePasswordItem.state     = [MPAppDelegate get].activeUser.saveKey? NSOnState: NSOffState;
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification
+                                                        object:NSStringFromSelector(configKey) userInfo:nil];
 }
 
 #pragma mark - NSApplicationDelegate
@@ -190,10 +186,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         [weakSelf updateMenuItems];
     } forKeyPath:@"activeUser" options:NSKeyValueObservingOptionInitial context:nil];
 
-    // Initially, use iCloud.
-    if ([[MPConfig get].firstRun boolValue])
-        [self storeManager].cloudEnabled = YES;
-
     // Status item.
     self.statusItem               = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
     self.statusItem.image         = [NSImage imageNamed:@"menu-icon"];
@@ -201,15 +193,17 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     self.statusItem.target        = self;
     self.statusItem.action        = @selector(showMenu);
 
+    __weak MPAppDelegate *wSelf = self;
     [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        [[[self.usersItem submenu] itemArray] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if ([[obj representedObject] isEqual:self.activeUserObjectID])
+        MPUserEntity *activeUser = wSelf.activeUser;
+        [[[wSelf.usersItem submenu] itemArray] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if ([[obj representedObject] isEqual:[activeUser objectID]])
                 [obj setState:NSOnState];
             else
                 [obj setState:NSOffState];
         }];
 
-        [MPMacConfig get].usedUserName = self.activeUser.name;
+        [MPMacConfig get].usedUserName = activeUser.name;
     }           forKeyPath:@"activeUserObjectID" options:0 context:nil];
     [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidChangeNotification object:nil queue:nil usingBlock:
      ^(NSNotification *note) {
@@ -220,6 +214,11 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                                                    ^(NSNotification *note) {
                                                        [self updateUsers];
                                                    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
+     ^(NSNotification *note) {
+         self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
+         self.savePasswordItem.state     = [MPAppDelegate get].activeUser.saveKey? NSOnState: NSOffState;
+     }];
     [self updateUsers];
 
     // Global hotkey.
@@ -309,58 +308,33 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
     // Save changes in the application's managed object context before the application terminates.
 
-    if (![self managedObjectContextIfReady]) {
+    NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
+    if (!moc)
         return NSTerminateNow;
-    }
 
-    if (![[self managedObjectContextIfReady] commitEditing]) {
-        NSLog(@"%@:%@ unable to commit editing to terminate", [self class], NSStringFromSelector(_cmd));
+    if (![moc commitEditing])
         return NSTerminateCancel;
-    }
 
-    if (![[self managedObjectContextIfReady] hasChanges]) {
+    if (![moc hasChanges])
         return NSTerminateNow;
-    }
 
     NSError *error = nil;
-    if (![[self managedObjectContextIfReady] save:&error]) {
-
-        // Customize this code block to include application-specific recovery steps.              
-        BOOL result = [sender presentError:error];
-        if (result) {
-            return NSTerminateCancel;
-        }
-
-        NSString *question     = NSLocalizedString(@"Could not save changes while quitting. Quit anyway?", @"Quit without saves error question message");
-        NSString *info         = NSLocalizedString(@"Quitting now will lose any changes you have made since the last successful save", @"Quit without saves error question info");
-        NSString *quitButton   = NSLocalizedString(@"Quit anyway", @"Quit anyway button title");
-        NSString *cancelButton = NSLocalizedString(@"Cancel", @"Cancel button title");
-        NSAlert  *alert        = [[NSAlert alloc] init];
-        [alert setMessageText:question];
-        [alert setInformativeText:info];
-        [alert addButtonWithTitle:quitButton];
-        [alert addButtonWithTitle:cancelButton];
-
-        NSInteger answer = [alert runModal];
-
-        if (answer == NSAlertAlternateReturn) {
-            return NSTerminateCancel;
-        }
-    }
+    if (![moc save:&error])
+        err(@"While terminating: %@", error);
 
     return NSTerminateNow;
 }
 
 #pragma mark - UbiquityStoreManagerDelegate
 
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToiCloud:(BOOL)iCloudEnabled {
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToCloud:(BOOL)cloudEnabled {
     
-    [super ubiquityStoreManager:manager didSwitchToiCloud:iCloudEnabled];
+    [super ubiquityStoreManager:manager didSwitchToCloud:cloudEnabled];
 
     [self updateMenuItems];
 
     if (![[MPConfig get].iCloudDecided boolValue]) {
-        if (iCloudEnabled)
+        if (cloudEnabled)
             return;
         
         switch ([[NSAlert alertWithMessageText:@"iCloud Is Disabled"
@@ -387,7 +361,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                   @"a user-specified password: these are sent to iCloud after being encrypted "
                   @"with your master password.\n\n"
                   @"Apple can never see any of your passwords."] runModal];
-                [self ubiquityStoreManager:manager didSwitchToiCloud:iCloudEnabled];
+                [self ubiquityStoreManager:manager didSwitchToCloud:cloudEnabled];
                 break;
             }
                 
