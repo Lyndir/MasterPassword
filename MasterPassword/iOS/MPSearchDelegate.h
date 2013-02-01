@@ -7,27 +7,22 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #import "MPElementEntity.h"
+#import "MPElementPickerDelegate.h"
 
 typedef enum {
     MPSearchScopeAll,
     MPSearchScopeOutdated,
 } MPSearchScope;
 
-@protocol MPSearchResultsDelegate<NSObject>
-
-- (void)didSelectElement:(MPElementEntity *)element;
-
-@end
-
 @interface MPSearchDelegate : NSObject<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchDisplayDelegate, NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) NSDateFormatter           *dateFormatter;
 @property (strong, readonly) NSFetchedResultsController *fetchedResultsController;
-@property (strong, nonatomic) NSString                  *query;
 @property (strong, nonatomic) UILabel                   *tipView;
 
-@property (weak, nonatomic) IBOutlet id<MPSearchResultsDelegate> delegate;
+@property (weak, nonatomic) IBOutlet id<MPElementPickerDelegate> delegate;
 @property (strong, nonatomic) IBOutlet UISearchDisplayController *searchDisplayController;
 @property (weak, nonatomic) IBOutlet UIView                      *searchTipContainer;
 

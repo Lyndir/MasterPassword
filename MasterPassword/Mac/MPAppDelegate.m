@@ -42,11 +42,6 @@ static EventHotKeyID MPLockHotKey = {.signature = 'lock', .id = 1};
     });
 }
 
-+ (MPAppDelegate *)get {
-
-    return (MPAppDelegate *)[super get];
-}
-
 static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEvent, void *userData) {
 
     // Extract the hotkey ID.

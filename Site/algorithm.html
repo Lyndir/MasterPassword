@@ -341,20 +341,7 @@
                 </ul>
             </p>
             <p>
-                By default, Master Password uses the <em>Long Password</em> type for any new passwords.  The user is able to choose a different password type, which is normally only done if the site's password policy is incompatible with the output password produced by this type.
-            </p>
-            <p>
-                To create the create the output password, the bytes in the <code>seed</code> are encoded according to the template.  The first <code>seed</code> byte is used to determine which of the type's templates to use for encoding an output password.  We take the byte value of the first <code>seed</code> byte modulo the amount of templates set for the chosen password type and use the result as a zero-based index in the template list for the password type.
-            </p>
-            <code><pre>
-                templates = [ "CvcvCvcvnoCvcv", "CvcvnoCvcvCvcv", "CvcvCvcvCvcvno", ... ]
-                template  = templates[ seed[0] % count( templates ) ]
-            </pre></code>
-            <p>
-                Now that we know what template to use for building our output password, all that's left is to iterate the template, and produce a character of password output for each step.  When we iterate the template (index <code>i</code>), we look in the character group identified by the character (string <code>passChars</code>) in the template at index <code>i</code>.
-            </p>
-            <p>
-                The following character groups (<code>passChars</code>) are defined:
+                Where each of the letters above expand any of the characters in their respective character group:
                 <ul>
                     <li><p>Template character: <code>V</code>
                         <ul>
@@ -402,6 +389,19 @@
                         </ul>
                     </p></li>
                 </ul>
+            </p>
+            <p>
+                By default, Master Password uses the <em>Long Password</em> type for any new passwords.  The user is able to choose a different password type, which is normally only done if the site's password policy is incompatible with the output password produced by this type.
+            </p>
+            <p>
+                To create the output password, the bytes in the <code>seed</code> are encoded according to the template.  The first <code>seed</code> byte is used to determine which of the type's templates to use for encoding an output password.  We take the byte value of the first <code>seed</code> byte modulo the amount of templates set for the chosen password type and use the result as a zero-based index in the template list for the password type.
+            </p>
+            <code><pre>
+                templates = [ "CvcvCvcvnoCvcv", "CvcvnoCvcvCvcv", "CvcvCvcvCvcvno", ... ]
+                template  = templates[ seed[0] % count( templates ) ]
+            </pre></code>
+            <p>
+                Now that we know what template to use for building our output password, all that's left is to iterate the template, and produce a character of password output for each step.  When we iterate the template (index <code>i</code>), we look in the character group identified by the character (string <code>passChars</code>) in the template at index <code>i</code>.
             </p>
             <p>
                 We use the <code>seed</code>'s byte value at index <code>i + 1</code> modulo the amount of characters in the character class to determine which character (<code>passChar</code>) in the class to use for the output password at index <code>i</code>.

@@ -20,9 +20,4 @@
     return self;
 }
 
-+ (MPMacConfig *)get {
-
-    return (MPMacConfig *)[super get];
-}
-
 @end

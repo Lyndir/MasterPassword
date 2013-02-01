@@ -496,7 +496,6 @@
 
     // Lay out user name label.
     self.nameLabel.text      = targetedAvatar? (targetedUser? targetedUser.name: @"New User"): nil;
-    dbg(@"targetedAvatar: %@, targetedUser: %@, nameLabel: %@", targetedAvatar, targetedUser, self.nameLabel.text);
     self.nameLabel.bounds    = CGRectSetHeight(self.nameLabel.bounds,
                                                [self.nameLabel.text sizeWithFont:self.nameLabel.font
                                                                constrainedToSize:CGSizeMake(self.nameLabel.bounds.size.width - 10, 100)

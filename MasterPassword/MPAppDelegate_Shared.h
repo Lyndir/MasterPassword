@@ -18,6 +18,8 @@
 @property (strong, nonatomic) MPUserEntity      *activeUser;
 @property (strong, nonatomic) MPKey             *key;
 
++ (instancetype)get;
+
 - (MPUserEntity *)activeUserInContext:(NSManagedObjectContext *)moc;
 
 @end

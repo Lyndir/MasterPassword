@@ -92,6 +92,16 @@
     [super viewWillDisappear:animated];
 }
 
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+
+    return UIInterfaceOrientationPortrait;
+}
+
+- (BOOL)shouldAutorotate {
+
+    return NO;
+}
+
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController
       viewControllerBeforeViewController:(UIViewController *)viewController {

@@ -9,12 +9,7 @@
 #import "MPSearchDelegate.h"
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Store.h"
-
-@interface MPSearchDelegate (Private)
-
-- (void)configureCell:(UITableViewCell *)cell inTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath;
-
-@end
+#import "MPMainViewController.h"
 
 @implementation MPSearchDelegate {
 
@@ -28,7 +23,6 @@
 
     self.dateFormatter           = [NSDateFormatter new];
     self.dateFormatter.dateStyle = NSDateFormatterShortStyle;
-    self.query                   = @"";
 
     self.tipView                  = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 170)];
     self.tipView.textAlignment    = NSTextAlignmentCenter;
@@ -60,12 +54,18 @@
 
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
         fetchRequest.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"uses_" ascending:NO]];
+        fetchRequest.fetchBatchSize = 20;
         _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:moc
                                                                           sectionNameKeyPath:nil cacheName:nil];
         _fetchedResultsController.delegate = self;
     }
 
     return _fetchedResultsController;
+}
+
+- (void)searchBarBookmarkButtonClicked:(UISearchBar *)searchBar {
+
+    [((MPMainViewController *)self.delegate) performSegueWithIdentifier:@"MP_AllSites" sender:self];
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
@@ -89,12 +89,6 @@
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
 
-    if (searchBar.searchResultsButtonSelected && !searchText.length)
-        searchBar.text = @" ";
-
-    self.query     = [searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    if (!self.query)
-        self.query = @"";
 }
 
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
@@ -113,8 +107,6 @@
 
 - (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller {
 
-    controller.searchBar.text = controller.searchBar.searchResultsButtonSelected? @" ": @"";
-    self.query                = @"";
 }
 
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
@@ -154,31 +146,30 @@
 
 - (void)fetchData {
 
+    
+    NSString *query = [self.searchDisplayController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if (!query)
+        return;
+
     MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
-    assert(self.query);
-    assert(activeUser);
+    if (!activeUser)
+        return;
 
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user == %@", activeUser];
-    if (self.query.length)
-        predicate = [NSCompoundPredicate
-         andPredicateWithSubpredicates:@[[NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", self.query],
-                                                                 predicate]];
-
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user == %@ AND name BEGINSWITH[cd] %@", activeUser, query];
     switch ((MPSearchScope)self.searchDisplayController.searchBar.selectedScopeButtonIndex) {
 
         case MPSearchScopeAll:
             break;
         case MPSearchScopeOutdated:
             predicate = [NSCompoundPredicate
-             andPredicateWithSubpredicates:@[[NSPredicate predicateWithFormat:@"requiresExplicitMigration_ == YES"],
-                                                                     predicate]];
+             andPredicateWithSubpredicates:@[[NSPredicate predicateWithFormat:@"requiresExplicitMigration_ == YES"], predicate]];
             break;
     }
     self.fetchedResultsController.fetchRequest.predicate = predicate;
 
     NSError *error;
     if (![self.fetchedResultsController performFetch:&error])
-    err(@"Couldn't fetch elements: %@", error);
+        err(@"Couldn't fetch elements: %@", error);
 
     [self.searchDisplayController.searchBar.superview enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
         CGRect searchBarFrame = self.searchDisplayController.searchBar.frame;
@@ -258,12 +249,13 @@
     NSArray *sections = [self.fetchedResultsController sections];
     NSUInteger sectionCount = [sections count];
 
-    if ([self.query length]) {
+    NSString *query = [self.searchDisplayController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if ([query length]) {
         __block BOOL hasExactQueryMatch = NO;
         [sections enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             id<NSFetchedResultsSectionInfo> sectionInfo = obj;
             [[sectionInfo objects] enumerateObjectsUsingBlock:^(id obj_, NSUInteger idx_, BOOL *stop_) {
-                if ([[obj_ name] isEqualToString:self.query]) {
+                if ([[obj_ name] isEqualToString:query]) {
                     hasExactQueryMatch = YES;
                     *stop_ = YES;
                 }
@@ -327,7 +319,8 @@
                                                                element.uses, [self.dateFormatter stringFromDate:element.lastUsed]];
     } else {
         // "New" section
-        cell.textLabel.text       = self.query;
+        NSString *query = [self.searchDisplayController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        cell.textLabel.text       = query;
         cell.detailTextLabel.text = @"Create a new site.";
     }
 }
@@ -339,7 +332,7 @@
 
     else {
         // "New" section.
-        NSString *siteName = self.query;
+        NSString *siteName = [self.searchDisplayController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         [PearlAlert showAlertWithTitle:@"New Site"
                                message:PearlString(@"Do you want to create a new site named:\n%@", siteName)
                              viewStyle:UIAlertViewStyleDefault

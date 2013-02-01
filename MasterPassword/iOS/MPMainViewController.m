@@ -10,6 +10,7 @@
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
+#import "MPAllSitesViewController.h"
 
 
 @interface MPMainViewController()
@@ -48,6 +49,8 @@
 
     if ([[segue identifier] isEqualToString:@"MP_ChooseType"])
         ((MPTypeViewController *)[segue destinationViewController]).delegate = self;
+    if ([[segue identifier] isEqualToString:@"MP_AllSites"])
+        ((MPAllSitesViewController *)[((UINavigationController *)[segue destinationViewController]) topViewController]).delegate = self;
 }
 
 - (void)viewDidLoad {
@@ -753,12 +756,12 @@
                          }
                          case 2: {
                              inf(@"Action: Preferences");
-                             [self performSegueWithIdentifier:@"UserProfile" sender:self];
+                             [self performSegueWithIdentifier:@"MP_UserProfile" sender:self];
                              break;
                          }
                          case 3: {
                              inf(@"Action: Other Apps");
-                             [self performSegueWithIdentifier:@"OtherApps" sender:self];
+                             [self performSegueWithIdentifier:@"MP_OtherApps" sender:self];
                              break;
                          }
 //#if defined(ADHOC) && defined(TESTFLIGHT_SDK_VERSION)

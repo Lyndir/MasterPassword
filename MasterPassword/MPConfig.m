@@ -28,9 +28,4 @@
     return self;
 }
 
-+ (MPConfig *)get {
-
-    return (MPConfig *)[super get];
-}
-
 @end

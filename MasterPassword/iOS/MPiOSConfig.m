@@ -25,9 +25,4 @@
     return self;
 }
 
-+ (MPiOSConfig *)get {
-
-    return (MPiOSConfig *)[super get];
-}
-
 @end

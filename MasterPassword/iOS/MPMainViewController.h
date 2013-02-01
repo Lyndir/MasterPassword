@@ -10,7 +10,7 @@
 #import "MPTypeViewController.h"
 #import "MPSearchDelegate.h"
 
-@interface MPMainViewController : UIViewController<MPTypeDelegate, UITextFieldDelegate, MPSearchResultsDelegate, UIWebViewDelegate, UIGestureRecognizerDelegate>
+@interface MPMainViewController : UIViewController<MPTypeDelegate, UITextFieldDelegate, MPElementPickerDelegate, UIWebViewDelegate, UIGestureRecognizerDelegate>
 
 @property (assign, nonatomic) BOOL siteInfoHidden;
 @property (strong, nonatomic) IBOutlet MPSearchDelegate *searchDelegate;
