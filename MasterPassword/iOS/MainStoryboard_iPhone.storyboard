@@ -1228,10 +1228,6 @@ Pink fluffy door frame.</string>
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" animating="YES" style="whiteLarge" id="XuP-pi-ygN">
-                                <rect key="frame" x="141" y="415" width="37" height="37"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            </activityIndicatorView>
                             <view contentMode="scaleToFill" id="PHH-XC-9QQ">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1584,7 +1580,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
                                         </connections>
                                     </button>
                                     <webView opaque="NO" contentMode="scaleToFill" id="rGU-aZ-XVm">
-                                        <rect key="frame" x="0.0" y="409" width="320" height="49"/>
+                                        <rect key="frame" x="0.0" y="411.5" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <dataDetectorType key="dataDetectorTypes"/>
@@ -1592,6 +1588,10 @@ You could use the word wall for  inspiration in finding a memorable master passw
                                             <outlet property="delegate" destination="Nbn-Rv-sP1" id="ZNn-UN-gcu"/>
                                         </connections>
                                     </webView>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" animating="YES" style="whiteLarge" id="XuP-pi-ygN">
+                                        <rect key="frame" x="141" y="415" width="37" height="37"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                    </activityIndicatorView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
@@ -2083,7 +2083,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
     <resources>
         <image name="Square-bottom.png" width="551" height="58"/>
         <image name="avatar-0.png" width="110" height="110"/>
-        <image name="background.png" width="568" height="568"/>
+        <image name="background.png" width="480" height="480"/>
         <image name="book.png" width="320" height="480"/>
         <image name="guide_page_0.png" width="320" height="480"/>
         <image name="guide_page_1.png" width="320" height="480"/>
