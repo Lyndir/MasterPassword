@@ -357,6 +357,7 @@
                 element.name    = siteName;
                 element.user    = activeUser;
                 element.type    = type;
+                element.lastUsed = [NSDate date];
                 element.version = MPAlgorithmDefaultVersion;
                 [element saveContext];
 

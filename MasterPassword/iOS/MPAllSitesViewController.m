@@ -48,7 +48,7 @@
 
 - (IBAction)add:(id)sender {
 
-    [PearlAlert showAlertWithTitle:@"Site To Add" message:nil viewStyle:UIAlertViewStylePlainTextInput initAlert:nil
+    [PearlAlert showAlertWithTitle:@"Add Site" message:nil viewStyle:UIAlertViewStylePlainTextInput initAlert:nil
                  tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                      if (alert.cancelButtonIndex == buttonIndex)
                          return;
@@ -68,13 +68,14 @@
 
                          MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:typeEntityClassName
                                                                                   inManagedObjectContext:moc];
-         
-                         element.name    = siteName;
-                         element.user    = activeUser;
-                         element.type    = type;
-                         element.version = MPAlgorithmDefaultVersion;
+
+                         element.name     = siteName;
+                         element.user     = activeUser;
+                         element.type     = type;
+                         element.lastUsed = [NSDate date];
+                         element.version  = MPAlgorithmDefaultVersion;
                          [element saveContext];
-         
+
                          NSManagedObjectID *elementOID = [element objectID];
                          dispatch_async(dispatch_get_main_queue(), ^{
                              MPElementEntity *element_ = (MPElementEntity *)[[MPAppDelegate managedObjectContextForThreadIfReady]
