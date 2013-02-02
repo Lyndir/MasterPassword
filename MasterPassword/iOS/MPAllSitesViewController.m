@@ -46,6 +46,48 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (IBAction)add:(id)sender {
+
+    [PearlAlert showAlertWithTitle:@"Site To Add" message:nil viewStyle:UIAlertViewStylePlainTextInput initAlert:nil
+                 tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                     if (alert.cancelButtonIndex == buttonIndex)
+                         return;
+
+                     NSString *siteName = [alert textFieldAtIndex:0].text;
+                     if (![siteName length])
+                         return;
+
+                     [MPAppDelegate managedObjectContextPerform:^(NSManagedObjectContext *moc) {
+                         MPUserEntity *activeUser = [[MPAppDelegate get] activeUserInContext:moc];
+                         assert(activeUser);
+         
+                         MPElementType type = activeUser.defaultType;
+                         if (!type)
+                             type = activeUser.defaultType = MPElementTypeGeneratedLong;
+                         NSString *typeEntityClassName = [MPAlgorithmDefault classNameOfType:type];
+
+                         MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:typeEntityClassName
+                                                                                  inManagedObjectContext:moc];
+         
+                         element.name    = siteName;
+                         element.user    = activeUser;
+                         element.type    = type;
+                         element.version = MPAlgorithmDefaultVersion;
+                         [element saveContext];
+         
+                         NSManagedObjectID *elementOID = [element objectID];
+                         dispatch_async(dispatch_get_main_queue(), ^{
+                             MPElementEntity *element_ = (MPElementEntity *)[[MPAppDelegate managedObjectContextForThreadIfReady]
+                                                                                            objectRegisteredForID:elementOID];
+                             [self.delegate didSelectElement:element_];
+                             [self close:nil];
+                         });
+                     }];
+
+                 }
+                       cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonOkay, nil];
+}
+
 - (NSFetchedResultsController *)fetchedResultsController {
 
     if (!_fetchedResultsController) {

@@ -1694,6 +1694,11 @@ You could use the word wall for  inspiration in finding a memorable master passw
                                 <action selector="close:" destination="idA-Pj-1U9" id="qqC-U7-8Ci"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="CR8-WY-9Td">
+                            <connections>
+                                <action selector="add:" destination="idA-Pj-1U9" id="G7b-hR-IH0"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="abw-PC-pyQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2197,6 +2202,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
         <class className="MPAllSitesViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MPAllSitesViewController.h"/>
             <relationships>
+                <relationship kind="action" name="add:"/>
                 <relationship kind="action" name="close:"/>
                 <relationship kind="outlet" name="delegate"/>
             </relationships>

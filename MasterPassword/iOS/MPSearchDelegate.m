@@ -347,12 +347,11 @@
                 assert(activeUser);
 
                 MPElementType type = activeUser.defaultType;
-                if (!type) {
-                    // Really shouldn't happen, but a few people crashed on this anyway.  Uhh.  Data store corruption?  Old bugs?
+                if (!type)
                     type = activeUser.defaultType = MPElementTypeGeneratedLong;
-                }
+                NSString *typeEntityClassName = [MPAlgorithmDefault classNameOfType:type];
 
-                MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmDefault classNameOfType:type]
+                MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:typeEntityClassName
                                                                          inManagedObjectContext:moc];
 
                 element.name    = siteName;

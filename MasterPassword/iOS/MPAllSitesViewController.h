@@ -24,5 +24,6 @@
 @property (weak, nonatomic) IBOutlet id<MPElementPickerDelegate> delegate;
 
 - (IBAction)close:(id)sender;
+- (IBAction)add:(id)sender;
 
 @end
