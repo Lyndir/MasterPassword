@@ -316,15 +316,8 @@
 		DAB8D77915036BF700CED3BC /* Square-top.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D4F215036BF600CED3BC /* Square-top.png */; };
 		DAB8D77A15036BF700CED3BC /* Square.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D4F315036BF600CED3BC /* Square.png */; };
 		DAB8D77B15036BF700CED3BC /* White_Rectangular.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D4F415036BF600CED3BC /* White_Rectangular.png */; };
-		DAB8D77C15036BF700CED3BC /* Exo-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D4F615036BF600CED3BC /* Exo-Black.otf */; };
-		DAB8D77D15036BF700CED3BC /* Exo-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D4F715036BF600CED3BC /* Exo-Bold.otf */; };
-		DAB8D77E15036BF700CED3BC /* Exo-DemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D4F815036BF600CED3BC /* Exo-DemiBold.otf */; };
 		DAB8D77F15036BF700CED3BC /* Exo-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D4F915036BF600CED3BC /* Exo-ExtraBold.otf */; };
-		DAB8D78015036BF700CED3BC /* Exo-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D4FA15036BF600CED3BC /* Exo-ExtraLight.otf */; };
-		DAB8D78115036BF700CED3BC /* Exo-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D4FB15036BF600CED3BC /* Exo-Light.otf */; };
-		DAB8D78215036BF700CED3BC /* Exo-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D4FC15036BF600CED3BC /* Exo-Medium.otf */; };
 		DAB8D78315036BF700CED3BC /* Exo-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D4FD15036BF600CED3BC /* Exo-Regular.otf */; };
-		DAB8D78415036BF700CED3BC /* Exo-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D4FE15036BF600CED3BC /* Exo-Thin.otf */; };
 		DAB8D78615036BF700CED3BC /* guide_page_0.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D50115036BF600CED3BC /* guide_page_0.png */; };
 		DAB8D78715036BF700CED3BC /* guide_page_0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D50215036BF600CED3BC /* guide_page_0@2x.png */; };
 		DAB8D78815036BF700CED3BC /* guide_page_1.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D50315036BF600CED3BC /* guide_page_1.png */; };
@@ -759,6 +752,8 @@
 		DAB8D93815036BF700CED3BC /* lock_red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D6B515036BF600CED3BC /* lock_red@2x.png */; };
 		DAB8D93915036BF700CED3BC /* logo-bare.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D6B615036BF600CED3BC /* logo-bare.png */; };
 		DAB8D97C1503718B00CED3BC /* jquery-1.6.1.min.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D6AB15036BF600CED3BC /* jquery-1.6.1.min.js */; };
+		DAB90E9916BD951200D06F4A /* SourceCodePro-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAB90E9316BD951200D06F4A /* SourceCodePro-Black.otf */; };
+		DAB90E9B16BD951200D06F4A /* SourceCodePro-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAB90E9516BD951200D06F4A /* SourceCodePro-ExtraLight.otf */; };
 		DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABB981515100B4000B05417 /* SystemConfiguration.framework */; };
 		DAC4149215C53C48007A716E /* dictionary.lst in Resources */ = {isa = PBXBuildFile; fileRef = DAC4149115C53C48007A716E /* dictionary.lst */; };
 		DAC6325E1486805C0075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
@@ -1358,15 +1353,8 @@
 		DAB8D4F215036BF600CED3BC /* Square-top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Square-top.png"; sourceTree = "<group>"; };
 		DAB8D4F315036BF600CED3BC /* Square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Square.png; sourceTree = "<group>"; };
 		DAB8D4F415036BF600CED3BC /* White_Rectangular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = White_Rectangular.png; sourceTree = "<group>"; };
-		DAB8D4F615036BF600CED3BC /* Exo-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Black.otf"; sourceTree = "<group>"; };
-		DAB8D4F715036BF600CED3BC /* Exo-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Bold.otf"; sourceTree = "<group>"; };
-		DAB8D4F815036BF600CED3BC /* Exo-DemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-DemiBold.otf"; sourceTree = "<group>"; };
 		DAB8D4F915036BF600CED3BC /* Exo-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-ExtraBold.otf"; sourceTree = "<group>"; };
-		DAB8D4FA15036BF600CED3BC /* Exo-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-ExtraLight.otf"; sourceTree = "<group>"; };
-		DAB8D4FB15036BF600CED3BC /* Exo-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Light.otf"; sourceTree = "<group>"; };
-		DAB8D4FC15036BF600CED3BC /* Exo-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Medium.otf"; sourceTree = "<group>"; };
 		DAB8D4FD15036BF600CED3BC /* Exo-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Regular.otf"; sourceTree = "<group>"; };
-		DAB8D4FE15036BF600CED3BC /* Exo-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Thin.otf"; sourceTree = "<group>"; };
 		DAB8D50115036BF600CED3BC /* guide_page_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_page_0.png; sourceTree = "<group>"; };
 		DAB8D50215036BF600CED3BC /* guide_page_0@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_page_0@2x.png"; sourceTree = "<group>"; };
 		DAB8D50315036BF600CED3BC /* guide_page_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_page_1.png; sourceTree = "<group>"; };
@@ -1867,6 +1855,8 @@
 		DAB8D6F715036BF600CED3BC /* tip_location_teal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tip_location_teal@2x.png"; sourceTree = "<group>"; };
 		DAB8D6F815036BF600CED3BC /* tip_location_wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tip_location_wood.png; sourceTree = "<group>"; };
 		DAB8D6F915036BF600CED3BC /* tip_location_wood@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tip_location_wood@2x.png"; sourceTree = "<group>"; };
+		DAB90E9316BD951200D06F4A /* SourceCodePro-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Black.otf"; sourceTree = "<group>"; };
+		DAB90E9516BD951200D06F4A /* SourceCodePro-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-ExtraLight.otf"; sourceTree = "<group>"; };
 		DABB980C150FF40100B05417 /* SendToMac-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SendToMac-Prefix.pch"; sourceTree = "<group>"; };
 		DABB980D150FF40100B05417 /* SendToMac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SendToMac.h; sourceTree = "<group>"; };
 		DABB980E150FF40100B05417 /* SendToMac.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SendToMac.m; sourceTree = "<group>"; };
@@ -2756,15 +2746,10 @@
 		DAB8D4F515036BF600CED3BC /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				DAB8D4F615036BF600CED3BC /* Exo-Black.otf */,
-				DAB8D4F715036BF600CED3BC /* Exo-Bold.otf */,
-				DAB8D4F815036BF600CED3BC /* Exo-DemiBold.otf */,
+				DAB90E9316BD951200D06F4A /* SourceCodePro-Black.otf */,
+				DAB90E9516BD951200D06F4A /* SourceCodePro-ExtraLight.otf */,
 				DAB8D4F915036BF600CED3BC /* Exo-ExtraBold.otf */,
-				DAB8D4FA15036BF600CED3BC /* Exo-ExtraLight.otf */,
-				DAB8D4FB15036BF600CED3BC /* Exo-Light.otf */,
-				DAB8D4FC15036BF600CED3BC /* Exo-Medium.otf */,
 				DAB8D4FD15036BF600CED3BC /* Exo-Regular.otf */,
-				DAB8D4FE15036BF600CED3BC /* Exo-Thin.otf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -4069,15 +4054,8 @@
 				DAB8D77915036BF700CED3BC /* Square-top.png in Resources */,
 				DAB8D77A15036BF700CED3BC /* Square.png in Resources */,
 				DAB8D77B15036BF700CED3BC /* White_Rectangular.png in Resources */,
-				DAB8D77C15036BF700CED3BC /* Exo-Black.otf in Resources */,
-				DAB8D77D15036BF700CED3BC /* Exo-Bold.otf in Resources */,
-				DAB8D77E15036BF700CED3BC /* Exo-DemiBold.otf in Resources */,
 				DAB8D77F15036BF700CED3BC /* Exo-ExtraBold.otf in Resources */,
-				DAB8D78015036BF700CED3BC /* Exo-ExtraLight.otf in Resources */,
-				DAB8D78115036BF700CED3BC /* Exo-Light.otf in Resources */,
-				DAB8D78215036BF700CED3BC /* Exo-Medium.otf in Resources */,
 				DAB8D78315036BF700CED3BC /* Exo-Regular.otf in Resources */,
-				DAB8D78415036BF700CED3BC /* Exo-Thin.otf in Resources */,
 				DAB8D78615036BF700CED3BC /* guide_page_0.png in Resources */,
 				DAB8D78715036BF700CED3BC /* guide_page_0@2x.png in Resources */,
 				DAB8D78815036BF700CED3BC /* guide_page_1.png in Resources */,
@@ -4590,6 +4568,8 @@
 				DA3EE947160145C700C68F6D /* Default-568h@2x.png in Resources */,
 				DA4ECA2E160D94A80012ABB9 /* TestFlight.plist in Resources */,
 				DA692DBF16BB191100F14463 /* Google+.plist in Resources */,
+				DAB90E9916BD951200D06F4A /* SourceCodePro-Black.otf in Resources */,
+				DAB90E9B16BD951200D06F4A /* SourceCodePro-ExtraLight.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -474,7 +474,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <accessibility key="accessibilityConfiguration" hint=""/>
                                                 <color key="textColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
-                                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="26"/>
+                                                <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="30"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
                                                 <connections>
                                                     <outlet property="delegate" destination="PQa-Xl-A3x" id="qOM-gq-c6g"/>
@@ -567,7 +567,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                                         <rect key="frame" x="0.0" y="0.0" width="280" height="31"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="14"/>
+                                                        <fontDescription key="fontDescription" name="AmericanTypewriter-Light" family="American Typewriter" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="done"/>
                                                         <connections>
                                                             <outlet property="delegate" destination="PQa-Xl-A3x" id="xG4-np-2j5"/>

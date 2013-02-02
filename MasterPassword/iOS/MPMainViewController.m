@@ -74,8 +74,6 @@
 
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
 
-    self.contentField.font = [UIFont fontWithName:@"Exo-Black" size:self.contentField.font.pointSize];
-
     self.alertBody.text         = nil;
     self.toolTipEditIcon.hidden = YES;
 
