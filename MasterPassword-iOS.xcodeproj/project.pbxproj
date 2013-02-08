@@ -754,6 +754,7 @@
 		DAB8D97C1503718B00CED3BC /* jquery-1.6.1.min.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB8D6AB15036BF600CED3BC /* jquery-1.6.1.min.js */; };
 		DAB90E9916BD951200D06F4A /* SourceCodePro-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAB90E9316BD951200D06F4A /* SourceCodePro-Black.otf */; };
 		DAB90E9B16BD951200D06F4A /* SourceCodePro-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAB90E9516BD951200D06F4A /* SourceCodePro-ExtraLight.otf */; };
+		DAB90EA016BE1B4200D06F4A /* Exo-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAB90E9F16BE1B4200D06F4A /* Exo-Bold.otf */; };
 		DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABB981515100B4000B05417 /* SystemConfiguration.framework */; };
 		DAC4149215C53C48007A716E /* dictionary.lst in Resources */ = {isa = PBXBuildFile; fileRef = DAC4149115C53C48007A716E /* dictionary.lst */; };
 		DAC6325E1486805C0075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
@@ -1857,6 +1858,7 @@
 		DAB8D6F915036BF600CED3BC /* tip_location_wood@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tip_location_wood@2x.png"; sourceTree = "<group>"; };
 		DAB90E9316BD951200D06F4A /* SourceCodePro-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Black.otf"; sourceTree = "<group>"; };
 		DAB90E9516BD951200D06F4A /* SourceCodePro-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-ExtraLight.otf"; sourceTree = "<group>"; };
+		DAB90E9F16BE1B4200D06F4A /* Exo-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Bold.otf"; sourceTree = "<group>"; };
 		DABB980C150FF40100B05417 /* SendToMac-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SendToMac-Prefix.pch"; sourceTree = "<group>"; };
 		DABB980D150FF40100B05417 /* SendToMac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SendToMac.h; sourceTree = "<group>"; };
 		DABB980E150FF40100B05417 /* SendToMac.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SendToMac.m; sourceTree = "<group>"; };
@@ -2748,6 +2750,7 @@
 			children = (
 				DAB90E9316BD951200D06F4A /* SourceCodePro-Black.otf */,
 				DAB90E9516BD951200D06F4A /* SourceCodePro-ExtraLight.otf */,
+				DAB90E9F16BE1B4200D06F4A /* Exo-Bold.otf */,
 				DAB8D4F915036BF600CED3BC /* Exo-ExtraBold.otf */,
 				DAB8D4FD15036BF600CED3BC /* Exo-Regular.otf */,
 			);
@@ -4570,6 +4573,7 @@
 				DA692DBF16BB191100F14463 /* Google+.plist in Resources */,
 				DAB90E9916BD951200D06F4A /* SourceCodePro-Black.otf in Resources */,
 				DAB90E9B16BD951200D06F4A /* SourceCodePro-ExtraLight.otf in Resources */,
+				DAB90EA016BE1B4200D06F4A /* Exo-Bold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

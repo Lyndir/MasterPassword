@@ -111,11 +111,11 @@
         case MPElementTypeGeneratedMedium:
             return @"Medium Password";
 
-        case MPElementTypeGeneratedShort:
-            return @"Short Password";
-
         case MPElementTypeGeneratedBasic:
             return @"Basic Password";
+
+        case MPElementTypeGeneratedShort:
+            return @"Short Password";
 
         case MPElementTypeGeneratedPIN:
             return @"PIN";
@@ -145,11 +145,11 @@
         case MPElementTypeGeneratedMedium:
             return @"Medium";
 
-        case MPElementTypeGeneratedShort:
-            return @"Short";
-
         case MPElementTypeGeneratedBasic:
             return @"Basic";
+
+        case MPElementTypeGeneratedShort:
+            return @"Short";
 
         case MPElementTypeGeneratedPIN:
             return @"PIN";
@@ -184,10 +184,10 @@
         case MPElementTypeGeneratedMedium:
             return [MPElementGeneratedEntity class];
 
-        case MPElementTypeGeneratedShort:
+        case MPElementTypeGeneratedBasic:
             return [MPElementGeneratedEntity class];
 
-        case MPElementTypeGeneratedBasic:
+        case MPElementTypeGeneratedShort:
             return [MPElementGeneratedEntity class];
 
         case MPElementTypeGeneratedPIN:

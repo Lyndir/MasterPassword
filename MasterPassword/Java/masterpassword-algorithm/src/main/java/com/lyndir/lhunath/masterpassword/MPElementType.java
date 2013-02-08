@@ -15,8 +15,8 @@ public enum MPElementType {
     GeneratedMaximum( "Maximum Security Password", "Maximum", "20 characters, contains symbols.", MPElementTypeClass.Generated ),
     GeneratedLong( "Long Password", "Long", "Copy-friendly, 14 characters, contains symbols.", MPElementTypeClass.Generated ),
     GeneratedMedium( "Medium Password", "Medium", "Copy-friendly, 8 characters, contains symbols.", MPElementTypeClass.Generated ),
-    GeneratedShort( "Short Password", "Short", "Copy-friendly, 4 characters, no symbols.", MPElementTypeClass.Generated ),
     GeneratedBasic( "Basic Password", "Basic", "8 characters, no symbols.", MPElementTypeClass.Generated ),
+    GeneratedShort( "Short Password", "Short", "Copy-friendly, 4 characters, no symbols.", MPElementTypeClass.Generated ),
     GeneratedPIN( "PIN", "PIN", "4 numbers.", MPElementTypeClass.Generated ),
 
     StoredPersonal( "Personal Password", "Personal", "AES-encrypted, exportable.", MPElementTypeClass.Stored, MPElementFeature.ExportContent ),

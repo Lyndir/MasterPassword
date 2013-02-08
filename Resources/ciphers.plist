@@ -38,15 +38,15 @@
 			<string>CvcnoCvc</string>
 			<string>CvcCvcno</string>
 		</array>
-		<key>Short Password</key>
-		<array>
-			<string>Cvcn</string>
-		</array>
 		<key>Basic Password</key>
 		<array>
 			<string>aaanaaan</string>
 			<string>aannaaan</string>
 			<string>aaannaaa</string>
+		</array>
+		<key>Short Password</key>
+		<array>
+			<string>Cvcn</string>
 		</array>
 		<key>PIN</key>
 		<array>

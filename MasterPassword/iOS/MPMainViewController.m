@@ -796,12 +796,17 @@
 
 - (MPElementType)selectedType {
 
-    __block MPElementType selectedType;
+    return [self selectedElement].type;
+}
+
+- (MPElementEntity *)selectedElement {
+
+    __block MPElementEntity *selectedElement;
     [self activeElementDo:^(MPElementEntity *activeElement) {
-        selectedType = activeElement.type;
+        selectedElement = activeElement;
     }];
 
-    return selectedType;
+    return selectedElement;
 }
 
 - (void)didSelectType:(MPElementType)type {

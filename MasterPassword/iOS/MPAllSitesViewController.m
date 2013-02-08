@@ -57,10 +57,10 @@
                      if (![siteName length])
                          return;
 
-                     [MPAppDelegate managedObjectContextPerform:^(NSManagedObjectContext *moc) {
+                     [MPAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
                          MPUserEntity *activeUser = [[MPAppDelegate get] activeUserInContext:moc];
                          assert(activeUser);
-         
+
                          MPElementType type = activeUser.defaultType;
                          if (!type)
                              type = activeUser.defaultType = MPElementTypeGeneratedLong;
@@ -235,8 +235,8 @@
     MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
     cell.textLabel.text       = element.name;
-    cell.detailTextLabel.text = PearlString(@"Used %d times, last on %@",
-                                            element.uses, [self.dateFormatter stringFromDate:element.lastUsed]);
+    cell.detailTextLabel.text = PearlString(@"%d views, last on %@: %@",
+            element.uses, [self.dateFormatter stringFromDate:element.lastUsed], [element.algorithm shortNameOfType:element.type]);
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

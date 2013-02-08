@@ -27,7 +27,7 @@ static char privateManagedObjectContextKey, mainManagedObjectContextKey;
     return threadManagedObjectContext;
 }
 
-+ (BOOL)managedObjectContextPerform:(void (^)(NSManagedObjectContext *))mocBlock {
++ (BOOL)managedObjectContextPerformBlock:(void (^)(NSManagedObjectContext *))mocBlock {
 
     NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
     if (!mainManagedObjectContext)
@@ -36,6 +36,21 @@ static char privateManagedObjectContextKey, mainManagedObjectContextKey;
     NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     moc.parentContext = mainManagedObjectContext;
     [moc performBlock:^{
+        mocBlock(moc);
+    }];
+
+    return YES;
+}
+
++ (BOOL)managedObjectContextPerformBlockAndWait:(void (^)(NSManagedObjectContext *))mocBlock {
+
+    NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
+    if (!mainManagedObjectContext)
+        return NO;
+
+    NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    moc.parentContext = mainManagedObjectContext;
+    [moc performBlockAndWait:^{
         mocBlock(moc);
     }];
 

@@ -7,6 +7,9 @@
 //
 
 #import "MPTypeViewController.h"
+#import "MPAppDelegate.h"
+#import "MPAppDelegate_Store.h"
+#import "MPAppDelegate_Key.h"
 
 
 @interface MPTypeViewController ()
@@ -64,8 +67,34 @@
 
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
 
-    if ([self.delegate respondsToSelector:@selector(selectedType)])
-        cell.selected = ([self.delegate selectedType] == [self typeAtIndexPath:indexPath]);
+    MPElementEntity *selectedElement = nil;
+    if ([self.delegate respondsToSelector:@selector(selectedElement)])
+        selectedElement = [self.delegate selectedElement];
+
+    MPElementType cellType = [self typeAtIndexPath:indexPath];
+    MPElementType selectedType = selectedElement? selectedElement.type: [self.delegate selectedType];
+    cell.selected = (selectedType == cellType);
+
+    if (cellType != NSNotFound && cellType & MPElementTypeClassGenerated) {
+        [(UITextField *) [cell viewWithTag:2] setText:@"..."];
+
+        NSManagedObjectID *selectedElementOID = [selectedElement objectID];
+        [MPAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+            NSError *error;
+            MPElementGeneratedEntity *selectedElement_ = (MPElementGeneratedEntity *) [moc existingObjectWithID:selectedElementOID error:&error];
+            if (!selectedElement_) {
+                err(@"Failed to retrieve element for password preview: %@", error);
+                return;
+            }
+
+            selectedElement_.type = cellType;
+            NSString *typeContent = [selectedElement.algorithm generateContentForElement:selectedElement_ usingKey:[MPAppDelegate get].key];
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [(UITextField *) [[tableView cellForRowAtIndexPath:indexPath] viewWithTag:2] setText:typeContent];
+            });
+        }];
+    }
 
     return cell;
 }
@@ -98,9 +127,9 @@
                 case 3:
                     return MPElementTypeGeneratedMedium;
                 case 4:
-                    return MPElementTypeGeneratedShort;
-                case 5:
                     return MPElementTypeGeneratedBasic;
+                case 5:
+                    return MPElementTypeGeneratedShort;
                 case 6:
                     return MPElementTypeGeneratedPIN;
                 case 7:

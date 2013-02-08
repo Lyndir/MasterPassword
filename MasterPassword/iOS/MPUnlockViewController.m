@@ -304,7 +304,7 @@
 
 - (void)didSelectNewUserAvatar:(UIButton *)newUserAvatar {
 
-    [MPAppDelegate managedObjectContextPerform:^(NSManagedObjectContext *moc) {
+    [MPAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
         MPUserEntity *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class])
                                                               inManagedObjectContext:moc];
 

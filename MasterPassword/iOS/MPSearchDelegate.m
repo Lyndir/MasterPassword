@@ -95,6 +95,7 @@
 
     controller.searchBar.prompt                = @"Enter the site's name:";
     controller.searchBar.showsScopeBar         = controller.searchBar.selectedScopeButtonIndex != MPSearchScopeAll;
+    controller.searchBar.text                  = @"";
     if (controller.searchBar.showsScopeBar)
         controller.searchBar.scopeButtonTitles = @[@"All", @"Outdated"];
     else
@@ -315,13 +316,13 @@
         MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
         cell.textLabel.text       = element.name;
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"Used %d times, last on %@",
-                                                               element.uses, [self.dateFormatter stringFromDate:element.lastUsed]];
+        cell.detailTextLabel.text = PearlString(@"%d views, last on %@: %@",
+                element.uses, [self.dateFormatter stringFromDate:element.lastUsed], [element.algorithm shortNameOfType:element.type]);
     } else {
         // "New" section
         NSString *query = [self.searchDisplayController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         cell.textLabel.text       = query;
-        cell.detailTextLabel.text = @"Create a new site.";
+        cell.detailTextLabel.text = PearlString(@"Add new site: %@", [MPAlgorithmDefault shortNameOfType:[[MPAppDelegate get].activeUser defaultType]]);
     }
 }
 
@@ -342,7 +343,7 @@
             if (buttonIndex == [alert cancelButtonIndex])
                 return;
 
-            [MPAppDelegate managedObjectContextPerform:^(NSManagedObjectContext *moc) {
+            [MPAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
                 MPUserEntity *activeUser = [[MPAppDelegate get] activeUserInContext:moc];
                 assert(activeUser);
 

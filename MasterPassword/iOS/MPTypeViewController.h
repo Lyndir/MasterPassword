@@ -8,12 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+#import "MPEntities.h"
+
+
 @protocol MPTypeDelegate<NSObject>
 
+@required
 - (void)didSelectType:(MPElementType)type;
+- (MPElementType)selectedType;
 
 @optional
-- (MPElementType)selectedType;
+- (MPElementEntity *)selectedElement;
 
 @end
 
