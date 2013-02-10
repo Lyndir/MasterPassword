@@ -319,37 +319,39 @@
 
 - (void)showNewUserNameAlertFor:(MPUserEntity *)newUser completion:(void (^)(BOOL finished))completion {
 
-    [PearlAlert showAlertWithTitle:@"Enter Your Name"
-                           message:nil viewStyle:UIAlertViewStylePlainTextInput
-                         initAlert:^(UIAlertView *alert, UITextField *firstField) {
-                             firstField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-                             firstField.keyboardType           = UIKeyboardTypeAlphabet;
-                             firstField.text                   = newUser.name;
-                             firstField.placeholder            = @"eg. Robert Lee Mitchell";
-                             firstField.enablesReturnKeyAutomatically = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [PearlAlert showAlertWithTitle:@"Enter Your Name"
+                               message:nil viewStyle:UIAlertViewStylePlainTextInput
+                             initAlert:^(UIAlertView *alert, UITextField *firstField) {
+                                 firstField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+                                 firstField.keyboardType           = UIKeyboardTypeAlphabet;
+                                 firstField.text                   = newUser.name;
+                                 firstField.placeholder            = @"eg. Robert Lee Mitchell";
+                                 firstField.enablesReturnKeyAutomatically = YES;
+                             }
+                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                         if (buttonIndex == [alert cancelButtonIndex]) {
+                             completion(NO);
+                             return;
                          }
-                 tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                     if (buttonIndex == [alert cancelButtonIndex]) {
-                         completion(NO);
-                         return;
+                         if (![alert textFieldAtIndex:0].text.length) {
+                             [PearlAlert showAlertWithTitle:@"Name Is Required" message:nil viewStyle:UIAlertViewStyleDefault initAlert:nil
+                                          tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                                              [newUser.managedObjectContext performBlock:^{
+                                                  [self showNewUserNameAlertFor:newUser completion:completion];
+                                              }];
+                                          } cancelTitle:@"Try Again" otherTitles:nil];
+                             return;
+                         }
+                         
+                         // Save
+                         [newUser.managedObjectContext performBlock:^{
+                             newUser.name = [alert textFieldAtIndex:0].text;
+                             [self showNewUserAvatarAlertFor:newUser completion:completion];
+                         }];
                      }
-                     if (![alert textFieldAtIndex:0].text.length) {
-                         [PearlAlert showAlertWithTitle:@"Name Is Required" message:nil viewStyle:UIAlertViewStyleDefault initAlert:nil
-                                      tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                                          [newUser.managedObjectContext performBlock:^{
-                                              [self showNewUserNameAlertFor:newUser completion:completion];
-                                          }];
-                                      } cancelTitle:@"Try Again" otherTitles:nil];
-                         return;
-                     }
-
-                     // Save
-                     [newUser.managedObjectContext performBlock:^{
-                         newUser.name = [alert textFieldAtIndex:0].text;
-                         [self showNewUserAvatarAlertFor:newUser completion:completion];
-                     }];
-                 }
-                       cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonSave, nil];
+                           cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonSave, nil];
+    });
 }
 
 - (void)showNewUserAvatarAlertFor:(MPUserEntity *)newUser completion:(void (^)(BOOL finished))completion {

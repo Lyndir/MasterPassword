@@ -553,8 +553,7 @@ static char privateManagedObjectContextKey, mainManagedObjectContextKey;
         NSString *exportContent = [siteElements objectAtIndex:5];
 
         // Create new site.
-        MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmForVersion(
-         version) classNameOfType:type]
+        MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmForVersion(version) classNameOfType:type]
                                                                  inManagedObjectContext:moc];
         element.name     = name;
         element.user     = user;

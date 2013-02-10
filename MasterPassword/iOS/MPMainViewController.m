@@ -10,7 +10,8 @@
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-#import "MPAllSitesViewController.h"
+#import "MPElementListAllViewController.h"
+#import "MPElementListSearchController.h"
 
 
 @interface MPMainViewController()
@@ -50,12 +51,12 @@
     if ([[segue identifier] isEqualToString:@"MP_ChooseType"])
         ((MPTypeViewController *)[segue destinationViewController]).delegate = self;
     if ([[segue identifier] isEqualToString:@"MP_AllSites"])
-        ((MPAllSitesViewController *)[((UINavigationController *)[segue destinationViewController]) topViewController]).delegate = self;
+        ((MPElementListAllViewController *)[((UINavigationController *)[segue destinationViewController]) topViewController]).delegate = self;
 }
 
 - (void)viewDidLoad {
 
-    self.searchDelegate                                  = [MPSearchDelegate new];
+    self.searchDelegate                                  = [MPElementListSearchController new];
     self.searchDelegate.delegate                         = self;
     self.searchDelegate.searchDisplayController          = self.searchDisplayController;
     self.searchDelegate.searchTipContainer               = self.searchTipContainer;

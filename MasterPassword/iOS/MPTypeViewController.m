@@ -87,8 +87,14 @@
                 return;
             }
 
-            selectedElement_.type = cellType;
-            NSString *typeContent = [selectedElement.algorithm generateContentForElement:selectedElement_ usingKey:[MPAppDelegate get].key];
+            MPElementGeneratedEntity *cellElement = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmDefault classNameOfType:cellType]
+                                                                                 inManagedObjectContext:moc];
+            cellElement.type = cellType;
+            cellElement.name = selectedElement_.name;
+            cellElement.user = selectedElement_.user;
+            cellElement.loginName = selectedElement_.loginName;
+            cellElement.version = MPAlgorithmDefaultVersion;
+            NSString *typeContent = [cellElement.algorithm generateContentForElement:cellElement usingKey:[MPAppDelegate get].key];
 
             dispatch_async(dispatch_get_main_queue(), ^{
                 [(UITextField *) [[tableView cellForRowAtIndexPath:indexPath] viewWithTag:2] setText:typeContent];

@@ -19,6 +19,10 @@
         err(@"While saving %@: %@", NSStringFromClass([self class]), error);
         return NO;
     }
+    if (![moc.parentContext save:&error]) {
+        err(@"While saving parent %@: %@", NSStringFromClass([self class]), error);
+        return NO;
+    }
 
     return YES;
 }
@@ -29,11 +33,24 @@
 
 - (MPElementType)type {
 
-    return (MPElementType)[self.type_ unsignedIntegerValue];
+    // Some people got elements with type == 0.
+    MPElementType type = (MPElementType)[self.type_ unsignedIntegerValue];
+    if (!type || type == NSNotFound)
+        type = [self.user defaultType];
+    if (!type || type == NSNotFound)
+        type = MPElementTypeGeneratedLong;
+
+    return type;
 }
 
 - (void)setType:(MPElementType)aType {
 
+    // Make sure we don't poison our model data with invalid values.
+    if (!aType || aType == NSNotFound)
+        aType = [self.user defaultType];
+    if (!aType || aType == NSNotFound)
+        aType = MPElementTypeGeneratedLong;
+        
     self.type_ = @(aType);
 }
 

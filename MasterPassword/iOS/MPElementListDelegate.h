@@ -9,21 +9,16 @@
  */
 
 //
-//  MPAllSitesViewController
+//  MPElementListDelegate
 //
 //  Created by Maarten Billemont on 2013-01-31.
 //  Copyright 2013 lhunath (Maarten Billemont). All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "MPElementEntity.h"
 
-#import "MPElementPickerDelegate.h"
+@protocol MPElementListDelegate <NSObject>
 
-@interface MPAllSitesViewController : UITableViewController
-
-@property (weak, nonatomic) IBOutlet id<MPElementPickerDelegate> delegate;
-
-- (IBAction)close:(id)sender;
-- (IBAction)add:(id)sender;
+- (void)didSelectElement:(MPElementEntity *)element;
 
 @end

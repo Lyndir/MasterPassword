@@ -9,16 +9,19 @@
  */
 
 //
-//  MPElementPickerDelegate
+//  MPElementListAllViewController
 //
 //  Created by Maarten Billemont on 2013-01-31.
 //  Copyright 2013 lhunath (Maarten Billemont). All rights reserved.
 //
 
-#import "MPElementEntity.h"
+#import <Foundation/Foundation.h>
 
-@protocol MPElementPickerDelegate<NSObject>
+#import "MPElementListController.h"
 
-- (void)didSelectElement:(MPElementEntity *)element;
+@interface MPElementListAllViewController : MPElementListController
+
+- (IBAction)close:(id)sender;
+- (IBAction)add:(id)sender;
 
 @end
