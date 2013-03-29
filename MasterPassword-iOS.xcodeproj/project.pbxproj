@@ -50,8 +50,6 @@
 		DA3EF18315A47744003ABF4E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA3EF18115A47744003ABF4E /* InfoPlist.strings */; };
 		DA3EF18615A47744003ABF4E /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3EF18515A47744003ABF4E /* Tests.m */; };
 		DA4425CC1557BED40052177D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
-		DA4426001557BF260052177D /* UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4425F11557BF260052177D /* UbiquityStoreManager.h */; };
-		DA4426011557BF260052177D /* UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4425F21557BF260052177D /* UbiquityStoreManager.m */; };
 		DA4426081557C1990052177D /* MPAppDelegate_Shared.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4426051557C1990052177D /* MPAppDelegate_Shared.m */; };
 		DA4426091557C1990052177D /* MPAppDelegate_Store.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4426071557C1990052177D /* MPAppDelegate_Store.m */; };
 		DA44260A1557D9E40052177D /* libiCloudStoreManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4425CB1557BED40052177D /* libiCloudStoreManager.a */; };
@@ -73,6 +71,10 @@
 		DA5587F015E83C3200860B4F /* social-twitter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5587EA15E83C3200860B4F /* social-twitter@2x.png */; };
 		DA5587F415E8418200860B4F /* iTunesArtwork-Rounded-73@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5587F115E8418200860B4F /* iTunesArtwork-Rounded-73@2x.png */; };
 		DA5587F615E8418200860B4F /* iTunesArtwork-Rounded.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5587F315E8418200860B4F /* iTunesArtwork-Rounded.png */; };
+		DA56D84B170527D70093BEEF /* UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA56D847170527D70093BEEF /* UbiquityStoreManager.m */; };
+		DA56D84C170527D70093BEEF /* NSError+UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DA56D848170527D70093BEEF /* NSError+UbiquityStoreManager.h */; };
+		DA56D84D170527D70093BEEF /* NSError+UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA56D849170527D70093BEEF /* NSError+UbiquityStoreManager.m */; };
+		DA56D84E170527D70093BEEF /* UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DA56D84A170527D70093BEEF /* UbiquityStoreManager.h */; };
 		DA5BFA49147E415C00F98B1E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA48147E415C00F98B1E /* UIKit.framework */; };
 		DA5BFA4B147E415C00F98B1E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA5BFA4D147E415C00F98B1E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */; };
@@ -1032,8 +1034,6 @@
 		DA3EF18515A47744003ABF4E /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		DA3EF18715A47744003ABF4E /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		DA4425CB1557BED40052177D /* libiCloudStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libiCloudStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA4425F11557BF260052177D /* UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UbiquityStoreManager.h; sourceTree = "<group>"; };
-		DA4425F21557BF260052177D /* UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UbiquityStoreManager.m; sourceTree = "<group>"; };
 		DA4426041557C1990052177D /* MPAppDelegate_Shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_Shared.h; sourceTree = "<group>"; };
 		DA4426051557C1990052177D /* MPAppDelegate_Shared.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_Shared.m; sourceTree = "<group>"; };
 		DA4426061557C1990052177D /* MPAppDelegate_Store.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_Store.h; sourceTree = "<group>"; };
@@ -1056,6 +1056,10 @@
 		DA5587EA15E83C3200860B4F /* social-twitter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "social-twitter@2x.png"; sourceTree = "<group>"; };
 		DA5587F115E8418200860B4F /* iTunesArtwork-Rounded-73@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork-Rounded-73@2x.png"; sourceTree = "<group>"; };
 		DA5587F315E8418200860B4F /* iTunesArtwork-Rounded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork-Rounded.png"; sourceTree = "<group>"; };
+		DA56D847170527D70093BEEF /* UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UbiquityStoreManager.m; sourceTree = "<group>"; };
+		DA56D848170527D70093BEEF /* NSError+UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+UbiquityStoreManager.h"; sourceTree = "<group>"; };
+		DA56D849170527D70093BEEF /* NSError+UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+UbiquityStoreManager.m"; sourceTree = "<group>"; };
+		DA56D84A170527D70093BEEF /* UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UbiquityStoreManager.h; sourceTree = "<group>"; };
 		DA5BFA44147E415C00F98B1E /* MasterPassword.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MasterPassword.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5BFA48147E415C00F98B1E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DA5BFA4A147E415C00F98B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -2149,16 +2153,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		DA4425D71557BF260052177D /* iCloudStoreManager */ = {
-			isa = PBXGroup;
-			children = (
-				DA4425F11557BF260052177D /* UbiquityStoreManager.h */,
-				DA4425F21557BF260052177D /* UbiquityStoreManager.m */,
-			);
-			name = iCloudStoreManager;
-			path = External/iCloudStoreManager/iCloudStoreManager;
-			sourceTree = "<group>";
-		};
 		DA5587F715E8B7B200860B4F /* Google+ */ = {
 			isa = PBXGroup;
 			children = (
@@ -2170,6 +2164,18 @@
 			path = "External/google-plus-ios-sdk/lib";
 			sourceTree = "<group>";
 		};
+		DA56D846170527D70093BEEF /* UbiquityStoreManager */ = {
+			isa = PBXGroup;
+			children = (
+				DA56D847170527D70093BEEF /* UbiquityStoreManager.m */,
+				DA56D848170527D70093BEEF /* NSError+UbiquityStoreManager.h */,
+				DA56D849170527D70093BEEF /* NSError+UbiquityStoreManager.m */,
+				DA56D84A170527D70093BEEF /* UbiquityStoreManager.h */,
+			);
+			name = UbiquityStoreManager;
+			path = External/UbiquityStoreManager/UbiquityStoreManager;
+			sourceTree = "<group>";
+		};
 		DA5BFA39147E415C00F98B1E = {
 			isa = PBXGroup;
 			children = (
@@ -2178,6 +2184,7 @@
 				DAB8D46F15036BF600CED3BC /* Resources */,
 				DABB980A150FF40100B05417 /* SendToMac */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
+				DA56D846170527D70093BEEF /* UbiquityStoreManager */,
 				DAC6325F1486805C0075AEA5 /* uicolor-utilities */,
 				DAC6326E148680650075AEA5 /* jrswizzle */,
 				DA95D59E14DF063C008D1B94 /* InAppSettingsKit */,
@@ -2185,7 +2192,6 @@
 				DAD3126115528C9C00A3F9ED /* TestFlight */,
 				DAD3127315528CD200A3F9ED /* Localytics */,
 				DA5587F715E8B7B200860B4F /* Google+ */,
-				DA4425D71557BF260052177D /* iCloudStoreManager */,
 				DA829E5D15984812002417D3 /* FontReplacer */,
 				DA3EF17E15A47744003ABF4E /* Tests */,
 				DA5BFA47147E415C00F98B1E /* Frameworks */,
@@ -3548,7 +3554,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA4426001557BF260052177D /* UbiquityStoreManager.h in Headers */,
+				DA56D84C170527D70093BEEF /* NSError+UbiquityStoreManager.h in Headers */,
+				DA56D84E170527D70093BEEF /* UbiquityStoreManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3687,9 +3694,9 @@
 			productReference = DA3EF17915A47744003ABF4E /* Tests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
-		DA4425CA1557BED40052177D /* iCloudStoreManager */ = {
+		DA4425CA1557BED40052177D /* UbiquityStoreManager */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DA4425D31557BED40052177D /* Build configuration list for PBXNativeTarget "iCloudStoreManager" */;
+			buildConfigurationList = DA4425D31557BED40052177D /* Build configuration list for PBXNativeTarget "UbiquityStoreManager" */;
 			buildPhases = (
 				DA4425C71557BED40052177D /* Sources */,
 				DA4425C81557BED40052177D /* Frameworks */,
@@ -3699,7 +3706,7 @@
 			);
 			dependencies = (
 			);
-			name = iCloudStoreManager;
+			name = UbiquityStoreManager;
 			productName = iCloudStoreManager;
 			productReference = DA4425CB1557BED40052177D /* libiCloudStoreManager.a */;
 			productType = "com.apple.product-type.library.static";
@@ -3881,7 +3888,7 @@
 				DAC6326B148680650075AEA5 /* jrswizzle */,
 				DA95D59B14DF063C008D1B94 /* InAppSettingsKit */,
 				DAD3127015528CD200A3F9ED /* Localytics */,
-				DA4425CA1557BED40052177D /* iCloudStoreManager */,
+				DA4425CA1557BED40052177D /* UbiquityStoreManager */,
 				DA829E50159847E0002417D3 /* FontReplacer */,
 				DA3EF17815A47744003ABF4E /* Tests */,
 				DA497B9615E8C90E00B52167 /* Google+ */,
@@ -4647,7 +4654,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA4426011557BF260052177D /* UbiquityStoreManager.m in Sources */,
+				DA56D84B170527D70093BEEF /* UbiquityStoreManager.m in Sources */,
+				DA56D84D170527D70093BEEF /* NSError+UbiquityStoreManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5488,7 +5496,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = AdHoc;
 		};
-		DA4425D31557BED40052177D /* Build configuration list for PBXNativeTarget "iCloudStoreManager" */ = {
+		DA4425D31557BED40052177D /* Build configuration list for PBXNativeTarget "UbiquityStoreManager" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA4425D41557BED40052177D /* Debug */,
