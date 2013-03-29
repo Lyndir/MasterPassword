@@ -13,13 +13,7 @@
 /*.iws
 
 # Xcode IDE
-/*.xcodeproj/*
-!/*.xcodeproj/*.pbxproj
-!/*.xcodeproj/xcshareddata
-!/*.xcodeproj/xcshareddata/*
-!/*.xcodeproj/project.xcworkspace
-!/*.xcodeproj/project.xcworkspace/*
-/*.xcodeproj/project.xcworkspace/xcuserdata
+xcuserdata/
 
 # Media
 Press/Background.png
