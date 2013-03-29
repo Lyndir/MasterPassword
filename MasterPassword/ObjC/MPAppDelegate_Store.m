@@ -68,24 +68,24 @@ static char privateManagedObjectContextKey, mainManagedObjectContextKey;
 - (NSManagedObjectContext *)privateManagedObjectContextIfReady {
 
     NSManagedObjectContext *privateManagedObjectContext = objc_getAssociatedObject(self, &privateManagedObjectContextKey);
-    if (!privateManagedObjectContext) {
-        privateManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [privateManagedObjectContext performBlockAndWait:^{
-            privateManagedObjectContext.mergePolicy                = NSMergeByPropertyObjectTrumpMergePolicy;
-            privateManagedObjectContext.persistentStoreCoordinator = self.storeManager.persistentStoreCoordinator;
-        }];
-
-        NSManagedObjectContext *mainManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-        mainManagedObjectContext.parentContext = privateManagedObjectContext;
-
-        objc_setAssociatedObject(self, &privateManagedObjectContextKey, privateManagedObjectContext, OBJC_ASSOCIATION_RETAIN);
-        objc_setAssociatedObject(self, &mainManagedObjectContextKey, mainManagedObjectContext, OBJC_ASSOCIATION_RETAIN);
-    }
-
-    if (![privateManagedObjectContext.persistentStoreCoordinator.persistentStores count])
-        // Store not available yet.
-        return nil;
-
+//    if (!privateManagedObjectContext) {
+//        privateManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+//        [privateManagedObjectContext performBlockAndWait:^{
+//            privateManagedObjectContext.mergePolicy                = NSMergeByPropertyObjectTrumpMergePolicy;
+//            privateManagedObjectContext.persistentStoreCoordinator = self.storeManager.persistentStoreCoordinator;
+//        }];
+//
+//        NSManagedObjectContext *mainManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+//        mainManagedObjectContext.parentContext = privateManagedObjectContext;
+//
+//        objc_setAssociatedObject(self, &privateManagedObjectContextKey, privateManagedObjectContext, OBJC_ASSOCIATION_RETAIN);
+//        objc_setAssociatedObject(self, &mainManagedObjectContextKey, mainManagedObjectContext, OBJC_ASSOCIATION_RETAIN);
+//    }
+//
+//    if (![privateManagedObjectContext.persistentStoreCoordinator.persistentStores count])
+//        // Store not available yet.
+//        return nil;
+//
     return privateManagedObjectContext;
 }
 
@@ -213,57 +213,57 @@ static char privateManagedObjectContextKey, mainManagedObjectContextKey;
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"iCloudEnabledKey"];
 }
 
-- (UbiquityStoreManager *)storeManager {
-
-    static UbiquityStoreManager *storeManager = nil;
-    if (storeManager)
-        return storeManager;
-
-    storeManager = [[UbiquityStoreManager alloc] initStoreNamed:nil withManagedObjectModel:nil localStoreURL:nil
-                                            containerIdentifier:@"HL3Q45LX9N.com.lyndir.lhunath.MasterPassword.shared"
-#if TARGET_OS_IPHONE
-                                         additionalStoreOptions:@{
-                                          NSPersistentStoreFileProtectionKey : NSFileProtectionComplete
-                                         }];
-#else
-                                         additionalStoreOptions:nil];
-#endif
-    storeManager.delegate = self;
-
-    // Migrate old store to new store location.
-    [self migrateStoreForManager:storeManager];
-
-    [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidChangeNotification
-                                                      object:storeManager queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      objc_setAssociatedObject(self, &privateManagedObjectContextKey, nil, OBJC_ASSOCIATION_RETAIN);
-                                                  }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
-     ^(NSNotification *note) {
-         if ([[MPConfig get].iCloud boolValue] != [self.storeManager cloudEnabled])
-             self.storeManager.cloudEnabled = [[MPConfig get].iCloud boolValue];
-     }];
-#if TARGET_OS_IPHONE
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification
-                                                      object:[UIApplication sharedApplication] queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      [self saveContexts];
-                                                  }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification
-                                                      object:[UIApplication sharedApplication] queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      [self saveContexts];
-                                                  }];
-#else
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillTerminateNotification
-                                                      object:[NSApplication sharedApplication] queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      [self saveContexts];
-                                                  }];
-#endif
-
-    return storeManager;
-}
+//- (UbiquityStoreManager *)storeManager {
+//
+//    static UbiquityStoreManager *storeManager = nil;
+//    if (storeManager)
+//        return storeManager;
+//
+//    storeManager = [[UbiquityStoreManager alloc] initStoreNamed:nil withManagedObjectModel:nil localStoreURL:nil
+//                                            containerIdentifier:@"HL3Q45LX9N.com.lyndir.lhunath.MasterPassword.shared"
+//#if TARGET_OS_IPHONE
+//                                         additionalStoreOptions:@{
+//                                          NSPersistentStoreFileProtectionKey : NSFileProtectionComplete
+//                                         }];
+//#else
+//                                         additionalStoreOptions:nil];
+//#endif
+//    storeManager.delegate = self;
+//
+//    // Migrate old store to new store location.
+//    [self migrateStoreForManager:storeManager];
+//
+//    [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidChangeNotification
+//                                                      object:storeManager queue:nil
+//                                                  usingBlock:^(NSNotification *note) {
+//                                                      objc_setAssociatedObject(self, &privateManagedObjectContextKey, nil, OBJC_ASSOCIATION_RETAIN);
+//                                                  }];
+//    [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
+//     ^(NSNotification *note) {
+//         if ([[MPConfig get].iCloud boolValue] != [self.storeManager cloudEnabled])
+//             self.storeManager.cloudEnabled = [[MPConfig get].iCloud boolValue];
+//     }];
+//#if TARGET_OS_IPHONE
+//    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification
+//                                                      object:[UIApplication sharedApplication] queue:nil
+//                                                  usingBlock:^(NSNotification *note) {
+//                                                      [self saveContexts];
+//                                                  }];
+//    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification
+//                                                      object:[UIApplication sharedApplication] queue:nil
+//                                                  usingBlock:^(NSNotification *note) {
+//                                                      [self saveContexts];
+//                                                  }];
+//#else
+//    [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillTerminateNotification
+//                                                      object:[NSApplication sharedApplication] queue:nil
+//                                                  usingBlock:^(NSNotification *note) {
+//                                                      [self saveContexts];
+//                                                  }];
+//#endif
+//
+//    return storeManager;
+//}
 
 - (void)saveContexts {
 
@@ -312,71 +312,71 @@ static char privateManagedObjectContextKey, mainManagedObjectContextKey;
     [MPConfig get].iCloud = @(cloudEnabled);
 }
 
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreManagerErrorCause)cause
-                     context:(id)context {
-
-    err(@"StoreManager: cause=%d, context=%@, error=%@", cause, context, error);
-
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:PearlString(MPCheckpointMPErrorUbiquity @"_%d", cause)];
-#endif
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointMPErrorUbiquity attributes:@{
-    @"cause": @(cause),
-    @"error.domain": error.domain,
-    @"error.code": @(error.code)
-    }];
-#endif
-
-    switch (cause) {
-        case UbiquityStoreManagerErrorCauseDeleteStore:
-        case UbiquityStoreManagerErrorCauseCreateStorePath:
-        case UbiquityStoreManagerErrorCauseClearStore:
-            break;
-        case UbiquityStoreManagerErrorCauseOpenLocalStore: {
-            wrn(@"Local store could not be opened: %@", error);
-
-            if (error.code == NSMigrationMissingSourceModelError) {
-                wrn(@"Resetting the local store.");
-
-#ifdef TESTFLIGHT_SDK_VERSION
-                [TestFlight passCheckpoint:MPCheckpointLocalStoreReset];
-#endif
-#ifdef LOCALYTICS
-                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointLocalStoreReset attributes:nil];
-#endif
-                [manager deleteLocalStore];
-
-                Throw(@"Local store was reset, application must be restarted to use it.");
-            } else
-             // Try again.
-                [manager persistentStoreCoordinator];
-        }
-        case UbiquityStoreManagerErrorCauseOpenCloudStore: {
-            wrn(@"iCloud store could not be opened: %@", error);
-
-            if (error.code == NSMigrationMissingSourceModelError) {
-                wrn(@"Resetting the iCloud store.");
-
-#ifdef TESTFLIGHT_SDK_VERSION
-                [TestFlight passCheckpoint:MPCheckpointCloudStoreReset];
-#endif
-#ifdef LOCALYTICS
-                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloudStoreReset attributes:nil];
-#endif
-                [manager deleteCloudStore];
-                break;
-            } else
-             // Try again.
-                [manager persistentStoreCoordinator];
-        }
-        case UbiquityStoreManagerErrorCauseMigrateLocalToCloudStore: {
-            wrn(@"Couldn't migrate local store to the cloud: %@", error);
-            wrn(@"Resetting the iCloud store.");
-            [manager deleteCloudStore];
-        };
-    }
-}
+//- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreManagerErrorCause)cause
+//                     context:(id)context {
+//
+//    err(@"StoreManager: cause=%d, context=%@, error=%@", cause, context, error);
+//
+//#ifdef TESTFLIGHT_SDK_VERSION
+//    [TestFlight passCheckpoint:PearlString(MPCheckpointMPErrorUbiquity @"_%d", cause)];
+//#endif
+//#ifdef LOCALYTICS
+//    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointMPErrorUbiquity attributes:@{
+//    @"cause": @(cause),
+//    @"error.domain": error.domain,
+//    @"error.code": @(error.code)
+//    }];
+//#endif
+//
+//    switch (cause) {
+//        case UbiquityStoreManagerErrorCauseDeleteStore:
+//        case UbiquityStoreManagerErrorCauseCreateStorePath:
+//        case UbiquityStoreManagerErrorCauseClearStore:
+//            break;
+//        case UbiquityStoreManagerErrorCauseOpenLocalStore: {
+//            wrn(@"Local store could not be opened: %@", error);
+//
+//            if (error.code == NSMigrationMissingSourceModelError) {
+//                wrn(@"Resetting the local store.");
+//
+//#ifdef TESTFLIGHT_SDK_VERSION
+//                [TestFlight passCheckpoint:MPCheckpointLocalStoreReset];
+//#endif
+//#ifdef LOCALYTICS
+//                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointLocalStoreReset attributes:nil];
+//#endif
+//                [manager deleteLocalStore];
+//
+//                Throw(@"Local store was reset, application must be restarted to use it.");
+//            } else
+//             // Try again.
+//                [manager persistentStoreCoordinator];
+//        }
+//        case UbiquityStoreManagerErrorCauseOpenCloudStore: {
+//            wrn(@"iCloud store could not be opened: %@", error);
+//
+//            if (error.code == NSMigrationMissingSourceModelError) {
+//                wrn(@"Resetting the iCloud store.");
+//
+//#ifdef TESTFLIGHT_SDK_VERSION
+//                [TestFlight passCheckpoint:MPCheckpointCloudStoreReset];
+//#endif
+//#ifdef LOCALYTICS
+//                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloudStoreReset attributes:nil];
+//#endif
+//                [manager deleteCloudStore];
+//                break;
+//            } else
+//             // Try again.
+//                [manager persistentStoreCoordinator];
+//        }
+//        case UbiquityStoreManagerErrorCauseMigrateLocalToCloudStore: {
+//            wrn(@"Couldn't migrate local store to the cloud: %@", error);
+//            wrn(@"Resetting the iCloud store.");
+//            [manager deleteCloudStore];
+//        };
+//    }
+//}
 
 #pragma mark - Import / Export
 

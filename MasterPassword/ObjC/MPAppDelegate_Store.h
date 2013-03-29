@@ -18,7 +18,7 @@ typedef enum {
     MPImportResultInternalError,
 } MPImportResult;
 
-@interface MPAppDelegate_Shared (Store)<UbiquityStoreManagerDelegate>
+@interface MPAppDelegate_Shared (Store)//<UbiquityStoreManagerDelegate>
 
 + (NSManagedObjectContext *)managedObjectContextForThreadIfReady;
 + (BOOL)managedObjectContextPerformBlock:(void (^)(NSManagedObjectContext *moc))mocBlock;
