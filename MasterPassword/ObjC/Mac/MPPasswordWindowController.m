@@ -39,7 +39,7 @@
             return;
         }
         
-        [MPAppDelegate managedObjectContextPerform:^(NSManagedObjectContext *moc) {
+        [MPAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
             MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
             if (![MPAlgorithmDefault migrateUser:activeUser])
                 [NSAlert alertWithMessageText:@"Migration Needed" defaultButton:@"OK" alternateButton:nil otherButton:nil

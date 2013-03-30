@@ -532,7 +532,7 @@
 		DAFE45F415039823003ABA7C /* PearlStringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlStringUtils.h; sourceTree = "<group>"; };
 		DAFE45F515039823003ABA7C /* PearlStringUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlStringUtils.m; sourceTree = "<group>"; };
 		DAFE45F815039823003ABA7C /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		DAFE45FB15039823003ABA7C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Pearl.strings; sourceTree = "<group>"; };
+		DAFE45FB15039823003ABA7C /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Pearl.strings; sourceTree = "<group>"; };
 		DAFE45FD15039823003ABA7C /* Pearl-Crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Pearl-Crypto.h"; sourceTree = "<group>"; };
 		DAFE45FE15039823003ABA7C /* PearlCryptUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlCryptUtils.h; sourceTree = "<group>"; };
 		DAFE45FF15039823003ABA7C /* PearlCryptUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlCryptUtils.m; sourceTree = "<group>"; };
@@ -1781,6 +1781,7 @@
 					"$(inherit)",
 					"\"$(SRCROOT)/../../../External\"/**",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
@@ -1853,6 +1854,7 @@
 					"$(inherit)",
 					"\"$(SRCROOT)/../../../External\"/**",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "";
@@ -1949,6 +1951,7 @@
 					"$(inherit)",
 					"\"$(SRCROOT)/../../../External\"/**",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "";
