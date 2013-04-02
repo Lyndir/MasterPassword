@@ -616,49 +616,49 @@
 
 #pragma mark - UbiquityStoreManagerDelegate
 
-//- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToCloud:(BOOL)cloudEnabled {
-//
-//    [super ubiquityStoreManager:manager didSwitchToCloud:cloudEnabled];
-//
-//    if (![[MPConfig get].iCloudDecided boolValue]) {
-//        if (!cloudEnabled) {
-//            [PearlAlert showAlertWithTitle:@"iCloud"
-//                                   message:
-//                                    @"iCloud is now disabled.\n\n"
-//                                     @"It is highly recommended you enable iCloud."
-//                                 viewStyle:UIAlertViewStyleDefault initAlert:nil
-//                         tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-//                             if (buttonIndex == [alert firstOtherButtonIndex] + 0) {
-//                                 [PearlAlert showAlertWithTitle:@"About iCloud"
-//                                                        message:
-//                                                         @"iCloud is Apple's solution for saving your data in \"the cloud\" "
-//                                                          @"and making sure your other iPhones, iPads and Macs are in sync.\n\n"
-//                                                          @"For Master Password, that means your sites are available on all your "
-//                                                          @"Apple devices, and you always have a backup of them in case "
-//                                                          @"you loose one or need to restore.\n\n"
-//                                                          @"Because of the way Master Password works, it doesn't need to send your "
-//                                                          @"site's passwords to Apple.  Only their names are saved to make it easier "
-//                                                          @"for you to find the site you need.  For some sites you may have set "
-//                                                          @"a user-specified password: these are sent to iCloud after being encrypted "
-//                                                          @"with your master password.\n\n"
-//                                                          @"Apple can never see any of your passwords."
-//                                                      viewStyle:UIAlertViewStyleDefault
-//                                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-//                                     [self ubiquityStoreManager:manager didSwitchToCloud:cloudEnabled];
-//                                 }
-//                                                    cancelTitle:[PearlStrings get].commonButtonThanks otherTitles:nil];
-//                                 return;
-//                             }
-//
-//                             [MPConfig get].iCloudDecided = @YES;
-//                             if (buttonIndex == [alert cancelButtonIndex])
-//                                 return;
-//                             if (buttonIndex == [alert firstOtherButtonIndex] + 1)
-//                                 manager.cloudEnabled = YES;
-//                         }     cancelTitle:@"Leave iCloud Off" otherTitles:@"Explain?", @"Enable iCloud", nil];
-//        }
-//    }
-//}
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToCloud:(BOOL)cloudEnabled {
+
+    [super ubiquityStoreManager:manager didSwitchToCloud:cloudEnabled];
+
+    if (![[MPConfig get].iCloudDecided boolValue]) {
+        if (!cloudEnabled) {
+            [PearlAlert showAlertWithTitle:@"iCloud"
+                                   message:
+                                    @"iCloud is now disabled.\n\n"
+                                     @"It is highly recommended you enable iCloud."
+                                 viewStyle:UIAlertViewStyleDefault initAlert:nil
+                         tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                             if (buttonIndex == [alert firstOtherButtonIndex] + 0) {
+                                 [PearlAlert showAlertWithTitle:@"About iCloud"
+                                                        message:
+                                                         @"iCloud is Apple's solution for saving your data in \"the cloud\" "
+                                                          @"and making sure your other iPhones, iPads and Macs are in sync.\n\n"
+                                                          @"For Master Password, that means your sites are available on all your "
+                                                          @"Apple devices, and you always have a backup of them in case "
+                                                          @"you loose one or need to restore.\n\n"
+                                                          @"Because of the way Master Password works, it doesn't need to send your "
+                                                          @"site's passwords to Apple.  Only their names are saved to make it easier "
+                                                          @"for you to find the site you need.  For some sites you may have set "
+                                                          @"a user-specified password: these are sent to iCloud after being encrypted "
+                                                          @"with your master password.\n\n"
+                                                          @"Apple can never see any of your passwords."
+                                                      viewStyle:UIAlertViewStyleDefault
+                                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                                     [self ubiquityStoreManager:manager didSwitchToCloud:cloudEnabled];
+                                 }
+                                                    cancelTitle:[PearlStrings get].commonButtonThanks otherTitles:nil];
+                                 return;
+                             }
+
+                             [MPConfig get].iCloudDecided = @YES;
+                             if (buttonIndex == [alert cancelButtonIndex])
+                                 return;
+                             if (buttonIndex == [alert firstOtherButtonIndex] + 1)
+                                 manager.cloudEnabled = YES;
+                         }     cancelTitle:@"Leave iCloud Off" otherTitles:@"Explain?", @"Enable iCloud", nil];
+        }
+    }
+}
 
 
 #pragma mark - Google+
