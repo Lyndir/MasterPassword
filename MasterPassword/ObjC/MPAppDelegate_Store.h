@@ -24,6 +24,7 @@ typedef enum {
 + (BOOL)managedObjectContextPerformBlock:(void (^)(NSManagedObjectContext *moc))mocBlock;
 + (BOOL)managedObjectContextPerformBlockAndWait:(void (^)(NSManagedObjectContext *))mocBlock;
 
+- (UbiquityStoreManager *)storeManager;
 - (MPImportResult)importSites:(NSString *)importedSitesString
             askImportPassword:(NSString *(^)(NSString *userName))importPassword
               askUserPassword:(NSString *(^)(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword;

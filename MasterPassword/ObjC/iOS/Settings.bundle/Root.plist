@@ -84,7 +84,7 @@
 			<key>Title</key>
 			<string>iCloud</string>
 			<key>Key</key>
-			<string>iCloud</string>
+			<string>USMCloudEnabledKey</string>
 			<key>DefaultValue</key>
 			<true/>
 		</dict>

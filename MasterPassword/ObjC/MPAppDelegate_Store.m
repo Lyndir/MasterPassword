@@ -9,6 +9,14 @@
 #import <objc/runtime.h>
 #import "MPAppDelegate_Store.h"
 
+@interface MPAppDelegate_Shared ()
+
+@property(nonatomic, strong) PearlAlert *handleCloudContentAlert;
+@property(nonatomic, strong) PearlAlert *fixCloudContentAlert;
+@property(nonatomic, strong) PearlOverlay *storeLoading;
+
+@end
+
 @implementation MPAppDelegate_Shared (Store)
 
 static char privateManagedObjectContextKey, mainManagedObjectContextKey;
@@ -58,35 +66,15 @@ static char privateManagedObjectContextKey, mainManagedObjectContextKey;
 }
 
 - (NSManagedObjectContext *)mainManagedObjectContextIfReady {
-    
-    if (![self privateManagedObjectContextIfReady])
-        return nil;
-    
-    return objc_getAssociatedObject(self, &mainManagedObjectContextKey);
+
+    [self storeManager];
+    return objc_getAssociatedObject( self, &mainManagedObjectContextKey );
 }
 
 - (NSManagedObjectContext *)privateManagedObjectContextIfReady {
 
-    NSManagedObjectContext *privateManagedObjectContext = objc_getAssociatedObject(self, &privateManagedObjectContextKey);
-    if (!privateManagedObjectContext) {
-        privateManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [privateManagedObjectContext performBlockAndWait:^{
-            privateManagedObjectContext.mergePolicy                = NSMergeByPropertyObjectTrumpMergePolicy;
-            privateManagedObjectContext.persistentStoreCoordinator = self.storeManager.persistentStoreCoordinator;
-        }];
-
-        NSManagedObjectContext *mainManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-        mainManagedObjectContext.parentContext = privateManagedObjectContext;
-
-        objc_setAssociatedObject(self, &privateManagedObjectContextKey, privateManagedObjectContext, OBJC_ASSOCIATION_RETAIN);
-        objc_setAssociatedObject(self, &mainManagedObjectContextKey, mainManagedObjectContext, OBJC_ASSOCIATION_RETAIN);
-    }
-
-    if (![privateManagedObjectContext.persistentStoreCoordinator.persistentStores count])
-        // Store not available yet.
-        return nil;
-
-    return privateManagedObjectContext;
+    [self storeManager];
+    return objc_getAssociatedObject( self, &privateManagedObjectContextKey );
 }
 
 - (void)migrateStoreForManager:(UbiquityStoreManager *)storeManager {
@@ -223,26 +211,16 @@ static char privateManagedObjectContextKey, mainManagedObjectContextKey;
                                             containerIdentifier:@"HL3Q45LX9N.com.lyndir.lhunath.MasterPassword.shared"
 #if TARGET_OS_IPHONE
                                          additionalStoreOptions:@{
-                                          NSPersistentStoreFileProtectionKey : NSFileProtectionComplete
-                                         }];
+                                                 NSPersistentStoreFileProtectionKey : NSFileProtectionComplete
+                                         }
 #else
-                                         additionalStoreOptions:nil];
+                                         additionalStoreOptions:nil
 #endif
-    storeManager.delegate = self;
+                                                       delegate:self];
 
     // Migrate old store to new store location.
     [self migrateStoreForManager:storeManager];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidChangeNotification
-                                                      object:storeManager queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      objc_setAssociatedObject(self, &privateManagedObjectContextKey, nil, OBJC_ASSOCIATION_RETAIN);
-                                                  }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
-     ^(NSNotification *note) {
-         if ([[MPConfig get].iCloud boolValue] != [self.storeManager cloudEnabled])
-             self.storeManager.cloudEnabled = [[MPConfig get].iCloud boolValue];
-     }];
 #if TARGET_OS_IPHONE
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification
                                                       object:[UIApplication sharedApplication] queue:nil
@@ -294,88 +272,97 @@ static char privateManagedObjectContextKey, mainManagedObjectContextKey;
     dbg(@"[StoreManager] %@", message);
 }
 
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToCloud:(BOOL)cloudEnabled {
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager willLoadStoreIsCloud:(BOOL)isCloudStore {
 
-    // manager.cloudEnabled is more reliable (eg. iOS' MPAppDelegate tampers with didSwitch a bit)
-    cloudEnabled = manager.cloudEnabled;
-    inf(@"Using iCloud? %@", cloudEnabled? @"YES": @"NO");
+    if (![self.storeLoading isVisible])
+        self.storeLoading = [PearlOverlay showOverlayWithTitle:@"Loading..."];
+
+    objc_setAssociatedObject( self, &privateManagedObjectContextKey, nil, OBJC_ASSOCIATION_RETAIN );
+    objc_setAssociatedObject( self, &mainManagedObjectContextKey, nil, OBJC_ASSOCIATION_RETAIN );
+}
+
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didLoadStoreForCoordinator:(NSPersistentStoreCoordinator *)coordinator
+                     isCloud:(BOOL)isCloudStore {
+
+    inf(@"Using iCloud? %@", @(isCloudStore));
 
 #ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:cloudEnabled? MPCheckpointCloudEnabled: MPCheckpointCloudDisabled];
+    [TestFlight passCheckpoint:isCloudStore? MPCheckpointCloudEnabled: MPCheckpointCloudDisabled];
 #endif
 #ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloud attributes:@{
-    @"enabled": cloudEnabled? @"YES": @"NO"
+    @"enabled": isCloudStore? @"YES": @"NO"
     }];
 #endif
 
-    [MPConfig get].iCloud = @(cloudEnabled);
+    // Create our contexts.
+    NSManagedObjectContext *privateManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    [privateManagedObjectContext performBlockAndWait:^{
+        privateManagedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
+        privateManagedObjectContext.persistentStoreCoordinator = coordinator;
+    }];
+
+    NSManagedObjectContext *mainManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+    mainManagedObjectContext.parentContext = privateManagedObjectContext;
+
+    objc_setAssociatedObject( self, &privateManagedObjectContextKey, privateManagedObjectContext, OBJC_ASSOCIATION_RETAIN );
+    objc_setAssociatedObject( self, &mainManagedObjectContextKey, mainManagedObjectContext, OBJC_ASSOCIATION_RETAIN );
+
+    [self.handleCloudContentAlert cancelAlert];
+    [self.fixCloudContentAlert cancelAlert];
+    [self.storeLoading cancelOverlay];
 }
 
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreManagerErrorCause)cause
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreErrorCause)cause
                      context:(id)context {
 
-    err(@"StoreManager: cause=%d, context=%@, error=%@", cause, context, error);
+    err(@"[StoreManager] ERROR: cause=%d, context=%@, error=%@", cause, context, error);
 
 #ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:PearlString(MPCheckpointMPErrorUbiquity @"_%d", cause)];
+    [TestFlight passCheckpoint:PearlString( MPCheckpointMPErrorUbiquity @"_%d", cause )];
 #endif
 #ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointMPErrorUbiquity attributes:@{
-    @"cause": @(cause),
-    @"error.domain": error.domain,
-    @"error.code": @(error.code)
+            @"cause"        : @(cause),
+            @"error.domain" : error.domain,
+            @"error.code"   : @(error.code)
     }];
 #endif
+}
 
-    switch (cause) {
-        case UbiquityStoreManagerErrorCauseDeleteStore:
-        case UbiquityStoreManagerErrorCauseCreateStorePath:
-        case UbiquityStoreManagerErrorCauseClearStore:
-            break;
-        case UbiquityStoreManagerErrorCauseOpenLocalStore: {
-            wrn(@"Local store could not be opened: %@", error);
+- (BOOL)ubiquityStoreManager:(UbiquityStoreManager *)manager handleCloudContentCorruptionWithHealthyStore:(BOOL)storeHealthy {
 
-            if (error.code == NSMigrationMissingSourceModelError) {
-                wrn(@"Resetting the local store.");
+    if (manager.cloudEnabled && !storeHealthy && !([self.handleCloudContentAlert.alertView isVisible] || [self.fixCloudContentAlert.alertView isVisible]))
+        dispatch_async( dispatch_get_main_queue(), ^{
+            [self showCloudContentAlert];
+        } );
 
-#ifdef TESTFLIGHT_SDK_VERSION
-                [TestFlight passCheckpoint:MPCheckpointLocalStoreReset];
-#endif
-#ifdef LOCALYTICS
-                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointLocalStoreReset attributes:nil];
-#endif
-                [manager deleteLocalStore];
+    return NO;
+}
 
-                Throw(@"Local store was reset, application must be restarted to use it.");
-            } else
-             // Try again.
-                [manager persistentStoreCoordinator];
-        }
-        case UbiquityStoreManagerErrorCauseOpenCloudStore: {
-            wrn(@"iCloud store could not be opened: %@", error);
+- (void)showCloudContentAlert {
 
-            if (error.code == NSMigrationMissingSourceModelError) {
-                wrn(@"Resetting the iCloud store.");
+    __weak MPAppDelegate_Shared *wSelf = self;
+    [self.handleCloudContentAlert cancelAlert];
+    self.handleCloudContentAlert = [PearlAlert showActivityWithTitle:@"iCloud Sync Problem" message:
+            @"Waiting for your other device to auto‑correct the problem..."
+                                                           initAlert:^(UIAlertView *alert) {
+                                                               [alert addButtonWithTitle:@"Fix Now"];
+                                                           }];
 
-#ifdef TESTFLIGHT_SDK_VERSION
-                [TestFlight passCheckpoint:MPCheckpointCloudStoreReset];
-#endif
-#ifdef LOCALYTICS
-                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloudStoreReset attributes:nil];
-#endif
-                [manager deleteCloudStore];
-                break;
-            } else
-             // Try again.
-                [manager persistentStoreCoordinator];
-        }
-        case UbiquityStoreManagerErrorCauseMigrateLocalToCloudStore: {
-            wrn(@"Couldn't migrate local store to the cloud: %@", error);
-            wrn(@"Resetting the iCloud store.");
-            [manager deleteCloudStore];
-        };
-    }
+    self.handleCloudContentAlert.tappedButtonBlock = ^(UIAlertView *alert, NSInteger buttonIndex) {
+        wSelf.fixCloudContentAlert = [PearlAlert showAlertWithTitle:@"Fix iCloud Now" message:
+                @"This problem can usually be auto‑corrected by opening the app on another device where you recently made changes.\n"
+                        @"You can correct the problem from this device anyway, but recent changes made on another device might get lost."
+                                                          viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:
+                        ^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                            if (buttonIndex_ == alert_.cancelButtonIndex)
+                                [wSelf showCloudContentAlert];
+                            if (buttonIndex_ == [alert_ firstOtherButtonIndex])
+                                [wSelf.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:YES];
+                        }
+                                                        cancelTitle:[PearlStrings get].commonButtonBack otherTitles:@"Fix Anyway", nil];
+    };
 }
 
 #pragma mark - Import / Export

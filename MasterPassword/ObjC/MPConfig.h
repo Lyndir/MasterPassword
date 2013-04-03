@@ -13,7 +13,6 @@
 @property (nonatomic, retain) NSNumber *sendInfo;
 @property (nonatomic, retain) NSNumber *rememberLogin;
 
-@property (nonatomic, retain) NSNumber *iCloud;
 @property (nonatomic, retain) NSNumber *iCloudDecided;
 
 @end

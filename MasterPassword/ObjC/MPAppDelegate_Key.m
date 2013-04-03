@@ -144,7 +144,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                 }
                 [user saveContext];
 #ifdef PEARL_UIKIT
-                [activityAlert dismissAlert];
+                [activityAlert cancelAlert];
 #endif
             }
     }
