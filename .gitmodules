@@ -4,9 +4,12 @@
 [submodule "External/InAppSettingsKit"]
 	path = External/InAppSettingsKit
 	url = git://github.com/futuretap/InAppSettingsKit.git
-[submodule "External/iCloudStoreManager"]
-	path = External/iCloudStoreManager
-	url = git://github.com/lhunath/iCloudStoreManager.git
 [submodule "External/FontReplacer"]
 	path = External/FontReplacer
 	url = git://github.com/0xced/FontReplacer.git
+[submodule "Press"]
+	path = Press
+	url = ../Press
+[submodule "External/UbiquityStoreManager"]
+	path = External/UbiquityStoreManager
+	url = git@github.com:lhunath/UbiquityStoreManager.git
