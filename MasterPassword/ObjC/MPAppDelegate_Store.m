@@ -9,17 +9,13 @@
 #import <objc/runtime.h>
 #import "MPAppDelegate_Store.h"
 
-@interface MPAppDelegate_Shared ()
-
-@property(nonatomic, strong) PearlAlert *handleCloudContentAlert;
-@property(nonatomic, strong) PearlAlert *fixCloudContentAlert;
-@property(nonatomic, strong) PearlOverlay *storeLoading;
-
-@end
-
 @implementation MPAppDelegate_Shared (Store)
+PearlAssociatedObjectProperty(PearlAlert*, HandleCloudContentAlert, handleCloudContentAlert);
+PearlAssociatedObjectProperty(PearlAlert*, FixCloudContentAlert, fixCloudContentAlert);
+PearlAssociatedObjectProperty(PearlOverlay*, StoreLoading, storeLoading);
+PearlAssociatedObjectProperty(NSManagedObjectContext*, PrivateManagedObjectContext, privateManagedObjectContext);
+PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext, mainManagedObjectContext);
 
-static char privateManagedObjectContextKey, mainManagedObjectContextKey;
 
 #pragma mark - Core Data setup
 
@@ -68,13 +64,13 @@ static char privateManagedObjectContextKey, mainManagedObjectContextKey;
 - (NSManagedObjectContext *)mainManagedObjectContextIfReady {
 
     [self storeManager];
-    return objc_getAssociatedObject( self, &mainManagedObjectContextKey );
+    return self.mainManagedObjectContext;
 }
 
 - (NSManagedObjectContext *)privateManagedObjectContextIfReady {
 
     [self storeManager];
-    return objc_getAssociatedObject( self, &privateManagedObjectContextKey );
+    return self.privateManagedObjectContext;
 }
 
 - (void)migrateStoreForManager:(UbiquityStoreManager *)storeManager {
@@ -245,7 +241,7 @@ static char privateManagedObjectContextKey, mainManagedObjectContextKey;
 
 - (void)saveContexts {
 
-    NSManagedObjectContext *mainManagedObjectContext = objc_getAssociatedObject(self, &mainManagedObjectContextKey);
+    NSManagedObjectContext *mainManagedObjectContext = self.mainManagedObjectContext;
     [mainManagedObjectContext performBlockAndWait:^{
         NSError *error = nil;
         if (![mainManagedObjectContext save:&error])
@@ -274,11 +270,14 @@ static char privateManagedObjectContextKey, mainManagedObjectContextKey;
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager willLoadStoreIsCloud:(BOOL)isCloudStore {
 
-    if (![self.storeLoading isVisible])
-        self.storeLoading = [PearlOverlay showOverlayWithTitle:@"Loading..."];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (![self.storeLoading isVisible])
+            self.storeLoading = [PearlOverlay showOverlayWithTitle:@"Loading..."];
+    });
 
-    objc_setAssociatedObject( self, &privateManagedObjectContextKey, nil, OBJC_ASSOCIATION_RETAIN );
-    objc_setAssociatedObject( self, &mainManagedObjectContextKey, nil, OBJC_ASSOCIATION_RETAIN );
+    // FIXME
+    //self.privateManagedObjectContext = nil;
+    //self.mainManagedObjectContext = nil;
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didLoadStoreForCoordinator:(NSPersistentStoreCoordinator *)coordinator
@@ -305,8 +304,8 @@ static char privateManagedObjectContextKey, mainManagedObjectContextKey;
     NSManagedObjectContext *mainManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     mainManagedObjectContext.parentContext = privateManagedObjectContext;
 
-    objc_setAssociatedObject( self, &privateManagedObjectContextKey, privateManagedObjectContext, OBJC_ASSOCIATION_RETAIN );
-    objc_setAssociatedObject( self, &mainManagedObjectContextKey, mainManagedObjectContext, OBJC_ASSOCIATION_RETAIN );
+    self.privateManagedObjectContext = privateManagedObjectContext;
+    self.mainManagedObjectContext = mainManagedObjectContext;
 
     [self.handleCloudContentAlert cancelAlert];
     [self.fixCloudContentAlert cancelAlert];
