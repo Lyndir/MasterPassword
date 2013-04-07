@@ -203,14 +203,10 @@
 - (void)updateUsers {
 
     NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
-    if (!moc) {
-        self.tip.text = @"Loading...";
-        [self.loadingUsersIndicator startAnimating];
+    if (!moc)
         return;
-    }
 
     self.tip.text = @"Tap and hold to delete or reset.";
-    [self.loadingUsersIndicator stopAnimating];
 
     __block NSArray *users = nil;
     [moc performBlockAndWait:^{

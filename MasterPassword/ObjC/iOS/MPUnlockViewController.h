@@ -24,7 +24,6 @@
 @property (weak, nonatomic) IBOutlet UILabel      *passwordTipLabel;
 @property (weak, nonatomic) IBOutlet UIView *wordWall;
 @property (strong, nonatomic) IBOutlet UILongPressGestureRecognizer *targetedUserActionGesture;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingUsersIndicator;
 @property (weak, nonatomic) IBOutlet UIView *uiContainer;
 @property (weak, nonatomic) IBOutlet UIWebView *newsView;
 
