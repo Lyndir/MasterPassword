@@ -92,60 +92,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                 user.keyID = tryKey.keyID;
 
                 // Migrate existing elements.
-                MPKey *recoverKey = nil;
-#ifdef PEARL_UIKIT
-                PearlAlert *activityAlert = [PearlAlert showActivityWithTitle:PearlString(@"Migrating %d sites...", [user.elements count])];
-#endif
-
-                for (MPElementEntity *element in user.elements) {
-                    if (element.type & MPElementTypeClassStored && ![element contentUsingKey:tryKey]) {
-                        id content = nil;
-                        if (recoverKey)
-                            content = [element contentUsingKey:recoverKey];
-
-                        while (!content) {
-                            __block NSString *masterPassword = nil;
-                            
-#ifdef PEARL_UIKIT
-                            dispatch_group_t recoverPasswordGroup = dispatch_group_create();
-                            dispatch_group_enter(recoverPasswordGroup);
-                            [PearlAlert showAlertWithTitle:@"Enter Old Master Password"
-                                                   message:PearlString(@"Your old master password is required to migrate the stored password for %@", element.name)
-                                                 viewStyle:UIAlertViewStyleSecureTextInput
-                                                 initAlert:nil
-                                         tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                                             @try {
-                                                 if (buttonIndex_ == [alert_ cancelButtonIndex])
-                                                     // Don't Migrate
-                                                     return;
-
-                                                 masterPassword = [alert_ textFieldAtIndex:0].text;
-                                             }
-                                             @finally {
-                                                 dispatch_group_leave(recoverPasswordGroup);
-                                             }
-                                         } cancelTitle:@"Don't Migrate" otherTitles:@"Migrate", nil];
-                            dispatch_group_wait(recoverPasswordGroup, DISPATCH_TIME_FOREVER);
-#endif
-                            if (!masterPassword)
-                                // Don't Migrate
-                                break;
-
-                            recoverKey = [element.algorithm keyForPassword:masterPassword ofUserNamed:user.name];
-                            content = [element contentUsingKey:recoverKey];
-                        }
-
-                        if (!content)
-                            // Don't Migrate
-                            break;
-
-                        [element setContent:content usingKey:tryKey];
-                    }
-                }
-                [user saveContext];
-#ifdef PEARL_UIKIT
-                [activityAlert cancelAlert];
-#endif
+                [self migrateElementsForUser:user inContext:user.managedObjectContext toKey:tryKey];
             }
     }
 
@@ -216,7 +163,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     }
 
     user.lastUsed = [NSDate date];
-    [user saveContext];
+    [user.managedObjectContext saveToStore];
     self.activeUser = user;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedInNotification object:self];
@@ -228,6 +175,68 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 #endif
 
     return YES;
+}
+
+- (void)migrateElementsForUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc toKey:(MPKey *)newKey {
+
+    if (![user.elements count])
+        // Nothing to migrate.
+        return;
+
+    MPKey *recoverKey = newKey;
+#ifdef PEARL_UIKIT
+    PearlAlert *activityAlert = [PearlAlert showActivityWithTitle:PearlString( @"Migrating %d sites...", [user.elements count] )];
+#endif
+
+    for (MPElementEntity *element in user.elements) {
+        if (element.type & MPElementTypeClassStored) {
+            id content = nil;
+            while (!(content = [element contentUsingKey:recoverKey])) {
+                // Failed to decrypt element with the current recoveryKey.  Ask user for a new one to use.
+                __block NSString *masterPassword = nil;
+
+#ifdef PEARL_UIKIT
+                dispatch_group_t recoverPasswordGroup = dispatch_group_create();
+                dispatch_group_enter( recoverPasswordGroup );
+                [PearlAlert showAlertWithTitle:@"Enter Old Master Password"
+                                       message:PearlString( @"Your old master password is required to migrate the stored password for %@",
+                                               element.name )
+                                     viewStyle:UIAlertViewStyleSecureTextInput
+                                     initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                    @try {
+                        if (buttonIndex_ == [alert_ cancelButtonIndex])
+                                // Don't Migrate
+                            return;
+
+                        masterPassword = [alert_ textFieldAtIndex:0].text;
+                    }
+                    @finally {
+                        dispatch_group_leave( recoverPasswordGroup );
+                    }
+                }                  cancelTitle:@"Don't Migrate" otherTitles:@"Migrate", nil];
+                dispatch_group_wait( recoverPasswordGroup, DISPATCH_TIME_FOREVER );
+#endif
+                if (!masterPassword)
+                        // Don't Migrate
+                    break;
+
+                recoverKey = [element.algorithm keyForPassword:masterPassword ofUserNamed:user.name];
+            }
+
+            if (!content)
+                    // Don't Migrate
+                break;
+
+            if (![recoverKey isEqualToKey:newKey])
+                [element setContent:content usingKey:newKey];
+        }
+    }
+
+    [moc saveToStore];
+
+#ifdef PEARL_UIKIT
+    [activityAlert cancelAlert];
+#endif
 }
 
 @end

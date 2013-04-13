@@ -138,7 +138,7 @@
                 self.outdatedAlertContainer.alpha = 1;
                 self.suppressOutdatedAlert = YES;
             }];
-        [activeUser saveContext];
+        [activeUser.managedObjectContext saveToStore];
     });
 
     if (![[MPiOSConfig get].actionsTipShown boolValue])

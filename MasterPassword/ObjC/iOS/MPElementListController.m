@@ -44,7 +44,7 @@
         element.type = type;
         element.lastUsed = [NSDate date];
         element.version = MPAlgorithmDefaultVersion;
-        [element saveContext];
+        [moc saveToStore];
 
         NSManagedObjectID *elementOID = [element objectID];
         dispatch_async(dispatch_get_main_queue(), ^{

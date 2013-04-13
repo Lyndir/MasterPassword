@@ -15,7 +15,7 @@
 
     NSError *error;
     if (![self save:&error]) {
-        err(@"While saving: %@", NSStringFromClass([self class]), error);
+        err(@"While saving: %@", error);
         return NO;
     }
 
@@ -194,12 +194,11 @@
 
 - (id)contentUsingKey:(MPKey *)key {
 
-    if (!(self.type & MPElementTypeClassGenerated)) {
-        err(@"Corrupt element: %@, type: %d is not in MPElementTypeClassGenerated", self.name, self.type);
-        return nil;
-    }
+    assert(self.type & MPElementTypeClassGenerated);
 
     if (![self.name length])
+        return nil;
+    if (!key)
         return nil;
 
     return [self.algorithm generateContentForElement:self usingKey:key];
@@ -221,6 +220,9 @@
 - (id)contentUsingKey:(MPKey *)key {
 
     assert(self.type & MPElementTypeClassStored);
+
+    if (!key)
+        return nil;
 
     NSData *encryptedContent;
     if (self.type & MPElementFeatureDevicePrivate)

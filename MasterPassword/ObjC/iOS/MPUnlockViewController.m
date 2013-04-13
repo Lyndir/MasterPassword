@@ -809,7 +809,7 @@
 
         if (buttonIndex == [sheet firstOtherButtonIndex])
             [moc performBlock:^{
-                [[MPAppDelegate get] changeMasterPasswordFor:targetedUser didResetBlock:^{
+                [[MPAppDelegate get] changeMasterPasswordFor:targetedUser inContext:moc didResetBlock:^{
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [[self avatarForUser:targetedUser] setSelected:YES];
                     });

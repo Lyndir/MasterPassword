@@ -49,7 +49,7 @@
             if (selected) {
                 MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
                 activeUser.avatar        = (unsigned)avatar.tag;
-                [activeUser saveContext];
+                [activeUser.managedObjectContext saveToStore];
             }
         } options:0];
         avatar.selected            = (a == [MPAppDelegate get].activeUser.avatar);
@@ -134,7 +134,7 @@
 
     MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
     activeUser.defaultType = type;
-    [activeUser saveContext];
+    [activeUser.managedObjectContext saveToStore];
 
     self.defaultTypeLabel.text = [[MPAppDelegate get].key.algorithm shortNameOfType:activeUser.defaultType];
 }
@@ -153,7 +153,7 @@
         [[MPAppDelegate get] storeSavedKeyFor:activeUser];
     else
         [[MPAppDelegate get] forgetSavedKeyFor:activeUser];
-    [activeUser saveContext];
+    [activeUser.managedObjectContext saveToStore];
 }
 
 - (IBAction)settings:(UIBarButtonItem *)sender {
