@@ -188,14 +188,6 @@
      [[UISegmentedControl appearance] setDividerImage:segUnselectedSelected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
      */
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      if ([[note.userInfo objectForKey:@"animated"] boolValue])
-                                                          [self.navigationController performSegueWithIdentifier:@"MP_Unlock" sender:nil];
-                                                      else
-                                                          [self.navigationController presentViewController:[self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
-                                                                                                  animated:NO completion:nil];
-                                                  }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
      ^(NSNotification *note) {
          if ([[MPiOSConfig get].sendInfo boolValue]) {
@@ -207,7 +199,7 @@
              [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].iCloudDecided boolValue] forKey:@"iCloudDecided"];
              [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].sendInfo boolValue] forKey:@"sendInfo"];
              [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].helpHidden boolValue] forKey:@"helpHidden"];
-             [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].showQuickStart boolValue] forKey:@"showQuickStart"];
+             [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].showSetup boolValue] forKey:@"showQuickStart"];
              [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].firstRun boolValue] forKey:@"firstRun"];
              [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].launchCount intValue] forKey:@"launchCount"];
              [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].askForReviews boolValue] forKey:@"askForReviews"];
@@ -220,7 +212,7 @@
              [TestFlight addCustomEnvironmentInformation:[[MPConfig get].iCloudDecided boolValue]? @"YES": @"NO" forKey:@"iCloudDecided"];
              [TestFlight addCustomEnvironmentInformation:[[MPiOSConfig get].sendInfo boolValue]? @"YES": @"NO" forKey:@"sendInfo"];
              [TestFlight addCustomEnvironmentInformation:[[MPiOSConfig get].helpHidden boolValue]? @"YES": @"NO" forKey:@"helpHidden"];
-             [TestFlight addCustomEnvironmentInformation:[[MPiOSConfig get].showQuickStart boolValue]? @"YES": @"NO"
+             [TestFlight addCustomEnvironmentInformation:[[MPiOSConfig get].showSetup boolValue]? @"YES": @"NO"
                                                   forKey:@"showQuickStart"];
              [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].firstRun boolValue]? @"YES": @"NO" forKey:@"firstRun"];
              [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].launchCount description] forKey:@"launchCount"];
@@ -237,7 +229,7 @@
               @"iCloudDecided"       : [[MPConfig get].iCloudDecided boolValue]? @"YES": @"NO",
               @"sendInfo"            : [[MPiOSConfig get].sendInfo boolValue]? @"YES": @"NO",
               @"helpHidden"          : [[MPiOSConfig get].helpHidden boolValue]? @"YES": @"NO",
-              @"showQuickStart"      : [[MPiOSConfig get].showQuickStart boolValue]? @"YES": @"NO",
+              @"showQuickStart"      : [[MPiOSConfig get].showSetup boolValue]? @"YES": @"NO",
               @"firstRun"            : [[PearlConfig get].firstRun boolValue]? @"YES": @"NO",
               @"launchCount"         : NilToNSNull([[PearlConfig get].launchCount description]),
               @"askForReviews"       : [[PearlConfig get].askForReviews boolValue]? @"YES": @"NO",
@@ -267,6 +259,9 @@
     [super application:application didFinishLaunchingWithOptions:launchOptions];
 
     inf(@"Started up with device identifier: %@", [PearlKeyChain deviceIdentifier]);
+
+    if ([[MPiOSConfig get].showSetup boolValue])
+        [[MPAppDelegate get] showSetup];
 
     return YES;
 }
@@ -438,6 +433,16 @@
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointShowGuide attributes:nil];
 }
 
+- (void)showSetup {
+
+    [self.navigationController performSegueWithIdentifier:@"MP_Setup" sender:self];
+
+#ifdef TESTFLIGHT_SDK_VERSION
+    [TestFlight passCheckpoint:MPCheckpointShowSetup];
+#endif
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointShowSetup attributes:nil];
+}
+
 - (void)showFeedback {
 
     [self showFeedbackWithLogs:NO forVC:nil];
@@ -575,7 +580,7 @@
                             nil];
 }
 
-- (void)changeMasterPasswordFor:(MPUserEntity *)user didResetBlock:(void (^)(void))didReset {
+- (void)changeMasterPasswordFor:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc didResetBlock:(void (^)(void))didReset {
 
     [PearlAlert showAlertWithTitle:@"Changing Master Password"
                            message:
@@ -587,12 +592,13 @@
         if (buttonIndex == [alert cancelButtonIndex])
             return;
 
-        [user.managedObjectContext performBlock:^{
+        [moc performBlock:^{
             inf(@"Unsetting master password for: %@.", user.userID);
             user.keyID = nil;
             [self forgetSavedKeyFor:user];
-            [self signOutAnimated:YES];
+            [moc saveToStore];
 
+            [self signOutAnimated:YES];
             if (didReset)
                 didReset();
 

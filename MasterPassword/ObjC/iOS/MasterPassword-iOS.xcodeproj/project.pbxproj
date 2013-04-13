@@ -16,6 +16,7 @@
 		93D399433EA75E50656040CB /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93D394077F8FAB8167647187 /* Twitter.framework */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
 		93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */; };
+		93D39F8A9254177891F38705 /* MPSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A28369954D147E239BA /* MPSetupViewController.m */; };
 		DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */; };
 		DA30E9CE15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */; };
 		DA30E9CF15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9CC15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m */; };
@@ -750,6 +751,10 @@
 		DABD3C261711E2DC00CF925C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DABD3BFA1711E2DC00CF925C /* InfoPlist.strings */; };
 		DABD3C271711E2DC00CF925C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BFC1711E2DC00CF925C /* main.m */; };
 		DABD3FC717122ADD00CF925C /* libscrypt-bin-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DABD3FC617122ADD00CF925C /* libscrypt-bin-ios.a */; };
+		DABD3FCA1712446200CF925C /* cloud.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD3FC81712446200CF925C /* cloud.png */; };
+		DABD3FCB1712446200CF925C /* cloud@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD3FC91712446200CF925C /* cloud@2x.png */; };
+		DABD3FCE1714F45C00CF925C /* identity.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD3FCC1714F45B00CF925C /* identity.png */; };
+		DABD3FCF1714F45C00CF925C /* identity@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD3FCD1714F45B00CF925C /* identity@2x.png */; };
 		DAC6325E1486805C0075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC6326D148680650075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC632891486D9690075AEA5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC632871486D95D0075AEA5 /* Security.framework */; };
@@ -938,6 +943,41 @@
 			remoteGlobalIDString = DA5BFA43147E415C00F98B1E;
 			remoteInfo = MasterPassword;
 		};
+		DA5A09D21714FA83005284AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DACA29C01705E313002C6C22 /* scrypt.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteInfo = scryptenc;
+		};
+		DA5A09D41714FA83005284AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DACA29C01705E313002C6C22 /* scrypt.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A0511C5A127770FD00DE46C4;
+			remoteInfo = scryptcrypto;
+		};
+		DA5A09D61714FA83005284AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DACA29C01705E313002C6C22 /* scrypt.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DA67FE5D14E4834300DB7CC9;
+			remoteInfo = util;
+		};
+		DA5A09D81714FA83005284AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DACA29C01705E313002C6C22 /* scrypt.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DABD3E841711E7D600CF925C;
+			remoteInfo = "scrypt-bin-ios";
+		};
+		DA5A09DA1714FA83005284AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DACA29C01705E313002C6C22 /* scrypt.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DABD3E9D1711E7E000CF925C;
+			remoteInfo = "scrypt-bin-osx";
+		};
 		DAC63283148681200075AEA5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
@@ -974,6 +1014,8 @@
 		93D394077F8FAB8167647187 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		93D3942A356B639724157982 /* PearlOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlOverlay.h; sourceTree = "<group>"; };
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
+		93D39730673227EFF6DEFF19 /* MPSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSetupViewController.h; sourceTree = "<group>"; };
+		93D39A28369954D147E239BA /* MPSetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSetupViewController.m; sourceTree = "<group>"; };
 		93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Indexing.m"; sourceTree = "<group>"; };
 		93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlEMail.h; sourceTree = "<group>"; };
 		DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -1735,7 +1777,11 @@
 		DABD3BF91711E2DC00CF925C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		DABD3BFB1711E2DC00CF925C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DABD3BFC1711E2DC00CF925C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		DABD3FC617122ADD00CF925C /* libscrypt-bin-ios.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "libscrypt-bin-ios.a"; path = "../../../External/Pearl/External/iOSPorts/ports/security/scrypt/build/Release-iphoneos/libscrypt-bin-ios.a"; sourceTree = "<group>"; };
+		DABD3FC617122ADD00CF925C /* libscrypt-bin-ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libscrypt-bin-ios.a"; path = "../../../External/Pearl/External/iOSPorts/ports/security/scrypt/build/Release-iphoneos/libscrypt-bin-ios.a"; sourceTree = "<group>"; };
+		DABD3FC81712446200CF925C /* cloud.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cloud.png; sourceTree = "<group>"; };
+		DABD3FC91712446200CF925C /* cloud@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cloud@2x.png"; sourceTree = "<group>"; };
+		DABD3FCC1714F45B00CF925C /* identity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = identity.png; sourceTree = "<group>"; };
+		DABD3FCD1714F45B00CF925C /* identity@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "identity@2x.png"; sourceTree = "<group>"; };
 		DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libuicolor-utilities.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC6326C148680650075AEA5 /* libjrswizzle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjrswizzle.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC632871486D95D0075AEA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -2088,6 +2134,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DA5A09C91714FA83005284AB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DA5A09D31714FA83005284AB /* libscryptenc.a */,
+				DA5A09D51714FA83005284AB /* libscryptcrypto.a */,
+				DA5A09D71714FA83005284AB /* libutil.a */,
+				DA5A09D91714FA83005284AB /* libscrypt-bin-ios.a */,
+				DA5A09DB1714FA83005284AB /* libscrypt-bin-osx.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		DA5BFA39147E415C00F98B1E = {
 			isa = PBXGroup;
 			children = (
@@ -2166,8 +2224,12 @@
 				DABD38751711E29700CF925C /* Tooltips */,
 				DABD38C41711E29700CF925C /* book.png */,
 				DABD38C51711E29700CF925C /* book@2x.png */,
+				DABD3FC81712446200CF925C /* cloud.png */,
+				DABD3FC91712446200CF925C /* cloud@2x.png */,
 				DABD38C61711E29700CF925C /* help.html */,
 				DABD38C71711E29700CF925C /* iTunesArtwork.png */,
+				DABD3FCC1714F45B00CF925C /* identity.png */,
+				DABD3FCD1714F45B00CF925C /* identity@2x.png */,
 				DABD38C81711E29700CF925C /* jquery-1.6.1.min.js */,
 				DABD38C91711E29700CF925C /* keypad.png */,
 				DABD38CA1711E29700CF925C /* logo-bare.png */,
@@ -2944,6 +3006,8 @@
 				DABD3BF91711E2DC00CF925C /* Settings.bundle */,
 				DABD3BFA1711E2DC00CF925C /* InfoPlist.strings */,
 				DABD3BFC1711E2DC00CF925C /* main.m */,
+				93D39A28369954D147E239BA /* MPSetupViewController.m */,
+				93D39730673227EFF6DEFF19 /* MPSetupViewController.h */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -3769,6 +3833,12 @@
 			mainGroup = DA5BFA39147E415C00F98B1E;
 			productRefGroup = DA5BFA45147E415C00F98B1E /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = DA5A09C91714FA83005284AB /* Products */;
+					ProjectRef = DACA29C01705E313002C6C22 /* scrypt.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				DA5BFA43147E415C00F98B1E /* MasterPassword */,
@@ -3784,6 +3854,44 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		DA5A09D31714FA83005284AB /* libscryptenc.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libscryptenc.a;
+			remoteRef = DA5A09D21714FA83005284AB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DA5A09D51714FA83005284AB /* libscryptcrypto.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libscryptcrypto.a;
+			remoteRef = DA5A09D41714FA83005284AB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DA5A09D71714FA83005284AB /* libutil.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libutil.a;
+			remoteRef = DA5A09D61714FA83005284AB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DA5A09D91714FA83005284AB /* libscrypt-bin-ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libscrypt-bin-ios.a";
+			remoteRef = DA5A09D81714FA83005284AB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DA5A09DB1714FA83005284AB /* libscrypt-bin-osx.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libscrypt-bin-osx.a";
+			remoteRef = DA5A09DA1714FA83005284AB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		DA3EF17615A47744003ABF4E /* Resources */ = {
@@ -4476,6 +4584,10 @@
 				DABD3C241711E2DC00CF925C /* MasterPassword.entitlements in Resources */,
 				DABD3C251711E2DC00CF925C /* Settings.bundle in Resources */,
 				DABD3C261711E2DC00CF925C /* InfoPlist.strings in Resources */,
+				DABD3FCA1712446200CF925C /* cloud.png in Resources */,
+				DABD3FCB1712446200CF925C /* cloud@2x.png in Resources */,
+				DABD3FCE1714F45C00CF925C /* identity.png in Resources */,
+				DABD3FCF1714F45C00CF925C /* identity@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4612,6 +4724,7 @@
 				DABD3C201711E2DC00CF925C /* MPUnlockViewController.m in Sources */,
 				DABD3C211711E2DC00CF925C /* MPiOSConfig.m in Sources */,
 				DABD3C271711E2DC00CF925C /* main.m in Sources */,
+				93D39F8A9254177891F38705 /* MPSetupViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5459,7 +5572,7 @@
 				DABD3BD31711E2DC00CF925C /* MasterPassword 3.xcdatamodel */,
 				DABD3BD41711E2DC00CF925C /* MasterPassword 4.xcdatamodel */,
 			);
-			currentVersion = DABD3BD11711E2DC00CF925C /* MasterPassword 1.xcdatamodel */;
+			currentVersion = DABD3BD41711E2DC00CF925C /* MasterPassword 4.xcdatamodel */;
 			path = MasterPassword.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

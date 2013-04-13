@@ -9,22 +9,17 @@
 #import "MPEntities.h"
 #import "MPAppDelegate.h"
 
-@implementation NSManagedObject (MP)
+@implementation NSManagedObjectContext (MP)
 
-- (BOOL)saveContext {
+- (BOOL)saveToStore {
 
     NSError *error;
-    NSManagedObjectContext *moc = [self managedObjectContext];
-    if (![moc save:&error]) {
-        err(@"While saving %@: %@", NSStringFromClass([self class]), error);
-        return NO;
-    }
-    if (![moc.parentContext save:&error]) {
-        err(@"While saving parent %@: %@", NSStringFromClass([self class]), error);
+    if (![self save:&error]) {
+        err(@"While saving: %@", NSStringFromClass([self class]), error);
         return NO;
     }
 
-    return YES;
+    return !self.parentContext || [self.parentContext saveToStore];
 }
 
 @end

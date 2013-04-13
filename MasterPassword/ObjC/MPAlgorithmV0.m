@@ -35,7 +35,7 @@
     
     NSError        *error            = nil;
     NSFetchRequest *migrationRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
-    migrationRequest.predicate = [NSPredicate predicateWithFormat:@"version_ < %d AND user == %@", MPAlgorithmDefaultVersion, user];
+    migrationRequest.predicate = [NSPredicate predicateWithFormat:@"version_ < %d AND user == %@", self.version, user];
     NSArray *migrationElements = [user.managedObjectContext executeFetchRequest:migrationRequest error:&error];
     if (!migrationElements) {
         err(@"While looking for elements to migrate: %@", error);

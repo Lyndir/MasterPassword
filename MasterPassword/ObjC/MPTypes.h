@@ -52,6 +52,7 @@ typedef enum {
 #define MPCheckpointUseType                   @"MPCheckpointUseType"
 #define MPCheckpointDeleteElement             @"MPCheckpointDeleteElement"
 #define MPCheckpointShowGuide                 @"MPCheckpointShowGuide"
+#define MPCheckpointShowSetup                 @"MPCheckpointShowSetup"
 #define MPCheckpointChangeMP                  @"MPCheckpointChangeMP"
 #define MPCheckpointMPErrorUbiquity           @"MPCheckpointMPErrorUbiquity"
 #define MPCheckpointLocalStoreReset           @"MPCheckpointLocalStoreReset"

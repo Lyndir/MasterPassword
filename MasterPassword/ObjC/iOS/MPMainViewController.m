@@ -25,17 +25,17 @@
 #pragma mark - View lifecycle
 
 - (BOOL)shouldAutorotate {
-    
+
     return YES;
 }
 
 - (NSUInteger)supportedInterfaceOrientations {
-    
+
     return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
-    
+
     return UIInterfaceOrientationPortrait;
 }
 
@@ -91,30 +91,24 @@
                  [self showToolTip:@"Password outdated. Tap to upgrade it." withIcon:nil];
          }];
      }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil queue:nil
-                                                  usingBlock:^void(NSNotification *note) {
-                                                      _activeElementOID = nil;
-                                                      self.suppressOutdatedAlert = NO;
-                                                      [self updateAnimated:NO];
-                                                  }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil queue:nil usingBlock:
+            ^(NSNotification *note) {
+                _activeElementOID = nil;
+                self.suppressOutdatedAlert = NO;
+                [self updateAnimated:NO];
+                [self.navigationController popToRootViewControllerAnimated:[[note.userInfo objectForKey:@"animated"] boolValue]];
+            }];
 
     [super viewDidLoad];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 
-    if ([[MPiOSConfig get].showQuickStart boolValue])
-        [[MPAppDelegate get] showGuide];
-    if (![MPAppDelegate get].activeUser)
-        // FIXME: Remove either this one or the one in -viewDidAppear:
-        [self presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
-                           animated:animated completion:nil];
-
-
     [self activeElementDo:^(MPElementEntity *activeElement) {
         if (activeElement.user != [MPAppDelegate get].activeUser)
             _activeElementOID = nil;
     }];
+
     self.searchDisplayController.searchBar.text = nil;
     self.alertContainer.alpha                   = 0;
     self.outdatedAlertContainer.alpha           = 0;
@@ -131,23 +125,21 @@
 - (void)viewDidAppear:(BOOL)animated {
 
     inf(@"Main will appear");
-    
+
     // Sometimes, the search bar gets stuck in some sort of first-responder mode that it can't get out of...
     [[self.view.window findFirstResponderInHierarchy] resignFirstResponder];
 
     // Needed for when we appear after a modal VC dismisses:
     // We can't present until the other modal VC has been fully dismissed and presenting in -viewWillAppear: will fail.
-    if ([MPAppDelegate get].activeUser)
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            if ([MPAlgorithmDefault migrateUser:[MPAppDelegate get].activeUser] && !self.suppressOutdatedAlert)
-                [UIView animateWithDuration:0.3f animations:^{
-                    self.outdatedAlertContainer.alpha = 1;
-                    self.suppressOutdatedAlert = YES;
-                }];
-        });
-    else
-        [self presentViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"MPUnlockViewController"]
-                                                animated:animated completion:nil];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
+        if ([MPAlgorithmDefault migrateUser:activeUser] && !self.suppressOutdatedAlert)
+            [UIView animateWithDuration:0.3f animations:^{
+                self.outdatedAlertContainer.alpha = 1;
+                self.suppressOutdatedAlert = YES;
+            }];
+        [activeUser saveContext];
+    });
 
     if (![[MPiOSConfig get].actionsTipShown boolValue])
         [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
@@ -686,19 +678,20 @@
     if (!warning)
         return;
 
-    [self changeActiveElementWithWarning:warning
-                                      do:^BOOL(MPElementEntity *activeElement) {
-                                          inf(@"Explicitly migrating element: %@", activeElement);
-                                          [activeElement migrateExplicitly:YES];
+    [self changeActiveElementWithWarning:warning do:
+            ^BOOL(MPElementEntity *activeElement) {
+                inf(@"Explicitly migrating element: %@", activeElement);
+                [activeElement migrateExplicitly:YES];
 
 #ifdef TESTFLIGHT_SDK_VERSION
-                                          [TestFlight passCheckpoint:MPCheckpointExplicitMigration];
+                [TestFlight passCheckpoint:MPCheckpointExplicitMigration];
 #endif
-                                          [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointExplicitMigration
-                                                                                     attributes:@{@"type"    : activeElement.typeName,
-                                                                                                  @"version" : @(activeElement.version)}];
-                                          return YES;
-                                      }];
+                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointExplicitMigration attributes:@{
+                        @"type"    : activeElement.typeName,
+                        @"version" : @(activeElement.version)
+                }];
+                return YES;
+            }];
 }
 
 - (IBAction)searchOutdatedElements {
@@ -736,63 +729,59 @@
 - (IBAction)action:(id)sender {
 
     [PearlSheet showSheetWithTitle:nil viewStyle:UIActionSheetStyleAutomatic
-                         initSheet:nil
-                 tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
-                     if (buttonIndex == [sheet cancelButtonIndex])
-                         return;
+                         initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
+        if (buttonIndex == [sheet cancelButtonIndex])
+            return;
 
-                     switch (buttonIndex - [sheet firstOtherButtonIndex]) {
-                         case 0: {
-                             inf(@"Action: FAQ");
-                             [self setHelpChapter:@"faq"];
-                             [self setHelpHidden:NO animated:YES];
-                             break;
-                         }
-                         case 1: {
-                             inf(@"Action: Guide");
-                             [[MPAppDelegate get] showGuide];
-                             break;
-                         }
-                         case 2: {
-                             inf(@"Action: Preferences");
-                             [self performSegueWithIdentifier:@"MP_UserProfile" sender:self];
-                             break;
-                         }
-                         case 3: {
-                             inf(@"Action: Other Apps");
-                             [self performSegueWithIdentifier:@"MP_OtherApps" sender:self];
-                             break;
-                         }
+        switch (buttonIndex - [sheet firstOtherButtonIndex]) {
+            case 0: {
+                inf(@"Action: FAQ");
+                [self setHelpChapter:@"faq"];
+                [self setHelpHidden:NO animated:YES];
+                break;
+            }
+            case 1: {
+                inf(@"Action: Guide");
+                [[MPAppDelegate get] showGuide];
+                break;
+            }
+            case 2: {
+                inf(@"Action: Preferences");
+                [self performSegueWithIdentifier:@"MP_UserProfile" sender:self];
+                break;
+            }
+            case 3: {
+                inf(@"Action: Other Apps");
+                [self performSegueWithIdentifier:@"MP_OtherApps" sender:self];
+                break;
+            }
 //#if defined(ADHOC) && defined(TESTFLIGHT_SDK_VERSION)
 //                         case 4: {
 //                             inf(@"Action: Feedback via TestFlight");
 //                             [TestFlight openFeedbackView];
 //                             break;
 //                         }
-//                         case 5:
 //#else
-                         case 4: {
-                             inf(@"Action: Feedback via Mail");
-                             [[MPAppDelegate get] showFeedbackWithLogs:YES forVC:self];
-                             break;
-                         }
-                         case 5:
+            case 4: {
+                inf(@"Action: Feedback via Mail");
+                [[MPAppDelegate get] showFeedbackWithLogs:YES forVC:self];
+                break;
+            }
 //#endif
-                         {
-                             inf(@"Action: Sign out");
-                             [[MPAppDelegate get] signOutAnimated:YES];
-                             break;
-                         }
 
-                         default: {
-                             wrn(@"Unsupported action: %u", buttonIndex - [sheet firstOtherButtonIndex]);
-                             break;
-                         }
-                     }
-                 }
+            default: {
+                wrn(@"Unsupported action: %u", buttonIndex - [sheet firstOtherButtonIndex]);
+                break;
+            }
+        }
+    }
                        cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:
-     @"FAQ", @"Tutorial", @"Preferences", @"Other Apps", @"Feedback", @"Sign Out",
-     nil];
+            @"？ FAQ",
+            @"ℹ Quick Guide",
+            @"⚙ Preferences",
+            @"⬇ Other Apps",
+            @"✉ Feedback",
+            nil];
 }
 
 - (MPElementType)selectedType {

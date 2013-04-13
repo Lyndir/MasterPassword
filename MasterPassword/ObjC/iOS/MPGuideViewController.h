@@ -10,9 +10,6 @@
 
 @interface MPGuideViewController : UIViewController <UIScrollViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
-
 - (IBAction)close;
 
 @end

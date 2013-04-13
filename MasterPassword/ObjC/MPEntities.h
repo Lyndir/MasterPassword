@@ -15,9 +15,9 @@
 
 #define MPAvatarCount 19
 
-@interface NSManagedObject (MP)
+@interface NSManagedObjectContext(MP)
 
-- (BOOL)saveContext;
+- (BOOL)saveToStore;
 
 @end
 

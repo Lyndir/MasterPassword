@@ -17,9 +17,10 @@
 @property (nonatomic, readonly) GPPShare *googlePlus;
 
 - (void)showGuide;
+- (void)showSetup;
 - (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController;
 
 - (void)export;
-- (void)changeMasterPasswordFor:(MPUserEntity *)user didResetBlock:(void(^)(void))didReset;
+- (void)changeMasterPasswordFor:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc didResetBlock:(void(^)(void))didReset;
 
 @end

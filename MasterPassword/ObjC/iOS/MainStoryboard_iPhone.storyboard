@@ -9,7 +9,7 @@
             <objects>
                 <tableViewController id="NKe-nv-566" customClass="MPTypeViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="btl-G4-V0S">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="aNa-wb-cYK">
@@ -474,18 +474,18 @@ Your passwords will be AES-encrypted with your master password.</string>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jZj-N1-rhF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="996" y="182"/>
+            <point key="canvasLocation" x="1537" y="145"/>
         </scene>
         <!--Main View Controller - Master Password-->
         <scene sceneID="U26-Zf-euQ">
             <objects>
                 <viewController id="PQa-Xl-A3x" customClass="MPMainViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ep0-Hn-5TR">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" image="background.png" id="0hY-LL-ITu">
-                                <rect key="frame" x="0.0" y="44" width="320" height="372"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="460"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <view contentMode="scaleToFill" id="Juh-jm-UDr" userLabel="View - Content">
@@ -629,7 +629,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                                 <rect key="frame" x="20" y="94" width="280" height="31"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <subviews>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Tap and hold to save a login name." textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="tj6-Ot-Fuh">
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Hold to set a login name." textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="tj6-Ot-Fuh">
                                                         <rect key="frame" x="0.0" y="0.0" width="280" height="31"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -664,7 +664,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                 </subviews>
                             </view>
                             <view contentMode="scaleToFill" id="61G-By-qLB" userLabel="View - Help">
-                                <rect key="frame" x="0.0" y="246" width="320" height="170"/>
+                                <rect key="frame" x="0.0" y="334" width="320" height="170"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="top" image="Square-bottom.png" id="lbm-A0-3PK">
@@ -830,8 +830,8 @@ Your passwords will be AES-encrypted with your master password.</string>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <view hidden="YES" alpha="0.0" contentMode="scaleToFill" id="6wk-NU-VQG" userLabel="View - Outdated Alert">
-                                <rect key="frame" x="10" y="230" width="300" height="180"/>
+                            <view alpha="0.0" contentMode="scaleToFill" id="6wk-NU-VQG" userLabel="View - Outdated Alert">
+                                <rect key="frame" x="10" y="318" width="300" height="180"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <imageView contentMode="scaleToFill" image="tip_alert_black.png" id="f30-i7-VBv">
@@ -908,8 +908,8 @@ These sites should be upgraded and their account's passwords updated as soon as 
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <view hidden="YES" alpha="0.0" contentMode="scaleToFill" id="yRY-qt-gz8" userLabel="View - Alert">
-                                <rect key="frame" x="10" y="230" width="300" height="180"/>
+                            <view alpha="0.0" contentMode="scaleToFill" id="yRY-qt-gz8" userLabel="View - Alert">
+                                <rect key="frame" x="10" y="318" width="300" height="180"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_alert_black.png" id="TUv-Tl-xTc">
@@ -966,6 +966,8 @@ L4m3P4sSw0rD</string>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="actionsTipContainer" destination="foz-tW-xGw" id="JDf-q6-StD"/>
                         <outlet property="alertBody" destination="jCg-t7-RuK" id="Aru-Nr-DY0"/>
@@ -1025,210 +1027,7 @@ L4m3P4sSw0rD</string>
                     </connections>
                 </panGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="455" y="182"/>
-        </scene>
-        <!--Guide View Controller-->
-        <scene sceneID="Rt1-b4-sUB">
-            <objects>
-                <viewController wantsFullScreenLayout="YES" id="qz3-eG-aEi" customClass="MPGuideViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="X11-a8-LKE">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="2Gp-Om-12P">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" id="97c-0y-Gcd">
-                                        <rect key="frame" x="0.0" y="0.0" width="2240" height="480"/>
-                                        <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
-                                        <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="bottom" image="guide_page_0.png" id="Sth-tH-klC">
-                                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                                                <accessibility key="accessibilityConfiguration">
-                                                    <string key="label">Welcome to Master Password.
-
-The goal of this application is to
-secure your online life.
-
-To accomplish this,
-over the course of the next few weeks
-you will slowly change the passwords
-of all your online accounts
-to secure random passwords
-generated by this application
-specifically for you.
-
-Swipe to read the guide.</string>
-                                                    <bool key="isElement" value="YES"/>
-                                                </accessibility>
-                                            </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="bottom" image="guide_page_1.png" id="Alw-oj-y4c">
-                                                <rect key="frame" x="320" y="0.0" width="320" height="480"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                                                <accessibility key="accessibilityConfiguration">
-                                                    <string key="label">Choose a master password.
-
-The first thing you'll do is choose a new master password.
-
-This password is the basis of all your
-other passwords.  It either generates
-or securely encrypts them.
-
-This is the only password
-you will need to remember.
-Take your time and think of a good one.
-Don't reuse an old password.</string>
-                                                    <bool key="isElement" value="YES"/>
-                                                </accessibility>
-                                            </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="bottom" image="guide_page_2.png" id="TNw-QO-X7v">
-                                                <rect key="frame" x="640" y="0.0" width="320" height="480"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                                                <accessibility key="accessibilityConfiguration">
-                                                    <string key="label">Enter your site's name.
-
-Once you're in, you can get the password
-for anything, just by entering its name
-in the search box.
-
-You can name sites, email addresses,
-but also real things like bike locks,
-phone numbers for their SIM's PIN or
-your house for the home alarm system.
-
-Examples:
-apple.com, john@doe.com, office safe, ...</string>
-                                                    <bool key="isElement" value="YES"/>
-                                                </accessibility>
-                                            </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="bottom" image="guide_page_3.png" id="99Q-zD-Qs3">
-                                                <rect key="frame" x="960" y="0.0" width="320" height="480"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                                                <accessibility key="accessibilityConfiguration">
-                                                    <string key="label">Previously used sites.
-
-While you enter a site's name,
-previously used sites show up immediately.
-Tap one to go directly to its password.
-
-The first time you enter a certain site,
-type its name fully and tap the result
-marked with "Create a new site".
-
-To delete a site, swipe over the
-search result for it from left to right
-and tap "Delete".</string>
-                                                    <bool key="isElement" value="YES"/>
-                                                </accessibility>
-                                            </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="bottom" image="guide_page_4.png" id="LvW-U8-uYd">
-                                                <rect key="frame" x="1280" y="0.0" width="320" height="480"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                                                <accessibility key="accessibilityConfiguration">
-                                                    <string key="label">Your password is then shown.
-Tap it to quickly copy it.
-
-The first time you generate a password,
-don't forget to actually set it too:
-Update your site or email account's password,
-or whatever other item this password is for.
-
-Tap the password type button if you want a different kind of password.
-Some sites have strange password policies
-that may not accept the generated password.
-You can then choose a different type of password.
-Alternatively, you can save a password
-of your own choosing.</string>
-                                                    <bool key="isElement" value="YES"/>
-                                                </accessibility>
-                                            </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="bottom" image="guide_page_5.png" id="Rpu-vf-p8m">
-                                                <rect key="frame" x="1600" y="0.0" width="320" height="480"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                                                <accessibility key="accessibilityConfiguration">
-                                                    <string key="label">Tap to the edit button to set a custom password.
-
-Stored passwords have an edit button to let you set or update the password for the site.
-
-The password counter button.
-Generated password use a counter.
-If you increment the counter by tapping its button,
-a new password will be generated.
-Do this if someone learns the site's password
-or if the site needs you to set a new one.
-Holding down will reset the counter back to 1.</string>
-                                                    <bool key="isElement" value="YES"/>
-                                                </accessibility>
-                                            </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="bottom" image="guide_page_6.png" id="X2u-ha-Kmz">
-                                                <rect key="frame" x="1920" y="0.0" width="320" height="480"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                                                <accessibility key="accessibilityConfiguration">
-                                                    <string key="label">Be safe online. Some tips:
-Use a different password for every site.
-
-Let the application generate a password
-for your sites. You won't need to remember
-these and they aren't save anywhere,
-so cannot get lost or stolen.
-
-It's a lot of work to change the passwords
-of all your sites, but well worth it in the end!
-
-Choose a long master password.
-Make a new password, don't reuse an old.
-Whatever you do, never give your new
-master password to anyone.  Ever.
-
-A good master password is at least 10 characters long.
-Absurd sentences make great password and they're
-usually much more memorable.  For example:
-Pink fluffy door frame.</string>
-                                                    <bool key="isElement" value="YES"/>
-                                                </accessibility>
-                                            </imageView>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" id="1Em-PE-EzE">
-                                                <rect key="frame" x="1930" y="414" width="300" height="46"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                <size key="titleShadowOffset" width="0.0" height="1"/>
-                                                <state key="normal" title="Get started" backgroundImage="ui_button_green_large.png">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <color key="titleShadowColor" red="0.1945605339" green="0.30086678830000002" blue="0.12636405349999999" alpha="1" colorSpace="deviceRGB"/>
-                                                </state>
-                                                <state key="highlighted">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="close" destination="qz3-eG-aEi" eventType="touchUpInside" id="60X-ke-dsh"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                    </view>
-                                </subviews>
-                                <connections>
-                                    <outlet property="delegate" destination="qz3-eG-aEi" id="nGi-wL-vBc"/>
-                                </connections>
-                            </scrollView>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="7" id="wdw-50-FUU">
-                                <rect key="frame" x="141" y="444" width="38" height="36"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            </pageControl>
-                        </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
-                    </view>
-                    <nil key="simulatedStatusBarMetrics"/>
-                    <connections>
-                        <outlet property="pageControl" destination="wdw-50-FUU" id="de3-Zd-QMG"/>
-                        <outlet property="scrollView" destination="2Gp-Om-12P" id="qFa-NB-7j0"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7yf-G7-kVy" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="455" y="785"/>
+            <point key="canvasLocation" x="996" y="145"/>
         </scene>
         <!--App View Controller-->
         <scene sceneID="aYk-5V-FnG">
@@ -1282,22 +1081,22 @@ Pink fluffy door frame.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hkm-U7-Dm7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="455" y="-381"/>
+            <point key="canvasLocation" x="463" y="-495"/>
         </scene>
         <!--Unlock View Controller-->
         <scene sceneID="HkH-JR-Fhy">
             <objects>
                 <viewController storyboardIdentifier="MPUnlockViewController" wantsFullScreenLayout="YES" modalTransitionStyle="flipHorizontal" id="Nbn-Rv-sP1" customClass="MPUnlockViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GeE-5J-ZZO">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="QWe-Gw-rD3">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <view contentMode="scaleToFill" id="PHH-XC-9QQ">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_spinner.png" id="27q-lX-0vy">
@@ -1456,7 +1255,7 @@ Pink fluffy door frame.</string>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="DBJ-Qi-ZcF">
-                                        <rect key="frame" x="20" y="460" width="280" height="20"/>
+                                        <rect key="frame" x="20" y="548" width="280" height="20"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -1464,7 +1263,7 @@ Pink fluffy door frame.</string>
                                         <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </label>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="white" delaysContentTouches="NO" id="Blg-F1-9NA">
-                                        <rect key="frame" x="0.0" y="10" width="320" height="340"/>
+                                        <rect key="frame" x="0.0" y="16" width="320" height="340"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" id="Ten-ig-gog">
@@ -1487,7 +1286,7 @@ Pink fluffy door frame.</string>
                                         </connections>
                                     </scrollView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="left" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="8s0-nT-Aoq">
-                                        <rect key="frame" x="90" y="289" width="140" height="15"/>
+                                        <rect key="frame" x="90" y="377" width="140" height="15"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="13"/>
@@ -1495,7 +1294,7 @@ Pink fluffy door frame.</string>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="0NM-NI-7UR">
-                                        <rect key="frame" x="90" y="86" width="140" height="15"/>
+                                        <rect key="frame" x="90" y="174" width="140" height="15"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="13"/>
@@ -1648,7 +1447,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
                                         </connections>
                                     </button>
                                     <webView opaque="NO" contentMode="scaleToFill" id="rGU-aZ-XVm">
-                                        <rect key="frame" x="0.0" y="411.5" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="499" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <dataDetectorType key="dataDetectorTypes"/>
@@ -1662,7 +1461,11 @@ You could use the word wall for  inspiration in finding a memorable master passw
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="dU2-XK-yUQ">
+                        <barButtonItem key="backBarButtonItem" title="Users" id="A5d-ER-NUM"/>
+                    </navigationItem>
                     <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="avatarTemplate" destination="Ten-ig-gog" id="0ZZ-z5-d5m"/>
                         <outlet property="avatarsView" destination="Blg-F1-9NA" id="2NL-jU-IMI"/>
@@ -1680,6 +1483,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
                         <outlet property="tip" destination="DBJ-Qi-ZcF" id="VXD-Zc-UYi"/>
                         <outlet property="uiContainer" destination="PHH-XC-9QQ" id="ogr-ak-h1V"/>
                         <outlet property="wordWall" destination="JTj-nh-BWs" id="Mdy-OW-ouS"/>
+                        <segue destination="PQa-Xl-A3x" kind="push" identifier="MP_Unlock" id="wiY-Sg-Ba4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OGA-5j-IcQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1689,7 +1493,78 @@ You could use the word wall for  inspiration in finding a memorable master passw
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
+            <point key="canvasLocation" x="455" y="145"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="wrY-9D-LEc">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="uu3-4d-bYN" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="T2Q-L6-b8f">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="Q4b-t4-pwH" kind="relationship" relationship="rootViewController" id="5mm-gX-15G"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bPk-nz-AJx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
             <point key="canvasLocation" x="455" y="1425"/>
+        </scene>
+        <!--Setup View Controller - iCloud-->
+        <scene sceneID="iQl-Z0-t8p">
+            <objects>
+                <viewController id="Q4b-t4-pwH" customClass="MPSetupViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="FnB-rI-puV">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="RjU-5e-mti">
+                                <rect key="frame" x="0.0" y="-64" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="top" image="cloud.png" id="Ahr-aa-V1N">
+                                <rect key="frame" x="20" y="20" width="280" height="80"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Enable iCloud?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="89k-h1-6e3">
+                                <rect key="frame" x="20" y="108" width="280" height="21"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="ToN-ll-G0q">
+                                <rect key="frame" x="20" y="137" width="280" height="200"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <string key="text">Enabling iCloud will keep all your iPhones, iPads and Macs nicely in-sync.  Any site you add on this device will automatically appear on all your others as well.
+
+Thanks to the special way Master Password works, your site passwords don't need to be sent to Apple.
+If you set a custom password, it will be encrypted before it is saved to the cloud.</string>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="M0m-G9-hH0">
+                                <rect key="frame" x="122" y="345" width="79" height="27"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                            </switch>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="iCloud" id="mNu-yP-9oW">
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="Kxp-c7-ErS">
+                            <connections>
+                                <segue destination="ZgN-2j-05b" kind="push" id="llz-jX-HRQ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Olv-0G-8Ul" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="996" y="1425"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="rAg-OU-9QV">
@@ -1706,14 +1581,14 @@ You could use the word wall for  inspiration in finding a memorable master passw
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vJs-4S-qNG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="996" y="1425"/>
+            <point key="canvasLocation" x="1537" y="-495"/>
         </scene>
         <!--Element List All View Controller - All Sites-->
         <scene sceneID="I7c-vt-d2s">
             <objects>
                 <tableViewController id="idA-Pj-1U9" customClass="MPElementListAllViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="48" sectionHeaderHeight="22" sectionFooterHeight="22" id="N83-sj-4tl">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <connections>
                             <outlet property="dataSource" destination="idA-Pj-1U9" id="yPh-6k-Ba9"/>
@@ -1735,22 +1610,22 @@ You could use the word wall for  inspiration in finding a memorable master passw
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="abw-PC-pyQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1537" y="1425"/>
+            <point key="canvasLocation" x="2078" y="-495"/>
         </scene>
         <!--Apps View Controller-->
         <scene sceneID="3cC-Qq-rgU">
             <objects>
                 <viewController wantsFullScreenLayout="YES" id="2Th-Tb-22a" customClass="MPAppsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="DHZ-5g-6vT">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="book.png" id="wjL-OU-K7k">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="page-gorillas.png" id="QQT-37-azo">
-                                <rect key="frame" x="0.0" y="38" width="305" height="400"/>
+                                <rect key="frame" x="0.0" y="79" width="305" height="400"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="drq-47-KK9">
@@ -1778,7 +1653,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pv9-cA-JY5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-85" y="-421"/>
+            <point key="canvasLocation" x="-85" y="-495"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="8r0-wA-Zre">
@@ -1792,21 +1667,21 @@ You could use the word wall for  inspiration in finding a memorable master passw
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="PQa-Xl-A3x" kind="relationship" relationship="rootViewController" id="LUg-eF-JQd"/>
-                        <segue destination="qz3-eG-aEi" kind="modal" identifier="MP_Guide" id="vyG-wN-8hU"/>
-                        <segue destination="Nbn-Rv-sP1" kind="modal" identifier="MP_Unlock" id="Dnr-C0-ZtN"/>
+                        <segue destination="uu3-4d-bYN" kind="modal" identifier="MP_Setup" id="qw3-O5-NEa"/>
+                        <segue destination="Nbn-Rv-sP1" kind="relationship" relationship="rootViewController" id="Gzv-dM-6bM"/>
+                        <segue destination="myN-X7-9Tg" kind="modal" identifier="MP_Guide" id="swi-5o-hfK"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lcz-JH-B5B" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-85" y="182"/>
+            <point key="canvasLocation" x="-85" y="145"/>
         </scene>
         <!--Preferences View Controller - User Profile-->
         <scene sceneID="cMu-Lq-D10">
             <objects>
                 <tableViewController id="oLN-6u-GLb" customClass="MPPreferencesViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="oSh-Ap-kLt">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="63M-7L-M7o">
@@ -2132,7 +2007,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CEl-jQ-l9k" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="996" y="785"/>
+            <point key="canvasLocation" x="1537" y="785"/>
         </scene>
         <!--App View Controller-->
         <scene sceneID="7oa-Tk-zt7">
@@ -2186,7 +2061,488 @@ You could use the word wall for  inspiration in finding a memorable master passw
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LHv-Mk-8Kp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="996" y="-381"/>
+            <point key="canvasLocation" x="1004" y="-495"/>
+        </scene>
+        <!--Setup View Controller-->
+        <scene sceneID="p4k-3T-J0X">
+            <objects>
+                <viewController id="ZgN-2j-05b" customClass="MPSetupViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="QIH-dS-sqD">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="FTf-06-1Pg">
+                                <rect key="frame" x="0.0" y="-64" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Getting Started" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FkR-cP-Y7K">
+                                <rect key="frame" x="20" y="108" width="280" height="21"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" usesAttributedText="YES" id="hwP-ds-GDh">
+                                <rect key="frame" x="20" y="137" width="280" height="347"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <attributedString key="attributedText">
+                                    <fragment>
+                                        <string key="content">The passwords created by this app are not stored anywhere but created on the spot.
+
+It is vital that you </string>
+                                        <attributes>
+                                            <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <font key="NSFont" size="14" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="remember your master password">
+                                        <attributes>
+                                            <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <font key="NSFont" size="14" name="Helvetica-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=" and that it is secure.  A small nonsense sentence is a great password. Eg. ">
+                                        <attributes>
+                                            <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <font key="NSFont" size="14" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="Banana colored duckling">
+                                        <attributes>
+                                            <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <font key="NSFont" size="14" name="Helvetica-BoldOblique"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content" base64-UTF8="YES">
+Cgo
+</string>
+                                        <attributes>
+                                            <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <font key="NSFont" size="14" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">Don't reuse an old password!
+</string>
+                                        <attributes>
+                                            <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <font key="NSFont" size="14" name="Helvetica-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">Don't give out your master password, no matter how close you think you are with the other person.
+
+You can make passwords for all sorts of things, like email addresses, sites or real-world objects like your bike lock: if you can name it, you can get a password for it.</string>
+                                        <attributes>
+                                            <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <font key="NSFont" size="14" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <imageView userInteractionEnabled="NO" contentMode="top" image="identity.png" id="7qX-kQ-3hp">
+                                <rect key="frame" x="20" y="20" width="280" height="80"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="oBl-x2-aUS">
+                        <barButtonItem key="leftBarButtonItem" title="Close" style="done" id="yZJ-lt-O5m">
+                            <connections>
+                                <action selector="close:" destination="ZgN-2j-05b" id="aKm-zK-xbg"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Guide" id="rVv-Hh-KDw">
+                            <connections>
+                                <segue destination="myN-X7-9Tg" kind="push" id="jgo-j3-gbW"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="561-Zo-a0K" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1537" y="1425"/>
+        </scene>
+        <!--Guide View Controller-->
+        <scene sceneID="k6U-hl-fJt">
+            <objects>
+                <viewController id="myN-X7-9Tg" customClass="MPGuideViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vkG-Oi-PHo">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" image="background.png" id="C2i-R4-36i">
+                                <rect key="frame" x="0.0" y="44" width="320" height="504"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" id="aRZ-vF-YZW" userLabel="View - Content">
+                                <rect key="frame" x="0.0" y="87" width="320" height="225"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <view clipsSubviews="YES" contentMode="scaleToFill" id="vSk-nT-Vwf" userLabel="View - Display">
+                                        <rect key="frame" x="0.0" y="20" width="320" height="137"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" alpha="0.80000001192092896" contentMode="scaleToFill" image="ui_panel_container.png" id="DnG-K7-jCr">
+                                                <rect key="frame" x="11" y="0.0" width="298" height="137"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <rect key="contentStretch" x="0.050000000000000003" y="0.10000000000000001" width="0.89999999999999991" height="0.79999999999999982"/>
+                                            </imageView>
+                                            <imageView userInteractionEnabled="NO" alpha="0.80000001192092896" contentMode="scaleToFill" image="ui_panel_display.png" id="XCE-7d-ffN">
+                                                <rect key="frame" x="11" y="0.0" width="298" height="86"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                <rect key="contentStretch" x="0.050000000000000003" y="0.10000000000000001" width="0.89999999999999991" height="0.79999999999999982"/>
+                                            </imageView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="naw-bU-g1E" userLabel="Button - Copy">
+                                                <rect key="frame" x="11" y="0.0" width="298" height="86"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <accessibility key="accessibilityConfiguration" hint="Copies the password."/>
+                                                <fontDescription key="fontDescription" type="boldSystem" size="button"/>
+                                                <state key="normal">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <state key="highlighted">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="copyContent" destination="myN-X7-9Tg" eventType="touchUpInside" id="R5w-Yl-vQ2"/>
+                                                </connections>
+                                            </button>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="10" id="vVA-b3-7Lo" userLabel="Label - Site Name">
+                                                <rect key="frame" x="25" y="0.0" width="270" height="26"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                <accessibility key="accessibilityConfiguration" label="">
+                                                    <accessibilityTraits key="traits" none="YES" staticText="YES" summaryElement="YES"/>
+                                                </accessibility>
+                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                <size key="shadowOffset" width="0.0" height="1"/>
+                                            </label>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="RateJija3$Tucm" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="G2i-wO-6x6" userLabel="Text Field - Content">
+                                                <rect key="frame" x="20" y="26" width="280" height="60"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                <accessibility key="accessibilityConfiguration" hint=""/>
+                                                <color key="textColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="30"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="myN-X7-9Tg" id="Skg-uS-Qnv"/>
+                                                </connections>
+                                            </textField>
+                                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZPR-Tx-as7" userLabel="Button - User">
+                                                <rect key="frame" x="266" y="-2" width="44" height="44"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                                                <state key="normal" image="icon_person.png">
+                                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <state key="highlighted">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="toggleUser" destination="myN-X7-9Tg" eventType="touchUpInside" id="4eb-0L-NHJ"/>
+                                                </connections>
+                                            </button>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="1" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="rDj-nH-rQR" userLabel="Label - Counter">
+                                                <rect key="frame" x="196" y="11" width="41" height="20"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                <accessibility key="accessibilityConfiguration" hint="Site's counter."/>
+                                                <fontDescription key="fontDescription" name="Copperplate-Bold" family="Copperplate" pointSize="17"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                <size key="shadowOffset" width="0.0" height="1"/>
+                                            </label>
+                                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="yxo-kW-iLM" userLabel="Button - Incrementer">
+                                                <rect key="frame" x="231" y="-2" width="44" height="44"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                <accessibility key="accessibilityConfiguration" hint="Increments the site counter."/>
+                                                <gestureRecognizers/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                                                <state key="normal" image="icon_plus.png">
+                                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <state key="highlighted">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="incrementPasswordCounter" destination="myN-X7-9Tg" eventType="touchUpInside" id="5Rm-nz-F7j"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="awz-TO-Bhd" userLabel="Button - Edit">
+                                                <rect key="frame" x="231" y="-2" width="44" height="44"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                <accessibility key="accessibilityConfiguration" hint="Edits the password."/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                                                <state key="normal" image="icon_edit.png">
+                                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <state key="highlighted">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="editPassword" destination="myN-X7-9Tg" eventType="touchUpInside" id="o16-F3-sId"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="CkS-2e-RXV" userLabel="Button - Upgrade">
+                                                <rect key="frame" x="231" y="-2" width="44" height="44"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                                                <state key="normal" image="icon_up.png">
+                                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <state key="highlighted">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="upgradePassword" destination="myN-X7-9Tg" eventType="touchUpInside" id="2R5-y6-hYc"/>
+                                                </connections>
+                                            </button>
+                                            <view contentMode="scaleToFill" id="60X-Nj-wqq" userLabel="View - User Name">
+                                                <rect key="frame" x="20" y="94" width="280" height="31"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="robert.mitchell@gmail.com" placeholder="Hold to set a login name." textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="9jx-Ue-v7J">
+                                                        <rect key="frame" x="0.0" y="0.0" width="280" height="31"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <fontDescription key="fontDescription" name="AmericanTypewriter-Light" family="American Typewriter" pointSize="14"/>
+                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="done"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="myN-X7-9Tg" id="Ekm-Up-Gjh"/>
+                                                        </connections>
+                                                    </textField>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </view>
+                                        </subviews>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" id="ebR-9P-XGe">
+                                        <rect key="frame" x="10" y="165" width="300" height="46"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                        <accessibility key="accessibilityConfiguration" hint="Changes the password type."/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <size key="titleShadowOffset" width="0.0" height="1"/>
+                                        <state key="normal" title="Long Password" backgroundImage="ui_button_standard_large.png">
+                                            <color key="titleColor" cocoaTouchSystemColor="lightTextColor"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                            </view>
+                            <searchBar contentMode="redraw" placeholder="Site name" showsBookmarkButton="YES" id="IJX-hq-SkG">
+                                <rect key="frame" x="0.0" y="44" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <gestureRecognizers/>
+                                <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
+                                <scopeButtonTitles>
+                                    <string>All</string>
+                                    <string>Outdated</string>
+                                </scopeButtonTitles>
+                            </searchBar>
+                            <navigationBar contentMode="scaleToFill" id="CEU-ib-OHf">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <items>
+                                    <navigationItem title="Master Password" id="Kbd-LM-sCQ"/>
+                                </items>
+                            </navigationBar>
+                            <view alpha="0.50000000000000011" contentMode="scaleToFill" id="Ahl-o0-lMv">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3wI-lo-tWc">
+                                        <rect key="frame" x="276" y="0.0" width="44" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        <accessibility key="accessibilityConfiguration" hint="" label="Close"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" image="icon_cancel.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="close" destination="myN-X7-9Tg" eventType="touchUpInside" id="MNR-Zi-Ftq"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="UHf-cp-97W">
+                                        <rect key="frame" x="33" y="502" width="44" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        <accessibility key="accessibilityConfiguration" hint="" label="Close"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" image="icon_play.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="closeAlert" destination="myN-X7-9Tg" eventType="touchUpInside" id="ogL-98-yIA"/>
+                                        </connections>
+                                    </button>
+                                    <progressView opaque="NO" contentMode="scaleToFill" progress="0.5" id="nf7-oM-7dh">
+                                        <rect key="frame" x="85" y="519" width="150" height="9"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="progressTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    </progressView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="X0C-Qf-SMn" userLabel="View - Content Tip">
+                                <rect key="frame" x="55" y="110" width="210" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="tYf-3g-pcO">
+                                        <rect key="frame" x="0.0" y="0.0" width="210" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Use this password" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="nGi-CK-Dng">
+                                        <rect key="frame" x="19" y="9" width="171" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="cUZ-lb-h7x" userLabel="View - Search Tip">
+                                <rect key="frame" x="10" y="55" width="300" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_top.png" id="NgB-q4-k0y">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <rect key="contentStretch" x="0.15000000000000002" y="0.15000000000000002" width="0.69999999999999973" height="0.69999999999999973"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Name for your password" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="lgI-5O-kXT">
+                                        <rect key="frame" x="-20" y="26" width="340" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="Pub-jz-pkR" userLabel="View - Type Tip">
+                                <rect key="frame" x="10" y="272" width="300" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_top.png" id="MHM-lM-iSV">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <rect key="contentStretch" x="0.15000000000000002" y="0.15000000000000002" width="0.69999999999999973" height="0.69999999999999973"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Tap to change the type of password" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="K9R-xw-Yta">
+                                        <rect key="frame" x="-20" y="26" width="340" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="w3j-Qm-9gD" userLabel="View - User Name Tip">
+                                <rect key="frame" x="55" y="166" width="210" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="w4A-YL-1Tu">
+                                        <rect key="frame" x="0.0" y="0.0" width="210" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Save your username here" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="b87-Cf-2qK">
+                                        <rect key="frame" x="19" y="9" width="171" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.14901960780000001" green="0.1647058824" blue="0.18039215689999999" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="p1Y-gL-psy"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <connections>
+                        <outlet property="contentContainer" destination="aRZ-vF-YZW" id="hU4-iX-4qp"/>
+                        <outlet property="contentField" destination="G2i-wO-6x6" id="JOb-yS-3me"/>
+                        <outlet property="contentTipBody" destination="nGi-CK-Dng" id="UJR-VS-Cwc"/>
+                        <outlet property="contentTipContainer" destination="X0C-Qf-SMn" id="VtW-fY-s6x"/>
+                        <outlet property="displayContainer" destination="vSk-nT-Vwf" id="dJv-aQ-vF2"/>
+                        <outlet property="loginNameContainer" destination="60X-Nj-wqq" id="NNt-fg-0hY"/>
+                        <outlet property="loginNameField" destination="9jx-Ue-v7J" id="J7H-Q9-s5r"/>
+                        <outlet property="loginNameTipBody" destination="b87-Cf-2qK" id="Vkf-p6-3St"/>
+                        <outlet property="loginNameTipContainer" destination="w3j-Qm-9gD" id="UBZ-u1-7vo"/>
+                        <outlet property="passwordCounter" destination="rDj-nH-rQR" id="iGu-2g-goP"/>
+                        <outlet property="passwordEdit" destination="awz-TO-Bhd" id="9LZ-AX-GlZ"/>
+                        <outlet property="passwordIncrementer" destination="yxo-kW-iLM" id="wJn-fv-fKJ"/>
+                        <outlet property="passwordUpgrade" destination="CkS-2e-RXV" id="hnU-qy-nQM"/>
+                        <outlet property="passwordUser" destination="ZPR-Tx-as7" id="94M-Dm-asP"/>
+                        <outlet property="pullDownGesture" destination="O19-XO-q6s" id="ZGD-xB-1eV"/>
+                        <outlet property="pullUpGesture" destination="D0R-Cc-rG7" id="CUh-gp-ckf"/>
+                        <outlet property="searchDisplayController" destination="P8c-gf-nN3" id="pvr-3d-V2W"/>
+                        <outlet property="searchTipContainer" destination="cUZ-lb-h7x" id="XbI-kk-Q9Y"/>
+                        <outlet property="siteName" destination="vVA-b3-7Lo" id="2Nk-GO-E6h"/>
+                        <outlet property="typeButton" destination="ebR-9P-XGe" id="WGb-FG-N68"/>
+                        <outlet property="typeTipContainer" destination="Pub-jz-pkR" id="nMm-z3-PG6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zsi-4A-If9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="OeZ-hn-lL1">
+                    <connections>
+                        <outlet property="searchBar" destination="IJX-hq-SkG" id="LF3-B0-RBY"/>
+                        <outlet property="searchContentsController" destination="myN-X7-9Tg" id="Fjz-gh-JyH"/>
+                    </connections>
+                </searchDisplayController>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="kYj-Dc-rXL">
+                    <connections>
+                        <action selector="panHelpDown:" destination="myN-X7-9Tg" id="f8Z-CC-TtC"/>
+                    </connections>
+                </panGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="ayP-1f-n2G">
+                    <connections>
+                        <action selector="panHelpUp:" destination="myN-X7-9Tg" id="7X1-pX-SVx"/>
+                    </connections>
+                </panGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="2078" y="1425"/>
         </scene>
     </scenes>
     <resources>
@@ -2194,20 +2550,16 @@ You could use the word wall for  inspiration in finding a memorable master passw
         <image name="avatar-0.png" width="110" height="110"/>
         <image name="background.png" width="568" height="568"/>
         <image name="book.png" width="320" height="480"/>
-        <image name="guide_page_0.png" width="320" height="480"/>
-        <image name="guide_page_1.png" width="320" height="480"/>
-        <image name="guide_page_2.png" width="320" height="480"/>
-        <image name="guide_page_3.png" width="320" height="480"/>
-        <image name="guide_page_4.png" width="320" height="480"/>
-        <image name="guide_page_5.png" width="320" height="480"/>
-        <image name="guide_page_6.png" width="320" height="480"/>
+        <image name="cloud.png" width="105" height="80"/>
         <image name="icon_action.png" width="32" height="32"/>
         <image name="icon_cancel.png" width="32" height="32"/>
         <image name="icon_edit.png" width="32" height="32"/>
         <image name="icon_find.png" width="32" height="32"/>
         <image name="icon_person.png" width="32" height="32"/>
+        <image name="icon_play.png" width="32" height="32"/>
         <image name="icon_plus.png" width="32" height="32"/>
         <image name="icon_up.png" width="32" height="32"/>
+        <image name="identity.png" width="82" height="80"/>
         <image name="page-deblock.png" width="305" height="400"/>
         <image name="page-gorillas.png" width="305" height="400"/>
         <image name="pull-down.png" width="60" height="10"/>
@@ -2220,7 +2572,6 @@ You could use the word wall for  inspiration in finding a memorable master passw
         <image name="tip_basic_black_bottom_right.png" width="210" height="60"/>
         <image name="tip_basic_black_top.png" width="210" height="60"/>
         <image name="tip_basic_black_top_right.png" width="205" height="61"/>
-        <image name="ui_button_green_large.png" width="300" height="46"/>
         <image name="ui_button_standard_large.png" width="300" height="46"/>
         <image name="ui_list_first.png" width="300" height="35"/>
         <image name="ui_list_last.png" width="300" height="35"/>
@@ -2269,8 +2620,6 @@ You could use the word wall for  inspiration in finding a memorable master passw
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MPGuideViewController.h"/>
             <relationships>
                 <relationship kind="action" name="close"/>
-                <relationship kind="outlet" name="pageControl" candidateClass="UIPageControl"/>
-                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
             </relationships>
         </class>
         <class className="MPMainViewController" superclassName="UIViewController">
@@ -2340,6 +2689,13 @@ You could use the word wall for  inspiration in finding a memorable master passw
                 <relationship kind="outlet" name="savePasswordSwitch" candidateClass="UISwitch"/>
             </relationships>
         </class>
+        <class className="MPSetupViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPSetupViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="close:" candidateClass="UIBarButtonItem"/>
+                <relationship kind="action" name="showGuide:" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
         <class className="MPTypeViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MPTypeViewController.h"/>
             <relationships>
@@ -2377,9 +2733,10 @@ You could use the word wall for  inspiration in finding a memorable master passw
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <nil key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="KIl-ZW-M7G"/>
+        <segue reference="jgo-j3-gbW"/>
+        <segue reference="9Bs-cD-ddF"/>
     </inferredMetricsTieBreakers>
 </document>

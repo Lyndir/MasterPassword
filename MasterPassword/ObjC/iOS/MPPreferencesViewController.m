@@ -114,8 +114,7 @@
     else
         if (cell == self.changeMPCell) {
             MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
-            [[MPAppDelegate get] changeMasterPasswordFor:activeUser didResetBlock:nil];
-            [activeUser saveContext];
+            [[MPAppDelegate get] changeMasterPasswordFor:activeUser inContext:activeUser.managedObjectContext didResetBlock:nil];
         }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
