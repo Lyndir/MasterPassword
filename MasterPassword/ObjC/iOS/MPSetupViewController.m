@@ -18,8 +18,29 @@
 
 #import "MPSetupViewController.h"
 #import "MPAppDelegate.h"
+#import "MPAppDelegate_Store.h"
 
 @implementation MPSetupViewController
+
+- (void)viewDidAppear:(BOOL)animated {
+
+    [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Setup"];
+
+    [super viewDidAppear:animated];
+
+    if (self.cloudSwitch && [[MPiOSConfig get].iCloudDecided boolValue])
+        self.cloudSwitch.on = [MPAppDelegate get].storeManager.cloudEnabled;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+
+    [super viewWillDisappear:animated];
+
+    if (self.cloudSwitch) {
+        [MPiOSConfig get].iCloudDecided = @YES;
+        [MPAppDelegate get].storeManager.cloudEnabled = self.cloudSwitch.on;
+    }
+}
 
 - (IBAction)close:(UIBarButtonItem *)sender {
 

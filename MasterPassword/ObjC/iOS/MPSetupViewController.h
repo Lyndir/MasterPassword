@@ -19,6 +19,9 @@
 #import <Foundation/Foundation.h>
 
 @interface MPSetupViewController : UIViewController
+
+@property (weak, nonatomic) IBOutlet UISwitch *cloudSwitch;
+
 - (IBAction)close:(UIBarButtonItem *)sender;
-- (IBAction)showGuide:(UIBarButtonItem *)sender;
+
 @end

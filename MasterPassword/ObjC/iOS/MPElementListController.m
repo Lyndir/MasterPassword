@@ -250,20 +250,23 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 forRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    if (editingStyle == UITableViewCellEditingStyleDelete)
-        [self.fetchedResultsController.managedObjectContext performBlock:^{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        NSManagedObjectContext *moc = self.fetchedResultsController.managedObjectContext;
+        [moc performBlock:^{
             MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
             inf(@"Deleting element: %@", element.name);
-            [self.fetchedResultsController.managedObjectContext deleteObject:element];
+            [moc deleteObject:element];
 
 #ifdef TESTFLIGHT_SDK_VERSION
             [TestFlight passCheckpoint:MPCheckpointDeleteElement];
 #endif
             [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointDeleteElement attributes:@{
-             @"type"    : element.typeName,
-             @"version" : @(element.version)}];
+                    @"type"    : element.typeName,
+                    @"version" : @(element.version)
+            }];
         }];
+    }
 }
 
 @end

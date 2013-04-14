@@ -590,34 +590,28 @@
 
     // Update element, keeping track of the old password.
     [self activeElementDo:^(MPElementEntity *activeElement) {
-        NSManagedObjectContext *moc = activeElement.managedObjectContext;
-        [moc performBlock:^{
+        // Perform the task.
+        NSString *oldPassword = [activeElement.content description];
+        if (!task( activeElement ))
+            return;
+        NSString *newPassword = [activeElement.content description];
 
-            // Perform the task.
-            NSString *oldPassword = [activeElement.content description];
-            if (!task(activeElement))
-                return;
-            NSString *newPassword = [activeElement.content description];
+        // Save.
+        [activeElement.managedObjectContext saveToStore];
 
-            // Save.
-            NSError *error;
-            if (![moc save:&error])
-            err(@"While saving changes to: %@, error: %@", activeElement.name, error);
+        // Update the UI.
+        dispatch_async( dispatch_get_main_queue(), ^{
+            [self updateAnimated:YES];
 
-            // Update the UI.
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateAnimated:YES];
-
-                // Show new and old password.
-                if ([oldPassword length] && ![oldPassword isEqualToString:newPassword])
-                    [self showAlertWithTitle:@"Password Changed!"
-                                     message:PearlString(@"The password for %@ has changed.\n\n"
-                                                          @"IMPORTANT:\n"
-                                                          @"Don't forget to update the site with your new password! "
-                                                          @"Your old password was:\n"
-                                                          @"%@", activeElement.name, oldPassword)];
-            });
-        }];
+            // Show new and old password.
+            if ([oldPassword length] && ![oldPassword isEqualToString:newPassword])
+                [self showAlertWithTitle:@"Password Changed!"
+                                 message:PearlString( @"The password for %@ has changed.\n\n"
+                                         @"IMPORTANT:\n"
+                                         @"Don't forget to update the site with your new password! "
+                                         @"Your old password was:\n"
+                                         @"%@", activeElement.name, oldPassword )];
+        } );
     }];
 }
 

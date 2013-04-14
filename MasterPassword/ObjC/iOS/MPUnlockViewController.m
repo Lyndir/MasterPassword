@@ -319,7 +319,7 @@
 - (void)showNewUserNameAlertFor:(MPUserEntity *)newUser inContext:(NSManagedObjectContext *)moc
                      completion:(void (^)(BOOL finished))completion {
 
-    dispatch_async(dispatch_get_main_queue(), ^{
+    PEARL_MAIN_THREAD_START
         [PearlAlert showAlertWithTitle:@"Enter Your Name"
                                message:nil viewStyle:UIAlertViewStylePlainTextInput
                              initAlert:^(UIAlertView *alert, UITextField *firstField) {
@@ -334,24 +334,23 @@
                              completion(NO);
                              return;
                          }
-                         if (![alert textFieldAtIndex:0].text.length) {
+                         NSString *name = [alert textFieldAtIndex:0].text;
+                         if (!name.length) {
                              [PearlAlert showAlertWithTitle:@"Name Is Required" message:nil viewStyle:UIAlertViewStyleDefault initAlert:nil
                                           tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                                              [moc performBlock:^{
-                                                  [self showNewUserNameAlertFor:newUser inContext:moc completion:completion];
-                                              }];
+                                              [self showNewUserNameAlertFor:newUser inContext:moc completion:completion];
                                           } cancelTitle:@"Try Again" otherTitles:nil];
                              return;
                          }
 
                          // Save
-                         [moc performBlock:^{
-                             newUser.name = [alert textFieldAtIndex:0].text;
-                             [self showNewUserAvatarAlertFor:newUser inContext:moc completion:completion];
+                         [moc performBlockAndWait:^{
+                             newUser.name = name;
                          }];
+                         [self showNewUserAvatarAlertFor:newUser inContext:moc completion:completion];
                      }
                            cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonSave, nil];
-    });
+    PEARL_MAIN_THREAD_END
 }
 
 - (void)showNewUserAvatarAlertFor:(MPUserEntity *)newUser inContext:(NSManagedObjectContext *)moc
@@ -365,9 +364,7 @@
                  tappedButtonBlock:^(UIAlertView *_alert, NSInteger _buttonIndex) {
 
                      // Okay
-                     [moc performBlock:^{
-                         [self showNewUserConfirmationAlertFor:newUser inContext:moc completion:completion];
-                     }];
+                     [self showNewUserConfirmationAlertFor:newUser inContext:moc completion:completion];
                  }     cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
 }
 
@@ -384,9 +381,7 @@
                          }
                  tappedButtonBlock:^void(UIAlertView *__alert, NSInteger __buttonIndex) {
                      if (__buttonIndex == [__alert cancelButtonIndex]) {
-                         [moc performBlock:^{
-                             [self showNewUserNameAlertFor:newUser inContext:moc completion:completion];
-                         }];
+                         [self showNewUserNameAlertFor:newUser inContext:moc completion:completion];
                          return;
                      }
 
@@ -808,12 +803,10 @@
         }
 
         if (buttonIndex == [sheet firstOtherButtonIndex])
-            [moc performBlock:^{
-                [[MPAppDelegate get] changeMasterPasswordFor:targetedUser inContext:moc didResetBlock:^{
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [[self avatarForUser:targetedUser] setSelected:YES];
-                    });
-                }];
+            [[MPAppDelegate get] changeMasterPasswordFor:targetedUser inContext:moc didResetBlock:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[self avatarForUser:targetedUser] setSelected:YES];
+                });
             }];
     }                  cancelTitle:[PearlStrings get].commonButtonCancel
                   destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];

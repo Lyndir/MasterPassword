@@ -1536,7 +1536,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="ToN-ll-G0q">
                                 <rect key="frame" x="20" y="137" width="280" height="200"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <string key="text">Enabling iCloud will keep all your iPhones, iPads and Macs nicely in-sync.  Any site you add on this device will automatically appear on all your others as well.
 
@@ -1548,7 +1548,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                             </textView>
                             <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="M0m-G9-hH0">
                                 <rect key="frame" x="122" y="345" width="79" height="27"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                             </switch>
                         </subviews>
@@ -1561,6 +1561,9 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="cloudSwitch" destination="M0m-G9-hH0" id="Egt-3w-3Zr"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Olv-0G-8Ul" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1669,7 +1672,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                     <connections>
                         <segue destination="uu3-4d-bYN" kind="modal" identifier="MP_Setup" id="qw3-O5-NEa"/>
                         <segue destination="Nbn-Rv-sP1" kind="relationship" relationship="rootViewController" id="Gzv-dM-6bM"/>
-                        <segue destination="myN-X7-9Tg" kind="modal" identifier="MP_Guide" id="swi-5o-hfK"/>
+                        <segue destination="myN-X7-9Tg" kind="modal" identifier="MP_Guide" modalTransitionStyle="crossDissolve" id="swi-5o-hfK"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lcz-JH-B5B" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2084,7 +2087,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" usesAttributedText="YES" id="hwP-ds-GDh">
                                 <rect key="frame" x="20" y="137" width="280" height="347"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <attributedString key="attributedText">
                                     <fragment>
@@ -2186,163 +2189,108 @@ You can make passwords for all sorts of things, like email addresses, sites or r
                                 <rect key="frame" x="0.0" y="44" width="320" height="504"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
-                            <view contentMode="scaleToFill" id="aRZ-vF-YZW" userLabel="View - Content">
-                                <rect key="frame" x="0.0" y="87" width="320" height="225"/>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" id="vSk-nT-Vwf" userLabel="View - Display">
+                                <rect key="frame" x="0.0" y="88" width="320" height="231"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <view clipsSubviews="YES" contentMode="scaleToFill" id="vSk-nT-Vwf" userLabel="View - Display">
-                                        <rect key="frame" x="0.0" y="20" width="320" height="137"/>
+                                    <imageView userInteractionEnabled="NO" alpha="0.80000001192092896" contentMode="scaleToFill" image="ui_panel_container.png" id="DnG-K7-jCr">
+                                        <rect key="frame" x="11" y="20" width="298" height="137"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <rect key="contentStretch" x="0.050000000000000003" y="0.10000000000000001" width="0.89999999999999991" height="0.79999999999999982"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" alpha="0.80000001192092896" contentMode="scaleToFill" image="ui_panel_display.png" id="XCE-7d-ffN">
+                                        <rect key="frame" x="11" y="20" width="298" height="86"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <rect key="contentStretch" x="0.050000000000000003" y="0.10000000000000001" width="0.89999999999999991" height="0.79999999999999982"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="naw-bU-g1E" userLabel="Button - Copy">
+                                        <rect key="frame" x="11" y="20" width="298" height="86"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <accessibility key="accessibilityConfiguration" hint="Copies the password."/>
+                                        <fontDescription key="fontDescription" type="boldSystem" size="button"/>
+                                        <state key="normal">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="gmail.com" lineBreakMode="tailTruncation" minimumFontSize="10" id="vVA-b3-7Lo" userLabel="Label - Site Name">
+                                        <rect key="frame" x="25" y="20" width="270" height="26"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <accessibility key="accessibilityConfiguration" label="">
+                                            <accessibilityTraits key="traits" none="YES" staticText="YES" summaryElement="YES"/>
+                                        </accessibility>
+                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        <size key="shadowOffset" width="0.0" height="1"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="RateJija3$Tucm" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="G2i-wO-6x6" userLabel="Text Field - Content">
+                                        <rect key="frame" x="20" y="46" width="280" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <accessibility key="accessibilityConfiguration" hint=""/>
+                                        <color key="textColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="30"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
+                                    </textField>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="ZPR-Tx-as7" userLabel="Button - User">
+                                        <rect key="frame" x="266" y="18" width="44" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                                        <state key="normal" image="icon_person.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="1" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="rDj-nH-rQR" userLabel="Label - Counter">
+                                        <rect key="frame" x="196" y="31" width="41" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        <accessibility key="accessibilityConfiguration" hint="Site's counter."/>
+                                        <fontDescription key="fontDescription" name="Copperplate-Bold" family="Copperplate" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        <size key="shadowOffset" width="0.0" height="1"/>
+                                    </label>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="yxo-kW-iLM" userLabel="Button - Incrementer">
+                                        <rect key="frame" x="231" y="18" width="44" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        <accessibility key="accessibilityConfiguration" hint="Increments the site counter."/>
+                                        <gestureRecognizers/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                                        <state key="normal" image="icon_plus.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                    <view contentMode="scaleToFill" id="60X-Nj-wqq" userLabel="View - User Name">
+                                        <rect key="frame" x="20" y="114" width="280" height="31"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" alpha="0.80000001192092896" contentMode="scaleToFill" image="ui_panel_container.png" id="DnG-K7-jCr">
-                                                <rect key="frame" x="11" y="0.0" width="298" height="137"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                <rect key="contentStretch" x="0.050000000000000003" y="0.10000000000000001" width="0.89999999999999991" height="0.79999999999999982"/>
-                                            </imageView>
-                                            <imageView userInteractionEnabled="NO" alpha="0.80000001192092896" contentMode="scaleToFill" image="ui_panel_display.png" id="XCE-7d-ffN">
-                                                <rect key="frame" x="11" y="0.0" width="298" height="86"/>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="robert.mitchell@gmail.com" placeholder="Hold to set a login name." textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="9jx-Ue-v7J">
+                                                <rect key="frame" x="0.0" y="0.0" width="280" height="31"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                                <rect key="contentStretch" x="0.050000000000000003" y="0.10000000000000001" width="0.89999999999999991" height="0.79999999999999982"/>
-                                            </imageView>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="naw-bU-g1E" userLabel="Button - Copy">
-                                                <rect key="frame" x="11" y="0.0" width="298" height="86"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <accessibility key="accessibilityConfiguration" hint="Copies the password."/>
-                                                <fontDescription key="fontDescription" type="boldSystem" size="button"/>
-                                                <state key="normal">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <state key="highlighted">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="copyContent" destination="myN-X7-9Tg" eventType="touchUpInside" id="R5w-Yl-vQ2"/>
-                                                </connections>
-                                            </button>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="10" id="vVA-b3-7Lo" userLabel="Label - Site Name">
-                                                <rect key="frame" x="25" y="0.0" width="270" height="26"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                                <accessibility key="accessibilityConfiguration" label="">
-                                                    <accessibilityTraits key="traits" none="YES" staticText="YES" summaryElement="YES"/>
-                                                </accessibility>
-                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <nil key="highlightedColor"/>
-                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                                <size key="shadowOffset" width="0.0" height="1"/>
-                                            </label>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="RateJija3$Tucm" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="G2i-wO-6x6" userLabel="Text Field - Content">
-                                                <rect key="frame" x="20" y="26" width="280" height="60"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                                <accessibility key="accessibilityConfiguration" hint=""/>
-                                                <color key="textColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
-                                                <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="30"/>
-                                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
-                                                <connections>
-                                                    <outlet property="delegate" destination="myN-X7-9Tg" id="Skg-uS-Qnv"/>
-                                                </connections>
+                                                <fontDescription key="fontDescription" name="AmericanTypewriter-Light" family="American Typewriter" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="done"/>
                                             </textField>
-                                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZPR-Tx-as7" userLabel="Button - User">
-                                                <rect key="frame" x="266" y="-2" width="44" height="44"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
-                                                <state key="normal" image="icon_person.png">
-                                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <state key="highlighted">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="toggleUser" destination="myN-X7-9Tg" eventType="touchUpInside" id="4eb-0L-NHJ"/>
-                                                </connections>
-                                            </button>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="1" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="rDj-nH-rQR" userLabel="Label - Counter">
-                                                <rect key="frame" x="196" y="11" width="41" height="20"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                <accessibility key="accessibilityConfiguration" hint="Site's counter."/>
-                                                <fontDescription key="fontDescription" name="Copperplate-Bold" family="Copperplate" pointSize="17"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <nil key="highlightedColor"/>
-                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                                <size key="shadowOffset" width="0.0" height="1"/>
-                                            </label>
-                                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="yxo-kW-iLM" userLabel="Button - Incrementer">
-                                                <rect key="frame" x="231" y="-2" width="44" height="44"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                <accessibility key="accessibilityConfiguration" hint="Increments the site counter."/>
-                                                <gestureRecognizers/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
-                                                <state key="normal" image="icon_plus.png">
-                                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <state key="highlighted">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="incrementPasswordCounter" destination="myN-X7-9Tg" eventType="touchUpInside" id="5Rm-nz-F7j"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="awz-TO-Bhd" userLabel="Button - Edit">
-                                                <rect key="frame" x="231" y="-2" width="44" height="44"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                <accessibility key="accessibilityConfiguration" hint="Edits the password."/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
-                                                <state key="normal" image="icon_edit.png">
-                                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <state key="highlighted">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="editPassword" destination="myN-X7-9Tg" eventType="touchUpInside" id="o16-F3-sId"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="CkS-2e-RXV" userLabel="Button - Upgrade">
-                                                <rect key="frame" x="231" y="-2" width="44" height="44"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
-                                                <state key="normal" image="icon_up.png">
-                                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <state key="highlighted">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="upgradePassword" destination="myN-X7-9Tg" eventType="touchUpInside" id="2R5-y6-hYc"/>
-                                                </connections>
-                                            </button>
-                                            <view contentMode="scaleToFill" id="60X-Nj-wqq" userLabel="View - User Name">
-                                                <rect key="frame" x="20" y="94" width="280" height="31"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                                <subviews>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="robert.mitchell@gmail.com" placeholder="Hold to set a login name." textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="9jx-Ue-v7J">
-                                                        <rect key="frame" x="0.0" y="0.0" width="280" height="31"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <fontDescription key="fontDescription" name="AmericanTypewriter-Light" family="American Typewriter" pointSize="14"/>
-                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="done"/>
-                                                        <connections>
-                                                            <outlet property="delegate" destination="myN-X7-9Tg" id="Ekm-Up-Gjh"/>
-                                                        </connections>
-                                                    </textField>
-                                                </subviews>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            </view>
                                         </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" id="ebR-9P-XGe">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="ebR-9P-XGe">
                                         <rect key="frame" x="10" y="165" width="300" height="46"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <accessibility key="accessibilityConfiguration" hint="Changes the password type."/>
@@ -2358,6 +2306,14 @@ You can make passwords for all sorts of things, like email addresses, sites or r
                                     </button>
                                 </subviews>
                             </view>
+                            <navigationBar contentMode="scaleToFill" id="CEU-ib-OHf">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <items>
+                                    <navigationItem title="Master Password" id="Kbd-LM-sCQ"/>
+                                </items>
+                            </navigationBar>
                             <searchBar contentMode="redraw" placeholder="Site name" showsBookmarkButton="YES" id="IJX-hq-SkG">
                                 <rect key="frame" x="0.0" y="44" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -2369,15 +2325,7 @@ You can make passwords for all sorts of things, like email addresses, sites or r
                                     <string>Outdated</string>
                                 </scopeButtonTitles>
                             </searchBar>
-                            <navigationBar contentMode="scaleToFill" id="CEU-ib-OHf">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <items>
-                                    <navigationItem title="Master Password" id="Kbd-LM-sCQ"/>
-                                </items>
-                            </navigationBar>
-                            <view alpha="0.50000000000000011" contentMode="scaleToFill" id="Ahl-o0-lMv">
+                            <view alpha="0.60000000000000009" contentMode="scaleToFill" id="Ahl-o0-lMv">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -2399,7 +2347,7 @@ You can make passwords for all sorts of things, like email addresses, sites or r
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="UHf-cp-97W">
                                         <rect key="frame" x="33" y="502" width="44" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <accessibility key="accessibilityConfiguration" hint="" label="Close"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" image="icon_play.png">
@@ -2410,28 +2358,61 @@ You can make passwords for all sorts of things, like email addresses, sites or r
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="closeAlert" destination="myN-X7-9Tg" eventType="touchUpInside" id="ogL-98-yIA"/>
+                                            <action selector="play" destination="myN-X7-9Tg" eventType="touchUpInside" id="2zM-lM-KYG"/>
                                         </connections>
                                     </button>
-                                    <progressView opaque="NO" contentMode="scaleToFill" progress="0.5" id="nf7-oM-7dh">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jDS-Vh-ETL">
+                                        <rect key="frame" x="124" y="234" width="72" height="80"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <accessibility key="accessibilityConfiguration" hint="" label="Close"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" image="play.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="play" destination="myN-X7-9Tg" eventType="touchUpInside" id="6vf-LF-jJt"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="nXW-Eq-JOa">
+                                        <rect key="frame" x="243" y="502" width="44" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <accessibility key="accessibilityConfiguration" hint="" label="Close"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" image="icon_volume-high.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="toggleVolume" destination="myN-X7-9Tg" eventType="touchUpInside" id="hHG-m2-dUF"/>
+                                        </connections>
+                                    </button>
+                                    <progressView opaque="NO" contentMode="scaleToFill" id="nf7-oM-7dh">
                                         <rect key="frame" x="85" y="519" width="150" height="9"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <color key="progressTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                     </progressView>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                             </view>
-                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="X0C-Qf-SMn" userLabel="View - Content Tip">
-                                <rect key="frame" x="55" y="110" width="210" height="60"/>
+                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="nDU-uf-V0X" userLabel="View - Tool Tip">
+                                <rect key="frame" x="10" y="59" width="266" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="tYf-3g-pcO">
-                                        <rect key="frame" x="0.0" y="0.0" width="210" height="60"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_bottom_right.png" id="Tmk-FU-w4D">
+                                        <rect key="frame" x="0.0" y="0.0" width="266" height="60"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <rect key="contentStretch" x="0.15000000000000002" y="0.15000000000000002" width="0.69999999999999973" height="0.69999999999999973"/>
                                     </imageView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Use this password" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="nGi-CK-Dng">
-                                        <rect key="frame" x="19" y="9" width="171" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Tap if you need a new password" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="V6L-v1-m1Z">
+                                        <rect key="frame" x="-20" y="9" width="306" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -2451,7 +2432,43 @@ You can make passwords for all sorts of things, like email addresses, sites or r
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Name for your password" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="lgI-5O-kXT">
                                         <rect key="frame" x="-20" y="26" width="340" height="21"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="X0C-Qf-SMn" userLabel="View - Content Tip">
+                                <rect key="frame" x="55" y="110" width="210" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="tYf-3g-pcO">
+                                        <rect key="frame" x="0.0" y="0.0" width="210" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Use this password" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="nGi-CK-Dng">
+                                        <rect key="frame" x="19" y="9" width="171" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="w3j-Qm-9gD" userLabel="View - User Name Tip">
+                                <rect key="frame" x="55" y="166" width="210" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="w4A-YL-1Tu">
+                                        <rect key="frame" x="0.0" y="0.0" width="210" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Save your username here" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="b87-Cf-2qK">
+                                        <rect key="frame" x="19" y="9" width="171" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -2477,70 +2494,38 @@ You can make passwords for all sorts of things, like email addresses, sites or r
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="w3j-Qm-9gD" userLabel="View - User Name Tip">
-                                <rect key="frame" x="55" y="166" width="210" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="w4A-YL-1Tu">
-                                        <rect key="frame" x="0.0" y="0.0" width="210" height="60"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    </imageView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Save your username here" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="b87-Cf-2qK">
-                                        <rect key="frame" x="19" y="9" width="171" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.14901960780000001" green="0.1647058824" blue="0.18039215689999999" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="p1Y-gL-psy"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
-                        <outlet property="contentContainer" destination="aRZ-vF-YZW" id="hU4-iX-4qp"/>
-                        <outlet property="contentField" destination="G2i-wO-6x6" id="JOb-yS-3me"/>
-                        <outlet property="contentTipBody" destination="nGi-CK-Dng" id="UJR-VS-Cwc"/>
-                        <outlet property="contentTipContainer" destination="X0C-Qf-SMn" id="VtW-fY-s6x"/>
-                        <outlet property="displayContainer" destination="vSk-nT-Vwf" id="dJv-aQ-vF2"/>
-                        <outlet property="loginNameContainer" destination="60X-Nj-wqq" id="NNt-fg-0hY"/>
-                        <outlet property="loginNameField" destination="9jx-Ue-v7J" id="J7H-Q9-s5r"/>
-                        <outlet property="loginNameTipBody" destination="b87-Cf-2qK" id="Vkf-p6-3St"/>
-                        <outlet property="loginNameTipContainer" destination="w3j-Qm-9gD" id="UBZ-u1-7vo"/>
-                        <outlet property="passwordCounter" destination="rDj-nH-rQR" id="iGu-2g-goP"/>
-                        <outlet property="passwordEdit" destination="awz-TO-Bhd" id="9LZ-AX-GlZ"/>
-                        <outlet property="passwordIncrementer" destination="yxo-kW-iLM" id="wJn-fv-fKJ"/>
-                        <outlet property="passwordUpgrade" destination="CkS-2e-RXV" id="hnU-qy-nQM"/>
-                        <outlet property="passwordUser" destination="ZPR-Tx-as7" id="94M-Dm-asP"/>
-                        <outlet property="pullDownGesture" destination="O19-XO-q6s" id="ZGD-xB-1eV"/>
-                        <outlet property="pullUpGesture" destination="D0R-Cc-rG7" id="CUh-gp-ckf"/>
-                        <outlet property="searchDisplayController" destination="P8c-gf-nN3" id="pvr-3d-V2W"/>
-                        <outlet property="searchTipContainer" destination="cUZ-lb-h7x" id="XbI-kk-Q9Y"/>
-                        <outlet property="siteName" destination="vVA-b3-7Lo" id="2Nk-GO-E6h"/>
-                        <outlet property="typeButton" destination="ebR-9P-XGe" id="WGb-FG-N68"/>
-                        <outlet property="typeTipContainer" destination="Pub-jz-pkR" id="nMm-z3-PG6"/>
+                        <outlet property="content" destination="vSk-nT-Vwf" id="Kgh-xj-8Z6"/>
+                        <outlet property="contentButton" destination="naw-bU-g1E" id="g2B-hC-aHX"/>
+                        <outlet property="contentText" destination="G2i-wO-6x6" id="u9H-xp-CR2"/>
+                        <outlet property="contentTip" destination="X0C-Qf-SMn" id="nSQ-vg-6ni"/>
+                        <outlet property="contentTipText" destination="nGi-CK-Dng" id="T7O-aC-li6"/>
+                        <outlet property="largePlayButton" destination="jDS-Vh-ETL" id="LIU-jq-0Oo"/>
+                        <outlet property="progress" destination="nf7-oM-7dh" id="dFy-br-0OQ"/>
+                        <outlet property="siteNameTip" destination="cUZ-lb-h7x" id="3cq-3F-Cwd"/>
+                        <outlet property="smallPlayButton" destination="UHf-cp-97W" id="K6U-Nf-F2p"/>
+                        <outlet property="toolButton" destination="yxo-kW-iLM" id="yuh-5h-1Nj"/>
+                        <outlet property="toolTip" destination="nDU-uf-V0X" id="qRq-tC-mdy"/>
+                        <outlet property="typeButton" destination="ebR-9P-XGe" id="ofw-d1-knI"/>
+                        <outlet property="typeTip" destination="Pub-jz-pkR" id="KAK-cu-b8O"/>
+                        <outlet property="usernameButton" destination="ZPR-Tx-as7" id="Skc-7h-X9c"/>
+                        <outlet property="usernameTip" destination="w3j-Qm-9gD" id="zg3-vy-aMx"/>
+                        <outlet property="volumeButton" destination="nXW-Eq-JOa" id="Ok3-SU-csw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zsi-4A-If9" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <searchDisplayController id="OeZ-hn-lL1">
                     <connections>
                         <outlet property="searchBar" destination="IJX-hq-SkG" id="LF3-B0-RBY"/>
-                        <outlet property="searchContentsController" destination="myN-X7-9Tg" id="Fjz-gh-JyH"/>
                     </connections>
                 </searchDisplayController>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="kYj-Dc-rXL">
-                    <connections>
-                        <action selector="panHelpDown:" destination="myN-X7-9Tg" id="f8Z-CC-TtC"/>
-                    </connections>
-                </panGestureRecognizer>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="ayP-1f-n2G">
-                    <connections>
-                        <action selector="panHelpUp:" destination="myN-X7-9Tg" id="7X1-pX-SVx"/>
-                    </connections>
-                </panGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="kYj-Dc-rXL"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="ayP-1f-n2G"/>
             </objects>
             <point key="canvasLocation" x="2078" y="1425"/>
         </scene>
@@ -2559,9 +2544,11 @@ You can make passwords for all sorts of things, like email addresses, sites or r
         <image name="icon_play.png" width="32" height="32"/>
         <image name="icon_plus.png" width="32" height="32"/>
         <image name="icon_up.png" width="32" height="32"/>
+        <image name="icon_volume-high.png" width="32" height="32"/>
         <image name="identity.png" width="82" height="80"/>
         <image name="page-deblock.png" width="305" height="400"/>
         <image name="page-gorillas.png" width="305" height="400"/>
+        <image name="play.png" width="72" height="80"/>
         <image name="pull-down.png" width="60" height="10"/>
         <image name="pull-up.png" width="60" height="20"/>
         <image name="social-facebook.png" width="44" height="44"/>
@@ -2620,6 +2607,24 @@ You can make passwords for all sorts of things, like email addresses, sites or r
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MPGuideViewController.h"/>
             <relationships>
                 <relationship kind="action" name="close"/>
+                <relationship kind="action" name="play"/>
+                <relationship kind="action" name="toggleVolume"/>
+                <relationship kind="outlet" name="content" candidateClass="UIView"/>
+                <relationship kind="outlet" name="contentButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="contentText" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="contentTip" candidateClass="UIView"/>
+                <relationship kind="outlet" name="contentTipText" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="largePlayButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="progress" candidateClass="UIProgressView"/>
+                <relationship kind="outlet" name="siteNameTip" candidateClass="UIView"/>
+                <relationship kind="outlet" name="smallPlayButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="toolButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="toolTip" candidateClass="UIView"/>
+                <relationship kind="outlet" name="typeButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="typeTip" candidateClass="UIView"/>
+                <relationship kind="outlet" name="usernameButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="usernameTip" candidateClass="UIView"/>
+                <relationship kind="outlet" name="volumeButton" candidateClass="UIButton"/>
             </relationships>
         </class>
         <class className="MPMainViewController" superclassName="UIViewController">
@@ -2694,6 +2699,7 @@ You can make passwords for all sorts of things, like email addresses, sites or r
             <relationships>
                 <relationship kind="action" name="close:" candidateClass="UIBarButtonItem"/>
                 <relationship kind="action" name="showGuide:" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="cloudSwitch" candidateClass="UISwitch"/>
             </relationships>
         </class>
         <class className="MPTypeViewController" superclassName="UITableViewController">

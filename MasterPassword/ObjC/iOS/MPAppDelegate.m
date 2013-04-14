@@ -260,8 +260,10 @@
 
     inf(@"Started up with device identifier: %@", [PearlKeyChain deviceIdentifier]);
 
-    if ([[MPiOSConfig get].showSetup boolValue])
-        [[MPAppDelegate get] showSetup];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([[MPiOSConfig get].showSetup boolValue])
+            [[MPAppDelegate get] showSetup];
+    });
 
     return YES;
 }
@@ -592,21 +594,21 @@
         if (buttonIndex == [alert cancelButtonIndex])
             return;
 
-        [moc performBlock:^{
+        [moc performBlockAndWait:^{
             inf(@"Unsetting master password for: %@.", user.userID);
             user.keyID = nil;
             [self forgetSavedKeyFor:user];
             [moc saveToStore];
+        }];
 
-            [self signOutAnimated:YES];
-            if (didReset)
-                didReset();
+        [self signOutAnimated:YES];
+        if (didReset)
+            didReset();
 
 #ifdef TESTFLIGHT_SDK_VERSION
-            [TestFlight passCheckpoint:MPCheckpointChangeMP];
+        [TestFlight passCheckpoint:MPCheckpointChangeMP];
 #endif
-            [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointChangeMP attributes:nil];
-        }];
+        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointChangeMP attributes:nil];
     }
                        cancelTitle:[PearlStrings get].commonButtonAbort
                        otherTitles:[PearlStrings get].commonButtonContinue, nil];
