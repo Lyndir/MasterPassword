@@ -10,7 +10,6 @@
 #import "MPMainViewController.h"
 #import "MPAppDelegate.h"
 
-
 @interface MPElementListSearchController ()
 
 @property (nonatomic) BOOL newSiteSectionWasNeeded;
@@ -47,7 +46,7 @@
 
 - (void)searchBarBookmarkButtonClicked:(UISearchBar *)searchBar {
 
-    [((MPMainViewController *)self.delegate) performSegueWithIdentifier:@"MP_AllSites" sender:self];
+    [((MPMainViewController *)self.delegate) performSegueWithIdentifier:@"MP_AllSites" sender:MPElementListFilterNone];
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
@@ -70,12 +69,7 @@
 
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
 
-    controller.searchBar.showsScopeBar         = controller.searchBar.selectedScopeButtonIndex != MPSearchScopeAll;
     controller.searchBar.text                  = @"";
-    if (controller.searchBar.showsScopeBar)
-        controller.searchBar.scopeButtonTitles = @[@"All", @"Outdated"];
-    else
-        controller.searchBar.scopeButtonTitles = nil;
 
     [UIView animateWithDuration:0.2f animations:^{
         self.searchTipContainer.alpha = 0;
@@ -91,8 +85,6 @@
 
     controller.searchBar.prompt                      = nil;
     controller.searchBar.searchResultsButtonSelected = NO;
-    controller.searchBar.selectedScopeButtonIndex    = MPSearchScopeAll;
-    controller.searchBar.showsScopeBar               = NO;
 }
 
 - (void)searchDisplayController:(UISearchDisplayController *)controller didLoadSearchResultsTableView:(UITableView *)tableView {
@@ -109,13 +101,6 @@
     [self updateData];
     return NO;
 }
-
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
-
-    [self updateData];
-    return NO;
-}
-
 
 - (void)updateData {
     
@@ -146,37 +131,39 @@
         return NO;
 
     __block BOOL hasExactQueryMatch = NO;
-    [[self.fetchedResultsController sections] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        id <NSFetchedResultsSectionInfo> sectionInfo = obj;
-        [[sectionInfo objects] enumerateObjectsUsingBlock:^(id obj_, NSUInteger idx_, BOOL *stop_) {
-            if ([[obj_ name] isEqualToString:query]) {
-                hasExactQueryMatch = YES;
-                *stop_ = YES;
-            }
-        }];
-        if (hasExactQueryMatch)
-            *stop = YES;
+    id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsControllerByUses sections] lastObject];
+    [[sectionInfo objects] enumerateObjectsUsingBlock:^(id obj_, NSUInteger idx_, BOOL *stop_) {
+        if ([[obj_ name] isEqualToString:query]) {
+            hasExactQueryMatch = YES;
+            *stop_ = YES;
+        }
     }];
+    if (hasExactQueryMatch)
+        return NO;
 
-    return !hasExactQueryMatch;
+    sectionInfo = [[self.fetchedResultsControllerByLastUsed sections] lastObject];
+    [[sectionInfo objects] enumerateObjectsUsingBlock:^(id obj_, NSUInteger idx_, BOOL *stop_) {
+        if ([[obj_ name] isEqualToString:query]) {
+            hasExactQueryMatch = YES;
+            *stop_ = YES;
+        }
+    }];
+    if (hasExactQueryMatch)
+        return NO;
+
+    return YES;
 }
 
 - (void)customTableViewUpdates {
 
     BOOL newSiteSectionIsNeeded = [self newSiteSectionNeeded];
-    dbg(@"isNeeded:%d, wasNeeded:%d", newSiteSectionIsNeeded, self.newSiteSectionWasNeeded);
-    if (newSiteSectionIsNeeded && !self.newSiteSectionWasNeeded) {
-        dbg(@"%@ -- insertSection:%d", NSStringFromSelector(_cmd), [[self.fetchedResultsController sections] count]);
-        [self.tableView insertSections:[NSIndexSet indexSetWithIndex:[[self.fetchedResultsController sections] count]]
+    if (newSiteSectionIsNeeded && !self.newSiteSectionWasNeeded)
+        [self.tableView insertSections:[NSIndexSet indexSetWithIndex:2]
                       withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
-    else if (!newSiteSectionIsNeeded && self.newSiteSectionWasNeeded) {
-        dbg(@"%@ -- deleteSection:%d", NSStringFromSelector(_cmd), [[self.fetchedResultsController sections] count]);
-        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:[[self.fetchedResultsController sections] count]]
+    else if (!newSiteSectionIsNeeded && self.newSiteSectionWasNeeded)
+        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:2]
                       withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
     self.newSiteSectionWasNeeded = newSiteSectionIsNeeded;
-    dbg(@"wasNeeded->%d", self.newSiteSectionWasNeeded);
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -185,39 +172,37 @@
     if ([self newSiteSectionNeeded])
         ++sectionCount;
 
-    dbg(@"%@ (actually) = %d", NSStringFromSelector(_cmd), sectionCount);
     return sectionCount;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
-    NSUInteger fetchSections = [[self.fetchedResultsController sections] count];
-    if (section < (NSInteger)fetchSections)
+    if (section < [super numberOfSectionsInTableView:tableView])
+        // Section is one of super's sections.
         return [super tableView:tableView numberOfRowsInSection:section];
 
-    dbg(@"%@%d = %d", NSStringFromSelector(_cmd), section, 1);
     return 1;
 }
 
-- (void)configureCell:(UITableViewCell *)cell inTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
+- (void)configureCell:(UITableViewCell *)cell inTableView:(UITableView *)tableView atTableIndexPath:(NSIndexPath *)indexPath {
 
-    NSUInteger fetchSections = [[self.fetchedResultsController sections] count];
-    if (indexPath.section < (NSInteger)fetchSections)
-        [super configureCell:cell inTableView:tableView atIndexPath:indexPath];
-
-    else {
-        // "New" section
-        NSString *query = [self.searchDisplayController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        cell.textLabel.text = query;
-        cell.detailTextLabel.text = PearlString(@"Add new site: %@",
-                [MPAlgorithmDefault shortNameOfType:[[MPAppDelegate get].activeUser defaultType]]);
+    if (indexPath.section < [super numberOfSectionsInTableView:tableView]) {
+        // Section is one of super's sections.
+        [super configureCell:cell inTableView:tableView atTableIndexPath:indexPath];
+        return;
     }
+
+    // "New" section
+    NSString *query = [self.searchDisplayController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    cell.textLabel.text = query;
+    cell.detailTextLabel.text = PearlString(@"New site: %@",
+            [MPAlgorithmDefault shortNameOfType:[[MPAppDelegate get].activeUser defaultType]]);
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    NSUInteger fetchSections = [[self.fetchedResultsController sections] count];
-    if (indexPath.section < (NSInteger)fetchSections) {
+    if (indexPath.section < [super numberOfSectionsInTableView:tableView]) {
+        // Section is one of super's sections.
         [super tableView:tableView didSelectRowAtIndexPath:indexPath];
         return;
     }
@@ -240,18 +225,18 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 
-    NSUInteger fetchSections = [[self.fetchedResultsController sections] count];
-    if (section < (NSInteger)fetchSections)
+    if (section < [super numberOfSectionsInTableView:tableView])
+        // Section is one of super's sections.
         return [super tableView:tableView titleForHeaderInSection:section];
 
-    return @"";
+    return @"Create";
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 forRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    NSUInteger fetchSections = [[self.fetchedResultsController sections] count];
-    if (indexPath.section < (NSInteger)fetchSections)
+    if (indexPath.section < [super numberOfSectionsInTableView:tableView])
+        // Section is one of super's sections.
         [super tableView:tableView commitEditingStyle:editingStyle forRowAtIndexPath:indexPath];
 }
 

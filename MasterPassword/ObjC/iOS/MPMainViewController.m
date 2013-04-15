@@ -8,10 +8,8 @@
 
 #import "MPMainViewController.h"
 #import "MPAppDelegate.h"
-#import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "MPElementListAllViewController.h"
-#import "MPElementListSearchController.h"
 
 
 @interface MPMainViewController()
@@ -50,8 +48,10 @@
 
     if ([[segue identifier] isEqualToString:@"MP_ChooseType"])
         ((MPTypeViewController *)[segue destinationViewController]).delegate = self;
-    if ([[segue identifier] isEqualToString:@"MP_AllSites"])
-        ((MPElementListAllViewController *)[((UINavigationController *)[segue destinationViewController]) topViewController]).delegate = self;
+    if ([[segue identifier] isEqualToString:@"MP_AllSites"]) {
+        ((MPElementListAllViewController *)[segue destinationViewController]).delegate = self;
+        ((MPElementListAllViewController *)[segue destinationViewController]).filter = sender;
+    }
 }
 
 - (void)viewDidLoad {
@@ -262,10 +262,10 @@
 
     if ([[MPiOSConfig get].helpHidden boolValue]) {
         self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, self.view.bounds.size.height - 44 /* search bar */);
-        self.helpContainer.frame    = CGRectSetY(self.helpContainer.frame, self.view.bounds.size.height - 20);
+        self.helpContainer.frame    = CGRectSetY(self.helpContainer.frame, self.view.bounds.size.height - 20 /* pull-up */);
     } else {
         self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 225);
-        self.helpContainer.frame    = CGRectSetY(self.helpContainer.frame, 246);
+        [self.helpContainer setFrameFromCurrentSizeAndParentPaddingTop:CGFLOAT_MAX right:0 bottom:0 left:0];
     }
 }
 
@@ -690,9 +690,7 @@
 
 - (IBAction)searchOutdatedElements {
 
-    self.searchDisplayController.searchBar.selectedScopeButtonIndex    = MPSearchScopeOutdated;
-    self.searchDisplayController.searchBar.searchResultsButtonSelected = YES;
-    [self.searchDisplayController.searchBar becomeFirstResponder];
+    [self performSegueWithIdentifier:@"MP_AllSites" sender:MPElementListFilterOutdated];
 }
 
 - (IBAction)closeAlert {

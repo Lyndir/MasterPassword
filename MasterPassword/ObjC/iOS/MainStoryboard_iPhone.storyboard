@@ -705,10 +705,6 @@ Your passwords will be AES-encrypted with your master password.</string>
                                 <gestureRecognizers/>
                                 <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
-                                <scopeButtonTitles>
-                                    <string>All</string>
-                                    <string>Outdated</string>
-                                </scopeButtonTitles>
                             </searchBar>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" id="foz-tW-xGw" userLabel="View - Action Tip">
                                 <rect key="frame" x="10" y="0.0" width="300" height="60"/>
@@ -1006,7 +1002,7 @@ L4m3P4sSw0rD</string>
                         <outlet property="typeTipContainer" destination="g55-0m-WjS" id="KZ9-KV-NMh"/>
                         <segue destination="oLN-6u-GLb" kind="push" identifier="MP_UserProfile" id="tKN-Sw-S5J"/>
                         <segue destination="2Th-Tb-22a" kind="modal" identifier="MP_OtherApps" id="Io5-cz-v9Y"/>
-                        <segue destination="KZ9-Bb-FN7" kind="modal" identifier="MP_AllSites" id="18w-AW-e8A"/>
+                        <segue destination="idA-Pj-1U9" kind="modal" identifier="MP_AllSites" id="nVS-UW-cgK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mK2-p1-3zC" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1101,7 +1097,7 @@ L4m3P4sSw0rD</string>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_spinner.png" id="27q-lX-0vy">
                                         <rect key="frame" x="105" y="40" width="110" height="110"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                     <view contentMode="scaleToFill" id="JTj-nh-BWs" userLabel="Word Wall">
                                         <rect key="frame" x="0.0" y="0.0" width="960" height="200"/>
@@ -1254,11 +1250,11 @@ L4m3P4sSw0rD</string>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="DBJ-Qi-ZcF">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="Tap and hold to delete or reset user." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="DBJ-Qi-ZcF">
                                         <rect key="frame" x="20" y="548" width="280" height="20"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
-                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                                         <nil key="highlightedColor"/>
                                         <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </label>
@@ -1287,7 +1283,7 @@ L4m3P4sSw0rD</string>
                                     </scrollView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="left" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="8s0-nT-Aoq">
                                         <rect key="frame" x="90" y="377" width="140" height="15"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="13"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1295,7 +1291,7 @@ L4m3P4sSw0rD</string>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="0NM-NI-7UR">
                                         <rect key="frame" x="90" y="174" width="140" height="15"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="13"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1303,7 +1299,7 @@ L4m3P4sSw0rD</string>
                                     </label>
                                     <view userInteractionEnabled="NO" contentMode="scaleToFill" id="xWL-xQ-KjX">
                                         <rect key="frame" x="20" y="60" width="280" height="100"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="Xrk-S4-ZN5">
                                                 <rect key="frame" x="0.0" y="0.0" width="280" height="100"/>
@@ -1325,7 +1321,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
                                     </view>
                                     <view contentMode="scaleToFill" id="7cc-yu-i0m">
                                         <rect key="frame" x="20" y="168" width="280" height="88"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Enter your master password:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="RhX-bA-EhC">
                                                 <rect key="frame" x="10" y="0.0" width="260" height="20"/>
@@ -1433,7 +1429,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
                                     </button>
                                     <button opaque="NO" alpha="0.10000000000000001" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="2dq-bb-mPl" userLabel="add">
                                         <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
                                         <state key="normal" title="＋">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1557,7 +1553,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                     <navigationItem key="navigationItem" title="iCloud" id="mNu-yP-9oW">
                         <barButtonItem key="rightBarButtonItem" title="Next" id="Kxp-c7-ErS">
                             <connections>
-                                <segue destination="ZgN-2j-05b" kind="push" id="llz-jX-HRQ"/>
+                                <segue destination="kSj-yX-DmT" kind="push" id="gbD-CB-5c8"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1569,51 +1565,44 @@ If you set a custom password, it will be encrypted before it is saved to the clo
             </objects>
             <point key="canvasLocation" x="996" y="1425"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="rAg-OU-9QV">
-            <objects>
-                <navigationController definesPresentationContext="YES" id="KZ9-Bb-FN7" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="s0n-kY-htJ">
-                        <rect key="frame" x="0.0" y="-44" width="0.0" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="idA-Pj-1U9" kind="relationship" relationship="rootViewController" id="dmZ-bA-SbA"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="vJs-4S-qNG" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1537" y="-495"/>
-        </scene>
-        <!--Element List All View Controller - All Sites-->
+        <!--Element List All View Controller-->
         <scene sceneID="I7c-vt-d2s">
             <objects>
                 <tableViewController id="idA-Pj-1U9" customClass="MPElementListAllViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="48" sectionHeaderHeight="22" sectionFooterHeight="22" id="N83-sj-4tl">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <navigationBar key="tableHeaderView" contentMode="scaleToFill" id="l0p-Tu-L9k">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <items>
+                                <navigationItem title="All Sites" id="Ipv-Tt-WPc">
+                                    <barButtonItem key="leftBarButtonItem" title="Close" style="done" id="Mnn-6X-DgP">
+                                        <connections>
+                                            <action selector="close:" destination="idA-Pj-1U9" id="qqC-U7-8Ci"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem key="rightBarButtonItem" systemItem="add" id="CR8-WY-9Td">
+                                        <connections>
+                                            <action selector="add:" destination="idA-Pj-1U9" id="G7b-hR-IH0"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </navigationItem>
+                            </items>
+                        </navigationBar>
                         <connections>
                             <outlet property="dataSource" destination="idA-Pj-1U9" id="yPh-6k-Ba9"/>
                             <outlet property="delegate" destination="idA-Pj-1U9" id="bdk-Iu-Hpv"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="All Sites" id="Ipv-Tt-WPc">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Mnn-6X-DgP">
-                            <connections>
-                                <action selector="close:" destination="idA-Pj-1U9" id="qqC-U7-8Ci"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="CR8-WY-9Td">
-                            <connections>
-                                <action selector="add:" destination="idA-Pj-1U9" id="G7b-hR-IH0"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <connections>
+                        <outlet property="navigationBar" destination="l0p-Tu-L9k" id="9DR-L3-ggI"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="abw-PC-pyQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2078" y="-495"/>
+            <point key="canvasLocation" x="1537" y="-495"/>
         </scene>
         <!--Apps View Controller-->
         <scene sceneID="3cC-Qq-rgU">
@@ -1623,17 +1612,17 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="book.png" id="wjL-OU-K7k">
+                            <imageView userInteractionEnabled="NO" contentMode="center" image="book.png" id="wjL-OU-K7k">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="page-gorillas.png" id="QQT-37-azo">
-                                <rect key="frame" x="0.0" y="79" width="305" height="400"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <rect key="frame" x="0.0" y="81" width="305" height="400"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="drq-47-KK9">
-                                <rect key="frame" x="85" y="448" width="150" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <rect key="frame" x="85" y="536" width="150" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -1647,7 +1636,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
@@ -1809,7 +1798,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                 <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="ilG-0h-SOb">
                                                     <rect key="frame" x="221" y="8" width="79" height="27"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <color key="onTintColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
                                                         <action selector="didToggleSwitch:" destination="oLN-6u-GLb" eventType="valueChanged" id="e5q-mf-XK7"/>
                                                     </connections>
@@ -2066,7 +2055,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
             </objects>
             <point key="canvasLocation" x="1004" y="-495"/>
         </scene>
-        <!--Setup View Controller-->
+        <!--Setup View Controller - About-->
         <scene sceneID="p4k-3T-J0X">
             <objects>
                 <viewController id="ZgN-2j-05b" customClass="MPSetupViewController" sceneMemberID="viewController">
@@ -2086,35 +2075,50 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" usesAttributedText="YES" id="hwP-ds-GDh">
-                                <rect key="frame" x="20" y="137" width="280" height="347"/>
+                                <rect key="frame" x="20" y="137" width="280" height="367"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <attributedString key="attributedText">
-                                    <fragment>
-                                        <string key="content">The passwords created by this app are not stored anywhere but created on the spot.
-
-It is vital that you </string>
+                                    <fragment content="The passwords created by this app are not stored anywhere but ">
                                         <attributes>
                                             <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <font key="NSFont" size="14" name="Helvetica"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                         </attributes>
                                     </fragment>
-                                    <fragment content="remember your master password">
+                                    <fragment content="created on the spot">
+                                        <attributes>
+                                            <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <font key="NSFont" size="14" name="Helvetica-Oblique"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">.
+
+You don't need to remember any password generated by this app, but </string>
+                                        <attributes>
+                                            <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <font key="NSFont" size="14" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="it is vital that you ">
                                         <attributes>
                                             <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <font key="NSFont" size="14" name="Helvetica-Bold"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                         </attributes>
                                     </fragment>
-                                    <fragment content=" and that it is secure.  A small nonsense sentence is a great password. Eg. ">
+                                    <fragment content="remember">
                                         <attributes>
                                             <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <font key="NSFont" size="14" name="Helvetica"/>
+                                            <font key="NSFont" size="14" name="Helvetica-BoldOblique"/>
+                                            <font key="NSOriginalFont" size="14" name="Helvetica-BoldOblique"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                         </attributes>
                                     </fragment>
-                                    <fragment content="Banana colored duckling">
+                                    <fragment content=" your master password">
                                         <attributes>
                                             <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <font key="NSFont" size="14" name="Helvetica-BoldOblique"/>
@@ -2122,28 +2126,29 @@ It is vital that you </string>
                                         </attributes>
                                     </fragment>
                                     <fragment>
-                                        <string key="content" base64-UTF8="YES">
-Cgo
-</string>
+                                        <string key="content"> and that it is secure.
+
+Don't reuse an old password!
+Don't give out your master password.
+A small nonsense sentence is a great password. </string>
                                         <attributes>
                                             <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <font key="NSFont" size="14" name="Helvetica"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                         </attributes>
                                     </fragment>
-                                    <fragment>
-                                        <string key="content">Don't reuse an old password!
-</string>
+                                    <fragment content="Eg. Banana colored duckling">
                                         <attributes>
                                             <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <font key="NSFont" size="14" name="Helvetica-Bold"/>
+                                            <font key="NSOriginalFont" size="14" name="Helvetica-Bold"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                         </attributes>
                                     </fragment>
                                     <fragment>
-                                        <string key="content">Don't give out your master password, no matter how close you think you are with the other person.
+                                        <string key="content">
 
-You can make passwords for all sorts of things, like email addresses, sites or real-world objects like your bike lock: if you can name it, you can get a password for it.</string>
+You can make passwords for anything, like email addresses, sites or real-world things like a bike lock: if you can name it, you can get a password for it.</string>
                                         <attributes>
                                             <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <font key="NSFont" size="14" name="Helvetica"/>
@@ -2160,13 +2165,13 @@ You can make passwords for all sorts of things, like email addresses, sites or r
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="oBl-x2-aUS">
+                    <navigationItem key="navigationItem" title="About" id="oBl-x2-aUS">
                         <barButtonItem key="leftBarButtonItem" title="Close" style="done" id="yZJ-lt-O5m">
                             <connections>
                                 <action selector="close:" destination="ZgN-2j-05b" id="aKm-zK-xbg"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Guide" id="rVv-Hh-KDw">
+                        <barButtonItem key="rightBarButtonItem" title="Overview" id="rVv-Hh-KDw">
                             <connections>
                                 <segue destination="myN-X7-9Tg" kind="push" id="jgo-j3-gbW"/>
                             </connections>
@@ -2175,7 +2180,7 @@ You can make passwords for all sorts of things, like email addresses, sites or r
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="561-Zo-a0K" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1537" y="1425"/>
+            <point key="canvasLocation" x="2078" y="1425"/>
         </scene>
         <!--Guide View Controller-->
         <scene sceneID="k6U-hl-fJt">
@@ -2527,7 +2532,66 @@ You can make passwords for all sorts of things, like email addresses, sites or r
                 <panGestureRecognizer minimumNumberOfTouches="1" id="kYj-Dc-rXL"/>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="ayP-1f-n2G"/>
             </objects>
-            <point key="canvasLocation" x="2078" y="1425"/>
+            <point key="canvasLocation" x="2619" y="1425"/>
+        </scene>
+        <!--Setup View Controller - Security-->
+        <scene sceneID="XZC-qy-rbH">
+            <objects>
+                <viewController id="kSj-yX-DmT" customClass="MPSetupViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="sT4-Jb-e5D">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="Eqt-R0-LTj">
+                                <rect key="frame" x="0.0" y="-64" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="top" image="unlocked.png" id="4ah-P0-2DG">
+                                <rect key="frame" x="20" y="20" width="280" height="80"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Stay Logged In?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="R2t-Ug-fY6">
+                                <rect key="frame" x="20" y="108" width="280" height="21"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="k4g-1Z-Hfw">
+                                <rect key="frame" x="20" y="137" width="280" height="196"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <string key="text">The right balance between security and convenience is often very personal.
+
+To make getting to your passwords faster, you can remain logged in after you close Master Password.  This allows you to skip having to log in the next time.
+
+However, it means that anyone who finds your device unlocked can do the same.</string>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="xmc-hs-riu">
+                                <rect key="frame" x="122" y="345" width="79" height="27"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                            </switch>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Security" id="7XO-EZ-YRY">
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="77S-5d-d24">
+                            <connections>
+                                <segue destination="ZgN-2j-05b" kind="push" id="Osp-Zu-L6y"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="rememberLoginSwitch" destination="xmc-hs-riu" id="ROi-H8-rcY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="M5H-qQ-ytd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1537" y="1425"/>
         </scene>
     </scenes>
     <resources>
@@ -2567,6 +2631,7 @@ You can make passwords for all sorts of things, like email addresses, sites or r
         <image name="ui_panel_display.png" width="300" height="86"/>
         <image name="ui_spinner.png" width="75" height="75"/>
         <image name="ui_textfield.png" width="158" height="34"/>
+        <image name="unlocked.png" width="84" height="80"/>
     </resources>
     <classes>
         <class className="MPAppViewController" superclassName="UIViewController">
@@ -2588,6 +2653,7 @@ You can make passwords for all sorts of things, like email addresses, sites or r
             <relationships>
                 <relationship kind="action" name="add:"/>
                 <relationship kind="action" name="close:"/>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
             </relationships>
         </class>
         <class className="MPElementListController" superclassName="UITableViewController">
@@ -2700,6 +2766,7 @@ You can make passwords for all sorts of things, like email addresses, sites or r
                 <relationship kind="action" name="close:" candidateClass="UIBarButtonItem"/>
                 <relationship kind="action" name="showGuide:" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="cloudSwitch" candidateClass="UISwitch"/>
+                <relationship kind="outlet" name="rememberLoginSwitch" candidateClass="UISwitch"/>
             </relationships>
         </class>
         <class className="MPTypeViewController" superclassName="UITableViewController">
@@ -2742,7 +2809,7 @@ You can make passwords for all sorts of things, like email addresses, sites or r
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="KIl-ZW-M7G"/>
         <segue reference="jgo-j3-gbW"/>
-        <segue reference="9Bs-cD-ddF"/>
     </inferredMetricsTieBreakers>
 </document>

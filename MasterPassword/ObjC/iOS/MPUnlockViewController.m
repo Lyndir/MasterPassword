@@ -212,7 +212,7 @@
     if (!moc)
         return;
 
-    self.tip.text = @"Tap and hold to delete or reset.";
+    self.tip.text = @"Tap and hold to delete or reset user.";
 
     __block NSArray *users = nil;
     [moc performBlockAndWait:^{
@@ -266,15 +266,13 @@
             avatar.backgroundColor = [UIColor clearColor];
     }                   options:0];
     [avatar onSelect:^(BOOL selected) {
-        if (selected) {
-            if ((self.selectedUser = user))
-                [self didToggleUserSelection];
-            else
-                [self didSelectNewUserAvatar:avatar];
-        } else {
+        if (!selected) {
             self.selectedUser = nil;
             [self didToggleUserSelection];
-        }
+        } else if ((self.selectedUser = user))
+            [self didToggleUserSelection];
+        else
+            [self didSelectNewUserAvatar:avatar];
     }        options:0];
 
     [self.avatarToUserOID setObject:NilToNSNull([user objectID]) forKey:[NSValue valueWithNonretainedObject:avatar]];

@@ -38,6 +38,8 @@
 		DA4DA1DA1564471F00F6F596 /* libuicolor-utilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */; };
 		DA5A09DF171A70E4005284AB /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5A09DD171A70E4005284AB /* play.png */; };
 		DA5A09E0171A70E4005284AB /* play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5A09DE171A70E4005284AB /* play@2x.png */; };
+		DA5A09EA171BB0F7005284AB /* unlocked.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5A09E8171BB0F7005284AB /* unlocked.png */; };
+		DA5A09EB171BB0F7005284AB /* unlocked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5A09E9171BB0F7005284AB /* unlocked@2x.png */; };
 		DA5BFA49147E415C00F98B1E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA48147E415C00F98B1E /* UIKit.framework */; };
 		DA5BFA4B147E415C00F98B1E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA5BFA4D147E415C00F98B1E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */; };
@@ -1036,6 +1038,8 @@
 		DA497B9715E8C90E00B52167 /* libGoogle+.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libGoogle+.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5A09DD171A70E4005284AB /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		DA5A09DE171A70E4005284AB /* play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x.png"; sourceTree = "<group>"; };
+		DA5A09E8171BB0F7005284AB /* unlocked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unlocked.png; sourceTree = "<group>"; };
+		DA5A09E9171BB0F7005284AB /* unlocked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unlocked@2x.png"; sourceTree = "<group>"; };
 		DA5BFA44147E415C00F98B1E /* MasterPassword.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MasterPassword.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5BFA48147E415C00F98B1E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DA5BFA4A147E415C00F98B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -2206,6 +2210,8 @@
 		DABD360D1711E29400CF925C /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				DA5A09E8171BB0F7005284AB /* unlocked.png */,
+				DA5A09E9171BB0F7005284AB /* unlocked@2x.png */,
 				DA5A09DD171A70E4005284AB /* play.png */,
 				DA5A09DE171A70E4005284AB /* play@2x.png */,
 				DABD360E1711E29400CF925C /* Automaton */,
@@ -4596,6 +4602,8 @@
 				DABD3FCF1714F45C00CF925C /* identity@2x.png in Resources */,
 				DA5A09DF171A70E4005284AB /* play.png in Resources */,
 				DA5A09E0171A70E4005284AB /* play@2x.png in Resources */,
+				DA5A09EA171BB0F7005284AB /* unlocked.png in Resources */,
+				DA5A09EB171BB0F7005284AB /* unlocked@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

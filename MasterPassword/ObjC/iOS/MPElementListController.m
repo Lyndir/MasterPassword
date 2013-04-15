@@ -1,10 +1,3 @@
-//
-// Created by lhunath on 2013-02-09.
-//
-// To change the template use AppCode | Preferences | File Templates.
-//
-
-
 #import "MPElementListController.h"
 
 #import "MPAppDelegate_Store.h"
@@ -15,7 +8,8 @@
 
 @implementation MPElementListController {
 
-    NSFetchedResultsController *_fetchedResultsController;
+    NSFetchedResultsController *_fetchedResultsControllerByUses;
+    NSFetchedResultsController *_fetchedResultsControllerByLastUsed;
     NSDateFormatter *_dateFormatter;
 }
 
@@ -57,23 +51,47 @@
     }];
 }
 
-- (NSFetchedResultsController *)fetchedResultsController {
+- (NSFetchedResultsController *)fetchedResultsControllerByLastUsed {
 
-    if (!_fetchedResultsController) {
-        NSAssert([[NSThread currentThread] isMainThread], @"The fetchedResultsController must run on the main thread.");
+    if (!_fetchedResultsControllerByLastUsed) {
+        NSAssert([[NSThread currentThread] isMainThread], @"The fetchedResultsController must be accessed from the main thread.");
         NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
         if (!moc)
             return nil;
 
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
-        fetchRequest.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"uses_" ascending:NO]];
-        fetchRequest.fetchBatchSize = 20;
-        _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:moc
+        fetchRequest.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:NSStringFromSelector( @selector(lastUsed) ) ascending:NO]];
+        [self configureFetchRequest:fetchRequest];
+        _fetchedResultsControllerByLastUsed = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:moc
                                                                           sectionNameKeyPath:nil cacheName:nil];
-        _fetchedResultsController.delegate = self;
+        _fetchedResultsControllerByLastUsed.delegate = self;
     }
 
-    return _fetchedResultsController;
+    return _fetchedResultsControllerByLastUsed;
+}
+
+- (NSFetchedResultsController *)fetchedResultsControllerByUses {
+
+    if (!_fetchedResultsControllerByUses) {
+        NSAssert([[NSThread currentThread] isMainThread], @"The fetchedResultsController must be accessed from the main thread.");
+        NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
+        if (!moc)
+            return nil;
+
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
+        fetchRequest.sortDescriptors = @[ [[NSSortDescriptor alloc] initWithKey:NSStringFromSelector( @selector(uses_) ) ascending:NO] ];
+        [self configureFetchRequest:fetchRequest];
+        _fetchedResultsControllerByUses = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:moc
+                                                                                sectionNameKeyPath:nil cacheName:nil];
+        _fetchedResultsControllerByUses.delegate = self;
+    }
+
+    return _fetchedResultsControllerByUses;
+}
+
+- (void)configureFetchRequest:(NSFetchRequest *)fetchRequest {
+
+    fetchRequest.fetchLimit = 5;
 }
 
 - (NSDateFormatter *)dateFormatter {
@@ -92,34 +110,33 @@
 
     // Build predicate.
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user == %@", activeUser];
+
+    // Add query predicate.
     UISearchBar *searchBar = self.searchDisplayController.searchBar;
     if (searchBar) {
         NSString *query = [searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         if (!query)
             return;
 
-        // Add query predicate.
         predicate = [NSCompoundPredicate andPredicateWithSubpredicates:
                 @[predicate, [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", query]]];
-
-        // Add scope predicate.
-        switch ((MPSearchScope) searchBar.selectedScopeButtonIndex) {
-
-            case MPSearchScopeAll:
-                break;
-            case MPSearchScopeOutdated:
-                predicate = [NSCompoundPredicate andPredicateWithSubpredicates:
-                        @[[NSPredicate predicateWithFormat:@"requiresExplicitMigration_ == YES"], predicate]];
-                break;
-        }
     }
-    self.fetchedResultsController.fetchRequest.predicate = predicate;
+    
+    // Add filter predicate.
+    if ([self.filter isEqualToString:MPElementListFilterOutdated])
+        predicate = [NSCompoundPredicate andPredicateWithSubpredicates:
+                     @[[NSPredicate predicateWithFormat:@"requiresExplicitMigration_ == YES"], predicate]];
 
+    // Fetch
     NSError *error;
-    if (![self.fetchedResultsController performFetch:&error])
+    self.fetchedResultsControllerByLastUsed.fetchRequest.predicate = predicate;
+    self.fetchedResultsControllerByUses.fetchRequest.predicate = predicate;
+    if (![self.fetchedResultsControllerByLastUsed performFetch:&error])
         err(@"Couldn't fetch elements: %@", error);
-    else
-        [self.tableView reloadData];
+    if (![self.fetchedResultsControllerByUses performFetch:&error])
+    err(@"Couldn't fetch elements: %@", error);
+
+    [self.tableView reloadData];
 }
 
 - (void)customTableViewUpdates {
@@ -140,49 +157,29 @@
 
         case NSFetchedResultsChangeInsert:
             dbg(@"%@ -- NSFetchedResultsChangeInsert:%@", NSStringFromSelector(_cmd), anObject);
-            [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView insertRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:newIndexPath] ]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
 
         case NSFetchedResultsChangeDelete:
             dbg(@"%@ -- NSFetchedResultsChangeDelete:%@", NSStringFromSelector(_cmd), anObject);
-            [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView deleteRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:indexPath] ]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
 
         case NSFetchedResultsChangeUpdate:
             dbg(@"%@ -- NSFetchedResultsChangeUpdate:%@", NSStringFromSelector(_cmd), anObject);
-            [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView reloadRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:indexPath] ]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
 
         case NSFetchedResultsChangeMove:
             dbg(@"%@ -- NSFetchedResultsChangeMove:%@", NSStringFromSelector(_cmd), anObject);
-            [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+            [self.tableView deleteRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:indexPath] ]
                                   withRowAnimation:UITableViewRowAnimationAutomatic];
-            [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+            [self.tableView insertRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:newIndexPath] ]
                                   withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
-    }
-}
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
-           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
-
-    switch (type) {
-
-        case NSFetchedResultsChangeInsert:
-            dbg(@"%@ -- NSFetchedResultsChangeInsert:%d", NSStringFromSelector(_cmd), sectionIndex);
-            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]
-                          withRowAnimation:UITableViewRowAnimationAutomatic];
-            break;
-
-        case NSFetchedResultsChangeDelete:
-            dbg(@"%@ -- NSFetchedResultsChangeDelete:%d", NSStringFromSelector(_cmd), sectionIndex);
-            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]
-                          withRowAnimation:UITableViewRowAnimationAutomatic];
-            break;
-
-        case NSFetchedResultsChangeMove:
-        case NSFetchedResultsChangeUpdate:
-            Throw(@"Invalid change type for section changes: %d", type);
     }
 }
 
@@ -195,16 +192,18 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 
-    NSInteger integer = (NSInteger)[[self.fetchedResultsController sections] count];
-    dbg(@"%@ = %d", NSStringFromSelector(_cmd), integer);
-    return integer;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
-    NSInteger integer = (NSInteger)[[[self.fetchedResultsController sections] objectAtIndex:(unsigned)section] numberOfObjects];
-    dbg(@"%@%d = %d", NSStringFromSelector(_cmd), section, integer);
-    return integer;
+    if (section == 0)
+        return (NSInteger)[[[self.fetchedResultsControllerByLastUsed sections] lastObject] numberOfObjects];
+
+    if (section == 1)
+        return (NSInteger)[[[self.fetchedResultsControllerByUses sections] lastObject] numberOfObjects];
+
+    Throw(@"Unsupported section: %d", section);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -213,50 +212,82 @@
     if (!cell)
         cell = (UITableViewCell *) [[UIViewController alloc] initWithNibName:@"MPElementListCellView" bundle:nil].view;
 
-    [self configureCell:cell inTableView:tableView atIndexPath:indexPath];
+    [self configureCell:cell inTableView:tableView atTableIndexPath:indexPath];
 
     return cell;
 }
 
-- (void)configureCell:(UITableViewCell *)cell inTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
+- (void)configureCell:(UITableViewCell *)cell inTableView:(UITableView *)tableView atTableIndexPath:(NSIndexPath *)indexPath {
 
-    MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    MPElementEntity *element = [self elementForTableIndexPath:indexPath];
 
     cell.textLabel.text = element.name;
     cell.detailTextLabel.text = PearlString(@"%d views, last on %@: %@",
             element.uses, [self.dateFormatter stringFromDate:element.lastUsed], [element.algorithm shortNameOfType:element.type]);
 }
 
+- (NSIndexPath *)tableIndexPathForFetchController:(NSFetchedResultsController *)fetchedResultsController indexPath:(NSIndexPath *)indexPath {
+
+    if (fetchedResultsController == self.fetchedResultsControllerByLastUsed)
+        return [NSIndexPath indexPathForRow:indexPath.row inSection:0];
+    if (fetchedResultsController == self.fetchedResultsControllerByUses)
+        return [NSIndexPath indexPathForRow:indexPath.row inSection:1];
+
+    Throw(@"Unknown fetched results controller: %@, for index path: %@", fetchedResultsController, indexPath);
+}
+
+- (NSIndexPath *)fetchedIndexPathForTableIndexPath:(NSIndexPath *)indexPath {
+
+    return [NSIndexPath indexPathForRow:indexPath.row inSection:0];
+}
+
+- (MPElementEntity *)elementForTableIndexPath:(NSIndexPath *)indexPath {
+
+    if (indexPath.section == 0)
+        return [self.fetchedResultsControllerByLastUsed objectAtIndexPath:[self fetchedIndexPathForTableIndexPath:indexPath]];
+
+    if (indexPath.section == 1)
+        return [self.fetchedResultsControllerByUses objectAtIndexPath:[self fetchedIndexPathForTableIndexPath:indexPath]];
+
+    Throw(@"Unsupported section: %d", indexPath.section);
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    [self.delegate didSelectElement:[self.fetchedResultsController objectAtIndexPath:indexPath]];
+    [self.delegate didSelectElement:[self elementForTableIndexPath:indexPath]];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 
-    return [[[self.fetchedResultsController sections] objectAtIndex:(unsigned)section] name];
+    if (section == 0)
+        return @"Most Recently Used";
+
+    if (section == 1)
+        return @"Most Commonly Used";
+
+    Throw(@"Unsupported section: %d", section);
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
 
-    return [self.fetchedResultsController sectionIndexTitles];
+    return @[@"recency", @"uses"];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
 
-    return [self.fetchedResultsController sectionForSectionIndexTitle:title atIndex:index];
+    return index;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 forRowAtIndexPath:(NSIndexPath *)indexPath {
 
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        NSManagedObjectContext *moc = self.fetchedResultsController.managedObjectContext;
-        [moc performBlock:^{
-            MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        MPElementEntity *element = [self elementForTableIndexPath:indexPath];
+        [element.managedObjectContext performBlockAndWait:^{
 
             inf(@"Deleting element: %@", element.name);
-            [moc deleteObject:element];
+            [element.managedObjectContext deleteObject:element];
+            [element.managedObjectContext saveToStore];
 
 #ifdef TESTFLIGHT_SDK_VERSION
             [TestFlight passCheckpoint:MPCheckpointDeleteElement];
