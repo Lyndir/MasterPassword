@@ -120,8 +120,8 @@
     self.nameLabel.layer.cornerRadius = 5;
     self.avatarTemplate.hidden        = YES;
     self.spinner.alpha                = 0;
-    self.passwordTipView.alpha        = 0;
-    self.createPasswordTipView.alpha  = 0;
+    self.passwordTipView.hidden       = NO;
+    self.createPasswordTipView.hidden = NO;
 
     NSMutableArray *wordListLines = [NSMutableArray arrayWithCapacity:27413];
     [[[NSString alloc] initWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"dictionary" withExtension:@"lst"]]
@@ -316,39 +316,37 @@
 
 - (void)showNewUserNameAlertFor:(MPUserEntity *)newUser inContext:(NSManagedObjectContext *)moc
                      completion:(void (^)(BOOL finished))completion {
-
-    PEARL_MAIN_THREAD_START
-        [PearlAlert showAlertWithTitle:@"Enter Your Name"
-                               message:nil viewStyle:UIAlertViewStylePlainTextInput
-                             initAlert:^(UIAlertView *alert, UITextField *firstField) {
-                                 firstField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-                                 firstField.keyboardType           = UIKeyboardTypeAlphabet;
-                                 firstField.text                   = newUser.name;
-                                 firstField.placeholder            = @"eg. Robert Lee Mitchell";
-                                 firstField.enablesReturnKeyAutomatically = YES;
-                             }
-                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                         if (buttonIndex == [alert cancelButtonIndex]) {
-                             completion(NO);
-                             return;
+    
+    [PearlAlert showAlertWithTitle:@"Enter Your Name"
+                           message:nil viewStyle:UIAlertViewStylePlainTextInput
+                         initAlert:^(UIAlertView *alert, UITextField *firstField) {
+                             firstField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+                             firstField.keyboardType           = UIKeyboardTypeAlphabet;
+                             firstField.text                   = newUser.name;
+                             firstField.placeholder            = @"eg. Robert Lee Mitchell";
+                             firstField.enablesReturnKeyAutomatically = YES;
                          }
-                         NSString *name = [alert textFieldAtIndex:0].text;
-                         if (!name.length) {
-                             [PearlAlert showAlertWithTitle:@"Name Is Required" message:nil viewStyle:UIAlertViewStyleDefault initAlert:nil
-                                          tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                                              [self showNewUserNameAlertFor:newUser inContext:moc completion:completion];
-                                          } cancelTitle:@"Try Again" otherTitles:nil];
-                             return;
-                         }
-
-                         // Save
-                         [moc performBlockAndWait:^{
-                             newUser.name = name;
-                         }];
-                         [self showNewUserAvatarAlertFor:newUser inContext:moc completion:completion];
+                 tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                     if (buttonIndex == [alert cancelButtonIndex]) {
+                         completion(NO);
+                         return;
                      }
-                           cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonSave, nil];
-    PEARL_MAIN_THREAD_END
+                     NSString *name = [alert textFieldAtIndex:0].text;
+                     if (!name.length) {
+                         [PearlAlert showAlertWithTitle:@"Name Is Required" message:nil viewStyle:UIAlertViewStyleDefault initAlert:nil
+                                      tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                                          [self showNewUserNameAlertFor:newUser inContext:moc completion:completion];
+                                      } cancelTitle:@"Try Again" otherTitles:nil];
+                         return;
+                     }
+                     
+                     // Save
+                     [moc performBlockAndWait:^{
+                         newUser.name = name;
+                     }];
+                     [self showNewUserAvatarAlertFor:newUser inContext:moc completion:completion];
+                 }
+                       cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonSave, nil];
 }
 
 - (void)showNewUserAvatarAlertFor:(MPUserEntity *)newUser inContext:(NSManagedObjectContext *)moc

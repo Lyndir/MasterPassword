@@ -196,7 +196,7 @@
     NSString *query = [self.searchDisplayController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     cell.textLabel.text = query;
     cell.detailTextLabel.text = PearlString(@"New site: %@",
-            [MPAlgorithmDefault shortNameOfType:[[MPAppDelegate get].activeUser defaultType]]);
+            [MPAlgorithmDefault shortNameOfType:[[[MPAppDelegate get] activeUserForThread] defaultType]]);
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -47,12 +47,12 @@
         } options:0];
         [avatar onSelect:^(BOOL selected) {
             if (selected) {
-                MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
+                MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
                 activeUser.avatar        = (unsigned)avatar.tag;
                 [activeUser.managedObjectContext saveToStore];
             }
         } options:0];
-        avatar.selected            = (a == [MPAppDelegate get].activeUser.avatar);
+        avatar.selected            = (a == [[MPAppDelegate get] activeUserForThread].avatar);
     }
 
     [super viewDidLoad];
@@ -68,8 +68,9 @@
         }
     } recurse:NO];
 
-    self.savePasswordSwitch.on = [MPAppDelegate get].activeUser.saveKey;
-    self.defaultTypeLabel.text = [[MPAppDelegate get].key.algorithm shortNameOfType:[MPAppDelegate get].activeUser.defaultType];
+    MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
+    self.savePasswordSwitch.on = activeUser.saveKey;
+    self.defaultTypeLabel.text = [[MPAppDelegate get].key.algorithm shortNameOfType:activeUser.defaultType];
 
     [super viewWillAppear:animated];
 }
@@ -113,7 +114,7 @@
 
     else
         if (cell == self.changeMPCell) {
-            MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
+            MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
             [[MPAppDelegate get] changeMasterPasswordFor:activeUser inContext:activeUser.managedObjectContext didResetBlock:nil];
         }
 
@@ -132,7 +133,7 @@
 
 - (void)didSelectType:(MPElementType)type {
 
-    MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
+    MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
     activeUser.defaultType = type;
     [activeUser.managedObjectContext saveToStore];
 
@@ -141,14 +142,14 @@
 
 - (MPElementType)selectedType {
 
-    return [MPAppDelegate get].activeUser.defaultType;
+    return [[MPAppDelegate get] activeUserForThread].defaultType;
 }
 
 #pragma mark - IBActions
 
 - (IBAction)didToggleSwitch:(UISwitch *)sender {
 
-    MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
+    MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
     if ((activeUser.saveKey = sender.on))
         [[MPAppDelegate get] storeSavedKeyFor:activeUser];
     else

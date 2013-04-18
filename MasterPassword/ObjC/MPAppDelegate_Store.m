@@ -356,8 +356,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     self.privateManagedObjectContext = privateManagedObjectContext;
     self.mainManagedObjectContext = mainManagedObjectContext;
 
-    [self.handleCloudContentAlert cancelAlert];
-    [self.fixCloudContentAlert cancelAlert];
+    [self.handleCloudContentAlert cancelAlertAnimated:YES];
+    [self.fixCloudContentAlert cancelAlertAnimated:YES];
     [self.storeLoading cancelOverlay];
 }
 
@@ -391,7 +391,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 - (void)showCloudContentAlert {
 
     __weak MPAppDelegate_Shared *wSelf = self;
-    [self.handleCloudContentAlert cancelAlert];
+    [self.handleCloudContentAlert cancelAlertAnimated:NO];
     self.handleCloudContentAlert = [PearlAlert showActivityWithTitle:@"iCloud Sync Problem" message:
             @"Waiting for your other device to auto‑correct the problem..."
                                                            initAlert:^(UIAlertView *alert) {
@@ -634,7 +634,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 - (NSString *)exportSitesShowingPasswords:(BOOL)showPasswords {
 
-    MPUserEntity *activeUser = self.activeUser;
+    MPUserEntity *activeUser = [self activeUserForThread];
     inf(@"Exporting sites, %@, for: %@", showPasswords? @"showing passwords": @"omitting passwords", activeUser.userID);
 
     // Header.

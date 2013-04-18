@@ -362,7 +362,7 @@
                 break;
         }
 
-        [activityAlert cancelAlert];
+        [activityAlert cancelAlertAnimated:YES];
     });
 
     return YES;
@@ -489,7 +489,7 @@
 
 - (void)openFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController {
 
-    NSString *userName = [MPAppDelegate get].activeUser.name;
+    NSString *userName = [[MPAppDelegate get] activeUserForThread].name;
     PearlLogLevel logLevel = [[MPiOSConfig get].sendInfo boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
 
     [[[PearlEMail alloc] initForEMailTo:@"Master Password Development <masterpassword@lyndir.com>"
@@ -555,12 +555,12 @@
     NSString *message;
 
     if (showPasswords)
-        message = PearlString(@"Export of Master Password sites with passwords included.\n"
+        message = PearlString(@"Export of Master Password sites with passwords included.\n\n"
                                @"REMINDER: Make sure nobody else sees this file!  Passwords are visible!\n\n\n"
                                @"--\n"
                                @"%@\n"
                                @"Master Password %@, build %@",
-                              self.activeUser.name,
+                              [self activeUserForThread].name,
                               [PearlInfoPlist get].CFBundleShortVersionString,
                               [PearlInfoPlist get].CFBundleVersion);
     else
@@ -568,7 +568,7 @@
                                @"--\n"
                                @"%@\n"
                                @"Master Password %@, build %@",
-                              self.activeUser.name,
+                              [self activeUserForThread].name,
                               [PearlInfoPlist get].CFBundleShortVersionString,
                               [PearlInfoPlist get].CFBundleVersion);
 
@@ -578,7 +578,7 @@
     [PearlEMail sendEMailTo:nil subject:@"Master Password Export" body:message
                 attachments:[[PearlEMailAttachment alloc] initWithContent:[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
                                                                  mimeType:@"text/plain" fileName:
-                  PearlString(@"%@ (%@).mpsites", self.activeUser.name, [exportDateFormatter stringFromDate:[NSDate date]])],
+                  PearlString(@"%@ (%@).mpsites", [self activeUserForThread].name, [exportDateFormatter stringFromDate:[NSDate date]])],
                             nil];
 }
 

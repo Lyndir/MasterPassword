@@ -73,11 +73,8 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     if (self.key)
         self.key = nil;
 
-    if (self.activeUser) {
-        self.activeUser = nil;
-        [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedOutNotification object:self userInfo:
-         @{@"animated": @(animated)}];
-    }
+    self.activeUser = nil;
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedOutNotification object:self userInfo:@{@"animated": @(animated)}];
 }
 
 - (BOOL)signInAsUser:(MPUserEntity *)user usingMasterPassword:(NSString *)password {
@@ -235,7 +232,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     [moc saveToStore];
 
 #ifdef PEARL_UIKIT
-    [activityAlert cancelAlert];
+    [activityAlert cancelAlertAnimated:YES];
 #endif
 }
 

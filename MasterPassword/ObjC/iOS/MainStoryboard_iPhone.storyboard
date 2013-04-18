@@ -9,7 +9,7 @@
             <objects>
                 <tableViewController id="NKe-nv-566" customClass="MPTypeViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="btl-G4-V0S">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="aNa-wb-cYK">
@@ -481,11 +481,11 @@ Your passwords will be AES-encrypted with your master password.</string>
             <objects>
                 <viewController id="PQa-Xl-A3x" customClass="MPMainViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ep0-Hn-5TR">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" image="background.png" id="0hY-LL-ITu">
-                                <rect key="frame" x="0.0" y="44" width="320" height="460"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="372"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <view contentMode="scaleToFill" id="Juh-jm-UDr" userLabel="View - Content">
@@ -662,9 +662,10 @@ Your passwords will be AES-encrypted with your master password.</string>
                                         </connections>
                                     </button>
                                 </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" id="61G-By-qLB" userLabel="View - Help">
-                                <rect key="frame" x="0.0" y="334" width="320" height="170"/>
+                                <rect key="frame" x="0.0" y="246" width="320" height="170"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="top" image="Square-bottom.png" id="lbm-A0-3PK">
@@ -706,7 +707,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                 <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
                             </searchBar>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="foz-tW-xGw" userLabel="View - Action Tip">
+                            <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="foz-tW-xGw" userLabel="View - Action Tip">
                                 <rect key="frame" x="10" y="0.0" width="300" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -729,7 +730,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="zOR-Du-qRL" userLabel="View - Search Tip">
+                            <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="zOR-Du-qRL" userLabel="View - Search Tip">
                                 <rect key="frame" x="10" y="15" width="300" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -748,9 +749,9 @@ Your passwords will be AES-encrypted with your master password.</string>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="UM8-56-kAO" userLabel="View - Tool Tip">
+                            <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="UM8-56-kAO" userLabel="View - Tool Tip">
                                 <rect key="frame" x="10" y="15" width="266" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_bottom_right.png" id="LqX-rO-rep">
                                         <rect key="frame" x="0.0" y="0.0" width="266" height="60"/>
@@ -771,7 +772,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="g55-0m-WjS" userLabel="View - Type Tip">
+                            <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="g55-0m-WjS" userLabel="View - Type Tip">
                                 <rect key="frame" x="10" y="228" width="300" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -790,7 +791,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="v2m-Gf-pEV" userLabel="View - Content Tip">
+                            <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="v2m-Gf-pEV" userLabel="View - Content Tip">
                                 <rect key="frame" x="55" y="50" width="210" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -808,7 +809,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="b9W-aA-93r" userLabel="View - User Name Tip">
+                            <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="b9W-aA-93r" userLabel="View - User Name Tip">
                                 <rect key="frame" x="55" y="110" width="210" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -826,8 +827,8 @@ Your passwords will be AES-encrypted with your master password.</string>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <view alpha="0.0" contentMode="scaleToFill" id="6wk-NU-VQG" userLabel="View - Outdated Alert">
-                                <rect key="frame" x="10" y="318" width="300" height="180"/>
+                            <view hidden="YES" alpha="0.0" contentMode="scaleToFill" id="6wk-NU-VQG" userLabel="View - Outdated Alert">
+                                <rect key="frame" x="10" y="230" width="300" height="180"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <imageView contentMode="scaleToFill" image="tip_alert_black.png" id="f30-i7-VBv">
@@ -904,8 +905,8 @@ These sites should be upgraded and their account's passwords updated as soon as 
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <view alpha="0.0" contentMode="scaleToFill" id="yRY-qt-gz8" userLabel="View - Alert">
-                                <rect key="frame" x="10" y="318" width="300" height="180"/>
+                            <view hidden="YES" alpha="0.0" contentMode="scaleToFill" id="yRY-qt-gz8" userLabel="View - Alert">
+                                <rect key="frame" x="10" y="230" width="300" height="180"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_alert_black.png" id="TUv-Tl-xTc">
@@ -1084,15 +1085,15 @@ L4m3P4sSw0rD</string>
             <objects>
                 <viewController storyboardIdentifier="MPUnlockViewController" wantsFullScreenLayout="YES" modalTransitionStyle="flipHorizontal" id="Nbn-Rv-sP1" customClass="MPUnlockViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GeE-5J-ZZO">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="QWe-Gw-rD3">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <view contentMode="scaleToFill" id="PHH-XC-9QQ">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_spinner.png" id="27q-lX-0vy">
@@ -1251,7 +1252,7 @@ L4m3P4sSw0rD</string>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="Tap and hold to delete or reset user." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="DBJ-Qi-ZcF">
-                                        <rect key="frame" x="20" y="548" width="280" height="20"/>
+                                        <rect key="frame" x="20" y="460" width="280" height="20"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
                                         <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
@@ -1260,7 +1261,7 @@ L4m3P4sSw0rD</string>
                                     </label>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="white" delaysContentTouches="NO" id="Blg-F1-9NA">
                                         <rect key="frame" x="0.0" y="16" width="320" height="340"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" id="Ten-ig-gog">
                                                 <rect key="frame" x="105" y="30" width="110" height="110"/>
@@ -1283,7 +1284,7 @@ L4m3P4sSw0rD</string>
                                     </scrollView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="left" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="8s0-nT-Aoq">
                                         <rect key="frame" x="90" y="377" width="140" height="15"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="13"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1291,15 +1292,15 @@ L4m3P4sSw0rD</string>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="0NM-NI-7UR">
                                         <rect key="frame" x="90" y="174" width="140" height="15"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="13"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view userInteractionEnabled="NO" contentMode="scaleToFill" id="xWL-xQ-KjX">
+                                    <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="xWL-xQ-KjX" userLabel="View - Create Password Tip">
                                         <rect key="frame" x="20" y="60" width="280" height="100"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="Xrk-S4-ZN5">
                                                 <rect key="frame" x="0.0" y="0.0" width="280" height="100"/>
@@ -1321,7 +1322,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
                                     </view>
                                     <view contentMode="scaleToFill" id="7cc-yu-i0m">
                                         <rect key="frame" x="20" y="168" width="280" height="88"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Enter your master password:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="RhX-bA-EhC">
                                                 <rect key="frame" x="10" y="0.0" width="260" height="20"/>
@@ -1345,7 +1346,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
                                                     <outlet property="delegate" destination="Nbn-Rv-sP1" id="Y0T-cI-gF1"/>
                                                 </connections>
                                             </textField>
-                                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="NvG-0R-eTZ">
+                                            <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="NvG-0R-eTZ" userLabel="View - Password Tip">
                                                 <rect key="frame" x="35" y="0.0" width="210" height="60"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <subviews>
@@ -1443,7 +1444,7 @@ You could use the word wall for  inspiration in finding a memorable master passw
                                         </connections>
                                     </button>
                                     <webView opaque="NO" contentMode="scaleToFill" id="rGU-aZ-XVm">
-                                        <rect key="frame" x="0.0" y="499" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="411" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <dataDetectorType key="dataDetectorTypes"/>
@@ -1491,14 +1492,19 @@ You could use the word wall for  inspiration in finding a memorable master passw
             </objects>
             <point key="canvasLocation" x="455" y="145"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Pearl Navigation Controller-->
         <scene sceneID="wrY-9D-LEc">
             <objects>
-                <navigationController definesPresentationContext="YES" id="uu3-4d-bYN" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="uu3-4d-bYN" customClass="PearlNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="T2Q-L6-b8f">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="supportedInterfaceOrientations">
+                            <integer key="value" value="2"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <segue destination="Q4b-t4-pwH" kind="relationship" relationship="rootViewController" id="5mm-gX-15G"/>
                     </connections>
@@ -1512,11 +1518,11 @@ You could use the word wall for  inspiration in finding a memorable master passw
             <objects>
                 <viewController id="Q4b-t4-pwH" customClass="MPSetupViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="FnB-rI-puV">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="RjU-5e-mti">
-                                <rect key="frame" x="0.0" y="-64" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="-64" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="top" image="cloud.png" id="Ahr-aa-V1N">
@@ -1570,7 +1576,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
             <objects>
                 <tableViewController id="idA-Pj-1U9" customClass="MPElementListAllViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="48" sectionHeaderHeight="22" sectionFooterHeight="22" id="N83-sj-4tl">
-                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <navigationBar key="tableHeaderView" contentMode="scaleToFill" id="l0p-Tu-L9k">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1608,33 +1614,40 @@ If you set a custom password, it will be encrypted before it is saved to the clo
         <scene sceneID="3cC-Qq-rgU">
             <objects>
                 <viewController wantsFullScreenLayout="YES" id="2Th-Tb-22a" customClass="MPAppsViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="DHZ-5g-6vT">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <view key="view" contentMode="scaleToFill" id="AhE-Ed-ajP">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="center" image="book.png" id="wjL-OU-K7k">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="page-gorillas.png" id="QQT-37-azo">
-                                <rect key="frame" x="0.0" y="81" width="305" height="400"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="drq-47-KK9">
-                                <rect key="frame" x="85" y="536" width="150" height="32"/>
+                            <view contentMode="scaleToFill" id="DHZ-5g-6vT">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="exit" destination="2Th-Tb-22a" eventType="touchUpInside" id="6Ra-GC-jSG"/>
-                                </connections>
-                            </button>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" image="book.png" id="wjL-OU-K7k">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="page-gorillas.png" id="QQT-37-azo">
+                                        <rect key="frame" x="0.0" y="38" width="305" height="400"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="drq-47-KK9">
+                                        <rect key="frame" x="85" y="448" width="150" height="32"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="exit" destination="2Th-Tb-22a" eventType="touchUpInside" id="6Ra-GC-jSG"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                     </view>
@@ -1647,10 +1660,10 @@ If you set a custom password, it will be encrypted before it is saved to the clo
             </objects>
             <point key="canvasLocation" x="-85" y="-495"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Pearl Navigation Controller-->
         <scene sceneID="8r0-wA-Zre">
             <objects>
-                <navigationController id="KZF-fe-y9n" sceneMemberID="viewController">
+                <navigationController id="KZF-fe-y9n" customClass="PearlNavigationController" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="sif-x3-Fol">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1658,6 +1671,9 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                         <color key="tintColor" red="0.37254901960784315" green="0.39215686274509803" blue="0.42745098039215684" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="forwardInterfaceRotation" value="YES"/>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <segue destination="uu3-4d-bYN" kind="modal" identifier="MP_Setup" id="qw3-O5-NEa"/>
                         <segue destination="Nbn-Rv-sP1" kind="relationship" relationship="rootViewController" id="Gzv-dM-6bM"/>
@@ -1673,7 +1689,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
             <objects>
                 <tableViewController id="oLN-6u-GLb" customClass="MPPreferencesViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="oSh-Ap-kLt">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="63M-7L-M7o">
@@ -1797,7 +1813,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="ilG-0h-SOb">
                                                     <rect key="frame" x="221" y="8" width="79" height="27"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
                                                         <action selector="didToggleSwitch:" destination="oLN-6u-GLb" eventType="valueChanged" id="e5q-mf-XK7"/>
@@ -1838,7 +1854,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Long" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="vKJ-1b-NeO">
                                                     <rect key="frame" x="200" y="11" width="100" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2060,11 +2076,11 @@ If you set a custom password, it will be encrypted before it is saved to the clo
             <objects>
                 <viewController id="ZgN-2j-05b" customClass="MPSetupViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QIH-dS-sqD">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="FTf-06-1Pg">
-                                <rect key="frame" x="0.0" y="-64" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="-64" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Getting Started" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FkR-cP-Y7K">
@@ -2075,7 +2091,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" usesAttributedText="YES" id="hwP-ds-GDh">
-                                <rect key="frame" x="20" y="137" width="280" height="367"/>
+                                <rect key="frame" x="20" y="137" width="280" height="279"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <attributedString key="attributedText">
@@ -2187,11 +2203,11 @@ You can make passwords for anything, like email addresses, sites or real-world t
             <objects>
                 <viewController id="myN-X7-9Tg" customClass="MPGuideViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vkG-Oi-PHo">
-                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" image="background.png" id="C2i-R4-36i">
-                                <rect key="frame" x="0.0" y="44" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="416"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <view clipsSubviews="YES" contentMode="scaleToFill" id="vSk-nT-Vwf" userLabel="View - Display">
@@ -2331,7 +2347,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                 </scopeButtonTitles>
                             </searchBar>
                             <view alpha="0.60000000000000009" contentMode="scaleToFill" id="Ahl-o0-lMv">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3wI-lo-tWc">
@@ -2351,7 +2367,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="UHf-cp-97W">
-                                        <rect key="frame" x="33" y="502" width="44" height="44"/>
+                                        <rect key="frame" x="33" y="414" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <accessibility key="accessibilityConfiguration" hint="" label="Close"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -2367,7 +2383,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jDS-Vh-ETL">
-                                        <rect key="frame" x="124" y="234" width="72" height="80"/>
+                                        <rect key="frame" x="124" y="190" width="72" height="80"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <accessibility key="accessibilityConfiguration" hint="" label="Close"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -2383,7 +2399,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="nXW-Eq-JOa">
-                                        <rect key="frame" x="243" y="502" width="44" height="44"/>
+                                        <rect key="frame" x="243" y="414" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <accessibility key="accessibilityConfiguration" hint="" label="Close"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -2399,16 +2415,16 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                         </connections>
                                     </button>
                                     <progressView opaque="NO" contentMode="scaleToFill" id="nf7-oM-7dh">
-                                        <rect key="frame" x="85" y="519" width="150" height="9"/>
+                                        <rect key="frame" x="85" y="431" width="150" height="9"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <color key="progressTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                     </progressView>
                                 </subviews>
                                 <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                             </view>
-                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="nDU-uf-V0X" userLabel="View - Tool Tip">
+                            <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="nDU-uf-V0X" userLabel="View - Tool Tip">
                                 <rect key="frame" x="10" y="59" width="266" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_bottom_right.png" id="Tmk-FU-w4D">
                                         <rect key="frame" x="0.0" y="0.0" width="266" height="60"/>
@@ -2425,7 +2441,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="cUZ-lb-h7x" userLabel="View - Search Tip">
+                            <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="cUZ-lb-h7x" userLabel="View - Site Name Tip">
                                 <rect key="frame" x="10" y="55" width="300" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -2444,7 +2460,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="X0C-Qf-SMn" userLabel="View - Content Tip">
+                            <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="X0C-Qf-SMn" userLabel="View - Content Tip">
                                 <rect key="frame" x="55" y="110" width="210" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -2462,7 +2478,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="w3j-Qm-9gD" userLabel="View - User Name Tip">
+                            <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="w3j-Qm-9gD" userLabel="View - User Name Tip">
                                 <rect key="frame" x="55" y="166" width="210" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -2480,7 +2496,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="Pub-jz-pkR" userLabel="View - Type Tip">
+                            <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="Pub-jz-pkR" userLabel="View - Type Tip">
                                 <rect key="frame" x="10" y="272" width="300" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -2539,11 +2555,11 @@ You can make passwords for anything, like email addresses, sites or real-world t
             <objects>
                 <viewController id="kSj-yX-DmT" customClass="MPSetupViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sT4-Jb-e5D">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="Eqt-R0-LTj">
-                                <rect key="frame" x="0.0" y="-64" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="-64" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="top" image="unlocked.png" id="4ah-P0-2DG">
@@ -2764,7 +2780,6 @@ However, it means that anyone who finds your device unlocked can do the same.</s
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MPSetupViewController.h"/>
             <relationships>
                 <relationship kind="action" name="close:" candidateClass="UIBarButtonItem"/>
-                <relationship kind="action" name="showGuide:" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="cloudSwitch" candidateClass="UISwitch"/>
                 <relationship kind="outlet" name="rememberLoginSwitch" candidateClass="UISwitch"/>
             </relationships>
@@ -2802,14 +2817,17 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                 <relationship kind="outlet" name="wordWall" candidateClass="UIView"/>
             </relationships>
         </class>
+        <class className="PearlNavigationController" superclassName="UINavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PearlNavigationController.h"/>
+        </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <nil key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
+        <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="KIl-ZW-M7G"/>
-        <segue reference="jgo-j3-gbW"/>
+        <segue reference="swi-5o-hfK"/>
+        <segue reference="9Bs-cD-ddF"/>
     </inferredMetricsTieBreakers>
 </document>

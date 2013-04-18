@@ -24,7 +24,7 @@
 #endif
 }
 
-- (MPUserEntity *)activeUser {
+- (MPUserEntity *)activeUserForThread {
 
     if (!_activeUserOID)
         return nil;
@@ -36,7 +36,7 @@
     NSError *error;
     MPUserEntity *activeUser = (MPUserEntity *)[moc existingObjectWithID:_activeUserOID error:&error];
     if (!activeUser)
-        err(@"Failed to retrieve active user: %@", error);
+    err(@"Failed to retrieve active user: %@", error);
 
     return activeUser;
 }

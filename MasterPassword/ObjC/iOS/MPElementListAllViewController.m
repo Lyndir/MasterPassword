@@ -77,7 +77,7 @@
                 [self performUpgradeAllWithCompletion:^(BOOL success, NSDictionary *changes) {
                     dispatch_async( dispatch_get_main_queue(), ^{
                         [self showUpgradeChanges:changes];
-                        [activity cancelAlert];
+                        [activity cancelAlertAnimated:YES];
                     } );
                 }];
             }          cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonContinue, nil];
@@ -110,6 +110,7 @@
                 }                  forKey:element.name];
         }
 
+        [moc saveToStore];
         completion(YES, elementChanges);
     }];
 }

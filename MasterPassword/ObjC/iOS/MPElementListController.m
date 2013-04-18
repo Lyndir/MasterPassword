@@ -104,7 +104,7 @@
 
 - (void)updateData {
 
-    MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
+    MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
     if (!activeUser)
         return;
 

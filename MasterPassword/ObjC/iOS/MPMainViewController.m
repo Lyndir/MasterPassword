@@ -84,19 +84,29 @@
                                                   }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPElementUpdatedNotification object:nil queue:nil usingBlock:
      ^void(NSNotification *note) {
-         [self activeElementDo:^(MPElementEntity *activeElement) {
-             if (activeElement.type & MPElementTypeClassStored && ![[activeElement.content description] length])
-                 [self showToolTip:@"Tap        to set a password." withIcon:self.toolTipEditIcon];
-             if (activeElement.requiresExplicitMigration)
-                 [self showToolTip:@"Password outdated. Tap to upgrade it." withIcon:nil];
-         }];
+         MPElementEntity *activeElement = [self activeElementForThread];
+         if (activeElement.type & MPElementTypeClassStored && ![[activeElement.content description] length])
+             [self showToolTip:@"Tap        to set a password." withIcon:self.toolTipEditIcon];
+         if (activeElement.requiresExplicitMigration)
+             [self showToolTip:@"Password outdated. Tap to upgrade it." withIcon:nil];
      }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil queue:nil usingBlock:
             ^(NSNotification *note) {
+                BOOL animated = [[note.userInfo objectForKey:@"animated"] boolValue];
+
                 _activeElementOID = nil;
                 self.suppressOutdatedAlert = NO;
                 [self updateAnimated:NO];
-                [self.navigationController popToRootViewControllerAnimated:[[note.userInfo objectForKey:@"animated"] boolValue]];
+
+                [[PearlSheet activeSheets] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    [obj cancelSheetAnimated:NO];
+                }];
+                if (![self.navigationController presentedViewController])
+                    [self.navigationController popToRootViewControllerAnimated:animated];
+                else
+                    [self.navigationController dismissViewControllerAnimated:animated completion:^{
+                        [self.navigationController popToRootViewControllerAnimated:animated];
+                    }];
             }];
 
     [super viewDidLoad];
@@ -104,18 +114,19 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 
-    [self activeElementDo:^(MPElementEntity *activeElement) {
-        if (activeElement.user != [MPAppDelegate get].activeUser)
-            _activeElementOID = nil;
-    }];
+    MPElementEntity *activeElement = [self activeElementForThread];
+    if (activeElement.user != [[MPAppDelegate get] activeUserForThread])
+        _activeElementOID = nil;
 
     self.searchDisplayController.searchBar.text = nil;
-    self.alertContainer.alpha                   = 0;
-    self.outdatedAlertContainer.alpha           = 0;
-    self.searchTipContainer.alpha               = 0;
-    self.actionsTipContainer.alpha              = 0;
-    self.typeTipContainer.alpha                 = 0;
-    self.toolTipContainer.alpha                 = 0;
+    self.alertContainer.hidden                  = NO;
+    self.outdatedAlertContainer.hidden          = NO;
+    self.searchTipContainer.hidden              = NO;
+    self.actionsTipContainer.hidden             = NO;
+    self.typeTipContainer.hidden                = NO;
+    self.toolTipContainer.hidden                = NO;
+    self.contentTipContainer.hidden             = NO;
+    self.loginNameTipContainer.hidden           = NO;
 
     [self updateAnimated:NO];
 
@@ -132,7 +143,7 @@
     // Needed for when we appear after a modal VC dismisses:
     // We can't present until the other modal VC has been fully dismissed and presenting in -viewWillAppear: will fail.
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
+        MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
         if ([MPAlgorithmDefault migrateUser:activeUser] && !self.suppressOutdatedAlert)
             [UIView animateWithDuration:0.3f animations:^{
                 self.outdatedAlertContainer.alpha = 1;
@@ -182,59 +193,58 @@
         return;
     }
 
-    [self activeElementDo:^(MPElementEntity *activeElement) {
-        [self setHelpChapter:activeElement? @"2": @"1"];
-        [self updateHelpHiddenAnimated:NO];
+    MPElementEntity *activeElement = [self activeElementForThread];
+    [self setHelpChapter:activeElement? @"2": @"1"];
+    [self updateHelpHiddenAnimated:NO];
 
-        self.passwordCounter.alpha     = 0;
-        self.passwordIncrementer.alpha = 0;
-        self.passwordEdit.alpha        = 0;
-        self.passwordUpgrade.alpha     = 0;
-        self.passwordUser.alpha        = 0;
-        self.displayContainer.alpha    = 0;
+    self.passwordCounter.alpha     = 0;
+    self.passwordIncrementer.alpha = 0;
+    self.passwordEdit.alpha        = 0;
+    self.passwordUpgrade.alpha     = 0;
+    self.passwordUser.alpha        = 0;
+    self.displayContainer.alpha    = 0;
 
-        if (activeElement) {
-            self.passwordUser.alpha     = 0.5f;
-            self.displayContainer.alpha = 1.0f;
-        }
+    if (activeElement) {
+        self.passwordUser.alpha     = 0.5f;
+        self.displayContainer.alpha = 1.0f;
+    }
 
-        if (activeElement.requiresExplicitMigration)
-            self.passwordUpgrade.alpha = 0.5f;
+    if (activeElement.requiresExplicitMigration)
+        self.passwordUpgrade.alpha = 0.5f;
 
-        else {
-            if (activeElement.type & MPElementTypeClassGenerated) {
-                self.passwordCounter.alpha     = 0.5f;
-                self.passwordIncrementer.alpha = 0.5f;
-            } else
-                if (activeElement.type & MPElementTypeClassStored)
-                    self.passwordEdit.alpha = 0.5f;
-        }
+    else {
+        if (activeElement.type & MPElementTypeClassGenerated) {
+            self.passwordCounter.alpha     = 0.5f;
+            self.passwordIncrementer.alpha = 0.5f;
+        } else
+            if (activeElement.type & MPElementTypeClassStored)
+                self.passwordEdit.alpha = 0.5f;
+    }
 
-        self.siteName.text = activeElement.name;
+    self.siteName.text = activeElement.name;
 
-        self.typeButton.alpha = activeElement? 1: 0;
-        [self.typeButton setTitle:activeElement.typeName
-                         forState:UIControlStateNormal];
+    self.typeButton.alpha = activeElement? 1: 0;
+    [self.typeButton setTitle:activeElement.typeName
+                     forState:UIControlStateNormal];
 
-        if ([activeElement isKindOfClass:[MPElementGeneratedEntity class]])
-            self.passwordCounter.text = PearlString(@"%u", ((MPElementGeneratedEntity *)activeElement).counter);
+    if ([activeElement isKindOfClass:[MPElementGeneratedEntity class]])
+        self.passwordCounter.text = PearlString(@"%u", ((MPElementGeneratedEntity *)activeElement).counter);
 
-        self.contentField.enabled = NO;
-        self.contentField.text    = @"";
-        if (activeElement.name && ![activeElement isDeleted])
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                NSString *description = [activeElement.content description];
+    self.contentField.enabled = NO;
+    self.contentField.text    = @"";
+    if (activeElement.name && ![activeElement isDeleted])
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            NSString *description = [activeElement.content description];
 
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.contentField.text = description;
-                });
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.contentField.text = description;
             });
+        });
 
-        self.loginNameField.enabled = NO;
-        self.loginNameField.text    = activeElement.loginName;
-        self.siteInfoHidden = !activeElement || ([[MPiOSConfig get].siteInfoHidden boolValue] && (activeElement.loginName == nil));
-        [self updateUserHiddenAnimated:NO];
-    }];
+    self.loginNameField.enabled = NO;
+    self.loginNameField.text    = activeElement.loginName;
+    self.siteInfoHidden = !activeElement || ([[MPiOSConfig get].siteInfoHidden boolValue] && (activeElement.loginName == nil));
+    [self updateUserHiddenAnimated:NO];
 }
 
 - (void)toggleHelpAnimated:(BOOL)animated {
@@ -344,12 +354,11 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
 
-    [self activeElementDo:^(MPElementEntity *activeElement) {
-        NSString *error = [self.helpView stringByEvaluatingJavaScriptFromString:
-                                          PearlString(@"setClass('%@');", activeElement.typeClassName)];
-        if (error.length)
+    MPElementEntity *activeElement = [self activeElementForThread];
+    NSString *error = [self.helpView stringByEvaluatingJavaScriptFromString:
+                                      PearlString(@"setClass('%@');", activeElement.typeClassName)];
+    if (error.length)
         err(@"helpView.setClass: %@", error);
-    }];
 }
 
 - (void)showContentTip:(NSString *)message withIcon:(UIImageView *)icon {
@@ -451,43 +460,41 @@
 
 - (IBAction)copyContent {
 
-    [self activeElementDo:^(MPElementEntity *activeElement) {
-        id content = activeElement.content;
-        if (!content)
-         // Nothing to copy.
-            return;
+    MPElementEntity *activeElement = [self activeElementForThread];
+    id content = activeElement.content;
+    if (!content)
+     // Nothing to copy.
+        return;
 
-        inf(@"Copying password for: %@", activeElement.name);
-        [UIPasteboard generalPasteboard].string = [content description];
+    inf(@"Copying password for: %@", activeElement.name);
+    [UIPasteboard generalPasteboard].string = [content description];
 
-        [self showContentTip:@"Copied!" withIcon:nil];
+    [self showContentTip:@"Copied!" withIcon:nil];
 
 #ifdef TESTFLIGHT_SDK_VERSION
-        [TestFlight passCheckpoint:MPCheckpointCopyToPasteboard];
+    [TestFlight passCheckpoint:MPCheckpointCopyToPasteboard];
 #endif
-        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyToPasteboard attributes:@{@"type"    : activeElement.typeName,
-                                                                                                        @"version" : @(activeElement.version)}];
-    }];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyToPasteboard attributes:@{@"type"    : activeElement.typeName,
+                                                                                                    @"version" : @(activeElement.version)}];
 }
 
 - (IBAction)copyLoginName:(UITapGestureRecognizer *)sender {
 
-    [self activeElementDo:^(MPElementEntity *activeElement) {
-        if (!activeElement.loginName)
-            return;
+    MPElementEntity *activeElement = [self activeElementForThread];
+    if (!activeElement.loginName)
+        return;
 
-        inf(@"Copying user name for: %@", activeElement.name);
-        [UIPasteboard generalPasteboard].string = activeElement.loginName;
+    inf(@"Copying user name for: %@", activeElement.name);
+    [UIPasteboard generalPasteboard].string = activeElement.loginName;
 
-        [self showLoginNameTip:@"Copied!"];
+    [self showLoginNameTip:@"Copied!"];
 
 #ifdef TESTFLIGHT_SDK_VERSION
-        [TestFlight passCheckpoint:MPCheckpointCopyLoginNameToPasteboard];
+    [TestFlight passCheckpoint:MPCheckpointCopyLoginNameToPasteboard];
 #endif
-        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyLoginNameToPasteboard
-                                                   attributes:@{@"type"    : activeElement.typeName,
-                                                                @"version" : @(activeElement.version)}];
-    }];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyLoginNameToPasteboard
+                                               attributes:@{@"type"    : activeElement.typeName,
+                                                            @"version" : @(activeElement.version)}];
 }
 
 - (IBAction)incrementPasswordCounter {
@@ -522,34 +529,30 @@
     if (sender.state != UIGestureRecognizerStateBegan)
      // Only fire when the gesture was first detected.
         return;
-    __block BOOL abort = NO;
-    [self activeElementDo:^(MPElementEntity *activeElement) {
-        if (![activeElement isKindOfClass:[MPElementGeneratedEntity class]]) {
-            // Not of a type that supports a password counter.
-            err(@"Cannot reset password counter: Element is not generated: %@", activeElement.name);
-            abort = YES;
-        } else
-            if (((MPElementGeneratedEntity *)activeElement).counter == 1)
-             // Counter has initial value, no point resetting.
-                abort = YES;
-    }];
-    if (abort)
+    MPElementEntity *activeElement = [self activeElementForThread];
+    if (![activeElement isKindOfClass:[MPElementGeneratedEntity class]]) {
+        // Not of a type that supports a password counter.
+        err(@"Cannot reset password counter: Element is not generated: %@", activeElement.name);
         return;
+    } else
+        if (((MPElementGeneratedEntity *)activeElement).counter == 1)
+         // Counter has initial value, no point resetting.
+            return;
 
     [self changeActiveElementWithWarning:
            @"You are resetting the site's password counter.\n\n"
             @"If you continue, the site's password will change back to its original value.  "
             @"You will then need to update your account's password back to this original value."
-                                do:^BOOL(MPElementEntity *activeElement){
-                                    inf(@"Resetting password counter for: %@", activeElement.name);
-                                    ((MPElementGeneratedEntity *)activeElement).counter = 1;
+                                do:^BOOL(MPElementEntity *activeElement_){
+                                    inf(@"Resetting password counter for: %@", activeElement_.name);
+                                    ((MPElementGeneratedEntity *)activeElement_).counter = 1;
 
 #ifdef TESTFLIGHT_SDK_VERSION
                                     [TestFlight passCheckpoint:MPCheckpointResetPasswordCounter];
 #endif
                                     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointResetPasswordCounter
-                                                                               attributes:@{@"type": activeElement.typeName,
-                                                                                            @"version": @(activeElement.version)}];
+                                                                               attributes:@{@"type": activeElement_.typeName,
+                                                                                            @"version": @(activeElement_.version)}];
                                     return YES;
                                 }];
 }
@@ -560,19 +563,18 @@
      // Only fire when the gesture was first detected.
         return;
 
-    [self activeElementDo:^(MPElementEntity *activeElement) {
-        if (!activeElement)
-            return;
+    MPElementEntity *activeElement = [self activeElementForThread];
+    if (!activeElement)
+        return;
 
-        self.loginNameField.enabled = YES;
-        [self.loginNameField becomeFirstResponder];
+    self.loginNameField.enabled = YES;
+    [self.loginNameField becomeFirstResponder];
 
 #ifdef TESTFLIGHT_SDK_VERSION
-        [TestFlight passCheckpoint:MPCheckpointEditLoginName];
+    [TestFlight passCheckpoint:MPCheckpointEditLoginName];
 #endif
-        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditLoginName attributes:@{@"type"    : activeElement.typeName,
-                                                                                                     @"version" : @(activeElement.version)}];
-    }];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditLoginName attributes:@{@"type"    : activeElement.typeName,
+                                                                                                 @"version" : @(activeElement.version)}];
 }
 
 - (void)changeActiveElementWithWarning:(NSString *)warning do:(BOOL (^)(MPElementEntity *activeElement))task; {
@@ -588,101 +590,92 @@
 
 - (void)changeActiveElementWithoutWarningDo:(BOOL (^)(MPElementEntity *activeElement))task; {
 
-    // Update element, keeping track of the old password.
-    [self activeElementDo:^(MPElementEntity *activeElement) {
-        // Perform the task.
-        NSString *oldPassword = [activeElement.content description];
-        if (!task( activeElement ))
-            return;
-        NSString *newPassword = [activeElement.content description];
+    MPElementEntity *activeElement = [self activeElementForThread];
+    NSString *oldPassword = [activeElement.content description];
+    if (!task( activeElement ))
+        return;
+    NSString *newPassword = [activeElement.content description];
 
-        // Save.
-        [activeElement.managedObjectContext saveToStore];
+    // Save.
+    [activeElement.managedObjectContext saveToStore];
 
-        // Update the UI.
-        dispatch_async( dispatch_get_main_queue(), ^{
-            [self updateAnimated:YES];
+    // Update the UI.
+    dispatch_async( dispatch_get_main_queue(), ^{
+        [self updateAnimated:YES];
 
-            // Show new and old password.
-            if ([oldPassword length] && ![oldPassword isEqualToString:newPassword])
-                [self showAlertWithTitle:@"Password Changed!"
-                                 message:PearlString( @"The password for %@ has changed.\n\n"
-                                         @"IMPORTANT:\n"
-                                         @"Don't forget to update the site with your new password! "
-                                         @"Your old password was:\n"
-                                         @"%@", activeElement.name, oldPassword )];
-        } );
-    }];
+        // Show new and old password.
+        if ([oldPassword length] && ![oldPassword isEqualToString:newPassword])
+            [self showAlertWithTitle:@"Password Changed!"
+                             message:PearlString( @"The password for %@ has changed.\n\n"
+                                     @"IMPORTANT:\n"
+                                     @"Don't forget to update the site with your new password! "
+                                     @"Your old password was:\n"
+                                     @"%@", activeElement.name, oldPassword )];
+    } );
 }
 
-- (void)activeElementDo:(void (^)(MPElementEntity *activeElement))task {
+- (MPElementEntity *)activeElementForThread {
 
-    if (!_activeElementOID) {
-        task(nil);
-        return;
-    }
+    if (!_activeElementOID)
+        return nil;
 
     NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
-    if (!moc) {
-        task(nil);
-        return;
-    }
+    if (!moc)
+        return nil;
 
     NSError *error;
     MPElementEntity *activeElement = (MPElementEntity *)[moc existingObjectWithID:_activeElementOID error:&error];
     if (!activeElement)
         err(@"Couldn't retrieve active element: %@", error);
 
-    task(activeElement);
+    return activeElement;
 }
 
 
 - (IBAction)editPassword {
 
-    [self activeElementDo:^(MPElementEntity *activeElement) {
-        if (!(activeElement.type & MPElementTypeClassStored)) {
-            // Not of a type that supports editing the content.
-            err(@"Cannot edit content: Element is not stored: %@", activeElement.name);
-            return;
-        }
+    MPElementEntity *activeElement = [self activeElementForThread];
+    if (!(activeElement.type & MPElementTypeClassStored)) {
+        // Not of a type that supports editing the content.
+        err(@"Cannot edit content: Element is not stored: %@", activeElement.name);
+        return;
+    }
 
-        self.contentField.enabled = YES;
-        [self.contentField becomeFirstResponder];
+    self.contentField.enabled = YES;
+    [self.contentField becomeFirstResponder];
 
 #ifdef TESTFLIGHT_SDK_VERSION
-        [TestFlight passCheckpoint:MPCheckpointEditPassword];
+    [TestFlight passCheckpoint:MPCheckpointEditPassword];
 #endif
-        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditPassword attributes:@{@"type"    : activeElement.typeName,
-                                                                                                    @"version" : @(activeElement.version)}];
-    }];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditPassword attributes:@{@"type"    : activeElement.typeName,
+                                                                                                @"version" : @(activeElement.version)}];
 }
 
 - (IBAction)upgradePassword {
 
-    __block NSString *warning = nil;
-    [self activeElementDo:^(MPElementEntity *activeElement) {
-        warning = activeElement.type & MPElementTypeClassGenerated?
+    MPElementEntity *activeElement = [self activeElementForThread];
+    if (!activeElement)
+        return;
+
+    NSString *warning = activeElement.type & MPElementTypeClassGenerated?
          @"You are upgrading the site.\n\n"
           @"This upgrade improves the site's compatibility with the latest version of Master Password.\n\n"
           @"Your password will change and you will need to update your site's account."
          :
          @"You are upgrading the site.\n\n"
           @"This upgrade improves the site's compatibility with the latest version of Master Password.";
-    }];
-    if (!warning)
-        return;
 
     [self changeActiveElementWithWarning:warning do:
-            ^BOOL(MPElementEntity *activeElement) {
-                inf(@"Explicitly migrating element: %@", activeElement);
-                [activeElement migrateExplicitly:YES];
+            ^BOOL(MPElementEntity *activeElement_) {
+                inf(@"Explicitly migrating element: %@", activeElement_);
+                [activeElement_ migrateExplicitly:YES];
 
 #ifdef TESTFLIGHT_SDK_VERSION
                 [TestFlight passCheckpoint:MPCheckpointExplicitMigration];
 #endif
                 [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointExplicitMigration attributes:@{
-                        @"type"    : activeElement.typeName,
-                        @"version" : @(activeElement.version)
+                        @"type"    : activeElement_.typeName,
+                        @"version" : @(activeElement_.version)
                 }];
                 return YES;
             }];
@@ -783,12 +776,7 @@
 
 - (MPElementEntity *)selectedElement {
 
-    __block MPElementEntity *selectedElement;
-    [self activeElementDo:^(MPElementEntity *activeElement) {
-        selectedElement = activeElement;
-    }];
-
-    return selectedElement;
+    return [self activeElementForThread];
 }
 
 - (void)didSelectType:(MPElementType)type {
@@ -839,36 +827,34 @@
         return YES;
     }];
 
-    [self activeElementDo:^(MPElementEntity *activeElement) {
-        inf(@"Selected: %@", activeElement.name);
-        dbg(@"Element:\n%@", [activeElement debugDescription]);
+    MPElementEntity *activeElement = [self activeElementForThread];
+    inf(@"Selected: %@", activeElement.name);
 
-        if (![[MPiOSConfig get].typeTipShown boolValue])
-            [UIView animateWithDuration:0.5f animations:^{
-                self.typeTipContainer.alpha = 1;
-            }                completion:^(BOOL finished) {
-                if (finished) {
-                    [MPiOSConfig get].typeTipShown = PearlBool(YES);
+    if (![[MPiOSConfig get].typeTipShown boolValue])
+        [UIView animateWithDuration:0.5f animations:^{
+            self.typeTipContainer.alpha = 1;
+        }                completion:^(BOOL finished) {
+            if (finished) {
+                [MPiOSConfig get].typeTipShown = PearlBool(YES);
 
-                    dispatch_after(
-                     dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                         [UIView animateWithDuration:0.2f animations:^{
-                             self.typeTipContainer.alpha = 0;
-                         }];
-                     });
-                }
-            }];
+                dispatch_after(
+                 dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                     [UIView animateWithDuration:0.2f animations:^{
+                         self.typeTipContainer.alpha = 0;
+                     }];
+                 });
+            }
+        }];
 
-        [self.searchDisplayController setActive:NO animated:YES];
-        self.searchDisplayController.searchBar.text = activeElement.name;
+    [self.searchDisplayController setActive:NO animated:YES];
+    self.searchDisplayController.searchBar.text = activeElement.name;
 
-        [[NSNotificationCenter defaultCenter] postNotificationName:MPElementUpdatedNotification object:activeElement.objectID];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPElementUpdatedNotification object:activeElement.objectID];
 #ifdef TESTFLIGHT_SDK_VERSION
-        [TestFlight passCheckpoint:PearlString(MPCheckpointUseType @"_%@", activeElement.typeShortName)];
+    [TestFlight passCheckpoint:PearlString(MPCheckpointUseType @"_%@", activeElement.typeShortName)];
 #endif
-        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointUseType attributes:@{@"type"    : activeElement.typeName,
-                                                                                               @"version" : @(activeElement.version)}];
-    }];
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointUseType attributes:@{@"type"    : activeElement.typeName,
+                                                                                           @"version" : @(activeElement.version)}];
     [self updateAnimated:YES];
 }
 
@@ -886,21 +872,17 @@
 
     if (textField == self.contentField) {
         self.contentField.enabled = NO;
-        __block BOOL abort = NO;
-        [self activeElementDo:^(MPElementEntity *activeElement) {
-            if (![activeElement isKindOfClass:[MPElementStoredEntity class]]) {
-                // Not of a type whose content can be edited.
-                err(@"Cannot update element content: Element is not stored: %@", activeElement.name);
-                abort = YES;
-            } else if ([((MPElementStoredEntity *)activeElement).content isEqual:self.contentField.text])
-                // Content hasn't changed.
-                abort = YES;
-        }];
-        if (abort)
+        MPElementEntity *activeElement = [self activeElementForThread];
+        if (![activeElement isKindOfClass:[MPElementStoredEntity class]]) {
+            // Not of a type whose content can be edited.
+            err(@"Cannot update element content: Element is not stored: %@", activeElement.name);
+            return;
+        } else if ([((MPElementStoredEntity *)activeElement).content isEqual:self.contentField.text])
+            // Content hasn't changed.
             return;
 
-        [self changeActiveElementWithoutWarningDo:^BOOL(MPElementEntity *activeElement) {
-            ((MPElementStoredEntity *)activeElement).content = self.contentField.text;
+        [self changeActiveElementWithoutWarningDo:^BOOL(MPElementEntity *activeElement_) {
+            ((MPElementStoredEntity *)activeElement_).content = self.contentField.text;
             return YES;
         }];
     }

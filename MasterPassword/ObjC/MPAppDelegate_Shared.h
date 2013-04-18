@@ -15,11 +15,12 @@
 @interface MPAppDelegate_Shared : NSObject <PearlConfigDelegate>
 #endif
 
-@property (strong, nonatomic) MPUserEntity      *activeUser;
 @property (strong, nonatomic) MPKey             *key;
 
 + (instancetype)get;
 
+- (MPUserEntity *)activeUserForThread;
 - (MPUserEntity *)activeUserInContext:(NSManagedObjectContext *)moc;
+- (void)setActiveUser:(MPUserEntity *)activeUser;
 
 @end

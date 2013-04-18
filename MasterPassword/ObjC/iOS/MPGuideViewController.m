@@ -33,6 +33,12 @@
 
     [super viewDidLoad];
 
+    self.siteNameTip.hidden = NO;
+    self.contentTip.hidden = NO;
+    self.usernameTip.hidden = NO;
+    self.typeTip.hidden = NO;
+    self.toolTip.hidden = NO;
+
     self.tickCount = 30;
 }
 
