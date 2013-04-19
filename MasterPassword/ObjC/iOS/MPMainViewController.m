@@ -761,11 +761,11 @@
         }
     }
                        cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:
-            @"？ FAQ",
-            @"ℹ Quick Guide",
-            @"⚙ Preferences",
-            @"⬇ Other Apps",
-            @"✉ Feedback",
+            @"？              FAQ                   ",
+            @"ⓘ        Quick Guide            ",
+            @"⚙         Preferences            ",
+            @"⚐         Other Apps             ",
+            @"✎           Feedback              ",
             nil];
 }
 

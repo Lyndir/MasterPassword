@@ -20,6 +20,9 @@
 @property (nonatomic) BOOL wordWallAnimating;
 @property (nonatomic, strong) NSArray          *wordList;
 
+@property(nonatomic, strong) NSOperationQueue *emergencyQueue;
+@property(nonatomic, strong) MPKey *emergencyKey;
+
 @end
 
 @implementation MPUnlockViewController {
@@ -104,12 +107,12 @@
 }
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
-    
+
     return UIInterfaceOrientationPortrait;
 }
 
 - (void)viewDidLoad {
-    
+
     [self.newsView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.masterpasswordapp.com/news.html"]]];
 
     self.avatarToUserOID = [NSMutableDictionary dictionaryWithCapacity:3];
@@ -117,11 +120,24 @@
     [self.avatarsView addGestureRecognizer:self.targetedUserActionGesture];
     self.avatarsView.decelerationRate = UIScrollViewDecelerationRateFast;
     self.avatarsView.clipsToBounds    = NO;
+    self.tip.text                     = @"";
     self.nameLabel.layer.cornerRadius = 5;
     self.avatarTemplate.hidden        = YES;
     self.spinner.alpha                = 0;
     self.passwordTipView.hidden       = NO;
     self.createPasswordTipView.hidden = NO;
+    self.emergencyPassword.text = @"";
+    self.emergencyGeneratorContainer.alpha = 0;
+    self.emergencyGeneratorContainer.hidden = YES;
+    self.emergencyQueue = [NSOperationQueue new];
+    [self.emergencyCounterStepper addTargetBlock:^(id sender, UIControlEvents event) {
+        self.emergencyCounter.text = PearlString( @"%d", (NSUInteger)self.emergencyCounterStepper.value);
+        
+        [self updateEmergencyPassword];
+    }                           forControlEvents:UIControlEventValueChanged];
+    [self.emergencyType addTargetBlock:^(id sender, UIControlEvents event) {
+        [self updateEmergencyPassword];
+    }                           forControlEvents:UIControlEventValueChanged];
 
     NSMutableArray *wordListLines = [NSMutableArray arrayWithCapacity:27413];
     [[[NSString alloc] initWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"dictionary" withExtension:@"lst"]]
@@ -147,6 +163,7 @@
                                                   }];
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:nil
                                                   usingBlock:^(NSNotification *note) {
+                                                      [self closeEmergencyAnimated:NO];
                                                       self.uiContainer.alpha = 0;
                                                   }];
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:nil
@@ -198,12 +215,34 @@
 - (void)viewWillDisappear:(BOOL)animated {
 
     inf(@"Lock screen will disappear");
+    [self closeEmergencyAnimated:animated];
+
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         [self.navigationController setNavigationBarHidden:NO animated:animated];
     }];
 
     [super viewWillDisappear:animated];
+}
+
+- (BOOL)canBecomeFirstResponder {
+
+    return YES;
+}
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+
+    if (motion == UIEventSubtypeMotionShake) {
+        [[self.view findFirstResponderInHierarchy] resignFirstResponder];
+
+        self.emergencyGeneratorContainer.alpha = 0;
+        self.emergencyGeneratorContainer.hidden = NO;
+        [UIView animateWithDuration:1 animations:^{
+            self.emergencyGeneratorContainer.alpha = 1;
+        } completion:^(BOOL finished) {
+            [self.emergencyName becomeFirstResponder];
+        }];
+    }
 }
 
 - (void)updateUsers {
@@ -316,7 +355,7 @@
 
 - (void)showNewUserNameAlertFor:(MPUserEntity *)newUser inContext:(NSManagedObjectContext *)moc
                      completion:(void (^)(BOOL finished))completion {
-    
+
     [PearlAlert showAlertWithTitle:@"Enter Your Name"
                            message:nil viewStyle:UIAlertViewStylePlainTextInput
                          initAlert:^(UIAlertView *alert, UITextField *firstField) {
@@ -339,7 +378,7 @@
                                       } cancelTitle:@"Try Again" otherTitles:nil];
                          return;
                      }
-                     
+
                      // Save
                      [moc performBlockAndWait:^{
                          newUser.name = name;
@@ -694,39 +733,147 @@
 
     [textField resignFirstResponder];
 
-    [self setSpinnerActive:YES];
+    if (textField == self.emergencyName) {
+        if (![self.emergencyMasterPassword.text length])
+            [self.emergencyMasterPassword becomeFirstResponder];
+    }
 
-    if (self.selectedUser.keyID)
-        [self tryMasterPassword];
+    else if (textField == self.emergencyMasterPassword) {
+        if (![self.emergencySite.text length])
+            [self.emergencySite becomeFirstResponder];
+    }
 
-    else
-        [PearlAlert showAlertWithTitle:@"New Master Password"
-                               message:@"Please confirm the spelling of this new master password."
-                             viewStyle:UIAlertViewStyleSecureTextInput
-                             initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-            [self setSpinnerActive:NO];
+    else if (textField == self.passwordField) {
+        [self setSpinnerActive:YES];
 
-            if (buttonIndex == [alert cancelButtonIndex])
-                return;
-
-            if (![[alert textFieldAtIndex:0].text isEqualToString:textField.text]) {
-                [PearlAlert showAlertWithTitle:@"Incorrect Master Password"
-                                       message:
-                                        @"The password you entered doesn't match with the master password you tried to use.  "
-                                         @"You've probably mistyped one of them.\n\n"
-                                         @"Give it another try."
-                                     viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:nil
-                                   cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
-                return;
-            }
-
+        if (self.selectedUser.keyID)
             [self tryMasterPassword];
-        }
-                           cancelTitle:[PearlStrings get].commonButtonCancel
-                           otherTitles:[PearlStrings get].commonButtonContinue, nil];
 
+        else
+            [PearlAlert showAlertWithTitle:@"New Master Password"
+                                   message:@"Please confirm the spelling of this new master password."
+                                 viewStyle:UIAlertViewStyleSecureTextInput
+                                 initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                [self setSpinnerActive:NO];
+
+                if (buttonIndex == [alert cancelButtonIndex])
+                    return;
+
+                if (![[alert textFieldAtIndex:0].text isEqualToString:textField.text]) {
+                    [PearlAlert showAlertWithTitle:@"Incorrect Master Password"
+                                           message:
+                                                   @"The password you entered doesn't match with the master password you tried to use.  "
+                                                           @"You've probably mistyped one of them.\n\n"
+                                                           @"Give it another try."
+                                         viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:nil
+                                       cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
+                    return;
+                }
+
+                [self tryMasterPassword];
+            }
+                               cancelTitle:[PearlStrings get].commonButtonCancel
+                               otherTitles:[PearlStrings get].commonButtonContinue, nil];
+    }
 
     return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+
+    if (textField == self.emergencyName || textField == self.emergencyMasterPassword)
+        [self updateEmergencyKey];
+
+    if (textField == self.emergencySite)
+        [self updateEmergencyPassword];
+}
+
+- (void)updateEmergencyKey {
+
+    if (![self.emergencyMasterPassword.text length] || ![self.emergencyName.text length])
+        return;
+
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        self.emergencyPassword.text = @"...";
+
+        NSString *masterPassword = self.emergencyMasterPassword.text;
+        NSString *userName = self.emergencyName.text;
+
+        [self.emergencyQueue addOperationWithBlock:^{
+            self.emergencyKey = [MPAlgorithmDefault keyForPassword:masterPassword ofUserNamed:userName];
+
+            [self updateEmergencyPassword];
+        }];
+    }];
+}
+
+- (void)updateEmergencyPassword {
+
+    if (!self.emergencyKey || ![self.emergencySite.text length])
+        return;
+
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        self.emergencyPassword.text = @"...";
+
+        NSString *name = self.emergencySite.text;
+        NSUInteger counter = (NSUInteger)self.emergencyCounterStepper.value;
+        MPElementType type;
+        switch (self.emergencyType.selectedSegmentIndex) {
+            case 0:
+                type = MPElementTypeGeneratedMaximum;
+                break;
+            case 1:
+                type = MPElementTypeGeneratedLong;
+                break;
+            case 2:
+                type = MPElementTypeGeneratedMedium;
+                break;
+            case 3:
+                type = MPElementTypeGeneratedBasic;
+                break;
+            case 4:
+                type = MPElementTypeGeneratedShort;
+                break;
+            case 5:
+                type = MPElementTypeGeneratedPIN;
+                break;
+            default:
+                Throw(@"Unsupported type index: %d", self.emergencyType.selectedSegmentIndex);
+        }
+
+        [self.emergencyQueue addOperationWithBlock:^{
+            NSString *content = [MPAlgorithmDefault generateContentNamed:name ofType:type withCounter:counter usingKey:self.emergencyKey];
+
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                self.emergencyPassword.text = content;
+            }];
+        }];
+    }];
+}
+
+- (IBAction)closeEmergency {
+
+    [self closeEmergencyAnimated:YES];
+}
+
+- (void)closeEmergencyAnimated:(BOOL)animated {
+
+    [[self.emergencyGeneratorContainer findFirstResponderInHierarchy] resignFirstResponder];
+
+    if (animated) {
+        [UIView animateWithDuration:0.5 animations:^{
+            [self closeEmergencyAnimated:NO];
+        }];
+        return;
+    }
+
+    self.emergencyName.text = @"";
+    self.emergencyMasterPassword.text = @"";
+    self.emergencySite.text = @"";
+    self.emergencyCounterStepper.value = 0;
+    self.emergencyPassword.text = @"";
+    self.emergencyGeneratorContainer.alpha = 0;
+    self.emergencyGeneratorContainer.hidden = YES;
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -756,12 +903,12 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request
  navigationType:(UIWebViewNavigationType)navigationType {
-    
+
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
         [[UIApplication sharedApplication] openURL:[request URL]];
         return NO;
     }
-    
+
     return YES;
 }
 
@@ -815,7 +962,7 @@
                              viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:nil cancelTitle:nil otherTitles:@"OK", nil];
         return;
     }
-    
+
     SLComposeViewController *vc = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
     [vc setInitialText:@"I've started doing passwords properly thanks to Master Password for iOS."];
     [vc addImage:[UIImage imageNamed:@"iTunesArtwork-Rounded"]];
@@ -922,7 +1069,7 @@
     MPUserEntity *selectedUser = (MPUserEntity *)[moc existingObjectWithID:_selectedUserOID error:&error];
     if (!selectedUser)
         err(@"Failed to retrieve selected user: %@", error);
-    
+
     return selectedUser;
 }
 

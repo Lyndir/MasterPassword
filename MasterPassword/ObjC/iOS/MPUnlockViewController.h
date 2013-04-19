@@ -26,6 +26,14 @@
 @property (strong, nonatomic) IBOutlet UILongPressGestureRecognizer *targetedUserActionGesture;
 @property (weak, nonatomic) IBOutlet UIView *uiContainer;
 @property (weak, nonatomic) IBOutlet UIWebView *newsView;
+@property (weak, nonatomic) IBOutlet UIView *emergencyGeneratorContainer;
+@property (weak, nonatomic) IBOutlet UITextField *emergencyName;
+@property (weak, nonatomic) IBOutlet UITextField *emergencyMasterPassword;
+@property (weak, nonatomic) IBOutlet UITextField *emergencySite;
+@property (weak, nonatomic) IBOutlet UIStepper *emergencyCounterStepper;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *emergencyType;
+@property (weak, nonatomic) IBOutlet UILabel *emergencyCounter;
+@property (weak, nonatomic) IBOutlet UITextField *emergencyPassword;
 
 @property (nonatomic, strong) UIColor *avatarShadowColor;
 
@@ -35,5 +43,6 @@
 - (IBAction)google:(UIButton *)sender;
 - (IBAction)mail:(UIButton *)sender;
 - (IBAction)add:(UIButton *)sender;
+- (IBAction)closeEmergency;
 
 @end

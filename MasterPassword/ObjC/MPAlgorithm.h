@@ -38,6 +38,7 @@
 - (Class)classOfType:(MPElementType)type;
 
 - (NSString *)generateContentForElement:(MPElementGeneratedEntity *)element usingKey:(MPKey *)key;
+- (NSString *)generateContentNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter usingKey:(MPKey *)key;
 
 @end
 

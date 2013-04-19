@@ -46,39 +46,22 @@
     return YES;
 }
 
-- (NSString *)generateContentForElement:(MPElementGeneratedEntity *)element usingKey:(MPKey *)key {
+- (NSString *)generateContentNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter usingKey:(MPKey *)key {
 
     static NSDictionary *MPTypes_ciphers = nil;
-
-    if (!element)
-        return nil;
-
-    if (!(element.type & MPElementTypeClassGenerated)) {
-        err(@"Incorrect type (is not MPElementTypeClassGenerated): %@, for: %@", [self nameOfType:element.type], element.name);
-        return nil;
-    }
-    if (!element.name.length) {
-        err(@"Missing name.");
-        return nil;
-    }
-    if (!key.keyData.length) {
-        err(@"Missing key.");
-        return nil;
-    }
-
     if (MPTypes_ciphers == nil)
-        MPTypes_ciphers = [NSDictionary dictionaryWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"ciphers"
-                                                                                            withExtension:@"plist"]];
+        MPTypes_ciphers = [NSDictionary dictionaryWithContentsOfURL:
+                [[NSBundle mainBundle] URLForResource:@"ciphers" withExtension:@"plist"]];
 
     // Determine the seed whose bytes will be used for calculating a password
-    uint32_t ncounter = htonl(element.counter), nnameLength = htonl(element.name.length);
+    uint32_t ncounter = htonl(counter), nnameLength = htonl(name.length);
     NSData *counterBytes    = [NSData dataWithBytes:&ncounter length:sizeof(ncounter)];
     NSData *nameLengthBytes = [NSData dataWithBytes:&nnameLength length:sizeof(nnameLength)];
-    trc(@"seed from: hmac-sha256(%@, 'com.lyndir.masterpassword' | %@ | %@ | %@)", [key.keyData encodeBase64], [nameLengthBytes encodeHex], element.name, [counterBytes encodeHex]);
+    trc(@"seed from: hmac-sha256(%@, 'com.lyndir.masterpassword' | %@ | %@ | %@)", [key.keyData encodeBase64], [nameLengthBytes encodeHex], name, [counterBytes encodeHex]);
     NSData *seed = [[NSData dataByConcatenatingDatas:
                              [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
                              nameLengthBytes,
-                             [element.name dataUsingEncoding:NSUTF8StringEncoding],
+                             [name dataUsingEncoding:NSUTF8StringEncoding],
                              counterBytes,
                              nil]
                              hmacWith:PearlHashSHA256 key:key.keyData];
@@ -87,10 +70,10 @@
 
     // Determine the cipher from the first seed byte.
     assert([seed length]);
-    NSArray  *typeCiphers = [[MPTypes_ciphers valueForKey:[self classNameOfType:element.type]]
-                                              valueForKey:[self nameOfType:element.type]];
+    NSArray  *typeCiphers = [[MPTypes_ciphers valueForKey:[self classNameOfType:type]]
+                                              valueForKey:[self nameOfType:type]];
     NSString *cipher      = [typeCiphers objectAtIndex:seedBytes[0] % [typeCiphers count]];
-    trc(@"type %@, ciphers: %@, selected: %@", [self nameOfType:element.type], typeCiphers, cipher);
+    trc(@"type %@, ciphers: %@, selected: %@", [self nameOfType:type], typeCiphers, cipher);
 
     // Encode the content, character by character, using subsequent seed bytes and the cipher.
     assert([seed length] >= [cipher length] + 1);

@@ -78,28 +78,17 @@
     if (cellType != NSNotFound && cellType & MPElementTypeClassGenerated) {
         [(UITextField *) [cell viewWithTag:2] setText:@"..."];
 
-        NSManagedObjectID *selectedElementOID = [selectedElement objectID];
-        [MPAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-            NSError *error;
-            MPElementGeneratedEntity *selectedElement_ = (MPElementGeneratedEntity *) [moc existingObjectWithID:selectedElementOID error:&error];
-            if (!selectedElement_) {
-                err(@"Failed to retrieve element for password preview: %@", error);
-                return;
-            }
+        NSString *name = selectedElement.name;
+        NSUInteger counter = ((MPElementGeneratedEntity *)selectedElement).counter;
 
-            MPElementGeneratedEntity *cellElement = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmDefault classNameOfType:cellType]
-                                                                                 inManagedObjectContext:moc];
-            cellElement.type = cellType;
-            cellElement.name = selectedElement_.name;
-            cellElement.user = selectedElement_.user;
-            cellElement.loginName = selectedElement_.loginName;
-            cellElement.version = MPAlgorithmDefaultVersion;
+        dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
+            NSString *typeContent = [MPAlgorithmDefault generateContentNamed:name ofType:cellType
+                                                                 withCounter:counter usingKey:[MPAppDelegate get].key];
 
-            NSString *typeContent = [cellElement.algorithm generateContentForElement:cellElement usingKey:[MPAppDelegate get].key];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [(UITextField *) [[tableView cellForRowAtIndexPath:indexPath] viewWithTag:2] setText:typeContent];
-            });
-        }];
+            dispatch_async( dispatch_get_main_queue(), ^{
+                [(UITextField *)[[tableView cellForRowAtIndexPath:indexPath] viewWithTag:2] setText:typeContent];
+            } );
+        } );
     }
 
     return cell;
