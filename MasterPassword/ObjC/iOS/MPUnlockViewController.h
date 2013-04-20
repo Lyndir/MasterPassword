@@ -35,7 +35,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *emergencyCounter;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *emergencyActivity;
 @property (weak, nonatomic) IBOutlet UIButton *emergencyPassword;
-@property (weak, nonatomic) IBOutlet UIView *contentTipContainer;
+@property (weak, nonatomic) IBOutlet UIView *emergencyContentTipContainer;
 
 @property (nonatomic, strong) UIColor *avatarShadowColor;
 

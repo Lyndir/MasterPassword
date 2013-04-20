@@ -1617,9 +1617,9 @@ You could use the word wall for  inspiration in finding a memorable master passw
                     <connections>
                         <outlet property="avatarTemplate" destination="Ten-ig-gog" id="0ZZ-z5-d5m"/>
                         <outlet property="avatarsView" destination="Blg-F1-9NA" id="2NL-jU-IMI"/>
-                        <outlet property="contentTipContainer" destination="sD9-hR-UAI" id="RiP-k1-7dk"/>
                         <outlet property="createPasswordTipView" destination="xWL-xQ-KjX" id="Pa1-Bk-pW2"/>
                         <outlet property="emergencyActivity" destination="3Ax-91-gVM" id="UfN-vk-k0Z"/>
+                        <outlet property="emergencyContentTipContainer" destination="sD9-hR-UAI" id="RiP-k1-7dk"/>
                         <outlet property="emergencyCounter" destination="TJC-xD-fjQ" id="jrf-nb-soB"/>
                         <outlet property="emergencyCounterStepper" destination="D49-fo-7FA" id="hj2-CL-zxq"/>
                         <outlet property="emergencyGeneratorContainer" destination="KNa-Xb-RuE" id="6jt-vU-L2Q"/>

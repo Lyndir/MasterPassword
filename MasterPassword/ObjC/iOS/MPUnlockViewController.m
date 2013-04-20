@@ -141,6 +141,8 @@
     [self.emergencyTypeControl addTargetBlock:^(id sender, UIControlEvents event) {
         [self updateEmergencyPassword];
     }                        forControlEvents:UIControlEventValueChanged];
+    self.emergencyContentTipContainer.alpha = 0;
+    self.emergencyContentTipContainer.hidden = NO;
     self.marqueeTipTexts = @[ @"Tap and hold to delete or reset user.",
                               @"Shake for emergency generator." ];
 
@@ -883,13 +885,13 @@
     [UIPasteboard generalPasteboard].string = [self.emergencyPassword titleForState:UIControlStateNormal];
 
     [UIView animateWithDuration:0.3f animations:^{
-        self.contentTipContainer.alpha = 1;
+        self.emergencyContentTipContainer.alpha = 1;
     }                completion:^(BOOL finished) {
         if (finished) {
             dispatch_time_t popTime = dispatch_time( DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC );
             dispatch_after( popTime, dispatch_get_main_queue(), ^(void) {
                 [UIView animateWithDuration:0.2f animations:^{
-                    self.contentTipContainer.alpha = 0;
+                    self.emergencyContentTipContainer.alpha = 0;
                 }];
             } );
         }
