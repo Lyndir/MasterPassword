@@ -2964,9 +2964,9 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                 <relationship kind="action" name="twitter:" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="avatarTemplate" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="avatarsView" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="contentTipContainer" candidateClass="UIView"/>
                 <relationship kind="outlet" name="createPasswordTipView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="emergencyActivity" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="emergencyContentTipContainer" candidateClass="UIView"/>
                 <relationship kind="outlet" name="emergencyCounter" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="emergencyCounterStepper" candidateClass="UIStepper"/>
                 <relationship kind="outlet" name="emergencyGeneratorContainer" candidateClass="UIView"/>
@@ -3000,7 +3000,7 @@ However, it means that anyone who finds your device unlocked can do the same.</s
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="swi-5o-hfK"/>
         <segue reference="9Bs-cD-ddF"/>
+        <segue reference="jgo-j3-gbW"/>
     </inferredMetricsTieBreakers>
 </document>
