@@ -25,20 +25,18 @@
 
 - (IBAction)gorillas:(UIButton *)sender {
 
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPCheckpointAppGorillas];
-#endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointAppGorillas attributes:nil];
+    MPCheckpoint( MPCheckpointApp, @{
+            @"app" : @"gorillas"
+    } );
 
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://itunes.apple.com/app/lyndir/gorillas/id302275459?mt=8"]];
 }
 
 - (IBAction)deblock:(UIButton *)sender {
 
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPCheckpointAppDeBlock];
-#endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointAppDeBlock attributes:nil];
+    MPCheckpoint( MPCheckpointApp, @{
+            @"app": @"deblock"
+    } );
 
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://itunes.apple.com/app/lyndir/deblock/id325058485?mt=8"]];
 }

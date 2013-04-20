@@ -897,14 +897,11 @@
         }
     }];
 
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPCheckpointCopyToPasteboard];
-#endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyToPasteboard attributes:@{
-            @"type"    : [MPAlgorithmDefault nameOfType:self.emergencyType],
-            @"version" : @MPAlgorithmDefaultVersion,
+    MPCheckpoint( MPCheckpointCopyToPasteboard, @{
+            @"type"      : [MPAlgorithmDefault nameOfType:self.emergencyType],
+            @"version"   : @MPAlgorithmDefaultVersion,
             @"emergency" : @YES,
-    }];
+    } );
 }
 
 - (void)emergencyCloseAnimated:(BOOL)animated {

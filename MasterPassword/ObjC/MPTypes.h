@@ -61,18 +61,22 @@ typedef enum {
 #define MPCheckpointSignedIn                  @"MPCheckpointSignedIn"
 #define MPCheckpointConfig                    @"MPCheckpointConfig"
 #define MPCheckpointCloud                     @"MPCheckpointCloud"
-#define MPCheckpointCloudEnabled              @"MPCheckpointCloudEnabled"
-#define MPCheckpointCloudDisabled             @"MPCheckpointCloudDisabled"
 #define MPCheckpointSitesImported             @"MPCheckpointSitesImported"
 #define MPCheckpointSitesExported             @"MPCheckpointSitesExported"
 #define MPCheckpointExplicitMigration         @"MPCheckpointExplicitMigration"
 #define MPCheckpointReview                    @"MPCheckpointReview"
 #define MPCheckpointApps                      @"MPCheckpointApps"
-#define MPCheckpointAppGorillas               @"MPCheckpointAppGorillas"
-#define MPCheckpointAppDeBlock                @"MPCheckpointAppDeBlock"
+#define MPCheckpointApp                       @"MPCheckpointApp"
 
 #define MPSignedInNotification                @"MPSignedInNotification"
 #define MPSignedOutNotification               @"MPSignedOutNotification"
 #define MPKeyForgottenNotification            @"MPKeyForgottenNotification"
 #define MPElementUpdatedNotification          @"MPElementUpdatedNotification"
 #define MPCheckConfigNotification             @"MPCheckConfigNotification"
+
+static void MPCheckpoint(NSString *checkpoint, NSDictionary *attributes) {
+
+#ifdef LOCALYTICS
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:checkpoint attributes:attributes];
+#endif
+}

@@ -48,10 +48,10 @@
 #endif
             [TestFlight addCustomEnvironmentInformation:@"Anonymous" forKey:@"username"];
             [TestFlight addCustomEnvironmentInformation:[PearlKeyChain deviceIdentifier] forKey:@"deviceIdentifier"];
-            [TestFlight setOptions:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                  [NSNumber numberWithBool:NO], @"logToConsole",
-                                                  [NSNumber numberWithBool:NO], @"logToSTDERR",
-                                                  nil]];
+            [TestFlight setOptions:@{
+                    @"logToConsole" : @NO,
+                    @"logToSTDERR"  : @NO
+            }];
             [TestFlight takeOff:testFlightToken];
             [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
                 PearlLogLevel level = PearlLogLevelWarn;
@@ -120,11 +120,10 @@
             [[LocalyticsSession sharedLocalyticsSession] upload];
             [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
                 if (message.level >= PearlLogLevelWarn)
-                    [[LocalyticsSession sharedLocalyticsSession] tagEvent:@"Problem"
-                                                               attributes:@{
-                                                               @"level": @(PearlLogLevelStr(message.level)),
-                                                               @"message": message.message
-                                                               }];
+                    MPCheckpoint( @"Problem", @{
+                            @"level"   : @(PearlLogLevelStr( message.level )),
+                            @"message" : message.message
+                    } );
 
                 return YES;
             }];
@@ -220,22 +219,20 @@
                                                   forKey:@"askForReviews"];
              [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].reviewAfterLaunches description] forKey:@"reviewAfterLaunches"];
              [TestFlight addCustomEnvironmentInformation:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
-
-             [TestFlight passCheckpoint:MPCheckpointConfig];
 #endif
-             [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointConfig attributes:@{
-              @"rememberLogin"       : [[MPConfig get].rememberLogin boolValue]? @"YES": @"NO",
-              @"iCloud"              : [self storeManager].cloudEnabled? @"YES": @"NO",
-              @"iCloudDecided"       : [[MPConfig get].iCloudDecided boolValue]? @"YES": @"NO",
-              @"sendInfo"            : [[MPiOSConfig get].sendInfo boolValue]? @"YES": @"NO",
-              @"helpHidden"          : [[MPiOSConfig get].helpHidden boolValue]? @"YES": @"NO",
-              @"showQuickStart"      : [[MPiOSConfig get].showSetup boolValue]? @"YES": @"NO",
-              @"firstRun"            : [[PearlConfig get].firstRun boolValue]? @"YES": @"NO",
-              @"launchCount"         : NilToNSNull([[PearlConfig get].launchCount description]),
-              @"askForReviews"       : [[PearlConfig get].askForReviews boolValue]? @"YES": @"NO",
-              @"reviewAfterLaunches" : NilToNSNull([[PearlConfig get].reviewAfterLaunches description]),
-              @"reviewedVersion"     : NilToNSNull([PearlConfig get].reviewedVersion)
-             }];
+             MPCheckpoint( MPCheckpointConfig, @{
+                     @"rememberLogin"       : [[MPConfig get].rememberLogin boolValue]? @"YES": @"NO",
+                     @"iCloud"              : [self storeManager].cloudEnabled? @"YES": @"NO",
+                     @"iCloudDecided"       : [[MPConfig get].iCloudDecided boolValue]? @"YES": @"NO",
+                     @"sendInfo"            : [[MPiOSConfig get].sendInfo boolValue]? @"YES": @"NO",
+                     @"helpHidden"          : [[MPiOSConfig get].helpHidden boolValue]? @"YES": @"NO",
+                     @"showQuickStart"      : [[MPiOSConfig get].showSetup boolValue]? @"YES": @"NO",
+                     @"firstRun"            : [[PearlConfig get].firstRun boolValue]? @"YES": @"NO",
+                     @"launchCount"         : NilToNSNull([[PearlConfig get].launchCount description]),
+                     @"askForReviews"       : [[PearlConfig get].askForReviews boolValue]? @"YES": @"NO",
+                     @"reviewAfterLaunches" : NilToNSNull([[PearlConfig get].reviewAfterLaunches description]),
+                     @"reviewedVersion"     : NilToNSNull([PearlConfig get].reviewedVersion)
+             } );
          }
      }];
     [[NSNotificationCenter defaultCenter] addObserverForName:kIASKAppSettingChanged object:nil queue:nil
@@ -429,20 +426,14 @@
 
     [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
 
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPCheckpointShowGuide];
-#endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointShowGuide attributes:nil];
+    MPCheckpoint( MPCheckpointShowGuide, nil );
 }
 
 - (void)showSetup {
 
     [self.navigationController performSegueWithIdentifier:@"MP_Setup" sender:self];
 
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPCheckpointShowSetup];
-#endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointShowSetup attributes:nil];
+    MPCheckpoint( MPCheckpointShowSetup, nil );
 }
 
 - (void)showFeedback {
@@ -452,10 +443,7 @@
 
 - (void)showReview {
 
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPCheckpointReview];
-#endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointReview attributes:nil];
+    MPCheckpoint( MPCheckpointReview, nil );
 
     [super showReview];
 }
@@ -605,10 +593,7 @@
         if (didReset)
             didReset();
 
-#ifdef TESTFLIGHT_SDK_VERSION
-        [TestFlight passCheckpoint:MPCheckpointChangeMP];
-#endif
-        [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointChangeMP attributes:nil];
+        MPCheckpoint( MPCheckpointChangeMP, nil );
     }
                        cancelTitle:[PearlStrings get].commonButtonAbort
                        otherTitles:[PearlStrings get].commonButtonContinue, nil];

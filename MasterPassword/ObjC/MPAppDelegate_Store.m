@@ -333,15 +333,9 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                      isCloud:(BOOL)isCloudStore {
 
     inf(@"Using iCloud? %@", @(isCloudStore));
-
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:isCloudStore? MPCheckpointCloudEnabled: MPCheckpointCloudDisabled];
-#endif
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCloud attributes:@{
-            @"enabled": @(isCloudStore)
-    }];
-#endif
+    MPCheckpoint( MPCheckpointCloud, @{
+            @"enabled" : @(isCloudStore)
+    } );
 
     // Create our contexts.
     NSManagedObjectContext *privateManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
@@ -365,17 +359,11 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                      context:(id)context {
 
     err(@"[StoreManager] ERROR: cause=%d, context=%@, error=%@", cause, context, error);
-
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:PearlString( MPCheckpointMPErrorUbiquity @"_%d", cause )];
-#endif
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointMPErrorUbiquity attributes:@{
+    MPCheckpoint( MPCheckpointMPErrorUbiquity, @{
             @"cause"        : @(cause),
             @"error.domain" : error.domain,
             @"error.code"   : @(error.code)
-    }];
-#endif
+    } );
 }
 
 - (BOOL)ubiquityStoreManager:(UbiquityStoreManager *)manager handleCloudContentCorruptionWithHealthyStore:(BOOL)storeHealthy {
@@ -622,12 +610,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     }
 
     inf(@"Import completed successfully.");
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPCheckpointSitesImported];
-#endif
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSitesImported attributes:nil];
-#endif
+    MPCheckpoint( MPCheckpointSitesImported, nil );
 
     return MPImportResultSuccess;
 }
@@ -683,12 +666,9 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
          ? content: @""];
     }
 
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPCheckpointSitesExported];
-#endif
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointSitesExported attributes:nil];
-#endif
+    MPCheckpoint( MPCheckpointSitesExported, @{
+            @"showPasswords" : @(showPasswords)
+    } );
 
     return export;
 }

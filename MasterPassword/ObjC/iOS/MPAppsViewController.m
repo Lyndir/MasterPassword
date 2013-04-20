@@ -66,11 +66,7 @@
 - (void)viewWillAppear:(BOOL)animated {
 
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPCheckpointApps];
-#endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointApps attributes:nil];
+    MPCheckpoint( MPCheckpointApps, nil );
 
     [self.pageViewController setViewControllers:@[ [self.pageVCs objectAtIndex:1]  ] direction:UIPageViewControllerNavigationDirectionForward
                                        animated:NO completion:nil];

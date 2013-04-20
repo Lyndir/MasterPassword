@@ -310,10 +310,9 @@
 
 - (void)setHelpChapter:(NSString *)chapter {
 
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:PearlString(MPCheckpointHelpChapter @"_%@", chapter)];
-#endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointHelpChapter attributes:@{@"chapter": chapter}];
+    MPCheckpoint( MPCheckpointHelpChapter, @{
+            @"chapter" : chapter
+    } );
 
     dispatch_async(dispatch_get_main_queue(), ^{
         NSURL *url = [NSURL URLWithString:[@"#" stringByAppendingString:chapter]
@@ -471,11 +470,11 @@
 
     [self showContentTip:@"Copied!" withIcon:nil];
 
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPCheckpointCopyToPasteboard];
-#endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyToPasteboard attributes:@{@"type"    : activeElement.typeName,
-                                                                                                    @"version" : @(activeElement.version)}];
+    MPCheckpoint( MPCheckpointCopyToPasteboard, @{
+            @"type"      : activeElement.typeName,
+            @"version"   : @(activeElement.version),
+            @"emergency" : @NO
+    } );
 }
 
 - (IBAction)copyLoginName:(UITapGestureRecognizer *)sender {
@@ -489,12 +488,10 @@
 
     [self showLoginNameTip:@"Copied!"];
 
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPCheckpointCopyLoginNameToPasteboard];
-#endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyLoginNameToPasteboard
-                                               attributes:@{@"type"    : activeElement.typeName,
-                                                            @"version" : @(activeElement.version)}];
+    MPCheckpoint( MPCheckpointCopyLoginNameToPasteboard, @{
+            @"type"    : activeElement.typeName,
+            @"version" : @(activeElement.version)
+    } );
 }
 
 - (IBAction)incrementPasswordCounter {
@@ -510,16 +507,16 @@
                                         err(@"Cannot increment password counter: Element is not generated: %@", activeElement.name);
                                         return NO;
                                     }
+                                    MPElementGeneratedEntity *activeGeneratedElement = (MPElementGeneratedEntity *)activeElement;
 
-                                    inf(@"Incrementing password counter for: %@", activeElement.name);
-                                    ++((MPElementGeneratedEntity *)activeElement).counter;
+                                    inf(@"Incrementing password counter for: %@", activeGeneratedElement.name);
+                                    ++activeGeneratedElement.counter;
 
-#ifdef TESTFLIGHT_SDK_VERSION
-                                    [TestFlight passCheckpoint:MPCheckpointIncrementPasswordCounter];
-#endif
-                                    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointIncrementPasswordCounter
-                                                                               attributes:@{@"type": activeElement.typeName,
-                                                                                            @"version": @(activeElement.version)}];
+                                    MPCheckpoint( MPCheckpointIncrementPasswordCounter, @{
+                                            @"type"    : activeGeneratedElement.typeName,
+                                            @"version" : @(activeGeneratedElement.version),
+                                            @"counter" : @(activeGeneratedElement.counter)
+                                    } );
                                     return YES;
                                 }];
 }
@@ -547,12 +544,10 @@
                                     inf(@"Resetting password counter for: %@", activeElement_.name);
                                     ((MPElementGeneratedEntity *)activeElement_).counter = 1;
 
-#ifdef TESTFLIGHT_SDK_VERSION
-                                    [TestFlight passCheckpoint:MPCheckpointResetPasswordCounter];
-#endif
-                                    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointResetPasswordCounter
-                                                                               attributes:@{@"type": activeElement_.typeName,
-                                                                                            @"version": @(activeElement_.version)}];
+                                    MPCheckpoint( MPCheckpointResetPasswordCounter, @{
+                                            @"type"    : activeElement_.typeName,
+                                            @"version" : @(activeElement_.version)
+                                    } );
                                     return YES;
                                 }];
 }
@@ -570,11 +565,10 @@
     self.loginNameField.enabled = YES;
     [self.loginNameField becomeFirstResponder];
 
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPCheckpointEditLoginName];
-#endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditLoginName attributes:@{@"type"    : activeElement.typeName,
-                                                                                                 @"version" : @(activeElement.version)}];
+    MPCheckpoint( MPCheckpointEditLoginName, @{
+            @"type"    : activeElement.typeName,
+            @"version" : @(activeElement.version)
+    } );
 }
 
 - (void)changeActiveElementWithWarning:(NSString *)warning do:(BOOL (^)(MPElementEntity *activeElement))task; {
@@ -644,11 +638,10 @@
     self.contentField.enabled = YES;
     [self.contentField becomeFirstResponder];
 
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:MPCheckpointEditPassword];
-#endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointEditPassword attributes:@{@"type"    : activeElement.typeName,
-                                                                                                @"version" : @(activeElement.version)}];
+    MPCheckpoint( MPCheckpointEditPassword, @{
+            @"type"    : activeElement.typeName,
+            @"version" : @(activeElement.version)
+    } );
 }
 
 - (IBAction)upgradePassword {
@@ -670,13 +663,10 @@
                 inf(@"Explicitly migrating element: %@", activeElement_);
                 [activeElement_ migrateExplicitly:YES];
 
-#ifdef TESTFLIGHT_SDK_VERSION
-                [TestFlight passCheckpoint:MPCheckpointExplicitMigration];
-#endif
-                [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointExplicitMigration attributes:@{
+                MPCheckpoint( MPCheckpointExplicitMigration, @{
                         @"type"    : activeElement_.typeName,
                         @"version" : @(activeElement_.version)
-                }];
+                } );
                 return YES;
             }];
 }
@@ -849,12 +839,11 @@
     [self.searchDisplayController setActive:NO animated:YES];
     self.searchDisplayController.searchBar.text = activeElement.name;
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPElementUpdatedNotification object:activeElement.objectID];
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:PearlString(MPCheckpointUseType @"_%@", activeElement.typeShortName)];
-#endif
-    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointUseType attributes:@{@"type"    : activeElement.typeName,
-                                                                                           @"version" : @(activeElement.version)}];
+    MPCheckpoint( MPCheckpointUseType, @{
+            @"type"    : activeElement.typeName,
+            @"version" : @(activeElement.version)
+    } );
+
     [self updateAnimated:YES];
 }
 

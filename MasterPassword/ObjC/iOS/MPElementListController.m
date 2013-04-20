@@ -289,13 +289,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             [element.managedObjectContext deleteObject:element];
             [element.managedObjectContext saveToStore];
 
-#ifdef TESTFLIGHT_SDK_VERSION
-            [TestFlight passCheckpoint:MPCheckpointDeleteElement];
-#endif
-            [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointDeleteElement attributes:@{
+            MPCheckpoint( MPCheckpointDeleteElement, @{
                     @"type"    : element.typeName,
                     @"version" : @(element.version)
-            }];
+            });
         }];
     }
 }
