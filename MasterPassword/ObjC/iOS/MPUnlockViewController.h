@@ -31,9 +31,11 @@
 @property (weak, nonatomic) IBOutlet UITextField *emergencyMasterPassword;
 @property (weak, nonatomic) IBOutlet UITextField *emergencySite;
 @property (weak, nonatomic) IBOutlet UIStepper *emergencyCounterStepper;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *emergencyType;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *emergencyTypeControl;
 @property (weak, nonatomic) IBOutlet UILabel *emergencyCounter;
-@property (weak, nonatomic) IBOutlet UITextField *emergencyPassword;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *emergencyActivity;
+@property (weak, nonatomic) IBOutlet UIButton *emergencyPassword;
+@property (weak, nonatomic) IBOutlet UIView *contentTipContainer;
 
 @property (nonatomic, strong) UIColor *avatarShadowColor;
 
@@ -43,6 +45,7 @@
 - (IBAction)google:(UIButton *)sender;
 - (IBAction)mail:(UIButton *)sender;
 - (IBAction)add:(UIButton *)sender;
-- (IBAction)closeEmergency;
+- (IBAction)emergencyClose:(UIButton *)sender;
+- (IBAction)emergencyCopy:(UIButton *)sender;
 
 @end

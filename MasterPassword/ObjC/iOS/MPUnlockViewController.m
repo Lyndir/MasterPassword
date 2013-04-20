@@ -23,6 +23,9 @@
 @property(nonatomic, strong) NSOperationQueue *emergencyQueue;
 @property(nonatomic, strong) MPKey *emergencyKey;
 
+@property(nonatomic, strong) NSTimer *marqueeTipTimer;
+@property(nonatomic) NSUInteger marqueeTipTextIndex;
+@property(nonatomic, strong) NSArray *marqueeTipTexts;
 @end
 
 @implementation MPUnlockViewController {
@@ -126,18 +129,20 @@
     self.spinner.alpha                = 0;
     self.passwordTipView.hidden       = NO;
     self.createPasswordTipView.hidden = NO;
-    self.emergencyPassword.text = @"";
+    [self.emergencyPassword setTitle:@"" forState:UIControlStateNormal];
     self.emergencyGeneratorContainer.alpha = 0;
     self.emergencyGeneratorContainer.hidden = YES;
     self.emergencyQueue = [NSOperationQueue new];
     [self.emergencyCounterStepper addTargetBlock:^(id sender, UIControlEvents event) {
         self.emergencyCounter.text = PearlString( @"%d", (NSUInteger)self.emergencyCounterStepper.value);
-        
+
         [self updateEmergencyPassword];
     }                           forControlEvents:UIControlEventValueChanged];
-    [self.emergencyType addTargetBlock:^(id sender, UIControlEvents event) {
+    [self.emergencyTypeControl addTargetBlock:^(id sender, UIControlEvents event) {
         [self updateEmergencyPassword];
-    }                           forControlEvents:UIControlEventValueChanged];
+    }                        forControlEvents:UIControlEventValueChanged];
+    self.marqueeTipTexts = @[ @"Tap and hold to delete or reset user.",
+                              @"Shake for emergency generator." ];
 
     NSMutableArray *wordListLines = [NSMutableArray arrayWithCapacity:27413];
     [[[NSString alloc] initWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"dictionary" withExtension:@"lst"]]
@@ -163,7 +168,7 @@
                                                   }];
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:nil
                                                   usingBlock:^(NSNotification *note) {
-                                                      [self closeEmergencyAnimated:NO];
+                                                      [self emergencyCloseAnimated:NO];
                                                       self.uiContainer.alpha = 0;
                                                   }];
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:nil
@@ -197,7 +202,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 
-    dbg(@"Lock screen did appear: %@", animated? @"animated": @"not animated");
     if (!animated)
         [[self findTargetedAvatar] setSelected:YES];
     else
@@ -207,6 +211,9 @@
         self.uiContainer.alpha = 1;
     }];
 
+    [self.marqueeTipTimer invalidate];
+    self.marqueeTipTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(marqueeTip) userInfo:nil repeats:YES];
+
     [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Unlock"];
 
     [super viewDidAppear:animated];
@@ -215,7 +222,9 @@
 - (void)viewWillDisappear:(BOOL)animated {
 
     inf(@"Lock screen will disappear");
-    [self closeEmergencyAnimated:animated];
+    [self emergencyCloseAnimated:animated];
+
+    [self.marqueeTipTimer invalidate];
 
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -237,7 +246,7 @@
 
         self.emergencyGeneratorContainer.alpha = 0;
         self.emergencyGeneratorContainer.hidden = NO;
-        [UIView animateWithDuration:1 animations:^{
+        [UIView animateWithDuration:0.5 animations:^{
             self.emergencyGeneratorContainer.alpha = 1;
         } completion:^(BOOL finished) {
             [self.emergencyName becomeFirstResponder];
@@ -245,13 +254,25 @@
     }
 }
 
+- (void)marqueeTip {
+    [UIView animateWithDuration:0.5 animations:^{
+        self.tip.alpha = 0;
+    } completion:^(BOOL finished) {
+        if (!finished)
+            return;
+        
+        self.tip.text = self.marqueeTipTexts[++self.marqueeTipTextIndex % [self.marqueeTipTexts count]];
+        [UIView animateWithDuration:0.5 animations:^{
+            self.tip.alpha = 1;
+        }];
+    }];
+}
+
 - (void)updateUsers {
 
     NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
     if (!moc)
         return;
-
-    self.tip.text = @"Tap and hold to delete or reset user.";
 
     __block NSArray *users = nil;
     [moc performBlockAndWait:^{
@@ -794,7 +815,8 @@
         return;
 
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        self.emergencyPassword.text = @"...";
+        [self.emergencyActivity startAnimating];
+        [self.emergencyPassword setTitle:@"" forState:UIControlStateNormal];
 
         NSString *masterPassword = self.emergencyMasterPassword.text;
         NSString *userName = self.emergencyName.text;
@@ -807,71 +829,101 @@
     }];
 }
 
+- (MPElementType)emergencyType {
+
+    switch (self.emergencyTypeControl.selectedSegmentIndex) {
+        case 0:
+            return MPElementTypeGeneratedMaximum;
+        case 1:
+            return MPElementTypeGeneratedLong;
+        case 2:
+            return MPElementTypeGeneratedMedium;
+        case 3:
+            return MPElementTypeGeneratedBasic;
+        case 4:
+            return MPElementTypeGeneratedShort;
+        case 5:
+            return MPElementTypeGeneratedPIN;
+        default:
+            Throw(@"Unsupported type index: %d", self.emergencyTypeControl.selectedSegmentIndex);
+    }
+}
+
 - (void)updateEmergencyPassword {
 
     if (!self.emergencyKey || ![self.emergencySite.text length])
         return;
 
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        self.emergencyPassword.text = @"...";
+        [self.emergencyPassword setTitle:@"" forState:UIControlStateNormal];
 
         NSString *name = self.emergencySite.text;
         NSUInteger counter = (NSUInteger)self.emergencyCounterStepper.value;
-        MPElementType type;
-        switch (self.emergencyType.selectedSegmentIndex) {
-            case 0:
-                type = MPElementTypeGeneratedMaximum;
-                break;
-            case 1:
-                type = MPElementTypeGeneratedLong;
-                break;
-            case 2:
-                type = MPElementTypeGeneratedMedium;
-                break;
-            case 3:
-                type = MPElementTypeGeneratedBasic;
-                break;
-            case 4:
-                type = MPElementTypeGeneratedShort;
-                break;
-            case 5:
-                type = MPElementTypeGeneratedPIN;
-                break;
-            default:
-                Throw(@"Unsupported type index: %d", self.emergencyType.selectedSegmentIndex);
-        }
 
         [self.emergencyQueue addOperationWithBlock:^{
-            NSString *content = [MPAlgorithmDefault generateContentNamed:name ofType:type withCounter:counter usingKey:self.emergencyKey];
+            NSString *content = [MPAlgorithmDefault generateContentNamed:name ofType:[self emergencyType]
+                                                             withCounter:counter usingKey:self.emergencyKey];
 
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                self.emergencyPassword.text = content;
+                [self.emergencyActivity stopAnimating];
+                [self.emergencyPassword setTitle:content forState:UIControlStateNormal];
             }];
         }];
     }];
 }
 
-- (IBAction)closeEmergency {
+- (IBAction)emergencyClose:(UIButton *)sender {
 
-    [self closeEmergencyAnimated:YES];
+    [self emergencyCloseAnimated:YES];
 }
 
-- (void)closeEmergencyAnimated:(BOOL)animated {
+- (IBAction)emergencyCopy:(UIButton *)sender {
 
+    inf(@"Copying emergency password for: %@", self.emergencyName.text);
+    [UIPasteboard generalPasteboard].string = [self.emergencyPassword titleForState:UIControlStateNormal];
+
+    [UIView animateWithDuration:0.3f animations:^{
+        self.contentTipContainer.alpha = 1;
+    }                completion:^(BOOL finished) {
+        if (finished) {
+            dispatch_time_t popTime = dispatch_time( DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC );
+            dispatch_after( popTime, dispatch_get_main_queue(), ^(void) {
+                [UIView animateWithDuration:0.2f animations:^{
+                    self.contentTipContainer.alpha = 0;
+                }];
+            } );
+        }
+    }];
+
+#ifdef TESTFLIGHT_SDK_VERSION
+    [TestFlight passCheckpoint:MPCheckpointCopyToPasteboard];
+#endif
+    [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointCopyToPasteboard attributes:@{
+            @"type"    : [MPAlgorithmDefault nameOfType:self.emergencyType],
+            @"version" : @MPAlgorithmDefaultVersion,
+            @"emergency" : @YES,
+    }];
+}
+
+- (void)emergencyCloseAnimated:(BOOL)animated {
+    
     [[self.emergencyGeneratorContainer findFirstResponderInHierarchy] resignFirstResponder];
 
     if (animated) {
         [UIView animateWithDuration:0.5 animations:^{
-            [self closeEmergencyAnimated:NO];
+            self.emergencyGeneratorContainer.alpha = 0;
+        } completion:^(BOOL finished) {
+            [self emergencyCloseAnimated:NO];
         }];
         return;
     }
-
+    
     self.emergencyName.text = @"";
     self.emergencyMasterPassword.text = @"";
     self.emergencySite.text = @"";
     self.emergencyCounterStepper.value = 0;
-    self.emergencyPassword.text = @"";
+    [self.emergencyPassword setTitle:@"" forState:UIControlStateNormal];
+    [self.emergencyActivity stopAnimating];
     self.emergencyGeneratorContainer.alpha = 0;
     self.emergencyGeneratorContainer.hidden = YES;
 }

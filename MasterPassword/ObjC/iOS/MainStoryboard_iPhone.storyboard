@@ -1513,6 +1513,19 @@ You could use the word wall for  inspiration in finding a memorable master passw
                                                     <outlet property="delegate" destination="Nbn-Rv-sP1" id="w1h-rQ-fIF"/>
                                                 </connections>
                                             </textField>
+                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="1" id="LfH-XT-9Vt">
+                                                <rect key="frame" x="41" y="223" width="240" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <segments>
+                                                    <segment title="Max"/>
+                                                    <segment title="Long"/>
+                                                    <segment title="Med"/>
+                                                    <segment title="Basic"/>
+                                                    <segment title="Short"/>
+                                                    <segment title="PIN"/>
+                                                </segments>
+                                                <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                                            </segmentedControl>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Counter" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" id="pa9-d6-vQt">
                                                 <rect key="frame" x="41" y="262" width="285" height="23"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1546,19 +1559,31 @@ You could use the word wall for  inspiration in finding a memorable master passw
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="closeEmergency" destination="Nbn-Rv-sP1" eventType="touchUpInside" id="TgI-O2-XiW"/>
+                                                    <action selector="emergencyClose:" destination="Nbn-Rv-sP1" eventType="touchUpInside" id="U2r-pg-UGB"/>
                                                 </connections>
                                             </button>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Kucy9-RimuTich" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="WAX-03-cSy" userLabel="Text Field - Content">
+                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="3Ax-91-gVM">
+                                                <rect key="frame" x="141.5" y="300" width="37" height="37"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            </activityIndicatorView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="r9J-C9-Bt1">
                                                 <rect key="frame" x="20" y="292" width="280" height="54"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                <accessibility key="accessibilityConfiguration" hint=""/>
-                                                <color key="textColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="30"/>
-                                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
-                                            </textField>
+                                                <size key="titleShadowOffset" width="0.0" height="1"/>
+                                                <state key="normal" title="Kucy9-RimuTich">
+                                                    <color key="titleColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <state key="highlighted">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="emergencyCopy:" destination="Nbn-Rv-sP1" eventType="touchUpInside" id="p7g-5T-dqz"/>
+                                                </connections>
+                                            </button>
                                             <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="sD9-hR-UAI" userLabel="View - Content Tip">
-                                                <rect key="frame" x="55" y="320" width="210" height="60"/>
+                                                <rect key="frame" x="55" y="266" width="210" height="60"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="Lua-xm-WX6">
@@ -1575,19 +1600,6 @@ You could use the word wall for  inspiration in finding a memorable master passw
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </view>
-                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="1" id="LfH-XT-9Vt">
-                                                <rect key="frame" x="41" y="223" width="240" height="30"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <segments>
-                                                    <segment title="Max"/>
-                                                    <segment title="Long"/>
-                                                    <segment title="Med"/>
-                                                    <segment title="Basic"/>
-                                                    <segment title="Short"/>
-                                                    <segment title="PIN"/>
-                                                </segments>
-                                                <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
-                                            </segmentedControl>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
@@ -1605,15 +1617,17 @@ You could use the word wall for  inspiration in finding a memorable master passw
                     <connections>
                         <outlet property="avatarTemplate" destination="Ten-ig-gog" id="0ZZ-z5-d5m"/>
                         <outlet property="avatarsView" destination="Blg-F1-9NA" id="2NL-jU-IMI"/>
+                        <outlet property="contentTipContainer" destination="sD9-hR-UAI" id="RiP-k1-7dk"/>
                         <outlet property="createPasswordTipView" destination="xWL-xQ-KjX" id="Pa1-Bk-pW2"/>
+                        <outlet property="emergencyActivity" destination="3Ax-91-gVM" id="UfN-vk-k0Z"/>
                         <outlet property="emergencyCounter" destination="TJC-xD-fjQ" id="jrf-nb-soB"/>
                         <outlet property="emergencyCounterStepper" destination="D49-fo-7FA" id="hj2-CL-zxq"/>
                         <outlet property="emergencyGeneratorContainer" destination="KNa-Xb-RuE" id="6jt-vU-L2Q"/>
                         <outlet property="emergencyMasterPassword" destination="Yvd-Hm-fuw" id="pnx-sH-P8R"/>
                         <outlet property="emergencyName" destination="esC-1q-bE7" id="ifH-bh-MhW"/>
-                        <outlet property="emergencyPassword" destination="WAX-03-cSy" id="lLN-BO-OQ8"/>
+                        <outlet property="emergencyPassword" destination="r9J-C9-Bt1" id="yt0-hH-0yT"/>
                         <outlet property="emergencySite" destination="YeH-3J-oY4" id="h0w-om-4vd"/>
-                        <outlet property="emergencyType" destination="LfH-XT-9Vt" id="pku-x3-i9h"/>
+                        <outlet property="emergencyTypeControl" destination="LfH-XT-9Vt" id="pku-x3-i9h"/>
                         <outlet property="nameLabel" destination="0NM-NI-7UR" id="GBg-Ry-sqj"/>
                         <outlet property="newsView" destination="rGU-aZ-XVm" id="p1r-Wf-YIY"/>
                         <outlet property="oldNameLabel" destination="8s0-nT-Aoq" id="plu-1H-MVc"/>
@@ -2796,6 +2810,190 @@ However, it means that anyone who finds your device unlocked can do the same.</s
         <image name="ui_textfield.png" width="158" height="34"/>
         <image name="unlocked.png" width="84" height="80"/>
     </resources>
+    <classes>
+        <class className="MPAppViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPAppViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="deblock:" candidateClass="UIButton"/>
+                <relationship kind="action" name="gorillas:" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="MPAppsViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPAppsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="exit"/>
+                <relationship kind="outlet" name="pagePositionView" candidateClass="UIImageView"/>
+            </relationships>
+        </class>
+        <class className="MPElementListAllViewController" superclassName="MPElementListController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPElementListAllViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="add:"/>
+                <relationship kind="action" name="close:"/>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
+            </relationships>
+        </class>
+        <class className="MPElementListController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPElementListController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="MPElementListSearchController" superclassName="MPElementListController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPElementListSearchController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="searchDisplayController" candidateClass="UISearchDisplayController"/>
+                <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="MPGuideViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPGuideViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="close"/>
+                <relationship kind="action" name="play"/>
+                <relationship kind="action" name="toggleVolume"/>
+                <relationship kind="outlet" name="content" candidateClass="UIView"/>
+                <relationship kind="outlet" name="contentButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="contentText" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="contentTip" candidateClass="UIView"/>
+                <relationship kind="outlet" name="contentTipText" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="largePlayButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="progress" candidateClass="UIProgressView"/>
+                <relationship kind="outlet" name="siteNameTip" candidateClass="UIView"/>
+                <relationship kind="outlet" name="smallPlayButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="toolButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="toolTip" candidateClass="UIView"/>
+                <relationship kind="outlet" name="typeButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="typeTip" candidateClass="UIView"/>
+                <relationship kind="outlet" name="usernameButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="usernameTip" candidateClass="UIView"/>
+                <relationship kind="outlet" name="volumeButton" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="MPMainViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPMainViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="action:" candidateClass="UIBarButtonItem"/>
+                <relationship kind="action" name="closeAlert"/>
+                <relationship kind="action" name="closeOutdatedAlert"/>
+                <relationship kind="action" name="copyContent"/>
+                <relationship kind="action" name="editLoginName:" candidateClass="UILongPressGestureRecognizer"/>
+                <relationship kind="action" name="editPassword"/>
+                <relationship kind="action" name="incrementPasswordCounter"/>
+                <relationship kind="action" name="infoOutdatedAlert"/>
+                <relationship kind="action" name="panHelpDown:" candidateClass="UIPanGestureRecognizer"/>
+                <relationship kind="action" name="panHelpUp:" candidateClass="UIPanGestureRecognizer"/>
+                <relationship kind="action" name="resetPasswordCounter:" candidateClass="UILongPressGestureRecognizer"/>
+                <relationship kind="action" name="searchOutdatedElements"/>
+                <relationship kind="action" name="toggleUser"/>
+                <relationship kind="action" name="upgradePassword"/>
+                <relationship kind="outlet" name="actionsTipContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="alertBody" candidateClass="UITextView"/>
+                <relationship kind="outlet" name="alertContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="alertTitle" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="contentContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="contentField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="contentTipBody" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="contentTipContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="displayContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="helpContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="helpView" candidateClass="UIWebView"/>
+                <relationship kind="outlet" name="loginNameContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="loginNameField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="loginNameTipBody" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="loginNameTipContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="outdatedAlertBack" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="outdatedAlertCloseButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="outdatedAlertContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="passwordCounter" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="passwordEdit" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="passwordIncrementer" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="passwordUpgrade" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="passwordUser" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="pullDownGesture" candidateClass="UIPanGestureRecognizer"/>
+                <relationship kind="outlet" name="pullDownView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="pullUpGesture" candidateClass="UIPanGestureRecognizer"/>
+                <relationship kind="outlet" name="pullUpView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="searchDelegate" candidateClass="MPElementListSearchController"/>
+                <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="siteName" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="toolTipBody" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="toolTipContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="toolTipEditIcon" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="typeButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="typeTipContainer" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="MPPreferencesViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPPreferencesViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="didToggleSwitch:" candidateClass="UISwitch"/>
+                <relationship kind="action" name="settings:"/>
+                <relationship kind="outlet" name="avatarTemplate" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="avatarsView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="changeMPCell" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="defaultTypeLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="exportCell" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="savePasswordSwitch" candidateClass="UISwitch"/>
+            </relationships>
+        </class>
+        <class className="MPSetupViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPSetupViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="close:" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="cloudSwitch" candidateClass="UISwitch"/>
+                <relationship kind="outlet" name="rememberLoginSwitch" candidateClass="UISwitch"/>
+            </relationships>
+        </class>
+        <class className="MPTypeViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPTypeViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="recommendedTipContainer" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="MPUnlockViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPUnlockViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="add:" candidateClass="UIButton"/>
+                <relationship kind="action" name="emergencyClose:" candidateClass="UIButton"/>
+                <relationship kind="action" name="emergencyCopy:" candidateClass="UIButton"/>
+                <relationship kind="action" name="facebook:" candidateClass="UIButton"/>
+                <relationship kind="action" name="google:" candidateClass="UIButton"/>
+                <relationship kind="action" name="mail:" candidateClass="UIButton"/>
+                <relationship kind="action" name="targetedUserAction:" candidateClass="UILongPressGestureRecognizer"/>
+                <relationship kind="action" name="twitter:" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="avatarTemplate" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="avatarsView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="contentTipContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="createPasswordTipView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="emergencyActivity" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="emergencyCounter" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="emergencyCounterStepper" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="emergencyGeneratorContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="emergencyMasterPassword" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="emergencyName" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="emergencyPassword" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="emergencySite" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="emergencyTypeControl" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="nameLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="newsView" candidateClass="UIWebView"/>
+                <relationship kind="outlet" name="oldNameLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="passwordFieldLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="passwordTipLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="passwordTipView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="passwordView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="spinner" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="targetedUserActionGesture" candidateClass="UILongPressGestureRecognizer"/>
+                <relationship kind="outlet" name="tip" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="uiContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="wordWall" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="PearlNavigationController" superclassName="UINavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PearlNavigationController.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <nil key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

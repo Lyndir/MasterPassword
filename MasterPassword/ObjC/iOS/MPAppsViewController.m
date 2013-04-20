@@ -60,9 +60,6 @@
     [self.pagePositionView removeFromSuperview];
     [self.pageViewController didMoveToParentViewController:self];
 
-    [self.pageViewController setViewControllers:@[[self.pageVCs objectAtIndex:0]] direction:UIPageViewControllerNavigationDirectionForward
-                                       animated:NO completion:nil];
-
     [super viewDidLoad];
 }
 
@@ -75,12 +72,18 @@
 #endif
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:MPCheckpointApps attributes:nil];
 
+    [self.pageViewController setViewControllers:@[ [self.pageVCs objectAtIndex:1]  ] direction:UIPageViewControllerNavigationDirectionForward
+                                       animated:NO completion:nil];
+
     [super viewWillAppear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
 
     [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Apps"];
+
+    [self.pageViewController setViewControllers:@[ [self.pageVCs objectAtIndex:0] ] direction:UIPageViewControllerNavigationDirectionForward
+                                       animated:YES completion:nil];
 
     [super viewDidAppear:animated];
 }
