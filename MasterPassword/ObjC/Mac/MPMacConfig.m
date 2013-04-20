@@ -15,7 +15,7 @@
     if (!(self = [super init]))
         return self;
 
-    [self.defaults registerDefaults:@{NSStringFromSelector(@selector(iTunesID)): @"510296984"}];
+    [self.defaults registerDefaults:@{ NSStringFromSelector( @selector(iTunesID) ) : @"510296984" }];
 
     return self;
 }

@@ -1,95 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>PreferenceSpecifiers</key>
-	<array>
-		<dict>
-			<key>FooterText</key>
-			<string>If you&apos;re experiencing problems, enabling this will send us details that can help diagnose and resolve them.  You will remain completely anonymous amongst the other thousands of users.  No sensitive information is ever sent.</string>
-			<key>Title</key>
-			<string></string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>DefaultValue</key>
-			<string>[auto]</string>
-			<key>Title</key>
-			<string>Version</string>
-			<key>Key</key>
-			<string>unset</string>
-			<key>Type</key>
-			<string>PSTitleValueSpecifier</string>
-		</dict>
-		<dict>
-			<key>DefaultValue</key>
-			<string>[auto]</string>
-			<key>Title</key>
-			<string>Build</string>
-			<key>Key</key>
-			<string>unset</string>
-			<key>Type</key>
-			<string>PSTitleValueSpecifier</string>
-		</dict>
-		<dict>
-			<key>DefaultValue</key>
-			<string>[auto]</string>
-			<key>Title</key>
-			<string>Copyright</string>
-			<key>Type</key>
-			<string>PSTitleValueSpecifier</string>
-			<key>Key</key>
-			<string>unset</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>Send Diagnostic Info</string>
-			<key>Key</key>
-			<string>sendInfo</string>
-			<key>DefaultValue</key>
-			<false/>
-		</dict>
-		<dict>
-			<key>FooterText</key>
-			<string>When enabled, closing the application will not log out the user.  Similar to your phone&apos;s SIM lock, you only need to log in once after powering on.</string>
-			<key>Title</key>
-			<string>Master Password</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>DefaultValue</key>
-			<false/>
-			<key>Key</key>
-			<string>rememberLogin</string>
-			<key>Title</key>
-			<string>Stay logged in</string>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-			<key>Title</key>
-			<string></string>
-			<key>FooterText</key>
-			<string>Makes your sites available to all your Apple devices.  This also works as a way of automatically keeping a back-up of your sites.  Apple cannot see any of your passwords.</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>iCloud</string>
-			<key>Key</key>
-			<string>USMCloudEnabledKey</string>
-			<key>DefaultValue</key>
-			<true/>
-		</dict>
-	</array>
-	<key>StringsTable</key>
-	<string>Root</string>
-</dict>
+    <dict>
+        <key>PreferenceSpecifiers</key>
+        <array>
+            <dict>
+                <key>FooterText</key>
+                <string>If you&apos;re experiencing problems, enabling this will send us details that can help diagnose and resolve them.
+                    You will remain completely anonymous amongst the other thousands of users. No sensitive information is ever sent.
+                </string>
+                <key>Title</key>
+                <string></string>
+                <key>Type</key>
+                <string>PSGroupSpecifier</string>
+            </dict>
+            <dict>
+                <key>DefaultValue</key>
+                <string>[auto]</string>
+                <key>Title</key>
+                <string>Version</string>
+                <key>Key</key>
+                <string>unset</string>
+                <key>Type</key>
+                <string>PSTitleValueSpecifier</string>
+            </dict>
+            <dict>
+                <key>DefaultValue</key>
+                <string>[auto]</string>
+                <key>Title</key>
+                <string>Build</string>
+                <key>Key</key>
+                <string>unset</string>
+                <key>Type</key>
+                <string>PSTitleValueSpecifier</string>
+            </dict>
+            <dict>
+                <key>DefaultValue</key>
+                <string>[auto]</string>
+                <key>Title</key>
+                <string>Copyright</string>
+                <key>Type</key>
+                <string>PSTitleValueSpecifier</string>
+                <key>Key</key>
+                <string>unset</string>
+            </dict>
+            <dict>
+                <key>Type</key>
+                <string>PSToggleSwitchSpecifier</string>
+                <key>Title</key>
+                <string>Send Diagnostic Info</string>
+                <key>Key</key>
+                <string>sendInfo</string>
+                <key>DefaultValue</key>
+                <false/>
+            </dict>
+            <dict>
+                <key>FooterText</key>
+                <string>When enabled, closing the application will not log out the user. Similar to your phone&apos;s SIM lock, you only
+                    need to log in once after powering on.
+                </string>
+                <key>Title</key>
+                <string>Master Password</string>
+                <key>Type</key>
+                <string>PSGroupSpecifier</string>
+            </dict>
+            <dict>
+                <key>DefaultValue</key>
+                <false/>
+                <key>Key</key>
+                <string>rememberLogin</string>
+                <key>Title</key>
+                <string>Stay logged in</string>
+                <key>Type</key>
+                <string>PSToggleSwitchSpecifier</string>
+            </dict>
+            <dict>
+                <key>Type</key>
+                <string>PSGroupSpecifier</string>
+                <key>Title</key>
+                <string></string>
+                <key>FooterText</key>
+                <string>Makes your sites available to all your Apple devices. This also works as a way of automatically keeping a back-up of
+                    your sites. Apple cannot see any of your passwords.
+                </string>
+            </dict>
+            <dict>
+                <key>Type</key>
+                <string>PSToggleSwitchSpecifier</string>
+                <key>Title</key>
+                <string>iCloud</string>
+                <key>Key</key>
+                <string>USMCloudEnabledKey</string>
+                <key>DefaultValue</key>
+                <true/>
+            </dict>
+        </array>
+        <key>StringsTable</key>
+        <string>Root</string>
+    </dict>
 </plist>

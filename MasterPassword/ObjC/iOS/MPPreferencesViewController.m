@@ -12,7 +12,7 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 
-@interface MPPreferencesViewController ()
+@interface MPPreferencesViewController()
 
 @end
 
@@ -24,35 +24,35 @@
 
     for (int a = 0; a < MPAvatarCount; ++a) {
         UIButton *avatar = [self.avatarTemplate clone];
-        avatar.tag                         = a;
-        avatar.hidden                      = NO;
-        avatar.center                      = CGPointMake(
-         self.avatarTemplate.center.x * (a + 1) + self.avatarTemplate.bounds.size.width / 2 * a,
-         self.avatarTemplate.center.y);
-        [avatar setBackgroundImage:[UIImage imageNamed:PearlString(@"avatar-%d", a)]
-                forState:UIControlStateNormal];
+        avatar.tag = a;
+        avatar.hidden = NO;
+        avatar.center = CGPointMake(
+                self.avatarTemplate.center.x * (a + 1) + self.avatarTemplate.bounds.size.width / 2 * a,
+                self.avatarTemplate.center.y );
+        [avatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%d", a )]
+                          forState:UIControlStateNormal];
         [avatar setSelectionInSuperviewCandidate:YES isClearable:NO];
 
-        avatar.layer.cornerRadius  = avatar.bounds.size.height / 2;
-        avatar.layer.shadowColor   = [UIColor blackColor].CGColor;
+        avatar.layer.cornerRadius = avatar.bounds.size.height / 2;
+        avatar.layer.shadowColor = [UIColor blackColor].CGColor;
         avatar.layer.shadowOpacity = 1;
-        avatar.layer.shadowRadius  = 5;
-        avatar.backgroundColor     = [UIColor clearColor];
+        avatar.layer.shadowRadius = 5;
+        avatar.backgroundColor = [UIColor clearColor];
 
         [avatar onHighlightOrSelect:^(BOOL highlighted, BOOL selected) {
             if (highlighted || selected)
                 avatar.backgroundColor = self.avatarTemplate.backgroundColor;
             else
                 avatar.backgroundColor = [UIColor clearColor];
-        } options:0];
+        }                   options:0];
         [avatar onSelect:^(BOOL selected) {
             if (selected) {
                 MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
-                activeUser.avatar        = (unsigned)avatar.tag;
+                activeUser.avatar = (unsigned)avatar.tag;
                 [activeUser.managedObjectContext saveToStore];
             }
-        } options:0];
-        avatar.selected            = (a == [[MPAppDelegate get] activeUserForThread].avatar);
+        }        options:0];
+        avatar.selected = (a == [[MPAppDelegate get] activeUserForThread].avatar);
     }
 
     [super viewDidLoad];
@@ -64,9 +64,10 @@
     [self.avatarsView autoSizeContent];
     [self.avatarsView enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
         if (subview.tag && ((UIControl *)subview).selected) {
-            [self.avatarsView setContentOffset:CGPointMake(subview.center.x - self.avatarsView.bounds.size.width / 2, 0) animated:animated];
+            [self.avatarsView setContentOffset:CGPointMake( subview.center.x - self.avatarsView.bounds.size.width / 2, 0 )
+                                      animated:animated];
         }
-    } recurse:NO];
+    }                           recurse:NO];
 
     MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
     self.savePasswordSwitch.on = activeUser.saveKey;
@@ -89,12 +90,12 @@
 }
 
 - (BOOL)shouldAutorotate {
-    
+
     return NO;
 }
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
-    
+
     return UIInterfaceOrientationPortrait;
 }
 
@@ -112,11 +113,10 @@
     if (cell == self.exportCell)
         [[MPAppDelegate get] export];
 
-    else
-        if (cell == self.changeMPCell) {
-            MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
-            [[MPAppDelegate get] changeMasterPasswordFor:activeUser inContext:activeUser.managedObjectContext didResetBlock:nil];
-        }
+    else if (cell == self.changeMPCell) {
+        MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
+        [[MPAppDelegate get] changeMasterPasswordFor:activeUser inContext:activeUser.managedObjectContext didResetBlock:nil];
+    }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -158,10 +158,10 @@
 }
 
 - (IBAction)settings:(UIBarButtonItem *)sender {
-    
+
     IASKAppSettingsViewController *vc = [IASKAppSettingsViewController new];
     vc.showDoneButton = NO;
-    
+
     [self.navigationController pushViewController:vc animated:YES];
     [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Settings"];
 }

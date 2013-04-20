@@ -10,6 +10,6 @@
 
 @interface MPMacConfig : MPConfig
 
-@property (nonatomic, retain) NSString *usedUserName;
+@property(nonatomic, retain) NSString *usedUserName;
 
 @end

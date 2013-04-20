@@ -9,10 +9,8 @@
 #import "MPTypeViewController.h"
 #import "MPAppDelegate.h"
 #import "MPAppDelegate_Store.h"
-#import "MPAppDelegate_Key.h"
 
-
-@interface MPTypeViewController ()
+@interface MPTypeViewController()
 
 - (MPElementType)typeAtIndexPath:(NSIndexPath *)indexPath;
 
@@ -37,11 +35,11 @@
             self.recommendedTipContainer.alpha = 1;
         }                completion:^(BOOL finished) {
             if (finished) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                dispatch_after( dispatch_time( DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC) ), dispatch_get_main_queue(), ^{
                     [UIView animateWithDuration:0.2f animations:^{
                         self.recommendedTipContainer.alpha = 0;
                     }];
-                });
+                } );
             }
         }];
 
@@ -76,7 +74,7 @@
     cell.selected = (selectedType == cellType);
 
     if (cellType != NSNotFound && cellType & MPElementTypeClassGenerated) {
-        [(UITextField *) [cell viewWithTag:2] setText:@"..."];
+        [(UITextField *)[cell viewWithTag:2] setText:@"..."];
 
         NSString *name = selectedElement.name;
         NSUInteger counter = ((MPElementGeneratedEntity *)selectedElement).counter;
@@ -100,7 +98,7 @@
 
     MPElementType type = [self typeAtIndexPath:indexPath];
     if (type == NSNotFound)
-        // Selected a non-type row.
+            // Selected a non-type row.
         return;
 
     [self.delegate didSelectType:type];

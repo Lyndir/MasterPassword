@@ -24,18 +24,17 @@ id<MPAlgorithm> MPAlgorithmForVersion(NSUInteger version) {
         versionToAlgorithm = [NSMutableDictionary dictionary];
 
     id<MPAlgorithm> algorithm = [versionToAlgorithm objectForKey:@(version)];
-    if (!algorithm)
-        if ((algorithm = [NSClassFromString(PearlString(@"MPAlgorithmV%lu", (unsigned long)version)) new]))
-            [versionToAlgorithm setObject:algorithm forKey:@(version)];
+    if (!algorithm) if ((algorithm = [NSClassFromString( PearlString( @"MPAlgorithmV%lu", (unsigned long)version ) ) new]))
+        [versionToAlgorithm setObject:algorithm forKey:@(version)];
 
     return algorithm;
 }
 
 id<MPAlgorithm> MPAlgorithmDefaultForBundleVersion(NSString *bundleVersion) {
 
-    if (PearlCFBundleVersionCompare(bundleVersion, @"1.3") == NSOrderedAscending)
-        // Pre-1.3
-        return MPAlgorithmForVersion(0);
+    if (PearlCFBundleVersionCompare( bundleVersion, @"1.3" ) == NSOrderedAscending)
+            // Pre-1.3
+        return MPAlgorithmForVersion( 0 );
 
     return MPAlgorithmDefault;
 }

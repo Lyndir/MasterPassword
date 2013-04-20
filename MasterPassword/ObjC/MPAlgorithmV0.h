@@ -17,5 +17,5 @@
 
 #import "MPAlgorithm.h"
 
-@interface MPAlgorithmV0 : NSObject <MPAlgorithm>
+@interface MPAlgorithmV0 : NSObject<MPAlgorithm>
 @end

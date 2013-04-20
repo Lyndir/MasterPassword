@@ -21,17 +21,17 @@
 
 @end
 
-@interface MPElementEntity (MP)
+@interface MPElementEntity(MP)
 
-@property (assign) MPElementType type;
-@property (readonly) NSString *typeName;
-@property (readonly) NSString *typeShortName;
-@property (readonly) NSString *typeClassName;
-@property (readonly) Class typeClass;
-@property (assign) NSUInteger    uses;
-@property (assign) NSUInteger    version;
-@property (assign) BOOL          requiresExplicitMigration;
-@property (readonly) id<MPAlgorithm> algorithm;
+@property(assign) MPElementType type;
+@property(readonly) NSString *typeName;
+@property(readonly) NSString *typeShortName;
+@property(readonly) NSString *typeClassName;
+@property(readonly) Class typeClass;
+@property(assign) NSUInteger uses;
+@property(assign) NSUInteger version;
+@property(assign) BOOL requiresExplicitMigration;
+@property(readonly) id<MPAlgorithm> algorithm;
 
 - (id)contentUsingKey:(MPKey *)key;
 - (void)setContent:(id)content usingKey:(MPKey *)key;
@@ -44,18 +44,18 @@
 
 @end
 
-@interface MPElementGeneratedEntity (MP)
+@interface MPElementGeneratedEntity(MP)
 
-@property (assign) NSUInteger counter;
+@property(assign) NSUInteger counter;
 
 @end
 
-@interface MPUserEntity (MP)
+@interface MPUserEntity(MP)
 
-@property (assign) NSUInteger avatar;
-@property (assign) BOOL       saveKey;
-@property (assign) MPElementType defaultType;
-@property (readonly) NSString *userID;
+@property(assign) NSUInteger avatar;
+@property(assign) BOOL saveKey;
+@property(assign) MPElementType defaultType;
+@property(readonly) NSString *userID;
 
 + (NSString *)idFor:(NSString *)userName;
 

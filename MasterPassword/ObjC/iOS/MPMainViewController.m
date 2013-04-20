@@ -11,9 +11,9 @@
 #import "MPAppDelegate_Store.h"
 #import "MPElementListAllViewController.h"
 
-
 @interface MPMainViewController()
-@property (nonatomic)BOOL suppressOutdatedAlert;
+
+@property(nonatomic) BOOL suppressOutdatedAlert;
 @end
 
 @implementation MPMainViewController {
@@ -43,7 +43,6 @@
     [self updateUserHiddenAnimated:NO];
 }
 
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
     if ([[segue identifier] isEqualToString:@"MP_ChooseType"])
@@ -56,13 +55,13 @@
 
 - (void)viewDidLoad {
 
-    self.searchDelegate                                  = [MPElementListSearchController new];
-    self.searchDelegate.delegate                         = self;
-    self.searchDelegate.searchDisplayController          = self.searchDisplayController;
-    self.searchDelegate.searchTipContainer               = self.searchTipContainer;
-    self.searchDisplayController.searchBar.delegate      = self.searchDelegate;
-    self.searchDisplayController.delegate                = self.searchDelegate;
-    self.searchDisplayController.searchResultsDelegate   = self.searchDelegate;
+    self.searchDelegate = [MPElementListSearchController new];
+    self.searchDelegate.delegate = self;
+    self.searchDelegate.searchDisplayController = self.searchDisplayController;
+    self.searchDelegate.searchTipContainer = self.searchTipContainer;
+    self.searchDisplayController.searchBar.delegate = self.searchDelegate;
+    self.searchDisplayController.delegate = self.searchDelegate;
+    self.searchDisplayController.searchResultsDelegate = self.searchDelegate;
     self.searchDisplayController.searchResultsDataSource = self.searchDelegate;
 
     [self.passwordIncrementer addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self
@@ -75,21 +74,21 @@
 
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
 
-    self.alertBody.text         = nil;
+    self.alertBody.text = nil;
     self.toolTipEditIcon.hidden = YES;
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification object:self queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      self.suppressOutdatedAlert = NO;
-                                                  }];
+    [[NSNotificationCenter defaultCenter]
+            addObserverForName:UIApplicationDidEnterBackgroundNotification object:self queue:nil usingBlock:^(NSNotification *note) {
+        self.suppressOutdatedAlert = NO;
+    }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPElementUpdatedNotification object:nil queue:nil usingBlock:
-     ^void(NSNotification *note) {
-         MPElementEntity *activeElement = [self activeElementForThread];
-         if (activeElement.type & MPElementTypeClassStored && ![[activeElement.content description] length])
-             [self showToolTip:@"Tap        to set a password." withIcon:self.toolTipEditIcon];
-         if (activeElement.requiresExplicitMigration)
-             [self showToolTip:@"Password outdated. Tap to upgrade it." withIcon:nil];
-     }];
+            ^void(NSNotification *note) {
+                MPElementEntity *activeElement = [self activeElementForThread];
+                if (activeElement.type & MPElementTypeClassStored && ![[activeElement.content description] length])
+                    [self showToolTip:@"Tap        to set a password." withIcon:self.toolTipEditIcon];
+                if (activeElement.requiresExplicitMigration)
+                    [self showToolTip:@"Password outdated. Tap to upgrade it." withIcon:nil];
+            }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil queue:nil usingBlock:
             ^(NSNotification *note) {
                 BOOL animated = [[note.userInfo objectForKey:@"animated"] boolValue];
@@ -119,14 +118,14 @@
         _activeElementOID = nil;
 
     self.searchDisplayController.searchBar.text = nil;
-    self.alertContainer.hidden                  = NO;
-    self.outdatedAlertContainer.hidden          = NO;
-    self.searchTipContainer.hidden              = NO;
-    self.actionsTipContainer.hidden             = NO;
-    self.typeTipContainer.hidden                = NO;
-    self.toolTipContainer.hidden                = NO;
-    self.contentTipContainer.hidden             = NO;
-    self.loginNameTipContainer.hidden           = NO;
+    self.alertContainer.hidden = NO;
+    self.outdatedAlertContainer.hidden = NO;
+    self.searchTipContainer.hidden = NO;
+    self.actionsTipContainer.hidden = NO;
+    self.typeTipContainer.hidden = NO;
+    self.toolTipContainer.hidden = NO;
+    self.contentTipContainer.hidden = NO;
+    self.loginNameTipContainer.hidden = NO;
 
     [self updateAnimated:NO];
 
@@ -142,7 +141,7 @@
 
     // Needed for when we appear after a modal VC dismisses:
     // We can't present until the other modal VC has been fully dismissed and presenting in -viewWillAppear: will fail.
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
         MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
         if ([MPAlgorithmDefault migrateUser:activeUser] && !self.suppressOutdatedAlert)
             [UIView animateWithDuration:0.3f animations:^{
@@ -150,7 +149,7 @@
                 self.suppressOutdatedAlert = YES;
             }];
         [activeUser.managedObjectContext saveToStore];
-    });
+    } );
 
     if (![[MPiOSConfig get].actionsTipShown boolValue])
         [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
@@ -161,7 +160,7 @@
 
             [MPiOSConfig get].actionsTipShown = @YES;
 
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            dispatch_after( dispatch_time( DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC) ), dispatch_get_main_queue(), ^{
                 [UIView animateWithDuration:0.2f animations:^{
                     self.actionsTipContainer.alpha = 0;
                 }                completion:^(BOOL finished_) {
@@ -170,7 +169,7 @@
                             self.searchTipContainer.alpha = 1;
                         }];
                 }];
-            });
+            } );
         }];
 
     [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Main"];
@@ -197,15 +196,15 @@
     [self setHelpChapter:activeElement? @"2": @"1"];
     [self updateHelpHiddenAnimated:NO];
 
-    self.passwordCounter.alpha     = 0;
+    self.passwordCounter.alpha = 0;
     self.passwordIncrementer.alpha = 0;
-    self.passwordEdit.alpha        = 0;
-    self.passwordUpgrade.alpha     = 0;
-    self.passwordUser.alpha        = 0;
-    self.displayContainer.alpha    = 0;
+    self.passwordEdit.alpha = 0;
+    self.passwordUpgrade.alpha = 0;
+    self.passwordUser.alpha = 0;
+    self.displayContainer.alpha = 0;
 
     if (activeElement) {
-        self.passwordUser.alpha     = 0.5f;
+        self.passwordUser.alpha = 0.5f;
         self.displayContainer.alpha = 1.0f;
     }
 
@@ -214,11 +213,11 @@
 
     else {
         if (activeElement.type & MPElementTypeClassGenerated) {
-            self.passwordCounter.alpha     = 0.5f;
+            self.passwordCounter.alpha = 0.5f;
             self.passwordIncrementer.alpha = 0.5f;
-        } else
-            if (activeElement.type & MPElementTypeClassStored)
-                self.passwordEdit.alpha = 0.5f;
+        }
+        else if (activeElement.type & MPElementTypeClassStored)
+            self.passwordEdit.alpha = 0.5f;
     }
 
     self.siteName.text = activeElement.name;
@@ -228,21 +227,21 @@
                      forState:UIControlStateNormal];
 
     if ([activeElement isKindOfClass:[MPElementGeneratedEntity class]])
-        self.passwordCounter.text = PearlString(@"%u", ((MPElementGeneratedEntity *)activeElement).counter);
+        self.passwordCounter.text = PearlString( @"%u", ((MPElementGeneratedEntity *)activeElement).counter );
 
     self.contentField.enabled = NO;
-    self.contentField.text    = @"";
+    self.contentField.text = @"";
     if (activeElement.name && ![activeElement isDeleted])
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
             NSString *description = [activeElement.content description];
 
-            dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async( dispatch_get_main_queue(), ^{
                 self.contentField.text = description;
-            });
-        });
+            } );
+        } );
 
     self.loginNameField.enabled = NO;
-    self.loginNameField.text    = activeElement.loginName;
+    self.loginNameField.text = activeElement.loginName;
     self.siteInfoHidden = !activeElement || ([[MPiOSConfig get].siteInfoHidden boolValue] && (activeElement.loginName == nil));
     [self updateUserHiddenAnimated:NO];
 }
@@ -271,10 +270,11 @@
     self.pullDownView.hidden = [[MPiOSConfig get].helpHidden boolValue];
 
     if ([[MPiOSConfig get].helpHidden boolValue]) {
-        self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, self.view.bounds.size.height - 44 /* search bar */);
-        self.helpContainer.frame    = CGRectSetY(self.helpContainer.frame, self.view.bounds.size.height - 20 /* pull-up */);
-    } else {
-        self.contentContainer.frame = CGRectSetHeight(self.contentContainer.frame, 225);
+        self.contentContainer.frame = CGRectSetHeight( self.contentContainer.frame, self.view.bounds.size.height - 44 /* search bar */);
+        self.helpContainer.frame = CGRectSetY( self.helpContainer.frame, self.view.bounds.size.height - 20 /* pull-up */);
+    }
+    else {
+        self.contentContainer.frame = CGRectSetHeight( self.contentContainer.frame, 225 );
         [self.helpContainer setFrameFromCurrentSizeAndParentPaddingTop:CGFLOAT_MAX right:0 bottom:0 left:0];
     }
 }
@@ -287,7 +287,7 @@
 - (void)toggleUserAnimated:(BOOL)animated {
 
     [MPiOSConfig get].siteInfoHidden = PearlBool(!self.siteInfoHidden);
-    self.siteInfoHidden              = [[MPiOSConfig get].siteInfoHidden boolValue];
+    self.siteInfoHidden = [[MPiOSConfig get].siteInfoHidden boolValue];
     [self updateUserHiddenAnimated:animated];
 }
 
@@ -301,11 +301,11 @@
     }
 
     if (self.siteInfoHidden) {
-        self.displayContainer.frame = CGRectSetHeight(self.displayContainer.frame, 87);
-    } else {
-        self.displayContainer.frame = CGRectSetHeight(self.displayContainer.frame, 137);
+        self.displayContainer.frame = CGRectSetHeight( self.displayContainer.frame, 87 );
     }
-
+    else {
+        self.displayContainer.frame = CGRectSetHeight( self.displayContainer.frame, 137 );
+    }
 }
 
 - (void)setHelpChapter:(NSString *)chapter {
@@ -314,11 +314,11 @@
             @"chapter" : chapter
     } );
 
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async( dispatch_get_main_queue(), ^{
         NSURL *url = [NSURL URLWithString:[@"#" stringByAppendingString:chapter]
                             relativeToURL:[[NSBundle mainBundle] URLForResource:@"help" withExtension:@"html"]];
         [self.helpView loadRequest:[NSURLRequest requestWithURL:url]];
-    });
+    } );
 }
 
 - (IBAction)panHelpDown:(UIPanGestureRecognizer *)sender {
@@ -330,7 +330,7 @@
         targetY = 246;
     }
 
-    self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, targetY);
+    self.helpContainer.frame = CGRectSetY( self.helpContainer.frame, targetY );
 
     if (sender.state == UIGestureRecognizerStateEnded)
         [self setHelpHidden:hideHelp animated:YES];
@@ -342,10 +342,10 @@
     BOOL hideHelp = NO;
     if (targetY >= self.view.bounds.size.height - 20) {
         hideHelp = YES;
-        targetY = self.view.bounds.size.height - 20 ;
+        targetY = self.view.bounds.size.height - 20;
     }
 
-    self.helpContainer.frame = CGRectSetY(self.helpContainer.frame, targetY);
+    self.helpContainer.frame = CGRectSetY( self.helpContainer.frame, targetY );
 
     if (sender.state == UIGestureRecognizerStateEnded)
         [self setHelpHidden:hideHelp animated:YES];
@@ -355,21 +355,21 @@
 
     MPElementEntity *activeElement = [self activeElementForThread];
     NSString *error = [self.helpView stringByEvaluatingJavaScriptFromString:
-                                      PearlString(@"setClass('%@');", activeElement.typeClassName)];
+            PearlString( @"setClass('%@');", activeElement.typeClassName )];
     if (error.length)
-        err(@"helpView.setClass: %@", error);
+    err(@"helpView.setClass: %@", error);
 }
 
 - (void)showContentTip:(NSString *)message withIcon:(UIImageView *)icon {
 
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async( dispatch_get_main_queue(), ^{
         if (self.contentTipCleanup)
-            self.contentTipCleanup(NO);
+            self.contentTipCleanup( NO );
 
         __weak MPMainViewController *wSelf = self;
         self.contentTipBody.text = message;
-        self.contentTipCleanup   = ^(BOOL finished) {
-            icon.hidden             = YES;
+        self.contentTipCleanup = ^(BOOL finished) {
+            icon.hidden = YES;
             wSelf.contentTipCleanup = nil;
         };
 
@@ -378,47 +378,47 @@
             self.contentTipContainer.alpha = 1;
         }                completion:^(BOOL finished) {
             if (finished) {
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                dispatch_time_t popTime = dispatch_time( DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC );
+                dispatch_after( popTime, dispatch_get_main_queue(), ^(void) {
                     [UIView animateWithDuration:0.2f animations:^{
                         self.contentTipContainer.alpha = 0;
                     }                completion:self.contentTipCleanup];
-                });
+                } );
             }
         }];
-    });
+    } );
 }
 
 - (void)showLoginNameTip:(NSString *)message {
 
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async( dispatch_get_main_queue(), ^{
         self.loginNameTipBody.text = message;
 
         [UIView animateWithDuration:0.3f animations:^{
             self.loginNameTipContainer.alpha = 1;
         }                completion:^(BOOL finished) {
             if (finished) {
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                dispatch_time_t popTime = dispatch_time( DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC );
+                dispatch_after( popTime, dispatch_get_main_queue(), ^(void) {
                     [UIView animateWithDuration:0.2f animations:^{
                         self.loginNameTipContainer.alpha = 0;
                     }];
-                });
+                } );
             }
         }];
-    });
+    } );
 }
 
 - (void)showToolTip:(NSString *)message withIcon:(UIImageView *)icon {
 
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async( dispatch_get_main_queue(), ^{
         if (self.toolTipCleanup)
-            self.toolTipCleanup(NO);
+            self.toolTipCleanup( NO );
 
         __weak MPMainViewController *wSelf = self;
         self.toolTipBody.text = message;
-        self.toolTipCleanup   = ^(BOOL finished) {
-            icon.hidden     = YES;
+        self.toolTipCleanup = ^(BOOL finished) {
+            icon.hidden = YES;
             wSelf.toolTipCleanup = nil;
         };
 
@@ -427,22 +427,22 @@
             self.toolTipContainer.alpha = 1;
         }                completion:^(BOOL finished) {
             if (finished) {
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                dispatch_time_t popTime = dispatch_time( DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC );
+                dispatch_after( popTime, dispatch_get_main_queue(), ^(void) {
                     [UIView animateWithDuration:0.2f animations:^{
                         self.toolTipContainer.alpha = 0;
                     }                completion:self.toolTipCleanup];
-                });
+                } );
             }
         }];
-    });
+    } );
 }
 
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message {
 
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async( dispatch_get_main_queue(), ^{
         self.alertTitle.text = title;
-        NSRange scrollRange = NSMakeRange(self.alertBody.text.length, message.length);
+        NSRange scrollRange = NSMakeRange( self.alertBody.text.length, message.length );
         if ([self.alertBody.text length])
             self.alertBody.text = [NSString stringWithFormat:@"%@\n\n---\n\n%@", self.alertBody.text, message];
         else
@@ -452,7 +452,7 @@
         [UIView animateWithDuration:0.3f animations:^{
             self.alertContainer.alpha = 1;
         }];
-    });
+    } );
 }
 
 #pragma mark - Protocols
@@ -462,7 +462,7 @@
     MPElementEntity *activeElement = [self activeElementForThread];
     id content = activeElement.content;
     if (!content)
-     // Nothing to copy.
+            // Nothing to copy.
         return;
 
     inf(@"Copying password for: %@", activeElement.name);
@@ -497,65 +497,65 @@
 - (IBAction)incrementPasswordCounter {
 
     [self changeActiveElementWithWarning:
-           @"You are incrementing the site's password counter.\n\n"
-            @"If you continue, a new password will be generated for this site.  "
-            @"You will then need to update your account's old password to this newly generated password.\n\n"
-            @"You can reset the counter by holding down on this button."
-                                do:^BOOL(MPElementEntity *activeElement) {
-                                    if (![activeElement isKindOfClass:[MPElementGeneratedEntity class]]) {
-                                        // Not of a type that supports a password counter.
-                                        err(@"Cannot increment password counter: Element is not generated: %@", activeElement.name);
-                                        return NO;
-                                    }
-                                    MPElementGeneratedEntity *activeGeneratedElement = (MPElementGeneratedEntity *)activeElement;
+            @"You are incrementing the site's password counter.\n\n"
+                    @"If you continue, a new password will be generated for this site.  "
+                    @"You will then need to update your account's old password to this newly generated password.\n\n"
+                    @"You can reset the counter by holding down on this button."
+                                      do:^BOOL(MPElementEntity *activeElement) {
+                                          if (![activeElement isKindOfClass:[MPElementGeneratedEntity class]]) {
+                                              // Not of a type that supports a password counter.
+                                              err(@"Cannot increment password counter: Element is not generated: %@", activeElement.name);
+                                              return NO;
+                                          }
+                                          MPElementGeneratedEntity *activeGeneratedElement = (MPElementGeneratedEntity *)activeElement;
 
-                                    inf(@"Incrementing password counter for: %@", activeGeneratedElement.name);
-                                    ++activeGeneratedElement.counter;
+                                          inf(@"Incrementing password counter for: %@", activeGeneratedElement.name);
+                                          ++activeGeneratedElement.counter;
 
-                                    MPCheckpoint( MPCheckpointIncrementPasswordCounter, @{
-                                            @"type"    : activeGeneratedElement.typeName,
-                                            @"version" : @(activeGeneratedElement.version),
-                                            @"counter" : @(activeGeneratedElement.counter)
-                                    } );
-                                    return YES;
-                                }];
+                                          MPCheckpoint( MPCheckpointIncrementPasswordCounter, @{
+                                                  @"type"    : activeGeneratedElement.typeName,
+                                                  @"version" : @(activeGeneratedElement.version),
+                                                  @"counter" : @(activeGeneratedElement.counter)
+                                          } );
+                                          return YES;
+                                      }];
 }
 
 - (IBAction)resetPasswordCounter:(UILongPressGestureRecognizer *)sender {
 
     if (sender.state != UIGestureRecognizerStateBegan)
-     // Only fire when the gesture was first detected.
+            // Only fire when the gesture was first detected.
         return;
     MPElementEntity *activeElement = [self activeElementForThread];
     if (![activeElement isKindOfClass:[MPElementGeneratedEntity class]]) {
         // Not of a type that supports a password counter.
         err(@"Cannot reset password counter: Element is not generated: %@", activeElement.name);
         return;
-    } else
-        if (((MPElementGeneratedEntity *)activeElement).counter == 1)
-         // Counter has initial value, no point resetting.
-            return;
+    }
+    else if (((MPElementGeneratedEntity *)activeElement).counter == 1)
+            // Counter has initial value, no point resetting.
+        return;
 
     [self changeActiveElementWithWarning:
-           @"You are resetting the site's password counter.\n\n"
-            @"If you continue, the site's password will change back to its original value.  "
-            @"You will then need to update your account's password back to this original value."
-                                do:^BOOL(MPElementEntity *activeElement_){
-                                    inf(@"Resetting password counter for: %@", activeElement_.name);
-                                    ((MPElementGeneratedEntity *)activeElement_).counter = 1;
+            @"You are resetting the site's password counter.\n\n"
+                    @"If you continue, the site's password will change back to its original value.  "
+                    @"You will then need to update your account's password back to this original value."
+                                      do:^BOOL(MPElementEntity *activeElement_) {
+                                          inf(@"Resetting password counter for: %@", activeElement_.name);
+                                          ((MPElementGeneratedEntity *)activeElement_).counter = 1;
 
-                                    MPCheckpoint( MPCheckpointResetPasswordCounter, @{
-                                            @"type"    : activeElement_.typeName,
-                                            @"version" : @(activeElement_.version)
-                                    } );
-                                    return YES;
-                                }];
+                                          MPCheckpoint( MPCheckpointResetPasswordCounter, @{
+                                                  @"type"    : activeElement_.typeName,
+                                                  @"version" : @(activeElement_.version)
+                                          } );
+                                          return YES;
+                                      }];
 }
 
 - (IBAction)editLoginName:(UILongPressGestureRecognizer *)sender {
 
     if (sender.state != UIGestureRecognizerStateBegan)
-     // Only fire when the gesture was first detected.
+            // Only fire when the gesture was first detected.
         return;
 
     MPElementEntity *activeElement = [self activeElementForThread];
@@ -620,11 +620,10 @@
     NSError *error;
     MPElementEntity *activeElement = (MPElementEntity *)[moc existingObjectWithID:_activeElementOID error:&error];
     if (!activeElement)
-        err(@"Couldn't retrieve active element: %@", error);
+    err(@"Couldn't retrieve active element: %@", error);
 
     return activeElement;
 }
-
 
 - (IBAction)editPassword {
 
@@ -651,12 +650,12 @@
         return;
 
     NSString *warning = activeElement.type & MPElementTypeClassGenerated?
-         @"You are upgrading the site.\n\n"
-          @"This upgrade improves the site's compatibility with the latest version of Master Password.\n\n"
-          @"Your password will change and you will need to update your site's account."
-         :
-         @"You are upgrading the site.\n\n"
-          @"This upgrade improves the site's compatibility with the latest version of Master Password.";
+                        @"You are upgrading the site.\n\n"
+                                @"This upgrade improves the site's compatibility with the latest version of Master Password.\n\n"
+                                @"Your password will change and you will need to update your site's account."
+                        :
+                        @"You are upgrading the site.\n\n"
+                                @"This upgrade improves the site's compatibility with the latest version of Master Password.";
 
     [self changeActiveElementWithWarning:warning do:
             ^BOOL(MPElementEntity *activeElement_) {
@@ -772,19 +771,20 @@
 - (void)didSelectType:(MPElementType)type {
 
     [self changeActiveElementWithWarning:
-           @"You are about to change the type of this password.\n\n"
-            @"If you continue, the password for this site will change.  "
-            @"You will need to update your account's old password to the new one."
-                                      do:^BOOL(MPElementEntity *activeElement){
+            @"You are about to change the type of this password.\n\n"
+                    @"If you continue, the password for this site will change.  "
+                    @"You will need to update your account's old password to the new one."
+                                      do:^BOOL(MPElementEntity *activeElement) {
                                           if ([activeElement.algorithm classOfType:type] != activeElement.typeClass) {
                                               // Type requires a different class of element.  Recreate the element.
-                                              MPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:[activeElement.algorithm classNameOfType:type]
-                                                                                                          inManagedObjectContext:activeElement.managedObjectContext];
-                                              newElement.name      = activeElement.name;
-                                              newElement.user      = activeElement.user;
-                                              newElement.uses      = activeElement.uses;
-                                              newElement.lastUsed  = activeElement.lastUsed;
-                                              newElement.version   = activeElement.version;
+                                              MPElementEntity *newElement
+                                                      = [NSEntityDescription insertNewObjectForEntityForName:[activeElement.algorithm classNameOfType:type]
+                                                                                      inManagedObjectContext:activeElement.managedObjectContext];
+                                              newElement.name = activeElement.name;
+                                              newElement.user = activeElement.user;
+                                              newElement.uses = activeElement.uses;
+                                              newElement.lastUsed = activeElement.lastUsed;
+                                              newElement.version = activeElement.version;
                                               newElement.loginName = activeElement.loginName;
 
                                               [activeElement.managedObjectContext deleteObject:activeElement];
@@ -793,8 +793,8 @@
                                           }
                                           activeElement.type = type;
 
-                                          [[NSNotificationCenter defaultCenter] postNotificationName:MPElementUpdatedNotification
-                                                                                              object:activeElement.objectID];
+                                          [[NSNotificationCenter defaultCenter]
+                                                  postNotificationName:MPElementUpdatedNotification object:activeElement.objectID];
                                           return YES;
                                       }];
 }
@@ -809,11 +809,11 @@
     [self changeActiveElementWithoutWarningDo:^BOOL(MPElementEntity *activeElement) {
         if ([activeElement use] == 1)
             [self showAlertWithTitle:@"New Site" message:
-                                                  PearlString(@"You've just created a password for %@.\n\n"
-                                                               @"IMPORTANT:\n"
-                                                               @"Go to %@ and set or change the password for your account to the password above.\n"
-                                                               @"Do this right away: if you forget, you may have trouble remembering which password to use to log into the site later on.",
-                                                              activeElement.name, activeElement.name)];
+                    PearlString( @"You've just created a password for %@.\n\n"
+                            @"IMPORTANT:\n"
+                            @"Go to %@ and set or change the password for your account to the password above.\n"
+                            @"Do this right away: if you forget, you may have trouble remembering which password to use to log into the site later on.",
+                            activeElement.name, activeElement.name )];
         return YES;
     }];
 
@@ -828,11 +828,11 @@
                 [MPiOSConfig get].typeTipShown = PearlBool(YES);
 
                 dispatch_after(
-                 dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                     [UIView animateWithDuration:0.2f animations:^{
-                         self.typeTipContainer.alpha = 0;
-                     }];
-                 });
+                        dispatch_time( DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC) ), dispatch_get_main_queue(), ^{
+                            [UIView animateWithDuration:0.2f animations:^{
+                                self.typeTipContainer.alpha = 0;
+                            }];
+                        } );
             }
         }];
 
@@ -866,8 +866,9 @@
             // Not of a type whose content can be edited.
             err(@"Cannot update element content: Element is not stored: %@", activeElement.name);
             return;
-        } else if ([((MPElementStoredEntity *)activeElement).content isEqual:self.contentField.text])
-            // Content hasn't changed.
+        }
+        else if ([((MPElementStoredEntity *)activeElement).content isEqual:self.contentField.text])
+                // Content hasn't changed.
             return;
 
         [self changeActiveElementWithoutWarningDo:^BOOL(MPElementEntity *activeElement_) {

@@ -10,13 +10,14 @@
 #import "MPMainViewController.h"
 #import "MPAppDelegate.h"
 
-@interface MPElementListSearchController ()
+@interface MPElementListSearchController()
 
-@property (nonatomic) BOOL newSiteSectionWasNeeded;
+@property(nonatomic) BOOL newSiteSectionWasNeeded;
 
 @end
 
 @implementation MPElementListSearchController
+
 @synthesize searchDisplayController;
 
 - (id)init {
@@ -24,22 +25,22 @@
     if (!(self = [super init]))
         return nil;
 
-    self.tipView                  = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 170)];
-    self.tipView.textAlignment    = NSTextAlignmentCenter;
-    self.tipView.backgroundColor  = [UIColor clearColor];
-    self.tipView.textColor        = [UIColor lightTextColor];
-    self.tipView.shadowColor      = [UIColor blackColor];
-    self.tipView.shadowOffset     = CGSizeMake(0, -1);
+    self.tipView = [[UILabel alloc] initWithFrame:CGRectMake( 0, 0, 320, 170 )];
+    self.tipView.textAlignment = NSTextAlignmentCenter;
+    self.tipView.backgroundColor = [UIColor clearColor];
+    self.tipView.textColor = [UIColor lightTextColor];
+    self.tipView.shadowColor = [UIColor blackColor];
+    self.tipView.shadowOffset = CGSizeMake( 0, -1 );
     self.tipView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight
-     | UIViewAutoresizingFlexibleBottomMargin;
-    self.tipView.numberOfLines    = 0;
-    self.tipView.font             = [UIFont systemFontOfSize:14];
+                                    | UIViewAutoresizingFlexibleBottomMargin;
+    self.tipView.numberOfLines = 0;
+    self.tipView.font = [UIFont systemFontOfSize:14];
     self.tipView.text =
-     @"Tip:\n"
-      @"Name your sites by their domain name:\n"
-      @"apple.com, twitter.com\n\n"
-      @"For email accounts, use the address:\n"
-      @"john@apple.com, john@gmail.com";
+            @"Tip:\n"
+                    @"Name your sites by their domain name:\n"
+                    @"apple.com, twitter.com\n\n"
+                    @"For email accounts, use the address:\n"
+                    @"john@apple.com, john@gmail.com";
 
     return self;
 }
@@ -69,7 +70,7 @@
 
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
 
-    controller.searchBar.text                  = @"";
+    controller.searchBar.text = @"";
 
     [UIView animateWithDuration:0.2f animations:^{
         self.searchTipContainer.alpha = 0;
@@ -83,15 +84,15 @@
 
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
 
-    controller.searchBar.prompt                      = nil;
+    controller.searchBar.prompt = nil;
     controller.searchBar.searchResultsButtonSelected = NO;
 }
 
 - (void)searchDisplayController:(UISearchDisplayController *)controller didLoadSearchResultsTableView:(UITableView *)tableView {
 
     tableView.backgroundColor = [UIColor blackColor];
-    tableView.separatorStyle  = UITableViewCellSeparatorStyleNone;
-    tableView.rowHeight       = 48.0f;
+    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    tableView.rowHeight = 48.0f;
 
     self.tableView = tableView;
 }
@@ -103,7 +104,7 @@
 }
 
 - (void)updateData {
-    
+
     [super updateData];
 
     UISearchBar *searchBar = self.searchDisplayController.searchBar;
@@ -111,13 +112,13 @@
     [searchBar.superview enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
 
         if ([subview isKindOfClass:[UIControl class]] &&
-                CGPointEqualToPoint(
-                        CGPointDistanceBetweenCGPoints(searchBarFrame.origin, subview.frame.origin),
-                        CGPointMake(0, searchBarFrame.size.height))) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+            CGPointEqualToPoint(
+                        CGPointDistanceBetweenCGPoints( searchBarFrame.origin, subview.frame.origin ),
+                        CGPointMake( 0, searchBarFrame.size.height ) )) {
+            dispatch_async( dispatch_get_main_queue(), ^{
                 [self.tipView removeFromSuperview];
                 [subview addSubview:self.tipView];
-            });
+            } );
 
             *stop = YES;
         }
@@ -131,7 +132,7 @@
         return NO;
 
     __block BOOL hasExactQueryMatch = NO;
-    id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsControllerByUses sections] lastObject];
+    id<NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsControllerByUses sections] lastObject];
     [[sectionInfo objects] enumerateObjectsUsingBlock:^(id obj_, NSUInteger idx_, BOOL *stop_) {
         if ([[obj_ name] isEqualToString:query]) {
             hasExactQueryMatch = YES;
@@ -178,7 +179,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
     if (section < [super numberOfSectionsInTableView:tableView])
-        // Section is one of super's sections.
+            // Section is one of super's sections.
         return [super tableView:tableView numberOfRowsInSection:section];
 
     return 1;
@@ -195,8 +196,8 @@
     // "New" section
     NSString *query = [self.searchDisplayController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     cell.textLabel.text = query;
-    cell.detailTextLabel.text = PearlString(@"New site: %@",
-            [MPAlgorithmDefault shortNameOfType:[[[MPAppDelegate get] activeUserForThread] defaultType]]);
+    cell.detailTextLabel.text = PearlString( @"New site: %@",
+            [MPAlgorithmDefault shortNameOfType:[[[MPAppDelegate get] activeUserForThread] defaultType]] );
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -208,10 +209,11 @@
     }
 
     // "New" section.
-    NSString *siteName = [self.searchDisplayController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *siteName
+            = [self.searchDisplayController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 
     [PearlAlert showAlertWithTitle:@"New Site"
-                           message:PearlString(@"Do you want to create a new site named:\n%@", siteName)
+                           message:PearlString( @"Do you want to create a new site named:\n%@", siteName )
                          viewStyle:UIAlertViewStyleDefault
                          initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -226,7 +228,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 
     if (section < [super numberOfSectionsInTableView:tableView])
-        // Section is one of super's sections.
+            // Section is one of super's sections.
         return [super tableView:tableView titleForHeaderInSection:section];
 
     return @"Create";
@@ -236,9 +238,8 @@
 forRowAtIndexPath:(NSIndexPath *)indexPath {
 
     if (indexPath.section < [super numberOfSectionsInTableView:tableView])
-        // Section is one of super's sections.
+            // Section is one of super's sections.
         [super tableView:tableView commitEditingStyle:editingStyle forRowAtIndexPath:indexPath];
 }
-
 
 @end

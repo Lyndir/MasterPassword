@@ -20,8 +20,8 @@
 
 @interface MPSetupViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UISwitch *cloudSwitch;
-@property (weak, nonatomic) IBOutlet UISwitch *rememberLoginSwitch;
+@property(weak, nonatomic) IBOutlet UISwitch *cloudSwitch;
+@property(weak, nonatomic) IBOutlet UISwitch *rememberLoginSwitch;
 
 - (IBAction)close:(UIBarButtonItem *)sender;
 

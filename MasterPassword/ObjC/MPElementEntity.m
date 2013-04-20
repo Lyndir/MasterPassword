@@ -7,8 +7,6 @@
 //
 
 #import "MPElementEntity.h"
-#import "MPUserEntity.h"
-
 
 @implementation MPElementEntity
 

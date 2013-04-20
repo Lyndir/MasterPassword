@@ -17,10 +17,9 @@
 
 #import <Foundation/Foundation.h>
 
+@interface MPAppsViewController : UIViewController<UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 
-@interface MPAppsViewController : UIViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
-
-@property (weak, nonatomic) IBOutlet UIImageView *pagePositionView;
+@property(weak, nonatomic) IBOutlet UIImageView *pagePositionView;
 
 - (IBAction)exit;
 

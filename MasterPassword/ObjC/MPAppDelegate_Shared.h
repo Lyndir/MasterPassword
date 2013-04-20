@@ -15,7 +15,7 @@
 @interface MPAppDelegate_Shared : NSObject <PearlConfigDelegate>
 #endif
 
-@property (strong, nonatomic) MPKey             *key;
+@property(strong, nonatomic) MPKey *key;
 
 + (instancetype)get;
 

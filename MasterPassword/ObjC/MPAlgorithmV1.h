@@ -17,6 +17,5 @@
 
 #import "MPAlgorithmV0.h"
 
-
 @interface MPAlgorithmV1 : MPAlgorithmV0
 @end

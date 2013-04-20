@@ -8,7 +8,7 @@
 
 #import "MPAppDelegate_Shared.h"
 
-@interface MPAppDelegate_Shared (Key)
+@interface MPAppDelegate_Shared(Key)
 
 - (BOOL)signInAsUser:(MPUserEntity *)user usingMasterPassword:(NSString *)password;
 - (void)signOutAnimated:(BOOL)animated;

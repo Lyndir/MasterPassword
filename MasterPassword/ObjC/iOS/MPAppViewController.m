@@ -17,11 +17,8 @@
 
 #import "MPAppViewController.h"
 
-
 @implementation MPAppViewController {
-
 }
-
 
 - (IBAction)gorillas:(UIButton *)sender {
 
@@ -35,7 +32,7 @@
 - (IBAction)deblock:(UIButton *)sender {
 
     MPCheckpoint( MPCheckpointApp, @{
-            @"app": @"deblock"
+            @"app" : @"deblock"
     } );
 
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://itunes.apple.com/app/lyndir/deblock/id325058485?mt=8"]];

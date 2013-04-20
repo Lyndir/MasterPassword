@@ -17,7 +17,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface MPAppViewController : UIViewController
 
 - (IBAction)gorillas:(UIButton *)sender;

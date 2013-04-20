@@ -17,22 +17,19 @@
 
 #import "MPAppsViewController.h"
 
+@interface MPAppsViewController()
 
-@interface MPAppsViewController ()
-
-@property (nonatomic, strong) NSMutableArray       *pageVCs;
-@property (nonatomic, strong) UIPageViewController *pageViewController;
-
+@property(nonatomic, strong) NSMutableArray *pageVCs;
+@property(nonatomic, strong) UIPageViewController *pageViewController;
 
 @end
 
 @implementation MPAppsViewController {
-
 }
+
 @synthesize pagePositionView = _pagePositionView;
 @synthesize pageVCs = _pageVCs;
 @synthesize pageViewController = _pageViewController;
-
 
 - (void)viewDidLoad {
 
@@ -40,7 +37,7 @@
     UIViewController *vc;
     @try {
         for (NSUInteger p = 0;
-             (vc = [self.storyboard instantiateViewControllerWithIdentifier:PearlString(@"MPAppViewController_%u", p)]);
+             (vc = [self.storyboard instantiateViewControllerWithIdentifier:PearlString( @"MPAppViewController_%u", p )]);
              ++p)
             [self.pageVCs addObject:vc];
     }
@@ -49,11 +46,11 @@
             [e raise];
     }
 
-    self.pageViewController            = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
-                                                                         navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
-                                                                                       options:nil];
+    self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
+                                                              navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
+                                                                            options:nil];
     self.pageViewController.dataSource = self;
-    self.pageViewController.delegate   = self;
+    self.pageViewController.delegate = self;
     [self addChildViewController:self.pageViewController];
     [self.view addSubview:self.pageViewController.view];
     self.pageViewController.view.frame = self.pagePositionView.frame;
@@ -68,7 +65,7 @@
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     MPCheckpoint( MPCheckpointApps, nil );
 
-    [self.pageViewController setViewControllers:@[ [self.pageVCs objectAtIndex:1]  ] direction:UIPageViewControllerNavigationDirectionForward
+    [self.pageViewController setViewControllers:@[ [self.pageVCs objectAtIndex:1] ] direction:UIPageViewControllerNavigationDirectionForward
                                        animated:NO completion:nil];
 
     [super viewWillAppear:animated];
@@ -100,7 +97,6 @@
 
     return NO;
 }
-
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController
       viewControllerBeforeViewController:(UIViewController *)viewController {

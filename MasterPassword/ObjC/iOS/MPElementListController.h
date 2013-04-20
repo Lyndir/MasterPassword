@@ -5,14 +5,14 @@
 #define MPElementListFilterNone @"MPElementListFilterNone"
 #define MPElementListFilterOutdated @"MPElementListFilterOutdated"
 
-@interface MPElementListController : UITableViewController <NSFetchedResultsControllerDelegate>
+@interface MPElementListController : UITableViewController<NSFetchedResultsControllerDelegate>
 
-@property (weak, nonatomic) IBOutlet id<MPElementListDelegate> delegate;
-@property (strong, nonatomic) NSString *filter;
+@property(weak, nonatomic) IBOutlet id<MPElementListDelegate> delegate;
+@property(strong, nonatomic) NSString *filter;
 
-@property (readonly) NSFetchedResultsController *fetchedResultsControllerByUses;
-@property (readonly) NSFetchedResultsController *fetchedResultsControllerByLastUsed;
-@property (readonly) NSDateFormatter *dateFormatter;
+@property(readonly) NSFetchedResultsController *fetchedResultsControllerByUses;
+@property(readonly) NSFetchedResultsController *fetchedResultsControllerByLastUsed;
+@property(readonly) NSDateFormatter *dateFormatter;
 
 - (void)updateData;
 - (void)addElementNamed:(NSString *)siteName completion:(void (^)(BOOL success))completion;

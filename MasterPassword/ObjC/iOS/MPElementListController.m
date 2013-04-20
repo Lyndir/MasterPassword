@@ -3,7 +3,7 @@
 #import "MPAppDelegate_Store.h"
 #import "MPAppDelegate.h"
 
-@interface MPElementListController ()
+@interface MPElementListController()
 @end
 
 @implementation MPElementListController {
@@ -13,11 +13,11 @@
     NSDateFormatter *_dateFormatter;
 }
 
-- (void)addElementNamed:(NSString *)siteName completion:(void(^)(BOOL success))completion {
+- (void)addElementNamed:(NSString *)siteName completion:(void (^)(BOOL success))completion {
 
     if (![siteName length]) {
         if (completion)
-            completion(false);
+            completion( false );
         return;
     }
 
@@ -41,13 +41,13 @@
         [moc saveToStore];
 
         NSManagedObjectID *elementOID = [element objectID];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            MPElementEntity *element_ = (MPElementEntity *) [[MPAppDelegate managedObjectContextForThreadIfReady]
+        dispatch_async( dispatch_get_main_queue(), ^{
+            MPElementEntity *element_ = (MPElementEntity *)[[MPAppDelegate managedObjectContextForThreadIfReady]
                     objectRegisteredForID:elementOID];
             [self.delegate didSelectElement:element_];
             if (completion)
-                completion(true);
-        });
+                completion( true );
+        } );
     }];
 }
 
@@ -59,11 +59,11 @@
         if (!moc)
             return nil;
 
-        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
-        fetchRequest.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:NSStringFromSelector( @selector(lastUsed) ) ascending:NO]];
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
+        fetchRequest.sortDescriptors = @[ [[NSSortDescriptor alloc] initWithKey:NSStringFromSelector( @selector(lastUsed) ) ascending:NO] ];
         [self configureFetchRequest:fetchRequest];
         _fetchedResultsControllerByLastUsed = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:moc
-                                                                          sectionNameKeyPath:nil cacheName:nil];
+                                                                                    sectionNameKeyPath:nil cacheName:nil];
         _fetchedResultsControllerByLastUsed.delegate = self;
     }
 
@@ -119,20 +119,20 @@
             return;
 
         predicate = [NSCompoundPredicate andPredicateWithSubpredicates:
-                @[predicate, [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", query]]];
+                @[ predicate, [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", query] ]];
     }
-    
+
     // Add filter predicate.
     if ([self.filter isEqualToString:MPElementListFilterOutdated])
         predicate = [NSCompoundPredicate andPredicateWithSubpredicates:
-                     @[[NSPredicate predicateWithFormat:@"requiresExplicitMigration_ == YES"], predicate]];
+                @[ [NSPredicate predicateWithFormat:@"requiresExplicitMigration_ == YES"], predicate ]];
 
     // Fetch
     NSError *error;
     self.fetchedResultsControllerByLastUsed.fetchRequest.predicate = predicate;
     self.fetchedResultsControllerByUses.fetchRequest.predicate = predicate;
     if (![self.fetchedResultsControllerByLastUsed performFetch:&error])
-        err(@"Couldn't fetch elements: %@", error);
+    err(@"Couldn't fetch elements: %@", error);
     if (![self.fetchedResultsControllerByUses performFetch:&error])
     err(@"Couldn't fetch elements: %@", error);
 
@@ -140,13 +140,12 @@
 }
 
 - (void)customTableViewUpdates {
-
 }
 
 // See MP-14, also crashes easily on internal assertions etc..
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
 
-    dbg(@"%@", NSStringFromSelector(_cmd));
+    dbg(@"%@", NSStringFromSelector( _cmd ));
     [self.tableView beginUpdates];
 }
 
@@ -156,25 +155,25 @@
     switch (type) {
 
         case NSFetchedResultsChangeInsert:
-            dbg(@"%@ -- NSFetchedResultsChangeInsert:%@", NSStringFromSelector(_cmd), anObject);
+            dbg(@"%@ -- NSFetchedResultsChangeInsert:%@", NSStringFromSelector( _cmd ), anObject);
             [self.tableView insertRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:newIndexPath] ]
                                   withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
 
         case NSFetchedResultsChangeDelete:
-            dbg(@"%@ -- NSFetchedResultsChangeDelete:%@", NSStringFromSelector(_cmd), anObject);
+            dbg(@"%@ -- NSFetchedResultsChangeDelete:%@", NSStringFromSelector( _cmd ), anObject);
             [self.tableView deleteRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:indexPath] ]
                                   withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
 
         case NSFetchedResultsChangeUpdate:
-            dbg(@"%@ -- NSFetchedResultsChangeUpdate:%@", NSStringFromSelector(_cmd), anObject);
+            dbg(@"%@ -- NSFetchedResultsChangeUpdate:%@", NSStringFromSelector( _cmd ), anObject);
             [self.tableView reloadRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:indexPath] ]
                                   withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
 
         case NSFetchedResultsChangeMove:
-            dbg(@"%@ -- NSFetchedResultsChangeMove:%@", NSStringFromSelector(_cmd), anObject);
+            dbg(@"%@ -- NSFetchedResultsChangeMove:%@", NSStringFromSelector( _cmd ), anObject);
             [self.tableView deleteRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:indexPath] ]
                                   withRowAnimation:UITableViewRowAnimationAutomatic];
             [self.tableView insertRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:newIndexPath] ]
@@ -185,7 +184,7 @@
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
 
-    dbg(@"%@ on %@", NSStringFromSelector(_cmd), [NSThread currentThread].name);
+    dbg(@"%@ on %@", NSStringFromSelector( _cmd ), [NSThread currentThread].name);
     [self customTableViewUpdates];
     [self.tableView endUpdates];
 }
@@ -210,7 +209,7 @@
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MPElementListCell"];
     if (!cell)
-        cell = (UITableViewCell *) [[UIViewController alloc] initWithNibName:@"MPElementListCellView" bundle:nil].view;
+        cell = (UITableViewCell *)[[UIViewController alloc] initWithNibName:@"MPElementListCellView" bundle:nil].view;
 
     [self configureCell:cell inTableView:tableView atTableIndexPath:indexPath];
 
@@ -222,11 +221,12 @@
     MPElementEntity *element = [self elementForTableIndexPath:indexPath];
 
     cell.textLabel.text = element.name;
-    cell.detailTextLabel.text = PearlString(@"%d views, last on %@: %@",
-            element.uses, [self.dateFormatter stringFromDate:element.lastUsed], [element.algorithm shortNameOfType:element.type]);
+    cell.detailTextLabel.text = PearlString( @"%d views, last on %@: %@",
+            element.uses, [self.dateFormatter stringFromDate:element.lastUsed], [element.algorithm shortNameOfType:element.type] );
 }
 
-- (NSIndexPath *)tableIndexPathForFetchController:(NSFetchedResultsController *)fetchedResultsController indexPath:(NSIndexPath *)indexPath {
+- (NSIndexPath *)tableIndexPathForFetchController:(NSFetchedResultsController *)fetchedResultsController
+                                        indexPath:(NSIndexPath *)indexPath {
 
     if (fetchedResultsController == self.fetchedResultsControllerByLastUsed)
         return [NSIndexPath indexPathForRow:indexPath.row inSection:0];
@@ -270,7 +270,7 @@
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
 
-    return @[@"recency", @"uses"];
+    return @[ @"recency", @"uses" ];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
@@ -292,7 +292,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             MPCheckpoint( MPCheckpointDeleteElement, @{
                     @"type"    : element.typeName,
                     @"version" : @(element.version)
-            });
+            } );
         }];
     }
 }

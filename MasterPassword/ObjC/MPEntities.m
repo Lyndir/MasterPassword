@@ -9,7 +9,7 @@
 #import "MPEntities.h"
 #import "MPAppDelegate.h"
 
-@implementation NSManagedObjectContext (MP)
+@implementation NSManagedObjectContext(MP)
 
 - (BOOL)saveToStore {
 
@@ -24,7 +24,7 @@
 
 @end
 
-@implementation MPElementEntity (MP)
+@implementation MPElementEntity(MP)
 
 - (MPElementType)type {
 
@@ -45,7 +45,7 @@
         aType = [self.user defaultType];
     if (!aType || aType == NSNotFound)
         aType = MPElementTypeGeneratedLong;
-        
+
     self.type_ = @(aType);
 }
 
@@ -101,7 +101,7 @@
 
 - (id<MPAlgorithm>)algorithm {
 
-    return MPAlgorithmForVersion(self.version);
+    return MPAlgorithmForVersion( self.version );
 }
 
 - (NSUInteger)use {
@@ -146,29 +146,27 @@
 }
 
 - (void)importProtectedContent:(NSString *)protectedContent protectedByKey:(MPKey *)contentProtectionKey usingKey:(MPKey *)key {
-
 }
 
 - (void)importClearTextContent:(NSString *)clearContent usingKey:(MPKey *)key {
-
 }
 
 - (NSString *)description {
 
-    return PearlString(@"%@:%@", [self class], [self name]);
+    return PearlString( @"%@:%@", [self class], [self name] );
 }
 
 - (NSString *)debugDescription {
 
-    return PearlString(@"{%@: name=%@, user=%@, type=%d, uses=%ld, lastUsed=%@, version=%ld, loginName=%@, requiresExplicitMigration=%d}",
-                       NSStringFromClass([self class]), self.name, self.user.name, self.type, (long)self.uses, self.lastUsed, (long)self.version,
-                       self.loginName, self.requiresExplicitMigration);
+    return PearlString( @"{%@: name=%@, user=%@, type=%d, uses=%ld, lastUsed=%@, version=%ld, loginName=%@, requiresExplicitMigration=%d}",
+            NSStringFromClass( [self class] ), self.name, self.user.name, self.type, (long)self.uses, self.lastUsed, (long)self.version,
+            self.loginName, self.requiresExplicitMigration );
 }
 
 - (BOOL)migrateExplicitly:(BOOL)explicit {
 
     while (self.version < MPAlgorithmDefaultVersion)
-        if ([MPAlgorithmForVersion(self.version + 1) migrateElement:self explicit:explicit])
+        if ([MPAlgorithmForVersion( self.version + 1 ) migrateElement:self explicit:explicit])
         inf(@"%@ migration to version: %ld succeeded for element: %@", explicit? @"Explicit": @"Automatic", (long)self.version + 1, self);
         else {
             wrn(@"%@ migration to version: %ld failed for element: %@", explicit? @"Explicit": @"Automatic", (long)self.version + 1, self);
@@ -180,7 +178,7 @@
 
 @end
 
-@implementation MPElementGeneratedEntity (MP)
+@implementation MPElementGeneratedEntity(MP)
 
 - (NSUInteger)counter {
 
@@ -204,16 +202,17 @@
     return [self.algorithm generateContentForElement:self usingKey:key];
 }
 
-
 @end
 
-@implementation MPElementStoredEntity (MP)
+@implementation MPElementStoredEntity(MP)
 
 + (NSDictionary *)queryForDevicePrivateElementNamed:(NSString *)name {
 
     return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
-                                   attributes:@{(__bridge id)kSecAttrService: @"DevicePrivate",
-                                                             (__bridge id)kSecAttrAccount: name}
+                                   attributes:@{
+                                           (__bridge id)kSecAttrService : @"DevicePrivate",
+                                           (__bridge id)kSecAttrAccount : name
+                                   }
                                       matches:nil];
 }
 
@@ -251,19 +250,20 @@
     assert([key.keyID isEqualToData:self.user.keyID]);
 
     NSData *encryptedContent = [[[content description] dataUsingEncoding:NSUTF8StringEncoding]
-                                          encryptWithSymmetricKey:[key subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
+            encryptWithSymmetricKey:[key subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
 
     if (self.type & MPElementFeatureDevicePrivate) {
         [PearlKeyChain addOrUpdateItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]
                                 withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                              encryptedContent, (__bridge id)kSecValueData,
-                                                              #if TARGET_OS_IPHONE
-                                                              (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-                                                              (__bridge id)kSecAttrAccessible,
-                                                              #endif
-                                                              nil]];
+                                        encryptedContent, (__bridge id)kSecValueData,
+                                        #if TARGET_OS_IPHONE
+                                        (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+                                                          (__bridge id)kSecAttrAccessible,
+                                        #endif
+                                        nil]];
         self.contentObject = nil;
-    } else
+    }
+    else
         self.contentObject = encryptedContent;
 }
 
@@ -280,7 +280,7 @@
     else {
         NSString *clearContent = [[NSString alloc] initWithData:[self decryptContent:[protectedContent decodeBase64]
                                                                             usingKey:contentProtectionKey]
-         encoding:NSUTF8StringEncoding];
+                                                       encoding:NSUTF8StringEncoding];
 
         [self importClearTextContent:clearContent usingKey:key];
     }
@@ -293,7 +293,7 @@
 
 @end
 
-@implementation MPUserEntity (MP)
+@implementation MPUserEntity(MP)
 
 - (NSUInteger)avatar {
 

@@ -12,16 +12,16 @@
 
 @interface MPAppDelegate : MPAppDelegate_Shared<NSApplicationDelegate>
 
-@property (nonatomic, strong) NSStatusItem               *statusItem;
-@property (nonatomic, strong) MPPasswordWindowController *passwordWindow;
-@property (nonatomic, weak) IBOutlet NSMenuItem          *lockItem;
-@property (nonatomic, weak) IBOutlet NSMenuItem          *showItem;
-@property (nonatomic, strong) IBOutlet NSMenu            *statusMenu;
-@property (nonatomic, weak) IBOutlet NSMenuItem          *useICloudItem;
-@property (nonatomic, weak) IBOutlet NSMenuItem          *rememberPasswordItem;
-@property (nonatomic, weak) IBOutlet NSMenuItem          *savePasswordItem;
-@property (nonatomic, weak) IBOutlet NSMenuItem          *createUserItem;
-@property (nonatomic, weak) IBOutlet NSMenuItem          *usersItem;
+@property(nonatomic, strong) NSStatusItem *statusItem;
+@property(nonatomic, strong) MPPasswordWindowController *passwordWindow;
+@property(nonatomic, weak) IBOutlet NSMenuItem *lockItem;
+@property(nonatomic, weak) IBOutlet NSMenuItem *showItem;
+@property(nonatomic, strong) IBOutlet NSMenu *statusMenu;
+@property(nonatomic, weak) IBOutlet NSMenuItem *useICloudItem;
+@property(nonatomic, weak) IBOutlet NSMenuItem *rememberPasswordItem;
+@property(nonatomic, weak) IBOutlet NSMenuItem *savePasswordItem;
+@property(nonatomic, weak) IBOutlet NSMenuItem *createUserItem;
+@property(nonatomic, weak) IBOutlet NSMenuItem *usersItem;
 
 - (IBAction)activate:(id)sender;
 - (IBAction)togglePreference:(NSMenuItem *)sender;

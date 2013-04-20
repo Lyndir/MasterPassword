@@ -12,12 +12,12 @@
 
 @interface MPPreferencesViewController : UITableViewController<IASKSettingsDelegate, MPTypeDelegate>
 
-@property (weak, nonatomic) IBOutlet UIScrollView    *avatarsView;
-@property (weak, nonatomic) IBOutlet UIButton        *avatarTemplate;
-@property (weak, nonatomic) IBOutlet UISwitch        *savePasswordSwitch;
-@property (weak, nonatomic) IBOutlet UITableViewCell *exportCell;
-@property (weak, nonatomic) IBOutlet UITableViewCell *changeMPCell;
-@property (weak, nonatomic) IBOutlet UILabel *defaultTypeLabel;
+@property(weak, nonatomic) IBOutlet UIScrollView *avatarsView;
+@property(weak, nonatomic) IBOutlet UIButton *avatarTemplate;
+@property(weak, nonatomic) IBOutlet UISwitch *savePasswordSwitch;
+@property(weak, nonatomic) IBOutlet UITableViewCell *exportCell;
+@property(weak, nonatomic) IBOutlet UITableViewCell *changeMPCell;
+@property(weak, nonatomic) IBOutlet UILabel *defaultTypeLabel;
 
 - (IBAction)didToggleSwitch:(UISwitch *)sender;
 - (IBAction)settings:(id)sender;

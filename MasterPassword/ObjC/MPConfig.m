@@ -9,6 +9,7 @@
 #import "MPAppDelegate.h"
 
 @implementation MPConfig
+
 @dynamic sendInfo, rememberLogin, iCloudDecided;
 
 - (id)init {
@@ -16,11 +17,13 @@
     if (!(self = [super init]))
         return nil;
 
-    [self.defaults registerDefaults:@{NSStringFromSelector(@selector(askForReviews)): @YES,
+    [self.defaults registerDefaults:@{
+            NSStringFromSelector( @selector(askForReviews) ) : @YES,
 
-                                                   NSStringFromSelector(@selector(sendInfo)): @NO,
-                                                   NSStringFromSelector(@selector(rememberLogin)): @NO,
-                                                   NSStringFromSelector(@selector(iCloudDecided)): @NO}];
+            NSStringFromSelector( @selector(sendInfo) )      : @NO,
+            NSStringFromSelector( @selector(rememberLogin) ) : @NO,
+            NSStringFromSelector( @selector(iCloudDecided) ) : @NO
+    }];
 
     self.delegate = [MPAppDelegate get];
 

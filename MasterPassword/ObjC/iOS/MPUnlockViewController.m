@@ -14,11 +14,11 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 
-@interface MPUnlockViewController ()
+@interface MPUnlockViewController()
 
-@property (strong, nonatomic) NSMutableDictionary *avatarToUserOID;
-@property (nonatomic) BOOL wordWallAnimating;
-@property (nonatomic, strong) NSArray          *wordList;
+@property(strong, nonatomic) NSMutableDictionary *avatarToUserOID;
+@property(nonatomic) BOOL wordWallAnimating;
+@property(nonatomic, strong) NSArray *wordList;
 
 @property(nonatomic, strong) NSOperationQueue *emergencyQueue;
 @property(nonatomic, strong) MPKey *emergencyKey;
@@ -34,28 +34,28 @@
 
 - (void)initializeAvatarAlert:(UIAlertView *)alert forUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc {
 
-    UIScrollView *alertAvatarScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(12, 30, 260, 150)];
+    UIScrollView *alertAvatarScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 12, 30, 260, 150 )];
     alertAvatarScrollView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
     [alertAvatarScrollView flashScrollIndicatorsContinuously];
     [alert addSubview:alertAvatarScrollView];
 
-    CGPoint  selectedOffset = CGPointZero;
-    for (int a              = 0; a < MPAvatarCount; ++a) {
+    CGPoint selectedOffset = CGPointZero;
+    for (int a = 0; a < MPAvatarCount; ++a) {
         UIButton *avatar = [self.avatarTemplate cloneAddedTo:alertAvatarScrollView];
 
-        avatar.tag    = a;
+        avatar.tag = a;
         avatar.hidden = NO;
         avatar.center = CGPointMake(
-         (20 + self.avatarTemplate.bounds.size.width / 2) * (a + 1) + self.avatarTemplate.bounds.size.width / 2 * a,
-         20 + self.avatarTemplate.bounds.size.height / 2);
-        [avatar setBackgroundImage:[UIImage imageNamed:PearlString(@"avatar-%d", a)] forState:UIControlStateNormal];
+                (20 + self.avatarTemplate.bounds.size.width / 2) * (a + 1) + self.avatarTemplate.bounds.size.width / 2 * a,
+                20 + self.avatarTemplate.bounds.size.height / 2 );
+        [avatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%d", a )] forState:UIControlStateNormal];
         [avatar setSelectionInSuperviewCandidate:YES isClearable:NO];
 
-        avatar.layer.cornerRadius  = avatar.bounds.size.height / 2;
-        avatar.layer.shadowColor   = [UIColor blackColor].CGColor;
+        avatar.layer.cornerRadius = avatar.bounds.size.height / 2;
+        avatar.layer.shadowColor = [UIColor blackColor].CGColor;
         avatar.layer.shadowOpacity = 1;
-        avatar.layer.shadowRadius  = 5;
-        avatar.backgroundColor     = [UIColor clearColor];
+        avatar.layer.shadowRadius = 5;
+        avatar.backgroundColor = [UIColor clearColor];
 
         [avatar onHighlightOrSelect:^(BOOL highlighted, BOOL selected) {
             if (highlighted || selected)
@@ -69,9 +69,9 @@
                     user.avatar = (unsigned)avatar.tag;
                 }];
         }        options:0];
-        avatar.selected            = (a == user.avatar);
+        avatar.selected = (a == user.avatar);
         if (avatar.selected)
-            selectedOffset = CGPointMake(avatar.center.x - alertAvatarScrollView.bounds.size.width / 2, 0);
+            selectedOffset = CGPointMake( avatar.center.x - alertAvatarScrollView.bounds.size.width / 2, 0 );
     }
 
     [alertAvatarScrollView autoSizeContent];
@@ -80,28 +80,28 @@
 
 - (void)initializeConfirmationAlert:(UIAlertView *)alert forUser:(MPUserEntity *)user {
 
-    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(12, 70, 260, 110)];
+    UIView *container = [[UIView alloc] initWithFrame:CGRectMake( 12, 70, 260, 110 )];
     [alert addSubview:container];
 
     UIButton *alertAvatar = [self.avatarTemplate cloneAddedTo:container];
-    alertAvatar.center              = CGPointMake(130, 55);
-    alertAvatar.hidden              = NO;
-    alertAvatar.layer.shadowColor   = [UIColor blackColor].CGColor;
+    alertAvatar.center = CGPointMake( 130, 55 );
+    alertAvatar.hidden = NO;
+    alertAvatar.layer.shadowColor = [UIColor blackColor].CGColor;
     alertAvatar.layer.shadowOpacity = 1;
-    alertAvatar.layer.shadowRadius  = 5;
-    alertAvatar.backgroundColor     = [UIColor clearColor];
-    [alertAvatar setBackgroundImage:[UIImage imageNamed:PearlString(@"avatar-%d", user.avatar)] forState:UIControlStateNormal];
+    alertAvatar.layer.shadowRadius = 5;
+    alertAvatar.backgroundColor = [UIColor clearColor];
+    [alertAvatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%d", user.avatar )] forState:UIControlStateNormal];
 
     UILabel *alertNameLabel = [self.nameLabel cloneAddedTo:container];
-    alertNameLabel.center             = alertAvatar.center;
-    alertNameLabel.text               = user.name;
-    alertNameLabel.bounds             = CGRectSetHeight(alertNameLabel.bounds,
-                                                        [alertNameLabel.text sizeWithFont:self.nameLabel.font
-                                                                        constrainedToSize:CGSizeMake(alertNameLabel.bounds.size.width - 10,
-                                                                                                     100)
-                                                                            lineBreakMode:self.nameLabel.lineBreakMode].height);
+    alertNameLabel.center = alertAvatar.center;
+    alertNameLabel.text = user.name;
+    alertNameLabel.bounds = CGRectSetHeight( alertNameLabel.bounds,
+            [alertNameLabel.text sizeWithFont:self.nameLabel.font
+                            constrainedToSize:CGSizeMake( alertNameLabel.bounds.size.width - 10,
+                                    100 )
+                                lineBreakMode:self.nameLabel.lineBreakMode].height );
     alertNameLabel.layer.cornerRadius = 5;
-    alertNameLabel.backgroundColor    = [UIColor blackColor];
+    alertNameLabel.backgroundColor = [UIColor blackColor];
 }
 
 - (BOOL)shouldAutorotate {
@@ -122,19 +122,19 @@
 
     [self.avatarsView addGestureRecognizer:self.targetedUserActionGesture];
     self.avatarsView.decelerationRate = UIScrollViewDecelerationRateFast;
-    self.avatarsView.clipsToBounds    = NO;
-    self.tip.text                     = @"";
+    self.avatarsView.clipsToBounds = NO;
+    self.tip.text = @"";
     self.nameLabel.layer.cornerRadius = 5;
-    self.avatarTemplate.hidden        = YES;
-    self.spinner.alpha                = 0;
-    self.passwordTipView.hidden       = NO;
+    self.avatarTemplate.hidden = YES;
+    self.spinner.alpha = 0;
+    self.passwordTipView.hidden = NO;
     self.createPasswordTipView.hidden = NO;
     [self.emergencyPassword setTitle:@"" forState:UIControlStateNormal];
     self.emergencyGeneratorContainer.alpha = 0;
     self.emergencyGeneratorContainer.hidden = YES;
     self.emergencyQueue = [NSOperationQueue new];
     [self.emergencyCounterStepper addTargetBlock:^(id sender, UIControlEvents event) {
-        self.emergencyCounter.text = PearlString( @"%d", (NSUInteger)self.emergencyCounterStepper.value);
+        self.emergencyCounter.text = PearlString( @"%d", (NSUInteger)self.emergencyCounterStepper.value );
 
         [self updateEmergencyPassword];
     }                           forControlEvents:UIControlEventValueChanged];
@@ -143,8 +143,10 @@
     }                        forControlEvents:UIControlEventValueChanged];
     self.emergencyContentTipContainer.alpha = 0;
     self.emergencyContentTipContainer.hidden = NO;
-    self.marqueeTipTexts = @[ @"Tap and hold to delete or reset user.",
-                              @"Shake for emergency generator." ];
+    self.marqueeTipTexts = @[
+            @"Tap and hold to delete or reset user.",
+            @"Shake for emergency generator."
+    ];
 
     NSMutableArray *wordListLines = [NSMutableArray arrayWithCapacity:27413];
     [[[NSString alloc] initWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"dictionary" withExtension:@"lst"]]
@@ -160,26 +162,26 @@
         [self initializeWordLabel:wordLabel];
     }                        recurse:NO];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidChangeNotification object:nil queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      [self updateUsers];
-                                                  }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidImportChangesNotification object:nil queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      [self updateUsers];
-                                                  }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      [self emergencyCloseAnimated:NO];
-                                                      self.uiContainer.alpha = 0;
-                                                  }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      [self updateLayoutAnimated:NO allowScroll:NO completion:nil];
-                                                      [UIView animateWithDuration:1 animations:^{
-                                                          self.uiContainer.alpha = 1;
-                                                      }];
-                                                  }];
+    [[NSNotificationCenter defaultCenter]
+            addObserverForName:UbiquityManagedStoreDidChangeNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [self updateUsers];
+    }];
+    [[NSNotificationCenter defaultCenter]
+            addObserverForName:UbiquityManagedStoreDidImportChangesNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [self updateUsers];
+    }];
+    [[NSNotificationCenter defaultCenter]
+            addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [self emergencyCloseAnimated:NO];
+        self.uiContainer.alpha = 0;
+    }];
+    [[NSNotificationCenter defaultCenter]
+            addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [self updateLayoutAnimated:NO allowScroll:NO completion:nil];
+        [UIView animateWithDuration:1 animations:^{
+            self.uiContainer.alpha = 1;
+        }];
+    }];
 
     [self updateLayoutAnimated:NO allowScroll:YES completion:nil];
 
@@ -250,19 +252,20 @@
         self.emergencyGeneratorContainer.hidden = NO;
         [UIView animateWithDuration:0.5 animations:^{
             self.emergencyGeneratorContainer.alpha = 1;
-        } completion:^(BOOL finished) {
+        }                completion:^(BOOL finished) {
             [self.emergencyName becomeFirstResponder];
         }];
     }
 }
 
 - (void)marqueeTip {
+
     [UIView animateWithDuration:0.5 animations:^{
         self.tip.alpha = 0;
-    } completion:^(BOOL finished) {
+    }                completion:^(BOOL finished) {
         if (!finished)
             return;
-        
+
         self.tip.text = self.marqueeTipTexts[++self.marqueeTipTextIndex % [self.marqueeTipTexts count]];
         [UIView animateWithDuration:0.5 animations:^{
             self.tip.alpha = 1;
@@ -278,9 +281,9 @@
 
     __block NSArray *users = nil;
     [moc performBlockAndWait:^{
-        NSError        *error        = nil;
-        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPUserEntity class])];
-        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO]];
+        NSError *error = nil;
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
+        fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO] ];
         users = [moc executeFetchRequest:fetchRequest error:&error];
         if (!users)
         err(@"Failed to load users: %@", error);
@@ -289,7 +292,7 @@
     // Clean up avatars.
     for (UIView *subview in [self.avatarsView subviews])
         if ([[self.avatarToUserOID allKeys] containsObject:[NSValue valueWithNonretainedObject:subview]])
-         // This subview is a former avatar.
+                // This subview is a former avatar.
             [subview removeFromSuperview];
     [self.avatarToUserOID removeAllObjects];
 
@@ -308,17 +311,17 @@
 
 - (UIButton *)setupAvatar:(UIButton *)avatar forUser:(MPUserEntity *)user {
 
-    avatar.center              = CGPointMake(avatar.center.x + [self.avatarToUserOID count] * 160, avatar.center.y);
-    avatar.hidden              = NO;
-    avatar.layer.cornerRadius  = avatar.bounds.size.height / 2;
-    avatar.layer.shadowColor   = [UIColor blackColor].CGColor;
+    avatar.center = CGPointMake( avatar.center.x + [self.avatarToUserOID count] * 160, avatar.center.y );
+    avatar.hidden = NO;
+    avatar.layer.cornerRadius = avatar.bounds.size.height / 2;
+    avatar.layer.shadowColor = [UIColor blackColor].CGColor;
     avatar.layer.shadowOpacity = 1;
-    avatar.layer.shadowRadius  = 20;
+    avatar.layer.shadowRadius = 20;
     avatar.layer.masksToBounds = NO;
-    avatar.backgroundColor     = [UIColor clearColor];
-    avatar.tag                 = user.avatar;
+    avatar.backgroundColor = [UIColor clearColor];
+    avatar.tag = user.avatar;
 
-    [avatar setBackgroundImage:[UIImage imageNamed:PearlString(@"avatar-%u", user.avatar)]
+    [avatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%u", user.avatar )]
                       forState:UIControlStateNormal];
     [avatar setSelectionInSuperviewCandidate:YES isClearable:YES];
     [avatar onHighlightOrSelect:^(BOOL highlighted, BOOL selected) {
@@ -331,7 +334,8 @@
         if (!selected) {
             self.selectedUser = nil;
             [self didToggleUserSelection];
-        } else if ((self.selectedUser = user))
+        }
+        else if ((self.selectedUser = user))
             [self didToggleUserSelection];
         else
             [self didSelectNewUserAvatar:avatar];
@@ -341,7 +345,7 @@
 
     if ([_selectedUserOID isEqual:[user objectID]]) {
         self.selectedUser = user;
-        avatar.selected   = YES;
+        avatar.selected = YES;
     }
 
     return avatar;
@@ -352,11 +356,10 @@
     MPUserEntity *selectedUser = self.selectedUser;
     if (!selectedUser)
         [self.passwordField resignFirstResponder];
-    else
-        if ([[MPAppDelegate get] signInAsUser:selectedUser usingMasterPassword:nil]) {
-            [self performSegueWithIdentifier:@"MP_Unlock" sender:self];
-            return;
-        }
+    else if ([[MPAppDelegate get] signInAsUser:selectedUser usingMasterPassword:nil]) {
+        [self performSegueWithIdentifier:@"MP_Unlock" sender:self];
+        return;
+    }
 
     [self updateLayoutAnimated:YES allowScroll:YES completion:^(BOOL finished) {
         if (self.selectedUser)
@@ -367,7 +370,8 @@
 - (void)didSelectNewUserAvatar:(UIButton *)newUserAvatar {
 
     [MPAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-        MPUserEntity *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class]) inManagedObjectContext:moc];
+        MPUserEntity *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass( [MPUserEntity class] )
+                                                              inManagedObjectContext:moc];
 
         [self showNewUserNameAlertFor:newUser inContext:moc completion:^(BOOL finished) {
             newUserAvatar.selected = NO;
@@ -383,14 +387,14 @@
                            message:nil viewStyle:UIAlertViewStylePlainTextInput
                          initAlert:^(UIAlertView *alert, UITextField *firstField) {
                              firstField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-                             firstField.keyboardType           = UIKeyboardTypeAlphabet;
-                             firstField.text                   = newUser.name;
-                             firstField.placeholder            = @"eg. Robert Lee Mitchell";
+                             firstField.keyboardType = UIKeyboardTypeAlphabet;
+                             firstField.text = newUser.name;
+                             firstField.placeholder = @"eg. Robert Lee Mitchell";
                              firstField.enablesReturnKeyAutomatically = YES;
                          }
                  tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                      if (buttonIndex == [alert cancelButtonIndex]) {
-                         completion(NO);
+                         completion( NO );
                          return;
                      }
                      NSString *name = [alert textFieldAtIndex:0].text;
@@ -398,7 +402,7 @@
                          [PearlAlert showAlertWithTitle:@"Name Is Required" message:nil viewStyle:UIAlertViewStyleDefault initAlert:nil
                                       tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                                           [self showNewUserNameAlertFor:newUser inContext:moc completion:completion];
-                                      } cancelTitle:@"Try Again" otherTitles:nil];
+                                      }     cancelTitle:@"Try Again" otherTitles:nil];
                          return;
                      }
 
@@ -431,8 +435,8 @@
 
     [PearlAlert showAlertWithTitle:@"Is this correct?"
                            message:
-                            @"Please double-check your name.\n"
-                             @"\n\n\n\n\n\n"
+                                   @"Please double-check your name.\n"
+                                           @"\n\n\n\n\n\n"
                          viewStyle:UIAlertViewStyleDefault
                          initAlert:^void(UIAlertView *__alert, UITextField *__firstField) {
                              [self initializeConfirmationAlert:__alert forUser:newUser];
@@ -445,7 +449,7 @@
 
                      // Confirm
                      [moc saveToStore];
-                     completion(YES);
+                     completion( YES );
 
                      [self updateUsers];
                  }
@@ -455,18 +459,18 @@
 - (void)updateLayoutAnimated:(BOOL)animated allowScroll:(BOOL)allowScroll completion:(void (^)(BOOL finished))completion {
 
     if (animated) {
-        self.oldNameLabel.text  = self.nameLabel.text;
+        self.oldNameLabel.text = self.nameLabel.text;
         self.oldNameLabel.alpha = 1;
-        self.nameLabel.alpha    = 0;
+        self.nameLabel.alpha = 0;
 
         [UIView animateWithDuration:0.5f animations:^{
             [self updateLayoutAnimated:NO allowScroll:allowScroll completion:nil];
 
             self.oldNameLabel.alpha = 0;
-            self.nameLabel.alpha    = 1;
+            self.nameLabel.alpha = 1;
         }                completion:^(BOOL finished) {
             if (completion)
-                completion(finished);
+                completion( finished );
         }];
         return;
     }
@@ -474,92 +478,93 @@
     // Lay out password entry and user selection views.
     if (self.selectedUser && !self.passwordView.alpha) {
         // User was just selected.
-        self.passwordView.alpha        = 1;
-        self.avatarsView.center        = CGPointMake(160, 180);
+        self.passwordView.alpha = 1;
+        self.avatarsView.center = CGPointMake( 160, 180 );
         self.avatarsView.scrollEnabled = NO;
-        self.nameLabel.center          = CGPointMake(160, 94);
+        self.nameLabel.center = CGPointMake( 160, 94 );
         self.nameLabel.backgroundColor = [UIColor blackColor];
-        self.oldNameLabel.center       = self.nameLabel.center;
-        self.avatarShadowColor         = [UIColor whiteColor];
-    } else
-        if (!self.selectedUser && self.passwordView.alpha == 1) {
-            // User was just deselected.
-            self.passwordField.text        = nil;
-            self.passwordView.alpha        = 0;
-            self.avatarsView.center        = CGPointMake(160, 310);
-            self.avatarsView.scrollEnabled = YES;
-            self.nameLabel.center          = CGPointMake(160, 296);
-            self.nameLabel.backgroundColor = [UIColor clearColor];
-            self.oldNameLabel.center       = self.nameLabel.center;
-            self.avatarShadowColor         = [UIColor lightGrayColor];
-        }
+        self.oldNameLabel.center = self.nameLabel.center;
+        self.avatarShadowColor = [UIColor whiteColor];
+    }
+    else if (!self.selectedUser && self.passwordView.alpha == 1) {
+        // User was just deselected.
+        self.passwordField.text = nil;
+        self.passwordView.alpha = 0;
+        self.avatarsView.center = CGPointMake( 160, 310 );
+        self.avatarsView.scrollEnabled = YES;
+        self.nameLabel.center = CGPointMake( 160, 296 );
+        self.nameLabel.backgroundColor = [UIColor clearColor];
+        self.oldNameLabel.center = self.nameLabel.center;
+        self.avatarShadowColor = [UIColor lightGrayColor];
+    }
 
     // Lay out the word wall.
     if (!self.selectedUser || self.selectedUser.keyID) {
         self.passwordFieldLabel.text = @"Enter your master password:";
 
-        self.wordWall.alpha              = 0;
+        self.wordWall.alpha = 0;
         self.createPasswordTipView.alpha = 0;
-        self.wordWallAnimating           = NO;
-    } else {
+        self.wordWallAnimating = NO;
+    }
+    else {
         self.passwordFieldLabel.text = @"Create your master password:";
 
         if (!self.wordWallAnimating) {
-            self.wordWallAnimating           = YES;
-            self.wordWall.alpha              = 1;
+            self.wordWallAnimating = YES;
+            self.wordWall.alpha = 1;
             self.createPasswordTipView.alpha = 1;
 
-            dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async( dispatch_get_main_queue(), ^{
                 // Jump out of our UIView animation block.
                 [self beginWordWallAnimation];
-            });
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 15 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            } );
+            dispatch_after( dispatch_time( DISPATCH_TIME_NOW, 15 * NSEC_PER_SEC ), dispatch_get_main_queue(), ^{
                 [UIView animateWithDuration:1 animations:^{
                     self.createPasswordTipView.alpha = 0;
                 }];
-            });
+            } );
         }
     }
 
     // Lay out user targeting.
-    MPUserEntity *targetedUser   = self.selectedUser;
-    UIButton     *selectedAvatar = [self avatarForUser:self.selectedUser];
-    UIButton     *targetedAvatar = selectedAvatar;
+    MPUserEntity *targetedUser = self.selectedUser;
+    UIButton *selectedAvatar = [self avatarForUser:self.selectedUser];
+    UIButton *targetedAvatar = selectedAvatar;
     if (!targetedAvatar) {
         targetedAvatar = [self findTargetedAvatar];
-        targetedUser   = [self userForAvatar:targetedAvatar];
+        targetedUser = [self userForAvatar:targetedAvatar];
     }
 
     [self.avatarsView enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
         if (![[self.avatarToUserOID allKeys] containsObject:[NSValue valueWithNonretainedObject:subview]])
-         // This subview is not one of the user avatars.
+                // This subview is not one of the user avatars.
             return;
         UIButton *avatar = (UIButton *)subview;
 
         BOOL isTargeted = avatar == targetedAvatar;
 
         avatar.userInteractionEnabled = isTargeted;
-        avatar.alpha                  = isTargeted? 1: self.selectedUser? 0.1: 0.4;
+        avatar.alpha = isTargeted? 1: self.selectedUser? 0.1: 0.4;
 
         [self updateAvatarShadowColor:avatar isTargeted:isTargeted];
     }                           recurse:NO];
 
     if (allowScroll) {
-        CGPoint targetContentOffset = CGPointMake(MAX(0, targetedAvatar.center.x - self.avatarsView.bounds.size.width / 2),
-         self.avatarsView.contentOffset.y);
-        if (!CGPointEqualToPoint(self.avatarsView.contentOffset, targetContentOffset))
+        CGPoint targetContentOffset = CGPointMake( MAX(0, targetedAvatar.center.x - self.avatarsView.bounds.size.width / 2),
+                self.avatarsView.contentOffset.y );
+        if (!CGPointEqualToPoint( self.avatarsView.contentOffset, targetContentOffset ))
             [self.avatarsView setContentOffset:targetContentOffset animated:animated];
     }
 
     // Lay out user name label.
-    self.nameLabel.text      = targetedAvatar? (targetedUser? targetedUser.name: @"New User"): nil;
-    self.nameLabel.bounds    = CGRectSetHeight(self.nameLabel.bounds,
-                                               [self.nameLabel.text sizeWithFont:self.nameLabel.font
-                                                               constrainedToSize:CGSizeMake(self.nameLabel.bounds.size.width - 10, 100)
-                                                                   lineBreakMode:self.nameLabel.lineBreakMode].height);
+    self.nameLabel.text = targetedAvatar? (targetedUser? targetedUser.name: @"New User"): nil;
+    self.nameLabel.bounds = CGRectSetHeight( self.nameLabel.bounds,
+            [self.nameLabel.text sizeWithFont:self.nameLabel.font
+                            constrainedToSize:CGSizeMake( self.nameLabel.bounds.size.width - 10, 100 )
+                                lineBreakMode:self.nameLabel.lineBreakMode].height );
     self.oldNameLabel.bounds = self.nameLabel.bounds;
     if (completion)
-        completion(YES);
+        completion( YES );
 }
 
 - (void)beginWordWallAnimation {
@@ -568,7 +573,7 @@
         UILabel *wordLabel = (UILabel *)subview;
 
         if (wordLabel.frame.origin.x < -self.wordWall.frame.size.width / 3) {
-            wordLabel.frame = CGRectSetX(wordLabel.frame, wordLabel.frame.origin.x + self.wordWall.frame.size.width);
+            wordLabel.frame = CGRectSetX( wordLabel.frame, wordLabel.frame.origin.x + self.wordWall.frame.size.width );
             [self initializeWordLabel:wordLabel];
         }
     }                        recurse:NO];
@@ -578,7 +583,7 @@
             [self.wordWall enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
                 UILabel *wordLabel = (UILabel *)subview;
 
-                wordLabel.frame = CGRectSetX(wordLabel.frame, wordLabel.frame.origin.x - self.wordWall.frame.size.width / 3);
+                wordLabel.frame = CGRectSetX( wordLabel.frame, wordLabel.frame.origin.x - self.wordWall.frame.size.width / 3 );
             }                        recurse:NO];
         }                completion:^(BOOL finished) {
             if (finished)
@@ -589,7 +594,7 @@
 - (void)initializeWordLabel:(UILabel *)wordLabel {
 
     wordLabel.alpha = 0.05 + (random() % 35) / 100.0F;
-    wordLabel.text  = [self.wordList objectAtIndex:(NSUInteger)random() % [self.wordList count]];
+    wordLabel.text = [self.wordList objectAtIndex:(NSUInteger)random() % [self.wordList count]];
 }
 
 - (void)setPasswordTip:(NSString *)string {
@@ -605,15 +610,15 @@
 - (void)tryMasterPassword {
 
     if (!self.selectedUser)
-        // No user selected, can't try sign-in.
+            // No user selected, can't try sign-in.
         return;
 
     [self setSpinnerActive:YES];
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
         BOOL unlocked = [[MPAppDelegate get] signInAsUser:self.selectedUser usingMasterPassword:self.passwordField.text];
 
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async( dispatch_get_main_queue(), ^{
             if (unlocked)
                 [self performSegueWithIdentifier:@"MP_Unlock" sender:self];
 
@@ -623,14 +628,14 @@
 
                 [self setSpinnerActive:NO];
             }
-        });
-    });
+        } );
+    } );
 }
 
 - (UIButton *)findTargetedAvatar {
 
     CGFloat xOfMiddle = self.avatarsView.contentOffset.x + self.avatarsView.bounds.size.width / 2;
-    return (UIButton *)[PearlUIUtils viewClosestTo:CGPointMake(xOfMiddle, self.avatarsView.contentOffset.y)
+    return (UIButton *)[PearlUIUtils viewClosestTo:CGPointMake( xOfMiddle, self.avatarsView.contentOffset.y )
                                            ofArray:self.avatarsView.subviews];
 }
 
@@ -660,7 +665,7 @@
     NSError *error;
     MPUserEntity *user = (MPUserEntity *)[moc existingObjectWithID:userOID error:&error];
     if (!user)
-        err(@"Failed retrieving user for avatar: %@", error);
+    err(@"Failed retrieving user for avatar: %@", error);
 
     return user;
 }
@@ -669,16 +674,17 @@
 
     PearlMainThread(^{
         CABasicAnimation *rotate = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
-        rotate.toValue  = [NSNumber numberWithDouble:2 * M_PI];
+        rotate.toValue = [NSNumber numberWithDouble:2 * M_PI];
         rotate.duration = 5.0;
 
         if (active) {
             rotate.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-            rotate.fromValue      = [NSNumber numberWithFloat:0];
-            rotate.repeatCount    = MAXFLOAT;
-        } else {
+            rotate.fromValue = [NSNumber numberWithFloat:0];
+            rotate.repeatCount = MAXFLOAT;
+        }
+        else {
             rotate.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-            rotate.repeatCount    = 1;
+            rotate.repeatCount = 1;
         }
 
         [self.spinner.layer removeAnimationForKey:@"rotation"];
@@ -700,44 +706,45 @@
     if (targeted) {
         if (![avatar.layer animationForKey:@"targetedShadow"]) {
             CABasicAnimation *toShadowColorAnimation = [CABasicAnimation animationWithKeyPath:@"shadowColor"];
-            toShadowColorAnimation.toValue   = (__bridge id)(avatar.selected? self.avatarTemplate.backgroundColor
-             : [UIColor whiteColor]).CGColor;
+            toShadowColorAnimation.toValue = (__bridge id)(avatar.selected? self.avatarTemplate.backgroundColor
+                                                           : [UIColor whiteColor]).CGColor;
             toShadowColorAnimation.beginTime = 0.0f;
-            toShadowColorAnimation.duration  = 0.5f;
-            toShadowColorAnimation.fillMode  = kCAFillModeForwards;
+            toShadowColorAnimation.duration = 0.5f;
+            toShadowColorAnimation.fillMode = kCAFillModeForwards;
 
             CABasicAnimation *toShadowOpacityAnimation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
-            toShadowOpacityAnimation.toValue  = PearlFloat(0.2);
+            toShadowOpacityAnimation.toValue = PearlFloat(0.2);
             toShadowOpacityAnimation.duration = 0.5f;
 
             CABasicAnimation *pulseShadowOpacityAnimation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
-            pulseShadowOpacityAnimation.fromValue    = PearlFloat(0.2);
-            pulseShadowOpacityAnimation.toValue      = PearlFloat(0.6);
-            pulseShadowOpacityAnimation.beginTime    = 0.5f;
-            pulseShadowOpacityAnimation.duration     = 2.0f;
+            pulseShadowOpacityAnimation.fromValue = PearlFloat(0.2);
+            pulseShadowOpacityAnimation.toValue = PearlFloat(0.6);
+            pulseShadowOpacityAnimation.beginTime = 0.5f;
+            pulseShadowOpacityAnimation.duration = 2.0f;
             pulseShadowOpacityAnimation.autoreverses = YES;
-            pulseShadowOpacityAnimation.repeatCount  = MAXFLOAT;
+            pulseShadowOpacityAnimation.repeatCount = MAXFLOAT;
 
             CAAnimationGroup *group = [[CAAnimationGroup alloc] init];
-            group.animations = @[toShadowColorAnimation, toShadowOpacityAnimation, pulseShadowOpacityAnimation];
-            group.duration   = MAXFLOAT;
+            group.animations = @[ toShadowColorAnimation, toShadowOpacityAnimation, pulseShadowOpacityAnimation ];
+            group.duration = MAXFLOAT;
 
             [avatar.layer removeAnimationForKey:@"inactiveShadow"];
             [avatar.layer addAnimation:group forKey:@"targetedShadow"];
         }
-    } else {
+    }
+    else {
         if ([avatar.layer animationForKey:@"targetedShadow"]) {
             CABasicAnimation *toShadowColorAnimation = [CABasicAnimation animationWithKeyPath:@"shadowColor"];
-            toShadowColorAnimation.toValue  = (__bridge id)[UIColor blackColor].CGColor;
+            toShadowColorAnimation.toValue = (__bridge id)[UIColor blackColor].CGColor;
             toShadowColorAnimation.duration = 0.5f;
 
             CABasicAnimation *toShadowOpacityAnimation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
-            toShadowOpacityAnimation.toValue  = PearlFloat(1);
+            toShadowOpacityAnimation.toValue = PearlFloat(1);
             toShadowOpacityAnimation.duration = 0.5f;
 
             CAAnimationGroup *group = [[CAAnimationGroup alloc] init];
-            group.animations = @[toShadowColorAnimation, toShadowOpacityAnimation];
-            group.duration   = 0.5f;
+            group.animations = @[ toShadowColorAnimation, toShadowOpacityAnimation ];
+            group.duration = 0.5f;
 
             [avatar.layer removeAnimationForKey:@"targetedShadow"];
             [avatar.layer addAnimation:group forKey:@"inactiveShadow"];
@@ -905,18 +912,18 @@
 }
 
 - (void)emergencyCloseAnimated:(BOOL)animated {
-    
+
     [[self.emergencyGeneratorContainer findFirstResponderInHierarchy] resignFirstResponder];
 
     if (animated) {
         [UIView animateWithDuration:0.5 animations:^{
             self.emergencyGeneratorContainer.alpha = 0;
-        } completion:^(BOOL finished) {
+        }                completion:^(BOOL finished) {
             [self emergencyCloseAnimated:NO];
         }];
         return;
     }
-    
+
     self.emergencyName.text = @"";
     self.emergencyMasterPassword.text = @"";
     self.emergencySite.text = @"";
@@ -933,9 +940,9 @@
               targetContentOffset:(inout CGPoint *)targetContentOffset {
 
     CGFloat xOfMiddle = targetContentOffset->x + scrollView.bounds.size.width / 2;
-    UIButton *middleAvatar = (UIButton *)[PearlUIUtils viewClosestTo:CGPointMake(xOfMiddle, targetContentOffset->y)
+    UIButton *middleAvatar = (UIButton *)[PearlUIUtils viewClosestTo:CGPointMake( xOfMiddle, targetContentOffset->y )
                                                              ofArray:scrollView.subviews];
-    *targetContentOffset = CGPointMake(middleAvatar.center.x - scrollView.bounds.size.width / 2, targetContentOffset->y);
+    *targetContentOffset = CGPointMake( middleAvatar.center.x - scrollView.bounds.size.width / 2, targetContentOffset->y );
 
     [self updateLayoutAnimated:NO allowScroll:NO completion:nil];
 }
@@ -979,7 +986,7 @@
 
     NSManagedObjectContext *moc = targetedUser.managedObjectContext;
     [PearlSheet showSheetWithTitle:targetedUser.name
-                           viewStyle:UIActionSheetStyleBlackTranslucent
+                         viewStyle:UIActionSheetStyleBlackTranslucent
                          initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
         if (buttonIndex == [sheet cancelButtonIndex])
             return;
@@ -989,18 +996,18 @@
                 [moc deleteObject:targetedUser];
                 [moc saveToStore];
 
-                dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_async( dispatch_get_main_queue(), ^{
                     [self updateUsers];
-                });
+                } );
             }];
             return;
         }
 
         if (buttonIndex == [sheet firstOtherButtonIndex])
             [[MPAppDelegate get] changeMasterPasswordFor:targetedUser inContext:moc didResetBlock:^{
-                dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_async( dispatch_get_main_queue(), ^{
                     [[self avatarForUser:targetedUser] setSelected:YES];
-                });
+                } );
             }];
     }                  cancelTitle:[PearlStrings get].commonButtonCancel
                   destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];
@@ -1040,7 +1047,7 @@
 
     id<GPPShareBuilder> shareDialog = [[MPAppDelegate get].googlePlus shareDialog];
     [[[shareDialog setURLToShare:[NSURL URLWithString:@"http://masterpasswordapp.com"]]
-                   setPrefillText:@"I've started doing passwords properly thanks to Master Password for iOS."] open];
+            setPrefillText:@"I've started doing passwords properly thanks to Master Password for iOS."] open];
 }
 
 - (IBAction)mail:(UIButton *)sender {
@@ -1069,18 +1076,19 @@
             // Twitter
             UIApplication *application = [UIApplication sharedApplication];
             for (NSString *candidate in @[
-            @"twitter://user?screen_name=%@", // Twitter
-            @"tweetbot:///user_profile/%@", // TweetBot
-            @"echofon:///user_timeline?%@", // Echofon
-            @"twit:///user?screen_name=%@", // Twittelator Pro
-            @"x-seesmic://twitter_profile?twitter_screen_name=%@", // Seesmic
-            @"x-birdfeed://user?screen_name=%@", // Birdfeed
-            @"tweetings:///user?screen_name=%@", // Tweetings
-            @"simplytweet:?link=http://twitter.com/%@", // SimplyTweet
-            @"icebird://user?screen_name=%@", // IceBird
-            @"fluttr://user/%@", // Fluttr
-            @"http://twitter.com/%@"]) {
-                NSURL *url = [NSURL URLWithString:PearlString(candidate, @"master_password")];
+                    @"twitter://user?screen_name=%@", // Twitter
+                    @"tweetbot:///user_profile/%@", // TweetBot
+                    @"echofon:///user_timeline?%@", // Echofon
+                    @"twit:///user?screen_name=%@", // Twittelator Pro
+                    @"x-seesmic://twitter_profile?twitter_screen_name=%@", // Seesmic
+                    @"x-birdfeed://user?screen_name=%@", // Birdfeed
+                    @"tweetings:///user?screen_name=%@", // Tweetings
+                    @"simplytweet:?link=http://twitter.com/%@", // SimplyTweet
+                    @"icebird://user?screen_name=%@", // IceBird
+                    @"fluttr://user/%@", // Fluttr
+                    @"http://twitter.com/%@"
+            ]) {
+                NSURL *url = [NSURL URLWithString:PearlString( candidate, @"master_password" )];
 
                 if ([application canOpenURL:url]) {
                     [application openURL:url];
@@ -1093,7 +1101,7 @@
             // Mailing List
             [PearlEMail sendEMailTo:@"masterpassword-join@lists.lyndir.com" subject:@"Subscribe"
                                body:@"Press 'Send' now to subscribe to the Master Password mailing list.\n\n"
-                                @"You'll be kept up-to-date on the evolution of and discussions revolving Master Password."];
+                                       @"You'll be kept up-to-date on the evolution of and discussions revolving Master Password."];
             return;
         }
         if (buttonIndex == [sheet firstOtherButtonIndex] + 4) {
@@ -1119,7 +1127,7 @@
     NSError *error;
     MPUserEntity *selectedUser = (MPUserEntity *)[moc existingObjectWithID:_selectedUserOID error:&error];
     if (!selectedUser)
-        err(@"Failed to retrieve selected user: %@", error);
+    err(@"Failed to retrieve selected user: %@", error);
 
     return selectedUser;
 }

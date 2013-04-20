@@ -18,7 +18,6 @@
 #import "MPAlgorithmV1.h"
 #import "MPEntities.h"
 
-
 @implementation MPAlgorithmV1
 
 - (NSUInteger)version {
@@ -29,7 +28,7 @@
 - (BOOL)migrateElement:(MPElementEntity *)element explicit:(BOOL)explicit {
 
     if (element.version != [self version] - 1)
-     // Only migrate from previous version.
+            // Only migrate from previous version.
         return NO;
 
     if (!explicit) {
@@ -42,7 +41,7 @@
 
     // Apply migration.
     element.requiresExplicitMigration = NO;
-    element.version                   = [self version];
+    element.version = [self version];
     return YES;
 }
 
@@ -55,24 +54,24 @@
 
     // Determine the seed whose bytes will be used for calculating a password
     uint32_t ncounter = htonl(counter), nnameLength = htonl(name.length);
-    NSData *counterBytes    = [NSData dataWithBytes:&ncounter length:sizeof(ncounter)];
+    NSData *counterBytes = [NSData dataWithBytes:&ncounter length:sizeof(ncounter)];
     NSData *nameLengthBytes = [NSData dataWithBytes:&nnameLength length:sizeof(nnameLength)];
     trc(@"seed from: hmac-sha256(%@, 'com.lyndir.masterpassword' | %@ | %@ | %@)", [key.keyData encodeBase64], [nameLengthBytes encodeHex], name, [counterBytes encodeHex]);
     NSData *seed = [[NSData dataByConcatenatingDatas:
-                             [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
-                             nameLengthBytes,
-                             [name dataUsingEncoding:NSUTF8StringEncoding],
-                             counterBytes,
-                             nil]
-                             hmacWith:PearlHashSHA256 key:key.keyData];
+            [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
+            nameLengthBytes,
+            [name dataUsingEncoding:NSUTF8StringEncoding],
+            counterBytes,
+            nil]
+            hmacWith:PearlHashSHA256 key:key.keyData];
     trc(@"seed is: %@", [seed encodeBase64]);
     const unsigned char *seedBytes = seed.bytes;
 
     // Determine the cipher from the first seed byte.
     assert([seed length]);
-    NSArray  *typeCiphers = [[MPTypes_ciphers valueForKey:[self classNameOfType:type]]
-                                              valueForKey:[self nameOfType:type]];
-    NSString *cipher      = [typeCiphers objectAtIndex:seedBytes[0] % [typeCiphers count]];
+    NSArray *typeCiphers = [[MPTypes_ciphers valueForKey:[self classNameOfType:type]]
+            valueForKey:[self nameOfType:type]];
+    NSString *cipher = [typeCiphers objectAtIndex:seedBytes[0] % [typeCiphers count]];
     trc(@"type %@, ciphers: %@, selected: %@", [self nameOfType:type], typeCiphers, cipher);
 
     // Encode the content, character by character, using subsequent seed bytes and the cipher.
@@ -80,10 +79,10 @@
     NSMutableString *content = [NSMutableString stringWithCapacity:[cipher length]];
     for (NSUInteger c = 0; c < [cipher length]; ++c) {
         uint16_t keyByte = seedBytes[c + 1];
-        NSString *cipherClass           = [cipher substringWithRange:NSMakeRange(c, 1)];
+        NSString *cipherClass = [cipher substringWithRange:NSMakeRange( c, 1 )];
         NSString *cipherClassCharacters = [[MPTypes_ciphers valueForKey:@"MPCharacterClasses"] valueForKey:cipherClass];
-        NSString *character             = [cipherClassCharacters substringWithRange:NSMakeRange(keyByte % [cipherClassCharacters length],
-                                                                                                1)];
+        NSString *character = [cipherClassCharacters substringWithRange:NSMakeRange( keyByte % [cipherClassCharacters length],
+                1 )];
 
         trc(@"class %@ has characters: %@, index: %u, selected: %@", cipherClass, cipherClassCharacters, keyByte, character);
         [content appendString:character];
@@ -91,6 +90,5 @@
 
     return content;
 }
-
 
 @end

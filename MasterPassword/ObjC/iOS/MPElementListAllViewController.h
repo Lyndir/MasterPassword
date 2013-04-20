@@ -20,7 +20,8 @@
 #import "MPElementListController.h"
 
 @interface MPElementListAllViewController : MPElementListController
-@property (weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
+
+@property(weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
 
 - (IBAction)close:(id)sender;
 - (IBAction)add:(id)sender;

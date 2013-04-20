@@ -32,9 +32,9 @@
 }
 
 - (BOOL)migrateUser:(MPUserEntity *)user {
-    
-    NSError        *error            = nil;
-    NSFetchRequest *migrationRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
+
+    NSError *error = nil;
+    NSFetchRequest *migrationRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
     migrationRequest.predicate = [NSPredicate predicateWithFormat:@"version_ < %d AND user == %@", self.version, user];
     NSArray *migrationElements = [user.managedObjectContext executeFetchRequest:migrationRequest error:&error];
     if (!migrationElements) {
@@ -42,7 +42,7 @@
         return NO;
     }
 
-    BOOL requiresExplicitMigration     = NO;
+    BOOL requiresExplicitMigration = NO;
     for (MPElementEntity *migrationElement in migrationElements)
         if (![migrationElement migrateExplicitly:NO])
             requiresExplicitMigration = YES;
@@ -53,7 +53,7 @@
 - (BOOL)migrateElement:(MPElementEntity *)element explicit:(BOOL)explicit {
 
     if (element.version != [self version] - 1)
-     // Only migrate from previous version.
+            // Only migrate from previous version.
         return NO;
 
     if (!explicit) {
@@ -64,21 +64,21 @@
 
     // Apply migration.
     element.requiresExplicitMigration = NO;
-    element.version                   = [self version];
+    element.version = [self version];
     return YES;
 }
 
 - (MPKey *)keyForPassword:(NSString *)password ofUserNamed:(NSString *)userName {
 
     uint32_t nuserNameLength = htonl(userName.length);
-    NSDate *start   = [NSDate date];
+    NSDate *start = [NSDate date];
     NSData *keyData = [PearlSCrypt deriveKeyWithLength:MP_dkLen fromPassword:[password dataUsingEncoding:NSUTF8StringEncoding]
-     usingSalt:[NSData dataByConcatenatingDatas:
-                        [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
-                        [NSData dataWithBytes:&nuserNameLength
-                                       length:sizeof(nuserNameLength)],
-                        [userName dataUsingEncoding:NSUTF8StringEncoding],
-                        nil] N:MP_N r:MP_r p:MP_p];
+            usingSalt:[NSData dataByConcatenatingDatas:
+                    [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
+                    [NSData dataWithBytes:&nuserNameLength
+                                   length:sizeof(nuserNameLength)],
+                    [userName dataUsingEncoding:NSUTF8StringEncoding],
+                    nil] N:MP_N r:MP_r p:MP_p];
 
     MPKey *key = [self keyFromKeyData:keyData];
     trc(@"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", userName, password, [key.keyID encodeHex], -[start timeIntervalSinceNow]);
@@ -166,13 +166,13 @@
 
 - (NSString *)classNameOfType:(MPElementType)type {
 
-    return NSStringFromClass([self classOfType:type]);
+    return NSStringFromClass( [self classOfType:type] );
 }
 
 - (Class)classOfType:(MPElementType)type {
 
     if (!type)
-        Throw(@"No type given.");
+    Throw(@"No type given.");
 
     switch (type) {
         case MPElementTypeGeneratedMaximum:
@@ -233,24 +233,24 @@
 
     // Determine the seed whose bytes will be used for calculating a password
     uint32_t ncounter = htonl(counter), nnameLength = htonl(name.length);
-    NSData *counterBytes    = [NSData dataWithBytes:&ncounter length:sizeof(ncounter)];
+    NSData *counterBytes = [NSData dataWithBytes:&ncounter length:sizeof(ncounter)];
     NSData *nameLengthBytes = [NSData dataWithBytes:&nnameLength length:sizeof(nnameLength)];
     trc(@"seed from: hmac-sha256(%@, 'com.lyndir.masterpassword' | %@ | %@ | %@)", [key.keyData encodeBase64], [nameLengthBytes encodeHex], name, [counterBytes encodeHex]);
     NSData *seed = [[NSData dataByConcatenatingDatas:
-                             [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
-                             nameLengthBytes,
-                             [name dataUsingEncoding:NSUTF8StringEncoding],
-                             counterBytes,
-                             nil]
-                             hmacWith:PearlHashSHA256 key:key.keyData];
+            [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
+            nameLengthBytes,
+            [name dataUsingEncoding:NSUTF8StringEncoding],
+            counterBytes,
+            nil]
+            hmacWith:PearlHashSHA256 key:key.keyData];
     trc(@"seed is: %@", [seed encodeBase64]);
     const char *seedBytes = seed.bytes;
 
     // Determine the cipher from the first seed byte.
     assert([seed length]);
-    NSArray  *typeCiphers = [[MPTypes_ciphers valueForKey:[self classNameOfType:type]]
-                                              valueForKey:[self nameOfType:type]];
-    NSString *cipher      = [typeCiphers objectAtIndex:htons(seedBytes[0]) % [typeCiphers count]];
+    NSArray *typeCiphers = [[MPTypes_ciphers valueForKey:[self classNameOfType:type]]
+            valueForKey:[self nameOfType:type]];
+    NSString *cipher = [typeCiphers objectAtIndex:htons(seedBytes[0]) % [typeCiphers count]];
     trc(@"type %@, ciphers: %@, selected: %@", [self nameOfType:type], typeCiphers, cipher);
 
     // Encode the content, character by character, using subsequent seed bytes and the cipher.
@@ -258,10 +258,10 @@
     NSMutableString *content = [NSMutableString stringWithCapacity:[cipher length]];
     for (NSUInteger c = 0; c < [cipher length]; ++c) {
         uint16_t keyByte = htons(seedBytes[c + 1]);
-        NSString *cipherClass           = [cipher substringWithRange:NSMakeRange(c, 1)];
+        NSString *cipherClass = [cipher substringWithRange:NSMakeRange( c, 1 )];
         NSString *cipherClassCharacters = [[MPTypes_ciphers valueForKey:@"MPCharacterClasses"] valueForKey:cipherClass];
-        NSString *character             = [cipherClassCharacters substringWithRange:NSMakeRange(keyByte % [cipherClassCharacters length],
-                                                                                                1)];
+        NSString *character = [cipherClassCharacters substringWithRange:NSMakeRange( keyByte % [cipherClassCharacters length],
+                1 )];
 
         trc(@"class %@ has characters: %@, index: %u, selected: %@", cipherClass, cipherClassCharacters, keyByte, character);
         [content appendString:character];

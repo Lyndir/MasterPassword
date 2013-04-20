@@ -10,9 +10,8 @@
 #import <CoreData/CoreData.h>
 #import "MPElementEntity.h"
 
-
 @interface MPElementGeneratedEntity : MPElementEntity
 
-@property (nonatomic, retain) NSNumber * counter_;
+@property(nonatomic, retain) NSNumber *counter_;
 
 @end

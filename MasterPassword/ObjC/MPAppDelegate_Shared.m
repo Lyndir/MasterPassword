@@ -49,7 +49,7 @@
     NSError *error;
     MPUserEntity *activeUser = (MPUserEntity *)[moc existingObjectWithID:_activeUserOID error:&error];
     if (!activeUser)
-        err(@"Failed to retrieve active user: %@", error);
+    err(@"Failed to retrieve active user: %@", error);
 
     return activeUser;
 }

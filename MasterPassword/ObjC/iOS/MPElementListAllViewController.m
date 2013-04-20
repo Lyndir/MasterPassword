@@ -83,7 +83,7 @@
             }          cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonContinue, nil];
 }
 
-- (void)performUpgradeAllWithCompletion:(void(^)(BOOL success, NSDictionary *changes))completion {
+- (void)performUpgradeAllWithCompletion:(void (^)(BOOL success, NSDictionary *changes))completion {
 
     [MPAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
@@ -93,7 +93,7 @@
         NSArray *elements = [moc executeFetchRequest:fetchRequest error:&error];
         if (!elements) {
             err(@"Failed to fetch outdated sites for upgrade: %@", error);
-            completion(NO, nil);
+            completion( NO, nil );
             return;
         }
 
@@ -111,7 +111,7 @@
         }
 
         [moc saveToStore];
-        completion(YES, elementChanges);
+        completion( YES, elementChanges );
     }];
 }
 
@@ -131,14 +131,13 @@
     [PearlAlert showAlertWithTitle:@"Sites Upgraded"
                            message:PearlString( @"This upgrade has caused %d passwords to change.\n"
                                    @"To make updating the actual passwords of these accounts easier, "
-                                   @"you can email a summary of these changes to yourself.", [changes count])
-                         viewStyle:UIAlertViewStyleDefault initAlert:nil
-                 tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                     if (buttonIndex == [alert cancelButtonIndex])
-                         return;
+                                   @"you can email a summary of these changes to yourself.", [changes count] )
+                         viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+        if (buttonIndex == [alert cancelButtonIndex])
+            return;
 
-                     [PearlEMail sendEMailTo:nil subject:@"[Master Password] Upgrade Changes" body:formattedChanges];
-                 } cancelTitle:@"Don't Email" otherTitles:@"Send Email", nil];
+        [PearlEMail sendEMailTo:nil subject:@"[Master Password] Upgrade Changes" body:formattedChanges];
+    }                  cancelTitle:@"Don't Email" otherTitles:@"Send Email", nil];
 }
 
 - (NSFetchedResultsController *)fetchedResultsControllerByUses {

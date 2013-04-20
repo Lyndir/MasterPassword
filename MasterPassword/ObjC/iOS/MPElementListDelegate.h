@@ -17,7 +17,7 @@
 
 #import "MPElementEntity.h"
 
-@protocol MPElementListDelegate <NSObject>
+@protocol MPElementListDelegate<NSObject>
 
 - (void)didSelectElement:(MPElementEntity *)element;
 

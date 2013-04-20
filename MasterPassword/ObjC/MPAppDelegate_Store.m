@@ -15,8 +15,8 @@
 #define STORE_OPTIONS
 #endif
 
-@implementation MPAppDelegate_Shared (Store)
-PearlAssociatedObjectProperty(PearlAlert*, HandleCloudContentAlert, handleCloudContentAlert);
+@implementation MPAppDelegate_Shared(Store)
+        PearlAssociatedObjectProperty(PearlAlert*, HandleCloudContentAlert, handleCloudContentAlert);
 PearlAssociatedObjectProperty(PearlAlert*, FixCloudContentAlert, fixCloudContentAlert);
 PearlAssociatedObjectProperty(PearlOverlay*, StoreLoading, storeLoading);
 PearlAssociatedObjectProperty(NSManagedObjectContext*, PrivateManagedObjectContext, privateManagedObjectContext);
@@ -30,8 +30,9 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
     if ([[NSThread currentThread] isMainThread])
         return mainManagedObjectContext;
-    
-    NSManagedObjectContext *threadManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
+
+    NSManagedObjectContext
+            *threadManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
     threadManagedObjectContext.parentContext = mainManagedObjectContext;
 
     return threadManagedObjectContext;
@@ -46,7 +47,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     moc.parentContext = mainManagedObjectContext;
     [moc performBlock:^{
-        mocBlock(moc);
+        mocBlock( moc );
     }];
 
     return YES;
@@ -61,7 +62,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     moc.parentContext = mainManagedObjectContext;
     [moc performBlockAndWait:^{
-        mocBlock(moc);
+        mocBlock( moc );
     }];
 
     return YES;
@@ -87,7 +88,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     storeManager = [[UbiquityStoreManager alloc] initStoreNamed:nil withManagedObjectModel:nil localStoreURL:nil
                                             containerIdentifier:@"HL3Q45LX9N.com.lyndir.lhunath.MasterPassword.shared"
-                                         additionalStoreOptions:@{STORE_OPTIONS}
+                                         additionalStoreOptions:@{ STORE_OPTIONS }
                                                        delegate:self];
 
 #if TARGET_OS_IPHONE
@@ -203,7 +204,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     // Migrate cloud store.
     NSString *uuid = [[NSUserDefaults standardUserDefaults] stringForKey:@"LocalUUIDKey"];
     if (!uuid)
-        // No old cloud store to migrate.
+            // No old cloud store to migrate.
         return;
 
     if (![manager cloudSafeForSeeding]) {
@@ -321,10 +322,10 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     self.privateManagedObjectContext = nil;
     self.mainManagedObjectContext = nil;
 
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async( dispatch_get_main_queue(), ^{
         if (![self.storeLoading isVisible])
             self.storeLoading = [PearlOverlay showOverlayWithTitle:@"Opening Your Data"];
-    });
+    } );
 
     [self migrateStoreForManager:manager isCloud:isCloudStore];
 }
@@ -338,7 +339,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     } );
 
     // Create our contexts.
-    NSManagedObjectContext *privateManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    NSManagedObjectContext
+            *privateManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     [privateManagedObjectContext performBlockAndWait:^{
         privateManagedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
         privateManagedObjectContext.persistentStoreCoordinator = coordinator;
@@ -433,7 +435,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     NSAssert(![[NSThread currentThread] isMainThread], @"This method should not be invoked from the main thread.");
     NSManagedObjectContext *moc;
     while (!(moc = [MPAppDelegate_Shared managedObjectContextForThreadIfReady]))
-        usleep((useconds_t)(USEC_PER_SEC * 0.2));
+        usleep( (useconds_t)(USEC_PER_SEC * 0.2) );
 
     // Parse import data.
     inf(@"Importing sites.");
@@ -442,11 +444,11 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     NSString *importBundleVersion = nil, *importUserName = nil;
     NSData *importKeyID = nil;
     BOOL headerStarted = NO, headerEnded = NO, clearText = NO;
-    NSArray        *importedSiteLines    = [importedSitesString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    NSMutableSet   *elementsToDelete     = [NSMutableSet set];
+    NSArray *importedSiteLines = [importedSitesString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    NSMutableSet *elementsToDelete = [NSMutableSet set];
     NSMutableArray *importedSiteElements = [NSMutableArray arrayWithCapacity:[importedSiteLines count]];
-    NSFetchRequest *elementFetchRequest  = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPElementEntity class])];
-    for (NSString  *importedSiteLine in importedSiteLines) {
+    NSFetchRequest *elementFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
+    for (NSString *importedSiteLine in importedSiteLines) {
         if ([importedSiteLine hasPrefix:@"#"]) {
             // Comment or header
             if (!headerStarted) {
@@ -468,13 +470,13 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                 return MPImportResultMalformedInput;
             }
             NSTextCheckingResult *headerElements = [[headerPattern matchesInString:importedSiteLine options:(NSMatchingOptions)0
-                                                                             range:NSMakeRange(0, [importedSiteLine length])] lastObject];
-            NSString             *headerName     = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:1]];
-            NSString             *headerValue    = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:2]];
+                                                                             range:NSMakeRange( 0, [importedSiteLine length] )] lastObject];
+            NSString *headerName = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:1]];
+            NSString *headerValue = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:2]];
             if ([headerName isEqualToString:@"User Name"]) {
                 importUserName = headerValue;
 
-                NSFetchRequest *userFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([MPUserEntity class])];
+                NSFetchRequest *userFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
                 userFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", importUserName];
                 NSArray *users = [moc executeFetchRequest:userFetchRequest error:&error];
                 if (!users) {
@@ -490,10 +492,10 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                 dbg(@"Found user: %@", [user debugDescription]);
             }
             if ([headerName isEqualToString:@"Key ID"])
-                importKeyID                      = [headerValue decodeHex];
+                importKeyID = [headerValue decodeHex];
             if ([headerName isEqualToString:@"Version"]) {
                 importBundleVersion = headerValue;
-                importAlgorithm     = MPAlgorithmDefaultForBundleVersion(importBundleVersion);
+                importAlgorithm = MPAlgorithmDefaultForBundleVersion( importBundleVersion );
             }
             if ([headerName isEqualToString:@"Passwords"]) {
                 if ([headerValue isEqualToString:@"VISIBLE"])
@@ -515,14 +517,14 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
             err(@"Invalid site format in line: %@", importedSiteLine);
             return MPImportResultMalformedInput;
         }
-        NSTextCheckingResult *siteElements  = [[sitePattern matchesInString:importedSiteLine options:(NSMatchingOptions)0
-                                                                      range:NSMakeRange(0, [importedSiteLine length])] lastObject];
-        NSString             *lastUsed      = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:1]];
-        NSString             *uses          = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:2]];
-        NSString             *type          = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:3]];
-        NSString             *version       = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:4]];
-        NSString             *name          = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:5]];
-        NSString             *exportContent = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:6]];
+        NSTextCheckingResult *siteElements = [[sitePattern matchesInString:importedSiteLine options:(NSMatchingOptions)0
+                                                                     range:NSMakeRange( 0, [importedSiteLine length] )] lastObject];
+        NSString *lastUsed = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:1]];
+        NSString *uses = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:2]];
+        NSString *type = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:3]];
+        NSString *version = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:4]];
+        NSString *name = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:5]];
+        NSString *exportContent = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:6]];
 
         // Find existing site.
         if (user) {
@@ -531,18 +533,18 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
             if (!existingSites) {
                 err(@"Lookup of existing sites failed for site: %@, user: %@, error: %@", name, user.userID, error);
                 return MPImportResultInternalError;
-            } else
-                if (existingSites.count)
-                dbg(@"Existing sites: %@", existingSites);
+            }
+            else if (existingSites.count)
+            dbg(@"Existing sites: %@", existingSites);
 
             [elementsToDelete addObjectsFromArray:existingSites];
-            [importedSiteElements addObject:@[lastUsed, uses, type, version, name, exportContent]];
+            [importedSiteElements addObject:@[ lastUsed, uses, type, version, name, exportContent ]];
         }
     }
 
     // Ask for confirmation to import these sites and the master password of the user.
     inf(@"Importing %lu sites, deleting %lu sites, for user: %@", (unsigned long)[importedSiteElements count], (unsigned long)[elementsToDelete count], [MPUserEntity idFor:importUserName]);
-    NSString *userMasterPassword = userPassword(user.name, [importedSiteElements count], [elementsToDelete count]);
+    NSString *userMasterPassword = userPassword( user.name, [importedSiteElements count], [elementsToDelete count] );
     if (!userMasterPassword) {
         inf(@"Import cancelled.");
         return MPImportResultCancelled;
@@ -563,9 +565,9 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     // Make sure there is a user.
     if (!user) {
-        user = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPUserEntity class])
+        user = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass( [MPUserEntity class] )
                                              inManagedObjectContext:moc];
-        user.name  = importUserName;
+        user.name = importUserName;
         user.keyID = importKeyID;
         dbg(@"Created User: %@", [user debugDescription]);
     }
@@ -573,27 +575,28 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     // Import new sites.
     for (NSArray *siteElements in importedSiteElements) {
         NSDate *lastUsed = [[NSDateFormatter rfc3339DateFormatter] dateFromString:[siteElements objectAtIndex:0]];
-        NSUInteger    uses    = (unsigned)[[siteElements objectAtIndex:1] integerValue];
-        MPElementType type    = (MPElementType)[[siteElements objectAtIndex:2] integerValue];
-        NSUInteger    version = (unsigned)[[siteElements objectAtIndex:3] integerValue];
-        NSString *name          = [siteElements objectAtIndex:4];
+        NSUInteger uses = (unsigned)[[siteElements objectAtIndex:1] integerValue];
+        MPElementType type = (MPElementType)[[siteElements objectAtIndex:2] integerValue];
+        NSUInteger version = (unsigned)[[siteElements objectAtIndex:3] integerValue];
+        NSString *name = [siteElements objectAtIndex:4];
         NSString *exportContent = [siteElements objectAtIndex:5];
 
         // Create new site.
-        MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmForVersion(version) classNameOfType:type]
-                                                                 inManagedObjectContext:moc];
-        element.name     = name;
-        element.user     = user;
-        element.type     = type;
-        element.uses     = uses;
+        MPElementEntity
+                *element = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmForVersion( version ) classNameOfType:type]
+                                                         inManagedObjectContext:moc];
+        element.name = name;
+        element.user = user;
+        element.type = type;
+        element.uses = uses;
         element.lastUsed = lastUsed;
-        element.version  = version;
+        element.version = version;
         if ([exportContent length]) {
             if (clearText)
                 [element importClearTextContent:exportContent usingKey:userKey];
             else {
                 if (!importKey)
-                    importKey = [importAlgorithm keyForPassword:importPassword(user.name) ofUserNamed:user.name];
+                    importKey = [importAlgorithm keyForPassword:importPassword( user.name ) ofUserNamed:user.name];
                 if (![importKey.keyID isEqualToData:importKeyID])
                     return MPImportResultInvalidPassword;
 
@@ -645,25 +648,24 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     // Sites.
     for (MPElementEntity *element in activeUser.elements) {
         NSDate *lastUsed = element.lastUsed;
-        NSUInteger    uses    = element.uses;
-        MPElementType type    = element.type;
-        NSUInteger    version = element.version;
-        NSString *name    = element.name;
+        NSUInteger uses = element.uses;
+        MPElementType type = element.type;
+        NSUInteger version = element.version;
+        NSString *name = element.name;
         NSString *content = nil;
 
         // Determine the content to export.
         if (!(type & MPElementFeatureDevicePrivate)) {
             if (showPasswords)
                 content = element.content;
-            else
-                if (type & MPElementFeatureExportContent)
-                    content = element.exportContent;
+            else if (type & MPElementFeatureExportContent)
+                content = element.exportContent;
         }
 
         [export appendFormat:@"%@  %8ld  %8s  %20s\t%@\n",
                              [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed], (long)uses,
-                             [PearlString(@"%u:%lu", type, (unsigned long)version) UTF8String], [name UTF8String], content
-         ? content: @""];
+                             [PearlString( @"%u:%lu", type, (unsigned long)version ) UTF8String], [name UTF8String], content
+                                                                                                                     ? content: @""];
     }
 
     MPCheckpoint( MPCheckpointSitesExported, @{

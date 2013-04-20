@@ -3,7 +3,7 @@
 //
 
 #ifdef __OBJC__
-    #import <Foundation/Foundation.h>
+#import <Foundation/Foundation.h>
 #endif
 
 #define PEARL_WITH_SCRYPT

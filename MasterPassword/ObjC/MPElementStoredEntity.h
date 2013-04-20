@@ -10,9 +10,8 @@
 #import <CoreData/CoreData.h>
 #import "MPElementEntity.h"
 
-
 @interface MPElementStoredEntity : MPElementEntity
 
-@property (nonatomic, retain) id contentObject;
+@property(nonatomic, retain) id contentObject;
 
 @end

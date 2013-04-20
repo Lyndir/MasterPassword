@@ -12,12 +12,11 @@
 
 #import "IASKSettingsReader.h"
 
-@interface MPAppDelegate ()
+@interface MPAppDelegate()
 
-@property (nonatomic, readwrite) GPPShare *googlePlus;
+@property(nonatomic, readwrite) GPPShare *googlePlus;
 
 @end
-
 
 @implementation MPAppDelegate
 
@@ -59,12 +58,12 @@
                     level = PearlLogLevelInfo;
 
                 if (message.level >= level)
-                    TFLog(@"%@", [message messageDescription]);
+                    TFLog( @"%@", [message messageDescription] );
 
                 return YES;
             }];
-            TFLog(@"TestFlight (%@) initialized for: %@ v%@.", //
-             TESTFLIGHT_SDK_VERSION, [PearlInfoPlist get].CFBundleName, [PearlInfoPlist get].CFBundleVersion);
+            TFLog( @"TestFlight (%@) initialized for: %@ v%@.", //
+                    TESTFLIGHT_SDK_VERSION, [PearlInfoPlist get].CFBundleName, [PearlInfoPlist get].CFBundleVersion );
         }
     }
     @catch (id exception) {
@@ -99,12 +98,12 @@
                     level = PearlLogLevelInfo;
 
                 if (message.level >= level)
-                    CLSLog(@"%@", [message messageDescription]);
+                    CLSLog( @"%@", [message messageDescription] );
 
                 return YES;
             }];
-            CLSLog(@"Crashlytics (%@) initialized for: %@ v%@.", //
-                   [Crashlytics sharedInstance].version, [PearlInfoPlist get].CFBundleName, [PearlInfoPlist get].CFBundleVersion);
+            CLSLog( @"Crashlytics (%@) initialized for: %@ v%@.", //
+                    [Crashlytics sharedInstance].version, [PearlInfoPlist get].CFBundleName, [PearlInfoPlist get].CFBundleVersion );
         }
     }
     @catch (id exception) {
@@ -133,34 +132,34 @@
         err(@"Localytics exception: %@", exception);
     }
 
-    UIImage *navBarImage = [[UIImage imageNamed:@"ui_navbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
+    UIImage *navBarImage = [[UIImage imageNamed:@"ui_navbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
     [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsLandscapePhone];
     [[UINavigationBar appearance] setTitleTextAttributes:
-     @{
-     UITextAttributeTextColor: [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
-     UITextAttributeTextShadowColor: [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f],
-     UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, -1)],
-     UITextAttributeFont: [UIFont fontWithName:@"Exo-Bold" size:20.0f]
-     }];
+            @{
+                    UITextAttributeTextColor        : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
+                    UITextAttributeTextShadowColor  : [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f],
+                    UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetMake( 0, -1 )],
+                    UITextAttributeFont             : [UIFont fontWithName:@"Exo-Bold" size:20.0f]
+            }];
 
-    UIImage *navBarButton = [[UIImage imageNamed:@"ui_navbar_button"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
-    UIImage *navBarBack   = [[UIImage imageNamed:@"ui_navbar_back"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 13, 0, 5)];
+    UIImage *navBarButton = [[UIImage imageNamed:@"ui_navbar_button"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
+    UIImage *navBarBack = [[UIImage imageNamed:@"ui_navbar_back"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 13, 0, 5 )];
     [[UIBarButtonItem appearance] setBackgroundImage:navBarButton forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [[UIBarButtonItem appearance] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:navBarBack forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
     [[UIBarButtonItem appearance] setTitleTextAttributes:
-     @{
-     UITextAttributeTextColor: [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
-     UITextAttributeTextShadowColor: [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f],
-     UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 1)]//,
-     // Causes a bug in iOS where image views get oddly stretched... or something.
-     //UITextAttributeFont: [UIFont fontWithName:@"HelveticaNeue" size:13.0f]
-     }
+            @{
+                    UITextAttributeTextColor        : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
+                    UITextAttributeTextShadowColor  : [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f],
+                    UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetMake( 0, 1 )]//,
+                    // Causes a bug in iOS where image views get oddly stretched... or something.
+                    //UITextAttributeFont: [UIFont fontWithName:@"HelveticaNeue" size:13.0f]
+            }
                                                 forState:UIControlStateNormal];
 
-    UIImage *toolBarImage = [[UIImage imageNamed:@"ui_toolbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake(25, 5, 5, 5)];
+    UIImage *toolBarImage = [[UIImage imageNamed:@"ui_toolbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake( 25, 5, 5, 5 )];
     [[UISearchBar appearance] setBackgroundImage:toolBarImage];
     [[UIToolbar appearance] setBackgroundImage:toolBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
 
@@ -188,58 +187,62 @@
      */
 
     [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
-     ^(NSNotification *note) {
-         if ([[MPiOSConfig get].sendInfo boolValue]) {
-             if ([PearlLogger get].printLevel > PearlLogLevelInfo)
-                 [PearlLogger get].printLevel = PearlLogLevelInfo;
+            ^(NSNotification *note) {
+                if ([[MPiOSConfig get].sendInfo boolValue]) {
+                    if ([PearlLogger get].printLevel > PearlLogLevelInfo)
+                        [PearlLogger get].printLevel = PearlLogLevelInfo;
 
-             [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].rememberLogin boolValue] forKey:@"rememberLogin"];
-             [[Crashlytics sharedInstance] setBoolValue:[self storeManager].cloudEnabled forKey:@"iCloud"];
-             [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].iCloudDecided boolValue] forKey:@"iCloudDecided"];
-             [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].sendInfo boolValue] forKey:@"sendInfo"];
-             [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].helpHidden boolValue] forKey:@"helpHidden"];
-             [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].showSetup boolValue] forKey:@"showQuickStart"];
-             [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].firstRun boolValue] forKey:@"firstRun"];
-             [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].launchCount intValue] forKey:@"launchCount"];
-             [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].askForReviews boolValue] forKey:@"askForReviews"];
-             [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].reviewAfterLaunches intValue] forKey:@"reviewAfterLaunches"];
-             [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
+                    [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].rememberLogin boolValue] forKey:@"rememberLogin"];
+                    [[Crashlytics sharedInstance] setBoolValue:[self storeManager].cloudEnabled forKey:@"iCloud"];
+                    [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].iCloudDecided boolValue] forKey:@"iCloudDecided"];
+                    [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].sendInfo boolValue] forKey:@"sendInfo"];
+                    [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].helpHidden boolValue] forKey:@"helpHidden"];
+                    [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].showSetup boolValue] forKey:@"showQuickStart"];
+                    [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].firstRun boolValue] forKey:@"firstRun"];
+                    [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].launchCount intValue] forKey:@"launchCount"];
+                    [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].askForReviews boolValue] forKey:@"askForReviews"];
+                    [[Crashlytics sharedInstance]
+                            setIntValue:[[PearlConfig get].reviewAfterLaunches intValue] forKey:@"reviewAfterLaunches"];
+                    [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
 
 #ifdef TESTFLIGHT_SDK_VERSION
-             [TestFlight addCustomEnvironmentInformation:[[MPConfig get].rememberLogin boolValue]? @"YES": @"NO" forKey:@"rememberLogin"];
-             [TestFlight addCustomEnvironmentInformation:[self storeManager].cloudEnabled? @"YES": @"NO" forKey:@"iCloud"];
-             [TestFlight addCustomEnvironmentInformation:[[MPConfig get].iCloudDecided boolValue]? @"YES": @"NO" forKey:@"iCloudDecided"];
-             [TestFlight addCustomEnvironmentInformation:[[MPiOSConfig get].sendInfo boolValue]? @"YES": @"NO" forKey:@"sendInfo"];
-             [TestFlight addCustomEnvironmentInformation:[[MPiOSConfig get].helpHidden boolValue]? @"YES": @"NO" forKey:@"helpHidden"];
-             [TestFlight addCustomEnvironmentInformation:[[MPiOSConfig get].showSetup boolValue]? @"YES": @"NO"
-                                                  forKey:@"showQuickStart"];
-             [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].firstRun boolValue]? @"YES": @"NO" forKey:@"firstRun"];
-             [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].launchCount description] forKey:@"launchCount"];
-             [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].askForReviews boolValue]? @"YES": @"NO"
-                                                  forKey:@"askForReviews"];
-             [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].reviewAfterLaunches description] forKey:@"reviewAfterLaunches"];
-             [TestFlight addCustomEnvironmentInformation:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
+                    [TestFlight addCustomEnvironmentInformation:[@([[MPConfig get].rememberLogin boolValue]) description]
+                                                         forKey:@"rememberLogin"];
+                    [TestFlight addCustomEnvironmentInformation:[@([self storeManager].cloudEnabled) description] forKey:@"iCloud"];
+                    [TestFlight addCustomEnvironmentInformation:[@([[MPConfig get].iCloudDecided boolValue]) description]
+                                                         forKey:@"iCloudDecided"];
+                    [TestFlight addCustomEnvironmentInformation:[@([[MPiOSConfig get].sendInfo boolValue]) description] forKey:@"sendInfo"];
+                    [TestFlight addCustomEnvironmentInformation:[@([[MPiOSConfig get].helpHidden boolValue]) description]
+                                                         forKey:@"helpHidden"];
+                    [TestFlight addCustomEnvironmentInformation:[@([[MPiOSConfig get].showSetup boolValue]) description]
+                                                         forKey:@"showQuickStart"];
+                    [TestFlight addCustomEnvironmentInformation:[@([[PearlConfig get].firstRun boolValue]) description] forKey:@"firstRun"];
+                    [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].launchCount description] forKey:@"launchCount"];
+                    [TestFlight addCustomEnvironmentInformation:[@([[PearlConfig get].askForReviews boolValue]) description]
+                                                         forKey:@"askForReviews"];
+                    [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].reviewAfterLaunches description]
+                                                         forKey:@"reviewAfterLaunches"];
+                    [TestFlight addCustomEnvironmentInformation:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
 #endif
-             MPCheckpoint( MPCheckpointConfig, @{
-                     @"rememberLogin"       : [[MPConfig get].rememberLogin boolValue]? @"YES": @"NO",
-                     @"iCloud"              : [self storeManager].cloudEnabled? @"YES": @"NO",
-                     @"iCloudDecided"       : [[MPConfig get].iCloudDecided boolValue]? @"YES": @"NO",
-                     @"sendInfo"            : [[MPiOSConfig get].sendInfo boolValue]? @"YES": @"NO",
-                     @"helpHidden"          : [[MPiOSConfig get].helpHidden boolValue]? @"YES": @"NO",
-                     @"showQuickStart"      : [[MPiOSConfig get].showSetup boolValue]? @"YES": @"NO",
-                     @"firstRun"            : [[PearlConfig get].firstRun boolValue]? @"YES": @"NO",
-                     @"launchCount"         : NilToNSNull([[PearlConfig get].launchCount description]),
-                     @"askForReviews"       : [[PearlConfig get].askForReviews boolValue]? @"YES": @"NO",
-                     @"reviewAfterLaunches" : NilToNSNull([[PearlConfig get].reviewAfterLaunches description]),
-                     @"reviewedVersion"     : NilToNSNull([PearlConfig get].reviewedVersion)
-             } );
-         }
-     }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:kIASKAppSettingChanged object:nil queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification
-                                                                                                          object:note userInfo:nil];
-                                                  }];
+                    MPCheckpoint( MPCheckpointConfig, @{
+                            @"rememberLogin"       : @([[MPConfig get].rememberLogin boolValue]),
+                            @"iCloud"              : @([self storeManager].cloudEnabled),
+                            @"iCloudDecided"       : @([[MPConfig get].iCloudDecided boolValue]),
+                            @"sendInfo"            : @([[MPiOSConfig get].sendInfo boolValue]),
+                            @"helpHidden"          : @([[MPiOSConfig get].helpHidden boolValue]),
+                            @"showQuickStart"      : @([[MPiOSConfig get].showSetup boolValue]),
+                            @"firstRun"            : @([[PearlConfig get].firstRun boolValue]),
+                            @"launchCount"         : NilToNSNull([[PearlConfig get].launchCount description]),
+                            @"askForReviews"       : @([[PearlConfig get].askForReviews boolValue]),
+                            @"reviewAfterLaunches" : NilToNSNull([[PearlConfig get].reviewAfterLaunches description]),
+                            @"reviewedVersion"     : NilToNSNull([PearlConfig get].reviewedVersion)
+                    } );
+                }
+            }];
+    [[NSNotificationCenter defaultCenter]
+            addObserverForName:kIASKAppSettingChanged object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note userInfo:nil];
+    }];
 
 #ifdef ADHOC
     [PearlAlert showAlertWithTitle:@"Welcome, tester!" message:
@@ -257,10 +260,10 @@
 
     inf(@"Started up with device identifier: %@", [PearlKeyChain deviceIdentifier]);
 
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async( dispatch_get_main_queue(), ^{
         if ([[MPiOSConfig get].showSetup boolValue])
             [[MPAppDelegate get] showSetup];
-    });
+    } );
 
     return YES;
 }
@@ -277,11 +280,11 @@
         return YES;
 
     // Arbitrary URL to mpsites data.
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSError       *error;
+    dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
+        NSError *error;
         NSURLResponse *response;
-        NSData        *importedSitesData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
-                                                                 returningResponse:&response error:&error];
+        NSData *importedSitesData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
+                                                          returningResponse:&response error:&error];
         if (error)
         err(@"While reading imported sites from %@: %@", url, error);
         if (!importedSitesData)
@@ -294,11 +297,11 @@
             __block NSString *masterPassword = nil;
 
             dispatch_group_t importPasswordGroup = dispatch_group_create();
-            dispatch_group_enter(importPasswordGroup);
-            dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_group_enter( importPasswordGroup );
+            dispatch_async( dispatch_get_main_queue(), ^{
                 [PearlAlert showAlertWithTitle:@"Import File's Master Password"
-                                       message:PearlString(@"%@'s export was done using a different master password.\n"
-                                                            @"Enter that master password to unlock the exported data.", userName)
+                                       message:PearlString( @"%@'s export was done using a different master password.\n"
+                                               @"Enter that master password to unlock the exported data.", userName )
                                      viewStyle:UIAlertViewStyleSecureTextInput
                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                     @try {
@@ -308,23 +311,23 @@
                         masterPassword = [alert_ textFieldAtIndex:0].text;
                     }
                     @finally {
-                        dispatch_group_leave(importPasswordGroup);
+                        dispatch_group_leave( importPasswordGroup );
                     }
                 }
                                    cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Unlock Import", nil];
-            });
-            dispatch_group_wait(importPasswordGroup, DISPATCH_TIME_FOREVER);
+            } );
+            dispatch_group_wait( importPasswordGroup, DISPATCH_TIME_FOREVER );
 
             return masterPassword;
         }                         askUserPassword:^NSString *(NSString *userName, NSUInteger importCount, NSUInteger deleteCount) {
             __block NSString *masterPassword = nil;
 
             dispatch_group_t userPasswordGroup = dispatch_group_create();
-            dispatch_group_enter(userPasswordGroup);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [PearlAlert showAlertWithTitle:PearlString(@"Master Password for\n%@", userName)
-                                       message:PearlString(@"Imports %d sites, overwriting %d.", importCount,
-                                                           deleteCount)
+            dispatch_group_enter( userPasswordGroup );
+            dispatch_async( dispatch_get_main_queue(), ^{
+                [PearlAlert showAlertWithTitle:PearlString( @"Master Password for\n%@", userName )
+                                       message:PearlString( @"Imports %d sites, overwriting %d.", importCount,
+                                               deleteCount )
                                      viewStyle:UIAlertViewStyleSecureTextInput
                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                     @try {
@@ -334,12 +337,12 @@
                         masterPassword = [alert_ textFieldAtIndex:0].text;
                     }
                     @finally {
-                        dispatch_group_leave(userPasswordGroup);
+                        dispatch_group_leave( userPasswordGroup );
                     }
                 }
                                    cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Import", nil];
-            });
-            dispatch_group_wait(userPasswordGroup, DISPATCH_TIME_FOREVER);
+            } );
+            dispatch_group_wait( userPasswordGroup, DISPATCH_TIME_FOREVER );
 
             return masterPassword;
         }];
@@ -360,7 +363,7 @@
         }
 
         [activityAlert cancelAlertAnimated:YES];
-    });
+    } );
 
     return YES;
 }
@@ -411,8 +414,7 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 
     inf(@"Re-activated");
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification
-                                                        object:application userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:application userInfo:nil];
 
     [[LocalyticsSession sharedLocalyticsSession] resume];
     [[LocalyticsSession sharedLocalyticsSession] upload];
@@ -453,26 +455,25 @@
     if (![PearlEMail canSendMail])
         [PearlAlert showAlertWithTitle:@"Feedback"
                                message:
-                                @"Have a question, comment, issue or just saying thanks?\n\n"
-                                 @"We'd love to hear what you think!\n"
-                                 @"masterpassword@lyndir.com"
+                                       @"Have a question, comment, issue or just saying thanks?\n\n"
+                                               @"We'd love to hear what you think!\n"
+                                               @"masterpassword@lyndir.com"
                              viewStyle:UIAlertViewStyleDefault
                              initAlert:nil tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay
                            otherTitles:nil];
 
+    else if (logs)
+        [PearlAlert showAlertWithTitle:@"Feedback"
+                               message:
+                                       @"Have a question, comment, issue or just saying thanks?\n\n"
+                                               @"If you're having trouble, it may help us if you can first reproduce the problem "
+                                               @"and then include log files in your message."
+                             viewStyle:UIAlertViewStyleDefault
+                             initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+            [self openFeedbackWithLogs:(buttonIndex_ == [alert_ firstOtherButtonIndex]) forVC:viewController];
+        }                  cancelTitle:nil otherTitles:@"Include Logs", @"No Logs", nil];
     else
-        if (logs)
-            [PearlAlert showAlertWithTitle:@"Feedback"
-                                   message:
-                                    @"Have a question, comment, issue or just saying thanks?\n\n"
-                                     @"If you're having trouble, it may help us if you can first reproduce the problem "
-                                     @"and then include log files in your message."
-                                 viewStyle:UIAlertViewStyleDefault
-                                 initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                [self openFeedbackWithLogs:(buttonIndex_ == [alert_ firstOtherButtonIndex]) forVC:viewController];
-            }                  cancelTitle:nil otherTitles:@"Include Logs", @"No Logs", nil];
-        else
-            [self openFeedbackWithLogs:NO forVC:viewController];
+        [self openFeedbackWithLogs:NO forVC:viewController];
 }
 
 - (void)openFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController {
@@ -481,46 +482,48 @@
     PearlLogLevel logLevel = [[MPiOSConfig get].sendInfo boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
 
     [[[PearlEMail alloc] initForEMailTo:@"Master Password Development <masterpassword@lyndir.com>"
-                                subject:PearlString(@"Feedback for Master Password [%@]",
-                                                    [[PearlKeyChain deviceIdentifier] stringByDeletingMatchesOf:@"-.*"])
-                                   body:PearlString(@"\n\n\n"
-                                                     @"--\n"
-                                                     @"%@"
-                                                     @"Master Password %@, build %@",
-                                                    userName? ([userName stringByAppendingString:@"\n"]): @"",
-                                                    [PearlInfoPlist get].CFBundleShortVersionString,
-                                                    [PearlInfoPlist get].CFBundleVersion)
+                                subject:PearlString( @"Feedback for Master Password [%@]",
+                                        [[PearlKeyChain deviceIdentifier] stringByDeletingMatchesOf:@"-.*"] )
+                                   body:PearlString( @"\n\n\n"
+                                           @"--\n"
+                                           @"%@"
+                                           @"Master Password %@, build %@",
+                                           userName? ([userName stringByAppendingString:@"\n"]): @"",
+                                           [PearlInfoPlist get].CFBundleShortVersionString,
+                                           [PearlInfoPlist get].CFBundleVersion )
 
                             attachments:(logs
-                             ? [[PearlEMailAttachment alloc] initWithContent:[[[PearlLogger get] formatMessagesWithLevel:logLevel] dataUsingEncoding:NSUTF8StringEncoding]
-                                                                    mimeType:@"text/plain"
-                                                                    fileName:PearlString(@"%@-%@.log",
-                                                                                         [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
-                                                                                         [PearlKeyChain deviceIdentifier])]
-                             : nil), nil]
-                  showComposerForVC:viewController];
+                                         ? [[PearlEMailAttachment alloc]
+                                            initWithContent:[[[PearlLogger get] formatMessagesWithLevel:logLevel]
+                                                    dataUsingEncoding:NSUTF8StringEncoding]
+                                                   mimeType:@"text/plain"
+                                                   fileName:PearlString( @"%@-%@.log",
+                                                           [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
+                                                           [PearlKeyChain deviceIdentifier] )]
+                                         : nil), nil]
+            showComposerForVC:viewController];
 }
 
 - (void)export {
 
     [PearlAlert showNotice:
-                 @"This will export all your site names.\n\n"
-                  @"You can open the export with a text editor to get an overview of all your sites.\n\n"
-                  @"The file also acts as a personal backup of your site list in case you don't sync with iCloud/iTunes."
+            @"This will export all your site names.\n\n"
+                    @"You can open the export with a text editor to get an overview of all your sites.\n\n"
+                    @"The file also acts as a personal backup of your site list in case you don't sync with iCloud/iTunes."
          tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
              [PearlAlert showAlertWithTitle:@"Reveal Passwords?" message:
-                                                                  @"Would you like to make all your passwords visible in the export?\n\n"
-                                                                   @"A safe export will only include your stored passwords, in an encrypted manner, "
-                                                                   @"making the result safe from falling in the wrong hands.\n\n"
-                                                                   @"If all your passwords are shown and somebody else finds the export, "
-                                                                   @"they could gain access to all your sites!"
+                     @"Would you like to make all your passwords visible in the export?\n\n"
+                             @"A safe export will only include your stored passwords, in an encrypted manner, "
+                             @"making the result safe from falling in the wrong hands.\n\n"
+                             @"If all your passwords are shown and somebody else finds the export, "
+                             @"they could gain access to all your sites!"
                                   viewStyle:UIAlertViewStyleDefault initAlert:nil
                           tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                               if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 0)
-                               // Safe Export
+                                      // Safe Export
                                   [self exportShowPasswords:NO];
                               if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
-                               // Show Passwords
+                                      // Show Passwords
                                   [self exportShowPasswords:YES];
                           }     cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
          }     otherTitles:nil];
@@ -531,8 +534,8 @@
     if (![PearlEMail canSendMail]) {
         [PearlAlert showAlertWithTitle:@"Cannot Send Mail"
                                message:
-                                @"Your device is not yet set up for sending mail.\n"
-                                 @"Close Master Password, go into Settings and add a Mail account."
+                                       @"Your device is not yet set up for sending mail.\n"
+                                               @"Close Master Password, go into Settings and add a Mail account."
                              viewStyle:UIAlertViewStyleDefault
                              initAlert:nil tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay
                            otherTitles:nil];
@@ -543,22 +546,22 @@
     NSString *message;
 
     if (showPasswords)
-        message = PearlString(@"Export of Master Password sites with passwords included.\n\n"
-                               @"REMINDER: Make sure nobody else sees this file!  Passwords are visible!\n\n\n"
-                               @"--\n"
-                               @"%@\n"
-                               @"Master Password %@, build %@",
-                              [self activeUserForThread].name,
-                              [PearlInfoPlist get].CFBundleShortVersionString,
-                              [PearlInfoPlist get].CFBundleVersion);
+        message = PearlString( @"Export of Master Password sites with passwords included.\n\n"
+                @"REMINDER: Make sure nobody else sees this file!  Passwords are visible!\n\n\n"
+                @"--\n"
+                @"%@\n"
+                @"Master Password %@, build %@",
+                [self activeUserForThread].name,
+                [PearlInfoPlist get].CFBundleShortVersionString,
+                [PearlInfoPlist get].CFBundleVersion );
     else
-        message = PearlString(@"Backup of Master Password sites.\n\n\n"
-                               @"--\n"
-                               @"%@\n"
-                               @"Master Password %@, build %@",
-                              [self activeUserForThread].name,
-                              [PearlInfoPlist get].CFBundleShortVersionString,
-                              [PearlInfoPlist get].CFBundleVersion);
+        message = PearlString( @"Backup of Master Password sites.\n\n\n"
+                @"--\n"
+                @"%@\n"
+                @"Master Password %@, build %@",
+                [self activeUserForThread].name,
+                [PearlInfoPlist get].CFBundleShortVersionString,
+                [PearlInfoPlist get].CFBundleVersion );
 
     NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
     [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
@@ -566,7 +569,8 @@
     [PearlEMail sendEMailTo:nil subject:@"Master Password Export" body:message
                 attachments:[[PearlEMailAttachment alloc] initWithContent:[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
                                                                  mimeType:@"text/plain" fileName:
-                  PearlString(@"%@ (%@).mpsites", [self activeUserForThread].name, [exportDateFormatter stringFromDate:[NSDate date]])],
+                                PearlString( @"%@ (%@).mpsites", [self activeUserForThread].name,
+                                        [exportDateFormatter stringFromDate:[NSDate date]] )],
                             nil];
 }
 
@@ -574,9 +578,9 @@
 
     [PearlAlert showAlertWithTitle:@"Changing Master Password"
                            message:
-                            @"If you continue, you'll be able to set a new master password.\n\n"
-                             @"Changing your master password will cause all your generated passwords to change!\n"
-                             @"Changing the master password back to the old one will cause your passwords to revert as well."
+                                   @"If you continue, you'll be able to set a new master password.\n\n"
+                                           @"Changing your master password will cause all your generated passwords to change!\n"
+                                           @"Changing the master password back to the old one will cause your passwords to revert as well."
                          viewStyle:UIAlertViewStyleDefault
                          initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
         if (buttonIndex == [alert cancelButtonIndex])
@@ -603,8 +607,8 @@
 
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)value {
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification
-                                                        object:NSStringFromSelector(configKey) userInfo:nil];
+    [[NSNotificationCenter defaultCenter]
+            postNotificationName:MPCheckConfigNotification object:NSStringFromSelector( configKey ) userInfo:nil];
 }
 
 #pragma mark - UbiquityStoreManagerDelegate
@@ -619,34 +623,33 @@
 - (void)alertCloudDisabledForManager:(UbiquityStoreManager *)manager {
 
     [PearlAlert showAlertWithTitle:@"iCloud" message:
-                @"iCloud is now disabled.\n\n"
-                        @"It is highly recommended you enable iCloud."
-                             viewStyle:UIAlertViewStyleDefault initAlert:nil
-                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                         if (buttonIndex == [alert firstOtherButtonIndex] + 0) {
-                             [PearlAlert showAlertWithTitle:@"About iCloud" message:
-                                     @"iCloud is Apple's solution for saving your data in \"the cloud\" "
-                                             @"and making sure your other iPhones, iPads and Macs are in sync.\n\n"
-                                             @"For Master Password, that means your sites are available on all your "
-                                             @"Apple devices, and you always have a backup of them in case "
-                                             @"you lose one or need to restore.\n\n"
-                                             @"Thanks to the way Master Password works, it doesn't need to send your "
-                                             @"site's passwords to Apple for the backup to work: Only their names are "
-                                             @"saved.  If you set a custom password it will be sent to iCloud after "
-                                             @"being encrypted with your master password.\n\n"
-                                             @"Apple can never see any of your passwords."
-                                                  viewStyle:UIAlertViewStyleDefault
-                                                  initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                                 [self alertCloudDisabledForManager:manager];
-                             }
-                                                cancelTitle:[PearlStrings get].commonButtonThanks otherTitles:nil];
-                             return;
-                         }
+            @"iCloud is now disabled.\n\n"
+                    @"It is highly recommended you enable iCloud."
+                         viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+        if (buttonIndex == [alert firstOtherButtonIndex] + 0) {
+            [PearlAlert showAlertWithTitle:@"About iCloud" message:
+                    @"iCloud is Apple's solution for saving your data in \"the cloud\" "
+                            @"and making sure your other iPhones, iPads and Macs are in sync.\n\n"
+                            @"For Master Password, that means your sites are available on all your "
+                            @"Apple devices, and you always have a backup of them in case "
+                            @"you lose one or need to restore.\n\n"
+                            @"Thanks to the way Master Password works, it doesn't need to send your "
+                            @"site's passwords to Apple for the backup to work: Only their names are "
+                            @"saved.  If you set a custom password it will be sent to iCloud after "
+                            @"being encrypted with your master password.\n\n"
+                            @"Apple can never see any of your passwords."
+                                 viewStyle:UIAlertViewStyleDefault
+                                 initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                [self alertCloudDisabledForManager:manager];
+            }
+                               cancelTitle:[PearlStrings get].commonButtonThanks otherTitles:nil];
+            return;
+        }
 
-                         [MPConfig get].iCloudDecided = @YES;
-                         if (buttonIndex == [alert firstOtherButtonIndex] + 1)
-                             manager.cloudEnabled = YES;
-                     }     cancelTitle:@"Leave Off" otherTitles:@"Explain?", @"Enable iCloud", nil];
+        [MPConfig get].iCloudDecided = @YES;
+        if (buttonIndex == [alert firstOtherButtonIndex] + 1)
+            manager.cloudEnabled = YES;
+    }                  cancelTitle:@"Leave Off" otherTitles:@"Explain?", @"Enable iCloud", nil];
 }
 
 
@@ -657,7 +660,7 @@
     static NSDictionary *googlePlusInfo = nil;
     if (googlePlusInfo == nil)
         googlePlusInfo = [[NSDictionary alloc] initWithContentsOfURL:
-                          [[NSBundle mainBundle] URLForResource:@"Google+" withExtension:@"plist"]];
+                [[NSBundle mainBundle] URLForResource:@"Google+" withExtension:@"plist"]];
 
     return googlePlusInfo;
 }
@@ -675,7 +678,7 @@
     static NSDictionary *testFlightInfo = nil;
     if (testFlightInfo == nil)
         testFlightInfo = [[NSDictionary alloc] initWithContentsOfURL:
-         [[NSBundle mainBundle] URLForResource:@"TestFlight" withExtension:@"plist"]];
+                [[NSBundle mainBundle] URLForResource:@"TestFlight" withExtension:@"plist"]];
 
     return testFlightInfo;
 }
@@ -693,7 +696,7 @@
     static NSDictionary *crashlyticsInfo = nil;
     if (crashlyticsInfo == nil)
         crashlyticsInfo = [[NSDictionary alloc] initWithContentsOfURL:
-         [[NSBundle mainBundle] URLForResource:@"Crashlytics" withExtension:@"plist"]];
+                [[NSBundle mainBundle] URLForResource:@"Crashlytics" withExtension:@"plist"]];
 
     return crashlyticsInfo;
 }
@@ -711,7 +714,7 @@
     static NSDictionary *localyticsInfo = nil;
     if (localyticsInfo == nil)
         localyticsInfo = [[NSDictionary alloc] initWithContentsOfURL:
-         [[NSBundle mainBundle] URLForResource:@"Localytics" withExtension:@"plist"]];
+                [[NSBundle mainBundle] URLForResource:@"Localytics" withExtension:@"plist"]];
 
     return localyticsInfo;
 }

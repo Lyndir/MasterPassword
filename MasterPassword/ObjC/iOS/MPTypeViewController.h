@@ -10,7 +10,6 @@
 
 #import "MPEntities.h"
 
-
 @protocol MPTypeDelegate<NSObject>
 
 @required
@@ -24,7 +23,7 @@
 
 @interface MPTypeViewController : UITableViewController
 
-@property (nonatomic, weak) id<MPTypeDelegate> delegate;
-@property (weak, nonatomic) IBOutlet UIView *recommendedTipContainer;
+@property(nonatomic, weak) id<MPTypeDelegate> delegate;
+@property(weak, nonatomic) IBOutlet UIView *recommendedTipContainer;
 
 @end

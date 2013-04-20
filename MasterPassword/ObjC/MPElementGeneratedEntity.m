@@ -8,7 +8,6 @@
 
 #import "MPElementGeneratedEntity.h"
 
-
 @implementation MPElementGeneratedEntity
 
 @dynamic counter_;

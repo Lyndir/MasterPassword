@@ -17,22 +17,22 @@
 
 #import "MPAlgorithm.h"
 
+@interface MPKey()
 
-@interface MPKey ()
-
-@property (nonatomic, readwrite, strong) id<MPAlgorithm> algorithm;
-@property (nonatomic, readwrite, strong) NSData *keyData;
-@property (nonatomic, readwrite, strong) NSData *keyID;
+@property(nonatomic, readwrite, strong) id<MPAlgorithm> algorithm;
+@property(nonatomic, readwrite, strong) NSData *keyData;
+@property(nonatomic, readwrite, strong) NSData *keyID;
 
 @end
 
 @implementation MPKey
+
 @synthesize algorithm = _algorithm, keyData = _keyData, keyID = _keyID;
 
 - (id)initWithKeyData:(NSData *)keyData algorithm:(id<MPAlgorithm>)algorithm {
 
     if (!(self = [super init]))
-        return  nil;
+        return nil;
 
     self.keyData = keyData;
     self.algorithm = algorithm;
@@ -43,7 +43,7 @@
 
 - (MPKey *)subKeyOfLength:(NSUInteger)subKeyLength {
 
-    NSData *subKeyData = [self.keyData subdataWithRange:NSMakeRange(0, MIN(subKeyLength, self.keyData.length))];
+    NSData *subKeyData = [self.keyData subdataWithRange:NSMakeRange( 0, MIN(subKeyLength, self.keyData.length) )];
 
     return [self.algorithm keyFromKeyData:subKeyData];
 }
@@ -60,6 +60,5 @@
 
     return [self isEqualToKey:object];
 }
-
 
 @end

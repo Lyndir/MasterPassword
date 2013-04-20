@@ -11,9 +11,9 @@
 
 @interface MPElementListSearchController : MPElementListController<UISearchBarDelegate, UISearchDisplayDelegate>
 
-@property (strong, nonatomic) UILabel                   *tipView;
+@property(strong, nonatomic) UILabel *tipView;
 
-@property (strong, nonatomic) IBOutlet UISearchDisplayController *searchDisplayController;
-@property (weak, nonatomic) IBOutlet UIView                      *searchTipContainer;
+@property(strong, nonatomic) IBOutlet UISearchDisplayController *searchDisplayController;
+@property(weak, nonatomic) IBOutlet UIView *searchTipContainer;
 
 @end

@@ -19,12 +19,11 @@
 
 @protocol MPAlgorithm;
 
-
 @interface MPKey : NSObject
 
-@property (nonatomic, readonly, strong) id<MPAlgorithm> algorithm;
-@property (nonatomic, readonly, strong) NSData *keyData;
-@property (nonatomic, readonly, strong) NSData *keyID;
+@property(nonatomic, readonly, strong) id<MPAlgorithm> algorithm;
+@property(nonatomic, readonly, strong) NSData *keyData;
+@property(nonatomic, readonly, strong) NSData *keyID;
 
 - (id)initWithKeyData:(NSData *)keyData algorithm:(id<MPAlgorithm>)algorithm;
 - (MPKey *)subKeyOfLength:(NSUInteger)subKeyLength;
