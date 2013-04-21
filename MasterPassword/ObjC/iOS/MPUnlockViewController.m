@@ -246,6 +246,7 @@
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
 
     if (motion == UIEventSubtypeMotionShake) {
+        MPCheckpoint( MPCheckpointEmergencyGenerator, nil );
         [[self.view findFirstResponderInHierarchy] resignFirstResponder];
 
         self.emergencyGeneratorContainer.alpha = 0;
@@ -1037,7 +1038,7 @@
     }
 
     SLComposeViewController *vc = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-    [vc setInitialText:@"I've started doing passwords properly thanks to Master Password for iOS."];
+    [vc setInitialText:@"I've started doing passwords properly thanks to Master Password."];
     [vc addImage:[UIImage imageNamed:@"iTunesArtwork-Rounded"]];
     [vc addURL:[NSURL URLWithString:@"http://masterpasswordapp.com"]];
     [self presentViewController:vc animated:YES completion:nil];
@@ -1047,7 +1048,7 @@
 
     id<GPPShareBuilder> shareDialog = [[MPAppDelegate get].googlePlus shareDialog];
     [[[shareDialog setURLToShare:[NSURL URLWithString:@"http://masterpasswordapp.com"]]
-            setPrefillText:@"I've started doing passwords properly thanks to Master Password for iOS."] open];
+            setPrefillText:@"I've started doing passwords properly thanks to Master Password."] open];
 }
 
 - (IBAction)mail:(UIButton *)sender {

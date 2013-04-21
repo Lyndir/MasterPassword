@@ -67,6 +67,7 @@ typedef enum {
 #define MPCheckpointReview                    @"MPCheckpointReview"
 #define MPCheckpointApps                      @"MPCheckpointApps"
 #define MPCheckpointApp                       @"MPCheckpointApp"
+#define MPCheckpointEmergencyGenerator        @"MPCheckpointEmergencyGenerator"
 
 #define MPSignedInNotification                @"MPSignedInNotification"
 #define MPSignedOutNotification               @"MPSignedOutNotification"

@@ -69,8 +69,7 @@
 
     // Determine the cipher from the first seed byte.
     assert([seed length]);
-    NSArray *typeCiphers = [[MPTypes_ciphers valueForKey:[self classNameOfType:type]]
-            valueForKey:[self nameOfType:type]];
+    NSArray *typeCiphers = [[MPTypes_ciphers valueForKey:[self classNameOfType:type]] valueForKey:[self nameOfType:type]];
     NSString *cipher = [typeCiphers objectAtIndex:seedBytes[0] % [typeCiphers count]];
     trc(@"type %@, ciphers: %@, selected: %@", [self nameOfType:type], typeCiphers, cipher);
 
@@ -81,8 +80,7 @@
         uint16_t keyByte = seedBytes[c + 1];
         NSString *cipherClass = [cipher substringWithRange:NSMakeRange( c, 1 )];
         NSString *cipherClassCharacters = [[MPTypes_ciphers valueForKey:@"MPCharacterClasses"] valueForKey:cipherClass];
-        NSString *character = [cipherClassCharacters substringWithRange:NSMakeRange( keyByte % [cipherClassCharacters length],
-                1 )];
+        NSString *character = [cipherClassCharacters substringWithRange:NSMakeRange( keyByte % [cipherClassCharacters length], 1 )];
 
         trc(@"class %@ has characters: %@, index: %u, selected: %@", cipherClass, cipherClassCharacters, keyByte, character);
         [content appendString:character];
