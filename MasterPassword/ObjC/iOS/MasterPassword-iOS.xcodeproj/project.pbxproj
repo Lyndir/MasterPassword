@@ -47,6 +47,16 @@
 		DA5BFA4D147E415C00F98B1E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */; };
 		DA5BFA4F147E415C00F98B1E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4E147E415C00F98B1E /* CoreData.framework */; };
 		DA5E5C3D1723681B003798D8 /* Square-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5C3C1723681B003798D8 /* Square-bottom.png */; };
+		DA5E5C6E17248959003798D8 /* crypto_aesctr.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C6517248959003798D8 /* crypto_aesctr.h */; };
+		DA5E5C6F17248959003798D8 /* crypto_scrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C6617248959003798D8 /* crypto_scrypt.h */; };
+		DA5E5C7017248959003798D8 /* memlimit.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C6717248959003798D8 /* memlimit.h */; };
+		DA5E5C7117248959003798D8 /* readpass.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C6817248959003798D8 /* readpass.h */; };
+		DA5E5C7217248959003798D8 /* scryptenc.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C6917248959003798D8 /* scryptenc.h */; };
+		DA5E5C7317248959003798D8 /* scryptenc_cpuperf.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C6A17248959003798D8 /* scryptenc_cpuperf.h */; };
+		DA5E5C7417248959003798D8 /* sha256.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C6B17248959003798D8 /* sha256.h */; };
+		DA5E5C7517248959003798D8 /* sysendian.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C6C17248959003798D8 /* sysendian.h */; };
+		DA5E5C7617248959003798D8 /* warn.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C6D17248959003798D8 /* warn.h */; };
+		DA5E5C78172489FA003798D8 /* libscryptenc-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5E5C77172489FA003798D8 /* libscryptenc-ios.a */; };
 		DA6701B816406A4100B61001 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA6701B716406A4100B61001 /* Accounts.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		DA6701DE16406B7300B61001 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA6701DD16406B7300B61001 /* Social.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		DA6701E016406BB400B61001 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA6701DF16406BB400B61001 /* AdSupport.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -757,7 +767,6 @@
 		DABD3C251711E2DC00CF925C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DABD3BF91711E2DC00CF925C /* Settings.bundle */; };
 		DABD3C261711E2DC00CF925C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DABD3BFA1711E2DC00CF925C /* InfoPlist.strings */; };
 		DABD3C271711E2DC00CF925C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BFC1711E2DC00CF925C /* main.m */; };
-		DABD3FC717122ADD00CF925C /* libscrypt-bin-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DABD3FC617122ADD00CF925C /* libscrypt-bin-ios.a */; };
 		DABD3FCA1712446200CF925C /* cloud.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD3FC81712446200CF925C /* cloud.png */; };
 		DABD3FCB1712446200CF925C /* cloud@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD3FC91712446200CF925C /* cloud@2x.png */; };
 		DABD3FCE1714F45C00CF925C /* identity.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD3FCC1714F45B00CF925C /* identity.png */; };
@@ -950,55 +959,6 @@
 			remoteGlobalIDString = DA5BFA43147E415C00F98B1E;
 			remoteInfo = MasterPassword;
 		};
-		DA5A09D21714FA83005284AB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DACA29C01705E313002C6C22 /* scrypt.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D;
-			remoteInfo = scryptenc;
-		};
-		DA5A09D41714FA83005284AB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DACA29C01705E313002C6C22 /* scrypt.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A0511C5A127770FD00DE46C4;
-			remoteInfo = scryptcrypto;
-		};
-		DA5A09D61714FA83005284AB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DACA29C01705E313002C6C22 /* scrypt.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = DA67FE5D14E4834300DB7CC9;
-			remoteInfo = util;
-		};
-		DA5A09D81714FA83005284AB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DACA29C01705E313002C6C22 /* scrypt.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = DABD3E841711E7D600CF925C;
-			remoteInfo = "scrypt-bin-ios";
-		};
-		DA5A09DA1714FA83005284AB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DACA29C01705E313002C6C22 /* scrypt.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = DABD3E9D1711E7E000CF925C;
-			remoteInfo = "scrypt-bin-osx";
-		};
-		DAC63283148681200075AEA5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DAC6325C1486805C0075AEA5;
-			remoteInfo = "uicolor-utilities";
-		};
-		DAC63285148681200075AEA5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DAC6326B148680650075AEA5;
-			remoteInfo = jrswizzle;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1051,6 +1011,16 @@
 		DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		DA5BFA4E147E415C00F98B1E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		DA5E5C3C1723681B003798D8 /* Square-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Square-bottom.png"; path = "Dividers/Square-bottom.png"; sourceTree = "<group>"; };
+		DA5E5C6517248959003798D8 /* crypto_aesctr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto_aesctr.h; sourceTree = "<group>"; };
+		DA5E5C6617248959003798D8 /* crypto_scrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto_scrypt.h; sourceTree = "<group>"; };
+		DA5E5C6717248959003798D8 /* memlimit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memlimit.h; sourceTree = "<group>"; };
+		DA5E5C6817248959003798D8 /* readpass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = readpass.h; sourceTree = "<group>"; };
+		DA5E5C6917248959003798D8 /* scryptenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scryptenc.h; sourceTree = "<group>"; };
+		DA5E5C6A17248959003798D8 /* scryptenc_cpuperf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scryptenc_cpuperf.h; sourceTree = "<group>"; };
+		DA5E5C6B17248959003798D8 /* sha256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha256.h; sourceTree = "<group>"; };
+		DA5E5C6C17248959003798D8 /* sysendian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sysendian.h; sourceTree = "<group>"; };
+		DA5E5C6D17248959003798D8 /* warn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = warn.h; sourceTree = "<group>"; };
+		DA5E5C77172489FA003798D8 /* libscryptenc-ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libscryptenc-ios.a"; path = "/Users/.z/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib/libscryptenc-ios.a"; sourceTree = "<absolute>"; };
 		DA6701B716406A4100B61001 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		DA6701DD16406B7300B61001 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		DA6701DF16406BB400B61001 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -1946,7 +1916,6 @@
 		DACA29B61705E2DE002C6C22 /* UIColor+HSV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+HSV.h"; sourceTree = "<group>"; };
 		DACA29BA1705E2DE002C6C22 /* UIColor+Expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Expanded.m"; sourceTree = "<group>"; };
 		DACA29BB1705E2DE002C6C22 /* UIColor+HSV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+HSV.m"; sourceTree = "<group>"; };
-		DACA29C01705E313002C6C22 /* scrypt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = scrypt.xcodeproj; path = External/iOSPorts/ports/security/scrypt/scrypt.xcodeproj; sourceTree = "<group>"; };
 		DAD3127115528CD200A3F9ED /* libLocalytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLocalytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAD312C01552A20800A3F9ED /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		DAEBC45214F6364500987BF6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -2130,10 +2099,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DABD3FC717122ADD00CF925C /* libscrypt-bin-ios.a in Frameworks */,
 				DA4DA1DA1564471F00F6F596 /* libuicolor-utilities.a in Frameworks */,
 				DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */,
 				DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */,
+				DA5E5C78172489FA003798D8 /* libscryptenc-ios.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2148,18 +2117,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DA5A09C91714FA83005284AB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				DA5A09D31714FA83005284AB /* libscryptenc.a */,
-				DA5A09D51714FA83005284AB /* libscryptcrypto.a */,
-				DA5A09D71714FA83005284AB /* libutil.a */,
-				DA5A09D91714FA83005284AB /* libscrypt-bin-ios.a */,
-				DA5A09DB1714FA83005284AB /* libscrypt-bin-osx.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		DA5BFA39147E415C00F98B1E = {
 			isa = PBXGroup;
 			children = (
@@ -2211,6 +2168,31 @@
 				DA3EF17A15A47744003ABF4E /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DA5E5C6317248959003798D8 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				DA5E5C77172489FA003798D8 /* libscryptenc-ios.a */,
+				DA5E5C6417248959003798D8 /* include */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		DA5E5C6417248959003798D8 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				DA5E5C6517248959003798D8 /* crypto_aesctr.h */,
+				DA5E5C6617248959003798D8 /* crypto_scrypt.h */,
+				DA5E5C6717248959003798D8 /* memlimit.h */,
+				DA5E5C6817248959003798D8 /* readpass.h */,
+				DA5E5C6917248959003798D8 /* scryptenc.h */,
+				DA5E5C6A17248959003798D8 /* scryptenc_cpuperf.h */,
+				DA5E5C6B17248959003798D8 /* sha256.h */,
+				DA5E5C6C17248959003798D8 /* sysendian.h */,
+				DA5E5C6D17248959003798D8 /* warn.h */,
+			);
+			path = include;
 			sourceTree = "<group>";
 		};
 		DABD360D1711E29400CF925C /* Media */ = {
@@ -3038,7 +3020,6 @@
 				DAFE45FC15039823003ABA7C /* Pearl-Crypto */,
 				DAFE460715039823003ABA7C /* Pearl-UIKit */,
 				DAC77CB1148291A600BCF976 /* Pearl-Prefix.pch */,
-				DACA29C01705E313002C6C22 /* scrypt.xcodeproj */,
 				DACA29751705E2BD002C6C22 /* jrswizzle */,
 				DACA29B41705E2DE002C6C22 /* uicolor-utilities */,
 			);
@@ -3450,6 +3431,7 @@
 		DAFE45FC15039823003ABA7C /* Pearl-Crypto */ = {
 			isa = PBXGroup;
 			children = (
+				DA5E5C6317248959003798D8 /* lib */,
 				DAFE45FD15039823003ABA7C /* Pearl-Crypto.h */,
 				DA30E9D115722EE500A68B4C /* Pearl-Crypto.m */,
 				DAFE45FE15039823003ABA7C /* PearlCryptUtils.h */,
@@ -3640,6 +3622,15 @@
 				DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */,
 				93D396BA1C74C4A06FD86437 /* PearlOverlay.h in Headers */,
 				93D3992FA1546E01F498F665 /* PearlNavigationController.h in Headers */,
+				DA5E5C6E17248959003798D8 /* crypto_aesctr.h in Headers */,
+				DA5E5C6F17248959003798D8 /* crypto_scrypt.h in Headers */,
+				DA5E5C7017248959003798D8 /* memlimit.h in Headers */,
+				DA5E5C7117248959003798D8 /* readpass.h in Headers */,
+				DA5E5C7217248959003798D8 /* scryptenc.h in Headers */,
+				DA5E5C7317248959003798D8 /* scryptenc_cpuperf.h in Headers */,
+				DA5E5C7417248959003798D8 /* sha256.h in Headers */,
+				DA5E5C7517248959003798D8 /* sysendian.h in Headers */,
+				DA5E5C7617248959003798D8 /* warn.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3808,8 +3799,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				DAC63284148681200075AEA5 /* PBXTargetDependency */,
-				DAC63286148681200075AEA5 /* PBXTargetDependency */,
 			);
 			name = Pearl;
 			productName = Pearl;
@@ -3855,12 +3844,6 @@
 			mainGroup = DA5BFA39147E415C00F98B1E;
 			productRefGroup = DA5BFA45147E415C00F98B1E /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = DA5A09C91714FA83005284AB /* Products */;
-					ProjectRef = DACA29C01705E313002C6C22 /* scrypt.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				DA5BFA43147E415C00F98B1E /* MasterPassword */,
@@ -3876,44 +3859,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		DA5A09D31714FA83005284AB /* libscryptenc.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libscryptenc.a;
-			remoteRef = DA5A09D21714FA83005284AB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DA5A09D51714FA83005284AB /* libscryptcrypto.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libscryptcrypto.a;
-			remoteRef = DA5A09D41714FA83005284AB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DA5A09D71714FA83005284AB /* libutil.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libutil.a;
-			remoteRef = DA5A09D61714FA83005284AB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DA5A09D91714FA83005284AB /* libscrypt-bin-ios.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libscrypt-bin-ios.a";
-			remoteRef = DA5A09D81714FA83005284AB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DA5A09DB1714FA83005284AB /* libscrypt-bin-osx.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libscrypt-bin-osx.a";
-			remoteRef = DA5A09DA1714FA83005284AB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		DA3EF17615A47744003ABF4E /* Resources */ = {
@@ -4875,16 +4820,6 @@
 			target = DA5BFA43147E415C00F98B1E /* MasterPassword */;
 			targetProxy = DA3EF19D15A47AEB003ABF4E /* PBXContainerItemProxy */;
 		};
-		DAC63284148681200075AEA5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DAC6325C1486805C0075AEA5 /* uicolor-utilities */;
-			targetProxy = DAC63283148681200075AEA5 /* PBXContainerItemProxy */;
-		};
-		DAC63286148681200075AEA5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DAC6326B148680650075AEA5 /* jrswizzle */;
-			targetProxy = DAC63285148681200075AEA5 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -4907,7 +4842,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		DA3EF18915A47744003ABF4E /* Debug */ = {
+		DA3EF18915A47744003ABF4E /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MasterPassword.app/MasterPassword";
@@ -4927,9 +4862,9 @@
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
-			name = Debug;
+			name = "Debug-iOS";
 		};
-		DA3EF18A15A47744003ABF4E /* AdHoc */ = {
+		DA3EF18A15A47744003ABF4E /* AdHoc-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -4957,9 +4892,9 @@
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = octest;
 			};
-			name = AdHoc;
+			name = "AdHoc-iOS";
 		};
-		DA3EF18B15A47744003ABF4E /* AppStore */ = {
+		DA3EF18B15A47744003ABF4E /* AppStore-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -4987,51 +4922,51 @@
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = octest;
 			};
-			name = AppStore;
+			name = "AppStore-iOS";
 		};
-		DA4425D41557BED40052177D /* Debug */ = {
+		DA4425D41557BED40052177D /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 			};
-			name = Debug;
+			name = "Debug-iOS";
 		};
-		DA4425D51557BED40052177D /* AdHoc */ = {
+		DA4425D51557BED40052177D /* AdHoc-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 			};
-			name = AdHoc;
+			name = "AdHoc-iOS";
 		};
-		DA4425D61557BED40052177D /* AppStore */ = {
+		DA4425D61557BED40052177D /* AppStore-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 			};
-			name = AppStore;
+			name = "AppStore-iOS";
 		};
-		DA497BA115E8C90E00B52167 /* Debug */ = {
+		DA497BA115E8C90E00B52167 /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
-			name = Debug;
+			name = "Debug-iOS";
 		};
-		DA497BA215E8C90E00B52167 /* AdHoc */ = {
+		DA497BA215E8C90E00B52167 /* AdHoc-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
-			name = AdHoc;
+			name = "AdHoc-iOS";
 		};
-		DA497BA315E8C90E00B52167 /* AppStore */ = {
+		DA497BA315E8C90E00B52167 /* AppStore-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
-			name = AppStore;
+			name = "AppStore-iOS";
 		};
-		DA5BFA6B147E415C00F98B1E /* Debug */ = {
+		DA5BFA6B147E415C00F98B1E /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -5099,9 +5034,9 @@
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Debug;
+			name = "Debug-iOS";
 		};
-		DA5BFA6C147E415C00F98B1E /* AdHoc */ = {
+		DA5BFA6C147E415C00F98B1E /* AdHoc-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -5169,9 +5104,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = AdHoc;
+			name = "AdHoc-iOS";
 		};
-		DA5BFA6E147E415C00F98B1E /* Debug */ = {
+		DA5BFA6E147E415C00F98B1E /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -5185,9 +5120,9 @@
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Debug;
+			name = "Debug-iOS";
 		};
-		DA5BFA6F147E415C00F98B1E /* AdHoc */ = {
+		DA5BFA6F147E415C00F98B1E /* AdHoc-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -5203,41 +5138,30 @@
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = AdHoc;
+			name = "AdHoc-iOS";
 		};
-		DA829E5A159847E0002417D3 /* Debug */ = {
+		DA829E5A159847E0002417D3 /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
-			name = Debug;
+			name = "Debug-iOS";
 		};
-		DA829E5B159847E0002417D3 /* AdHoc */ = {
+		DA829E5B159847E0002417D3 /* AdHoc-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
-			name = AdHoc;
+			name = "AdHoc-iOS";
 		};
-		DA829E5C159847E0002417D3 /* AppStore */ = {
+		DA829E5C159847E0002417D3 /* AppStore-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
-			name = AppStore;
+			name = "AppStore-iOS";
 		};
-		DA95D5A514DF063C008D1B94 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DSTROOT = /tmp/InAppSettingsKit.dst;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = InAppSettingsKit;
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		DA95D5A614DF063C008D1B94 /* AdHoc */ = {
+		DA95D5A514DF063C008D1B94 /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/InAppSettingsKit.dst;
@@ -5246,9 +5170,20 @@
 				PRODUCT_NAME = InAppSettingsKit;
 				SKIP_INSTALL = YES;
 			};
-			name = AdHoc;
+			name = "Debug-iOS";
 		};
-		DA95D60914DF3F3B008D1B94 /* AppStore */ = {
+		DA95D5A614DF063C008D1B94 /* AdHoc-iOS */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/InAppSettingsKit.dst;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = InAppSettingsKit;
+				SKIP_INSTALL = YES;
+			};
+			name = "AdHoc-iOS";
+		};
+		DA95D60914DF3F3B008D1B94 /* AppStore-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -5316,9 +5251,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = AppStore;
+			name = "AppStore-iOS";
 		};
-		DA95D60A14DF3F3B008D1B94 /* AppStore */ = {
+		DA95D60A14DF3F3B008D1B94 /* AppStore-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -5334,21 +5269,25 @@
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = AppStore;
+			name = "AppStore-iOS";
 		};
-		DA95D60B14DF3F3B008D1B94 /* AppStore */ = {
+		DA95D60B14DF3F3B008D1B94 /* AppStore-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Pearl.dst;
 				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = AppStore;
+			name = "AppStore-iOS";
 		};
-		DA95D60C14DF3F3B008D1B94 /* AppStore */ = {
+		DA95D60C14DF3F3B008D1B94 /* AppStore-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -5358,9 +5297,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = AppStore;
+			name = "AppStore-iOS";
 		};
-		DA95D60D14DF3F3B008D1B94 /* AppStore */ = {
+		DA95D60D14DF3F3B008D1B94 /* AppStore-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -5370,9 +5309,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = AppStore;
+			name = "AppStore-iOS";
 		};
-		DA95D60E14DF3F3B008D1B94 /* AppStore */ = {
+		DA95D60E14DF3F3B008D1B94 /* AppStore-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/InAppSettingsKit.dst;
@@ -5381,9 +5320,9 @@
 				PRODUCT_NAME = InAppSettingsKit;
 				SKIP_INSTALL = YES;
 			};
-			name = AppStore;
+			name = "AppStore-iOS";
 		};
-		DAC632661486805C0075AEA5 /* Debug */ = {
+		DAC632661486805C0075AEA5 /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -5393,9 +5332,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = Debug;
+			name = "Debug-iOS";
 		};
-		DAC632671486805C0075AEA5 /* AdHoc */ = {
+		DAC632671486805C0075AEA5 /* AdHoc-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -5405,9 +5344,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = AdHoc;
+			name = "AdHoc-iOS";
 		};
-		DAC63275148680650075AEA5 /* Debug */ = {
+		DAC63275148680650075AEA5 /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -5417,9 +5356,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = Debug;
+			name = "Debug-iOS";
 		};
-		DAC63276148680650075AEA5 /* AdHoc */ = {
+		DAC63276148680650075AEA5 /* AdHoc-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -5429,52 +5368,60 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = AdHoc;
+			name = "AdHoc-iOS";
 		};
-		DAC77CB5148291A600BCF976 /* Debug */ = {
+		DAC77CB5148291A600BCF976 /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Pearl.dst;
 				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = Debug;
+			name = "Debug-iOS";
 		};
-		DAC77CB6148291A600BCF976 /* AdHoc */ = {
+		DAC77CB6148291A600BCF976 /* AdHoc-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Pearl.dst;
 				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = AdHoc;
+			name = "AdHoc-iOS";
 		};
-		DAD3127A15528CD200A3F9ED /* Debug */ = {
+		DAD3127A15528CD200A3F9ED /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
-			name = Debug;
+			name = "Debug-iOS";
 		};
-		DAD3127B15528CD200A3F9ED /* AdHoc */ = {
+		DAD3127B15528CD200A3F9ED /* AdHoc-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
-			name = AdHoc;
+			name = "AdHoc-iOS";
 		};
-		DAD3127C15528CD200A3F9ED /* AppStore */ = {
+		DAD3127C15528CD200A3F9ED /* AppStore-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
-			name = AppStore;
+			name = "AppStore-iOS";
 		};
 /* End XCBuildConfiguration section */
 
@@ -5482,112 +5429,112 @@
 		DA3EF18815A47744003ABF4E /* Build configuration list for PBXNativeTarget "Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA3EF18915A47744003ABF4E /* Debug */,
-				DA3EF18A15A47744003ABF4E /* AdHoc */,
-				DA3EF18B15A47744003ABF4E /* AppStore */,
+				DA3EF18915A47744003ABF4E /* Debug-iOS */,
+				DA3EF18A15A47744003ABF4E /* AdHoc-iOS */,
+				DA3EF18B15A47744003ABF4E /* AppStore-iOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-iOS";
 		};
 		DA4425D31557BED40052177D /* Build configuration list for PBXNativeTarget "UbiquityStoreManager" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA4425D41557BED40052177D /* Debug */,
-				DA4425D51557BED40052177D /* AdHoc */,
-				DA4425D61557BED40052177D /* AppStore */,
+				DA4425D41557BED40052177D /* Debug-iOS */,
+				DA4425D51557BED40052177D /* AdHoc-iOS */,
+				DA4425D61557BED40052177D /* AppStore-iOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-iOS";
 		};
 		DA497BA015E8C90E00B52167 /* Build configuration list for PBXNativeTarget "Google+" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA497BA115E8C90E00B52167 /* Debug */,
-				DA497BA215E8C90E00B52167 /* AdHoc */,
-				DA497BA315E8C90E00B52167 /* AppStore */,
+				DA497BA115E8C90E00B52167 /* Debug-iOS */,
+				DA497BA215E8C90E00B52167 /* AdHoc-iOS */,
+				DA497BA315E8C90E00B52167 /* AppStore-iOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-iOS";
 		};
 		DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA5BFA6B147E415C00F98B1E /* Debug */,
-				DA5BFA6C147E415C00F98B1E /* AdHoc */,
-				DA95D60914DF3F3B008D1B94 /* AppStore */,
+				DA5BFA6B147E415C00F98B1E /* Debug-iOS */,
+				DA5BFA6C147E415C00F98B1E /* AdHoc-iOS */,
+				DA95D60914DF3F3B008D1B94 /* AppStore-iOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-iOS";
 		};
 		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA5BFA6E147E415C00F98B1E /* Debug */,
-				DA5BFA6F147E415C00F98B1E /* AdHoc */,
-				DA95D60A14DF3F3B008D1B94 /* AppStore */,
+				DA5BFA6E147E415C00F98B1E /* Debug-iOS */,
+				DA5BFA6F147E415C00F98B1E /* AdHoc-iOS */,
+				DA95D60A14DF3F3B008D1B94 /* AppStore-iOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-iOS";
 		};
 		DA829E59159847E0002417D3 /* Build configuration list for PBXNativeTarget "FontReplacer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA829E5A159847E0002417D3 /* Debug */,
-				DA829E5B159847E0002417D3 /* AdHoc */,
-				DA829E5C159847E0002417D3 /* AppStore */,
+				DA829E5A159847E0002417D3 /* Debug-iOS */,
+				DA829E5B159847E0002417D3 /* AdHoc-iOS */,
+				DA829E5C159847E0002417D3 /* AppStore-iOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-iOS";
 		};
 		DA95D5A414DF063C008D1B94 /* Build configuration list for PBXNativeTarget "InAppSettingsKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA95D5A514DF063C008D1B94 /* Debug */,
-				DA95D5A614DF063C008D1B94 /* AdHoc */,
-				DA95D60E14DF3F3B008D1B94 /* AppStore */,
+				DA95D5A514DF063C008D1B94 /* Debug-iOS */,
+				DA95D5A614DF063C008D1B94 /* AdHoc-iOS */,
+				DA95D60E14DF3F3B008D1B94 /* AppStore-iOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-iOS";
 		};
 		DAC632651486805C0075AEA5 /* Build configuration list for PBXNativeTarget "uicolor-utilities" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAC632661486805C0075AEA5 /* Debug */,
-				DAC632671486805C0075AEA5 /* AdHoc */,
-				DA95D60C14DF3F3B008D1B94 /* AppStore */,
+				DAC632661486805C0075AEA5 /* Debug-iOS */,
+				DAC632671486805C0075AEA5 /* AdHoc-iOS */,
+				DA95D60C14DF3F3B008D1B94 /* AppStore-iOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-iOS";
 		};
 		DAC63274148680650075AEA5 /* Build configuration list for PBXNativeTarget "jrswizzle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAC63275148680650075AEA5 /* Debug */,
-				DAC63276148680650075AEA5 /* AdHoc */,
-				DA95D60D14DF3F3B008D1B94 /* AppStore */,
+				DAC63275148680650075AEA5 /* Debug-iOS */,
+				DAC63276148680650075AEA5 /* AdHoc-iOS */,
+				DA95D60D14DF3F3B008D1B94 /* AppStore-iOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-iOS";
 		};
 		DAC77CB7148291A600BCF976 /* Build configuration list for PBXNativeTarget "Pearl" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAC77CB5148291A600BCF976 /* Debug */,
-				DAC77CB6148291A600BCF976 /* AdHoc */,
-				DA95D60B14DF3F3B008D1B94 /* AppStore */,
+				DAC77CB5148291A600BCF976 /* Debug-iOS */,
+				DAC77CB6148291A600BCF976 /* AdHoc-iOS */,
+				DA95D60B14DF3F3B008D1B94 /* AppStore-iOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-iOS";
 		};
 		DAD3127915528CD200A3F9ED /* Build configuration list for PBXNativeTarget "Localytics" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAD3127A15528CD200A3F9ED /* Debug */,
-				DAD3127B15528CD200A3F9ED /* AdHoc */,
-				DAD3127C15528CD200A3F9ED /* AppStore */,
+				DAD3127A15528CD200A3F9ED /* Debug-iOS */,
+				DAD3127B15528CD200A3F9ED /* AdHoc-iOS */,
+				DAD3127C15528CD200A3F9ED /* AppStore-iOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-iOS";
 		};
 /* End XCConfigurationList section */
 

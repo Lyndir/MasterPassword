@@ -16,9 +16,11 @@
 #endif
 
 @implementation MPAppDelegate_Shared(Store)
-        PearlAssociatedObjectProperty(PearlAlert*, HandleCloudContentAlert, handleCloudContentAlert);
+#if TARGET_OS_IPHONE
+PearlAssociatedObjectProperty(PearlAlert*, HandleCloudContentAlert, handleCloudContentAlert);
 PearlAssociatedObjectProperty(PearlAlert*, FixCloudContentAlert, fixCloudContentAlert);
 PearlAssociatedObjectProperty(PearlOverlay*, StoreLoading, storeLoading);
+#endif
 PearlAssociatedObjectProperty(NSManagedObjectContext*, PrivateManagedObjectContext, privateManagedObjectContext);
 PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext, mainManagedObjectContext);
 
@@ -322,10 +324,12 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     self.privateManagedObjectContext = nil;
     self.mainManagedObjectContext = nil;
 
+#if TARGET_OS_IPHONE
     dispatch_async( dispatch_get_main_queue(), ^{
         if (![self.storeLoading isVisible])
             self.storeLoading = [PearlOverlay showOverlayWithTitle:@"Opening Your Data"];
     } );
+#endif
 
     [self migrateStoreForManager:manager isCloud:isCloudStore];
 }
@@ -352,9 +356,11 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     self.privateManagedObjectContext = privateManagedObjectContext;
     self.mainManagedObjectContext = mainManagedObjectContext;
 
+#if TARGET_OS_IPHONE
     [self.handleCloudContentAlert cancelAlertAnimated:YES];
     [self.fixCloudContentAlert cancelAlertAnimated:YES];
     [self.storeLoading cancelOverlay];
+#endif
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreErrorCause)cause
@@ -370,14 +376,17 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 - (BOOL)ubiquityStoreManager:(UbiquityStoreManager *)manager handleCloudContentCorruptionWithHealthyStore:(BOOL)storeHealthy {
 
+#if TARGET_OS_IPHONE
     if (manager.cloudEnabled && !storeHealthy && !([self.handleCloudContentAlert.alertView isVisible] || [self.fixCloudContentAlert.alertView isVisible]))
         dispatch_async( dispatch_get_main_queue(), ^{
             [self showCloudContentAlert];
         } );
+#endif
 
     return NO;
 }
 
+#if TARGET_OS_IPHONE
 - (void)showCloudContentAlert {
 
     __weak MPAppDelegate_Shared *wSelf = self;
@@ -402,6 +411,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                                                         cancelTitle:[PearlStrings get].commonButtonBack otherTitles:@"Fix Anyway", nil];
     };
 }
+#endif
 
 #pragma mark - Import / Export
 

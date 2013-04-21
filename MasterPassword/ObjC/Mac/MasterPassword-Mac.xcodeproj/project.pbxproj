@@ -20,7 +20,6 @@
 		DA16B33A17064508000A0EAB /* MPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DA16B32F17064507000A0EAB /* MPAppDelegate.m */; };
 		DA16B33B17064508000A0EAB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA16B33017064507000A0EAB /* main.m */; };
 		DA16B33C17064508000A0EAB /* MPPasswordWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA16B33117064507000A0EAB /* MPPasswordWindowController.xib */; };
-		DA16B33E17066103000A0EAB /* libscryptenc-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B33D17066103000A0EAB /* libscryptenc-osx.a */; };
 		DA16B33F170661D4000A0EAB /* libUbiquityStoreManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */; };
 		DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B340170661DB000A0EAB /* Carbon.framework */; };
 		DA16B342170661E0000A0EAB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC632871486D95D0075AEA5 /* Security.framework */; };
@@ -39,6 +38,16 @@
 		DA3EF17D15A47744003ABF4E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA4425CC1557BED40052177D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
+		DA5E5C8817248AA1003798D8 /* crypto_aesctr.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C7B17248AA1003798D8 /* crypto_aesctr.h */; };
+		DA5E5C8917248AA1003798D8 /* crypto_scrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C7C17248AA1003798D8 /* crypto_scrypt.h */; };
+		DA5E5C8A17248AA1003798D8 /* memlimit.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C7D17248AA1003798D8 /* memlimit.h */; };
+		DA5E5C8B17248AA1003798D8 /* readpass.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C7E17248AA1003798D8 /* readpass.h */; };
+		DA5E5C8C17248AA1003798D8 /* scryptenc.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C7F17248AA1003798D8 /* scryptenc.h */; };
+		DA5E5C8D17248AA1003798D8 /* scryptenc_cpuperf.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C8017248AA1003798D8 /* scryptenc_cpuperf.h */; };
+		DA5E5C8E17248AA1003798D8 /* sha256.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C8117248AA1003798D8 /* sha256.h */; };
+		DA5E5C8F17248AA1003798D8 /* sysendian.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C8217248AA1003798D8 /* sysendian.h */; };
+		DA5E5C9017248AA1003798D8 /* warn.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C8317248AA1003798D8 /* warn.h */; };
+		DA5E5C9417248AA1003798D8 /* libscryptenc-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5E5C8717248AA1003798D8 /* libscryptenc-osx.a */; };
 		DAC6326D148680650075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DACA22BB1705DE7D002C6C22 /* UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA22B71705DE7D002C6C22 /* UbiquityStoreManager.m */; };
@@ -114,87 +123,6 @@
 		DACA29741705E1A8002C6C22 /* dictionary.lst in Resources */ = {isa = PBXBuildFile; fileRef = DACA29721705E1A8002C6C22 /* dictionary.lst */; };
 		DACA298D1705E2BD002C6C22 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29771705E2BD002C6C22 /* JRSwizzle.h */; };
 		DACA299A1705E2BD002C6C22 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA298C1705E2BD002C6C22 /* JRSwizzle.m */; };
-		DACA2A331705EE91002C6C22 /* conf.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29E11705EE90002C6C22 /* conf.h */; };
-		DACA2A341705EE91002C6C22 /* rsa.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29E21705EE90002C6C22 /* rsa.h */; };
-		DACA2A351705EE91002C6C22 /* ui.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29E31705EE91002C6C22 /* ui.h */; };
-		DACA2A361705EE91002C6C22 /* seed.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29E41705EE91002C6C22 /* seed.h */; };
-		DACA2A371705EE91002C6C22 /* stack.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29E51705EE91002C6C22 /* stack.h */; };
-		DACA2A381705EE91002C6C22 /* buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29E61705EE91002C6C22 /* buffer.h */; };
-		DACA2A391705EE91002C6C22 /* ssl2.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29E71705EE91002C6C22 /* ssl2.h */; };
-		DACA2A3A1705EE91002C6C22 /* ocsp.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29E81705EE91002C6C22 /* ocsp.h */; };
-		DACA2A3B1705EE91002C6C22 /* rc4.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29E91705EE91002C6C22 /* rc4.h */; };
-		DACA2A3C1705EE91002C6C22 /* ossl_typ.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29EA1705EE91002C6C22 /* ossl_typ.h */; };
-		DACA2A3D1705EE91002C6C22 /* dso.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29EB1705EE91002C6C22 /* dso.h */; };
-		DACA2A3E1705EE91002C6C22 /* txt_db.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29EC1705EE91002C6C22 /* txt_db.h */; };
-		DACA2A3F1705EE91002C6C22 /* err.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29ED1705EE91002C6C22 /* err.h */; };
-		DACA2A401705EE91002C6C22 /* pem.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29EE1705EE91002C6C22 /* pem.h */; };
-		DACA2A411705EE91002C6C22 /* blowfish.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29EF1705EE91002C6C22 /* blowfish.h */; };
-		DACA2A421705EE91002C6C22 /* ssl3.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29F01705EE91002C6C22 /* ssl3.h */; };
-		DACA2A431705EE91002C6C22 /* evp.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29F11705EE91002C6C22 /* evp.h */; };
-		DACA2A441705EE91002C6C22 /* crypto.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29F21705EE91002C6C22 /* crypto.h */; };
-		DACA2A451705EE91002C6C22 /* idea.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29F31705EE91002C6C22 /* idea.h */; };
-		DACA2A461705EE91002C6C22 /* objects.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29F41705EE91002C6C22 /* objects.h */; };
-		DACA2A471705EE91002C6C22 /* pqueue.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29F51705EE91002C6C22 /* pqueue.h */; };
-		DACA2A481705EE91002C6C22 /* rand.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29F61705EE91002C6C22 /* rand.h */; };
-		DACA2A491705EE91002C6C22 /* modes.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29F71705EE91002C6C22 /* modes.h */; };
-		DACA2A4A1705EE91002C6C22 /* hmac.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29F81705EE91002C6C22 /* hmac.h */; };
-		DACA2A4B1705EE91002C6C22 /* ec.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29F91705EE91002C6C22 /* ec.h */; };
-		DACA2A4C1705EE91002C6C22 /* dtls1.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29FA1705EE91002C6C22 /* dtls1.h */; };
-		DACA2A4D1705EE91002C6C22 /* engine.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29FB1705EE91002C6C22 /* engine.h */; };
-		DACA2A4E1705EE91002C6C22 /* pem2.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29FC1705EE91002C6C22 /* pem2.h */; };
-		DACA2A4F1705EE91002C6C22 /* des.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29FD1705EE91002C6C22 /* des.h */; };
-		DACA2A501705EE91002C6C22 /* ecdh.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29FE1705EE91002C6C22 /* ecdh.h */; };
-		DACA2A511705EE91002C6C22 /* e_os2.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29FF1705EE91002C6C22 /* e_os2.h */; };
-		DACA2A521705EE91002C6C22 /* pkcs7.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A001705EE91002C6C22 /* pkcs7.h */; };
-		DACA2A531705EE91002C6C22 /* ecdsa.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A011705EE91002C6C22 /* ecdsa.h */; };
-		DACA2A541705EE91002C6C22 /* krb5_asn.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A021705EE91002C6C22 /* krb5_asn.h */; };
-		DACA2A551705EE91002C6C22 /* dh.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A031705EE91002C6C22 /* dh.h */; };
-		DACA2A561705EE91002C6C22 /* cast.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A041705EE91002C6C22 /* cast.h */; };
-		DACA2A571705EE91002C6C22 /* comp.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A051705EE91002C6C22 /* comp.h */; };
-		DACA2A581705EE91002C6C22 /* obj_mac.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A061705EE91002C6C22 /* obj_mac.h */; };
-		DACA2A591705EE91002C6C22 /* ebcdic.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A071705EE91002C6C22 /* ebcdic.h */; };
-		DACA2A5A1705EE91002C6C22 /* pkcs12.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A081705EE91002C6C22 /* pkcs12.h */; };
-		DACA2A5B1705EE91002C6C22 /* camellia.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A091705EE91002C6C22 /* camellia.h */; };
-		DACA2A5C1705EE91002C6C22 /* asn1t.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A0A1705EE91002C6C22 /* asn1t.h */; };
-		DACA2A5D1705EE91002C6C22 /* md5.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A0B1705EE91002C6C22 /* md5.h */; };
-		DACA2A5E1705EE91002C6C22 /* symhacks.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A0C1705EE91002C6C22 /* symhacks.h */; };
-		DACA2A5F1705EE91002C6C22 /* ui_compat.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A0D1705EE91002C6C22 /* ui_compat.h */; };
-		DACA2A601705EE91002C6C22 /* rc2.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A0E1705EE91002C6C22 /* rc2.h */; };
-		DACA2A611705EE91002C6C22 /* lhash.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A0F1705EE91002C6C22 /* lhash.h */; };
-		DACA2A621705EE91002C6C22 /* bn.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A101705EE91002C6C22 /* bn.h */; };
-		DACA2A631705EE91002C6C22 /* opensslv.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A111705EE91002C6C22 /* opensslv.h */; };
-		DACA2A641705EE91002C6C22 /* mdc2.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A121705EE91002C6C22 /* mdc2.h */; };
-		DACA2A651705EE91002C6C22 /* cms.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A131705EE91002C6C22 /* cms.h */; };
-		DACA2A661705EE91002C6C22 /* x509v3.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A141705EE91002C6C22 /* x509v3.h */; };
-		DACA2A671705EE91002C6C22 /* md4.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A151705EE91002C6C22 /* md4.h */; };
-		DACA2A681705EE91002C6C22 /* asn1_mac.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A161705EE91002C6C22 /* asn1_mac.h */; };
-		DACA2A691705EE91002C6C22 /* ssl23.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A171705EE91002C6C22 /* ssl23.h */; };
-		DACA2A6A1705EE91002C6C22 /* x509.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A181705EE91002C6C22 /* x509.h */; };
-		DACA2A6B1705EE91002C6C22 /* safestack.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A191705EE91002C6C22 /* safestack.h */; };
-		DACA2A6C1705EE91002C6C22 /* des_old.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A1A1705EE91002C6C22 /* des_old.h */; };
-		DACA2A6D1705EE91002C6C22 /* ts.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A1B1705EE91002C6C22 /* ts.h */; };
-		DACA2A6E1705EE91002C6C22 /* bio.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A1C1705EE91002C6C22 /* bio.h */; };
-		DACA2A6F1705EE91002C6C22 /* sha.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A1D1705EE91002C6C22 /* sha.h */; };
-		DACA2A701705EE91002C6C22 /* whrlpool.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A1E1705EE91002C6C22 /* whrlpool.h */; };
-		DACA2A711705EE91002C6C22 /* x509_vfy.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A1F1705EE91002C6C22 /* x509_vfy.h */; };
-		DACA2A721705EE91002C6C22 /* conf_api.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A201705EE91002C6C22 /* conf_api.h */; };
-		DACA2A731705EE91002C6C22 /* aes.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A211705EE91002C6C22 /* aes.h */; };
-		DACA2A741705EE91002C6C22 /* tls1.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A221705EE91002C6C22 /* tls1.h */; };
-		DACA2A751705EE91002C6C22 /* kssl.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A231705EE91002C6C22 /* kssl.h */; };
-		DACA2A761705EE91002C6C22 /* ripemd.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A241705EE91002C6C22 /* ripemd.h */; };
-		DACA2A771705EE91002C6C22 /* dsa.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A251705EE91002C6C22 /* dsa.h */; };
-		DACA2A781705EE91002C6C22 /* ssl.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A261705EE91002C6C22 /* ssl.h */; };
-		DACA2A791705EE91002C6C22 /* opensslconf.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A271705EE91002C6C22 /* opensslconf.h */; };
-		DACA2A7A1705EE91002C6C22 /* asn1.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A281705EE91002C6C22 /* asn1.h */; };
-		DACA2A7B1705EE91002C6C22 /* scryptenc_cpuperf.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A2A1705EE91002C6C22 /* scryptenc_cpuperf.h */; };
-		DACA2A7C1705EE91002C6C22 /* scryptenc.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A2B1705EE91002C6C22 /* scryptenc.h */; };
-		DACA2A7D1705EE91002C6C22 /* crypto_scrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A2C1705EE91002C6C22 /* crypto_scrypt.h */; };
-		DACA2A7E1705EE91002C6C22 /* memlimit.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A2D1705EE91002C6C22 /* memlimit.h */; };
-		DACA2A7F1705EE91002C6C22 /* sha256.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A2E1705EE91002C6C22 /* sha256.h */; };
-		DACA2A801705EE91002C6C22 /* sysendian.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A2F1705EE91002C6C22 /* sysendian.h */; };
-		DACA2A811705EE91002C6C22 /* crypto_aesctr.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A301705EE91002C6C22 /* crypto_aesctr.h */; };
-		DACA2A821705EE91002C6C22 /* warn.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A311705EE91002C6C22 /* warn.h */; };
-		DACA2A831705EE91002C6C22 /* readpass.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA2A321705EE91002C6C22 /* readpass.h */; };
 		DAFE4A1315039824003ABA7C /* NSObject+PearlExport.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45D815039823003ABA7C /* NSObject+PearlExport.h */; };
 		DAFE4A1415039824003ABA7C /* NSObject+PearlExport.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45D915039823003ABA7C /* NSObject+PearlExport.m */; };
 		DAFE4A1515039824003ABA7C /* NSString+PearlNSArrayFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45DA15039823003ABA7C /* NSString+PearlNSArrayFormat.h */; };
@@ -254,27 +182,6 @@
 			remoteGlobalIDString = DAC6326B148680650075AEA5;
 			remoteInfo = jrswizzle;
 		};
-		DACA29DA1705E36C002C6C22 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DACA29C01705E313002C6C22 /* scrypt.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D;
-			remoteInfo = scryptenc;
-		};
-		DACA29DC1705E36C002C6C22 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DACA29C01705E313002C6C22 /* scrypt.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A0511C5A127770FD00DE46C4;
-			remoteInfo = scryptcrypto;
-		};
-		DACA29DE1705E36C002C6C22 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DACA29C01705E313002C6C22 /* scrypt.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = DA67FE5D14E4834300DB7CC9;
-			remoteInfo = util;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -298,7 +205,6 @@
 		DA16B33017064507000A0EAB /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DA16B33117064507000A0EAB /* MPPasswordWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPPasswordWindowController.xib; sourceTree = "<group>"; };
 		DA16B33217064507000A0EAB /* MPPasswordWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindowController.h; sourceTree = "<group>"; };
-		DA16B33D17066103000A0EAB /* libscryptenc-osx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libscryptenc-osx.a"; sourceTree = "<group>"; };
 		DA16B340170661DB000A0EAB /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		DA16B343170661EE000A0EAB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+PearlMutableInfo.h"; sourceTree = "<group>"; };
@@ -317,6 +223,16 @@
 		DA5BFA4A147E415C00F98B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		DA5BFA4E147E415C00F98B1E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		DA5E5C7B17248AA1003798D8 /* crypto_aesctr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto_aesctr.h; sourceTree = "<group>"; };
+		DA5E5C7C17248AA1003798D8 /* crypto_scrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto_scrypt.h; sourceTree = "<group>"; };
+		DA5E5C7D17248AA1003798D8 /* memlimit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memlimit.h; sourceTree = "<group>"; };
+		DA5E5C7E17248AA1003798D8 /* readpass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = readpass.h; sourceTree = "<group>"; };
+		DA5E5C7F17248AA1003798D8 /* scryptenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scryptenc.h; sourceTree = "<group>"; };
+		DA5E5C8017248AA1003798D8 /* scryptenc_cpuperf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scryptenc_cpuperf.h; sourceTree = "<group>"; };
+		DA5E5C8117248AA1003798D8 /* sha256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha256.h; sourceTree = "<group>"; };
+		DA5E5C8217248AA1003798D8 /* sysendian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sysendian.h; sourceTree = "<group>"; };
+		DA5E5C8317248AA1003798D8 /* warn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = warn.h; sourceTree = "<group>"; };
+		DA5E5C8717248AA1003798D8 /* libscryptenc-osx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libscryptenc-osx.a"; sourceTree = "<group>"; };
 		DA6701B716406A4100B61001 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		DA6701DD16406B7300B61001 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		DA6701DF16406BB400B61001 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -419,88 +335,6 @@
 		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
 		DACA29771705E2BD002C6C22 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
 		DACA298C1705E2BD002C6C22 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
-		DACA29C01705E313002C6C22 /* scrypt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = scrypt.xcodeproj; path = ports/security/scrypt/scrypt.xcodeproj; sourceTree = "<group>"; };
-		DACA29E11705EE90002C6C22 /* conf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = conf.h; sourceTree = "<group>"; };
-		DACA29E21705EE90002C6C22 /* rsa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rsa.h; sourceTree = "<group>"; };
-		DACA29E31705EE91002C6C22 /* ui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui.h; sourceTree = "<group>"; };
-		DACA29E41705EE91002C6C22 /* seed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = seed.h; sourceTree = "<group>"; };
-		DACA29E51705EE91002C6C22 /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
-		DACA29E61705EE91002C6C22 /* buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = buffer.h; sourceTree = "<group>"; };
-		DACA29E71705EE91002C6C22 /* ssl2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssl2.h; sourceTree = "<group>"; };
-		DACA29E81705EE91002C6C22 /* ocsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ocsp.h; sourceTree = "<group>"; };
-		DACA29E91705EE91002C6C22 /* rc4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rc4.h; sourceTree = "<group>"; };
-		DACA29EA1705EE91002C6C22 /* ossl_typ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ossl_typ.h; sourceTree = "<group>"; };
-		DACA29EB1705EE91002C6C22 /* dso.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dso.h; sourceTree = "<group>"; };
-		DACA29EC1705EE91002C6C22 /* txt_db.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = txt_db.h; sourceTree = "<group>"; };
-		DACA29ED1705EE91002C6C22 /* err.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = err.h; sourceTree = "<group>"; };
-		DACA29EE1705EE91002C6C22 /* pem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pem.h; sourceTree = "<group>"; };
-		DACA29EF1705EE91002C6C22 /* blowfish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blowfish.h; sourceTree = "<group>"; };
-		DACA29F01705EE91002C6C22 /* ssl3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssl3.h; sourceTree = "<group>"; };
-		DACA29F11705EE91002C6C22 /* evp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = evp.h; sourceTree = "<group>"; };
-		DACA29F21705EE91002C6C22 /* crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto.h; sourceTree = "<group>"; };
-		DACA29F31705EE91002C6C22 /* idea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = idea.h; sourceTree = "<group>"; };
-		DACA29F41705EE91002C6C22 /* objects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objects.h; sourceTree = "<group>"; };
-		DACA29F51705EE91002C6C22 /* pqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pqueue.h; sourceTree = "<group>"; };
-		DACA29F61705EE91002C6C22 /* rand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rand.h; sourceTree = "<group>"; };
-		DACA29F71705EE91002C6C22 /* modes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = modes.h; sourceTree = "<group>"; };
-		DACA29F81705EE91002C6C22 /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmac.h; sourceTree = "<group>"; };
-		DACA29F91705EE91002C6C22 /* ec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ec.h; sourceTree = "<group>"; };
-		DACA29FA1705EE91002C6C22 /* dtls1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dtls1.h; sourceTree = "<group>"; };
-		DACA29FB1705EE91002C6C22 /* engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engine.h; sourceTree = "<group>"; };
-		DACA29FC1705EE91002C6C22 /* pem2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pem2.h; sourceTree = "<group>"; };
-		DACA29FD1705EE91002C6C22 /* des.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = des.h; sourceTree = "<group>"; };
-		DACA29FE1705EE91002C6C22 /* ecdh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecdh.h; sourceTree = "<group>"; };
-		DACA29FF1705EE91002C6C22 /* e_os2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = e_os2.h; sourceTree = "<group>"; };
-		DACA2A001705EE91002C6C22 /* pkcs7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pkcs7.h; sourceTree = "<group>"; };
-		DACA2A011705EE91002C6C22 /* ecdsa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecdsa.h; sourceTree = "<group>"; };
-		DACA2A021705EE91002C6C22 /* krb5_asn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = krb5_asn.h; sourceTree = "<group>"; };
-		DACA2A031705EE91002C6C22 /* dh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dh.h; sourceTree = "<group>"; };
-		DACA2A041705EE91002C6C22 /* cast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cast.h; sourceTree = "<group>"; };
-		DACA2A051705EE91002C6C22 /* comp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = comp.h; sourceTree = "<group>"; };
-		DACA2A061705EE91002C6C22 /* obj_mac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = obj_mac.h; sourceTree = "<group>"; };
-		DACA2A071705EE91002C6C22 /* ebcdic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ebcdic.h; sourceTree = "<group>"; };
-		DACA2A081705EE91002C6C22 /* pkcs12.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pkcs12.h; sourceTree = "<group>"; };
-		DACA2A091705EE91002C6C22 /* camellia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camellia.h; sourceTree = "<group>"; };
-		DACA2A0A1705EE91002C6C22 /* asn1t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn1t.h; sourceTree = "<group>"; };
-		DACA2A0B1705EE91002C6C22 /* md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
-		DACA2A0C1705EE91002C6C22 /* symhacks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = symhacks.h; sourceTree = "<group>"; };
-		DACA2A0D1705EE91002C6C22 /* ui_compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_compat.h; sourceTree = "<group>"; };
-		DACA2A0E1705EE91002C6C22 /* rc2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rc2.h; sourceTree = "<group>"; };
-		DACA2A0F1705EE91002C6C22 /* lhash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lhash.h; sourceTree = "<group>"; };
-		DACA2A101705EE91002C6C22 /* bn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bn.h; sourceTree = "<group>"; };
-		DACA2A111705EE91002C6C22 /* opensslv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opensslv.h; sourceTree = "<group>"; };
-		DACA2A121705EE91002C6C22 /* mdc2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mdc2.h; sourceTree = "<group>"; };
-		DACA2A131705EE91002C6C22 /* cms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cms.h; sourceTree = "<group>"; };
-		DACA2A141705EE91002C6C22 /* x509v3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x509v3.h; sourceTree = "<group>"; };
-		DACA2A151705EE91002C6C22 /* md4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md4.h; sourceTree = "<group>"; };
-		DACA2A161705EE91002C6C22 /* asn1_mac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn1_mac.h; sourceTree = "<group>"; };
-		DACA2A171705EE91002C6C22 /* ssl23.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssl23.h; sourceTree = "<group>"; };
-		DACA2A181705EE91002C6C22 /* x509.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x509.h; sourceTree = "<group>"; };
-		DACA2A191705EE91002C6C22 /* safestack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = safestack.h; sourceTree = "<group>"; };
-		DACA2A1A1705EE91002C6C22 /* des_old.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = des_old.h; sourceTree = "<group>"; };
-		DACA2A1B1705EE91002C6C22 /* ts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ts.h; sourceTree = "<group>"; };
-		DACA2A1C1705EE91002C6C22 /* bio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bio.h; sourceTree = "<group>"; };
-		DACA2A1D1705EE91002C6C22 /* sha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha.h; sourceTree = "<group>"; };
-		DACA2A1E1705EE91002C6C22 /* whrlpool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = whrlpool.h; sourceTree = "<group>"; };
-		DACA2A1F1705EE91002C6C22 /* x509_vfy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x509_vfy.h; sourceTree = "<group>"; };
-		DACA2A201705EE91002C6C22 /* conf_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = conf_api.h; sourceTree = "<group>"; };
-		DACA2A211705EE91002C6C22 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
-		DACA2A221705EE91002C6C22 /* tls1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tls1.h; sourceTree = "<group>"; };
-		DACA2A231705EE91002C6C22 /* kssl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kssl.h; sourceTree = "<group>"; };
-		DACA2A241705EE91002C6C22 /* ripemd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ripemd.h; sourceTree = "<group>"; };
-		DACA2A251705EE91002C6C22 /* dsa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dsa.h; sourceTree = "<group>"; };
-		DACA2A261705EE91002C6C22 /* ssl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssl.h; sourceTree = "<group>"; };
-		DACA2A271705EE91002C6C22 /* opensslconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opensslconf.h; sourceTree = "<group>"; };
-		DACA2A281705EE91002C6C22 /* asn1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn1.h; sourceTree = "<group>"; };
-		DACA2A2A1705EE91002C6C22 /* scryptenc_cpuperf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scryptenc_cpuperf.h; sourceTree = "<group>"; };
-		DACA2A2B1705EE91002C6C22 /* scryptenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scryptenc.h; sourceTree = "<group>"; };
-		DACA2A2C1705EE91002C6C22 /* crypto_scrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto_scrypt.h; sourceTree = "<group>"; };
-		DACA2A2D1705EE91002C6C22 /* memlimit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memlimit.h; sourceTree = "<group>"; };
-		DACA2A2E1705EE91002C6C22 /* sha256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha256.h; sourceTree = "<group>"; };
-		DACA2A2F1705EE91002C6C22 /* sysendian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sysendian.h; sourceTree = "<group>"; };
-		DACA2A301705EE91002C6C22 /* crypto_aesctr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto_aesctr.h; sourceTree = "<group>"; };
-		DACA2A311705EE91002C6C22 /* warn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = warn.h; sourceTree = "<group>"; };
-		DACA2A321705EE91002C6C22 /* readpass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = readpass.h; sourceTree = "<group>"; };
 		DAD312C01552A20800A3F9ED /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		DAEBC45214F6364500987BF6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DAFE45D815039823003ABA7C /* NSObject+PearlExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PearlExport.h"; sourceTree = "<group>"; };
@@ -594,7 +428,7 @@
 			files = (
 				DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */,
 				DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */,
-				DA16B33E17066103000A0EAB /* libscryptenc-osx.a in Frameworks */,
+				DA5E5C9417248AA1003798D8 /* libscryptenc-osx.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -671,6 +505,31 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		DA5E5C7917248AA1003798D8 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				DA5E5C7A17248AA1003798D8 /* include */,
+				DA5E5C8717248AA1003798D8 /* libscryptenc-osx.a */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		DA5E5C7A17248AA1003798D8 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				DA5E5C7B17248AA1003798D8 /* crypto_aesctr.h */,
+				DA5E5C7C17248AA1003798D8 /* crypto_scrypt.h */,
+				DA5E5C7D17248AA1003798D8 /* memlimit.h */,
+				DA5E5C7E17248AA1003798D8 /* readpass.h */,
+				DA5E5C7F17248AA1003798D8 /* scryptenc.h */,
+				DA5E5C8017248AA1003798D8 /* scryptenc_cpuperf.h */,
+				DA5E5C8117248AA1003798D8 /* sha256.h */,
+				DA5E5C8217248AA1003798D8 /* sysendian.h */,
+				DA5E5C8317248AA1003798D8 /* warn.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
 		DAC77CAF148291A600BCF976 /* Pearl */ = {
 			isa = PBXGroup;
 			children = (
@@ -684,7 +543,6 @@
 		DACA22121705DDC5002C6C22 /* External */ = {
 			isa = PBXGroup;
 			children = (
-				DACA29D11705E353002C6C22 /* iOSPorts */,
 				DACA29751705E2BD002C6C22 /* jrswizzle */,
 				DACA22181705DE28002C6C22 /* Crashlytics.framework */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
@@ -870,124 +728,6 @@
 			path = Pearl/External/jrswizzle;
 			sourceTree = "<group>";
 		};
-		DACA29D11705E353002C6C22 /* iOSPorts */ = {
-			isa = PBXGroup;
-			children = (
-				DACA29E01705EE90002C6C22 /* openssl */,
-				DACA2A291705EE91002C6C22 /* scrypt */,
-				DACA29C01705E313002C6C22 /* scrypt.xcodeproj */,
-			);
-			name = iOSPorts;
-			path = Pearl/External/iOSPorts;
-			sourceTree = "<group>";
-		};
-		DACA29D31705E36C002C6C22 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				DACA29DB1705E36C002C6C22 /* libscryptenc.a */,
-				DACA29DD1705E36C002C6C22 /* libscryptcrypto.a */,
-				DACA29DF1705E36C002C6C22 /* libutil.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		DACA29E01705EE90002C6C22 /* openssl */ = {
-			isa = PBXGroup;
-			children = (
-				DACA29E11705EE90002C6C22 /* conf.h */,
-				DACA29E21705EE90002C6C22 /* rsa.h */,
-				DACA29E31705EE91002C6C22 /* ui.h */,
-				DACA29E41705EE91002C6C22 /* seed.h */,
-				DACA29E51705EE91002C6C22 /* stack.h */,
-				DACA29E61705EE91002C6C22 /* buffer.h */,
-				DACA29E71705EE91002C6C22 /* ssl2.h */,
-				DACA29E81705EE91002C6C22 /* ocsp.h */,
-				DACA29E91705EE91002C6C22 /* rc4.h */,
-				DACA29EA1705EE91002C6C22 /* ossl_typ.h */,
-				DACA29EB1705EE91002C6C22 /* dso.h */,
-				DACA29EC1705EE91002C6C22 /* txt_db.h */,
-				DACA29ED1705EE91002C6C22 /* err.h */,
-				DACA29EE1705EE91002C6C22 /* pem.h */,
-				DACA29EF1705EE91002C6C22 /* blowfish.h */,
-				DACA29F01705EE91002C6C22 /* ssl3.h */,
-				DACA29F11705EE91002C6C22 /* evp.h */,
-				DACA29F21705EE91002C6C22 /* crypto.h */,
-				DACA29F31705EE91002C6C22 /* idea.h */,
-				DACA29F41705EE91002C6C22 /* objects.h */,
-				DACA29F51705EE91002C6C22 /* pqueue.h */,
-				DACA29F61705EE91002C6C22 /* rand.h */,
-				DACA29F71705EE91002C6C22 /* modes.h */,
-				DACA29F81705EE91002C6C22 /* hmac.h */,
-				DACA29F91705EE91002C6C22 /* ec.h */,
-				DACA29FA1705EE91002C6C22 /* dtls1.h */,
-				DACA29FB1705EE91002C6C22 /* engine.h */,
-				DACA29FC1705EE91002C6C22 /* pem2.h */,
-				DACA29FD1705EE91002C6C22 /* des.h */,
-				DACA29FE1705EE91002C6C22 /* ecdh.h */,
-				DACA29FF1705EE91002C6C22 /* e_os2.h */,
-				DACA2A001705EE91002C6C22 /* pkcs7.h */,
-				DACA2A011705EE91002C6C22 /* ecdsa.h */,
-				DACA2A021705EE91002C6C22 /* krb5_asn.h */,
-				DACA2A031705EE91002C6C22 /* dh.h */,
-				DACA2A041705EE91002C6C22 /* cast.h */,
-				DACA2A051705EE91002C6C22 /* comp.h */,
-				DACA2A061705EE91002C6C22 /* obj_mac.h */,
-				DACA2A071705EE91002C6C22 /* ebcdic.h */,
-				DACA2A081705EE91002C6C22 /* pkcs12.h */,
-				DACA2A091705EE91002C6C22 /* camellia.h */,
-				DACA2A0A1705EE91002C6C22 /* asn1t.h */,
-				DACA2A0B1705EE91002C6C22 /* md5.h */,
-				DACA2A0C1705EE91002C6C22 /* symhacks.h */,
-				DACA2A0D1705EE91002C6C22 /* ui_compat.h */,
-				DACA2A0E1705EE91002C6C22 /* rc2.h */,
-				DACA2A0F1705EE91002C6C22 /* lhash.h */,
-				DACA2A101705EE91002C6C22 /* bn.h */,
-				DACA2A111705EE91002C6C22 /* opensslv.h */,
-				DACA2A121705EE91002C6C22 /* mdc2.h */,
-				DACA2A131705EE91002C6C22 /* cms.h */,
-				DACA2A141705EE91002C6C22 /* x509v3.h */,
-				DACA2A151705EE91002C6C22 /* md4.h */,
-				DACA2A161705EE91002C6C22 /* asn1_mac.h */,
-				DACA2A171705EE91002C6C22 /* ssl23.h */,
-				DACA2A181705EE91002C6C22 /* x509.h */,
-				DACA2A191705EE91002C6C22 /* safestack.h */,
-				DACA2A1A1705EE91002C6C22 /* des_old.h */,
-				DACA2A1B1705EE91002C6C22 /* ts.h */,
-				DACA2A1C1705EE91002C6C22 /* bio.h */,
-				DACA2A1D1705EE91002C6C22 /* sha.h */,
-				DACA2A1E1705EE91002C6C22 /* whrlpool.h */,
-				DACA2A1F1705EE91002C6C22 /* x509_vfy.h */,
-				DACA2A201705EE91002C6C22 /* conf_api.h */,
-				DACA2A211705EE91002C6C22 /* aes.h */,
-				DACA2A221705EE91002C6C22 /* tls1.h */,
-				DACA2A231705EE91002C6C22 /* kssl.h */,
-				DACA2A241705EE91002C6C22 /* ripemd.h */,
-				DACA2A251705EE91002C6C22 /* dsa.h */,
-				DACA2A261705EE91002C6C22 /* ssl.h */,
-				DACA2A271705EE91002C6C22 /* opensslconf.h */,
-				DACA2A281705EE91002C6C22 /* asn1.h */,
-			);
-			name = openssl;
-			path = include/openssl;
-			sourceTree = "<group>";
-		};
-		DACA2A291705EE91002C6C22 /* scrypt */ = {
-			isa = PBXGroup;
-			children = (
-				DACA2A2A1705EE91002C6C22 /* scryptenc_cpuperf.h */,
-				DACA2A2B1705EE91002C6C22 /* scryptenc.h */,
-				DACA2A2C1705EE91002C6C22 /* crypto_scrypt.h */,
-				DACA2A2D1705EE91002C6C22 /* memlimit.h */,
-				DACA2A2E1705EE91002C6C22 /* sha256.h */,
-				DACA2A2F1705EE91002C6C22 /* sysendian.h */,
-				DACA2A301705EE91002C6C22 /* crypto_aesctr.h */,
-				DACA2A311705EE91002C6C22 /* warn.h */,
-				DACA2A321705EE91002C6C22 /* readpass.h */,
-			);
-			name = scrypt;
-			path = include/scrypt;
-			sourceTree = "<group>";
-		};
 		DAFE45D715039823003ABA7C /* Pearl */ = {
 			isa = PBXGroup;
 			children = (
@@ -1051,7 +791,7 @@
 		DAFE45FC15039823003ABA7C /* Pearl-Crypto */ = {
 			isa = PBXGroup;
 			children = (
-				DA16B33D17066103000A0EAB /* libscryptenc-osx.a */,
+				DA5E5C7917248AA1003798D8 /* lib */,
 				DAFE45FD15039823003ABA7C /* Pearl-Crypto.h */,
 				DA30E9D115722EE500A68B4C /* Pearl-Crypto.m */,
 				DAFE45FE15039823003ABA7C /* PearlCryptUtils.h */,
@@ -1118,87 +858,15 @@
 				93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */,
 				93D392EC39DA43C46C692C12 /* NSDictionary+Indexing.h in Headers */,
 				DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */,
-				DACA2A331705EE91002C6C22 /* conf.h in Headers */,
-				DACA2A341705EE91002C6C22 /* rsa.h in Headers */,
-				DACA2A351705EE91002C6C22 /* ui.h in Headers */,
-				DACA2A361705EE91002C6C22 /* seed.h in Headers */,
-				DACA2A371705EE91002C6C22 /* stack.h in Headers */,
-				DACA2A381705EE91002C6C22 /* buffer.h in Headers */,
-				DACA2A391705EE91002C6C22 /* ssl2.h in Headers */,
-				DACA2A3A1705EE91002C6C22 /* ocsp.h in Headers */,
-				DACA2A3B1705EE91002C6C22 /* rc4.h in Headers */,
-				DACA2A3C1705EE91002C6C22 /* ossl_typ.h in Headers */,
-				DACA2A3D1705EE91002C6C22 /* dso.h in Headers */,
-				DACA2A3E1705EE91002C6C22 /* txt_db.h in Headers */,
-				DACA2A3F1705EE91002C6C22 /* err.h in Headers */,
-				DACA2A401705EE91002C6C22 /* pem.h in Headers */,
-				DACA2A411705EE91002C6C22 /* blowfish.h in Headers */,
-				DACA2A421705EE91002C6C22 /* ssl3.h in Headers */,
-				DACA2A431705EE91002C6C22 /* evp.h in Headers */,
-				DACA2A441705EE91002C6C22 /* crypto.h in Headers */,
-				DACA2A451705EE91002C6C22 /* idea.h in Headers */,
-				DACA2A461705EE91002C6C22 /* objects.h in Headers */,
-				DACA2A471705EE91002C6C22 /* pqueue.h in Headers */,
-				DACA2A481705EE91002C6C22 /* rand.h in Headers */,
-				DACA2A491705EE91002C6C22 /* modes.h in Headers */,
-				DACA2A4A1705EE91002C6C22 /* hmac.h in Headers */,
-				DACA2A4B1705EE91002C6C22 /* ec.h in Headers */,
-				DACA2A4C1705EE91002C6C22 /* dtls1.h in Headers */,
-				DACA2A4D1705EE91002C6C22 /* engine.h in Headers */,
-				DACA2A4E1705EE91002C6C22 /* pem2.h in Headers */,
-				DACA2A4F1705EE91002C6C22 /* des.h in Headers */,
-				DACA2A501705EE91002C6C22 /* ecdh.h in Headers */,
-				DACA2A511705EE91002C6C22 /* e_os2.h in Headers */,
-				DACA2A521705EE91002C6C22 /* pkcs7.h in Headers */,
-				DACA2A531705EE91002C6C22 /* ecdsa.h in Headers */,
-				DACA2A541705EE91002C6C22 /* krb5_asn.h in Headers */,
-				DACA2A551705EE91002C6C22 /* dh.h in Headers */,
-				DACA2A561705EE91002C6C22 /* cast.h in Headers */,
-				DACA2A571705EE91002C6C22 /* comp.h in Headers */,
-				DACA2A581705EE91002C6C22 /* obj_mac.h in Headers */,
-				DACA2A591705EE91002C6C22 /* ebcdic.h in Headers */,
-				DACA2A5A1705EE91002C6C22 /* pkcs12.h in Headers */,
-				DACA2A5B1705EE91002C6C22 /* camellia.h in Headers */,
-				DACA2A5C1705EE91002C6C22 /* asn1t.h in Headers */,
-				DACA2A5D1705EE91002C6C22 /* md5.h in Headers */,
-				DACA2A5E1705EE91002C6C22 /* symhacks.h in Headers */,
-				DACA2A5F1705EE91002C6C22 /* ui_compat.h in Headers */,
-				DACA2A601705EE91002C6C22 /* rc2.h in Headers */,
-				DACA2A611705EE91002C6C22 /* lhash.h in Headers */,
-				DACA2A621705EE91002C6C22 /* bn.h in Headers */,
-				DACA2A631705EE91002C6C22 /* opensslv.h in Headers */,
-				DACA2A641705EE91002C6C22 /* mdc2.h in Headers */,
-				DACA2A651705EE91002C6C22 /* cms.h in Headers */,
-				DACA2A661705EE91002C6C22 /* x509v3.h in Headers */,
-				DACA2A671705EE91002C6C22 /* md4.h in Headers */,
-				DACA2A681705EE91002C6C22 /* asn1_mac.h in Headers */,
-				DACA2A691705EE91002C6C22 /* ssl23.h in Headers */,
-				DACA2A6A1705EE91002C6C22 /* x509.h in Headers */,
-				DACA2A6B1705EE91002C6C22 /* safestack.h in Headers */,
-				DACA2A6C1705EE91002C6C22 /* des_old.h in Headers */,
-				DACA2A6D1705EE91002C6C22 /* ts.h in Headers */,
-				DACA2A6E1705EE91002C6C22 /* bio.h in Headers */,
-				DACA2A6F1705EE91002C6C22 /* sha.h in Headers */,
-				DACA2A701705EE91002C6C22 /* whrlpool.h in Headers */,
-				DACA2A711705EE91002C6C22 /* x509_vfy.h in Headers */,
-				DACA2A721705EE91002C6C22 /* conf_api.h in Headers */,
-				DACA2A731705EE91002C6C22 /* aes.h in Headers */,
-				DACA2A741705EE91002C6C22 /* tls1.h in Headers */,
-				DACA2A751705EE91002C6C22 /* kssl.h in Headers */,
-				DACA2A761705EE91002C6C22 /* ripemd.h in Headers */,
-				DACA2A771705EE91002C6C22 /* dsa.h in Headers */,
-				DACA2A781705EE91002C6C22 /* ssl.h in Headers */,
-				DACA2A791705EE91002C6C22 /* opensslconf.h in Headers */,
-				DACA2A7A1705EE91002C6C22 /* asn1.h in Headers */,
-				DACA2A7B1705EE91002C6C22 /* scryptenc_cpuperf.h in Headers */,
-				DACA2A7C1705EE91002C6C22 /* scryptenc.h in Headers */,
-				DACA2A7D1705EE91002C6C22 /* crypto_scrypt.h in Headers */,
-				DACA2A7E1705EE91002C6C22 /* memlimit.h in Headers */,
-				DACA2A7F1705EE91002C6C22 /* sha256.h in Headers */,
-				DACA2A801705EE91002C6C22 /* sysendian.h in Headers */,
-				DACA2A811705EE91002C6C22 /* crypto_aesctr.h in Headers */,
-				DACA2A821705EE91002C6C22 /* warn.h in Headers */,
-				DACA2A831705EE91002C6C22 /* readpass.h in Headers */,
+				DA5E5C8817248AA1003798D8 /* crypto_aesctr.h in Headers */,
+				DA5E5C8917248AA1003798D8 /* crypto_scrypt.h in Headers */,
+				DA5E5C8A17248AA1003798D8 /* memlimit.h in Headers */,
+				DA5E5C8B17248AA1003798D8 /* readpass.h in Headers */,
+				DA5E5C8C17248AA1003798D8 /* scryptenc.h in Headers */,
+				DA5E5C8D17248AA1003798D8 /* scryptenc_cpuperf.h in Headers */,
+				DA5E5C8E17248AA1003798D8 /* sha256.h in Headers */,
+				DA5E5C8F17248AA1003798D8 /* sysendian.h in Headers */,
+				DA5E5C9017248AA1003798D8 /* warn.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1317,12 +985,6 @@
 			mainGroup = DA5BFA39147E415C00F98B1E;
 			productRefGroup = DA5BFA45147E415C00F98B1E /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = DACA29D31705E36C002C6C22 /* Products */;
-					ProjectRef = DACA29C01705E313002C6C22 /* scrypt.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				DA5BFA43147E415C00F98B1E /* MasterPassword */,
@@ -1333,30 +995,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		DACA29DB1705E36C002C6C22 /* libscryptenc.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libscryptenc.a;
-			remoteRef = DACA29DA1705E36C002C6C22 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DACA29DD1705E36C002C6C22 /* libscryptcrypto.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libscryptcrypto.a;
-			remoteRef = DACA29DC1705E36C002C6C22 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DACA29DF1705E36C002C6C22 /* libutil.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libutil.a;
-			remoteRef = DACA29DE1705E36C002C6C22 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		DA3EF17615A47744003ABF4E /* Resources */ = {
@@ -1614,7 +1252,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		DA3EF18915A47744003ABF4E /* Debug */ = {
+		DA3EF18915A47744003ABF4E /* Debug-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MasterPassword.app/MasterPassword";
@@ -1634,9 +1272,9 @@
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
-			name = Debug;
+			name = "Debug-Mac";
 		};
-		DA3EF18A15A47744003ABF4E /* AdHoc */ = {
+		DA3EF18A15A47744003ABF4E /* AdHoc-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1664,9 +1302,9 @@
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = octest;
 			};
-			name = AdHoc;
+			name = "AdHoc-Mac";
 		};
-		DA3EF18B15A47744003ABF4E /* AppStore */ = {
+		DA3EF18B15A47744003ABF4E /* AppStore-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1694,30 +1332,30 @@
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = octest;
 			};
-			name = AppStore;
+			name = "AppStore-Mac";
 		};
-		DA4425D41557BED40052177D /* Debug */ = {
+		DA4425D41557BED40052177D /* Debug-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 			};
-			name = Debug;
+			name = "Debug-Mac";
 		};
-		DA4425D51557BED40052177D /* AdHoc */ = {
+		DA4425D51557BED40052177D /* AdHoc-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 			};
-			name = AdHoc;
+			name = "AdHoc-Mac";
 		};
-		DA4425D61557BED40052177D /* AppStore */ = {
+		DA4425D61557BED40052177D /* AppStore-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 			};
-			name = AppStore;
+			name = "AppStore-Mac";
 		};
-		DA5BFA6B147E415C00F98B1E /* Debug */ = {
+		DA5BFA6B147E415C00F98B1E /* Debug-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1788,9 +1426,9 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
-			name = Debug;
+			name = "Debug-Mac";
 		};
-		DA5BFA6C147E415C00F98B1E /* AdHoc */ = {
+		DA5BFA6C147E415C00F98B1E /* AdHoc-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1862,9 +1500,9 @@
 				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
 			};
-			name = AdHoc;
+			name = "AdHoc-Mac";
 		};
-		DA5BFA6E147E415C00F98B1E /* Debug */ = {
+		DA5BFA6E147E415C00F98B1E /* Debug-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -1873,9 +1511,9 @@
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				SKIP_INSTALL = NO;
 			};
-			name = Debug;
+			name = "Debug-Mac";
 		};
-		DA5BFA6F147E415C00F98B1E /* AdHoc */ = {
+		DA5BFA6F147E415C00F98B1E /* AdHoc-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -1884,9 +1522,9 @@
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				SKIP_INSTALL = NO;
 			};
-			name = AdHoc;
+			name = "AdHoc-Mac";
 		};
-		DA95D60914DF3F3B008D1B94 /* AppStore */ = {
+		DA95D60914DF3F3B008D1B94 /* AppStore-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1960,9 +1598,9 @@
 				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
 			};
-			name = AppStore;
+			name = "AppStore-Mac";
 		};
-		DA95D60A14DF3F3B008D1B94 /* AppStore */ = {
+		DA95D60A14DF3F3B008D1B94 /* AppStore-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -1971,9 +1609,9 @@
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				SKIP_INSTALL = NO;
 			};
-			name = AppStore;
+			name = "AppStore-Mac";
 		};
-		DA95D60B14DF3F3B008D1B94 /* AppStore */ = {
+		DA95D60B14DF3F3B008D1B94 /* AppStore-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -1982,14 +1620,15 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto\"",
+					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = AppStore;
+			name = "AppStore-Mac";
 		};
-		DA95D60D14DF3F3B008D1B94 /* AppStore */ = {
+		DA95D60D14DF3F3B008D1B94 /* AppStore-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -1999,9 +1638,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = AppStore;
+			name = "AppStore-Mac";
 		};
-		DAC63275148680650075AEA5 /* Debug */ = {
+		DAC63275148680650075AEA5 /* Debug-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -2011,9 +1650,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = Debug;
+			name = "Debug-Mac";
 		};
-		DAC63276148680650075AEA5 /* AdHoc */ = {
+		DAC63276148680650075AEA5 /* AdHoc-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -2023,9 +1662,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = AdHoc;
+			name = "AdHoc-Mac";
 		};
-		DAC77CB5148291A600BCF976 /* Debug */ = {
+		DAC77CB5148291A600BCF976 /* Debug-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -2034,14 +1673,15 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto\"",
+					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = Debug;
+			name = "Debug-Mac";
 		};
-		DAC77CB6148291A600BCF976 /* AdHoc */ = {
+		DAC77CB6148291A600BCF976 /* AdHoc-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -2050,12 +1690,13 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto\"",
+					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = AdHoc;
+			name = "AdHoc-Mac";
 		};
 /* End XCBuildConfiguration section */
 
@@ -2063,62 +1704,62 @@
 		DA3EF18815A47744003ABF4E /* Build configuration list for PBXNativeTarget "Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA3EF18915A47744003ABF4E /* Debug */,
-				DA3EF18A15A47744003ABF4E /* AdHoc */,
-				DA3EF18B15A47744003ABF4E /* AppStore */,
+				DA3EF18915A47744003ABF4E /* Debug-Mac */,
+				DA3EF18A15A47744003ABF4E /* AdHoc-Mac */,
+				DA3EF18B15A47744003ABF4E /* AppStore-Mac */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-Mac";
 		};
 		DA4425D31557BED40052177D /* Build configuration list for PBXNativeTarget "UbiquityStoreManager" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA4425D41557BED40052177D /* Debug */,
-				DA4425D51557BED40052177D /* AdHoc */,
-				DA4425D61557BED40052177D /* AppStore */,
+				DA4425D41557BED40052177D /* Debug-Mac */,
+				DA4425D51557BED40052177D /* AdHoc-Mac */,
+				DA4425D61557BED40052177D /* AppStore-Mac */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-Mac";
 		};
 		DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-Mac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA5BFA6B147E415C00F98B1E /* Debug */,
-				DA5BFA6C147E415C00F98B1E /* AdHoc */,
-				DA95D60914DF3F3B008D1B94 /* AppStore */,
+				DA5BFA6B147E415C00F98B1E /* Debug-Mac */,
+				DA5BFA6C147E415C00F98B1E /* AdHoc-Mac */,
+				DA95D60914DF3F3B008D1B94 /* AppStore-Mac */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-Mac";
 		};
 		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA5BFA6E147E415C00F98B1E /* Debug */,
-				DA5BFA6F147E415C00F98B1E /* AdHoc */,
-				DA95D60A14DF3F3B008D1B94 /* AppStore */,
+				DA5BFA6E147E415C00F98B1E /* Debug-Mac */,
+				DA5BFA6F147E415C00F98B1E /* AdHoc-Mac */,
+				DA95D60A14DF3F3B008D1B94 /* AppStore-Mac */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-Mac";
 		};
 		DAC63274148680650075AEA5 /* Build configuration list for PBXNativeTarget "jrswizzle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAC63275148680650075AEA5 /* Debug */,
-				DAC63276148680650075AEA5 /* AdHoc */,
-				DA95D60D14DF3F3B008D1B94 /* AppStore */,
+				DAC63275148680650075AEA5 /* Debug-Mac */,
+				DAC63276148680650075AEA5 /* AdHoc-Mac */,
+				DA95D60D14DF3F3B008D1B94 /* AppStore-Mac */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-Mac";
 		};
 		DAC77CB7148291A600BCF976 /* Build configuration list for PBXNativeTarget "Pearl" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAC77CB5148291A600BCF976 /* Debug */,
-				DAC77CB6148291A600BCF976 /* AdHoc */,
-				DA95D60B14DF3F3B008D1B94 /* AppStore */,
+				DAC77CB5148291A600BCF976 /* Debug-Mac */,
+				DAC77CB6148291A600BCF976 /* AdHoc-Mac */,
+				DA95D60B14DF3F3B008D1B94 /* AppStore-Mac */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = AdHoc;
+			defaultConfigurationName = "AdHoc-Mac";
 		};
 /* End XCConfigurationList section */
 

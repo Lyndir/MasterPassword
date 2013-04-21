@@ -122,7 +122,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)activate:(id)sender {
 
-    if (!self.activeUser)
+    if (![self activeUserForThread])
             // No user, can't activate.
         return;
 
@@ -135,16 +135,16 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (IBAction)togglePreference:(NSMenuItem *)sender {
 
     if (sender == useICloudItem)
-        [MPConfig get].iCloud = @(sender.state == NSOnState);
+        [self storeManager].cloudEnabled = sender.state == NSOnState;
     if (sender == rememberPasswordItem)
         [MPConfig get].rememberLogin = [NSNumber numberWithBool:![[MPConfig get].rememberLogin boolValue]];
     if (sender == savePasswordItem) {
-        MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
+        MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
         if ((activeUser.saveKey = !activeUser.saveKey))
             [[MPAppDelegate get] storeSavedKeyFor:activeUser];
         else
             [[MPAppDelegate get] forgetSavedKeyFor:activeUser];
-        [activeUser saveContext];
+        [activeUser.managedObjectContext saveToStore];
     }
 }
 
@@ -190,7 +190,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     __weak MPAppDelegate *wSelf = self;
     [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        MPUserEntity *activeUser = wSelf.activeUser;
+        MPUserEntity *activeUser = [wSelf activeUserForThread];
         [[[wSelf.usersItem submenu] itemArray] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             if ([[obj representedObject] isEqual:[activeUser objectID]])
                 [obj setState:NSOnState];
@@ -212,7 +212,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
             ^(NSNotification *note) {
                 self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
-                self.savePasswordItem.state = [MPAppDelegate get].activeUser.saveKey? NSOnState: NSOffState;
+                self.savePasswordItem.state = [[MPAppDelegate get] activeUserForThread].saveKey? NSOnState: NSOffState;
             }];
     [self updateUsers];
 
@@ -234,11 +234,12 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)updateMenuItems {
 
+    MPUserEntity *activeUser = [self activeUserForThread];
     if (!(self.showItem.enabled = ![self.passwordWindow.window isVisible])) {
         self.showItem.title = @"Show (Showing)";
         self.showItem.toolTip = @"Master Password is already showing.";
     }
-    else if (!(self.showItem.enabled = (self.activeUser != nil))) {
+    else if (!(self.showItem.enabled = (activeUser != nil))) {
         self.showItem.title = @"Show (No user)";
         self.showItem.toolTip = @"First select the user to show passwords for.";
     }
@@ -260,8 +261,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
 
-    self.savePasswordItem.state = [MPAppDelegate get].activeUser.saveKey? NSOnState: NSOffState;
-    if (!self.activeUser) {
+    self.savePasswordItem.state = activeUser.saveKey? NSOnState: NSOffState;
+    if (!activeUser) {
         self.savePasswordItem.title = @"Save Password (No user)";
         self.savePasswordItem.enabled = NO;
         self.savePasswordItem.toolTip = @"First select your user and unlock by showing the Master Password window.";
@@ -277,8 +278,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         self.savePasswordItem.toolTip = nil;
     }
 
-    self.useICloudItem.state = [[MPMacConfig get].iCloud boolValue]? NSOnState: NSOffState;
-    if (!(self.useICloudItem.enabled = ![[MPMacConfig get].iCloud boolValue])) {
+    self.useICloudItem.state = self.storeManager.cloudEnabled? NSOnState: NSOffState;
+    self.useICloudItem.enabled = !self.storeManager.cloudEnabled;
+    if (self.storeManager.cloudEnabled) {
         self.useICloudItem.title = @"Use iCloud (Required)";
         self.useICloudItem.toolTip = @"iCloud is required in this version.  Future versions will work without iCloud as well.";
     }
@@ -318,57 +320,16 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     if (![moc hasChanges])
         return NSTerminateNow;
 
-    NSError *error = nil;
-    if (![moc save:&error])
-    err(@"While terminating: %@", error);
-
+    [moc saveToStore];
     return NSTerminateNow;
 }
 
 #pragma mark - UbiquityStoreManagerDelegate
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager willLoadStoreIsCloud:(BOOL)isCloudStore {
 
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didSwitchToCloud:(BOOL)cloudEnabled {
+    manager.cloudEnabled = YES;
 
-    [super ubiquityStoreManager:manager didSwitchToCloud:cloudEnabled];
-
-    [self updateMenuItems];
-
-    if (![[MPConfig get].iCloudDecided boolValue]) {
-        if (cloudEnabled)
-            return;
-
-        switch ([[NSAlert alertWithMessageText:@"iCloud Is Disabled"
-                                 defaultButton:@"Enable iCloud" alternateButton:@"Leave iCloud Off" otherButton:@"Explain?"
-                     informativeTextWithFormat:@"It is highly recommended you enable iCloud."] runModal]) {
-            case NSAlertDefaultReturn: {
-                [MPConfig get].iCloudDecided = @YES;
-                manager.cloudEnabled = YES;
-                break;
-            }
-
-            case NSAlertOtherReturn: {
-                [[NSAlert alertWithMessageText:@"About iCloud"
-                                 defaultButton:[PearlStrings get].commonButtonThanks alternateButton:nil otherButton:nil
-                     informativeTextWithFormat:
-                             @"iCloud is Apple's solution for saving your data in \"the cloud\" "
-                                     @"and making sure your other iPhones, iPads and Macs are in sync.\n\n"
-                                     @"For Master Password, that means your sites are available on all your "
-                                     @"Apple devices, and you always have a backup of them in case "
-                                     @"you loose one or need to restore.\n\n"
-                                     @"Because of the way Master Password works, it doesn't need to send your "
-                                     @"site's passwords to Apple.  Only their names are saved to make it easier "
-                                     @"for you to find the site you need.  For some sites you may have set "
-                                     @"a user-specified password: these are sent to iCloud after being encrypted "
-                                     @"with your master password.\n\n"
-                                     @"Apple can never see any of your passwords."] runModal];
-                [self ubiquityStoreManager:manager didSwitchToCloud:cloudEnabled];
-                break;
-            }
-
-            default:
-                break;
-        };
-    }
+    [super ubiquityStoreManager:manager willLoadStoreIsCloud:isCloudStore];
 }
 
 @end

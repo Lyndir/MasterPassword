@@ -30,7 +30,7 @@
     [self.tipField setStringValue:@""];
 
     [[MPAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        [self.userLabel setStringValue:PearlString( @"%@'s password for:", [MPAppDelegate get].activeUser.name )];
+        [self.userLabel setStringValue:PearlString( @"%@'s password for:", [[MPAppDelegate get] activeUserForThread].name )];
     }                          forKeyPath:@"activeUser" options:NSKeyValueObservingOptionInitial context:nil];
     [[MPAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
         if (![MPAppDelegate get].key) {
@@ -39,8 +39,7 @@
         }
 
         [MPAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-            MPUserEntity *activeUser = [MPAppDelegate get].activeUser;
-            if (![MPAlgorithmDefault migrateUser:activeUser])
+            if (![MPAlgorithmDefault migrateUser:[[MPAppDelegate get] activeUserForThread]])
                 [NSAlert alertWithMessageText:@"Migration Needed" defaultButton:@"OK" alternateButton:nil otherButton:nil
                     informativeTextWithFormat:@"Certain sites require explicit migration to get updated to the latest version of the "
                             @"Master Password algorithm.  For these sites, a migration button will appear.  Migrating these sites will cause "
@@ -68,13 +67,14 @@
 
 - (void)unlock {
 
-    if (![MPAppDelegate get].activeUser)
+    MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
+    if (!activeUser)
             // No user to sign in with.
         return;
     if ([MPAppDelegate get].key)
             // Already logged in.
         return;
-    if ([[MPAppDelegate get] signInAsUser:[MPAppDelegate get].activeUser usingMasterPassword:nil])
+    if ([[MPAppDelegate get] signInAsUser:activeUser usingMasterPassword:nil])
             // Load the key from the keychain.
         return;
 
@@ -91,7 +91,7 @@
             NSAlert *alert = [NSAlert alertWithMessageText:@"Master Password is locked."
                                              defaultButton:@"Unlock" alternateButton:@"Change" otherButton:@"Cancel"
                                  informativeTextWithFormat:@"The master password is required to unlock the application for:\n\n%@",
-                                                           [MPAppDelegate get].activeUser.name];
+                                                           activeUser.name];
             NSSecureTextField *passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
             [alert setAccessoryView:passwordField];
             [alert layout];
@@ -108,6 +108,7 @@
         return;
     }
     if (contextInfo == MPAlertUnlockMP) {
+        MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
         switch (returnCode) {
             case NSAlertAlternateReturn:
                 // "Change" button.
@@ -120,8 +121,8 @@
                                          @"You can always change back to your current master password later.\n"
                                          @"Your current sites and passwords will then become available again."] runModal]
                     == 1) {
-                    [MPAppDelegate get].activeUser.keyID = nil;
-                    [[MPAppDelegate get] forgetSavedKeyFor:[MPAppDelegate get].activeUser];
+                    activeUser.keyID = nil;
+                    [[MPAppDelegate get] forgetSavedKeyFor:activeUser];
                     [[MPAppDelegate get] signOutAnimated:YES];
                 }
                 break;
@@ -137,7 +138,7 @@
                 [self.progressView startAnimation:nil];
                 self.inProgress = YES;
                 dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0 ), ^{
-                    BOOL success = [[MPAppDelegate get] signInAsUser:[MPAppDelegate get].activeUser
+                    BOOL success = [[MPAppDelegate get] signInAsUser:activeUser
                                                  usingMasterPassword:[(NSSecureTextField *)alert.accessoryView stringValue]];
                     self.inProgress = NO;
 
@@ -149,7 +150,7 @@
                         else {
                             [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
                                     NSLocalizedDescriptionKey : PearlString( @"Incorrect master password for user %@",
-                                            [MPAppDelegate get].activeUser.name )
+                                            activeUser.name )
                             }]] beginSheetModalForWindow:self.window modalDelegate:self
                                           didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertIncorrectMP];
                         }
@@ -175,7 +176,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
     fetchRequest.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses_" ascending:NO]];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(name BEGINSWITH[cd] %@) AND user == %@",
-                                                              query, [MPAppDelegate get].activeUser];
+                                                              query, [[MPAppDelegate get] activeUserForThread]];
 
     NSError *error = nil;
     self.siteResults = [[MPAppDelegate managedObjectContextForThreadIfReady] executeFetchRequest:fetchRequest error:&error];
