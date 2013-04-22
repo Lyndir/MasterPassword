@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 source bashlib
-cd "${0%/*}/../Resources"
-PATH+=:/Applications/Xcode.app//Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin
+cd "${0%/*}/../MasterPassword/Resources/Media"
+PATH+=:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin
 temp="${TMPDIR:-/tmp}/.$$.convertImages"
 mkdir "$temp" || err "Couldn't create temp directory." || return
 trap 'rmdir "$temp"' EXIT
@@ -11,6 +11,8 @@ downsize() {
     convert "$from" -filter box -resize "$size" -unsharp 1x1+1+0.4 "$to"
     pngcrush -d "$temp" -rem gAMA -rem cHRM -rem sRGB -rem iCCP "$to" && mv "$temp/"* "$to"
 }
+
+
 
 inf "Converting iTunesArtwork"
 icons=(
@@ -22,16 +24,48 @@ icons=(
     [58]="Icon-Small@2x.png"
     [50]="Icon-Small-50.png"
     [100]="Icon-Small-50@2x.png"
+    [512]="iTunesArtwork"
 )
-
-for size in "${!icons[@]}"; do
+for size in $(reverse "${!icons[@]}"); do
     file=${icons[size]}
 
-    if [[ "iTunesArtwork.png" -nt $file ]]; then
+    if [[ "iTunesArtwork@2x" -nt $file ]]; then
         pinf "$file ($size px)"
-            downsize "iTunesArtwork.png" "$file" "${size}x${size}"
+            downsize "iTunesArtwork@2x" "$file" "${size}x${size}"
         fnip
     fi
+done
+
+
+
+inf "Populating iconsets"
+icons=(
+    "icon_512x512.png"
+    "icon_256x256@2x.png"
+    "icon_256x256.png"
+    "icon_128x128@2x.png"
+    "icon_128x128.png"
+    "icon_32x32@2x.png"
+    "icon_32x32.png"
+    "icon_16x16@2x.png"
+    "icon_16x16.png"
+)
+for iconset in *.iconset; do
+    [[ -d $iconset ]] || continue
+
+    for dest in "${icons[@]}"; do
+        src=$iconset/icon_512x512@2x.png
+        dest=$iconset/$dest
+        IFS='_x@.' read _ _ points scale _ <<< "${dest##*/}"
+        [[ $scale = *[^[:digit:]]* ]] && scale=1
+        size=$(( points * scale ))
+
+        if [[ ! -e $dest || "$src" -nt "$dest" ]]; then
+            pinf "$src -> $dest ($size px)"
+                downsize "$src" "$dest" "$size"
+            fnip
+        fi
+    done
 done
 
 
@@ -52,7 +86,7 @@ for file in ./**/*{@2x,-ipadhd,-hd}.png; do
             emit -$?
         fi
     fi
-    if [[ ! -e $dest || "$file" -nt "$dest" ]]; then
+    if [[ ! -e $dest || "$dest" -ot "$file" ]]; then
         pinf "$file -> $dest"
             downsize "$file" "$dest"
         fnip
