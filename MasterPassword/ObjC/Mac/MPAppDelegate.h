@@ -22,11 +22,12 @@
 @property(nonatomic, weak) IBOutlet NSMenuItem *savePasswordItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *createUserItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *usersItem;
+@property(nonatomic, weak) IBOutlet NSMenuItem *dialogStyleRegular;
+@property(nonatomic, weak) IBOutlet NSMenuItem *dialogStyleHUD;
 
 - (IBAction)activate:(id)sender;
 - (IBAction)togglePreference:(NSMenuItem *)sender;
 - (IBAction)newUser:(NSMenuItem *)sender;
-- (IBAction)signOut:(id)sender;
 - (IBAction)lock:(id)sender;
 
 @end

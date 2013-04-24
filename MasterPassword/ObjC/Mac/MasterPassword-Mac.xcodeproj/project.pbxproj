@@ -201,7 +201,7 @@
 		DA3EF17915A47744003ABF4E /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA3EF17A15A47744003ABF4E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUbiquityStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA5BFA44147E415C00F98B1E /* MasterPassword.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MasterPassword.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA5BFA44147E415C00F98B1E /* MasterPassword-Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MasterPassword-Mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5BFA4A147E415C00F98B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		DA5BFA4E147E415C00F98B1E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -440,7 +440,7 @@
 		DA5BFA45147E415C00F98B1E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DA5BFA44147E415C00F98B1E /* MasterPassword.app */,
+				DA5BFA44147E415C00F98B1E /* MasterPassword-Mac.app */,
 				DAC77CAD148291A600BCF976 /* libPearl.a */,
 				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
 				DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */,
@@ -893,9 +893,9 @@
 			productReference = DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		DA5BFA43147E415C00F98B1E /* MasterPassword */ = {
+		DA5BFA43147E415C00F98B1E /* MasterPassword-Mac */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */;
+			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword-Mac" */;
 			buildPhases = (
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
@@ -907,9 +907,9 @@
 			);
 			dependencies = (
 			);
-			name = MasterPassword;
+			name = "MasterPassword-Mac";
 			productName = MasterPassword;
-			productReference = DA5BFA44147E415C00F98B1E /* MasterPassword.app */;
+			productReference = DA5BFA44147E415C00F98B1E /* MasterPassword-Mac.app */;
 			productType = "com.apple.product-type.application";
 		};
 		DAC6326B148680650075AEA5 /* jrswizzle */ = {
@@ -971,7 +971,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DA5BFA43147E415C00F98B1E /* MasterPassword */,
+				DA5BFA43147E415C00F98B1E /* MasterPassword-Mac */,
 				DAC77CAC148291A600BCF976 /* Pearl */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
 				DA4425CA1557BED40052177D /* UbiquityStoreManager */,
@@ -1190,7 +1190,7 @@
 /* Begin PBXTargetDependency section */
 		DA3EF19E15A47AEB003ABF4E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DA5BFA43147E415C00F98B1E /* MasterPassword */;
+			target = DA5BFA43147E415C00F98B1E /* MasterPassword-Mac */;
 			targetProxy = DA3EF19D15A47AEB003ABF4E /* PBXContainerItemProxy */;
 		};
 		DAC63286148681200075AEA5 /* PBXTargetDependency */ = {
@@ -1717,7 +1717,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "AdHoc-Mac";
 		};
-		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */ = {
+		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword-Mac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA5BFA6E147E415C00F98B1E /* Debug-Mac */,

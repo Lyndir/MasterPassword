@@ -1003,7 +1003,7 @@
 		DA5A09DE171A70E4005284AB /* play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x.png"; sourceTree = "<group>"; };
 		DA5A09E8171BB0F7005284AB /* unlocked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unlocked.png; sourceTree = "<group>"; };
 		DA5A09E9171BB0F7005284AB /* unlocked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unlocked@2x.png"; sourceTree = "<group>"; };
-		DA5BFA44147E415C00F98B1E /* MasterPassword.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MasterPassword.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA5BFA44147E415C00F98B1E /* MasterPassword-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MasterPassword-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5BFA48147E415C00F98B1E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DA5BFA4A147E415C00F98B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -2127,7 +2127,7 @@
 		DA5BFA45147E415C00F98B1E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DA5BFA44147E415C00F98B1E /* MasterPassword.app */,
+				DA5BFA44147E415C00F98B1E /* MasterPassword-iOS.app */,
 				DAC77CAD148291A600BCF976 /* libPearl.a */,
 				DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */,
 				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
@@ -3695,9 +3695,9 @@
 			productReference = DA497B9715E8C90E00B52167 /* libGoogle+.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		DA5BFA43147E415C00F98B1E /* MasterPassword */ = {
+		DA5BFA43147E415C00F98B1E /* MasterPassword-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */;
+			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword-iOS" */;
 			buildPhases = (
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
@@ -3709,9 +3709,9 @@
 			);
 			dependencies = (
 			);
-			name = MasterPassword;
+			name = "MasterPassword-iOS";
 			productName = MasterPassword;
-			productReference = DA5BFA44147E415C00F98B1E /* MasterPassword.app */;
+			productReference = DA5BFA44147E415C00F98B1E /* MasterPassword-iOS.app */;
 			productType = "com.apple.product-type.application";
 		};
 		DA829E50159847E0002417D3 /* FontReplacer */ = {
@@ -3840,7 +3840,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DA5BFA43147E415C00F98B1E /* MasterPassword */,
+				DA5BFA43147E415C00F98B1E /* MasterPassword-iOS */,
 				DAC77CAC148291A600BCF976 /* Pearl */,
 				DAC6325C1486805C0075AEA5 /* uicolor-utilities */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
@@ -4809,7 +4809,7 @@
 /* Begin PBXTargetDependency section */
 		DA3EF19E15A47AEB003ABF4E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DA5BFA43147E415C00F98B1E /* MasterPassword */;
+			target = DA5BFA43147E415C00F98B1E /* MasterPassword-iOS */;
 			targetProxy = DA3EF19D15A47AEB003ABF4E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -5458,7 +5458,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "AdHoc-iOS";
 		};
-		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */ = {
+		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA5BFA6E147E415C00F98B1E /* Debug-iOS */,

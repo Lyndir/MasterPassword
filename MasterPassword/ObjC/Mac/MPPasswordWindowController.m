@@ -26,6 +26,7 @@
 
 - (void)windowDidLoad {
 
+    [self updateDialogStyle];
     [self setContent:@""];
     [self.tipField setStringValue:@""];
 
@@ -58,6 +59,16 @@
     }];
 
     [super windowDidLoad];
+}
+
+- (void)updateDialogStyle {
+
+    if ([[MPMacConfig get].dialogStyleHUD boolValue]) {
+        self.window.styleMask = NSHUDWindowMask | NSTitledWindowMask | NSUtilityWindowMask | NSClosableWindowMask;
+    }
+    else {
+        self.window.styleMask = NSTexturedBackgroundWindowMask | NSResizableWindowMask | NSTitledWindowMask | NSClosableWindowMask;
+    }
 }
 
 - (void)unlock {

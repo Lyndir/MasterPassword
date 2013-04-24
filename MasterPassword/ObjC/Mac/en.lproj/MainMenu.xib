@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1070</int>
-		<string key="IBDocument.SystemVersion">12C60</string>
-		<string key="IBDocument.InterfaceBuilderVersion">2844</string>
-		<string key="IBDocument.AppKitVersion">1187.34</string>
-		<string key="IBDocument.HIToolboxVersion">625.00</string>
+		<string key="IBDocument.SystemVersion">12D78</string>
+		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
+		<string key="IBDocument.AppKitVersion">1187.37</string>
+		<string key="IBDocument.HIToolboxVersion">626.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">2844</string>
+			<string key="NS.object.0">3084</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>NSCustomObject</string>
@@ -168,6 +168,37 @@
 									<object class="NSAttributedString" key="NSAttributedTitle">
 										<string key="NSString">Save the password in your keychain so you don't need to enter it again.</string>
 										<reference key="NSAttributes" ref="583461090"/>
+									</object>
+								</object>
+								<object class="NSMenuItem" id="123543264">
+									<reference key="NSMenu" ref="800575174"/>
+									<string key="NSTitle">Password Dialog Style</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="269450960"/>
+									<reference key="NSMixedImage" ref="977440657"/>
+									<string key="NSAction">submenuAction:</string>
+									<object class="NSMenu" key="NSSubmenu" id="293904698">
+										<string key="NSTitle">Password Dialog Style</string>
+										<array class="NSMutableArray" key="NSMenuItems">
+											<object class="NSMenuItem" id="560371092">
+												<reference key="NSMenu" ref="293904698"/>
+												<string key="NSTitle">Regular</string>
+												<string key="NSKeyEquiv"/>
+												<int key="NSMnemonicLoc">2147483647</int>
+												<reference key="NSOnImage" ref="269450960"/>
+												<reference key="NSMixedImage" ref="977440657"/>
+											</object>
+											<object class="NSMenuItem" id="117792016">
+												<reference key="NSMenu" ref="293904698"/>
+												<string key="NSTitle">HUD</string>
+												<string key="NSKeyEquiv"/>
+												<int key="NSMnemonicLoc">2147483647</int>
+												<reference key="NSOnImage" ref="269450960"/>
+												<reference key="NSMixedImage" ref="977440657"/>
+												<int key="NSTag">1</int>
+											</object>
+										</array>
 									</object>
 								</object>
 							</array>
@@ -345,6 +376,38 @@
 					</object>
 					<int key="connectionID">764</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">dialogStyleHUD</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="117792016"/>
+					</object>
+					<int key="connectionID">771</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">dialogStyleRegular</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="560371092"/>
+					</object>
+					<int key="connectionID">772</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">togglePreference:</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="560371092"/>
+					</object>
+					<int key="connectionID">773</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">togglePreference:</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="117792016"/>
+					</object>
+					<int key="connectionID">774</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -439,6 +502,7 @@
 							<reference ref="461686112"/>
 							<reference ref="110488020"/>
 							<reference ref="123831322"/>
+							<reference ref="123543264"/>
 						</array>
 						<reference key="parent" ref="851296005"/>
 					</object>
@@ -499,6 +563,33 @@
 						<reference key="object" ref="925131766"/>
 						<reference key="parent" ref="934187555"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">765</int>
+						<reference key="object" ref="123543264"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="293904698"/>
+						</array>
+						<reference key="parent" ref="800575174"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">766</int>
+						<reference key="object" ref="293904698"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="560371092"/>
+							<reference ref="117792016"/>
+						</array>
+						<reference key="parent" ref="123543264"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">767</int>
+						<reference key="object" ref="560371092"/>
+						<reference key="parent" ref="293904698"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">768</int>
+						<reference key="object" ref="117792016"/>
+						<reference key="parent" ref="293904698"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -533,14 +624,120 @@
 				</object>
 				<string key="757.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="759.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="765.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="766.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="767.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="768.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			</dictionary>
 			<dictionary class="NSMutableDictionary" key="unlocalizedProperties"/>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">764</int>
+			<int key="maxID">774</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<object class="IBPartialClassDescription">
+					<string key="className">MPAppDelegate</string>
+					<string key="superclassName">MPAppDelegate_Shared</string>
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="activate:">id</string>
+						<string key="lock:">id</string>
+						<string key="newUser:">NSMenuItem</string>
+						<string key="signOut:">id</string>
+						<string key="togglePreference:">NSMenuItem</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="activate:">
+							<string key="name">activate:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="lock:">
+							<string key="name">lock:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="newUser:">
+							<string key="name">newUser:</string>
+							<string key="candidateClassName">NSMenuItem</string>
+						</object>
+						<object class="IBActionInfo" key="signOut:">
+							<string key="name">signOut:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="togglePreference:">
+							<string key="name">togglePreference:</string>
+							<string key="candidateClassName">NSMenuItem</string>
+						</object>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="createUserItem">NSMenuItem</string>
+						<string key="dialogStyleHUD">NSMenuItem</string>
+						<string key="dialogStyleRegular">NSMenuItem</string>
+						<string key="lockItem">NSMenuItem</string>
+						<string key="rememberPasswordItem">NSMenuItem</string>
+						<string key="savePasswordItem">NSMenuItem</string>
+						<string key="showItem">NSMenuItem</string>
+						<string key="statusMenu">NSMenu</string>
+						<string key="useICloudItem">NSMenuItem</string>
+						<string key="usersItem">NSMenuItem</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="createUserItem">
+							<string key="name">createUserItem</string>
+							<string key="candidateClassName">NSMenuItem</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="dialogStyleHUD">
+							<string key="name">dialogStyleHUD</string>
+							<string key="candidateClassName">NSMenuItem</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="dialogStyleRegular">
+							<string key="name">dialogStyleRegular</string>
+							<string key="candidateClassName">NSMenuItem</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lockItem">
+							<string key="name">lockItem</string>
+							<string key="candidateClassName">NSMenuItem</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="rememberPasswordItem">
+							<string key="name">rememberPasswordItem</string>
+							<string key="candidateClassName">NSMenuItem</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="savePasswordItem">
+							<string key="name">savePasswordItem</string>
+							<string key="candidateClassName">NSMenuItem</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="showItem">
+							<string key="name">showItem</string>
+							<string key="candidateClassName">NSMenuItem</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="statusMenu">
+							<string key="name">statusMenu</string>
+							<string key="candidateClassName">NSMenu</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="useICloudItem">
+							<string key="name">useICloudItem</string>
+							<string key="candidateClassName">NSMenuItem</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="usersItem">
+							<string key="name">usersItem</string>
+							<string key="candidateClassName">NSMenuItem</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/MPAppDelegate.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">MPAppDelegate_Shared</string>
+					<string key="superclassName">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/MPAppDelegate_Shared.h</string>
+					</object>
+				</object>
+			</array>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencies">

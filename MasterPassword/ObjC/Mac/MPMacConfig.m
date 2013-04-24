@@ -9,13 +9,17 @@
 @implementation MPMacConfig
 
 @dynamic usedUserName;
+@dynamic dialogStyleHUD;
 
 - (id)init {
 
     if (!(self = [super init]))
         return self;
 
-    [self.defaults registerDefaults:@{ NSStringFromSelector( @selector(iTunesID) ) : @"510296984" }];
+    [self.defaults registerDefaults:@{
+            NSStringFromSelector( @selector(iTunesID) )       : @"510296984",
+            NSStringFromSelector( @selector(dialogStyleHUD) ) : @NO
+    }];
 
     return self;
 }

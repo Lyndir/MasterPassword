@@ -19,17 +19,6 @@
 
 @implementation MPAppDelegate
 
-@synthesize statusItem;
-@synthesize lockItem;
-@synthesize showItem;
-@synthesize statusMenu;
-@synthesize useICloudItem;
-@synthesize rememberPasswordItem;
-@synthesize savePasswordItem;
-@synthesize passwordWindow;
-
-@synthesize key;
-
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wfour-char-constants"
 static EventHotKeyID MPShowHotKey = { .signature = 'show', .id = 1 };
@@ -145,11 +134,11 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)togglePreference:(NSMenuItem *)sender {
 
-    if (sender == useICloudItem)
+    if (sender == self.useICloudItem)
         [self storeManager].cloudEnabled = sender.state == NSOnState;
-    if (sender == rememberPasswordItem)
+    if (sender == self.rememberPasswordItem)
         [MPConfig get].rememberLogin = [NSNumber numberWithBool:![[MPConfig get].rememberLogin boolValue]];
-    if (sender == savePasswordItem) {
+    if (sender == self.savePasswordItem) {
         MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
         if ((activeUser.saveKey = !activeUser.saveKey))
             [[MPAppDelegate get] storeSavedKeyFor:activeUser];
@@ -157,6 +146,10 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             [[MPAppDelegate get] forgetSavedKeyFor:activeUser];
         [activeUser.managedObjectContext saveToStore];
     }
+    if (sender == self.dialogStyleRegular)
+        [MPMacConfig get].dialogStyleHUD = @NO;
+    if (sender == self.dialogStyleHUD)
+        [MPMacConfig get].dialogStyleHUD = @YES;
 }
 
 - (IBAction)newUser:(NSMenuItem *)sender {
@@ -181,7 +174,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 #pragma mark - NSApplicationDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    
+
+    [[NSUbiquitousKeyValueStore defaultStore] setString:@"0B3CA2DF-5796-44DF-B5E0-121EC3846464" forKey:@"USMStoreUUIDKey"];
     // Setup delegates and listeners.
     [MPConfig get].delegate = self;
     __weak id weakSelf = self;
@@ -212,6 +206,17 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             ^(NSNotification *note) {
                 self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
                 self.savePasswordItem.state = [[MPAppDelegate get] activeUserForThread].saveKey? NSOnState: NSOffState;
+                self.dialogStyleRegular.state = ![[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
+                self.dialogStyleHUD.state = [[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
+                if ([note.object isEqual:NSStringFromSelector( @selector(dialogStyleHUD) )]) {
+                    if (![self.passwordWindow.window isVisible])
+                        self.passwordWindow = nil;
+                    else {
+                        [self.passwordWindow close];
+                        self.passwordWindow = nil;
+                        [self showPasswordWindow];
+                    }
+                }
             }];
     [self updateUsers];
 
@@ -232,6 +237,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 }
 
 - (void)setActiveUser:(MPUserEntity *)activeUser {
+
+    [self.passwordWindow close];
 
     [super setActiveUser:activeUser];
 
@@ -303,21 +310,20 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }
 }
 
-- (void)applicationWillBecomeActive:(NSNotification *)notification {
-
-    if (!self.passwordWindow)
-        self.passwordWindow = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
-}
-
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
 
+    [self showPasswordWindow];
+}
+
+- (void)showPasswordWindow {
+
     // Don't show window if we weren't already running (ie. if we haven't been activated before).
-    if (!self.wasRunning) {
-        dbg(@"Wasn't running yet, not activating.");
+    if (!self.wasRunning)
         self.wasRunning = YES;
-    }
     else {
-        dbg(@"Was running already, activating.");
+        if (!self.passwordWindow)
+            self.passwordWindow = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
+
         [self.passwordWindow showWindow:self];
     }
 }
