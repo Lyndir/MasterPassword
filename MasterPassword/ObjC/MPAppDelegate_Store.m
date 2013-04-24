@@ -30,6 +30,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 + (NSManagedObjectContext *)managedObjectContextForThreadIfReady {
 
     NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
+    if (!mainManagedObjectContext)
+        return nil;
     if ([[NSThread currentThread] isMainThread])
         return mainManagedObjectContext;
 

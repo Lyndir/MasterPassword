@@ -11,6 +11,12 @@
 #import "MPAppDelegate_Store.h"
 #import <Carbon/Carbon.h>
 
+@interface MPAppDelegate ()
+
+@property(nonatomic) BOOL wasRunning;
+
+@end
+
 @implementation MPAppDelegate
 
 @synthesize statusItem;
@@ -110,7 +116,12 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)selectUser:(NSMenuItem *)item {
 
-    self.activeUser = (MPUserEntity *)[[MPAppDelegate managedObjectContextForThreadIfReady] objectRegisteredForID:[item representedObject]];
+    NSError *error = nil;
+    NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
+    self.activeUser = (MPUserEntity *)[moc existingObjectWithID:[item representedObject] error:&error];
+
+    if (error)
+    err(@"While looking up selected user: %@", error);
 }
 
 - (void)showMenu {
@@ -170,7 +181,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 #pragma mark - NSApplicationDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-
+    
     // Setup delegates and listeners.
     [MPConfig get].delegate = self;
     __weak id weakSelf = self;
@@ -188,18 +199,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     self.statusItem.target = self;
     self.statusItem.action = @selector(showMenu);
 
-    __weak MPAppDelegate *wSelf = self;
-    [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        MPUserEntity *activeUser = [wSelf activeUserForThread];
-        [[[wSelf.usersItem submenu] itemArray] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if ([[obj representedObject] isEqual:[activeUser objectID]])
-                [obj setState:NSOnState];
-            else
-                [obj setState:NSOffState];
-        }];
-
-        [MPMacConfig get].usedUserName = activeUser.name;
-    }           forKeyPath:@"activeUserObjectID" options:0 context:nil];
     [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidChangeNotification object:nil queue:nil usingBlock:
             ^(NSNotification *note) {
                 [self updateUsers];
@@ -230,6 +229,20 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     status = RegisterEventHotKey( 35 /* p */, controlKey + optionKey + cmdKey, MPLockHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
     if (status != noErr)
     err(@"Error registering 'lock' hotkey: %d", status);
+}
+
+- (void)setActiveUser:(MPUserEntity *)activeUser {
+
+    [super setActiveUser:activeUser];
+
+    [[[self.usersItem submenu] itemArray] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([[obj representedObject] isEqual:[activeUser objectID]])
+            [obj setState:NSOnState];
+        else
+            [obj setState:NSOffState];
+    }];
+
+    [MPMacConfig get].usedUserName = activeUser.name;
 }
 
 - (void)updateMenuItems {
@@ -298,7 +311,15 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
 
-    [self.passwordWindow showWindow:self];
+    // Don't show window if we weren't already running (ie. if we haven't been activated before).
+    if (!self.wasRunning) {
+        dbg(@"Wasn't running yet, not activating.");
+        self.wasRunning = YES;
+    }
+    else {
+        dbg(@"Was running already, activating.");
+        [self.passwordWindow showWindow:self];
+    }
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification {

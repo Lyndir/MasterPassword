@@ -32,21 +32,16 @@
     [[MPAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
         [self.userLabel setStringValue:PearlString( @"%@'s password for:", [[MPAppDelegate get] activeUserForThread].name )];
     }                          forKeyPath:@"activeUser" options:NSKeyValueObservingOptionInitial context:nil];
-    [[MPAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        if (![MPAppDelegate get].key) {
-            [self unlock];
-            return;
-        }
-
-        [MPAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-            if (![MPAlgorithmDefault migrateUser:[[MPAppDelegate get] activeUserForThread]])
-                [NSAlert alertWithMessageText:@"Migration Needed" defaultButton:@"OK" alternateButton:nil otherButton:nil
-                    informativeTextWithFormat:@"Certain sites require explicit migration to get updated to the latest version of the "
-                            @"Master Password algorithm.  For these sites, a migration button will appear.  Migrating these sites will cause "
-                            @"their passwords to change.  You'll need to update your profile for that site with the new password."];
-            [moc saveToStore];
-        }];
-    }                          forKeyPath:@"key" options:NSKeyValueObservingOptionInitial context:nil];
+//    [[MPAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
+//        [MPAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+//            if (![MPAlgorithmDefault migrateUser:[[MPAppDelegate get] activeUserInContext:moc]])
+//                [NSAlert alertWithMessageText:@"Migration Needed" defaultButton:@"OK" alternateButton:nil otherButton:nil
+//                    informativeTextWithFormat:@"Certain sites require explicit migration to get updated to the latest version of the "
+//                            @"Master Password algorithm.  For these sites, a migration button will appear.  Migrating these sites will cause "
+//                            @"their passwords to change.  You'll need to update your profile for that site with the new password."];
+//            [moc saveToStore];
+//        }];
+//    }                          forKeyPath:@"key" options:NSKeyValueObservingOptionInitial context:nil];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:NSWindowDidBecomeKeyNotification object:self.window queue:nil usingBlock:^(NSNotification *note) {
         if (!self.inProgress)
