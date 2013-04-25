@@ -8,7 +8,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "MPPreferencesViewController.h"
-#import "MPAppDelegate.h"
+#import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 
@@ -47,12 +47,12 @@
         }                   options:0];
         [avatar onSelect:^(BOOL selected) {
             if (selected) {
-                MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
+                MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForThread];
                 activeUser.avatar = (unsigned)avatar.tag;
                 [activeUser.managedObjectContext saveToStore];
             }
         }        options:0];
-        avatar.selected = (a == [[MPAppDelegate get] activeUserForThread].avatar);
+        avatar.selected = (a == [[MPiOSAppDelegate get] activeUserForThread].avatar);
     }
 
     [super viewDidLoad];
@@ -69,9 +69,9 @@
         }
     }                           recurse:NO];
 
-    MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
+    MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForThread];
     self.savePasswordSwitch.on = activeUser.saveKey;
-    self.defaultTypeLabel.text = [[MPAppDelegate get].key.algorithm shortNameOfType:activeUser.defaultType];
+    self.defaultTypeLabel.text = [[MPiOSAppDelegate get].key.algorithm shortNameOfType:activeUser.defaultType];
 
     [super viewWillAppear:animated];
 }
@@ -111,11 +111,11 @@
 
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
     if (cell == self.exportCell)
-        [[MPAppDelegate get] export];
+        [[MPiOSAppDelegate get] export];
 
     else if (cell == self.changeMPCell) {
-        MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
-        [[MPAppDelegate get] changeMasterPasswordFor:activeUser inContext:activeUser.managedObjectContext didResetBlock:nil];
+        MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForThread];
+        [[MPiOSAppDelegate get] changeMasterPasswordFor:activeUser inContext:activeUser.managedObjectContext didResetBlock:nil];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -133,27 +133,27 @@
 
 - (void)didSelectType:(MPElementType)type {
 
-    MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
+    MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForThread];
     activeUser.defaultType = type;
     [activeUser.managedObjectContext saveToStore];
 
-    self.defaultTypeLabel.text = [[MPAppDelegate get].key.algorithm shortNameOfType:activeUser.defaultType];
+    self.defaultTypeLabel.text = [[MPiOSAppDelegate get].key.algorithm shortNameOfType:activeUser.defaultType];
 }
 
 - (MPElementType)selectedType {
 
-    return [[MPAppDelegate get] activeUserForThread].defaultType;
+    return [[MPiOSAppDelegate get] activeUserForThread].defaultType;
 }
 
 #pragma mark - IBActions
 
 - (IBAction)didToggleSwitch:(UISwitch *)sender {
 
-    MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
+    MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForThread];
     if ((activeUser.saveKey = sender.on))
-        [[MPAppDelegate get] storeSavedKeyFor:activeUser];
+        [[MPiOSAppDelegate get] storeSavedKeyFor:activeUser];
     else
-        [[MPAppDelegate get] forgetSavedKeyFor:activeUser];
+        [[MPiOSAppDelegate get] forgetSavedKeyFor:activeUser];
     [activeUser.managedObjectContext saveToStore];
 }
 

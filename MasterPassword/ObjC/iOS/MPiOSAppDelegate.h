@@ -1,5 +1,5 @@
 //
-//  MPAppDelegate.h
+//  MPiOSAppDelegate.h
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 24/11/11.
@@ -12,7 +12,7 @@
 #import "MPAppDelegate_Shared.h"
 #import "GPPShare.h"
 
-@interface MPAppDelegate : MPAppDelegate_Shared
+@interface MPiOSAppDelegate : MPAppDelegate_Shared
 
 @property(nonatomic, readonly) GPPShare *googlePlus;
 

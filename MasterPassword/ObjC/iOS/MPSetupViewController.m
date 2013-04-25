@@ -17,7 +17,7 @@
 //
 
 #import "MPSetupViewController.h"
-#import "MPAppDelegate.h"
+#import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
 
 @implementation MPSetupViewController
@@ -29,7 +29,7 @@
     [super viewDidAppear:animated];
 
     if (self.cloudSwitch && [[MPiOSConfig get].iCloudDecided boolValue])
-        self.cloudSwitch.on = [MPAppDelegate get].storeManager.cloudEnabled;
+        self.cloudSwitch.on = [MPiOSAppDelegate get].storeManager.cloudEnabled;
     if (self.rememberLoginSwitch)
         self.rememberLoginSwitch.on = [[MPiOSConfig get].rememberLogin boolValue];
 }
@@ -40,7 +40,7 @@
 
     if (self.cloudSwitch) {
         [MPiOSConfig get].iCloudDecided = @YES;
-        [MPAppDelegate get].storeManager.cloudEnabled = self.cloudSwitch.on;
+        [MPiOSAppDelegate get].storeManager.cloudEnabled = self.cloudSwitch.on;
     }
     if (self.rememberLoginSwitch)
         [MPiOSConfig get].rememberLogin = @(self.rememberLoginSwitch.on);
@@ -56,7 +56,7 @@
 
     [MPiOSConfig get].showSetup = @NO;
     [self dismissViewControllerAnimated:YES completion:^{
-        [[MPAppDelegate get] showGuide];
+        [[MPiOSAppDelegate get] showGuide];
     }];
 }
 

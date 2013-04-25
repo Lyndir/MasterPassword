@@ -8,7 +8,7 @@
 
 #import "MPElementListSearchController.h"
 #import "MPMainViewController.h"
-#import "MPAppDelegate.h"
+#import "MPiOSAppDelegate.h"
 
 @interface MPElementListSearchController()
 
@@ -197,7 +197,7 @@
     NSString *query = [self.searchDisplayController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     cell.textLabel.text = query;
     cell.detailTextLabel.text = PearlString( @"New site: %@",
-            [MPAlgorithmDefault shortNameOfType:[[[MPAppDelegate get] activeUserForThread] defaultType]] );
+            [MPAlgorithmDefault shortNameOfType:[[[MPiOSAppDelegate get] activeUserForThread] defaultType]] );
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

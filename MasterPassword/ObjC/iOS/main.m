@@ -6,11 +6,11 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import "MPAppDelegate.h"
+#import "MPiOSAppDelegate.h"
 
 int main(int argc, char *argv[]) {
 
     @autoreleasepool {
-        return UIApplicationMain( argc, argv, nil, NSStringFromClass( [MPAppDelegate class] ) );
+        return UIApplicationMain( argc, argv, nil, NSStringFromClass( [MPiOSAppDelegate class] ) );
     }
 }

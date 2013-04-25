@@ -1,24 +1,24 @@
 //
-//  MPAppDelegate.m
+//  MPiOSAppDelegate.m
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 24/11/11.
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import "MPAppDelegate.h"
+#import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 
 #import "IASKSettingsReader.h"
 
-@interface MPAppDelegate()
+@interface MPiOSAppDelegate()
 
 @property(nonatomic, readwrite) GPPShare *googlePlus;
 
 @end
 
-@implementation MPAppDelegate
+@implementation MPiOSAppDelegate
 
 + (void)initialize {
 
@@ -262,7 +262,7 @@
 
     dispatch_async( dispatch_get_main_queue(), ^{
         if ([[MPiOSConfig get].showSetup boolValue])
-            [[MPAppDelegate get] showSetup];
+            [[MPiOSAppDelegate get] showSetup];
     } );
 
     return YES;
@@ -478,7 +478,7 @@
 
 - (void)openFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController {
 
-    NSString *userName = [[MPAppDelegate get] activeUserForThread].name;
+    NSString *userName = [[MPiOSAppDelegate get] activeUserForThread].name;
     PearlLogLevel logLevel = [[MPiOSConfig get].sendInfo boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
 
     [[[PearlEMail alloc] initForEMailTo:@"Master Password Development <masterpassword@lyndir.com>"

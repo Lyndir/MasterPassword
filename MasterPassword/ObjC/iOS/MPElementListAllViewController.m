@@ -16,7 +16,7 @@
 //
 
 #import "MPElementListAllViewController.h"
-#import "MPAppDelegate.h"
+#import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
 
 #define MPElementUpgradeOldContentKey @"MPElementUpgradeOldContentKey"
@@ -85,7 +85,7 @@
 
 - (void)performUpgradeAllWithCompletion:(void (^)(BOOL success, NSDictionary *changes))completion {
 
-    [MPAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
         fetchRequest.fetchBatchSize = 20;
 

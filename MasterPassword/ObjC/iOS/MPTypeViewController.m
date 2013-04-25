@@ -7,7 +7,7 @@
 //
 
 #import "MPTypeViewController.h"
-#import "MPAppDelegate.h"
+#import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
 
 @interface MPTypeViewController()
@@ -81,7 +81,7 @@
 
         dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
             NSString *typeContent = [MPAlgorithmDefault generateContentNamed:name ofType:cellType
-                                                                 withCounter:counter usingKey:[MPAppDelegate get].key];
+                                                                 withCounter:counter usingKey:[MPiOSAppDelegate get].key];
 
             dispatch_async( dispatch_get_main_queue(), ^{
                 [(UITextField *)[[tableView cellForRowAtIndexPath:indexPath] viewWithTag:2] setText:typeContent];

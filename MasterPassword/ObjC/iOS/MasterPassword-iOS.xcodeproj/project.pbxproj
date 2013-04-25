@@ -746,7 +746,7 @@
 		DABD3C081711E2DC00CF925C /* MPKey.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BB71711E2DC00CF925C /* MPKey.m */; };
 		DABD3C091711E2DC00CF925C /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BBA1711E2DC00CF925C /* MPUserEntity.m */; };
 		DABD3C141711E2DC00CF925C /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BD01711E2DC00CF925C /* MasterPassword.xcdatamodeld */; };
-		DABD3C151711E2DC00CF925C /* MPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BD91711E2DC00CF925C /* MPAppDelegate.m */; };
+		DABD3C151711E2DC00CF925C /* MPiOSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BD91711E2DC00CF925C /* MPiOSAppDelegate.m */; };
 		DABD3C161711E2DC00CF925C /* MPAppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BDB1711E2DC00CF925C /* MPAppViewController.m */; };
 		DABD3C171711E2DC00CF925C /* MPAppsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BDD1711E2DC00CF925C /* MPAppsViewController.m */; };
 		DABD3C181711E2DC00CF925C /* MPElementListAllViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BDF1711E2DC00CF925C /* MPElementListAllViewController.m */; };
@@ -1724,8 +1724,8 @@
 		DABD3BD21711E2DC00CF925C /* MasterPassword 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 2.xcdatamodel"; sourceTree = "<group>"; };
 		DABD3BD31711E2DC00CF925C /* MasterPassword 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 3.xcdatamodel"; sourceTree = "<group>"; };
 		DABD3BD41711E2DC00CF925C /* MasterPassword 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 4.xcdatamodel"; sourceTree = "<group>"; };
-		DABD3BD81711E2DC00CF925C /* MPAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate.h; sourceTree = "<group>"; };
-		DABD3BD91711E2DC00CF925C /* MPAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate.m; sourceTree = "<group>"; };
+		DABD3BD81711E2DC00CF925C /* MPiOSAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPiOSAppDelegate.h; sourceTree = "<group>"; };
+		DABD3BD91711E2DC00CF925C /* MPiOSAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPiOSAppDelegate.m; sourceTree = "<group>"; };
 		DABD3BDA1711E2DC00CF925C /* MPAppViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppViewController.h; sourceTree = "<group>"; };
 		DABD3BDB1711E2DC00CF925C /* MPAppViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppViewController.m; sourceTree = "<group>"; };
 		DABD3BDC1711E2DC00CF925C /* MPAppsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppsViewController.h; sourceTree = "<group>"; };
@@ -2968,8 +2968,8 @@
 		DABD3BD71711E2DC00CF925C /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				DABD3BD81711E2DC00CF925C /* MPAppDelegate.h */,
-				DABD3BD91711E2DC00CF925C /* MPAppDelegate.m */,
+				DABD3BD81711E2DC00CF925C /* MPiOSAppDelegate.h */,
+				DABD3BD91711E2DC00CF925C /* MPiOSAppDelegate.m */,
 				DABD3BDA1711E2DC00CF925C /* MPAppViewController.h */,
 				DABD3BDB1711E2DC00CF925C /* MPAppViewController.m */,
 				DABD3BDC1711E2DC00CF925C /* MPAppsViewController.h */,
@@ -4675,7 +4675,7 @@
 				DABD3C081711E2DC00CF925C /* MPKey.m in Sources */,
 				DABD3C091711E2DC00CF925C /* MPUserEntity.m in Sources */,
 				DABD3C141711E2DC00CF925C /* MasterPassword.xcdatamodeld in Sources */,
-				DABD3C151711E2DC00CF925C /* MPAppDelegate.m in Sources */,
+				DABD3C151711E2DC00CF925C /* MPiOSAppDelegate.m in Sources */,
 				DABD3C161711E2DC00CF925C /* MPAppViewController.m in Sources */,
 				DABD3C171711E2DC00CF925C /* MPAppsViewController.m in Sources */,
 				DABD3C181711E2DC00CF925C /* MPElementListAllViewController.m in Sources */,

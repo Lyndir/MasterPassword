@@ -7,7 +7,7 @@
 //
 
 #import "MPMainViewController.h"
-#import "MPAppDelegate.h"
+#import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
 #import "MPElementListAllViewController.h"
 
@@ -114,7 +114,7 @@
 - (void)viewWillAppear:(BOOL)animated {
 
     MPElementEntity *activeElement = [self activeElementForThread];
-    if (activeElement.user != [[MPAppDelegate get] activeUserForThread])
+    if (activeElement.user != [[MPiOSAppDelegate get] activeUserForThread])
         _activeElementOID = nil;
 
     self.searchDisplayController.searchBar.text = nil;
@@ -142,7 +142,7 @@
     // Needed for when we appear after a modal VC dismisses:
     // We can't present until the other modal VC has been fully dismissed and presenting in -viewWillAppear: will fail.
     dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
-        MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
+        MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForThread];
         if ([MPAlgorithmDefault migrateUser:activeUser] && !self.suppressOutdatedAlert)
             [UIView animateWithDuration:0.3f animations:^{
                 self.outdatedAlertContainer.alpha = 1;
@@ -613,7 +613,7 @@
     if (!_activeElementOID)
         return nil;
 
-    NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
+    NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
     if (!moc)
         return nil;
 
@@ -716,7 +716,7 @@
             }
             case 1: {
                 inf(@"Action: Guide");
-                [[MPAppDelegate get] showGuide];
+                [[MPiOSAppDelegate get] showGuide];
                 break;
             }
             case 2: {
@@ -738,7 +738,7 @@
 //#else
             case 4: {
                 inf(@"Action: Feedback via Mail");
-                [[MPAppDelegate get] showFeedbackWithLogs:YES forVC:self];
+                [[MPiOSAppDelegate get] showFeedbackWithLogs:YES forVC:self];
                 break;
             }
 //#endif

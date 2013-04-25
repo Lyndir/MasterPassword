@@ -10,7 +10,7 @@
 #import <Social/Social.h>
 
 #import "MPUnlockViewController.h"
-#import "MPAppDelegate.h"
+#import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 
@@ -194,7 +194,7 @@
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 
-    [[MPAppDelegate get] signOutAnimated:NO];
+    [[MPiOSAppDelegate get] signOutAnimated:NO];
 
     _selectedUserOID = nil;
     [self updateUsers];
@@ -276,7 +276,7 @@
 
 - (void)updateUsers {
 
-    NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
+    NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
     if (!moc)
         return;
 
@@ -357,7 +357,7 @@
     MPUserEntity *selectedUser = self.selectedUser;
     if (!selectedUser)
         [self.passwordField resignFirstResponder];
-    else if ([[MPAppDelegate get] signInAsUser:selectedUser usingMasterPassword:nil]) {
+    else if ([[MPiOSAppDelegate get] signInAsUser:selectedUser usingMasterPassword:nil]) {
         [self performSegueWithIdentifier:@"MP_Unlock" sender:self];
         return;
     }
@@ -370,7 +370,7 @@
 
 - (void)didSelectNewUserAvatar:(UIButton *)newUserAvatar {
 
-    [MPAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
         MPUserEntity *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass( [MPUserEntity class] )
                                                               inManagedObjectContext:moc];
 
@@ -617,7 +617,7 @@
     [self setSpinnerActive:YES];
 
     dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
-        BOOL unlocked = [[MPAppDelegate get] signInAsUser:self.selectedUser usingMasterPassword:self.passwordField.text];
+        BOOL unlocked = [[MPiOSAppDelegate get] signInAsUser:self.selectedUser usingMasterPassword:self.passwordField.text];
 
         dispatch_async( dispatch_get_main_queue(), ^{
             if (unlocked)
@@ -655,7 +655,7 @@
 
 - (MPUserEntity *)userForAvatar:(UIButton *)avatar {
 
-    NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
+    NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
     if (!moc)
         return nil;
 
@@ -1005,7 +1005,7 @@
         }
 
         if (buttonIndex == [sheet firstOtherButtonIndex])
-            [[MPAppDelegate get] changeMasterPasswordFor:targetedUser inContext:moc didResetBlock:^{
+            [[MPiOSAppDelegate get] changeMasterPasswordFor:targetedUser inContext:moc didResetBlock:^{
                 dispatch_async( dispatch_get_main_queue(), ^{
                     [[self avatarForUser:targetedUser] setSelected:YES];
                 } );
@@ -1046,14 +1046,14 @@
 
 - (IBAction)google:(UIButton *)sender {
 
-    id<GPPShareBuilder> shareDialog = [[MPAppDelegate get].googlePlus shareDialog];
+    id<GPPShareBuilder> shareDialog = [[MPiOSAppDelegate get].googlePlus shareDialog];
     [[[shareDialog setURLToShare:[NSURL URLWithString:@"http://masterpasswordapp.com"]]
             setPrefillText:@"I've started doing passwords properly thanks to Master Password."] open];
 }
 
 - (IBAction)mail:(UIButton *)sender {
 
-    [[MPAppDelegate get] showFeedbackWithLogs:NO forVC:self];
+    [[MPiOSAppDelegate get] showFeedbackWithLogs:NO forVC:self];
 }
 
 - (IBAction)add:(UIButton *)sender {
@@ -1121,7 +1121,7 @@
     if (!_selectedUserOID)
         return nil;
 
-    NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
+    NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
     if (!moc)
         return nil;
 

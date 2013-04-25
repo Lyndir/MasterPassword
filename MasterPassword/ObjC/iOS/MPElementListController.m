@@ -1,7 +1,7 @@
 #import "MPElementListController.h"
 
 #import "MPAppDelegate_Store.h"
-#import "MPAppDelegate.h"
+#import "MPiOSAppDelegate.h"
 
 @interface MPElementListController()
 @end
@@ -21,8 +21,8 @@
         return;
     }
 
-    [MPAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-        MPUserEntity *activeUser = [[MPAppDelegate get] activeUserInContext:moc];
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+        MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:moc];
         assert(activeUser);
 
         MPElementType type = activeUser.defaultType;
@@ -42,7 +42,7 @@
 
         NSManagedObjectID *elementOID = [element objectID];
         dispatch_async( dispatch_get_main_queue(), ^{
-            MPElementEntity *element_ = (MPElementEntity *)[[MPAppDelegate managedObjectContextForThreadIfReady]
+            MPElementEntity *element_ = (MPElementEntity *)[[MPiOSAppDelegate managedObjectContextForThreadIfReady]
                     objectRegisteredForID:elementOID];
             [self.delegate didSelectElement:element_];
             if (completion)
@@ -55,7 +55,7 @@
 
     if (!_fetchedResultsControllerByLastUsed) {
         NSAssert([[NSThread currentThread] isMainThread], @"The fetchedResultsController must be accessed from the main thread.");
-        NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
+        NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
         if (!moc)
             return nil;
 
@@ -74,7 +74,7 @@
 
     if (!_fetchedResultsControllerByUses) {
         NSAssert([[NSThread currentThread] isMainThread], @"The fetchedResultsController must be accessed from the main thread.");
-        NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
+        NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
         if (!moc)
             return nil;
 
@@ -104,7 +104,7 @@
 
 - (void)updateData {
 
-    MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
+    MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForThread];
     if (!activeUser)
         return;
 
