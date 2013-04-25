@@ -51,7 +51,7 @@
 		DA5E5D001724A667003798D8 /* MPEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CAC1724A667003798D8 /* MPEntities.m */; };
 		DA5E5D011724A667003798D8 /* MPKey.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CAE1724A667003798D8 /* MPKey.m */; };
 		DA5E5D021724A667003798D8 /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB11724A667003798D8 /* MPUserEntity.m */; };
-		DA5E5D031724A667003798D8 /* MPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB41724A667003798D8 /* MPAppDelegate.m */; };
+		DA5E5D031724A667003798D8 /* MPMacAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB41724A667003798D8 /* MPMacAppDelegate.m */; };
 		DA5E5D041724A667003798D8 /* MPMacConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB61724A667003798D8 /* MPMacConfig.m */; };
 		DA5E5D051724A667003798D8 /* MPPasswordWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB81724A667003798D8 /* MPPasswordWindowController.m */; };
 		DA5E5D061724A667003798D8 /* MPPasswordWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5CB91724A667003798D8 /* MPPasswordWindowController.xib */; };
@@ -242,8 +242,8 @@
 		DA5E5CAF1724A667003798D8 /* MPTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTypes.h; sourceTree = "<group>"; };
 		DA5E5CB01724A667003798D8 /* MPUserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUserEntity.h; sourceTree = "<group>"; };
 		DA5E5CB11724A667003798D8 /* MPUserEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUserEntity.m; sourceTree = "<group>"; };
-		DA5E5CB31724A667003798D8 /* MPAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate.h; sourceTree = "<group>"; };
-		DA5E5CB41724A667003798D8 /* MPAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate.m; sourceTree = "<group>"; };
+		DA5E5CB31724A667003798D8 /* MPMacAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPMacAppDelegate.h; sourceTree = "<group>"; };
+		DA5E5CB41724A667003798D8 /* MPMacAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPMacAppDelegate.m; sourceTree = "<group>"; };
 		DA5E5CB51724A667003798D8 /* MPMacConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPMacConfig.h; sourceTree = "<group>"; };
 		DA5E5CB61724A667003798D8 /* MPMacConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPMacConfig.m; sourceTree = "<group>"; };
 		DA5E5CB71724A667003798D8 /* MPPasswordWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindowController.h; sourceTree = "<group>"; };
@@ -534,8 +534,8 @@
 		DA5E5CB21724A667003798D8 /* Mac */ = {
 			isa = PBXGroup;
 			children = (
-				DA5E5CB31724A667003798D8 /* MPAppDelegate.h */,
-				DA5E5CB41724A667003798D8 /* MPAppDelegate.m */,
+				DA5E5CB31724A667003798D8 /* MPMacAppDelegate.h */,
+				DA5E5CB41724A667003798D8 /* MPMacAppDelegate.m */,
 				DA5E5CB51724A667003798D8 /* MPMacConfig.h */,
 				DA5E5CB61724A667003798D8 /* MPMacConfig.m */,
 				DA5E5CB71724A667003798D8 /* MPPasswordWindowController.h */,
@@ -1136,7 +1136,7 @@
 				DA5E5D001724A667003798D8 /* MPEntities.m in Sources */,
 				DA5E5D011724A667003798D8 /* MPKey.m in Sources */,
 				DA5E5D021724A667003798D8 /* MPUserEntity.m in Sources */,
-				DA5E5D031724A667003798D8 /* MPAppDelegate.m in Sources */,
+				DA5E5D031724A667003798D8 /* MPMacAppDelegate.m in Sources */,
 				DA5E5D041724A667003798D8 /* MPMacConfig.m in Sources */,
 				DA5E5D051724A667003798D8 /* MPPasswordWindowController.m in Sources */,
 				DA5E5D0C1724A667003798D8 /* main.m in Sources */,

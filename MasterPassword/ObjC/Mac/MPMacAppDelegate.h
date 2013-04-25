@@ -1,5 +1,5 @@
 //
-//  MPAppDelegate.h
+//  MPMacAppDelegate.h
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 04/03/12.
@@ -10,7 +10,7 @@
 #import "MPAppDelegate_Shared.h"
 #import "MPPasswordWindowController.h"
 
-@interface MPAppDelegate : MPAppDelegate_Shared<NSApplicationDelegate>
+@interface MPMacAppDelegate : MPAppDelegate_Shared<NSApplicationDelegate>
 
 @property(nonatomic, strong) NSStatusItem *statusItem;
 @property(nonatomic, strong) MPPasswordWindowController *passwordWindow;

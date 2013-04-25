@@ -7,7 +7,7 @@
 //
 
 #import "MPPasswordWindowController.h"
-#import "MPAppDelegate.h"
+#import "MPMacAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 
@@ -26,16 +26,18 @@
 
 - (void)windowDidLoad {
 
-    [self updateDialogStyle];
+    if ([[MPMacConfig get].dialogStyleHUD boolValue])
+        self.window.styleMask = NSHUDWindowMask | NSTitledWindowMask | NSUtilityWindowMask | NSClosableWindowMask;
+    else
+        self.window.styleMask = NSTexturedBackgroundWindowMask | NSResizableWindowMask | NSTitledWindowMask | NSClosableWindowMask;
+    
     [self setContent:@""];
     [self.tipField setStringValue:@""];
 
-    [[MPAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        [self.userLabel setStringValue:PearlString( @"%@'s password for:", [[MPAppDelegate get] activeUserForThread].name )];
-    }                          forKeyPath:@"activeUser" options:NSKeyValueObservingOptionInitial context:nil];
-//    [[MPAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-//        [MPAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-//            if (![MPAlgorithmDefault migrateUser:[[MPAppDelegate get] activeUserInContext:moc]])
+    [self.userLabel setStringValue:PearlString( @"%@'s password for:", [[MPMacAppDelegate get] activeUserForThread].name )];
+//    [[MPMacAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
+//        [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+//            if (![MPAlgorithmDefault migrateUser:[[MPMacAppDelegate get] activeUserInContext:moc]])
 //                [NSAlert alertWithMessageText:@"Migration Needed" defaultButton:@"OK" alternateButton:nil otherButton:nil
 //                    informativeTextWithFormat:@"Certain sites require explicit migration to get updated to the latest version of the "
 //                            @"Master Password algorithm.  For these sites, a migration button will appear.  Migrating these sites will cause "
@@ -61,33 +63,23 @@
     [super windowDidLoad];
 }
 
-- (void)updateDialogStyle {
-
-    if ([[MPMacConfig get].dialogStyleHUD boolValue]) {
-        self.window.styleMask = NSHUDWindowMask | NSTitledWindowMask | NSUtilityWindowMask | NSClosableWindowMask;
-    }
-    else {
-        self.window.styleMask = NSTexturedBackgroundWindowMask | NSResizableWindowMask | NSTitledWindowMask | NSClosableWindowMask;
-    }
-}
-
 - (void)unlock {
 
-    MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
+    MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserForThread];
     if (!activeUser)
             // No user to sign in with.
         return;
-    if ([MPAppDelegate get].key)
+    if ([MPMacAppDelegate get].key)
             // Already logged in.
         return;
-    if ([[MPAppDelegate get] signInAsUser:activeUser usingMasterPassword:nil])
+    if ([[MPMacAppDelegate get] signInAsUser:activeUser usingMasterPassword:nil])
             // Load the key from the keychain.
         return;
 
-    if (![MPAppDelegate get].key)
+    if (![MPMacAppDelegate get].key)
             // Ask the user to set the key through his master password.
         dispatch_async( dispatch_get_main_queue(), ^{
-            if ([MPAppDelegate get].key)
+            if ([MPMacAppDelegate get].key)
                 return;
 
             self.content = @"";
@@ -114,7 +106,7 @@
         return;
     }
     if (contextInfo == MPAlertUnlockMP) {
-        MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
+        MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserForThread];
         switch (returnCode) {
             case NSAlertAlternateReturn:
                 // "Change" button.
@@ -128,8 +120,8 @@
                                          @"Your current sites and passwords will then become available again."] runModal]
                     == 1) {
                     activeUser.keyID = nil;
-                    [[MPAppDelegate get] forgetSavedKeyFor:activeUser];
-                    [[MPAppDelegate get] signOutAnimated:YES];
+                    [[MPMacAppDelegate get] forgetSavedKeyFor:activeUser];
+                    [[MPMacAppDelegate get] signOutAnimated:YES];
                 }
                 break;
 
@@ -144,7 +136,7 @@
                 [self.progressView startAnimation:nil];
                 self.inProgress = YES;
                 dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0 ), ^{
-                    BOOL success = [[MPAppDelegate get] signInAsUser:activeUser
+                    BOOL success = [[MPMacAppDelegate get] signInAsUser:activeUser
                                                  usingMasterPassword:[(NSSecureTextField *)alert.accessoryView stringValue]];
                     self.inProgress = NO;
 
@@ -176,16 +168,16 @@
  forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger *)index {
 
     NSString *query = [[control stringValue] substringWithRange:charRange];
-    if (![query length] || ![MPAppDelegate get].key)
+    if (![query length] || ![MPMacAppDelegate get].key)
         return nil;
 
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
     fetchRequest.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"uses_" ascending:NO]];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(name BEGINSWITH[cd] %@) AND user == %@",
-                                                              query, [[MPAppDelegate get] activeUserForThread]];
+                                                              query, [[MPMacAppDelegate get] activeUserForThread]];
 
     NSError *error = nil;
-    self.siteResults = [[MPAppDelegate managedObjectContextForThreadIfReady] executeFetchRequest:fetchRequest error:&error];
+    self.siteResults = [[MPMacAppDelegate managedObjectContextForThreadIfReady] executeFetchRequest:fetchRequest error:&error];
     if (error)
     err(@"While fetching elements for completion: %@", error);
 
@@ -320,14 +312,14 @@
     // For when the app should be able to create new sites.
     /*
      else
-     [[MPAppDelegate get].managedObjectContext performBlock:^{
+     [[MPMacAppDelegate get].managedObjectContext performBlock:^{
      MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPElementGeneratedEntity class])
-     inManagedObjectContext:[MPAppDelegate get].managedObjectContext];
+     inManagedObjectContext:[MPMacAppDelegate get].managedObjectContext];
      assert([element isKindOfClass:ClassFromMPElementType(element.type)]);
-     assert([MPAppDelegate get].keyID);
+     assert([MPMacAppDelegate get].keyID);
      
      element.name = siteName;
-     element.keyID = [MPAppDelegate get].keyID;
+     element.keyID = [MPMacAppDelegate get].keyID;
      
      NSString *description = [element.content description];
      [element use];

@@ -1,23 +1,23 @@
 //
-//  MPAppDelegate.m
+//  MPMacAppDelegate.m
 //  MasterPassword
 //
 //  Created by Maarten Billemont on 04/03/12.
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import "MPAppDelegate.h"
+#import "MPMacAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import <Carbon/Carbon.h>
 
-@interface MPAppDelegate ()
+@interface MPMacAppDelegate()
 
 @property(nonatomic) BOOL wasRunning;
 
 @end
 
-@implementation MPAppDelegate
+@implementation MPMacAppDelegate
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wfour-char-constants"
@@ -46,11 +46,11 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     // Check which hotkey this was.
     if (hotKeyID.signature == MPShowHotKey.signature && hotKeyID.id == MPShowHotKey.id) {
-        [((__bridge MPAppDelegate *)userData) activate:nil];
+        [((__bridge MPMacAppDelegate *)userData) activate:nil];
         return noErr;
     }
     if (hotKeyID.signature == MPLockHotKey.signature && hotKeyID.id == MPLockHotKey.id) {
-        [((__bridge MPAppDelegate *)userData) lock:nil];
+        [((__bridge MPMacAppDelegate *)userData) lock:nil];
         return noErr;
     }
 
@@ -64,7 +64,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             [[self.usersItem submenu] removeItem:obj];
     }];
 
-    NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
+    NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
     if (!moc) {
         self.createUserItem.title = @"New User (Not ready)";
         self.createUserItem.enabled = NO;
@@ -106,7 +106,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (void)selectUser:(NSMenuItem *)item {
 
     NSError *error = nil;
-    NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
+    NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
     self.activeUser = (MPUserEntity *)[moc existingObjectWithID:[item representedObject] error:&error];
 
     if (error)
@@ -139,11 +139,11 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     if (sender == self.rememberPasswordItem)
         [MPConfig get].rememberLogin = [NSNumber numberWithBool:![[MPConfig get].rememberLogin boolValue]];
     if (sender == self.savePasswordItem) {
-        MPUserEntity *activeUser = [[MPAppDelegate get] activeUserForThread];
+        MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserForThread];
         if ((activeUser.saveKey = !activeUser.saveKey))
-            [[MPAppDelegate get] storeSavedKeyFor:activeUser];
+            [[MPMacAppDelegate get] storeSavedKeyFor:activeUser];
         else
-            [[MPAppDelegate get] forgetSavedKeyFor:activeUser];
+            [[MPMacAppDelegate get] forgetSavedKeyFor:activeUser];
         [activeUser.managedObjectContext saveToStore];
     }
     if (sender == self.dialogStyleRegular)
@@ -153,11 +153,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 }
 
 - (IBAction)newUser:(NSMenuItem *)sender {
-}
-
-- (IBAction)signOut:(id)sender {
-
-    [self signOutAnimated:YES];
 }
 
 - (IBAction)lock:(id)sender {
@@ -205,9 +200,10 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
             ^(NSNotification *note) {
                 self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
-                self.savePasswordItem.state = [[MPAppDelegate get] activeUserForThread].saveKey? NSOnState: NSOffState;
+                self.savePasswordItem.state = [[MPMacAppDelegate get] activeUserForThread].saveKey? NSOnState: NSOffState;
                 self.dialogStyleRegular.state = ![[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
                 self.dialogStyleHUD.state = [[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
+                
                 if ([note.object isEqual:NSStringFromSelector( @selector(dialogStyleHUD) )]) {
                     if (![self.passwordWindow.window isVisible])
                         self.passwordWindow = nil;
@@ -238,9 +234,13 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)setActiveUser:(MPUserEntity *)activeUser {
 
-    [self.passwordWindow close];
-
-    [super setActiveUser:activeUser];
+    BOOL reopenPasswordWindow = [self.passwordWindow.window isVisible];
+    
+    if (![[self activeUserForThread].objectID isEqual:activeUser.objectID]) {
+        [self.passwordWindow close];
+        self.passwordWindow = nil;
+        [super setActiveUser:activeUser];
+    }
 
     [[[self.usersItem submenu] itemArray] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if ([[obj representedObject] isEqual:[activeUser objectID]])
@@ -250,6 +250,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }];
 
     [MPMacConfig get].usedUserName = activeUser.name;
+    
+    if (reopenPasswordWindow)
+        [self showPasswordWindow];
 }
 
 - (void)updateMenuItems {
@@ -331,13 +334,13 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (void)applicationWillResignActive:(NSNotification *)notification {
 
     if (![[MPConfig get].rememberLogin boolValue])
-        self.key = nil;
+        [self lock:nil];
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
     // Save changes in the application's managed object context before the application terminates.
 
-    NSManagedObjectContext *moc = [MPAppDelegate managedObjectContextForThreadIfReady];
+    NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
     if (!moc)
         return NSTerminateNow;
 
