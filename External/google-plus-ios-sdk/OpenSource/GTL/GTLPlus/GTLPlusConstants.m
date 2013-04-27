@@ -1,4 +1,4 @@
-/* Copyright (c) 2012 Google Inc.
+/* Copyright (c) 2013 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,30 @@
 // ----------------------------------------------------------------------------
 // NOTE: This file is generated from Google APIs Discovery Service.
 // Service:
-//   Google+ API (plus/v1moments)
+//   Google+ API (plus/v1)
 // Description:
 //   The Google+ API enables developers to build on top of the Google+ platform.
 // Documentation:
-//   https://developers.google.com/+/history/
+//   https://developers.google.com/+/api/
 
 #import "GTLPlusConstants.h"
 
 // Authorization scope
-NSString * const kGTLAuthScopePlusMe           = @"https://www.googleapis.com/auth/plus.me";
-NSString * const kGTLAuthScopePlusMomentsWrite = @"https://www.googleapis.com/auth/plus.moments.write";
+NSString * const kGTLAuthScopePlusLogin = @"https://www.googleapis.com/auth/plus.login";
+NSString * const kGTLAuthScopePlusMe    = @"https://www.googleapis.com/auth/plus.me";
 
 // Collection
-NSString * const kGTLPlusCollectionVault = @"vault";
+NSString * const kGTLPlusCollectionPlusoners = @"plusoners";
+NSString * const kGTLPlusCollectionPublic    = @"public";
+NSString * const kGTLPlusCollectionResharers = @"resharers";
+NSString * const kGTLPlusCollectionVault     = @"vault";
+NSString * const kGTLPlusCollectionVisible   = @"visible";
+
+// OrderBy
+NSString * const kGTLPlusOrderByAlphabetical = @"alphabetical";
+NSString * const kGTLPlusOrderByBest         = @"best";
+NSString * const kGTLPlusOrderByRecent       = @"recent";
+
+// SortOrder
+NSString * const kGTLPlusSortOrderAscending  = @"ascending";
+NSString * const kGTLPlusSortOrderDescending = @"descending";

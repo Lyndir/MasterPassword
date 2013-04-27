@@ -1,0 +1,5 @@
+/* Sign-in button text */
+"Sign in" = "登录";
+
+/* Long form sign-in button text */
+"Sign in with Google" = "使用 Google 帐户登录";

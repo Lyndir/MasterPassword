@@ -35,9 +35,8 @@
 @property (retain, nonatomic) IBOutlet UILabel *signInDisplayName;
 // A button to sign out of this application.
 @property (retain, nonatomic) IBOutlet UIButton *signOutButton;
-// A switch for whether to request for Google+ History's
-// https://www.googleapis.com/auth/plus.moments.write scope.
-@property (retain, nonatomic) IBOutlet UISwitch *plusMomentsWriteScope;
+// A button to disconnect user from this application.
+@property (retain, nonatomic) IBOutlet UIButton *disconnectButton;
 // A switch for whether to request
 // https://www.googleapis.com/auth/userinfo.email scope to get user's email
 // address after the sign-in action.
@@ -45,9 +44,8 @@
 
 // Called when the user presses the "Sign out" button.
 - (IBAction)signOut:(id)sender;
-// Called when the user toggles Google+ History's
-// https://www.googleapis.com/auth/plus.moments.write scope.
-- (IBAction)plusMomentsWriteScopeToggle:(id)sender;
+// Called when the user presses the "Disconnect" button.
+- (IBAction)disconnect:(id)sender;
 // Called when the user toggles the
 // https://www.googleapis.com/auth/userinfo.email scope.
 - (IBAction)userinfoEmailScopeToggle:(id)sender;

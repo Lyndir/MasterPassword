@@ -47,8 +47,11 @@ static BOOL ConformsToNSObjectProtocol(Class cls) {
        || (strncmp(className, "__NS", 4) == 0)
        || (strcmp(className, "CFObject") == 0)
        || (strcmp(className, "__IncompleteProtocol") == 0)
+       || (strcmp(className, "__ARCLite__") == 0)
+       || (strcmp(className, "WebMIMETypeRegistry") == 0)
 #if GTM_IPHONE_SDK
        || (strcmp(className, "Object") == 0)
+       || (strcmp(className, "UIKeyboardCandidateUtilities") == 0)
 #endif
     ) {
     return YES;
@@ -80,14 +83,18 @@ void GTMMethodCheckMethodChecker(void) {
   // Run through all the classes looking for class methods that are
   // prefixed with xxGMMethodCheckMethod. If it finds one, it calls it.
   // See GTMMethodCheck.h to see what it does.
+#if !defined(__has_feature) || !__has_feature(objc_arc)
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+#else
+  @autoreleasepool {
+#endif
   int numClasses = 0;
   int newNumClasses = objc_getClassList(NULL, 0);
   int i;
   Class *classes = NULL;
   while (numClasses < newNumClasses) {
     numClasses = newNumClasses;
-    classes = realloc(classes, sizeof(Class) * numClasses);
+    classes = (Class *)realloc(classes, sizeof(Class) * numClasses);
     _GTMDevAssert(classes, @"Unable to allocate memory for classes");
     newNumClasses = objc_getClassList(classes, numClasses);
   }
@@ -157,7 +164,11 @@ void GTMMethodCheckMethodChecker(void) {
     free(methods);
   }
   free(classes);
+#if !defined(__has_feature) || !__has_feature(objc_arc)
   [pool drain];
+#else
+  }  // @autoreleasepool
+#endif
 }
 
 #endif  // DEBUG

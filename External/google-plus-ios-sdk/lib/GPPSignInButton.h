@@ -4,53 +4,41 @@
 //
 //  Copyright 2012 Google Inc.
 //
-//  Usage of this SDK is subject to the Google+ Platform Terms of Service:
+//  Use of this SDK is subject to the Google+ Platform Terms of Service:
 //  https://developers.google.com/+/terms
 //
 
 #import <UIKit/UIKit.h>
 
-@class GPPSignIn;
-@protocol GPPSignInDelegate;
-
-// The various visual styles supported by the GPPSignInButton.
+// The various layout styles supported by the GPPSignInButton.
+// The minmum size of the button depends on the language used for text.
+// The following dimensions (in points) fit for all languages:
+// kGPPSignInButtonStyleStandard: 226 x 48
+// kGPPSignInButtonStyleWide:     308 x 48
+// kGPPSignInButtonStyleIconOnly:  46 x 48 (no text, fixed size)
 typedef enum {
-  kGPPSignInButtonStyleNormal,
-  kGPPSignInButtonStyleWide
+  kGPPSignInButtonStyleStandard = 0,
+  kGPPSignInButtonStyleWide = 1,
+  kGPPSignInButtonStyleIconOnly = 2
 } GPPSignInButtonStyle;
 
-// A view that displays the Google+ sign-in button. You can instantiate this
-// class programmatically or from a NIB file. Once instantiated, you should
-// set the client ID and delegate properties and add this view to your own view
-// hierarchy.
-@interface GPPSignInButton : UIView
+// The various color schemes supported by the GPPSignInButton.
+typedef enum {
+  kGPPSignInButtonColorSchemeDark = 0,
+  kGPPSignInButtonColorSchemeLight = 1
+} GPPSignInButtonColorScheme;
 
-// The OAuth 2.0 client ID of the application.
-@property(nonatomic, copy) NSString *clientID;
+// This class provides the Google+ sign-in button. You can instantiate this
+// class programmatically or from a NIB file.  You should set up the
+// |GPPSignIn| shared instance with your client ID and any additional scopes,
+// implement the delegate methods for |GPPSignIn|, and add this button to your
+// view hierarchy.
+@interface GPPSignInButton : UIButton
 
-// See GPPSignIn.h for details on this delegate.
-@property(nonatomic, assign) id<GPPSignInDelegate> delegate;
-
-// Actually does the work of signing in with Google+.
-@property(nonatomic, readonly) GPPSignIn *googlePlusSignIn;
-
-// The OAuth 2.0 scopes for the APIs that you are using. This is used to fetch
-// an OAuth 2.0 token. By default, this is set to the
-// https://www.googleapis.com/auth/plus.me scope.
-@property(nonatomic, copy) NSArray *scope;
-
-// Whether or not to fetch user email after signing in. The email is saved in
-// the |GTMOAuth2Authentication| object.
-@property (nonatomic, assign) BOOL shouldFetchGoogleUserEmail;
-
-// Sets the sign-in button. The default style is normal.
+// Sets the sign-in button layout style. The default style is standard.
 - (void)setStyle:(GPPSignInButtonStyle)style;
 
-// This method should be called from your |UIApplicationDelegate|'s
-// |application:openURL:sourceApplication:annotation|. Returns |YES| if
-// |GPPSignInButton| handled this URL.
-- (BOOL)handleURL:(NSURL *)url
-    sourceApplication:(NSString *)sourceApplication
-           annotation:(id)annotation;
+// Sets the sign-in button color scheme. The default scheme is dark.
+- (void)setColorScheme:(GPPSignInButtonColorScheme)colorScheme;
 
 @end

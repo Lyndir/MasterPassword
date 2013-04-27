@@ -45,8 +45,8 @@
 + (id)batchQuery;
 + (id)batchQueryWithQueries:(NSArray *)array;
 
-- (void)addQuery:(GTLQuery *)query;
+- (void)addQuery:(GTLQuery *)query GTL_NONNULL((1));
 
-- (GTLQuery *)queryForRequestID:(NSString *)requestID;
+- (GTLQuery *)queryForRequestID:(NSString *)requestID GTL_NONNULL((1));
 
 @end

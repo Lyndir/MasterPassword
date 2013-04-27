@@ -116,15 +116,15 @@
 #endif
 
 // methodName is the RPC method name to use.
-+ (id)queryWithMethodName:(NSString *)methodName;
++ (id)queryWithMethodName:(NSString *)methodName GTL_NONNULL((1));
 
 // methodName is the RPC method name to use.
-- (id)initWithMethodName:(NSString *)method;
+- (id)initWithMethodName:(NSString *)method GTL_NONNULL((1));
 
 // If you need to set a parameter that is not listed as a property for a
 // query class, you can do so via this api.  If you need to clear it after
 // setting, pass nil for obj.
-- (void)setCustomParameter:(id)obj forKey:(NSString *)key;
+- (void)setCustomParameter:(id)obj forKey:(NSString *)key GTL_NONNULL((2));
 
 // Auto-generated request IDs
 + (NSString *)nextRequestID;

@@ -9,15 +9,8 @@
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-
 #import "IASKSettingsReader.h"
-#import "LocalyticsAmpSession.h"
-
-@interface MPiOSAppDelegate()
-
-@property(nonatomic, readwrite) GPPShare *googlePlus;
-
-@end
+#import "GPPSignIn.h"
 
 @implementation MPiOSAppDelegate
 
@@ -75,7 +68,7 @@
         NSString *googlePlusClientID = [self googlePlusClientID];
         if ([googlePlusClientID length]) {
             inf(@"Initializing Google+");
-            self.googlePlus = [[GPPShare alloc] initWithClientID:googlePlusClientID];
+            [[GPPSignIn sharedInstance] setClientID:googlePlusClientID];
         }
     }
     @catch (id exception) {
@@ -279,11 +272,7 @@
         return NO;
 
     // Google+
-    if ([self.googlePlus handleURL:url sourceApplication:sourceApplication annotation:annotation])
-        return YES;
-
-    // Localytics
-    if ([[LocalyticsAmpSession shared] handleURL:url])
+    if ([[GPPSignIn sharedInstance] handleURL:url sourceApplication:sourceApplication annotation:annotation])
         return YES;
 
     // Arbitrary URL to mpsites data.

@@ -20,9 +20,9 @@
 
 @class GTLServicePlus;
 
-// A view controller for writing different kinds of moments to Google+ history.
+// A view controller for writing different kinds of moments to Google+.
 // The open-source GTLPlus libraries are required. For more details, see
-// https://developers.google.com/+/history/ .
+// https://developers.google.com/+/features/app-activities .
 @interface GooglePlusSampleMomentsViewController : UIViewController<
     UITableViewDelegate,
     UITableViewDataSource,
@@ -30,8 +30,12 @@
   BOOL keyboardVisible_;
 }
 
+// A label to prompt the selection of a moment.
+@property (retain, nonatomic) IBOutlet UILabel *selectionLabel;
 // The table that displays the different kinds of moments available.
 @property (retain, nonatomic) IBOutlet UITableView *momentsTable;
+// The view for the bootom controls.
+@property (retain, nonatomic) IBOutlet UIView *bottomControls;
 // The target URL to associate with this moment.
 @property (retain, nonatomic) IBOutlet UITextField *momentURL;
 // A label to display the result of writing a moment.

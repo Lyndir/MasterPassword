@@ -32,7 +32,7 @@ static NSString *EncodeBase64StringCommon(NSData *data, const char *table) {
   NSUInteger bufferSize = ((length + 2) / 3) * 4;
   NSMutableData* buffer = [NSMutableData dataWithLength:bufferSize];
 
-  uint8_t *output = [buffer mutableBytes];
+  int8_t *output = [buffer mutableBytes];
 
   for (NSUInteger i = 0; i < length; i += 3) {
     NSUInteger value = 0;
@@ -70,7 +70,7 @@ static void CreateDecodingTable(const char *encodingTable,
                                 size_t encodingTableSize, char *decodingTable) {
   memset(decodingTable, 0, 128);
   for (unsigned int i = 0; i < encodingTableSize; i++) {
-    decodingTable[(unsigned int) encodingTable[i]] = i;
+    decodingTable[(unsigned int) encodingTable[i]] = (char)i;
   }
 }
 
@@ -80,7 +80,7 @@ static NSData *DecodeBase64StringCommon(NSString *base64Str,
   const char *cString = [base64Str cStringUsingEncoding:NSASCIIStringEncoding];
   if (cString == nil) return nil;
 
-  NSInteger inputLength = strlen(cString);
+  NSInteger inputLength = (NSInteger)strlen(cString);
   if (inputLength % 4 != 0) return nil;
   if (inputLength == 0) return [NSData data];
 
@@ -89,7 +89,7 @@ static NSData *DecodeBase64StringCommon(NSString *base64Str,
   }
 
   NSInteger outputLength = inputLength * 3 / 4;
-  NSMutableData* data = [NSMutableData dataWithLength:outputLength];
+  NSMutableData* data = [NSMutableData dataWithLength:(NSUInteger)outputLength];
   uint8_t *output = [data mutableBytes];
 
   NSInteger inputPoint = 0;
@@ -102,12 +102,12 @@ static NSData *DecodeBase64StringCommon(NSString *base64Str,
     int i2 = inputPoint < inputLength ? cString[inputPoint++] : 'A'; // 'A' will decode to \0
     int i3 = inputPoint < inputLength ? cString[inputPoint++] : 'A';
 
-    output[outputPoint++] = (table[i0] << 2) | (table[i1] >> 4);
+    output[outputPoint++] = (uint8_t)((table[i0] << 2) | (table[i1] >> 4));
     if (outputPoint < outputLength) {
-      output[outputPoint++] = ((table[i1] & 0xF) << 4) | (table[i2] >> 2);
+      output[outputPoint++] = (uint8_t)(((table[i1] & 0xF) << 4) | (table[i2] >> 2));
     }
     if (outputPoint < outputLength) {
-      output[outputPoint++] = ((table[i2] & 0x3) << 6) | table[i3];
+      output[outputPoint++] = (uint8_t)(((table[i2] & 0x3) << 6) | table[i3]);
     }
   }
 

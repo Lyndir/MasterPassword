@@ -1,4 +1,4 @@
-/* Copyright (c) 2012 Google Inc.
+/* Copyright (c) 2013 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,11 @@
 // ----------------------------------------------------------------------------
 // NOTE: This file is generated from Google APIs Discovery Service.
 // Service:
-//   Google+ API (plus/v1moments)
+//   Google+ API (plus/v1)
 // Description:
 //   The Google+ API enables developers to build on top of the Google+ platform.
 // Documentation:
-//   https://developers.google.com/+/history/
+//   https://developers.google.com/+/api/
 // Classes:
 //   GTLPlusItemScope (0 custom class methods, 55 custom properties)
 

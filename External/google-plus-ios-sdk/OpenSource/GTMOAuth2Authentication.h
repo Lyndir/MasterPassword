@@ -149,6 +149,7 @@ _EXTERN NSString* const kGTMOAuth2NetworkFound        _INITIALIZE_AS(@"kGTMOAuth
 @property (retain) NSString *scope;
 @property (retain) NSString *tokenType;
 @property (retain) NSString *assertion;
+@property (retain) NSString *refreshScope;
 
 // Apps may optionally add parameters here to be provided to the token
 // endpoint on token requests and refreshes
@@ -176,6 +177,9 @@ _EXTERN NSString* const kGTMOAuth2NetworkFound        _INITIALIZE_AS(@"kGTMOAuth
 // with the authorizing service.
 @property (copy) NSString *serviceProvider;
 
+// User ID; not used for authentication
+@property (retain) NSString *userID;
+
 // User email and verified status; not used for authentication
 //
 // The verified string can be checked with -boolValue. If the result is false,
@@ -184,8 +188,8 @@ _EXTERN NSString* const kGTMOAuth2NetworkFound        _INITIALIZE_AS(@"kGTMOAuth
 @property (retain) NSString *userEmail;
 @property (retain) NSString *userEmailIsVerified;
 
-// Property indicating if this auth has a refresh token so is suitable for
-// authorizing a request. This does not guarantee that the token is valid.
+// Property indicating if this auth has a refresh or access token so is suitable
+// for authorizing a request. This does not guarantee that the token is valid.
 @property (readonly) BOOL canAuthorize;
 
 // Property indicating if this object will authorize plain http request
@@ -273,8 +277,12 @@ _EXTERN NSString* const kGTMOAuth2NetworkFound        _INITIALIZE_AS(@"kGTMOAuth
 // Check if a request appears to be authorized
 - (BOOL)isAuthorizedRequest:(NSURLRequest *)request;
 
-// Stop any pending refresh fetch
+// Stop any pending refresh fetch. This will also cancel the authorization
+// for all fetch requests pending authorization.
 - (void)stopAuthorization;
+
+// Prevents authorization callback for a given request.
+- (void)stopAuthorizationForRequest:(NSURLRequest *)request;
 
 // OAuth fetch user-agent header value
 - (NSString *)userAgent;

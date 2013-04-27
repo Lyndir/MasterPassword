@@ -633,7 +633,10 @@ static NSString *ETagIfPresent(GTLObject *obj) {
     if (bodyObject != nil) {
       GTL_DEBUG_ASSERT([parameters objectForKey:kBodyObjectParamKey] == nil,
                        @"There was already something under the 'data' key?!");
-      [worker setObject:[bodyObject JSON] forKey:kBodyObjectParamKey];
+      NSMutableDictionary *json = [bodyObject JSON];
+      if (json != nil) {
+        [worker setObject:json forKey:kBodyObjectParamKey];
+      }
     }
     finalParams = worker;
   }

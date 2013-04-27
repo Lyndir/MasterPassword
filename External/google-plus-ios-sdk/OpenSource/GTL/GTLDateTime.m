@@ -34,6 +34,12 @@
 
 @end
 
+static NSCharacterSet *gDashSet = nil;
+static NSCharacterSet *gTSet = nil;
+static NSCharacterSet *gColonSet = nil;
+static NSCharacterSet *gPlusMinusZSet = nil;
+static NSMutableDictionary *gCalendarsForTimeZones = nil;
+
 @implementation GTLDateTime
 
 // A note about milliseconds_:
@@ -57,6 +63,19 @@
             milliseconds = milliseconds_,
             offsetSeconds = offsetSeconds_,
             universalTime = isUniversalTime_;
+
++ (void)initialize {
+  // Note that initialize is guaranteed by the runtime to be called in a
+  // thread-safe manner.
+  if (gDashSet == nil) {
+    gDashSet = [[NSCharacterSet characterSetWithCharactersInString:@"-"] retain];
+    gTSet = [[NSCharacterSet characterSetWithCharactersInString:@"Tt "] retain];
+    gColonSet = [[NSCharacterSet characterSetWithCharactersInString:@":"] retain];
+    gPlusMinusZSet = [[NSCharacterSet characterSetWithCharactersInString:@"+-zZ"] retain];
+
+    gCalendarsForTimeZones = [[NSMutableDictionary alloc] init];
+  }
+}
 
 + (GTLDateTime *)dateTimeWithRFC3339String:(NSString *)str {
   if (str == nil) return nil;
@@ -179,29 +198,41 @@
   }
 }
 
-- (NSCalendar *)calendar {
-  NSCalendar *cal = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
-  NSTimeZone *tz = self.timeZone;
-  if (tz) {
-    [cal setTimeZone:tz];
+- (NSCalendar *)calendarForTimeZone:(NSTimeZone *)tz {
+  NSCalendar *cal = nil;
+  @synchronized(gCalendarsForTimeZones) {
+    id tzKey = (tz ? tz : [NSNull null]);
+    cal = [gCalendarsForTimeZones objectForKey:tzKey];
+    if (cal == nil) {
+      cal = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
+      if (tz) {
+        [cal setTimeZone:tz];
+      }
+      [gCalendarsForTimeZones setObject:cal forKey:tzKey];
+    }
   }
   return cal;
 }
 
+- (NSCalendar *)calendar {
+  NSTimeZone *tz = self.timeZone;
+  return [self calendarForTimeZone:tz];
+}
+
 - (NSDate *)date {
-  NSCalendar *cal = self.calendar;
   NSDateComponents *dateComponents = self.dateComponents;
   NSTimeInterval extraMillisecondsAsSeconds = 0.0;
+  NSCalendar *cal;
 
   if (!self.hasTime) {
-    // we're not keeping track of a time, but NSDate always is based on
+    // We're not keeping track of a time, but NSDate always is based on
     // an absolute time. We want to avoid returning an NSDate where the
     // calendar date appears different from what was used to create our
     // date-time object.
     //
     // We'll make a copy of the date components, setting the time on our
     // copy to noon GMT, since that ensures the date renders correctly for
-    // any time zone
+    // any time zone.
     NSDateComponents *noonDateComponents = [[dateComponents copy] autorelease];
     [noonDateComponents setHour:12];
     [noonDateComponents setMinute:0];
@@ -209,8 +240,10 @@
     dateComponents = noonDateComponents;
     
     NSTimeZone *gmt = [NSTimeZone timeZoneWithName:@"Universal"];
-    [cal setTimeZone:gmt];
+    cal = [self calendarForTimeZone:gmt];
   } else {
+    cal = self.calendar;
+
     // Add in the fractional seconds that don't fit into NSDateComponents.
     extraMillisecondsAsSeconds = ((NSTimeInterval)self.milliseconds) / 1000.0;
   }
@@ -278,10 +311,7 @@
 }
 
 - (void)setFromDate:(NSDate *)date timeZone:(NSTimeZone *)tz {
-  NSCalendar *cal = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
-  if (tz) {
-    [cal setTimeZone:tz];
-  }
+  NSCalendar *cal = [self calendarForTimeZone:tz];
 
   NSUInteger const kComponentBits = (NSYearCalendarUnit | NSMonthCalendarUnit
     | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit
@@ -332,25 +362,20 @@
     // There should be no whitespace, so no skip characters.
     [scanner setCharactersToBeSkipped:nil];
 
-    NSCharacterSet* dashSet = [NSCharacterSet characterSetWithCharactersInString:@"-"];
-    NSCharacterSet* tSet = [NSCharacterSet characterSetWithCharactersInString:@"Tt "];
-    NSCharacterSet* colonSet = [NSCharacterSet characterSetWithCharactersInString:@":"];
-    NSCharacterSet* plusMinusZSet = [NSCharacterSet characterSetWithCharactersInString:@"+-zZ"];
-
     // for example, scan 2006-11-17T15:10:46-08:00
     //                or 2006-11-17T15:10:46Z
     if (// yyyy-mm-dd
         [scanner scanInteger:&year] &&
-        [scanner scanCharactersFromSet:dashSet intoString:NULL] &&
+        [scanner scanCharactersFromSet:gDashSet intoString:NULL] &&
         [scanner scanInteger:&month] &&
-        [scanner scanCharactersFromSet:dashSet intoString:NULL] &&
+        [scanner scanCharactersFromSet:gDashSet intoString:NULL] &&
         [scanner scanInteger:&day] &&
         // Thh:mm:ss
-        [scanner scanCharactersFromSet:tSet intoString:NULL] &&
+        [scanner scanCharactersFromSet:gTSet intoString:NULL] &&
         [scanner scanInteger:&hour] &&
-        [scanner scanCharactersFromSet:colonSet intoString:NULL] &&
+        [scanner scanCharactersFromSet:gColonSet intoString:NULL] &&
         [scanner scanInteger:&minute] &&
-        [scanner scanCharactersFromSet:colonSet intoString:NULL] &&
+        [scanner scanCharactersFromSet:gColonSet intoString:NULL] &&
         [scanner scanDouble:&secDouble]) {
 
       // At this point we got secDouble, pull it apart.
@@ -360,9 +385,9 @@
 
       // Finish parsing, now the offset info.
       if (// Z or +hh:mm
-          [scanner scanCharactersFromSet:plusMinusZSet intoString:&sign] &&
+          [scanner scanCharactersFromSet:gPlusMinusZSet intoString:&sign] &&
           [scanner scanInteger:&offsetHour] &&
-          [scanner scanCharactersFromSet:colonSet intoString:NULL] &&
+          [scanner scanCharactersFromSet:gColonSet intoString:NULL] &&
           [scanner scanInteger:&offsetMinute]) {
       }
     }

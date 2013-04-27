@@ -14,8 +14,6 @@
 
 @interface MPiOSAppDelegate : MPAppDelegate_Shared
 
-@property(nonatomic, readonly) GPPShare *googlePlus;
-
 - (void)showGuide;
 - (void)showSetup;
 - (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController;

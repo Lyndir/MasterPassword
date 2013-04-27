@@ -19,42 +19,31 @@
 #import "GooglePlusSampleAppDelegate.h"
 
 #import "GooglePlusSampleMasterViewController.h"
-#import "GPPDeepLink.h"
 #import "GPPSignIn.h"
-#import "GPPSignInButton.h"
+#import "GPPURLHandler.h"
 
 @implementation GooglePlusSampleAppDelegate
 
 @synthesize window = window_;
 @synthesize navigationController = navigationController_;
-@synthesize signInButton = signInButton_;
-@synthesize auth = auth_;
-@synthesize share = share_;
-@synthesize plusMomentsWriteScope = plusMomentsWriteScope_;
 
 // DO NOT USE THIS CLIENT ID. IT WILL NOT WORK FOR YOUR APP.
 // Please use the client ID created for you by Google.
 static NSString * const kClientID =
-    @"122385832599-2mcvobo565un3ab7d6d06m6fjemocto9.apps.googleusercontent.com";
-
-+ (NSString *)clientID {
-  return kClientID;
-}
+    @"452265719636.apps.googleusercontent.com";
 
 #pragma mark Object life-cycle.
 
 - (void)dealloc {
   [window_ release];
   [navigationController_ release];
-  [signInButton_ release];
-  [auth_ release];
-  [share_ release];
   [super dealloc];
 }
 
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  plusMomentsWriteScope_ = YES;
+  // Set app's client ID for |GPPSignIn| and |GPPShare|.
+  [GPPSignIn sharedInstance].clientID = kClientID;
 
   self.window = [[[UIWindow alloc]
       initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
@@ -69,16 +58,8 @@ static NSString * const kClientID =
   [self.window makeKeyAndVisible];
 
   // Read Google+ deep-link data.
-  GPPDeepLink *deepLink = [GPPDeepLink readDeepLinkAfterInstall];
-  if (deepLink) {
-    UIAlertView *alert = [[[UIAlertView alloc]
-        initWithTitle:@"Read Deep-link Data"
-              message:[deepLink deepLinkID]
-             delegate:nil
-    cancelButtonTitle:@"OK"
-    otherButtonTitles:nil] autorelease];
-    [alert show];
-  }
+  [GPPDeepLink setDelegate:self];
+  [GPPDeepLink readDeepLinkAfterInstall];
   return YES;
 }
 
@@ -86,34 +67,22 @@ static NSString * const kClientID =
               openURL:(NSURL *)url
     sourceApplication:(NSString *)sourceApplication
            annotation:(id)annotation {
-  // Handle Google+ share dialog URL.
-  if ([share_ handleURL:url
-      sourceApplication:sourceApplication
-             annotation:annotation]) {
-    return YES;
-  }
+  return [GPPURLHandler handleURL:url
+                sourceApplication:sourceApplication
+                       annotation:annotation];
+}
 
-  // Handle Google+ sign-in button URL.
-  if ([signInButton_ handleURL:url
-             sourceApplication:sourceApplication
-                    annotation:annotation]) {
-    return YES;
-  }
+#pragma mark - GPPDeepLinkDelegate
 
-  // Handle Google+ deep-link data URL.
-  GPPDeepLink *deepLink = [GPPDeepLink handleURL:url
-                               sourceApplication:sourceApplication
-                                      annotation:annotation];
-  if (deepLink) {
-    UIAlertView *alert = [[[UIAlertView alloc]
-        initWithTitle:@"Handle Deep-link Data"
-              message:[deepLink deepLinkID]
-             delegate:nil
-    cancelButtonTitle:@"OK"
-    otherButtonTitles:nil] autorelease];
-    [alert show];
-  }
-  return NO;
+- (void)didReceiveDeepLink:(GPPDeepLink *)deepLink {
+  // An example to handle the deep link data.
+  UIAlertView *alert = [[[UIAlertView alloc]
+          initWithTitle:@"Deep-link Data"
+                message:[deepLink deepLinkID]
+               delegate:nil
+      cancelButtonTitle:@"OK"
+      otherButtonTitles:nil] autorelease];
+  [alert show];
 }
 
 @end

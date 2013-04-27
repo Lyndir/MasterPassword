@@ -152,6 +152,11 @@
 // delegate's finishedSelector
 - (void)windowWasClosed;
 
+// Start the sequences for signing in with an authorization code. The
+// authentication must contain an authorization code, otherwise the process
+// will fail.
+- (void)authCodeObtained;
+
 #pragma mark -
 
 #if !GTM_OAUTH2_SKIP_GOOGLE_SUPPORT

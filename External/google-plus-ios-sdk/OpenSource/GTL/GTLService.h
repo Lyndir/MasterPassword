@@ -160,11 +160,11 @@ typedef void *GTLServiceUploadProgressBlock;
 
 - (GTLServiceTicket *)executeQuery:(id<GTLQueryProtocol>)query
                           delegate:(id)delegate
-                 didFinishSelector:(SEL)finishedSelector;
+                 didFinishSelector:(SEL)finishedSelector GTL_NONNULL((1));
 
 #if NS_BLOCKS_AVAILABLE
 - (GTLServiceTicket *)executeQuery:(id<GTLQueryProtocol>)query
-                 completionHandler:(void (^)(GTLServiceTicket *ticket, id object, NSError *error))handler;
+                 completionHandler:(void (^)(GTLServiceTicket *ticket, id object, NSError *error))handler GTL_NONNULL((1));
 #endif
 
 // Automatic page fetches
@@ -231,85 +231,85 @@ typedef void *GTLServiceUploadProgressBlock;
                                       parameters:(NSDictionary *)parameters
                                      objectClass:(Class)objectClass
                                         delegate:(id)delegate
-                               didFinishSelector:(SEL)finishedSelector;
+                               didFinishSelector:(SEL)finishedSelector GTL_NONNULL((1));
 
 - (GTLServiceTicket *)fetchObjectWithMethodNamed:(NSString *)methodName
                                  insertingObject:(GTLObject *)bodyObject
                                      objectClass:(Class)objectClass
                                         delegate:(id)delegate
-                               didFinishSelector:(SEL)finishedSelector;
+                               didFinishSelector:(SEL)finishedSelector GTL_NONNULL((1));
 
 - (GTLServiceTicket *)fetchObjectWithMethodNamed:(NSString *)methodName
                                       parameters:(NSDictionary *)parameters
                                  insertingObject:(GTLObject *)bodyObject
                                      objectClass:(Class)objectClass
                                         delegate:(id)delegate
-                               didFinishSelector:(SEL)finishedSelector;
+                               didFinishSelector:(SEL)finishedSelector GTL_NONNULL((1));
 
 #if NS_BLOCKS_AVAILABLE
 - (GTLServiceTicket *)fetchObjectWithMethodNamed:(NSString *)methodName
                                       parameters:(NSDictionary *)parameters
                                      objectClass:(Class)objectClass
-                               completionHandler:(void (^)(GTLServiceTicket *ticket, id object, NSError *error))handler;
+                               completionHandler:(void (^)(GTLServiceTicket *ticket, id object, NSError *error))handler GTL_NONNULL((1));
 
 - (GTLServiceTicket *)fetchObjectWithMethodNamed:(NSString *)methodName
                                  insertingObject:(GTLObject *)bodyObject
                                      objectClass:(Class)objectClass
-                               completionHandler:(void (^)(GTLServiceTicket *ticket, id object, NSError *error))handler;
+                               completionHandler:(void (^)(GTLServiceTicket *ticket, id object, NSError *error))handler GTL_NONNULL((1));
 
 - (GTLServiceTicket *)fetchObjectWithMethodNamed:(NSString *)methodName
                                       parameters:(NSDictionary *)parameters
                                  insertingObject:(GTLObject *)bodyObject
                                      objectClass:(Class)objectClass
-                               completionHandler:(void (^)(GTLServiceTicket *ticket, id object, NSError *error))handler;
+                               completionHandler:(void (^)(GTLServiceTicket *ticket, id object, NSError *error))handler GTL_NONNULL((1));
 #endif
 
 #pragma mark REST Fetch Methods
 
 - (GTLServiceTicket *)fetchObjectWithURL:(NSURL *)objectURL
                                 delegate:(id)delegate
-                       didFinishSelector:(SEL)finishedSelector;
+                       didFinishSelector:(SEL)finishedSelector GTL_NONNULL((1));
 
 - (GTLServiceTicket *)fetchObjectWithURL:(NSURL *)objectURL
                              objectClass:(Class)objectClass
                                 delegate:(id)delegate
-                       didFinishSelector:(SEL)finishedSelector;
+                       didFinishSelector:(SEL)finishedSelector GTL_NONNULL((1));
 
 - (GTLServiceTicket *)fetchPublicObjectWithURL:(NSURL *)objectURL
                                    objectClass:(Class)objectClass
                                       delegate:(id)delegate
-                             didFinishSelector:(SEL)finishedSelector;
+                             didFinishSelector:(SEL)finishedSelector GTL_NONNULL((1));
 
 - (GTLServiceTicket *)fetchObjectByInsertingObject:(GTLObject *)bodyToPut
                                             forURL:(NSURL *)destinationURL
                                           delegate:(id)delegate
-                                 didFinishSelector:(SEL)finishedSelector;
+                                 didFinishSelector:(SEL)finishedSelector GTL_NONNULL((1,2));
 
 - (GTLServiceTicket *)fetchObjectByUpdatingObject:(GTLObject *)bodyToPut
                                            forURL:(NSURL *)destinationURL
                                          delegate:(id)delegate
-                                didFinishSelector:(SEL)finishedSelector;
+                                didFinishSelector:(SEL)finishedSelector GTL_NONNULL((1,2));
 
 - (GTLServiceTicket *)deleteResourceURL:(NSURL *)destinationURL
                                    ETag:(NSString *)etagOrNil
                                delegate:(id)delegate
-                      didFinishSelector:(SEL)finishedSelector;
+                      didFinishSelector:(SEL)finishedSelector GTL_NONNULL((1));
 
 #if NS_BLOCKS_AVAILABLE
 - (GTLServiceTicket *)fetchObjectWithURL:(NSURL *)objectURL
-                       completionHandler:(void (^)(GTLServiceTicket *ticket, id object, NSError *error))handler;
+                       completionHandler:(void (^)(GTLServiceTicket *ticket, id object, NSError *error))handler GTL_NONNULL((1));
 
 - (GTLServiceTicket *)fetchObjectByInsertingObject:(GTLObject *)bodyToPut
                                             forURL:(NSURL *)destinationURL
-                                 completionHandler:(void (^)(GTLServiceTicket *ticket, id object, NSError *error))handler;
+                                 completionHandler:(void (^)(GTLServiceTicket *ticket, id object, NSError *error))handler GTL_NONNULL((1));
 
 - (GTLServiceTicket *)fetchObjectByUpdatingObject:(GTLObject *)bodyToPut
                                            forURL:(NSURL *)destinationURL
-                                completionHandler:(void (^)(GTLServiceTicket *ticket, id object, NSError *error))handler;
+                                completionHandler:(void (^)(GTLServiceTicket *ticket, id object, NSError *error))handler GTL_NONNULL((1));
 
 - (GTLServiceTicket *)deleteResourceURL:(NSURL *)destinationURL
                                    ETag:(NSString *)etagOrNil
-                      completionHandler:(void (^)(GTLServiceTicket *ticket, id object, NSError *error))handler;
+                      completionHandler:(void (^)(GTLServiceTicket *ticket, id object, NSError *error))handler GTL_NONNULL((1));
 #endif
 
 #pragma mark User Properties
@@ -320,8 +320,8 @@ typedef void *GTLServiceUploadProgressBlock;
 //
 // The service properties dictionary is copied to become the initial property
 // dictionary for each ticket.
-- (void)setServiceProperty:(id)obj forKey:(NSString *)key; // pass nil obj to remove property
-- (id)servicePropertyForKey:(NSString *)key;
+- (void)setServiceProperty:(id)obj forKey:(NSString *)key GTL_NONNULL((2)); // pass nil obj to remove property
+- (id)servicePropertyForKey:(NSString *)key GTL_NONNULL((1));
 
 @property (nonatomic, copy) NSDictionary *serviceProperties;
 
@@ -391,7 +391,7 @@ typedef void *GTLServiceUploadProgressBlock;
 // For http method, pass nil (for default GET method), POST, PUT, or DELETE
 - (NSMutableURLRequest *)requestForURL:(NSURL *)url
                                   ETag:(NSString *)etagOrNil
-                            httpMethod:(NSString *)httpMethodOrNil;
+                            httpMethod:(NSString *)httpMethodOrNil GTL_NONNULL((1));
 
 // objectRequestForURL returns an NSMutableURLRequest for a JSON GTL object
 //
@@ -403,7 +403,7 @@ typedef void *GTLServiceUploadProgressBlock;
                                   httpMethod:(NSString *)httpMethod
                                       isREST:(BOOL)isREST
                            additionalHeaders:(NSDictionary *)additionalHeaders
-                                      ticket:(GTLServiceTicket *)ticket;
+                                      ticket:(GTLServiceTicket *)ticket GTL_NONNULL((1));
 
 // The queue used for parsing JSON responses (previously this property
 // was called operationQueue)
@@ -479,7 +479,7 @@ typedef void *GTLServiceUploadProgressBlock;
 - (BOOL)waitForTicket:(GTLServiceTicket *)ticket
               timeout:(NSTimeInterval)timeoutInSeconds
         fetchedObject:(GTLObject **)outObjectOrNil
-                error:(NSError **)outErrorOrNil;
+                error:(NSError **)outErrorOrNil GTL_NONNULL((1));
 @end
 
 #pragma mark -
@@ -555,7 +555,7 @@ typedef void *GTLServiceUploadProgressBlock;
 // Properties and userData are supported for client convenience.
 //
 // Property keys beginning with _ are reserved by the library.
-- (void)setProperty:(id)obj forKey:(NSString *)key; // pass nil obj to remove property
+- (void)setProperty:(id)obj forKey:(NSString *)key GTL_NONNULL((1)); // pass nil obj to remove property
 - (id)propertyForKey:(NSString *)key;
 
 @property (nonatomic, copy) NSDictionary *properties;
@@ -567,7 +567,7 @@ typedef void *GTLServiceUploadProgressBlock;
 @property (nonatomic, retain) GTLObject *fetchedObject;
 @property (nonatomic, retain) id<GTLQueryProtocol> executingQuery; // Query currently being fetched by this ticket
 @property (nonatomic, retain) id<GTLQueryProtocol> originalQuery;  // Query used to create this ticket
-- (GTLQuery *)queryForRequestID:(NSString *)requestID; // Returns the query from within the batch with the given id.
+- (GTLQuery *)queryForRequestID:(NSString *)requestID GTL_NONNULL((1)); // Returns the query from within the batch with the given id.
 
 @property (nonatomic, retain) NSDictionary *surrogates;
 

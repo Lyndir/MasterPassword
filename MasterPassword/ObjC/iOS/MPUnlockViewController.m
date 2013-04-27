@@ -14,6 +14,8 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 
+#import "GPPSignIn.h"
+
 @interface MPUnlockViewController()
 
 @property(strong, nonatomic) NSMutableDictionary *avatarToUserOID;
@@ -1046,7 +1048,7 @@
 
 - (IBAction)google:(UIButton *)sender {
 
-    id<GPPShareBuilder> shareDialog = [[MPiOSAppDelegate get].googlePlus shareDialog];
+    id<GPPShareBuilder> shareDialog = [[GPPShare sharedInstance] shareDialog];
     [[[shareDialog setURLToShare:[NSURL URLWithString:@"http://masterpasswordapp.com"]]
             setPrefillText:@"I've started doing passwords properly thanks to Master Password."] open];
 }

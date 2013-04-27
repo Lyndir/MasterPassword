@@ -19,13 +19,8 @@
 #import "GooglePlusSampleMomentsViewController.h"
 
 #import <QuartzCore/QuartzCore.h>
-#import "GooglePlusSampleAppDelegate.h"
+#import "GPPSignIn.h"
 #import "GTLPlus.h"
-#import "GTLPlusConstants.h"
-#import "GTLPlusItemScope.h"
-#import "GTLPlusMoment.h"
-#import "GTLQueryPlus.h"
-#import "GTLServicePlus.h"
 #import "GTMLogger.h"
 #import "GTMOAuth2Authentication.h"
 
@@ -39,13 +34,15 @@
 
 @implementation GooglePlusSampleMomentsViewController
 
+@synthesize selectionLabel = selectionLabel_;
 @synthesize momentsTable = momentsTable_;
+@synthesize bottomControls = bottomControls_;
 @synthesize momentURL = momentURL_;
 @synthesize momentStatus = momentStatus_;
 @synthesize addButton = addButton_;
 
 // The different kinds of moments.
-static const int kNumMomentTypes = 9;
+static const int kNumMomentTypes = 8;
 static NSString * const kMomentTypes[kNumMomentTypes] = {
     @"AddActivity",
     @"BuyActivity",
@@ -54,8 +51,7 @@ static NSString * const kMomentTypes[kNumMomentTypes] = {
     @"CreateActivity",
     @"ListenActivity",
     @"ReserveActivity",
-    @"ReviewActivity",
-    @"ViewActivity" };
+    @"ReviewActivity" };
 static NSString * const kMomentURLs[kNumMomentTypes] = {
     @"thing",
     @"a-book",
@@ -64,8 +60,7 @@ static NSString * const kMomentURLs[kNumMomentTypes] = {
     @"photo",
     @"song",
     @"restaurant",
-    @"widget",
-    @"video" };
+    @"widget" };
 static NSString * const kMomentURLFormat =
     @"https://developers.google.com/+/plugins/snippet/examples/%@";
 
@@ -81,7 +76,9 @@ static NSString * const kMomentURLFormat =
       removeObserver:self
                 name:UIKeyboardWillHideNotification
               object:nil];
+  [selectionLabel_ release];
   [momentsTable_ release];
+  [bottomControls_ release];
   [momentURL_ release];
   [momentStatus_ release];
   [addButton_ release];
@@ -121,6 +118,23 @@ static NSString * const kMomentURLFormat =
          selector:@selector(keyboardWillHide:)
              name:UIKeyboardWillHideNotification
            object:nil];
+
+  // Scale the table view vertically down to its contents if necessary.
+  [momentsTable_ reloadData];
+  CGRect frame = momentsTable_.frame;
+  if (frame.size.height > momentsTable_.contentSize.height) {
+    CGFloat shift = frame.size.height - momentsTable_.contentSize.height;
+    frame.size.height = momentsTable_.contentSize.height;
+    momentsTable_.frame = frame;
+
+    // Also update the prompt by removing the "scroll for more" part.
+    selectionLabel_.text = @"Select an activity";
+
+    // And move the bottom view up for the same shift amount.
+    frame = bottomControls_.frame;
+    frame.origin.y -= shift;
+    bottomControls_.frame = frame;
+  }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -140,24 +154,23 @@ static NSString * const kMomentURLFormat =
 #pragma mark - IBActions
 
 - (IBAction)momentButton:(id)sender {
-  GooglePlusSampleAppDelegate *appDelegate = (GooglePlusSampleAppDelegate *)
-      [[UIApplication sharedApplication] delegate];
-  if (!appDelegate.auth) {
+  GTMOAuth2Authentication *auth = [GPPSignIn sharedInstance].authentication;
+  if (!auth) {
     // To authenticate, use Google+ sign-in button.
     momentStatus_.text = @"Status: Not authenticated";
     return;
   }
 
-  // Here is an example of writing a moment to Google+ history:
+  // Here is an example of writing a moment to Google+:
   // 1. Create a |GTLServicePlus| instance to send a request to Google+.
   GTLServicePlus* plusService = [[[GTLServicePlus alloc] init] autorelease];
   plusService.retryEnabled = YES;
 
   // 2. Set a valid |GTMOAuth2Authentication| object as the authorizer.
-  [plusService setAuthorizer:appDelegate.auth];
+  [plusService setAuthorizer:auth];
 
   // 3. Create a |GTLPlusMoment| object with required fields. For reference, see
-  // https://developers.google.com/+/history/ .
+  // https://developers.google.com/+/features/app-activities .
   int selectedRow = [[momentsTable_ indexPathForSelectedRow] row];
   NSString *selectedMoment = kMomentTypes[selectedRow];
 
@@ -194,7 +207,7 @@ static NSString * const kMomentURLFormat =
                     [NSString stringWithFormat:@"Status: Error: %@", error];
               } else {
                 momentStatus_.text = [NSString stringWithFormat:
-                    @"Status: Saved to Google+ history (%@)",
+                    @"Status: Saved to Google+ (%@)",
                     selectedMoment];
               }
           }];
@@ -264,7 +277,7 @@ static NSString * const kMomentURLFormat =
     result.text = @"I can't wait to use it on my site :)";
     return result;
   } else if ([selectedMoment isEqualToString:@"ReserveActivity"]) {
-    result.type = @"http://schema.org/Reservation";
+    result.type = @"http://schemas.google.com/Reservation";
     result.startDate = @"2012-06-28T19:00:00-08:00";
     result.attendeeCount = [[[NSNumber alloc] initWithInt:3] autorelease];
     return result;
@@ -316,18 +329,12 @@ static NSString * const kMomentURLFormat =
 }
 
 - (void)reportAuthStatus {
-  NSString *authStatus = @"";
-  GooglePlusSampleAppDelegate *appDelegate = (GooglePlusSampleAppDelegate *)
-      [[UIApplication sharedApplication] delegate];
-
-  if (appDelegate.auth) {
-    authStatus = @"Status: Authenticated";
+  if ([GPPSignIn sharedInstance].authentication) {
+    momentStatus_.text = @"Status: Authenticated";
   } else {
     // To authenticate, use Google+ sign-in button.
-    authStatus = @"Status: Not authenticated";
+    momentStatus_.text = @"Status: Not authenticated";
   }
-
-  momentStatus_.text = authStatus;
 }
 
 @end

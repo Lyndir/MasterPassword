@@ -18,25 +18,23 @@
 
 #import "GooglePlusSampleMasterViewController.h"
 
-#import "GooglePlusSampleAppDelegate.h"
-#import "GooglePlusSampleShareViewController.h"
-#import "GooglePlusSampleSignInViewController.h"
-#import "GooglePlusSampleMomentsViewController.h"
+#import "GPPSignIn.h"
 
-static const int kNumViewControllers = 3;
+static const int kNumViewControllers = 5;
 static NSString * const kMenuOptions[kNumViewControllers] = {
-    @"Sign In", @"Share", @"Moments" };
+    @"Sign in", @"Share", @"List people", @"Write moments",
+    @"List & remove moments" };
 static NSString * const kUnselectableMenuOptions[kNumViewControllers] = {
-    @"", @"", @"Sign in to use moments" };
+    nil, nil, @"Sign in to list people", @"Sign in to write moments",
+    @"Sign in to list/remove moments" };
 static NSString * const kNibNames[kNumViewControllers] = {
     @"GooglePlusSampleSignInViewController",
     @"GooglePlusSampleShareViewController",
-    @"GooglePlusSampleMomentsViewController" };
-static const int kMomentsIndex = 2;
+    @"GooglePlusSampleListPeopleViewController",
+    @"GooglePlusSampleMomentsViewController",
+    @"GooglePlusSampleListMomentsViewController" };
 
-@interface GooglePlusSampleMasterViewController () {
-  NSIndexPath *momentsIndexPath_;
-}
+@interface GooglePlusSampleMasterViewController ()
 - (BOOL)isSelectable:(NSIndexPath *)indexPath;
 @end
 
@@ -58,7 +56,6 @@ static const int kMomentsIndex = 2;
 }
 
 - (void)dealloc {
-  [momentsIndexPath_ release];
   [super dealloc];
 }
 
@@ -75,11 +72,7 @@ static const int kMomentsIndex = 2;
 
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
-  if (momentsIndexPath_) {
-    [self.tableView
-        reloadRowsAtIndexPaths:[NSArray arrayWithObject:momentsIndexPath_]
-              withRowAnimation:UITableViewRowAnimationFade];
-  }
+  [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDelegate/UITableViewDataSource
@@ -132,14 +125,9 @@ static const int kMomentsIndex = 2;
 #pragma mark - Helper methods
 
 - (BOOL)isSelectable:(NSIndexPath *)indexPath {
-  if (indexPath.row == kMomentsIndex) {
-    if (!momentsIndexPath_) {
-      momentsIndexPath_ = [indexPath retain];
-    }
-    // To use Google+ History API, you need to sign in.
-    GooglePlusSampleAppDelegate *appDelegate = (GooglePlusSampleAppDelegate *)
-        [[UIApplication sharedApplication] delegate];
-    return appDelegate.auth && appDelegate.plusMomentsWriteScope;
+  if (kUnselectableMenuOptions[indexPath.row]) {
+    // To use Google+ moments, you need to sign in.
+    return [GPPSignIn sharedInstance].authentication != nil;
   }
   return YES;
 }

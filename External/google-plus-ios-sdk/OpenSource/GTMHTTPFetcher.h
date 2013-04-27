@@ -390,6 +390,8 @@ NSString *GTMApplicationIdentifier(NSBundle *bundle);
 
 - (void)stopAuthorization;
 
+- (void)stopAuthorizationForRequest:(NSURLRequest *)request;
+
 - (BOOL)isAuthorizingRequest:(NSURLRequest *)request;
 
 - (BOOL)isAuthorizedRequest:(NSURLRequest *)request;
@@ -472,6 +474,11 @@ NSString *GTMApplicationIdentifier(NSBundle *bundle);
 
   NSString *comment_;               // comment for log
   NSString *log_;
+#if !STRIP_GTM_FETCH_LOGGING
+  NSString *logRequestBody_;
+  NSString *logResponseBody_;
+  BOOL shouldDeferResponseBodyLogging_;
+#endif
 }
 
 // Create a fetcher
@@ -704,7 +711,7 @@ NSString *GTMApplicationIdentifier(NSBundle *bundle);
 // Comments are useful for logging
 @property (copy) NSString *comment;
 
-- (void)setCommentWithFormat:(id)format, ...;
+- (void)setCommentWithFormat:(NSString *)format, ... NS_FORMAT_FUNCTION(1, 2);
 
 // Log of request and response, if logging is enabled
 @property (copy) NSString *log;

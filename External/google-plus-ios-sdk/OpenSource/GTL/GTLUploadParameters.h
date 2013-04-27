@@ -52,9 +52,9 @@
 @property (assign) BOOL shouldSendUploadOnly;
 
 + (GTLUploadParameters *)uploadParametersWithData:(NSData *)data
-                                         MIMEType:(NSString *)mimeType;
+                                         MIMEType:(NSString *)mimeType GTL_NONNULL((1,2));
 
 + (GTLUploadParameters *)uploadParametersWithFileHandle:(NSFileHandle *)fileHandle
-                                               MIMEType:(NSString *)mimeType;
+                                               MIMEType:(NSString *)mimeType GTL_NONNULL((1,2));
 
 @end

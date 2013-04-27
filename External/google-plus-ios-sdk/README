@@ -1,6 +1,7 @@
-This Google+ iOS SDK allows users to sign in with Google+, share with Google+,
-and write moments to Google+ history from third-party apps. The SDK contains the
-following files:
+This Google+ iOS SDK allows users to sign in and share with Google+ from
+third-party apps.  The SDK also provides Google+ APIs for the app to access
+the list of people in user-selected circles and to read and write user's app
+activities.  The SDK contains the following files:
 
 README  -- This file.
 
@@ -22,19 +23,11 @@ OpenSource/  -- Google open source files used by the SDK. Add all files in this
                 Also see comments for the subdirectory below.
   GTL/ -- Google open source files only used by the sample app. Include them
           into your project if you're going to use the same functionality,
-          e.g. Add Moments.
+          e.g. writing user's app activities.
 
 Resources/  -- Resources that can be used in your app.
-               For |GPPSignInButton|, the google_plus_sign_in*.png images
+               For |GPPSignInButton|, the gpp_sign_in_*.png images
                are required.
-  google_plus_share.png -- 82x24 Google+ share button image.
-  google_plus_share_large.png -- 112x32 Google+ share button image.
-  google_plus_share@2x.png -- 164x48 Google+ share button image.
-  google_plus_share_large@2x.png -- 224x64 Google+ share button image.
-  google_plus_sign_in.png -- 120x32 Google+ sign-in button image.
-  google_plus_sign_in_wide.png --220x32 Wide Google+ sign-in button image.
-  google_plus_sign_in@2x.png -- 240x64 Google+ sign-in button image.
-  google_plus_sign_in_wide@2x.png -- 440x64 Wide Google+ sign-in button image.
 
 SampleCode/  -- Sample code for your reference only.
                 Do not include this in your project.

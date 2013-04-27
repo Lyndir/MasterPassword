@@ -28,15 +28,18 @@
     GPPShareDelegate,
     UITextFieldDelegate,
     UIActionSheetDelegate,
+    UIPickerViewDataSource,
+    UIPickerViewDelegate,
     MFMailComposeViewControllerDelegate> {
-  // The Google+ share object to manage the share dialog.
-  GPPShare *share_;
   // Whether the keyboard is visible or not.
   BOOL keyboardVisible_;
   // The text field being edited.
   UITextField *activeField_;
 }
 
+@property (retain, nonatomic) NSArray *callToActions;
+@property (copy, nonatomic) NSString *selectedCallToAction;
+@property (retain, nonatomic) UIPickerView *callToActionPickerView;
 // The text to prefill the user comment in the share dialog.
 @property (retain, nonatomic) IBOutlet UITextField *sharePrefillText;
 // The URL resource to share in the share dialog.
@@ -45,36 +48,39 @@
 @property (retain, nonatomic) IBOutlet UILabel *shareStatus;
 // A toolbar to share via Google+ or email.
 @property (retain, nonatomic) IBOutlet UIToolbar *shareToolbar;
-// A switch to toggle Google+ share with deep linking.
-@property (retain, nonatomic) IBOutlet UISwitch *attachDeepLinkSwitch;
-// The deep-link ID to be attached with the Google+ share to qualify as
+// A switch to toggle Google+ share with content deep linking.
+@property (retain, nonatomic) IBOutlet UISwitch *addContentDeepLinkSwitch;
+// The content deep-link ID to be attached with the Google+ share to qualify as
 // a deep-link share.
-@property (retain, nonatomic) IBOutlet UITextField *deepLinkID;
+@property (retain, nonatomic) IBOutlet UITextField *contentDeepLinkID;
 // The share's title.
-@property (retain, nonatomic) IBOutlet UITextField *deepLinkTitle;
+@property (retain, nonatomic) IBOutlet UITextField *contentDeepLinkTitle;
 // The share's description.
-@property (retain, nonatomic) IBOutlet UITextField *deepLinkDescription;
+@property (retain, nonatomic) IBOutlet UITextField *contentDeepLinkDescription;
 // The share's thumbnail URL.
-@property (retain, nonatomic) IBOutlet UITextField *deepLinkThumbnailURL;
+@property (retain, nonatomic) IBOutlet UITextField *contentDeepLinkThumbnailURL;
 // The share view.
 @property (retain, nonatomic) IBOutlet UIScrollView *shareScrollView;
 @property (retain, nonatomic) IBOutlet UIView *shareView;
 // Labels for Google+ share sample.
-@property (retain, nonatomic) IBOutlet UILabel *attachDeepLinkDataLabel;
+@property (retain, nonatomic) IBOutlet UILabel *addContentDeepLinkLabel;
 @property (retain, nonatomic) IBOutlet UILabel *urlToShareLabel;
 @property (retain, nonatomic) IBOutlet UILabel *prefillTextLabel;
-@property (retain, nonatomic) IBOutlet UILabel *deepLinkIDLabel;
-@property (retain, nonatomic) IBOutlet UILabel *deepLinkTitleLabel;
-@property (retain, nonatomic) IBOutlet UILabel *deepLinkDescriptionLabel;
-@property (retain, nonatomic) IBOutlet UILabel *deepLinkThumbnailURLLabel;
+@property (retain, nonatomic) IBOutlet UILabel *contentDeepLinkIDLabel;
+@property (retain, nonatomic) IBOutlet UILabel *contentDeepLinkTitleLabel;
+@property (retain, nonatomic) IBOutlet UILabel *contentDeepLinkDescriptionLabel;
+@property (retain, nonatomic) IBOutlet UILabel *contentDeepLinkThumbnailURLLabel;
 @property (retain, nonatomic) IBOutlet UIButton *shareButton;
-@property (retain, nonatomic) IBOutlet UISwitch *urlForDeepLinkMetadataSwitch;
-@property (retain, nonatomic) IBOutlet UILabel *urlForDeepLinkMetadataLabel;
+@property (retain, nonatomic) IBOutlet UISwitch *urlForContentDeepLinkMetadataSwitch;
+@property (retain, nonatomic) IBOutlet UILabel *urlForContentDeepLinkMetadataLabel;
+// The switch for adding call-to-action button.
+@property (retain, nonatomic) IBOutlet UISwitch *addCallToActionButtonSwitch;
+@property (retain, nonatomic) IBOutlet UILabel *addCallToActionButtonLabel;
 
-// Called when the switch for deep-link data is toggled.
-- (IBAction)deepLinkSwitchToggle:(id)sender;
+// Called when the switch for content deep link is toggled.
+- (IBAction)contentDeepLinkSwitchToggle:(id)sender;
 // Called when the switch for metadata from URL preview is toggled.
-- (IBAction)urlForDeepLinkMetadataSwitchToggle:(id)sender;
+- (IBAction)urlForContentDeepLinkMetadataSwitchToggle:(id)sender;
 // Called when the share button is pressed.
 - (IBAction)shareButton:(id)sender;
 // Called when the toolbar share button is pressed.

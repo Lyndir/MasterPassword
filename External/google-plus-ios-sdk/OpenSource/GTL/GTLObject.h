@@ -83,7 +83,7 @@
 - (NSString *)JSONString;
 
 // generic access to json; also creates it if necessary
-- (void)setJSONValue:(id)obj forKey:(NSString *)key;
+- (void)setJSONValue:(id)obj forKey:(NSString *)key  GTL_NONNULL((2));
 - (id)JSONValueForKey:(NSString *)key;
 
 // Returns the list of keys in this object's JSON that aren't listed as
@@ -93,13 +93,15 @@
 // Any keys in the JSON that aren't listed as @properties on the object
 // are counted as "additional properties".  These allow you to get/set them.
 - (id)additionalPropertyForName:(NSString *)name;
-- (void)setAdditionalProperty:(id)obj forName:(NSString *)name;
+- (void)setAdditionalProperty:(id)obj forName:(NSString *)name GTL_NONNULL((2));
 - (NSDictionary *)additionalProperties;
 
 // User properties are supported for client convenience, but are not copied by
 // copyWithZone.  User Properties keys beginning with _ are reserved by the library.
-- (void)setProperty:(id)obj forKey:(NSString *)key; // pass nil obj to remove property
-- (id)propertyForKey:(NSString *)key;
+//
+// Set nil for obj to remove the property.
+- (void)setProperty:(id)obj forKey:(NSString *)key GTL_NONNULL((2));
+- (id)propertyForKey:(NSString *)key GTL_NONNULL((1));
 
 // userData is stored as a property with key "_userData"
 - (void)setUserData:(id)obj;
@@ -184,7 +186,7 @@
 // identifiers to items.  If the items list for the instance somehow changes,
 // use the reset method below to force a new cache to be created for this
 // collection.
-- (id)itemForIdentifier:(NSString *)key;
+- (id)itemForIdentifier:(NSString *)key GTL_NONNULL((1));
 
 // Identifiers for all items are cached when the first one is obtained.
 // This method resets the cache.  It is needed only if the item list has
@@ -199,7 +201,7 @@
 
 // Base object use for when an service method directly returns an array instead
 // of an object. Normally methods should return an object with an 'items'
-// property, this exists for the methods not up to spec.
+// property, but this exists for the methods not up to spec.
 @interface GTLResultArray : GTLCollectionObject
 // This method should only be called by subclasses.
 - (NSArray *)itemsWithItemClass:(Class)itemClass;

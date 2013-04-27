@@ -1,0 +1,5 @@
+/* Sign-in button text */
+"Sign in" = "로그인";
+
+/* Long form sign-in button text */
+"Sign in with Google" = "Google 계정으로 로그인";

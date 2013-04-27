@@ -18,7 +18,10 @@
 
 #import "GooglePlusSampleShareViewController.h"
 
-#import "GooglePlusSampleAppDelegate.h"
+#import <QuartzCore/QuartzCore.h>
+#import "GPPSignIn.h"
+#import "GTLPlusConstants.h"
+#import "GTMOAuth2Authentication.h"
 
 @interface GooglePlusSampleShareViewController()
 - (void)animateKeyboard:(NSNotification *)notification
@@ -30,51 +33,64 @@
 
 @implementation GooglePlusSampleShareViewController
 
-@synthesize attachDeepLinkSwitch = attachDeepLinkSwitch_;
-@synthesize deepLinkDescription = deepLinkDescription_;
-@synthesize deepLinkID = deepLinkID_;
-@synthesize deepLinkTitle = deepLinkTitle_;
-@synthesize deepLinkThumbnailURL = deepLinkThumbnailURL_;
+@synthesize callToActions = callToActions_;
+@synthesize selectedCallToAction = selectedCallToAction_;
+@synthesize callToActionPickerView = callToActionPickerView_;
+@synthesize addContentDeepLinkSwitch = addContentDeepLinkSwitch_;
+@synthesize contentDeepLinkDescription = contentDeepLinkDescription_;
+@synthesize contentDeepLinkID = contentDeepLinkID_;
+@synthesize contentDeepLinkTitle = contentDeepLinkTitle_;
+@synthesize contentDeepLinkThumbnailURL = contentDeepLinkThumbnailURL_;
 @synthesize sharePrefillText = sharePrefillText_;
 @synthesize shareURL = shareURL_;
 @synthesize shareStatus = shareStatus_;
 @synthesize shareToolbar = shareToolbar_;
 @synthesize shareScrollView = shareScrollView_;
 @synthesize shareView = shareView_;
-@synthesize attachDeepLinkDataLabel = attachDeepLinkDataLabel_;
+@synthesize addContentDeepLinkLabel = addContentDeepLinkLabel_;
 @synthesize urlToShareLabel = urlToShareLabel_;
 @synthesize prefillTextLabel = prefillTextLabel_;
-@synthesize deepLinkIDLabel = deepLinkIDLabel_;
-@synthesize deepLinkTitleLabel = deepLinkTitleLabel_;
-@synthesize deepLinkDescriptionLabel = deepLinkDescriptionLabel_;
-@synthesize deepLinkThumbnailURLLabel = deepLinkThumbnailURLLabel_;
+@synthesize contentDeepLinkIDLabel = contentDeepLinkIDLabel_;
+@synthesize contentDeepLinkTitleLabel = contentDeepLinkTitleLabel_;
+@synthesize contentDeepLinkDescriptionLabel =
+    contentDeepLinkDescriptionLabel_;
+@synthesize contentDeepLinkThumbnailURLLabel =
+    contentDeepLinkThumbnailURLLabel_;
 @synthesize shareButton = shareButton_;
-@synthesize urlForDeepLinkMetadataSwitch = urlForDeepLinkMetadataSwitch_;
-@synthesize urlForDeepLinkMetadataLabel = urlForDeepLinkMetadataLabel_;
+@synthesize urlForContentDeepLinkMetadataSwitch =
+    urlForContentDeepLinkMetadataSwitch_;
+@synthesize urlForContentDeepLinkMetadataLabel =
+    urlForContentDeepLinkMetadataLabel_;
+@synthesize addCallToActionButtonSwitch = addCallToActionButtonSwitch_;
+@synthesize addCallToActionButtonLabel = addCallToActionButtonLabel_;
 
 - (void)dealloc {
-  [attachDeepLinkSwitch_ release];
-  [deepLinkID_ release];
-  [deepLinkTitle_ release];
-  [deepLinkDescription_ release];
-  [deepLinkThumbnailURL_ release];
+  [callToActions_ release];
+  [selectedCallToAction_ release];
+  [callToActionPickerView_ release];
+  [addContentDeepLinkSwitch_ release];
+  [contentDeepLinkID_ release];
+  [contentDeepLinkTitle_ release];
+  [contentDeepLinkDescription_ release];
+  [contentDeepLinkThumbnailURL_ release];
   [sharePrefillText_ release];
   [shareURL_ release];
   [shareStatus_ release];
-  [share_ release];
   [shareToolbar_ release];
   [shareScrollView_ release];
   [shareView_ release];
-  [attachDeepLinkDataLabel_ release];
+  [addContentDeepLinkLabel_ release];
   [urlToShareLabel_ release];
   [prefillTextLabel_ release];
-  [deepLinkIDLabel_ release];
-  [deepLinkTitleLabel_ release];
-  [deepLinkDescriptionLabel_ release];
-  [deepLinkThumbnailURLLabel_ release];
+  [contentDeepLinkIDLabel_ release];
+  [contentDeepLinkTitleLabel_ release];
+  [contentDeepLinkDescriptionLabel_ release];
+  [contentDeepLinkThumbnailURLLabel_ release];
   [shareButton_ release];
-  [urlForDeepLinkMetadataSwitch_ release];
-  [urlForDeepLinkMetadataLabel_ release];
+  [urlForContentDeepLinkMetadataSwitch_ release];
+  [urlForContentDeepLinkMetadataLabel_ release];
+  [addCallToActionButtonSwitch_ release];
+  [addCallToActionButtonLabel_ release];
   [super dealloc];
 }
 
@@ -82,14 +98,120 @@
 
 - (void)viewDidLoad {
   // Set up Google+ share dialog.
-  GooglePlusSampleAppDelegate *appDelegate = (GooglePlusSampleAppDelegate *)
-      [[UIApplication sharedApplication] delegate];
-  NSString *clientID = [GooglePlusSampleAppDelegate clientID];
-  share_ = [[GPPShare alloc] initWithClientID:clientID];
-  share_.delegate = self;
-  appDelegate.share = share_;
+  [GPPShare sharedInstance].delegate = self;
 
-  [attachDeepLinkSwitch_ setOn:NO];
+  [addCallToActionButtonSwitch_ setOn:NO];
+  [addContentDeepLinkSwitch_ setOn:NO];
+  if (![GPPSignIn sharedInstance].authentication ||
+      ![[GPPSignIn sharedInstance].scopes containsObject:
+          kGTLAuthScopePlusLogin]) {
+    addCallToActionButtonLabel_.text = @"Sign in for call-to-action";
+    addCallToActionButtonSwitch_.enabled = NO;
+  }
+  addCallToActionButtonLabel_.adjustsFontSizeToFitWidth = YES;
+
+  self.callToActions = [NSArray arrayWithObjects:
+      @"ACCEPT",
+      @"ACCEPT_GIFT",
+      @"ADD",
+      @"ANSWER",
+      @"ADD_TO_CALENDAR",
+      @"APPLY",
+      @"ASK",
+      @"ATTACK",
+      @"BEAT",
+      @"BID",
+      @"BOOK",
+      @"BOOKMARK",
+      @"BROWSE",
+      @"BUY",
+      @"CAPTURE",
+      @"CHALLENGE",
+      @"CHANGE",
+      @"CHECKIN",
+      @"CLICK_HERE",
+      @"CLICK_ME",
+      @"COLLECT",
+      @"COMMENT",
+      @"COMPARE",
+      @"COMPLAIN",
+      @"CONFIRM",
+      @"CONNECT",
+      @"CONTRIBUTE",
+      @"COOK",
+      @"CREATE",
+      @"DEFEND",
+      @"DINE",
+      @"DISCOVER",
+      @"DISCUSS",
+      @"DONATE",
+      @"DOWNLOAD",
+      @"EARN",
+      @"EAT",
+      @"EXPLAIN",
+      @"FOLLOW",
+      @"GET",
+      @"GIFT",
+      @"GIVE",
+      @"GO",
+      @"HELP",
+      @"IDENTIFY",
+      @"INSTALL_APP",
+      @"INTRODUCE",
+      @"INVITE",
+      @"JOIN",
+      @"JOIN_ME",
+      @"LEARN",
+      @"LEARN_MORE",
+      @"LISTEN",
+      @"LOVE",
+      @"MAKE",
+      @"MATCH",
+      @"OFFER",
+      @"OPEN",
+      @"OPEN_APP",
+      @"OWN",
+      @"PAY",
+      @"PIN",
+      @"PLAN",
+      @"PLAY",
+      @"RATE",
+      @"READ",
+      @"RECOMMEND",
+      @"RECORD",
+      @"REDEEM",
+      @"REPLY",
+      @"RESERVE",
+      @"REVIEW",
+      @"RSVP",
+      @"SAVE",
+      @"SAVE_OFFER",
+      @"SELL",
+      @"SEND",
+      @"SHARE_X",
+      @"SIGN_IN",
+      @"SIGN_UP",
+      @"START",
+      @"ST0P",
+      @"TEST",
+      @"UPVOTE",
+      @"VIEW",
+      @"VIEW_ITEM",
+      @"VIEW_PROFILE",
+      @"VISIT",
+      @"VOTE",
+      @"WANT",
+      @"WATCH",
+      @"WRITE",
+      nil
+  ];
+  self.selectedCallToAction = [callToActions_ objectAtIndex:0];
+  self.callToActionPickerView = [[[UIPickerView alloc] init] autorelease];
+  callToActionPickerView_.delegate = self;
+  callToActionPickerView_.dataSource = self;
+  [addCallToActionButtonSwitch_ addTarget:self
+                                   action:@selector(addCallToActionSwitched)
+                         forControlEvents:UIControlEventValueChanged];
 
   [self layout];
   [self populateTextFields];
@@ -97,12 +219,7 @@
 }
 
 - (void)viewDidUnload {
-  GooglePlusSampleAppDelegate *appDelegate = (GooglePlusSampleAppDelegate *)
-      [[UIApplication sharedApplication] delegate];
-  appDelegate.share = nil;
-  share_.delegate = nil;
-  [share_ release];
-  share_ = nil;
+  [GPPShare sharedInstance].delegate = nil;
   [[NSNotificationCenter defaultCenter]
       removeObserver:self
                 name:UIKeyboardWillShowNotification
@@ -112,29 +229,32 @@
                 name:UIKeyboardWillHideNotification
               object:nil];
 
-  [self setAttachDeepLinkSwitch:nil];
-  [self setDeepLinkID:nil];
-  [self setDeepLinkTitle:nil];
-  [self setDeepLinkDescription:nil];
-  [self setDeepLinkThumbnailURL:nil];
+  [self setAddContentDeepLinkSwitch:nil];
+  [self setContentDeepLinkID:nil];
+  [self setContentDeepLinkTitle:nil];
+  [self setContentDeepLinkDescription:nil];
+  [self setContentDeepLinkThumbnailURL:nil];
   [self setShareScrollView:nil];
   [self setShareView:nil];
   [self setShareToolbar:nil];
-  [self setAttachDeepLinkDataLabel:nil];
+  [self setAddContentDeepLinkLabel:nil];
   [self setUrlToShareLabel:nil];
   [self setPrefillTextLabel:nil];
-  [self setDeepLinkIDLabel:nil];
-  [self setDeepLinkTitleLabel:nil];
-  [self setDeepLinkDescriptionLabel:nil];
-  [self setDeepLinkThumbnailURLLabel:nil];
+  [self setContentDeepLinkIDLabel:nil];
+  [self setContentDeepLinkTitleLabel:nil];
+  [self setContentDeepLinkDescriptionLabel:nil];
+  [self setContentDeepLinkThumbnailURLLabel:nil];
   [self setShareButton:nil];
-  [self setUrlForDeepLinkMetadataSwitch:nil];
-  [self setUrlForDeepLinkMetadataLabel:nil];
+  [self setUrlForContentDeepLinkMetadataSwitch:nil];
+  [self setUrlForContentDeepLinkMetadataLabel:nil];
+  [self setAddCallToActionButtonSwitch:nil];
+  [self setAddCallToActionButtonLabel:nil];
   [super viewDidUnload];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-  if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad){
+  if ([[UIDevice currentDevice] userInterfaceIdiom]
+      == UIUserInterfaceIdiomPad) {
     shareScrollView_.frame = self.view.frame;
   }
   [super viewWillAppear:animated];
@@ -247,30 +367,40 @@
 
 - (IBAction)shareButton:(id)sender {
   shareStatus_.text = @"Status: Sharing...";
-  id<GPPShareBuilder> shareBuilder = [share_ shareDialog];
+  id<GPPShareBuilder> shareBuilder = [[GPPShare sharedInstance] shareDialog];
 
   NSString *inputURL = shareURL_.text;
   NSURL *urlToShare = [inputURL length] ? [NSURL URLWithString:inputURL] : nil;
   if (urlToShare) {
-    shareBuilder = [shareBuilder setURLToShare:urlToShare];
+    [shareBuilder setURLToShare:urlToShare];
   }
 
-  if ([deepLinkID_ text]) {
-    shareBuilder = [shareBuilder setContentDeepLinkID:[deepLinkID_ text]];
-    NSString *title = [deepLinkTitle_ text];
-    NSString *description = [deepLinkDescription_ text];
+  if ([contentDeepLinkID_ text]) {
+    [shareBuilder setContentDeepLinkID:[contentDeepLinkID_ text]];
+    NSString *title = [contentDeepLinkTitle_ text];
+    NSString *description = [contentDeepLinkDescription_ text];
     if (title && description) {
-      NSURL *thumbnailURL = [NSURL URLWithString:[deepLinkThumbnailURL_ text]];
-      shareBuilder = [shareBuilder setTitle:title
-                                description:description
-                               thumbnailURL:thumbnailURL];
+      NSURL *thumbnailURL =
+          [NSURL URLWithString:[contentDeepLinkThumbnailURL_ text]];
+      [shareBuilder setTitle:title
+                 description:description
+                thumbnailURL:thumbnailURL];
     }
   }
 
   NSString *inputText = sharePrefillText_.text;
   NSString *text = [inputText length] ? inputText : nil;
   if (text) {
-    shareBuilder = [shareBuilder setPrefillText:text];
+    [shareBuilder setPrefillText:text];
+  }
+
+  if ([addCallToActionButtonSwitch_ isOn]) {
+    // Please replace the URL below with your own call-to-action button URL.
+    NSURL *callToActionURL = [NSURL URLWithString:
+        @"http://developers.google.com/+/mobile/ios/"];
+    [shareBuilder setCallToActionButtonWithLabel:selectedCallToAction_
+                                             URL:callToActionURL
+                                      deepLinkID:@"call-to-action"];
   }
 
   if (![shareBuilder open]) {
@@ -289,54 +419,62 @@
   [actionSheet showFromToolbar:shareToolbar_];
 }
 
-- (IBAction)urlForDeepLinkMetadataSwitchToggle:(id)sender {
+- (IBAction)urlForContentDeepLinkMetadataSwitchToggle:(id)sender {
   [self layout];
   [self populateTextFields];
 }
 
-- (IBAction)deepLinkSwitchToggle:(id)sender {
-  if (!attachDeepLinkSwitch_.on) {
-    [urlForDeepLinkMetadataSwitch_ setOn:YES];
+- (IBAction)contentDeepLinkSwitchToggle:(id)sender {
+  if (!addContentDeepLinkSwitch_.on) {
+    [urlForContentDeepLinkMetadataSwitch_ setOn:YES];
   }
   [self layout];
   [self populateTextFields];
 }
 
-#pragma mark - helper methods
+#pragma mark - Helper methods
 
-- (void) placeView:(UIView *)view x:(CGFloat)x y:(CGFloat)y {
+- (void)placeView:(UIView *)view x:(CGFloat)x y:(CGFloat)y {
   CGSize frameSize = view.frame.size;
   view.frame = CGRectMake(x, y, frameSize.width, frameSize.height);
 }
 
-- (void) layout {
+- (void)layout {
   CGFloat originX = 20.0;
-  CGFloat originY = 20.0;
-  CGFloat yPadding = 20.0;
+  CGFloat originY = 10.0;
+  CGFloat yPadding = 10.0;
   CGFloat currentY = originY;
   CGFloat middleX = 150;
 
-  // Place the switch for attaching deep-link data.
-  [self placeView:attachDeepLinkDataLabel_ x:originX y:currentY];
-  [self placeView:attachDeepLinkSwitch_ x:middleX + 50 y:currentY];
-  CGSize frameSize = attachDeepLinkSwitch_.frame.size;
+  // Place the switch for adding call-to-action button.
+  [self placeView:addCallToActionButtonLabel_ x:originX y:currentY];
+  [self placeView:addCallToActionButtonSwitch_ x:middleX * 1.5 y:currentY];
+  CGSize frameSize = addCallToActionButtonSwitch_.frame.size;
+  currentY += frameSize.height + yPadding;
+
+  // Place the switch for attaching content deep-link data.
+  [self placeView:addContentDeepLinkLabel_ x:originX y:currentY];
+  [self placeView:addContentDeepLinkSwitch_ x:middleX * 1.5 y:currentY];
+  frameSize = addContentDeepLinkSwitch_.frame.size;
   currentY += frameSize.height + yPadding;
 
   // Place the switch for preview URL.
-  if (attachDeepLinkSwitch_.on) {
-    [self placeView:urlForDeepLinkMetadataLabel_ x:originX y:currentY];
-    [self placeView:urlForDeepLinkMetadataSwitch_ x:middleX + 50 y:currentY];
-    frameSize = urlForDeepLinkMetadataSwitch_.frame.size;
+  if (addContentDeepLinkSwitch_.on) {
+    [self placeView:urlForContentDeepLinkMetadataLabel_ x:originX y:currentY];
+    [self placeView:urlForContentDeepLinkMetadataSwitch_
+                  x:middleX * 1.5
+                  y:currentY];
+    frameSize = urlForContentDeepLinkMetadataSwitch_.frame.size;
     currentY += frameSize.height + yPadding;
-    urlForDeepLinkMetadataSwitch_.hidden = NO;
-    urlForDeepLinkMetadataLabel_.hidden = NO;
+    urlForContentDeepLinkMetadataSwitch_.hidden = NO;
+    urlForContentDeepLinkMetadataLabel_.hidden = NO;
   } else {
-    urlForDeepLinkMetadataSwitch_.hidden = YES;
-    urlForDeepLinkMetadataLabel_.hidden = YES;
+    urlForContentDeepLinkMetadataSwitch_.hidden = YES;
+    urlForContentDeepLinkMetadataLabel_.hidden = YES;
   }
 
   // Place the field for URL to share.
-  if (urlForDeepLinkMetadataSwitch_.on) {
+  if (urlForContentDeepLinkMetadataSwitch_.on) {
     [self placeView:urlToShareLabel_ x:originX y:currentY];
     frameSize = urlToShareLabel_.frame.size;
     currentY += frameSize.height + 0.5 * yPadding;
@@ -360,62 +498,70 @@
   currentY += frameSize.height + yPadding;
 
   // Place the content deep-link ID field.
-  if (attachDeepLinkSwitch_.on) {
-    [self placeView:deepLinkIDLabel_ x:originX y:currentY];
-    frameSize = deepLinkIDLabel_.frame.size;
+  if (addContentDeepLinkSwitch_.on) {
+    [self placeView:contentDeepLinkIDLabel_ x:originX y:currentY];
+    frameSize = contentDeepLinkIDLabel_.frame.size;
     currentY += frameSize.height + 0.5 * yPadding;
-    [self placeView:deepLinkID_ x:originX y:currentY];
-    frameSize = deepLinkID_.frame.size;
+    [self placeView:contentDeepLinkID_ x:originX y:currentY];
+    frameSize = contentDeepLinkID_.frame.size;
     currentY += frameSize.height + yPadding;
-    deepLinkIDLabel_.hidden = NO;
-    deepLinkID_.hidden = NO;
+    contentDeepLinkIDLabel_.hidden = NO;
+    contentDeepLinkID_.hidden = NO;
   } else {
-    deepLinkIDLabel_.hidden = YES;
-    deepLinkID_.hidden = YES;
+    contentDeepLinkIDLabel_.hidden = YES;
+    contentDeepLinkID_.hidden = YES;
   }
 
   // Place fields for content deep-link metadata.
-  if (attachDeepLinkSwitch_.on && !urlForDeepLinkMetadataSwitch_.on) {
-    [self placeView:deepLinkTitleLabel_ x:originX y:currentY];
-    frameSize = deepLinkTitleLabel_.frame.size;
+  if (addContentDeepLinkSwitch_.on &&
+      !urlForContentDeepLinkMetadataSwitch_.on) {
+    [self placeView:contentDeepLinkTitleLabel_ x:originX y:currentY];
+    frameSize = contentDeepLinkTitleLabel_.frame.size;
     currentY += frameSize.height + 0.5 * yPadding;
-    [self placeView:deepLinkTitle_ x:originX y:currentY];
-    frameSize = deepLinkTitle_.frame.size;
+    [self placeView:contentDeepLinkTitle_ x:originX y:currentY];
+    frameSize = contentDeepLinkTitle_.frame.size;
     currentY += frameSize.height + yPadding;
 
-    [self placeView:deepLinkDescriptionLabel_ x:originX y:currentY];
-    frameSize = deepLinkDescriptionLabel_.frame.size;
+    [self placeView:contentDeepLinkDescriptionLabel_ x:originX y:currentY];
+    frameSize = contentDeepLinkDescriptionLabel_.frame.size;
     currentY += frameSize.height + 0.5 * yPadding;
-    [self placeView:deepLinkDescription_ x:originX y:currentY];
-    frameSize = deepLinkDescription_.frame.size;
+    [self placeView:contentDeepLinkDescription_ x:originX y:currentY];
+    frameSize = contentDeepLinkDescription_.frame.size;
     currentY += frameSize.height + yPadding;
 
-    [self placeView:deepLinkThumbnailURLLabel_ x:originX y:currentY];
-    frameSize = deepLinkThumbnailURLLabel_.frame.size;
+    [self placeView:contentDeepLinkThumbnailURLLabel_ x:originX y:currentY];
+    frameSize = contentDeepLinkThumbnailURLLabel_.frame.size;
     currentY += frameSize.height + 0.5 * yPadding;
-    [self placeView:deepLinkThumbnailURL_ x:originX y:currentY];
-    frameSize = deepLinkThumbnailURL_.frame.size;
+    [self placeView:contentDeepLinkThumbnailURL_ x:originX y:currentY];
+    frameSize = contentDeepLinkThumbnailURL_.frame.size;
     currentY += frameSize.height + yPadding;
 
-    deepLinkTitle_.hidden = NO;
-    deepLinkTitleLabel_.hidden = NO;
-    deepLinkDescriptionLabel_.hidden = NO;
-    deepLinkDescription_.hidden = NO;
-    deepLinkThumbnailURLLabel_.hidden = NO;
-    deepLinkThumbnailURL_.hidden = NO;
+    contentDeepLinkTitle_.hidden = NO;
+    contentDeepLinkTitleLabel_.hidden = NO;
+    contentDeepLinkDescriptionLabel_.hidden = NO;
+    contentDeepLinkDescription_.hidden = NO;
+    contentDeepLinkThumbnailURLLabel_.hidden = NO;
+    contentDeepLinkThumbnailURL_.hidden = NO;
   } else {
-    deepLinkTitle_.hidden = YES;
-    deepLinkTitleLabel_.hidden = YES;
-    deepLinkDescriptionLabel_.hidden = YES;
-    deepLinkDescription_.hidden = YES;
-    deepLinkThumbnailURLLabel_.hidden = YES;
-    deepLinkThumbnailURL_.hidden = YES;
+    contentDeepLinkTitle_.hidden = YES;
+    contentDeepLinkTitleLabel_.hidden = YES;
+    contentDeepLinkDescriptionLabel_.hidden = YES;
+    contentDeepLinkDescription_.hidden = YES;
+    contentDeepLinkThumbnailURLLabel_.hidden = YES;
+    contentDeepLinkThumbnailURL_.hidden = YES;
   }
 
   // Place the share button and status.
-  [self placeView:shareButton_ x:originX y:currentY];
+  [[shareButton_ layer] setCornerRadius:5];
+  [[shareButton_ layer] setMasksToBounds:YES];
+  CGColorRef borderColor = [[UIColor colorWithWhite:203.0/255.0
+                                              alpha:1.0] CGColor];
+  [[shareButton_ layer] setBorderColor:borderColor];
+  [[shareButton_ layer] setBorderWidth:1.0];
+
+  [self placeView:shareButton_ x:originX y:currentY + yPadding];
   frameSize = shareButton_.frame.size;
-  currentY += frameSize.height + yPadding;
+  currentY += frameSize.height + yPadding * 2;
 
   [self placeView:shareStatus_ x:originX y:currentY];
   frameSize = shareStatus_.frame.size;
@@ -436,31 +582,32 @@
   if (shareURL_.hidden) {
     shareURL_.text = @"";
   } else {
-    shareURL_.text = @"http://developers.google.com";
+    shareURL_.text = @"http://developers.google.com/+/mobile/ios/";
   }
 
-  if (deepLinkID_.hidden) {
-    deepLinkID_.text = @"";
+  if (contentDeepLinkID_.hidden) {
+    contentDeepLinkID_.text = @"";
   } else {
-    deepLinkID_.text = @"reviews/314159265358";
+    contentDeepLinkID_.text = @"playlist/314159265358";
   }
 
-  if (deepLinkTitle_.hidden) {
-    deepLinkTitle_.text = @"";
+  if (contentDeepLinkTitle_.hidden) {
+    contentDeepLinkTitle_.text = @"";
   } else {
-    deepLinkTitle_.text = @"Joe's Diner Review";
+    contentDeepLinkTitle_.text = @"Joe's Pop Music Playlist";
   }
 
-  if (deepLinkDescription_.hidden) {
-    deepLinkDescription_.text = @"";
+  if (contentDeepLinkDescription_.hidden) {
+    contentDeepLinkDescription_.text = @"";
   } else {
-    deepLinkDescription_.text = @"Check out my review of the awesome toast!";
+    contentDeepLinkDescription_.text =
+        @"Check out this playlist of my favorite pop songs!";
   }
 
-  if (deepLinkThumbnailURL_.hidden) {
-    deepLinkThumbnailURL_.text = @"";
+  if (contentDeepLinkThumbnailURL_.hidden) {
+    contentDeepLinkThumbnailURL_.text = @"";
   } else {
-    deepLinkThumbnailURL_.text =
+    contentDeepLinkThumbnailURL_.text =
         @"http://www.google.com/logos/2012/childrensday-2012-hp.jpg";
   }
 }
@@ -493,6 +640,64 @@
     [shareScrollView_ setContentOffset:scrollPoint animated:YES];
   }
   return;
+}
+
+- (void)addCallToActionSwitched {
+  if (!addCallToActionButtonSwitch_.on) {
+    return;
+  }
+  [self.view addSubview:callToActionPickerView_];
+}
+
+#pragma mark - UIPickerViewDataSource
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+  return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView
+    numberOfRowsInComponent:(NSInteger)component {
+  return callToActions_.count;
+}
+
+#pragma mark - UIPickerViewDelegate
+
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row
+    forComponent:(NSInteger)component reusingView:(UIView *)view {
+  UITableViewCell *cell = (UITableViewCell *)view;
+  if (cell == nil) {
+    cell = [[[UITableViewCell alloc]
+          initWithStyle:UITableViewCellStyleDefault
+        reuseIdentifier:nil] autorelease];
+    [cell setBackgroundColor:[UIColor clearColor]];
+    [cell setBounds: CGRectMake(0, 0, cell.frame.size.width - 20 , 44)];
+    UITapGestureRecognizer *singleTapGestureRecognizer =
+        [[[UITapGestureRecognizer alloc]
+            initWithTarget:self
+                    action:@selector(toggleSelection:)] autorelease];
+    singleTapGestureRecognizer.numberOfTapsRequired = 1;
+    [cell addGestureRecognizer:singleTapGestureRecognizer];
+  }
+  NSString *callToAction = [callToActions_ objectAtIndex:row];
+  if ([selectedCallToAction_ isEqualToString:callToAction]) {
+    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+  } else {
+    cell.accessoryType = UITableViewCellAccessoryNone;
+  }
+  cell.textLabel.text = callToAction;
+  cell.textLabel.font = [UIFont systemFontOfSize:12];
+  cell.tag = row;
+  return cell;
+}
+
+- (void)toggleSelection:(UITapGestureRecognizer *)recognizer {
+  int row = recognizer.view.tag;
+  self.selectedCallToAction = [callToActions_ objectAtIndex:row];
+  [callToActionPickerView_ removeFromSuperview];
+  // Force refresh checked/unchecked marks.
+  [callToActionPickerView_ reloadAllComponents];
+  addCallToActionButtonLabel_.text =
+      [NSString stringWithFormat:@"Call-to-Action: %@", selectedCallToAction_];
 }
 
 @end

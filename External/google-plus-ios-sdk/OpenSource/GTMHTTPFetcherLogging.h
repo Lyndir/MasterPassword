@@ -80,6 +80,19 @@
 // internal; called by fetcher
 - (void)logFetchWithError:(NSError *)error;
 - (BOOL)logCapturePostStream;
+
+// Applications may provide alternative body strings to be displayed in the
+// log, such as for binary requests or responses.  If deferring is turned
+// on, the response log will not be sent until deferring is turned off,
+// allowing the application to write the response body after the response
+// data has been parsed.
+- (void)setLogRequestBody:(NSString *)bodyString;
+- (NSString *)logRequestBody;
+- (void)setLogResponseBody:(NSString *)bodyString;
+- (NSString *)logResponseBody;
+- (void)setShouldDeferResponseBodyLogging:(BOOL)flag;
+- (BOOL)shouldDeferResponseBodyLogging;
+
 @end
 
-#endif
+#endif  // !STRIP_GTM_FETCH_LOGGING

@@ -104,7 +104,7 @@ const CFStringRef kCharsToForceEscape = CFSTR("!*'();:@&=+$,/?%#[]");
 
   for (unsigned int idx = 0; utf8[idx] != '\0'; idx++) {
 
-    unsigned char currChar = utf8[idx];
+    unsigned char currChar = (unsigned char)utf8[idx];
     if (currChar < 0x20 || currChar == 0x25 || currChar > 0x7E) {
 
       if (encoded == nil) {
@@ -322,19 +322,36 @@ BOOL GTL_AreBoolsEqual(BOOL b1, BOOL b2) {
 }
 
 NSNumber *GTL_EnsureNSNumber(NSNumber *num) {
+  // If the server returned a string object where we expect a number, try
+  // to make a number object.
   if ([num isKindOfClass:[NSString class]]) {
-    NSDecimalNumber *reallyNum;
-    // Force the parse to use '.' as the number seperator.
-    static NSLocale *usLocale = nil;
-    @synchronized([GTLUtilities class]) {
-      if (usLocale == nil) {
-        usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    NSNumber *newNum;
+    NSString *str = (NSString *)num;
+    if ([str rangeOfString:@"."].location != NSNotFound) {
+      // This is a floating-point number.
+      // Force the parser to use '.' as the decimal separator.
+      static NSLocale *usLocale = nil;
+      @synchronized([GTLUtilities class]) {
+        if (usLocale == nil) {
+          usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+        }
+        newNum = [NSDecimalNumber decimalNumberWithString:(NSString*)num
+                                                   locale:(id)usLocale];
       }
-      reallyNum = [NSDecimalNumber decimalNumberWithString:(NSString*)num
-                                                    locale:(id)usLocale];
+    } else {
+      // NSDecimalNumber +decimalNumberWithString:locale:
+      // does not correctly create an NSNumber for large values like
+      // 71100000000007780.
+      if ([str hasPrefix:@"-"]) {
+        newNum = [NSNumber numberWithLongLong:[str longLongValue]];
+      } else {
+        const char *utf8 = [str UTF8String];
+        unsigned long long ull = strtoull(utf8, NULL, 10);
+        newNum = [NSNumber numberWithUnsignedLongLong:ull];
+      }
     }
-    if (reallyNum != nil) {
-      num = reallyNum;
+    if (newNum) {
+      num = newNum;
     }
   }
   return num;

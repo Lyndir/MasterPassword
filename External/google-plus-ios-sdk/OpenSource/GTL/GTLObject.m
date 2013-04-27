@@ -197,7 +197,7 @@ static NSString *const kUserDataPropertyKey = @"_userData";
       // Open question: should this instead create the union of elements for
       // all items in the array, rather than just get fields from the first
       // array object?
-      if ([value count] > 0) {
+      if ([(NSArray *)value count] > 0) {
         id firstObj = [value objectAtIndex:0];
         if ([firstObj isKindOfClass:[NSDictionary class]]) {
           // An array of objects
@@ -455,7 +455,7 @@ static NSString *const kUserDataPropertyKey = @"_userData";
     } else if ([rawValue isKindOfClass:[NSArray class]]) {
       // for arrays, show the number of items in the array:
       //   [3]
-      value = [NSString stringWithFormat:@"[%lu]", (unsigned long)[rawValue count]];
+      value = [NSString stringWithFormat:@"[%lu]", (unsigned long)[(NSArray *)rawValue count]];
     } else if ([rawValue isKindOfClass:[NSString class]]) {
       // for strings, show the string in quotes:
       //   "Hi mom."

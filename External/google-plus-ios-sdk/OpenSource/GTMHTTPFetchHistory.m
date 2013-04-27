@@ -183,13 +183,13 @@ static NSString* const kGTMETagHeader = @"Etag";
 - (void)removeExpiredCookies {
 
   // count backwards since we're deleting items from the array
-  for (NSInteger idx = [cookies_ count] - 1; idx >= 0; idx--) {
+  for (NSInteger idx = (NSInteger)[cookies_ count] - 1; idx >= 0; idx--) {
 
-    NSHTTPCookie *storedCookie = [cookies_ objectAtIndex:idx];
+    NSHTTPCookie *storedCookie = [cookies_ objectAtIndex:(NSUInteger)idx];
 
     NSDate *expiresDate = [storedCookie expiresDate];
     if (expiresDate && [expiresDate timeIntervalSinceNow] < 0) {
-      [cookies_ removeObjectAtIndex:idx];
+      [cookies_ removeObjectAtIndex:(NSUInteger)idx];
     }
   }
 }
