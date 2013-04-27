@@ -126,7 +126,6 @@
     self.tip.text = @"";
     self.nameLabel.layer.cornerRadius = 5;
     self.avatarTemplate.hidden = YES;
-    self.spinner.alpha = 0;
     self.passwordTipView.hidden = NO;
     self.createPasswordTipView.hidden = NO;
     [self.emergencyPassword setTitle:@"" forState:UIControlStateNormal];
@@ -200,13 +199,14 @@
     [self updateUsers];
 
     self.uiContainer.alpha = 0;
+    self.spinner.alpha = 0;
 
     [super viewWillAppear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
 
-    if (!animated)
+    if (!animated && !self.navigationController.presentedViewController)
         [[self findTargetedAvatar] setSelected:YES];
     else
         [self updateLayoutAnimated:YES allowScroll:YES completion:nil];

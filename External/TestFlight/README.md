@@ -52,37 +52,33 @@ This SDK can be run from both the iPhone Simulator and Device and has been teste
 
         section. This will give you access to the SDK across all files.
 
-    2. Get your Team Token which you can find at [http://testflightapp.com/dashboard/team/](http://testflightapp.com/dashboard/team/) select the team you are using from the team selection drop down list on the top of the page and then select Team Info.
+    2. Get your Application Token which you can find at [http://testflightapp.com/dashboard/applications/](http://testflightapp.com/dashboard/applications/) select the application you are using from the list choose the SDK option and the application token for this application will be there. To ensure that your testers do not show up as anonymous place the call to setDeviceIdentifer before calling takeOff. Remove #define TESTING 1 before building your release build for the App Store.
 
-    3. Launch TestFlight with your Team Token
+    3. Launch TestFlight with your Application Token
 
             -(BOOL)application:(UIApplication *)application 
                 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
             // start of your application:didFinishLaunchingWithOptions 
-            // ...
-            [TestFlight takeOff:@"Insert your Team Token here"];
+
+            // !!!: Use the next line only during beta
+            // [TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
+            
+            [TestFlight takeOff:@"Insert your Application Token here"];
             // The rest of your application:didFinishLaunchingWithOptions method
             // ...
             }
 
     4. To report crashes to you we install our own uncaught exception handler. If you are not currently using an exception handler of your own then all you need to do is go to the next step. If you currently use an Exception Handler, or you use another framework that does please go to the section on advanced exception handling.
-                     
-5. To enable the best crash reporting possible we recommend setting the following project build settings in Xcode to NO for all targets that you want to have live crash reporting for. You can find build settings by opening the Project Navigator (default command+1 or command+shift+j) then clicking on the project you are configuring (usually the first selection in the list). From there you can choose to either change the global project settings or settings on an individual project basis. All settings below are in the Deployment Section.
 
-    1. Deployment Post Processing
-    2. Strip Debug Symbols During Copy
-    3. Strip Linked Product
 
 ##Beta Testing and Release Differentiation
 
-In order to provide more information about your testers while beta testing you will need to provide the device's unique identifier. This identifier is not something that the SDK will collect from the device and we do not recommend using this in production. To send the device identifier to us put the following code before your call to takeOff.
+In order to provide more information about your testers while beta testing you will need to provide the device's unique identifier. This identifier is not something that the SDK will collect from the device and we do not recommend using this in production. To send the device identifier to us put the following code **before your call to takeOff**.
 
-    #define TESTING 1
-    #ifdef TESTING
-        [TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
-    #endif
+    [TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
+    [TestFlight takeOff:@"Insert your Application Token here"];
 
-This will allow you to have the best possible information during testing, but disable getting and sending of the device unique identifier when you release your application. When it is time to release simply comment out #define TESTING 1. If you decide to not include the device's unique identifier during your testing phase TestFlight will still collect all of the information that you send but it may be anonymized.
+This will allow you to have the best possible information during testing. **When it is time to submit to the App Store comment this line out**. Apple may reject your app if you leave this line in. If you decide to not include the device's unique identifier during your testing phase TestFlight will still collect all of the information that you send but it may be anonymized.
 
     
 ##Checkpoint API
@@ -165,7 +161,7 @@ An uncaught exception means that your application is in an unknown state and the
         sigaction(SIGILL, &newSignalAction, NULL);
         sigaction(SIGBUS, &newSignalAction, NULL);
         // Call takeOff after install your own unhandled exception and signal handlers
-        [TestFlight takeOff:@"Insert your Team Token here"];
+        [TestFlight takeOff:@"Insert your Application Token here"];
         // continue with your application initialization
       }
 
@@ -193,13 +189,13 @@ We have implemented three different loggers.
 
 Each of the loggers log asynchronously and all TFLog calls are non blocking. The TestFlight logger writes its data to a file which is then sent to our servers on Session End events. The Apple System Logger sends its messages to the Apple System Log and are viewable using the Organizer in Xcode when the device is attached to your computer. The ASL logger can be disabled by turning it off in your TestFlight options
 
-    [TestFlight setOptions:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"logToConsole"]];
+    [TestFlight setOptions:{ TFOptionLogToConsole : @NO }];
 
 The default option is YES.
 
 The STDERR logger sends log messages to STDERR so that you can see your log statements while debugging. The STDERR logger is only active when a debugger is attached to your application. If you do not wish to use the STDERR logger you can disable it by turning it off in your TestFlight options
 
-    [TestFlight setOptions:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"logToSTDERR"]];
+    [TestFlight setOptions:{ TFOptionLogToSTDERR : @NO }];
 
 The default option is YES.
 

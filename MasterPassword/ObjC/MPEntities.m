@@ -7,7 +7,7 @@
 //
 
 #import "MPEntities.h"
-#import "MPAppDelegate.h"
+#import "MPAppDelegate_Shared.h"
 
 @implementation NSManagedObjectContext(MP)
 
@@ -112,7 +112,7 @@
 
 - (id)content {
 
-    MPKey *key = [MPAppDelegate get].key;
+    MPKey *key = [MPAppDelegate_Shared get].key;
     if (!key)
         return nil;
 
@@ -122,7 +122,7 @@
 
 - (void)setContent:(id)content {
 
-    MPKey *key = [MPAppDelegate get].key;
+    MPKey *key = [MPAppDelegate_Shared get].key;
     if (!key)
         return;
 

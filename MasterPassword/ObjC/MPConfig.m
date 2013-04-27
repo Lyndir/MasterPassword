@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import "MPAppDelegate.h"
+#import "MPAppDelegate_Shared.h"
 
 @implementation MPConfig
 
@@ -25,7 +25,7 @@
             NSStringFromSelector( @selector(iCloudDecided) ) : @NO
     }];
 
-    self.delegate = [MPAppDelegate get];
+    self.delegate = [MPAppDelegate_Shared get];
 
     return self;
 }
