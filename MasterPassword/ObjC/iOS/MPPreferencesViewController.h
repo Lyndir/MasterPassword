@@ -7,10 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "IASKAppSettingsViewController.h"
 #import "MPTypeViewController.h"
 
-@interface MPPreferencesViewController : UITableViewController<IASKSettingsDelegate, MPTypeDelegate>
+@interface MPPreferencesViewController : UITableViewController<MPTypeDelegate>
 
 @property(weak, nonatomic) IBOutlet UIScrollView *avatarsView;
 @property(weak, nonatomic) IBOutlet UIButton *avatarTemplate;
@@ -20,6 +19,5 @@
 @property(weak, nonatomic) IBOutlet UILabel *defaultTypeLabel;
 
 - (IBAction)didToggleSwitch:(UISwitch *)sender;
-- (IBAction)settings:(id)sender;
 
 @end

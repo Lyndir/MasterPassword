@@ -121,14 +121,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-#pragma mark - IASKSettingsDelegate
-
-- (void)settingsViewControllerDidEnd:(IASKAppSettingsViewController *)sender {
-
-    while ([self.navigationController.viewControllers containsObject:sender])
-        [self.navigationController popViewControllerAnimated:YES];
-}
-
 #pragma mark - MPTypeDelegate
 
 - (void)didSelectType:(MPElementType)type {
@@ -155,15 +147,6 @@
     else
         [[MPiOSAppDelegate get] forgetSavedKeyFor:activeUser];
     [activeUser.managedObjectContext saveToStore];
-}
-
-- (IBAction)settings:(UIBarButtonItem *)sender {
-
-    IASKAppSettingsViewController *vc = [IASKAppSettingsViewController new];
-    vc.showDoneButton = NO;
-
-    [self.navigationController pushViewController:vc animated:YES];
-    [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Settings"];
 }
 
 @end
