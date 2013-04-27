@@ -622,7 +622,11 @@
 
 - (NSString *)googlePlusClientID {
 
-    return NSNullToNil([[self googlePlusInfo] valueForKeyPath:@"ClientID"]);
+    NSString *googlePlusClientID = NSNullToNil([[self googlePlusInfo] valueForKeyPath:@"ClientID"]);
+    if (![googlePlusClientID length])
+    wrn(@"Google+ client ID not set.  User won't be able to share via Google+.");
+
+    return googlePlusClientID;
 }
 
 
@@ -640,7 +644,11 @@
 
 - (NSString *)testFlightToken {
 
-    return NSNullToNil([[self testFlightInfo] valueForKeyPath:@"Application Token"]);
+    NSString *testFlightToken = NSNullToNil([[self testFlightInfo] valueForKeyPath:@"Application Token"]);
+    if (![testFlightToken length])
+    wrn(@"TestFlight token not set.  Test Flight won't be aware of this test.");
+    
+    return testFlightToken;
 }
 
 
@@ -658,7 +666,11 @@
 
 - (NSString *)crashlyticsAPIKey {
 
-    return NSNullToNil([[self crashlyticsInfo] valueForKeyPath:@"API Key"]);
+    NSString *crashlyticsAPIKey = NSNullToNil([[self crashlyticsInfo] valueForKeyPath:@"API Key"]);
+    if (![crashlyticsAPIKey length])
+    wrn(@"Crashlytics API key not set.  Crash logs won't be recorded.");
+
+    return crashlyticsAPIKey;
 }
 
 
@@ -677,10 +689,14 @@
 - (NSString *)localyticsKey {
 
 #ifdef DEBUG
-    return NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.development"]);
+    NSString *localyticsKey = NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.development"]);
 #else
-    return NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.distribution"]);
+    NSString *localyticsKey = NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.distribution"]);
 #endif
+    if (![localyticsKey length])
+    wrn(@"Localytics key not set.  Demographics won't be collected.");
+    
+    return localyticsKey;
 }
 
 @end
