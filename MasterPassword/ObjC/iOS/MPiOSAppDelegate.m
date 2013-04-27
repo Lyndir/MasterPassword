@@ -640,7 +640,7 @@
 
 - (NSString *)testFlightToken {
 
-    return NSNullToNil([[self testFlightInfo] valueForKeyPath:@"Team Token"]);
+    return NSNullToNil([[self testFlightInfo] valueForKeyPath:@"Application Token"]);
 }
 
 
