@@ -11,6 +11,7 @@
 #import "MPAppDelegate_Store.h"
 
 #import "IASKSettingsReader.h"
+#import "LocalyticsAmpSession.h"
 
 @interface MPiOSAppDelegate()
 
@@ -116,6 +117,8 @@
             [[LocalyticsSession sharedLocalyticsSession] LocalyticsSession:localyticsKey];
             [[LocalyticsSession sharedLocalyticsSession] open];
             [LocalyticsSession sharedLocalyticsSession].enableHTTPS = YES;
+            [[LocalyticsSession sharedLocalyticsSession] setCustomerId:[PearlKeyChain deviceIdentifier]];
+            [[LocalyticsSession sharedLocalyticsSession] setCustomerName:@"Anonymous"];
             [[LocalyticsSession sharedLocalyticsSession] upload];
             [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
                 if (message.level >= PearlLogLevelWarn)
@@ -277,6 +280,10 @@
 
     // Google+
     if ([self.googlePlus handleURL:url sourceApplication:sourceApplication annotation:annotation])
+        return YES;
+
+    // Localytics
+    if ([[LocalyticsAmpSession shared] handleURL:url])
         return YES;
 
     // Arbitrary URL to mpsites data.

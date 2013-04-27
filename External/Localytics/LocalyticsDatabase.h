@@ -1,11 +1,11 @@
 //
 //  LocalyticsDatabase.h
-//  Copyright (C) 2012 Char Software Inc., DBA Localytics
-// 
+//  Copyright (C) 2013 Char Software Inc., DBA Localytics
+//
 //  This code is provided under the Localytics Modified BSD License.
 //  A copy of this license has been distributed in a file called LICENSE
-//  with this source code.  
-// 
+//  with this source code.
+//
 // Please visit www.localytics.com for more information.
 
 #import <Foundation/Foundation.h>
@@ -18,9 +18,7 @@
     sqlite3 *_databaseConnection;
 }
 
-+ (LocalyticsDatabase *)sharedLocalyticsDatabase;
-
-- (NSUInteger)databaseSize;
+- (unsigned long long)databaseSize;
 - (int)eventCount;
 - (NSTimeInterval)createdTimestamp;
 
@@ -48,7 +46,7 @@
 - (BOOL)vacuumIfRequired;
 
 - (NSTimeInterval)lastSessionStartTimestamp;
-- (BOOL)setLastsessionStartTimestamp:(NSTimeInterval)timestamp;
+- (BOOL)setLastSessionStartTimestamp:(NSTimeInterval)timestamp;
 
 - (BOOL)isOptedOut;
 - (BOOL)setOptedOut:(BOOL)optOut;
@@ -58,8 +56,14 @@
 - (NSString *)customDimension:(int)dimension;
 - (BOOL)setCustomDimension:(int)dimension value:(NSString *)value;
 
-- (NSString *)customerId;
-- (BOOL)setCustomerId:(NSString *)newCustomerId;
+- (BOOL)setValueForIdentifier:(NSString *)identifierName value:(NSString *)value;
+- (NSString *)valueForIdentifier:(NSString *)identifierName;
+- (BOOL)deleteIdentifer:(NSString *)identifierName;
+- (NSDictionary *)identifiers;
+
+- (BOOL)setFacebookAttribution:(NSString *)fbAttribution;
+- (NSString *)facebookAttributionFromDb;
+- (NSString *)facebookAttributionFromPasteboard;
 
 - (NSInteger)safeIntegerValueFromDictionary:(NSDictionary *)dict forKey:(NSString *)key;
 - (NSString *)safeStringValueFromDictionary:(NSDictionary *)dict forKey:(NSString *)key;
