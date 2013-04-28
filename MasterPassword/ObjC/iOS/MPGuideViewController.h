@@ -23,12 +23,10 @@
 @property(weak, nonatomic) IBOutlet UIView *content;
 @property(weak, nonatomic) IBOutlet UIButton *contentButton;
 @property(weak, nonatomic) IBOutlet UITextField *contentText;
-@property(weak, nonatomic) IBOutlet UIButton *volumeButton;
 @property(weak, nonatomic) IBOutlet UIButton *largePlayButton;
 @property(weak, nonatomic) IBOutlet UIButton *smallPlayButton;
 
 - (IBAction)play;
 - (IBAction)close;
-- (IBAction)toggleVolume;
 
 @end

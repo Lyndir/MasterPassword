@@ -106,14 +106,6 @@
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction)toggleVolume {
-
-    if ((self.muted = !self.muted))
-        [self.volumeButton setImage:[UIImage imageNamed:@"icon_volume-mute"] forState:UIControlStateNormal];
-    else
-        [self.volumeButton setImage:[UIImage imageNamed:@"icon_volume-high"] forState:UIControlStateNormal];
-}
-
 - (void)tick:(NSTimer *)timer {
 
     self.lastTick = self.currentTick;

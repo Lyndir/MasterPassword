@@ -2589,22 +2589,6 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                             <action selector="play" destination="myN-X7-9Tg" eventType="touchUpInside" id="6vf-LF-jJt"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="nXW-Eq-JOa">
-                                        <rect key="frame" x="243" y="414" width="44" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <accessibility key="accessibilityConfiguration" hint="" label="Close"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" image="icon_volume-high.png">
-                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="toggleVolume" destination="myN-X7-9Tg" eventType="touchUpInside" id="hHG-m2-dUF"/>
-                                        </connections>
-                                    </button>
                                     <progressView opaque="NO" contentMode="scaleToFill" id="nf7-oM-7dh">
                                         <rect key="frame" x="85" y="431" width="150" height="9"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2727,7 +2711,6 @@ You can make passwords for anything, like email addresses, sites or real-world t
                         <outlet property="typeTip" destination="Pub-jz-pkR" id="KAK-cu-b8O"/>
                         <outlet property="usernameButton" destination="ZPR-Tx-as7" id="Skc-7h-X9c"/>
                         <outlet property="usernameTip" destination="w3j-Qm-9gD" id="zg3-vy-aMx"/>
-                        <outlet property="volumeButton" destination="nXW-Eq-JOa" id="Ok3-SU-csw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zsi-4A-If9" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2815,7 +2798,6 @@ However, it means that anyone who finds your device unlocked can do the same.</s
         <image name="icon_play.png" width="32" height="32"/>
         <image name="icon_plus.png" width="32" height="32"/>
         <image name="icon_up.png" width="32" height="32"/>
-        <image name="icon_volume-high.png" width="32" height="32"/>
         <image name="identity.png" width="82" height="80"/>
         <image name="page-deblock.png" width="305" height="400"/>
         <image name="page-gorillas.png" width="305" height="400"/>
