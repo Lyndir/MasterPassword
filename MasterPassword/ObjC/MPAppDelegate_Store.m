@@ -17,7 +17,7 @@
 
 @implementation MPAppDelegate_Shared(Store)
 #if TARGET_OS_IPHONE
-PearlAssociatedObjectProperty(PearlAlert*, HandleCloudContentAlert, handleCloudContentAlert);
+        PearlAssociatedObjectProperty(PearlAlert*, HandleCloudContentAlert, handleCloudContentAlert);
 PearlAssociatedObjectProperty(PearlAlert*, FixCloudContentAlert, fixCloudContentAlert);
 PearlAssociatedObjectProperty(PearlOverlay*, StoreLoading, storeLoading);
 #endif
@@ -157,8 +157,6 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
             NSMigratePersistentStoresAutomaticallyOption : @YES,
             NSInferMappingModelAutomaticallyOption       : @YES
     };
-    NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
-    NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
 
     // Create the directory to hold the new local store.
     if (![[NSFileManager defaultManager] createDirectoryAtPath:[manager URLForLocalStoreDirectory].path
@@ -168,29 +166,11 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         return;
     }
 
-    // Open the old local store.
-    NSPersistentStore *oldStore = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:oldLocalStoreURL
-                                                          options:oldLocalStoreOptions error:&error];
-    if (!oldStore) {
-        err(@"While opening old store for migration %@: %@", oldLocalStoreURL.path, error);
-        return;
-    }
-
-    // Migrate to the new local store.
-    if (![psc migratePersistentStore:oldStore toURL:newLocalStoreURL options:newLocalStoreOptions withType:NSSQLiteStoreType
-                               error:&error]) {
-        err(@"While migrating local store from %@ -> %@: %@", oldLocalStoreURL, newLocalStoreURL, error);
+    if (![manager copyMigrateStore:oldLocalStoreURL withOptions:oldLocalStoreOptions
+                           toStore:newLocalStoreURL withOptions:newLocalStoreOptions
+                             error:nil cause:nil context:nil]) {
         manager.localStoreURL = oldLocalStoreURL;
         return;
-    }
-
-    // Clean-up.
-    for (NSPersistentStore *store in psc.persistentStores)
-        if (![psc removePersistentStore:store error:&error]) {
-            err(@"While removing the migrated store from the store context: %@", error);
-        }
-    if (![[NSFileManager defaultManager] removeItemAtURL:oldLocalStoreURL error:&error]) {
-        err(@"While deleting the old local store: %@", error);
     }
 
     inf(@"Successfully migrated old to new local store.");
@@ -260,32 +240,10 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         return;
     }
 
-    NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
-    NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
-
-    // Open the old cloud store.
-    NSPersistentStore *oldStore = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:oldCloudStoreURL
-                                                          options:oldCloudStoreOptions error:&error];
-    if (!oldStore) {
-        err(@"While opening old store for migration %@: %@", oldCloudStoreURL.path, error);
+    if (![manager copyMigrateStore:oldCloudStoreURL withOptions:oldCloudStoreOptions
+                           toStore:newCloudStoreURL withOptions:newCloudStoreOptions
+                             error:nil cause:nil context:nil])
         return;
-    }
-
-    // Migrate to the new cloud store.
-    if (![psc migratePersistentStore:oldStore toURL:newCloudStoreURL options:newCloudStoreOptions withType:NSSQLiteStoreType
-                               error:&error]) {
-        err(@"While migrating cloud store from %@ -> %@: %@", oldCloudStoreURL.path, newCloudStoreURL.path, error);
-        return;
-    }
-
-    // Clean-up.
-    for (NSPersistentStore *store in psc.persistentStores)
-        if (![psc removePersistentStore:store error:&error]) {
-            err(@"While removing the migrated store from the store context: %@", error);
-        }
-    if (![[NSFileManager defaultManager] removeItemAtURL:oldCloudStoreURL error:&error]) {
-        err(@"While deleting the old cloud store: %@", error);
-    }
 
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"LocalUUIDKey"];
     inf(@"Successfully migrated old to new cloud store.");
@@ -322,7 +280,6 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager willLoadStoreIsCloud:(BOOL)isCloudStore {
 
-    // FIXME
     self.privateManagedObjectContext = nil;
     self.mainManagedObjectContext = nil;
 
@@ -413,6 +370,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                                                         cancelTitle:[PearlStrings get].commonButtonBack otherTitles:@"Fix Anyway", nil];
     };
 }
+
 #endif
 
 #pragma mark - Import / Export

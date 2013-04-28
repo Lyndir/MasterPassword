@@ -77,18 +77,20 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedOutNotification object:self userInfo:@{ @"animated" : @(animated) }];
 }
 
-- (BOOL)signInAsUser:(MPUserEntity *)user usingMasterPassword:(NSString *)password {
+- (BOOL)signInAsUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc usingMasterPassword:(NSString *)password {
 
-    assert(!password || ![NSThread isMainThread]); // If we need to computing a key, this operation shouldn't be on the main thread.
+    if (password)
+        NSAssert(![NSThread isMainThread], @"Computing key may not happen from the main thread.");
+
     MPKey *tryKey = nil;
 
     // Method 1: When the user has no keyID set, set a new key from the given master password.
     if (!user.keyID) {
-        if ([password length]) if ((tryKey = [MPAlgorithmDefault keyForPassword:password ofUserNamed:user.name])) {
+        if ([password length] && (tryKey = [MPAlgorithmDefault keyForPassword:password ofUserNamed:user.name])) {
             user.keyID = tryKey.keyID;
 
             // Migrate existing elements.
-            [self migrateElementsForUser:user inContext:user.managedObjectContext toKey:tryKey];
+            [self migrateElementsForUser:user inContext:moc toKey:tryKey];
         }
     }
 
@@ -153,7 +155,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     }
 
     user.lastUsed = [NSDate date];
-    [user.managedObjectContext saveToStore];
+    [moc saveToStore];
     self.activeUser = user;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedInNotification object:self];

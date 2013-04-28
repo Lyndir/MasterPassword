@@ -77,10 +77,10 @@
     self.alertBody.text = nil;
     self.toolTipEditIcon.hidden = YES;
 
-    [[NSNotificationCenter defaultCenter]
-            addObserverForName:UIApplicationDidEnterBackgroundNotification object:self queue:nil usingBlock:^(NSNotification *note) {
-        self.suppressOutdatedAlert = NO;
-    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification object:self queue:nil usingBlock:
+            ^(NSNotification *note) {
+                self.suppressOutdatedAlert = NO;
+            }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPElementUpdatedNotification object:nil queue:nil usingBlock:
             ^void(NSNotification *note) {
                 MPElementEntity *activeElement = [self activeElementForThread];
@@ -106,6 +106,11 @@
                     [self.navigationController dismissViewControllerAnimated:animated completion:^{
                         [self.navigationController popToRootViewControllerAnimated:animated];
                     }];
+            }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidChangeNotification object:nil queue:nil usingBlock:
+            ^(NSNotification *note) {
+                if (!self.activeElementForThread)
+                    [self didSelectElement:nil];
             }];
 
     [super viewDidLoad];
@@ -584,37 +589,43 @@
 
 - (void)changeActiveElementWithoutWarningDo:(BOOL (^)(MPElementEntity *activeElement))task; {
 
-    MPElementEntity *activeElement = [self activeElementForThread];
-    NSString *oldPassword = [activeElement.content description];
-    if (!task( activeElement ))
-        return;
-    NSString *newPassword = [activeElement.content description];
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        MPElementEntity *activeElement = [self activeElementInContext:context];
+        if (!activeElement)
+            return;
 
-    // Save.
-    [activeElement.managedObjectContext saveToStore];
+        NSString *oldPassword = [activeElement.content description];
+        if (!task( activeElement ))
+            return;
+        NSString *newPassword = [activeElement.content description];
 
-    // Update the UI.
-    dispatch_async( dispatch_get_main_queue(), ^{
-        [self updateAnimated:YES];
+        // Save.
+        [context saveToStore];
 
-        // Show new and old password.
-        if ([oldPassword length] && ![oldPassword isEqualToString:newPassword])
-            [self showAlertWithTitle:@"Password Changed!"
-                             message:PearlString( @"The password for %@ has changed.\n\n"
-                                     @"IMPORTANT:\n"
-                                     @"Don't forget to update the site with your new password! "
-                                     @"Your old password was:\n"
-                                     @"%@", activeElement.name, oldPassword )];
-    } );
+        // Update the UI.
+        dispatch_async( dispatch_get_main_queue(), ^{
+            [self updateAnimated:YES];
+
+            // Show new and old password.
+            if ([oldPassword length] && ![oldPassword isEqualToString:newPassword])
+                [self showAlertWithTitle:@"Password Changed!"
+                                 message:PearlString( @"The password for %@ has changed.\n\n"
+                                         @"IMPORTANT:\n"
+                                         @"Don't forget to update the site with your new password! "
+                                         @"Your old password was:\n"
+                                         @"%@", activeElement.name, oldPassword )];
+        } );
+    }];
 }
 
 - (MPElementEntity *)activeElementForThread {
 
-    if (!_activeElementOID)
-        return nil;
+    return [self activeElementInContext:[MPiOSAppDelegate managedObjectContextForThreadIfReady]];
+}
 
-    NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
-    if (!moc)
+- (MPElementEntity *)activeElementInContext:(NSManagedObjectContext *)moc {
+
+    if (!_activeElementOID)
         return nil;
 
     NSError *error;
@@ -801,47 +812,45 @@
 
 - (void)didSelectElement:(MPElementEntity *)element {
 
-    if (!element)
-        return;
-
+    inf(@"Selected: %@", element.name);
     _activeElementOID = element.objectID;
     [self closeAlert];
-    [self changeActiveElementWithoutWarningDo:^BOOL(MPElementEntity *activeElement) {
-        if ([activeElement use] == 1)
-            [self showAlertWithTitle:@"New Site" message:
-                    PearlString( @"You've just created a password for %@.\n\n"
-                            @"IMPORTANT:\n"
-                            @"Go to %@ and set or change the password for your account to the password above.\n"
-                            @"Do this right away: if you forget, you may have trouble remembering which password to use to log into the site later on.",
-                            activeElement.name, activeElement.name )];
-        return YES;
-    }];
 
-    MPElementEntity *activeElement = [self activeElementForThread];
-    inf(@"Selected: %@", activeElement.name);
-
-    if (![[MPiOSConfig get].typeTipShown boolValue])
-        [UIView animateWithDuration:0.5f animations:^{
-            self.typeTipContainer.alpha = 1;
-        }                completion:^(BOOL finished) {
-            if (finished) {
-                [MPiOSConfig get].typeTipShown = PearlBool(YES);
-
-                dispatch_after(
-                        dispatch_time( DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC) ), dispatch_get_main_queue(), ^{
-                            [UIView animateWithDuration:0.2f animations:^{
-                                self.typeTipContainer.alpha = 0;
-                            }];
-                        } );
-            }
+    if (element) {
+        [self changeActiveElementWithoutWarningDo:^BOOL(MPElementEntity *activeElement) {
+            if ([activeElement use] == 1)
+                [self showAlertWithTitle:@"New Site" message:
+                        PearlString( @"You've just created a password for %@.\n\n"
+                                @"IMPORTANT:\n"
+                                @"Go to %@ and set or change the password for your account to the password above.\n"
+                                @"Do this right away: if you forget, you may have trouble remembering which password to use to log into the site later on.",
+                                activeElement.name, activeElement.name )];
+            return YES;
         }];
 
+        if (![[MPiOSConfig get].typeTipShown boolValue])
+            [UIView animateWithDuration:0.5f animations:^{
+                self.typeTipContainer.alpha = 1;
+            }                completion:^(BOOL finished) {
+                if (finished) {
+                    [MPiOSConfig get].typeTipShown = PearlBool(YES);
+
+                    dispatch_after(
+                            dispatch_time( DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC) ), dispatch_get_main_queue(), ^{
+                                [UIView animateWithDuration:0.2f animations:^{
+                                    self.typeTipContainer.alpha = 0;
+                                }];
+                            } );
+                }
+            }];
+    }
+
     [self.searchDisplayController setActive:NO animated:YES];
-    self.searchDisplayController.searchBar.text = activeElement.name;
+    self.searchDisplayController.searchBar.text = element.name;
 
     MPCheckpoint( MPCheckpointUseType, @{
-            @"type"    : activeElement.typeName,
-            @"version" : @(activeElement.version)
+            @"type"    : element.typeName,
+            @"version" : @(element.version)
     } );
 
     [self updateAnimated:YES];

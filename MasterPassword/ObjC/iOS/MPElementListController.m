@@ -13,6 +13,16 @@
     NSDateFormatter *_dateFormatter;
 }
 
+- (void)viewDidLoad {
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidChangeNotification object:nil queue:nil usingBlock:
+            ^(NSNotification *note) {
+                [self updateData];
+            }];
+
+    [super viewDidLoad];
+}
+
 - (void)addElementNamed:(NSString *)siteName completion:(void (^)(BOOL success))completion {
 
     if (![siteName length]) {
@@ -105,8 +115,12 @@
 - (void)updateData {
 
     MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForThread];
-    if (!activeUser)
+    if (!activeUser) {
+        _fetchedResultsControllerByLastUsed = nil;
+        _fetchedResultsControllerByUses = nil;
+        [self.tableView reloadData];
         return;
+    }
 
     // Build predicate.
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user == %@", activeUser];

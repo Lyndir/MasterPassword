@@ -14,8 +14,6 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 
-#import "GPPSignIn.h"
-
 @interface MPUnlockViewController()
 
 @property(strong, nonatomic) NSMutableDictionary *avatarToUserOID;
@@ -163,26 +161,26 @@
         [self initializeWordLabel:wordLabel];
     }                        recurse:NO];
 
-    [[NSNotificationCenter defaultCenter]
-            addObserverForName:UbiquityManagedStoreDidChangeNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
-        [self updateUsers];
-    }];
-    [[NSNotificationCenter defaultCenter]
-            addObserverForName:UbiquityManagedStoreDidImportChangesNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
-        [self updateUsers];
-    }];
-    [[NSNotificationCenter defaultCenter]
-            addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
-        [self emergencyCloseAnimated:NO];
-        self.uiContainer.alpha = 0;
-    }];
-    [[NSNotificationCenter defaultCenter]
-            addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
-        [self updateLayoutAnimated:NO allowScroll:NO completion:nil];
-        [UIView animateWithDuration:1 animations:^{
-            self.uiContainer.alpha = 1;
-        }];
-    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidChangeNotification object:nil queue:nil usingBlock:
+            ^(NSNotification *note) {
+                [self updateUsers];
+            }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidImportChangesNotification object:nil queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [self updateUsers];
+                                                  }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:nil usingBlock:
+            ^(NSNotification *note) {
+                [self emergencyCloseAnimated:NO];
+                self.uiContainer.alpha = 0;
+            }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:nil usingBlock:
+            ^(NSNotification *note) {
+                [self updateLayoutAnimated:NO allowScroll:NO completion:nil];
+                [UIView animateWithDuration:1 animations:^{
+                    self.uiContainer.alpha = 1;
+                }];
+            }];
 
     [self updateLayoutAnimated:NO allowScroll:YES completion:nil];
 
@@ -356,16 +354,16 @@
 
 - (void)didToggleUserSelection {
 
-    MPUserEntity *selectedUser = self.selectedUser;
+    MPUserEntity *selectedUser = [self selectedUserForThread];
     if (!selectedUser)
         [self.passwordField resignFirstResponder];
-    else if ([[MPiOSAppDelegate get] signInAsUser:selectedUser usingMasterPassword:nil]) {
+    else if ([[MPiOSAppDelegate get] signInAsUser:selectedUser inContext:selectedUser.managedObjectContext usingMasterPassword:nil]) {
         [self performSegueWithIdentifier:@"MP_Unlock" sender:self];
         return;
     }
 
     [self updateLayoutAnimated:YES allowScroll:YES completion:^(BOOL finished) {
-        if (self.selectedUser)
+        if ([self selectedUserForThread])
             [self.passwordField becomeFirstResponder];
     }];
 }
@@ -479,7 +477,8 @@
     }
 
     // Lay out password entry and user selection views.
-    if (self.selectedUser && !self.passwordView.alpha) {
+    MPUserEntity *selectedUser = [self selectedUserForThread];
+    if (selectedUser && !self.passwordView.alpha) {
         // User was just selected.
         self.passwordView.alpha = 1;
         self.avatarsView.center = CGPointMake( 160, 180 );
@@ -489,7 +488,7 @@
         self.oldNameLabel.center = self.nameLabel.center;
         self.avatarShadowColor = [UIColor whiteColor];
     }
-    else if (!self.selectedUser && self.passwordView.alpha == 1) {
+    else if (!selectedUser && self.passwordView.alpha == 1) {
         // User was just deselected.
         self.passwordField.text = nil;
         self.passwordView.alpha = 0;
@@ -502,7 +501,7 @@
     }
 
     // Lay out the word wall.
-    if (!self.selectedUser || self.selectedUser.keyID) {
+    if (!selectedUser || selectedUser.keyID) {
         self.passwordFieldLabel.text = @"Enter your master password:";
 
         self.wordWall.alpha = 0;
@@ -530,8 +529,8 @@
     }
 
     // Lay out user targeting.
-    MPUserEntity *targetedUser = self.selectedUser;
-    UIButton *selectedAvatar = [self avatarForUser:self.selectedUser];
+    UIButton *selectedAvatar = [self avatarForUser:selectedUser];
+    MPUserEntity *targetedUser = selectedUser;
     UIButton *targetedAvatar = selectedAvatar;
     if (!targetedAvatar) {
         targetedAvatar = [self findTargetedAvatar];
@@ -547,7 +546,7 @@
         BOOL isTargeted = avatar == targetedAvatar;
 
         avatar.userInteractionEnabled = isTargeted;
-        avatar.alpha = isTargeted? 1: self.selectedUser? 0.1: 0.4;
+        avatar.alpha = isTargeted? 1: [self selectedUserForThread]? 0.1: 0.4;
 
         [self updateAvatarShadowColor:avatar isTargeted:isTargeted];
     }                           recurse:NO];
@@ -612,14 +611,15 @@
 
 - (void)tryMasterPassword {
 
-    if (!self.selectedUser)
+    if (![self selectedUserForThread])
             // No user selected, can't try sign-in.
         return;
 
     [self setSpinnerActive:YES];
 
-    dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
-        BOOL unlocked = [[MPiOSAppDelegate get] signInAsUser:self.selectedUser usingMasterPassword:self.passwordField.text];
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+        BOOL unlocked = [[MPiOSAppDelegate get] signInAsUser:[self selectedUserInContext:moc] inContext:moc
+                                         usingMasterPassword:self.passwordField.text];
 
         dispatch_async( dispatch_get_main_queue(), ^{
             if (unlocked)
@@ -632,7 +632,7 @@
                 [self setSpinnerActive:NO];
             }
         } );
-    } );
+    }];
 }
 
 - (UIButton *)findTargetedAvatar {
@@ -697,9 +697,9 @@
             self.spinner.alpha = active? 1: 0;
 
             if (active)
-                [self avatarForUser:self.selectedUser].backgroundColor = [UIColor clearColor];
+                [self avatarForUser:[self selectedUserForThread]].backgroundColor = [UIColor clearColor];
             else
-                [self avatarForUser:self.selectedUser].backgroundColor = self.avatarTemplate.backgroundColor;
+                [self avatarForUser:[self selectedUserForThread]].backgroundColor = self.avatarTemplate.backgroundColor;
         }];
     });
 }
@@ -779,7 +779,7 @@
     else if (textField == self.passwordField) {
         [self setSpinnerActive:YES];
 
-        if (self.selectedUser.keyID)
+        if ([self selectedUserForThread].keyID)
             [self tryMasterPassword];
 
         else
@@ -980,7 +980,7 @@
     if (sender.state != UIGestureRecognizerStateBegan)
         return;
 
-    if (self.selectedUser)
+    if ([self selectedUserForThread])
         return;
 
     MPUserEntity *targetedUser = [self userForAvatar:[self findTargetedAvatar]];
@@ -1118,13 +1118,14 @@
 
 #pragma mark - Core Data
 
-- (MPUserEntity *)selectedUser {
+- (MPUserEntity *)selectedUserForThread {
+
+    return [self selectedUserInContext:[MPiOSAppDelegate managedObjectContextForThreadIfReady]];
+}
+
+- (MPUserEntity *)selectedUserInContext:(NSManagedObjectContext *)moc {
 
     if (!_selectedUserOID)
-        return nil;
-
-    NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
-    if (!moc)
         return nil;
 
     NSError *error;

@@ -63,11 +63,6 @@
     }
 }
 
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-
-    [self.delegate didSelectElement:nil];
-}
-
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
 
     controller.searchBar.text = @"";

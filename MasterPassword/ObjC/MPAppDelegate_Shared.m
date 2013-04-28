@@ -26,19 +26,7 @@
 
 - (MPUserEntity *)activeUserForThread {
 
-    if (!_activeUserOID)
-        return nil;
-
-    NSManagedObjectContext *moc = [MPAppDelegate_Shared managedObjectContextForThreadIfReady];
-    if (!moc)
-        return nil;
-
-    NSError *error;
-    MPUserEntity *activeUser = (MPUserEntity *)[moc existingObjectWithID:_activeUserOID error:&error];
-    if (!activeUser)
-    err(@"Failed to retrieve active user: %@", error);
-
-    return activeUser;
+    return [self activeUserInContext:[MPAppDelegate_Shared managedObjectContextForThreadIfReady]];
 }
 
 - (MPUserEntity *)activeUserInContext:(NSManagedObjectContext *)moc {
