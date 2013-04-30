@@ -17,7 +17,7 @@
 + (void)initialize {
 
     [MPiOSConfig get];
-
+    [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
 #ifdef DEBUG
     [PearlLogger get].printLevel = PearlLogLevelDebug;
     //[NSClassFromString(@"WebView") performSelector:NSSelectorFromString(@"_enableRemoteInspector")];
@@ -434,11 +434,6 @@
     MPCheckpoint( MPCheckpointShowSetup, nil );
 }
 
-- (void)showFeedback {
-
-    [self showFeedbackWithLogs:NO forVC:nil];
-}
-
 - (void)showReview {
 
     MPCheckpoint( MPCheckpointReview, nil );
@@ -476,6 +471,8 @@
 
     NSString *userName = [[MPiOSAppDelegate get] activeUserForThread].name;
     PearlLogLevel logLevel = [[MPiOSConfig get].sendInfo boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
+    if ([[MPiOSConfig get].traceMode boolValue])
+        logLevel = PearlLogLevelTrace;
 
     [[[PearlEMail alloc] initForEMailTo:@"Master Password Development <masterpassword@lyndir.com>"
                                 subject:PearlString( @"Feedback for Master Password [%@]",
@@ -602,6 +599,11 @@
 #pragma mark - PearlConfigDelegate
 
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)value {
+
+    if (configKey == @selector(traceMode)) {
+        [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
+        inf(@"Trace is now: %@", [[MPiOSConfig get].traceMode boolValue]? @"ON": @"OFF");
+    }
 
     [[NSNotificationCenter defaultCenter]
             postNotificationName:MPCheckConfigNotification object:NSStringFromSelector( configKey ) userInfo:nil];

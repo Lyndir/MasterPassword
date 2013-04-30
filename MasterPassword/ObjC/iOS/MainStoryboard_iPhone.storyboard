@@ -476,6 +476,99 @@ Your passwords will be AES-encrypted with your master password.</string>
             </objects>
             <point key="canvasLocation" x="1537" y="145"/>
         </scene>
+        <!--Logs View Controller - Log Inspector-->
+        <scene sceneID="AKo-Ze-vcJ">
+            <objects>
+                <viewController id="Tx0-mM-kHk" customClass="MPLogsViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3oc-v8-YGP">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="mtJ-9r-6yT">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" id="ojc-Tn-DM1">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="372"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <mutableString key="text">119-20:51:52        MPiOSAppDelegate.m:36  | INFO    : Initializing TestFlight
+119-20:51:52        MPiOSAppDelegate.m:70  | INFO    : Initializing Google+
+119-20:51:52        MPiOSAppDelegate.m:80  | INFO    : Initializing Crashlytics
+119-20:51:52        MPiOSAppDelegate.m:109 | INFO    : Initializing Localytics
+119-20:51:53        PearlAppDelegate.m:71  | INFO    : Master Password (MasterPassword) 1.4 (1.4.0) (GIT: 1.4-0-g8a4eecd-dirty)
+119-20:51:53        MPiOSAppDelegate.m:257 | INFO    : Started up with device identifier: A8C51CDA-6F60-4F0C-BFC9-68A08F2F2DD7
+119-20:51:59     MPAppDelegate_Store.m:278 | DEBUG   : [StoreManager] (Re)loading store...
+119-20:51:59     MPAppDelegate_Store.m:278 | DEBUG   : [StoreManager] Will load cloud store: 0B3CA2DF-5796-44DF-B5E0-121EC3846464 (definite).
+119-20:51:59             PearlConfig.m:193 | INFO    : Lock screen will appear
+119-20:51:59        MPiOSAppDelegate.m:412 | INFO    : Re-activated
+119-20:51:59             PearlConfig.m:180 | DEBUG   : MPiOSConfig.launchCount = [70 ->] 71
+119-20:52:02     MPAppDelegate_Store.m:278 | DEBUG   : [StoreManager] Clearing stores...
+119-20:52:03     MPAppDelegate_Store.m:278 | DEBUG   : [StoreManager] Loading store without seeding.
+119-20:52:09     MPAppDelegate_Store.m:278 | DEBUG   : [StoreManager] Cloud enabled and successfully loaded cloud store.
+119-20:52:09     MPAppDelegate_Store.m:299 | INFO    : Using iCloud? 1
+119-20:52:12       MPAppDelegate_Key.m:28  | INFO    : Found key in keychain for: b55911588b178466be1d6392597e899b8de46f9a
+119-20:52:12       MPAppDelegate_Key.m:132 | INFO    : Logged in: b55911588b178466be1d6392597e899b8de46f9a
+119-20:52:13  MPUnlockViewController.m:229 | INFO    : Lock screen will disappear
+119-20:52:13    MPMainViewController.m:142 | INFO    : Main will appear
+119-20:52:16    MPMainViewController.m:734 | INFO    : Action: Preferences
+119-20:52:17    MPMainViewController.m:187 | INFO    : Main will disappear.
+</mutableString>
+                                <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="9"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="QPO-l8-Opz">
+                                <rect key="frame" x="0.0" y="372" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items>
+                                    <barButtonItem systemItem="compose" id="Yvq-If-VqG">
+                                        <connections>
+                                            <action selector="mail:" destination="Tx0-mM-kHk" id="Efg-Nz-tf2"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem systemItem="refresh" id="fzf-tt-Vc3">
+                                        <connections>
+                                            <action selector="refresh:" destination="Tx0-mM-kHk" id="Xur-Ed-PN7"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem systemItem="flexibleSpace" id="GcH-O1-v3J"/>
+                                    <barButtonItem style="plain" id="yi1-I8-uzn">
+                                        <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="lzO-Kl-IPf">
+                                            <rect key="frame" x="191" y="8" width="123" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <segments>
+                                                <segment title="Normal"/>
+                                                <segment title="Debug"/>
+                                            </segments>
+                                            <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                                            <connections>
+                                                <action selector="toggleLevelControl:" destination="Tx0-mM-kHk" eventType="valueChanged" id="Snn-NE-BnD"/>
+                                            </connections>
+                                        </segmentedControl>
+                                        <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Log Inspector" id="RrC-3Q-nBN">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="RYe-xc-zYv">
+                            <connections>
+                                <action selector="close:" destination="Tx0-mM-kHk" id="KrS-tQ-IOf"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="levelControl" destination="lzO-Kl-IPf" id="B7k-yM-dR0"/>
+                        <outlet property="logView" destination="ojc-Tn-DM1" id="mOS-LG-HHA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2Jl-Qq-bOz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2078" y="145"/>
+        </scene>
         <!--Main View Controller - Master Password-->
         <scene sceneID="U26-Zf-euQ">
             <objects>
@@ -2172,6 +2265,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                         <outlet property="defaultTypeLabel" destination="vKJ-1b-NeO" id="4vz-2l-xXk"/>
                         <outlet property="exportCell" destination="X2m-92-Qzh" id="zjs-9C-uKX"/>
                         <outlet property="savePasswordSwitch" destination="ilG-0h-SOb" id="iZD-gQ-pve"/>
+                        <segue destination="Tx0-mM-kHk" kind="push" identifier="MP_Logs" id="rWT-Kr-cAs"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CEl-jQ-l9k" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2869,7 +2963,6 @@ However, it means that anyone who finds your device unlocked can do the same.</s
             <relationships>
                 <relationship kind="action" name="close"/>
                 <relationship kind="action" name="play"/>
-                <relationship kind="action" name="toggleVolume"/>
                 <relationship kind="outlet" name="content" candidateClass="UIView"/>
                 <relationship kind="outlet" name="contentButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="contentText" candidateClass="UITextField"/>
@@ -2885,7 +2978,17 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                 <relationship kind="outlet" name="typeTip" candidateClass="UIView"/>
                 <relationship kind="outlet" name="usernameButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="usernameTip" candidateClass="UIView"/>
-                <relationship kind="outlet" name="volumeButton" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="MPLogsViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPLogsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="close:" candidateClass="UIBarButtonItem"/>
+                <relationship kind="action" name="mail:" candidateClass="UIBarButtonItem"/>
+                <relationship kind="action" name="refresh:" candidateClass="UIBarButtonItem"/>
+                <relationship kind="action" name="toggleLevelControl:" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="levelControl" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="logView" candidateClass="UITextView"/>
             </relationships>
         </class>
         <class className="MPMainViewController" superclassName="UIViewController">

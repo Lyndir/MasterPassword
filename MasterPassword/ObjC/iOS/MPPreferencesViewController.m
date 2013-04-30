@@ -89,6 +89,21 @@
     [super viewWillDisappear:animated];
 }
 
+- (BOOL)canBecomeFirstResponder {
+
+    return YES;
+}
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+
+    if (motion == UIEventSubtypeMotionShake) {
+        MPCheckpoint( MPCheckpointLogs, @{
+                @"trace": [MPiOSConfig get].traceMode
+        } );
+        [self performSegueWithIdentifier:@"MP_Logs" sender:self];
+    }
+}
+
 - (BOOL)shouldAutorotate {
 
     return NO;

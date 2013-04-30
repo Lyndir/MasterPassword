@@ -8,7 +8,7 @@
 
 @implementation MPiOSConfig
 
-@dynamic sendInfo, helpHidden, siteInfoHidden, showSetup, actionsTipShown, typeTipShown, loginNameTipShown;
+@dynamic helpHidden, siteInfoHidden, showSetup, actionsTipShown, typeTipShown, loginNameTipShown, traceMode;
 
 - (id)init {
 
@@ -20,9 +20,10 @@
             NSStringFromSelector( @selector(siteInfoHidden) )    : @YES,
             NSStringFromSelector( @selector(showSetup) )         : @YES,
             NSStringFromSelector( @selector(iTunesID) )          : @"510296984",
-            NSStringFromSelector( @selector(actionsTipShown) )   : PearlBoolNot(self.firstRun),
-            NSStringFromSelector( @selector(typeTipShown) )      : PearlBoolNot(self.firstRun),
-            NSStringFromSelector( @selector(loginNameTipShown) ) : PearlBool(NO)
+            NSStringFromSelector( @selector(actionsTipShown) )   : @(!self.firstRun),
+            NSStringFromSelector( @selector(typeTipShown) )      : @(!self.firstRun),
+            NSStringFromSelector( @selector(loginNameTipShown) ) : @NO,
+            NSStringFromSelector( @selector(traceMode) )         : @NO
     }];
 
     return self;

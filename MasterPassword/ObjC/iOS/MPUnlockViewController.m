@@ -116,7 +116,8 @@
 
 - (void)viewDidLoad {
 
-    [self.newsView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.masterpasswordapp.com/news.html"]]];
+    [self.newsView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:
+            PearlString(@"http://www.masterpasswordapp.com/news.html?version=%@", [[PearlInfoPlist get] CFBundleVersion])]]];
 
     self.avatarToUserOID = [NSMutableDictionary dictionaryWithCapacity:3];
 

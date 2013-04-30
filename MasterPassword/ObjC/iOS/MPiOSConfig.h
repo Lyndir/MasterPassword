@@ -16,5 +16,6 @@
 @property(nonatomic, retain) NSNumber *actionsTipShown;
 @property(nonatomic, retain) NSNumber *typeTipShown;
 @property(nonatomic, retain) NSNumber *loginNameTipShown;
+@property(nonatomic, retain) NSNumber *traceMode;
 
 @end
