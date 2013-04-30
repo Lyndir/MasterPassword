@@ -71,7 +71,17 @@
 
 - (IBAction)mail:(UIBarButtonItem *)sender {
 
-    [[MPiOSAppDelegate get] openFeedbackWithLogs:YES forVC:self];
+    if ([[MPiOSConfig get].traceMode boolValue]) {
+        [PearlAlert showAlertWithTitle:@"Hiding Trace Messages" message:
+                @"Trace-level log messages will not be mailed. "
+                        @"These messages contain sensitive and personal information."
+                             viewStyle:UIAlertViewStyleDefault initAlert:nil
+                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                         [[MPiOSAppDelegate get] openFeedbackWithLogs:YES forVC:self];
+                     }     cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
+    }
+    else
+        [[MPiOSAppDelegate get] openFeedbackWithLogs:YES forVC:self];
 }
 
 @end

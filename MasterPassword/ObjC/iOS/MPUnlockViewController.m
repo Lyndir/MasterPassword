@@ -345,20 +345,19 @@
 
     [self.avatarToUserOID setObject:NilToNSNull([user objectID]) forKey:[NSValue valueWithNonretainedObject:avatar]];
 
-    if ([_selectedUserOID isEqual:[user objectID]]) {
-        self.selectedUser = user;
+    if ([_selectedUserOID isEqual:[user objectID]])
         avatar.selected = YES;
-    }
 
     return avatar;
 }
 
 - (void)didToggleUserSelection {
 
-    MPUserEntity *selectedUser = [self selectedUserForThread];
+    NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
+    MPUserEntity *selectedUser = [self selectedUserInContext:moc];
     if (!selectedUser)
         [self.passwordField resignFirstResponder];
-    else if ([[MPiOSAppDelegate get] signInAsUser:selectedUser inContext:selectedUser.managedObjectContext usingMasterPassword:nil]) {
+    else if ([[MPiOSAppDelegate get] signInAsUser:selectedUser saveInContext:moc usingMasterPassword:nil]) {
         [self performSegueWithIdentifier:@"MP_Unlock" sender:self];
         return;
     }
@@ -450,7 +449,12 @@
                      }
 
                      // Confirm
-                     [moc saveToStore];
+                     [moc performBlockAndWait:^{
+                         [moc saveToStore];
+                         NSError *error = nil;
+                         if (![moc obtainPermanentIDsForObjects:@[newUser] error:&error])
+                         err(@"Failed to obtain permanent object ID for new user: %@", error);
+                     }];
                      completion( YES );
 
                      [self updateUsers];
@@ -535,7 +539,7 @@
     UIButton *targetedAvatar = selectedAvatar;
     if (!targetedAvatar) {
         targetedAvatar = [self findTargetedAvatar];
-        targetedUser = [self userForAvatar:targetedAvatar];
+        targetedUser = [self userForAvatar:targetedAvatar inContext:[MPiOSAppDelegate managedObjectContextForThreadIfReady]];
     }
 
     [self.avatarsView enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
@@ -619,7 +623,7 @@
     [self setSpinnerActive:YES];
 
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-        BOOL unlocked = [[MPiOSAppDelegate get] signInAsUser:[self selectedUserInContext:moc] inContext:moc
+        BOOL unlocked = [[MPiOSAppDelegate get] signInAsUser:[self selectedUserInContext:moc] saveInContext:moc
                                          usingMasterPassword:self.passwordField.text];
 
         dispatch_async( dispatch_get_main_queue(), ^{
@@ -656,11 +660,7 @@
     return avatar;
 }
 
-- (MPUserEntity *)userForAvatar:(UIButton *)avatar {
-
-    NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
-    if (!moc)
-        return nil;
+- (MPUserEntity *)userForAvatar:(UIButton *)avatar inContext:(NSManagedObjectContext *)moc {
 
     NSManagedObjectID *userOID = NSNullToNil([self.avatarToUserOID objectForKey:[NSValue valueWithNonretainedObject:avatar]]);
     if (!userOID)
@@ -984,11 +984,11 @@
     if ([self selectedUserForThread])
         return;
 
-    MPUserEntity *targetedUser = [self userForAvatar:[self findTargetedAvatar]];
+    NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
+    MPUserEntity *targetedUser = [self userForAvatar:[self findTargetedAvatar] inContext:moc];
     if (!targetedUser)
         return;
 
-    NSManagedObjectContext *moc = targetedUser.managedObjectContext;
     [PearlSheet showSheetWithTitle:targetedUser.name
                          viewStyle:UIActionSheetStyleBlackTranslucent
                          initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
@@ -1008,7 +1008,7 @@
         }
 
         if (buttonIndex == [sheet firstOtherButtonIndex])
-            [[MPiOSAppDelegate get] changeMasterPasswordFor:targetedUser inContext:moc didResetBlock:^{
+            [[MPiOSAppDelegate get] changeMasterPasswordFor:targetedUser saveInContext:moc didResetBlock:^{
                 dispatch_async( dispatch_get_main_queue(), ^{
                     [[self avatarForUser:targetedUser] setSelected:YES];
                 } );

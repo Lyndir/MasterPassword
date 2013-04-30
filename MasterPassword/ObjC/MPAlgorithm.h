@@ -25,7 +25,7 @@
 
 @required
 - (NSUInteger)version;
-- (BOOL)migrateUser:(MPUserEntity *)user;
+- (BOOL)migrateUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc;
 - (BOOL)migrateElement:(MPElementEntity *)element explicit:(BOOL)explicit;
 
 - (MPKey *)keyForPassword:(NSString *)password ofUserNamed:(NSString *)userName;

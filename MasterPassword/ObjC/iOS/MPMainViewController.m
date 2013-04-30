@@ -146,15 +146,15 @@
 
     // Needed for when we appear after a modal VC dismisses:
     // We can't present until the other modal VC has been fully dismissed and presenting in -viewWillAppear: will fail.
-    dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
-        MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForThread];
-        if ([MPAlgorithmDefault migrateUser:activeUser] && !self.suppressOutdatedAlert)
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+        MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:moc];
+        if ([MPAlgorithmDefault migrateUser:activeUser inContext:moc] && !self.suppressOutdatedAlert)
             [UIView animateWithDuration:0.3f animations:^{
                 self.outdatedAlertContainer.alpha = 1;
                 self.suppressOutdatedAlert = YES;
             }];
-        [activeUser.managedObjectContext saveToStore];
-    } );
+        [moc saveToStore];
+    }];
 
     if (![[MPiOSConfig get].actionsTipShown boolValue])
         [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
@@ -506,7 +506,7 @@
                     @"If you continue, a new password will be generated for this site.  "
                     @"You will then need to update your account's old password to this newly generated password.\n\n"
                     @"You can reset the counter by holding down on this button."
-                                      do:^BOOL(MPElementEntity *activeElement) {
+                                      do:^BOOL(MPElementEntity *activeElement, NSManagedObjectContext *context) {
                                           if (![activeElement isKindOfClass:[MPElementGeneratedEntity class]]) {
                                               // Not of a type that supports a password counter.
                                               err(@"Cannot increment password counter: Element is not generated: %@", activeElement.name);
@@ -545,7 +545,7 @@
             @"You are resetting the site's password counter.\n\n"
                     @"If you continue, the site's password will change back to its original value.  "
                     @"You will then need to update your account's password back to this original value."
-                                      do:^BOOL(MPElementEntity *activeElement_) {
+                                      do:^BOOL(MPElementEntity *activeElement_, NSManagedObjectContext *context) {
                                           inf(@"Resetting password counter for: %@", activeElement_.name);
                                           ((MPElementGeneratedEntity *)activeElement_).counter = 1;
 
@@ -576,7 +576,8 @@
     } );
 }
 
-- (void)changeActiveElementWithWarning:(NSString *)warning do:(BOOL (^)(MPElementEntity *activeElement))task; {
+- (void)changeActiveElementWithWarning:(NSString *)warning
+                                    do:(BOOL (^)(MPElementEntity *activeElement, NSManagedObjectContext *context))task {
 
     [PearlAlert showAlertWithTitle:@"Password Change" message:warning viewStyle:UIAlertViewStyleDefault
                          initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
@@ -587,7 +588,7 @@
     }                  cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonContinue, nil];
 }
 
-- (void)changeActiveElementWithoutWarningDo:(BOOL (^)(MPElementEntity *activeElement))task; {
+- (void)changeActiveElementWithoutWarningDo:(BOOL (^)(MPElementEntity *, NSManagedObjectContext *context))task {
 
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         MPElementEntity *activeElement = [self activeElementInContext:context];
@@ -595,7 +596,7 @@
             return;
 
         NSString *oldPassword = [activeElement.content description];
-        if (!task( activeElement ))
+        if (!task( activeElement, context ))
             return;
         NSString *newPassword = [activeElement.content description];
 
@@ -669,7 +670,7 @@
                                 @"This upgrade improves the site's compatibility with the latest version of Master Password.";
 
     [self changeActiveElementWithWarning:warning do:
-            ^BOOL(MPElementEntity *activeElement_) {
+            ^BOOL(MPElementEntity *activeElement_, NSManagedObjectContext *context) {
                 inf(@"Explicitly migrating element: %@", activeElement_);
                 [activeElement_ migrateExplicitly:YES];
 
@@ -785,12 +786,12 @@
             @"You are about to change the type of this password.\n\n"
                     @"If you continue, the password for this site will change.  "
                     @"You will need to update your account's old password to the new one."
-                                      do:^BOOL(MPElementEntity *activeElement) {
+                                      do:^BOOL(MPElementEntity *activeElement, NSManagedObjectContext *context) {
                                           if ([activeElement.algorithm classOfType:type] != activeElement.typeClass) {
                                               // Type requires a different class of element.  Recreate the element.
                                               MPElementEntity *newElement
                                                       = [NSEntityDescription insertNewObjectForEntityForName:[activeElement.algorithm classNameOfType:type]
-                                                                                      inManagedObjectContext:activeElement.managedObjectContext];
+                                                                                      inManagedObjectContext:context];
                                               newElement.name = activeElement.name;
                                               newElement.user = activeElement.user;
                                               newElement.uses = activeElement.uses;
@@ -798,11 +799,10 @@
                                               newElement.version = activeElement.version;
                                               newElement.loginName = activeElement.loginName;
 
-                                              [activeElement.managedObjectContext deleteObject:activeElement];
+                                              [context deleteObject:activeElement];
 
                                               NSError *error;
-                                              if (![newElement.managedObjectContext obtainPermanentIDsForObjects:@[ newElement ]
-                                                                                                           error:&error])
+                                              if (![context obtainPermanentIDsForObjects:@[ newElement ] error:&error])
                                               err(@"Failed to obtain a permanent object ID after changing object type: %@", error);
 
                                               _activeElementOID = newElement.objectID;
@@ -819,15 +819,11 @@
 - (void)didSelectElement:(MPElementEntity *)element {
 
     inf(@"Selected: %@", element.name);
-    NSError *error = nil;
-    if (element.objectID.isTemporaryID && ![element.managedObjectContext obtainPermanentIDsForObjects:@[ element ] error:&error])
-    err(@"Failed to obtain a permanent object ID after setting active element: %@", error);
-
     _activeElementOID = element.objectID;
     [self closeAlert];
 
     if (element) {
-        [self changeActiveElementWithoutWarningDo:^BOOL(MPElementEntity *activeElement) {
+        [self changeActiveElementWithoutWarningDo:^BOOL(MPElementEntity *activeElement, NSManagedObjectContext *context) {
             if ([activeElement use] == 1)
                 [self showAlertWithTitle:@"New Site" message:
                         PearlString( @"You've just created a password for %@.\n\n"
@@ -890,7 +886,7 @@
                 // Content hasn't changed.
             return;
 
-        [self changeActiveElementWithoutWarningDo:^BOOL(MPElementEntity *activeElement_) {
+        [self changeActiveElementWithoutWarningDo:^BOOL(MPElementEntity *activeElement_, NSManagedObjectContext *context) {
             ((MPElementStoredEntity *)activeElement_).content = self.contentField.text;
             return YES;
         }];
@@ -903,7 +899,7 @@
             [MPiOSConfig get].loginNameTipShown = @YES;
         }
 
-        [self changeActiveElementWithoutWarningDo:^BOOL(MPElementEntity *activeElement) {
+        [self changeActiveElementWithoutWarningDo:^BOOL(MPElementEntity *activeElement, NSManagedObjectContext *context) {
             if ([self.loginNameField.text length])
                 activeElement.loginName = self.loginNameField.text;
             else

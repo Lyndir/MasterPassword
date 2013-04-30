@@ -256,11 +256,12 @@
 
 - (MPElementEntity *)activeElementForThread {
 
-    if (!_activeElementOID)
-        return nil;
+    return [self activeElementInContext:[MPMacAppDelegate managedObjectContextForThreadIfReady]];
+}
 
-    NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
-    if (!moc)
+- (MPElementEntity *)activeElementInContext:(NSManagedObjectContext *)moc {
+
+    if (!_activeElementOID)
         return nil;
 
     NSError *error;
@@ -297,9 +298,10 @@
                 return;
             }
 
-            MPElementEntity *activeElement = [self activeElementForThread];
+            NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
+            MPElementEntity *activeElement = [self activeElementInContext:moc];
             [activeElement use];
-            [activeElement.managedObjectContext saveToStore];
+            [moc saveToStore];
         }
 
         dispatch_async( dispatch_get_main_queue(), ^{

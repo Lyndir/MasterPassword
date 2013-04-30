@@ -31,12 +31,12 @@
     return 0;
 }
 
-- (BOOL)migrateUser:(MPUserEntity *)user {
+- (BOOL)migrateUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc {
 
     NSError *error = nil;
     NSFetchRequest *migrationRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
     migrationRequest.predicate = [NSPredicate predicateWithFormat:@"version_ < %d AND user == %@", self.version, user];
-    NSArray *migrationElements = [user.managedObjectContext executeFetchRequest:migrationRequest error:&error];
+    NSArray *migrationElements = [moc executeFetchRequest:migrationRequest error:&error];
     if (!migrationElements) {
         err(@"While looking for elements to migrate: %@", error);
         return NO;

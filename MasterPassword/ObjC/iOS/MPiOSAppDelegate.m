@@ -470,9 +470,9 @@
 - (void)openFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController {
 
     NSString *userName = [[MPiOSAppDelegate get] activeUserForThread].name;
-    PearlLogLevel logLevel = [[MPiOSConfig get].sendInfo boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
-    if ([[MPiOSConfig get].traceMode boolValue])
-        logLevel = PearlLogLevelTrace;
+    PearlLogLevel logLevel = PearlLogLevelInfo;
+    if (logs && ([[MPiOSConfig get].sendInfo boolValue] || [[MPiOSConfig get].traceMode boolValue]))
+        logLevel = PearlLogLevelDebug;
 
     [[[PearlEMail alloc] initForEMailTo:@"Master Password Development <masterpassword@lyndir.com>"
                                 subject:PearlString( @"Feedback for Master Password [%@]",
@@ -567,7 +567,7 @@
                             nil];
 }
 
-- (void)changeMasterPasswordFor:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc didResetBlock:(void (^)(void))didReset {
+- (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void (^)(void))didReset {
 
     [PearlAlert showAlertWithTitle:@"Changing Master Password"
                            message:

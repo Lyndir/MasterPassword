@@ -50,6 +50,10 @@
         element.version = MPAlgorithmDefaultVersion;
         [moc saveToStore];
 
+        NSError *error = nil;
+        if (element.objectID.isTemporaryID && ![moc obtainPermanentIDsForObjects:@[ element ] error:&error])
+        err(@"Failed to obtain a permanent object ID after creating new element: %@", error);
+
         NSManagedObjectID *elementOID = [element objectID];
         dispatch_async( dispatch_get_main_queue(), ^{
             MPElementEntity *element_ = (MPElementEntity *)[[MPiOSAppDelegate managedObjectContextForThreadIfReady]
@@ -292,12 +296,18 @@
 forRowAtIndexPath:(NSIndexPath *)indexPath {
 
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        MPElementEntity *element = [self elementForTableIndexPath:indexPath];
-        [element.managedObjectContext performBlockAndWait:^{
+        NSManagedObjectID *elementOID = [self elementForTableIndexPath:indexPath].objectID;
+        [MPiOSAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
+            NSError *error = nil;
+            MPElementEntity *element = (MPElementEntity *)[context existingObjectWithID:elementOID error:&error];
+            if (!element) {
+                err(@"Failed to retrieve element to delete: %@", error);
+                return;
+            }
 
             inf(@"Deleting element: %@", element.name);
-            [element.managedObjectContext deleteObject:element];
-            [element.managedObjectContext saveToStore];
+            [context deleteObject:element];
+            [context saveToStore];
 
             MPCheckpoint( MPCheckpointDeleteElement, @{
                     @"type"    : element.typeName,

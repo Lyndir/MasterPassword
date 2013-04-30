@@ -77,7 +77,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedOutNotification object:self userInfo:@{ @"animated" : @(animated) }];
 }
 
-- (BOOL)signInAsUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc usingMasterPassword:(NSString *)password {
+- (BOOL)signInAsUser:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc usingMasterPassword:(NSString *)password {
 
     if (password)
         NSAssert(![NSThread isMainThread], @"Computing key may not happen from the main thread.");

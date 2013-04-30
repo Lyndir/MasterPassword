@@ -493,6 +493,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         NSString *uses = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:2]];
         NSString *type = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:3]];
         NSString *version = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:4]];
+        if ([version length])
+            version = [version substringFromIndex:1]; // Strip the leading colon.
         NSString *name = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:5]];
         NSString *exportContent = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:6]];
 
@@ -509,6 +511,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
             [elementsToDelete addObjectsFromArray:existingSites];
             [importedSiteElements addObject:@[ lastUsed, uses, type, version, name, exportContent ]];
+            dbg(@"Will import site: lastUsed=%@, uses=%@, type=%@, version=%@, name=%@, exportContent=%@",
+            lastUsed, uses, type, version, name, exportContent);
         }
     }
 
