@@ -145,9 +145,9 @@
     NSError *error;
     self.fetchedResultsControllerByLastUsed.fetchRequest.predicate = predicate;
     self.fetchedResultsControllerByUses.fetchRequest.predicate = predicate;
-    if (![self.fetchedResultsControllerByLastUsed performFetch:&error])
+    if (self.fetchedResultsControllerByLastUsed && ![self.fetchedResultsControllerByLastUsed performFetch:&error])
     err(@"Couldn't fetch elements: %@", error);
-    if (![self.fetchedResultsControllerByUses performFetch:&error])
+    if (self.fetchedResultsControllerByUses && ![self.fetchedResultsControllerByUses performFetch:&error])
     err(@"Couldn't fetch elements: %@", error);
 
     [self.tableView reloadData];
@@ -157,50 +157,46 @@
 }
 
 // See MP-14, also crashes easily on internal assertions etc..
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-
-    dbg(@"%@", NSStringFromSelector( _cmd ));
-    [self.tableView beginUpdates];
-}
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
-       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
-
-    switch (type) {
-
-        case NSFetchedResultsChangeInsert:
-            dbg(@"%@ -- NSFetchedResultsChangeInsert:%@", NSStringFromSelector( _cmd ), anObject);
-            [self.tableView insertRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:newIndexPath] ]
-                                  withRowAnimation:UITableViewRowAnimationAutomatic];
-            break;
-
-        case NSFetchedResultsChangeDelete:
-            dbg(@"%@ -- NSFetchedResultsChangeDelete:%@", NSStringFromSelector( _cmd ), anObject);
-            [self.tableView deleteRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:indexPath] ]
-                                  withRowAnimation:UITableViewRowAnimationAutomatic];
-            break;
-
-        case NSFetchedResultsChangeUpdate:
-            dbg(@"%@ -- NSFetchedResultsChangeUpdate:%@", NSStringFromSelector( _cmd ), anObject);
-            [self.tableView reloadRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:indexPath] ]
-                                  withRowAnimation:UITableViewRowAnimationAutomatic];
-            break;
-
-        case NSFetchedResultsChangeMove:
-            dbg(@"%@ -- NSFetchedResultsChangeMove:%@", NSStringFromSelector( _cmd ), anObject);
-            [self.tableView deleteRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:indexPath] ]
-                                  withRowAnimation:UITableViewRowAnimationAutomatic];
-            [self.tableView insertRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:newIndexPath] ]
-                                  withRowAnimation:UITableViewRowAnimationAutomatic];
-            break;
-    }
-}
+//- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+//
+//    [self.tableView beginUpdates];
+//}
+//
+//- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
+//       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+//
+//    switch (type) {
+//
+//        case NSFetchedResultsChangeInsert:
+//            [self.tableView insertRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:newIndexPath] ]
+//                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+//            break;
+//
+//        case NSFetchedResultsChangeDelete:
+//            [self.tableView deleteRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:indexPath] ]
+//                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+//            break;
+//
+//        case NSFetchedResultsChangeUpdate:
+//            [self.tableView reloadRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:indexPath] ]
+//                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+//            break;
+//
+//        case NSFetchedResultsChangeMove:
+//            [self.tableView deleteRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:indexPath] ]
+//                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+//            [self.tableView insertRowsAtIndexPaths:@[ [self tableIndexPathForFetchController:controller indexPath:newIndexPath] ]
+//                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+//            break;
+//    }
+//}
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
 
-    dbg(@"%@ on %@", NSStringFromSelector( _cmd ), [NSThread currentThread].name);
-    [self customTableViewUpdates];
-    [self.tableView endUpdates];
+//    [self customTableViewUpdates];
+//    [self.tableView endUpdates];
+
+    [self.tableView reloadData];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

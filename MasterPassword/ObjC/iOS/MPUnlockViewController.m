@@ -1139,6 +1139,11 @@
 
 - (void)setSelectedUser:(MPUserEntity *)selectedUser {
 
+    NSError *error = nil;
+    if (selectedUser.objectID.isTemporaryID &&
+        ![selectedUser.managedObjectContext obtainPermanentIDsForObjects:@[ selectedUser ] error:&error])
+    err(@"Failed to obtain a permanent object ID after setting selected user: %@", error);
+
     _selectedUserOID = selectedUser.objectID;
 }
 

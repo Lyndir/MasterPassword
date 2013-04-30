@@ -799,6 +799,12 @@
                                               newElement.loginName = activeElement.loginName;
 
                                               [activeElement.managedObjectContext deleteObject:activeElement];
+
+                                              NSError *error;
+                                              if (![newElement.managedObjectContext obtainPermanentIDsForObjects:@[ newElement ]
+                                                                                                           error:&error])
+                                              err(@"Failed to obtain a permanent object ID after changing object type: %@", error);
+
                                               _activeElementOID = newElement.objectID;
                                               activeElement = newElement;
                                           }
@@ -813,6 +819,10 @@
 - (void)didSelectElement:(MPElementEntity *)element {
 
     inf(@"Selected: %@", element.name);
+    NSError *error = nil;
+    if (element.objectID.isTemporaryID && ![element.managedObjectContext obtainPermanentIDsForObjects:@[ element ] error:&error])
+    err(@"Failed to obtain a permanent object ID after setting active element: %@", error);
+
     _activeElementOID = element.objectID;
     [self closeAlert];
 
