@@ -19,7 +19,7 @@
 - (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController;
 - (void)openFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController;
 
-    - (void)export;
+- (void)export;
 - (void)changeMasterPasswordFor:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc didResetBlock:(void (^)(void))didReset;
 
 @end
