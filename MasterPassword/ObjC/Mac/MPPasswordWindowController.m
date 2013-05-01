@@ -301,8 +301,7 @@
             if (![[NSPasteboard generalPasteboard] setString:content forType:NSPasteboardTypeString]) {
                 wrn(@"Couldn't copy password to pasteboard.");
                 return;
-            } else
-                dbg(@"Copied: %@", content);
+            }
 
             NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
             MPElementEntity *activeElement = [self activeElementInContext:moc];
