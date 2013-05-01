@@ -35,8 +35,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     if ([[NSThread currentThread] isMainThread])
         return mainManagedObjectContext;
 
-    NSManagedObjectContext
-            *threadManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
+    NSManagedObjectContext *threadManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
     threadManagedObjectContext.parentContext = mainManagedObjectContext;
 
     return threadManagedObjectContext;

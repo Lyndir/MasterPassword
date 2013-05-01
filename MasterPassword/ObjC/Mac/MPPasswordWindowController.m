@@ -66,14 +66,15 @@
 
 - (void)unlock {
 
-    MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserForThread];
+    NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
+    MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:moc];
     if (!activeUser)
             // No user to sign in with.
         return;
     if ([MPMacAppDelegate get].key)
             // Already logged in.
         return;
-    if ([[MPMacAppDelegate get] signInAsUser:activeUser usingMasterPassword:nil])
+    if ([[MPMacAppDelegate get] signInAsUser:activeUser saveInContext:moc usingMasterPassword:nil])
             // Load the key from the keychain.
         return;
 
@@ -107,7 +108,8 @@
         return;
     }
     if (contextInfo == MPAlertUnlockMP) {
-        MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserForThread];
+        NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
+        MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:moc];
         switch (returnCode) {
             case NSAlertAlternateReturn:
                 // "Change" button.
@@ -126,6 +128,7 @@
                     activeUser.keyID = nil;
                     [[MPMacAppDelegate get] forgetSavedKeyFor:activeUser];
                     [[MPMacAppDelegate get] signOutAnimated:YES];
+                    [moc saveToStore];
                 }
             }
                 break;
@@ -140,25 +143,30 @@
                 self.contentContainer.alphaValue = 0;
                 [self.progressView startAnimation:nil];
                 self.inProgress = YES;
-                dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0 ), ^{
-                    BOOL success = [[MPMacAppDelegate get] signInAsUser:activeUser
+                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+                    NSError *error = nil;
+                    MPUserEntity *activeUser_ = (MPUserEntity *)[moc existingObjectWithID:activeUser.objectID error:&error];
+                    if (!activeUser_)
+                        err(@"Failed to retrieve active use while logging in: %@", error);
+                    
+                    BOOL success = [[MPMacAppDelegate get] signInAsUser:activeUser saveInContext:moc
                                                     usingMasterPassword:[(NSSecureTextField *)alert.accessoryView stringValue]];
                     self.inProgress = NO;
-
+                    
                     dispatch_async( dispatch_get_main_queue(), ^{
                         [self.progressView stopAnimation:nil];
-
+                        
                         if (success)
                             self.contentContainer.alphaValue = 1;
                         else {
                             [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
-                                    NSLocalizedDescriptionKey : PearlString( @"Incorrect master password for user %@",
-                                            activeUser.name )
-                            }]] beginSheetModalForWindow:self.window modalDelegate:self
-                                          didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertIncorrectMP];
+                                                   NSLocalizedDescriptionKey : PearlString( @"Incorrect master password for user %@",
+                                                                                           activeUser.name )
+                                                      }]] beginSheetModalForWindow:self.window modalDelegate:self
+                             didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertIncorrectMP];
                         }
                     } );
-                } );
+                }];
             }
 
             default:
@@ -185,10 +193,10 @@
 
         NSError *error = nil;
         NSArray *siteResults = [context executeFetchRequest:fetchRequest error:&error];
-        if (error)
-        err(@"While fetching elements for completion: %@", error);
-
-        if (siteResults) {
+        if (!siteResults)
+            err(@"While fetching elements for completion: %@", error);
+        else if ([siteResults count]) {
+            _activeElementOID = ((NSManagedObject *)[siteResults objectAtIndex:0]).objectID;
             for (MPElementEntity *element in siteResults)
                 [mutableResults addObject:element.name];
             //[mutableResults addObject:query]; // For when the app should be able to create new sites.
@@ -218,9 +226,6 @@
     }
 
     return NO;
-}
-
-- (void)copyContents {
 }
 
 - (void)controlTextDidEndEditing:(NSNotification *)note {
@@ -296,7 +301,8 @@
             if (![[NSPasteboard generalPasteboard] setString:content forType:NSPasteboardTypeString]) {
                 wrn(@"Couldn't copy password to pasteboard.");
                 return;
-            }
+            } else
+                dbg(@"Copied: %@", content);
 
             NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
             MPElementEntity *activeElement = [self activeElementInContext:moc];
