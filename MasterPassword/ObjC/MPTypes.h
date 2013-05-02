@@ -68,7 +68,7 @@ typedef enum {
 #define MPCheckpointApps                      @"MPCheckpointApps"
 #define MPCheckpointApp                       @"MPCheckpointApp"
 #define MPCheckpointEmergencyGenerator        @"MPCheckpointEmergencyGenerator"
-#define MPCheckpointLogs        @"MPCheckpointLogs"
+#define MPCheckpointLogs                      @"MPCheckpointLogs"
 
 #define MPSignedInNotification                @"MPSignedInNotification"
 #define MPSignedOutNotification               @"MPSignedOutNotification"
@@ -78,7 +78,11 @@ typedef enum {
 
 static void MPCheckpoint(NSString *checkpoint, NSDictionary *attributes) {
 
+    inf(@"%@: %@", checkpoint, attributes);
 #ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] tagEvent:checkpoint attributes:attributes];
+#endif
+#ifdef TESTFLIGHT_SDK_VERSION
+    [TestFlight passCheckpoint:checkpoint];
 #endif
 }
