@@ -154,6 +154,35 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 }
 
 - (IBAction)newUser:(NSMenuItem *)sender {
+
+    NSAlert *alert = [NSAlert alertWithMessageText:@"New User"
+                                     defaultButton:@"Create User" alternateButton:nil otherButton:@"Cancel"
+                         informativeTextWithFormat:@"To begin, enter your full name.\n\n"
+                                                           @"IMPORTANT: Enter your name correctly, including the right capitalization, "
+                                                           @"as you would on an official document."];
+    NSTextField *nameField = [[NSTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
+    [alert setAccessoryView:nameField];
+    [alert layout];
+    [nameField becomeFirstResponder];
+    if ([alert runModal] != NSAlertDefaultReturn)
+        return;
+
+    NSString *name = [(NSSecureTextField *)alert.accessoryView stringValue];
+    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+        MPUserEntity *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass( [MPUserEntity class] )
+                                                              inManagedObjectContext:moc];
+        newUser.name = name;
+        [moc saveToStore];
+        NSError *error = nil;
+        if (![moc obtainPermanentIDsForObjects:@[ newUser ] error:&error])
+        err(@"Failed to obtain permanent object ID for new user: %@", error);
+
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self updateUsers];
+            [self setActiveUser:newUser];
+            [self showPasswordWindow];
+        }];
+    }];
 }
 
 - (IBAction)lock:(id)sender {

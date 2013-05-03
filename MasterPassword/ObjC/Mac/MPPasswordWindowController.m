@@ -58,6 +58,7 @@
     }];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:MPSignedOutNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+        _activeElementOID = nil;
         [self.window close];
     }];
 
@@ -143,27 +144,28 @@
                 self.contentContainer.alphaValue = 0;
                 [self.progressView startAnimation:nil];
                 self.inProgress = YES;
-                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+
+                NSString *password = [(NSSecureTextField *)alert.accessoryView stringValue];
+                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc_) {
                     NSError *error = nil;
-                    MPUserEntity *activeUser_ = (MPUserEntity *)[moc existingObjectWithID:activeUser.objectID error:&error];
+                    MPUserEntity *activeUser_ = (MPUserEntity *)[moc_ existingObjectWithID:activeUser.objectID error:&error];
                     if (!activeUser_)
-                        err(@"Failed to retrieve active use while logging in: %@", error);
-                    
-                    BOOL success = [[MPMacAppDelegate get] signInAsUser:activeUser saveInContext:moc
-                                                    usingMasterPassword:[(NSSecureTextField *)alert.accessoryView stringValue]];
+                    err(@"Failed to retrieve active use while logging in: %@", error);
+
+                    BOOL success = [[MPMacAppDelegate get] signInAsUser:activeUser saveInContext:moc_
+                                                    usingMasterPassword:password];
                     self.inProgress = NO;
-                    
+
                     dispatch_async( dispatch_get_main_queue(), ^{
                         [self.progressView stopAnimation:nil];
-                        
+
                         if (success)
                             self.contentContainer.alphaValue = 1;
                         else {
                             [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
-                                                   NSLocalizedDescriptionKey : PearlString( @"Incorrect master password for user %@",
-                                                                                           activeUser.name )
-                                                      }]] beginSheetModalForWindow:self.window modalDelegate:self
-                             didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertIncorrectMP];
+                                    NSLocalizedDescriptionKey : PearlString( @"Incorrect master password for user %@", activeUser.name )
+                            }]] beginSheetModalForWindow:self.window modalDelegate:self
+                                          didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertIncorrectMP];
                         }
                     } );
                 }];
@@ -194,7 +196,7 @@
         NSError *error = nil;
         NSArray *siteResults = [context executeFetchRequest:fetchRequest error:&error];
         if (!siteResults)
-            err(@"While fetching elements for completion: %@", error);
+        err(@"While fetching elements for completion: %@", error);
         else if ([siteResults count]) {
             _activeElementOID = ((NSManagedObject *)[siteResults objectAtIndex:0]).objectID;
             for (MPElementEntity *element in siteResults)
