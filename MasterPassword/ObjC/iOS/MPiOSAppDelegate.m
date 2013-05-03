@@ -202,23 +202,28 @@
                     [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
 
 #ifdef TESTFLIGHT_SDK_VERSION
-                    [TestFlight addCustomEnvironmentInformation:[@([[MPConfig get].rememberLogin boolValue]) description]
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([MPConfig get].rememberLogin)
                                                          forKey:@"rememberLogin"];
-                    [TestFlight addCustomEnvironmentInformation:[@([self storeManager].cloudEnabled) description] forKey:@"iCloud"];
-                    [TestFlight addCustomEnvironmentInformation:[@([[MPConfig get].iCloudDecided boolValue]) description]
+                    [TestFlight addCustomEnvironmentInformation:PearlStringB([self storeManager].cloudEnabled)
+                                                         forKey:@"iCloud"];
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([MPConfig get].iCloudDecided)
                                                          forKey:@"iCloudDecided"];
-                    [TestFlight addCustomEnvironmentInformation:[@([[MPiOSConfig get].sendInfo boolValue]) description] forKey:@"sendInfo"];
-                    [TestFlight addCustomEnvironmentInformation:[@([[MPiOSConfig get].helpHidden boolValue]) description]
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([MPiOSConfig get].sendInfo)
+                                                         forKey:@"sendInfo"];
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([MPiOSConfig get].helpHidden)
                                                          forKey:@"helpHidden"];
-                    [TestFlight addCustomEnvironmentInformation:[@([[MPiOSConfig get].showSetup boolValue]) description]
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([MPiOSConfig get].showSetup)
                                                          forKey:@"showQuickStart"];
-                    [TestFlight addCustomEnvironmentInformation:[@([[PearlConfig get].firstRun boolValue]) description] forKey:@"firstRun"];
-                    [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].launchCount description] forKey:@"launchCount"];
-                    [TestFlight addCustomEnvironmentInformation:[@([[PearlConfig get].askForReviews boolValue]) description]
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([PearlConfig get].firstRun)
+                                                         forKey:@"firstRun"];
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([PearlConfig get].launchCount)
+                                                         forKey:@"launchCount"];
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([PearlConfig get].askForReviews)
                                                          forKey:@"askForReviews"];
-                    [TestFlight addCustomEnvironmentInformation:[[PearlConfig get].reviewAfterLaunches description]
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([PearlConfig get].reviewAfterLaunches)
                                                          forKey:@"reviewAfterLaunches"];
-                    [TestFlight addCustomEnvironmentInformation:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
+                    [TestFlight addCustomEnvironmentInformation:[PearlConfig get].reviewedVersion
+                                                         forKey:@"reviewedVersion"];
 #endif
                     MPCheckpoint( MPCheckpointConfig, @{
                             @"rememberLogin"       : @([[MPConfig get].rememberLogin boolValue]),
@@ -228,9 +233,9 @@
                             @"helpHidden"          : @([[MPiOSConfig get].helpHidden boolValue]),
                             @"showQuickStart"      : @([[MPiOSConfig get].showSetup boolValue]),
                             @"firstRun"            : @([[PearlConfig get].firstRun boolValue]),
-                            @"launchCount"         : NilToNSNull([[PearlConfig get].launchCount description]),
+                            @"launchCount"         : NilToNSNull([PearlConfig get].launchCount),
                             @"askForReviews"       : @([[PearlConfig get].askForReviews boolValue]),
-                            @"reviewAfterLaunches" : NilToNSNull([[PearlConfig get].reviewAfterLaunches description]),
+                            @"reviewAfterLaunches" : NilToNSNull([PearlConfig get].reviewAfterLaunches),
                             @"reviewedVersion"     : NilToNSNull([PearlConfig get].reviewedVersion)
                     } );
                 }

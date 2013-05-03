@@ -15,6 +15,20 @@
 #define STORE_OPTIONS
 #endif
 
+#define MPMigrationLevelLocalStoreKey @"MPMigrationLevelLocalStoreKey"
+typedef enum {
+    MPMigrationLevelLocalStoreV13,
+    MPMigrationLevelLocalStoreV14,
+    MPMigrationLevelLocalStoreCurrent = MPMigrationLevelLocalStoreV14,
+} MPMigrationLevelLocalStore;
+
+#define MPMigrationLevelCloudStoreKey @"MPMigrationLevelCloudStoreKey"
+typedef enum {
+    MPMigrationLevelCloudStoreV13,
+    MPMigrationLevelCloudStoreV14,
+    MPMigrationLevelCloudStoreCurrent = MPMigrationLevelCloudStoreV14,
+} MPMigrationLevelCloudStore;
+
 @implementation MPAppDelegate_Shared(Store)
 #if TARGET_OS_IPHONE
         PearlAssociatedObjectProperty(PearlAlert*, HandleCloudContentAlert, handleCloudContentAlert);
@@ -98,18 +112,18 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification
                                                       object:[UIApplication sharedApplication] queue:nil
                                                   usingBlock:^(NSNotification *note) {
-                                                      [self saveContexts];
+                                                      [[self mainManagedObjectContext] saveToStore];
                                                   }];
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification
                                                       object:[UIApplication sharedApplication] queue:nil
                                                   usingBlock:^(NSNotification *note) {
-                                                      [self saveContexts];
+                                                      [[self mainManagedObjectContext] saveToStore];
                                                   }];
 #else
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillTerminateNotification
                                                       object:[NSApplication sharedApplication] queue:nil
                                                   usingBlock:^(NSNotification *note) {
-                                                      [self saveContexts];
+                                                      [[self mainManagedObjectContext] saveToStore];
                                                   }];
 #endif
 
@@ -126,6 +140,11 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 - (void)migrateLocalStoreForManager:(UbiquityStoreManager *)manager {
 
+    MPMigrationLevelLocalStore migrationLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"MPMigrationLevelLocalStore"];
+    if (migrationLevel >= MPMigrationLevelLocalStoreCurrent)
+        // Local store up-to-date.
+        return;
+
     NSURL *applicationFilesDirectory = [[[NSFileManager defaultManager]
             URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
     NSURL *oldLocalStoreURL = [[applicationFilesDirectory
@@ -137,10 +156,12 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     }
     if (![[NSFileManager defaultManager] fileExistsAtPath:oldLocalStoreURL.path isDirectory:NO]) {
         // No local store to migrate.
+        [[NSUserDefaults standardUserDefaults] setInteger:MPMigrationLevelLocalStoreCurrent forKey:MPMigrationLevelLocalStoreKey];
         return;
     }
     if ([[NSFileManager defaultManager] fileExistsAtPath:newLocalStoreURL.path isDirectory:NO]) {
         wrn(@"Can't migrate old local store: A new local store already exists.");
+        [[NSUserDefaults standardUserDefaults] setInteger:MPMigrationLevelLocalStoreCurrent forKey:MPMigrationLevelLocalStoreKey];
         return;
     }
 
@@ -172,10 +193,16 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         return;
     }
 
+    [[NSUserDefaults standardUserDefaults] setInteger:MPMigrationLevelLocalStoreCurrent forKey:MPMigrationLevelLocalStoreKey];
     inf(@"Successfully migrated old to new local store.");
 }
 
 - (void)migrateCloudStoreForManager:(UbiquityStoreManager *)manager {
+
+    MPMigrationLevelCloudStore migrationLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"MPMigrationLevelCloudStore"];
+    if (migrationLevel >= MPMigrationLevelCloudStoreCurrent)
+            // Cloud store up-to-date.
+        return;
 
     // Migrate cloud enabled preference.
     NSNumber *oldCloudEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:@"iCloudEnabledKey"];
@@ -186,12 +213,15 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     // Migrate cloud store.
     NSString *uuid = [[NSUserDefaults standardUserDefaults] stringForKey:@"LocalUUIDKey"];
-    if (!uuid)
-            // No old cloud store to migrate.
+    if (!uuid) {
+        // No old cloud store to migrate.
+        [[NSUserDefaults standardUserDefaults] setInteger:MPMigrationLevelCloudStoreCurrent forKey:MPMigrationLevelCloudStoreKey];
         return;
+    }
 
     if (![manager cloudSafeForSeeding]) {
         wrn(@"Can't migrate old cloud store: A new cloud store already exists.");
+        [[NSUserDefaults standardUserDefaults] setInteger:MPMigrationLevelCloudStoreCurrent forKey:MPMigrationLevelCloudStoreKey];
         return;
     }
 
@@ -244,25 +274,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                              error:nil cause:nil context:nil])
         return;
 
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"LocalUUIDKey"];
+    [[NSUserDefaults standardUserDefaults] setInteger:MPMigrationLevelCloudStoreCurrent forKey:MPMigrationLevelCloudStoreKey];
     inf(@"Successfully migrated old to new cloud store.");
-}
-
-- (void)saveContexts {
-
-    NSManagedObjectContext *mainManagedObjectContext = self.mainManagedObjectContext;
-    [mainManagedObjectContext performBlockAndWait:^{
-        NSError *error = nil;
-        if (![mainManagedObjectContext save:&error])
-        err(@"While saving main context: %@", error);
-    }];
-
-    NSManagedObjectContext *privateManagedObjectContext = [self privateManagedObjectContextIfReady];
-    [privateManagedObjectContext performBlockAndWait:^{
-        NSError *error = nil;
-        if (![privateManagedObjectContext save:&error])
-        err(@"While saving private context: %@", error);
-    }];
 }
 
 #pragma mark - UbiquityStoreManagerDelegate
@@ -301,8 +314,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     } );
 
     // Create our contexts.
-    NSManagedObjectContext
-            *privateManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    NSManagedObjectContext *privateManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     [privateManagedObjectContext performBlockAndWait:^{
         privateManagedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
         privateManagedObjectContext.persistentStoreCoordinator = coordinator;
