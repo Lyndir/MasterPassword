@@ -140,7 +140,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 - (void)migrateLocalStoreForManager:(UbiquityStoreManager *)manager {
 
-    MPMigrationLevelLocalStore migrationLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"MPMigrationLevelLocalStore"];
+    MPMigrationLevelLocalStore migrationLevel = (unsigned)[[NSUserDefaults standardUserDefaults] integerForKey:@"MPMigrationLevelLocalStore"];
     if (migrationLevel >= MPMigrationLevelLocalStoreCurrent)
         // Local store up-to-date.
         return;
@@ -199,7 +199,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 - (void)migrateCloudStoreForManager:(UbiquityStoreManager *)manager {
 
-    MPMigrationLevelCloudStore migrationLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"MPMigrationLevelCloudStore"];
+    MPMigrationLevelCloudStore migrationLevel = (unsigned)[[NSUserDefaults standardUserDefaults] integerForKey:@"MPMigrationLevelCloudStore"];
     if (migrationLevel >= MPMigrationLevelCloudStoreCurrent)
             // Cloud store up-to-date.
         return;
