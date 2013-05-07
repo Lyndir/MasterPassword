@@ -14,6 +14,7 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 
+
 @interface MPUnlockViewController()
 
 @property(strong, nonatomic) NSMutableDictionary *avatarToUserOID;
@@ -27,6 +28,7 @@
 @property(nonatomic) NSUInteger marqueeTipTextIndex;
 @property(nonatomic, strong) NSArray *marqueeTipTexts;
 @end
+
 
 @implementation MPUnlockViewController {
     NSManagedObjectID *_selectedUserOID;
@@ -116,8 +118,8 @@
 
 - (void)viewDidLoad {
 
-    [self.newsView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:
-            PearlString(@"http://www.masterpasswordapp.com/news.html?version=%@", [[PearlInfoPlist get] CFBundleVersion])]]];
+    NSString *newsURL = PearlString( @"http://www.masterpasswordapp.com/news.html?version=%@", [[PearlInfoPlist get] CFBundleVersion] );
+    [self.newsView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:newsURL]]];
 
     self.avatarToUserOID = [NSMutableDictionary dictionaryWithCapacity:3];
 
@@ -370,15 +372,17 @@
 
 - (void)didSelectNewUserAvatar:(UIButton *)newUserAvatar {
 
-    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-        MPUserEntity *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass( [MPUserEntity class] )
-                                                              inManagedObjectContext:moc];
+    if (![MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+        MPUserEntity
+                *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass( [MPUserEntity class] )
+                                                         inManagedObjectContext:moc];
 
         [self showNewUserNameAlertFor:newUser inContext:moc completion:^(BOOL finished) {
             newUserAvatar.selected = NO;
             self.selectedUser = newUser;
         }];
-    }];
+    }])
+        newUserAvatar.selected = NO;
 }
 
 - (void)showNewUserNameAlertFor:(MPUserEntity *)newUser inContext:(NSManagedObjectContext *)moc
@@ -452,7 +456,7 @@
                      [moc performBlockAndWait:^{
                          [moc saveToStore];
                          NSError *error = nil;
-                         if (![moc obtainPermanentIDsForObjects:@[newUser] error:&error])
+                         if (![moc obtainPermanentIDsForObjects:@[ newUser ] error:&error])
                          err(@"Failed to obtain permanent object ID for new user: %@", error);
                      }];
                      completion( YES );
@@ -486,7 +490,7 @@
     if (selectedUser && !self.passwordView.alpha) {
         // User was just selected.
         self.passwordView.alpha = 1;
-        self.avatarsView.center = CGPointMake( 160, 180 );
+        self.avatarsView.frame = CGRectSetY( self.avatarsView.frame, 16 );
         self.avatarsView.scrollEnabled = NO;
         self.nameLabel.center = CGPointMake( 160, 94 );
         self.nameLabel.backgroundColor = [UIColor blackColor];
@@ -497,7 +501,7 @@
         // User was just deselected.
         self.passwordField.text = nil;
         self.passwordView.alpha = 0;
-        self.avatarsView.center = CGPointMake( 160, 310 );
+        self.avatarsView.frame = CGRectSetY( self.avatarsView.frame, 140 );
         self.avatarsView.scrollEnabled = YES;
         self.nameLabel.center = CGPointMake( 160, 296 );
         self.nameLabel.backgroundColor = [UIColor clearColor];
@@ -557,7 +561,8 @@
     }                           recurse:NO];
 
     if (allowScroll) {
-        CGPoint targetContentOffset = CGPointMake( MAX(0, targetedAvatar.center.x - self.avatarsView.bounds.size.width / 2),
+        CGPoint targetContentOffset = CGPointMake(
+                MAX(0, targetedAvatar.center.x - self.avatarsView.bounds.size.width / 2),
                 self.avatarsView.contentOffset.y );
         if (!CGPointEqualToPoint( self.avatarsView.contentOffset, targetContentOffset ))
             [self.avatarsView setContentOffset:targetContentOffset animated:animated];
