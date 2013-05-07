@@ -23,48 +23,6 @@
     [super viewDidLoad];
 }
 
-- (void)addElementNamed:(NSString *)siteName completion:(void (^)(BOOL success))completion {
-
-    if (![siteName length]) {
-        if (completion)
-            completion( false );
-        return;
-    }
-
-    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-        MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:moc];
-        assert(activeUser);
-
-        MPElementType type = activeUser.defaultType;
-        if (!type)
-            type = activeUser.defaultType = MPElementTypeGeneratedLong;
-        NSString *typeEntityClassName = [MPAlgorithmDefault classNameOfType:type];
-
-        MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:typeEntityClassName
-                                                                 inManagedObjectContext:moc];
-
-        element.name = siteName;
-        element.user = activeUser;
-        element.type = type;
-        element.lastUsed = [NSDate date];
-        element.version = MPAlgorithmDefaultVersion;
-        [moc saveToStore];
-
-        NSError *error = nil;
-        if (element.objectID.isTemporaryID && ![moc obtainPermanentIDsForObjects:@[ element ] error:&error])
-        err(@"Failed to obtain a permanent object ID after creating new element: %@", error);
-
-        NSManagedObjectID *elementOID = [element objectID];
-        dispatch_async( dispatch_get_main_queue(), ^{
-            MPElementEntity *element_ = (MPElementEntity *)[[MPiOSAppDelegate managedObjectContextForThreadIfReady]
-                    objectRegisteredForID:elementOID];
-            [self.delegate didSelectElement:element_];
-            if (completion)
-                completion( true );
-        } );
-    }];
-}
-
 - (NSFetchedResultsController *)fetchedResultsControllerByLastUsed {
 
     if (!_fetchedResultsControllerByLastUsed) {

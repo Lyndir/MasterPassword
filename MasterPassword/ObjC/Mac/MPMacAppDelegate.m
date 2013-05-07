@@ -105,6 +105,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)selectUser:(NSMenuItem *)item {
 
+    [self signOutAnimated:NO];
+
     NSError *error = nil;
     NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
     self.activeUser = (MPUserEntity *)[moc existingObjectWithID:[item representedObject] error:&error];

@@ -13,12 +13,14 @@
 
 #define MPAlertUnlockMP     @"MPAlertUnlockMP"
 #define MPAlertIncorrectMP  @"MPAlertIncorrectMP"
+#define MPAlertCreateSite   @"MPAlertCreateSite"
 
 @interface MPPasswordWindowController()
 
 @property(nonatomic) BOOL inProgress;
 @property(nonatomic) BOOL siteFieldPreventCompletion;
 
+@property(nonatomic, strong) NSOperationQueue *backgroundQueue;
 @end
 
 @implementation MPPasswordWindowController {
@@ -31,6 +33,9 @@
         self.window.styleMask = NSHUDWindowMask | NSTitledWindowMask | NSUtilityWindowMask | NSClosableWindowMask;
     else
         self.window.styleMask = NSTexturedBackgroundWindowMask | NSResizableWindowMask | NSTitledWindowMask | NSClosableWindowMask;
+
+    self.backgroundQueue = [NSOperationQueue new];
+    self.backgroundQueue.maxConcurrentOperationCount = 1;
 
     [self setContent:@""];
     [self.tipField setStringValue:@""];
@@ -81,7 +86,7 @@
 
     if (![MPMacAppDelegate get].key)
             // Ask the user to set the key through his master password.
-        dispatch_async( dispatch_get_main_queue(), ^{
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             if ([MPMacAppDelegate get].key)
                 return;
 
@@ -99,7 +104,7 @@
             [passwordField becomeFirstResponder];
             [alert beginSheetModalForWindow:self.window modalDelegate:self
                              didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertUnlockMP];
-        } );
+        }];
 }
 
 - (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
@@ -112,9 +117,8 @@
         NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
         MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:moc];
         switch (returnCode) {
-            case NSAlertAlternateReturn:
+            case NSAlertAlternateReturn: {
                 // "Change" button.
-            {
                 NSInteger returnCode_ = [[NSAlert
                         alertWithMessageText:@"Changing Master Password" defaultButton:nil
                              alternateButton:[PearlStrings get].commonButtonCancel otherButton:nil informativeTextWithFormat:
@@ -131,13 +135,14 @@
                     [[MPMacAppDelegate get] signOutAnimated:YES];
                     [moc saveToStore];
                 }
-            }
                 break;
+            }
 
-            case NSAlertOtherReturn:
+            case NSAlertOtherReturn: {
                 // "Cancel" button.
                 [self.window close];
                 return;
+            }
 
             case NSAlertDefaultReturn: {
                 // "Unlock" button.
@@ -156,7 +161,7 @@
                                                     usingMasterPassword:password];
                     self.inProgress = NO;
 
-                    dispatch_async( dispatch_get_main_queue(), ^{
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                         [self.progressView stopAnimation:nil];
 
                         if (success)
@@ -167,8 +172,9 @@
                             }]] beginSheetModalForWindow:self.window modalDelegate:self
                                           didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertIncorrectMP];
                         }
-                    } );
+                    }];
                 }];
+                break;
             }
 
             default:
@@ -177,12 +183,27 @@
 
         return;
     }
+    if (contextInfo == MPAlertCreateSite) {
+        switch (returnCode) {
+            case NSAlertDefaultReturn: {
+                [[MPMacAppDelegate get] addElementNamed:[self.siteField stringValue] completion:^(MPElementEntity *element) {
+                    if (element) {
+                        _activeElementOID = element.objectID;
+                        [self trySiteWithAction:NO];
+                    }
+                }];
+                break;
+            }
+            default:
+                break;
+        }
+    }
 }
 
 - (NSArray *)control:(NSControl *)control textView:(NSTextView *)textView completions:(NSArray *)words
  forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger *)index {
 
-    NSString *query = [[control stringValue] substringWithRange:charRange];
+    NSString *query = [[textView string] substringWithRange:charRange];
     if (![query length] || ![MPMacAppDelegate get].key)
         return nil;
 
@@ -203,12 +224,14 @@
                 [mutableResults addObject:element.name];
             //[mutableResults addObject:query]; // For when the app should be able to create new sites.
         }
+        else
+            _activeElementOID = nil;
     }];
 
-    if ([mutableResults count] == 1) {
+    if ([mutableResults count] < 2) {
         //[textView setString:[(MPElementEntity *)[siteResults objectAtIndex:0] name]];
         //[textView setSelectedRange:NSMakeRange( [query length], [[textView string] length] - [query length] )];
-        [self trySiteAndCopyContent:NO];
+        [self trySiteWithAction:NO];
     }
 
     return mutableResults;
@@ -216,14 +239,17 @@
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector {
 
-    if (commandSelector == @selector(cancel:)) {
+    if (commandSelector == @selector(cancel:)) { // Escape without completion.
         [self.window close];
         return YES;
     }
-    if ((self.siteFieldPreventCompletion = [NSStringFromSelector( commandSelector ) hasPrefix:@"delete"]))
+    if ((self.siteFieldPreventCompletion = [NSStringFromSelector( commandSelector ) hasPrefix:@"delete"])) { // Backspace any time.
+        _activeElementOID = nil;
+        [self trySiteWithAction:NO];
         return NO;
-    if (commandSelector == @selector(insertNewline:)) {
-        [self trySiteAndCopyContent:YES];
+    }
+    if (commandSelector == @selector(insertNewline:)) { // Return without completion.
+        [self trySiteWithAction:YES];
         return YES;
     }
 
@@ -235,7 +261,7 @@
     if (note.object != self.siteField)
         return;
 
-    [self trySiteAndCopyContent:NO];
+    [self trySiteWithAction:NO];
 }
 
 - (void)controlTextDidChange:(NSNotification *)note {
@@ -244,12 +270,18 @@
         return;
 
     // Update the site content as the site name changes.
-    BOOL enterPressed = [[NSApp currentEvent] type] == NSKeyDown &&
-                        [[[NSApp currentEvent] charactersIgnoringModifiers] isEqualToString:@"\r"];
-    [self trySiteAndCopyContent:enterPressed];
-
-    if (enterPressed)
+    if ([[NSApp currentEvent] type] == NSKeyDown &&
+        [[[NSApp currentEvent] charactersIgnoringModifiers] isEqualToString:@"\r"]) { // Return while completing.
+        [self trySiteWithAction:YES];
         return;
+    }
+
+    if ([[NSApp currentEvent] type] == NSKeyDown &&
+        [[[NSApp currentEvent] charactersIgnoringModifiers] characterAtIndex:0] == 0x1b) { // Escape while completing.
+        _activeElementOID = nil;
+        [self trySiteWithAction:NO];
+        return;
+    }
 
     if (self.siteFieldPreventCompletion) {
         self.siteFieldPreventCompletion = NO;
@@ -289,67 +321,75 @@
     }]];
 }
 
-- (void)trySiteAndCopyContent:(BOOL)copyContent {
+- (void)trySiteWithAction:(BOOL)doAction {
 
-    [self setContent:@""];
-    [self.tipField setStringValue:@"Generating..."];
-
-    dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
+    [self.backgroundQueue addOperationWithBlock:^{
         NSString *content = [[self activeElementForThread].content description];
         if (!content)
             content = @"";
-        if (copyContent) {
-            [[NSPasteboard generalPasteboard] declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
-            if (![[NSPasteboard generalPasteboard] setString:content forType:NSPasteboardTypeString]) {
-                wrn(@"Couldn't copy password to pasteboard.");
+
+        NSString *siteName = [self.siteField stringValue];
+        dbg(@"name: %@, action: %d", siteName, doAction);
+        if (doAction) {
+            if ([content length]) {
+                // Performing action while content is available.  Copy it.
+                [self copyContent:content];
+            }
+            else if ([siteName length]) {
+                // Performing action without content but a site name is written.
+                [self createNewSite:siteName];
                 return;
             }
-
-            NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
-            MPElementEntity *activeElement = [self activeElementInContext:moc];
-            [activeElement use];
-            [moc saveToStore];
         }
 
-        dispatch_async( dispatch_get_main_queue(), ^{
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self setContent:content];
 
             self.tipField.alphaValue = 1;
-            if (!copyContent)
+            if ([content length] == 0) {
+                if ([siteName length])
+                    [self.tipField setStringValue:@"Hit ⌤ (ENTER) to create a new site."];
+                else
+                    [self.tipField setStringValue:@""];
+            }
+            else if (!doAction)
                 [self.tipField setStringValue:@"Hit ⌤ (ENTER) to copy the password."];
             else {
                 [self.tipField setStringValue:@"Copied!  Hit ⎋ (ESC) to close window."];
-                dispatch_time_t popTime = dispatch_time( DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC) );
-                dispatch_after( popTime, dispatch_get_main_queue(), ^{
+                dispatch_after( dispatch_time( DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC) ), dispatch_get_main_queue(), ^{
                     [NSAnimationContext beginGrouping];
                     [[NSAnimationContext currentContext] setDuration:0.2f];
                     [self.tipField.animator setAlphaValue:0];
                     [NSAnimationContext endGrouping];
                 } );
             }
-        } );
-    } );
+        }];
+    }];
+}
 
-    // For when the app should be able to create new sites.
-    /*
-     else
-     [[MPMacAppDelegate get].managedObjectContext performBlock:^{
-     MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([MPElementGeneratedEntity class])
-     inManagedObjectContext:[MPMacAppDelegate get].managedObjectContext];
-     assert([element isKindOfClass:ClassFromMPElementType(element.type)]);
-     assert([MPMacAppDelegate get].keyID);
-     
-     element.name = siteName;
-     element.keyID = [MPMacAppDelegate get].keyID;
-     
-     NSString *description = [element.content description];
-     [element use];
-     
-     dispatch_async(dispatch_get_main_queue(), ^{
-     [self setContent:description];
-     });
-     }];
-     */
+- (void)copyContent:(NSString *)content {
+
+    [[NSPasteboard generalPasteboard] declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
+    if (![[NSPasteboard generalPasteboard] setString:content forType:NSPasteboardTypeString]) {
+        wrn(@"Couldn't copy password to pasteboard.");
+        return;
+    }
+
+    NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
+    MPElementEntity *activeElement = [self activeElementInContext:moc];
+    [activeElement use];
+    [moc saveToStore];
+}
+
+- (void)createNewSite:(NSString *)siteName {
+
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        NSAlert *alert = [NSAlert alertWithMessageText:@"Create site?"
+                                         defaultButton:@"Create" alternateButton:nil otherButton:@"Cancel"
+                             informativeTextWithFormat:@"Do you want to create a new site named:\n\n%@", siteName];
+        [alert beginSheetModalForWindow:self.window modalDelegate:self
+                         didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertCreateSite];
+    }];
 }
 
 @end

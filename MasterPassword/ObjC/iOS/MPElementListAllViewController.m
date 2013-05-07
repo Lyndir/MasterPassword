@@ -55,9 +55,11 @@
                          return;
 
                      __weak MPElementListAllViewController *wSelf = self;
-                     [self addElementNamed:[alert textFieldAtIndex:0].text completion:^(BOOL success) {
-                         if (success)
+                     [[MPiOSAppDelegate get] addElementNamed:[alert textFieldAtIndex:0].text completion:^(MPElementEntity *element) {
+                         if (element) {
+                             [wSelf.delegate didSelectElement:element];
                              [wSelf close:nil];
+                         }
                      }];
                  }
                        cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonOkay, nil];

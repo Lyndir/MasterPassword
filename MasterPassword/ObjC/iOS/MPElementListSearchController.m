@@ -9,6 +9,7 @@
 #import "MPElementListSearchController.h"
 #import "MPMainViewController.h"
 #import "MPiOSAppDelegate.h"
+#import "MPAppDelegate_Store.h"
 
 @interface MPElementListSearchController()
 
@@ -216,7 +217,11 @@
         if (buttonIndex == [alert cancelButtonIndex])
             return;
 
-        [self addElementNamed:siteName completion:nil];
+        __weak MPElementListController *wSelf = self;
+        [[MPiOSAppDelegate get] addElementNamed:siteName completion:^(MPElementEntity *element) {
+            if (element)
+                [wSelf.delegate didSelectElement:element];
+        }];
     }                  cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonYes, nil];
 }
 

@@ -15,7 +15,6 @@
 @property(readonly) NSDateFormatter *dateFormatter;
 
 - (void)updateData;
-- (void)addElementNamed:(NSString *)siteName completion:(void (^)(BOOL success))completion;
 - (void)configureCell:(UITableViewCell *)cell inTableView:(UITableView *)tableView atTableIndexPath:(NSIndexPath *)indexPath;
 - (void)customTableViewUpdates;
 
