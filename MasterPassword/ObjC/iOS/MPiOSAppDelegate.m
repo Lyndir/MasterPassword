@@ -266,6 +266,18 @@
             [[MPiOSAppDelegate get] showSetup];
     } );
 
+    MPCheckpoint(MPCheckpointStarted, @{
+            @"simulator" : PearlStringB([PearlDeviceUtils isSimulator]),
+            @"encrypted" : PearlStringB([PearlDeviceUtils isAppEncrypted]),
+            @"jailbroken" : PearlStringB([PearlDeviceUtils isJailbroken]),
+            @"platform" : [PearlDeviceUtils platform],
+#ifdef APPSTORE
+            @"legal" : PearlStringB([PearlDeviceUtils isAppEncrypted]),
+#else
+            @"legal" : @"YES",
+#endif
+    });
+
     return YES;
 }
 
