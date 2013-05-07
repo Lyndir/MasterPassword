@@ -21,6 +21,9 @@
 #ifdef DEBUG
     [PearlLogger get].printLevel = PearlLogLevelDebug;
     //[NSClassFromString(@"WebView") performSelector:NSSelectorFromString(@"_enableRemoteInspector")];
+#else
+    if ([[MPiOSConfig get].sendInfo boolValue])
+        [PearlLogger get].printLevel = PearlLogLevelInfo;
 #endif
 }
 
