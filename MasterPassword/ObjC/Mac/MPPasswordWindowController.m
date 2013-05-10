@@ -53,6 +53,8 @@
 //    }                          forKeyPath:@"key" options:NSKeyValueObservingOptionInitial context:nil];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:NSWindowDidBecomeKeyNotification object:self.window queue:nil usingBlock:^(NSNotification *note) {
+        if (![MPMacAppDelegate managedObjectContextForThreadIfReady])
+            [self waitUntilStoreLoaded];
         if (!self.inProgress)
             [self unlock];
         [self.siteField selectText:self];
@@ -66,8 +68,15 @@
         _activeElementOID = nil;
         [self.window close];
     }];
+    [[NSNotificationCenter defaultCenter]
+            addObserverForName:UbiquityManagedStoreDidChangeNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [self waitUntilStoreLoaded];
+    }];
 
     [super windowDidLoad];
+}
+
+- (void)waitUntilStoreLoaded {
 }
 
 - (void)unlock {
@@ -323,12 +332,12 @@
 
 - (void)trySiteWithAction:(BOOL)doAction {
 
+    NSString *siteName = [self.siteField stringValue];
     [self.backgroundQueue addOperationWithBlock:^{
         NSString *content = [[self activeElementForThread].content description];
         if (!content)
             content = @"";
 
-        NSString *siteName = [self.siteField stringValue];
         dbg(@"name: %@, action: %d", siteName, doAction);
         if (doAction) {
             if ([content length]) {

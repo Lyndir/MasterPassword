@@ -849,15 +849,15 @@
                             } );
                 }
             }];
+        
+        MPCheckpoint( MPCheckpointUseType, @{
+                     @"type"    : element.typeName,
+                     @"version" : @(element.version)
+                     } );
     }
 
     [self.searchDisplayController setActive:NO animated:YES];
     self.searchDisplayController.searchBar.text = element.name;
-
-    MPCheckpoint( MPCheckpointUseType, @{
-            @"type"    : element.typeName,
-            @"version" : @(element.version)
-    } );
 
     [self updateAnimated:YES];
 }

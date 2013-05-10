@@ -11,12 +11,6 @@
 #import "MPAppDelegate_Store.h"
 #import <Carbon/Carbon.h>
 
-@interface MPMacAppDelegate()
-
-@property(nonatomic) BOOL wasRunning;
-
-@end
-
 @implementation MPMacAppDelegate
 
 #pragma clang diagnostic push
@@ -46,7 +40,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     // Check which hotkey this was.
     if (hotKeyID.signature == MPShowHotKey.signature && hotKeyID.id == MPShowHotKey.id) {
-        [((__bridge MPMacAppDelegate *)userData) activate:nil];
+        [((__bridge MPMacAppDelegate *)userData) showPasswordWindow];
         return noErr;
     }
     if (hotKeyID.signature == MPLockHotKey.signature && hotKeyID.id == MPLockHotKey.id) {
@@ -92,15 +86,18 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                 @"Then give iCloud some time to sync the new user to your Mac.";
     }
 
+    MPUserEntity *activeUser = self.activeUserForThread;
     for (MPUserEntity *user in users) {
         NSMenuItem *userItem = [[NSMenuItem alloc] initWithTitle:user.name action:@selector(selectUser:) keyEquivalent:@""];
         [userItem setTarget:self];
         [userItem setRepresentedObject:[user objectID]];
         [[self.usersItem submenu] addItem:userItem];
 
-        if ([user.name isEqualToString:[MPMacConfig get].usedUserName])
+        if (!activeUser && [user.name isEqualToString:[MPMacConfig get].usedUserName])
             [self selectUser:userItem];
     }
+    
+    [self updateMenuItems];
 }
 
 - (void)selectUser:(NSMenuItem *)item {
@@ -190,6 +187,16 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (IBAction)lock:(id)sender {
 
     self.key = nil;
+}
+
+- (IBAction)rebuildCloud:(id)sender {
+
+    if ([[NSAlert alertWithMessageText:@"iCloud Truth Sync" defaultButton:@"Continue"
+                       alternateButton:nil otherButton:@"Cancel"
+             informativeTextWithFormat:@"This action will force all your iCloud enabled devices to revert to this device's version of the truth."
+                     @"\n\nThis is only necessary if you notice that your devices aren't syncing properly anymore.  "
+                     "Any data on other devices not available from here will be lost."] runModal] == NSAlertDefaultReturn)
+        [self.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:NO];
 }
 
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)oldValue {
@@ -347,20 +354,16 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
 
-    [self showPasswordWindow];
+//    [self showPasswordWindow];
 }
 
-- (void)showPasswordWindow {
+- (IBAction)showPasswordWindow {
 
     // Don't show window if we weren't already running (ie. if we haven't been activated before).
-    if (!self.wasRunning)
-        self.wasRunning = YES;
-    else {
-        if (!self.passwordWindow)
-            self.passwordWindow = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
-
-        [self.passwordWindow showWindow:self];
-    }
+    if (!self.passwordWindow)
+        self.passwordWindow = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
+    
+    [self.passwordWindow showWindow:self];
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification {
