@@ -77,7 +77,9 @@
         [(UITextField *)[cell viewWithTag:2] setText:@"..."];
 
         NSString *name = selectedElement.name;
-        NSUInteger counter = ((MPElementGeneratedEntity *)selectedElement).counter;
+        NSUInteger counter = 0;
+        if ([selectedElement isKindOfClass:[MPElementGeneratedEntity class]])
+            counter = ((MPElementGeneratedEntity *)selectedElement).counter;
 
         dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
             NSString *typeContent = [MPAlgorithmDefault generateContentNamed:name ofType:cellType

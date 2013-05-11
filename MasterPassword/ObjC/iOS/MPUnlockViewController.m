@@ -8,6 +8,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import <Social/Social.h>
+#import <CoreGraphics/CoreGraphics.h>
 
 #import "MPUnlockViewController.h"
 #import "MPiOSAppDelegate.h"
@@ -209,6 +210,8 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 
+    [self becomeFirstResponder];
+
     if (!animated && !self.navigationController.presentedViewController)
         [[self findTargetedAvatar] setSelected:YES];
     else
@@ -254,10 +257,21 @@
 
         self.emergencyGeneratorContainer.alpha = 0;
         self.emergencyGeneratorContainer.hidden = NO;
-        [UIView animateWithDuration:0.5 animations:^{
+        self.emergencyGeneratorContainer.frame = CGRectSetX( self.emergencyGeneratorContainer.frame,
+                self.emergencyGeneratorContainer.frame.origin.x - 100 );
+        [UIView animateWithDuration:0.3 animations:^{
+            self.emergencyGeneratorContainer.frame = CGRectSetX( self.emergencyGeneratorContainer.frame,
+                    self.emergencyGeneratorContainer.frame.origin.x + 150 );
             self.emergencyGeneratorContainer.alpha = 1;
         }                completion:^(BOOL finished) {
+            if (!finished)
+                return;
+
             [self.emergencyName becomeFirstResponder];
+            [UIView animateWithDuration:0.2 animations:^{
+                self.emergencyGeneratorContainer.frame = CGRectSetX( self.emergencyGeneratorContainer.frame,
+                        self.emergencyGeneratorContainer.frame.origin.x - 50 );
+            }];
         }];
     }
 }
@@ -925,7 +939,7 @@
     [[self.emergencyGeneratorContainer findFirstResponderInHierarchy] resignFirstResponder];
 
     if (animated) {
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:0.2 animations:^{
             self.emergencyGeneratorContainer.alpha = 0;
         }                completion:^(BOOL finished) {
             [self emergencyCloseAnimated:NO];

@@ -316,9 +316,9 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 #pragma mark - UbiquityStoreManagerDelegate
 
-- (NSManagedObjectContext *)managedObjectContextForUbiquityStoreManager:(UbiquityStoreManager *)usm {
+- (NSManagedObjectContext *)managedObjectContextForUbiquityChangesInManager:(UbiquityStoreManager *)manager {
 
-    return [self privateManagedObjectContextIfReady];
+    return [self mainManagedObjectContextIfReady];
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager log:(NSString *)message {
@@ -328,7 +328,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager willLoadStoreIsCloud:(BOOL)isCloudStore {
 
-    NSManagedObjectContext *moc = self.mainManagedObjectContextIfReady;
+    NSManagedObjectContext *moc = [self mainManagedObjectContextIfReady];
     [moc performBlockAndWait:^{
         [moc saveToStore];
 

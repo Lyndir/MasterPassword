@@ -1549,11 +1549,11 @@ You could use the word wall for  inspiration in finding a memorable master passw
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view hidden="YES" alpha="0.30000000000000016" contentMode="scaleToFill" id="KNa-Xb-RuE" userLabel="View - Emergency Generator">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <rect key="frame" x="-100" y="0.0" width="520" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" id="vdf-Kn-Sle">
-                                        <rect key="frame" x="0.0" y="20" width="320" height="434"/>
+                                        <rect key="frame" x="100" y="20" width="320" height="434"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_panel_display.png" id="jLf-TI-anP">
