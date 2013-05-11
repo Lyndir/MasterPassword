@@ -13,11 +13,12 @@
 
 - (BOOL)saveToStore {
 
-    NSError *error;
-    if (![self save:&error]) {
-        err(@"While saving: %@", error);
-        return NO;
-    }
+    __block BOOL success = NO;
+    [self performBlockAndWait:^{
+        NSError *error = nil;
+        if (!(success = [self save:&error]))
+            err(@"While saving: %@", error);
+    }];
 
     return !self.parentContext || [self.parentContext saveToStore];
 }

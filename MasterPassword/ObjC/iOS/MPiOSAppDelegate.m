@@ -12,6 +12,13 @@
 #import "IASKSettingsReader.h"
 #import "GPPSignIn.h"
 
+@interface MPiOSAppDelegate()
+
+@property(nonatomic, strong) PearlAlert *handleCloudContentAlert;
+@property(nonatomic, strong) PearlAlert *fixCloudContentAlert;
+@property(nonatomic, strong) PearlOverlay *storeLoading;
+@end
+
 @implementation MPiOSAppDelegate
 
 + (void)initialize {
@@ -627,6 +634,67 @@
 
     [[NSNotificationCenter defaultCenter]
             postNotificationName:MPCheckConfigNotification object:NSStringFromSelector( configKey ) userInfo:nil];
+}
+
+
+#pragma mark - Google+
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager willLoadStoreIsCloud:(BOOL)isCloudStore {
+
+    dispatch_async( dispatch_get_main_queue(), ^{
+        [self.handleCloudContentAlert cancelAlertAnimated:YES];
+        if (![self.storeLoading isVisible])
+            self.storeLoading = [PearlOverlay showOverlayWithTitle:@"Opening Your Data"];
+    } );
+
+    [super ubiquityStoreManager:manager willLoadStoreIsCloud:isCloudStore];
+}
+
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didLoadStoreForCoordinator:(NSPersistentStoreCoordinator *)coordinator
+                     isCloud:(BOOL)isCloudStore {
+
+    [super ubiquityStoreManager:manager didLoadStoreForCoordinator:coordinator isCloud:isCloudStore];
+
+    dispatch_async( dispatch_get_main_queue(), ^{
+        [self.handleCloudContentAlert cancelAlertAnimated:YES];
+        [self.fixCloudContentAlert cancelAlertAnimated:YES];
+        [self.storeLoading cancelOverlayAnimated:YES];
+    } );
+}
+
+- (BOOL)ubiquityStoreManager:(UbiquityStoreManager *)manager handleCloudContentCorruptionWithHealthyStore:(BOOL)storeHealthy {
+
+    if (manager.cloudEnabled && !storeHealthy && !([self.handleCloudContentAlert.alertView isVisible] || [self.fixCloudContentAlert.alertView isVisible]))
+        dispatch_async( dispatch_get_main_queue(), ^{
+            [self.storeLoading cancelOverlayAnimated:YES];
+            [self showCloudContentAlert];
+        } );
+
+    return NO;
+}
+
+- (void)showCloudContentAlert {
+
+    __weak MPiOSAppDelegate *wSelf = self;
+    [self.handleCloudContentAlert cancelAlertAnimated:NO];
+    self.handleCloudContentAlert = [PearlAlert showActivityWithTitle:@"iCloud Sync Problem" message:
+            @"Waiting for your other device to auto‑correct the problem..."
+                                                           initAlert:^(UIAlertView *alert) {
+                                                               [alert addButtonWithTitle:@"Fix Now"];
+                                                           }];
+
+    self.handleCloudContentAlert.tappedButtonBlock = ^(UIAlertView *alert, NSInteger buttonIndex) {
+        wSelf.fixCloudContentAlert = [PearlAlert showAlertWithTitle:@"Fix iCloud Now" message:
+                @"This problem can usually be auto‑corrected by opening the app on another device where you recently made changes.\n"
+                        @"You can correct the problem from this device anyway, but recent changes made on another device might get lost."
+                                                          viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:
+                        ^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                            if (buttonIndex_ == alert_.cancelButtonIndex)
+                                [wSelf showCloudContentAlert];
+                            if (buttonIndex_ == [alert_ firstOtherButtonIndex])
+                                [wSelf.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:YES];
+                        }
+                                                        cancelTitle:[PearlStrings get].commonButtonBack otherTitles:@"Fix Anyway", nil];
+    };
 }
 
 

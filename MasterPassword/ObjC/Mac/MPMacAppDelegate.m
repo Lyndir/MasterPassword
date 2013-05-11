@@ -119,18 +119,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     [self.statusItem popUpStatusItemMenu:self.statusMenu];
 }
 
-- (IBAction)activate:(id)sender {
-
-    if (![self activeUserForThread])
-            // No user, can't activate.
-        return;
-
-    if ([[NSApplication sharedApplication] isActive])
-        [self applicationDidBecomeActive:nil];
-    else
-        [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
-}
-
 - (IBAction)togglePreference:(NSMenuItem *)sender {
 
     if (sender == self.useICloudItem)
@@ -227,12 +215,12 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     self.statusItem.target = self;
     self.statusItem.action = @selector(showMenu);
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidChangeNotification object:nil queue:nil usingBlock:
+    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil queue:nil usingBlock:
             ^(NSNotification *note) {
                 [self updateUsers];
             }];
     [[NSNotificationCenter defaultCenter]
-            addObserverForName:UbiquityManagedStoreDidImportChangesNotification object:nil queue:nil usingBlock:
+            addObserverForName:USMStoreDidImportChangesNotification object:nil queue:nil usingBlock:
             ^(NSNotification *note) {
                 [self updateUsers];
             }];
@@ -358,6 +346,14 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 }
 
 - (IBAction)showPasswordWindow {
+
+    // If no user, can't activate.
+    if (![self activeUserForThread])
+        return;
+
+    // Activate the app if not active.
+    if (![[NSApplication sharedApplication] isActive])
+        [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 
     // Don't show window if we weren't already running (ie. if we haven't been activated before).
     if (!self.passwordWindow)

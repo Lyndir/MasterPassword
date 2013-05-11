@@ -170,6 +170,16 @@ OBJC_EXTERN void CLSNSLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
  **/
 @property (nonatomic, readonly) NSDate *crashedOnDate;
 
+/**
+ * Returns the os version that the application crashed on.
+ **/
+@property (nonatomic, readonly) NSString *OSVersion;
+
+/**
+ * Returns the os build version that the application crashed on.
+ **/
+@property (nonatomic, readonly) NSString *OSBuildVersion;
+
 @end
 
 /**

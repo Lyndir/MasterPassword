@@ -33,11 +33,6 @@ typedef NS_ENUM(NSInteger, MPMigrationLevelCloudStore) {
 };
 
 @implementation MPAppDelegate_Shared(Store)
-#if TARGET_OS_IPHONE
-        PearlAssociatedObjectProperty(PearlAlert*, HandleCloudContentAlert, handleCloudContentAlert);
-PearlAssociatedObjectProperty(PearlAlert*, FixCloudContentAlert, fixCloudContentAlert);
-PearlAssociatedObjectProperty(PearlOverlay*, StoreLoading, storeLoading);
-#endif
         PearlAssociatedObjectProperty(NSManagedObjectContext*, PrivateManagedObjectContext, privateManagedObjectContext);
 PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext, mainManagedObjectContext);
 
@@ -127,7 +122,10 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillTerminateNotification
                                                       object:[NSApplication sharedApplication] queue:nil
                                                   usingBlock:^(NSNotification *note) {
-                                                      [[self mainManagedObjectContext] saveToStore];
+                                                      NSManagedObjectContext *moc = self.mainManagedObjectContextIfReady;
+                                                      [moc performBlockAndWait:^{
+                                                          [moc saveToStore];
+                                                      }];
                                                   }];
 #endif
 
@@ -330,15 +328,13 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager willLoadStoreIsCloud:(BOOL)isCloudStore {
 
-    self.privateManagedObjectContext = nil;
-    self.mainManagedObjectContext = nil;
+    NSManagedObjectContext *moc = self.mainManagedObjectContextIfReady;
+    [moc performBlockAndWait:^{
+        [moc saveToStore];
 
-#if TARGET_OS_IPHONE
-    dispatch_async( dispatch_get_main_queue(), ^{
-        if (![self.storeLoading isVisible])
-            self.storeLoading = [PearlOverlay showOverlayWithTitle:@"Opening Your Data"];
-    } );
-#endif
+        self.privateManagedObjectContext = nil;
+        self.mainManagedObjectContext = nil;
+    }];
 
     [self migrateStoreForManager:manager isCloud:isCloudStore];
 }
@@ -378,12 +374,6 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     self.privateManagedObjectContext = privateManagedObjectContext;
     self.mainManagedObjectContext = mainManagedObjectContext;
-
-#if TARGET_OS_IPHONE
-    [self.handleCloudContentAlert cancelAlertAnimated:YES];
-    [self.fixCloudContentAlert cancelAlertAnimated:YES];
-    [self.storeLoading cancelOverlay];
-#endif
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreErrorCause)cause
@@ -396,46 +386,6 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
             @"error.code"   : @(error.code)
     } );
 }
-
-- (BOOL)ubiquityStoreManager:(UbiquityStoreManager *)manager handleCloudContentCorruptionWithHealthyStore:(BOOL)storeHealthy {
-
-#if TARGET_OS_IPHONE
-    if (manager.cloudEnabled && !storeHealthy && !([self.handleCloudContentAlert.alertView isVisible] || [self.fixCloudContentAlert.alertView isVisible]))
-        dispatch_async( dispatch_get_main_queue(), ^{
-            [self showCloudContentAlert];
-        } );
-#endif
-
-    return NO;
-}
-
-#if TARGET_OS_IPHONE
-- (void)showCloudContentAlert {
-
-    __weak MPAppDelegate_Shared *wSelf = self;
-    [self.handleCloudContentAlert cancelAlertAnimated:NO];
-    self.handleCloudContentAlert = [PearlAlert showActivityWithTitle:@"iCloud Sync Problem" message:
-            @"Waiting for your other device to auto‑correct the problem..."
-                                                           initAlert:^(UIAlertView *alert) {
-                                                               [alert addButtonWithTitle:@"Fix Now"];
-                                                           }];
-
-    self.handleCloudContentAlert.tappedButtonBlock = ^(UIAlertView *alert, NSInteger buttonIndex) {
-        wSelf.fixCloudContentAlert = [PearlAlert showAlertWithTitle:@"Fix iCloud Now" message:
-                @"This problem can usually be auto‑corrected by opening the app on another device where you recently made changes.\n"
-                        @"You can correct the problem from this device anyway, but recent changes made on another device might get lost."
-                                                          viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:
-                        ^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                            if (buttonIndex_ == alert_.cancelButtonIndex)
-                                [wSelf showCloudContentAlert];
-                            if (buttonIndex_ == [alert_ firstOtherButtonIndex])
-                                [wSelf.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:YES];
-                        }
-                                                        cancelTitle:[PearlStrings get].commonButtonBack otherTitles:@"Fix Anyway", nil];
-    };
-}
-
-#endif
 
 #pragma mark - Utilities
 

@@ -69,7 +69,7 @@
         [self.window close];
     }];
     [[NSNotificationCenter defaultCenter]
-            addObserverForName:UbiquityManagedStoreDidChangeNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+            addObserverForName:USMStoreDidChangeNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
         [self waitUntilStoreLoaded];
     }];
 

@@ -107,7 +107,7 @@
                         [self.navigationController popToRootViewControllerAnimated:animated];
                     }];
             }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidChangeNotification object:nil queue:nil usingBlock:
+    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil queue:nil usingBlock:
             ^(NSNotification *note) {
                 if (!self.activeElementForThread)
                     [self didSelectElement:nil];

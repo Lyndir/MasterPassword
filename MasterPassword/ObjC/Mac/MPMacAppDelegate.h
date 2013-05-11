@@ -26,7 +26,6 @@
 @property(nonatomic, weak) IBOutlet NSMenuItem *dialogStyleHUD;
 
 - (IBAction)showPasswordWindow;
-- (IBAction)activate:(id)sender;
 - (IBAction)togglePreference:(NSMenuItem *)sender;
 - (IBAction)newUser:(NSMenuItem *)sender;
 - (IBAction)lock:(id)sender;

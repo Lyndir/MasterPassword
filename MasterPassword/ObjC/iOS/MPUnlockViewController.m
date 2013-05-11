@@ -164,11 +164,11 @@
         [self initializeWordLabel:wordLabel];
     }                        recurse:NO];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidChangeNotification object:nil queue:nil usingBlock:
+    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil queue:nil usingBlock:
             ^(NSNotification *note) {
                 [self updateUsers];
             }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:UbiquityManagedStoreDidImportChangesNotification object:nil queue:nil
+    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidImportChangesNotification object:nil queue:nil
                                                   usingBlock:^(NSNotification *note) {
                                                       [self updateUsers];
                                                   }];
