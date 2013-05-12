@@ -22,8 +22,8 @@
 @interface MPLogsViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITextView *logView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *levelControl;
+- (IBAction)action:(id)sender;
 - (IBAction)toggleLevelControl:(UISegmentedControl *)sender;
-- (IBAction)close:(UIBarButtonItem *)sender;
 - (IBAction)refresh:(UIBarButtonItem *)sender;
 - (IBAction)mail:(UIBarButtonItem *)sender;
 @end

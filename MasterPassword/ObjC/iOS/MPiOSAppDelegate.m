@@ -25,12 +25,16 @@
 
     [MPiOSConfig get];
     [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
+    NSLog( @"sendInfo: %@", [MPiOSConfig get].sendInfo );
 #ifdef DEBUG
     [PearlLogger get].printLevel = PearlLogLevelDebug;
     //[NSClassFromString(@"WebView") performSelector:NSSelectorFromString(@"_enableRemoteInspector")];
 #else
-    if ([[MPiOSConfig get].sendInfo boolValue])
+    if ([[MPiOSConfig get].sendInfo boolValue]) {
+        NSLog( @"autoprinting" );
         [PearlLogger get].printLevel = PearlLogLevelInfo;
+        inf(@"Autoprinted.");
+    }
 #endif
 }
 
