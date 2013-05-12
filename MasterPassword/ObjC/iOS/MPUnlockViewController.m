@@ -117,6 +117,11 @@
     return UIInterfaceOrientationPortrait;
 }
 
+- (NSUInteger)supportedInterfaceOrientations {
+
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 - (void)viewDidLoad {
 
     NSString *newsURL = PearlString( @"http://www.masterpasswordapp.com/news.html?version=%@", [[PearlInfoPlist get] CFBundleVersion] );
