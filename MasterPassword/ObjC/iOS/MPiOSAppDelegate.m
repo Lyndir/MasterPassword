@@ -25,16 +25,9 @@
 
     [MPiOSConfig get];
     [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
-    NSLog( @"sendInfo: %@", [MPiOSConfig get].sendInfo );
 #ifdef DEBUG
     [PearlLogger get].printLevel = PearlLogLevelDebug;
     //[NSClassFromString(@"WebView") performSelector:NSSelectorFromString(@"_enableRemoteInspector")];
-#else
-    if ([[MPiOSConfig get].sendInfo boolValue]) {
-        NSLog( @"autoprinting" );
-        [PearlLogger get].printLevel = PearlLogLevelInfo;
-        inf(@"Autoprinted.");
-    }
 #endif
 }
 
@@ -173,28 +166,26 @@
     [[UISearchBar appearance] setBackgroundImage:toolBarImage];
     [[UIToolbar appearance] setBackgroundImage:toolBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
 
-    /*
-     UIImage *minImage = [[UIImage imageNamed:@"slider-minimum.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
-     UIImage *maxImage = [[UIImage imageNamed:@"slider-maximum.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
-     UIImage *thumbImage = [UIImage imageNamed:@"slider-handle.png"];
-
-     [[UISlider appearance] setMaximumTrackImage:maxImage forState:UIControlStateNormal];
-     [[UISlider appearance] setMinimumTrackImage:minImage forState:UIControlStateNormal];
-     [[UISlider appearance] setThumbImage:thumbImage forState:UIControlStateNormal];
-
-     UIImage *segmentSelected = [[UIImage imageNamed:@"segcontrol_sel.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];
-     UIImage *segmentUnselected = [[UIImage imageNamed:@"segcontrol_uns.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 15)];
-     UIImage *segmentSelectedUnselected = [UIImage imageNamed:@"segcontrol_sel-uns.png"];
-     UIImage *segUnselectedSelected = [UIImage imageNamed:@"segcontrol_uns-sel.png"];
-     UIImage *segmentUnselectedUnselected = [UIImage imageNamed:@"segcontrol_uns-uns.png"];
-
-     [[UISegmentedControl appearance] setBackgroundImage:segmentUnselected forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-     [[UISegmentedControl appearance] setBackgroundImage:segmentSelected forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
-
-     [[UISegmentedControl appearance] setDividerImage:segmentUnselectedUnselected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-     [[UISegmentedControl appearance] setDividerImage:segmentSelectedUnselected forLeftSegmentState:UIControlStateSelected rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-     [[UISegmentedControl appearance] setDividerImage:segUnselectedSelected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
-     */
+    // UIImage *minImage = [[UIImage imageNamed:@"slider-minimum"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
+    // UIImage *maxImage = [[UIImage imageNamed:@"slider-maximum"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
+    // UIImage *thumbImage = [UIImage imageNamed:@"slider-handle"];
+    //
+    // [[UISlider appearance] setMaximumTrackImage:maxImage forState:UIControlStateNormal];
+    // [[UISlider appearance] setMinimumTrackImage:minImage forState:UIControlStateNormal];
+    // [[UISlider appearance] setThumbImage:thumbImage forState:UIControlStateNormal];
+    //
+    // UIImage *segmentSelected = [[UIImage imageNamed:@"segcontrol_sel"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];
+    // UIImage *segmentUnselected = [[UIImage imageNamed:@"segcontrol_uns"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 15)];
+    // UIImage *segmentSelectedUnselected = [UIImage imageNamed:@"segcontrol_sel-uns"];
+    // UIImage *segUnselectedSelected = [UIImage imageNamed:@"segcontrol_uns-sel"];
+    // UIImage *segmentUnselectedUnselected = [UIImage imageNamed:@"segcontrol_uns-uns"];
+    //
+    // [[UISegmentedControl appearance] setBackgroundImage:segmentUnselected forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    // [[UISegmentedControl appearance] setBackgroundImage:segmentSelected forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
+    //
+    // [[UISegmentedControl appearance] setDividerImage:segmentUnselectedUnselected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    // [[UISegmentedControl appearance] setDividerImage:segmentSelectedUnselected forLeftSegmentState:UIControlStateSelected rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    // [[UISegmentedControl appearance] setDividerImage:segUnselectedSelected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
             ^(NSNotification *note) {
