@@ -14,6 +14,7 @@
 #define MPAlertUnlockMP     @"MPAlertUnlockMP"
 #define MPAlertIncorrectMP  @"MPAlertIncorrectMP"
 #define MPAlertCreateSite   @"MPAlertCreateSite"
+#define MPAlertLoadingData  @"MPAlertLoadingData"
 
 @interface MPPasswordWindowController()
 
@@ -21,6 +22,7 @@
 @property(nonatomic) BOOL siteFieldPreventCompletion;
 
 @property(nonatomic, strong) NSOperationQueue *backgroundQueue;
+@property(nonatomic, strong) NSConditionLock *loadingLock;
 @end
 
 @implementation MPPasswordWindowController {
@@ -41,7 +43,7 @@
     [self.tipField setStringValue:@""];
 
     [self.userLabel setStringValue:PearlString( @"%@'s password for:", [[MPMacAppDelegate get] activeUserForThread].name )];
-//    [[MPMacAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
+    [[MPMacAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
 //        [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
 //            if (![MPAlgorithmDefault migrateUser:[[MPMacAppDelegate get] activeUserInContext:moc]])
 //                [NSAlert alertWithMessageText:@"Migration Needed" defaultButton:@"OK" alternateButton:nil otherButton:nil
@@ -50,18 +52,23 @@
 //                            @"their passwords to change.  You'll need to update your profile for that site with the new password."];
 //            [moc saveToStore];
 //        }];
-//    }                          forKeyPath:@"key" options:NSKeyValueObservingOptionInitial context:nil];
+        if (!self.inProgress && ![MPMacAppDelegate get].key) {
+            if (![MPMacAppDelegate get].activeUserForThread.saveKey)
+                [self unlock];
+            else
+                [self.window close];
+        }
+    }                          forKeyPath:@"key" options:NSKeyValueObservingOptionInitial context:nil];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:NSWindowDidBecomeKeyNotification object:self.window queue:nil usingBlock:^(NSNotification *note) {
-        if (![MPMacAppDelegate managedObjectContextForThreadIfReady])
-            [self waitUntilStoreLoaded];
+        [self waitUntilStoreLoaded];
         if (!self.inProgress)
             [self unlock];
-        [self.siteField selectText:self];
+        [self.siteField selectText:nil];
     }];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:NSWindowWillCloseNotification object:self.window queue:nil usingBlock:^(NSNotification *note) {
-        [[NSApplication sharedApplication] hide:self];
+        [[NSApplication sharedApplication] hide:nil];
     }];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:MPSignedOutNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
@@ -77,6 +84,18 @@
 }
 
 - (void)waitUntilStoreLoaded {
+
+    if ([MPMacAppDelegate managedObjectContextForThreadIfReady]) {
+        [self.loadingLock unlockWithCondition:1];
+        return;
+    }
+
+    [[NSAlert alertWithMessageText:@"Loading Your Data" defaultButton:nil alternateButton:nil otherButton:nil
+         informativeTextWithFormat:nil]
+            beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:)
+                         contextInfo:MPAlertLoadingData];
+    [self.loadingLock = [[NSConditionLock alloc] initWithCondition:0] lockWhenCondition:1];
+    self.loadingLock = nil;
 }
 
 - (void)unlock {
@@ -121,6 +140,11 @@
 
     if (contextInfo == MPAlertIncorrectMP) {
         [self.window close];
+        return;
+    }
+    if (contextInfo == MPAlertLoadingData) {
+        [alert.window orderOut:nil];
+        [self waitUntilStoreLoaded];
         return;
     }
     if (contextInfo == MPAlertUnlockMP) {

@@ -40,7 +40,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     // Check which hotkey this was.
     if (hotKeyID.signature == MPShowHotKey.signature && hotKeyID.id == MPShowHotKey.id) {
-        [((__bridge MPMacAppDelegate *)userData) showPasswordWindow];
+        [((__bridge MPMacAppDelegate *)userData) showPasswordWindow:nil];
         return noErr;
     }
     if (hotKeyID.signature == MPLockHotKey.signature && hotKeyID.id == MPLockHotKey.id) {
@@ -168,7 +168,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self updateUsers];
             [self setActiveUser:newUser];
-            [self showPasswordWindow];
+            [self showPasswordWindow:nil];
         }];
     }];
 }
@@ -238,7 +238,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                     else {
                         [self.passwordWindow close];
                         self.passwordWindow = nil;
-                        [self showPasswordWindow];
+                        [self showPasswordWindow:nil];
                     }
                 }
             }];
@@ -280,24 +280,24 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     [MPMacConfig get].usedUserName = activeUser.name;
     
     if (reopenPasswordWindow)
-        [self showPasswordWindow];
+        [self showPasswordWindow:nil];
 }
 
 - (void)updateMenuItems {
 
     MPUserEntity *activeUser = [self activeUserForThread];
-    if (!(self.showItem.enabled = ![self.passwordWindow.window isVisible])) {
-        self.showItem.title = @"Show (Showing)";
-        self.showItem.toolTip = @"Master Password is already showing.";
-    }
-    else if (!(self.showItem.enabled = (activeUser != nil))) {
-        self.showItem.title = @"Show (No user)";
-        self.showItem.toolTip = @"First select the user to show passwords for.";
-    }
-    else {
-        self.showItem.title = @"Show";
-        self.showItem.toolTip = nil;
-    }
+//    if (!(self.showItem.enabled = ![self.passwordWindow.window isVisible])) {
+//        self.showItem.title = @"Show (Showing)";
+//        self.showItem.toolTip = @"Master Password is already showing.";
+//    }
+//    else if (!(self.showItem.enabled = (activeUser != nil))) {
+//        self.showItem.title = @"Show (No user)";
+//        self.showItem.toolTip = @"First select the user to show passwords for.";
+//    }
+//    else {
+//        self.showItem.title = @"Show";
+//        self.showItem.toolTip = nil;
+//    }
 
     if (self.key) {
         self.lockItem.title = @"Lock";
@@ -346,7 +346,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 //    [self showPasswordWindow];
 }
 
-- (IBAction)showPasswordWindow {
+- (IBAction)showPasswordWindow:(id)sender {
 
     // If no user, can't activate.
     if (![self activeUserForThread])
