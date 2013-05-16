@@ -126,13 +126,14 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     if (sender == self.rememberPasswordItem)
         [MPConfig get].rememberLogin = [NSNumber numberWithBool:![[MPConfig get].rememberLogin boolValue]];
     if (sender == self.savePasswordItem) {
-        NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
-        MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:moc];
-        if ((activeUser.saveKey = !activeUser.saveKey))
-            [[MPMacAppDelegate get] storeSavedKeyFor:activeUser];
-        else
-            [[MPMacAppDelegate get] forgetSavedKeyFor:activeUser];
-        [moc saveToStore];
+        [MPMacAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
+            MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:context];
+            if ((activeUser.saveKey = !activeUser.saveKey))
+                [[MPMacAppDelegate get] storeSavedKeyFor:activeUser];
+            else
+                [[MPMacAppDelegate get] forgetSavedKeyFor:activeUser];
+            [context saveToStore];
+        }];
     }
     if (sender == self.dialogStyleRegular)
         [MPMacConfig get].dialogStyleHUD = @NO;

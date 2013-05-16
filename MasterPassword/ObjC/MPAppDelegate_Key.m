@@ -24,14 +24,12 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 - (MPKey *)loadSavedKeyFor:(MPUserEntity *)user {
 
     NSData *keyData = [PearlKeyChain dataOfItemForQuery:keyQuery( user )];
-    if (keyData)
-    inf(@"Found key in keychain for: %@", user.userID);
-
-    else {
-        user.saveKey = NO;
+    if (!keyData) {
         inf(@"No key found in keychain for: %@", user.userID);
+        return nil;
     }
 
+    inf(@"Found key in keychain for: %@", user.userID);
     return [MPAlgorithmDefault keyFromKeyData:keyData];
 }
 
@@ -57,14 +55,10 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 - (void)forgetSavedKeyFor:(MPUserEntity *)user {
 
     OSStatus result = [PearlKeyChain deleteItemForQuery:keyQuery( user )];
-    if (result == noErr || result == errSecItemNotFound) {
-        user.saveKey = NO;
+    if (result == noErr) {
+        inf(@"Removed key from keychain for: %@", user.userID);
 
-        if (result == noErr) {
-            inf(@"Removed key from keychain for: %@", user.userID);
-
-            [[NSNotificationCenter defaultCenter] postNotificationName:MPKeyForgottenNotification object:self];
-        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:MPKeyForgottenNotification object:self];
     }
 }
 
@@ -80,7 +74,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 - (BOOL)signInAsUser:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc usingMasterPassword:(NSString *)password {
 
     if (password)
-        NSAssert(![NSThread isMainThread], @"Computing key may not happen from the main thread.");
+        NSAssert(![NSThread isMainThread], @"Computing key must not happen from the main thread.");
 
     MPKey *tryKey = nil;
 
@@ -90,7 +84,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
             user.keyID = tryKey.keyID;
 
             // Migrate existing elements.
-            [self migrateElementsForUser:user inContext:moc toKey:tryKey];
+            [self migrateElementsForUser:user saveInContext:moc toKey:tryKey];
         }
     }
 
@@ -101,7 +95,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     else if (!tryKey) {
         // Key should be saved in keychain.  Load it.
-        if ((tryKey = [self loadSavedKeyFor:user])) if (![user.keyID isEqual:tryKey.keyID]) {
+        if ((tryKey = [self loadSavedKeyFor:user]) && ![user.keyID isEqual:tryKey.keyID]) {
             // Loaded password doesn't match user's keyID.  Forget saved password: it is incorrect.
             inf(@"Saved password doesn't match keyID for: %@", user.userID);
 
@@ -164,7 +158,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     return YES;
 }
 
-- (void)migrateElementsForUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc toKey:(MPKey *)newKey {
+- (void)migrateElementsForUser:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc toKey:(MPKey *)newKey {
 
     if (![user.elements count])
             // Nothing to migrate.

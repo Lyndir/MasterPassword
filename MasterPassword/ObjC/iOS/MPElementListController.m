@@ -25,17 +25,18 @@
 
 - (NSFetchedResultsController *)fetchedResultsControllerByLastUsed {
 
+    NSAssert([[NSThread currentThread] isMainThread], @"The fetchedResultsController must be accessed from the main thread.");
+
     if (!_fetchedResultsControllerByLastUsed) {
-        NSAssert([[NSThread currentThread] isMainThread], @"The fetchedResultsController must be accessed from the main thread.");
-        NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
-        if (!moc)
+        NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
+        if (!mainContext)
             return nil;
 
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
         fetchRequest.sortDescriptors = @[ [[NSSortDescriptor alloc] initWithKey:NSStringFromSelector( @selector(lastUsed) ) ascending:NO] ];
         [self configureFetchRequest:fetchRequest];
-        _fetchedResultsControllerByLastUsed = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:moc
-                                                                                    sectionNameKeyPath:nil cacheName:nil];
+        _fetchedResultsControllerByLastUsed = [[NSFetchedResultsController alloc]
+                initWithFetchRequest:fetchRequest managedObjectContext:mainContext sectionNameKeyPath:nil cacheName:nil];
         _fetchedResultsControllerByLastUsed.delegate = self;
     }
 
@@ -44,17 +45,18 @@
 
 - (NSFetchedResultsController *)fetchedResultsControllerByUses {
 
+    NSAssert([[NSThread currentThread] isMainThread], @"The fetchedResultsController must be accessed from the main thread.");
+
     if (!_fetchedResultsControllerByUses) {
-        NSAssert([[NSThread currentThread] isMainThread], @"The fetchedResultsController must be accessed from the main thread.");
-        NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
-        if (!moc)
+        NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
+        if (!mainContext)
             return nil;
 
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
         fetchRequest.sortDescriptors = @[ [[NSSortDescriptor alloc] initWithKey:NSStringFromSelector( @selector(uses_) ) ascending:NO] ];
         [self configureFetchRequest:fetchRequest];
-        _fetchedResultsControllerByUses = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:moc
-                                                                                sectionNameKeyPath:nil cacheName:nil];
+        _fetchedResultsControllerByUses = [[NSFetchedResultsController alloc]
+                initWithFetchRequest:fetchRequest managedObjectContext:mainContext sectionNameKeyPath:nil cacheName:nil];
         _fetchedResultsControllerByUses.delegate = self;
     }
 

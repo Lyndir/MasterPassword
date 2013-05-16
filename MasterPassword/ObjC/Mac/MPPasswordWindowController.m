@@ -81,39 +81,40 @@
 
 - (void)unlock {
 
-    NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
-    MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:moc];
-    if (!activeUser)
-            // No user to sign in with.
-        return;
-    if ([MPMacAppDelegate get].key)
-            // Already logged in.
-        return;
-    if ([[MPMacAppDelegate get] signInAsUser:activeUser saveInContext:moc usingMasterPassword:nil])
-            // Load the key from the keychain.
-        return;
+    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+        MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:moc];
+        if (!activeUser)
+                // No user to sign in with.
+            return;
+        if ([MPMacAppDelegate get].key)
+                // Already logged in.
+            return;
+        if ([[MPMacAppDelegate get] signInAsUser:activeUser saveInContext:moc usingMasterPassword:nil])
+                // Load the key from the keychain.
+            return;
 
-    if (![MPMacAppDelegate get].key)
-            // Ask the user to set the key through his master password.
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            if ([MPMacAppDelegate get].key)
-                return;
+        if (![MPMacAppDelegate get].key)
+                // Ask the user to set the key through his master password.
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                if ([MPMacAppDelegate get].key)
+                    return;
 
-            self.content = @"";
-            [self.siteField setStringValue:@""];
-            [self.tipField setStringValue:@""];
+                self.content = @"";
+                [self.siteField setStringValue:@""];
+                [self.tipField setStringValue:@""];
 
-            NSAlert *alert = [NSAlert alertWithMessageText:@"Master Password is locked."
-                                             defaultButton:@"Unlock" alternateButton:@"Change" otherButton:@"Cancel"
-                                 informativeTextWithFormat:@"The master password is required to unlock the application for:\n\n%@",
-                                                           activeUser.name];
-            NSSecureTextField *passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
-            [alert setAccessoryView:passwordField];
-            [alert layout];
-            [passwordField becomeFirstResponder];
-            [alert beginSheetModalForWindow:self.window modalDelegate:self
-                             didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertUnlockMP];
-        }];
+                NSAlert *alert = [NSAlert alertWithMessageText:@"Master Password is locked."
+                                                 defaultButton:@"Unlock" alternateButton:@"Change" otherButton:@"Cancel"
+                                     informativeTextWithFormat:@"The master password is required to unlock the application for:\n\n%@",
+                                                               activeUser.name];
+                NSSecureTextField *passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
+                [alert setAccessoryView:passwordField];
+                [alert layout];
+                [passwordField becomeFirstResponder];
+                [alert beginSheetModalForWindow:self.window modalDelegate:self
+                                 didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertUnlockMP];
+            }];
+    }];
 }
 
 - (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
@@ -123,8 +124,6 @@
         return;
     }
     if (contextInfo == MPAlertUnlockMP) {
-        NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
-        MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:moc];
         switch (returnCode) {
             case NSAlertAlternateReturn: {
                 // "Change" button.
@@ -139,10 +138,13 @@
                         runModal];
 
                 if (returnCode_ == NSAlertDefaultReturn) {
-                    activeUser.keyID = nil;
-                    [[MPMacAppDelegate get] forgetSavedKeyFor:activeUser];
-                    [[MPMacAppDelegate get] signOutAnimated:YES];
-                    [moc saveToStore];
+                    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+                        MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:moc];
+                        activeUser.keyID = nil;
+                        [[MPMacAppDelegate get] forgetSavedKeyFor:activeUser];
+                        [[MPMacAppDelegate get] signOutAnimated:YES];
+                        [moc saveToStore];
+                    }];
                 }
                 break;
             }
@@ -160,13 +162,9 @@
                 self.inProgress = YES;
 
                 NSString *password = [(NSSecureTextField *)alert.accessoryView stringValue];
-                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc_) {
-                    NSError *error = nil;
-                    MPUserEntity *activeUser_ = (MPUserEntity *)[moc_ existingObjectWithID:activeUser.objectID error:&error];
-                    if (!activeUser_)
-                    err(@"Failed to retrieve active use while logging in: %@", error);
-
-                    BOOL success = [[MPMacAppDelegate get] signInAsUser:activeUser saveInContext:moc_
+                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+                    MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:moc];
+                    BOOL success = [[MPMacAppDelegate get] signInAsUser:activeUser saveInContext:moc
                                                     usingMasterPassword:password];
                     self.inProgress = NO;
 
@@ -384,10 +382,10 @@
         return;
     }
 
-    NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
-    MPElementEntity *activeElement = [self activeElementInContext:moc];
-    [activeElement use];
-    [moc saveToStore];
+    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+        [[self activeElementInContext:moc] use];
+        [moc saveToStore];
+    }];
 }
 
 - (void)createNewSite:(NSString *)siteName {

@@ -298,29 +298,22 @@
 
 - (void)updateUsers {
 
-    NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
-    if (!moc)
-        return;
-
-    __block NSArray *users = nil;
-    [moc performBlockAndWait:^{
+    [MPiOSAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
         NSError *error = nil;
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
         fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO] ];
-        users = [moc executeFetchRequest:fetchRequest error:&error];
+        NSArray *users = [context executeFetchRequest:fetchRequest error:&error];
         if (!users)
         err(@"Failed to load users: %@", error);
-    }];
 
-    // Clean up avatars.
-    for (UIView *subview in [self.avatarsView subviews])
-        if ([[self.avatarToUserOID allKeys] containsObject:[NSValue valueWithNonretainedObject:subview]])
-                // This subview is a former avatar.
-            [subview removeFromSuperview];
-    [self.avatarToUserOID removeAllObjects];
+        // Clean up avatars.
+        for (UIView *subview in [self.avatarsView subviews])
+            if ([[self.avatarToUserOID allKeys] containsObject:[NSValue valueWithNonretainedObject:subview]])
+                    // This subview is a former avatar.
+                [subview removeFromSuperview];
+        [self.avatarToUserOID removeAllObjects];
 
-    // Create avatars.
-    [moc performBlockAndWait:^{
+        // Create avatars.
         for (MPUserEntity *user in users)
             [self setupAvatar:[self.avatarTemplate clone] forUser:user];
         [self setupAvatar:[self.avatarTemplate clone] forUser:nil];
@@ -374,11 +367,13 @@
 
 - (void)didToggleUserSelection {
 
-    NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
-    MPUserEntity *selectedUser = [self selectedUserInContext:moc];
+    NSAssert([[NSThread currentThread] isMainThread], @"User selection should only be toggled from the main thread.");
+
+    NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
+    MPUserEntity *selectedUser = [self selectedUserInContext:mainContext];
     if (!selectedUser)
         [self.passwordField resignFirstResponder];
-    else if ([[MPiOSAppDelegate get] signInAsUser:selectedUser saveInContext:moc usingMasterPassword:nil]) {
+    else if ([[MPiOSAppDelegate get] signInAsUser:selectedUser saveInContext:mainContext usingMasterPassword:nil]) {
         [self performSegueWithIdentifier:@"MP_Unlock" sender:self];
         return;
     }
@@ -391,20 +386,18 @@
 
 - (void)didSelectNewUserAvatar:(UIButton *)newUserAvatar {
 
-    if (![MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-        MPUserEntity
-                *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass( [MPUserEntity class] )
-                                                         inManagedObjectContext:moc];
+    if (![MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        MPUserEntity *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass( [MPUserEntity class] )
+                                                              inManagedObjectContext:context];
 
-        [self showNewUserNameAlertFor:newUser inContext:moc completion:^(BOOL finished) {
+        [self showNewUserNameAlertFor:newUser saveInContext:context completion:^(BOOL finished) {
             newUserAvatar.selected = NO;
-            self.selectedUser = newUser;
         }];
     }])
         newUserAvatar.selected = NO;
 }
 
-- (void)showNewUserNameAlertFor:(MPUserEntity *)newUser inContext:(NSManagedObjectContext *)moc
+- (void)showNewUserNameAlertFor:(MPUserEntity *)newUser saveInContext:(NSManagedObjectContext *)context
                      completion:(void (^)(BOOL finished))completion {
 
     [PearlAlert showAlertWithTitle:@"Enter Your Name"
@@ -425,36 +418,36 @@
                      if (!name.length) {
                          [PearlAlert showAlertWithTitle:@"Name Is Required" message:nil viewStyle:UIAlertViewStyleDefault initAlert:nil
                                       tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                                          [self showNewUserNameAlertFor:newUser inContext:moc completion:completion];
+                                          [self showNewUserNameAlertFor:newUser saveInContext:context completion:completion];
                                       }     cancelTitle:@"Try Again" otherTitles:nil];
                          return;
                      }
 
                      // Save
-                     [moc performBlockAndWait:^{
+                     [context performBlockAndWait:^{
                          newUser.name = name;
                      }];
-                     [self showNewUserAvatarAlertFor:newUser inContext:moc completion:completion];
+                     [self showNewUserAvatarAlertFor:newUser saveInContext:context completion:completion];
                  }
                        cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonSave, nil];
 }
 
-- (void)showNewUserAvatarAlertFor:(MPUserEntity *)newUser inContext:(NSManagedObjectContext *)moc
+- (void)showNewUserAvatarAlertFor:(MPUserEntity *)newUser saveInContext:(NSManagedObjectContext *)context
                        completion:(void (^)(BOOL finished))completion {
 
     [PearlAlert showAlertWithTitle:@"Choose Your Avatar"
                            message:@"\n\n\n\n\n\n" viewStyle:UIAlertViewStyleDefault
                          initAlert:^(UIAlertView *_alert, UITextField *_firstField) {
-                             [self initializeAvatarAlert:_alert forUser:newUser inContext:moc];
+                             [self initializeAvatarAlert:_alert forUser:newUser inContext:context];
                          }
                  tappedButtonBlock:^(UIAlertView *_alert, NSInteger _buttonIndex) {
 
                      // Okay
-                     [self showNewUserConfirmationAlertFor:newUser inContext:moc completion:completion];
+                     [self showNewUserConfirmationAlertFor:newUser saveInContext:context completion:completion];
                  }     cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
 }
 
-- (void)showNewUserConfirmationAlertFor:(MPUserEntity *)newUser inContext:(NSManagedObjectContext *)moc
+- (void)showNewUserConfirmationAlertFor:(MPUserEntity *)newUser saveInContext:(NSManagedObjectContext *)context
                              completion:(void (^)(BOOL finished))completion {
 
     [PearlAlert showAlertWithTitle:@"Is this correct?"
@@ -467,16 +460,17 @@
                          }
                  tappedButtonBlock:^void(UIAlertView *__alert, NSInteger __buttonIndex) {
                      if (__buttonIndex == [__alert cancelButtonIndex]) {
-                         [self showNewUserNameAlertFor:newUser inContext:moc completion:completion];
+                         [self showNewUserNameAlertFor:newUser saveInContext:context completion:completion];
                          return;
                      }
 
                      // Confirm
-                     [moc performBlockAndWait:^{
-                         [moc saveToStore];
+                     [context performBlockAndWait:^{
+                         [context saveToStore];
                          NSError *error = nil;
-                         if (![moc obtainPermanentIDsForObjects:@[ newUser ] error:&error])
+                         if (![context obtainPermanentIDsForObjects:@[ newUser ] error:&error])
                          err(@"Failed to obtain permanent object ID for new user: %@", error);
+                         self.selectedUser = newUser;
                      }];
                      completion( YES );
 
@@ -684,14 +678,14 @@
     return avatar;
 }
 
-- (MPUserEntity *)userForAvatar:(UIButton *)avatar inContext:(NSManagedObjectContext *)moc {
+- (MPUserEntity *)userForAvatar:(UIButton *)avatar inContext:(NSManagedObjectContext *)context {
 
     NSManagedObjectID *userOID = NSNullToNil([self.avatarToUserOID objectForKey:[NSValue valueWithNonretainedObject:avatar]]);
     if (!userOID)
         return nil;
 
     NSError *error;
-    MPUserEntity *user = (MPUserEntity *)[moc existingObjectWithID:userOID error:&error];
+    MPUserEntity *user = (MPUserEntity *)[context existingObjectWithID:userOID error:&error];
     if (!user)
     err(@"Failed retrieving user for avatar: %@", error);
 
@@ -1008,37 +1002,38 @@
     if ([self selectedUserForThread])
         return;
 
-    NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
-    MPUserEntity *targetedUser = [self userForAvatar:[self findTargetedAvatar] inContext:moc];
-    if (!targetedUser)
-        return;
-
-    [PearlSheet showSheetWithTitle:targetedUser.name
-                         viewStyle:UIActionSheetStyleBlackTranslucent
-                         initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
-        if (buttonIndex == [sheet cancelButtonIndex])
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        MPUserEntity *targetedUser = [self userForAvatar:[self findTargetedAvatar] inContext:context];
+        if (!targetedUser)
             return;
 
-        if (buttonIndex == [sheet destructiveButtonIndex]) {
-            [moc performBlock:^{
-                [moc deleteObject:targetedUser];
-                [moc saveToStore];
+        [PearlSheet showSheetWithTitle:targetedUser.name
+                             viewStyle:UIActionSheetStyleBlackTranslucent
+                             initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
+            if (buttonIndex == [sheet cancelButtonIndex])
+                return;
 
-                dispatch_async( dispatch_get_main_queue(), ^{
-                    [self updateUsers];
-                } );
-            }];
-            return;
-        }
+            if (buttonIndex == [sheet destructiveButtonIndex]) {
+                [context performBlock:^{
+                    [context deleteObject:targetedUser];
+                    [context saveToStore];
 
-        if (buttonIndex == [sheet firstOtherButtonIndex])
-            [[MPiOSAppDelegate get] changeMasterPasswordFor:targetedUser saveInContext:moc didResetBlock:^{
-                dispatch_async( dispatch_get_main_queue(), ^{
-                    [[self avatarForUser:targetedUser] setSelected:YES];
-                } );
-            }];
-    }                  cancelTitle:[PearlStrings get].commonButtonCancel
-                  destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];
+                    dispatch_async( dispatch_get_main_queue(), ^{
+                        [self updateUsers];
+                    } );
+                }];
+                return;
+            }
+
+            if (buttonIndex == [sheet firstOtherButtonIndex])
+                [[MPiOSAppDelegate get] changeMasterPasswordFor:targetedUser saveInContext:context didResetBlock:^{
+                    dispatch_async( dispatch_get_main_queue(), ^{
+                        [[self avatarForUser:targetedUser] setSelected:YES];
+                    } );
+                }];
+        }                  cancelTitle:[PearlStrings get].commonButtonCancel
+                      destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];
+    }];
 }
 
 - (IBAction)facebook:(UIButton *)sender {

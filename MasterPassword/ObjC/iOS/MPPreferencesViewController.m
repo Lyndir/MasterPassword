@@ -47,13 +47,10 @@
         }                   options:0];
         [avatar onSelect:^(BOOL selected) {
             if (selected) {
-                NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
-                if (!moc)
-                    return;
-
-                MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:moc];
-                activeUser.avatar = (unsigned)avatar.tag;
-                [moc saveToStore];
+                [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+                    [[MPiOSAppDelegate get] activeUserInContext:moc].avatar = (unsigned)avatar.tag;
+                    [moc saveToStore];
+                }];
             }
         }        options:0];
         avatar.selected = (a == [[MPiOSAppDelegate get] activeUserForThread].avatar);
@@ -133,12 +130,10 @@
         [[MPiOSAppDelegate get] export];
 
     else if (cell == self.changeMPCell) {
-        NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
-        if (!moc)
-            return;
-
-        MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:moc];
-        [[MPiOSAppDelegate get] changeMasterPasswordFor:activeUser saveInContext:moc didResetBlock:nil];
+        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+            MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:moc];
+            [[MPiOSAppDelegate get] changeMasterPasswordFor:activeUser saveInContext:moc didResetBlock:nil];
+        }];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -148,15 +143,13 @@
 
 - (void)didSelectType:(MPElementType)type {
 
-    NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
-    if (!moc)
-        return;
+    self.defaultTypeLabel.text = [[MPiOSAppDelegate get].key.algorithm shortNameOfType:type];
 
-    MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:moc];
-    activeUser.defaultType = type;
-    [moc saveToStore];
-
-    self.defaultTypeLabel.text = [[MPiOSAppDelegate get].key.algorithm shortNameOfType:activeUser.defaultType];
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:context];
+        activeUser.defaultType = type;
+        [context saveToStore];
+    }];
 }
 
 - (MPElementType)selectedType {
@@ -168,16 +161,15 @@
 
 - (IBAction)didToggleSwitch:(UISwitch *)sender {
 
-    NSManagedObjectContext *moc = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
-    if (!moc)
-        return;
-
-    MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:moc];
-    if ((activeUser.saveKey = sender.on))
-        [[MPiOSAppDelegate get] storeSavedKeyFor:activeUser];
-    else
-        [[MPiOSAppDelegate get] forgetSavedKeyFor:activeUser];
-    [moc saveToStore];
+    if (sender == self.savePasswordSwitch)
+        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+            MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:moc];
+            if ((activeUser.saveKey = sender.on))
+                [[MPiOSAppDelegate get] storeSavedKeyFor:activeUser];
+            else
+                [[MPiOSAppDelegate get] forgetSavedKeyFor:activeUser];
+            [moc saveToStore];
+        }];
 }
 
 @end

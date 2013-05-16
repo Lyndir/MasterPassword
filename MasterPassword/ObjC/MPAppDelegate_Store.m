@@ -54,7 +54,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     return threadManagedObjectContext;
 }
 
-+ (BOOL)managedObjectContextPerformBlock:(void (^)(NSManagedObjectContext *))mocBlock {
++ (BOOL)managedObjectContextPerformBlock:(void (^)(NSManagedObjectContext *context))mocBlock {
 
     NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
     if (!mainManagedObjectContext)
@@ -69,7 +69,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     return YES;
 }
 
-+ (BOOL)managedObjectContextPerformBlockAndWait:(void (^)(NSManagedObjectContext *))mocBlock {
++ (BOOL)managedObjectContextPerformBlockAndWait:(void (^)(NSManagedObjectContext *context))mocBlock {
 
     NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
     if (!mainManagedObjectContext)
@@ -430,6 +430,26 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
             askImportPassword:(NSString *(^)(NSString *userName))importPassword
               askUserPassword:(NSString *(^)(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword {
 
+    NSAssert(![[NSThread currentThread] isMainThread], @"This method should not be invoked from the main thread.");
+
+    __block MPImportResult result = MPImportResultCancelled;
+    do {
+        if ([MPAppDelegate_Shared managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
+            result = [self importSites:importedSitesString askImportPassword:importPassword askUserPassword:userPassword
+                         saveInContext:context];
+        }])
+            break;
+        usleep( (useconds_t)(USEC_PER_SEC * 0.2) );
+    } while (YES);
+
+    return result;
+}
+
+- (MPImportResult)importSites:(NSString *)importedSitesString
+            askImportPassword:(NSString *(^)(NSString *userName))importPassword
+              askUserPassword:(NSString *(^)(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword
+                saveInContext:(NSManagedObjectContext *)context {
+
     // Compile patterns.
     static NSRegularExpression *headerPattern, *sitePattern;
     NSError *error = nil;
@@ -451,12 +471,6 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
             return MPImportResultInternalError;
         }
     }
-
-    // Get a MOC.
-    NSAssert(![[NSThread currentThread] isMainThread], @"This method should not be invoked from the main thread.");
-    NSManagedObjectContext *moc;
-    while (!(moc = [MPAppDelegate_Shared managedObjectContextForThreadIfReady]))
-        usleep( (useconds_t)(USEC_PER_SEC * 0.2) );
 
     // Parse import data.
     inf(@"Importing sites.");
@@ -499,7 +513,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
                 NSFetchRequest *userFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
                 userFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", importUserName];
-                NSArray *users = [moc executeFetchRequest:userFetchRequest error:&error];
+                NSArray *users = [context executeFetchRequest:userFetchRequest error:&error];
                 if (!users) {
                     err(@"While looking for user: %@, error: %@", importUserName, error);
                     return MPImportResultInternalError;
@@ -552,7 +566,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         // Find existing site.
         if (user) {
             elementFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND user == %@", name, user];
-            NSArray *existingSites = [moc executeFetchRequest:elementFetchRequest error:&error];
+            NSArray *existingSites = [context executeFetchRequest:elementFetchRequest error:&error];
             if (!existingSites) {
                 err(@"Lookup of existing sites failed for site: %@, user: %@, error: %@", name, user.userID, error);
                 return MPImportResultInternalError;
@@ -585,13 +599,13 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     if (elementsToDelete.count)
         [elementsToDelete enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
             inf(@"Deleting site: %@, it will be replaced by an imported site.", [obj name]);
-            [moc deleteObject:obj];
+            [context deleteObject:obj];
         }];
 
     // Make sure there is a user.
     if (!user) {
         user = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass( [MPUserEntity class] )
-                                             inManagedObjectContext:moc];
+                                             inManagedObjectContext:context];
         user.name = importUserName;
         user.keyID = importKeyID;
         dbg(@"Created User: %@", [user debugDescription]);
@@ -609,7 +623,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         // Create new site.
         MPElementEntity
                 *element = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmForVersion( version ) classNameOfType:type]
-                                                         inManagedObjectContext:moc];
+                                                         inManagedObjectContext:context];
         element.name = name;
         element.user = user;
         element.type = type;
@@ -632,10 +646,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         dbg(@"Created Element: %@", [element debugDescription]);
     }
 
-    if (![moc save:&error]) {
-        err(@"While saving imported sites: %@", error);
+    if (![context saveToStore])
         return MPImportResultInternalError;
-    }
 
     inf(@"Import completed successfully.");
     MPCheckpoint( MPCheckpointSitesImported, nil );
