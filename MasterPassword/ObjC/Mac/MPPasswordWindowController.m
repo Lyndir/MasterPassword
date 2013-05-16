@@ -14,7 +14,6 @@
 #define MPAlertUnlockMP     @"MPAlertUnlockMP"
 #define MPAlertIncorrectMP  @"MPAlertIncorrectMP"
 #define MPAlertCreateSite   @"MPAlertCreateSite"
-#define MPAlertLoadingData  @"MPAlertLoadingData"
 
 @interface MPPasswordWindowController()
 
@@ -22,7 +21,7 @@
 @property(nonatomic) BOOL siteFieldPreventCompletion;
 
 @property(nonatomic, strong) NSOperationQueue *backgroundQueue;
-@property(nonatomic, strong) NSConditionLock *loadingLock;
+@property(nonatomic, strong) NSAlert *loadingDataAlert;
 @end
 
 @implementation MPPasswordWindowController {
@@ -52,18 +51,11 @@
 //                            @"their passwords to change.  You'll need to update your profile for that site with the new password."];
 //            [moc saveToStore];
 //        }];
-        if (!self.inProgress && ![MPMacAppDelegate get].key) {
-            if (![MPMacAppDelegate get].activeUserForThread.saveKey)
-                [self unlock];
-            else
-                [self.window close];
-        }
+        [self handleUnloadedOrLocked];
     }                          forKeyPath:@"key" options:NSKeyValueObservingOptionInitial context:nil];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:NSWindowDidBecomeKeyNotification object:self.window queue:nil usingBlock:^(NSNotification *note) {
-        [self waitUntilStoreLoaded];
-        if (!self.inProgress)
-            [self unlock];
+        [self checkLoadedAndUnlocked];
         [self.siteField selectText:nil];
     }];
     [[NSNotificationCenter defaultCenter]
@@ -73,35 +65,55 @@
     [[NSNotificationCenter defaultCenter]
             addObserverForName:MPSignedOutNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
         _activeElementOID = nil;
-        [self.window close];
+        [self.siteField setStringValue:@""];
+        [self trySiteWithAction:NO];
+        [self handleUnloadedOrLocked];
     }];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:USMStoreDidChangeNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
-        [self waitUntilStoreLoaded];
+        [self checkLoadedAndUnlocked];
     }];
 
     [super windowDidLoad];
 }
 
-- (void)waitUntilStoreLoaded {
+- (void)handleUnloadedOrLocked {
+
+    if (!self.inProgress && ![MPMacAppDelegate get].key) {
+        MPUserEntity *activeUser = [MPMacAppDelegate get].activeUserForThread;
+        if (activeUser && !activeUser.saveKey)
+            [self unlock];
+        else
+            [self.window close];
+    }
+}
+
+- (void)checkLoadedAndUnlocked {
+
+    if ([self waitUntilStoreLoaded] && !self.inProgress)
+        [self unlock];
+}
+
+- (BOOL)waitUntilStoreLoaded {
 
     if ([MPMacAppDelegate managedObjectContextForThreadIfReady]) {
-        [self.loadingLock unlockWithCondition:1];
-        return;
+        [NSApp endSheet:self.loadingDataAlert.window];
+        return YES;
     }
 
-    [[NSAlert alertWithMessageText:@"Loading Your Data" defaultButton:nil alternateButton:nil otherButton:nil
-         informativeTextWithFormat:nil]
-            beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:)
-                         contextInfo:MPAlertLoadingData];
-    [self.loadingLock = [[NSConditionLock alloc] initWithCondition:0] lockWhenCondition:1];
-    self.loadingLock = nil;
+    [self.loadingDataAlert = [NSAlert alertWithMessageText:@"Opening Your Data" defaultButton:@"..." alternateButton:nil otherButton:nil
+                                 informativeTextWithFormat:@""]
+            beginSheetModalForWindow:self.window modalDelegate:self
+                      didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
+
+    return NO;
 }
 
 - (void)unlock {
 
     [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
         MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:moc];
+        NSString *userName = activeUser.name;
         if (!activeUser)
                 // No user to sign in with.
             return;
@@ -125,7 +137,7 @@
                 NSAlert *alert = [NSAlert alertWithMessageText:@"Master Password is locked."
                                                  defaultButton:@"Unlock" alternateButton:@"Change" otherButton:@"Cancel"
                                      informativeTextWithFormat:@"The master password is required to unlock the application for:\n\n%@",
-                                                               activeUser.name];
+                                                               userName];
                 NSSecureTextField *passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
                 [alert setAccessoryView:passwordField];
                 [alert layout];
@@ -136,15 +148,15 @@
     }];
 }
 
+- (IBAction)reload:(id)sender {
+
+    [[MPMacAppDelegate get].storeManager reloadStore];
+}
+
 - (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 
     if (contextInfo == MPAlertIncorrectMP) {
         [self.window close];
-        return;
-    }
-    if (contextInfo == MPAlertLoadingData) {
-        [alert.window orderOut:nil];
-        [self waitUntilStoreLoaded];
         return;
     }
     if (contextInfo == MPAlertUnlockMP) {
@@ -355,7 +367,9 @@
 - (void)trySiteWithAction:(BOOL)doAction {
 
     NSString *siteName = [self.siteField stringValue];
+    [self.progressView startAnimation:nil];
     [self.backgroundQueue addOperationWithBlock:^{
+        BOOL actionHandled = NO;
         NSString *content = [[self activeElementForThread].content description];
         if (!content)
             content = @"";
@@ -369,15 +383,18 @@
             else if ([siteName length]) {
                 // Performing action without content but a site name is written.
                 [self createNewSite:siteName];
-                return;
+                actionHandled = YES;
             }
         }
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self setContent:content];
+            [self.progressView stopAnimation:nil];
 
             self.tipField.alphaValue = 1;
-            if ([content length] == 0) {
+            if (actionHandled)
+                [self.tipField setStringValue:@""];
+            else if ([content length] == 0) {
                 if ([siteName length])
                     [self.tipField setStringValue:@"Hit ⌤ (ENTER) to create a new site."];
                 else
