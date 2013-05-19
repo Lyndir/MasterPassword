@@ -60,6 +60,7 @@
     }];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:NSWindowWillCloseNotification object:self.window queue:nil usingBlock:^(NSNotification *note) {
+        [NSApp endSheet:[self.window attachedSheet]];
         [[NSApplication sharedApplication] hide:nil];
     }];
     [[NSNotificationCenter defaultCenter]

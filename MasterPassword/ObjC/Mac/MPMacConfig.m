@@ -10,6 +10,7 @@
 
 @dynamic usedUserName;
 @dynamic dialogStyleHUD;
+@dynamic showAppWindow;
 
 - (id)init {
 
@@ -18,7 +19,8 @@
 
     [self.defaults registerDefaults:@{
             NSStringFromSelector( @selector(iTunesID) )       : @"510296984",
-            NSStringFromSelector( @selector(dialogStyleHUD) ) : @NO
+            NSStringFromSelector( @selector(dialogStyleHUD) ) : @NO,
+            NSStringFromSelector( @selector(showAppWindow) )  : @YES
     }];
 
     return self;

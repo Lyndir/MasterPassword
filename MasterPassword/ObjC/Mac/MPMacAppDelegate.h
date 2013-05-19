@@ -24,11 +24,14 @@
 @property(nonatomic, weak) IBOutlet NSMenuItem *usersItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *dialogStyleRegular;
 @property(nonatomic, weak) IBOutlet NSMenuItem *dialogStyleHUD;
+@property(nonatomic, weak) IBOutlet NSButton *appWindowDontShow;
 
 - (IBAction)showPasswordWindow:(id)sender;
 - (IBAction)togglePreference:(NSMenuItem *)sender;
 - (IBAction)newUser:(NSMenuItem *)sender;
 - (IBAction)lock:(id)sender;
 - (IBAction)rebuildCloud:(id)sender;
+- (IBAction)terminate:(id)sender;
+- (IBAction)iphoneAppStore:(id)sender;
 
 @end

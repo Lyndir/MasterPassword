@@ -11,6 +11,11 @@
 #import "MPAppDelegate_Store.h"
 #import <Carbon/Carbon.h>
 
+@interface MPMacAppDelegate()
+
+@property(nonatomic, strong) NSWindowController *appsWindow;
+@end
+
 @implementation MPMacAppDelegate
 
 #pragma clang diagnostic push
@@ -188,6 +193,22 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         [self.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:NO];
 }
 
+- (IBAction)terminate:(id)sender {
+
+    [self.passwordWindow close];
+    self.passwordWindow = nil;
+    
+    [NSApp terminate:nil];
+}
+
+- (IBAction)iphoneAppStore:(id)sender {
+
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://itunes.apple.com/app/id510296984"]];
+
+    [self.appWindowDontShow.window close];
+    self.appWindowDontShow = nil;
+}
+
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)oldValue {
 
     [[NSNotificationCenter defaultCenter]
@@ -198,7 +219,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
-    [[NSUbiquitousKeyValueStore defaultStore] setString:@"0B3CA2DF-5796-44DF-B5E0-121EC3846464" forKey:@"USMStoreUUIDKey"];
     // Setup delegates and listeners.
     [MPConfig get].delegate = self;
     __weak id weakSelf = self;
@@ -248,8 +268,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     EventHotKeyRef hotKeyRef;
     EventTypeSpec hotKeyEvents[1] = { { .eventClass = kEventClassKeyboard, .eventKind = kEventHotKeyPressed } };
     OSStatus status = InstallApplicationEventHandler(NewEventHandlerUPP( MPHotKeyHander ), GetEventTypeCount( hotKeyEvents ),
-    hotKeyEvents,
-    (__bridge void *)self, NULL);
+                                                     hotKeyEvents, (__bridge void *)self, NULL);
     if (status != noErr)
     err(@"Error installing application event handler: %d", status);
     status = RegisterEventHotKey( 35 /* p */, controlKey + cmdKey, MPShowHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
@@ -258,6 +277,15 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     status = RegisterEventHotKey( 35 /* p */, controlKey + optionKey + cmdKey, MPLockHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
     if (status != noErr)
     err(@"Error registering 'lock' hotkey: %d", status);
+    
+    // iOS App window
+    if ([[MPMacConfig get].showAppWindow boolValue]) {
+        [self.appsWindow = [[NSWindowController alloc] initWithWindowNibName:@"MPAppsWindow" owner:self] showWindow:self];
+        [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillCloseNotification object:self.appsWindow.window queue:nil
+                                                      usingBlock:^(NSNotification *note) {
+                                                          [MPMacConfig get].showAppWindow = @(self.appWindowDontShow.state == NSOffState);
+                                                      }];
+    }
 }
 
 - (void)setActiveUser:(MPUserEntity *)activeUser {
@@ -339,11 +367,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         self.useICloudItem.title = @"Use iCloud (Required)";
         self.useICloudItem.toolTip = nil;
     }
-}
-
-- (void)applicationDidBecomeActive:(NSNotification *)notification {
-
-//    [self showPasswordWindow];
 }
 
 - (IBAction)showPasswordWindow:(id)sender {

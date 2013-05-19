@@ -11,6 +11,9 @@
 		93D395F08A087F8A24689347 /* NSArray+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
 		93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */; };
+		DA0933CA1747A56A00DE1CEF /* MPAppsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA0933C91747A56A00DE1CEF /* MPAppsWindow.xib */; };
+		DA0933CC1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */; };
+		DA0933D01747B91B00DE1CEF /* appstore.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CF1747B91B00DE1CEF /* appstore.png */; };
 		DA16B33F170661D4000A0EAB /* libUbiquityStoreManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */; };
 		DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B340170661DB000A0EAB /* Carbon.framework */; };
 		DA16B342170661E0000A0EAB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC632871486D95D0075AEA5 /* Security.framework */; };
@@ -30,6 +33,8 @@
 		DA4C45F4173B57B700745CC5 /* NSURL+UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4C45F2173B57B700745CC5 /* NSURL+UbiquityStoreManager.h */; };
 		DA4C45F5173B57B700745CC5 /* NSURL+UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4C45F3173B57B700745CC5 /* NSURL+UbiquityStoreManager.m */; };
 		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
+		DA531D051748610100121B83 /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = DA531D031748610000121B83 /* video.png */; };
+		DA531D061748610100121B83 /* video@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA531D041748610100121B83 /* video@2x.png */; };
 		DA5E5C8817248AA1003798D8 /* crypto_aesctr.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C7B17248AA1003798D8 /* crypto_aesctr.h */; };
 		DA5E5C8917248AA1003798D8 /* crypto_scrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C7C17248AA1003798D8 /* crypto_scrypt.h */; };
 		DA5E5C8A17248AA1003798D8 /* memlimit.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C7D17248AA1003798D8 /* memlimit.h */; };
@@ -190,6 +195,9 @@
 		93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Indexing.h"; sourceTree = "<group>"; };
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
 		93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Indexing.m"; sourceTree = "<group>"; };
+		DA0933C91747A56A00DE1CEF /* MPAppsWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPAppsWindow.xib; sourceTree = "<group>"; };
+		DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shot-laptop-leaning-iphone.png"; sourceTree = "<group>"; };
+		DA0933CF1747B91B00DE1CEF /* appstore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = appstore.png; sourceTree = "<group>"; };
 		DA16B340170661DB000A0EAB /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		DA16B343170661EE000A0EAB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+PearlMutableInfo.h"; sourceTree = "<group>"; };
@@ -205,7 +213,9 @@
 		DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUbiquityStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA4C45F2173B57B700745CC5 /* NSURL+UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+UbiquityStoreManager.h"; sourceTree = "<group>"; };
 		DA4C45F3173B57B700745CC5 /* NSURL+UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+UbiquityStoreManager.m"; sourceTree = "<group>"; };
-		DA5BFA44147E415C00F98B1E /* MasterPassword.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MasterPassword.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA531D031748610000121B83 /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video.png; sourceTree = "<group>"; };
+		DA531D041748610100121B83 /* video@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video@2x.png"; sourceTree = "<group>"; };
+		DA5BFA44147E415C00F98B1E /* Master Password.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Master Password.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5BFA4A147E415C00F98B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		DA5BFA4E147E415C00F98B1E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -444,7 +454,7 @@
 		DA5BFA45147E415C00F98B1E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DA5BFA44147E415C00F98B1E /* MasterPassword.app */,
+				DA5BFA44147E415C00F98B1E /* Master Password.app */,
 				DAC77CAD148291A600BCF976 /* libPearl.a */,
 				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
 				DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */,
@@ -552,6 +562,7 @@
 				DA5E5CC21724A667003798D8 /* InfoPlist.strings */,
 				DA5E5CC41724A667003798D8 /* MainMenu.xib */,
 				DA5E5CC61724A667003798D8 /* main.m */,
+				DA0933C91747A56A00DE1CEF /* MPAppsWindow.xib */,
 			);
 			path = Mac;
 			sourceTree = "<group>";
@@ -607,6 +618,10 @@
 		DACA23B51705DF7D002C6C22 /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				DA531D031748610000121B83 /* video.png */,
+				DA531D041748610100121B83 /* video@2x.png */,
+				DA0933CF1747B91B00DE1CEF /* appstore.png */,
+				DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */,
 				DA5E5D541724F9C8003798D8 /* MasterPassword.iconset */,
 				DACA24161705DF7D002C6C22 /* Background */,
 				DACA24311705DF7D002C6C22 /* Avatars */,
@@ -900,9 +915,9 @@
 			productReference = DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		DA5BFA43147E415C00F98B1E /* MasterPassword */ = {
+		DA5BFA43147E415C00F98B1E /* Master Password */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */;
+			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "Master Password" */;
 			buildPhases = (
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
@@ -914,9 +929,9 @@
 			);
 			dependencies = (
 			);
-			name = MasterPassword;
+			name = "Master Password";
 			productName = MasterPassword;
-			productReference = DA5BFA44147E415C00F98B1E /* MasterPassword.app */;
+			productReference = DA5BFA44147E415C00F98B1E /* Master Password.app */;
 			productType = "com.apple.product-type.application";
 		};
 		DAC6326B148680650075AEA5 /* jrswizzle */ = {
@@ -978,7 +993,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DA5BFA43147E415C00F98B1E /* MasterPassword */,
+				DA5BFA43147E415C00F98B1E /* Master Password */,
 				DAC77CAC148291A600BCF976 /* Pearl */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
 				DA4425CA1557BED40052177D /* UbiquityStoreManager */,
@@ -1058,6 +1073,11 @@
 				DA5E5D0A1724A667003798D8 /* InfoPlist.strings in Resources */,
 				DA5E5D0B1724A667003798D8 /* MainMenu.xib in Resources */,
 				DA5E5D551724F9C8003798D8 /* MasterPassword.iconset in Resources */,
+				DA0933CA1747A56A00DE1CEF /* MPAppsWindow.xib in Resources */,
+				DA0933CC1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png in Resources */,
+				DA0933D01747B91B00DE1CEF /* appstore.png in Resources */,
+				DA531D051748610100121B83 /* video.png in Resources */,
+				DA531D061748610100121B83 /* video@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1198,7 +1218,7 @@
 /* Begin PBXTargetDependency section */
 		DA3EF19E15A47AEB003ABF4E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DA5BFA43147E415C00F98B1E /* MasterPassword */;
+			target = DA5BFA43147E415C00F98B1E /* Master Password */;
 			targetProxy = DA3EF19D15A47AEB003ABF4E /* PBXContainerItemProxy */;
 		};
 		DAC63286148681200075AEA5 /* PBXTargetDependency */ = {
@@ -1725,7 +1745,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "AdHoc-Mac";
 		};
-		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */ = {
+		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "Master Password" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA5BFA6E147E415C00F98B1E /* Debug-Mac */,

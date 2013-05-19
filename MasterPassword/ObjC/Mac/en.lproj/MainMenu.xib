@@ -285,14 +285,6 @@
 		<object class="IBObjectContainer" key="IBDocument.Objects">
 			<array class="NSMutableArray" key="connectionRecords">
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">terminate:</string>
-						<reference key="source" ref="1050"/>
-						<reference key="destination" ref="291035877"/>
-					</object>
-					<int key="connectionID">734</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">delegate</string>
 						<reference key="source" ref="1021"/>
@@ -451,6 +443,14 @@
 						<reference key="destination" ref="846612332"/>
 					</object>
 					<int key="connectionID">783</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">terminate:</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="291035877"/>
+					</object>
+					<int key="connectionID">784</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -709,7 +709,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">783</int>
+			<int key="maxID">784</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -729,6 +729,7 @@
 						<string key="newUser:">NSMenuItem</string>
 						<string key="rebuildCloud:">id</string>
 						<string key="showPasswordWindow:">id</string>
+						<string key="terminate:">id</string>
 						<string key="togglePreference:">NSMenuItem</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
@@ -746,6 +747,10 @@
 						</object>
 						<object class="IBActionInfo" key="showPasswordWindow:">
 							<string key="name">showPasswordWindow:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="terminate:">
+							<string key="name">terminate:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="togglePreference:">
