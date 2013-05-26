@@ -1,0 +1,118 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+    font-weight: 300;
+}
+
+nav {
+    font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+}
+
+nav {
+	opacity: 0.85;
+}
+
+h1, h2, h3, h4 {
+	margin-top: 1em;
+}
+
+.content {
+	padding-top: 100px;
+	width: 900px;
+	margin: auto;
+}
+.box {
+    display:                    inline-block;
+    position:                   relative;
+    font-size:                  0;
+}
+.box img {
+    border:                     1px solid white;
+}
+
+.thumb.container {
+	clear: both;
+	border-bottom: 2px ridge white;
+	margin-bottom: 4em;
+}
+.thumb .pull-right {
+	margin-left: 5ex;
+}
+.thumb .pull-left {
+	margin-right: 5ex;
+}
+
+.column {
+	display: inline-block;
+	margin: 0 2em;
+	vertical-align: top;
+}
+
+.navbar .nav .img {
+	padding: 4px;
+}
+
+.navbar .nav .img img {
+	display: block;
+	height: 32px;
+}
+
+header {
+	position: relative;
+
+	color: white;
+	text-shadow: black 0 1px 50px, black 0 1px 50px,  black 0 1px 50px;
+	box-shadow: 0 1px 5px #000;
+}
+#app header {
+	height: 80%;
+	/*background: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.5) 100%), black url("../img/shot-laptop-leaning-iphone.png") center top / cover no-repeat;*/
+	/*background: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.5) 100%), black url("../img/shot-laptop-standing-iphone-separate.png") center top / cover no-repeat;*/
+	/*background: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.5) 100%), black url("../img/shot-laptop-standing-iphone-facing.png") center center / cover no-repeat;*/
+	background: radial-gradient(ellipse at 30% 50%, rgba(0,0,0,0.3) 50%,rgba(0,0,0,1) 100%), black url("../img/shot-laptop-standing-iphone-angled-flipped.png") center center / cover no-repeat;
+}
+#algorithm header {
+	height: 40%;
+	background: radial-gradient(ellipse at 30% 50%, rgba(0,0,0,0.3) 50%,rgba(0,0,0,1) 100%), url("../img/mp-process-angled.png") 40% center / contain no-repeat, linear-gradient( to top, #272727, #222222 );
+	background-attachment: fixed;
+}
+header .content {
+	position: absolute;
+	width: 900px;
+	bottom: 5px;
+	left: 50%;
+	margin-left: -450px;
+
+	text-align: right;
+
+	/*background: linear-gradient(to bottom, rgba(0,0,0,0) 85%, rgba(0,0,0,0.7) 85%);*/
+	/*background: black url("../img/shot-laptop-leaning-iphone.png") center top / cover no-repeat;*/
+}
+header h1 {
+	font-size: 4em;
+}
+header h2 {
+	font-size: 2em;
+	font-weight: normal;
+}
+footer {
+	overflow: hidden;
+	text-align: center;
+}
+footer h1 {
+	background: #EEE;
+
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+	font-size: 170%;
+	font-weight: 100;
+}
+footer .content {
+	margin: 1em auto;
+	padding: 0;
+}
+footer .column {
+	text-align: left;
+}
