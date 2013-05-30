@@ -33,8 +33,6 @@
 		DA4C45F4173B57B700745CC5 /* NSURL+UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4C45F2173B57B700745CC5 /* NSURL+UbiquityStoreManager.h */; };
 		DA4C45F5173B57B700745CC5 /* NSURL+UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4C45F3173B57B700745CC5 /* NSURL+UbiquityStoreManager.m */; };
 		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
-		DA531D051748610100121B83 /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = DA531D031748610000121B83 /* video.png */; };
-		DA531D061748610100121B83 /* video@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA531D041748610100121B83 /* video@2x.png */; };
 		DA5E5C8817248AA1003798D8 /* crypto_aesctr.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C7B17248AA1003798D8 /* crypto_aesctr.h */; };
 		DA5E5C8917248AA1003798D8 /* crypto_scrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C7C17248AA1003798D8 /* crypto_scrypt.h */; };
 		DA5E5C8A17248AA1003798D8 /* memlimit.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C7D17248AA1003798D8 /* memlimit.h */; };
@@ -213,8 +211,6 @@
 		DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUbiquityStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA4C45F2173B57B700745CC5 /* NSURL+UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+UbiquityStoreManager.h"; sourceTree = "<group>"; };
 		DA4C45F3173B57B700745CC5 /* NSURL+UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+UbiquityStoreManager.m"; sourceTree = "<group>"; };
-		DA531D031748610000121B83 /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video.png; sourceTree = "<group>"; };
-		DA531D041748610100121B83 /* video@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video@2x.png"; sourceTree = "<group>"; };
 		DA5BFA44147E415C00F98B1E /* Master Password.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Master Password.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5BFA4A147E415C00F98B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -618,8 +614,6 @@
 		DACA23B51705DF7D002C6C22 /* Media */ = {
 			isa = PBXGroup;
 			children = (
-				DA531D031748610000121B83 /* video.png */,
-				DA531D041748610100121B83 /* video@2x.png */,
 				DA0933CF1747B91B00DE1CEF /* appstore.png */,
 				DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */,
 				DA5E5D541724F9C8003798D8 /* MasterPassword.iconset */,
@@ -1076,8 +1070,6 @@
 				DA0933CA1747A56A00DE1CEF /* MPAppsWindow.xib in Resources */,
 				DA0933CC1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png in Resources */,
 				DA0933D01747B91B00DE1CEF /* appstore.png in Resources */,
-				DA531D051748610100121B83 /* video.png in Resources */,
-				DA531D061748610100121B83 /* video@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

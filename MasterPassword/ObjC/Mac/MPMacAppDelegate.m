@@ -127,7 +127,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (IBAction)togglePreference:(NSMenuItem *)sender {
 
     if (sender == self.useICloudItem)
-        [self storeManager].cloudEnabled = sender.state == NSOnState;
+        [self storeManager].cloudEnabled = !(sender.state == NSOnState);
     if (sender == self.rememberPasswordItem)
         [MPConfig get].rememberLogin = [NSNumber numberWithBool:![[MPConfig get].rememberLogin boolValue]];
     if (sender == self.savePasswordItem) {
@@ -358,15 +358,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }
 
     self.useICloudItem.state = self.storeManager.cloudEnabled? NSOnState: NSOffState;
-    self.useICloudItem.enabled = !self.storeManager.cloudEnabled;
-    if (self.storeManager.cloudEnabled) {
-        self.useICloudItem.title = @"Use iCloud (Required)";
-        self.useICloudItem.toolTip = @"iCloud is required in this version.  Future versions will work without iCloud as well.";
-    }
-    else {
-        self.useICloudItem.title = @"Use iCloud (Required)";
-        self.useICloudItem.toolTip = nil;
-    }
 }
 
 - (IBAction)showPasswordWindow:(id)sender {
@@ -407,14 +398,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     [moc saveToStore];
     return NSTerminateNow;
-}
-
-#pragma mark - UbiquityStoreManagerDelegate
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager willLoadStoreIsCloud:(BOOL)isCloudStore {
-
-    manager.cloudEnabled = YES;
-
-    [super ubiquityStoreManager:manager willLoadStoreIsCloud:isCloudStore];
 }
 
 @end
