@@ -19,89 +19,6 @@
 
         <link rel="stylesheet" type="text/css" href="css/ml-shadows.css" />
         <link rel="stylesheet" type="text/css" href="css/buttons/buttons.css" />
-
-        <!-- Google Analytics -->
-        <script type="text/javascript">
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', 'UA-90535-15']);
-            _gaq.push(['_trackPageview']);
-
-            (function() {
-                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();
-        </script>
-
-        <!-- Get Satisfaction -->
-        <!--script type="text/javascript" charset="utf-8">
-          var is_ssl = ("https:" == document.location.protocol);
-          var asset_host = is_ssl ? "https://d3rdqalhjaisuu.cloudfront.net/" : "http://d3rdqalhjaisuu.cloudfront.net/";
-          document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
-        </script>
-        <script type="text/javascript" charset="utf-8">
-          var feedback_widget_options = {};
-          feedback_widget_options.display = "overlay";  
-          feedback_widget_options.company = "lyndir";
-          feedback_widget_options.placement = "right";
-          feedback_widget_options.color = "#222";
-          feedback_widget_options.style = "question";
-          var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
-        </script-->
-
-        <!-- UserEcho -->
-        <script type='text/javascript'>
-            var _ues = {
-            host:'support.lyndir.com',
-            forum:'13031',
-            lang:'en',
-            tab_icon_show:false,
-            tab_corner_radius:5,
-            tab_font_size:20,
-            tab_image_hash:'RmVlZGJhY2s%3D',
-            tab_alignment:'right',
-            tab_text_color:'#FFFFFF',
-            tab_bg_color:'#DDDDDD',
-            tab_hover_color:'#CCCCCC'
-            };
-
-            (function() {
-                var _ue = document.createElement('script'); _ue.type = 'text/javascript'; _ue.async = true;
-                _ue.src = ('https:' == document.location.protocol ? 'https://s3.amazonaws.com/' : 'http://') + 'cdn.userecho.com/js/widget-1.4.gz.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(_ue, s);
-              })();
-        </script>
-
-        <!-- AdWords -->
-        <script type="text/javascript">
-            /* <![CDATA[ */
-            goog_snippet_vars = function() {
-                var w = window;
-                w.google_conversion_id = 1015576061;
-                w.google_conversion_label = "PcXqCPPz5AIQ_euh5AM";
-                w.google_conversion_value = 4;
-            }
-            goog_report_conversion = function(url) {
-                goog_snippet_vars();
-                window.google_conversion_format = "3";
-                window.google_is_call = true;
-                var opt = new Object();
-                opt.onload_callback = function() {
-                    if (typeof(url) != 'undefined') {
-                        window.location = url;
-                    }
-                }
-                var conv_handler = window['google_trackConversion'];
-                if (typeof(conv_handler) == 'function') {
-                    conv_handler(opt);
-                }
-            }
-            /* ]]> */
-        </script>
-        <script type="text/javascript" src="http://www.googleadservices.com/pagead/conversion_async.js"></script>
-
-        <!-- Google +1 -->
-        <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
     </head>
 
     <body itemscope itemtype="http://schema.org/MobileSoftwareApplication" id="algorithm">
@@ -131,24 +48,30 @@
             </div>
         </nav>
 
-        <header><div class="content">
+        <header>
+            <img class="background" src="img/mp-process-angled.png" data-stellar-ratio="2.5" />
+            <div class="container">
         
-            <!-- <div class="box effect-8">
-                iframe id="ytplayer" type="text/html" width="640" height="360" frameborder="0"
-                    src="http://www.youtube.com/embed/QTfA0O7YnHQ?origin=http://masterpassword.lyndir.com&autohide=1&autoplay=0&rel=0&showinfo=0&theme=light&color=white"></iframe
-                <iframe width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen
-                    src="http://player.vimeo.com/video/45803664?title=0&amp;byline=0&amp;portrait=0&amp;color=ffffff"></iframe>
-            </div> -->
+                <!-- <div class="box effect-8">
+                    iframe id="ytplayer" type="text/html" width="640" height="360" frameborder="0"
+                        src="http://www.youtube.com/embed/QTfA0O7YnHQ?origin=http://masterpassword.lyndir.com&autohide=1&autoplay=0&rel=0&showinfo=0&theme=light&color=white"></iframe
+                    <iframe width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen
+                        src="http://player.vimeo.com/video/45803664?title=0&amp;byline=0&amp;portrait=0&amp;color=ffffff"></iframe>
+                </div> -->
 
-            <h2>The Master Password Algorithm</h2>
-        
-        </div></header>
+                <div class="content">
+                    <h2>The Master Password Algorithm</h2>
+                </div>
+            
+            </div>
+        </header>
 
         <section><div class="content">
         
-            <div class="thumb container">
+            <div class="thumb clearfix">
                 <p><b>Master Password is <em>an algorithm used to generate unique passwords</em></b> for websites, email accounts, or anything else <em>based only on easily reproducible input</em>.<br />
                     The goal is a process that avoids all the problems involved with other password solutions.</p>
+                <p>The Master Password algorithm is <i>open</i>: this page describes its inner workings in detail.  We believe the following is an important lesson we should all learn: Regardless of how much encryption a solution claims, <a href="http://www.geekzone.co.nz/foobar/5823">if you don't know how it works, you cannot assume it is secure</a> (at least, not the kind of secure you care about).</p>
 
                 <h1>The Password Problem</h1>
                 <img class="pull-right" src="img/thumb-authenticate.png" />
@@ -187,7 +110,7 @@
                 </p>
             </div>
 
-            <div class="thumb container">
+            <div class="thumb clearfix">
                 <img class="pull-left" src="img/thumb-process-black.png" />
                 <h1>How Does It Work?</h1>
                 <p>The user is expected to remember the following information:
@@ -219,14 +142,14 @@
                 <p>The purpose of this process is to deter any attempts at brute-forcing a user's master password from a known site password.  The key derivation is done using the <a href="http://www.tarsnap.com/scrypt.html" onclick="_gaq.push(['_trackPageview', '/outbound/tarsnap.com/scrypt.html">scrypt</a> algorithm, which guarantees that the process sufficiently time- and resource-consuming to make brute-forcing an infeasible attack.</p>
                 <p>The key derivation is salted by the user's full name to prevent the generation of rainbow tables on the algorithm.  This salt is not secret, and the user's full name is chosen because it is an input of sufficiently high entropy while being (hopefully) impossible to forget by the user.</p>
 
-                <pre>key   = scrypt( P, S, N, r, p, dkLen )
-                     where
-                     P     = master password
-                     S     = "com.lyndir.masterpassword" . name length . name
-                     N     = 32768
-                     r     = 8
-                     p     = 2
-                     dkLen = 64</pre>
+<pre>key   = scrypt( P, S, N, r, p, dkLen )
+where
+P     = master password
+S     = "com.lyndir.masterpassword" . name length . name
+N     = 32768
+r     = 8
+p     = 2
+dkLen = 64</pre>
 
                 <h1>The Template Seed</h1>
                 <p>With the master <code>key</code> known, we can proceed to calculate a template <code>seed</code> for the site.  The template <code>seed</code> is essentially the site-specific secret in binary form.</p>
@@ -248,8 +171,8 @@
                     To create the output password, the bytes in the template <code>seed</code> are encoded according to the <code>template</code>.  The first <code>seed</code> byte is used to determine which of the type's templates to use for encoding an output password.  We take the byte value of the first <code>seed</code> byte modulo the amount of <code>templates</code> set for the chosen password type and use the result as a zero-based index in the <code>templates</code> list for the password type.
                 </p>
 
-                <pre>templates = [ "CvcvCvcvnoCvcv", "CvcvnoCvcvCvcv", "CvcvCvcvCvcvno", ... ]
-                     template  = templates[ seed[0] % count( templates ) ]</pre>
+<pre>templates = [ "CvcvCvcvnoCvcv", "CvcvnoCvcvCvcv", "CvcvCvcvCvcvno", ... ]
+template  = templates[ seed[0] % count( templates ) ]</pre>
 
                 <p>
                     Now that we know what <code>template</code> to use for building our output password, all that's left is to iterate the <code>template</code>, and produce a character of password output for each step.  When we iterate the <code>template</code> (index <code>i</code>), we look in the character group identified by the character (string <code>passChars</code>) in the <code>template</code> at index <code>i</code>.
@@ -258,8 +181,8 @@
                     We use the <code>seed</code>'s byte value at index <code>i + 1</code> modulo the amount of characters in the character class to determine which character (<code>passChar</code>) in the class to use for the output password at index <code>i</code>.
                 </p>
 
-                <pre>passChar    = passChars[ seed[i + 1] % count( passChars ) ]
-                     passWord[i] = passChar</pre>
+<pre>passChar    = passChars[ seed[i + 1] % count( passChars ) ]
+passWord[i] = passChar</pre>
 
                 <p>The result is an encoded <code>passWord</code> string that contains the password generated for the site, such as:</p>
                 <h2 class="text-center well well-large">CuzaSasy3*Rimo</h2>
@@ -386,8 +309,98 @@
 
         </div></footer>
 
+        <!-- Scripts -->
         <script src="http://code.jquery.com/jquery.js"></script>
         <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.stellar.min.js"></script>
+        <script type="text/javascript">
+            $(function(){
+                $.stellar();
+            });
+        </script>
+
+        <!-- Google Analytics -->
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-90535-15']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+
+        <!-- Get Satisfaction -->
+        <!--script type="text/javascript" charset="utf-8">
+          var is_ssl = ("https:" == document.location.protocol);
+          var asset_host = is_ssl ? "https://d3rdqalhjaisuu.cloudfront.net/" : "http://d3rdqalhjaisuu.cloudfront.net/";
+          document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript" charset="utf-8">
+          var feedback_widget_options = {};
+          feedback_widget_options.display = "overlay";  
+          feedback_widget_options.company = "lyndir";
+          feedback_widget_options.placement = "right";
+          feedback_widget_options.color = "#222";
+          feedback_widget_options.style = "question";
+          var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
+        </script-->
+
+        <!-- UserEcho -->
+        <script type='text/javascript'>
+            var _ues = {
+            host:'support.lyndir.com',
+            forum:'13031',
+            lang:'en',
+            tab_icon_show:false,
+            tab_corner_radius:5,
+            tab_font_size:20,
+            tab_image_hash:'RmVlZGJhY2s%3D',
+            tab_alignment:'right',
+            tab_text_color:'#FFFFFF',
+            tab_bg_color:'#DDDDDD',
+            tab_hover_color:'#CCCCCC'
+            };
+
+            (function() {
+                var _ue = document.createElement('script'); _ue.type = 'text/javascript'; _ue.async = true;
+                _ue.src = ('https:' == document.location.protocol ? 'https://s3.amazonaws.com/' : 'http://') + 'cdn.userecho.com/js/widget-1.4.gz.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(_ue, s);
+              })();
+        </script>
+
+        <!-- AdWords -->
+        <script type="text/javascript">
+            /* <![CDATA[ */
+            goog_snippet_vars = function() {
+                var w = window;
+                w.google_conversion_id = 1015576061;
+                w.google_conversion_label = "PcXqCPPz5AIQ_euh5AM";
+                w.google_conversion_value = 4;
+            }
+            goog_report_conversion = function(url) {
+                goog_snippet_vars();
+                window.google_conversion_format = "3";
+                window.google_is_call = true;
+                var opt = new Object();
+                opt.onload_callback = function() {
+                    if (typeof(url) != 'undefined') {
+                        window.location = url;
+                    }
+                }
+                var conv_handler = window['google_trackConversion'];
+                if (typeof(conv_handler) == 'function') {
+                    conv_handler(opt);
+                }
+            }
+            /* ]]> */
+        </script>
+        <script type="text/javascript" src="http://www.googleadservices.com/pagead/conversion_async.js"></script>
+
+        <!-- Google +1 -->
+        <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
     </body>
 
 </html>

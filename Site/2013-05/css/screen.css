@@ -21,7 +21,7 @@ h1, h2, h3, h4 {
 
 .content {
 	padding-top: 100px;
-	width: 900px;
+	width: 940px;
 	margin: auto;
 }
 .box {
@@ -33,7 +33,7 @@ h1, h2, h3, h4 {
     border:                     1px solid white;
 }
 
-.thumb.container {
+.thumb {
 	clear: both;
 	border-bottom: 2px ridge white;
 	margin-bottom: 4em;
@@ -62,29 +62,53 @@ h1, h2, h3, h4 {
 
 header {
 	position: relative;
+	overflow: hidden;
 
 	color: white;
-	text-shadow: black 0 1px 50px, black 0 1px 50px,  black 0 1px 50px;
+	background: black;
+	text-shadow: black 0 1px 50px;
 	box-shadow: 0 1px 5px #000;
+}
+header .container {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+
+	background: radial-gradient(70% 50% at 30% 50%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.8) 100%);
+}
+header .background {
+	position: absolute;
+	width: 100%;
+	height: 100%;
 }
 #app header {
 	height: 80%;
-	/*background: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.5) 100%), black url("../img/shot-laptop-leaning-iphone.png") center top / cover no-repeat;*/
-	/*background: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.5) 100%), black url("../img/shot-laptop-standing-iphone-separate.png") center top / cover no-repeat;*/
-	/*background: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.5) 100%), black url("../img/shot-laptop-standing-iphone-facing.png") center center / cover no-repeat;*/
-	background: radial-gradient(ellipse at 30% 50%, rgba(0,0,0,0.3) 50%,rgba(0,0,0,1) 100%), black url("../img/shot-laptop-standing-iphone-angled-flipped.png") center center / cover no-repeat;
+}
+#app header .background {
+	background: url('../img/shot-laptop-standing-iphone-angled-flipped.png') center center;
+    background-size: cover;
 }
 #algorithm header {
 	height: 40%;
-	background: radial-gradient(ellipse at 30% 50%, rgba(0,0,0,0.3) 50%,rgba(0,0,0,1) 100%), url("../img/mp-process-angled.png") 40% center / contain no-repeat, linear-gradient( to top, #272727, #222222 );
-	background-attachment: fixed;
+	
+	background: #272727;
+}
+#algorithm header .background {
+	width: 940px;
+	height: auto;
+	left: 50%;
+	top: -10%;
+	margin-left: -470px;
+}
+#algorithm header .container {
+	background: radial-gradient(50% 50% at 50% 30%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.8) 100%);
 }
 header .content {
 	position: absolute;
-	width: 900px;
 	bottom: 5px;
 	left: 50%;
-	margin-left: -450px;
+	margin-left: -470px;
 
 	text-align: right;
 
