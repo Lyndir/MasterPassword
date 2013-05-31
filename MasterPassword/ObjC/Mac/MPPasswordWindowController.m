@@ -60,8 +60,11 @@
     }];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:NSWindowWillCloseNotification object:self.window queue:nil usingBlock:^(NSNotification *note) {
-        [NSApp endSheet:[self.window attachedSheet]];
-        [[NSApplication sharedApplication] hide:nil];
+                NSWindow *sheet = [self.window attachedSheet];
+                if (sheet)
+                    [NSApp endSheet:sheet];
+                
+                [NSApp hide:nil];
     }];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:MPSignedOutNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
@@ -201,6 +204,7 @@
                 NSString *password = [(NSSecureTextField *)alert.accessoryView stringValue];
                 [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
                     MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:moc];
+                    NSString *userName = activeUser.name;
                     BOOL success = [[MPMacAppDelegate get] signInAsUser:activeUser saveInContext:moc
                                                     usingMasterPassword:password];
                     self.inProgress = NO;
@@ -212,7 +216,7 @@
                             self.contentContainer.alphaValue = 1;
                         else {
                             [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
-                                    NSLocalizedDescriptionKey : PearlString( @"Incorrect master password for user %@", activeUser.name )
+                                    NSLocalizedDescriptionKey : PearlString( @"Incorrect master password for user %@", userName )
                             }]] beginSheetModalForWindow:self.window modalDelegate:self
                                           didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertIncorrectMP];
                         }

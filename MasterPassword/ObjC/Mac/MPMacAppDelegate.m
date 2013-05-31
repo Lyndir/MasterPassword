@@ -224,10 +224,13 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     __weak id weakSelf = self;
     [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
         [weakSelf updateMenuItems];
-    }           forKeyPath:@"key" options:NSKeyValueObservingOptionInitial context:nil];
+    }           forKeyPath:@"key" options:0 context:nil];
     [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
         [weakSelf updateMenuItems];
-    }           forKeyPath:@"activeUser" options:NSKeyValueObservingOptionInitial context:nil];
+    }           forKeyPath:@"activeUser" options:0 context:nil];
+    [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
+        [weakSelf updateMenuItems];
+    }           forKeyPath:@"storeManager.cloudAvailable" options:0 context:nil];
 
     // Status item.
     self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
@@ -358,6 +361,15 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }
 
     self.useICloudItem.state = self.storeManager.cloudEnabled? NSOnState: NSOffState;
+    self.useICloudItem.enabled = self.storeManager.cloudAvailable;
+    if (self.storeManager.cloudAvailable) {
+        self.useICloudItem.title = @"Use iCloud";
+        self.useICloudItem.toolTip = nil;
+    }
+    else {
+        self.useICloudItem.title = @"Use iCloud (Unavailable)";
+        self.useICloudItem.toolTip = @"iCloud is not set up for your Mac user.";
+    }
 }
 
 - (IBAction)showPasswordWindow:(id)sender {
