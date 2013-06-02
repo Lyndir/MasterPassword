@@ -1,27 +1,28 @@
-<!DOCTYPE HTML>
-
-<html itemscope itemtype="http://schema.org/Product">
-
+<!DOCTYPE html>
+<html class="no-js" itemscope itemtype="http://schema.org/Product">
     <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title itemprop="name">Master Password &mdash; Secure your life, forget your passwords.</title>
-
-        <link rel="icon" href="img/favicon.png" type="image/x-png" />
-        <link rel="shortcut icon" href="img/favicon.png" type="image/x-png" />
-
-        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
         <meta itemprop="description" content="Master Password is an ingenious password solution that makes your passwords truly impossible to lose." />
         <meta itemprop="image" content="http://masterpassword.lyndir.com/img/iTunesArtwork-Rounded.png" />
         <meta name="apple-itunes-app" content="app-id=510296984" />
+        <meta name="viewport" content="width=device-width">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" media="screen" href="css/screen.css" />
+        <link rel="icon" href="img/favicon.png" type="image/x-png" />
+        <link rel="shortcut icon" href="img/favicon.png" type="image/x-png" />
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="css/main.css">
 
-        <link rel="stylesheet" type="text/css" href="css/ml-shadows.css" />
-        <link rel="stylesheet" type="text/css" href="css/buttons/buttons.css" />
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="js/vendor/prefixfree.min.js"></script>
     </head>
-
     <body itemscope itemtype="http://schema.org/MobileSoftwareApplication" id="algorithm">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
 
         <nav class="navbar navbar-fixed-top">
             <div class="navbar-inner">
@@ -310,27 +311,24 @@ passWord[i] = passChar</pre>
         </div></footer>
 
         <!-- Scripts -->
-        <script src="http://code.jquery.com/jquery.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/jquery.stellar.min.js"></script>
-        <script type="text/javascript">
-            $(function(){
-                $.stellar();
-            });
-        </script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="js/vendor/bootstrap.min.js"></script>
+
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
 
         <!-- Google Analytics -->
-        <script type="text/javascript">
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', 'UA-90535-15']);
-            _gaq.push(['_trackPageview']);
-
-            (function() {
-                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();
+        <script>
+            var _gaq=[['_setAccount','UA-90535-15'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
         </script>
+
+        <!-- Google +1 -->
+        <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 
         <!-- Get Satisfaction -->
         <!--script type="text/javascript" charset="utf-8">
@@ -398,9 +396,6 @@ passWord[i] = passChar</pre>
             /* ]]> */
         </script>
         <script type="text/javascript" src="http://www.googleadservices.com/pagead/conversion_async.js"></script>
-
-        <!-- Google +1 -->
-        <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
     </body>
 
 </html>
