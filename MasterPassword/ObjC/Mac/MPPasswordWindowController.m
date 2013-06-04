@@ -30,6 +30,7 @@
 
 - (void)windowDidLoad {
 
+    NSLog(@"DidLoad:\n%@", [NSThread callStackSymbols]);
     if ([[MPMacConfig get].dialogStyleHUD boolValue])
         self.window.styleMask = NSHUDWindowMask | NSTitledWindowMask | NSUtilityWindowMask | NSClosableWindowMask;
     else
@@ -55,11 +56,13 @@
     }                          forKeyPath:@"key" options:NSKeyValueObservingOptionInitial context:nil];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:NSWindowDidBecomeKeyNotification object:self.window queue:nil usingBlock:^(NSNotification *note) {
+                NSLog(@"DidBecomeKey:\n%@", [NSThread callStackSymbols]);
         [self checkLoadedAndUnlocked];
         [self.siteField selectText:nil];
     }];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:NSWindowWillCloseNotification object:self.window queue:nil usingBlock:^(NSNotification *note) {
+                NSLog(@"WillClose:\n%@", [NSThread callStackSymbols]);
                 NSWindow *sheet = [self.window attachedSheet];
                 if (sheet)
                     [NSApp endSheet:sheet];
@@ -87,8 +90,10 @@
         MPUserEntity *activeUser = [MPMacAppDelegate get].activeUserForThread;
         if (activeUser && !activeUser.saveKey)
             [self unlock];
-        else
+        else {
+            NSLog(@"Closing: !inProgress && !key && (!activeUser || activeUser.saveKey)");
             [self.window close];
+        }
     }
 }
 
@@ -160,6 +165,7 @@
 - (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 
     if (contextInfo == MPAlertIncorrectMP) {
+        NSLog(@"Closing: Incorrect MP, button: %ld", returnCode);
         [self.window close];
         return;
     }
@@ -191,6 +197,7 @@
 
             case NSAlertOtherReturn: {
                 // "Cancel" button.
+                NSLog(@"Closing: Unlock MP, button: %ld", (long)returnCode);
                 [self.window close];
                 return;
             }
@@ -288,6 +295,7 @@
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector {
 
     if (commandSelector == @selector(cancel:)) { // Escape without completion.
+        NSLog(@"Closing: ESC without completion");
         [self.window close];
         return YES;
     }

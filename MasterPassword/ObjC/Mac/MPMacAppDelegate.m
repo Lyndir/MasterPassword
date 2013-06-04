@@ -121,7 +121,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     [self updateMenuItems];
 
-    [self.statusItem popUpStatusItemMenu:self.statusMenu];
+    [self.statusView popUpMenu];
 }
 
 - (IBAction)togglePreference:(NSMenuItem *)sender {
@@ -195,6 +195,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)terminate:(id)sender {
 
+    NSLog(@"Closing: Terminating");
     [self.passwordWindow close];
     self.passwordWindow = nil;
     
@@ -205,6 +206,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://itunes.apple.com/app/id510296984"]];
 
+    NSLog(@"Closing: App Store");
     [self.appWindowDontShow.window close];
     self.appWindowDontShow = nil;
 }
@@ -233,11 +235,12 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }           forKeyPath:@"storeManager.cloudAvailable" options:0 context:nil];
 
     // Status item.
-    self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
-    self.statusItem.image = [NSImage imageNamed:@"menu-icon"];
-    self.statusItem.highlightMode = YES;
-    self.statusItem.target = self;
-    self.statusItem.action = @selector(showMenu);
+    self.statusView = [[RHStatusItemView alloc] initWithStatusBarItem:
+                       [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength]];
+    self.statusView.image = [NSImage imageNamed:@"menu-icon"];
+    self.statusView.menu = self.statusMenu;
+    self.statusView.target = self;
+    self.statusView.action = @selector(showMenu);
 
     [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil queue:nil usingBlock:
             ^(NSNotification *note) {
@@ -259,6 +262,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                     if (![self.passwordWindow.window isVisible])
                         self.passwordWindow = nil;
                     else {
+                        NSLog(@"Closing: dialogStyleHUD && passwordWindow.isVisible");
                         [self.passwordWindow close];
                         self.passwordWindow = nil;
                         [self showPasswordWindow:nil];
@@ -281,14 +285,20 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     if (status != noErr)
     err(@"Error registering 'lock' hotkey: %d", status);
     
-    // iOS App window
-    if ([[MPMacConfig get].showAppWindow boolValue]) {
+    // Initial display.
+    [NSApp activateIgnoringOtherApps:YES];
+    if (YES || [[MPMacConfig get].showAppWindow boolValue]) {
         [self.appsWindow = [[NSWindowController alloc] initWithWindowNibName:@"MPAppsWindow" owner:self] showWindow:self];
         [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillCloseNotification object:self.appsWindow.window queue:nil
                                                       usingBlock:^(NSNotification *note) {
                                                           [MPMacConfig get].showAppWindow = @(self.appWindowDontShow.state == NSOffState);
                                                       }];
     }
+    [[NSOperationQueue mainQueue] addOperation:[NSBlockOperation blockOperationWithBlock:^{
+        if (YES || [[MPMacConfig get].firstRun boolValue]) {
+            [self showMenu];
+        }
+    }]];
 }
 
 - (void)setActiveUser:(MPUserEntity *)activeUser {
@@ -296,6 +306,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     BOOL reopenPasswordWindow = [self.passwordWindow.window isVisible];
     
     if (![[self activeUserForThread].objectID isEqual:activeUser.objectID]) {
+        NSLog(@"Closing: activeUser changed: %@ -> %@, reopening: %d", [self activeUserForThread].objectID, activeUser.objectID, reopenPasswordWindow);
         [self.passwordWindow close];
         self.passwordWindow = nil;
         [super setActiveUser:activeUser];
@@ -375,8 +386,10 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (IBAction)showPasswordWindow:(id)sender {
 
     // If no user, can't activate.
-    if (![self activeUserForThread])
+    if (YES || ![self activeUserForThread]) {
+        [[NSAlert alertWithMessageText:@"No User Selected" defaultButton:[PearlStrings get].commonButtonOkay alternateButton:nil otherButton:nil informativeTextWithFormat:@"Begin by selecting or creating your user from the status menu (●●●|) next to the clock.", nil] runModal];
         return;
+    }
 
     // Activate the app if not active.
     if (![[NSApplication sharedApplication] isActive])

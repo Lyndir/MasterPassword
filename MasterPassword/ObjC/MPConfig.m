@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
+#import "MPConfig.h"
 #import "MPAppDelegate_Shared.h"
 
 @implementation MPConfig

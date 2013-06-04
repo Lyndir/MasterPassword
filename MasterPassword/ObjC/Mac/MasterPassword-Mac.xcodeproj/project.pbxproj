@@ -68,6 +68,9 @@
 		DA5E5D0C1724A667003798D8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CC61724A667003798D8 /* main.m */; };
 		DA5E5D0D1724A667003798D8 /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CC71724A667003798D8 /* MasterPassword.xcdatamodeld */; };
 		DA5E5D551724F9C8003798D8 /* MasterPassword.iconset in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5D541724F9C8003798D8 /* MasterPassword.iconset */; };
+		DABC6C02175D8C85000C15D4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
+		DABC6C15175D8CE1000C15D4 /* RHStatusItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = DABC6C14175D8CE1000C15D4 /* RHStatusItemView.m */; };
+		DABC6C16175D8E3A000C15D4 /* libRHStatusItemView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DABC6C01175D8C85000C15D4 /* libRHStatusItemView.a */; };
 		DAC6326D148680650075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DACA22BB1705DE7D002C6C22 /* UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA22B71705DE7D002C6C22 /* UbiquityStoreManager.m */; };
@@ -188,6 +191,18 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		DABC6BFF175D8C85000C15D4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Indexing.m"; sourceTree = "<group>"; };
 		93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Indexing.h"; sourceTree = "<group>"; };
@@ -275,6 +290,9 @@
 		DA6701DD16406B7300B61001 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		DA672D2E14F92C6B004A189C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		DABB981515100B4000B05417 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		DABC6C01175D8C85000C15D4 /* libRHStatusItemView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRHStatusItemView.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DABC6C13175D8CE1000C15D4 /* RHStatusItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHStatusItemView.h; sourceTree = "<group>"; };
+		DABC6C14175D8CE1000C15D4 /* RHStatusItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHStatusItemView.m; sourceTree = "<group>"; };
 		DAC6326C148680650075AEA5 /* libjrswizzle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjrswizzle.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC632871486D95D0075AEA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		DAC77CAD148291A600BCF976 /* libPearl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPearl.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -407,11 +425,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DABC6C16175D8E3A000C15D4 /* libRHStatusItemView.a in Frameworks */,
 				DA16B33F170661D4000A0EAB /* libUbiquityStoreManager.a in Frameworks */,
 				DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */,
 				DA16B342170661E0000A0EAB /* Security.framework in Frameworks */,
 				DA16B345170661F2000A0EAB /* libPearl.a in Frameworks */,
 				DA16B344170661EE000A0EAB /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DABC6BFE175D8C85000C15D4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DABC6C02175D8C85000C15D4 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,6 +482,7 @@
 				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
 				DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */,
 				DA3EF17915A47744003ABF4E /* Tests.octest */,
+				DABC6C01175D8C85000C15D4 /* libRHStatusItemView.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -563,6 +591,16 @@
 			path = Mac;
 			sourceTree = "<group>";
 		};
+		DABC6C0E175D8CE1000C15D4 /* RHStatusItemView */ = {
+			isa = PBXGroup;
+			children = (
+				DABC6C13175D8CE1000C15D4 /* RHStatusItemView.h */,
+				DABC6C14175D8CE1000C15D4 /* RHStatusItemView.m */,
+			);
+			name = RHStatusItemView;
+			path = RHStatusItemView/RHStatusItemView;
+			sourceTree = "<group>";
+		};
 		DAC77CAF148291A600BCF976 /* Pearl */ = {
 			isa = PBXGroup;
 			children = (
@@ -576,6 +614,7 @@
 		DACA22121705DDC5002C6C22 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				DABC6C0E175D8CE1000C15D4 /* RHStatusItemView */,
 				DACA29751705E2BD002C6C22 /* jrswizzle */,
 				DACA22181705DE28002C6C22 /* Crashlytics.framework */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
@@ -928,6 +967,23 @@
 			productReference = DA5BFA44147E415C00F98B1E /* Master Password.app */;
 			productType = "com.apple.product-type.application";
 		};
+		DABC6C00175D8C85000C15D4 /* RHStatusItemView */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DABC6C0A175D8C85000C15D4 /* Build configuration list for PBXNativeTarget "RHStatusItemView" */;
+			buildPhases = (
+				DABC6BFD175D8C85000C15D4 /* Sources */,
+				DABC6BFE175D8C85000C15D4 /* Frameworks */,
+				DABC6BFF175D8C85000C15D4 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RHStatusItemView;
+			productName = RHStatusItemView;
+			productReference = DABC6C01175D8C85000C15D4 /* libRHStatusItemView.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		DAC6326B148680650075AEA5 /* jrswizzle */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAC63274148680650075AEA5 /* Build configuration list for PBXNativeTarget "jrswizzle" */;
@@ -991,6 +1047,7 @@
 				DAC77CAC148291A600BCF976 /* Pearl */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
 				DA4425CA1557BED40052177D /* UbiquityStoreManager */,
+				DABC6C00175D8C85000C15D4 /* RHStatusItemView */,
 				DA3EF17815A47744003ABF4E /* Tests */,
 			);
 		};
@@ -1161,6 +1218,14 @@
 				DA5E5D051724A667003798D8 /* MPPasswordWindowController.m in Sources */,
 				DA5E5D0C1724A667003798D8 /* main.m in Sources */,
 				DA5E5D0D1724A667003798D8 /* MasterPassword.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DABC6BFD175D8C85000C15D4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DABC6C15175D8CE1000C15D4 /* RHStatusItemView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1646,6 +1711,24 @@
 			};
 			name = "AppStore-Mac";
 		};
+		DABC6C0B175D8C85000C15D4 /* Debug-Mac */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = "Debug-Mac";
+		};
+		DABC6C0C175D8C85000C15D4 /* AdHoc-Mac */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = "AdHoc-Mac";
+		};
+		DABC6C0D175D8C85000C15D4 /* AppStore-Mac */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = "AppStore-Mac";
+		};
 		DAC63275148680650075AEA5 /* Debug-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1746,6 +1829,15 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "AdHoc-Mac";
+		};
+		DABC6C0A175D8C85000C15D4 /* Build configuration list for PBXNativeTarget "RHStatusItemView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DABC6C0B175D8C85000C15D4 /* Debug-Mac */,
+				DABC6C0C175D8C85000C15D4 /* AdHoc-Mac */,
+				DABC6C0D175D8C85000C15D4 /* AppStore-Mac */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		DAC63274148680650075AEA5 /* Build configuration list for PBXNativeTarget "jrswizzle" */ = {
 			isa = XCConfigurationList;
