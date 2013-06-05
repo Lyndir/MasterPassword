@@ -384,16 +384,14 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 }
 
 - (IBAction)showPasswordWindow:(id)sender {
-
+    
+    [NSApp activateIgnoringOtherApps:YES];
+    
     // If no user, can't activate.
-    if (YES || ![self activeUserForThread]) {
+    if (![self activeUserForThread]) {
         [[NSAlert alertWithMessageText:@"No User Selected" defaultButton:[PearlStrings get].commonButtonOkay alternateButton:nil otherButton:nil informativeTextWithFormat:@"Begin by selecting or creating your user from the status menu (●●●|) next to the clock.", nil] runModal];
         return;
     }
-
-    // Activate the app if not active.
-    if (![[NSApplication sharedApplication] isActive])
-        [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 
     // Don't show window if we weren't already running (ie. if we haven't been activated before).
     if (!self.passwordWindow)
