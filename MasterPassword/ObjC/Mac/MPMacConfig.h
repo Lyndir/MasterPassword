@@ -12,6 +12,5 @@
 
 @property(nonatomic, retain) NSString *usedUserName;
 @property(nonatomic, retain) NSNumber *dialogStyleHUD;
-@property(nonatomic, strong) NSNumber *showAppWindow;
 
 @end

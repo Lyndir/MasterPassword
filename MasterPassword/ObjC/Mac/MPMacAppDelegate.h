@@ -18,17 +18,19 @@
 @property(nonatomic, weak) IBOutlet NSMenuItem *lockItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *showItem;
 @property(nonatomic, strong) IBOutlet NSMenu *statusMenu;
-@property(nonatomic, weak) IBOutlet NSMenuItem *useICloudItem;
+@property(nonatomic, weak) IBOutlet NSMenuItem *useCloudItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *rememberPasswordItem;
+@property(nonatomic, weak) IBOutlet NSMenuItem *openAtLoginItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *savePasswordItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *createUserItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *usersItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *dialogStyleRegular;
 @property(nonatomic, weak) IBOutlet NSMenuItem *dialogStyleHUD;
-@property(nonatomic, weak) IBOutlet NSButton *appWindowDontShow;
+@property(nonatomic, weak) IBOutlet NSButton *openAtLoginButton;
+@property(nonatomic, weak) IBOutlet NSButton *enableCloudButton;
 
 - (IBAction)showPasswordWindow:(id)sender;
-- (IBAction)togglePreference:(NSMenuItem *)sender;
+- (IBAction)togglePreference:(id)sender;
 - (IBAction)newUser:(NSMenuItem *)sender;
 - (IBAction)lock:(id)sender;
 - (IBAction)rebuildCloud:(id)sender;

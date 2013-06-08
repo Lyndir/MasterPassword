@@ -84,6 +84,18 @@
     [super windowDidLoad];
 }
 
+- (BOOL)shouldCloseDocument {
+    NSLog(@"shouldCloseDocument:\n%@", [NSThread callStackSymbols]);
+    
+    return [super shouldCloseDocument];
+}
+
+- (void)close {
+    NSLog(@"close:\n%@", [NSThread callStackSymbols]);
+
+    [super close];
+}
+
 - (void)handleUnloadedOrLocked {
 
     if (!self.inProgress && ![MPMacAppDelegate get].key) {

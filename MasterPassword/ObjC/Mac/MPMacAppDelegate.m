@@ -10,10 +10,13 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import <Carbon/Carbon.h>
+#import <ServiceManagement/ServiceManagement.h>
+
+#define LOGIN_HELPER_BUNDLE_ID @"com.lyndir.lhunath.MasterPassword.Mac.LoginHelper"
 
 @interface MPMacAppDelegate()
 
-@property(nonatomic, strong) NSWindowController *appsWindow;
+@property(nonatomic, strong) NSWindowController *initialWindow;
 @end
 
 @implementation MPMacAppDelegate
@@ -101,7 +104,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         if (!activeUser && [user.name isEqualToString:[MPMacConfig get].usedUserName])
             [self selectUser:userItem];
     }
-    
+
     [self updateMenuItems];
 }
 
@@ -124,12 +127,18 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     [self.statusView popUpMenu];
 }
 
-- (IBAction)togglePreference:(NSMenuItem *)sender {
+- (IBAction)togglePreference:(id)sender {
 
-    if (sender == self.useICloudItem)
-        [self storeManager].cloudEnabled = !(sender.state == NSOnState);
+    if (sender == self.enableCloudButton)
+        [self storeManager].cloudEnabled = (self.enableCloudButton.state == NSOnState);
+    if (sender == self.useCloudItem)
+        [self storeManager].cloudEnabled = !(self.useCloudItem.state == NSOnState);
     if (sender == self.rememberPasswordItem)
         [MPConfig get].rememberLogin = [NSNumber numberWithBool:![[MPConfig get].rememberLogin boolValue]];
+    if (sender == self.openAtLoginButton)
+        [self setLoginItemEnabled:(self.openAtLoginButton.state == NSOnState)];
+    if (sender == self.openAtLoginItem)
+        [self setLoginItemEnabled:!(self.openAtLoginItem.state == NSOnState)];
     if (sender == self.savePasswordItem) {
         [MPMacAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
             MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:context];
@@ -151,8 +160,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     NSAlert *alert = [NSAlert alertWithMessageText:@"New User"
                                      defaultButton:@"Create User" alternateButton:nil otherButton:@"Cancel"
                          informativeTextWithFormat:@"To begin, enter your full name.\n\n"
-                                                           @"IMPORTANT: Enter your name correctly, including the right capitalization, "
-                                                           @"as you would on an official document."];
+                                 @"IMPORTANT: Enter your name correctly, including the right capitalization, "
+                                 @"as you would on an official document."];
     NSTextField *nameField = [[NSTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
     [alert setAccessoryView:nameField];
     [alert layout];
@@ -195,10 +204,10 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)terminate:(id)sender {
 
-    NSLog(@"Closing: Terminating");
+    NSLog( @"Closing: Terminating" );
     [self.passwordWindow close];
     self.passwordWindow = nil;
-    
+
     [NSApp terminate:nil];
 }
 
@@ -206,9 +215,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://itunes.apple.com/app/id510296984"]];
 
-    NSLog(@"Closing: App Store");
-    [self.appWindowDontShow.window close];
-    self.appWindowDontShow = nil;
+    NSLog( @"Closing: App Store" );
+    [self.initialWindow close];
+    self.initialWindow = nil;
 }
 
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)oldValue {
@@ -236,7 +245,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     // Status item.
     self.statusView = [[RHStatusItemView alloc] initWithStatusBarItem:
-                       [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength]];
+            [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength]];
     self.statusView.image = [NSImage imageNamed:@"menu-icon"];
     self.statusView.menu = self.statusMenu;
     self.statusView.target = self;
@@ -257,12 +266,12 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                 self.savePasswordItem.state = [[MPMacAppDelegate get] activeUserForThread].saveKey? NSOnState: NSOffState;
                 self.dialogStyleRegular.state = ![[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
                 self.dialogStyleHUD.state = [[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
-                
+
                 if ([note.object isEqual:NSStringFromSelector( @selector(dialogStyleHUD) )]) {
                     if (![self.passwordWindow.window isVisible])
                         self.passwordWindow = nil;
                     else {
-                        NSLog(@"Closing: dialogStyleHUD && passwordWindow.isVisible");
+                        NSLog( @"Closing: dialogStyleHUD && passwordWindow.isVisible" );
                         [self.passwordWindow close];
                         self.passwordWindow = nil;
                         [self showPasswordWindow:nil];
@@ -275,7 +284,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     EventHotKeyRef hotKeyRef;
     EventTypeSpec hotKeyEvents[1] = { { .eventClass = kEventClassKeyboard, .eventKind = kEventHotKeyPressed } };
     OSStatus status = InstallApplicationEventHandler(NewEventHandlerUPP( MPHotKeyHander ), GetEventTypeCount( hotKeyEvents ),
-                                                     hotKeyEvents, (__bridge void *)self, NULL);
+    hotKeyEvents, (__bridge void *)self, NULL);
     if (status != noErr)
     err(@"Error installing application event handler: %d", status);
     status = RegisterEventHotKey( 35 /* p */, controlKey + cmdKey, MPShowHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
@@ -284,43 +293,37 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     status = RegisterEventHotKey( 35 /* p */, controlKey + optionKey + cmdKey, MPLockHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
     if (status != noErr)
     err(@"Error registering 'lock' hotkey: %d", status);
-    
+
     // Initial display.
     [NSApp activateIgnoringOtherApps:YES];
-    if (YES || [[MPMacConfig get].showAppWindow boolValue]) {
-        [self.appsWindow = [[NSWindowController alloc] initWithWindowNibName:@"MPAppsWindow" owner:self] showWindow:self];
-        [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillCloseNotification object:self.appsWindow.window queue:nil
-                                                      usingBlock:^(NSNotification *note) {
-                                                          [MPMacConfig get].showAppWindow = @(self.appWindowDontShow.state == NSOffState);
-                                                      }];
-    }
-    [[NSOperationQueue mainQueue] addOperation:[NSBlockOperation blockOperationWithBlock:^{
-        if (YES || [[MPMacConfig get].firstRun boolValue]) {
-            [self showMenu];
-        }
-    }]];
+    if ([[MPMacConfig get].firstRun boolValue])
+        [self.initialWindow = [[NSWindowController alloc] initWithWindowNibName:@"MPInitialWindow" owner:self] showWindow:self];
 }
 
 - (void)setActiveUser:(MPUserEntity *)activeUser {
 
     BOOL reopenPasswordWindow = [self.passwordWindow.window isVisible];
-    
+
     if (![[self activeUserForThread].objectID isEqual:activeUser.objectID]) {
-        NSLog(@"Closing: activeUser changed: %@ -> %@, reopening: %d", [self activeUserForThread].objectID, activeUser.objectID, reopenPasswordWindow);
+        NSLog( @"Closing: activeUser changed: %@ -> %@, reopening: %d", [self activeUserForThread].objectID, activeUser.objectID,
+                reopenPasswordWindow );
         [self.passwordWindow close];
         self.passwordWindow = nil;
         [super setActiveUser:activeUser];
     }
 
+    self.usersItem.state = NSMixedState;
     [[[self.usersItem submenu] itemArray] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([[obj representedObject] isEqual:[activeUser objectID]])
+        if ([[obj representedObject] isEqual:[activeUser objectID]]) {
             [obj setState:NSOnState];
+            self.usersItem.state = NSOffState;
+        }
         else
             [obj setState:NSOffState];
     }];
 
     [MPMacConfig get].usedUserName = activeUser.name;
-    
+
     if (reopenPasswordWindow)
         [self showPasswordWindow:nil];
 }
@@ -352,6 +355,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         self.lockItem.toolTip = @"Master Password is currently locked.";
     }
 
+    BOOL loginItemEnabled = [self loginItemEnabled];
+    self.openAtLoginItem.state = loginItemEnabled? NSOnState: NSOffState;
+    self.openAtLoginButton.state = loginItemEnabled? NSOnState: NSOffState;
     self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
 
     self.savePasswordItem.state = activeUser.saveKey? NSOnState: NSOffState;
@@ -371,33 +377,66 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         self.savePasswordItem.toolTip = nil;
     }
 
-    self.useICloudItem.state = self.storeManager.cloudEnabled? NSOnState: NSOffState;
-    self.useICloudItem.enabled = self.storeManager.cloudAvailable;
+    self.useCloudItem.state = self.storeManager.cloudEnabled? NSOnState: NSOffState;
+    self.enableCloudButton.state = self.storeManager.cloudEnabled? NSOnState: NSOffState;
+    self.useCloudItem.enabled = self.storeManager.cloudAvailable;
     if (self.storeManager.cloudAvailable) {
-        self.useICloudItem.title = @"Use iCloud";
-        self.useICloudItem.toolTip = nil;
+        self.useCloudItem.title = @"Use iCloud";
+        self.useCloudItem.toolTip = nil;
     }
     else {
-        self.useICloudItem.title = @"Use iCloud (Unavailable)";
-        self.useICloudItem.toolTip = @"iCloud is not set up for your Mac user.";
+        self.useCloudItem.title = @"Use iCloud (Unavailable)";
+        self.useCloudItem.toolTip = @"iCloud is not set up for your Mac user.";
     }
 }
 
 - (IBAction)showPasswordWindow:(id)sender {
-    
+
     [NSApp activateIgnoringOtherApps:YES];
-    
+
     // If no user, can't activate.
     if (![self activeUserForThread]) {
-        [[NSAlert alertWithMessageText:@"No User Selected" defaultButton:[PearlStrings get].commonButtonOkay alternateButton:nil otherButton:nil informativeTextWithFormat:@"Begin by selecting or creating your user from the status menu (●●●|) next to the clock.", nil] runModal];
+        [[NSAlert alertWithMessageText:@"No User Selected" defaultButton:[PearlStrings get].commonButtonOkay alternateButton:nil
+                           otherButton:nil informativeTextWithFormat:
+                        @"Begin by selecting or creating your user from the status menu (●●●|) next to the clock."]
+                runModal];
         return;
     }
 
     // Don't show window if we weren't already running (ie. if we haven't been activated before).
     if (!self.passwordWindow)
         self.passwordWindow = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
-    
+
     [self.passwordWindow showWindow:self];
+}
+
+- (void)setLoginItemEnabled:(BOOL)enabled {
+
+    BOOL loginItemEnabled = [self loginItemEnabled];
+    if (loginItemEnabled != enabled) {
+        if (SMLoginItemSetEnabled( (__bridge CFStringRef)LOGIN_HELPER_BUNDLE_ID, (Boolean)enabled ) == true)
+            loginItemEnabled = enabled;
+        else
+            wrn(@"Failed to set login item.");
+    }
+
+    self.openAtLoginItem.state = loginItemEnabled? NSOnState: NSOffState;
+    self.openAtLoginButton.state = loginItemEnabled? NSOnState: NSOffState;
+}
+
+- (BOOL)loginItemEnabled {
+
+    // The easy and sane method (SMJobCopyDictionary) can pose problems when the app is sandboxed. -_-
+    NSArray *jobs = (__bridge_transfer NSArray *)SMCopyAllJobDictionaries( kSMDomainUserLaunchd );
+
+    for (NSDictionary *job in jobs)
+        if ([LOGIN_HELPER_BUNDLE_ID isEqualToString:[job objectForKey:@"Label"]]) {
+            dbg(@"loginItemEnabled: %@", @([[job objectForKey:@"OnDemand"] boolValue]));
+            return [[job objectForKey:@"OnDemand"] boolValue];
+        }
+
+    dbg(@"loginItemEnabled: not found");
+    return NO;
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification {

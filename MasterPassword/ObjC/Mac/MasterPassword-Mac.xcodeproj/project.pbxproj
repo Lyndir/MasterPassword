@@ -11,7 +11,7 @@
 		93D395F08A087F8A24689347 /* NSArray+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
 		93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */; };
-		DA0933CA1747A56A00DE1CEF /* MPAppsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA0933C91747A56A00DE1CEF /* MPAppsWindow.xib */; };
+		DA0933CA1747A56A00DE1CEF /* MPInitialWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA0933C91747A56A00DE1CEF /* MPInitialWindow.xib */; };
 		DA0933CC1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */; };
 		DA0933D01747B91B00DE1CEF /* appstore.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CF1747B91B00DE1CEF /* appstore.png */; };
 		DA16B33F170661D4000A0EAB /* libUbiquityStoreManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */; };
@@ -130,6 +130,8 @@
 		DACA29741705E1A8002C6C22 /* dictionary.lst in Resources */ = {isa = PBXBuildFile; fileRef = DACA29721705E1A8002C6C22 /* dictionary.lst */; };
 		DACA298D1705E2BD002C6C22 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29771705E2BD002C6C22 /* JRSwizzle.h */; };
 		DACA299A1705E2BD002C6C22 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA298C1705E2BD002C6C22 /* JRSwizzle.m */; };
+		DAD9B5F01762CAA4001835F9 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD9B5EF1762CAA4001835F9 /* ServiceManagement.framework */; };
+		DAD9B5F11762CAB9001835F9 /* MasterPassword-Mac-LoginHelper.app in Copy LoginHelper */ = {isa = PBXBuildFile; fileRef = DAD9B5E6176299BA001835F9 /* MasterPassword-Mac-LoginHelper.app */; };
 		DAFE4A1315039824003ABA7C /* NSObject+PearlExport.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45D815039823003ABA7C /* NSObject+PearlExport.h */; };
 		DAFE4A1415039824003ABA7C /* NSObject+PearlExport.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45D915039823003ABA7C /* NSObject+PearlExport.m */; };
 		DAFE4A1515039824003ABA7C /* NSString+PearlNSArrayFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45DA15039823003ABA7C /* NSString+PearlNSArrayFormat.h */; };
@@ -189,16 +191,25 @@
 			remoteGlobalIDString = DAC6326B148680650075AEA5;
 			remoteInfo = jrswizzle;
 		};
+		DAD9B5E5176299BA001835F9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAD9B5E1176299B9001835F9 /* MasterPassword-Mac-LoginHelper.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DAD9B5C1176299B9001835F9;
+			remoteInfo = "MasterPassword-Mac-LoginHelper";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		DABC6BFF175D8C85000C15D4 /* CopyFiles */ = {
+		DAD9B5EE1762CA3A001835F9 /* Copy LoginHelper */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = "include/${PRODUCT_NAME}";
-			dstSubfolderSpec = 16;
+			dstPath = Contents/Library/LoginItems;
+			dstSubfolderSpec = 1;
 			files = (
+				DAD9B5F11762CAB9001835F9 /* MasterPassword-Mac-LoginHelper.app in Copy LoginHelper */,
 			);
+			name = "Copy LoginHelper";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -208,7 +219,7 @@
 		93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Indexing.h"; sourceTree = "<group>"; };
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
 		93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Indexing.m"; sourceTree = "<group>"; };
-		DA0933C91747A56A00DE1CEF /* MPAppsWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPAppsWindow.xib; sourceTree = "<group>"; };
+		DA0933C91747A56A00DE1CEF /* MPInitialWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPInitialWindow.xib; sourceTree = "<group>"; };
 		DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shot-laptop-leaning-iphone.png"; sourceTree = "<group>"; };
 		DA0933CF1747B91B00DE1CEF /* appstore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = appstore.png; sourceTree = "<group>"; };
 		DA16B340170661DB000A0EAB /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -226,7 +237,7 @@
 		DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUbiquityStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA4C45F2173B57B700745CC5 /* NSURL+UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+UbiquityStoreManager.h"; sourceTree = "<group>"; };
 		DA4C45F3173B57B700745CC5 /* NSURL+UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+UbiquityStoreManager.m"; sourceTree = "<group>"; };
-		DA5BFA44147E415C00F98B1E /* Master Password.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Master Password.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA5BFA44147E415C00F98B1E /* MasterPassword.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MasterPassword.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5BFA4A147E415C00F98B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		DA5BFA4E147E415C00F98B1E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -356,6 +367,8 @@
 		DACA29771705E2BD002C6C22 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
 		DACA298C1705E2BD002C6C22 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
 		DAD312C01552A20800A3F9ED /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		DAD9B5E1176299B9001835F9 /* MasterPassword-Mac-LoginHelper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "MasterPassword-Mac-LoginHelper.xcodeproj"; path = "MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper.xcodeproj"; sourceTree = "<group>"; };
+		DAD9B5EF1762CAA4001835F9 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		DAEBC45214F6364500987BF6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DAFE45D815039823003ABA7C /* NSObject+PearlExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PearlExport.h"; sourceTree = "<group>"; };
 		DAFE45D915039823003ABA7C /* NSObject+PearlExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PearlExport.m"; sourceTree = "<group>"; };
@@ -425,6 +438,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAD9B5F01762CAA4001835F9 /* ServiceManagement.framework in Frameworks */,
 				DABC6C16175D8E3A000C15D4 /* libRHStatusItemView.a in Frameworks */,
 				DA16B33F170661D4000A0EAB /* libUbiquityStoreManager.a in Frameworks */,
 				DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */,
@@ -477,7 +491,7 @@
 		DA5BFA45147E415C00F98B1E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DA5BFA44147E415C00F98B1E /* Master Password.app */,
+				DA5BFA44147E415C00F98B1E /* MasterPassword.app */,
 				DAC77CAD148291A600BCF976 /* libPearl.a */,
 				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
 				DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */,
@@ -490,6 +504,7 @@
 		DA5BFA47147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DAD9B5EF1762CAA4001835F9 /* ServiceManagement.framework */,
 				DA16B343170661EE000A0EAB /* Cocoa.framework */,
 				DA16B340170661DB000A0EAB /* Carbon.framework */,
 				DA6701DD16406B7300B61001 /* Social.framework */,
@@ -572,6 +587,7 @@
 		DA5E5CB21724A667003798D8 /* Mac */ = {
 			isa = PBXGroup;
 			children = (
+				DAD9B5E1176299B9001835F9 /* MasterPassword-Mac-LoginHelper.xcodeproj */,
 				DA5E5CB31724A667003798D8 /* MPMacAppDelegate.h */,
 				DA5E5CB41724A667003798D8 /* MPMacAppDelegate.m */,
 				DA5E5CB51724A667003798D8 /* MPMacConfig.h */,
@@ -586,7 +602,7 @@
 				DA5E5CC21724A667003798D8 /* InfoPlist.strings */,
 				DA5E5CC41724A667003798D8 /* MainMenu.xib */,
 				DA5E5CC61724A667003798D8 /* main.m */,
-				DA0933C91747A56A00DE1CEF /* MPAppsWindow.xib */,
+				DA0933C91747A56A00DE1CEF /* MPInitialWindow.xib */,
 			);
 			path = Mac;
 			sourceTree = "<group>";
@@ -764,6 +780,14 @@
 			);
 			name = jrswizzle;
 			path = Pearl/External/jrswizzle;
+			sourceTree = "<group>";
+		};
+		DAD9B5E2176299B9001835F9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DAD9B5E6176299BA001835F9 /* MasterPassword-Mac-LoginHelper.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		DAFE45D715039823003ABA7C /* Pearl */ = {
@@ -948,23 +972,24 @@
 			productReference = DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		DA5BFA43147E415C00F98B1E /* Master Password */ = {
+		DA5BFA43147E415C00F98B1E /* MasterPassword */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "Master Password" */;
+			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */;
 			buildPhases = (
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
 				DA5BFA42147E415C00F98B1E /* Resources */,
 				DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */,
 				DAD3125D155288AA00A3F9ED /* Run Script: Crashlytics */,
+				DAD9B5EE1762CA3A001835F9 /* Copy LoginHelper */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "Master Password";
+			name = MasterPassword;
 			productName = MasterPassword;
-			productReference = DA5BFA44147E415C00F98B1E /* Master Password.app */;
+			productReference = DA5BFA44147E415C00F98B1E /* MasterPassword.app */;
 			productType = "com.apple.product-type.application";
 		};
 		DABC6C00175D8C85000C15D4 /* RHStatusItemView */ = {
@@ -973,7 +998,6 @@
 			buildPhases = (
 				DABC6BFD175D8C85000C15D4 /* Sources */,
 				DABC6BFE175D8C85000C15D4 /* Frameworks */,
-				DABC6BFF175D8C85000C15D4 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -1041,9 +1065,15 @@
 			mainGroup = DA5BFA39147E415C00F98B1E;
 			productRefGroup = DA5BFA45147E415C00F98B1E /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = DAD9B5E2176299B9001835F9 /* Products */;
+					ProjectRef = DAD9B5E1176299B9001835F9 /* MasterPassword-Mac-LoginHelper.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
-				DA5BFA43147E415C00F98B1E /* Master Password */,
+				DA5BFA43147E415C00F98B1E /* MasterPassword */,
 				DAC77CAC148291A600BCF976 /* Pearl */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
 				DA4425CA1557BED40052177D /* UbiquityStoreManager */,
@@ -1052,6 +1082,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		DAD9B5E6176299BA001835F9 /* MasterPassword-Mac-LoginHelper.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "MasterPassword-Mac-LoginHelper.app";
+			remoteRef = DAD9B5E5176299BA001835F9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		DA3EF17615A47744003ABF4E /* Resources */ = {
@@ -1124,7 +1164,7 @@
 				DA5E5D0A1724A667003798D8 /* InfoPlist.strings in Resources */,
 				DA5E5D0B1724A667003798D8 /* MainMenu.xib in Resources */,
 				DA5E5D551724F9C8003798D8 /* MasterPassword.iconset in Resources */,
-				DA0933CA1747A56A00DE1CEF /* MPAppsWindow.xib in Resources */,
+				DA0933CA1747A56A00DE1CEF /* MPInitialWindow.xib in Resources */,
 				DA0933CC1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png in Resources */,
 				DA0933D01747B91B00DE1CEF /* appstore.png in Resources */,
 			);
@@ -1275,7 +1315,7 @@
 /* Begin PBXTargetDependency section */
 		DA3EF19E15A47AEB003ABF4E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DA5BFA43147E415C00F98B1E /* Master Password */;
+			target = DA5BFA43147E415C00F98B1E /* MasterPassword */;
 			targetProxy = DA3EF19D15A47AEB003ABF4E /* PBXContainerItemProxy */;
 		};
 		DAC63286148681200075AEA5 /* PBXTargetDependency */ = {
@@ -1518,6 +1558,7 @@
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";
 				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherit)",
 					"\"$(SRCROOT)/../../../External\"",
@@ -1567,6 +1608,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
@@ -1820,7 +1862,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "AdHoc-Mac";
 		};
-		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "Master Password" */ = {
+		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA5BFA6E147E415C00F98B1E /* Debug-Mac */,
@@ -1838,6 +1880,7 @@
 				DABC6C0D175D8C85000C15D4 /* AppStore-Mac */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "AdHoc-Mac";
 		};
 		DAC63274148680650075AEA5 /* Build configuration list for PBXNativeTarget "jrswizzle" */ = {
 			isa = XCConfigurationList;
