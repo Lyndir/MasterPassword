@@ -237,7 +237,7 @@
 		DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUbiquityStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA4C45F2173B57B700745CC5 /* NSURL+UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+UbiquityStoreManager.h"; sourceTree = "<group>"; };
 		DA4C45F3173B57B700745CC5 /* NSURL+UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+UbiquityStoreManager.m"; sourceTree = "<group>"; };
-		DA5BFA44147E415C00F98B1E /* MasterPassword.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MasterPassword.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA5BFA44147E415C00F98B1E /* Master Password.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Master Password.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5BFA4A147E415C00F98B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		DA5BFA4E147E415C00F98B1E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -491,7 +491,7 @@
 		DA5BFA45147E415C00F98B1E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DA5BFA44147E415C00F98B1E /* MasterPassword.app */,
+				DA5BFA44147E415C00F98B1E /* Master Password.app */,
 				DAC77CAD148291A600BCF976 /* libPearl.a */,
 				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
 				DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */,
@@ -989,7 +989,7 @@
 			);
 			name = MasterPassword;
 			productName = MasterPassword;
-			productReference = DA5BFA44147E415C00F98B1E /* MasterPassword.app */;
+			productReference = DA5BFA44147E415C00F98B1E /* Master Password.app */;
 			productType = "com.apple.product-type.application";
 		};
 		DABC6C00175D8C85000C15D4 /* RHStatusItemView */ = {
@@ -1623,6 +1623,7 @@
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				SKIP_INSTALL = NO;
+				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
 			name = "Debug-Mac";
 		};
@@ -1634,6 +1635,7 @@
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				SKIP_INSTALL = NO;
+				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
 			name = "AdHoc-Mac";
 		};
@@ -1721,6 +1723,7 @@
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				SKIP_INSTALL = NO;
+				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
 			name = "AppStore-Mac";
 		};
