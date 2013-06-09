@@ -225,7 +225,7 @@
 							<object class="NSButtonCell" key="NSCell" id="922307452">
 								<int key="NSCellFlags">67108864</int>
 								<int key="NSCellFlags2">134217728</int>
-								<string key="NSContents">Enable iCloud</string>
+								<string key="NSContents">Use iCloud</string>
 								<reference key="NSSupport" ref="1068244176"/>
 								<string key="NSCellIdentifier">_NS:9</string>
 								<reference key="NSControlView" ref="499448697"/>

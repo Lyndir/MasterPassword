@@ -204,7 +204,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)terminate:(id)sender {
 
-    NSLog( @"Closing: Terminating" );
     [self.passwordWindow close];
     self.passwordWindow = nil;
 
@@ -215,7 +214,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://itunes.apple.com/app/id510296984"]];
 
-    NSLog( @"Closing: App Store" );
     [self.initialWindow close];
     self.initialWindow = nil;
 }
@@ -271,7 +269,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                     if (![self.passwordWindow.window isVisible])
                         self.passwordWindow = nil;
                     else {
-                        NSLog( @"Closing: dialogStyleHUD && passwordWindow.isVisible" );
                         [self.passwordWindow close];
                         self.passwordWindow = nil;
                         [self showPasswordWindow:nil];
@@ -305,8 +302,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     BOOL reopenPasswordWindow = [self.passwordWindow.window isVisible];
 
     if (![[self activeUserForThread].objectID isEqual:activeUser.objectID]) {
-        NSLog( @"Closing: activeUser changed: %@ -> %@, reopening: %d", [self activeUserForThread].objectID, activeUser.objectID,
-                reopenPasswordWindow );
         [self.passwordWindow close];
         self.passwordWindow = nil;
         [super setActiveUser:activeUser];

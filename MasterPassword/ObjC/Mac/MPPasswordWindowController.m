@@ -22,6 +22,7 @@
 
 @property(nonatomic, strong) NSOperationQueue *backgroundQueue;
 @property(nonatomic, strong) NSAlert *loadingDataAlert;
+@property(nonatomic) BOOL closing;
 @end
 
 @implementation MPPasswordWindowController {
@@ -30,7 +31,6 @@
 
 - (void)windowDidLoad {
 
-    NSLog(@"DidLoad:\n%@", [NSThread callStackSymbols]);
     if ([[MPMacConfig get].dialogStyleHUD boolValue])
         self.window.styleMask = NSHUDWindowMask | NSTitledWindowMask | NSUtilityWindowMask | NSClosableWindowMask;
     else
@@ -52,73 +52,63 @@
 //                            @"their passwords to change.  You'll need to update your profile for that site with the new password."];
 //            [moc saveToStore];
 //        }];
-        [self handleUnloadedOrLocked];
-    }                          forKeyPath:@"key" options:NSKeyValueObservingOptionInitial context:nil];
+        [self ensureLoadedAndUnlockedOrCloseIfLoggedOut:YES];
+    }                             forKeyPath:@"key" options:NSKeyValueObservingOptionInitial context:nil];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:NSWindowDidBecomeKeyNotification object:self.window queue:nil usingBlock:^(NSNotification *note) {
-                NSLog(@"DidBecomeKey:\n%@", [NSThread callStackSymbols]);
-        [self checkLoadedAndUnlocked];
+        [self ensureLoadedAndUnlockedOrCloseIfLoggedOut:NO];
         [self.siteField selectText:nil];
     }];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:NSWindowWillCloseNotification object:self.window queue:nil usingBlock:^(NSNotification *note) {
-                NSLog(@"WillClose:\n%@", [NSThread callStackSymbols]);
-                NSWindow *sheet = [self.window attachedSheet];
-                if (sheet)
-                    [NSApp endSheet:sheet];
-                
-                [NSApp hide:nil];
+        dispatch_async( dispatch_get_main_queue(), ^{
+            NSWindow *sheet = [self.window attachedSheet];
+            if (sheet)
+                [NSApp endSheet:sheet];
+
+            [NSApp hide:nil];
+            self.closing = NO;
+        } );
     }];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:MPSignedOutNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
         _activeElementOID = nil;
         [self.siteField setStringValue:@""];
         [self trySiteWithAction:NO];
-        [self handleUnloadedOrLocked];
+        [self ensureLoadedAndUnlockedOrCloseIfLoggedOut:YES];
     }];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:USMStoreDidChangeNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
-        [self checkLoadedAndUnlocked];
+        [self ensureLoadedAndUnlockedOrCloseIfLoggedOut:NO];
     }];
 
     [super windowDidLoad];
 }
 
-- (BOOL)shouldCloseDocument {
-    NSLog(@"shouldCloseDocument:\n%@", [NSThread callStackSymbols]);
-    
-    return [super shouldCloseDocument];
-}
-
 - (void)close {
-    NSLog(@"close:\n%@", [NSThread callStackSymbols]);
 
+    self.closing = YES;
     [super close];
 }
 
-- (void)handleUnloadedOrLocked {
+- (BOOL)ensureLoadedAndUnlockedOrCloseIfLoggedOut:(BOOL)closeIfLoggedOut {
 
-    if (!self.inProgress && ![MPMacAppDelegate get].key) {
-        MPUserEntity *activeUser = [MPMacAppDelegate get].activeUserForThread;
-        if (activeUser && !activeUser.saveKey)
-            [self unlock];
-        else {
-            NSLog(@"Closing: !inProgress && !key && (!activeUser || activeUser.saveKey)");
-            [self.window close];
-        }
-    }
+    if (![self ensureStoreLoaded])
+        return NO;
+
+    if (self.closing || self.inProgress || !self.window.isKeyWindow)
+        return NO;
+
+    return [self ensureUnlocked:closeIfLoggedOut];
 }
 
-- (void)checkLoadedAndUnlocked {
-
-    if ([self waitUntilStoreLoaded] && !self.inProgress)
-        [self unlock];
-}
-
-- (BOOL)waitUntilStoreLoaded {
+- (BOOL)ensureStoreLoaded {
 
     if ([MPMacAppDelegate managedObjectContextForThreadIfReady]) {
-        [NSApp endSheet:self.loadingDataAlert.window];
+        // Store loaded.
+        if (self.loadingDataAlert.window)
+            [NSApp endSheet:self.loadingDataAlert.window];
+
         return YES;
     }
 
@@ -130,43 +120,57 @@
     return NO;
 }
 
-- (void)unlock {
+- (BOOL)ensureUnlocked:(BOOL)closeIfLoggedOut {
 
-    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+    __block BOOL unlocked = NO;
+    [MPMacAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *moc) {
         MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:moc];
         NSString *userName = activeUser.name;
-        if (!activeUser)
-                // No user to sign in with.
+        if (!activeUser) {
+            // No user to sign in with.
+            if (closeIfLoggedOut)
+                [self close];
             return;
-        if ([MPMacAppDelegate get].key)
-                // Already logged in.
+        }
+        if ([MPMacAppDelegate get].key) {
+            // Already logged in.
+            unlocked = YES;
             return;
-        if ([[MPMacAppDelegate get] signInAsUser:activeUser saveInContext:moc usingMasterPassword:nil])
-                // Load the key from the keychain.
+        }
+        if (activeUser.saveKey && closeIfLoggedOut) {
+            // App was locked, don't instantly unlock again.
+            [self close];
             return;
+        }
+        if ([[MPMacAppDelegate get] signInAsUser:activeUser saveInContext:moc usingMasterPassword:nil]) {
+            // Loaded the key from the keychain.
+            unlocked = YES;
+            return;
+        }
 
-        if (![MPMacAppDelegate get].key)
-                // Ask the user to set the key through his master password.
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                if ([MPMacAppDelegate get].key)
-                    return;
+        // Ask the user to set the key through his master password.
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            if ([MPMacAppDelegate get].key)
+                return;
 
-                self.content = @"";
-                [self.siteField setStringValue:@""];
-                [self.tipField setStringValue:@""];
+            self.content = @"";
+            [self.siteField setStringValue:@""];
+            [self.tipField setStringValue:@""];
 
-                NSAlert *alert = [NSAlert alertWithMessageText:@"Master Password is locked."
-                                                 defaultButton:@"Unlock" alternateButton:@"Change" otherButton:@"Cancel"
-                                     informativeTextWithFormat:@"The master password is required to unlock the application for:\n\n%@",
-                                                               userName];
-                NSSecureTextField *passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
-                [alert setAccessoryView:passwordField];
-                [alert layout];
-                [passwordField becomeFirstResponder];
-                [alert beginSheetModalForWindow:self.window modalDelegate:self
-                                 didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertUnlockMP];
-            }];
+            NSAlert *alert = [NSAlert alertWithMessageText:@"Master Password is locked."
+                                             defaultButton:@"Unlock" alternateButton:@"Change" otherButton:@"Cancel"
+                                 informativeTextWithFormat:@"The master password is required to unlock the application for:\n\n%@",
+                                                           userName];
+            NSSecureTextField *passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
+            [alert setAccessoryView:passwordField];
+            [alert layout];
+            [passwordField becomeFirstResponder];
+            [alert beginSheetModalForWindow:self.window modalDelegate:self
+                             didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertUnlockMP];
+        }];
     }];
+
+    return unlocked;
 }
 
 - (IBAction)reload:(id)sender {
@@ -177,8 +181,7 @@
 - (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 
     if (contextInfo == MPAlertIncorrectMP) {
-        NSLog(@"Closing: Incorrect MP, button: %ld", returnCode);
-        [self.window close];
+        [self close];
         return;
     }
     if (contextInfo == MPAlertUnlockMP) {
@@ -209,9 +212,8 @@
 
             case NSAlertOtherReturn: {
                 // "Cancel" button.
-                NSLog(@"Closing: Unlock MP, button: %ld", (long)returnCode);
-                [self.window close];
-                return;
+                [self close];
+                break;
             }
 
             case NSAlertDefaultReturn: {
@@ -228,7 +230,7 @@
                                                     usingMasterPassword:password];
                     self.inProgress = NO;
 
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    dispatch_async( dispatch_get_current_queue(), ^{
                         [self.progressView stopAnimation:nil];
 
                         if (success)
@@ -239,7 +241,7 @@
                             }]] beginSheetModalForWindow:self.window modalDelegate:self
                                           didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertIncorrectMP];
                         }
-                    }];
+                    } );
                 }];
                 break;
             }
@@ -307,8 +309,7 @@
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector {
 
     if (commandSelector == @selector(cancel:)) { // Escape without completion.
-        NSLog(@"Closing: ESC without completion");
-        [self.window close];
+        [self close];
         return YES;
     }
     if ((self.siteFieldPreventCompletion = [NSStringFromSelector( commandSelector ) hasPrefix:@"delete"])) { // Backspace any time.
@@ -399,7 +400,6 @@
         if (!content)
             content = @"";
 
-        dbg(@"name: %@, action: %d", siteName, doAction);
         if (doAction) {
             if ([content length]) {
                 // Performing action while content is available.  Copy it.
