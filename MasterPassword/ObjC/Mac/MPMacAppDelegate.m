@@ -395,6 +395,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                            otherButton:nil informativeTextWithFormat:
                         @"Begin by selecting or creating your user from the status menu (●●●|) next to the clock."]
                 runModal];
+        [self.statusView popUpMenu];
         return;
     }
 

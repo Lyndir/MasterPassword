@@ -426,6 +426,38 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     }];
 }
 
+- (MPElementEntity *)changeElement:(MPElementEntity *)element inContext:(NSManagedObjectContext *)context toType:(MPElementType)type {
+
+    if ([element.algorithm classOfType:type] == element.typeClass)
+        element.type = type;
+
+    else {
+        // Type requires a different class of element.  Recreate the element.
+        MPElementEntity *newElement
+                = [NSEntityDescription insertNewObjectForEntityForName:[element.algorithm classNameOfType:type]
+                                                inManagedObjectContext:context];
+        newElement.type = type;
+        newElement.name = element.name;
+        newElement.user = element.user;
+        newElement.uses = element.uses;
+        newElement.lastUsed = element.lastUsed;
+        newElement.version = element.version;
+        newElement.loginName = element.loginName;
+
+        [context deleteObject:element];
+        [context saveToStore];
+
+        NSError *error;
+        if (![context obtainPermanentIDsForObjects:@[ newElement ] error:&error])
+        err(@"Failed to obtain a permanent object ID after changing object type: %@", error);
+
+        element = newElement;
+    }
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPElementUpdatedNotification object:element.objectID];
+    return element;
+}
+
 - (MPImportResult)importSites:(NSString *)importedSitesString
             askImportPassword:(NSString *(^)(NSString *userName))importPassword
               askUserPassword:(NSString *(^)(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword {

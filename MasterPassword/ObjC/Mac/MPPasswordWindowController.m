@@ -14,6 +14,7 @@
 #define MPAlertUnlockMP     @"MPAlertUnlockMP"
 #define MPAlertIncorrectMP  @"MPAlertIncorrectMP"
 #define MPAlertCreateSite   @"MPAlertCreateSite"
+#define MPAlertChangeType   @"MPAlertChangeType"
 
 @interface MPPasswordWindowController()
 
@@ -74,6 +75,7 @@
             addObserverForName:MPSignedOutNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
         _activeElementOID = nil;
         [self.siteField setStringValue:@""];
+        [self.typeField deselectItemAtIndex:[self.typeField indexOfSelectedItem]];
         [self trySiteWithAction:NO];
         [self ensureLoadedAndUnlockedOrCloseIfLoggedOut:YES];
     }];
@@ -155,6 +157,7 @@
 
             self.content = @"";
             [self.siteField setStringValue:@""];
+            [self.typeField deselectItemAtIndex:[self.typeField indexOfSelectedItem]];
             [self.tipField setStringValue:@""];
 
             NSAlert *alert = [NSAlert alertWithMessageText:@"Master Password is locked."
@@ -171,11 +174,6 @@
     }];
 
     return unlocked;
-}
-
-- (IBAction)reload:(id)sender {
-
-    [[MPMacAppDelegate get].storeManager reloadStore];
 }
 
 - (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
@@ -267,6 +265,68 @@
                 break;
         }
     }
+    if (contextInfo == MPAlertChangeType) {
+        switch (returnCode) {
+            case NSAlertDefaultReturn: {
+                MPElementType type = [self selectedType];
+                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                    MPElementEntity *activeElement = [self activeElementInContext:context];
+                    _activeElementOID = [[MPMacAppDelegate get] changeElement:activeElement inContext:context
+                                                                       toType:type].objectID;
+                    [context saveToStore];
+
+                    dispatch_async( dispatch_get_main_queue(), ^{
+                        [self trySiteWithAction:NO];
+                    } );
+                }];
+                break;
+            }
+            default:
+                break;
+        }
+    }
+}
+
+- (MPElementType)selectedType {
+
+    if (self.typeField.indexOfSelectedItem == 0)
+        return MPElementTypeGeneratedMaximum;
+    if (self.typeField.indexOfSelectedItem == 1)
+        return MPElementTypeGeneratedLong;
+    if (self.typeField.indexOfSelectedItem == 2)
+        return MPElementTypeGeneratedMedium;
+    if (self.typeField.indexOfSelectedItem == 3)
+        return MPElementTypeGeneratedBasic;
+    if (self.typeField.indexOfSelectedItem == 4)
+        return MPElementTypeGeneratedShort;
+    if (self.typeField.indexOfSelectedItem == 5)
+        return MPElementTypeGeneratedPIN;
+    if (self.typeField.indexOfSelectedItem == 6)
+        return MPElementTypeStoredPersonal;
+    if (self.typeField.indexOfSelectedItem == 7)
+        return MPElementTypeStoredDevicePrivate;
+
+    wrn(@"Unsupported type selected: %li, assuming Long.", self.typeField.indexOfSelectedItem);
+    return MPElementTypeGeneratedLong;
+}
+
+- (void)comboBoxSelectionDidChange:(NSNotification *)notification {
+
+    if (notification.object == self.typeField) {
+        if ([self.typeField indexOfSelectedItem] < 0)
+            return;
+        MPElementEntity *activeElement = [self activeElementForThread];
+        MPElementType selectedType = [self selectedType];
+        if (!activeElement || activeElement.type == selectedType || !(selectedType & MPElementTypeClassGenerated))
+            return;
+
+        [[NSAlert alertWithMessageText:@"Change Password Type" defaultButton:@"Change Password"
+                       alternateButton:@"Cancel" otherButton:nil
+             informativeTextWithFormat:@"Changing the password type for this site will cause the password to change.\n"
+                     @"You will need to update your account with the new password."]
+                beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:)
+                             contextInfo:MPAlertChangeType];
+    }
 }
 
 - (NSArray *)control:(NSControl *)control textView:(NSTextView *)textView completions:(NSArray *)words
@@ -291,7 +351,6 @@
             _activeElementOID = ((NSManagedObject *)[siteResults objectAtIndex:0]).objectID;
             for (MPElementEntity *element in siteResults)
                 [mutableResults addObject:element.name];
-            //[mutableResults addObject:query]; // For when the app should be able to create new sites.
         }
         else
             _activeElementOID = nil;
@@ -396,7 +455,9 @@
     [self.progressView startAnimation:nil];
     [self.backgroundQueue addOperationWithBlock:^{
         BOOL actionHandled = NO;
-        NSString *content = [[self activeElementForThread].content description];
+        MPElementEntity *activeElement = [self activeElementForThread];
+        NSString *content = [activeElement.content description];
+        NSString *typeName = [activeElement typeShortName];
         if (!content)
             content = @"";
 
@@ -415,6 +476,7 @@
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self setContent:content];
             [self.progressView stopAnimation:nil];
+            [self.typeField selectItemWithObjectValue:typeName];
 
             self.tipField.alphaValue = 1;
             if (actionHandled)

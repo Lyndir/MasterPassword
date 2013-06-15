@@ -8,15 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface MPPasswordWindowController : NSWindowController<NSTextFieldDelegate>
+@interface MPPasswordWindowController : NSWindowController<NSTextFieldDelegate, NSComboBoxDelegate>
 
 @property(nonatomic, weak) IBOutlet NSTextField *siteField;
 @property(nonatomic, weak) IBOutlet NSTextField *contentField;
 @property(nonatomic, weak) IBOutlet NSTextField *tipField;
+@property(nonatomic, weak) IBOutlet NSComboBox *typeField;
 @property(nonatomic, weak) IBOutlet NSView *contentContainer;
 @property(nonatomic, weak) IBOutlet NSProgressIndicator *progressView;
 @property(nonatomic, weak) IBOutlet NSTextField *userLabel;
-
-- (IBAction)reload:(id)sender;
 
 @end

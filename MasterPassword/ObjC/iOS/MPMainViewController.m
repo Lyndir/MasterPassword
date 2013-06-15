@@ -789,35 +789,8 @@
                     @"If you continue, the password for this site will change.  "
                     @"You will need to update your account's old password to the new one."
                                       do:^BOOL(MPElementEntity *activeElement, NSManagedObjectContext *context) {
-                                          if ([activeElement.algorithm classOfType:type] == activeElement.typeClass)
-                                              activeElement.type = type;
-                                          
-                                          else {
-                                              // Type requires a different class of element.  Recreate the element.
-                                              MPElementEntity *newElement
-                                                      = [NSEntityDescription insertNewObjectForEntityForName:[activeElement.algorithm classNameOfType:type]
-                                                                                      inManagedObjectContext:context];
-                                              newElement.type = type;
-                                              newElement.name = activeElement.name;
-                                              newElement.user = activeElement.user;
-                                              newElement.uses = activeElement.uses;
-                                              newElement.lastUsed = activeElement.lastUsed;
-                                              newElement.version = activeElement.version;
-                                              newElement.loginName = activeElement.loginName;
-
-                                              [context deleteObject:activeElement];
-                                              [context saveToStore];
-
-                                              NSError *error;
-                                              if (![context obtainPermanentIDsForObjects:@[ newElement ] error:&error])
-                                              err(@"Failed to obtain a permanent object ID after changing object type: %@", error);
-
-                                              _activeElementOID = newElement.objectID;
-                                              activeElement = newElement;
-                                          }
-
-                                          [[NSNotificationCenter defaultCenter]
-                                                  postNotificationName:MPElementUpdatedNotification object:activeElement.objectID];
+                                          _activeElementOID = [[MPiOSAppDelegate get] changeElement:activeElement inContext:context
+                                                                                             toType:type].objectID;
                                           return YES;
                                       }];
 }
