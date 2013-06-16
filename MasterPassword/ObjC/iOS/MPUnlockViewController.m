@@ -369,11 +369,11 @@
 
     NSAssert([[NSThread currentThread] isMainThread], @"User selection should only be toggled from the main thread.");
 
-    NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForThreadIfReady];
-    MPUserEntity *selectedUser = [self selectedUserInContext:mainContext];
+    NSManagedObjectContext *context = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
+    MPUserEntity *selectedUser = [self selectedUserInContext:context];
     if (!selectedUser)
         [self.passwordField resignFirstResponder];
-    else if ([[MPiOSAppDelegate get] signInAsUser:selectedUser saveInContext:mainContext usingMasterPassword:nil]) {
+    else if ([[MPiOSAppDelegate get] signInAsUser:selectedUser saveInContext:context usingMasterPassword:nil]) {
         [self performSegueWithIdentifier:@"MP_Unlock" sender:self];
         return;
     }
@@ -556,7 +556,7 @@
     UIButton *targetedAvatar = selectedAvatar;
     if (!targetedAvatar) {
         targetedAvatar = [self findTargetedAvatar];
-        targetedUser = [self userForAvatar:targetedAvatar inContext:[MPiOSAppDelegate managedObjectContextForThreadIfReady]];
+        targetedUser = [self userForAvatar:targetedAvatar inContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
     }
 
     [self.avatarsView enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
@@ -1140,7 +1140,7 @@
 
 - (MPUserEntity *)selectedUserForThread {
 
-    return [self selectedUserInContext:[MPiOSAppDelegate managedObjectContextForThreadIfReady]];
+    return [self selectedUserInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
 }
 
 - (MPUserEntity *)selectedUserInContext:(NSManagedObjectContext *)moc {

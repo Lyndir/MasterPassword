@@ -83,7 +83,7 @@
             }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPElementUpdatedNotification object:nil queue:nil usingBlock:
             ^void(NSNotification *note) {
-                MPElementEntity *activeElement = [self activeElementForThread];
+                MPElementEntity *activeElement = [self activeElementForMainThread];
                 if (activeElement.type & MPElementTypeClassStored && ![[activeElement.content description] length])
                     [self showToolTip:@"Tap        to set a password." withIcon:self.toolTipEditIcon];
                 if (activeElement.requiresExplicitMigration)
@@ -109,7 +109,7 @@
             }];
     [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil queue:nil usingBlock:
             ^(NSNotification *note) {
-                if (!self.activeElementForThread)
+                if (!self.activeElementForMainThread)
                     [self didSelectElement:nil];
             }];
 
@@ -118,8 +118,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 
-    MPElementEntity *activeElement = [self activeElementForThread];
-    if (activeElement.user != [[MPiOSAppDelegate get] activeUserForThread])
+    MPElementEntity *activeElement = [self activeElementForMainThread];
+    if (activeElement.user != [[MPiOSAppDelegate get] activeUserForMainThread])
         _activeElementOID = nil;
 
     self.searchDisplayController.searchBar.text = nil;
@@ -197,7 +197,7 @@
         return;
     }
 
-    MPElementEntity *activeElement = [self activeElementForThread];
+    MPElementEntity *activeElement = [self activeElementForMainThread];
     [self setHelpChapter:activeElement? @"2": @"1"];
     [self updateHelpHiddenAnimated:NO];
 
@@ -358,7 +358,7 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
 
-    MPElementEntity *activeElement = [self activeElementForThread];
+    MPElementEntity *activeElement = [self activeElementForMainThread];
     NSString *error = [self.helpView stringByEvaluatingJavaScriptFromString:
             PearlString( @"setClass('%@');", activeElement.typeClassName )];
     if (error.length)
@@ -464,7 +464,7 @@
 
 - (IBAction)copyContent {
 
-    MPElementEntity *activeElement = [self activeElementForThread];
+    MPElementEntity *activeElement = [self activeElementForMainThread];
     id content = activeElement.content;
     if (!content)
             // Nothing to copy.
@@ -484,7 +484,7 @@
 
 - (IBAction)copyLoginName:(UITapGestureRecognizer *)sender {
 
-    MPElementEntity *activeElement = [self activeElementForThread];
+    MPElementEntity *activeElement = [self activeElementForMainThread];
     if (!activeElement.loginName)
         return;
 
@@ -531,7 +531,7 @@
     if (sender.state != UIGestureRecognizerStateBegan)
             // Only fire when the gesture was first detected.
         return;
-    MPElementEntity *activeElement = [self activeElementForThread];
+    MPElementEntity *activeElement = [self activeElementForMainThread];
     if (![activeElement isKindOfClass:[MPElementGeneratedEntity class]]) {
         // Not of a type that supports a password counter.
         err(@"Cannot reset password counter: Element is not generated: %@", activeElement.name);
@@ -563,7 +563,7 @@
             // Only fire when the gesture was first detected.
         return;
 
-    MPElementEntity *activeElement = [self activeElementForThread];
+    MPElementEntity *activeElement = [self activeElementForMainThread];
     if (!activeElement)
         return;
 
@@ -621,9 +621,9 @@
     }];
 }
 
-- (MPElementEntity *)activeElementForThread {
+- (MPElementEntity *)activeElementForMainThread {
 
-    return [self activeElementInContext:[MPiOSAppDelegate managedObjectContextForThreadIfReady]];
+    return [self activeElementInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
 }
 
 - (MPElementEntity *)activeElementInContext:(NSManagedObjectContext *)moc {
@@ -641,7 +641,7 @@
 
 - (IBAction)editPassword {
 
-    MPElementEntity *activeElement = [self activeElementForThread];
+    MPElementEntity *activeElement = [self activeElementForMainThread];
     if (!(activeElement.type & MPElementTypeClassStored)) {
         // Not of a type that supports editing the content.
         err(@"Cannot edit content: Element is not stored: %@", activeElement.name);
@@ -659,7 +659,7 @@
 
 - (IBAction)upgradePassword {
 
-    MPElementEntity *activeElement = [self activeElementForThread];
+    MPElementEntity *activeElement = [self activeElementForMainThread];
     if (!activeElement)
         return;
 
@@ -779,7 +779,7 @@
 
 - (MPElementEntity *)selectedElement {
 
-    return [self activeElementForThread];
+    return [self activeElementForMainThread];
 }
 
 - (void)didSelectType:(MPElementType)type {
@@ -855,7 +855,7 @@
 
     if (textField == self.contentField) {
         self.contentField.enabled = NO;
-        MPElementEntity *activeElement = [self activeElementForThread];
+        MPElementEntity *activeElement = [self activeElementForMainThread];
         if (![activeElement isKindOfClass:[MPElementStoredEntity class]]) {
             // Not of a type whose content can be edited.
             err(@"Cannot update element content: Element is not stored: %@", activeElement.name);

@@ -24,9 +24,9 @@
 #endif
 }
 
-- (MPUserEntity *)activeUserForThread {
+- (MPUserEntity *)activeUserForMainThread {
 
-    return [self activeUserInContext:[MPAppDelegate_Shared managedObjectContextForThreadIfReady]];
+    return [self activeUserInContext:[MPAppDelegate_Shared managedObjectContextForMainThreadIfReady]];
 }
 
 - (MPUserEntity *)activeUserInContext:(NSManagedObjectContext *)moc {

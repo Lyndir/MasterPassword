@@ -19,7 +19,7 @@
 
 + (instancetype)get;
 
-- (MPUserEntity *)activeUserForThread;
+- (MPUserEntity *)activeUserForMainThread;
 - (MPUserEntity *)activeUserInContext:(NSManagedObjectContext *)moc;
 - (void)setActiveUser:(MPUserEntity *)activeUser;
 

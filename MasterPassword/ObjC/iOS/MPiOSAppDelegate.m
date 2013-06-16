@@ -491,7 +491,7 @@
 
 - (void)openFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController {
 
-    NSString *userName = [[MPiOSAppDelegate get] activeUserForThread].name;
+    NSString *userName = [[MPiOSAppDelegate get] activeUserForMainThread].name;
     PearlLogLevel logLevel = PearlLogLevelInfo;
     if (logs && ([[MPiOSConfig get].sendInfo boolValue] || [[MPiOSConfig get].traceMode boolValue]))
         logLevel = PearlLogLevelDebug;
@@ -566,7 +566,7 @@
                 @"--\n"
                 @"%@\n"
                 @"Master Password %@, build %@",
-                [self activeUserForThread].name,
+                [self activeUserForMainThread].name,
                 [PearlInfoPlist get].CFBundleShortVersionString,
                 [PearlInfoPlist get].CFBundleVersion );
     else
@@ -574,7 +574,7 @@
                 @"--\n"
                 @"%@\n"
                 @"Master Password %@, build %@",
-                [self activeUserForThread].name,
+                [self activeUserForMainThread].name,
                 [PearlInfoPlist get].CFBundleShortVersionString,
                 [PearlInfoPlist get].CFBundleVersion );
 
@@ -584,7 +584,7 @@
     [PearlEMail sendEMailTo:nil subject:@"Master Password Export" body:message
                 attachments:[[PearlEMailAttachment alloc] initWithContent:[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
                                                                  mimeType:@"text/plain" fileName:
-                                PearlString( @"%@ (%@).mpsites", [self activeUserForThread].name,
+                                PearlString( @"%@ (%@).mpsites", [self activeUserForMainThread].name,
                                         [exportDateFormatter stringFromDate:[NSDate date]] )],
                             nil];
 }

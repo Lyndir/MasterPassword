@@ -230,7 +230,6 @@
 		DABD3C201711E2DC00CF925C /* MPUnlockViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BEF1711E2DC00CF925C /* MPUnlockViewController.m */; };
 		DABD3C211711E2DC00CF925C /* MPiOSConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BF11711E2DC00CF925C /* MPiOSConfig.m */; };
 		DABD3C221711E2DC00CF925C /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DABD3BF21711E2DC00CF925C /* MainStoryboard_iPhone.storyboard */; };
-		DABD3C231711E2DC00CF925C /* MasterPassword-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DABD3BF31711E2DC00CF925C /* MasterPassword-Info.plist */; };
 		DABD3C241711E2DC00CF925C /* MasterPassword.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DABD3BF81711E2DC00CF925C /* MasterPassword.entitlements */; };
 		DABD3C251711E2DC00CF925C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DABD3BF91711E2DC00CF925C /* Settings.bundle */; };
 		DABD3C261711E2DC00CF925C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DABD3BFA1711E2DC00CF925C /* InfoPlist.strings */; };
@@ -3258,7 +3257,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = MP;
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = Lyndir;
 			};
 			buildConfigurationList = DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-iOS" */;
@@ -3517,7 +3516,6 @@
 				DABD3B9E1711E29800CF925C /* social-twitter@2x.png in Resources */,
 				DABD3C191711E2DC00CF925C /* MPElementListCellView.xib in Resources */,
 				DABD3C221711E2DC00CF925C /* MainStoryboard_iPhone.storyboard in Resources */,
-				DABD3C231711E2DC00CF925C /* MasterPassword-Info.plist in Resources */,
 				DABD3C241711E2DC00CF925C /* MasterPassword.entitlements in Resources */,
 				DABD3C251711E2DC00CF925C /* Settings.bundle in Resources */,
 				DABD3C261711E2DC00CF925C /* InfoPlist.strings in Resources */,
@@ -3857,7 +3855,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MasterPassword.app/MasterPassword";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = YES;
@@ -3887,7 +3884,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MasterPassword.app/MasterPassword";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = YES;
@@ -3971,7 +3967,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_WARN_CXX0X_EXTENSIONS = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -4041,7 +4036,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_WARN_CXX0X_EXTENSIONS = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -4166,7 +4160,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_WARN_CXX0X_EXTENSIONS = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;

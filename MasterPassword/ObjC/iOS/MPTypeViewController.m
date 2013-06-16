@@ -73,7 +73,7 @@
     MPElementType selectedType = selectedElement? selectedElement.type: [self.delegate selectedType];
     cell.selected = (selectedType == cellType);
 
-    if (cellType != NSNotFound && cellType & MPElementTypeClassGenerated) {
+    if (cellType != (MPElementType)NSNotFound && cellType & MPElementTypeClassGenerated) {
         [(UITextField *)[cell viewWithTag:2] setText:@"..."];
 
         NSString *name = selectedElement.name;
@@ -99,7 +99,7 @@
     assert(self.navigationController.topViewController == self);
 
     MPElementType type = [self typeAtIndexPath:indexPath];
-    if (type == NSNotFound)
+    if (type == (MPElementType)NSNotFound)
             // Selected a non-type row.
         return;
 

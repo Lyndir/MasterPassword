@@ -53,7 +53,7 @@
                 }];
             }
         }        options:0];
-        avatar.selected = (a == [[MPiOSAppDelegate get] activeUserForThread].avatar);
+        avatar.selected = (a == [[MPiOSAppDelegate get] activeUserForMainThread].avatar);
     }
 
     [super viewDidLoad];
@@ -70,7 +70,7 @@
         }
     }                           recurse:NO];
 
-    MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForThread];
+    MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForMainThread];
     self.savePasswordSwitch.on = activeUser.saveKey;
     self.defaultTypeLabel.text = [[MPiOSAppDelegate get].key.algorithm shortNameOfType:activeUser.defaultType];
 
@@ -154,7 +154,7 @@
 
 - (MPElementType)selectedType {
 
-    return [[MPiOSAppDelegate get] activeUserForThread].defaultType;
+    return [[MPiOSAppDelegate get] activeUserForMainThread].defaultType;
 }
 
 #pragma mark - IBActions

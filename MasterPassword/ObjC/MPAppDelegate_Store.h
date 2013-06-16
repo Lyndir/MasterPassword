@@ -20,12 +20,13 @@ typedef enum {
 
 @interface MPAppDelegate_Shared(Store)<UbiquityStoreManagerDelegate>
 
-+ (NSManagedObjectContext *)managedObjectContextForThreadIfReady;
++ (NSManagedObjectContext *)managedObjectContextForMainThreadIfReady;
 + (BOOL)managedObjectContextPerformBlock:(void (^)(NSManagedObjectContext *context))mocBlock;
 + (BOOL)managedObjectContextPerformBlockAndWait:(void (^)(NSManagedObjectContext *context))mocBlock;
 
 - (UbiquityStoreManager *)storeManager;
 
+/** @param completion The block to execute after adding the element, executed from the main thread with the new element in the main MOC. */
 - (void)addElementNamed:(NSString *)siteName completion:(void (^)(MPElementEntity *element))completion;
 - (MPElementEntity *)changeElement:(MPElementEntity *)element inContext:(NSManagedObjectContext *)context toType:(MPElementType)type;
 - (MPImportResult)importSites:(NSString *)importedSitesString

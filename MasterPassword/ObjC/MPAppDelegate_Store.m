@@ -39,19 +39,14 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 #pragma mark - Core Data setup
 
-+ (NSManagedObjectContext *)managedObjectContextForThreadIfReady {
++ (NSManagedObjectContext *)managedObjectContextForMainThreadIfReady {
 
+    NSAssert([[NSThread currentThread] isMainThread], @"Can only access main MOC from the main thread.");
     NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
-    if (!mainManagedObjectContext)
+    if (!mainManagedObjectContext || ![[NSThread currentThread] isMainThread])
         return nil;
-    if ([[NSThread currentThread] isMainThread])
-        return mainManagedObjectContext;
 
-    NSManagedObjectContext
-            *threadManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
-    threadManagedObjectContext.parentContext = mainManagedObjectContext;
-
-    return threadManagedObjectContext;
+    return mainManagedObjectContext;
 }
 
 + (BOOL)managedObjectContextPerformBlock:(void (^)(NSManagedObjectContext *context))mocBlock {
@@ -396,8 +391,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         return;
     }
 
-    [MPAppDelegate_Shared managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-        MPUserEntity *activeUser = [self activeUserInContext:moc];
+    [MPAppDelegate_Shared managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        MPUserEntity *activeUser = [self activeUserInContext:context];
         assert(activeUser);
 
         MPElementType type = activeUser.defaultType;
@@ -406,22 +401,22 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         NSString *typeEntityClassName = [MPAlgorithmDefault classNameOfType:type];
 
         MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:typeEntityClassName
-                                                                 inManagedObjectContext:moc];
+                                                                 inManagedObjectContext:context];
 
         element.name = siteName;
         element.user = activeUser;
         element.type = type;
         element.lastUsed = [NSDate date];
         element.version = MPAlgorithmDefaultVersion;
-        [moc saveToStore];
+        [context saveToStore];
 
         NSError *error = nil;
-        if (element.objectID.isTemporaryID && ![moc obtainPermanentIDsForObjects:@[ element ] error:&error])
+        if (element.objectID.isTemporaryID && ![context obtainPermanentIDsForObjects:@[ element ] error:&error])
         err(@"Failed to obtain a permanent object ID after creating new element: %@", error);
 
         NSManagedObjectID *elementOID = [element objectID];
         dispatch_async( dispatch_get_main_queue(), ^{
-            completion( (MPElementEntity *)[[MPAppDelegate_Shared managedObjectContextForThreadIfReady] objectRegisteredForID:elementOID] );
+            completion( (MPElementEntity *)[[MPAppDelegate_Shared managedObjectContextForMainThreadIfReady] objectRegisteredForID:elementOID] );
         } );
     }];
 }
@@ -689,7 +684,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 - (NSString *)exportSitesShowingPasswords:(BOOL)showPasswords {
 
-    MPUserEntity *activeUser = [self activeUserForThread];
+    MPUserEntity *activeUser = [self activeUserForMainThread];
     inf(@"Exporting sites, %@, for: %@", showPasswords? @"showing passwords": @"omitting passwords", activeUser.userID);
 
     // Header.

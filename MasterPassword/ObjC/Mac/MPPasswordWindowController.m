@@ -43,7 +43,7 @@
     [self setContent:@""];
     [self.tipField setStringValue:@""];
 
-    [self.userLabel setStringValue:PearlString( @"%@'s password for:", [[MPMacAppDelegate get] activeUserForThread].name )];
+    [self.userLabel setStringValue:PearlString( @"%@'s password for:", [[MPMacAppDelegate get] activeUserForMainThread].name )];
     [[MPMacAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
 //        [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
 //            if (![MPAlgorithmDefault migrateUser:[[MPMacAppDelegate get] activeUserInContext:moc]])
@@ -106,7 +106,7 @@
 
 - (BOOL)ensureStoreLoaded {
 
-    if ([MPMacAppDelegate managedObjectContextForThreadIfReady]) {
+    if ([MPMacAppDelegate managedObjectContextForMainThreadIfReady]) {
         // Store loaded.
         if (self.loadingDataAlert.window)
             [NSApp endSheet:self.loadingDataAlert.window];
@@ -197,12 +197,12 @@
                         runModal];
 
                 if (returnCode_ == NSAlertDefaultReturn) {
-                    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-                        MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:moc];
+                    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                        MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:context];
                         activeUser.keyID = nil;
                         [[MPMacAppDelegate get] forgetSavedKeyFor:activeUser];
                         [[MPMacAppDelegate get] signOutAnimated:YES];
-                        [moc saveToStore];
+                        [context saveToStore];
                     }];
                 }
                 break;
@@ -315,7 +315,7 @@
     if (notification.object == self.typeField) {
         if ([self.typeField indexOfSelectedItem] < 0)
             return;
-        MPElementEntity *activeElement = [self activeElementForThread];
+        MPElementEntity *activeElement = [self activeElementForMainThread];
         MPElementType selectedType = [self selectedType];
         if (!activeElement || activeElement.type == selectedType || !(selectedType & MPElementTypeClassGenerated))
             return;
@@ -421,9 +421,9 @@
     self.siteFieldPreventCompletion = NO;
 }
 
-- (MPElementEntity *)activeElementForThread {
+- (MPElementEntity *)activeElementForMainThread {
 
-    return [self activeElementInContext:[MPMacAppDelegate managedObjectContextForThreadIfReady]];
+    return [self activeElementInContext:[MPMacAppDelegate managedObjectContextForMainThreadIfReady]];
 }
 
 - (MPElementEntity *)activeElementInContext:(NSManagedObjectContext *)moc {
@@ -453,9 +453,9 @@
 
     NSString *siteName = [self.siteField stringValue];
     [self.progressView startAnimation:nil];
-    [self.backgroundQueue addOperationWithBlock:^{
+    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         BOOL actionHandled = NO;
-        MPElementEntity *activeElement = [self activeElementForThread];
+        MPElementEntity *activeElement = [self activeElementInContext:context];
         NSString *content = [activeElement.content description];
         NSString *typeName = [activeElement typeShortName];
         if (!content)

@@ -66,8 +66,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             [[self.usersItem submenu] removeItem:obj];
     }];
 
-    NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
-    if (!moc) {
+    NSManagedObjectContext *context = [MPMacAppDelegate managedObjectContextForMainThreadIfReady];
+    if (!context) {
         self.createUserItem.title = @"New User (Not ready)";
         self.createUserItem.enabled = NO;
         self.createUserItem.toolTip = @"Please wait until the app is fully loaded.";
@@ -83,7 +83,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     NSError *error = nil;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
     fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO] ];
-    NSArray *users = [moc executeFetchRequest:fetchRequest error:&error];
+    NSArray *users = [context executeFetchRequest:fetchRequest error:&error];
     if (!users)
     err(@"Failed to load users: %@", error);
 
@@ -94,7 +94,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                 @"Then give iCloud some time to sync the new user to your Mac.";
     }
 
-    MPUserEntity *activeUser = self.activeUserForThread;
+    MPUserEntity *activeUser = [self activeUserInContext:context];
     for (MPUserEntity *user in users) {
         NSMenuItem *userItem = [[NSMenuItem alloc] initWithTitle:user.name action:@selector(selectUser:) keyEquivalent:@""];
         [userItem setTarget:self];
@@ -113,8 +113,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     [self signOutAnimated:NO];
 
     NSError *error = nil;
-    NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
-    self.activeUser = (MPUserEntity *)[moc existingObjectWithID:[item representedObject] error:&error];
+    NSManagedObjectContext *context = [MPMacAppDelegate managedObjectContextForMainThreadIfReady];
+    self.activeUser = (MPUserEntity *)[context existingObjectWithID:[item representedObject] error:&error];
 
     if (error)
     err(@"While looking up selected user: %@", error);
@@ -261,7 +261,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
             ^(NSNotification *note) {
                 self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
-                self.savePasswordItem.state = [[MPMacAppDelegate get] activeUserForThread].saveKey? NSOnState: NSOffState;
+                self.savePasswordItem.state = [[MPMacAppDelegate get] activeUserForMainThread].saveKey? NSOnState: NSOffState;
                 self.dialogStyleRegular.state = ![[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
                 self.dialogStyleHUD.state = [[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
 
@@ -283,13 +283,13 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     OSStatus status = InstallApplicationEventHandler(NewEventHandlerUPP( MPHotKeyHander ), GetEventTypeCount( hotKeyEvents ),
     hotKeyEvents, (__bridge void *)self, NULL);
     if (status != noErr)
-    err(@"Error installing application event handler: %d", status);
+    err(@"Error installing application event handler: %i", (int)status);
     status = RegisterEventHotKey( 35 /* p */, controlKey + cmdKey, MPShowHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
     if (status != noErr)
-    err(@"Error registering 'show' hotkey: %d", status);
+    err(@"Error registering 'show' hotkey: %i", (int)status);
     status = RegisterEventHotKey( 35 /* p */, controlKey + optionKey + cmdKey, MPLockHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
     if (status != noErr)
-    err(@"Error registering 'lock' hotkey: %d", status);
+    err(@"Error registering 'lock' hotkey: %i", (int)status);
 
     // Initial display.
     [NSApp activateIgnoringOtherApps:YES];
@@ -301,11 +301,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     BOOL reopenPasswordWindow = [self.passwordWindow.window isVisible];
 
-    if (![[self activeUserForThread].objectID isEqual:activeUser.objectID]) {
-        [self.passwordWindow close];
-        self.passwordWindow = nil;
-        [super setActiveUser:activeUser];
-    }
+    [self.passwordWindow close];
+    self.passwordWindow = nil;
+    [super setActiveUser:activeUser];
 
     self.usersItem.state = NSMixedState;
     [[[self.usersItem submenu] itemArray] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -325,7 +323,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)updateMenuItems {
 
-    MPUserEntity *activeUser = [self activeUserForThread];
+    MPUserEntity *activeUser = [self activeUserForMainThread];
 //    if (!(self.showItem.enabled = ![self.passwordWindow.window isVisible])) {
 //        self.showItem.title = @"Show (Showing)";
 //        self.showItem.toolTip = @"Master Password is already showing.";
@@ -390,7 +388,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     [NSApp activateIgnoringOtherApps:YES];
 
     // If no user, can't activate.
-    if (![self activeUserForThread]) {
+    if (![self activeUserForMainThread]) {
         [[NSAlert alertWithMessageText:@"No User Selected" defaultButton:[PearlStrings get].commonButtonOkay alternateButton:nil
                            otherButton:nil informativeTextWithFormat:
                         @"Begin by selecting or creating your user from the status menu (●●●|) next to the clock."]
@@ -444,17 +442,17 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
     // Save changes in the application's managed object context before the application terminates.
 
-    NSManagedObjectContext *moc = [MPMacAppDelegate managedObjectContextForThreadIfReady];
-    if (!moc)
+    NSManagedObjectContext *context = [MPMacAppDelegate managedObjectContextForMainThreadIfReady];
+    if (!context)
         return NSTerminateNow;
 
-    if (![moc commitEditing])
+    if (![context commitEditing])
         return NSTerminateCancel;
 
-    if (![moc hasChanges])
+    if (![context hasChanges])
         return NSTerminateNow;
 
-    [moc saveToStore];
+    [context saveToStore];
     return NSTerminateNow;
 }
 
