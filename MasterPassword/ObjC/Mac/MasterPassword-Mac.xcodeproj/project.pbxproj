@@ -19,6 +19,7 @@
 		DA16B342170661E0000A0EAB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC632871486D95D0075AEA5 /* Security.framework */; };
 		DA16B344170661EE000A0EAB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B343170661EE000A0EAB /* Cocoa.framework */; };
 		DA16B345170661F2000A0EAB /* libPearl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC77CAD148291A600BCF976 /* libPearl.a */; };
+		DA1E4D50176E0E280065E0EF /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA1E4D4F176E0E280065E0EF /* Media.xcassets */; };
 		DA30E9CE15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */; };
 		DA30E9CF15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9CC15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m */; };
 		DA30E9D015722ECA00A68B4C /* Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9CD15722ECA00A68B4C /* Pearl.m */; };
@@ -223,6 +224,7 @@
 		DA0933CF1747B91B00DE1CEF /* appstore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = appstore.png; sourceTree = "<group>"; };
 		DA16B340170661DB000A0EAB /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		DA16B343170661EE000A0EAB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		DA1E4D4F176E0E280065E0EF /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = MasterPassword/Media.xcassets; sourceTree = "<group>"; };
 		DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+PearlMutableInfo.h"; sourceTree = "<group>"; };
 		DA30E9CC15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+PearlMutableInfo.m"; sourceTree = "<group>"; };
 		DA30E9CD15722ECA00A68B4C /* Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pearl.m; sourceTree = "<group>"; };
@@ -479,6 +481,7 @@
 		DA5BFA39147E415C00F98B1E = {
 			isa = PBXGroup;
 			children = (
+				DA1E4D4F176E0E280065E0EF /* Media.xcassets */,
 				DA5E5C961724A667003798D8 /* ObjC */,
 				DACA23B41705DF7D002C6C22 /* Resources */,
 				DACA22121705DDC5002C6C22 /* External */,
@@ -1125,6 +1128,7 @@
 				DACA271B1705DF81002C6C22 /* avatar-7@2x.png in Resources */,
 				DACA271C1705DF81002C6C22 /* avatar-17@2x.png in Resources */,
 				DACA271D1705DF81002C6C22 /* avatar-14.png in Resources */,
+				DA1E4D50176E0E280065E0EF /* Media.xcassets in Resources */,
 				DACA271E1705DF81002C6C22 /* avatar-18@2x.png in Resources */,
 				DACA271F1705DF81002C6C22 /* avatar-8.png in Resources */,
 				DACA27201705DF81002C6C22 /* avatar-13.png in Resources */,
@@ -1630,6 +1634,7 @@
 		DA5BFA6E147E415C00F98B1E /* Debug-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
@@ -1644,6 +1649,7 @@
 		DA5BFA6F147E415C00F98B1E /* AdHoc-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
@@ -1738,6 +1744,7 @@
 		DA95D60A14DF3F3B008D1B94 /* AppStore-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
