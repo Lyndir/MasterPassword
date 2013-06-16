@@ -184,6 +184,13 @@
 			remoteGlobalIDString = DA5BFA43147E415C00F98B1E;
 			remoteInfo = MasterPassword;
 		};
+		DABFA071176E3FDF00E83589 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAD9B5E1176299B9001835F9 /* MasterPassword-Mac-LoginHelper.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = DAD9B5C0176299B9001835F9;
+			remoteInfo = "MasterPassword-Mac-LoginHelper";
+		};
 		DAC63285148681200075AEA5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DA5BFA3B147E415C00F98B1E /* Project object */;
@@ -988,6 +995,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				DABFA072176E3FDF00E83589 /* PBXTargetDependency */,
 			);
 			name = MasterPassword;
 			productName = MasterPassword;
@@ -1324,6 +1332,11 @@
 			isa = PBXTargetDependency;
 			target = DA5BFA43147E415C00F98B1E /* MasterPassword */;
 			targetProxy = DA3EF19D15A47AEB003ABF4E /* PBXContainerItemProxy */;
+		};
+		DABFA072176E3FDF00E83589 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "MasterPassword-Mac-LoginHelper";
+			targetProxy = DABFA071176E3FDF00E83589 /* PBXContainerItemProxy */;
 		};
 		DAC63286148681200075AEA5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
