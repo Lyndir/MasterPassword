@@ -480,7 +480,8 @@
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self setContent:content];
             [self.progressView stopAnimation:nil];
-            [self.typeField selectItemWithObjectValue:typeName];
+            if (![[self.typeField stringValue] isEqualToString:typeName])
+                [self.typeField selectItemWithObjectValue:typeName];
 
             self.tipField.alphaValue = 1;
             if (actionHandled)
