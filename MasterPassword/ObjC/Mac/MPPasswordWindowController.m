@@ -32,10 +32,14 @@
 
 - (void)windowDidLoad {
 
-    if ([[MPMacConfig get].dialogStyleHUD boolValue])
+    if ([[MPMacConfig get].dialogStyleHUD boolValue]) {
         self.window.styleMask = NSHUDWindowMask | NSTitledWindowMask | NSUtilityWindowMask | NSClosableWindowMask;
-    else
+        self.siteLabel.textColor = [NSColor whiteColor];
+    }
+    else {
         self.window.styleMask = NSTexturedBackgroundWindowMask | NSResizableWindowMask | NSTitledWindowMask | NSClosableWindowMask;
+        self.siteLabel.textColor = [NSColor controlTextColor];
+    }
 
     self.backgroundQueue = [NSOperationQueue new];
     self.backgroundQueue.maxConcurrentOperationCount = 1;

@@ -299,10 +299,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)setActiveUser:(MPUserEntity *)activeUser {
 
-    BOOL reopenPasswordWindow = [self.passwordWindow.window isVisible];
-
-    [self.passwordWindow close];
-    self.passwordWindow = nil;
     [super setActiveUser:activeUser];
 
     self.usersItem.state = NSMixedState;
@@ -316,9 +312,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }];
 
     [MPMacConfig get].usedUserName = activeUser.name;
-
-    if (reopenPasswordWindow)
-        [self showPasswordWindow:nil];
 }
 
 - (void)updateMenuItems {

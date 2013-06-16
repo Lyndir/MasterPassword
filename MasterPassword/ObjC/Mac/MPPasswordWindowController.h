@@ -10,6 +10,7 @@
 
 @interface MPPasswordWindowController : NSWindowController<NSTextFieldDelegate, NSComboBoxDelegate>
 
+@property(nonatomic, weak) IBOutlet NSTextField *siteLabel;
 @property(nonatomic, weak) IBOutlet NSTextField *siteField;
 @property(nonatomic, weak) IBOutlet NSTextField *contentField;
 @property(nonatomic, weak) IBOutlet NSTextField *tipField;
