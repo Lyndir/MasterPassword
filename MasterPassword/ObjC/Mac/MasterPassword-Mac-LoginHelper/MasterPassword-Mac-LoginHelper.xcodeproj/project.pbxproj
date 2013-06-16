@@ -109,7 +109,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = MP;
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Maarten Billemont";
 			};
 			buildConfigurationList = DAD9B5BC176299B9001835F9 /* Build configuration list for PBXProject "MasterPassword-Mac-LoginHelper" */;
@@ -168,7 +168,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
@@ -225,7 +224,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
@@ -276,6 +274,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper.entitlements";
 				CODE_SIGN_IDENTITY = "Developer ID Application: Maarten Billemont";
+				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper-Info.plist";
 				PROVISIONING_PROFILE = "";
 			};
@@ -285,6 +284,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper.entitlements";
+				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper-Info.plist";
 			};
 			name = Release;

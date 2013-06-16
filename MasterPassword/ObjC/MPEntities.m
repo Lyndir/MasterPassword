@@ -31,9 +31,9 @@
 
     // Some people got elements with type == 0.
     MPElementType type = (MPElementType)[self.type_ unsignedIntegerValue];
-    if (!type || type == NSNotFound)
+    if (!type || type == (MPElementType)NSNotFound)
         type = [self.user defaultType];
-    if (!type || type == NSNotFound)
+    if (!type || type == (MPElementType)NSNotFound)
         type = MPElementTypeGeneratedLong;
 
     return type;
@@ -42,9 +42,9 @@
 - (void)setType:(MPElementType)aType {
 
     // Make sure we don't poison our model data with invalid values.
-    if (!aType || aType == NSNotFound)
+    if (!aType || aType == (MPElementType)NSNotFound)
         aType = [self.user defaultType];
-    if (!aType || aType == NSNotFound)
+    if (!aType || aType == (MPElementType)NSNotFound)
         aType = MPElementTypeGeneratedLong;
 
     self.type_ = @(aType);
