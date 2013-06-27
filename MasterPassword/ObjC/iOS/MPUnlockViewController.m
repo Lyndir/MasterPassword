@@ -170,20 +170,24 @@
         [self initializeWordLabel:wordLabel];
     }                        recurse:NO];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil queue:nil usingBlock:
+    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
                 [self updateUsers];
             }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidImportChangesNotification object:nil queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      [self updateUsers];
-                                                  }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:nil usingBlock:
+    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidImportChangesNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
+            ^(NSNotification *note) {
+                [self updateUsers];
+            }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
                 [self emergencyCloseAnimated:NO];
                 self.uiContainer.alpha = 0;
             }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:nil usingBlock:
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
                 [self updateLayoutAnimated:NO allowScroll:NO completion:nil];
                 [UIView animateWithDuration:1 animations:^{

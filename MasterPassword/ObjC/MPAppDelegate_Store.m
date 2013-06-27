@@ -103,25 +103,22 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                                                        delegate:self];
 
 #if TARGET_OS_IPHONE
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification
-                                                      object:[UIApplication sharedApplication] queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      [[self mainManagedObjectContext] saveToStore];
-                                                  }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification
-                                                      object:[UIApplication sharedApplication] queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      [[self mainManagedObjectContext] saveToStore];
-                                                  }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification object:[UIApplication sharedApplication]
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
+     ^(NSNotification *note) {
+         [[self mainManagedObjectContext] saveToStore];
+     }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:[UIApplication sharedApplication]
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
+     ^(NSNotification *note) {
+         [[self mainManagedObjectContext] saveToStore];
+     }];
 #else
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillTerminateNotification
-                                                      object:[NSApplication sharedApplication] queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      NSManagedObjectContext *moc = self.mainManagedObjectContextIfReady;
-                                                      [moc performBlockAndWait:^{
-                                                          [moc saveToStore];
-                                                      }];
-                                                  }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillTerminateNotification object:NSApp
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
+     ^(NSNotification *note) {
+         [self.mainManagedObjectContextIfReady saveToStore];
+     }];
 #endif
 
     return storeManager;

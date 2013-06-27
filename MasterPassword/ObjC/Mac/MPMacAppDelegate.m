@@ -232,13 +232,19 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     [MPConfig get].delegate = self;
     __weak id weakSelf = self;
     [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        [weakSelf updateMenuItems];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf updateMenuItems];
+        });
     }           forKeyPath:@"key" options:0 context:nil];
     [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        [weakSelf updateMenuItems];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf updateMenuItems];
+        });
     }           forKeyPath:@"activeUser" options:0 context:nil];
     [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        [weakSelf updateMenuItems];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf updateMenuItems];
+        });
     }           forKeyPath:@"storeManager.cloudAvailable" options:0 context:nil];
 
     // Status item.
@@ -249,16 +255,18 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     self.statusView.target = self;
     self.statusView.action = @selector(showMenu);
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil queue:nil usingBlock:
+    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
                 [self updateUsers];
             }];
-    [[NSNotificationCenter defaultCenter]
-            addObserverForName:USMStoreDidImportChangesNotification object:nil queue:nil usingBlock:
+    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidImportChangesNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
                 [self updateUsers];
             }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
                 self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
                 self.savePasswordItem.state = [[MPMacAppDelegate get] activeUserForMainThread].saveKey? NSOnState: NSOffState;

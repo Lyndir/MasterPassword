@@ -12,17 +12,17 @@ nav {
 }
 
 nav {
-	opacity: 0.85;
+    opacity: 0.85;
 }
 
 h1, h2, h3, h4 {
-	margin-top: 1em;
+    margin-top: 1em;
 }
 
 .content {
-	padding-top: 100px;
-	width: 940px;
-	margin: auto;
+    padding-top: 100px;
+    width: 940px;
+    margin: auto;
 }
 .box {
     display:                    inline-block;
@@ -34,109 +34,109 @@ h1, h2, h3, h4 {
 }
 
 .thumb {
-	clear: both;
-	border-bottom: 2px ridge white;
-	margin-bottom: 4em;
+    clear: both;
+    border-bottom: 2px ridge white;
+    margin-bottom: 4em;
 }
 .thumb .pull-right {
-	margin-left: 5ex;
+    margin-left: 5ex;
 }
 .thumb .pull-left {
-	margin-right: 5ex;
+    margin-right: 5ex;
 }
 
 .column {
-	display: inline-block;
-	margin: 0 2em;
-	vertical-align: top;
+    display: inline-block;
+    margin: 0 2em;
+    vertical-align: top;
 }
 
 .navbar .nav .img {
-	padding: 4px;
+    padding: 4px;
 }
 
 .navbar .nav .img img {
-	display: block;
-	height: 32px;
+    display: block;
+    height: 32px;
 }
 
 header {
-	position: relative;
-	overflow: hidden;
+    position: relative;
+    overflow: hidden;
 
-	color: white;
-	background: black;
-	text-shadow: black 0 1px 50px;
-	box-shadow: 0 1px 5px #000;
+    color: white;
+    background: black;
+    text-shadow: black 0 1px 50px;
+    box-shadow: 0 1px 5px #000;
 }
 header .container {
-	position: relative;
-	width: 100%;
-	height: 100%;
-	z-index: 1;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
 
-	background: radial-gradient(70% 50% at 30% 50%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.8) 100%);
+    background: radial-gradient(70% 50% at 30% 50%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.8) 100%);
 }
 header .background {
-	position: absolute;
-	width: 100%;
-	height: 100%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 #app header {
-	height: 80%;
+    height: 80%;
 }
 #app header .background {
-	background: url('../img/shot-laptop-standing-iphone-angled-flipped.png') center center;
+    background: url('../img/shot-laptop-standing-iphone-angled-flipped.png') center center;
     background-size: cover;
 }
 #algorithm header {
-	height: 40%;
-	
-	background: #272727;
+    height: 40%;
+    
+    background: #272727;
 }
 #algorithm header .background {
-	width: 940px;
-	height: auto;
-	left: 50%;
-	top: -10%;
-	margin-left: -470px;
+    width: 940px;
+    height: auto;
+    left: 50%;
+    top: -10%;
+    margin-left: -470px;
 }
 #algorithm header .container {
-	background: radial-gradient(50% 50% at 50% 30%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.8) 100%);
+    background: radial-gradient(50% 50% at 50% 30%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.8) 100%);
 }
 header .content {
-	position: absolute;
-	bottom: 5px;
-	left: 50%;
-	margin-left: -470px;
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    margin-left: -470px;
 
-	text-align: right;
+    text-align: right;
 
-	/*background: linear-gradient(to bottom, rgba(0,0,0,0) 85%, rgba(0,0,0,0.7) 85%);*/
-	/*background: black url("../img/shot-laptop-leaning-iphone.png") center top / cover no-repeat;*/
+    /*background: linear-gradient(to bottom, rgba(0,0,0,0) 85%, rgba(0,0,0,0.7) 85%);*/
+    /*background: black url("../img/shot-laptop-leaning-iphone.png") center top / cover no-repeat;*/
 }
 header h1 {
-	font-size: 4em;
+    font-size: 4em;
 }
 header h2 {
-	font-size: 2em;
-	font-weight: normal;
+    font-size: 2em;
+    font-weight: normal;
 }
 footer {
-	overflow: hidden;
-	text-align: center;
+    overflow: hidden;
+    text-align: center;
 }
 footer h1 {
-	background: #EEE;
+    background: #EEE;
 
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
-	font-size: 170%;
-	font-weight: 100;
+    font-size: 170%;
+    font-weight: 100;
 }
 footer .content {
-	margin: 1em auto;
-	padding: 0;
+    margin: 1em auto;
+    padding: 0;
 }
 footer .column {
-	text-align: left;
+    text-align: left;
 }

@@ -15,7 +15,8 @@
 
 - (void)viewDidLoad {
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil queue:nil usingBlock:
+    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
                 [self updateData];
             }];

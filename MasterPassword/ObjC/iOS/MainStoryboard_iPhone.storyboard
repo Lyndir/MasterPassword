@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12D78" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4457.6" systemVersion="12D78" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
+        <deployment defaultVersion="1536" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3682.6"/>
     </dependencies>
     <scenes>
         <!--Type View Controller - Type-->
@@ -470,6 +471,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                             <outlet property="delegate" destination="NKe-nv-566" id="O5k-hI-7Tf"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Type" id="rak-Td-wu1"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jZj-N1-rhF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -537,6 +539,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                         <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="lzO-Kl-IPf">
                                             <rect key="frame" x="191" y="8" width="123" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                             <segments>
                                                 <segment title="Normal"/>
                                                 <segment title="Debug"/>
@@ -553,6 +556,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Log Inspector" id="RrC-3Q-nBN">
                         <barButtonItem key="rightBarButtonItem" systemItem="action" id="SpB-nm-8qW">
                             <connections>
@@ -1048,6 +1052,7 @@ L4m3P4sSw0rD</string>
                         </subviews>
                         <color key="backgroundColor" red="0.14901960784313725" green="0.16470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Master Password" id="hB9-S6-KHC">
                         <barButtonItem key="backBarButtonItem" title="Site" id="tQQ-BA-KkZ"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="action" id="8Y7-Bf-FHa">
@@ -1056,7 +1061,7 @@ L4m3P4sSw0rD</string>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="actionsTipContainer" destination="foz-tW-xGw" id="JDf-q6-StD"/>
@@ -1166,6 +1171,7 @@ L4m3P4sSw0rD</string>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="zZZ-QZ-Yur"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                 </viewController>
@@ -1448,7 +1454,7 @@ You can use the words in the background for inspiration in finding a memorable m
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     </imageView>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Incorrect password." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="gQ2-mB-BP4">
-                                                        <rect key="frame" x="15" y="0.5" width="180" height="40"/>
+                                                        <rect key="frame" x="15" y="1" width="180" height="40"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -1609,6 +1615,7 @@ You can use the words in the background for inspiration in finding a memorable m
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="1" id="LfH-XT-9Vt">
                                                 <rect key="frame" x="41" y="223" width="240" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <segments>
                                                     <segment title="Max"/>
                                                     <segment title="Long"/>
@@ -1629,7 +1636,7 @@ You can use the words in the background for inspiration in finding a memorable m
                                                 <size key="shadowOffset" width="0.0" height="1"/>
                                             </label>
                                             <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" id="D49-fo-7FA">
-                                                <rect key="frame" x="187" y="260" width="94" height="27"/>
+                                                <rect key="frame" x="187" y="260" width="94" height="23"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             </stepper>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="TJC-xD-fjQ">
@@ -1702,6 +1709,7 @@ You can use the words in the background for inspiration in finding a memorable m
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="dU2-XK-yUQ">
                         <barButtonItem key="backBarButtonItem" title="Users" id="A5d-ER-NUM"/>
                     </navigationItem>
@@ -1750,6 +1758,7 @@ You can use the words in the background for inspiration in finding a memorable m
         <scene sceneID="wrY-9D-LEc">
             <objects>
                 <navigationController definesPresentationContext="YES" id="uu3-4d-bYN" customClass="PearlNavigationController" sceneMemberID="viewController">
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="T2Q-L6-b8f">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -1772,11 +1781,11 @@ You can use the words in the background for inspiration in finding a memorable m
             <objects>
                 <viewController id="Q4b-t4-pwH" customClass="MPSetupViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="FnB-rI-puV">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="RjU-5e-mti">
-                                <rect key="frame" x="0.0" y="-64" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="-64" width="320" height="588"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="top" image="cloud.png" id="Ahr-aa-V1N">
@@ -1803,13 +1812,14 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="M0m-G9-hH0">
-                                <rect key="frame" x="122" y="345" width="79" height="27"/>
+                                <rect key="frame" x="136" y="345" width="51" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                             </switch>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="iCloud" id="mNu-yP-9oW">
                         <barButtonItem key="rightBarButtonItem" title="Next" id="Kxp-c7-ErS">
                             <connections>
@@ -1830,7 +1840,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
             <objects>
                 <tableViewController id="idA-Pj-1U9" customClass="MPElementListAllViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="48" sectionHeaderHeight="22" sectionFooterHeight="22" id="N83-sj-4tl">
-                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <navigationBar key="tableHeaderView" contentMode="scaleToFill" id="l0p-Tu-L9k">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1856,6 +1866,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                             <outlet property="delegate" destination="idA-Pj-1U9" id="bdk-Iu-Hpv"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
                         <outlet property="navigationBar" destination="l0p-Tu-L9k" id="9DR-L3-ggI"/>
                     </connections>
@@ -1905,6 +1916,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="pagePositionView" destination="QQT-37-azo" id="TSf-0y-3VK"/>
@@ -1918,6 +1930,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
         <scene sceneID="8r0-wA-Zre">
             <objects>
                 <navigationController id="KZF-fe-y9n" customClass="PearlNavigationController" sceneMemberID="viewController">
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="sif-x3-Fol">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -2066,7 +2079,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="ilG-0h-SOb">
-                                                    <rect key="frame" x="221" y="8" width="79" height="27"/>
+                                                    <rect key="frame" x="249" y="4" width="51" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
@@ -2251,6 +2264,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                             <outlet property="delegate" destination="oLN-6u-GLb" id="MM9-S2-8rf"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="User Profile" id="reg-hh-9Ra">
                         <barButtonItem key="rightBarButtonItem" title="Settings" id="Bac-IA-e0Z">
                             <connections>
@@ -2282,10 +2296,10 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="-" id="Ywm-Yd-GPT">
-                                <rect key="frame" x="0.0" y="46" width="320" height="46"/>
+                                <rect key="frame" x="0.0" y="55" width="320" height="45"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
@@ -2296,6 +2310,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                             <outlet property="delegate" destination="Vrp-Gl-7qn" id="Kcg-1V-uAD"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="ZbK-tt-Abw"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lBn-RG-JE2" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2349,6 +2364,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="Pm8-fx-hfM"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                 </viewController>
@@ -2361,11 +2377,11 @@ If you set a custom password, it will be encrypted before it is saved to the clo
             <objects>
                 <viewController id="ZgN-2j-05b" customClass="MPSetupViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QIH-dS-sqD">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="FTf-06-1Pg">
-                                <rect key="frame" x="0.0" y="-64" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="-64" width="320" height="588"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Getting Started" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FkR-cP-Y7K">
@@ -2376,7 +2392,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" usesAttributedText="YES" id="hwP-ds-GDh">
-                                <rect key="frame" x="20" y="137" width="280" height="367"/>
+                                <rect key="frame" x="20" y="137" width="280" height="387"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <attributedString key="attributedText">
@@ -2466,6 +2482,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="About" id="oBl-x2-aUS">
                         <barButtonItem key="leftBarButtonItem" title="Close" style="done" id="yZJ-lt-O5m">
                             <connections>
@@ -2488,11 +2505,11 @@ You can make passwords for anything, like email addresses, sites or real-world t
             <objects>
                 <viewController id="myN-X7-9Tg" customClass="MPGuideViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vkG-Oi-PHo">
-                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" image="background.png" id="C2i-R4-36i">
-                                <rect key="frame" x="0.0" y="44" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <view clipsSubviews="YES" contentMode="scaleToFill" id="vSk-nT-Vwf" userLabel="View - Display">
@@ -2632,7 +2649,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                 </scopeButtonTitles>
                             </searchBar>
                             <view alpha="0.60000000000000009" contentMode="scaleToFill" id="Ahl-o0-lMv">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3wI-lo-tWc">
@@ -2652,7 +2669,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="UHf-cp-97W">
-                                        <rect key="frame" x="33" y="502" width="44" height="44"/>
+                                        <rect key="frame" x="33" y="522" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <accessibility key="accessibilityConfiguration" hint="" label="Close"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -2668,7 +2685,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jDS-Vh-ETL">
-                                        <rect key="frame" x="124" y="234" width="72" height="80"/>
+                                        <rect key="frame" x="124" y="244" width="72" height="80"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <accessibility key="accessibilityConfiguration" hint="" label="Close"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -2684,7 +2701,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                         </connections>
                                     </button>
                                     <progressView opaque="NO" contentMode="scaleToFill" id="nf7-oM-7dh">
-                                        <rect key="frame" x="85" y="519" width="150" height="9"/>
+                                        <rect key="frame" x="85" y="546" width="150" height="2"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <color key="progressTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                     </progressView>
@@ -2787,6 +2804,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                         </subviews>
                         <color key="backgroundColor" red="0.14901960780000001" green="0.1647058824" blue="0.18039215689999999" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="p1Y-gL-psy"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
@@ -2823,11 +2841,11 @@ You can make passwords for anything, like email addresses, sites or real-world t
             <objects>
                 <viewController id="kSj-yX-DmT" customClass="MPSetupViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sT4-Jb-e5D">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="Eqt-R0-LTj">
-                                <rect key="frame" x="0.0" y="-64" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="-64" width="320" height="588"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="top" image="unlocked.png" id="4ah-P0-2DG">
@@ -2855,13 +2873,14 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="xmc-hs-riu">
-                                <rect key="frame" x="122" y="345" width="79" height="27"/>
+                                <rect key="frame" x="136" y="345" width="51" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                             </switch>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Security" id="7XO-EZ-YRY">
                         <barButtonItem key="rightBarButtonItem" title="Next" id="77S-5d-d24">
                             <connections>
@@ -2916,204 +2935,6 @@ However, it means that anyone who finds your device unlocked can do the same.</s
         <image name="ui_textfield.png" width="158" height="34"/>
         <image name="unlocked.png" width="84" height="80"/>
     </resources>
-    <classes>
-        <class className="IASKAppSettingsViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/IASKAppSettingsViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="MPAppViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPAppViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="deblock:" candidateClass="UIButton"/>
-                <relationship kind="action" name="gorillas:" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="MPAppsViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPAppsViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="exit"/>
-                <relationship kind="outlet" name="pagePositionView" candidateClass="UIImageView"/>
-            </relationships>
-        </class>
-        <class className="MPElementListAllViewController" superclassName="MPElementListController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPElementListAllViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="add:"/>
-                <relationship kind="action" name="close:"/>
-                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
-            </relationships>
-        </class>
-        <class className="MPElementListController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPElementListController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="MPElementListSearchController" superclassName="MPElementListController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPElementListSearchController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="searchDisplayController" candidateClass="UISearchDisplayController"/>
-                <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="MPGuideViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPGuideViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="close"/>
-                <relationship kind="action" name="play"/>
-                <relationship kind="outlet" name="content" candidateClass="UIView"/>
-                <relationship kind="outlet" name="contentButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="contentText" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="contentTip" candidateClass="UIView"/>
-                <relationship kind="outlet" name="contentTipText" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="largePlayButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="progress" candidateClass="UIProgressView"/>
-                <relationship kind="outlet" name="siteNameTip" candidateClass="UIView"/>
-                <relationship kind="outlet" name="smallPlayButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="toolButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="toolTip" candidateClass="UIView"/>
-                <relationship kind="outlet" name="typeButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="typeTip" candidateClass="UIView"/>
-                <relationship kind="outlet" name="usernameButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="usernameTip" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="MPLogsViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPLogsViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="action:"/>
-                <relationship kind="action" name="mail:" candidateClass="UIBarButtonItem"/>
-                <relationship kind="action" name="refresh:" candidateClass="UIBarButtonItem"/>
-                <relationship kind="action" name="toggleLevelControl:" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="levelControl" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="logView" candidateClass="UITextView"/>
-            </relationships>
-        </class>
-        <class className="MPMainViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPMainViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="action:" candidateClass="UIBarButtonItem"/>
-                <relationship kind="action" name="closeAlert"/>
-                <relationship kind="action" name="closeOutdatedAlert"/>
-                <relationship kind="action" name="copyContent"/>
-                <relationship kind="action" name="editLoginName:" candidateClass="UILongPressGestureRecognizer"/>
-                <relationship kind="action" name="editPassword"/>
-                <relationship kind="action" name="incrementPasswordCounter"/>
-                <relationship kind="action" name="infoOutdatedAlert"/>
-                <relationship kind="action" name="panHelpDown:" candidateClass="UIPanGestureRecognizer"/>
-                <relationship kind="action" name="panHelpUp:" candidateClass="UIPanGestureRecognizer"/>
-                <relationship kind="action" name="resetPasswordCounter:" candidateClass="UILongPressGestureRecognizer"/>
-                <relationship kind="action" name="searchOutdatedElements"/>
-                <relationship kind="action" name="toggleUser"/>
-                <relationship kind="action" name="upgradePassword"/>
-                <relationship kind="outlet" name="actionsTipContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="alertBody" candidateClass="UITextView"/>
-                <relationship kind="outlet" name="alertContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="alertTitle" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="contentContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="contentField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="contentTipBody" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="contentTipContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="displayContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="helpContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="helpView" candidateClass="UIWebView"/>
-                <relationship kind="outlet" name="loginNameContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="loginNameField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="loginNameTipBody" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="loginNameTipContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="outdatedAlertBack" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="outdatedAlertCloseButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="outdatedAlertContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="passwordCounter" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="passwordEdit" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="passwordIncrementer" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="passwordUpgrade" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="passwordUser" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="pullDownGesture" candidateClass="UIPanGestureRecognizer"/>
-                <relationship kind="outlet" name="pullDownView" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="pullUpGesture" candidateClass="UIPanGestureRecognizer"/>
-                <relationship kind="outlet" name="pullUpView" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="searchDelegate" candidateClass="MPElementListSearchController"/>
-                <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="siteName" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="toolTipBody" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="toolTipContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="toolTipEditIcon" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="typeButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="typeTipContainer" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="MPPreferencesViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPPreferencesViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="didToggleSwitch:" candidateClass="UISwitch"/>
-                <relationship kind="outlet" name="avatarTemplate" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="avatarsView" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="changeMPCell" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="defaultTypeLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="exportCell" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="savePasswordSwitch" candidateClass="UISwitch"/>
-            </relationships>
-        </class>
-        <class className="MPSetupViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPSetupViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="close:" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="cloudSwitch" candidateClass="UISwitch"/>
-                <relationship kind="outlet" name="rememberLoginSwitch" candidateClass="UISwitch"/>
-            </relationships>
-        </class>
-        <class className="MPTypeViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPTypeViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="recommendedTipContainer" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="MPUnlockViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPUnlockViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="add:" candidateClass="UIButton"/>
-                <relationship kind="action" name="emergencyClose:" candidateClass="UIButton"/>
-                <relationship kind="action" name="emergencyCopy:" candidateClass="UIButton"/>
-                <relationship kind="action" name="facebook:" candidateClass="UIButton"/>
-                <relationship kind="action" name="google:" candidateClass="UIButton"/>
-                <relationship kind="action" name="mail:" candidateClass="UIButton"/>
-                <relationship kind="action" name="targetedUserAction:" candidateClass="UILongPressGestureRecognizer"/>
-                <relationship kind="action" name="twitter:" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="avatarTemplate" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="avatarsView" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="createPasswordTipView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="emergencyActivity" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="emergencyContentTipContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="emergencyCounter" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="emergencyCounterStepper" candidateClass="UIStepper"/>
-                <relationship kind="outlet" name="emergencyGeneratorContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="emergencyMasterPassword" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="emergencyName" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="emergencyPassword" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="emergencySite" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="emergencyTypeControl" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="nameLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="newsView" candidateClass="UIWebView"/>
-                <relationship kind="outlet" name="oldNameLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="passwordFieldLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="passwordTipLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="passwordTipView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="passwordView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="spinner" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="targetedUserActionGesture" candidateClass="UILongPressGestureRecognizer"/>
-                <relationship kind="outlet" name="tip" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="uiContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="wordWall" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="PearlNavigationController" superclassName="UINavigationController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PearlNavigationController.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <nil key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
@@ -3121,6 +2942,6 @@ However, it means that anyone who finds your device unlocked can do the same.</s
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="swi-5o-hfK"/>
-        <segue reference="KIl-ZW-M7G"/>
+        <segue reference="9Bs-cD-ddF"/>
     </inferredMetricsTieBreakers>
 </document>

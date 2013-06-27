@@ -81,15 +81,17 @@
             ^(NSNotification *note) {
                 self.suppressOutdatedAlert = NO;
             }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:MPElementUpdatedNotification object:nil queue:nil usingBlock:
-            ^void(NSNotification *note) {
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPElementUpdatedNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
+            ^(NSNotification *note) {
                 MPElementEntity *activeElement = [self activeElementForMainThread];
                 if (activeElement.type & MPElementTypeClassStored && ![[activeElement.content description] length])
                     [self showToolTip:@"Tap        to set a password." withIcon:self.toolTipEditIcon];
                 if (activeElement.requiresExplicitMigration)
                     [self showToolTip:@"Password outdated. Tap to upgrade it." withIcon:nil];
             }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil queue:nil usingBlock:
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
                 BOOL animated = [[note.userInfo objectForKey:@"animated"] boolValue];
 
@@ -107,7 +109,8 @@
                         [self.navigationController popToRootViewControllerAnimated:animated];
                     }];
             }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil queue:nil usingBlock:
+    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
                 if (!self.activeElementForMainThread)
                     [self didSelectElement:nil];

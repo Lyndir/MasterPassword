@@ -57,34 +57,38 @@
 //                            @"their passwords to change.  You'll need to update your profile for that site with the new password."];
 //            [moc saveToStore];
 //        }];
-        [self ensureLoadedAndUnlockedOrCloseIfLoggedOut:YES];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self ensureLoadedAndUnlockedOrCloseIfLoggedOut:YES];
+        });
     }                             forKeyPath:@"key" options:NSKeyValueObservingOptionInitial context:nil];
-    [[NSNotificationCenter defaultCenter]
-            addObserverForName:NSWindowDidBecomeKeyNotification object:self.window queue:nil usingBlock:^(NSNotification *note) {
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:self.window
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
+     ^(NSNotification *note) {
         [self ensureLoadedAndUnlockedOrCloseIfLoggedOut:NO];
         [self.siteField selectText:nil];
     }];
-    [[NSNotificationCenter defaultCenter]
-            addObserverForName:NSWindowWillCloseNotification object:self.window queue:nil usingBlock:^(NSNotification *note) {
-        dispatch_async( dispatch_get_main_queue(), ^{
-            NSWindow *sheet = [self.window attachedSheet];
-            if (sheet)
-                [NSApp endSheet:sheet];
-
-            [NSApp hide:nil];
-            self.closing = NO;
-        } );
-    }];
-    [[NSNotificationCenter defaultCenter]
-            addObserverForName:MPSignedOutNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillCloseNotification object:self.window
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
+     ^(NSNotification *note) {
+         NSWindow *sheet = [self.window attachedSheet];
+         if (sheet)
+             [NSApp endSheet:sheet];
+         
+         [NSApp hide:nil];
+         self.closing = NO;
+     }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
+     ^(NSNotification *note) {
         _activeElementOID = nil;
         [self.siteField setStringValue:@""];
         [self.typeField deselectItemAtIndex:[self.typeField indexOfSelectedItem]];
         [self trySiteWithAction:NO];
         [self ensureLoadedAndUnlockedOrCloseIfLoggedOut:YES];
     }];
-    [[NSNotificationCenter defaultCenter]
-            addObserverForName:USMStoreDidChangeNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
+     ^(NSNotification *note) {
         [self ensureLoadedAndUnlockedOrCloseIfLoggedOut:NO];
     }];
 
