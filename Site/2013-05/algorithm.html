@@ -72,12 +72,12 @@
             <div class="thumb clearfix">
                 <p><b>Master Password is <em>an algorithm used to generate unique passwords</em></b> for websites, email accounts, or anything else <em>based only on easily reproducible input</em>.<br />
                     The goal is a process that avoids all the problems involved with other password solutions.</p>
-                <p>The Master Password algorithm is <i>open</i>: this page describes its inner workings in detail.  We believe the following is an important lesson we should all learn: Regardless of how much encryption a solution claims, <a href="http://www.geekzone.co.nz/foobar/5823">if you don't know how it works, you cannot assume it is secure</a> (at least, not the kind of secure you care about).</p>
+                    <p>The Master Password algorithm is <i>open</i>: this page describes its inner workings in detail.  We believe the following is an important lesson we should all learn: Regardless of how much encryption a solution claims, <a href="http://www.geekzone.co.nz/foobar/5823">if you don't know how it works, you <strong>cannot</strong> assume it is secure</a> (at least, not the kind of secure you care about).</p>
 
                 <h1>The Password Problem</h1>
                 <img class="pull-right" src="img/thumb-authenticate.png" />
                 <p>Passwords are used to authenticate you to someone else.  That means, convince someone that you really are who you say you are.  The theory is that when you two are the only ones that know a certain secret word, then the other party can be certain of your identity when you prove to them you know the secret word.</p>
-                <p>Authentication using passwords is pretty good in theory but fails when the password is either:
+                <p>Authentication using passwords is pretty good in theory but <strong>fails when</strong> the password is either:
                     <ul>
                         <li>Easily guessed by an impersonator.</li>
                         <li>Known by others.</li>
@@ -89,7 +89,7 @@
 
                 <h1>Password Solutions</h1>
                 <p>To help with these problems, there are a bunch of apps available that remember your passwords for you.  They accomplish this by saving your passwords in an encrypted vault or by sending them off to a cloud server.</p>
-                <p>These approaches are very helpful, but they come with a few very <em>important</em> downsides:
+                <p>These approaches are very helpful, but they come with a few very <em>important</em> <strong>downsides</strong>:
                     <ul>
                         <li>Vaults need to be backed-up to avoid the risk of complete identity loss.</li>
                         <li>Vaults need to be kept nearby and in-sync across the your devices or you won't always be able to access the password you need.</li>
@@ -101,10 +101,10 @@
                 <h1>Solving Availability</h1>
                 <p>Losing all your passwords or other password availability issues are frustrating and sometimes even disastrous.</p>
                 <p>Master Password solves this problem by being a <em>stateless</em> solution.  That means that no information needs to be saved in order for the program to be able to give you your password again in the future.</p>
-                <p>Since Master Password doesn't save your passwords and doesn't send them anywhere, it avoids the following risks:
+                <p>Since Master Password doesn't save your passwords and doesn't send them anywhere, it <strong>avoids the following risks</strong>:
                     <ul>
-                        <li>Your passwords cannot be found in a file.</li>
-                        <li>Your passwords cannot be intercepted during transport.</li>
+                        <li>Your passwords cannot be found in a file or even a backup.</li>
+                        <li>Your passwords cannot be intercepted during sync.</li>
                         <li>You don't need to trust a third party with your secrets.</li>
                         <li>You can't lose your passwords.</li>
                     </ul>
