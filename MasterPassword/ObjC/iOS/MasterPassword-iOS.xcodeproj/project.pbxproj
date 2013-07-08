@@ -4129,7 +4129,7 @@
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "15ECACBF-EF7C-4870-85D0-3D4DE67E6513";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "20B988BD-7A10-49E6-9FF7-367BD5714A31";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
