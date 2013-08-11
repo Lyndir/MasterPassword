@@ -8,10 +8,6 @@
 
     <logger name="com.lyndir" level="TRACE" />
 
-    <!--
-    <logger name="org.apache.wicket" level="DEBUG" />
-    -->
-
     <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>

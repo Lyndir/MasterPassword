@@ -632,13 +632,14 @@
 }
 
 
-#pragma mark - Google+
+#pragma mark - UbiquityStoreManager
+
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager willLoadStoreIsCloud:(BOOL)isCloudStore {
 
     dispatch_async( dispatch_get_main_queue(), ^{
         [self.handleCloudContentAlert cancelAlertAnimated:YES];
         if (![self.storeLoading isVisible])
-            self.storeLoading = [PearlOverlay showOverlayWithTitle:@"Opening Your Data"];
+            self.storeLoading = [PearlOverlay showOverlayWithTitle:@"Loading Sites"];
     } );
 
     [super ubiquityStoreManager:manager willLoadStoreIsCloud:isCloudStore];
@@ -679,7 +680,7 @@
 
     self.handleCloudContentAlert.tappedButtonBlock = ^(UIAlertView *alert, NSInteger buttonIndex) {
         wSelf.fixCloudContentAlert = [PearlAlert showAlertWithTitle:@"Fix iCloud Now" message:
-                @"This problem can usually be auto‑corrected by opening the app on another device where you recently made changes.\n"
+                @"This problem can be auto‑corrected by opening the app on another device where you recently made changes.\n"
                         @"You can correct the problem from this device anyway, but recent changes made on another device might get lost."
                                                           viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:
                         ^(UIAlertView *alert_, NSInteger buttonIndex_) {
