@@ -21,7 +21,11 @@
 #import "MPAppDelegate_Store.h"
 #import "MPAppDelegate_Key.h"
 
-@implementation MPLogsViewController
+@implementation MPLogsViewController {
+    PearlAlert *switchCloudStoreProgress;
+}
+
+@synthesize switchCloudStoreProgress;
 
 - (void)viewDidLoad {
 
@@ -58,7 +62,10 @@
                              if (buttonIndex_ == alert.cancelButtonIndex)
                                  return;
 
-                             [self switchCloudStore];
+                             switchCloudStoreProgress = [PearlAlert showActivityWithTitle:@"Enumerating Stores"];
+                             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                                 [self switchCloudStore];
+                             });
                          }     cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonContinue, nil];
         }
     }                  cancelTitle:[PearlStrings get].commonButtonCancel
@@ -80,22 +87,27 @@
         if ([[NSFileManager defaultManager] fileExistsAtPath:content.path isDirectory:&directory] && directory)
             [contentNames addObject:[content lastPathComponent]];
 
-    [PearlSheet showSheetWithTitle:[[MPiOSAppDelegate get].storeManager valueForKey:@"storeUUID_ThreadSafe"]
-                         viewStyle:UIActionSheetStyleAutomatic
-                         initSheet:^(UIActionSheet *sheet) {
-                             for (NSString *contentName in contentNames) {
-                                [sheet addButtonWithTitle:contentName];
-                             }
-                         }
-                 tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
-                     if (buttonIndex == sheet.cancelButtonIndex)
-                         return;
+    NSString *storeUUID = [[MPiOSAppDelegate get].storeManager valueForKey:@"storeUUID_ThreadSafe"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [switchCloudStoreProgress cancelAlertAnimated:YES];
 
-                     [[MPiOSAppDelegate get].storeManager setValue:[contentNames objectAtIndex:(unsigned)buttonIndex] forKey:@"storeUUID"];
-                     [[MPiOSAppDelegate get].storeManager reloadStore];
-                     [[MPiOSAppDelegate get] signOutAnimated:YES];
-                 }
-                       cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:nil];
+        [PearlSheet showSheetWithTitle:storeUUID
+                             viewStyle:UIActionSheetStyleAutomatic
+                             initSheet:^(UIActionSheet *sheet) {
+                                 for (NSString *contentName in contentNames) {
+                                     [sheet addButtonWithTitle:contentName];
+                                 }
+                             }
+                     tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
+                         if (buttonIndex == sheet.cancelButtonIndex)
+                             return;
+                         
+                         [[MPiOSAppDelegate get].storeManager setValue:[contentNames objectAtIndex:(unsigned)buttonIndex] forKey:@"storeUUID"];
+                         [[MPiOSAppDelegate get].storeManager reloadStore];
+                         [[MPiOSAppDelegate get] signOutAnimated:YES];
+                     }
+                           cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:nil];
+    });
 }
 
 - (IBAction)toggleLevelControl:(UISegmentedControl *)sender {

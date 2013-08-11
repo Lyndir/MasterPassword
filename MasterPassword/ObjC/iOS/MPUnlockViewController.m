@@ -1006,38 +1006,35 @@
     if ([self selectedUserForThread])
         return;
 
-    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        MPUserEntity *targetedUser = [self userForAvatar:[self findTargetedAvatar] inContext:context];
-        if (!targetedUser)
+    NSManagedObjectContext *context = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
+    MPUserEntity *targetedUser = [self userForAvatar:[self findTargetedAvatar] inContext:context];
+    if (!targetedUser)
+        return;
+
+    [PearlSheet showSheetWithTitle:targetedUser.name
+                         viewStyle:UIActionSheetStyleBlackTranslucent
+                         initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
+        if (buttonIndex == [sheet cancelButtonIndex])
             return;
 
-        [PearlSheet showSheetWithTitle:targetedUser.name
-                             viewStyle:UIActionSheetStyleBlackTranslucent
-                             initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
-            if (buttonIndex == [sheet cancelButtonIndex])
-                return;
+        if (buttonIndex == [sheet destructiveButtonIndex]) {
+            [context deleteObject:targetedUser];
+            [context saveToStore];
 
-            if (buttonIndex == [sheet destructiveButtonIndex]) {
-                [context performBlock:^{
-                    [context deleteObject:targetedUser];
-                    [context saveToStore];
+            dispatch_async( dispatch_get_main_queue(), ^{
+                [self updateUsers];
+            } );
+            return;
+        }
 
-                    dispatch_async( dispatch_get_main_queue(), ^{
-                        [self updateUsers];
-                    } );
-                }];
-                return;
-            }
-
-            if (buttonIndex == [sheet firstOtherButtonIndex])
-                [[MPiOSAppDelegate get] changeMasterPasswordFor:targetedUser saveInContext:context didResetBlock:^{
-                    dispatch_async( dispatch_get_main_queue(), ^{
-                        [[self avatarForUser:targetedUser] setSelected:YES];
-                    } );
-                }];
-        }                  cancelTitle:[PearlStrings get].commonButtonCancel
-                      destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];
-    }];
+        if (buttonIndex == [sheet firstOtherButtonIndex])
+            [[MPiOSAppDelegate get] changeMasterPasswordFor:targetedUser saveInContext:context didResetBlock:^{
+                dispatch_async( dispatch_get_main_queue(), ^{
+                    [[self avatarForUser:targetedUser] setSelected:YES];
+                } );
+            }];
+    }                  cancelTitle:[PearlStrings get].commonButtonCancel
+                  destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];
 }
 
 - (IBAction)facebook:(UIButton *)sender {

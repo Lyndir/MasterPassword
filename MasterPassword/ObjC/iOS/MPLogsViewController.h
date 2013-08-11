@@ -22,6 +22,7 @@
 @interface MPLogsViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITextView *logView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *levelControl;
+@property(nonatomic, strong) PearlAlert *switchCloudStoreProgress;
 - (IBAction)action:(id)sender;
 - (IBAction)toggleLevelControl:(UISegmentedControl *)sender;
 - (IBAction)refresh:(UIBarButtonItem *)sender;
