@@ -124,9 +124,6 @@
 
 - (void)viewDidLoad {
 
-    NSString *newsURL = PearlString( @"http://www.masterpasswordapp.com/news.html?version=%@", [[PearlInfoPlist get] CFBundleVersion] );
-    [self.newsView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:newsURL]]];
-
     self.avatarToUserOID = [NSMutableDictionary dictionaryWithCapacity:3];
 
     [self.avatarsView addGestureRecognizer:self.targetedUserActionGesture];
@@ -193,6 +190,10 @@
                 [UIView animateWithDuration:1 animations:^{
                     self.uiContainer.alpha = 1;
                 }];
+
+                NSString *newsURL = PearlString( @"http://masterpasswordapp.com/news-dev.html?version=%@",
+                        [[PearlInfoPlist get] CFBundleVersion] );
+                [self.newsView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:newsURL]]];
             }];
 
     [self updateLayoutAnimated:NO allowScroll:YES completion:nil];
