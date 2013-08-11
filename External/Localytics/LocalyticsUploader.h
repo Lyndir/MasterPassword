@@ -57,16 +57,6 @@ extern NSString * const kLocalyticsKeyResponseBody;
 
 
 /*!
- @method LocalyticsUploader
- @abstract Upload attribution data to Localytics.
- @param localyticsApplicationKey the Localytics application ID
- @param attribution Attribution cookie captured at install time
- @param installId Install id passed to the server in the x-install-id header field.
- @param advertisingIdentifier The Apple 'advertisingidentifier'
- */
-- (void)uploaderAttributionWithApplicationKey:(NSString *)appKey attribution:(NSString *)attribution installId:(NSString *)installId advertisingIdentifier:(NSString *)advertisingIdentifier;
-
-/*!
  @method uploadTimeStamp
  @abstract Retrieve upload TimeStamp.
  */

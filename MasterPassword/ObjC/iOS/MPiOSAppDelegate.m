@@ -10,7 +10,7 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "IASKSettingsReader.h"
-#import "GPPSignIn.h"
+#import <GooglePlus/GPPSignIn.h>
 
 @interface MPiOSAppDelegate()
 

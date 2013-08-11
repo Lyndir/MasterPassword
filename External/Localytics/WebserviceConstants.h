@@ -17,7 +17,6 @@
 #define HEADER_CLIENT_TIME      @"x-upload-time"
 #define HEADER_INSTALL_ID       @"x-install-id"
 #define HEADER_CLIENT_VERSION   @"x-client-version"
-#define HEADER_DELAY_SESSION	@"ll-first-session"
 
 /*********************
  * Shared Attributes *
@@ -69,6 +68,7 @@
 #define PARAM_IDENTIFIERS           @"ids"      // Identifiers (dictionary)
 #define PARAM_BIRTH_TIME            @"b"        // Birth time (Since epoch)
 #define PARAM_TIMEZONE_OFFSET		@"tz"       // Device offset from GMT in seconds
+#define PARAM_FB_ATTRIBUTION		@"fbat"		// Facebook attribution cookie
 
 /*****************
  * Session Start *
@@ -119,15 +119,5 @@
 #define PARAM_NEW_FLOW_EVENTS       @"nw"   // Events and screens encountered during this session that have NOT been staged for upload.
 #define PARAM_OLD_FLOW_EVENTS       @"od"   // Events and screens encountered during this session that HAVE been staged for upload.
 
-/************************
- * Partner attributions *
- ***********************/
-#define FB_ATTRIBUTION              @"fb_attrib_first"          // Facebook attribution cookie
-#define FB_ATTRIBUTION_TIME         @"fb_attrib_first_date"     // Time original attribution cookie was collected
-#define FB_ATTRIBUTION_CURRENT      @"fb_attrib_current"        // Facebook attribution cookie
-#define FB_ATTRIBUTION_CURRENT_TIME @"fb_attrib_current_date"   // Time original attribution cookie was collected
-#define FB_DEVICE_ID                @"dpid"                     // Device unique identifiers
-#define FB_DEVICE_ID_TYPE           @"dpid_type"                // Either UDID or ADID (advertisingIdentifier)
-#define FB_INSTALL_ID               @"install_id"               // Device install ID
 
 

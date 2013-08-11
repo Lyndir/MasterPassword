@@ -7,27 +7,20 @@ README  -- This file.
 
 Changelog  -- The versions and changes of the SDK.
 
-lib/  -- Header files and libraries.
-  GPPDeepLink.h -- Header file to include for sharing with Google+ with content
-                   deep linking.
-  GPPShare.h -- Header file to include for sharing with Google+.
-  GPPSignIn.h -- Header file to include for signing into Google+.
-  GPPSignInButton.h -- Header file to include for showing a button to
-                       sign in with Google+.
-  libGooglePlus.a -- Static library built for iOS device to link into your app.
-  libGooglePlusUniversal.a -- Static library built for both iOS device and
-                              simulator to link into your app.
+GooglePlus.framework/  -- The Google+ SDK framework.
 
-OpenSource/  -- Google open source files used by the SDK. Add all files in this
-                directory into your project if you're not already using them.
-                Also see comments for the subdirectory below.
-  GTL/ -- Google open source files only used by the sample app. Include them
-          into your project if you're going to use the same functionality,
-          e.g. writing user's app activities.
+GooglePlus.bundle/  -- Resources that can be used in your app.
+                       Required if |GPPSignInButton| is used.
 
-Resources/  -- Resources that can be used in your app.
-               For |GPPSignInButton|, the gpp_sign_in_*.png images
-               are required.
+GoogleOpenSource.framework/ -- A framework containing all the open source files
+                               used by the SDK.
+                               Either add this framework or add individual
+                               files in OpenSource/ directory into your project.
+
+OpenSource/  -- Google open source files used by the SDK.
+                This contains the same code as in GoogleOpenSource.framework.
+                If you're not adding GoogleOpenSource.framework, add the files
+                you need from this directory into your project.
 
 SampleCode/  -- Sample code for your reference only.
                 Do not include this in your project.

@@ -22,10 +22,6 @@
 #define LOCALYTICS_URL_SECURED   @"https://analytics.localytics.com/api/v2/applications/%@/uploads"
 #endif
 
-#ifndef LOCALYTICS_ATTRIBUTION_SERVER
-#define LOCALYTICS_ATTRIBUTION_SERVER @"http://a.localytics.com/fb_install/"
-#endif
-
 NSString * const kLocalyticsKeyResponseBody = @"localytics.key.responseBody";
 
 @interface LocalyticsUploader ()
@@ -178,11 +174,6 @@ NSString * const kLocalyticsKeyResponseBody = @"localytics.key.responseBody";
 	[submitRequest setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
 	[submitRequest setValue:[NSString stringWithFormat:@"%d", requestData.length] forHTTPHeaderField:@"Content-Length"];
 	
-	if ([LocalyticsSession shared].delaySession == YES)
-	{
-		[submitRequest setValue:@"true" forHTTPHeaderField:HEADER_DELAY_SESSION];
-	}
-	
 	[submitRequest setHTTPBody:requestData];
 	
 	return submitRequest;
@@ -196,71 +187,6 @@ NSString * const kLocalyticsKeyResponseBody = @"localytics.key.responseBody";
 	[[[LocalyticsSession shared] db] vacuumIfRequired];
 }
 
-- (void)uploaderAttributionWithApplicationKey:(NSString *)appKey attribution:(NSString *)attribution installId:(NSString *)installId advertisingIdentifier:(NSString *)advertisingIdentifier
-{
-	// Required parameters
-	if(!attribution)
-		return;
-	
-	NSString *apiUrlString = [LOCALYTICS_ATTRIBUTION_SERVER stringByAppendingString:appKey];
-	NSMutableURLRequest *submitRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiUrlString]
-																 cachePolicy:NSURLRequestReloadIgnoringCacheData
-															 timeoutInterval:60.0];
-	
-	NSMutableString *postBody = [NSMutableString string];
-	[postBody appendFormat:@"%@=%@", FB_ATTRIBUTION, attribution];
-	[postBody appendFormat:@"&%@=%ld", FB_ATTRIBUTION_TIME, (long)[[[LocalyticsSession shared] db] createdTimestamp]];
-	
-	if(advertisingIdentifier)
-	{
-		[postBody appendFormat:@"&%@=%@", FB_DEVICE_ID_TYPE, @"adid"];
-		[postBody appendFormat:@"&%@=%@", FB_DEVICE_ID, advertisingIdentifier];
-		
-	}
-	
-	if(installId)
-	{
-		[postBody appendFormat:@"&%@=%@", FB_INSTALL_ID, installId];
-	}
-	
-	[submitRequest setHTTPMethod:@"POST"];
-	[submitRequest setHTTPBody:[postBody dataUsingEncoding:NSUTF8StringEncoding]];
-	
-	// Perform synchronous upload in an async dispatch. This is necessary because the calling block will not persist to
-	// receive the response data.
-	dispatch_group_async([[LocalyticsSession shared] criticalGroup], [[LocalyticsSession shared] queue], ^{
-		@try  {
-			NSURLResponse *response = nil;
-			NSError *responseError = nil;
-			[NSURLConnection sendSynchronousRequest:submitRequest
-								  returningResponse:&response
-											  error:&responseError];
-			NSInteger responseStatusCode = [(NSHTTPURLResponse *)response statusCode];
-			
-			if (responseError) {
-				// On error, simply print the error and close the uploader.  We have to assume the data was not transmited
-				// so it is not deleted.
-				LocalyticsLog("Error uploading Facebook attribution.  Code: %d,  Description: %@",
-							  [responseError code],
-							  [responseError localizedDescription]);
-			}
-			else
-			{
-				// While response status codes in the 5xx range leave upload rows intact, the default case is to delete.
-				if (responseStatusCode >= 500 && responseStatusCode < 600) {
-					LocalyticsLog("Facebook attribution upload unsuccessful. Response code %d", responseStatusCode);
-				}
-				else
-				{
-					LocalyticsLog("Facebook attribution upload completed successfully. Response code %d", responseStatusCode);
-					[[[LocalyticsSession shared] db] setFacebookAttribution:nil];
-					[LocalyticsSession shared].facebookAttribution = nil;
-				}
-			}
-		}
-		@catch (NSException * e) {}
-	});
-}
 /*!
  @method gzipDeflatedDataWithData
  @abstract Deflates the provided data using gzip at the default compression level (6).

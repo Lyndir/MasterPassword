@@ -40,7 +40,6 @@
 	NSMutableString *_screens;              // Comma-delimited list of screens tagged during this session.
 	NSTimeInterval _sessionActiveDuration;  // Duration that session open.
 	BOOL _sessionHasBeenOpen;               // Whether or not this session has ever been open.
-	BOOL _delaySession;						// Whether or not the server should delay processing on this upload
 	LocalyticsDatabase *_db;                // Localytics database reference
 	LocalyticsUploader *_uploader;          // Localytics uploader reference
 }
@@ -60,8 +59,10 @@
 @property (nonatomic, retain) NSMutableString *screens;
 @property (nonatomic, assign) NSTimeInterval sessionActiveDuration;
 @property (nonatomic, assign) BOOL sessionHasBeenOpen;
-@property (nonatomic, assign) BOOL delaySession;
 @property (nonatomic, assign) NSInteger sessionNumber;
+@property (nonatomic, assign) BOOL needsSessionStartActions;
+@property (nonatomic, assign) BOOL needsFirstRunActions;
+@property (nonatomic, assign) BOOL needsUpgradeActions;
 
 // Private methods.
 + (id)allocFactory;
@@ -80,7 +81,9 @@
 - (LocalyticsDatabase *)db;
 - (LocalyticsUploader *)uploader;
 - (BOOL)uploadIsNeeded;
-
+- (void)onStartSession;
+- (void)onFirstRun;
+- (void)onUpgrade;
 
 // Datapoint methods.
 - (NSString *)customDimensions;

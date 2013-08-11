@@ -755,7 +755,7 @@ static NSString *ETagIfPresent(GTLObject *obj) {
 
   // Build up the array of RPC calls.
   NSMutableArray *rpcPayloads = [NSMutableArray arrayWithCapacity:numberOfQueries];
-  NSMutableSet *requestIDs = [NSMutableSet setWithCapacity:numberOfQueries];
+  NSMutableArray *requestIDs = [NSMutableSet setWithCapacity:numberOfQueries];
   for (GTLQuery *query in queries) {
     NSString *methodName = query.methodName;
     NSDictionary *parameters = query.JSON;
@@ -770,6 +770,10 @@ static NSString *ETagIfPresent(GTLObject *obj) {
 
     GTL_DEBUG_ASSERT(query.additionalHTTPHeaders == nil,
                      @"additionalHTTPHeaders disallowed on queries added to a batch - query %@ (%@)",
+                     requestID, methodName);
+
+    GTL_DEBUG_ASSERT(query.urlQueryParameters == nil,
+                     @"urlQueryParameters disallowed on queries added to a batch - query %@ (%@)",
                      requestID, methodName);
 
     GTL_DEBUG_ASSERT(query.uploadParameters == nil,
@@ -802,10 +806,16 @@ static NSString *ETagIfPresent(GTLObject *obj) {
 
   BOOL mayAuthorize = (batchCopy ? !batchCopy.shouldSkipAuthorization : YES);
 
-  // urlQueryParameters on the queries are currently unsupport during a batch
-  // as it's not clear how to map them.
-
   NSURL *rpcURL = self.rpcURL;
+
+  // We'll use the batch query's URL parameters, and ignore the URL parameters
+  // specified on the individual queries.
+  NSDictionary *urlQueryParameters = batch.urlQueryParameters;
+  if ([urlQueryParameters count] > 0) {
+    rpcURL = [GTLUtilities URLWithString:[rpcURL absoluteString]
+                         queryParameters:urlQueryParameters];
+  }
+
   GTLServiceTicket *resultTicket = [self fetchObjectWithURL:rpcURL
                                                 objectClass:[GTLBatchResult class]
                                                  bodyObject:nil

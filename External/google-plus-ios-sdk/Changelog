@@ -1,3 +1,7 @@
+2013-05-07  -- v1.3.0
+- Packaged as framework
+- Bug fixes
+
 2013-02-26  -- v1.2.1
 - Interactive posts on Google+ share
 - Improved sign-in and share APIs to use shared instances

@@ -18,6 +18,8 @@
     sqlite3 *_databaseConnection;
 }
 
+@property (nonatomic, assign, readonly) BOOL firstRun;
+
 - (unsigned long long)databaseSize;
 - (int)eventCount;
 - (NSTimeInterval)createdTimestamp;
@@ -50,6 +52,8 @@
 
 - (BOOL)isOptedOut;
 - (BOOL)setOptedOut:(BOOL)optOut;
+- (NSString *)appVersion;
+- (BOOL)updateAppVersion:(NSString *)appVersion;
 - (NSString *)installId;
 - (NSString *)appKey; // Most recent app key-- may not be that used to open the session.
 

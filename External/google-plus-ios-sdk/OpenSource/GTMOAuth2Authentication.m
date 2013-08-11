@@ -122,6 +122,7 @@ static NSString *const kRefreshFetchArgsKey = @"requestArgs";
 @interface GTMOAuth2Authentication ()
 
 @property (retain) NSMutableArray *authorizationQueue;
+@property (readonly) NSString *authorizationToken;
 
 - (void)setKeysForResponseJSONData:(NSData *)data;
 
@@ -132,8 +133,6 @@ static NSString *const kRefreshFetchArgsKey = @"requestArgs";
 - (BOOL)shouldRefreshAccessToken;
 
 - (void)updateExpirationDate;
-
-- (NSDictionary *)dictionaryWithJSONData:(NSData *)data;
 
 - (void)tokenFetcher:(GTMHTTPFetcher *)fetcher
     finishedWithData:(NSData *)data
@@ -164,9 +163,11 @@ finishedRefreshWithFetcher:(GTMHTTPFetcher *)fetcher
             clientSecret = clientSecret_,
             redirectURI = redirectURI_,
             parameters = parameters_,
+            authorizationTokenKey = authorizationTokenKey_,
             tokenURL = tokenURL_,
             expirationDate = expirationDate_,
             additionalTokenRequestParameters = additionalTokenRequestParameters_,
+            additionalGrantTypeRequestParameters = additionalGrantTypeRequestParameters_,
             refreshFetcher = refreshFetcher_,
             fetcherService = fetcherService_,
             parserClass = parserClass_,
@@ -237,9 +238,11 @@ finishedRefreshWithFetcher:(GTMHTTPFetcher *)fetcher
   [clientSecret_ release];
   [redirectURI_ release];
   [parameters_ release];
+  [authorizationTokenKey_ release];
   [tokenURL_ release];
   [expirationDate_ release];
   [additionalTokenRequestParameters_ release];
+  [additionalGrantTypeRequestParameters_ release];
   [refreshFetcher_ release];
   [authorizationQueue_ release];
   [userData_ release];
@@ -290,11 +293,11 @@ finishedRefreshWithFetcher:(GTMHTTPFetcher *)fetcher
 }
 
 - (void)setKeysForResponseJSONData:(NSData *)data {
-  NSDictionary *dict = [self dictionaryWithJSONData:data];
+  NSDictionary *dict = [[self class] dictionaryWithJSONData:data];
   [self setKeysForResponseDictionary:dict];
 }
 
-- (NSDictionary *)dictionaryWithJSONData:(NSData *)data {
++ (NSDictionary *)dictionaryWithJSONData:(NSData *)data {
   NSMutableDictionary *obj = nil;
   NSError *error = nil;
 
@@ -437,12 +440,32 @@ finishedRefreshWithFetcher:(GTMHTTPFetcher *)fetcher
 
     BOOL hasAccessToken = ([self.accessToken length] > 0);
 
+    NSString *noteName;
+    NSDictionary *userInfo = nil;
     if (hasAccessToken && error == nil) {
-      NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-      [nc postNotificationName:kGTMOAuth2AccessTokenRefreshed
-                        object:self
-                      userInfo:nil];
+      // Successful refresh.
+      noteName = kGTMOAuth2AccessTokenRefreshed;
+      userInfo = nil;
+    } else {
+      // Google's OAuth 2 implementation returns a 400 with JSON body
+      // containing error key "invalid_grant" to indicate the refresh token
+      // is invalid or has been revoked by the user.  We'll promote the
+      // JSON error key's value for easy inspection by the observer.
+      noteName = kGTMOAuth2AccessTokenRefreshFailed;
+      NSString *jsonErr = nil;
+      if ([error code] == kGTMHTTPFetcherStatusBadRequest) {
+        NSDictionary *json = [[error userInfo] objectForKey:kGTMOAuth2ErrorJSONKey];
+        jsonErr = [json objectForKey:kGTMOAuth2ErrorMessageKey];
+      }
+      // error and jsonErr may be nil
+      userInfo = [NSMutableDictionary dictionary];
+      [userInfo setValue:error forKey:kGTMOAuth2ErrorObjectKey];
+      [userInfo setValue:jsonErr forKey:kGTMOAuth2ErrorMessageKey];
     }
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc postNotificationName:noteName
+                      object:self
+                    userInfo:userInfo];
 
     for (GTMOAuth2AuthorizationArgs *args in pendingAuthQueue) {
       if (!hasAccessToken && args.error == nil) {
@@ -522,7 +545,8 @@ finishedRefreshWithFetcher:(GTMHTTPFetcher *)fetcher
 #endif
   }
 
-  NSString *accessToken = self.accessToken;
+  // Get the access token.
+  NSString *accessToken = self.authorizationToken;
   if (isAuthorizableRequest && [accessToken length] > 0) {
     if (request) {
       // we have a likely valid access token
@@ -620,8 +644,8 @@ finishedRefreshWithFetcher:(GTMHTTPFetcher *)fetcher
   NSString *token = self.refreshToken;
   if (token == nil) {
     // For services which do not support refresh tokens, we'll just check
-    // the access token
-    token = self.accessToken;
+    // the access token.
+    token = self.authorizationToken;
   }
   BOOL canAuth = [token length] > 0;
   return canAuth;
@@ -699,10 +723,11 @@ finishedRefreshWithFetcher:(GTMHTTPFetcher *)fetcher
   NSString *refreshToken = self.refreshToken;
   NSString *code = self.code;
   NSString *assertion = self.assertion;
+  NSString *grantType = nil;
   
   if (refreshToken) {
     // We have a refresh token
-    [paramsDict setObject:@"refresh_token" forKey:@"grant_type"];
+    grantType = @"refresh_token";
     [paramsDict setObject:refreshToken forKey:@"refresh_token"];
 
     NSString *refreshScope = self.refreshScope;
@@ -713,7 +738,7 @@ finishedRefreshWithFetcher:(GTMHTTPFetcher *)fetcher
     fetchType = kGTMOAuth2FetchTypeRefresh;
   } else if (code) {
     // We have a code string
-    [paramsDict setObject:@"authorization_code" forKey:@"grant_type"];
+    grantType = @"authorization_code";
     [paramsDict setObject:code forKey:@"code"];
 
     NSString *redirectURI = self.redirectURI;
@@ -729,9 +754,8 @@ finishedRefreshWithFetcher:(GTMHTTPFetcher *)fetcher
     fetchType = kGTMOAuth2FetchTypeToken;
   } else if (assertion) {
     // We have an assertion string
+    grantType = @"http://oauth.net/grant_type/jwt/1.0/bearer";
     [paramsDict setObject:assertion forKey:@"assertion"];
-    [paramsDict setObject:@"http://oauth.net/grant_type/jwt/1.0/bearer"
-                   forKey:@"grant_type"];
     fetchType = kGTMOAuth2FetchTypeAssertion;
   } else {
 #if DEBUG
@@ -739,7 +763,8 @@ finishedRefreshWithFetcher:(GTMHTTPFetcher *)fetcher
 #endif
     return nil;
   }
-  
+  [paramsDict setObject:grantType forKey:@"grant_type"];
+
   NSString *clientID = self.clientID;
   if ([clientID length] > 0) {
     [paramsDict setObject:clientID forKey:@"client_id"];
@@ -753,6 +778,11 @@ finishedRefreshWithFetcher:(GTMHTTPFetcher *)fetcher
   NSDictionary *additionalParams = self.additionalTokenRequestParameters;
   if (additionalParams) {
     [paramsDict addEntriesFromDictionary:additionalParams];
+  }
+  NSDictionary *grantTypeParams =
+    [self.additionalGrantTypeRequestParameters objectForKey:grantType];
+  if (grantTypeParams) {
+    [paramsDict addEntriesFromDictionary:grantTypeParams];
   }
 
   NSString *paramStr = [[self class] encodedQueryParametersForDictionary:paramsDict];
@@ -821,11 +851,11 @@ finishedRefreshWithFetcher:(GTMHTTPFetcher *)fetcher
   BOOL hasData = ([data length] > 0);
 
   if (error) {
-    // Failed; if the error body is JSON, parse it and add it to the error's
-    // userInfo dictionary
+    // Failed. If the error body is JSON, parse it and add it to the error's
+    // userInfo dictionary.
     if (hasData) {
       if (isResponseJSON) {
-        NSDictionary *errorJson = [self dictionaryWithJSONData:data];
+        NSDictionary *errorJson = [[self class] dictionaryWithJSONData:data];
         if ([errorJson count] > 0) {
 #if DEBUG
           NSLog(@"Error %@\nError data:\n%@", error, errorJson);
@@ -845,7 +875,7 @@ finishedRefreshWithFetcher:(GTMHTTPFetcher *)fetcher
       }
     }
   } else {
-    // Succeeded; we have an access token
+    // Succeeded; we have the requested token.
 #if DEBUG
     NSAssert(hasData, @"data missing in token response");
 #endif
@@ -960,9 +990,23 @@ finishedRefreshWithFetcher:(GTMHTTPFetcher *)fetcher
   self.expirationDate = nil;
   self.userEmail = nil;
   self.userEmailIsVerified = nil;
+  self.authorizationTokenKey = nil;
 }
 
 #pragma mark Accessors for Response Parameters
+
+- (NSString *)authorizationToken {
+  // The token used for authorization is typically the access token unless
+  // the user has specified that an alternative parameter be used.
+  NSString *authorizationToken;
+  NSString *authTokenKey = self.authorizationTokenKey;
+  if (authTokenKey != nil) {
+    authorizationToken = [self.parameters objectForKey:authTokenKey];
+  } else {
+    authorizationToken = self.accessToken;
+  }
+  return authorizationToken;
+}
 
 - (NSString *)accessToken {
   return [self.parameters objectForKey:kOAuth2AccessTokenKey];

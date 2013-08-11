@@ -49,12 +49,14 @@ static LocalyticsSession *_sharedLocalyticsSession = nil;
 @synthesize screens                     = _screens;
 @synthesize sessionActiveDuration       = _sessionActiveDuration;
 @synthesize sessionHasBeenOpen          = _sessionHasBeenOpen;
-@synthesize delaySession				= _delaySession;
 @synthesize sessionNumber               = _sessionNumber;
 @synthesize enableHTTPS                 = _enableHTTPS;
 @synthesize loggingEnabled              = _loggingEnabled;
 @synthesize localyticsDelegate          = _localyticsDelegate;
 @synthesize facebookAttribution			= _facebookAttribution;
+@synthesize needsSessionStartActions    = _needsSessionStartActions;
+@synthesize needsFirstRunActions        = _needsFirstRunActions;
+@synthesize needsUpgradeActions         = _needsUpgradeActions;
 
 // Stores the last location passed in to the app.
 CLLocationCoordinate2D lastDeviceLocation = {0,0};
@@ -91,7 +93,9 @@ CLLocationCoordinate2D lastDeviceLocation = {0,0};
 		_queue = dispatch_queue_create("com.Localytics.operations", DISPATCH_QUEUE_SERIAL);
 		_criticalGroup = dispatch_group_create();
 		_enableHTTPS = NO;
-		_delaySession = NO;
+        _needsSessionStartActions = NO;
+        _needsFirstRunActions = NO;
+        _needsUpgradeActions = NO;
 		[_sharedLocalyticsSession db];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
@@ -135,11 +139,21 @@ CLLocationCoordinate2D lastDeviceLocation = {0,0};
 					// Record the key for future checks.
 					[[[LocalyticsSession shared] db] updateAppKey:appKey];
 				}
+                
+                // Check for first run
+                self.needsFirstRunActions = [[[LocalyticsSession shared] db] firstRun];
+                
+                // Check for app upgrade
+                NSString *currentAppVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+                NSString *storedAppVersion = [[[LocalyticsSession shared] db] appVersion];
+                if (storedAppVersion && ![currentAppVersion isEqualToString:storedAppVersion])
+                    self.needsUpgradeActions = YES;
+                if (storedAppVersion == nil || ![currentAppVersion isEqualToString:storedAppVersion])
+                    [[[LocalyticsSession shared] db] updateAppVersion:currentAppVersion];
 				
 				self.applicationKey = appKey;
 				self.hasInitialized = YES;
 				self.facebookAttribution =  [[[LocalyticsSession shared] db] facebookAttributionFromDb];
-				self.delaySession = self.facebookAttribution != nil;
 				
 				LocalyticsLog("Object Initialized.  Application's key is: %@", self.applicationKey);
 				
@@ -634,8 +648,6 @@ CLLocationCoordinate2D lastDeviceLocation = {0,0};
 		}
 		@catch (NSException * e) { }
 	});
-	
-	[self uploadPartnerAttributions];
 }
 
 - (BOOL)uploadIsNeeded
@@ -643,21 +655,11 @@ CLLocationCoordinate2D lastDeviceLocation = {0,0};
 	return [[self db] unstagedEventCount] > 0;
 }
 
-- (void)uploadPartnerAttributions
-{
-	dispatch_group_async(_criticalGroup, _queue, ^{
-		@try {
-			if (!self.facebookAttribution)
-				return;
-			
-			[[self uploader] uploaderAttributionWithApplicationKey:self.applicationKey
-													   attribution:self.facebookAttribution
-														 installId:[self installationId]
-											 advertisingIdentifier:[self advertisingIdentifier]];
-		}
-		@catch (NSException *e) {}
-	});
-}
+- (void)onStartSession {}
+
+- (void)onFirstRun {}
+
+- (void)onUpgrade {}
 
 #pragma mark Private Methods
 
@@ -669,6 +671,23 @@ CLLocationCoordinate2D lastDeviceLocation = {0,0};
 - (void)uploadCallback:(NSDictionary*)info
 {
 #pragma unused(info)
+    if (self.needsFirstRunActions)
+    {
+        [self onFirstRun];
+        self.needsFirstRunActions = NO;
+    }
+
+    if (self.needsUpgradeActions)
+    {
+        [self onUpgrade];
+        self.needsUpgradeActions = NO;
+    }
+
+    if (self.needsSessionStartActions)
+    {
+        [self onStartSession];
+        self.needsSessionStartActions = NO;
+    }
 }
 
 - (void)dequeueCloseEventBlobString
@@ -773,6 +792,12 @@ CLLocationCoordinate2D lastDeviceLocation = {0,0};
 			self.isSessionOpen = YES;
 			self.sessionHasBeenOpen = YES;
 			LocalyticsLog("Succesfully opened session. UUID is: %@", self.sessionUUID);
+         
+            // Queue up a call to onStartSession after upload
+            self.needsSessionStartActions = YES;
+            
+            // Upload after opening session successfully
+            [self upload];
 		}
 		else {
 			[db rollbackTransaction:t];
@@ -897,6 +922,13 @@ CLLocationCoordinate2D lastDeviceLocation = {0,0};
 	[headerString appendString:[self formatAttributeWithName:PARAM_DEVICE_COUNTRY    value:[locale objectForKey:NSLocaleCountryCode]]];
 	[headerString appendString:[NSString stringWithFormat:@",\"%@\":%@", PARAM_JAILBROKEN, [self isDeviceJailbroken] ? @"true" : @"false"]];
 	[headerString appendString:[NSString stringWithFormat:@",\"%@\":%d", PARAM_TIMEZONE_OFFSET, [[NSTimeZone localTimeZone] secondsFromGMT]]];
+	
+	// >> Attribution information
+	//
+	if (self.facebookAttribution)
+	{
+		[headerString appendString:[self formatAttributeWithName:PARAM_FB_ATTRIBUTION value:self.facebookAttribution]];
+	}
 	
 	//  Close second level - attributes
 	[headerString appendString:@"}"];
@@ -1198,27 +1230,27 @@ CLLocationCoordinate2D lastDeviceLocation = {0,0};
  */
 - (NSString *)installationId
 {
-	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-	NSString *installId = [prefs stringForKey:PREFERENCES_KEY];
-	
-	if(installId == nil)
-	{
-		LocalyticsLog("Install ID not found in preferences, checking DB");
-		installId = [[self db] installId];
-	}
-	
-	// If it hasn't been found yet, generate a new one.
-	if(installId == nil)
-	{
-		LocalyticsLog("Install ID not find one in database, generating a new one.");
-		installId = [self randomUUID];
-	}
-	
-	// Store the newly generated installId
-	[prefs setObject:installId forKey:PREFERENCES_KEY];
-	[[NSUserDefaults standardUserDefaults] synchronize];
-	
-	return installId;
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSString *installId = [prefs stringForKey:PREFERENCES_KEY];
+    
+    if(installId == nil)
+    {
+        LocalyticsLog("Install ID not found in preferences, checking DB");
+        installId = [[self db] installId];
+    }
+    
+    // If it hasn't been found yet, generate a new one.
+    if(installId == nil)
+    {
+        LocalyticsLog("Install ID not find one in database, generating a new one.");
+        installId = [self randomUUID];
+    }
+    
+    // Store the newly generated installId
+    [prefs setObject:installId forKey:PREFERENCES_KEY];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    return installId;
 }
 
 /*!
@@ -1259,7 +1291,12 @@ CLLocationCoordinate2D lastDeviceLocation = {0,0};
  */
 - (NSString *)appVersion
 {
-	return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    
+    if (version == nil || [version isEqualToString:@""])
+        version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    
+    return version;
 }
 
 - (NSString *)customDimension:(int)dimension

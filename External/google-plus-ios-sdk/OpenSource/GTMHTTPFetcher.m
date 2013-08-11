@@ -142,6 +142,11 @@ static NSString *const kCallbackError = @"error";
       // Default to system default cookie storage
       [self setCookieStorageMethod:kGTMHTTPFetcherCookieStorageMethodSystemDefault];
     }
+#if !STRIP_GTM_FETCH_LOGGING
+    // Encourage developers to set the comment property or use
+    // setCommentWithFormat: by providing a default string.
+    comment_ = @"(No fetcher comment set)";
+#endif
   }
   return self;
 }
@@ -345,6 +350,13 @@ static NSString *const kCallbackError = @"error";
   }
 #endif
 
+  if (downloadFileHandle_ != nil) {
+    // Downloading to a file, so downloadedData_ remains nil.
+  } else {
+    self.downloadedData = [NSMutableData data];
+  }
+
+  hasConnectionEnded_ = NO;
   if ([runLoopModes_ count] == 0 && delegateQueue == nil) {
     // No custom callback modes or queue were specified, so start the connection
     // on the current run loop in the current mode
@@ -367,17 +379,11 @@ static NSString *const kCallbackError = @"error";
     }
     [connection_ start];
   }
-  hasConnectionEnded_ = NO;
 
   if (!connection_) {
     NSAssert(connection_ != nil, @"beginFetchWithDelegate could not create a connection");
+    self.downloadedData = nil;
     goto CannotBeginFetch;
-  }
-
-  if (downloadFileHandle_ != nil) {
-    // downloading to a file, so downloadedData_ remains nil
-  } else {
-    self.downloadedData = [NSMutableData data];
   }
 
 #if GTM_BACKGROUND_FETCHING
@@ -388,15 +394,22 @@ static NSString *const kCallbackError = @"error";
     if ([app respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)]) {
       // Tell UIApplication that we want to continue even when the app is in the
       // background.
-      NSThread *thread = [NSThread currentThread];
+      NSThread *thread = delegateQueue_ ? nil : [NSThread currentThread];
       backgroundTaskIdentifer_ = [app beginBackgroundTaskWithExpirationHandler:^{
-        // Callback - this block is always invoked by UIApplication on the main
-        // thread, but we want to run the user's callbacks on the thread used
-        // to start the fetch.
-        [self performSelector:@selector(backgroundFetchExpired)
-                     onThread:thread
-                   withObject:nil
-                waitUntilDone:YES];
+        // Background task expiration callback - this block is always invoked by
+        // UIApplication on the main thread.
+        if (thread) {
+          // Run the user's callbacks on the thread used to start the
+          // fetch.
+          [self performSelector:@selector(backgroundFetchExpired)
+                       onThread:thread
+                     withObject:nil
+                  waitUntilDone:YES];
+        } else {
+          // backgroundFetchExpired invokes callbacks on the provided delegate
+          // queue.
+          [self backgroundFetchExpired];
+        }
       }];
     }
   }
@@ -673,7 +686,7 @@ CannotBeginFetch:
       // this may be called in a callback from the connection, so use autorelease
       [oldConnection autorelease];
     }
-  }
+  }  // @synchronized(self)
 
   // send the stopped notification
   [self sendStopNotificationIfNeeded];
@@ -692,7 +705,7 @@ CannotBeginFetch:
                                                  error:NULL];
       self.temporaryDownloadPath = nil;
     }
-  }
+  }  // @synchronized(self)
 
   [service fetcherDidStop:self];
 
@@ -824,7 +837,7 @@ CannotBeginFetch:
       [self setMutableRequest:mutable];
     }
     return redirectRequest;
-  }
+  }  // @synchronized(self)
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
@@ -900,7 +913,7 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
                forAuthenticationChallenge:challenge];
         return;
       }
-    }
+    }  // @synchronized(self)
 
     // If we don't have credentials, or we've already failed auth 3x,
     // report the error, putting the challenge as a value in the userInfo
@@ -1061,11 +1074,18 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
   @synchronized(self) {
 #if DEBUG
-    // The download file handle should be set before the fetch is started, not
-    // after
+    NSAssert(!hasConnectionEnded_, @"Connection received data after ending");
+
+    // The download file handle should be set or the data object allocated
+    // before the fetch is started.
     NSAssert((downloadFileHandle_ == nil) != (downloadedData_ == nil),
-             @"received data accumulates as NSData or NSFileHandle, not both");
+             @"received data accumulates as either NSData (%d) or"
+             @" NSFileHandle (%d)",
+             (downloadedData_ != nil), (downloadFileHandle_ != nil));
 #endif
+    // Hopefully, we'll never see this execute out-of-order, receiving data
+    // after we've received the finished or failed callback.
+    if (hasConnectionEnded_) return;
 
     if (downloadFileHandle_ != nil) {
       // Append to file
@@ -1102,7 +1122,7 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
       receivedDataBlock_(downloadedData_);
     }
 #endif
-  }
+  }  // @synchronized(self)
 }
 
 // For error 304's ("Not Modified") where we've cached the data, return
@@ -1228,7 +1248,7 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
 #if !STRIP_GTM_FETCH_LOGGING
     shouldDeferLogging = shouldDeferResponseBodyLogging_;
 #endif
-  }
+  }  // @synchronized(self)
 
   if (shouldBeginRetryTimer) {
     [self beginRetryTimer];
@@ -1470,7 +1490,7 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
       retryTimer_ = nil;
       shouldNotify = YES;
     }
-  }
+  }  // @synchronized(self)
 
   if (shouldNotify) {
     NSNotificationCenter *defaultNC = [NSNotificationCenter defaultCenter];

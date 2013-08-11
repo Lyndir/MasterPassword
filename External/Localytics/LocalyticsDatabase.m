@@ -29,6 +29,7 @@
 - (void)upgradeToSchemaV10;
 - (void)upgradeToSchemaV11;
 - (void)upgradeToSchemaV12;
+- (void)upgradeToSchemaV13;
 - (void)moveDbToCaches;
 - (NSString *)randomUUID;
 @end
@@ -74,12 +75,12 @@
 		}
 		
 		// Check db connection, creating schema if necessary.
-		BOOL firstRun = NO;
+        _firstRun = NO;
 		if (code == SQLITE_OK) {
 			sqlite3_busy_timeout(_databaseConnection, BUSY_TIMEOUT); // Defaults to 0, otherwise.
 			if ([self schemaVersion] == 0) {
 				[self createSchema];
-				firstRun = YES;
+				_firstRun = YES;
 			}
 		}
 		
@@ -117,9 +118,12 @@
 		if ([self schemaVersion] < 12) {
 			[self upgradeToSchemaV12];
 		}
+		if ([self schemaVersion] < 13) {
+			[self upgradeToSchemaV13];
+		}
 		
 		// Perfrorm first run actions
-		if(firstRun)
+		if(_firstRun)
 		{
 			[self collectFacebookAttributionIfAvailable];
 		}
@@ -672,6 +676,29 @@
 	}
 }
 
+- (void)upgradeToSchemaV13
+{
+    int code = sqlite3_exec(_databaseConnection, "BEGIN", NULL, NULL, NULL);
+	
+	if (code == SQLITE_OK) {
+		code = sqlite3_exec(_databaseConnection,
+							"ALTER TABLE localytics_info ADD app_version CHAR(64)",
+							NULL, NULL, NULL);
+	}
+    
+    if (code == SQLITE_OK) {
+		code = sqlite3_exec(_databaseConnection,
+							"UPDATE localytics_info set schema_version = 13",
+							NULL, NULL, NULL);
+	}
+
+    // Commit transaction.
+	if (code == SQLITE_OK || code == SQLITE_DONE) {
+		sqlite3_exec(_databaseConnection, "COMMIT", NULL, NULL, NULL);
+	} else {
+		sqlite3_exec(_databaseConnection, "ROLLBACK", NULL, NULL, NULL);
+	}
+}
 	
 - (unsigned long long)databaseSize {
 	unsigned long long size = 0;
@@ -754,6 +781,30 @@
 	sqlite3_finalize(updateOptedOut);
 	
 	return code == SQLITE_OK;
+}
+
+- (NSString *)appVersion {
+	NSString *appVersion = nil;
+	
+	sqlite3_stmt *selectAppVersion;
+	sqlite3_prepare_v2(_databaseConnection, "SELECT app_version FROM localytics_info", -1, &selectAppVersion, NULL);
+	int code = sqlite3_step(selectAppVersion);
+	if (code == SQLITE_ROW) {
+		char* chars = (char *)sqlite3_column_text(selectAppVersion, 0);
+		if(chars) appVersion = [NSString stringWithUTF8String:chars];
+	}
+	sqlite3_finalize(selectAppVersion);
+	
+	return appVersion;
+}
+
+- (BOOL)updateAppVersion:(NSString *)appVersion {
+	sqlite3_stmt *updateAppVersion;
+	sqlite3_prepare_v2(_databaseConnection, "UPDATE localytics_info set app_version = ?", -1, &updateAppVersion, NULL);
+	sqlite3_bind_text (updateAppVersion, 1, [appVersion UTF8String], -1, SQLITE_TRANSIENT);
+	int code = sqlite3_step(updateAppVersion);
+	sqlite3_finalize(updateAppVersion);
+	return (code == SQLITE_DONE);
 }
 
 - (NSString *)customDimension:(int)dimension {

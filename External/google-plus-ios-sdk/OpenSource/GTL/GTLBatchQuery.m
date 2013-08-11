@@ -22,7 +22,8 @@
 @implementation GTLBatchQuery
 
 @synthesize shouldSkipAuthorization = skipAuthorization_,
-            additionalHTTPHeaders = additionalHTTPHeaders_;
+            additionalHTTPHeaders = additionalHTTPHeaders_,
+            urlQueryParameters = urlQueryParameters_;
 
 + (id)batchQuery {
   GTLBatchQuery *obj = [[[self alloc] init] autorelease];
@@ -49,6 +50,7 @@
 - (void)dealloc {
   [queries_ release];
   [additionalHTTPHeaders_ release];
+  [urlQueryParameters_ release];
   [requestIDMap_ release];
 
   [super dealloc];
