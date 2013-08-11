@@ -681,15 +681,19 @@
     self.handleCloudContentAlert.tappedButtonBlock = ^(UIAlertView *alert, NSInteger buttonIndex) {
         wSelf.fixCloudContentAlert = [PearlAlert showAlertWithTitle:@"Fix iCloud Now" message:
                 @"This problem can be auto‑corrected by opening the app on another device where you recently made changes.\n"
-                        @"You can correct the problem from this device anyway, but recent changes made on another device might get lost."
+                        @"You can correct the problem from this device anyway, but recent changes made on another device might get lost.\n\n"
+                        @"You can also turn iCloud off and go back to your local sites."
                                                           viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:
                         ^(UIAlertView *alert_, NSInteger buttonIndex_) {
                             if (buttonIndex_ == alert_.cancelButtonIndex)
                                 [wSelf showCloudContentAlert];
                             if (buttonIndex_ == [alert_ firstOtherButtonIndex])
                                 [wSelf.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:YES];
+                            if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
+                                wSelf.storeManager.cloudEnabled = NO;
                         }
-                                                        cancelTitle:[PearlStrings get].commonButtonBack otherTitles:@"Fix Anyway", nil];
+                                                        cancelTitle:[PearlStrings get].commonButtonBack otherTitles:@"Fix Anyway",
+                                                                                                                    @"Turn Off", nil];
     };
 }
 
