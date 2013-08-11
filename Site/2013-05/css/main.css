@@ -89,19 +89,22 @@ header .background {
     background: url('../img/shot-laptop-standing-iphone-angled-flipped.png') center center;
     background-size: cover;
 }
-#algorithm header {
+#algorithm header,
+#support header {
     height: 40%;
     
     background: #272727;
 }
-#algorithm header .background {
+#algorithm header .background,
+#support header .background {
     width: 940px;
     height: auto;
     left: 50%;
     top: -10%;
     margin-left: -470px;
 }
-#algorithm header .container {
+#algorithm header .container,
+#support header .container {
     background: radial-gradient(50% 50% at 50% 30%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.8) 100%);
 }
 header .content {
