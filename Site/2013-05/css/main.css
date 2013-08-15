@@ -75,7 +75,11 @@ header .container {
     height: 100%;
     z-index: 1;
 
+    background: radial-gradient(center, ellipse cover,  rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.8) 100%);
+    background: gradient(radial, center center, 0px, center center, 100%, color-stop(50%,rgba(0,0,0,0.3)), color-stop(100%,rgba(0,0,0,0.8)));
+    background: radial-gradient(ellipse at center,  rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.8) 100%);
     background: radial-gradient(70% 50% at 30% 50%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.8) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#44000000', endColorstr='#cc000000',GradientType=1 );
 }
 header .background {
     position: absolute;
@@ -105,7 +109,11 @@ header .background {
 }
 #algorithm header .container,
 #support header .container {
+    background: radial-gradient(center, ellipse cover,  rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.8) 100%);
+    background: gradient(radial, center center, 0px, center center, 100%, color-stop(50%,rgba(0,0,0,0.3)), color-stop(100%,rgba(0,0,0,0.8)));
+    background: radial-gradient(ellipse at center,  rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.8) 100%);
     background: radial-gradient(50% 50% at 50% 30%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.8) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#44000000', endColorstr='#cc000000',GradientType=1 );
 }
 header .content {
     position: absolute;
