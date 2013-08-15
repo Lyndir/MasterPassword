@@ -319,7 +319,7 @@
 - (void)setHelpChapter:(NSString *)chapter {
 
     MPCheckpoint( MPCheckpointHelpChapter, @{
-            @"chapter" : chapter
+            @"chapter" : NilToNSNull(chapter)
     } );
 
     dispatch_async( dispatch_get_main_queue(), ^{
@@ -479,7 +479,7 @@
     [self showContentTip:@"Copied!" withIcon:nil];
 
     MPCheckpoint( MPCheckpointCopyToPasteboard, @{
-            @"type"      : activeElement.typeName,
+            @"type"      : NilToNSNull(activeElement.typeName),
             @"version"   : @(activeElement.version),
             @"emergency" : @NO
     } );
@@ -497,7 +497,7 @@
     [self showLoginNameTip:@"Copied!"];
 
     MPCheckpoint( MPCheckpointCopyLoginNameToPasteboard, @{
-            @"type"    : activeElement.typeName,
+            @"type"    : NilToNSNull(activeElement.typeName),
             @"version" : @(activeElement.version)
     } );
 }
@@ -521,7 +521,7 @@
                                           ++activeGeneratedElement.counter;
 
                                           MPCheckpoint( MPCheckpointIncrementPasswordCounter, @{
-                                                  @"type"    : activeGeneratedElement.typeName,
+                                                  @"type"    : NilToNSNull(activeGeneratedElement.typeName),
                                                   @"version" : @(activeGeneratedElement.version),
                                                   @"counter" : @(activeGeneratedElement.counter)
                                           } );
@@ -553,7 +553,7 @@
                                           ((MPElementGeneratedEntity *)activeElement_).counter = 1;
 
                                           MPCheckpoint( MPCheckpointResetPasswordCounter, @{
-                                                  @"type"    : activeElement_.typeName,
+                                                  @"type"    : NilToNSNull(activeElement_.typeName),
                                                   @"version" : @(activeElement_.version)
                                           } );
                                           return YES;
@@ -574,7 +574,7 @@
     [self.loginNameField becomeFirstResponder];
 
     MPCheckpoint( MPCheckpointEditLoginName, @{
-            @"type"    : activeElement.typeName,
+            @"type"    : NilToNSNull(activeElement.typeName),
             @"version" : @(activeElement.version)
     } );
 }
@@ -601,7 +601,7 @@
         NSString *oldPassword = [activeElement.content description];
         if (!task( activeElement, context ))
             return;
-        
+
         activeElement = [self activeElementInContext:context];
         NSString *newPassword = [activeElement.content description];
 
@@ -655,7 +655,7 @@
     [self.contentField becomeFirstResponder];
 
     MPCheckpoint( MPCheckpointEditPassword, @{
-            @"type"    : activeElement.typeName,
+            @"type"    : NilToNSNull(activeElement.typeName),
             @"version" : @(activeElement.version)
     } );
 }
@@ -680,7 +680,7 @@
                 [activeElement_ migrateExplicitly:YES];
 
                 MPCheckpoint( MPCheckpointExplicitMigration, @{
-                        @"type"    : activeElement_.typeName,
+                        @"type"    : NilToNSNull(activeElement_.typeName),
                         @"version" : @(activeElement_.version)
                 } );
                 return YES;
@@ -831,11 +831,11 @@
                             } );
                 }
             }];
-        
+
         MPCheckpoint( MPCheckpointUseType, @{
-                     @"type"    : element.typeName,
-                     @"version" : @(element.version)
-                     } );
+                @"type"    : NilToNSNull(element.typeName),
+                @"version" : @(element.version)
+        } );
     }
 
     [self.searchDisplayController setActive:NO animated:YES];

@@ -271,7 +271,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             [context saveToStore];
 
             MPCheckpoint( MPCheckpointDeleteElement, @{
-                    @"type"    : element.typeName,
+                    @"type"    : NilToNSNull(element.typeName),
                     @"version" : @(element.version)
             } );
         }];

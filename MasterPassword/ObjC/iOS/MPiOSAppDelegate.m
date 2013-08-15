@@ -124,7 +124,7 @@
                 if (message.level >= PearlLogLevelWarn)
                     MPCheckpoint( @"Problem", @{
                             @"level"   : @(PearlLogLevelStr( message.level )),
-                            @"message" : message.message
+                            @"message" : NilToNSNull(message.message)
                     } );
 
                 return YES;
@@ -207,25 +207,25 @@
                     [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
 
 #ifdef TESTFLIGHT_SDK_VERSION
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([MPConfig get].rememberLogin)
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPConfig get].rememberLogin )
                                                          forKey:@"rememberLogin"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringB([self storeManager].cloudEnabled)
+                    [TestFlight addCustomEnvironmentInformation:PearlStringB( [self storeManager].cloudEnabled )
                                                          forKey:@"iCloud"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([MPConfig get].iCloudDecided)
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPConfig get].iCloudDecided )
                                                          forKey:@"iCloudDecided"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([MPiOSConfig get].sendInfo)
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].sendInfo )
                                                          forKey:@"sendInfo"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([MPiOSConfig get].helpHidden)
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].helpHidden )
                                                          forKey:@"helpHidden"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([MPiOSConfig get].showSetup)
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].showSetup )
                                                          forKey:@"showQuickStart"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([PearlConfig get].firstRun)
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].firstRun )
                                                          forKey:@"firstRun"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([PearlConfig get].launchCount)
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].launchCount )
                                                          forKey:@"launchCount"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([PearlConfig get].askForReviews)
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].askForReviews )
                                                          forKey:@"askForReviews"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB([PearlConfig get].reviewAfterLaunches)
+                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].reviewAfterLaunches )
                                                          forKey:@"reviewAfterLaunches"];
                     [TestFlight addCustomEnvironmentInformation:[PearlConfig get].reviewedVersion
                                                          forKey:@"reviewedVersion"];
@@ -271,17 +271,17 @@
             [[MPiOSAppDelegate get] showSetup];
     } );
 
-    MPCheckpoint(MPCheckpointStarted, @{
-            @"simulator" : PearlStringB([PearlDeviceUtils isSimulator]),
-            @"encrypted" : PearlStringB([PearlDeviceUtils isAppEncrypted]),
-            @"jailbroken" : PearlStringB([PearlDeviceUtils isJailbroken]),
-            @"platform" : [PearlDeviceUtils platform],
+    MPCheckpoint( MPCheckpointStarted, @{
+            @"simulator"  : PearlStringB( [PearlDeviceUtils isSimulator] ),
+            @"encrypted"  : PearlStringB( [PearlDeviceUtils isAppEncrypted] ),
+            @"jailbroken" : PearlStringB( [PearlDeviceUtils isJailbroken] ),
+            @"platform"   : [PearlDeviceUtils platform],
 #ifdef APPSTORE
             @"legal" : PearlStringB([PearlDeviceUtils isAppEncrypted]),
 #else
-            @"legal" : @"YES",
+            @"legal"      : @"YES",
 #endif
-    });
+    } );
 
     return YES;
 }
@@ -737,7 +737,7 @@
     NSString *testFlightToken = NSNullToNil([[self testFlightInfo] valueForKeyPath:@"Application Token"]);
     if (![testFlightToken length])
     wrn(@"TestFlight token not set.  Test Flight won't be aware of this test.");
-    
+
     return testFlightToken;
 }
 
@@ -785,7 +785,7 @@
 #endif
     if (![localyticsKey length])
     wrn(@"Localytics key not set.  Demographics won't be collected.");
-    
+
     return localyticsKey;
 }
 

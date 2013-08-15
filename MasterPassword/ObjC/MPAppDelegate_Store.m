@@ -105,14 +105,15 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 #if TARGET_OS_IPHONE
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification object:[UIApplication sharedApplication]
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
-     ^(NSNotification *note) {
-         [[self mainManagedObjectContext] saveToStore];
-     }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:[UIApplication sharedApplication]
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:
-     ^(NSNotification *note) {
-         [[self mainManagedObjectContext] saveToStore];
-     }];
+            ^(NSNotification *note) {
+                [[self mainManagedObjectContext] saveToStore];
+            }];
+    [[NSNotificationCenter defaultCenter]
+            addObserverForName:UIApplicationWillResignActiveNotification object:[UIApplication sharedApplication]
+                         queue:[NSOperationQueue mainQueue] usingBlock:
+            ^(NSNotification *note) {
+                [[self mainManagedObjectContext] saveToStore];
+            }];
 #else
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillTerminateNotification object:NSApp
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
@@ -374,7 +375,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     err(@"[StoreManager] ERROR: cause=%d, context=%@, error=%@", cause, context, error);
     MPCheckpoint( MPCheckpointMPErrorUbiquity, @{
             @"cause"        : @(cause),
-            @"error.domain" : error.domain,
+            @"error.domain" : NilToNSNull(error.domain),
             @"error.code"   : @(error.code)
     } );
 }
@@ -413,7 +414,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
         NSManagedObjectID *elementOID = [element objectID];
         dispatch_async( dispatch_get_main_queue(), ^{
-            completion( (MPElementEntity *)[[MPAppDelegate_Shared managedObjectContextForMainThreadIfReady] objectRegisteredForID:elementOID] );
+            completion(
+                    (MPElementEntity *)[[MPAppDelegate_Shared managedObjectContextForMainThreadIfReady] objectRegisteredForID:elementOID] );
         } );
     }];
 }

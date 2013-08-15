@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import <QuartzCore/QuartzCore.h>
 #import "MPPreferencesViewController.h"
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Key.h"
@@ -99,7 +98,7 @@
 
     if (motion == UIEventSubtypeMotionShake) {
         MPCheckpoint( MPCheckpointLogs, @{
-                @"trace": [MPiOSConfig get].traceMode
+                @"trace" : [MPiOSConfig get].traceMode
         } );
         [self performSegueWithIdentifier:@"MP_Logs" sender:self];
     }

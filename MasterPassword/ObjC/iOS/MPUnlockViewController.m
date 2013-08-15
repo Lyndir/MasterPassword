@@ -6,15 +6,12 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import <QuartzCore/QuartzCore.h>
 #import <Social/Social.h>
-#import <CoreGraphics/CoreGraphics.h>
 
 #import "MPUnlockViewController.h"
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-
 
 @interface MPUnlockViewController()
 
@@ -29,7 +26,6 @@
 @property(nonatomic) NSUInteger marqueeTipTextIndex;
 @property(nonatomic, strong) NSArray *marqueeTipTexts;
 @end
-
 
 @implementation MPUnlockViewController {
     NSManagedObjectID *_selectedUserOID;
@@ -932,7 +928,7 @@
     }];
 
     MPCheckpoint( MPCheckpointCopyToPasteboard, @{
-            @"type"      : [MPAlgorithmDefault nameOfType:self.emergencyType],
+            @"type"      : NilToNSNull([MPAlgorithmDefault nameOfType:self.emergencyType]),
             @"version"   : @MPAlgorithmDefaultVersion,
             @"emergency" : @YES,
     } );
