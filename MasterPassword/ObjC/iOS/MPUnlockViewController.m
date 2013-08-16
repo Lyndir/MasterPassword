@@ -7,6 +7,7 @@
 //
 
 #import <Social/Social.h>
+#import <QuartzCore/QuartzCore.h>
 
 #import "MPUnlockViewController.h"
 #import "MPiOSAppDelegate.h"
