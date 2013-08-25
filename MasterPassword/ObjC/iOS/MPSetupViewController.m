@@ -24,7 +24,9 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 
+#ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Setup"];
+#endif
 
     [super viewDidAppear:animated];
 

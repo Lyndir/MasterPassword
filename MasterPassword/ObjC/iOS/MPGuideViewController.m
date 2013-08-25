@@ -67,7 +67,9 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 
+#ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Guide"];
+#endif
 
     [super viewDidAppear:animated];
 }

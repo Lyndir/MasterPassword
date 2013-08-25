@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12D78" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4504" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
+        <deployment defaultVersion="1536" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3734.1"/>
     </dependencies>
     <scenes>
         <!--Type View Controller - Type-->
@@ -9,11 +10,11 @@
             <objects>
                 <tableViewController id="NKe-nv-566" customClass="MPTypeViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="btl-G4-V0S">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="aNa-wb-cYK">
-                            <rect key="frame" x="0.0" y="697" width="320" height="20"/>
+                            <rect key="frame" x="0.0" y="761" width="320" height="20"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
@@ -21,10 +22,10 @@
                             <tableViewSection id="gUv-FU-O36">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="70" id="NCB-rX-weq">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
+                                        <rect key="frame" x="0.0" y="64" width="320" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="69"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NCB-rX-weq" id="fh2-xv-DR4">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="1. Generated" lineBreakMode="tailTruncation" minimumFontSize="10" id="azh-GA-KA1">
@@ -37,7 +38,7 @@
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="These types create a password for you." lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" id="E4a-XS-Qlz">
-                                                    <rect key="frame" x="20" y="49" width="280" height="20"/>
+                                                    <rect key="frame" x="20" y="49" width="280" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <fontDescription key="fontDescription" name="GillSans-LightItalic" family="Gill Sans" pointSize="14"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -46,24 +47,23 @@
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="44" id="PBE-wW-HXv">
-                                        <rect key="frame" x="0.0" y="70" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="134" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PBE-wW-HXv" id="Qwx-jd-EO4">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_first.png" id="Uw9-CC-Snk">
-                                                    <rect key="frame" x="10" y="0.0" width="300" height="44"/>
+                                                    <rect key="frame" x="10" y="1" width="300" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="Maximum Security" lineBreakMode="tailTruncation" minimumFontSize="10" id="Twq-Pz-E1B">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="24"/>
+                                                    <rect key="frame" x="20" y="1" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -72,41 +72,40 @@
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" text="ga$JYcF3PVZ5BPK92W2/" lineBreakMode="tailTruncation" minimumFontSize="10" id="IOR-qB-kgm">
-                                                    <rect key="frame" x="20" y="23" width="280" height="20"/>
+                                                    <rect key="frame" x="20" y="24" width="280" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="left" text="> age of the universe" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="MhA-7a-ZSX">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="24"/>
+                                                    <rect key="frame" x="20" y="1" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="backgroundView" destination="Uw9-CC-Snk" id="cn1-H0-jQm"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="44" id="Fho-bQ-ENV">
-                                        <rect key="frame" x="0.0" y="114" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="178" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Fho-bQ-ENV" id="ztM-NE-FC9">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_middle.png" id="UNz-7Y-fyS">
-                                                    <rect key="frame" x="10" y="0.0" width="300" height="44"/>
+                                                    <rect key="frame" x="10" y="1" width="300" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="Long Password" lineBreakMode="tailTruncation" minimumFontSize="10" id="HAz-5s-UMX">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="24"/>
+                                                    <rect key="frame" x="20" y="1" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -115,41 +114,40 @@
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" text="Duzr1_NixiMevx" lineBreakMode="tailTruncation" minimumFontSize="10" id="J9t-dg-gQm">
-                                                    <rect key="frame" x="20" y="23" width="280" height="20"/>
+                                                    <rect key="frame" x="20" y="24" width="280" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="left" text="196 billion years" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="H6n-Lc-lsa">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="24"/>
+                                                    <rect key="frame" x="20" y="1" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="backgroundView" destination="UNz-7Y-fyS" id="RVT-rv-shk"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="re0-ZT-bnP">
-                                        <rect key="frame" x="0.0" y="158" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="222" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="re0-ZT-bnP" id="x60-57-1Dj">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_middle.png" id="EWy-Eb-L5p">
-                                                    <rect key="frame" x="10" y="0.0" width="300" height="44"/>
+                                                    <rect key="frame" x="10" y="0.0" width="300" height="45"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="Medium Password" lineBreakMode="tailTruncation" minimumFontSize="10" id="5NA-XX-th4">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="24"/>
+                                                    <rect key="frame" x="20" y="1" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -158,41 +156,40 @@
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" text="DuzRel7]" lineBreakMode="tailTruncation" minimumFontSize="10" id="MI2-JM-j4b">
-                                                    <rect key="frame" x="20" y="23" width="280" height="20"/>
+                                                    <rect key="frame" x="20" y="24" width="280" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="left" text="5 months" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="0pP-Jt-tfo">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="24"/>
+                                                    <rect key="frame" x="20" y="1" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="backgroundView" destination="EWy-Eb-L5p" id="kEq-84-wg1"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="ywW-4w-Wej">
-                                        <rect key="frame" x="0.0" y="202" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="266" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ywW-4w-Wej" id="0lt-DK-zzt">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_middle.png" id="Son-EL-Drx">
-                                                    <rect key="frame" x="10" y="0.0" width="300" height="44"/>
+                                                    <rect key="frame" x="10" y="0.0" width="300" height="45"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="Basic Password" lineBreakMode="tailTruncation" minimumFontSize="10" id="Pim-A8-aib">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="24"/>
+                                                    <rect key="frame" x="20" y="1" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -201,41 +198,40 @@
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" text="gsE0xNE7" lineBreakMode="tailTruncation" minimumFontSize="10" id="CYQ-D8-vNS">
-                                                    <rect key="frame" x="20" y="23" width="280" height="20"/>
+                                                    <rect key="frame" x="20" y="24" width="280" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="left" text="12 days" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="sQ5-xf-CsC">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="24"/>
+                                                    <rect key="frame" x="20" y="1" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="backgroundView" destination="Son-EL-Drx" id="PwP-QX-uQx"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="4pb-c9-i2D">
-                                        <rect key="frame" x="0.0" y="246" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="310" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4pb-c9-i2D" id="nye-uG-i75">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_middle.png" id="Jqw-h1-g2X">
-                                                    <rect key="frame" x="10" y="0.0" width="300" height="44"/>
+                                                    <rect key="frame" x="10" y="0.0" width="300" height="45"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="Short Password" lineBreakMode="tailTruncation" minimumFontSize="10" id="iqW-mf-H1R">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="24"/>
+                                                    <rect key="frame" x="20" y="1" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -244,41 +240,40 @@
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" text="Duz0" lineBreakMode="tailTruncation" minimumFontSize="10" id="Zi3-26-3iq">
-                                                    <rect key="frame" x="20" y="23" width="280" height="20"/>
+                                                    <rect key="frame" x="20" y="24" width="280" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="left" text="trivial" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="bSa-9x-ziy">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="24"/>
+                                                    <rect key="frame" x="20" y="1" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="backgroundView" destination="Jqw-h1-g2X" id="kNj-fn-7Yr"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="5p5-OD-zpn">
-                                        <rect key="frame" x="0.0" y="290" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="354" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5p5-OD-zpn" id="Xqr-bN-Szu">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_last.png" id="5nI-rL-CoO">
-                                                    <rect key="frame" x="10" y="0.0" width="300" height="44"/>
+                                                    <rect key="frame" x="10" y="0.0" width="300" height="45"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="PIN" lineBreakMode="tailTruncation" minimumFontSize="10" id="Yu2-5k-AwW">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="24"/>
+                                                    <rect key="frame" x="20" y="1" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -287,36 +282,35 @@
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" text="1990" lineBreakMode="tailTruncation" minimumFontSize="10" id="5Zm-AH-bAe">
-                                                    <rect key="frame" x="20" y="23" width="280" height="20"/>
+                                                    <rect key="frame" x="20" y="24" width="280" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="left" text="trivial" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="lb3-5W-KDb">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="24"/>
+                                                    <rect key="frame" x="20" y="1" width="280" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="backgroundView" destination="5nI-rL-CoO" id="Kb0-pd-plQ"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="100" id="r1t-kd-2rC">
-                                        <rect key="frame" x="0.0" y="334" width="320" height="100"/>
+                                        <rect key="frame" x="0.0" y="398" width="320" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="99"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="r1t-kd-2rC" id="LAv-BS-Xpx">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" id="fv2-uA-eLe">
-                                                    <rect key="frame" x="20" y="0.0" width="264" height="79"/>
+                                                    <rect key="frame" x="20" y="0.0" width="264" height="80"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <string key="text">The time indicates the strength of the password.
 It's an estimate of the amount of time necessary for a hacker with a powerful computer to discover your password if the site gets hacked.</string>
@@ -327,8 +321,7 @@ It's an estimate of the amount of time necessary for a hacker with a powerful co
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                 </cells>
@@ -336,10 +329,10 @@ It's an estimate of the amount of time necessary for a hacker with a powerful co
                             <tableViewSection id="Jqk-Jl-vVm">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="120" id="OK2-fa-fDw">
-                                        <rect key="frame" x="0.0" y="434" width="320" height="120"/>
+                                        <rect key="frame" x="0.0" y="498" width="320" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="119"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OK2-fa-fDw" id="zyE-mx-vQD">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="2. User-specified" lineBreakMode="tailTruncation" minimumFontSize="10" id="146-3h-mdD">
@@ -352,7 +345,7 @@ It's an estimate of the amount of time necessary for a hacker with a powerful co
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" id="Bbk-lL-BeB">
-                                                    <rect key="frame" x="20" y="49" width="280" height="70"/>
+                                                    <rect key="frame" x="20" y="49" width="280" height="71"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <string key="text">These types save a custom password for you.
 
@@ -364,14 +357,13 @@ Your passwords will be AES-encrypted with your master password.</string>
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="44" id="Q2e-yF-SSN">
-                                        <rect key="frame" x="0.0" y="554" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="618" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Q2e-yF-SSN" id="As3-1Z-JAS">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -397,17 +389,16 @@ Your passwords will be AES-encrypted with your master password.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="backgroundView" destination="rqV-4z-jN8" id="Swr-Lq-gJz"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="ePk-a9-aNi">
-                                        <rect key="frame" x="0.0" y="598" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="662" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ePk-a9-aNi" id="AIP-tC-kyf">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -433,17 +424,16 @@ Your passwords will be AES-encrypted with your master password.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="backgroundView" destination="PUy-Qk-CeF" id="sMI-bL-Xv1"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="55" id="bSk-Eo-ELv">
-                                        <rect key="frame" x="0.0" y="642" width="320" height="55"/>
+                                        <rect key="frame" x="0.0" y="706" width="320" height="55"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bSk-Eo-ELv" id="T7c-Ca-m7f">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="54"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -458,8 +448,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                 </cells>
@@ -481,15 +470,15 @@ Your passwords will be AES-encrypted with your master password.</string>
             <objects>
                 <viewController id="Tx0-mM-kHk" customClass="MPLogsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3oc-v8-YGP">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="mtJ-9r-6yT">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" id="ojc-Tn-DM1">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="524"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <string key="text">119-20:51:52        MPiOSAppDelegate.m:36  | INFO    : Initializing TestFlight
@@ -519,7 +508,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="QPO-l8-Opz">
-                                <rect key="frame" x="0.0" y="460" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
                                     <barButtonItem systemItem="compose" id="Yvq-If-VqG">
@@ -535,7 +524,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                     <barButtonItem systemItem="flexibleSpace" id="GcH-O1-v3J"/>
                                     <barButtonItem style="plain" id="yi1-I8-uzn">
                                         <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="lzO-Kl-IPf">
-                                            <rect key="frame" x="191" y="8" width="123" height="30"/>
+                                            <rect key="frame" x="191" y="7" width="123" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <segments>
                                                 <segment title="Normal"/>
@@ -574,11 +563,11 @@ Your passwords will be AES-encrypted with your master password.</string>
             <objects>
                 <viewController id="PQa-Xl-A3x" customClass="MPMainViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ep0-Hn-5TR">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" image="background.png" id="0hY-LL-ITu">
-                                <rect key="frame" x="0.0" y="44" width="320" height="460"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <view contentMode="scaleToFill" id="Juh-jm-UDr" userLabel="View - Content">
@@ -758,7 +747,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" id="61G-By-qLB" userLabel="View - Help">
-                                <rect key="frame" x="0.0" y="334" width="320" height="170"/>
+                                <rect key="frame" x="0.0" y="398" width="320" height="170"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="top" image="Square-bottom.png" id="lbm-A0-3PK">
@@ -921,7 +910,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view hidden="YES" alpha="0.0" contentMode="scaleToFill" id="6wk-NU-VQG" userLabel="View - Outdated Alert">
-                                <rect key="frame" x="10" y="318" width="300" height="180"/>
+                                <rect key="frame" x="10" y="382" width="300" height="180"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <imageView contentMode="scaleToFill" image="tip_alert_black.png" id="f30-i7-VBv">
@@ -999,7 +988,7 @@ These sites should be upgraded and their account's passwords updated as soon as 
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view hidden="YES" alpha="0.0" contentMode="scaleToFill" id="yRY-qt-gz8" userLabel="View - Alert">
-                                <rect key="frame" x="10" y="318" width="300" height="180"/>
+                                <rect key="frame" x="10" y="382" width="300" height="180"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_alert_black.png" id="TUv-Tl-xTc">
@@ -1056,7 +1045,7 @@ L4m3P4sSw0rD</string>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="actionsTipContainer" destination="foz-tW-xGw" id="JDf-q6-StD"/>
@@ -1448,7 +1437,7 @@ You can use the words in the background for inspiration in finding a memorable m
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     </imageView>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Incorrect password." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="gQ2-mB-BP4">
-                                                        <rect key="frame" x="15" y="0.5" width="180" height="40"/>
+                                                        <rect key="frame" x="15" y="1" width="180" height="39"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -1629,7 +1618,7 @@ You can use the words in the background for inspiration in finding a memorable m
                                                 <size key="shadowOffset" width="0.0" height="1"/>
                                             </label>
                                             <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" id="D49-fo-7FA">
-                                                <rect key="frame" x="187" y="260" width="94" height="27"/>
+                                                <rect key="frame" x="187" y="260" width="94" height="23"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             </stepper>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="TJC-xD-fjQ">
@@ -1772,11 +1761,11 @@ You can use the words in the background for inspiration in finding a memorable m
             <objects>
                 <viewController id="Q4b-t4-pwH" customClass="MPSetupViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="FnB-rI-puV">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="RjU-5e-mti">
-                                <rect key="frame" x="0.0" y="-64" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="-64" width="320" height="632"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="top" image="cloud.png" id="Ahr-aa-V1N">
@@ -1803,7 +1792,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="M0m-G9-hH0">
-                                <rect key="frame" x="122" y="345" width="79" height="27"/>
+                                <rect key="frame" x="136" y="345" width="51" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                             </switch>
@@ -1830,7 +1819,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
             <objects>
                 <tableViewController id="idA-Pj-1U9" customClass="MPElementListAllViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="48" sectionHeaderHeight="22" sectionFooterHeight="22" id="N83-sj-4tl">
-                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <navigationBar key="tableHeaderView" contentMode="scaleToFill" id="l0p-Tu-L9k">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1943,11 +1932,11 @@ If you set a custom password, it will be encrypted before it is saved to the clo
             <objects>
                 <tableViewController id="oLN-6u-GLb" customClass="MPPreferencesViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="oSh-Ap-kLt">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="63M-7L-M7o">
-                            <rect key="frame" x="0.0" y="695" width="320" height="20"/>
+                            <rect key="frame" x="0.0" y="759" width="320" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
@@ -1955,10 +1944,10 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                             <tableViewSection id="OJv-8V-W2l">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="226" id="9gC-Vq-Ta8">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="226"/>
+                                        <rect key="frame" x="0.0" y="64" width="320" height="226"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="225"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9gC-Vq-Ta8" id="Gbd-ki-h84">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="226"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Avatar" lineBreakMode="tailTruncation" minimumFontSize="10" id="0Wd-wn-t6z">
@@ -1980,7 +1969,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" id="TMH-Xt-EnD">
-                                                    <rect key="frame" x="0.0" y="95" width="320" height="130"/>
+                                                    <rect key="frame" x="0.0" y="95" width="320" height="131"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="top" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="6ap-Xw-Ubd">
@@ -1999,8 +1988,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                     </subviews>
                                                 </scrollView>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                 </cells>
@@ -2008,10 +1996,10 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                             <tableViewSection id="TRa-Gy-tG5">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="70" id="n1H-sG-HDc">
-                                        <rect key="frame" x="0.0" y="226" width="320" height="70"/>
+                                        <rect key="frame" x="0.0" y="290" width="320" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="69"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="n1H-sG-HDc" id="lNe-nF-wJy">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Preferences" lineBreakMode="tailTruncation" minimumFontSize="10" id="ylz-i5-tem">
@@ -2024,7 +2012,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="These are user-specific configuration settings." lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" id="WCm-A3-a1a">
-                                                    <rect key="frame" x="20" y="49" width="280" height="22"/>
+                                                    <rect key="frame" x="20" y="49" width="280" height="23"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <fontDescription key="fontDescription" name="GillSans-LightItalic" family="Gill Sans" pointSize="14"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2033,15 +2021,14 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="44" id="0jz-0D-ggZ">
-                                        <rect key="frame" x="0.0" y="296" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="360" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0jz-0D-ggZ" id="p02-pp-grs">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_first.png" id="8dk-FW-Tse">
@@ -2050,7 +2037,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                     <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Save Password" lineBreakMode="tailTruncation" minimumFontSize="10" id="0Mf-7e-quo">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="23"/>
+                                                    <rect key="frame" x="20" y="1" width="280" height="23"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2059,14 +2046,14 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Stores your master password." lineBreakMode="tailTruncation" minimumFontSize="10" id="Hfj-40-OHR">
-                                                    <rect key="frame" x="20" y="23" width="280" height="20"/>
+                                                    <rect key="frame" x="20" y="24" width="280" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="ilG-0h-SOb">
-                                                    <rect key="frame" x="221" y="8" width="79" height="27"/>
+                                                    <rect key="frame" x="249" y="5" width="51" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
@@ -2074,15 +2061,14 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                     </connections>
                                                 </switch>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="44" id="ruw-YM-LQK">
-                                        <rect key="frame" x="0.0" y="340" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="404" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ruw-YM-LQK" id="uO8-xr-M6y">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_list_last.png" id="YjI-sp-m0W">
@@ -2091,7 +2077,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                     <rect key="contentStretch" x="0.10000000000000001" y="0.20000000000000001" width="0.79999999999999982" height="0.59999999999999964"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Default Password Type" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" id="Cna-C5-ovR">
-                                                    <rect key="frame" x="20" y="0.0" width="285" height="23"/>
+                                                    <rect key="frame" x="20" y="1" width="285" height="23"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2100,7 +2086,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Type used for new sites." lineBreakMode="tailTruncation" minimumFontSize="10" id="uh9-NL-39c">
-                                                    <rect key="frame" x="20" y="23" width="280" height="20"/>
+                                                    <rect key="frame" x="20" y="24" width="280" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -2114,22 +2100,21 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <segue destination="NKe-nv-566" kind="push" identifier="MP_ChooseType" id="KIl-ZW-M7G"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="155" id="YEg-WL-WBP">
-                                        <rect key="frame" x="0.0" y="384" width="320" height="155"/>
+                                        <rect key="frame" x="0.0" y="448" width="320" height="155"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="154"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YEg-WL-WBP" id="ak1-UX-N72">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="155"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" id="qoQ-x9-XHs">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="154"/>
+                                                    <rect key="frame" x="20" y="0.0" width="280" height="155"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <string key="text">"Save Password" will store your master password in the keychain.  This means you won't need the master password anymore to log in (unless your device gets restored or you start using a new device). This is somewhat less secure in the event of theft.  You can compensate for the reduced security by going into Settings and navigating: General->Passcode Lock, disabling "Simple Passcode", and setting a more secure passcode for your device.</string>
                                                     <fontDescription key="fontDescription" name="GillSans-LightItalic" family="Gill Sans" pointSize="14"/>
@@ -2139,8 +2124,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                 </cells>
@@ -2148,9 +2132,9 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                             <tableViewSection id="dN3-cJ-9WA">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="68" id="xBt-OT-BYA">
-                                        <rect key="frame" x="0.0" y="539" width="320" height="68"/>
+                                        <rect key="frame" x="0.0" y="603" width="320" height="68"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xBt-OT-BYA" id="PvR-xp-Igf">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="67"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -2173,14 +2157,13 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="44" id="X2m-92-Qzh">
-                                        <rect key="frame" x="0.0" y="607" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="671" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="X2m-92-Qzh" id="Tn7-Ei-pZh">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -2206,14 +2189,13 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="glr-eJ-qKq">
-                                        <rect key="frame" x="0.0" y="651" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="715" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="glr-eJ-qKq" id="Pif-aU-ppL">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -2239,8 +2221,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                 </cells>
@@ -2276,19 +2257,18 @@ If you set a custom password, it will be encrypted before it is saved to the clo
         <scene sceneID="jOa-sR-fj7">
             <objects>
                 <tableViewController id="Vrp-Gl-7qn" customClass="IASKAppSettingsViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="NCp-ii-ux0">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="NCp-ii-ux0">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="-" id="Ywm-Yd-GPT">
-                                <rect key="frame" x="0.0" y="46" width="320" height="46"/>
+                                <rect key="frame" x="0.0" y="119" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Ywm-Yd-GPT" id="6b7-zB-qNE">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                </view>
+                                </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -2361,11 +2341,11 @@ If you set a custom password, it will be encrypted before it is saved to the clo
             <objects>
                 <viewController id="ZgN-2j-05b" customClass="MPSetupViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QIH-dS-sqD">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="FTf-06-1Pg">
-                                <rect key="frame" x="0.0" y="-64" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="-64" width="320" height="632"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Getting Started" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FkR-cP-Y7K">
@@ -2376,7 +2356,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" usesAttributedText="YES" id="hwP-ds-GDh">
-                                <rect key="frame" x="20" y="137" width="280" height="367"/>
+                                <rect key="frame" x="20" y="137" width="280" height="431"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <attributedString key="attributedText">
@@ -2488,11 +2468,11 @@ You can make passwords for anything, like email addresses, sites or real-world t
             <objects>
                 <viewController id="myN-X7-9Tg" customClass="MPGuideViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vkG-Oi-PHo">
-                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" image="background.png" id="C2i-R4-36i">
-                                <rect key="frame" x="0.0" y="44" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <view clipsSubviews="YES" contentMode="scaleToFill" id="vSk-nT-Vwf" userLabel="View - Display">
@@ -2632,7 +2612,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                 </scopeButtonTitles>
                             </searchBar>
                             <view alpha="0.60000000000000009" contentMode="scaleToFill" id="Ahl-o0-lMv">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3wI-lo-tWc">
@@ -2652,7 +2632,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="UHf-cp-97W">
-                                        <rect key="frame" x="33" y="502" width="44" height="44"/>
+                                        <rect key="frame" x="33" y="522" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <accessibility key="accessibilityConfiguration" hint="" label="Close"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -2668,7 +2648,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jDS-Vh-ETL">
-                                        <rect key="frame" x="124" y="234" width="72" height="80"/>
+                                        <rect key="frame" x="124" y="244" width="72" height="80"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <accessibility key="accessibilityConfiguration" hint="" label="Close"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -2684,7 +2664,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                         </connections>
                                     </button>
                                     <progressView opaque="NO" contentMode="scaleToFill" id="nf7-oM-7dh">
-                                        <rect key="frame" x="85" y="519" width="150" height="9"/>
+                                        <rect key="frame" x="85" y="546" width="150" height="2"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <color key="progressTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                     </progressView>
@@ -2823,11 +2803,11 @@ You can make passwords for anything, like email addresses, sites or real-world t
             <objects>
                 <viewController id="kSj-yX-DmT" customClass="MPSetupViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sT4-Jb-e5D">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="Eqt-R0-LTj">
-                                <rect key="frame" x="0.0" y="-64" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="-64" width="320" height="632"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="top" image="unlocked.png" id="4ah-P0-2DG">
@@ -2855,7 +2835,7 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="xmc-hs-riu">
-                                <rect key="frame" x="122" y="345" width="79" height="27"/>
+                                <rect key="frame" x="136" y="345" width="51" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                             </switch>
@@ -2916,206 +2896,8 @@ However, it means that anyone who finds your device unlocked can do the same.</s
         <image name="ui_textfield.png" width="158" height="34"/>
         <image name="unlocked.png" width="84" height="80"/>
     </resources>
-    <classes>
-        <class className="IASKAppSettingsViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/IASKAppSettingsViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="MPAppViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPAppViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="deblock:" candidateClass="UIButton"/>
-                <relationship kind="action" name="gorillas:" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="MPAppsViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPAppsViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="exit"/>
-                <relationship kind="outlet" name="pagePositionView" candidateClass="UIImageView"/>
-            </relationships>
-        </class>
-        <class className="MPElementListAllViewController" superclassName="MPElementListController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPElementListAllViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="add:"/>
-                <relationship kind="action" name="close:"/>
-                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
-            </relationships>
-        </class>
-        <class className="MPElementListController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPElementListController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="delegate"/>
-            </relationships>
-        </class>
-        <class className="MPElementListSearchController" superclassName="MPElementListController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPElementListSearchController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="searchDisplayController" candidateClass="UISearchDisplayController"/>
-                <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="MPGuideViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPGuideViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="close"/>
-                <relationship kind="action" name="play"/>
-                <relationship kind="outlet" name="content" candidateClass="UIView"/>
-                <relationship kind="outlet" name="contentButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="contentText" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="contentTip" candidateClass="UIView"/>
-                <relationship kind="outlet" name="contentTipText" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="largePlayButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="progress" candidateClass="UIProgressView"/>
-                <relationship kind="outlet" name="siteNameTip" candidateClass="UIView"/>
-                <relationship kind="outlet" name="smallPlayButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="toolButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="toolTip" candidateClass="UIView"/>
-                <relationship kind="outlet" name="typeButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="typeTip" candidateClass="UIView"/>
-                <relationship kind="outlet" name="usernameButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="usernameTip" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="MPLogsViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPLogsViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="action:"/>
-                <relationship kind="action" name="mail:" candidateClass="UIBarButtonItem"/>
-                <relationship kind="action" name="refresh:" candidateClass="UIBarButtonItem"/>
-                <relationship kind="action" name="toggleLevelControl:" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="levelControl" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="logView" candidateClass="UITextView"/>
-            </relationships>
-        </class>
-        <class className="MPMainViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPMainViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="action:" candidateClass="UIBarButtonItem"/>
-                <relationship kind="action" name="closeAlert"/>
-                <relationship kind="action" name="closeOutdatedAlert"/>
-                <relationship kind="action" name="copyContent"/>
-                <relationship kind="action" name="editLoginName:" candidateClass="UILongPressGestureRecognizer"/>
-                <relationship kind="action" name="editPassword"/>
-                <relationship kind="action" name="incrementPasswordCounter"/>
-                <relationship kind="action" name="infoOutdatedAlert"/>
-                <relationship kind="action" name="panHelpDown:" candidateClass="UIPanGestureRecognizer"/>
-                <relationship kind="action" name="panHelpUp:" candidateClass="UIPanGestureRecognizer"/>
-                <relationship kind="action" name="resetPasswordCounter:" candidateClass="UILongPressGestureRecognizer"/>
-                <relationship kind="action" name="searchOutdatedElements"/>
-                <relationship kind="action" name="toggleUser"/>
-                <relationship kind="action" name="upgradePassword"/>
-                <relationship kind="outlet" name="actionsTipContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="alertBody" candidateClass="UITextView"/>
-                <relationship kind="outlet" name="alertContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="alertTitle" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="contentContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="contentField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="contentTipBody" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="contentTipContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="displayContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="helpContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="helpView" candidateClass="UIWebView"/>
-                <relationship kind="outlet" name="loginNameContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="loginNameField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="loginNameTipBody" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="loginNameTipContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="outdatedAlertBack" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="outdatedAlertCloseButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="outdatedAlertContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="passwordCounter" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="passwordEdit" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="passwordIncrementer" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="passwordUpgrade" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="passwordUser" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="pullDownGesture" candidateClass="UIPanGestureRecognizer"/>
-                <relationship kind="outlet" name="pullDownView" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="pullUpGesture" candidateClass="UIPanGestureRecognizer"/>
-                <relationship kind="outlet" name="pullUpView" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="searchDelegate" candidateClass="MPElementListSearchController"/>
-                <relationship kind="outlet" name="searchTipContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="siteName" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="toolTipBody" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="toolTipContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="toolTipEditIcon" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="typeButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="typeTipContainer" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="MPPreferencesViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPPreferencesViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="didToggleSwitch:" candidateClass="UISwitch"/>
-                <relationship kind="outlet" name="avatarTemplate" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="avatarsView" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="changeMPCell" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="defaultTypeLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="exportCell" candidateClass="UITableViewCell"/>
-                <relationship kind="outlet" name="savePasswordSwitch" candidateClass="UISwitch"/>
-            </relationships>
-        </class>
-        <class className="MPSetupViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPSetupViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="close:" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="cloudSwitch" candidateClass="UISwitch"/>
-                <relationship kind="outlet" name="rememberLoginSwitch" candidateClass="UISwitch"/>
-            </relationships>
-        </class>
-        <class className="MPTypeViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPTypeViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="recommendedTipContainer" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="MPUnlockViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPUnlockViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="add:" candidateClass="UIButton"/>
-                <relationship kind="action" name="emergencyClose:" candidateClass="UIButton"/>
-                <relationship kind="action" name="emergencyCopy:" candidateClass="UIButton"/>
-                <relationship kind="action" name="facebook:" candidateClass="UIButton"/>
-                <relationship kind="action" name="google:" candidateClass="UIButton"/>
-                <relationship kind="action" name="mail:" candidateClass="UIButton"/>
-                <relationship kind="action" name="targetedUserAction:" candidateClass="UILongPressGestureRecognizer"/>
-                <relationship kind="action" name="twitter:" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="avatarTemplate" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="avatarsView" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="createPasswordTipView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="emergencyActivity" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="emergencyContentTipContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="emergencyCounter" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="emergencyCounterStepper" candidateClass="UIStepper"/>
-                <relationship kind="outlet" name="emergencyGeneratorContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="emergencyMasterPassword" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="emergencyName" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="emergencyPassword" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="emergencySite" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="emergencyTypeControl" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="nameLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="newsView" candidateClass="UIWebView"/>
-                <relationship kind="outlet" name="oldNameLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="passwordFieldLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="passwordTipLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="passwordTipView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="passwordView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="spinner" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="targetedUserActionGesture" candidateClass="UILongPressGestureRecognizer"/>
-                <relationship kind="outlet" name="tip" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="uiContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="wordWall" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="PearlNavigationController" superclassName="UINavigationController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PearlNavigationController.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <nil key="statusBar"/>
+        <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>

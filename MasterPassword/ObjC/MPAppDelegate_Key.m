@@ -139,7 +139,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
             [Crashlytics setObjectValue:user.userID forKey:@"username"];
             [Crashlytics setUserName:user.userID];
 #endif
-#if TARGET_OS_IPHONE
+#ifdef LOCALYTICS
             [[LocalyticsSession sharedLocalyticsSession] setCustomerName:user.userID];
 #endif
         }

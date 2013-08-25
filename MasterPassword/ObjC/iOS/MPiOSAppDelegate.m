@@ -81,6 +81,7 @@
     @catch (id exception) {
         err(@"Google+: %@", exception);
     }
+#ifdef CRASHLYTICS
     @try {
         NSString *crashlyticsAPIKey = [self crashlyticsAPIKey];
         if ([crashlyticsAPIKey length]) {
@@ -110,6 +111,8 @@
     @catch (id exception) {
         err(@"Crashlytics: %@", exception);
     }
+#endif
+#ifdef LOCALYTICS
     @try {
         NSString *localyticsKey = [self localyticsKey];
         if ([localyticsKey length]) {
@@ -134,6 +137,7 @@
     @catch (id exception) {
         err(@"Localytics exception: %@", exception);
     }
+#endif
 
     UIImage *navBarImage = [[UIImage imageNamed:@"ui_navbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
     [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
@@ -193,6 +197,7 @@
                     if ([PearlLogger get].printLevel > PearlLogLevelInfo)
                         [PearlLogger get].printLevel = PearlLogLevelInfo;
 
+#ifdef CRASHLYTICS
                     [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].rememberLogin boolValue] forKey:@"rememberLogin"];
                     [[Crashlytics sharedInstance] setBoolValue:[self storeManager].cloudEnabled forKey:@"iCloud"];
                     [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].iCloudDecided boolValue] forKey:@"iCloudDecided"];
@@ -205,6 +210,7 @@
                     [[Crashlytics sharedInstance]
                             setIntValue:[[PearlConfig get].reviewAfterLaunches intValue] forKey:@"reviewAfterLaunches"];
                     [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
+#endif
 
 #ifdef TESTFLIGHT_SDK_VERSION
                     [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPConfig get].rememberLogin )
@@ -395,24 +401,30 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
 
+#ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] close];
     [[LocalyticsSession sharedLocalyticsSession] upload];
+#endif
 
     [super applicationDidEnterBackground:application];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
 
+#ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] resume];
     [[LocalyticsSession sharedLocalyticsSession] upload];
+#endif
 
     [super applicationWillEnterForeground:application];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
 
+#ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] close];
     [[LocalyticsSession sharedLocalyticsSession] upload];
+#endif
 
     [super applicationWillTerminate:application];
 }
@@ -423,8 +435,10 @@
     if (![[MPiOSConfig get].rememberLogin boolValue])
         [self signOutAnimated:NO];
 
+#ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] close];
     [[LocalyticsSession sharedLocalyticsSession] upload];
+#endif
 
     [super applicationWillResignActive:application];
 }
@@ -434,8 +448,10 @@
     inf(@"Re-activated");
     [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:application userInfo:nil];
 
+#ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] resume];
     [[LocalyticsSession sharedLocalyticsSession] upload];
+#endif
 
     [super applicationDidBecomeActive:application];
 }

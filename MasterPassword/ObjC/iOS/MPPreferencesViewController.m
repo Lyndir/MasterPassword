@@ -80,7 +80,9 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 
+#ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Preferences"];
+#endif
 
     [super viewDidAppear:animated];
 }

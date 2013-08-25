@@ -73,8 +73,10 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 
+#ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Apps"];
-
+#endif
+    
     [self.pageViewController setViewControllers:@[ [self.pageVCs objectAtIndex:0] ] direction:UIPageViewControllerNavigationDirectionForward
                                        animated:YES completion:nil];
 
