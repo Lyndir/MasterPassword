@@ -3672,6 +3672,9 @@
 					"$(inherited)",
 					"NDEBUG=1",
 					"NS_BLOCK_ASSERTIONS=1",
+					"TESTFLIGHT=1",
+					"LOCALYTICS=1",
+					"CRASHLYTICS=1",
 				);
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
@@ -3720,6 +3723,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
+				EXCLUDED_SOURCE_FILE_NAMES = libTestFlight.a;
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				SKIP_INSTALL = NO;
@@ -3733,6 +3737,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Maarten Billemont";
+				EXCLUDED_SOURCE_FILE_NAMES = "";
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "20B988BD-7A10-49E6-9FF7-367BD5714A31";
@@ -3788,6 +3793,8 @@
 					"$(inherited)",
 					"NDEBUG=1",
 					"NS_BLOCK_ASSERTIONS=1",
+					"CRASHLYTICS=1",
+					"LOCALYTICS=1",
 				);
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
@@ -3837,6 +3844,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Maarten Billemont";
+				EXCLUDED_SOURCE_FILE_NAMES = libTestFlight.a;
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3EF104A5-610A-429E-ACF0-232A2C8A7E1C";
