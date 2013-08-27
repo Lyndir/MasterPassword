@@ -2955,16 +2955,6 @@
 				CLASSPREFIX = MP;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = Lyndir;
-				TargetAttributes = {
-					DA5BFA43147E415C00F98B1E = {
-						DevelopmentTeam = HL3Q45LX9N;
-						SystemCapabilities = {
-							com.apple.DataProtection = {
-								enabled = 1;
-							};
-						};
-					};
-				};
 			};
 			buildConfigurationList = DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-iOS" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -3733,12 +3723,9 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EXCLUDED_SOURCE_FILE_NAMES = libTestFlight.a;
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
-				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -3749,12 +3736,10 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Maarten Billemont";
 				EXCLUDED_SOURCE_FILE_NAMES = "";
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
-				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "20B988BD-7A10-49E6-9FF7-367BD5714A31";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -3858,12 +3843,10 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Maarten Billemont";
 				EXCLUDED_SOURCE_FILE_NAMES = libTestFlight.a;
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
-				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3EF104A5-610A-429E-ACF0-232A2C8A7E1C";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
