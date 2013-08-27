@@ -51,10 +51,9 @@
                                                                             options:nil];
     self.pageViewController.dataSource = self;
     self.pageViewController.delegate = self;
+    self.pageViewController.view.frame = CGRectFromOriginWithSize( CGPointZero, self.pagePositionView.bounds.size );
     [self addChildViewController:self.pageViewController];
-    [self.view addSubview:self.pageViewController.view];
-    self.pageViewController.view.frame = self.pagePositionView.frame;
-    [self.pagePositionView removeFromSuperview];
+    [self.pagePositionView addSubview:self.pageViewController.view];
     [self.pageViewController didMoveToParentViewController:self];
 
     [super viewDidLoad];
