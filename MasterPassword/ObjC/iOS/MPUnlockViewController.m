@@ -188,7 +188,7 @@
                     self.uiContainer.alpha = 1;
                 }];
 
-                NSString *newsURL = PearlString( @"http://masterpasswordapp.com/news-dev.html?version=%@",
+                NSString *newsURL = PearlString( @"http://masterpasswordapp.com/news.html?version=%@",
                         [[PearlInfoPlist get] CFBundleVersion] );
                 [self.newsView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:newsURL]]];
             }];
@@ -244,11 +244,6 @@
     [self emergencyCloseAnimated:animated];
 
     [self.marqueeTipTimer invalidate];
-
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        [self.navigationController setNavigationBarHidden:NO animated:animated];
-    }];
 
     [super viewWillDisappear:animated];
 }
