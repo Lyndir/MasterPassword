@@ -139,36 +139,36 @@
     }
 #endif
 
-    UIImage *navBarImage = [[UIImage imageNamed:@"ui_navbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
-    [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
-    [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsLandscapePhone];
-    [[UINavigationBar appearance] setTitleTextAttributes:
-            @{
-                    UITextAttributeTextColor        : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
-                    UITextAttributeTextShadowColor  : [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f],
-                    UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetMake( 0, -1 )],
-                    UITextAttributeFont             : [UIFont fontWithName:@"Exo-Bold" size:20.0f]
-            }];
-
-    UIImage *navBarButton = [[UIImage imageNamed:@"ui_navbar_button"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
-    UIImage *navBarBack = [[UIImage imageNamed:@"ui_navbar_back"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 13, 0, 5 )];
-    [[UIBarButtonItem appearance] setBackgroundImage:navBarButton forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [[UIBarButtonItem appearance] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
-    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:navBarBack forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
-    [[UIBarButtonItem appearance] setTitleTextAttributes:
-            @{
-                    UITextAttributeTextColor        : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
-                    UITextAttributeTextShadowColor  : [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f],
-                    UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetMake( 0, 1 )]//,
-                    // Causes a bug in iOS where image views get oddly stretched... or something.
-                    //UITextAttributeFont: [UIFont fontWithName:@"HelveticaNeue" size:13.0f]
-            }
-                                                forState:UIControlStateNormal];
-
-    UIImage *toolBarImage = [[UIImage imageNamed:@"ui_toolbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake( 25, 5, 5, 5 )];
-    [[UISearchBar appearance] setBackgroundImage:toolBarImage];
-    [[UIToolbar appearance] setBackgroundImage:toolBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+//    UIImage *navBarImage = [[UIImage imageNamed:@"ui_navbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
+//    [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
+//    [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsLandscapePhone];
+//    [[UINavigationBar appearance] setTitleTextAttributes:
+//            @{
+//                    UITextAttributeTextColor        : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
+//                    UITextAttributeTextShadowColor  : [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f],
+//                    UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetMake( 0, -1 )],
+//                    UITextAttributeFont             : [UIFont fontWithName:@"Exo-Bold" size:20.0f]
+//            }];
+//
+//    UIImage *navBarButton = [[UIImage imageNamed:@"ui_navbar_button"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
+//    UIImage *navBarBack = [[UIImage imageNamed:@"ui_navbar_back"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 13, 0, 5 )];
+//    [[UIBarButtonItem appearance] setBackgroundImage:navBarButton forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+//    [[UIBarButtonItem appearance] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
+//    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:navBarBack forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+//    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
+//    [[UIBarButtonItem appearance] setTitleTextAttributes:
+//            @{
+//                    UITextAttributeTextColor        : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
+//                    UITextAttributeTextShadowColor  : [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f],
+//                    UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetMake( 0, 1 )]//,
+//                    // Causes a bug in iOS where image views get oddly stretched... or something.
+//                    //UITextAttributeFont: [UIFont fontWithName:@"HelveticaNeue" size:13.0f]
+//            }
+//                                                forState:UIControlStateNormal];
+//
+//    UIImage *toolBarImage = [[UIImage imageNamed:@"ui_toolbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake( 25, 5, 5, 5 )];
+//    [[UISearchBar appearance] setBackgroundImage:toolBarImage];
+//    [[UIToolbar appearance] setBackgroundImage:toolBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
 
     // UIImage *minImage = [[UIImage imageNamed:@"slider-minimum"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
     // UIImage *maxImage = [[UIImage imageNamed:@"slider-maximum"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
