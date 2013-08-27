@@ -2876,34 +2876,19 @@ However, it means that anyone who finds your device unlocked can do the same.</s
     <resources>
         <image name="Square-bottom.png" width="551" height="58"/>
         <image name="avatar-0.png" width="110" height="110"/>
-        <image name="avatar-0.png" width="110" height="110"/>
-        <image name="background.png" width="568" height="568"/>
-        <image name="background.png" width="568" height="568"/>
-        <image name="background.png" width="568" height="568"/>
-        <image name="background.png" width="568" height="568"/>
-        <image name="background.png" width="568" height="568"/>
-        <image name="background.png" width="568" height="568"/>
         <image name="background.png" width="568" height="568"/>
         <image name="book.png" width="320" height="480"/>
         <image name="cloud.png" width="105" height="80"/>
         <image name="icon_action.png" width="32" height="32"/>
         <image name="icon_cancel.png" width="32" height="32"/>
-        <image name="icon_cancel.png" width="32" height="32"/>
-        <image name="icon_cancel.png" width="32" height="32"/>
-        <image name="icon_cancel.png" width="32" height="32"/>
-        <image name="icon_edit.png" width="32" height="32"/>
         <image name="icon_edit.png" width="32" height="32"/>
         <image name="icon_find.png" width="32" height="32"/>
-        <image name="icon_find.png" width="32" height="32"/>
-        <image name="icon_person.png" width="32" height="32"/>
         <image name="icon_person.png" width="32" height="32"/>
         <image name="icon_play.png" width="32" height="32"/>
-        <image name="icon_plus.png" width="32" height="32"/>
         <image name="icon_plus.png" width="32" height="32"/>
         <image name="icon_up.png" width="32" height="32"/>
         <image name="identity.png" width="82" height="80"/>
         <image name="page-deblock.png" width="305" height="400"/>
-        <image name="page-gorillas.png" width="305" height="400"/>
         <image name="page-gorillas.png" width="305" height="400"/>
         <image name="play.png" width="72" height="80"/>
         <image name="pull-down.png" width="60" height="10"/>
@@ -2912,39 +2897,15 @@ However, it means that anyone who finds your device unlocked can do the same.</s
         <image name="social-google+.png" width="44" height="44"/>
         <image name="social-twitter.png" width="44" height="44"/>
         <image name="tip_alert_black.png" width="235" height="81"/>
-        <image name="tip_alert_black.png" width="235" height="81"/>
-        <image name="tip_basic_black.png" width="210" height="60"/>
-        <image name="tip_basic_black.png" width="210" height="60"/>
-        <image name="tip_basic_black.png" width="210" height="60"/>
-        <image name="tip_basic_black.png" width="210" height="60"/>
-        <image name="tip_basic_black.png" width="210" height="60"/>
-        <image name="tip_basic_black.png" width="210" height="60"/>
         <image name="tip_basic_black.png" width="210" height="60"/>
         <image name="tip_basic_black_bottom_right.png" width="210" height="60"/>
-        <image name="tip_basic_black_bottom_right.png" width="210" height="60"/>
-        <image name="tip_basic_black_top.png" width="210" height="60"/>
-        <image name="tip_basic_black_top.png" width="210" height="60"/>
-        <image name="tip_basic_black_top.png" width="210" height="60"/>
         <image name="tip_basic_black_top.png" width="210" height="60"/>
         <image name="tip_basic_black_top_right.png" width="205" height="61"/>
         <image name="ui_button_standard_large.png" width="300" height="46"/>
-        <image name="ui_button_standard_large.png" width="300" height="46"/>
-        <image name="ui_list_first.png" width="300" height="35"/>
-        <image name="ui_list_first.png" width="300" height="35"/>
-        <image name="ui_list_first.png" width="300" height="35"/>
         <image name="ui_list_first.png" width="300" height="35"/>
         <image name="ui_list_last.png" width="300" height="35"/>
-        <image name="ui_list_last.png" width="300" height="35"/>
-        <image name="ui_list_last.png" width="300" height="35"/>
-        <image name="ui_list_last.png" width="300" height="35"/>
-        <image name="ui_list_middle.png" width="300" height="34"/>
-        <image name="ui_list_middle.png" width="300" height="34"/>
-        <image name="ui_list_middle.png" width="300" height="34"/>
         <image name="ui_list_middle.png" width="300" height="34"/>
         <image name="ui_panel_container.png" width="300" height="87"/>
-        <image name="ui_panel_container.png" width="300" height="87"/>
-        <image name="ui_panel_display.png" width="300" height="86"/>
-        <image name="ui_panel_display.png" width="300" height="86"/>
         <image name="ui_panel_display.png" width="300" height="86"/>
         <image name="ui_spinner.png" width="75" height="75"/>
         <image name="ui_textfield.png" width="158" height="34"/>
