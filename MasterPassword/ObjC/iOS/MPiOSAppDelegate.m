@@ -41,11 +41,6 @@
         NSString *testFlightToken = [self testFlightToken];
         if ([testFlightToken length]) {
             inf(@"Initializing TestFlight");
-#ifdef ADHOC
-            [TestFlight setDeviceIdentifier:[(id)[UIDevice currentDevice] uniqueIdentifier]];
-#else
-            [TestFlight setDeviceIdentifier:[PearlKeyChain deviceIdentifier]];
-#endif
             [TestFlight addCustomEnvironmentInformation:@"Anonymous" forKey:@"username"];
             [TestFlight addCustomEnvironmentInformation:[PearlKeyChain deviceIdentifier] forKey:@"deviceIdentifier"];
             [TestFlight setOptions:@{

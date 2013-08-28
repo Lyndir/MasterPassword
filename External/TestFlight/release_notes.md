@@ -1,3 +1,37 @@
+## 2.0
+
+Improvements
+
+- ARC
+- All public TestFlight methods may be called from any thread or dispatch_queue
+- All public TestFlight methods (except for `TFLog` and `takeOff:`) are asynchronous, so there is never a wait on them
+- TestFlight never uses more than 1 network connection at a time
+- All network traffic is grouped together, sent at once, and transferred in MessagePack. This results in using less bandwidth and less network calls.
+- All network traffic if server is not reachable
+- Size of SDK reduced by 70%
+- New In App Update UI in an alert with landscape support. Should work for all different types of apps.
+- Manual Sessions: You can manually control session start and end. See `TestFlight+ManualSessions.h` for more information
+- Combining of back to back sessions. If a session starts less than 30 seconds from the last session which ended, the previous session is continued. You may change the time limit (or turn this off) using the `TFOptionSessionKeepAliveTimeout` option key.
+- No longer automatically starts a session on `+takeOff:` in order to support new background modes that might launch an app in the background.
+- `TFOptionReportCrashes` option to not install crash handlers
+- Remove all calls to `dispatch_get_current_queue`, it is deprecated
+
+Changes
+
+- Removed all access to mac address
+- Added AdSupport.framework requirement (as a replacement for mac address to get accurate user counts)
+- Add format attribute to TFLog to show warnings for wrong format specifiers or not using a format string
+- Removed Questions
+- Removed Feedback View (along with backtrace option)
+
+Bug Fixes
+
+- Fixed addrinfo memory leak
+- Fixed possible `-[TFAirTrafficController getNumberOrNilFrom:withKey:]` crash when bad data is received.
+- CoreTelephony crash work around: this is a workaround of a iOS bug that causes deallocated instances of `CTTelephonyNetworkInfo` to receive notifications which causes crashes. Core Telephony is used to retrieve the device's mobile carrier.
+- Fix bug with crash reporting in iOS 7
+
+
 ## 1.2.4 - February 19, 2013
 
 - Fixed bug that caused crash reports to sometimes not send immediately (they would be resent later)
@@ -7,7 +41,7 @@
 - Fixed typos in readme
 - Fixed bug where logs not sent on crash
 - Fixed bug where empty crash files were created (but not sent)
-- Cache cache path
+- Cache path to TF's directory so it does not need to be regenerated every time
 - Use consts for `setOptions:`
 - Updated `setDeviceIdentifier:` comments to make them clearer
 - Remove potentially conflicting function name `UIColorFromRGB`
