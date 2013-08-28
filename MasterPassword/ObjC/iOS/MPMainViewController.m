@@ -120,9 +120,10 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+
     [self.navigationController setNavigationBarHidden:NO animated:animated];
+    if (![super respondsToSelector:@selector(prefersStatusBarHidden)])
+        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
 
     MPElementEntity *activeElement = [self activeElementForMainThread];
     if (activeElement.user != [[MPiOSAppDelegate get] activeUserForMainThread])

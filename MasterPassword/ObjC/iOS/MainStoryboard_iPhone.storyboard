@@ -1089,7 +1089,7 @@ L4m3P4sSw0rD</string>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mK2-p1-3zC" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="P8c-gf-nN3">
+                <searchDisplayController searchResultsTitle="" id="P8c-gf-nN3">
                     <connections>
                         <outlet property="searchBar" destination="qeo-n2-WVh" id="bFO-FC-Xdj"/>
                         <outlet property="searchContentsController" destination="PQa-Xl-A3x" id="iEu-t3-hJY"/>
@@ -2918,6 +2918,6 @@ However, it means that anyone who finds your device unlocked can do the same.</s
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="swi-5o-hfK"/>
-        <segue reference="KIl-ZW-M7G"/>
+        <segue reference="9Bs-cD-ddF"/>
     </inferredMetricsTieBreakers>
 </document>

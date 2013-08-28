@@ -23,21 +23,21 @@
 
 + (void)initialize {
 
-    [MPiOSConfig get];
     [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
 #ifdef DEBUG
     [PearlLogger get].printLevel = PearlLogLevelDebug;
-    //[NSClassFromString(@"WebView") performSelector:NSSelectorFromString(@"_enableRemoteInspector")];
+#else
+    [PearlLogger get].printLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
 #endif
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-    [[[NSBundle mainBundle] mutableInfoDictionary] setObject:@"Master Password" forKey:@"CFBundleDisplayName"];
-    [[[NSBundle mainBundle] mutableLocalizedInfoDictionary] setObject:@"Master Password" forKey:@"CFBundleDisplayName"];
+    @try {
+        [[[NSBundle mainBundle] mutableInfoDictionary] setObject:@"Master Password" forKey:@"CFBundleDisplayName"];
+        [[[NSBundle mainBundle] mutableLocalizedInfoDictionary] setObject:@"Master Password" forKey:@"CFBundleDisplayName"];
 
 #ifdef TESTFLIGHT_SDK_VERSION
-    @try {
         NSString *testFlightToken = [self testFlightToken];
         if ([testFlightToken length]) {
             inf(@"Initializing TestFlight");
@@ -61,23 +61,13 @@
             TFLog( @"TestFlight (%@) initialized for: %@ v%@.", //
                     TESTFLIGHT_SDK_VERSION, [PearlInfoPlist get].CFBundleName, [PearlInfoPlist get].CFBundleVersion );
         }
-    }
-    @catch (id exception) {
-        err(@"TestFlight: %@", exception);
-    }
 #endif
-    @try {
         NSString *googlePlusClientID = [self googlePlusClientID];
         if ([googlePlusClientID length]) {
             inf(@"Initializing Google+");
             [[GPPSignIn sharedInstance] setClientID:googlePlusClientID];
         }
-    }
-    @catch (id exception) {
-        err(@"Google+: %@", exception);
-    }
 #ifdef CRASHLYTICS
-    @try {
         NSString *crashlyticsAPIKey = [self crashlyticsAPIKey];
         if ([crashlyticsAPIKey length]) {
             inf(@"Initializing Crashlytics");
@@ -102,13 +92,8 @@
             CLSLog( @"Crashlytics (%@) initialized for: %@ v%@.", //
                     [Crashlytics sharedInstance].version, [PearlInfoPlist get].CFBundleName, [PearlInfoPlist get].CFBundleVersion );
         }
-    }
-    @catch (id exception) {
-        err(@"Crashlytics: %@", exception);
-    }
 #endif
 #ifdef LOCALYTICS
-    @try {
         NSString *localyticsKey = [self localyticsKey];
         if ([localyticsKey length]) {
             inf(@"Initializing Localytics");
@@ -128,161 +113,182 @@
                 return YES;
             }];
         }
+#endif
     }
     @catch (id exception) {
-        err(@"Localytics exception: %@", exception);
+        err(@"During Analytics Setup: %@", exception);
     }
-#endif
+    @try {
+        if (floor( NSFoundationVersionNumber ) <= NSFoundationVersionNumber_iOS_6_1) {
+            UIImage *navBarImage = [[UIImage imageNamed:@"ui_navbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
+            [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
+            [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsLandscapePhone];
+            [[UINavigationBar appearance] setTitleTextAttributes:
+                    @{
+                            UITextAttributeTextColor        : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
+                            UITextAttributeTextShadowColor  : [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f],
+                            UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetMake( 0, -1 )],
+                            UITextAttributeFont             : [UIFont fontWithName:@"Exo-Bold" size:20.0f]
+                    }];
 
-//    UIImage *navBarImage = [[UIImage imageNamed:@"ui_navbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
-//    [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
-//    [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsLandscapePhone];
-//    [[UINavigationBar appearance] setTitleTextAttributes:
-//            @{
-//                    UITextAttributeTextColor        : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
-//                    UITextAttributeTextShadowColor  : [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f],
-//                    UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetMake( 0, -1 )],
-//                    UITextAttributeFont             : [UIFont fontWithName:@"Exo-Bold" size:20.0f]
-//            }];
-//
-//    UIImage *navBarButton = [[UIImage imageNamed:@"ui_navbar_button"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
-//    UIImage *navBarBack = [[UIImage imageNamed:@"ui_navbar_back"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 13, 0, 5 )];
-//    [[UIBarButtonItem appearance] setBackgroundImage:navBarButton forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-//    [[UIBarButtonItem appearance] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
-//    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:navBarBack forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-//    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
-//    [[UIBarButtonItem appearance] setTitleTextAttributes:
-//            @{
-//                    UITextAttributeTextColor        : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
-//                    UITextAttributeTextShadowColor  : [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f],
-//                    UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetMake( 0, 1 )]//,
-//                    // Causes a bug in iOS where image views get oddly stretched... or something.
-//                    //UITextAttributeFont: [UIFont fontWithName:@"HelveticaNeue" size:13.0f]
-//            }
-//                                                forState:UIControlStateNormal];
-//
-//    UIImage *toolBarImage = [[UIImage imageNamed:@"ui_toolbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake( 25, 5, 5, 5 )];
-//    [[UISearchBar appearance] setBackgroundImage:toolBarImage];
-//    [[UIToolbar appearance] setBackgroundImage:toolBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+            UIImage *navBarButton = [[UIImage imageNamed:@"ui_navbar_button"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
+            UIImage *navBarBack = [[UIImage imageNamed:@"ui_navbar_back"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 13, 0, 5 )];
+            [[UIBarButtonItem appearance] setBackgroundImage:navBarButton forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+            [[UIBarButtonItem appearance] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
+            [[UIBarButtonItem appearance]
+                    setBackButtonBackgroundImage:navBarBack forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+            [[UIBarButtonItem appearance]
+                    setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
+            [[UIBarButtonItem appearance] setTitleTextAttributes:
+                    @{
+                            UITextAttributeTextColor        : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
+                            UITextAttributeTextShadowColor  : [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f],
+                            UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetMake( 0, 1 )]//,
+                            // Causes a bug in iOS where image views get oddly stretched... or something.
+                            //UITextAttributeFont: [UIFont fontWithName:@"HelveticaNeue" size:13.0f]
+                    }
+                                                        forState:UIControlStateNormal];
 
-    // UIImage *minImage = [[UIImage imageNamed:@"slider-minimum"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
-    // UIImage *maxImage = [[UIImage imageNamed:@"slider-maximum"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
-    // UIImage *thumbImage = [UIImage imageNamed:@"slider-handle"];
-    //
-    // [[UISlider appearance] setMaximumTrackImage:maxImage forState:UIControlStateNormal];
-    // [[UISlider appearance] setMinimumTrackImage:minImage forState:UIControlStateNormal];
-    // [[UISlider appearance] setThumbImage:thumbImage forState:UIControlStateNormal];
-    //
-    // UIImage *segmentSelected = [[UIImage imageNamed:@"segcontrol_sel"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];
-    // UIImage *segmentUnselected = [[UIImage imageNamed:@"segcontrol_uns"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 15)];
-    // UIImage *segmentSelectedUnselected = [UIImage imageNamed:@"segcontrol_sel-uns"];
-    // UIImage *segUnselectedSelected = [UIImage imageNamed:@"segcontrol_uns-sel"];
-    // UIImage *segmentUnselectedUnselected = [UIImage imageNamed:@"segcontrol_uns-uns"];
-    //
-    // [[UISegmentedControl appearance] setBackgroundImage:segmentUnselected forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    // [[UISegmentedControl appearance] setBackgroundImage:segmentSelected forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
-    //
-    // [[UISegmentedControl appearance] setDividerImage:segmentUnselectedUnselected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    // [[UISegmentedControl appearance] setDividerImage:segmentSelectedUnselected forLeftSegmentState:UIControlStateSelected rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    // [[UISegmentedControl appearance] setDividerImage:segUnselectedSelected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
+            UIImage *toolBarImage = [[UIImage imageNamed:@"ui_toolbar_container"]
+                    resizableImageWithCapInsets:UIEdgeInsetsMake( 25, 5, 5, 5 )];
+            [[UISearchBar appearance] setBackgroundImage:toolBarImage];
+            [[UIToolbar appearance] setBackgroundImage:toolBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
-            ^(NSNotification *note) {
-                if ([[MPiOSConfig get].sendInfo boolValue]) {
-                    if ([PearlLogger get].printLevel > PearlLogLevelInfo)
-                        [PearlLogger get].printLevel = PearlLogLevelInfo;
+            // UIImage *minImage = [[UIImage imageNamed:@"slider-minimum"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
+            // UIImage *maxImage = [[UIImage imageNamed:@"slider-maximum"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
+            // UIImage *thumbImage = [UIImage imageNamed:@"slider-handle"];
+            //
+            // [[UISlider appearance] setMaximumTrackImage:maxImage forState:UIControlStateNormal];
+            // [[UISlider appearance] setMinimumTrackImage:minImage forState:UIControlStateNormal];
+            // [[UISlider appearance] setThumbImage:thumbImage forState:UIControlStateNormal];
+            //
+            // UIImage *segmentSelected = [[UIImage imageNamed:@"segcontrol_sel"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];
+            // UIImage *segmentUnselected = [[UIImage imageNamed:@"segcontrol_uns"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 15)];
+            // UIImage *segmentSelectedUnselected = [UIImage imageNamed:@"segcontrol_sel-uns"];
+            // UIImage *segUnselectedSelected = [UIImage imageNamed:@"segcontrol_uns-sel"];
+            // UIImage *segmentUnselectedUnselected = [UIImage imageNamed:@"segcontrol_uns-uns"];
+            //
+            // [[UISegmentedControl appearance] setBackgroundImage:segmentUnselected forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+            // [[UISegmentedControl appearance] setBackgroundImage:segmentSelected forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
+            //
+            // [[UISegmentedControl appearance] setDividerImage:segmentUnselectedUnselected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+            // [[UISegmentedControl appearance] setDividerImage:segmentSelectedUnselected forLeftSegmentState:UIControlStateSelected rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+            // [[UISegmentedControl appearance] setDividerImage:segUnselectedSelected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
+        }
+    }
+    @catch (id exception) {
+        err(@"During Theme Setup: %@", exception);
+    }
+    @try {
+        [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
+                ^(NSNotification *note) {
+                    if ([[MPiOSConfig get].sendInfo boolValue]) {
+                        if ([PearlLogger get].printLevel > PearlLogLevelInfo)
+                            [PearlLogger get].printLevel = PearlLogLevelInfo;
 
 #ifdef CRASHLYTICS
-                    [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].rememberLogin boolValue] forKey:@"rememberLogin"];
-                    [[Crashlytics sharedInstance] setBoolValue:[self storeManager].cloudEnabled forKey:@"iCloud"];
-                    [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].iCloudDecided boolValue] forKey:@"iCloudDecided"];
-                    [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].sendInfo boolValue] forKey:@"sendInfo"];
-                    [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].helpHidden boolValue] forKey:@"helpHidden"];
-                    [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].showSetup boolValue] forKey:@"showQuickStart"];
-                    [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].firstRun boolValue] forKey:@"firstRun"];
-                    [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].launchCount intValue] forKey:@"launchCount"];
-                    [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].askForReviews boolValue] forKey:@"askForReviews"];
-                    [[Crashlytics sharedInstance]
-                            setIntValue:[[PearlConfig get].reviewAfterLaunches intValue] forKey:@"reviewAfterLaunches"];
-                    [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
+                        [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].rememberLogin boolValue] forKey:@"rememberLogin"];
+                        [[Crashlytics sharedInstance] setBoolValue:[self storeManager].cloudEnabled forKey:@"iCloud"];
+                        [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].iCloudDecided boolValue] forKey:@"iCloudDecided"];
+                        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].sendInfo boolValue] forKey:@"sendInfo"];
+                        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].helpHidden boolValue] forKey:@"helpHidden"];
+                        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].showSetup boolValue] forKey:@"showQuickStart"];
+                        [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].firstRun boolValue] forKey:@"firstRun"];
+                        [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].launchCount intValue] forKey:@"launchCount"];
+                        [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].askForReviews boolValue] forKey:@"askForReviews"];
+                        [[Crashlytics sharedInstance]
+                                setIntValue:[[PearlConfig get].reviewAfterLaunches intValue] forKey:@"reviewAfterLaunches"];
+                        [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
 #endif
 
 #ifdef TESTFLIGHT_SDK_VERSION
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPConfig get].rememberLogin )
-                                                         forKey:@"rememberLogin"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringB( [self storeManager].cloudEnabled )
-                                                         forKey:@"iCloud"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPConfig get].iCloudDecided )
-                                                         forKey:@"iCloudDecided"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].sendInfo )
-                                                         forKey:@"sendInfo"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].helpHidden )
-                                                         forKey:@"helpHidden"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].showSetup )
-                                                         forKey:@"showQuickStart"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].firstRun )
-                                                         forKey:@"firstRun"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].launchCount )
-                                                         forKey:@"launchCount"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].askForReviews )
-                                                         forKey:@"askForReviews"];
-                    [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].reviewAfterLaunches )
-                                                         forKey:@"reviewAfterLaunches"];
-                    [TestFlight addCustomEnvironmentInformation:[PearlConfig get].reviewedVersion
-                                                         forKey:@"reviewedVersion"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPConfig get].rememberLogin )
+                                                             forKey:@"rememberLogin"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringB( [self storeManager].cloudEnabled )
+                                                             forKey:@"iCloud"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPConfig get].iCloudDecided )
+                                                             forKey:@"iCloudDecided"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].sendInfo )
+                                                             forKey:@"sendInfo"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].helpHidden )
+                                                             forKey:@"helpHidden"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].showSetup )
+                                                             forKey:@"showQuickStart"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].firstRun )
+                                                             forKey:@"firstRun"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].launchCount )
+                                                             forKey:@"launchCount"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].askForReviews )
+                                                             forKey:@"askForReviews"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].reviewAfterLaunches )
+                                                             forKey:@"reviewAfterLaunches"];
+                        [TestFlight addCustomEnvironmentInformation:[PearlConfig get].reviewedVersion
+                                                             forKey:@"reviewedVersion"];
 #endif
-                    MPCheckpoint( MPCheckpointConfig, @{
-                            @"rememberLogin"       : @([[MPConfig get].rememberLogin boolValue]),
-                            @"iCloud"              : @([self storeManager].cloudEnabled),
-                            @"iCloudDecided"       : @([[MPConfig get].iCloudDecided boolValue]),
-                            @"sendInfo"            : @([[MPiOSConfig get].sendInfo boolValue]),
-                            @"helpHidden"          : @([[MPiOSConfig get].helpHidden boolValue]),
-                            @"showQuickStart"      : @([[MPiOSConfig get].showSetup boolValue]),
-                            @"firstRun"            : @([[PearlConfig get].firstRun boolValue]),
-                            @"launchCount"         : NilToNSNull([PearlConfig get].launchCount),
-                            @"askForReviews"       : @([[PearlConfig get].askForReviews boolValue]),
-                            @"reviewAfterLaunches" : NilToNSNull([PearlConfig get].reviewAfterLaunches),
-                            @"reviewedVersion"     : NilToNSNull([PearlConfig get].reviewedVersion)
-                    } );
-                }
-            }];
-    [[NSNotificationCenter defaultCenter]
-            addObserverForName:kIASKAppSettingChanged object:nil queue:nil usingBlock:^(NSNotification *note) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note userInfo:nil];
-    }];
+                        MPCheckpoint( MPCheckpointConfig, @{
+                                @"rememberLogin"       : @([[MPConfig get].rememberLogin boolValue]),
+                                @"iCloud"              : @([self storeManager].cloudEnabled),
+                                @"iCloudDecided"       : @([[MPConfig get].iCloudDecided boolValue]),
+                                @"sendInfo"            : @([[MPiOSConfig get].sendInfo boolValue]),
+                                @"helpHidden"          : @([[MPiOSConfig get].helpHidden boolValue]),
+                                @"showQuickStart"      : @([[MPiOSConfig get].showSetup boolValue]),
+                                @"firstRun"            : @([[PearlConfig get].firstRun boolValue]),
+                                @"launchCount"         : NilToNSNull([PearlConfig get].launchCount),
+                                @"askForReviews"       : @([[PearlConfig get].askForReviews boolValue]),
+                                @"reviewAfterLaunches" : NilToNSNull([PearlConfig get].reviewAfterLaunches),
+                                @"reviewedVersion"     : NilToNSNull([PearlConfig get].reviewedVersion)
+                        } );
+                    }
+                }];
+        [[NSNotificationCenter defaultCenter]
+                addObserverForName:kIASKAppSettingChanged object:nil queue:nil usingBlock:^(NSNotification *note) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note userInfo:nil];
+        }];
 
 #ifdef ADHOC
-    [PearlAlert showAlertWithTitle:@"Welcome, tester!" message:
-     @"Thank you for taking the time to test Master Password.\n\n"
-     @"Please provide any feedback, however minor it may seem, via the Feedback action item accessible from the top right.\n\n"
-     @"Contact me directly at:\n"
-     @"lhunath@lyndir.com\n"
-     @"Or report detailed issues at:\n"
-     @"https://youtrack.lyndir.com\n"
-                         viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:nil
-                       cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
+        [PearlAlert showAlertWithTitle:@"Welcome, tester!" message:
+         @"Thank you for taking the time to test Master Password.\n\n"
+         @"Please provide any feedback, however minor it may seem, via the Feedback action item accessible from the top right.\n\n"
+         @"Contact me directly at:\n"
+         @"lhunath@lyndir.com\n"
+         @"Or report detailed issues at:\n"
+         @"https://youtrack.lyndir.com\n"
+                             viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:nil
+                           cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
 #endif
+    }
+    @catch (id exception) {
+        err(@"During Config Test: %@", exception);
+    }
+    @try {
+        [super application:application didFinishLaunchingWithOptions:launchOptions];
+    }
+    @catch (id exception) {
+        err(@"During Pearl Application Launch: %@", exception);
+    }
+    @try {
+        inf(@"Started up with device identifier: %@", [PearlKeyChain deviceIdentifier]);
 
-    [super application:application didFinishLaunchingWithOptions:launchOptions];
+        dispatch_async( dispatch_get_main_queue(), ^{
+            if ([[MPiOSConfig get].showSetup boolValue])
+                [[MPiOSAppDelegate get] showSetup];
+        } );
 
-    inf(@"Started up with device identifier: %@", [PearlKeyChain deviceIdentifier]);
-
-    dispatch_async( dispatch_get_main_queue(), ^{
-        if ([[MPiOSConfig get].showSetup boolValue])
-            [[MPiOSAppDelegate get] showSetup];
-    } );
-
-    MPCheckpoint( MPCheckpointStarted, @{
-            @"simulator"  : PearlStringB( [PearlDeviceUtils isSimulator] ),
-            @"encrypted"  : PearlStringB( [PearlDeviceUtils isAppEncrypted] ),
-            @"jailbroken" : PearlStringB( [PearlDeviceUtils isJailbroken] ),
-            @"platform"   : [PearlDeviceUtils platform],
+        MPCheckpoint( MPCheckpointStarted, @{
+                @"simulator"  : PearlStringB( [PearlDeviceUtils isSimulator] ),
+                @"encrypted"  : PearlStringB( [PearlDeviceUtils isAppEncrypted] ),
+                @"jailbroken" : PearlStringB( [PearlDeviceUtils isJailbroken] ),
+                @"platform"   : [PearlDeviceUtils platform],
 #ifdef APPSTORE
-            @"legal" : PearlStringB([PearlDeviceUtils isAppEncrypted]),
+                @"legal" : PearlStringB([PearlDeviceUtils isAppEncrypted]),
 #else
-            @"legal"      : @"YES",
+                @"legal"      : @"YES",
 #endif
-    } );
+        } );
+    }
+    @catch (id exception) {
+        err(@"During Post-Startup: %@", exception);
+    }
 
     return YES;
 }

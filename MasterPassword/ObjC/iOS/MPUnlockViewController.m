@@ -202,7 +202,8 @@
 
     inf(@"Lock screen will appear");
     [self.navigationController setNavigationBarHidden:YES animated:animated];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+    if (![super respondsToSelector:@selector(prefersStatusBarHidden)])
+        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 
     [[MPiOSAppDelegate get] signOutAnimated:NO];
 
@@ -246,6 +247,16 @@
     [self.marqueeTipTimer invalidate];
 
     [super viewWillDisappear:animated];
+}
+
+- (BOOL)prefersStatusBarHidden {
+
+    return YES;
+}
+
+- (UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
+
+    return UIStatusBarAnimationSlide;
 }
 
 - (BOOL)canBecomeFirstResponder {
