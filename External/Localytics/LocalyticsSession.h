@@ -13,6 +13,9 @@
 #define CLIENT_VERSION              @"2.18.0"
 #define MARKETING_PLATFORM
 
+// Forward declaration
+@protocol LocalyticsSessionDelegate;
+
 /*!
  @class LocalyticsSession
  @discussion The class which manages creating, collecting, & uploading a Localytics session.
@@ -40,10 +43,6 @@
  
  @author Localytics
  */
-
-// Forward declaration
-@protocol LocalyticsSessionDelegate;
-
 @interface LocalyticsSession : NSObject
 
 
@@ -65,7 +64,7 @@
 
 /*!
  @property sessionTimeoutInterval
- @abstrac (Optional) If an App stays in the background for more than this many seconds,
+ @abstract (Optional) If an App stays in the background for more than this many seconds,
  start a new session when it returns to foreground.
  */
 @property (atomic) float sessionTimeoutInterval;
@@ -98,7 +97,7 @@
  upload methods. Best Practice is to call open & upload immediately after Localytics Session when loading an app,
  this method fascilitates that behavior.
  It is recommended that this call be placed in <code>applicationDidFinishLaunching</code>.
- @param applicationKey The key unique for each application generated
+ @param appKey The key unique for each application generated
  at www.localytics.com
  */
 - (void)startSession:(NSString *)appKey;
@@ -159,20 +158,16 @@
  <br>
  See the tagging guide at: http://wiki.localytics.com/
  @param event The name of the event which occurred.
- @param attributes (Optional) An object/hash/dictionary of key-value pairs, contains 
+ @param attributes (Optional) An object/hash/dictionary of key-value pairs, contains
  contextual data specific to the event.
- @param rerportAttributes (Optional) Additional attributes used for custom reporting.
+ @param reportAttributes (Optional) Additional attributes used for custom reporting.
  Available to Enterprise customers, please contact services for more details.
  @param customerValueIncrease (Optional) Numeric value, added to customer lifetime value.
  Integer expected. Try to use lowest possible unit, such as cents for US currency.
  */
-- (void)tagEvent:(NSString *)event;
-
-- (void)tagEvent:(NSString *)event
-      attributes:(NSDictionary *)attributes;
-
 - (void)tagEvent:(NSString *)event
       attributes:(NSDictionary *)attributes
+reportAttributes:(NSDictionary *)reportAttributes
 customerValueIncrease:(NSNumber *)customerValueIncrease;
 
 - (void)tagEvent:(NSString *)event
@@ -181,9 +176,12 @@ reportAttributes:(NSDictionary *)reportAttributes;
 
 - (void)tagEvent:(NSString *)event
       attributes:(NSDictionary *)attributes
-reportAttributes:(NSDictionary *)reportAttributes
 customerValueIncrease:(NSNumber *)customerValueIncrease;
 
+- (void)tagEvent:(NSString *)event
+      attributes:(NSDictionary *)attributes;
+
+- (void)tagEvent:(NSString *)event;
 
 /*!
  @method tagScreen
@@ -205,7 +203,7 @@ customerValueIncrease:(NSNumber *)customerValueIncrease;
 /*!
  @method LocalyticsSession
  @abstract Initializes the Localytics Object.  Not necessary if you choose to use startSession.
- @param applicationKey The key unique for each application generated at www.localytics.com
+ @param appKey The key unique for each application generated at www.localytics.com
  */
 - (void)LocalyticsSession:(NSString *)appKey;
 
