@@ -142,7 +142,10 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     inf(@"Local store migration level: %d (current %d)", (signed)migrationLevel, (signed)MPMigrationLevelLocalStoreCurrent);
     if (migrationLevel <= MPMigrationLevelLocalStoreV1)
-        [self migrateV1LocalStore];
+        if (![self migrateV1LocalStore]) {
+            inf(@"Failed to migrate old V1 to new local store.");
+            return;
+        }
 
     [[NSUserDefaults standardUserDefaults] setInteger:MPMigrationLevelLocalStoreCurrent forKey:MPMigrationLevelLocalStoreKey];
     inf(@"Successfully migrated old to new local store.");
@@ -156,15 +159,24 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         return;
 
     inf(@"Cloud store migration level: %d (current %d)", (signed)migrationLevel, (signed)MPMigrationLevelCloudStoreCurrent);
-    if (migrationLevel <= MPMigrationLevelCloudStoreV1)
-        [self migrateV1CloudStore];
-    else if (migrationLevel <= MPMigrationLevelCloudStoreV2)
-        [self migrateV2CloudStore];
+    if (migrationLevel <= MPMigrationLevelCloudStoreV1) {
+        if (![self migrateV1CloudStore]) {
+            inf(@"Failed to migrate old V1 to new cloud store.");
+            return;
+        }
+    }
+    else if (migrationLevel <= MPMigrationLevelCloudStoreV2) {
+        if (![self migrateV2CloudStore]) {
+            inf(@"Failed to migrate old V2 to new cloud store.");
+            return;
+        }
+    }
 
     [[NSUserDefaults standardUserDefaults] setInteger:MPMigrationLevelCloudStoreCurrent forKey:MPMigrationLevelCloudStoreKey];
+    inf(@"Successfully migrated old to new cloud store.");
 }
 
-- (void)migrateV1CloudStore {
+- (BOOL)migrateV1CloudStore {
 
     // Migrate cloud enabled preference.
     NSNumber *oldCloudEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:@"iCloudEnabledKey"];
@@ -175,7 +187,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     NSString *uuid = [[NSUserDefaults standardUserDefaults] stringForKey:@"LocalUUIDKey"];
     if (!uuid) {
         inf(@"No V1 cloud store to migrate.");
-        return;
+        return YES;
     }
 
     inf(@"Migrating V1 cloud store: %@ -> %@", uuid, [self.storeManager valueForKey:@"storeUUID"]);
@@ -187,16 +199,16 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
             URLByAppendingPathComponent:@"Database.nosync" isDirectory:YES]
             URLByAppendingPathComponent:uuid isDirectory:NO] URLByAppendingPathExtension:@"sqlite"];
 
-    [self migrateFromCloudStore:oldCloudStoreURL cloudContent:oldCloudContentURL contentName:uuid];
+    return [self migrateFromCloudStore:oldCloudStoreURL cloudContent:oldCloudContentURL contentName:uuid];
 }
 
-- (void)migrateV2CloudStore {
+- (BOOL)migrateV2CloudStore {
 
     // Migrate cloud store.
     NSString *uuid = [[NSUbiquitousKeyValueStore defaultStore] stringForKey:@"USMStoreUUIDKey"];
     if (!uuid) {
         inf(@"No V2 cloud store to migrate.");
-        return;
+        return YES;
     }
 
     inf(@"Migrating V2 cloud store: %@ -> %@", uuid, [self.storeManager valueForKey:@"storeUUID"]);
@@ -208,10 +220,10 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
             URLByAppendingPathComponent:@"CloudStore.nosync" isDirectory:YES]
             URLByAppendingPathComponent:uuid isDirectory:NO] URLByAppendingPathExtension:@"sqlite"];
 
-    [self migrateFromCloudStore:oldCloudStoreURL cloudContent:oldCloudContentURL contentName:uuid];
+    return [self migrateFromCloudStore:oldCloudStoreURL cloudContent:oldCloudContentURL contentName:uuid];
 }
 
-- (void)migrateV1LocalStore {
+- (BOOL)migrateV1LocalStore {
 
     NSURL *applicationFilesDirectory = [[[NSFileManager defaultManager]
             URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
@@ -219,19 +231,19 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
             URLByAppendingPathComponent:@"MasterPassword" isDirectory:NO] URLByAppendingPathExtension:@"sqlite"];
     if (![[NSFileManager defaultManager] fileExistsAtPath:oldLocalStoreURL.path isDirectory:NO]) {
         inf(@"No V1 local store to migrate.");
-        return;
+        return YES;
     }
 
     inf(@"Migrating V1 local store");
-    [self migrateFromLocalStore:oldLocalStoreURL];
+    return [self migrateFromLocalStore:oldLocalStoreURL];
 }
 
-- (void)migrateFromLocalStore:(NSURL *)oldLocalStoreURL {
+- (BOOL)migrateFromLocalStore:(NSURL *)oldLocalStoreURL {
 
     NSURL *newLocalStoreURL = [self.storeManager URLForLocalStore];
     if ([[NSFileManager defaultManager] fileExistsAtPath:newLocalStoreURL.path isDirectory:NO]) {
         wrn(@"Can't migrate local store: A new local store already exists.");
-        return;
+        return YES;
     }
 
     NSError *error = nil;
@@ -253,17 +265,20 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     if (![self.storeManager copyMigrateStore:oldLocalStoreURL withOptions:oldLocalStoreOptions
                                      toStore:newLocalStoreURL withOptions:newLocalStoreOptions
-                                       error:nil cause:nil context:nil])
-        return;
+                                       error:nil cause:nil context:nil]) {
+        self.storeManager.localStoreURL = oldLocalStoreURL;
+        return NO;
+    }
 
     inf(@"Successfully migrated to new local store.");
+    return YES;
 }
 
-- (void)migrateFromCloudStore:(NSURL *)oldCloudStoreURL cloudContent:(NSURL *)oldCloudContentURL contentName:(NSString *)contentName {
+- (BOOL)migrateFromCloudStore:(NSURL *)oldCloudStoreURL cloudContent:(NSURL *)oldCloudContentURL contentName:(NSString *)contentName {
 
     if (![self.storeManager cloudSafeForSeeding]) {
         inf(@"Can't migrate cloud store: A new cloud store already exists.");
-        return;
+        return YES;
     }
 
     NSURL *newCloudStoreURL = [self.storeManager URLForCloudStore];
@@ -302,9 +317,10 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     if (![self.storeManager copyMigrateStore:oldCloudStoreURL withOptions:oldCloudStoreOptions
                                      toStore:newCloudStoreURL withOptions:newCloudStoreOptions
                                        error:nil cause:nil context:nil])
-        return;
+        return NO;
 
     inf(@"Successfully migrated to new cloud store.");
+    return YES;
 }
 
 #pragma mark - UbiquityStoreManagerDelegate
