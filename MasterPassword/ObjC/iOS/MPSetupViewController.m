@@ -42,7 +42,7 @@
 
     if (self.cloudSwitch) {
         [MPiOSConfig get].iCloudDecided = @YES;
-        [MPiOSAppDelegate get].storeManager.cloudEnabled = self.cloudSwitch.on;
+        [MPiOSConfig get].iCloudEnabled = @(self.cloudSwitch.on);
     }
     if (self.rememberLoginSwitch)
         [MPiOSConfig get].rememberLogin = @(self.rememberLoginSwitch.on);

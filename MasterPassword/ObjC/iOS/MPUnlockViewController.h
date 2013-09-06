@@ -37,15 +37,14 @@
 @property(weak, nonatomic) IBOutlet UIButton *emergencyPassword;
 @property(weak, nonatomic) IBOutlet UIView *emergencyContentTipContainer;
 
-@property(nonatomic, strong) UIColor *avatarShadowColor;
-
 - (IBAction)targetedUserAction:(UILongPressGestureRecognizer *)sender;
-- (IBAction)facebook:(UIButton *)sender;
-- (IBAction)twitter:(UIButton *)sender;
-- (IBAction)google:(UIButton *)sender;
-- (IBAction)mail:(UIButton *)sender;
-- (IBAction)add:(UIButton *)sender;
-- (IBAction)emergencyClose:(UIButton *)sender;
-- (IBAction)emergencyCopy:(UIButton *)sender;
+- (IBAction)facebook:(id)sender;
+- (IBAction)twitter:(id)sender;
+- (IBAction)google:(id)sender;
+- (IBAction)mail:(id)sender;
+- (IBAction)add:(id)sender;
+- (IBAction)emergencyOpen:(id)sender;
+- (IBAction)emergencyClose:(id)sender;
+- (IBAction)emergencyCopy:(id)sender;
 
 @end

@@ -243,10 +243,15 @@
 
     inf(@"Lock screen will disappear");
     [self emergencyCloseAnimated:animated];
-
     [self.marqueeTipTimer invalidate];
 
     [super viewWillDisappear:animated];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+
+    if ([segue.identifier isEqualToString:@"MP_Settings"])
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -266,29 +271,8 @@
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
 
-    if (motion == UIEventSubtypeMotionShake) {
-        MPCheckpoint( MPCheckpointEmergencyGenerator, nil );
-        [[self.view findFirstResponderInHierarchy] resignFirstResponder];
-
-        self.emergencyGeneratorContainer.alpha = 0;
-        self.emergencyGeneratorContainer.hidden = NO;
-        self.emergencyGeneratorContainer.frame = CGRectSetX( self.emergencyGeneratorContainer.frame,
-                self.emergencyGeneratorContainer.frame.origin.x - 100 );
-        [UIView animateWithDuration:0.3 animations:^{
-            self.emergencyGeneratorContainer.frame = CGRectSetX( self.emergencyGeneratorContainer.frame,
-                    self.emergencyGeneratorContainer.frame.origin.x + 150 );
-            self.emergencyGeneratorContainer.alpha = 1;
-        }                completion:^(BOOL finished) {
-            if (!finished)
-                return;
-
-            [self.emergencyName becomeFirstResponder];
-            [UIView animateWithDuration:0.2 animations:^{
-                self.emergencyGeneratorContainer.frame = CGRectSetX( self.emergencyGeneratorContainer.frame,
-                        self.emergencyGeneratorContainer.frame.origin.x - 50 );
-            }];
-        }];
-    }
+    if (motion == UIEventSubtypeMotionShake)
+        [self emergencyOpenAnimated:YES];
 }
 
 - (void)marqueeTip {
@@ -518,7 +502,6 @@
         self.nameLabel.center = CGPointMake( 160, 94 );
         self.nameLabel.backgroundColor = [UIColor blackColor];
         self.oldNameLabel.center = self.nameLabel.center;
-        self.avatarShadowColor = [UIColor whiteColor];
     }
     else if (!selectedUser && self.passwordView.alpha == 1) {
         // User was just deselected.
@@ -529,7 +512,6 @@
         self.nameLabel.center = CGPointMake( 160, 296 );
         self.nameLabel.backgroundColor = [UIColor clearColor];
         self.oldNameLabel.center = self.nameLabel.center;
-        self.avatarShadowColor = [UIColor lightGrayColor];
     }
 
     // Lay out the word wall.
@@ -913,12 +895,20 @@
     }];
 }
 
-- (IBAction)emergencyClose:(UIButton *)sender {
+- (IBAction)emergencyOpen:(id)sender {
+
+    if ([sender isKindOfClass:[UIGestureRecognizer class]] && ((UIGestureRecognizer *)sender).state != UIGestureRecognizerStateBegan)
+        return;
+
+    [self emergencyOpenAnimated:YES];
+}
+
+- (IBAction)emergencyClose:(id)sender {
 
     [self emergencyCloseAnimated:YES];
 }
 
-- (IBAction)emergencyCopy:(UIButton *)sender {
+- (IBAction)emergencyCopy:(id)sender {
 
     inf(@"Copying emergency password for: %@", self.emergencyName.text);
     [UIPasteboard generalPasteboard].string = [self.emergencyPassword titleForState:UIControlStateNormal];
@@ -943,6 +933,38 @@
     } );
 }
 
+- (void)emergencyOpenAnimated:(BOOL)animated {
+
+    [[self.emergencyGeneratorContainer findFirstResponderInHierarchy] resignFirstResponder];
+
+    if (animated) {
+        self.emergencyGeneratorContainer.alpha = 0;
+        self.emergencyGeneratorContainer.hidden = NO;
+        self.emergencyGeneratorContainer.frame = CGRectSetX( self.emergencyGeneratorContainer.frame,
+                self.emergencyGeneratorContainer.frame.origin.x - 100 );
+
+        [UIView animateWithDuration:0.2 animations:^{
+            self.emergencyGeneratorContainer.frame = CGRectSetX( self.emergencyGeneratorContainer.frame,
+                    self.emergencyGeneratorContainer.frame.origin.x + 150 );
+            self.emergencyGeneratorContainer.alpha = 1;
+        }                completion:^(BOOL finished) {
+            if (finished) {
+                [self emergencyOpenAnimated:NO];
+                [UIView animateWithDuration:0.2 animations:^{
+                    self.emergencyGeneratorContainer.frame = CGRectSetX( self.emergencyGeneratorContainer.frame,
+                            self.emergencyGeneratorContainer.frame.origin.x - 50 );
+                }];
+            }
+        }];
+        return;
+    }
+
+    MPCheckpoint( MPCheckpointEmergencyGenerator, nil );
+    self.emergencyGeneratorContainer.hidden = NO;
+    self.emergencyGeneratorContainer.alpha = 1;
+    [self.emergencyName becomeFirstResponder];
+}
+
 - (void)emergencyCloseAnimated:(BOOL)animated {
 
     [[self.emergencyGeneratorContainer findFirstResponderInHierarchy] resignFirstResponder];
@@ -951,7 +973,8 @@
         [UIView animateWithDuration:0.2 animations:^{
             self.emergencyGeneratorContainer.alpha = 0;
         }                completion:^(BOOL finished) {
-            [self emergencyCloseAnimated:NO];
+            if (finished)
+                [self emergencyCloseAnimated:NO];
         }];
         return;
     }
@@ -1043,7 +1066,7 @@
                   destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];
 }
 
-- (IBAction)facebook:(UIButton *)sender {
+- (IBAction)facebook:(id)sender {
 
     if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
         [PearlAlert showAlertWithTitle:@"Facebook Not Enabled" message:@"To send tweets, configure Facebook from Settings."
@@ -1058,7 +1081,7 @@
     [self presentViewController:vc animated:YES completion:nil];
 }
 
-- (IBAction)twitter:(UIButton *)sender {
+- (IBAction)twitter:(id)sender {
 
     if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
         [PearlAlert showAlertWithTitle:@"Twitter Not Enabled" message:@"To send tweets, configure Twitter from Settings."
@@ -1073,19 +1096,19 @@
     [self presentViewController:vc animated:YES completion:nil];
 }
 
-- (IBAction)google:(UIButton *)sender {
+- (IBAction)google:(id)sender {
 
     id<GPPShareBuilder> shareDialog = [[GPPShare sharedInstance] shareDialog];
     [[[shareDialog setURLToShare:[NSURL URLWithString:@"http://masterpasswordapp.com"]]
             setPrefillText:@"I've started doing passwords properly thanks to Master Password."] open];
 }
 
-- (IBAction)mail:(UIButton *)sender {
+- (IBAction)mail:(id)sender {
 
     [[MPiOSAppDelegate get] showFeedbackWithLogs:NO forVC:self];
 }
 
-- (IBAction)add:(UIButton *)sender {
+- (IBAction)add:(id)sender {
 
     [PearlSheet showSheetWithTitle:@"Follow Master Password" viewStyle:UIActionSheetStyleBlackTranslucent
                          initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {

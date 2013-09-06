@@ -8,7 +8,7 @@
 
 @implementation MPiOSConfig
 
-@dynamic helpHidden, siteInfoHidden, showSetup, actionsTipShown, typeTipShown, loginNameTipShown, traceMode;
+@dynamic helpHidden, siteInfoHidden, showSetup, actionsTipShown, typeTipShown, loginNameTipShown, traceMode, iCloudEnabled;
 
 - (id)init {
 
@@ -23,7 +23,8 @@
             NSStringFromSelector( @selector(actionsTipShown) )   : @(!self.firstRun),
             NSStringFromSelector( @selector(typeTipShown) )      : @(!self.firstRun),
             NSStringFromSelector( @selector(loginNameTipShown) ) : @NO,
-            NSStringFromSelector( @selector(traceMode) )         : @NO
+            NSStringFromSelector( @selector(traceMode) )         : @NO,
+            NSStringFromSelector( @selector(iCloudEnabled) )     : @YES
     }];
 
     return self;

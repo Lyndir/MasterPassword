@@ -63,9 +63,9 @@
                                  return;
 
                              switchCloudStoreProgress = [PearlAlert showActivityWithTitle:@"Enumerating Stores"];
-                             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                             dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
                                  [self switchCloudStore];
-                             });
+                             } );
                          }     cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonContinue, nil];
         }
     }                  cancelTitle:[PearlStrings get].commonButtonCancel
@@ -75,39 +75,88 @@
 - (void)switchCloudStore {
 
     NSError *error = nil;
+    NSURL *cloudStoreDirectory = [[MPiOSAppDelegate get].storeManager URLForCloudStoreDirectory];
     NSURL *cloudContentDirectory = [[MPiOSAppDelegate get].storeManager URLForCloudContentDirectory];
     NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:cloudContentDirectory includingPropertiesForKeys:nil
-                                                     options:NSDirectoryEnumerationSkipsHiddenFiles error:&error];
+                                                                         options:NSDirectoryEnumerationSkipsHiddenFiles error:&error];
     if (!contents)
     err(@"While enumerating cloud contents: %@", error);
 
-    NSMutableArray *contentNames = [NSMutableArray arrayWithCapacity:[contents count]];
-    BOOL directory = NO;
+    BOOL directory;
+    NSMutableDictionary *stores = [NSMutableDictionary dictionaryWithCapacity:[contents count]];
+    NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
+    NSPersistentStoreCoordinator *storePSC = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+    NSFetchRequest *usersFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
+    NSFetchRequest *sitesFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
     for (NSURL *content in contents)
-        if ([[NSFileManager defaultManager] fileExistsAtPath:content.path isDirectory:&directory] && directory)
-            [contentNames addObject:[content lastPathComponent]];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:content.path isDirectory:&directory] && directory) {
+            NSString *contentString = [content lastPathComponent];
+            NSUInteger lastDash = [contentString rangeOfString:@"-" options:NSBackwardsSearch].location;
+            NSString *storeDescription = lastDash == NSNotFound? contentString: [contentString substringFromIndex:lastDash + 1];
+            NSPersistentStore *store = nil;
+            @try {
+                NSURL *storeURL = [[cloudStoreDirectory
+                        URLByAppendingPathComponent:[content lastPathComponent] isDirectory:NO]
+                        URLByAppendingPathExtension:@"sqlite"];
+                if (!(store = [storePSC addPersistentStoreWithType:NSSQLiteStoreType configuration:nil
+                                                               URL:storeURL options:@{
+                                NSPersistentStoreUbiquitousContentNameKey    : [[MPiOSAppDelegate get].storeManager valueForKey:@"contentName"],
+                                NSPersistentStoreUbiquitousContentURLKey     : content,
+                                NSMigratePersistentStoresAutomaticallyOption : @YES,
+                                NSInferMappingModelAutomaticallyOption       : @YES,
+                                NSPersistentStoreFileProtectionKey           : NSFileProtectionComplete
+                        }                                    error:&error])) {
+                    wrn(@"Couldn't describe store opening %@: %@", [content lastPathComponent], error);
+                    continue;
+                }
+
+                NSUInteger userCount, siteCount;
+                NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+                moc.persistentStoreCoordinator = storePSC;
+                if ((userCount = [moc countForFetchRequest:usersFetchRequest error:&error]) == NSNotFound) {
+                    wrn(@"Couldn't describe store userCount %@: %@", [content lastPathComponent], error);
+                    continue;
+                }
+                if ((siteCount = [moc countForFetchRequest:sitesFetchRequest error:&error]) == NSNotFound) {
+                    wrn(@"Couldn't describe store siteCount %@: %@", [content lastPathComponent], error);
+                    continue;
+                }
+
+                storeDescription = PearlString( @"%@: %dU, %dS", storeDescription, userCount, siteCount );
+            }
+            @catch (NSException *exception) {
+                wrn(@"Couldn't describe store %@: exception %@", [content lastPathComponent], exception);
+            }
+            @finally {
+                if (store) if (![storePSC removePersistentStore:store error:&error])
+                wrn(@"Couldn't remove store %@: %@", [content lastPathComponent], error);
+                [stores setObject:storeDescription forKey:[content lastPathComponent]];
+            }
+        }
 
     NSString *storeUUID = [[MPiOSAppDelegate get].storeManager valueForKey:@"storeUUID_ThreadSafe"];
-    dispatch_async(dispatch_get_main_queue(), ^{
+    NSUInteger lastDash = [storeUUID rangeOfString:@"-" options:NSBackwardsSearch].location;
+    NSString *title = PearlString( @"Current: %@", lastDash == NSNotFound? storeUUID: [storeUUID substringFromIndex:lastDash + 1] );
+    dispatch_async( dispatch_get_main_queue(), ^{
         [switchCloudStoreProgress cancelAlertAnimated:YES];
 
-        [PearlSheet showSheetWithTitle:storeUUID
-                             viewStyle:UIActionSheetStyleAutomatic
+        NSArray *storeUUIDs = [stores allKeys];
+        [PearlSheet showSheetWithTitle:title viewStyle:UIActionSheetStyleAutomatic
                              initSheet:^(UIActionSheet *sheet) {
-                                 for (NSString *contentName in contentNames) {
-                                     [sheet addButtonWithTitle:contentName];
-                                 }
+                                 for (NSString *contentName in storeUUIDs)
+                                     [sheet addButtonWithTitle:[stores objectForKey:contentName]];
                              }
                      tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
                          if (buttonIndex == sheet.cancelButtonIndex)
                              return;
-                         
-                         [[MPiOSAppDelegate get].storeManager setValue:[contentNames objectAtIndex:(unsigned)buttonIndex] forKey:@"storeUUID"];
+
+                         [[MPiOSAppDelegate get].storeManager setValue:[storeUUIDs objectAtIndex:(unsigned)buttonIndex]
+                                                                forKey:@"storeUUID"];
                          [[MPiOSAppDelegate get].storeManager reloadStore];
                          [[MPiOSAppDelegate get] signOutAnimated:YES];
                      }
                            cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:nil];
-    });
+    } );
 }
 
 - (IBAction)toggleLevelControl:(UISegmentedControl *)sender {

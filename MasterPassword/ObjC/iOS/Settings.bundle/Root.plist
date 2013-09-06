@@ -1,95 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-        <key>PreferenceSpecifiers</key>
-        <array>
-            <dict>
-                <key>FooterText</key>
-                <string>Enable this setting to send us carefully anonymized information to help us diagnose and resolve issues you might experience in the future.</string>
-                <key>Title</key>
-                <string></string>
-                <key>Type</key>
-                <string>PSGroupSpecifier</string>
-            </dict>
-            <dict>
-                <key>DefaultValue</key>
-                <string>[auto]</string>
-                <key>Title</key>
-                <string>Version</string>
-                <key>Key</key>
-                <string>unset</string>
-                <key>Type</key>
-                <string>PSTitleValueSpecifier</string>
-            </dict>
-            <dict>
-                <key>DefaultValue</key>
-                <string>[auto]</string>
-                <key>Title</key>
-                <string>Build</string>
-                <key>Key</key>
-                <string>unset</string>
-                <key>Type</key>
-                <string>PSTitleValueSpecifier</string>
-            </dict>
-            <dict>
-                <key>DefaultValue</key>
-                <string>[auto]</string>
-                <key>Title</key>
-                <string>Copyright</string>
-                <key>Type</key>
-                <string>PSTitleValueSpecifier</string>
-                <key>Key</key>
-                <string>unset</string>
-            </dict>
-            <dict>
-                <key>Type</key>
-                <string>PSToggleSwitchSpecifier</string>
-                <key>Title</key>
-                <string>Send Diagnostic Info</string>
-                <key>Key</key>
-                <string>sendInfo</string>
-                <key>DefaultValue</key>
-                <false/>
-            </dict>
-            <dict>
-                <key>FooterText</key>
-                <string>When enabled, you will not be logged out when switching out of the application. This will help you get to your passwords faster, but when someone finds your device unlocked, they can too.</string>
-                <key>Title</key>
-                <string>Master Password</string>
-                <key>Type</key>
-                <string>PSGroupSpecifier</string>
-            </dict>
-            <dict>
-                <key>DefaultValue</key>
-                <false/>
-                <key>Key</key>
-                <string>rememberLogin</string>
-                <key>Title</key>
-                <string>Stay logged in</string>
-                <key>Type</key>
-                <string>PSToggleSwitchSpecifier</string>
-            </dict>
-            <dict>
-                <key>Type</key>
-                <string>PSGroupSpecifier</string>
-                <key>Title</key>
-                <string></string>
-                <key>FooterText</key>
-                <string>Synchronizes your sites with your other Apple devices. It's also a good way of keeping automatic backups.</string>
-            </dict>
-            <dict>
-                <key>Type</key>
-                <string>PSToggleSwitchSpecifier</string>
-                <key>Title</key>
-                <string>iCloud</string>
-                <key>Key</key>
-                <string>USMCloudEnabledKey</string>
-                <key>DefaultValue</key>
-                <true/>
-            </dict>
-        </array>
-        <key>StringsTable</key>
-        <string>Root</string>
-    </dict>
+<dict>
+	<key>PreferenceSpecifiers</key>
+	<array>
+		<dict>
+			<key>FooterText</key>
+			<string>Enable this setting to send us carefully anonymized information to help us diagnose and resolve issues you might experience in the future.</string>
+			<key>Title</key>
+			<string></string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<string>[auto]</string>
+			<key>Title</key>
+			<string>Version</string>
+			<key>Key</key>
+			<string>unset</string>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<string>[auto]</string>
+			<key>Title</key>
+			<string>Build</string>
+			<key>Key</key>
+			<string>unset</string>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<string>[auto]</string>
+			<key>Title</key>
+			<string>Copyright</string>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Key</key>
+			<string>unset</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Send Diagnostic Info</string>
+			<key>Key</key>
+			<string>sendInfo</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>FooterText</key>
+			<string>When enabled, you will not be logged out when switching out of the application. This will help you get to your passwords faster, but when someone finds your device unlocked, they can too.</string>
+			<key>Title</key>
+			<string>Master Password</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<false/>
+			<key>Key</key>
+			<string>rememberLogin</string>
+			<key>Title</key>
+			<string>Stay logged in</string>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string></string>
+			<key>FooterText</key>
+			<string>Synchronizes your sites with your other Apple devices. It&apos;s also a good way of keeping automatic backups.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>iCloud</string>
+			<key>Key</key>
+			<string>iCloudEnabled</string>
+			<key>DefaultValue</key>
+			<true/>
+		</dict>
+	</array>
+	<key>StringsTable</key>
+	<string>Root</string>
+</dict>
 </plist>

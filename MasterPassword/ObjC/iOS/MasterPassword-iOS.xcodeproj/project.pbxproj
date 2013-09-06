@@ -72,6 +72,8 @@
 		DA6701E016406BB400B61001 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA6701DF16406BB400B61001 /* AdSupport.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		DA672D2F14F92C6B004A189C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DA672D2E14F92C6B004A189C /* libz.dylib */; };
 		DA672D3014F9413D004A189C /* libPearl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC77CAD148291A600BCF976 /* libPearl.a */; };
+		DA69540617D975D900BF294E /* icon_gears.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37841711E29500CF925C /* icon_gears.png */; };
+		DA69540717D975D900BF294E /* icon_gears@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37851711E29500CF925C /* icon_gears@2x.png */; };
 		DA829E52159847E0002417D3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA829E6215984832002417D3 /* libFontReplacer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA829E51159847E0002417D3 /* libFontReplacer.a */; };
 		DA95D5F214DF0B2C008D1B94 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */; };
@@ -3121,6 +3123,7 @@
 				DABD39041711E29700CF925C /* ui_panel_display@2x.png in Resources */,
 				DABD391D1711E29700CF925C /* ui_spinner.png in Resources */,
 				DABD391E1711E29700CF925C /* ui_spinner@2x.png in Resources */,
+				DA69540617D975D900BF294E /* icon_gears.png in Resources */,
 				DABD39271711E29700CF925C /* ui_textfield.png in Resources */,
 				DABD39281711E29700CF925C /* ui_textfield@2x.png in Resources */,
 				DABD39291711E29700CF925C /* ui_toolbar_container.png in Resources */,
@@ -3190,6 +3193,7 @@
 				DABD3ABD1711E29800CF925C /* icon_play@2x.png in Resources */,
 				DABD3ABE1711E29800CF925C /* icon_plus.png in Resources */,
 				DABD3ABF1711E29800CF925C /* icon_plus@2x.png in Resources */,
+				DA69540717D975D900BF294E /* icon_gears@2x.png in Resources */,
 				DABD3B1C1711E29800CF925C /* icon_up.png in Resources */,
 				DABD3B1D1711E29800CF925C /* icon_up@2x.png in Resources */,
 				DABD3B3C1711E29800CF925C /* tip_alert_black.png in Resources */,

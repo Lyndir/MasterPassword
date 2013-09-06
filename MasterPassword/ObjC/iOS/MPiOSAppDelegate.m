@@ -182,67 +182,12 @@
     @try {
         [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
                 ^(NSNotification *note) {
-                    if ([[MPiOSConfig get].sendInfo boolValue]) {
-                        if ([PearlLogger get].printLevel > PearlLogLevelInfo)
-                            [PearlLogger get].printLevel = PearlLogLevelInfo;
-
-#ifdef CRASHLYTICS
-                        [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].rememberLogin boolValue] forKey:@"rememberLogin"];
-                        [[Crashlytics sharedInstance] setBoolValue:[self storeManager].cloudEnabled forKey:@"iCloud"];
-                        [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].iCloudDecided boolValue] forKey:@"iCloudDecided"];
-                        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].sendInfo boolValue] forKey:@"sendInfo"];
-                        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].helpHidden boolValue] forKey:@"helpHidden"];
-                        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].showSetup boolValue] forKey:@"showQuickStart"];
-                        [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].firstRun boolValue] forKey:@"firstRun"];
-                        [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].launchCount intValue] forKey:@"launchCount"];
-                        [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].askForReviews boolValue] forKey:@"askForReviews"];
-                        [[Crashlytics sharedInstance]
-                                setIntValue:[[PearlConfig get].reviewAfterLaunches intValue] forKey:@"reviewAfterLaunches"];
-                        [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
-#endif
-
-#ifdef TESTFLIGHT_SDK_VERSION
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPConfig get].rememberLogin )
-                                                             forKey:@"rememberLogin"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringB( [self storeManager].cloudEnabled )
-                                                             forKey:@"iCloud"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPConfig get].iCloudDecided )
-                                                             forKey:@"iCloudDecided"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].sendInfo )
-                                                             forKey:@"sendInfo"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].helpHidden )
-                                                             forKey:@"helpHidden"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].showSetup )
-                                                             forKey:@"showQuickStart"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].firstRun )
-                                                             forKey:@"firstRun"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].launchCount )
-                                                             forKey:@"launchCount"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].askForReviews )
-                                                             forKey:@"askForReviews"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].reviewAfterLaunches )
-                                                             forKey:@"reviewAfterLaunches"];
-                        [TestFlight addCustomEnvironmentInformation:[PearlConfig get].reviewedVersion
-                                                             forKey:@"reviewedVersion"];
-#endif
-                        MPCheckpoint( MPCheckpointConfig, @{
-                                @"rememberLogin"       : @([[MPConfig get].rememberLogin boolValue]),
-                                @"iCloud"              : @([self storeManager].cloudEnabled),
-                                @"iCloudDecided"       : @([[MPConfig get].iCloudDecided boolValue]),
-                                @"sendInfo"            : @([[MPiOSConfig get].sendInfo boolValue]),
-                                @"helpHidden"          : @([[MPiOSConfig get].helpHidden boolValue]),
-                                @"showQuickStart"      : @([[MPiOSConfig get].showSetup boolValue]),
-                                @"firstRun"            : @([[PearlConfig get].firstRun boolValue]),
-                                @"launchCount"         : NilToNSNull([PearlConfig get].launchCount),
-                                @"askForReviews"       : @([[PearlConfig get].askForReviews boolValue]),
-                                @"reviewAfterLaunches" : NilToNSNull([PearlConfig get].reviewAfterLaunches),
-                                @"reviewedVersion"     : NilToNSNull([PearlConfig get].reviewedVersion)
-                        } );
-                    }
+                    [self checkConfig];
                 }];
         [[NSNotificationCenter defaultCenter]
                 addObserverForName:kIASKAppSettingChanged object:nil queue:nil usingBlock:^(NSNotification *note) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note userInfo:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification
+                                                                object:note userInfo:nil];
         }];
 
 #ifdef ADHOC
@@ -447,7 +392,8 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 
     inf(@"Re-activated");
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:application userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification
+                                                        object:application userInfo:nil];
 
 #ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] resume];
@@ -635,17 +581,108 @@
                        otherTitles:[PearlStrings get].commonButtonContinue, nil];
 }
 
+
 #pragma mark - PearlConfigDelegate
 
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)value {
 
-    if (configKey == @selector(traceMode)) {
-        [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
-        inf(@"Trace is now: %@", [[MPiOSConfig get].traceMode boolValue]? @"ON": @"OFF");
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification
+                                                        object:NSStringFromSelector( configKey ) userInfo:nil];
+}
+
+- (void)checkConfig {
+
+    // iCloud enabled / disabled
+    if ([[MPiOSConfig get].iCloudEnabled boolValue] != self.storeManager.cloudEnabled) {
+        if ([[MPiOSConfig get].iCloudEnabled boolValue])
+            [self.storeManager setCloudEnabledAndOverwriteCloudWithLocalIfConfirmed:^(void (^setConfirmationAnswer)(BOOL answer)) {
+                [PearlAlert showAlertWithTitle:@"Keep Sites?"
+                                       message:@"You can either revert to your old iCloud sites or overwrite them with your current sites."
+                                     viewStyle:UIAlertViewStyleDefault initAlert:nil
+                             tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                 if (buttonIndex == [alert cancelButtonIndex])
+                                     setConfirmationAnswer( NO );
+                                 if (buttonIndex == [alert firstOtherButtonIndex])
+                                     setConfirmationAnswer( YES );
+                             }
+                                   cancelTitle:@"Revert" otherTitles:@"Replace iCloud", nil];
+            }];
+        else
+            [self.storeManager setCloudDisabledAndOverwriteLocalWithCloudIfConfirmed:^(void (^setConfirmationAnswer)(BOOL answer)) {
+                [PearlAlert showAlertWithTitle:@"Keep iCloud Sites?"
+                                       message:@"You can either revert to your old sites or overwrite them with your current iCloud sites."
+                                     viewStyle:UIAlertViewStyleDefault initAlert:nil
+                             tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                 if (buttonIndex == [alert cancelButtonIndex])
+                                     setConfirmationAnswer( NO );
+                                 if (buttonIndex == [alert firstOtherButtonIndex])
+                                     setConfirmationAnswer( YES );
+                             }
+                                   cancelTitle:@"Revert" otherTitles:@"Copy iCloud", nil];
+            }];
     }
 
-    [[NSNotificationCenter defaultCenter]
-            postNotificationName:MPCheckConfigNotification object:NSStringFromSelector( configKey ) userInfo:nil];
+    // Trace mode
+    [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
+
+    // Send info
+    if ([[MPiOSConfig get].sendInfo boolValue]) {
+        if ([PearlLogger get].printLevel > PearlLogLevelInfo)
+            [PearlLogger get].printLevel = PearlLogLevelInfo;
+
+#ifdef CRASHLYTICS
+                        [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].rememberLogin boolValue] forKey:@"rememberLogin"];
+                        [[Crashlytics sharedInstance] setBoolValue:[self storeManager].cloudEnabled forKey:@"iCloud"];
+                        [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].iCloudDecided boolValue] forKey:@"iCloudDecided"];
+                        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].sendInfo boolValue] forKey:@"sendInfo"];
+                        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].helpHidden boolValue] forKey:@"helpHidden"];
+                        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].showSetup boolValue] forKey:@"showQuickStart"];
+                        [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].firstRun boolValue] forKey:@"firstRun"];
+                        [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].launchCount intValue] forKey:@"launchCount"];
+                        [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].askForReviews boolValue] forKey:@"askForReviews"];
+                        [[Crashlytics sharedInstance]
+                                setIntValue:[[PearlConfig get].reviewAfterLaunches intValue] forKey:@"reviewAfterLaunches"];
+                        [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
+#endif
+
+#ifdef TESTFLIGHT_SDK_VERSION
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPConfig get].rememberLogin )
+                                                             forKey:@"rememberLogin"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringB( [self storeManager].cloudEnabled )
+                                                             forKey:@"iCloud"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPConfig get].iCloudDecided )
+                                                             forKey:@"iCloudDecided"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].sendInfo )
+                                                             forKey:@"sendInfo"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].helpHidden )
+                                                             forKey:@"helpHidden"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].showSetup )
+                                                             forKey:@"showQuickStart"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].firstRun )
+                                                             forKey:@"firstRun"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].launchCount )
+                                                             forKey:@"launchCount"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].askForReviews )
+                                                             forKey:@"askForReviews"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].reviewAfterLaunches )
+                                                             forKey:@"reviewAfterLaunches"];
+                        [TestFlight addCustomEnvironmentInformation:[PearlConfig get].reviewedVersion
+                                                             forKey:@"reviewedVersion"];
+#endif
+        MPCheckpoint( MPCheckpointConfig, @{
+                @"rememberLogin"       : @([[MPConfig get].rememberLogin boolValue]),
+                @"iCloud"              : @([self storeManager].cloudEnabled),
+                @"iCloudDecided"       : @([[MPConfig get].iCloudDecided boolValue]),
+                @"sendInfo"            : @([[MPiOSConfig get].sendInfo boolValue]),
+                @"helpHidden"          : @([[MPiOSConfig get].helpHidden boolValue]),
+                @"showQuickStart"      : @([[MPiOSConfig get].showSetup boolValue]),
+                @"firstRun"            : @([[PearlConfig get].firstRun boolValue]),
+                @"launchCount"         : NilToNSNull([PearlConfig get].launchCount),
+                @"askForReviews"       : @([[PearlConfig get].askForReviews boolValue]),
+                @"reviewAfterLaunches" : NilToNSNull([PearlConfig get].reviewAfterLaunches),
+                @"reviewedVersion"     : NilToNSNull([PearlConfig get].reviewedVersion)
+        } );
+    }
 }
 
 
@@ -665,6 +702,7 @@
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didLoadStoreForCoordinator:(NSPersistentStoreCoordinator *)coordinator
                      isCloud:(BOOL)isCloudStore {
 
+    [MPiOSConfig get].iCloudEnabled = @(isCloudStore);
     [super ubiquityStoreManager:manager didLoadStoreForCoordinator:coordinator isCloud:isCloudStore];
 
     dispatch_async( dispatch_get_main_queue(), ^{
@@ -693,24 +731,27 @@
             @"Waiting for your other device to auto‑correct the problem..."
                                                            initAlert:^(UIAlertView *alert) {
                                                                [alert addButtonWithTitle:@"Fix Now"];
+                                                               [alert addButtonWithTitle:@"Turn Off"];
                                                            }];
 
     self.handleCloudContentAlert.tappedButtonBlock = ^(UIAlertView *alert, NSInteger buttonIndex) {
-        wSelf.fixCloudContentAlert = [PearlAlert showAlertWithTitle:@"Fix iCloud Now" message:
-                @"This problem can be auto‑corrected by opening the app on another device where you recently made changes.\n"
-                        @"You can correct the problem from this device anyway, but recent changes made on another device might get lost.\n\n"
-                        @"You can also turn iCloud off and go back to your local sites."
-                                                          viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:
-                        ^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                            if (buttonIndex_ == alert_.cancelButtonIndex)
-                                [wSelf showCloudContentAlert];
-                            if (buttonIndex_ == [alert_ firstOtherButtonIndex])
-                                [wSelf.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:YES];
-                            if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
-                                wSelf.storeManager.cloudEnabled = NO;
-                        }
-                                                        cancelTitle:[PearlStrings get].commonButtonBack otherTitles:@"Fix Anyway",
-                                                                                                                    @"Turn Off", nil];
+        if (buttonIndex == [alert firstOtherButtonIndex])
+            wSelf.fixCloudContentAlert = [PearlAlert showAlertWithTitle:@"Fix iCloud Now" message:
+                    @"This problem can be auto‑corrected by opening the app on another device where you recently made changes.\n"
+                            @"You can fix the problem from this device anyway, but recent changes from another device might get lost.\n\n"
+                            @"You can also turn iCloud off for now."
+                                                              viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:
+                            ^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                                if (buttonIndex_ == alert_.cancelButtonIndex)
+                                    [wSelf showCloudContentAlert];
+                                if (buttonIndex_ == [alert_ firstOtherButtonIndex])
+                                    [wSelf.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:YES];
+                                if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
+                                    [MPiOSConfig get].iCloudEnabled = NO;
+                            }                               cancelTitle:[PearlStrings get].commonButtonBack
+                                                            otherTitles:@"Fix Anyway", @"Turn Off", nil];
+        if (buttonIndex == [alert firstOtherButtonIndex] + 1)
+            [MPiOSConfig get].iCloudEnabled = NO;
     };
 }
 
