@@ -91,8 +91,8 @@
     for (NSURL *content in contents)
         if ([[NSFileManager defaultManager] fileExistsAtPath:content.path isDirectory:&directory] && directory) {
             NSString *contentString = [content lastPathComponent];
-            NSUInteger lastDash = [contentString rangeOfString:@"-" options:NSBackwardsSearch].location;
-            NSString *storeDescription = lastDash == NSNotFound? contentString: [contentString substringFromIndex:lastDash + 1];
+            NSUInteger firstDash = [contentString rangeOfString:@"-" options:0].location;
+            NSString *storeDescription = firstDash == NSNotFound? contentString: [contentString substringToIndex:firstDash];
             NSPersistentStore *store = nil;
             @try {
                 NSURL *storeURL = [[cloudStoreDirectory
@@ -135,27 +135,21 @@
         }
 
     NSString *storeUUID = [[MPiOSAppDelegate get].storeManager valueForKey:@"storeUUID_ThreadSafe"];
-    NSUInteger lastDash = [storeUUID rangeOfString:@"-" options:NSBackwardsSearch].location;
-    NSString *title = PearlString( @"Current: %@", lastDash == NSNotFound? storeUUID: [storeUUID substringFromIndex:lastDash + 1] );
+    NSUInteger firstDash = [storeUUID rangeOfString:@"-" options:0].location;
+    PearlArrayTVC *vc = [[PearlArrayTVC alloc] initWithStyle:UITableViewStylePlain];
+    vc.title = PearlString( @"Current: %@", firstDash == NSNotFound? storeUUID: [storeUUID substringToIndex:firstDash] );
+    [stores enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        [vc addRowWithName:obj style:PearlArrayTVCRowStyleLink toggled:NO toSection:@"Cloud Stores"
+           activationBlock:^BOOL(BOOL wasToggled) {
+               [[MPiOSAppDelegate get].storeManager setValue:key forKey:@"storeUUID"];
+               [[MPiOSAppDelegate get].storeManager reloadStore];
+               [[MPiOSAppDelegate get] signOutAnimated:YES];
+               return YES;
+           }];
+    }];
     dispatch_async( dispatch_get_main_queue(), ^{
         [switchCloudStoreProgress cancelAlertAnimated:YES];
-
-        NSArray *storeUUIDs = [stores allKeys];
-        [PearlSheet showSheetWithTitle:title viewStyle:UIActionSheetStyleAutomatic
-                             initSheet:^(UIActionSheet *sheet) {
-                                 for (NSString *contentName in storeUUIDs)
-                                     [sheet addButtonWithTitle:[stores objectForKey:contentName]];
-                             }
-                     tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
-                         if (buttonIndex == sheet.cancelButtonIndex)
-                             return;
-
-                         [[MPiOSAppDelegate get].storeManager setValue:[storeUUIDs objectAtIndex:(unsigned)buttonIndex]
-                                                                forKey:@"storeUUID"];
-                         [[MPiOSAppDelegate get].storeManager reloadStore];
-                         [[MPiOSAppDelegate get] signOutAnimated:YES];
-                     }
-                           cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:nil];
+        [self.navigationController pushViewController:vc animated:YES];
     } );
 }
 
