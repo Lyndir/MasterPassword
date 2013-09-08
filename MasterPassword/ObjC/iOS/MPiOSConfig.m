@@ -24,7 +24,7 @@
             NSStringFromSelector( @selector(typeTipShown) )      : @(!self.firstRun),
             NSStringFromSelector( @selector(loginNameTipShown) ) : @NO,
             NSStringFromSelector( @selector(traceMode) )         : @NO,
-            NSStringFromSelector( @selector(iCloudEnabled) )     : @YES
+            NSStringFromSelector( @selector(iCloudEnabled) )     : @NO
     }];
 
     return self;

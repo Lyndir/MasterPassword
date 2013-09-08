@@ -593,7 +593,9 @@
 - (void)checkConfig {
 
     // iCloud enabled / disabled
-    if ([[MPiOSConfig get].iCloudEnabled boolValue] != self.storeManager.cloudEnabled) {
+    BOOL iCloudEnabled = [[MPiOSConfig get].iCloudEnabled boolValue];
+    BOOL cloudEnabled = self.storeManager.cloudEnabled;
+    if (iCloudEnabled != cloudEnabled) {
         if ([[MPiOSConfig get].iCloudEnabled boolValue])
             [self.storeManager setCloudEnabledAndOverwriteCloudWithLocalIfConfirmed:^(void (^setConfirmationAnswer)(BOOL answer)) {
                 [PearlAlert showAlertWithTitle:@"Keep Sites?"

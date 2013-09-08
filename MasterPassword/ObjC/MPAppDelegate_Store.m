@@ -263,9 +263,10 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                                    withIntermediateDirectories:YES attributes:nil error:&error])
     err(@"While creating directory for new local store: %@", error);
 
-    if (![self.storeManager copyMigrateStore:oldLocalStoreURL withOptions:oldLocalStoreOptions
-                                     toStore:newLocalStoreURL withOptions:newLocalStoreOptions
-                                       error:nil cause:nil context:nil]) {
+    if (![self.storeManager migrateStore:oldLocalStoreURL withOptions:oldLocalStoreOptions
+                                 toStore:newLocalStoreURL withOptions:newLocalStoreOptions
+                                strategy:self.storeManager.migrationStrategy
+                                   error:nil cause:nil context:nil]) {
         self.storeManager.localStoreURL = oldLocalStoreURL;
         return NO;
     }
@@ -310,13 +311,11 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     if (![[NSFileManager defaultManager] createDirectoryAtPath:[self.storeManager URLForCloudStoreDirectory].path
                                    withIntermediateDirectories:YES attributes:nil error:&error])
     err(@"While creating directory for new cloud store: %@", error);
-    if (![[NSFileManager defaultManager] createDirectoryAtPath:[self.storeManager URLForCloudContent].path
-                                   withIntermediateDirectories:YES attributes:nil error:&error])
-    err(@"While creating directory for new cloud content: %@", error);
 
-    if (![self.storeManager copyMigrateStore:oldCloudStoreURL withOptions:oldCloudStoreOptions
-                                     toStore:newCloudStoreURL withOptions:newCloudStoreOptions
-                                       error:nil cause:nil context:nil])
+    if (![self.storeManager migrateStore:oldCloudStoreURL withOptions:oldCloudStoreOptions
+                                 toStore:newCloudStoreURL withOptions:newCloudStoreOptions
+                                strategy:self.storeManager.migrationStrategy
+                                   error:nil cause:nil context:nil])
         return NO;
 
     inf(@"Successfully migrated to new cloud store.");
