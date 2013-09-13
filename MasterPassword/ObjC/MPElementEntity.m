@@ -10,7 +10,6 @@
 
 @implementation MPElementEntity
 
-@dynamic content;
 @dynamic lastUsed;
 @dynamic loginName;
 @dynamic name;

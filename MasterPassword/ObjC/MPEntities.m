@@ -13,14 +13,21 @@
 
 - (BOOL)saveToStore {
 
-    __block BOOL success = NO;
-    [self performBlockAndWait:^{
-        NSError *error = nil;
-        if (!(success = [self save:&error]))
-            err(@"While saving: %@", error);
-    }];
+    __block BOOL success = YES;
+    if ([self hasChanges])
+        [self performBlockAndWait:^{
+            @try {
+                NSError *error = nil;
+                if (!(success = [self save:&error]))
+                err(@"While saving: %@", error);
+            }
+            @catch (NSException *exception) {
+                success = NO;
+                err(@"While saving: %@", exception);
+            }
+        }];
 
-    return !self.parentContext || [self.parentContext saveToStore];
+    return success && (!self.parentContext || [self.parentContext saveToStore]);
 }
 
 @end
@@ -111,47 +118,6 @@
     return ++self.uses;
 }
 
-- (id)content {
-
-    MPKey *key = [MPAppDelegate_Shared get].key;
-    if (!key)
-        return nil;
-
-    assert([key.keyID isEqualToData:self.user.keyID]);
-    return [self contentUsingKey:key];
-}
-
-- (void)setContent:(id)content {
-
-    MPKey *key = [MPAppDelegate_Shared get].key;
-    if (!key)
-        return;
-
-    assert([key.keyID isEqualToData:self.user.keyID]);
-    [self setContent:content usingKey:key];
-}
-
-- (id)contentUsingKey:(MPKey *)key {
-
-    Throw(@"Content retrieval implementation missing for: %@", [self class]);
-}
-
-- (void)setContent:(id)content usingKey:(MPKey *)key {
-
-    Throw(@"Content assignment implementation missing for: %@", [self class]);
-}
-
-- (NSString *)exportContent {
-
-    return nil;
-}
-
-- (void)importProtectedContent:(NSString *)protectedContent protectedByKey:(MPKey *)contentProtectionKey usingKey:(MPKey *)key {
-}
-
-- (void)importClearTextContent:(NSString *)clearContent usingKey:(MPKey *)key {
-}
-
 - (NSString *)description {
 
     return PearlString( @"%@:%@", [self class], [self name] );
@@ -191,106 +157,9 @@
     self.counter_ = @(aCounter);
 }
 
-- (id)contentUsingKey:(MPKey *)key {
-
-    assert(self.type & MPElementTypeClassGenerated);
-
-    if (![self.name length])
-        return nil;
-    if (!key)
-        return nil;
-
-    return [self.algorithm generateContentForElement:self usingKey:key];
-}
-
 @end
 
 @implementation MPElementStoredEntity(MP)
-
-+ (NSDictionary *)queryForDevicePrivateElementNamed:(NSString *)name {
-
-    return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
-                                   attributes:@{
-                                           (__bridge id)kSecAttrService : @"DevicePrivate",
-                                           (__bridge id)kSecAttrAccount : name
-                                   }
-                                      matches:nil];
-}
-
-- (id)contentUsingKey:(MPKey *)key {
-
-    assert(self.type & MPElementTypeClassStored);
-
-    if (!key)
-        return nil;
-
-    NSData *encryptedContent;
-    if (self.type & MPElementFeatureDevicePrivate)
-        encryptedContent = [PearlKeyChain dataOfItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]];
-    else
-        encryptedContent = self.contentObject;
-
-    NSData *decryptedContent = nil;
-    if ([encryptedContent length])
-        decryptedContent = [self decryptContent:encryptedContent usingKey:key];
-
-    if (!decryptedContent)
-        return nil;
-
-    return [[NSString alloc] initWithBytes:decryptedContent.bytes length:decryptedContent.length encoding:NSUTF8StringEncoding];
-}
-
-- (NSData *)decryptContent:(NSData *)encryptedContent usingKey:(MPKey *)key {
-
-    return [encryptedContent decryptWithSymmetricKey:[key subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
-}
-
-- (void)setContent:(id)content usingKey:(MPKey *)key {
-
-    assert(self.type & MPElementTypeClassStored);
-    assert([key.keyID isEqualToData:self.user.keyID]);
-
-    NSData *encryptedContent = [[[content description] dataUsingEncoding:NSUTF8StringEncoding]
-            encryptWithSymmetricKey:[key subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
-
-    if (self.type & MPElementFeatureDevicePrivate) {
-        [PearlKeyChain addOrUpdateItemForQuery:[MPElementStoredEntity queryForDevicePrivateElementNamed:self.name]
-                                withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                        encryptedContent, (__bridge id)kSecValueData,
-                                        #if TARGET_OS_IPHONE
-                                        (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-                                                          (__bridge id)kSecAttrAccessible,
-                                        #endif
-                                        nil]];
-        self.contentObject = nil;
-    }
-    else
-        self.contentObject = encryptedContent;
-}
-
-- (NSString *)exportContent {
-
-    return [self.contentObject encodeBase64];
-}
-
-- (void)importProtectedContent:(NSString *)protectedContent protectedByKey:(MPKey *)contentProtectionKey usingKey:(MPKey *)key {
-
-    if ([contentProtectionKey.keyID isEqualToData:key.keyID])
-        self.contentObject = [protectedContent decodeBase64];
-
-    else {
-        NSString *clearContent = [[NSString alloc] initWithData:[self decryptContent:[protectedContent decodeBase64]
-                                                                            usingKey:contentProtectionKey]
-                                                       encoding:NSUTF8StringEncoding];
-
-        [self importClearTextContent:clearContent usingKey:key];
-    }
-}
-
-- (void)importClearTextContent:(NSString *)clearContent usingKey:(MPKey *)key {
-
-    [self setContent:clearContent usingKey:key];
-}
 
 @end
 

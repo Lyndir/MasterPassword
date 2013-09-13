@@ -16,6 +16,7 @@
 //
 
 #import "MPKey.h"
+#import "MPElementStoredEntity.h"
 #import "MPElementGeneratedEntity.h"
 
 #define MPAlgorithmDefaultVersion 1
@@ -37,8 +38,19 @@
 - (NSString *)classNameOfType:(MPElementType)type;
 - (Class)classOfType:(MPElementType)type;
 
-- (NSString *)generateContentForElement:(MPElementGeneratedEntity *)element usingKey:(MPKey *)key;
 - (NSString *)generateContentNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter usingKey:(MPKey *)key;
+- (NSString *)storedContentForElement:(MPElementStoredEntity *)element usingKey:(MPKey *)key;
+
+- (void)saveContent:(NSString *)clearContent toElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
+- (NSString *)resolveContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
+- (void)resolveContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey
+                          result:(void (^)(NSString *result))resultBlock;
+
+- (void)importProtectedContent:(NSString *)protectedContent protectedByKey:(MPKey *)importKey
+                   intoElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
+- (void)importClearTextContent:(NSString *)clearContent intoElement:(MPElementEntity *)element
+                      usingKey:(MPKey *)elementKey;
+- (NSString *)exportContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
 
 @end
 

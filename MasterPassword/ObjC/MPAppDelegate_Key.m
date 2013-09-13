@@ -171,8 +171,8 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     for (MPElementEntity *element in user.elements) {
         if (element.type & MPElementTypeClassStored) {
-            id content = nil;
-            while (!(content = [element contentUsingKey:recoverKey])) {
+            NSString *content;
+            while (!(content = [element.algorithm storedContentForElement:(MPElementStoredEntity *)element usingKey:recoverKey])) {
                 // Failed to decrypt element with the current recoveryKey.  Ask user for a new one to use.
                 __block NSString *masterPassword = nil;
 
@@ -209,7 +209,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                 break;
 
             if (![recoverKey isEqualToKey:newKey])
-                [element setContent:content usingKey:newKey];
+                [element.algorithm saveContent:content toElement:element usingKey:newKey];
         }
     }
 

@@ -336,7 +336,9 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager willLoadStoreIsCloud:(BOOL)isCloudStore {
 
+//    [manager setValue:@"C61DCF27-BD25-4CF1-AE8F-8B613DF8AB47" forKey:@"storeUUID"];
     NSManagedObjectContext *moc = [self mainManagedObjectContextIfReady];
+    NSLog( @"willLoadStoreIsCloud:%d mainMoc:%@", isCloudStore, moc);
     [moc performBlockAndWait:^{
         [moc saveToStore];
 
@@ -350,6 +352,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didLoadStoreForCoordinator:(NSPersistentStoreCoordinator *)coordinator
                      isCloud:(BOOL)isCloudStore {
 
+    NSLog( @"didLoadStoreForCoordinatorStores:%d isCloud:%d", [[coordinator persistentStores] count], isCloudStore );
     inf(@"Using iCloud? %@", @(isCloudStore));
     MPCheckpoint( MPCheckpointCloud, @{
             @"enabled" : @(isCloudStore)
@@ -382,16 +385,17 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     self.privateManagedObjectContext = privateManagedObjectContext;
     self.mainManagedObjectContext = mainManagedObjectContext;
+    NSLog( @"set mainMoc:%@", mainManagedObjectContext );
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreErrorCause)cause
                      context:(id)context {
 
-    err(@"[StoreManager] ERROR: cause=%d, context=%@, error=%@", cause, context, error);
+    err(@"[StoreManager] ERROR: cause=%@, context=%@, error=%@", NSStringFromUSMCause( cause ), context, error);
     MPCheckpoint( MPCheckpointMPErrorUbiquity, @{
             @"cause"        : @(cause),
-            @"error.domain" : NilToNSNull(error.domain),
-            @"error.code"   : @(error.code)
+            @"error.code"   : @(error.code),
+            @"error.domain" : NilToNSNull(error.domain)
     } );
 }
 
@@ -406,7 +410,9 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     [MPAppDelegate_Shared managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         MPUserEntity *activeUser = [self activeUserInContext:context];
-        assert(activeUser);
+        NSAssert(activeUser, @"Missing user.");
+        if (!activeUser)
+            return;
 
         MPElementType type = activeUser.defaultType;
         if (!type)
@@ -673,14 +679,14 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         element.version = version;
         if ([exportContent length]) {
             if (clearText)
-                [element importClearTextContent:exportContent usingKey:userKey];
+                [element.algorithm importClearTextContent:exportContent intoElement:element usingKey:userKey];
             else {
                 if (!importKey)
                     importKey = [importAlgorithm keyForPassword:importPassword( user.name ) ofUserNamed:user.name];
                 if (![importKey.keyID isEqualToData:importKeyID])
                     return MPImportResultInvalidPassword;
 
-                [element importProtectedContent:exportContent protectedByKey:importKey usingKey:userKey];
+                [element.algorithm importProtectedContent:exportContent protectedByKey:importKey intoElement:element usingKey:userKey];
             }
         }
 
@@ -735,9 +741,9 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         // Determine the content to export.
         if (!(type & MPElementFeatureDevicePrivate)) {
             if (showPasswords)
-                content = element.content;
+                content = [element.algorithm resolveContentForElement:element usingKey:self.key];
             else if (type & MPElementFeatureExportContent)
-                content = element.exportContent;
+                content = [element.algorithm exportContentForElement:element usingKey:self.key];
         }
 
         [export appendFormat:@"%@  %8ld  %8s  %20s\t%@\n",

@@ -85,7 +85,8 @@
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
                 MPElementEntity *activeElement = [self activeElementForMainThread];
-                if (activeElement.type & MPElementTypeClassStored && ![[activeElement.content description] length])
+                if (activeElement.type & MPElementTypeClassStored &&
+                    ![[activeElement.algorithm resolveContentForElement:activeElement usingKey:[MPAppDelegate_Shared get].key] length])
                     [self showToolTip:@"Tap        to set a password." withIcon:self.toolTipEditIcon];
                 if (activeElement.requiresExplicitMigration)
                     [self showToolTip:@"Password outdated. Tap to upgrade it." withIcon:nil];
@@ -246,13 +247,11 @@
     self.contentField.enabled = NO;
     self.contentField.text = @"";
     if (activeElement.name && ![activeElement isDeleted])
-        dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
-            NSString *description = [activeElement.content description];
-
+        [activeElement.algorithm resolveContentForElement:activeElement usingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
             dispatch_async( dispatch_get_main_queue(), ^{
-                self.contentField.text = description;
+                self.contentField.text = result;
             } );
-        } );
+        }];
 
     self.loginNameField.enabled = NO;
     self.loginNameField.text = activeElement.loginName;
@@ -474,21 +473,21 @@
 - (IBAction)copyContent {
 
     MPElementEntity *activeElement = [self activeElementForMainThread];
-    id content = activeElement.content;
-    if (!content)
-            // Nothing to copy.
-        return;
-
     inf(@"Copying password for: %@", activeElement.name);
-    [UIPasteboard generalPasteboard].string = [content description];
-
-    [self showContentTip:@"Copied!" withIcon:nil];
-
     MPCheckpoint( MPCheckpointCopyToPasteboard, @{
             @"type"      : NilToNSNull(activeElement.typeName),
             @"version"   : @(activeElement.version),
             @"emergency" : @NO
     } );
+
+    [activeElement.algorithm resolveContentForElement:activeElement usingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
+        if (!result)
+                // Nothing to copy.
+            return;
+
+        [UIPasteboard generalPasteboard].string = result;
+        [self showContentTip:@"Copied!" withIcon:nil];
+    }];
 }
 
 - (IBAction)copyLoginName:(UITapGestureRecognizer *)sender {
@@ -604,12 +603,13 @@
         if (!activeElement)
             return;
 
-        NSString *oldPassword = [activeElement.content description];
+        MPKey *key = [MPAppDelegate_Shared get].key;
+        NSString *oldPassword = [activeElement.algorithm resolveContentForElement:activeElement usingKey:key];
         if (!task( activeElement, context ))
             return;
 
         activeElement = [self activeElementInContext:context];
-        NSString *newPassword = [activeElement.content description];
+        NSString *newPassword = [activeElement.algorithm resolveContentForElement:activeElement usingKey:key];
 
         // Save.
         [context saveToStore];
@@ -865,17 +865,18 @@
     if (textField == self.contentField) {
         self.contentField.enabled = NO;
         MPElementEntity *activeElement = [self activeElementForMainThread];
+        MPKey *key = [MPAppDelegate_Shared get].key;
         if (![activeElement isKindOfClass:[MPElementStoredEntity class]]) {
             // Not of a type whose content can be edited.
             err(@"Cannot update element content: Element is not stored: %@", activeElement.name);
             return;
         }
-        else if ([((MPElementStoredEntity *)activeElement).content isEqual:self.contentField.text])
+        else if ([[activeElement.algorithm resolveContentForElement:activeElement usingKey:key] isEqual:self.contentField.text])
                 // Content hasn't changed.
             return;
 
         [self changeActiveElementWithoutWarningDo:^BOOL(MPElementEntity *activeElement_, NSManagedObjectContext *context) {
-            ((MPElementStoredEntity *)activeElement_).content = self.contentField.text;
+            [activeElement_.algorithm saveContent:self.contentField.text toElement:activeElement_ usingKey:key];
             return YES;
         }];
     }

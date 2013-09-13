@@ -33,13 +33,7 @@
 @property(assign) BOOL requiresExplicitMigration;
 @property(readonly) id<MPAlgorithm> algorithm;
 
-- (id)contentUsingKey:(MPKey *)key;
-- (void)setContent:(id)content usingKey:(MPKey *)key;
-
 - (NSUInteger)use;
-- (NSString *)exportContent;
-- (void)importProtectedContent:(NSString *)protectedContent protectedByKey:(MPKey *)contentProtectionKey usingKey:(MPKey *)key2;
-- (void)importClearTextContent:(NSString *)clearContent usingKey:(MPKey *)key;
 - (BOOL)migrateExplicitly:(BOOL)explicit;
 
 @end

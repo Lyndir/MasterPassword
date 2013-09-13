@@ -98,7 +98,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    assert(self.navigationController.topViewController == self);
+    NSAssert(self.navigationController.topViewController == self, @"Not the currently active navigation item.");
 
     MPElementType type = [self typeAtIndexPath:indexPath];
     if (type == (MPElementType)NSNotFound)

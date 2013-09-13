@@ -99,11 +99,12 @@
             return;
         }
 
+        MPKey *key = [MPAppDelegate_Shared get].key;
         NSMutableDictionary *elementChanges = [NSMutableDictionary dictionaryWithCapacity:[elements count]];
         for (MPElementEntity *element in elements) {
-            id oldContent = [element content];
+            id oldContent = [element.algorithm resolveContentForElement:element usingKey:key];
             [element migrateExplicitly:YES];
-            id newContent = [element content];
+            id newContent = [element.algorithm resolveContentForElement:element usingKey:key];
 
             if (!(element.type & MPElementFeatureDevicePrivate) && (!oldContent || ![oldContent isEqual:newContent]))
                 [elementChanges setObject:@{

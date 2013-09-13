@@ -68,13 +68,13 @@
     const unsigned char *seedBytes = seed.bytes;
 
     // Determine the cipher from the first seed byte.
-    assert([seed length]);
+    NSAssert([seed length], @"Missing seed.");
     NSArray *typeCiphers = [[MPTypes_ciphers valueForKey:[self classNameOfType:type]] valueForKey:[self nameOfType:type]];
     NSString *cipher = [typeCiphers objectAtIndex:seedBytes[0] % [typeCiphers count]];
     trc(@"type %@, ciphers: %@, selected: %@", [self nameOfType:type], typeCiphers, cipher);
 
     // Encode the content, character by character, using subsequent seed bytes and the cipher.
-    assert([seed length] >= [cipher length] + 1);
+    NSAssert([seed length] >= [cipher length] + 1, @"Insufficient seed bytes to encode cipher.");
     NSMutableString *content = [NSMutableString stringWithCapacity:[cipher length]];
     for (NSUInteger c = 0; c < [cipher length]; ++c) {
         uint16_t keyByte = seedBytes[c + 1];

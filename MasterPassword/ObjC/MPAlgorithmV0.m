@@ -203,27 +203,6 @@
     Throw(@"Type not supported: %d", type);
 }
 
-- (NSString *)generateContentForElement:(MPElementGeneratedEntity *)element usingKey:(MPKey *)key {
-
-    if (!element)
-        return nil;
-
-    if (!(element.type & MPElementTypeClassGenerated)) {
-        err(@"Incorrect type (is not MPElementTypeClassGenerated): %@, for: %@", [self nameOfType:element.type], element.name);
-        return nil;
-    }
-    if (!element.name.length) {
-        err(@"Missing name.");
-        return nil;
-    }
-    if (!key.keyData.length) {
-        err(@"Missing key.");
-        return nil;
-    }
-
-    return [self generateContentNamed:element.name ofType:element.type withCounter:element.counter usingKey:key];
-}
-
 - (NSString *)generateContentNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter usingKey:(MPKey *)key {
 
     static NSDictionary *MPTypes_ciphers = nil;
@@ -247,14 +226,14 @@
     const char *seedBytes = seed.bytes;
 
     // Determine the cipher from the first seed byte.
-    assert([seed length]);
+    NSAssert([seed length], @"Missing seed.");
     NSArray *typeCiphers = [[MPTypes_ciphers valueForKey:[self classNameOfType:type]]
             valueForKey:[self nameOfType:type]];
     NSString *cipher = [typeCiphers objectAtIndex:htons(seedBytes[0]) % [typeCiphers count]];
     trc(@"type %@, ciphers: %@, selected: %@", [self nameOfType:type], typeCiphers, cipher);
 
     // Encode the content, character by character, using subsequent seed bytes and the cipher.
-    assert([seed length] >= [cipher length] + 1);
+    NSAssert([seed length] >= [cipher length] + 1, @"Insufficient seed bytes to encode cipher.");
     NSMutableString *content = [NSMutableString stringWithCapacity:[cipher length]];
     for (NSUInteger c = 0; c < [cipher length]; ++c) {
         uint16_t keyByte = htons(seedBytes[c + 1]);
@@ -268,6 +247,242 @@
     }
 
     return content;
+}
+
+- (NSString *)storedContentForElement:(MPElementStoredEntity *)element usingKey:(MPKey *)key {
+
+    return [self decryptContent:element.contentObject usingKey:key];
+}
+
+- (void)saveContent:(NSString *)clearContent toElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+
+    NSAssert([elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user.");
+    switch (element.type) {
+        case MPElementTypeGeneratedMaximum:
+        case MPElementTypeGeneratedLong:
+        case MPElementTypeGeneratedMedium:
+        case MPElementTypeGeneratedBasic:
+        case MPElementTypeGeneratedShort:
+        case MPElementTypeGeneratedPIN: {
+            NSAssert(NO, @"Cannot save content to element with generated type %d.", element.type);
+            break;
+        }
+
+        case MPElementTypeStoredPersonal: {
+            NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
+            @"Element with stored type %d is not an MPElementStoredEntity, but a %@.", element.type, [element class]);
+
+            NSData *encryptedContent = [[clearContent dataUsingEncoding:NSUTF8StringEncoding]
+                    encryptWithSymmetricKey:[elementKey subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
+            ((MPElementStoredEntity *)element).contentObject = encryptedContent;
+            break;
+        }
+        case MPElementTypeStoredDevicePrivate: {
+            NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
+            @"Element with stored type %d is not an MPElementStoredEntity, but a %@.", element.type, [element class]);
+
+            NSData *encryptedContent = [[clearContent dataUsingEncoding:NSUTF8StringEncoding]
+                    encryptWithSymmetricKey:[elementKey subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
+            NSDictionary *elementQuery = [self queryForDevicePrivateElementNamed:element.name];
+            if (!encryptedContent)
+                [PearlKeyChain deleteItemForQuery:elementQuery];
+            else
+                [PearlKeyChain addOrUpdateItemForQuery:elementQuery withAttributes:@{
+                        (__bridge id)kSecValueData      : encryptedContent,
+#if TARGET_OS_IPHONE
+                        (__bridge id)kSecAttrAccessible : (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+#endif
+                }];
+            ((MPElementStoredEntity *)element).contentObject = nil;
+            break;
+        }
+    }
+}
+
+- (NSString *)resolveContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_group_enter( group );
+    __block NSString *result = nil;
+    [self resolveContentForElement:element usingKey:elementKey result:^(NSString *result_) {
+        result = result_;
+        dispatch_group_leave( group );
+    }];
+    dispatch_group_wait( group, DISPATCH_TIME_FOREVER );
+
+    return result;
+}
+
+- (void)resolveContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey result:(void (^)(NSString *result))resultBlock {
+
+    NSAssert([elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user.");
+    switch (element.type) {
+        case MPElementTypeGeneratedMaximum:
+        case MPElementTypeGeneratedLong:
+        case MPElementTypeGeneratedMedium:
+        case MPElementTypeGeneratedBasic:
+        case MPElementTypeGeneratedShort:
+        case MPElementTypeGeneratedPIN: {
+            NSAssert([element isKindOfClass:[MPElementGeneratedEntity class]],
+            @"Element with generated type %d is not an MPElementGeneratedEntity, but a %@.", element.type, [element class]);
+
+            NSString *name = element.name;
+            MPElementType type = element.type;
+            NSUInteger counter = ((MPElementGeneratedEntity *)element).counter;
+            id<MPAlgorithm> algorithm = nil;
+            if (!element.name.length)
+            err(@"Missing name.");
+            else if (!elementKey.keyData.length)
+            err(@"Missing key.");
+            else
+                algorithm = element.algorithm;
+
+            dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
+                NSString *result = [algorithm generateContentNamed:name ofType:type withCounter:counter usingKey:elementKey];
+                resultBlock( result );
+            } );
+            break;
+        }
+
+        case MPElementTypeStoredPersonal: {
+            NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
+            @"Element with stored type %d is not an MPElementStoredEntity, but a %@.", element.type, [element class]);
+
+            NSData *encryptedContent = ((MPElementStoredEntity *)element).contentObject;
+
+            dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
+                NSString *result = [self decryptContent:encryptedContent usingKey:elementKey];
+                resultBlock( result );
+            } );
+            break;
+        }
+        case MPElementTypeStoredDevicePrivate: {
+            NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
+            @"Element with stored type %d is not an MPElementStoredEntity, but a %@.", element.type, [element class]);
+
+            NSDictionary *elementQuery = [self queryForDevicePrivateElementNamed:element.name];
+            NSData *encryptedContent = [PearlKeyChain dataOfItemForQuery:elementQuery];
+
+            dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
+                NSString *result = [self decryptContent:encryptedContent usingKey:elementKey];
+                resultBlock( result );
+            } );
+            break;
+        }
+    }
+}
+
+- (void)importProtectedContent:(NSString *)protectedContent protectedByKey:(MPKey *)importKey
+                   intoElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+
+    NSAssert([elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user.");
+    switch (element.type) {
+        case MPElementTypeGeneratedMaximum:
+        case MPElementTypeGeneratedLong:
+        case MPElementTypeGeneratedMedium:
+        case MPElementTypeGeneratedBasic:
+        case MPElementTypeGeneratedShort:
+        case MPElementTypeGeneratedPIN:
+            break;
+
+        case MPElementTypeStoredPersonal: {
+            NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
+            @"Element with stored type %d is not an MPElementStoredEntity, but a %@.", element.type, [element class]);
+            if ([importKey.keyID isEqualToData:elementKey.keyID])
+                ((MPElementStoredEntity *)element).contentObject = [protectedContent decodeBase64];
+
+            else {
+                NSString *clearContent = [self decryptContent:[protectedContent decodeBase64] usingKey:importKey];
+                [self importClearTextContent:clearContent intoElement:element usingKey:elementKey];
+            }
+            break;
+        }
+
+        case MPElementTypeStoredDevicePrivate:
+            break;
+    }
+}
+
+- (void)importClearTextContent:(NSString *)clearContent intoElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+
+    NSAssert([elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user.");
+    switch (element.type) {
+        case MPElementTypeGeneratedMaximum:
+        case MPElementTypeGeneratedLong:
+        case MPElementTypeGeneratedMedium:
+        case MPElementTypeGeneratedBasic:
+        case MPElementTypeGeneratedShort:
+        case MPElementTypeGeneratedPIN:
+            break;
+
+        case MPElementTypeStoredPersonal: {
+            [self saveContent:clearContent toElement:element usingKey:elementKey];
+            break;
+        }
+
+        case MPElementTypeStoredDevicePrivate:
+            break;
+    }
+}
+
+- (NSString *)exportContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+
+    NSAssert([elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user.");
+    if (!(element.type & MPElementFeatureExportContent))
+        return nil;
+
+    NSString *result = nil;
+    switch (element.type) {
+        case MPElementTypeGeneratedMaximum:
+        case MPElementTypeGeneratedLong:
+        case MPElementTypeGeneratedMedium:
+        case MPElementTypeGeneratedBasic:
+        case MPElementTypeGeneratedShort:
+        case MPElementTypeGeneratedPIN: {
+            result = nil;
+            break;
+        }
+
+        case MPElementTypeStoredPersonal: {
+            NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
+            @"Element with stored type %d is not an MPElementStoredEntity, but a %@.", element.type, [element class]);
+            result = [((MPElementStoredEntity *)element).contentObject encodeBase64];
+            break;
+        }
+
+        case MPElementTypeStoredDevicePrivate: {
+            result = nil;
+            break;
+        }
+    }
+
+    return result;
+}
+
+- (BOOL)migrateExplicitly:(BOOL)explicit {
+
+    return NO;
+}
+
+- (NSDictionary *)queryForDevicePrivateElementNamed:(NSString *)name {
+
+    return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
+                                   attributes:@{
+                                           (__bridge id)kSecAttrService : @"DevicePrivate",
+                                           (__bridge id)kSecAttrAccount : name
+                                   }
+                                      matches:nil];
+}
+
+- (NSString *)decryptContent:(NSData *)encryptedContent usingKey:(MPKey *)key {
+
+    NSData *decryptedContent = nil;
+    if ([encryptedContent length])
+        decryptedContent = [encryptedContent decryptWithSymmetricKey:[key subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
+    if (!decryptedContent)
+        return nil;
+
+    return [[NSString alloc] initWithBytes:decryptedContent.bytes length:decryptedContent.length encoding:NSUTF8StringEncoding];
 }
 
 @end
