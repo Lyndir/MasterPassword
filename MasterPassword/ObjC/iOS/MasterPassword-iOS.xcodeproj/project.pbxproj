@@ -59,14 +59,6 @@
 		DA5E5C7517248959003798D8 /* sysendian.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C6C17248959003798D8 /* sysendian.h */; };
 		DA5E5C7617248959003798D8 /* warn.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C6D17248959003798D8 /* warn.h */; };
 		DA5E5C78172489FA003798D8 /* libscryptenc-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5E5C77172489FA003798D8 /* libscryptenc-ios.a */; };
-		DA5E5D4C1724F616003798D8 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5D441724F616003798D8 /* Icon-72.png */; };
-		DA5E5D4D1724F616003798D8 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5D451724F616003798D8 /* Icon-72@2x.png */; };
-		DA5E5D4E1724F616003798D8 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5D461724F616003798D8 /* Icon-Small-50.png */; };
-		DA5E5D4F1724F616003798D8 /* Icon-Small-50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5D471724F616003798D8 /* Icon-Small-50@2x.png */; };
-		DA5E5D501724F616003798D8 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5D481724F616003798D8 /* Icon-Small.png */; };
-		DA5E5D511724F616003798D8 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5D491724F616003798D8 /* Icon-Small@2x.png */; };
-		DA5E5D521724F616003798D8 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5D4A1724F616003798D8 /* Icon.png */; };
-		DA5E5D531724F616003798D8 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5D4B1724F616003798D8 /* Icon@2x.png */; };
 		DA6701B816406A4100B61001 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA6701B716406A4100B61001 /* Accounts.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		DA6701DE16406B7300B61001 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA6701DD16406B7300B61001 /* Social.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		DA6701E016406BB400B61001 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA6701DF16406BB400B61001 /* AdSupport.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -76,6 +68,7 @@
 		DA69540717D975D900BF294E /* icon_gears@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37851711E29500CF925C /* icon_gears@2x.png */; };
 		DA829E52159847E0002417D3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA829E6215984832002417D3 /* libFontReplacer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA829E51159847E0002417D3 /* libFontReplacer.a */; };
+		DA945C8717E3F3FD0053236B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA945C8617E3F3FD0053236B /* Images.xcassets */; };
 		DA95D5F214DF0B2C008D1B94 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */; };
 		DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABB981515100B4000B05417 /* SystemConfiguration.framework */; };
 		DABD38DB1711E29700CF925C /* ui_background.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD360F1711E29400CF925C /* ui_background.png */; };
@@ -144,10 +137,6 @@
 		DABD395C1711E29700CF925C /* avatar-9@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD36911711E29400CF925C /* avatar-9@2x.png */; };
 		DABD395D1711E29700CF925C /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD36931711E29400CF925C /* background.png */; };
 		DABD395E1711E29700CF925C /* background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD36941711E29400CF925C /* background@2x.png */; };
-		DABD395F1711E29700CF925C /* Default-568h.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD36951711E29400CF925C /* Default-568h.png */; };
-		DABD39601711E29700CF925C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD36961711E29400CF925C /* Default-568h@2x.png */; };
-		DABD39611711E29700CF925C /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD36971711E29400CF925C /* Default.png */; };
-		DABD39621711E29700CF925C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD36981711E29400CF925C /* Default@2x.png */; };
 		DABD39841711E29700CF925C /* Exo-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DABD36BC1711E29500CF925C /* Exo-Bold.otf */; };
 		DABD39851711E29700CF925C /* Exo-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DABD36BD1711E29500CF925C /* Exo-ExtraBold.otf */; };
 		DABD39861711E29700CF925C /* Exo-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DABD36BE1711E29500CF925C /* Exo-Regular.otf */; };
@@ -437,19 +426,12 @@
 		DA5E5C6C17248959003798D8 /* sysendian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sysendian.h; sourceTree = "<group>"; };
 		DA5E5C6D17248959003798D8 /* warn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = warn.h; sourceTree = "<group>"; };
 		DA5E5C77172489FA003798D8 /* libscryptenc-ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libscryptenc-ios.a"; path = "/Users/.z/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib/libscryptenc-ios.a"; sourceTree = "<absolute>"; };
-		DA5E5D441724F616003798D8 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
-		DA5E5D451724F616003798D8 /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72@2x.png"; sourceTree = "<group>"; };
-		DA5E5D461724F616003798D8 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
-		DA5E5D471724F616003798D8 /* Icon-Small-50@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50@2x.png"; sourceTree = "<group>"; };
-		DA5E5D481724F616003798D8 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
-		DA5E5D491724F616003798D8 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
-		DA5E5D4A1724F616003798D8 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
-		DA5E5D4B1724F616003798D8 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		DA6701B716406A4100B61001 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		DA6701DD16406B7300B61001 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		DA6701DF16406BB400B61001 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		DA672D2E14F92C6B004A189C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		DA829E51159847E0002417D3 /* libFontReplacer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFontReplacer.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA945C8617E3F3FD0053236B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		DAAC35DD156BD77D00C5FD93 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		DABB981515100B4000B05417 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -585,10 +567,6 @@
 		DABD36911711E29400CF925C /* avatar-9@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-9@2x.png"; sourceTree = "<group>"; };
 		DABD36931711E29400CF925C /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		DABD36941711E29400CF925C /* background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@2x.png"; sourceTree = "<group>"; };
-		DABD36951711E29400CF925C /* Default-568h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h.png"; sourceTree = "<group>"; };
-		DABD36961711E29400CF925C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		DABD36971711E29400CF925C /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		DABD36981711E29400CF925C /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		DABD36BC1711E29500CF925C /* Exo-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Bold.otf"; sourceTree = "<group>"; };
 		DABD36BD1711E29500CF925C /* Exo-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-ExtraBold.otf"; sourceTree = "<group>"; };
 		DABD36BE1711E29500CF925C /* Exo-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Regular.otf"; sourceTree = "<group>"; };
@@ -1507,14 +1485,7 @@
 		DABD360D1711E29400CF925C /* Media */ = {
 			isa = PBXGroup;
 			children = (
-				DA5E5D441724F616003798D8 /* Icon-72.png */,
-				DA5E5D451724F616003798D8 /* Icon-72@2x.png */,
-				DA5E5D461724F616003798D8 /* Icon-Small-50.png */,
-				DA5E5D471724F616003798D8 /* Icon-Small-50@2x.png */,
-				DA5E5D481724F616003798D8 /* Icon-Small.png */,
-				DA5E5D491724F616003798D8 /* Icon-Small@2x.png */,
-				DA5E5D4A1724F616003798D8 /* Icon.png */,
-				DA5E5D4B1724F616003798D8 /* Icon@2x.png */,
+				DA945C8617E3F3FD0053236B /* Images.xcassets */,
 				DA5E5C3C1723681B003798D8 /* Square-bottom.png */,
 				DA5A09E8171BB0F7005284AB /* unlocked.png */,
 				DA5A09E9171BB0F7005284AB /* unlocked@2x.png */,
@@ -1523,10 +1494,6 @@
 				DABD360E1711E29400CF925C /* Automaton */,
 				DABD366B1711E29400CF925C /* Avatars */,
 				DABD36921711E29400CF925C /* Background */,
-				DABD36951711E29400CF925C /* Default-568h.png */,
-				DABD36961711E29400CF925C /* Default-568h@2x.png */,
-				DABD36971711E29400CF925C /* Default.png */,
-				DABD36981711E29400CF925C /* Default@2x.png */,
 				DABD36BB1711E29500CF925C /* Fonts */,
 				DABD36D91711E29500CF925C /* Insignia */,
 				DABD38751711E29700CF925C /* Tooltips */,
@@ -3168,13 +3135,10 @@
 				DABD395C1711E29700CF925C /* avatar-9@2x.png in Resources */,
 				DABD395D1711E29700CF925C /* background.png in Resources */,
 				DABD395E1711E29700CF925C /* background@2x.png in Resources */,
-				DABD395F1711E29700CF925C /* Default-568h.png in Resources */,
-				DABD39601711E29700CF925C /* Default-568h@2x.png in Resources */,
-				DABD39611711E29700CF925C /* Default.png in Resources */,
-				DABD39621711E29700CF925C /* Default@2x.png in Resources */,
 				DABD39841711E29700CF925C /* Exo-Bold.otf in Resources */,
 				DABD39851711E29700CF925C /* Exo-ExtraBold.otf in Resources */,
 				DABD39861711E29700CF925C /* Exo-Regular.otf in Resources */,
+				DA945C8717E3F3FD0053236B /* Images.xcassets in Resources */,
 				DABD39871711E29700CF925C /* SourceCodePro-Black.otf in Resources */,
 				DABD39881711E29700CF925C /* SourceCodePro-ExtraLight.otf in Resources */,
 				DABD39A01711E29700CF925C /* icon_action.png in Resources */,
@@ -3241,14 +3205,6 @@
 				DA5A09EA171BB0F7005284AB /* unlocked.png in Resources */,
 				DA5A09EB171BB0F7005284AB /* unlocked@2x.png in Resources */,
 				DA5E5C3D1723681B003798D8 /* Square-bottom.png in Resources */,
-				DA5E5D4C1724F616003798D8 /* Icon-72.png in Resources */,
-				DA5E5D4D1724F616003798D8 /* Icon-72@2x.png in Resources */,
-				DA5E5D4E1724F616003798D8 /* Icon-Small-50.png in Resources */,
-				DA5E5D4F1724F616003798D8 /* Icon-Small-50@2x.png in Resources */,
-				DA5E5D501724F616003798D8 /* Icon-Small.png in Resources */,
-				DA5E5D511724F616003798D8 /* Icon-Small@2x.png in Resources */,
-				DA5E5D521724F616003798D8 /* Icon.png in Resources */,
-				DA5E5D531724F616003798D8 /* Icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3749,6 +3705,8 @@
 		DA5BFA6E147E415C00F98B1E /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -3766,6 +3724,8 @@
 		DA5BFA6F147E415C00F98B1E /* AdHoc-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Maarten Billemont";
@@ -3880,6 +3840,8 @@
 		DA95D60A14DF3F3B008D1B94 /* AppStore-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				EXCLUDED_SOURCE_FILE_NAMES = libTestFlight.a;

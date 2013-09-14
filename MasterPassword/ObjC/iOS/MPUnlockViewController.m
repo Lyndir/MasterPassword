@@ -982,7 +982,7 @@
     self.emergencyName.text = @"";
     self.emergencyMasterPassword.text = @"";
     self.emergencySite.text = @"";
-    self.emergencyCounterStepper.value = 0;
+    self.emergencyCounterStepper.value = 1;
     [self.emergencyPassword setTitle:@"" forState:UIControlStateNormal];
     [self.emergencyActivity stopAnimating];
     self.emergencyGeneratorContainer.alpha = 0;

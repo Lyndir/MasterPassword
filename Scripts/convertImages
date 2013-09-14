@@ -14,20 +14,18 @@ downsize() {
 
 
 
-inf "Converting iTunesArtwork"
+inf "Converting appiconsets"
 icons=(
-    [57]="Icon.png"
     [114]="Icon@2x.png"
-    [72]="Icon-72.png"
+    [120]="Icon-60@2x.png"
+    [80]="Icon-40@2x.png"
     [144]="Icon-72@2x.png"
-    [29]="Icon-Small.png"
     [58]="Icon-Small@2x.png"
-    [50]="Icon-Small-50.png"
     [100]="Icon-Small-50@2x.png"
     [512]="iTunesArtwork"
 )
 for size in $(reverse "${!icons[@]}"); do
-    file=${icons[size]}
+    file=Images.xcassets/AppIcon.appiconset/${icons[size]}
 
     if [[ "iTunesArtwork@2x" -nt $file ]]; then
         pinf "$file ($size px)"

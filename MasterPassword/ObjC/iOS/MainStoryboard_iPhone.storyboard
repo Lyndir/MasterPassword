@@ -1039,6 +1039,7 @@ L4m3P4sSw0rD</string>
                         </subviews>
                         <color key="backgroundColor" red="0.14901960784313725" green="0.16470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="hB9-S6-KHC">
                         <barButtonItem key="backBarButtonItem" title="Site" id="MOV-d1-f0k"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="action" id="8Y7-Bf-FHa">
@@ -1624,7 +1625,7 @@ You can use the words in the background for inspiration in finding a memorable m
                                                 <rect key="frame" x="187" y="260" width="94" height="29"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             </stepper>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="TJC-xD-fjQ">
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="1" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="TJC-xD-fjQ">
                                                 <rect key="frame" x="79" y="263" width="100" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1843,7 +1844,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
         <!--Element List All View Controller-->
         <scene sceneID="I7c-vt-d2s">
             <objects>
-                <tableViewController id="idA-Pj-1U9" customClass="MPElementListAllViewController" sceneMemberID="viewController">
+                <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="idA-Pj-1U9" customClass="MPElementListAllViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="48" sectionHeaderHeight="22" sectionFooterHeight="22" id="N83-sj-4tl">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1875,6 +1876,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                             <outlet property="delegate" destination="idA-Pj-1U9" id="bdk-Iu-Hpv"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
                         <outlet property="navigationBar" destination="l0p-Tu-L9k" id="9DR-L3-ggI"/>
                     </connections>
@@ -2949,7 +2951,7 @@ However, it means that anyone who finds your device unlocked can do the same.</s
     <inferredMetricsTieBreakers>
         <segue reference="swi-5o-hfK"/>
         <segue reference="hxY-aA-ngI"/>
+        <segue reference="9Bs-cD-ddF"/>
         <segue reference="rWT-Kr-cAs"/>
-        <segue reference="KIl-ZW-M7G"/>
     </inferredMetricsTieBreakers>
 </document>
