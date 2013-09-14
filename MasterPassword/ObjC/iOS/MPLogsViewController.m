@@ -74,83 +74,77 @@
 
 - (void)switchCloudStore {
 
-//    NSError *error = nil;
-//    NSURL *cloudStoreDirectory = [[MPiOSAppDelegate get].storeManager URLForCloudStoreDirectory];
-//    NSURL *cloudContentDirectory = [[MPiOSAppDelegate get].storeManager URLForCloudContentDirectory];
-//    NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:cloudContentDirectory includingPropertiesForKeys:nil
-//                                                                         options:NSDirectoryEnumerationSkipsHiddenFiles error:&error];
-//    if (!contents)
-//    err(@"While enumerating cloud contents: %@", error);
-//
-//    BOOL directory;
-//    NSMutableDictionary *stores = [NSMutableDictionary dictionaryWithCapacity:[contents count]];
-//    NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
-//    NSPersistentStoreCoordinator *storePSC = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
-//    NSFetchRequest *usersFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
-//    NSFetchRequest *sitesFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
-//    for (NSURL *content in contents)
-//        if ([[NSFileManager defaultManager] fileExistsAtPath:content.path isDirectory:&directory] && directory) {
-//            NSString *contentString = [content lastPathComponent];
-//            NSUInteger firstDash = [contentString rangeOfString:@"-" options:0].location;
-//            NSString *storeDescription = firstDash == NSNotFound? contentString: [contentString substringToIndex:firstDash];
-//            NSPersistentStore *store = nil;
-//            @try {
-//                NSURL *storeURL = [[cloudStoreDirectory
-//                        URLByAppendingPathComponent:[content lastPathComponent] isDirectory:NO]
-//                        URLByAppendingPathExtension:@"sqlite"];
-//                if (!(store = [storePSC addPersistentStoreWithType:NSSQLiteStoreType configuration:nil
-//                                                               URL:storeURL options:@{
-//                                NSPersistentStoreUbiquitousContentNameKey    : [[MPiOSAppDelegate get].storeManager valueForKey:@"contentName"],
-//                                NSPersistentStoreUbiquitousContentURLKey     : content,
-//                                NSMigratePersistentStoresAutomaticallyOption : @YES,
-//                                NSInferMappingModelAutomaticallyOption       : @YES,
-//                                NSPersistentStoreFileProtectionKey           : NSFileProtectionComplete
-//                        }                                    error:&error])) {
-//                    wrn(@"Couldn't describe store opening %@: %@", [content lastPathComponent], error);
-//                    continue;
-//                }
-//
-//                NSUInteger userCount, siteCount;
-//                NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-//                moc.persistentStoreCoordinator = storePSC;
-//                if ((userCount = [moc countForFetchRequest:usersFetchRequest error:&error]) == NSNotFound) {
-//                    wrn(@"Couldn't describe store userCount %@: %@", [content lastPathComponent], error);
-//                    continue;
-//                }
-//                if ((siteCount = [moc countForFetchRequest:sitesFetchRequest error:&error]) == NSNotFound) {
-//                    wrn(@"Couldn't describe store siteCount %@: %@", [content lastPathComponent], error);
-//                    continue;
-//                }
-//
-//                storeDescription = PearlString( @"%@: %dU, %dS", storeDescription, userCount, siteCount );
-//            }
-//            @catch (NSException *exception) {
-//                wrn(@"Couldn't describe store %@: exception %@", [content lastPathComponent], exception);
-//            }
-//            @finally {
-//                if (store) if (![storePSC removePersistentStore:store error:&error])
-//                wrn(@"Couldn't remove store %@: %@", [content lastPathComponent], error);
-//                [stores setObject:storeDescription forKey:[content lastPathComponent]];
-//            }
-//        }
-//
-//    NSString *storeUUID = [[MPiOSAppDelegate get].storeManager valueForKey:@"storeUUID_ThreadSafe"];
-//    NSUInteger firstDash = [storeUUID rangeOfString:@"-" options:0].location;
-//    PearlArrayTVC *vc = [[PearlArrayTVC alloc] initWithStyle:UITableViewStylePlain];
-//    vc.title = PearlString( @"Current: %@", firstDash == NSNotFound? storeUUID: [storeUUID substringToIndex:firstDash] );
-//    [stores enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-//        [vc addRowWithName:obj style:PearlArrayTVCRowStyleLink toggled:NO toSection:@"Cloud Stores"
-//           activationBlock:^BOOL(BOOL wasToggled) {
-//               [[MPiOSAppDelegate get].storeManager setValue:key forKey:@"storeUUID"];
-//               [[MPiOSAppDelegate get].storeManager reloadStore];
-//               [[MPiOSAppDelegate get] signOutAnimated:YES];
-//               return YES;
-//           }];
-//    }];
-//    dispatch_async( dispatch_get_main_queue(), ^{
-//        [switchCloudStoreProgress cancelAlertAnimated:YES];
-//        [self.navigationController pushViewController:vc animated:YES];
-//    } );
+    NSDictionary *cloudStores = [[MPiOSAppDelegate get].storeManager enumerateCloudStores];
+    if (!cloudStores)
+    wrn(@"Failed enumerating cloud stores.");
+
+    NSString *currentStoreUUID = nil;
+    NSMutableDictionary *stores = [NSMutableDictionary dictionary];
+    NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
+    NSPersistentStoreCoordinator *storePSC = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+    NSFetchRequest *usersFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
+    NSFetchRequest *sitesFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
+    for (NSURL *cloudStoreURL in cloudStores) {
+        NSString *storeUUID = [[cloudStoreURL URLByDeletingPathExtension] lastPathComponent];
+        for (NSDictionary *cloudStoreOptions in [cloudStores objectForKey:cloudStoreURL]) {
+            NSError *error = nil;
+            NSPersistentStore *store = nil;
+            NSUInteger firstDash = [storeUUID rangeOfString:@"-" options:0].location;
+            NSString *storeDescription = PearlString( @"%@ v%@",
+                    firstDash == NSNotFound? storeUUID: [storeUUID substringToIndex:firstDash],
+                    cloudStoreOptions[USMCloudVersionKey] );
+            if ([cloudStoreOptions[USMCloudCurrentKey] boolValue])
+                currentStoreUUID = storeUUID;
+            @try {
+                if (!(store = [storePSC addPersistentStoreWithType:NSSQLiteStoreType configuration:nil
+                                                               URL:cloudStoreURL options:cloudStoreOptions error:&error])) {
+                    wrn(@"Couldn't describe store %@.  While opening: %@", storeDescription, error);
+                    continue;
+                }
+
+                NSUInteger userCount, siteCount;
+                NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+                moc.persistentStoreCoordinator = storePSC;
+                if ((userCount = [moc countForFetchRequest:usersFetchRequest error:&error]) == NSNotFound) {
+                    wrn(@"Couldn't describe store %@.  While determining userCount: %@", storeDescription, error);
+                    continue;
+                }
+                if ((siteCount = [moc countForFetchRequest:sitesFetchRequest error:&error]) == NSNotFound) {
+                    wrn(@"Couldn't describe store %@.  While determining siteCount: %@", storeDescription, error);
+                    continue;
+                }
+
+                storeDescription = PearlString( @"%@: %dU, %dS", storeDescription, userCount, siteCount );
+            }
+            @catch (NSException *exception) {
+                wrn(@"Couldn't describe store %@: %@", storeDescription, exception);
+            }
+            @finally {
+                if (store && ![storePSC removePersistentStore:store error:&error]) {
+                    wrn(@"Couldn't remove store %@: %@", storeDescription, error);
+                    storePSC = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+                }
+
+                [stores setObject:cloudStoreOptions forKey:storeDescription];
+            }
+        }
+    }
+
+    PearlArrayTVC *vc = [[PearlArrayTVC alloc] initWithStyle:UITableViewStylePlain];
+    NSUInteger firstDash = [currentStoreUUID rangeOfString:@"-" options:0].location;
+    vc.title = PearlString( @"Active: %@", firstDash == NSNotFound? currentStoreUUID: [currentStoreUUID substringToIndex:firstDash] );
+    [stores enumerateKeysAndObjectsUsingBlock:^(id storeDescription, id cloudStoreOptions, BOOL *stop) {
+        [vc addRowWithName:storeDescription style:PearlArrayTVCRowStyleLink toggled:[cloudStoreOptions[USMCloudCurrentKey] boolValue]
+                 toSection:@"Cloud Stores" activationBlock:^BOOL(BOOL wasToggled) {
+            [[MPiOSAppDelegate get].storeManager switchToCloudStoreWithOptions:cloudStoreOptions];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+            return YES;
+        }];
+    }];
+    dispatch_async( dispatch_get_main_queue(), ^{
+        [switchCloudStoreProgress cancelAlertAnimated:YES];
+        [self.navigationController pushViewController:vc animated:YES];
+    } );
 }
 
 - (IBAction)toggleLevelControl:(UISegmentedControl *)sender {

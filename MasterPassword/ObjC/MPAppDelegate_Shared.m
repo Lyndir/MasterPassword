@@ -8,6 +8,7 @@
 
 #import "MPAppDelegate_Shared.h"
 #import "MPAppDelegate_Store.h"
+#import "MPAppDelegate_Key.h"
 
 @implementation MPAppDelegate_Shared {
     NSManagedObjectID *_activeUserOID;
@@ -36,8 +37,10 @@
 
     NSError *error;
     MPUserEntity *activeUser = (MPUserEntity *)[moc existingObjectWithID:_activeUserOID error:&error];
-    if (!activeUser)
-    err(@"Failed to retrieve active user: %@", error);
+    if (!activeUser) {
+        [self signOutAnimated:YES];
+        err(@"Failed to retrieve active user: %@", error);
+    }
 
     return activeUser;
 }

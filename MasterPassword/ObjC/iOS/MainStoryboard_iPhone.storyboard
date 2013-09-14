@@ -545,6 +545,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Log Inspector" id="RrC-3Q-nBN">
+                        <barButtonItem key="backBarButtonItem" title="Logs" id="6wH-VM-LLh"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="action" id="SpB-nm-8qW">
                             <connections>
                                 <action selector="action:" destination="Tx0-mM-kHk" id="2fa-eg-8yh"/>
@@ -1167,17 +1168,17 @@ L4m3P4sSw0rD</string>
         <!--Unlock View Controller-->
         <scene sceneID="HkH-JR-Fhy">
             <objects>
-                <viewController storyboardIdentifier="MPUnlockViewController" automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="flipHorizontal" id="Nbn-Rv-sP1" customClass="MPUnlockViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MPUnlockViewController" extendedLayoutIncludesOpaqueBars="YES" modalTransitionStyle="flipHorizontal" id="Nbn-Rv-sP1" customClass="MPUnlockViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GeE-5J-ZZO">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" id="QWe-Gw-rD3">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="592"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="656"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <view contentMode="scaleToFill" id="PHH-XC-9QQ" userLabel="View - UI Container">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_spinner.png" id="27q-lX-0vy">
@@ -1336,7 +1337,7 @@ L4m3P4sSw0rD</string>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                     <view contentMode="scaleToFill" id="870-GQ-iOh" userLabel="View - Share Buttons">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <button opaque="NO" alpha="0.20000000000000015" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="tGv-v7-kcX" userLabel="google+">
@@ -1417,7 +1418,7 @@ L4m3P4sSw0rD</string>
                                                 </connections>
                                             </button>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="Tap and hold to delete or reset user." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="DBJ-Qi-ZcF">
-                                                <rect key="frame" x="20" y="484" width="280" height="20"/>
+                                                <rect key="frame" x="20" y="548" width="280" height="20"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
                                                 <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
@@ -1537,7 +1538,7 @@ You can use the words in the background for inspiration in finding a memorable m
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                     <webView opaque="NO" contentMode="scaleToFill" id="rGU-aZ-XVm">
-                                        <rect key="frame" x="0.0" y="435" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="499" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <dataDetectorType key="dataDetectorTypes"/>
@@ -1549,15 +1550,15 @@ You can use the words in the background for inspiration in finding a memorable m
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view hidden="YES" alpha="0.30000000000000016" contentMode="scaleToFill" id="KNa-Xb-RuE" userLabel="View - Emergency Generator">
-                                <rect key="frame" x="-100" y="0.0" width="520" height="504"/>
+                                <rect key="frame" x="-100" y="0.0" width="520" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" id="vdf-Kn-Sle">
-                                        <rect key="frame" x="100" y="20" width="320" height="370"/>
+                                        <rect key="frame" x="100" y="20" width="320" height="434"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_panel_display.png" id="jLf-TI-anP">
-                                                <rect key="frame" x="11" y="0.0" width="298" height="370"/>
+                                                <rect key="frame" x="11" y="0.0" width="298" height="434"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <rect key="contentStretch" x="0.050000000000000003" y="0.10000000000000001" width="0.89999999999999991" height="0.79999999999999982"/>
                                             </imageView>
@@ -1672,11 +1673,11 @@ You can use the words in the background for inspiration in finding a memorable m
                                                 </connections>
                                             </button>
                                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="3Ax-91-gVM">
-                                                <rect key="frame" x="141" y="324" width="37" height="37"/>
+                                                <rect key="frame" x="141" y="388" width="37" height="37"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             </activityIndicatorView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="r9J-C9-Bt1">
-                                                <rect key="frame" x="20" y="316" width="280" height="54"/>
+                                                <rect key="frame" x="20" y="380" width="280" height="54"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="30"/>
                                                 <size key="titleShadowOffset" width="0.0" height="1"/>
@@ -1692,7 +1693,7 @@ You can use the words in the background for inspiration in finding a memorable m
                                                 </connections>
                                             </button>
                                             <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="sD9-hR-UAI" userLabel="View - Content Tip">
-                                                <rect key="frame" x="55" y="290" width="210" height="60"/>
+                                                <rect key="frame" x="55" y="354" width="210" height="60"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" id="Lua-xm-WX6">
@@ -1718,7 +1719,6 @@ You can use the words in the background for inspiration in finding a memorable m
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="dU2-XK-yUQ">
                         <barButtonItem key="backBarButtonItem" title="Log Out" id="A5d-ER-NUM"/>
                     </navigationItem>
@@ -1771,6 +1771,7 @@ You can use the words in the background for inspiration in finding a memorable m
         <scene sceneID="wrY-9D-LEc">
             <objects>
                 <navigationController definesPresentationContext="YES" id="uu3-4d-bYN" customClass="PearlNavigationController" sceneMemberID="viewController">
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="T2Q-L6-b8f">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
@@ -1850,7 +1851,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
         <!--Element List All View Controller-->
         <scene sceneID="I7c-vt-d2s">
             <objects>
-                <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="idA-Pj-1U9" customClass="MPElementListAllViewController" sceneMemberID="viewController">
+                <tableViewController id="idA-Pj-1U9" customClass="MPElementListAllViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="48" sectionHeaderHeight="22" sectionFooterHeight="22" id="N83-sj-4tl">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1944,6 +1945,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
         <scene sceneID="8r0-wA-Zre">
             <objects>
                 <navigationController id="KZF-fe-y9n" customClass="PearlNavigationController" sceneMemberID="viewController">
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" barStyle="black" translucent="NO" id="sif-x3-Fol">
@@ -2512,7 +2514,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
         <!--Guide View Controller-->
         <scene sceneID="k6U-hl-fJt">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="myN-X7-9Tg" customClass="MPGuideViewController" sceneMemberID="viewController">
+                <viewController id="myN-X7-9Tg" customClass="MPGuideViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vkG-Oi-PHo">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2813,7 +2815,6 @@ You can make passwords for anything, like email addresses, sites or real-world t
                         </subviews>
                         <color key="backgroundColor" red="0.14901960780000001" green="0.1647058824" blue="0.18039215689999999" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
-                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="p1Y-gL-psy"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
@@ -2908,35 +2909,20 @@ However, it means that anyone who finds your device unlocked can do the same.</s
     <resources>
         <image name="Square-bottom.png" width="551" height="58"/>
         <image name="avatar-0.png" width="110" height="110"/>
-        <image name="avatar-0.png" width="110" height="110"/>
-        <image name="background.png" width="568" height="568"/>
-        <image name="background.png" width="568" height="568"/>
-        <image name="background.png" width="568" height="568"/>
-        <image name="background.png" width="568" height="568"/>
-        <image name="background.png" width="568" height="568"/>
-        <image name="background.png" width="568" height="568"/>
         <image name="background.png" width="568" height="568"/>
         <image name="book.png" width="320" height="480"/>
         <image name="cloud.png" width="105" height="80"/>
         <image name="icon_action.png" width="32" height="32"/>
         <image name="icon_cancel.png" width="32" height="32"/>
-        <image name="icon_cancel.png" width="32" height="32"/>
-        <image name="icon_cancel.png" width="32" height="32"/>
-        <image name="icon_cancel.png" width="32" height="32"/>
         <image name="icon_edit.png" width="32" height="32"/>
-        <image name="icon_edit.png" width="32" height="32"/>
-        <image name="icon_find.png" width="32" height="32"/>
         <image name="icon_find.png" width="32" height="32"/>
         <image name="icon_gears.png" width="32" height="32"/>
         <image name="icon_person.png" width="32" height="32"/>
-        <image name="icon_person.png" width="32" height="32"/>
         <image name="icon_play.png" width="32" height="32"/>
-        <image name="icon_plus.png" width="32" height="32"/>
         <image name="icon_plus.png" width="32" height="32"/>
         <image name="icon_up.png" width="32" height="32"/>
         <image name="identity.png" width="82" height="80"/>
         <image name="page-deblock.png" width="305" height="400"/>
-        <image name="page-gorillas.png" width="305" height="400"/>
         <image name="page-gorillas.png" width="305" height="400"/>
         <image name="play.png" width="72" height="80"/>
         <image name="pull-down.png" width="60" height="10"/>
@@ -2945,39 +2931,15 @@ However, it means that anyone who finds your device unlocked can do the same.</s
         <image name="social-google+.png" width="44" height="44"/>
         <image name="social-twitter.png" width="44" height="44"/>
         <image name="tip_alert_black.png" width="235" height="81"/>
-        <image name="tip_alert_black.png" width="235" height="81"/>
-        <image name="tip_basic_black.png" width="210" height="60"/>
-        <image name="tip_basic_black.png" width="210" height="60"/>
-        <image name="tip_basic_black.png" width="210" height="60"/>
-        <image name="tip_basic_black.png" width="210" height="60"/>
-        <image name="tip_basic_black.png" width="210" height="60"/>
-        <image name="tip_basic_black.png" width="210" height="60"/>
         <image name="tip_basic_black.png" width="210" height="60"/>
         <image name="tip_basic_black_bottom_right.png" width="210" height="60"/>
-        <image name="tip_basic_black_bottom_right.png" width="210" height="60"/>
-        <image name="tip_basic_black_top.png" width="210" height="60"/>
-        <image name="tip_basic_black_top.png" width="210" height="60"/>
-        <image name="tip_basic_black_top.png" width="210" height="60"/>
         <image name="tip_basic_black_top.png" width="210" height="60"/>
         <image name="tip_basic_black_top_right.png" width="205" height="61"/>
         <image name="ui_button_standard_large.png" width="300" height="46"/>
-        <image name="ui_button_standard_large.png" width="300" height="46"/>
-        <image name="ui_list_first.png" width="300" height="35"/>
-        <image name="ui_list_first.png" width="300" height="35"/>
-        <image name="ui_list_first.png" width="300" height="35"/>
         <image name="ui_list_first.png" width="300" height="35"/>
         <image name="ui_list_last.png" width="300" height="35"/>
-        <image name="ui_list_last.png" width="300" height="35"/>
-        <image name="ui_list_last.png" width="300" height="35"/>
-        <image name="ui_list_last.png" width="300" height="35"/>
-        <image name="ui_list_middle.png" width="300" height="34"/>
-        <image name="ui_list_middle.png" width="300" height="34"/>
-        <image name="ui_list_middle.png" width="300" height="34"/>
         <image name="ui_list_middle.png" width="300" height="34"/>
         <image name="ui_panel_container.png" width="300" height="87"/>
-        <image name="ui_panel_container.png" width="300" height="87"/>
-        <image name="ui_panel_display.png" width="300" height="86"/>
-        <image name="ui_panel_display.png" width="300" height="86"/>
         <image name="ui_panel_display.png" width="300" height="86"/>
         <image name="ui_spinner.png" width="75" height="75"/>
         <image name="ui_textfield.png" width="158" height="34"/>
@@ -2989,9 +2951,9 @@ However, it means that anyone who finds your device unlocked can do the same.</s
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="jgo-j3-gbW"/>
-        <segue reference="KIl-ZW-M7G"/>
-        <segue reference="rWT-Kr-cAs"/>
-        <segue reference="X2A-e4-krq"/>
+        <segue reference="swi-5o-hfK"/>
+        <segue reference="hxY-aA-ngI"/>
+        <segue reference="5Im-dm-qfS"/>
+        <segue reference="9Bs-cD-ddF"/>
     </inferredMetricsTieBreakers>
 </document>

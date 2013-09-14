@@ -49,9 +49,7 @@
             }];
             [TestFlight takeOff:testFlightToken];
             [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
-                PearlLogLevel level = PearlLogLevelWarn;
-                if ([[MPiOSConfig get].sendInfo boolValue])
-                    level = PearlLogLevelInfo;
+                PearlLogLevel level = PearlLogLevelDebug;
 
                 if (message.level >= level)
                     TFLog( @"%@", [message messageDescription] );
@@ -80,9 +78,9 @@
             [Crashlytics setObjectValue:@"Anonymous" forKey:@"username"];
             [Crashlytics startWithAPIKey:crashlyticsAPIKey];
             [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
-                PearlLogLevel level = PearlLogLevelWarn;
+                PearlLogLevel level = PearlLogLevelInfo;
                 if ([[MPiOSConfig get].sendInfo boolValue])
-                    level = PearlLogLevelInfo;
+                    level = PearlLogLevelDebug;
 
                 if (message.level >= level)
                     CLSLog( @"%@", [message messageDescription] );
