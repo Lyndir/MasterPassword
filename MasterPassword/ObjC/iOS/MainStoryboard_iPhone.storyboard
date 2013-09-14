@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4504" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3734.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <scenes>
         <!--Type View Controller - Type-->
@@ -1167,7 +1167,7 @@ L4m3P4sSw0rD</string>
         <!--Unlock View Controller-->
         <scene sceneID="HkH-JR-Fhy">
             <objects>
-                <viewController storyboardIdentifier="MPUnlockViewController" wantsFullScreenLayout="YES" modalTransitionStyle="flipHorizontal" id="Nbn-Rv-sP1" customClass="MPUnlockViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MPUnlockViewController" automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="flipHorizontal" id="Nbn-Rv-sP1" customClass="MPUnlockViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GeE-5J-ZZO">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1335,14 +1335,98 @@ L4m3P4sSw0rD</string>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="Tap and hold to delete or reset user." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="DBJ-Qi-ZcF">
-                                        <rect key="frame" x="20" y="484" width="280" height="20"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
-                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                    </label>
+                                    <view contentMode="scaleToFill" id="870-GQ-iOh" userLabel="View - Share Buttons">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <subviews>
+                                            <button opaque="NO" alpha="0.20000000000000015" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="tGv-v7-kcX" userLabel="google+">
+                                                <rect key="frame" x="86" y="0.0" width="44" height="44"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <state key="normal" backgroundImage="social-google+.png">
+                                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <state key="highlighted">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="google:" destination="Nbn-Rv-sP1" eventType="touchUpInside" id="5T6-yt-7jv"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" alpha="0.20000000000000015" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="eeS-3V-WSf" userLabel="twitter">
+                                                <rect key="frame" x="190" y="0.0" width="44" height="44"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <state key="normal" backgroundImage="social-twitter.png">
+                                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <state key="highlighted">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="twitter:" destination="Nbn-Rv-sP1" eventType="touchUpInside" id="491-Kf-UAK"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" alpha="0.20000000000000015" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5Qz-dA-cgl" userLabel="facebook">
+                                                <rect key="frame" x="138" y="0.0" width="44" height="44"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <state key="normal" backgroundImage="social-facebook.png">
+                                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <state key="highlighted">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="facebook:" destination="Nbn-Rv-sP1" eventType="touchUpInside" id="Sup-Dp-WHn"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" alpha="0.10000000000000001" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vM2-8p-qn7" userLabel="mail">
+                                                <rect key="frame" x="276" y="0.0" width="44" height="44"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                <gestureRecognizers/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                                <state key="normal" title="✉">
+                                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <state key="highlighted">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="mail:" destination="Nbn-Rv-sP1" eventType="touchUpInside" id="f6b-uF-NNs"/>
+                                                    <outletCollection property="gestureRecognizers" destination="6ew-le-Bbs" appends="YES" id="rBb-Ur-1Cc"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" alpha="0.10000000000000001" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="2dq-bb-mPl" userLabel="add">
+                                                <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
+                                                <state key="normal" title="＋">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <state key="highlighted">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="add:" destination="Nbn-Rv-sP1" eventType="touchUpInside" id="Fee-sf-mIv"/>
+                                                </connections>
+                                            </button>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="Tap and hold to delete or reset user." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="DBJ-Qi-ZcF">
+                                                <rect key="frame" x="20" y="484" width="280" height="20"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
+                                                <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                                <nil key="highlightedColor"/>
+                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </view>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="white" delaysContentTouches="NO" id="Blg-F1-9NA">
                                         <rect key="frame" x="0.0" y="16" width="320" height="340"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -1404,7 +1488,7 @@ You can use the words in the background for inspiration in finding a memorable m
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <view contentMode="scaleToFill" id="7cc-yu-i0m">
+                                    <view contentMode="scaleToFill" id="7cc-yu-i0m" userLabel="View - MP Entry">
                                         <rect key="frame" x="20" y="168" width="280" height="88"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <subviews>
@@ -1452,83 +1536,6 @@ You can use the words in the background for inspiration in finding a memorable m
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <button opaque="NO" alpha="0.20000000000000015" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5Qz-dA-cgl" userLabel="facebook">
-                                        <rect key="frame" x="84" y="0.0" width="44" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" backgroundImage="social-facebook.png">
-                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="facebook:" destination="Nbn-Rv-sP1" eventType="touchUpInside" id="Sup-Dp-WHn"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" alpha="0.20000000000000015" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="eeS-3V-WSf" userLabel="twitter">
-                                        <rect key="frame" x="138" y="0.0" width="44" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" backgroundImage="social-twitter.png">
-                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="twitter:" destination="Nbn-Rv-sP1" eventType="touchUpInside" id="491-Kf-UAK"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" alpha="0.20000000000000015" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="tGv-v7-kcX" userLabel="google+">
-                                        <rect key="frame" x="192" y="0.0" width="44" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" backgroundImage="social-google+.png">
-                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="google:" destination="Nbn-Rv-sP1" eventType="touchUpInside" id="5T6-yt-7jv"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" alpha="0.10000000000000001" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vM2-8p-qn7" userLabel="mail">
-                                        <rect key="frame" x="276" y="0.0" width="44" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                        <gestureRecognizers/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                        <state key="normal" title="✉">
-                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="mail:" destination="Nbn-Rv-sP1" eventType="touchUpInside" id="f6b-uF-NNs"/>
-                                            <outletCollection property="gestureRecognizers" destination="6ew-le-Bbs" appends="YES" id="rBb-Ur-1Cc"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" alpha="0.10000000000000001" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="2dq-bb-mPl" userLabel="add">
-                                        <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
-                                        <state key="normal" title="＋">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="add:" destination="Nbn-Rv-sP1" eventType="touchUpInside" id="Fee-sf-mIv"/>
-                                        </connections>
-                                    </button>
                                     <webView opaque="NO" contentMode="scaleToFill" id="rGU-aZ-XVm">
                                         <rect key="frame" x="0.0" y="435" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -1541,7 +1548,7 @@ You can use the words in the background for inspiration in finding a memorable m
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <view alpha="0.30000000000000016" contentMode="scaleToFill" id="KNa-Xb-RuE" userLabel="View - Emergency Generator">
+                            <view hidden="YES" alpha="0.30000000000000016" contentMode="scaleToFill" id="KNa-Xb-RuE" userLabel="View - Emergency Generator">
                                 <rect key="frame" x="-100" y="0.0" width="520" height="504"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -1711,6 +1718,7 @@ You can use the words in the background for inspiration in finding a memorable m
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="dU2-XK-yUQ">
                         <barButtonItem key="backBarButtonItem" title="Log Out" id="A5d-ER-NUM"/>
                     </navigationItem>
@@ -1736,6 +1744,7 @@ You can use the words in the background for inspiration in finding a memorable m
                         <outlet property="passwordTipLabel" destination="gQ2-mB-BP4" id="aHU-tn-duI"/>
                         <outlet property="passwordTipView" destination="NvG-0R-eTZ" id="4Mx-TL-yfu"/>
                         <outlet property="passwordView" destination="7cc-yu-i0m" id="WoF-Ab-PPC"/>
+                        <outlet property="shareContainer" destination="870-GQ-iOh" id="6X3-jY-Y9R"/>
                         <outlet property="spinner" destination="27q-lX-0vy" id="CGK-G9-PRI"/>
                         <outlet property="targetedUserActionGesture" destination="9WS-yS-aqQ" id="y74-cg-eat"/>
                         <outlet property="tip" destination="DBJ-Qi-ZcF" id="VXD-Zc-UYi"/>
@@ -1766,9 +1775,6 @@ You can use the words in the background for inspiration in finding a memorable m
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
-                        <textAttributes key="titleTextAttributes">
-                            <color key="textColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
-                        </textAttributes>
                     </navigationBar>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="supportedInterfaceOrientations">
@@ -1945,9 +1951,6 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
-                        <textAttributes key="titleTextAttributes">
-                            <color key="textColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
-                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <userDefinedRuntimeAttributes>
@@ -1956,7 +1959,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                     <connections>
                         <segue destination="uu3-4d-bYN" kind="modal" identifier="MP_Setup" id="qw3-O5-NEa"/>
                         <segue destination="Nbn-Rv-sP1" kind="relationship" relationship="rootViewController" id="Gzv-dM-6bM"/>
-                        <segue destination="myN-X7-9Tg" kind="modal" identifier="MP_Guide" modalTransitionStyle="crossDissolve" id="swi-5o-hfK"/>
+                        <segue destination="myN-X7-9Tg" kind="modal" identifier="MP_Guide" id="swi-5o-hfK"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lcz-JH-B5B" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2289,7 +2292,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
             </objects>
             <point key="canvasLocation" x="1537" y="785"/>
         </scene>
-        <!--App Settings View Controller-->
+        <!--App Settings View Controller - Settings-->
         <scene sceneID="jOa-sR-fj7">
             <objects>
                 <tableViewController id="Vrp-Gl-7qn" customClass="IASKAppSettingsViewController" sceneMemberID="viewController">
@@ -2312,7 +2315,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                             <outlet property="delegate" destination="Vrp-Gl-7qn" id="Kcg-1V-uAD"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="ZbK-tt-Abw">
+                    <navigationItem key="navigationItem" title="Settings" id="ZbK-tt-Abw">
                         <barButtonItem key="rightBarButtonItem" title="Logs" id="G5c-pK-nH0">
                             <connections>
                                 <segue destination="Tx0-mM-kHk" kind="push" id="5Im-dm-qfS"/>
@@ -2509,7 +2512,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
         <!--Guide View Controller-->
         <scene sceneID="k6U-hl-fJt">
             <objects>
-                <viewController id="myN-X7-9Tg" customClass="MPGuideViewController" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="myN-X7-9Tg" customClass="MPGuideViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vkG-Oi-PHo">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2647,18 +2650,14 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                     <navigationItem title="Master Password" id="Kbd-LM-sCQ"/>
                                 </items>
                             </navigationBar>
-                            <searchBar contentMode="redraw" placeholder="Site name" showsBookmarkButton="YES" id="IJX-hq-SkG">
+                            <searchBar contentMode="redraw" barStyle="black" placeholder="Site name" showsBookmarkButton="YES" translucent="NO" id="IJX-hq-SkG">
                                 <rect key="frame" x="0.0" y="44" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <gestureRecognizers/>
                                 <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
-                                <scopeButtonTitles>
-                                    <string>All</string>
-                                    <string>Outdated</string>
-                                </scopeButtonTitles>
                             </searchBar>
-                            <view alpha="0.60000000000000009" contentMode="scaleToFill" id="Ahl-o0-lMv">
+                            <view contentMode="scaleToFill" id="Ahl-o0-lMv">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -2716,7 +2715,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
                                         <color key="progressTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                     </progressView>
                                 </subviews>
-                                <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                                <color key="backgroundColor" red="0.12156862745098039" green="0.12941176470588237" blue="0.14117647058823529" alpha="0.5" colorSpace="calibratedRGB"/>
                             </view>
                             <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="nDU-uf-V0X" userLabel="View - Tool Tip">
                                 <rect key="frame" x="10" y="59" width="266" height="60"/>
@@ -2814,7 +2813,9 @@ You can make passwords for anything, like email addresses, sites or real-world t
                         </subviews>
                         <color key="backgroundColor" red="0.14901960780000001" green="0.1647058824" blue="0.18039215689999999" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="p1Y-gL-psy"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="content" destination="vSk-nT-Vwf" id="Kgh-xj-8Z6"/>
                         <outlet property="contentButton" destination="naw-bU-g1E" id="g2B-hC-aHX"/>
@@ -2949,9 +2950,9 @@ However, it means that anyone who finds your device unlocked can do the same.</s
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="swi-5o-hfK"/>
+        <segue reference="jgo-j3-gbW"/>
         <segue reference="hxY-aA-ngI"/>
+        <segue reference="5Im-dm-qfS"/>
         <segue reference="9Bs-cD-ddF"/>
-        <segue reference="rWT-Kr-cAs"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -179,6 +179,7 @@
             ^(NSNotification *note) {
                 [self emergencyCloseAnimated:NO];
                 self.uiContainer.alpha = 0;
+                self.shareContainer.alpha = 0;
             }];
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
@@ -186,6 +187,11 @@
                 [self updateLayoutAnimated:NO allowScroll:NO completion:nil];
                 [UIView animateWithDuration:1 animations:^{
                     self.uiContainer.alpha = 1;
+                }                completion:^(BOOL finished) {
+                    if (finished)
+                        [UIView animateWithDuration:1 animations:^{
+                            self.shareContainer.alpha = 1;
+                        }];
                 }];
 
                 NSString *newsURL = PearlString( @"http://masterpasswordapp.com/news.html?version=%@",
@@ -211,6 +217,7 @@
     [self updateUsers];
 
     self.uiContainer.alpha = 0;
+    self.shareContainer.alpha = 0;
     self.spinner.alpha = 0;
 
     [super viewWillAppear:animated];
@@ -225,8 +232,13 @@
     else
         [self updateLayoutAnimated:YES allowScroll:YES completion:nil];
 
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:1 animations:^{
         self.uiContainer.alpha = 1;
+    } completion:^(BOOL finished) {
+        if (finished)
+            [UIView animateWithDuration:1 animations:^{
+                self.shareContainer.alpha = 1;
+            }];
     }];
 
     [self.marqueeTipTimer invalidate];
@@ -345,10 +357,11 @@
             self.selectedUser = nil;
             [self didToggleUserSelection];
         }
-        else if ((self.selectedUser = user))
-            [self didToggleUserSelection];
-        else
+        else if (!user)
             [self didSelectNewUserAvatar:avatar];
+        else if ([self setSelectedUser:user])
+            [self didToggleUserSelection];
+
     }        options:0];
 
     [self.avatarToUserOID setObject:NilToNSNull([user objectID]) forKey:[NSValue valueWithNonretainedObject:avatar]];
@@ -1186,7 +1199,10 @@
     return selectedUser;
 }
 
-- (void)setSelectedUser:(MPUserEntity *)selectedUser {
+- (BOOL)setSelectedUser:(MPUserEntity *)selectedUser {
+
+    if ([_selectedUserOID isEqual:selectedUser.objectID])
+        return NO;
 
     NSError *error = nil;
     if (selectedUser.objectID.isTemporaryID &&
@@ -1194,6 +1210,7 @@
     err(@"Failed to obtain a permanent object ID after setting selected user: %@", error);
 
     _selectedUserOID = selectedUser.objectID;
+    return YES;
 }
 
 @end

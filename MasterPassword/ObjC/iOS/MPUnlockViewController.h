@@ -25,6 +25,7 @@
 @property(weak, nonatomic) IBOutlet UIView *wordWall;
 @property(strong, nonatomic) IBOutlet UILongPressGestureRecognizer *targetedUserActionGesture;
 @property(weak, nonatomic) IBOutlet UIView *uiContainer;
+@property(weak, nonatomic) IBOutlet UIView *shareContainer;
 @property(weak, nonatomic) IBOutlet UIWebView *newsView;
 @property(weak, nonatomic) IBOutlet UIView *emergencyGeneratorContainer;
 @property(weak, nonatomic) IBOutlet UITextField *emergencyName;

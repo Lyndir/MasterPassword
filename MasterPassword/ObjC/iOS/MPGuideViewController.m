@@ -29,6 +29,11 @@
     return UIInterfaceOrientationPortrait;
 }
 
+- (BOOL)prefersStatusBarHidden {
+
+    return NO;
+}
+
 - (void)viewDidLoad {
 
     [super viewDidLoad];
@@ -43,6 +48,10 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    if (![super respondsToSelector:@selector(prefersStatusBarHidden)])
+        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
 
     inf(@"Guide will appear.");
     [super viewWillAppear:animated];
