@@ -1825,7 +1825,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="M0m-G9-hH0">
-                                <rect key="frame" x="122" y="345" width="51" height="31"/>
+                                <rect key="frame" x="136" y="345" width="51" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                             </switch>
@@ -2092,7 +2092,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="ilG-0h-SOb">
-                                                    <rect key="frame" x="261" y="6" width="51" height="31"/>
+                                                    <rect key="frame" x="251" y="6" width="51" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                     <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
@@ -2882,7 +2882,7 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="xmc-hs-riu">
-                                <rect key="frame" x="122" y="345" width="51" height="31"/>
+                                <rect key="frame" x="136" y="341" width="51" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                             </switch>
@@ -2908,20 +2908,35 @@ However, it means that anyone who finds your device unlocked can do the same.</s
     <resources>
         <image name="Square-bottom.png" width="551" height="58"/>
         <image name="avatar-0.png" width="110" height="110"/>
+        <image name="avatar-0.png" width="110" height="110"/>
+        <image name="background.png" width="568" height="568"/>
+        <image name="background.png" width="568" height="568"/>
+        <image name="background.png" width="568" height="568"/>
+        <image name="background.png" width="568" height="568"/>
+        <image name="background.png" width="568" height="568"/>
+        <image name="background.png" width="568" height="568"/>
         <image name="background.png" width="568" height="568"/>
         <image name="book.png" width="320" height="480"/>
         <image name="cloud.png" width="105" height="80"/>
         <image name="icon_action.png" width="32" height="32"/>
         <image name="icon_cancel.png" width="32" height="32"/>
+        <image name="icon_cancel.png" width="32" height="32"/>
+        <image name="icon_cancel.png" width="32" height="32"/>
+        <image name="icon_cancel.png" width="32" height="32"/>
         <image name="icon_edit.png" width="32" height="32"/>
+        <image name="icon_edit.png" width="32" height="32"/>
+        <image name="icon_find.png" width="32" height="32"/>
         <image name="icon_find.png" width="32" height="32"/>
         <image name="icon_gears.png" width="32" height="32"/>
         <image name="icon_person.png" width="32" height="32"/>
+        <image name="icon_person.png" width="32" height="32"/>
         <image name="icon_play.png" width="32" height="32"/>
+        <image name="icon_plus.png" width="32" height="32"/>
         <image name="icon_plus.png" width="32" height="32"/>
         <image name="icon_up.png" width="32" height="32"/>
         <image name="identity.png" width="82" height="80"/>
         <image name="page-deblock.png" width="305" height="400"/>
+        <image name="page-gorillas.png" width="305" height="400"/>
         <image name="page-gorillas.png" width="305" height="400"/>
         <image name="play.png" width="72" height="80"/>
         <image name="pull-down.png" width="60" height="10"/>
@@ -2930,15 +2945,39 @@ However, it means that anyone who finds your device unlocked can do the same.</s
         <image name="social-google+.png" width="44" height="44"/>
         <image name="social-twitter.png" width="44" height="44"/>
         <image name="tip_alert_black.png" width="235" height="81"/>
+        <image name="tip_alert_black.png" width="235" height="81"/>
+        <image name="tip_basic_black.png" width="210" height="60"/>
+        <image name="tip_basic_black.png" width="210" height="60"/>
+        <image name="tip_basic_black.png" width="210" height="60"/>
+        <image name="tip_basic_black.png" width="210" height="60"/>
+        <image name="tip_basic_black.png" width="210" height="60"/>
+        <image name="tip_basic_black.png" width="210" height="60"/>
         <image name="tip_basic_black.png" width="210" height="60"/>
         <image name="tip_basic_black_bottom_right.png" width="210" height="60"/>
+        <image name="tip_basic_black_bottom_right.png" width="210" height="60"/>
+        <image name="tip_basic_black_top.png" width="210" height="60"/>
+        <image name="tip_basic_black_top.png" width="210" height="60"/>
+        <image name="tip_basic_black_top.png" width="210" height="60"/>
         <image name="tip_basic_black_top.png" width="210" height="60"/>
         <image name="tip_basic_black_top_right.png" width="205" height="61"/>
         <image name="ui_button_standard_large.png" width="300" height="46"/>
+        <image name="ui_button_standard_large.png" width="300" height="46"/>
+        <image name="ui_list_first.png" width="300" height="35"/>
+        <image name="ui_list_first.png" width="300" height="35"/>
+        <image name="ui_list_first.png" width="300" height="35"/>
         <image name="ui_list_first.png" width="300" height="35"/>
         <image name="ui_list_last.png" width="300" height="35"/>
+        <image name="ui_list_last.png" width="300" height="35"/>
+        <image name="ui_list_last.png" width="300" height="35"/>
+        <image name="ui_list_last.png" width="300" height="35"/>
+        <image name="ui_list_middle.png" width="300" height="34"/>
+        <image name="ui_list_middle.png" width="300" height="34"/>
+        <image name="ui_list_middle.png" width="300" height="34"/>
         <image name="ui_list_middle.png" width="300" height="34"/>
         <image name="ui_panel_container.png" width="300" height="87"/>
+        <image name="ui_panel_container.png" width="300" height="87"/>
+        <image name="ui_panel_display.png" width="300" height="86"/>
+        <image name="ui_panel_display.png" width="300" height="86"/>
         <image name="ui_panel_display.png" width="300" height="86"/>
         <image name="ui_spinner.png" width="75" height="75"/>
         <image name="ui_textfield.png" width="158" height="34"/>
@@ -2951,8 +2990,8 @@ However, it means that anyone who finds your device unlocked can do the same.</s
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="jgo-j3-gbW"/>
-        <segue reference="hxY-aA-ngI"/>
-        <segue reference="5Im-dm-qfS"/>
-        <segue reference="9Bs-cD-ddF"/>
+        <segue reference="KIl-ZW-M7G"/>
+        <segue reference="rWT-Kr-cAs"/>
+        <segue reference="X2A-e4-krq"/>
     </inferredMetricsTieBreakers>
 </document>
