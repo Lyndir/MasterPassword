@@ -632,7 +632,7 @@
 
 #ifdef CRASHLYTICS
                         [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].rememberLogin boolValue] forKey:@"rememberLogin"];
-                        [[Crashlytics sharedInstance] setBoolValue:[self storeManager].cloudEnabled forKey:@"iCloud"];
+                        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].iCloudEnabled boolValue] forKey:@"iCloudEnabled"];
                         [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].iCloudDecided boolValue] forKey:@"iCloudDecided"];
                         [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].sendInfo boolValue] forKey:@"sendInfo"];
                         [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].helpHidden boolValue] forKey:@"helpHidden"];
@@ -648,8 +648,8 @@
 #ifdef TESTFLIGHT_SDK_VERSION
                         [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPConfig get].rememberLogin )
                                                              forKey:@"rememberLogin"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringB( [self storeManager].cloudEnabled )
-                                                             forKey:@"iCloud"];
+                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].iCloudEnabled )
+                                                             forKey:@"iCloudEnabled"];
                         [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPConfig get].iCloudDecided )
                                                              forKey:@"iCloudDecided"];
                         [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].sendInfo )
@@ -671,7 +671,7 @@
 #endif
         MPCheckpoint( MPCheckpointConfig, @{
                 @"rememberLogin"       : @([[MPConfig get].rememberLogin boolValue]),
-                @"iCloud"              : @([self storeManager].cloudEnabled),
+                @"iCloudEnabled"       : @([[MPiOSConfig get].iCloudEnabled boolValue]),
                 @"iCloudDecided"       : @([[MPConfig get].iCloudDecided boolValue]),
                 @"sendInfo"            : @([[MPiOSConfig get].sendInfo boolValue]),
                 @"helpHidden"          : @([[MPiOSConfig get].helpHidden boolValue]),

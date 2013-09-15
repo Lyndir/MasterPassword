@@ -336,9 +336,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager willLoadStoreIsCloud:(BOOL)isCloudStore {
 
-//    [manager setValue:@"C61DCF27-BD25-4CF1-AE8F-8B613DF8AB47" forKey:@"storeUUID"];
     NSManagedObjectContext *moc = [self mainManagedObjectContextIfReady];
-    NSLog( @"willLoadStoreIsCloud:%d mainMoc:%@", isCloudStore, moc);
     [moc performBlockAndWait:^{
         [moc saveToStore];
 
@@ -352,7 +350,6 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didLoadStoreForCoordinator:(NSPersistentStoreCoordinator *)coordinator
                      isCloud:(BOOL)isCloudStore {
 
-    NSLog( @"didLoadStoreForCoordinatorStores:%d isCloud:%d", [[coordinator persistentStores] count], isCloudStore );
     inf(@"Using iCloud? %@", @(isCloudStore));
     MPCheckpoint( MPCheckpointCloud, @{
             @"enabled" : @(isCloudStore)
@@ -385,7 +382,6 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     self.privateManagedObjectContext = privateManagedObjectContext;
     self.mainManagedObjectContext = mainManagedObjectContext;
-    NSLog( @"set mainMoc:%@", mainManagedObjectContext );
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreErrorCause)cause

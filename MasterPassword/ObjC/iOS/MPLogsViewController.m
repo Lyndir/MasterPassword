@@ -32,9 +32,11 @@
     [super viewDidLoad];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:NSUserDefaultsDidChangeNotification object:nil
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:
+                                                       queue:nil usingBlock:
             ^(NSNotification *note) {
-                self.levelControl.selectedSegmentIndex = [[MPiOSConfig get].traceMode boolValue]? 1: 0;
+                dispatch_async( dispatch_get_main_queue(), ^{
+                    self.levelControl.selectedSegmentIndex = [[MPiOSConfig get].traceMode boolValue]? 1: 0;
+                });
             }];
 }
 
