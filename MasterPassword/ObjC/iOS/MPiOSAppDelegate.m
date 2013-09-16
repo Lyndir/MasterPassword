@@ -596,8 +596,26 @@
     if (iCloudEnabled != cloudEnabled) {
         if ([[MPiOSConfig get].iCloudEnabled boolValue])
             [self.storeManager setCloudEnabledAndOverwriteCloudWithLocalIfConfirmed:^(void (^setConfirmationAnswer)(BOOL answer)) {
-                [PearlAlert showAlertWithTitle:@"Keep Sites?"
-                                       message:@"You can either revert to your old iCloud sites or overwrite them with your current sites."
+                __block NSUInteger siteCount = NSNotFound;
+                [MPAppDelegate_Shared managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
+                    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
+                    NSError *error = nil;
+                    if ((siteCount = [context countForFetchRequest:fetchRequest error:&error]) == NSNotFound) {
+                        wrn(@"Couldn't count current sites: %@", error);
+                        return;
+                    }
+                }];
+
+                // If we currently have no sites, don't bother asking to copy them.
+                if (siteCount == 0) {
+                    setConfirmationAnswer( NO );
+                    return;
+                }
+
+                // The current store has sites, ask the user if he wants to copy them to the cloud
+                [PearlAlert showAlertWithTitle:@"Copy Sites To iCloud?"
+                                       message:@"You can either switch to your old iCloud sites "
+                                                       @"or overwrite them with your current sites."
                                      viewStyle:UIAlertViewStyleDefault initAlert:nil
                              tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                                  if (buttonIndex == [alert cancelButtonIndex])
@@ -605,12 +623,29 @@
                                  if (buttonIndex == [alert firstOtherButtonIndex])
                                      setConfirmationAnswer( YES );
                              }
-                                   cancelTitle:@"Revert" otherTitles:@"Replace iCloud", nil];
+                                   cancelTitle:@"Use Old" otherTitles:@"Overwrite", nil];
             }];
         else
             [self.storeManager setCloudDisabledAndOverwriteLocalWithCloudIfConfirmed:^(void (^setConfirmationAnswer)(BOOL answer)) {
-                [PearlAlert showAlertWithTitle:@"Keep iCloud Sites?"
-                                       message:@"You can either revert to your old sites or overwrite them with your current iCloud sites."
+                __block NSUInteger siteCount = NSNotFound;
+                [MPAppDelegate_Shared managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
+                    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
+                    NSError *error = nil;
+                    if ((siteCount = [context countForFetchRequest:fetchRequest error:&error]) == NSNotFound) {
+                        wrn(@"Couldn't count current sites: %@", error);
+                        return;
+                    }
+                }];
+
+                // If we currently have no sites, don't bother asking to copy them.
+                if (siteCount == 0) {
+                    setConfirmationAnswer( NO );
+                    return;
+                }
+
+                [PearlAlert showAlertWithTitle:@"Copy iCloud Sites?"
+                                       message:@"You can either switch to the old sites on your device "
+                                                       @"or overwrite them with your current iCloud sites."
                                      viewStyle:UIAlertViewStyleDefault initAlert:nil
                              tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                                  if (buttonIndex == [alert cancelButtonIndex])
@@ -618,7 +653,7 @@
                                  if (buttonIndex == [alert firstOtherButtonIndex])
                                      setConfirmationAnswer( YES );
                              }
-                                   cancelTitle:@"Revert" otherTitles:@"Copy iCloud", nil];
+                                   cancelTitle:@"Use Old" otherTitles:@"Overwrite", nil];
             }];
     }
 
