@@ -246,27 +246,10 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         return YES;
     }
 
-    NSError *error = nil;
-    NSDictionary *oldLocalStoreOptions = @{
-            STORE_OPTIONS
-            NSReadOnlyPersistentStoreOption        : @YES,
-            NSInferMappingModelAutomaticallyOption : @YES
-    };
-    NSDictionary *newLocalStoreOptions = @{
-            STORE_OPTIONS
-            NSMigratePersistentStoresAutomaticallyOption : @YES,
-            NSInferMappingModelAutomaticallyOption       : @YES
-    };
-
     // Create the directory to hold the new local store.
-    if (![[NSFileManager defaultManager] createDirectoryAtPath:[self.storeManager URLForLocalStoreDirectory].path
-                                   withIntermediateDirectories:YES attributes:nil error:&error])
-    err(@"While creating directory for new local store: %@", error);
-
-    if (![self.storeManager migrateStore:oldLocalStoreURL withOptions:oldLocalStoreOptions
-                                 toStore:newLocalStoreURL withOptions:newLocalStoreOptions
-                                strategy:self.storeManager.migrationStrategy
-                                   error:nil cause:nil context:nil]) {
+    if (![self.storeManager migrateStore:oldLocalStoreURL withOptions:nil
+                                 toStore:newLocalStoreURL withOptions:nil
+                                strategy:0 error:nil cause:nil context:nil]) {
         self.storeManager.localStoreURL = oldLocalStoreURL;
         return NO;
     }
@@ -283,39 +266,9 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     }
 
     NSURL *newCloudStoreURL = [self.storeManager URLForCloudStore];
-    NSURL *newCloudContentURL = [self.storeManager URLForCloudContent];
-
-    NSError *error = nil;
-    NSDictionary *oldCloudStoreOptions = @{
-            STORE_OPTIONS
-            NSPersistentStoreUbiquitousContentNameKey : contentName,
-            NSPersistentStoreUbiquitousContentURLKey  : oldCloudContentURL,
-            NSInferMappingModelAutomaticallyOption    : @YES
-    };
-    NSDictionary *newCloudStoreOptions = @{
-            STORE_OPTIONS
-            NSPersistentStoreUbiquitousContentNameKey    : [self.storeManager valueForKey:@"contentName"],
-            NSPersistentStoreUbiquitousContentURLKey     : newCloudContentURL,
-            NSMigratePersistentStoresAutomaticallyOption : @YES,
-            NSInferMappingModelAutomaticallyOption       : @YES
-    };
-
-    // Create the directory to hold the new cloud store.
-    // This is only necessary if we want to try to rebuild the old store.  See comment above about how that failed.
-    if (![[NSFileManager defaultManager] createDirectoryAtPath:[oldCloudStoreURL URLByDeletingLastPathComponent].path
-                                   withIntermediateDirectories:YES attributes:nil error:&error])
-    err(@"While creating directory for old cloud store: %@", error);
-    if (![[NSFileManager defaultManager] createDirectoryAtPath:oldCloudContentURL.path
-                                   withIntermediateDirectories:YES attributes:nil error:&error])
-    err(@"While creating directory for old cloud content: %@", error);
-    if (![[NSFileManager defaultManager] createDirectoryAtPath:[self.storeManager URLForCloudStoreDirectory].path
-                                   withIntermediateDirectories:YES attributes:nil error:&error])
-    err(@"While creating directory for new cloud store: %@", error);
-
-    if (![self.storeManager migrateStore:oldCloudStoreURL withOptions:oldCloudStoreOptions
-                                 toStore:newCloudStoreURL withOptions:newCloudStoreOptions
-                                strategy:self.storeManager.migrationStrategy
-                                   error:nil cause:nil context:nil])
+    if (![self.storeManager migrateStore:oldCloudStoreURL withOptions:nil
+                                 toStore:newCloudStoreURL withOptions:nil
+                                strategy:0 error:nil cause:nil context:nil])
         return NO;
 
     inf(@"Successfully migrated to new cloud store.");
