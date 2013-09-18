@@ -17,7 +17,7 @@
 + (MPAppDelegate_Shared *)get {
 
 #if TARGET_OS_IPHONE
-    return (MPAppDelegate_Shared *)[UIApplication sharedApplication].delegate;
+    return (MPAppDelegate_Shared *)UIApp.delegate;
 #elif defined (__MAC_OS_X_VERSION_MIN_REQUIRED)
     return (MPAppDelegate_Shared *)[NSApplication sharedApplication].delegate;
 #else

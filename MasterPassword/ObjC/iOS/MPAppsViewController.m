@@ -61,7 +61,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+    [UIApp setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     MPCheckpoint( MPCheckpointApps, nil );
 
     [self.pageViewController setViewControllers:@[ [self.pageVCs objectAtIndex:1] ] direction:UIPageViewControllerNavigationDirectionForward
@@ -84,7 +84,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
 
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+    [UIApp setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
 
     [super viewWillDisappear:animated];
 }

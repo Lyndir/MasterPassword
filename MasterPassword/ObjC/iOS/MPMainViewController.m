@@ -122,9 +122,9 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
     if (![super respondsToSelector:@selector(prefersStatusBarHidden)])
-        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+        [UIApp setStatusBarHidden:NO withAnimation:animated? UIStatusBarAnimationSlide: UIStatusBarAnimationNone];
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
 
     MPElementEntity *activeElement = [self activeElementForMainThread];
     if (activeElement.user != [[MPiOSAppDelegate get] activeUserForMainThread])
@@ -149,11 +149,6 @@
 
     inf(@"Main will appear");
 
-    // Sometimes, the search bar gets stuck in some sort of first-responder mode that it can't get out of...
-    [[self.view.window findFirstResponderInHierarchy] resignFirstResponder];
-
-    // Needed for when we appear after a modal VC dismisses:
-    // We can't present until the other modal VC has been fully dismissed and presenting in -viewWillAppear: will fail.
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
         MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:moc];
         if ([MPAlgorithmDefault migrateUser:activeUser inContext:moc] && !self.suppressOutdatedAlert)
@@ -908,7 +903,7 @@
             return NO;
         }
 
-        [[UIApplication sharedApplication] openURL:[request URL]];
+        [UIApp openURL:[request URL]];
         return NO;
     }
 

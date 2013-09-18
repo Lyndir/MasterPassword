@@ -207,9 +207,9 @@
 - (void)viewWillAppear:(BOOL)animated {
 
     inf(@"Lock screen will appear");
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
     if (![super respondsToSelector:@selector(prefersStatusBarHidden)])
-        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+        [UIApp setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
 
     [[MPiOSAppDelegate get] signOutAnimated:NO];
 
@@ -1031,7 +1031,7 @@
  navigationType:(UIWebViewNavigationType)navigationType {
 
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
-        [[UIApplication sharedApplication] openURL:[request URL]];
+        [UIApp openURL:[request URL]];
         return NO;
     }
 
@@ -1130,17 +1130,17 @@
 
         if (buttonIndex == [sheet firstOtherButtonIndex]) {
             // Google+
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://plus.google.com/116256327773442623984/about"]];
+            [UIApp openURL:[NSURL URLWithString:@"https://plus.google.com/116256327773442623984/about"]];
             return;
         }
         if (buttonIndex == [sheet firstOtherButtonIndex] + 1) {
             // Facebook
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.facebook.com/masterpasswordapp"]];
+            [UIApp openURL:[NSURL URLWithString:@"https://www.facebook.com/masterpasswordapp"]];
             return;
         }
         if (buttonIndex == [sheet firstOtherButtonIndex] + 2) {
             // Twitter
-            UIApplication *application = [UIApplication sharedApplication];
+            UIApplication *application = UIApp;
             for (NSString *candidate in @[
                     @"twitter://user?screen_name=%@", // Twitter
                     @"tweetbot:///user_profile/%@", // TweetBot
@@ -1172,7 +1172,7 @@
         }
         if (buttonIndex == [sheet firstOtherButtonIndex] + 4) {
             // GitHub
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/Lyndir/MasterPassword"]];
+            [UIApp openURL:[NSURL URLWithString:@"https://github.com/Lyndir/MasterPassword"]];
             return;
         }
     }                  cancelTitle:[PearlStrings get].commonButtonCancel

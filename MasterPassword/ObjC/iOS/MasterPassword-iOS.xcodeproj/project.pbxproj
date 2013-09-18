@@ -256,6 +256,7 @@
 		DAD3127215528CD200A3F9ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAD312BF1552A1BD00A3F9ED /* libLocalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD3127115528CD200A3F9ED /* libLocalytics.a */; };
 		DAD312C21552A22700A3F9ED /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD312C01552A20800A3F9ED /* libsqlite3.dylib */; };
+		DAE1EF2217E942DE00BC0086 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAE1EF2417E942DE00BC0086 /* Localizable.strings */; };
 		DAEBC45314F6364500987BF6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
 		DAFC5656172C573B00CB5CC5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAFC5683172C57EC00CB5CC5 /* IASKAppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFC5665172C57EC00CB5CC5 /* IASKAppSettingsViewController.m */; };
@@ -1173,6 +1174,7 @@
 		DACA29BB1705E2DE002C6C22 /* UIColor+HSV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+HSV.m"; sourceTree = "<group>"; };
 		DAD3127115528CD200A3F9ED /* libLocalytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLocalytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAD312C01552A20800A3F9ED /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		DAE1EF2317E942DE00BC0086 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DAEBC45214F6364500987BF6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DAFC5655172C573B00CB5CC5 /* libInAppSettingsKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libInAppSettingsKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAFC5659172C573B00CB5CC5 /* InAppSettingsKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "InAppSettingsKit-Prefix.pch"; sourceTree = "<group>"; };
@@ -2356,6 +2358,7 @@
 				DACA26971705DF81002C6C22 /* Google+ */,
 				DACA26951705DF81002C6C22 /* Localytics */,
 				DACA26931705DF81002C6C22 /* TestFlight */,
+				DAE1EF2417E942DE00BC0086 /* Localizable.strings */,
 			);
 			name = Resources;
 			path = ../../Resources;
@@ -3200,6 +3203,7 @@
 				DABD3FCB1712446200CF925C /* cloud@2x.png in Resources */,
 				DABD3FCE1714F45C00CF925C /* identity.png in Resources */,
 				DABD3FCF1714F45C00CF925C /* identity@2x.png in Resources */,
+				DAE1EF2217E942DE00BC0086 /* Localizable.strings in Resources */,
 				DA5A09DF171A70E4005284AB /* play.png in Resources */,
 				DA5A09E0171A70E4005284AB /* play@2x.png in Resources */,
 				DA5A09EA171BB0F7005284AB /* unlocked.png in Resources */,
@@ -3437,6 +3441,14 @@
 				DABD3BFB1711E2DC00CF925C /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		DAE1EF2417E942DE00BC0086 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DAE1EF2317E942DE00BC0086 /* en */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		DAFE45FA15039823003ABA7C /* Pearl.strings */ = {

@@ -24,14 +24,19 @@
     return NO;
 }
 
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
-
-    return UIInterfaceOrientationPortrait;
-}
-
 - (BOOL)prefersStatusBarHidden {
 
     return NO;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+
+    return UIStatusBarStyleLightContent;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+
+    return UIInterfaceOrientationPortrait;
 }
 
 - (void)viewDidLoad {
@@ -43,6 +48,7 @@
     self.usernameTip.hidden = NO;
     self.typeTip.hidden = NO;
     self.toolTip.hidden = NO;
+    self.alertTip.hidden = NO;
 
     self.tickCount = 30;
 }
@@ -50,27 +56,44 @@
 - (void)viewWillAppear:(BOOL)animated {
 
     [self.navigationController setNavigationBarHidden:YES animated:animated];
-    if (![super respondsToSelector:@selector(prefersStatusBarHidden)])
-        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
 
     inf(@"Guide will appear.");
     [super viewWillAppear:animated];
 
     if (self.navigationController) {
         // Via setup
-        [self.navigationController setNavigationBarHidden:YES animated:animated];
         self.smallPlayButton.hidden = YES;
+
         self.siteNameTip.alpha = 0;
         self.content.alpha = 0;
         self.content.frame = CGRectSetHeight( self.content.frame, 180 );
         self.contentTip.alpha = 0;
+        self.contentButton.highlighted = NO;
         self.usernameTip.alpha = 0;
+        self.usernameButton.highlighted = NO;
         self.typeTip.alpha = 0;
+        self.typeButton.highlighted = NO;
         self.toolTip.alpha = 0;
+        self.toolButton.highlighted = NO;
+        self.alertTip.alpha = 0;
     }
     else {
         // Via segue
         self.largePlayButton.hidden = YES;
+
+        self.siteNameTip.alpha = 1;
+        self.content.alpha = 1;
+        self.content.frame = CGRectSetHeight( self.content.frame, 231 );
+        self.contentTip.alpha = 1;
+        self.contentTipText.text = @"Tap to copy";
+        self.contentButton.highlighted = NO;
+        self.usernameTip.alpha = 1;
+        self.usernameButton.highlighted = NO;
+        self.typeTip.alpha = 1;
+        self.typeButton.highlighted = NO;
+        self.toolTip.alpha = 0;
+        self.toolButton.highlighted = NO;
+        self.alertTip.alpha = 1;
     }
 }
 
@@ -86,7 +109,6 @@
 - (void)viewWillDisappear:(BOOL)animated {
 
     inf(@"Guide will disappear.");
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
     [super viewWillDisappear:animated];
 }
 
@@ -132,6 +154,7 @@
             self.usernameTip.alpha = 0;
             self.typeTip.alpha = 0;
             self.toolTip.alpha = 0;
+            self.alertTip.alpha = 0;
         }];
     }
     else if (self.currentTick < 10) {
@@ -139,9 +162,11 @@
             self.siteNameTip.alpha = 0;
             self.content.alpha = 1;
             self.contentTip.alpha = 1;
+            self.contentTipText.text = @"Your password";
             self.usernameTip.alpha = 0;
             self.typeTip.alpha = 0;
             self.toolTip.alpha = 0;
+            self.alertTip.alpha = 0;
         }];
     }
     else if (self.currentTick < 15) {
@@ -149,12 +174,13 @@
             self.siteNameTip.alpha = 0;
             self.content.alpha = 1;
             self.contentTip.alpha = 1;
-            self.contentButton.highlighted = YES;
             self.contentTipText.text = @"Tap to copy";
+            self.contentButton.highlighted = YES;
             self.usernameTip.alpha = 0;
             self.typeTip.alpha = 0;
             self.toolButton.highlighted = NO;
             self.toolTip.alpha = 0;
+            self.alertTip.alpha = 0;
         }];
     }
     else if (self.currentTick < 20) {
@@ -164,11 +190,11 @@
             self.content.frame = CGRectSetHeight( self.content.frame, 231 );
             self.contentTip.alpha = 0;
             self.contentButton.highlighted = NO;
-            self.contentTipText.text = @"Use this password";
             self.usernameButton.highlighted = YES;
             self.usernameTip.alpha = 1;
             self.typeTip.alpha = 0;
             self.toolTip.alpha = 0;
+            self.alertTip.alpha = 0;
         }];
     }
     else if (self.currentTick < 25) {
@@ -181,6 +207,7 @@
             self.typeTip.alpha = 1;
             self.typeButton.highlighted = YES;
             self.toolTip.alpha = 0;
+            self.alertTip.alpha = 0;
         }];
     }
     else if (self.currentTick < 30) {
@@ -193,6 +220,7 @@
             self.typeButton.highlighted = NO;
             self.toolButton.highlighted = YES;
             self.toolTip.alpha = 1;
+            self.alertTip.alpha = 0;
             self.contentText.text = @"XupuMajf4'Hafh";
         }];
     }
@@ -209,6 +237,7 @@
             self.typeTip.alpha = 1;
             self.toolButton.highlighted = NO;
             self.toolTip.alpha = 0;
+            self.alertTip.alpha = 1;
         }];
     }
 }

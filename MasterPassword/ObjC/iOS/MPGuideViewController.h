@@ -25,6 +25,7 @@
 @property(weak, nonatomic) IBOutlet UITextField *contentText;
 @property(weak, nonatomic) IBOutlet UIButton *largePlayButton;
 @property(weak, nonatomic) IBOutlet UIButton *smallPlayButton;
+@property(weak, nonatomic) IBOutlet UIView *alertTip;
 
 - (IBAction)play;
 - (IBAction)close;

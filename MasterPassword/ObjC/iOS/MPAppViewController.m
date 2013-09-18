@@ -26,7 +26,7 @@
             @"app" : @"gorillas"
     } );
 
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://itunes.apple.com/app/lyndir/gorillas/id302275459?mt=8"]];
+    [UIApp openURL:[NSURL URLWithString:@"http://itunes.apple.com/app/lyndir/gorillas/id302275459?mt=8"]];
 }
 
 - (IBAction)deblock:(UIButton *)sender {
@@ -35,7 +35,7 @@
             @"app" : @"deblock"
     } );
 
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://itunes.apple.com/app/lyndir/deblock/id325058485?mt=8"]];
+    [UIApp openURL:[NSURL URLWithString:@"http://itunes.apple.com/app/lyndir/deblock/id325058485?mt=8"]];
 }
 
 @end

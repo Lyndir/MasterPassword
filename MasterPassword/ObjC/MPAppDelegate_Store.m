@@ -103,13 +103,13 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                                                        delegate:self];
 
 #if TARGET_OS_IPHONE
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification object:[UIApplication sharedApplication]
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification object:UIApp
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
                 [[self mainManagedObjectContext] saveToStore];
             }];
     [[NSNotificationCenter defaultCenter]
-            addObserverForName:UIApplicationWillResignActiveNotification object:[UIApplication sharedApplication]
+            addObserverForName:UIApplicationWillResignActiveNotification object:UIApp
                          queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
                 [[self mainManagedObjectContext] saveToStore];

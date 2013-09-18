@@ -1,0 +1,11 @@
+/* 
+  MasterPassword.strings
+  MasterPassword-iOS
+
+  Created by Maarten Billemont on 2013-09-17.
+  Copyright (c) 2013 Lyndir. All rights reserved.
+*/
+"review.message"                            =
+"Has %@ been useful to you?\
+\
+It would mean a lot if you could review this version and tell your friends about its benefits.";
