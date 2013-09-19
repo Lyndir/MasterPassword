@@ -19,6 +19,9 @@ isCheckedOut() {
     ! git submodule status | grep -q "^-[^ ]* $modulePath"
 }
 
+# git submodule sync -- A bug causes this to init ALL external dependencies.
+git submodule sync $(git submodule status | awk '/^ / { print $2 }')
+
 
 # Check out our missing dependencies
 for dependency in "${dependencies[@]}"; do
@@ -29,8 +32,6 @@ done
 
 
 # Update our modules
-# git submodule sync -- A bug causes this to init ALL external dependencies.
-git submodule sync $(git submodule status | awk '/^ / { print $2 }')
 git submodule update
 
 

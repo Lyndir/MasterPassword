@@ -3,7 +3,7 @@
 	url = git://github.com/Lyndir/Pearl.git
 [submodule "External/InAppSettingsKit"]
 	path = External/InAppSettingsKit
-	url = git://github.com/futuretap/InAppSettingsKit.git
+	url = git://github.com/lhunath/InAppSettingsKit.git
 [submodule "External/FontReplacer"]
 	path = External/FontReplacer
 	url = git://github.com/0xced/FontReplacer.git
