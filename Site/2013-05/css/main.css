@@ -59,6 +59,13 @@ h1, h2, h3, h4 {
     display: block;
     height: 32px;
 }
+ul.pictures {
+    list-style: none;
+}
+ul.pictures li {
+    display: inline-block;
+    padding: 1ex;
+}
 
 header {
     position: relative;
