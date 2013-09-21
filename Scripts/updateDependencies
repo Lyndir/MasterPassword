@@ -4,8 +4,6 @@ cd "${BASH_SOURCE%/*}/.."
 shopt -s extglob
 
 
-## LisuUI
-#
 ## Submodules that need to be checked out.
 dependencies=( External/{FontReplacer,InAppSettingsKit,Pearl{,:External/jrswizzle,:External/uicolor-utilities,:External/iOSPorts},google-plus-ios-sdk,UbiquityStoreManager,RHStatusItemView} )
 
