@@ -166,7 +166,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     MPKey *recoverKey = newKey;
 #ifdef PEARL_UIKIT
-    PearlAlert *activityAlert = [PearlAlert showActivityWithTitle:PearlString( @"Migrating %d sites...", [user.elements count] )];
+    PearlAlert *activityAlert = [PearlAlert showActivityWithTitle:PearlString( @"Migrating %ld sites...", (long)[user.elements count] )];
 #endif
 
     for (MPElementEntity *element in user.elements) {

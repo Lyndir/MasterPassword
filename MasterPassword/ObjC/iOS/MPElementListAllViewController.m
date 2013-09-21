@@ -142,9 +142,9 @@
     }
 
     [PearlAlert showAlertWithTitle:@"Sites Upgraded"
-                           message:PearlString( @"This upgrade has caused %d passwords to change.\n"
+                           message:PearlString( @"This upgrade has caused %lu passwords to change.\n"
                                    @"To make updating the actual passwords of these accounts easier, "
-                                   @"you can email a summary of these changes to yourself.", [changes count] )
+                                   @"you can email a summary of these changes to yourself.", (unsigned long)[changes count] )
                          viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
         if (buttonIndex == [alert cancelButtonIndex])
             return;

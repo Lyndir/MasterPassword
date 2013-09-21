@@ -10,7 +10,7 @@
 #import <MessageUI/MessageUI.h>
 
 #import "MPAppDelegate_Shared.h"
-#import <GooglePlus/GPPShare.h>
+#import <GooglePlus/GooglePlus.h>
 
 @interface MPiOSAppDelegate : MPAppDelegate_Shared
 

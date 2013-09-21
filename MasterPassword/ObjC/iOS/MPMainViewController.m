@@ -237,7 +237,7 @@
                      forState:UIControlStateNormal];
 
     if ([activeElement isKindOfClass:[MPElementGeneratedEntity class]])
-        self.passwordCounter.text = PearlString( @"%u", ((MPElementGeneratedEntity *)activeElement).counter );
+        self.passwordCounter.text = PearlString( @"%lu", (unsigned long)((MPElementGeneratedEntity *)activeElement).counter );
 
     self.contentField.enabled = NO;
     self.contentField.text = @"";
@@ -762,7 +762,7 @@
 //#endif
 
             default: {
-                wrn(@"Unsupported action: %u", buttonIndex - [sheet firstOtherButtonIndex]);
+                wrn(@"Unsupported action: %ld", (long)(buttonIndex - [sheet firstOtherButtonIndex]));
                 break;
             }
         }

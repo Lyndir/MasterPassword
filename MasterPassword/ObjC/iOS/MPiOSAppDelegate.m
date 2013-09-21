@@ -10,7 +10,6 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "IASKSettingsReader.h"
-#import <GooglePlus/GPPSignIn.h>
 
 @interface MPiOSAppDelegate()
 
@@ -294,8 +293,8 @@
             dispatch_group_enter( userPasswordGroup );
             dispatch_async( dispatch_get_main_queue(), ^{
                 [PearlAlert showAlertWithTitle:PearlString( @"Master Password for\n%@", userName )
-                                       message:PearlString( @"Imports %d sites, overwriting %d.", importCount,
-                                               deleteCount )
+                                       message:PearlString( @"Imports %lu sites, overwriting %lu.",
+                                                           (unsigned long)importCount, (unsigned long)deleteCount )
                                      viewStyle:UIAlertViewStyleSecureTextInput
                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                     @try {

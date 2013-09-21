@@ -133,7 +133,7 @@
                     return (MPElementType)NSNotFound;
 
                 default: {
-                    Throw(@"Unsupported row: %d, when selecting generated element type.", indexPath.row);
+                    Throw(@"Unsupported row: %ld, when selecting generated element type.", (long)indexPath.row);
                 }
             }
         }
@@ -151,13 +151,13 @@
                     return (MPElementType)NSNotFound;
 
                 default: {
-                    Throw(@"Unsupported row: %d, when selecting stored element type.", indexPath.row);
+                    Throw(@"Unsupported row: %ld, when selecting stored element type.", (long)indexPath.row);
                 }
             }
         }
 
         default:
-            Throw(@"Unsupported section: %d, when selecting element type.", indexPath.section);
+            Throw(@"Unsupported section: %ld, when selecting element type.", (long)indexPath.section);
     }
 }
 

@@ -90,7 +90,8 @@
     alertAvatar.layer.shadowOpacity = 1;
     alertAvatar.layer.shadowRadius = 5;
     alertAvatar.backgroundColor = [UIColor clearColor];
-    [alertAvatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%d", user.avatar )] forState:UIControlStateNormal];
+    [alertAvatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%lu", (unsigned long)user.avatar )]
+                           forState:UIControlStateNormal];
 
     UILabel *alertNameLabel = [self.nameLabel cloneAddedTo:container];
     alertNameLabel.center = alertAvatar.center;
@@ -136,7 +137,7 @@
     self.emergencyGeneratorContainer.hidden = YES;
     self.emergencyQueue = [NSOperationQueue new];
     [self.emergencyCounterStepper addTargetBlock:^(id sender, UIControlEvents event) {
-        self.emergencyCounter.text = PearlString( @"%d", (NSUInteger)self.emergencyCounterStepper.value );
+        self.emergencyCounter.text = PearlString( @"%lu", (unsigned long)self.emergencyCounterStepper.value );
 
         [self updateEmergencyPassword];
     }                           forControlEvents:UIControlEventValueChanged];
@@ -343,7 +344,7 @@
     avatar.backgroundColor = [UIColor clearColor];
     avatar.tag = user.avatar;
 
-    [avatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%u", user.avatar )]
+    [avatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%lu", (unsigned long)user.avatar )]
                       forState:UIControlStateNormal];
     [avatar setSelectionInSuperviewCandidate:YES isClearable:YES];
     [avatar onHighlightOrSelect:^(BOOL highlighted, BOOL selected) {
@@ -881,7 +882,7 @@
         case 5:
             return MPElementTypeGeneratedPIN;
         default:
-            Throw(@"Unsupported type index: %d", self.emergencyTypeControl.selectedSegmentIndex);
+            Throw(@"Unsupported type index: %ld", (long)self.emergencyTypeControl.selectedSegmentIndex);
     }
 }
 

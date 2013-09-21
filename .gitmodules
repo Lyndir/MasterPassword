@@ -13,3 +13,6 @@
 [submodule "External/RHStatusItemView"]
 	path = External/RHStatusItemView
 	url = git://github.com/lhunath/RHStatusItemView.git
+[submodule "External/DCIntrospect"]
+	path = External/DCIntrospect
+	url = https://github.com/domesticcatsoftware/DCIntrospect.git

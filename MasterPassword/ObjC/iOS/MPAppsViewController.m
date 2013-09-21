@@ -37,7 +37,7 @@
     UIViewController *vc;
     @try {
         for (NSUInteger p = 0;
-             (vc = [self.storyboard instantiateViewControllerWithIdentifier:PearlString( @"MPAppViewController_%u", p )]);
+             (vc = [self.storyboard instantiateViewControllerWithIdentifier:PearlString( @"MPAppViewController_%lu", (long)p )]);
              ++p)
             [self.pageVCs addObject:vc];
     }

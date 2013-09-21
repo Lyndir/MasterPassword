@@ -6,7 +6,6 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import <objc/runtime.h>
 #import "MPAppDelegate_Store.h"
 
 #if TARGET_OS_IPHONE
@@ -141,11 +140,10 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         return;
 
     inf(@"Local store migration level: %d (current %d)", (signed)migrationLevel, (signed)MPMigrationLevelLocalStoreCurrent);
-    if (migrationLevel <= MPMigrationLevelLocalStoreV1)
-        if (![self migrateV1LocalStore]) {
-            inf(@"Failed to migrate old V1 to new local store.");
-            return;
-        }
+    if (migrationLevel <= MPMigrationLevelLocalStoreV1) if (![self migrateV1LocalStore]) {
+        inf(@"Failed to migrate old V1 to new local store.");
+        return;
+    }
 
     [[NSUserDefaults standardUserDefaults] setInteger:MPMigrationLevelLocalStoreCurrent forKey:MPMigrationLevelLocalStoreKey];
     inf(@"Successfully migrated old to new local store.");
@@ -284,7 +282,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager log:(NSString *)message {
 
-    dbg(@"[StoreManager] %@", message);
+    inf(@"[StoreManager] %@", message);
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager willLoadStoreIsCloud:(BOOL)isCloudStore {
@@ -344,7 +342,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     MPCheckpoint( MPCheckpointMPErrorUbiquity, @{
             @"cause"        : @(cause),
             @"error.code"   : @(error.code),
-            @"error.domain" : NilToNSNull(error.domain)
+            @"error.domain" : NilToNSNull(error.domain),
+            @"error.reason" : NilToNSNull(IfNotNilElse( [error localizedFailureReason], [error localizedDescription] )),
     } );
 }
 

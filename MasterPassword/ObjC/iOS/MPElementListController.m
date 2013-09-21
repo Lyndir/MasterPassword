@@ -177,7 +177,7 @@
     if (section == 1)
         return (NSInteger)[[[self.fetchedResultsControllerByUses sections] lastObject] numberOfObjects];
 
-    Throw(@"Unsupported section: %d", section);
+    Throw(@"Unsupported section: %ld", (long)section);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -196,8 +196,9 @@
     MPElementEntity *element = [self elementForTableIndexPath:indexPath];
 
     cell.textLabel.text = element.name;
-    cell.detailTextLabel.text = PearlString( @"%d views, last on %@: %@",
-            element.uses, [self.dateFormatter stringFromDate:element.lastUsed], [element.algorithm shortNameOfType:element.type] );
+    cell.detailTextLabel.text = PearlString( @"%lu views, last on %@: %@",
+            (unsigned long)element.uses, [self.dateFormatter stringFromDate:element.lastUsed],
+                                            [element.algorithm shortNameOfType:element.type] );
 }
 
 - (NSIndexPath *)tableIndexPathForFetchController:(NSFetchedResultsController *)fetchedResultsController
@@ -224,7 +225,7 @@
     if (indexPath.section == 1)
         return [self.fetchedResultsControllerByUses objectAtIndexPath:[self fetchedIndexPathForTableIndexPath:indexPath]];
 
-    Throw(@"Unsupported section: %d", indexPath.section);
+    Throw(@"Unsupported section: %ld", (long)indexPath.section);
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -240,7 +241,7 @@
     if (section == 1)
         return @"Most Commonly Used";
 
-    Throw(@"Unsupported section: %d", section);
+    Throw(@"Unsupported section: %ld", (long)section);
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {

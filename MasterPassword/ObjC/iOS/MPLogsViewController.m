@@ -116,7 +116,7 @@
                     continue;
                 }
 
-                storeDescription = PearlString( @"%@: %dU, %dS", storeDescription, userCount, siteCount );
+                storeDescription = PearlString( @"%@: %luU, %luS", storeDescription, (unsigned long)userCount, (unsigned long)siteCount );
             }
             @catch (NSException *exception) {
                 wrn(@"Couldn't describe store %@: %@", storeDescription, exception);
