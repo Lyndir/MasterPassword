@@ -3824,7 +3824,10 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Maarten Billemont (HL3Q45LX9N)";
-				EXCLUDED_SOURCE_FILE_NAMES = "libTestFlight.a,libDCIntrospect.a";
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					libTestFlight.a,
+					libDCIntrospect.a,
+				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6C6B84DD-9D8F-4321-BD77-5F737DBE1778";
