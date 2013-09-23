@@ -100,7 +100,7 @@
                 self.suppressOutdatedAlert = NO;
                 [self updateAnimated:NO];
 
-                [[PearlSheet activeSheets] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [[[PearlSheet activeSheets] copy] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     [obj cancelSheetAnimated:NO];
                 }];
                 if (![self.navigationController presentedViewController])
