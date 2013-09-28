@@ -88,7 +88,7 @@
     NSFetchRequest *sitesFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
     for (NSURL *cloudStoreURL in cloudStores) {
         NSString *storeUUID = [[cloudStoreURL URLByDeletingPathExtension] lastPathComponent];
-        for (NSDictionary *cloudStoreOptions in [cloudStores objectForKey:cloudStoreURL]) {
+        for (NSDictionary *cloudStoreOptions in cloudStores[cloudStoreURL]) {
             NSError *error = nil;
             NSPersistentStore *store = nil;
             NSUInteger firstDash = [storeUUID rangeOfString:@"-" options:0].location;
@@ -127,7 +127,7 @@
                     storePSC = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
                 }
 
-                [stores setObject:cloudStoreOptions forKey:storeDescription];
+                stores[storeDescription] = cloudStoreOptions;
             }
         }
     }

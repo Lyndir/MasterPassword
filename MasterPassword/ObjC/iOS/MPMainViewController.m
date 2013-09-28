@@ -94,7 +94,7 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
-                BOOL animated = [[note.userInfo objectForKey:@"animated"] boolValue];
+                BOOL animated = [(note.userInfo)[@"animated"] boolValue];
 
                 _activeElementOID = nil;
                 self.suppressOutdatedAlert = NO;
@@ -294,7 +294,7 @@
 
 - (void)toggleUserAnimated:(BOOL)animated {
 
-    [MPiOSConfig get].siteInfoHidden = PearlBool(!self.siteInfoHidden);
+    [MPiOSConfig get].siteInfoHidden = @(!self.siteInfoHidden);
     self.siteInfoHidden = [[MPiOSConfig get].siteInfoHidden boolValue];
     [self updateUserHiddenAnimated:animated];
 }

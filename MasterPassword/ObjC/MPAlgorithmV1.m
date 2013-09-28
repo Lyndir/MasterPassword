@@ -70,7 +70,7 @@
     // Determine the cipher from the first seed byte.
     NSAssert([seed length], @"Missing seed.");
     NSArray *typeCiphers = [[MPTypes_ciphers valueForKey:[self classNameOfType:type]] valueForKey:[self nameOfType:type]];
-    NSString *cipher = [typeCiphers objectAtIndex:seedBytes[0] % [typeCiphers count]];
+    NSString *cipher = typeCiphers[seedBytes[0] % [typeCiphers count]];
     trc(@"type %@, ciphers: %@, selected: %@", [self nameOfType:type], typeCiphers, cipher);
 
     // Encode the content, character by character, using subsequent seed bytes and the cipher.

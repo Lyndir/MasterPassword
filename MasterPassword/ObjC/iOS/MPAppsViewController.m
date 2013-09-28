@@ -64,7 +64,7 @@
     [UIApp setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     MPCheckpoint( MPCheckpointApps, nil );
 
-    [self.pageViewController setViewControllers:@[ [self.pageVCs objectAtIndex:1] ] direction:UIPageViewControllerNavigationDirectionForward
+    [self.pageViewController setViewControllers:@[ (self.pageVCs)[1] ] direction:UIPageViewControllerNavigationDirectionForward
                                        animated:NO completion:nil];
 
     [super viewWillAppear:animated];
@@ -76,7 +76,7 @@
     [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Apps"];
 #endif
     
-    [self.pageViewController setViewControllers:@[ [self.pageVCs objectAtIndex:0] ] direction:UIPageViewControllerNavigationDirectionForward
+    [self.pageViewController setViewControllers:@[ (self.pageVCs)[0] ] direction:UIPageViewControllerNavigationDirectionForward
                                        animated:YES completion:nil];
 
     [super viewDidAppear:animated];
@@ -103,14 +103,14 @@
       viewControllerBeforeViewController:(UIViewController *)viewController {
 
     NSUInteger vcIndex = [self.pageVCs indexOfObject:viewController];
-    return [self.pageVCs objectAtIndex:(vcIndex + [self.pageVCs count] - 1) % self.pageVCs.count];
+    return (self.pageVCs)[(vcIndex + [self.pageVCs count] - 1) % self.pageVCs.count];
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController
        viewControllerAfterViewController:(UIViewController *)viewController {
 
     NSUInteger vcIndex = [self.pageVCs indexOfObject:viewController];
-    return [self.pageVCs objectAtIndex:(vcIndex + 1) % self.pageVCs.count];
+    return (self.pageVCs)[(vcIndex + 1) % self.pageVCs.count];
 }
 
 - (IBAction)exit {

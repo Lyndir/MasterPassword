@@ -365,7 +365,7 @@
 
     }        options:0];
 
-    [self.avatarToUserOID setObject:NilToNSNull([user objectID]) forKey:[NSValue valueWithNonretainedObject:avatar]];
+    (self.avatarToUserOID)[[NSValue valueWithNonretainedObject:avatar]] = NilToNSNull([user objectID]);
 
     if ([_selectedUserOID isEqual:[user objectID]])
         avatar.selected = YES;
@@ -625,7 +625,7 @@
 - (void)initializeWordLabel:(UILabel *)wordLabel {
 
     wordLabel.alpha = 0.05 + (random() % 35) / 100.0F;
-    wordLabel.text = [self.wordList objectAtIndex:(NSUInteger)random() % [self.wordList count]];
+    wordLabel.text = (self.wordList)[(NSUInteger)random() % [self.wordList count]];
 }
 
 - (void)setPasswordTip:(NSString *)string {
@@ -686,7 +686,7 @@
 
 - (MPUserEntity *)userForAvatar:(UIButton *)avatar inContext:(NSManagedObjectContext *)context {
 
-    NSManagedObjectID *userOID = NSNullToNil([self.avatarToUserOID objectForKey:[NSValue valueWithNonretainedObject:avatar]]);
+    NSManagedObjectID *userOID = NSNullToNil((self.avatarToUserOID)[[NSValue valueWithNonretainedObject:avatar]]);
     if (!userOID)
         return nil;
 
@@ -707,7 +707,7 @@
 
         if (active) {
             rotate.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-            rotate.fromValue = [NSNumber numberWithFloat:0];
+            rotate.fromValue = @0.0;
             rotate.repeatCount = MAXFLOAT;
         }
         else {
@@ -741,12 +741,12 @@
             toShadowColorAnimation.fillMode = kCAFillModeForwards;
 
             CABasicAnimation *toShadowOpacityAnimation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
-            toShadowOpacityAnimation.toValue = PearlFloat(0.2);
+            toShadowOpacityAnimation.toValue = @0.2f;
             toShadowOpacityAnimation.duration = 0.5f;
 
             CABasicAnimation *pulseShadowOpacityAnimation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
-            pulseShadowOpacityAnimation.fromValue = PearlFloat(0.2);
-            pulseShadowOpacityAnimation.toValue = PearlFloat(0.6);
+            pulseShadowOpacityAnimation.fromValue = @0.2f;
+            pulseShadowOpacityAnimation.toValue = @0.6f;
             pulseShadowOpacityAnimation.beginTime = 0.5f;
             pulseShadowOpacityAnimation.duration = 2.0f;
             pulseShadowOpacityAnimation.autoreverses = YES;
@@ -767,7 +767,7 @@
             toShadowColorAnimation.duration = 0.5f;
 
             CABasicAnimation *toShadowOpacityAnimation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
-            toShadowOpacityAnimation.toValue = PearlFloat(1);
+            toShadowOpacityAnimation.toValue = @1.0f;
             toShadowOpacityAnimation.duration = 0.5f;
 
             CAAnimationGroup *group = [[CAAnimationGroup alloc] init];

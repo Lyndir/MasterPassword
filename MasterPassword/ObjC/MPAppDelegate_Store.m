@@ -608,12 +608,12 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     // Import new sites.
     for (NSArray *siteElements in importedSiteElements) {
-        NSDate *lastUsed = [[NSDateFormatter rfc3339DateFormatter] dateFromString:[siteElements objectAtIndex:0]];
-        NSUInteger uses = (unsigned)[[siteElements objectAtIndex:1] integerValue];
-        MPElementType type = (MPElementType)[[siteElements objectAtIndex:2] integerValue];
-        NSUInteger version = (unsigned)[[siteElements objectAtIndex:3] integerValue];
-        NSString *name = [siteElements objectAtIndex:4];
-        NSString *exportContent = [siteElements objectAtIndex:5];
+        NSDate *lastUsed = [[NSDateFormatter rfc3339DateFormatter] dateFromString:siteElements[0]];
+        NSUInteger uses = (unsigned)[siteElements[1] integerValue];
+        MPElementType type = (MPElementType)[siteElements[2] integerValue];
+        NSUInteger version = (unsigned)[siteElements[3] integerValue];
+        NSString *name = siteElements[4];
+        NSString *exportContent = siteElements[5];
 
         // Create new site.
         MPElementEntity

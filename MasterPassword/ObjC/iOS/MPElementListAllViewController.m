@@ -117,10 +117,10 @@
             id newContent = [element.algorithm resolveContentForElement:element usingKey:key];
 
             if (!(element.type & MPElementFeatureDevicePrivate) && (!oldContent || ![oldContent isEqual:newContent]))
-                [elementChanges setObject:@{
+                elementChanges[element.name] = @{
                         MPElementUpgradeOldContentKey : oldContent,
                         MPElementUpgradeNewContentKey : newContent,
-                }                  forKey:element.name];
+                };
         }
 
         [moc saveToStore];
@@ -135,9 +135,9 @@
 
     NSMutableString *formattedChanges = [NSMutableString new];
     for (NSString *changedElementName in changes) {
-        NSDictionary *elementChanges = [changes objectForKey:changedElementName];
-        id oldContent = [elementChanges objectForKey:MPElementUpgradeOldContentKey];
-        id newContent = [elementChanges objectForKey:MPElementUpgradeNewContentKey];
+        NSDictionary *elementChanges = changes[changedElementName];
+        id oldContent = elementChanges[MPElementUpgradeOldContentKey];
+        id newContent = elementChanges[MPElementUpgradeNewContentKey];
         [formattedChanges appendFormat:@"%@: %@ -> %@\n", changedElementName, oldContent, newContent];
     }
 
