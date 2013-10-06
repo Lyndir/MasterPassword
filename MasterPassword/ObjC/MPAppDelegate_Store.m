@@ -244,7 +244,6 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         return YES;
     }
 
-    // Create the directory to hold the new local store.
     if (![self.storeManager migrateStore:oldLocalStoreURL withOptions:nil
                                  toStore:newLocalStoreURL withOptions:nil
                                 strategy:0 error:nil cause:nil context:nil]) {
