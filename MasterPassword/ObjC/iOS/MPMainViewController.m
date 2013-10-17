@@ -55,23 +55,6 @@
 
 - (void)viewDidLoad {
 
-    self.searchDelegate = [MPElementListSearchController new];
-    self.searchDelegate.delegate = self;
-    self.searchDelegate.searchDisplayController = self.searchDisplayController;
-    self.searchDelegate.searchTipContainer = self.searchTipContainer;
-    self.searchDisplayController.searchBar.delegate = self.searchDelegate;
-    self.searchDisplayController.delegate = self.searchDelegate;
-    self.searchDisplayController.searchResultsDelegate = self.searchDelegate;
-    self.searchDisplayController.searchResultsDataSource = self.searchDelegate;
-
-    [self.passwordIncrementer addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                                                                 action:@selector(resetPasswordCounter:)]];
-    [self.loginNameContainer addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                                                                action:@selector(editLoginName:)]];
-    [self.loginNameContainer addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(copyLoginName:)]];
-    [self.outdatedAlertBack addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                                         action:@selector(infoOutdatedAlert)]];
-
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ui_background"]];
 
     self.alertBody.text = nil;

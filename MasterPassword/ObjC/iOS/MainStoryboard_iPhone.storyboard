@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
@@ -674,6 +674,7 @@ Your passwords will be AES-encrypted with your master password.</string>
                                                 </state>
                                                 <connections>
                                                     <action selector="incrementPasswordCounter" destination="PQa-Xl-A3x" eventType="touchUpInside" id="hMc-kb-yFA"/>
+                                                    <outletCollection property="gestureRecognizers" destination="Frb-Ve-w79" appends="YES" id="5dU-0R-IR7"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="9FS-fS-xH6" userLabel="Button - Edit">
@@ -726,6 +727,10 @@ Your passwords will be AES-encrypted with your master password.</string>
                                                     </textField>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <connections>
+                                                    <outletCollection property="gestureRecognizers" destination="SfB-KW-KnA" appends="YES" id="EF5-oz-f2K"/>
+                                                    <outletCollection property="gestureRecognizers" destination="Qyt-6l-shg" appends="YES" id="Bi9-JM-jxt"/>
+                                                </connections>
                                             </view>
                                         </subviews>
                                     </view>
@@ -791,6 +796,9 @@ Your passwords will be AES-encrypted with your master password.</string>
                                 <gestureRecognizers/>
                                 <color key="tintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
+                                <connections>
+                                    <outlet property="delegate" destination="S88-IL-SpJ" id="gA4-6d-Fu5"/>
+                                </connections>
                             </searchBar>
                             <view hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" id="foz-tW-xGw" userLabel="View - Action Tip">
                                 <rect key="frame" x="10" y="0.0" width="300" height="60"/>
@@ -920,6 +928,9 @@ Your passwords will be AES-encrypted with your master password.</string>
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="180"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <rect key="contentStretch" x="0.25" y="0.6499999999999998" width="0.64999999999999969" height="0.10000000000000002"/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="6vw-jn-qnG" appends="YES" id="4Io-l8-ID5"/>
+                                        </connections>
                                     </imageView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Outdated Sites" lineBreakMode="tailTruncation" minimumFontSize="10" id="ga8-ha-4zb">
                                         <rect key="frame" x="70" y="20" width="210" height="21"/>
@@ -1077,6 +1088,7 @@ L4m3P4sSw0rD</string>
                         <outlet property="pullDownView" destination="qgs-1p-CRh" id="XWn-9h-aYM"/>
                         <outlet property="pullUpGesture" destination="D0R-Cc-rG7" id="v3L-Nf-bIC"/>
                         <outlet property="pullUpView" destination="dId-fW-MRd" id="JED-fJ-VfH"/>
+                        <outlet property="searchDelegate" destination="S88-IL-SpJ" id="KoD-Wi-yqs"/>
                         <outlet property="searchDisplayController" destination="P8c-gf-nN3" id="CLs-YI-7NC"/>
                         <outlet property="searchTipContainer" destination="zOR-Du-qRL" id="X7h-Vh-iCE"/>
                         <outlet property="siteName" destination="gSK-aB-wNI" id="IIe-z8-zy8"/>
@@ -1093,10 +1105,36 @@ L4m3P4sSw0rD</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mK2-p1-3zC" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <searchDisplayController searchResultsTitle="" id="P8c-gf-nN3">
                     <connections>
+                        <outlet property="delegate" destination="S88-IL-SpJ" id="vyb-1H-gV1"/>
                         <outlet property="searchBar" destination="qeo-n2-WVh" id="bFO-FC-Xdj"/>
                         <outlet property="searchContentsController" destination="PQa-Xl-A3x" id="iEu-t3-hJY"/>
+                        <outlet property="searchResultsDataSource" destination="S88-IL-SpJ" id="vwd-hZ-dCb"/>
+                        <outlet property="searchResultsDelegate" destination="S88-IL-SpJ" id="62J-00-vq7"/>
                     </connections>
                 </searchDisplayController>
+                <customObject id="S88-IL-SpJ" customClass="MPElementListSearchController">
+                    <connections>
+                        <outlet property="delegate" destination="PQa-Xl-A3x" id="LLe-ba-wg6"/>
+                        <outlet property="searchDisplayController" destination="P8c-gf-nN3" id="aXE-is-5AO"/>
+                        <outlet property="searchTipContainer" destination="zOR-Du-qRL" id="1Cg-nx-oRl"/>
+                    </connections>
+                </customObject>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="Frb-Ve-w79" userLabel="Long Press Gesture (reset pw)">
+                    <connections>
+                        <action selector="resetPasswordCounter:" destination="PQa-Xl-A3x" id="Iup-Mu-kTx"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="SfB-KW-KnA" userLabel="Long Press Gesture (edit username)">
+                    <connections>
+                        <action selector="editLoginName:" destination="PQa-Xl-A3x" id="DNy-7M-ogJ"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+                <tapGestureRecognizer id="Qyt-6l-shg" userLabel="Tap Gesture (copy username)">
+                    <connections>
+                        <action selector="copyLoginName:" destination="PQa-Xl-A3x" id="4Kn-O1-Iii"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="6vw-jn-qnG" userLabel="Tap Gesture (info outdated)"/>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="O19-XO-q6s">
                     <connections>
                         <action selector="panHelpDown:" destination="PQa-Xl-A3x" id="w7M-2J-eqL"/>
@@ -1862,6 +1900,7 @@ If you set a custom password, it will be encrypted before it is saved to the clo
                                 <navigationBar contentMode="scaleToFill" barStyle="black" translucent="NO" id="l0p-Tu-L9k">
                                     <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                                     <color key="tintColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="barTintColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
                                     <textAttributes key="titleTextAttributes">

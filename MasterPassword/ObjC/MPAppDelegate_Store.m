@@ -289,6 +289,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     NSManagedObjectContext *moc = [self mainManagedObjectContextIfReady];
     [moc performBlockAndWait:^{
         [moc saveToStore];
+        [moc reset];
 
         self.privateManagedObjectContext = nil;
         self.mainManagedObjectContext = nil;
