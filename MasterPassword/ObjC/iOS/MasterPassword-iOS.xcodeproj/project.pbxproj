@@ -252,6 +252,25 @@
 		DAD3127215528CD200A3F9ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAD312BF1552A1BD00A3F9ED /* libLocalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD3127115528CD200A3F9ED /* libLocalytics.a */; };
 		DAD312C21552A22700A3F9ED /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD312C01552A20800A3F9ED /* libsqlite3.dylib */; };
+		DADEF4121810D2940052CA3E /* love-lyndir.button.green.png in Resources */ = {isa = PBXBuildFile; fileRef = DADEF4061810D2940052CA3E /* love-lyndir.button.green.png */; };
+		DADEF4131810D2940052CA3E /* love-lyndir.button.green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DADEF4071810D2940052CA3E /* love-lyndir.button.green@2x.png */; };
+		DADEF4141810D2940052CA3E /* love-lyndir.button.grey.png in Resources */ = {isa = PBXBuildFile; fileRef = DADEF4081810D2940052CA3E /* love-lyndir.button.grey.png */; };
+		DADEF4151810D2940052CA3E /* love-lyndir.button.grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DADEF4091810D2940052CA3E /* love-lyndir.button.grey@2x.png */; };
+		DADEF4161810D2940052CA3E /* love-lyndir.button.red.png in Resources */ = {isa = PBXBuildFile; fileRef = DADEF40A1810D2940052CA3E /* love-lyndir.button.red.png */; };
+		DADEF4171810D2940052CA3E /* love-lyndir.button.red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DADEF40B1810D2940052CA3E /* love-lyndir.button.red@2x.png */; };
+		DADEF4181810D2940052CA3E /* love-lyndir.heart.green.png in Resources */ = {isa = PBXBuildFile; fileRef = DADEF40C1810D2940052CA3E /* love-lyndir.heart.green.png */; };
+		DADEF4191810D2940052CA3E /* love-lyndir.heart.green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DADEF40D1810D2940052CA3E /* love-lyndir.heart.green@2x.png */; };
+		DADEF41A1810D2940052CA3E /* love-lyndir.heart.grey.png in Resources */ = {isa = PBXBuildFile; fileRef = DADEF40E1810D2940052CA3E /* love-lyndir.heart.grey.png */; };
+		DADEF41B1810D2940052CA3E /* love-lyndir.heart.grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DADEF40F1810D2940052CA3E /* love-lyndir.heart.grey@2x.png */; };
+		DADEF41C1810D2940052CA3E /* love-lyndir.heart.red.png in Resources */ = {isa = PBXBuildFile; fileRef = DADEF4101810D2940052CA3E /* love-lyndir.heart.red.png */; };
+		DADEF41D1810D2940052CA3E /* love-lyndir.heart.red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DADEF4111810D2940052CA3E /* love-lyndir.heart.red@2x.png */; };
+		DADEF4231810D5530052CA3E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
+		DADEF4461810D5850052CA3E /* LLButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3944D91A78331DB509193 /* LLButtonView.m */; };
+		DADEF4471810D5850052CA3E /* LLToggleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39C8E26B06F01566785B7 /* LLToggleViewController.m */; };
+		DADEF44B1810E7F30052CA3E /* love-lyndir.picker.png in Resources */ = {isa = PBXBuildFile; fileRef = DADEF4491810E7F30052CA3E /* love-lyndir.picker.png */; };
+		DADEF44C1810E7F30052CA3E /* love-lyndir.picker@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DADEF44A1810E7F30052CA3E /* love-lyndir.picker@2x.png */; };
+		DADEF44D1810F9BF0052CA3E /* libLoveLyndir.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DADEF4221810D5530052CA3E /* libLoveLyndir.a */; };
+		DADEF44E1810FA3B0052CA3E /* LoveLyndir.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DADEF4481810D5A70052CA3E /* LoveLyndir.storyboard */; };
 		DAE1EF2217E942DE00BC0086 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAE1EF2417E942DE00BC0086 /* Localizable.strings */; };
 		DAE1EF2A17ED112700BC0086 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAE1EF5817ED115E00BC0086 /* DCCrossHairView.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE1EF5017ED115E00BC0086 /* DCCrossHairView.m */; };
@@ -368,6 +387,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		DADEF4201810D5530052CA3E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DAE1EF2717ED112600BC0086 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -387,6 +415,8 @@
 		93D393BB973253D4BAAC84AA /* PearlEMail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlEMail.m; sourceTree = "<group>"; };
 		93D394077F8FAB8167647187 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		93D3942A356B639724157982 /* PearlOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlOverlay.h; sourceTree = "<group>"; };
+		93D3943B25D2BC7BA4691553 /* LLButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLButtonView.h; sourceTree = "<group>"; };
+		93D3944D91A78331DB509193 /* LLButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLButtonView.m; sourceTree = "<group>"; };
 		93D3956915634581E737B38C /* PearlNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlNavigationController.m; sourceTree = "<group>"; };
 		93D3957F61D8AFE3B6580C32 /* NSURL+UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+UbiquityStoreManager.h"; sourceTree = "<group>"; };
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
@@ -395,7 +425,9 @@
 		93D3979190DACEBD1F6AE9F4 /* MPLogsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPLogsViewController.m; sourceTree = "<group>"; };
 		93D398567FD02DB2647B8CF3 /* PearlNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlNavigationController.h; sourceTree = "<group>"; };
 		93D39A28369954D147E239BA /* MPSetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSetupViewController.m; sourceTree = "<group>"; };
+		93D39A3CC4D8330831FC8CB4 /* LLToggleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLToggleViewController.h; sourceTree = "<group>"; };
 		93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Indexing.m"; sourceTree = "<group>"; };
+		93D39C8E26B06F01566785B7 /* LLToggleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLToggleViewController.m; sourceTree = "<group>"; };
 		93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlEMail.h; sourceTree = "<group>"; };
 		DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+PearlMutableInfo.h"; sourceTree = "<group>"; };
@@ -1177,6 +1209,22 @@
 		DACA29BB1705E2DE002C6C22 /* UIColor+HSV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+HSV.m"; sourceTree = "<group>"; };
 		DAD3127115528CD200A3F9ED /* libLocalytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLocalytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAD312C01552A20800A3F9ED /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		DADEF4061810D2940052CA3E /* love-lyndir.button.green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.button.green.png"; sourceTree = "<group>"; };
+		DADEF4071810D2940052CA3E /* love-lyndir.button.green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.button.green@2x.png"; sourceTree = "<group>"; };
+		DADEF4081810D2940052CA3E /* love-lyndir.button.grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.button.grey.png"; sourceTree = "<group>"; };
+		DADEF4091810D2940052CA3E /* love-lyndir.button.grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.button.grey@2x.png"; sourceTree = "<group>"; };
+		DADEF40A1810D2940052CA3E /* love-lyndir.button.red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.button.red.png"; sourceTree = "<group>"; };
+		DADEF40B1810D2940052CA3E /* love-lyndir.button.red@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.button.red@2x.png"; sourceTree = "<group>"; };
+		DADEF40C1810D2940052CA3E /* love-lyndir.heart.green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.heart.green.png"; sourceTree = "<group>"; };
+		DADEF40D1810D2940052CA3E /* love-lyndir.heart.green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.heart.green@2x.png"; sourceTree = "<group>"; };
+		DADEF40E1810D2940052CA3E /* love-lyndir.heart.grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.heart.grey.png"; sourceTree = "<group>"; };
+		DADEF40F1810D2940052CA3E /* love-lyndir.heart.grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.heart.grey@2x.png"; sourceTree = "<group>"; };
+		DADEF4101810D2940052CA3E /* love-lyndir.heart.red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.heart.red.png"; sourceTree = "<group>"; };
+		DADEF4111810D2940052CA3E /* love-lyndir.heart.red@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.heart.red@2x.png"; sourceTree = "<group>"; };
+		DADEF4221810D5530052CA3E /* libLoveLyndir.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLoveLyndir.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DADEF4481810D5A70052CA3E /* LoveLyndir.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LoveLyndir.storyboard; sourceTree = "<group>"; };
+		DADEF4491810E7F30052CA3E /* love-lyndir.picker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.picker.png"; sourceTree = "<group>"; };
+		DADEF44A1810E7F30052CA3E /* love-lyndir.picker@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.picker@2x.png"; sourceTree = "<group>"; };
 		DAE1EF2317E942DE00BC0086 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DAE1EF2917ED112600BC0086 /* libDCIntrospect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDCIntrospect.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE1EF3717ED112700BC0086 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -1330,6 +1378,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DADEF44D1810F9BF0052CA3E /* libLoveLyndir.a in Frameworks */,
 				DAE1EF5C17ED118400BC0086 /* libDCIntrospect.a in Frameworks */,
 				DAFC5691172C582A00CB5CC5 /* libInAppSettingsKit.a in Frameworks */,
 				DA6701E016406BB400B61001 /* AdSupport.framework in Frameworks */,
@@ -1401,6 +1450,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DADEF41F1810D5530052CA3E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DADEF4231810D5530052CA3E /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DAE1EF2617ED112600BC0086 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1444,6 +1501,7 @@
 				DA829E51159847E0002417D3 /* libFontReplacer.a */,
 				DAFC5655172C573B00CB5CC5 /* libInAppSettingsKit.a */,
 				DAE1EF2917ED112600BC0086 /* libDCIntrospect.a */,
+				DADEF4221810D5530052CA3E /* libLoveLyndir.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2300,6 +2358,7 @@
 		DACA22121705DDC5002C6C22 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				DADEF3E91810D1980052CA3E /* LoveLyndir */,
 				DAE1EF4E17ED115E00BC0086 /* DCIntrospect */,
 				DABF632217B744F900DA7E38 /* GoogleOpenSource.framework */,
 				DABF632317B744F900DA7E38 /* GooglePlus.framework */,
@@ -2441,6 +2500,48 @@
 			);
 			name = "uicolor-utilities";
 			path = "External/uicolor-utilities";
+			sourceTree = "<group>";
+		};
+		DADEF3E91810D1980052CA3E /* LoveLyndir */ = {
+			isa = PBXGroup;
+			children = (
+				DADEF4041810D2940052CA3E /* ObjC */,
+				DADEF4051810D2940052CA3E /* Resources */,
+			);
+			path = LoveLyndir;
+			sourceTree = "<group>";
+		};
+		DADEF4041810D2940052CA3E /* ObjC */ = {
+			isa = PBXGroup;
+			children = (
+				93D3944D91A78331DB509193 /* LLButtonView.m */,
+				93D3943B25D2BC7BA4691553 /* LLButtonView.h */,
+				93D39C8E26B06F01566785B7 /* LLToggleViewController.m */,
+				93D39A3CC4D8330831FC8CB4 /* LLToggleViewController.h */,
+				DADEF4481810D5A70052CA3E /* LoveLyndir.storyboard */,
+			);
+			path = ObjC;
+			sourceTree = "<group>";
+		};
+		DADEF4051810D2940052CA3E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DADEF4491810E7F30052CA3E /* love-lyndir.picker.png */,
+				DADEF44A1810E7F30052CA3E /* love-lyndir.picker@2x.png */,
+				DADEF4061810D2940052CA3E /* love-lyndir.button.green.png */,
+				DADEF4071810D2940052CA3E /* love-lyndir.button.green@2x.png */,
+				DADEF4081810D2940052CA3E /* love-lyndir.button.grey.png */,
+				DADEF4091810D2940052CA3E /* love-lyndir.button.grey@2x.png */,
+				DADEF40A1810D2940052CA3E /* love-lyndir.button.red.png */,
+				DADEF40B1810D2940052CA3E /* love-lyndir.button.red@2x.png */,
+				DADEF40C1810D2940052CA3E /* love-lyndir.heart.green.png */,
+				DADEF40D1810D2940052CA3E /* love-lyndir.heart.green@2x.png */,
+				DADEF40E1810D2940052CA3E /* love-lyndir.heart.grey.png */,
+				DADEF40F1810D2940052CA3E /* love-lyndir.heart.grey@2x.png */,
+				DADEF4101810D2940052CA3E /* love-lyndir.heart.red.png */,
+				DADEF4111810D2940052CA3E /* love-lyndir.heart.red@2x.png */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		DAE1EF4E17ED115E00BC0086 /* DCIntrospect */ = {
@@ -2920,6 +3021,23 @@
 			productReference = DAD3127115528CD200A3F9ED /* libLocalytics.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		DADEF4211810D5530052CA3E /* LoveLyndir */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DADEF4441810D5540052CA3E /* Build configuration list for PBXNativeTarget "LoveLyndir" */;
+			buildPhases = (
+				DADEF41E1810D5530052CA3E /* Sources */,
+				DADEF41F1810D5530052CA3E /* Frameworks */,
+				DADEF4201810D5530052CA3E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LoveLyndir;
+			productName = LoveLyndir;
+			productReference = DADEF4221810D5530052CA3E /* libLoveLyndir.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		DAE1EF2817ED112600BC0086 /* DCIntrospect */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAE1EF4617ED112700BC0086 /* Build configuration list for PBXNativeTarget "DCIntrospect" */;
@@ -3079,6 +3197,7 @@
 				DA829E50159847E0002417D3 /* FontReplacer */,
 				DAFC5654172C573B00CB5CC5 /* InAppSettingsKit */,
 				DAE1EF2817ED112600BC0086 /* DCIntrospect */,
+				DADEF4211810D5530052CA3E /* LoveLyndir */,
 			);
 		};
 /* End PBXProject section */
@@ -3093,6 +3212,7 @@
 				DACA296D1705DF81002C6C22 /* Localytics.plist in Resources */,
 				DACA296E1705DF81002C6C22 /* Google+.plist in Resources */,
 				DACA296F1705DF81002C6C22 /* Crashlytics.plist in Resources */,
+				DADEF4171810D2940052CA3E /* love-lyndir.button.red@2x.png in Resources */,
 				DACA29731705E1A8002C6C22 /* ciphers.plist in Resources */,
 				DACA29741705E1A8002C6C22 /* dictionary.lst in Resources */,
 				DABD38DB1711E29700CF925C /* ui_background.png in Resources */,
@@ -3127,6 +3247,7 @@
 				DABD39391711E29700CF925C /* avatar-1.png in Resources */,
 				DABD393A1711E29700CF925C /* avatar-10.png in Resources */,
 				DABD393B1711E29700CF925C /* avatar-10@2x.png in Resources */,
+				DADEF41C1810D2940052CA3E /* love-lyndir.heart.red.png in Resources */,
 				DABD393C1711E29700CF925C /* avatar-11.png in Resources */,
 				DABD393D1711E29700CF925C /* avatar-11@2x.png in Resources */,
 				DABD393E1711E29700CF925C /* avatar-12.png in Resources */,
@@ -3134,6 +3255,7 @@
 				DABD39401711E29700CF925C /* avatar-13.png in Resources */,
 				DABD39411711E29700CF925C /* avatar-13@2x.png in Resources */,
 				DABD39421711E29700CF925C /* avatar-14.png in Resources */,
+				DADEF41A1810D2940052CA3E /* love-lyndir.heart.grey.png in Resources */,
 				DABD39431711E29700CF925C /* avatar-14@2x.png in Resources */,
 				DABD39441711E29700CF925C /* avatar-15.png in Resources */,
 				DABD39451711E29700CF925C /* avatar-15@2x.png in Resources */,
@@ -3157,6 +3279,7 @@
 				DABD39571711E29700CF925C /* avatar-7.png in Resources */,
 				DABD39581711E29700CF925C /* avatar-7@2x.png in Resources */,
 				DABD39591711E29700CF925C /* avatar-8.png in Resources */,
+				DADEF41D1810D2940052CA3E /* love-lyndir.heart.red@2x.png in Resources */,
 				DABD395A1711E29700CF925C /* avatar-8@2x.png in Resources */,
 				DABD395B1711E29700CF925C /* avatar-9.png in Resources */,
 				DABD395C1711E29700CF925C /* avatar-9@2x.png in Resources */,
@@ -3167,6 +3290,8 @@
 				DABD39861711E29700CF925C /* Exo-Regular.otf in Resources */,
 				DA945C8717E3F3FD0053236B /* Images.xcassets in Resources */,
 				DABD39871711E29700CF925C /* SourceCodePro-Black.otf in Resources */,
+				DADEF4161810D2940052CA3E /* love-lyndir.button.red.png in Resources */,
+				DADEF44E1810FA3B0052CA3E /* LoveLyndir.storyboard in Resources */,
 				DABD39881711E29700CF925C /* SourceCodePro-ExtraLight.otf in Resources */,
 				DABD39A01711E29700CF925C /* icon_action.png in Resources */,
 				DABD39A11711E29700CF925C /* icon_action@2x.png in Resources */,
@@ -3174,16 +3299,21 @@
 				DABD39F31711E29700CF925C /* icon_cancel@2x.png in Resources */,
 				DABD3A261711E29700CF925C /* icon_edit.png in Resources */,
 				DABD3A271711E29700CF925C /* icon_edit@2x.png in Resources */,
+				DADEF41B1810D2940052CA3E /* love-lyndir.heart.grey@2x.png in Resources */,
 				DABD3A3A1711E29700CF925C /* icon_find.png in Resources */,
 				DABD3A3B1711E29700CF925C /* icon_find@2x.png in Resources */,
 				DABD3AA01711E29800CF925C /* icon_pause.png in Resources */,
 				DABD3AA11711E29800CF925C /* icon_pause@2x.png in Resources */,
 				DABD3AAA1711E29800CF925C /* icon_person.png in Resources */,
+				DADEF4191810D2940052CA3E /* love-lyndir.heart.green@2x.png in Resources */,
+				DADEF4131810D2940052CA3E /* love-lyndir.button.green@2x.png in Resources */,
 				DABD3AAB1711E29800CF925C /* icon_person@2x.png in Resources */,
 				DABD3ABC1711E29800CF925C /* icon_play.png in Resources */,
+				DADEF4141810D2940052CA3E /* love-lyndir.button.grey.png in Resources */,
 				DABD3ABD1711E29800CF925C /* icon_play@2x.png in Resources */,
 				DABD3ABE1711E29800CF925C /* icon_plus.png in Resources */,
 				DABD3ABF1711E29800CF925C /* icon_plus@2x.png in Resources */,
+				DADEF4181810D2940052CA3E /* love-lyndir.heart.green.png in Resources */,
 				DA69540717D975D900BF294E /* icon_gears@2x.png in Resources */,
 				DABD3B1C1711E29800CF925C /* icon_up.png in Resources */,
 				DABD3B1D1711E29800CF925C /* icon_up@2x.png in Resources */,
@@ -3202,6 +3332,7 @@
 				DABD3B8A1711E29800CF925C /* help.html in Resources */,
 				DABD3B8D1711E29800CF925C /* keypad.png in Resources */,
 				DABD3B8E1711E29800CF925C /* logo-bare.png in Resources */,
+				DADEF44B1810E7F30052CA3E /* love-lyndir.picker.png in Resources */,
 				DABD3B8F1711E29800CF925C /* menu-icon.png in Resources */,
 				DABD3B901711E29800CF925C /* menu-icon@2x.png in Resources */,
 				DABD3B911711E29800CF925C /* page-deblock.png in Resources */,
@@ -3215,6 +3346,7 @@
 				DABD3B991711E29800CF925C /* social-facebook.png in Resources */,
 				DABD3B9A1711E29800CF925C /* social-facebook@2x.png in Resources */,
 				DABD3B9B1711E29800CF925C /* social-google+.png in Resources */,
+				DADEF4121810D2940052CA3E /* love-lyndir.button.green.png in Resources */,
 				DABD3B9C1711E29800CF925C /* social-google+@2x.png in Resources */,
 				DABD3B9D1711E29800CF925C /* social-twitter.png in Resources */,
 				DABD3B9E1711E29800CF925C /* social-twitter@2x.png in Resources */,
@@ -3227,12 +3359,14 @@
 				DABD3FCB1712446200CF925C /* cloud@2x.png in Resources */,
 				DABD3FCE1714F45C00CF925C /* identity.png in Resources */,
 				DABD3FCF1714F45C00CF925C /* identity@2x.png in Resources */,
+				DADEF4151810D2940052CA3E /* love-lyndir.button.grey@2x.png in Resources */,
 				DAE1EF2217E942DE00BC0086 /* Localizable.strings in Resources */,
 				DA5A09DF171A70E4005284AB /* play.png in Resources */,
 				DA5A09E0171A70E4005284AB /* play@2x.png in Resources */,
 				DA5A09EA171BB0F7005284AB /* unlocked.png in Resources */,
 				DA5A09EB171BB0F7005284AB /* unlocked@2x.png in Resources */,
 				DA5E5C3D1723681B003798D8 /* Square-bottom.png in Resources */,
+				DADEF44C1810E7F30052CA3E /* love-lyndir.picker@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3404,6 +3538,15 @@
 				DAFC56A3172C6E8500CB5CC5 /* LocalyticsDatabase.m in Sources */,
 				DAFC56A6172C6E8500CB5CC5 /* LocalyticsSession.m in Sources */,
 				DAFC56AA172C6E8500CB5CC5 /* LocalyticsUploader.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DADEF41E1810D5530052CA3E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DADEF4471810D5850052CA3E /* LLToggleViewController.m in Sources */,
+				DADEF4461810D5850052CA3E /* LLButtonView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3992,6 +4135,24 @@
 			};
 			name = "AppStore-iOS";
 		};
+		DADEF43E1810D5540052CA3E /* Debug-iOS */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = "Debug-iOS";
+		};
+		DADEF43F1810D5540052CA3E /* AdHoc-iOS */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = "AdHoc-iOS";
+		};
+		DADEF4401810D5540052CA3E /* AppStore-iOS */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = "AppStore-iOS";
+		};
 		DAE1EF4717ED112700BC0086 /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4128,6 +4289,15 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "AdHoc-iOS";
+		};
+		DADEF4441810D5540052CA3E /* Build configuration list for PBXNativeTarget "LoveLyndir" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DADEF43E1810D5540052CA3E /* Debug-iOS */,
+				DADEF43F1810D5540052CA3E /* AdHoc-iOS */,
+				DADEF4401810D5540052CA3E /* AppStore-iOS */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		DAE1EF4617ED112700BC0086 /* Build configuration list for PBXNativeTarget "DCIntrospect" */ = {
 			isa = XCConfigurationList;

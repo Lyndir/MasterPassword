@@ -1575,15 +1575,13 @@ You can use the words in the background for inspiration in finding a memorable m
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <webView opaque="NO" contentMode="scaleToFill" id="rGU-aZ-XVm">
-                                        <rect key="frame" x="0.0" y="499" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <dataDetectorType key="dataDetectorTypes"/>
-                                        <connections>
-                                            <outlet property="delegate" destination="Nbn-Rv-sP1" id="ZNn-UN-gcu"/>
-                                        </connections>
-                                    </webView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="uow-B8-taR" customClass="LLButtonView">
+                                        <rect key="frame" x="144" y="513" width="32" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <state key="normal" image="love-lyndir.button.grey.png">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
@@ -1775,7 +1773,6 @@ You can use the words in the background for inspiration in finding a memorable m
                         <outlet property="emergencySite" destination="YeH-3J-oY4" id="h0w-om-4vd"/>
                         <outlet property="emergencyTypeControl" destination="LfH-XT-9Vt" id="pku-x3-i9h"/>
                         <outlet property="nameLabel" destination="0NM-NI-7UR" id="GBg-Ry-sqj"/>
-                        <outlet property="newsView" destination="rGU-aZ-XVm" id="p1r-Wf-YIY"/>
                         <outlet property="oldNameLabel" destination="8s0-nT-Aoq" id="plu-1H-MVc"/>
                         <outlet property="passwordField" destination="rTR-7Q-X8o" id="Vsn-uO-4lO"/>
                         <outlet property="passwordFieldLabel" destination="RhX-bA-EhC" id="8Wq-OV-OlS"/>
@@ -3015,6 +3012,7 @@ However, it means that anyone who finds your device unlocked can do the same.</s
         <image name="icon_plus.png" width="32" height="32"/>
         <image name="icon_up.png" width="32" height="32"/>
         <image name="identity.png" width="82" height="80"/>
+        <image name="love-lyndir.button.grey.png" width="32" height="30"/>
         <image name="page-deblock.png" width="305" height="400"/>
         <image name="page-gorillas.png" width="305" height="400"/>
         <image name="play.png" width="72" height="80"/>
