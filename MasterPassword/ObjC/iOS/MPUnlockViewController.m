@@ -175,6 +175,11 @@
             ^(NSNotification *note) {
                 [self updateUsers];
             }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPSitesImportedNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
+            ^(NSNotification *note) {
+                [self updateUsers];
+            }];
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {

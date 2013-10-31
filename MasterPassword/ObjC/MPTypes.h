@@ -76,6 +76,9 @@ typedef enum {
 #define MPKeyForgottenNotification            @"MPKeyForgottenNotification"
 #define MPElementUpdatedNotification          @"MPElementUpdatedNotification"
 #define MPCheckConfigNotification             @"MPCheckConfigNotification"
+#define MPSitesImportedNotification           @"MPSitesImportedNotification"
+
+#define MPSitesImportedNotificationUserKey    @"MPSitesImportedNotificationUserKey"
 
 static void MPCheckpoint(NSString *checkpoint, NSDictionary *attributes) {
 

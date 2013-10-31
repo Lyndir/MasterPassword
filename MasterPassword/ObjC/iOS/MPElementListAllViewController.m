@@ -85,11 +85,11 @@
                 if (buttonIndex == [alert cancelButtonIndex])
                     return;
 
-                PearlAlert *activity = [PearlAlert showActivityWithTitle:@"Upgrading Sites"];
+                PearlOverlay *activity = [PearlOverlay showOverlayWithTitle:@"Upgrading Sites"];
                 [self performUpgradeAllWithCompletion:^(BOOL success, NSDictionary *changes) {
                     dispatch_async( dispatch_get_main_queue(), ^{
                         [self showUpgradeChanges:changes];
-                        [activity cancelAlertAnimated:YES];
+                        [activity cancelOverlayAnimated:YES];
                     } );
                 }];
             }          cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonContinue, nil];

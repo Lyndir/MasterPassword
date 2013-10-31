@@ -257,7 +257,7 @@
         if (!importedSitesData)
             return;
 
-        PearlAlert *activityAlert = [PearlAlert showActivityWithTitle:@"Importing"];
+        PearlOverlay *activityOverlay = [PearlOverlay showOverlayWithTitle:@"Importing"];
 
         NSString *importedSitesString = [[NSString alloc] initWithData:importedSitesData encoding:NSUTF8StringEncoding];
         MPImportResult result = [self importSites:importedSitesString askImportPassword:^NSString *(NSString *userName) {
@@ -294,7 +294,7 @@
             dispatch_async( dispatch_get_main_queue(), ^{
                 [PearlAlert showAlertWithTitle:PearlString( @"Master Password for\n%@", userName )
                                        message:PearlString( @"Imports %lu sites, overwriting %lu.",
-                                                           (unsigned long)importCount, (unsigned long)deleteCount )
+                                               (unsigned long)importCount, (unsigned long)deleteCount )
                                      viewStyle:UIAlertViewStyleSecureTextInput
                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                     @try {
@@ -329,7 +329,7 @@
                 break;
         }
 
-        [activityAlert cancelAlertAnimated:YES];
+        [activityOverlay cancelOverlayAnimated:YES];
     } );
 
     return YES;
@@ -469,12 +469,12 @@
 
                             attachments:(logs
                                          ? [[PearlEMailAttachment alloc]
-                                            initWithContent:[[[PearlLogger get] formatMessagesWithLevel:logLevel]
-                                                    dataUsingEncoding:NSUTF8StringEncoding]
-                                                   mimeType:@"text/plain"
-                                                   fileName:PearlString( @"%@-%@.log",
-                                                           [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
-                                                           [PearlKeyChain deviceIdentifier] )]
+                                                 initWithContent:[[[PearlLogger get] formatMessagesWithLevel:logLevel]
+                                                         dataUsingEncoding:NSUTF8StringEncoding]
+                                                        mimeType:@"text/plain"
+                                                        fileName:PearlString( @"%@-%@.log",
+                                                                [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
+                                                                [PearlKeyChain deviceIdentifier] )]
                                          : nil), nil]
             showComposerForVC:viewController];
 }
@@ -500,8 +500,8 @@
                               if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
                                       // Show Passwords
                                   [self exportShowPasswords:YES];
-                          }     cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
-         }     otherTitles:nil];
+                          } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
+         } otherTitles:nil];
 }
 
 - (void)exportShowPasswords:(BOOL)showPasswords {
@@ -761,32 +761,32 @@
 
     __weak MPiOSAppDelegate *wSelf = self;
     [self.handleCloudContentAlert cancelAlertAnimated:NO];
-    self.handleCloudContentAlert = [PearlAlert showActivityWithTitle:@"iCloud Sync Problem" message:
-            @"Waiting for your other device to auto‑correct the problem..."
-                                                           initAlert:^(UIAlertView *alert) {
-                                                               [alert addButtonWithTitle:@"Fix Now"];
-                                                               [alert addButtonWithTitle:@"Turn Off"];
-                                                           }];
-
-    self.handleCloudContentAlert.tappedButtonBlock = ^(UIAlertView *alert, NSInteger buttonIndex) {
-        if (buttonIndex == [alert firstOtherButtonIndex])
-            wSelf.fixCloudContentAlert = [PearlAlert showAlertWithTitle:@"Fix iCloud Now" message:
-                    @"This problem can be auto‑corrected by opening the app on another device where you recently made changes.\n"
-                            @"You can fix the problem from this device anyway, but recent changes from another device might get lost.\n\n"
-                            @"You can also turn iCloud off for now."
-                                                              viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:
-                            ^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                                if (buttonIndex_ == alert_.cancelButtonIndex)
-                                    [wSelf showCloudContentAlert];
-                                if (buttonIndex_ == [alert_ firstOtherButtonIndex])
-                                    [wSelf.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:YES];
-                                if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
-                                    [MPiOSConfig get].iCloudEnabled = NO;
-                            }                               cancelTitle:[PearlStrings get].commonButtonBack
-                                                            otherTitles:@"Fix Anyway", @"Turn Off", nil];
-        if (buttonIndex == [alert firstOtherButtonIndex] + 1)
-            [MPiOSConfig get].iCloudEnabled = NO;
-    };
+    // TODO: Add the activity indicator back.
+    self.handleCloudContentAlert = [PearlAlert showAlertWithTitle:@"iCloud Sync Problem"
+                                                          message:@"Waiting for your other device to auto‑correct the problem..."
+                                                        viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:
+                    ^(UIAlertView *alert, NSInteger buttonIndex) {
+                        if (buttonIndex == [alert firstOtherButtonIndex])
+                            wSelf.fixCloudContentAlert = [PearlAlert showAlertWithTitle:@"Fix iCloud Now" message:
+                                    @"This problem can be auto‑corrected by opening the app on another device where you recently made changes.\n"
+                                            @"You can fix the problem from this device anyway, but recent changes from another device might get lost.\n\n"
+                                            @"You can also turn iCloud off for now."
+                                                                              viewStyle:UIAlertViewStyleDefault
+                                                                              initAlert:nil tappedButtonBlock:
+                                            ^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                                                if (buttonIndex_ == alert_.cancelButtonIndex)
+                                                    [wSelf showCloudContentAlert];
+                                                if (buttonIndex_ == [alert_ firstOtherButtonIndex])
+                                                    [wSelf.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:YES];
+                                                if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
+                                                    [MPiOSConfig get].iCloudEnabled = @NO;
+                                            }
+                                                                            cancelTitle:[PearlStrings get].commonButtonBack
+                                                                            otherTitles:@"Fix Anyway",
+                                                                                        @"Turn Off", nil];
+                        if (buttonIndex == [alert firstOtherButtonIndex] + 1)
+                            [MPiOSConfig get].iCloudEnabled = @NO;
+                    }                                 cancelTitle:nil otherTitles:@"Fix Now", @"Turn Off", nil];
 }
 
 

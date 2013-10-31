@@ -19,13 +19,10 @@
 #import "MPLogsViewController.h"
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
-#import "MPAppDelegate_Key.h"
 
 @implementation MPLogsViewController {
-    PearlAlert *switchCloudStoreProgress;
+    PearlOverlay *_switchCloudStoreProgress;
 }
-
-@synthesize switchCloudStoreProgress;
 
 - (void)viewDidLoad {
 
@@ -36,7 +33,7 @@
             ^(NSNotification *note) {
                 dispatch_async( dispatch_get_main_queue(), ^{
                     self.levelControl.selectedSegmentIndex = [[MPiOSConfig get].traceMode boolValue]? 1: 0;
-                });
+                } );
             }];
 }
 
@@ -57,6 +54,7 @@
             return;
 
         if (buttonIndex == sheet.firstOtherButtonIndex) {
+            // Switch
             [PearlAlert showAlertWithTitle:@"Switching iCloud Store" message:
                     @"WARNING: This is an advanced operation and should only be done if you're having trouble with iCloud."
                                  viewStyle:UIAlertViewStyleDefault initAlert:nil
@@ -64,14 +62,44 @@
                              if (buttonIndex_ == alert.cancelButtonIndex)
                                  return;
 
-                             switchCloudStoreProgress = [PearlAlert showActivityWithTitle:@"Enumerating Stores"];
+                             _switchCloudStoreProgress = [PearlOverlay showOverlayWithTitle:@"Enumerating Stores"];
                              dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
                                  [self switchCloudStore];
                              } );
-                         }     cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonContinue, nil];
+                         } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonContinue, nil];
+        }
+
+        if (buttonIndex == sheet.firstOtherButtonIndex + 1) {
+            // Rebuild
+            [PearlAlert showAlertWithTitle:@"Rebuilding iCloud Store" message:
+                    @"WARNING: This is an advanced operation and should only be done if you're having trouble with iCloud.\n"
+                            @"Your local iCloud data will be removed and redownloaded from iCloud."
+                                 viewStyle:UIAlertViewStyleDefault initAlert:nil
+                         tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex_) {
+                             if (buttonIndex_ == alert.cancelButtonIndex)
+                                 return;
+
+                             [[MPiOSAppDelegate get].storeManager deleteCloudContainerLocalOnly:YES];
+                         }
+                               cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonContinue, nil];
+        }
+
+        if (buttonIndex == sheet.firstOtherButtonIndex + 2) {
+            // Wipe
+            [PearlAlert showAlertWithTitle:@"Wiping iCloud Clean" message:
+                    @"WARNING: This is an advanced operation and should only be done if you're having trouble with iCloud.\n"
+                            @"All your iCloud data will be permanently lost.  This is a clean slate!"
+                                 viewStyle:UIAlertViewStyleDefault initAlert:nil
+                         tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex_) {
+                             if (buttonIndex_ == alert.cancelButtonIndex)
+                                 return;
+
+                             [[MPiOSAppDelegate get].storeManager deleteCloudContainerLocalOnly:NO];
+                         }
+                               cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonContinue, nil];
         }
     }                  cancelTitle:[PearlStrings get].commonButtonCancel
-                  destructiveTitle:nil otherTitles:@"Switch iCloud Store", nil];
+                  destructiveTitle:nil otherTitles:@"Switch iCloud Store", @"Rebuild iCloud Container", @"Wipe iCloud Clean", nil];
 }
 
 - (void)switchCloudStore {
@@ -144,7 +172,7 @@
         }];
     }];
     dispatch_async( dispatch_get_main_queue(), ^{
-        [switchCloudStoreProgress cancelAlertAnimated:YES];
+        [_switchCloudStoreProgress cancelOverlayAnimated:YES];
         [self.navigationController pushViewController:vc animated:YES];
     } );
 }
@@ -162,7 +190,7 @@
                              return;
 
                          [MPiOSConfig get].traceMode = @YES;
-                     }     cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Enable Trace", nil];
+                     } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Enable Trace", nil];
     }
     else
         [MPiOSConfig get].traceMode = @NO;
@@ -182,7 +210,7 @@
                              viewStyle:UIAlertViewStyleDefault initAlert:nil
                      tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
                          [[MPiOSAppDelegate get] openFeedbackWithLogs:YES forVC:self];
-                     }     cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
+                     } cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
     }
     else
         [[MPiOSAppDelegate get] openFeedbackWithLogs:YES forVC:self];

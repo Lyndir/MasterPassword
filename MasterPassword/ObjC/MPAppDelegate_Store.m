@@ -441,8 +441,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 }
 
 - (MPImportResult)importSites:(NSString *)importedSitesString
-            askImportPassword:(NSString *(^)(NSString *userName))importPassword
-              askUserPassword:(NSString *(^)(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword
+            askImportPassword:(NSString *(^)(NSString *userName))askImportPassword
+              askUserPassword:(NSString *(^)(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))askUserPassword
                 saveInContext:(NSManagedObjectContext *)context {
 
     // Compile patterns.
@@ -566,29 +566,32 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                 err(@"Lookup of existing sites failed for site: %@, user: %@, error: %@", name, user.userID, error);
                 return MPImportResultInternalError;
             }
-            else if (existingSites.count)
-            dbg(@"Existing sites: %@", existingSites);
-
-            [elementsToDelete addObjectsFromArray:existingSites];
-            [importedSiteElements addObject:@[ lastUsed, uses, type, version, name, exportContent ]];
-            dbg(@"Will import site: lastUsed=%@, uses=%@, type=%@, version=%@, name=%@, exportContent=%@",
-            lastUsed, uses, type, version, name, exportContent);
+            if ([existingSites count]) {
+                dbg(@"Existing sites: %@", existingSites);
+                [elementsToDelete addObjectsFromArray:existingSites];
+            }
         }
+        [importedSiteElements addObject:@[ lastUsed, uses, type, version, name, exportContent ]];
+        dbg(@"Will import site: lastUsed=%@, uses=%@, type=%@, version=%@, name=%@, exportContent=%@",
+        lastUsed, uses, type, version, name, exportContent);
     }
 
     // Ask for confirmation to import these sites and the master password of the user.
     inf(@"Importing %lu sites, deleting %lu sites, for user: %@", (unsigned long)[importedSiteElements count], (unsigned long)[elementsToDelete count], [MPUserEntity idFor:importUserName]);
-    NSString *userMasterPassword = userPassword( user.name, [importedSiteElements count], [elementsToDelete count] );
+    NSString *userMasterPassword = askUserPassword( user? user.name: importUserName, [importedSiteElements count], [elementsToDelete count] );
     if (!userMasterPassword) {
         inf(@"Import cancelled.");
         return MPImportResultCancelled;
     }
-    MPKey *userKey = [MPAlgorithmDefault keyForPassword:userMasterPassword ofUserNamed:user.name];
-    if (![userKey.keyID isEqualToData:user.keyID])
+    MPKey *userKey = [MPAlgorithmDefault keyForPassword:userMasterPassword ofUserNamed:user? user.name: importUserName];
+    if (user && ![userKey.keyID isEqualToData:user.keyID])
         return MPImportResultInvalidPassword;
     __block MPKey *importKey = userKey;
-    if ([importKey.keyID isEqualToData:importKeyID])
-        importKey = nil;
+    if (![importKey.keyID isEqualToData:importKeyID])
+        importKey = [importAlgorithm keyForPassword:askImportPassword( importUserName ) ofUserNamed:importUserName];
+    if (![importKey.keyID isEqualToData:importKeyID])
+        return MPImportResultInvalidPassword;
+
 
     // Delete existing sites.
     if (elementsToDelete.count)
@@ -628,14 +631,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         if ([exportContent length]) {
             if (clearText)
                 [element.algorithm importClearTextContent:exportContent intoElement:element usingKey:userKey];
-            else {
-                if (!importKey)
-                    importKey = [importAlgorithm keyForPassword:importPassword( user.name ) ofUserNamed:user.name];
-                if (![importKey.keyID isEqualToData:importKeyID])
-                    return MPImportResultInvalidPassword;
-
+            else
                 [element.algorithm importProtectedContent:exportContent protectedByKey:importKey intoElement:element usingKey:userKey];
-            }
         }
 
         dbg(@"Created Element: %@", [element debugDescription]);
@@ -646,6 +643,10 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     inf(@"Import completed successfully.");
     MPCheckpoint( MPCheckpointSitesImported, nil );
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPSitesImportedNotification object:nil userInfo:@{
+            MPSitesImportedNotificationUserKey: user
+    }];
 
     return MPImportResultSuccess;
 }
