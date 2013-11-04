@@ -48,8 +48,8 @@
     if ([[segue identifier] isEqualToString:@"MP_ChooseType"])
         ((MPTypeViewController *)[segue destinationViewController]).delegate = self;
     if ([[segue identifier] isEqualToString:@"MP_AllSites"]) {
-        ((MPElementListAllViewController *)[segue destinationViewController]).delegate = self;
-        ((MPElementListAllViewController *)[segue destinationViewController]).filter = sender;
+        ((MPElementListAllViewController *)[[segue destinationViewController] topViewController]).delegate = self;
+        ((MPElementListAllViewController *)[[segue destinationViewController] topViewController]).filter = sender;
     }
 }
 

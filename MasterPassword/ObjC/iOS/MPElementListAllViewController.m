@@ -39,13 +39,13 @@
     [super viewWillAppear:animated];
 
     if ([self.filter isEqualToString:MPElementListFilterNone]) {
-        self.navigationBar.topItem.title = @"All Sites";
-        self.navigationBar.topItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+        self.navigationItem.title = @"All Sites";
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
                 initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(add:)];
     }
     else if ([self.filter isEqualToString:MPElementListFilterOutdated]) {
-        self.navigationBar.topItem.title = @"Outdated";
-        self.navigationBar.topItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+        self.navigationItem.title = @"Outdated";
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
                 initWithTitle:@"Upgrade All" style:UIBarButtonItemStyleBordered target:self action:@selector(upgradeAll:)];
     }
 

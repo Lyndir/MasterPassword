@@ -86,7 +86,7 @@
 			<key>Key</key>
 			<string>iCloudEnabled</string>
 			<key>DefaultValue</key>
-			<true/>
+			<false/>
 		</dict>
 	</array>
 	<key>StringsTable</key>
