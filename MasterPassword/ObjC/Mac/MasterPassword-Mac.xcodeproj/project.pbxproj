@@ -31,8 +31,6 @@
 		DA3EF17B15A47744003ABF4E /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA3EF17A15A47744003ABF4E /* SenTestingKit.framework */; };
 		DA3EF17D15A47744003ABF4E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA4425CC1557BED40052177D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
-		DA4C45F4173B57B700745CC5 /* NSURL+UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4C45F2173B57B700745CC5 /* NSURL+UbiquityStoreManager.h */; };
-		DA4C45F5173B57B700745CC5 /* NSURL+UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4C45F3173B57B700745CC5 /* NSURL+UbiquityStoreManager.m */; };
 		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
 		DA5E5C8817248AA1003798D8 /* crypto_aesctr.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C7B17248AA1003798D8 /* crypto_aesctr.h */; };
 		DA5E5C8917248AA1003798D8 /* crypto_scrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = DA5E5C7C17248AA1003798D8 /* crypto_scrypt.h */; };
@@ -243,8 +241,6 @@
 		DA3EF17915A47744003ABF4E /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA3EF17A15A47744003ABF4E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUbiquityStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA4C45F2173B57B700745CC5 /* NSURL+UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+UbiquityStoreManager.h"; sourceTree = "<group>"; };
-		DA4C45F3173B57B700745CC5 /* NSURL+UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+UbiquityStoreManager.m"; sourceTree = "<group>"; };
 		DA5BFA44147E415C00F98B1E /* Master Password.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Master Password.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5BFA4A147E415C00F98B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -652,8 +648,6 @@
 		DACA22B61705DE7D002C6C22 /* UbiquityStoreManager */ = {
 			isa = PBXGroup;
 			children = (
-				DA4C45F2173B57B700745CC5 /* NSURL+UbiquityStoreManager.h */,
-				DA4C45F3173B57B700745CC5 /* NSURL+UbiquityStoreManager.m */,
 				DACA22BA1705DE7D002C6C22 /* UbiquityStoreManager.h */,
 				DACA22B71705DE7D002C6C22 /* UbiquityStoreManager.m */,
 				DACA22B81705DE7D002C6C22 /* NSError+UbiquityStoreManager.h */,
@@ -887,7 +881,6 @@
 			files = (
 				DACA22BC1705DE7D002C6C22 /* NSError+UbiquityStoreManager.h in Headers */,
 				DACA22BE1705DE7D002C6C22 /* UbiquityStoreManager.h in Headers */,
-				DA4C45F4173B57B700745CC5 /* NSURL+UbiquityStoreManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1247,7 +1240,6 @@
 			files = (
 				DACA22BB1705DE7D002C6C22 /* UbiquityStoreManager.m in Sources */,
 				DACA22BD1705DE7D002C6C22 /* NSError+UbiquityStoreManager.m in Sources */,
-				DA4C45F5173B57B700745CC5 /* NSURL+UbiquityStoreManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
