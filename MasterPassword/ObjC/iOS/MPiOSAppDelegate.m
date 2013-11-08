@@ -746,6 +746,14 @@
     } );
 }
 
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager failedLoadingStoreWithCause:(UbiquityStoreErrorCause)cause context:(id)context
+                    wasCloud:(BOOL)wasCloudStore {
+
+    dispatch_async( dispatch_get_main_queue(), ^{
+        [self.storeLoading cancelOverlayAnimated:YES];
+    } );
+}
+
 - (BOOL)ubiquityStoreManager:(UbiquityStoreManager *)manager handleCloudContentCorruptionWithHealthyStore:(BOOL)storeHealthy {
 
     if (manager.cloudEnabled && !storeHealthy && !([self.handleCloudContentAlert.alertView isVisible] || [self.fixCloudContentAlert.alertView isVisible]))
