@@ -20,7 +20,6 @@
 		93D399BBC0A7EC746CB1B19B /* MPLogsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D391943675426839501BB8 /* MPLogsViewController.h */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
 		93D39C8AD8EAB747856B3A8C /* LLModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3923B42DA2DA18F287092 /* LLModel.m */; };
-		93D39CFC8520AD406FFF72D7 /* LLAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39696C9572BEE830F2EAB /* LLAboutViewController.m */; };
 		93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */; };
 		93D39F8A9254177891F38705 /* MPSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A28369954D147E239BA /* MPSetupViewController.m */; };
 		DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */; };
@@ -419,8 +418,6 @@
 		93D394077F8FAB8167647187 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		93D3942A356B639724157982 /* PearlOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlOverlay.h; sourceTree = "<group>"; };
 		93D3956915634581E737B38C /* PearlNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlNavigationController.m; sourceTree = "<group>"; };
-		93D395B53B7175D22034BBEF /* LLAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLAboutViewController.h; sourceTree = "<group>"; };
-		93D39696C9572BEE830F2EAB /* LLAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLAboutViewController.m; sourceTree = "<group>"; };
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
 		93D39730673227EFF6DEFF19 /* MPSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSetupViewController.h; sourceTree = "<group>"; };
 		93D3979190DACEBD1F6AE9F4 /* MPLogsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPLogsViewController.m; sourceTree = "<group>"; };
@@ -2527,8 +2524,6 @@
 				93D3983278751A530262F64E /* LLConfig.h */,
 				93D39BF6BCBDFFE844E7D34C /* LLButtonView.m */,
 				93D39BA6C5CB452973918B7D /* LLButtonView.h */,
-				93D39696C9572BEE830F2EAB /* LLAboutViewController.m */,
-				93D395B53B7175D22034BBEF /* LLAboutViewController.h */,
 			);
 			path = ObjC;
 			sourceTree = "<group>";
@@ -3556,7 +3551,6 @@
 				DADEF4471810D5850052CA3E /* LLToggleViewController.m in Sources */,
 				93D39C8AD8EAB747856B3A8C /* LLModel.m in Sources */,
 				93D39233C3EDD9A947ABA52D /* LLButtonView.m in Sources */,
-				93D39CFC8520AD406FFF72D7 /* LLAboutViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

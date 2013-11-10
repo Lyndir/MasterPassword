@@ -964,16 +964,11 @@
 
         [UIView animateWithDuration:0.2 animations:^{
             self.emergencyGeneratorContainer.frame = CGRectSetX( self.emergencyGeneratorContainer.frame,
-                    self.emergencyGeneratorContainer.frame.origin.x + 150 );
+                    self.emergencyGeneratorContainer.frame.origin.x + 100 );
             self.emergencyGeneratorContainer.alpha = 1;
         }                completion:^(BOOL finished) {
-            if (finished) {
+            if (finished)
                 [self emergencyOpenAnimated:NO];
-                [UIView animateWithDuration:0.2 animations:^{
-                    self.emergencyGeneratorContainer.frame = CGRectSetX( self.emergencyGeneratorContainer.frame,
-                            self.emergencyGeneratorContainer.frame.origin.x - 50 );
-                }];
-            }
         }];
         return;
     }
