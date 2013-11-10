@@ -26,10 +26,11 @@ icons=(
 )
 for size in $(reverse "${!icons[@]}"); do
     file=Images.xcassets/AppIcon.appiconset/${icons[size]}
+    echo "$PWD/$file"
 
-    if [[ "iTunesArtwork@2x" -nt $file ]]; then
+    if [[ "iTunesArtwork@2x.png" -nt $file ]]; then
         pinf "$file ($size px)"
-            downsize "iTunesArtwork@2x" "$file" "${size}x${size}"
+            downsize "iTunesArtwork@2x.png" "$file" "${size}x${size}"
         fnip
     fi
 done
