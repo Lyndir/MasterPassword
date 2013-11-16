@@ -7,7 +7,6 @@
 //
 
 #import <Social/Social.h>
-#import <QuartzCore/QuartzCore.h>
 
 #import "MPUnlockViewController.h"
 #import "MPiOSAppDelegate.h"
@@ -26,10 +25,16 @@
 @property(nonatomic, strong) NSTimer *marqueeTipTimer;
 @property(nonatomic) NSUInteger marqueeTipTextIndex;
 @property(nonatomic, strong) NSArray *marqueeTipTexts;
+@property(nonatomic, strong) id mocObserver;
 @end
 
 @implementation MPUnlockViewController {
     NSManagedObjectID *_selectedUserOID;
+}
+
+- (void)dealloc {
+    if (self.mocObserver)
+        [[NSNotificationCenter defaultCenter] removeObserver:self.mocObserver];
 }
 
 - (void)initializeAvatarAlert:(UIAlertView *)alert forUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc {
@@ -240,7 +245,7 @@
 
     [UIView animateWithDuration:1 animations:^{
         self.uiContainer.alpha = 1;
-    } completion:^(BOOL finished) {
+    }                completion:^(BOOL finished) {
         if (finished)
             [UIView animateWithDuration:1 animations:^{
                 self.shareContainer.alpha = 1;
@@ -310,6 +315,17 @@
 
 - (void)updateUsers {
 
+    NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
+    if (mainContext) {
+        if (self.mocObserver)
+            [[NSNotificationCenter defaultCenter] removeObserver:self.mocObserver];
+        self.mocObserver = [[NSNotificationCenter defaultCenter]
+                addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:mainContext
+                             queue:nil usingBlock:^(NSNotification *note) {
+                    [self updateUsers];
+                }];
+    }
+
     [MPiOSAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
         NSError *error = nil;
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
@@ -367,7 +383,6 @@
             [self didSelectNewUserAvatar:avatar];
         else if ([self setSelectedUser:user])
             [self didToggleUserSelection];
-
     }        options:0];
 
     (self.avatarToUserOID)[[NSValue valueWithNonretainedObject:avatar]] = NilToNSNull([user objectID]);
@@ -432,7 +447,7 @@
                          [PearlAlert showAlertWithTitle:@"Name Is Required" message:nil viewStyle:UIAlertViewStyleDefault initAlert:nil
                                       tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                                           [self showNewUserNameAlertFor:newUser saveInContext:context completion:completion];
-                                      }     cancelTitle:@"Try Again" otherTitles:nil];
+                                      } cancelTitle:@"Try Again" otherTitles:nil];
                          return;
                      }
 
@@ -457,7 +472,7 @@
 
                      // Okay
                      [self showNewUserConfirmationAlertFor:newUser saveInContext:context completion:completion];
-                 }     cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
+                 } cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
 }
 
 - (void)showNewUserConfirmationAlertFor:(MPUserEntity *)newUser saveInContext:(NSManagedObjectContext *)context
@@ -740,7 +755,7 @@
         if (![avatar.layer animationForKey:@"targetedShadow"]) {
             CABasicAnimation *toShadowColorAnimation = [CABasicAnimation animationWithKeyPath:@"shadowColor"];
             toShadowColorAnimation.toValue = (__bridge id)(avatar.selected? self.avatarTemplate.backgroundColor
-                                                           : [UIColor whiteColor]).CGColor;
+                                                                          : [UIColor whiteColor]).CGColor;
             toShadowColorAnimation.beginTime = 0.0f;
             toShadowColorAnimation.duration = 0.5f;
             toShadowColorAnimation.fillMode = kCAFillModeForwards;
@@ -1194,8 +1209,11 @@
 
     NSError *error;
     MPUserEntity *selectedUser = (MPUserEntity *)[moc existingObjectWithID:_selectedUserOID error:&error];
-    if (!selectedUser)
-    err(@"Failed to retrieve selected user: %@", error);
+    if (!selectedUser) {
+        err(@"Failed to retrieve selected user: %@", error);
+        _selectedUserOID = nil;
+        [self updateUsers];
+    }
 
     return selectedUser;
 }
@@ -1207,8 +1225,11 @@
 
     NSError *error = nil;
     if (selectedUser.objectID.isTemporaryID &&
-        ![selectedUser.managedObjectContext obtainPermanentIDsForObjects:@[ selectedUser ] error:&error])
-    err(@"Failed to obtain a permanent object ID after setting selected user: %@", error);
+        ![selectedUser.managedObjectContext obtainPermanentIDsForObjects:@[ selectedUser ] error:&error]) {
+        err(@"Failed to obtain a permanent object ID after setting selected user: %@", error);
+        _selectedUserOID = nil;
+        [self updateUsers];
+    }
 
     _selectedUserOID = selectedUser.objectID;
     return YES;
