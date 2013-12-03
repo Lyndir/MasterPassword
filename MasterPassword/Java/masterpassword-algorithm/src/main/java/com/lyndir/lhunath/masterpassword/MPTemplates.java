@@ -32,10 +32,16 @@ public class MPTemplates extends MetaObject {
         this.templates = templates;
     }
 
+    public static MPTemplates load() {
+
+        return loadFromPList( "ciphers.plist" );
+    }
+
     public static MPTemplates loadFromPList(final String templateResource) {
 
         @SuppressWarnings("IOResourceOpenedButNotSafelyClosed")
         InputStream templateStream = Thread.currentThread().getContextClassLoader().getResourceAsStream( templateResource );
+        Preconditions.checkNotNull( templateStream, "Not found: %s", templateResource );
         try {
             NSObject plistObject = PropertyListParser.parse( templateStream );
             Preconditions.checkState( NSDictionary.class.isAssignableFrom( plistObject.getClass() ) );
@@ -98,6 +104,6 @@ public class MPTemplates extends MetaObject {
 
     public static void main(final String... arguments) {
 
-        loadFromPList( "templates.plist" );
+        load();
     }
 }

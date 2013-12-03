@@ -31,7 +31,7 @@ public abstract class MasterPassword {
     private static final ByteOrder                    MP_byteOrder = ByteOrder.BIG_ENDIAN;
     private static final MessageDigests               MP_hash      = MessageDigests.SHA256;
     private static final MessageAuthenticationDigests MP_mac       = MessageAuthenticationDigests.HmacSHA256;
-    private static final MPTemplates                  templates    = MPTemplates.loadFromPList( "templates.plist" );
+    private static final MPTemplates                  templates    = MPTemplates.load();
 
     public static byte[] keyForPassword(final String password, final String username) {
 
