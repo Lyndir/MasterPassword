@@ -19,10 +19,18 @@ h1, h2, h3, h4 {
     margin-top: 1em;
 }
 
+section {
+    padding: 1ex 0;
+
+    text-align: center;
+}
 .content {
     padding-top: 100px;
     width: 940px;
     margin: auto;
+
+    text-align: left;
+    text-align: initial;
 }
 .box {
     display:                    inline-block;
