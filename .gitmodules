@@ -17,5 +17,5 @@
 	path = External/DCIntrospect
 	url = https://github.com/lhunath/DCIntrospect.git
 [submodule "External/LoveLyndir"]
-	path = External/DCIntrospect
+	path = External/LoveLyndir
 	url = git://github.com/Lyndir/love-lyndir.client.git
