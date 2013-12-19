@@ -21,7 +21,7 @@
     <modules>
         <module>masterpassword-algorithm</module>
         <module>masterpassword-cli</module>
-        <module>masterpassword-android</module>
+        <!--module>masterpassword-android</module-->
     </modules>
 
     <!-- REMOTE ARTIFACT REPOSITORIES -->

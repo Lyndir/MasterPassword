@@ -274,7 +274,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 #pragma mark - UbiquityStoreManagerDelegate
 
-- (NSManagedObjectContext *)managedObjectContextForUbiquityChangesInManager:(UbiquityStoreManager *)manager {
+- (NSManagedObjectContext *)ubiquityStoreManager:(UbiquityStoreManager *)manager managedObjectContextForUbiquityChanges:(NSNotification *)note {
 
     return [self mainManagedObjectContextIfReady];
 }
