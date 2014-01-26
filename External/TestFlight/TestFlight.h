@@ -6,7 +6,7 @@
 //  Copyright 2011 TestFlight. All rights reserved.
 
 #import <Foundation/Foundation.h>
-#define TESTFLIGHT_SDK_VERSION @"2.0.0"
+#define TESTFLIGHT_SDK_VERSION @"2.1.4"
 #undef TFLog
 
 #if __cplusplus
@@ -41,7 +41,12 @@ extern "C" {
 
 
 /**
- * Starts a TestFlight session using the Application Token for this Application
+ * Sets up TestFlight's infrastructure.
+ *
+ * - Saves App Token
+ * - Starts automatic session management
+ * - Installs Crash Handlers
+ * - Kicks off sending of old session data
  *
  * @param applicationToken Will be the application token for the current application.
  *                         The token for this application can be retrieved by going to https://testflightapp.com/dashboard/applications/
