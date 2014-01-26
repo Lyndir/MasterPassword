@@ -2,4 +2,6 @@ language: objective-c
 xcode_project: Pearl.xcodeproj
 xcode_scheme: Pearl
 xcode_sdk: iphonesimulator
-install: ./Scripts/updateDependencies
+git:
+  submodules: false
+before_install: ./Scripts/updateDependencies
