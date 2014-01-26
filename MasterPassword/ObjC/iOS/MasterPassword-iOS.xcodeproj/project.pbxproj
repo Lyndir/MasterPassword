@@ -70,6 +70,7 @@
 		DA945C8717E3F3FD0053236B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA945C8617E3F3FD0053236B /* Images.xcassets */; };
 		DA95D5F214DF0B2C008D1B94 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */; };
 		DA9B51551895D79E009D2A0B /* gittip.png in Resources */ = {isa = PBXBuildFile; fileRef = DA9B51541895D79E009D2A0B /* gittip.png */; };
+		DA9B51581895D853009D2A0B /* LLGitTip.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B51561895D853009D2A0B /* LLGitTip.m */; };
 		DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABB981515100B4000B05417 /* SystemConfiguration.framework */; };
 		DABD38DB1711E29700CF925C /* ui_background.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD360F1711E29400CF925C /* ui_background.png */; };
 		DABD38DC1711E29700CF925C /* ui_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD36101711E29400CF925C /* ui_background@2x.png */; };
@@ -477,6 +478,8 @@
 		DA945C8617E3F3FD0053236B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		DA9B51541895D79E009D2A0B /* gittip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gittip.png; sourceTree = "<group>"; };
+		DA9B51561895D853009D2A0B /* LLGitTip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLGitTip.m; sourceTree = "<group>"; };
+		DA9B51571895D853009D2A0B /* LLGitTip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLGitTip.h; sourceTree = "<group>"; };
 		DAAC35DD156BD77D00C5FD93 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		DABB981515100B4000B05417 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DABD360F1711E29400CF925C /* ui_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ui_background.png; sourceTree = "<group>"; };
@@ -2522,6 +2525,8 @@
 		DADEF4041810D2940052CA3E /* ObjC */ = {
 			isa = PBXGroup;
 			children = (
+				DA9B51561895D853009D2A0B /* LLGitTip.m */,
+				DA9B51571895D853009D2A0B /* LLGitTip.h */,
 				93D39C8E26B06F01566785B7 /* LLToggleViewController.m */,
 				93D39A3CC4D8330831FC8CB4 /* LLToggleViewController.h */,
 				DADEF4481810D5A70052CA3E /* LoveLyndir.storyboard */,
@@ -3565,6 +3570,7 @@
 			files = (
 				DADEF4471810D5850052CA3E /* LLToggleViewController.m in Sources */,
 				93D39C8AD8EAB747856B3A8C /* LLModel.m in Sources */,
+				DA9B51581895D853009D2A0B /* LLGitTip.m in Sources */,
 				93D39233C3EDD9A947ABA52D /* LLButtonView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
