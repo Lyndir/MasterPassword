@@ -98,7 +98,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     storeManager = [[UbiquityStoreManager alloc] initStoreNamed:nil withManagedObjectModel:nil localStoreURL:nil
                                             containerIdentifier:MPCloudContainerIdentifier
-                                         additionalStoreOptions:@{ STORE_OPTIONS }
+                                             storeConfiguration:nil storeOptions:@{ STORE_OPTIONS }
                                                        delegate:self];
 
 #if TARGET_OS_IPHONE
@@ -197,7 +197,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
             URLByAppendingPathComponent:@"Database.nosync" isDirectory:YES]
             URLByAppendingPathComponent:uuid isDirectory:NO] URLByAppendingPathExtension:@"sqlite"];
 
-    return [self migrateFromCloudStore:oldCloudStoreURL cloudContent:oldCloudContentURL contentName:uuid];
+    return [self migrateFromCloudStore:oldCloudStoreURL cloudContent:oldCloudContentURL];
 }
 
 - (BOOL)migrateV2CloudStore {
@@ -218,7 +218,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
             URLByAppendingPathComponent:@"CloudStore.nosync" isDirectory:YES]
             URLByAppendingPathComponent:uuid isDirectory:NO] URLByAppendingPathExtension:@"sqlite"];
 
-    return [self migrateFromCloudStore:oldCloudStoreURL cloudContent:oldCloudContentURL contentName:uuid];
+    return [self migrateFromCloudStore:oldCloudStoreURL cloudContent:oldCloudContentURL];
 }
 
 - (BOOL)migrateV1LocalStore {
@@ -255,7 +255,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     return YES;
 }
 
-- (BOOL)migrateFromCloudStore:(NSURL *)oldCloudStoreURL cloudContent:(NSURL *)oldCloudContentURL contentName:(NSString *)contentName {
+- (BOOL)migrateFromCloudStore:(NSURL *)oldCloudStoreURL cloudContent:(NSURL *)oldCloudContentURL {
 
     if (![self.storeManager cloudSafeForSeeding]) {
         inf(@"Can't migrate cloud store: A new cloud store already exists.");
@@ -274,7 +274,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 #pragma mark - UbiquityStoreManagerDelegate
 
-- (NSManagedObjectContext *)ubiquityStoreManager:(UbiquityStoreManager *)manager managedObjectContextForUbiquityChanges:(NSNotification *)note {
+- (NSManagedObjectContext *)ubiquityStoreManager:(UbiquityStoreManager *)manager
+          managedObjectContextForUbiquityChanges:(NSNotification *)note {
 
     return [self mainManagedObjectContextIfReady];
 }
@@ -578,7 +579,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     // Ask for confirmation to import these sites and the master password of the user.
     inf(@"Importing %lu sites, deleting %lu sites, for user: %@", (unsigned long)[importedSiteElements count], (unsigned long)[elementsToDelete count], [MPUserEntity idFor:importUserName]);
-    NSString *userMasterPassword = askUserPassword( user? user.name: importUserName, [importedSiteElements count], [elementsToDelete count] );
+    NSString *userMasterPassword = askUserPassword( user? user.name: importUserName, [importedSiteElements count],
+            [elementsToDelete count] );
     if (!userMasterPassword) {
         inf(@"Import cancelled.");
         return MPImportResultCancelled;
@@ -645,7 +647,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     MPCheckpoint( MPCheckpointSitesImported, nil );
 
     [[NSNotificationCenter defaultCenter] postNotificationName:MPSitesImportedNotification object:nil userInfo:@{
-            MPSitesImportedNotificationUserKey: user
+            MPSitesImportedNotificationUserKey : user
     }];
 
     return MPImportResultSuccess;
