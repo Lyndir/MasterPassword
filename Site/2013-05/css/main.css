@@ -32,6 +32,24 @@ section {
     text-align: left;
     text-align: initial;
 }
+.hlvl {
+    border-left: 5px solid #EEE;
+    padding-left: 1em;
+}
+.hlvl .hlvl {
+    border-color: #CCC;
+    margin-left: -1em;
+    padding-left: 2em;
+}
+.hlvl .hlvl .hlvl {
+    border-color: #AAA;
+    margin-left: -2em;
+    padding-left: 3em;
+}
+h3.inline {
+    display: inline-block;
+    line-height: inherit;
+}
 .box {
     display:                    inline-block;
     position:                   relative;
@@ -165,4 +183,13 @@ footer .content {
 }
 footer .column {
     text-align: left;
+}
+q::before {
+    content: open-quote;
+}
+q {
+    font-style: italic;
+}
+q::after {
+    content: close-quote;
 }

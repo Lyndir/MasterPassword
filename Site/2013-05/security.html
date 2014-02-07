@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html class="no-js" itemscope itemtype="http://schema.org/Product">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title itemprop="name">Master Password &mdash; Secure your life, forget your passwords.</title>
+        <meta itemprop="description" content="Master Password is an ingenious password solution that makes your passwords truly impossible to lose." />
+        <meta itemprop="image" content="http://masterpassword.lyndir.com/img/iTunesArtwork-Rounded.png" />
+        <meta name="viewport" content="width=device-width">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="icon" href="img/favicon.png" type="image/x-png" />
+        <link rel="shortcut icon" href="img/favicon.png" type="image/x-png" />
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="js/vendor/prefixfree.min.js"></script>
+    </head>
+    <body itemscope itemtype="http://schema.org/MobileSoftwareApplication" id="trouble">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <nav class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="brand" href="./">●●●|</a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav">
+                            <li><a href="./">App</a></li>
+                            <li class="active"><a href="security.html">Security</a></li>
+                            <li><a href="algorithm.html">Algorithm</a></li>
+                            <li><a href="support.html">Support</a></li>
+                            <li><a href="http://github.com/Lyndir/MasterPassword">Source</a></li>
+                        </ul>
+                        <ul class="nav pull-right">
+                            <li class="divider-vertical"></li>
+                            <li><a href="MasterPassword_PressKit.zip" onclick="_gaq.push(['_trackPageview', '/outbound/presskit']);">⬇ Press Kit</a></li>
+                            <li><a href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-fixed-header');_gaq.push(['_trackPageview', '/outbound/itunes']);" class="img"><img src="img/appstore.svg" /></a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </nav>
+
+        <header>
+            <img class="background" src="img/mp-process-angled.png" data-stellar-ratio="2.5" />
+            <div class="container">
+        
+                <!-- <div class="box effect-8">
+                    iframe id="ytplayer" type="text/html" width="640" height="360" frameborder="0"
+                        src="http://www.youtube.com/embed/QTfA0O7YnHQ?origin=http://masterpassword.lyndir.com&autohide=1&autoplay=0&rel=0&showinfo=0&theme=light&color=white"></iframe
+                    <iframe width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen
+                        src="http://player.vimeo.com/video/45803664?title=0&amp;byline=0&amp;portrait=0&amp;color=ffffff"></iframe>
+                </div> -->
+
+                <div class="content">
+                    <h2>Security Overview</h2>
+                </div>
+            
+            </div>
+        </header>
+
+        <section><div class="content">
+        
+            <p>The following is an overview of the security properties of the Master Password solution.  It aims to answer all questions related to the strengths and weaknesses of the algorithm behind Master Password.  If you have any unanswered questions after reading this page, don't hesitate to <a href="support.html">get in touch</a>.</p>
+
+            <div class="thumb clearfix">
+                <h1>What Does Master Password Give Me?</h1>
+                <p>What do you need from passwords? You need security. <em>Security is an extremely vague term</em>, and excessively over-used in marketting material. Terms such as encryption, military-strength, and so on are used freely without context. As a customer, <em>it is now your responsibility to put these terms into context</em> and <strong>evaluate how well a solution really helps with the safety of your private data</strong>.</p>
+                <p>How do you properly evaluate the security of a product?  Investigate what kind of security the product really gives you.  There are a few key points on which you should evaluate security:</p>
+
+                <div class="hlvl">
+                    <ol>
+                        <li><a href="#strength">STRENGTH</a>:
+                        How well does it protect against increasingly creative attackers? How easy is it to get in?</li>
+                        <li><a href="#trust">TRUST</a>:
+                        How much trust do you need to dish out? How many points of failure are there to this trust?</li>
+                        <li><a href="#loss">LOSS</a>:
+                        How safe are you from locking yourself out? What happens when your hardware breaks or your house burns down?</li>
+                        <li><a href="#usability">USABILITY</a>:
+                        How easy is it to use this product? How likely are you to bypass it for convenience?</li>
+                    </ol>
+
+                    <div class="hlvl">
+                        <h2 id="strength">STRENGTH: Why Is Master Password Strong?</h2>
+                        <p>The first point is pretty obvious, we want to keep malicious people out. Unfortunately, these people are getting increasingly more creative and are targetting as many people as they possibly can.  In the next few years, <strong>you WILL become the target of somebody's attack</strong>, most likely more than once. News reports of millions of people's accounts having been put at risk are becoming ever more frequent.</p>
+                        <p>When we evaluate the strength of a password solution, there are two important aspects that we need to consider:</p>
+                        <div class="hlvl">
+                            <ol>
+                                <li><strong>STRONG PASSWORDS</strong>:
+                                How hard is it for an attacker to get into one of my web accounts protected by these passwords?</li>
+                                <li><strong>STRONG CRYPTOGRAPHY</strong>:
+                                How hard is it for an attacker to get to all my passwords by attacking my app itself?</li>
+                            </ol>
+
+                            <p><h3 class="inline">Master Password solves the <em>strong passwords</em> problem</h3>
+                            by generating passwords for you with extremely high entropy.  We've found that humans are exceedingly bad at coming up with good passwords, especially when they need a new one every week for a new site they sign up with.  Master Password therefore takes the guesswork out of it and generates high-entropy, memorable passwords.  Thanks to the high entropy, when a hacker obtains all of <a
+                                href="http://www.washingtonpost.com/business/technology/linkedin-eharmony-deal-with-breach-aftermath/2012/06/07/gJQAwqs5KV_story.html">LinkedIn's password hashes</a>
+                            again, they likely still won't be able to brute-force your real LinkedIn password out of it.</p>
+                            <p>If you used an evenly distributed custom 6-character alphanumeric password (<code>0wn3dZ</code> doesn't count), it might take an insistant attacker <em>3 months</em> to brute-force your password from a leaked hash.  If you used Master Password's default <em>Long Password</em> instead, it would take that same attacker <em>more than a year</em> of non-stop focus on your password.  If you used Master Password's <em>Maximum Security</em> type, it would take him up to <strong>312409704477000007680
+                                years</strong>.</p>
+
+                            <p><h3 class="inline">Master Password solves the <em>strong cryptography</em> problem</h3>
+                            by using key derivation.</p>
+                        </div>
+
+                        <h3>These things are hard to get right.</h3>
+                        <p>Security is hard to get right.  Applying some "military strength" encryption, doing some "hashing" and topping it off with some "proprietory" encoding doesn't suffice.  There are many ways in which you can unintentionally open the door for attackers to weaken your solution or make it trivial to get in.  When you evaluate a product consider <em>proprietary algorithms and missing details</em> on why it is "secure" as <strong>glaring red flags</strong>.
+                    </div>
+                    
+                    <div class="hlvl">
+                        <h2 id="trust">TRUST: Why Should I Trust Master Password?</h2>
+                        <p>Regardless of how strong a solution is, all that strength can be easily defeated by misplaced or violated trust. If you're looking for a security product, you <strong>will need to trust something</strong> but it is important that you carefully consider and minimize that trust.  Some prefer to put their trust in large organizations with a track record.  Some prefer to put it in secret algorithms they aren't even allowed to evaluate themselves.</p>
+
+                        <p><h3 class="inline">At Master Password we've decided that real trust</h3>
+                        is the result of <strong>transparancy</strong>.  Which is why we've made our algorithm open, published it on our website, described it in full and exposed it to cryptographic experts. We've also made our applications that implement it open-source so that you can see how they work and even bypass our binary distributions and instead install them from source.</p>
+
+                        <p><h3 class="inline">Master Password minimizes the parties</h3>
+                        you need to trust by implementing a completely stateless solution that requires <em>no storage</em> (you don't need to trust your hard disk or hardware), requires <em>no backups or syncing</em> (you don't need to trust that all your passwords are safely backed up and synced across your devices so they're actually available to you), requires <em>no cloud services</em> (you don't need to trust that your Internet connection is safe, or a cloud provider won't lose your
+                        data or <a href="http://www.guardian.co.uk/world/2013/jun/06/us-tech-giants-nsa-data">secretly send it to your or a foreign government</a>).
+
+                        <h3>Trust is the most common failure point.</h3>
+                        <p>Most other solutions that get strength right don't care so much about the trust front.  They figure, if you're going to pay them for their app, you might as well trust them with all your passwords too.  This really shouldn't be an implicit assumption.  They're <strong>your passwords</strong>, and nobody else should have a say.</p>
+                    </div>
+                    
+                    <div class="hlvl">
+                        <h2 id="loss">LOSS: Can I Lose Everything?</h2>
+                        <p>Loss is another one of those points that are very often overlooked.  It's as though the implicit assumptions are that everybody backs all of their stuff up to at least two different devices and backups in the cloud in at least two separate countries.  Well, <strong>people don't always have perfect backups</strong>.  In fact, they usually don't have <em>any</em>.</p>
+                        <p>So what happens when you drop your phone in the toilet, spill your coffee on your laptop, or worse, your kid drops a candle into the arts and crafts box and sets the house alight?  You lose everything.  <strong>You lose your own identity</strong>.</p>
+
+                        <p><h3 class="inline">Master Password is engineered to immune</h3>
+                        to data loss.  And what better a way to fight data loss than by using <em>no data at all</em>?  Master Password is a stateless solution, which means that its passwords are a result of only the things you can remember.  Additionally, it minimizes the things you need to remember to little more than your own name, the site you want to use and a sentence as long as three or four words in a song's lyrics (don't use an actual song's lyrics for your master password!  The
+                        point is small sentences are very memorable).</p>
+                        
+                        <p>When all is lost, you just need to open up Master Password, be it on a brand new computer, or a friend's iPhone, and you can just add your name and site back to it.  Your passwords will re-appear "out of thin air".</p>
+
+                        <h3>Most password solutions rely on "vaults".</h3>
+                        <p>Vaults make the password problem really easy: passwords can be encrypted and stored on your hard disk for when you need the password again.  You only notice the trouble vaults inflict when disaster strikes and you either lose the vault, it falls in the wrong hands, or a foreign government confiscates it.  Be extremely wary of all vault-based password solutions and <em>make sure you understand the down sides well</em>.</p>
+                    </div>
+
+                    <div class="hlvl">
+                        <h2 id="usability">USABILITY: I Don't Really Need A Secure Facebook...</h2>
+                        <p>And then there's the biggest obstacle of all.  Bigger even than password strength, trust issues and risk of total loss, is the risk that you'll get lazy.  Usability should be a primary concern for password solutions, but it is often overlooked.</p>
+
+                        <p>When a security solution becomes just a little bit too hard to use, people become extremely eager to just skip it.  At first, only for those "<em>innocent</em>" cases where they "<em>don't really need security</em>".  Not only is that a very slippery slope, it also gives attackers a way to climb up from your weakly protected sites to your strong ones through various methods including social engineering with your friends, your sites' support staff and even with you
+                        directly.</p>
+
+                        <p>All your sites should be <strong>equally well protected</strong>, each of them with <strong>unique passwords</strong> and you need to remain ever encouraged to keep it that way.</p>
+
+                        <p><h3 class="inline">Master Password makes it easier on you</h3>
+                        in various ways.  It tries to minimize the time it takes to get to the password you need.  It uses copy/paste functionality and generates easily memorable and typeable passwords to facilitate their usage.  It removes the need for you to take the time to think of strong passwords by doing it for you.  And we're constantly thinking of more ways to speed things up.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="thumb clearfix">
+                <h1>How Does It Manage To Do All That?</h1>
+                <p>For the more technical details, please see the <a href="algorithm.html">Algorithm</a> page instead.  I will give a more down-to-earth overview here.</p>
+
+                <div class="hlvl">
+                    <h2>To Be Stateless</h2>
+                    <p>As mentioned, Master Password is a stateless solution which means it derives its passwords solely from <strong>things that you can easily remember and nothing more</strong>.  So what does it use?</p>
+
+                    <div class="hlvl">
+                        <ol>
+                            <li><a href="#inputname">Your Name</a>:
+                            We recommend you use your full given names and family name.</li>
+                            <li><a href="#inputmp">Your Master Password</a>:
+                            This one is your <strong>personal</strong> secret.  Don't give it to anyone.  <em>Ever</em>.</li>
+                            <li><a href="#inputsite">The Site Name</a>:
+                            This tells Master Password which password to generate.  If you just use the site's bare domain name, you won't need to remember anything extra.</li>
+                            <li><a href="#inputcounter">The Site Counter</a>:
+                            The least obvious, it's a number that starts at 1 and only ever goes up if you want a new password for the site.</li>
+                        </ol>
+
+                        <div class="hlvl">
+                            <p id="inputname"><h3 id="inputmp" class="inline">The fact that we need</h3>
+                            a master password is obvious, why do we need a name?<br />
+                            The name is a key element to the security of the algorithm: It is a seed to the key derivation that happens on your master password.  Without this seed, the key derivation could be weakened by attackers generating a rainbow table.  In practice, it ensures that two different people won't by chance pick the same master password and end up with all the same site passwords.</p>
+                        </div>
+
+                        <div class="hlvl">
+                            <p id="inputcounter"><h3 id="inputsite" class="inline">The name of the site</h3>
+                            is also an obvious requirement, it ensures each site has a unique password.  What's the counter about?  Well, if a site's password was the result of just your name, your master password, and the site's name, what would you do if somebody saw your password?  Or if the site told you its password database was compromised and you need to set a new password?  You'd need a way to make a new password for the site.  The solution is the password counter.  Increase the counter, get a new password.  Don't
+                            worry too much about not remembering the counter.  If you ever need to, just start the counter from one and bump it until you get the password that logs you into your site.</p>
+                        </div>
+                    </div>
+
+                    <h2>To Be Strong</h2>
+                    <p>Using those givens, Master Password applies its algorithm to get you a password for the site.  Why can you trust that this algorithm is strong against possible attacks?  How does it work and what attacks does it prevent?</p>
+
+                    <p>Here's how it works.  To get your password, Master Password goes through the following steps:</p>
+
+                    <div class="hlvl">
+                        <ol>
+                            <li><a href="#masterkey">The Master Key</a>:
+                            We use the master password and your name to derive a very long master key using <em>scrypt key derivation</em>.</li>
+                            <li><a href="#passwordseed">The Password Seed</a>:
+                            We create a <em>password seed</em> from the site's name and counter using your master key and <em>HMAC-SHA-256</em>.</li>
+                            <li><a href="#passwordtemplate">The Site Password</a>:
+                            We compose a good password by encoding your <em>password seed</em> using a password template.</li>
+                        </ol>
+
+                        <div class="hlvl">
+                            <h3 id="masterkey" class="inline">The Master Key</h3>
+                            <p>The first part of the process it to obtain a very strong "token" of your personal identity.  We call this token your <em>master key</em>, because it is very much like the one and only <strong>main key that opens all your doors</strong>.  It is a personal key, it represents your identity.</p>
+                            <p>The master key is derived from your name and your master password, and thrown away as soon as it's no longer needed to minimize the risk of loss.</p>
+                            <p>Since it's vital that nobody else can gain access to your master key, it's important that the process of deriving the key is unsurmountably difficult.  An attacker could try a brute-force attack against your master key or password by convincing you to make an account on his website, and then guessing at your master password or your master key until he finds one that gives him your password for his fake site.</p>
+                            <p>These are two different types of brute-force attacks and we need to make sure to defeat both of them.</p>
+                            <p>To defeat a brute-force attack against your master key, we make sure the master key is sufficiently high in entropy.  Since the master key is a 256-bit key, an attacker would now have to make up to <code>2<sup>256</sup></code> guesses, or try <code>115792089237316195423570985008687907853269984665640564039457584007913129639936</code> master keys before finding the right one.  Even at an ambitious rate of 2 billion tries per second, it would take several times the age of the universe to try all of them.
+                            <p>A brute-force attack against your master password is more feasible, since your master password will be tiny compared to such a huge master key.</p>
+                            <p>Even if you used a 6-character evenly distributed random alphanumeric password (such as <code>yIp6X1</code>), an attacker with an decent GPU could brute-force such a password in less than <em>3 years</em>.  With a powerful setup (eg. a cluster of <em>10 Nvidia 8800GT</em> GPUs which can try about <em>2 billion passwords a second</em>), that time could conceivibly go down to <em>3 or 4 months</em>.</p>
+                            <p>To solve this problem, we introduce an expensive <q>scrypt</q>-based <em>key derivation</em> step.  <em>scrypt</em> specifically improves on standard key derivation techniques by not only wasting a lot of <em>CPU time</em>, but also consuming huge amounts of <em>RAM</em>.  We need to be careful to choose the right parameters so that logging into Master Password doesn't take too long on weaker mobile devices while the possibility of guessing at passwords is sufficiently
+                            cippled for attackers. The theory is, the longer it takes for an attacker to try out one guess of your master password, the longer it'll take him to find the right one.  We pull this theory into the extreme so that guessing your password now takes <strong>19477911.1969 years</strong> instead of <em>3 months</em> while logging into Master Password on an iPhone 4S takes less than 3 seconds.</p>
+                            <p>It bears note that <em>scrypt</em>'s approach is specifically interesting because it costs both a lot of CPU and a lot of RAM to derive a master key. That means that the more computers an attacker buys, the more his $ cost goes up.  CPU and RAM are expensive, and forcing the derivation to use a lot instead of minuscule amounts causes the $ cost of a brute-force attack to become phenomenal.</p>
+                            <p>Given these solutions, we feel confident Master Password is adequately protected against attacks on your private master key.</p>
+                        </div>
+                        <div class="hlvl">
+                            <h3 id="passwordseed" class="inline">The Password Seed</h3>
+                            <p>With your master key, we can move on to getting a site-specific secret, since the idea behind Master Password is that each site needs to have a unique password.</p>
+                            <p>To derive a site-specific secret from your master key, we employ <q>HMAC-SHA-256</q> (a SHA-Hashed Message Authentication Code of 256-bit in length) to compute an authentication token by carefully hashing the site's name and counter with the master key.  The result is a 256-bit <em>password seed</em>, which is essentially <strong>your key to get into the website</strong>.</p>
+                            <p>It's obvious why we include the site name in this operation: it gets us a site-specific result.  The password counter exists to allow you to get a new and completely different password for the site in case your old one becomes lost or compromised.</p>
+                            <p>Some may wonder why this password seed is quite so large.  We've chosen a 256-bit password seed not because it gives us any added security, but specifically because it gives us enough entropy in case the user wants to encode a really long password (see the "Maximum Security" password template in the next section).</p>
+                        </div>
+                        <div class="hlvl">
+                            <h3 id="passwordtemplate" class="inline">The Site Password</h3>
+                            <p>Even though we now already have a site-specific key, called the <em>password seed</em>, this is a 256-bit sequence, which is definitely not something you can type into a password field.  The last step involves encoding a nice password using the secret bits in this seed.</p>
+                            <p>While we're encoding a password, we have one final problem to solve: password policies.  Most websites nowadays have taken it upon themselves to restrict the kinds of passwords you can use.  The point is usually to keep you from using passwords that are too weak, but these policies unfortunately often include rules that are detrimental for the strength of passwords (such as <q>your password MUST contain a number, it MUST start with a letter, and it MUST
+                                NOT be longer than 6 characters.  Oh yeah, and it MUST NOT contain quotes or anything fancy because we strip that since we don't know how else to sanitize data against SQL injection while we store your passwords in plain text.</q> (did you detect a little rant there?).</p>
+                            <p>Master Password comes with a set of templates which are carefully crafted to give you passwords which strike an optimal balance between security and usability while dodging the rules of the most common password policies.</p>
+                            <p>Master Password's default <em>Long Password</em> template produces memorable passwords such as <code>XikuFuzzFosu9[</code> which have just under 56 bits of entropy.  It would take an Nvidia 8800GT about <strong>10 years</strong> at <em>200 million passwords per second</em>.  That same machine would crack a perfectly random 6-character alphanumeric password in <em>3 years</em>.</p>
+                            <p>Master Password's <em>Secure Password</em> template uses a lot of bits from the password seed to give you a password that's 20 characters long, looks something like <code>A2/IczT2BKx^(bVa18Kp</code> and would take that same machine up to <strong>3124097044769999945728 years</strong> to crack.</p>
+                            <p>Given these numbers we feel confident that Master Password's output passwords offer you the maximum amount of confidence in the strength of your external accounts.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="thumb clearfix">
+                <h1>Conclusion</h1>
+                <p>We've explained all the important factors in which password managers can and should protect the security of your private information.  We've also clarified in which ways Master Password deals with each of these factors and backed these clarifications with numbers and reasoning.</p>
+                <p>Hopefully this information has given you sufficient confidence in the Master Password algorithm and has taught you important ways to evaluate other competing security products so that you can make an informed decision.</p>
+
+                <h2>A Final Note On Security</h2>
+                <p>Of course, there are much easier ways for attackers to get at your passwords than through brute-forcing them or the solutions that provide them.  When sites like <em>Yahoo!</em> store your passwords as plain-text in their databases, or you log into websites via plain HTTP connections where middle men can read everything that goes over the wire, your extra strong password can instantly be defeated.  These problems cannot be solved by a password manager, and it is therefore important that users remain ever
+                vigilant and don't rely on a "security solution" to keep them "secure" from "everything".</p>
+                <p>Master Password aims to provide you with secure passwords and protects you from loss.  It cannot protect your wire as you send passwords over the internet, it cannot protect the note paper if you write these passwords down somewhere, and it cannot protect your web account when the web master has been negligent and the site gets hacked.  Security, as always, must come in many forms, and the weakest link easily breaks the entire chain.</p>
+            </div>
+        
+            <div class="thumb clearfix">
+                <h1>Other Questions / Issues</h1>
+                <p>Don't hesitate to send us a message at <a href="mailto:masterpassword@lyndir.com">masterpassword@lyndir.com</a>.  I'll get right on your case.  Try to include any details you can.  Good or common questions will have their answers added to this page.</p>
+            </div>
+
+        </div></section>
+
+        <footer><div class="muted content">
+        
+            <p><em>Master Password is a security product and algorithm by <a href="http://www.lhunath.com">Maarten Billemont</a>, <a href="http://www.lyndir.com">Lyndir</a>.</em></p>
+            <p><a href="http://gorillas.lyndir.com">Gorillas</a> ● <a href="http://deblock.lyndir.com">DeBlock</a> ● <a href="http://github.com/Lyndir">GitHub</a></p>
+
+        </div></footer>
+
+        <!-- Scripts -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="js/vendor/bootstrap.min.js"></script>
+
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
+        <!-- Google Analytics -->
+        <script>
+            var _gaq=[['_setAccount','UA-90535-15'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+
+        <!-- Google +1 -->
+        <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+
+        <!-- Get Satisfaction -->
+        <!--script type="text/javascript" charset="utf-8">
+          var is_ssl = ("https:" == document.location.protocol);
+          var asset_host = is_ssl ? "https://d3rdqalhjaisuu.cloudfront.net/" : "http://d3rdqalhjaisuu.cloudfront.net/";
+          document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript" charset="utf-8">
+          var feedback_widget_options = {};
+          feedback_widget_options.display = "overlay";  
+          feedback_widget_options.company = "lyndir";
+          feedback_widget_options.placement = "right";
+          feedback_widget_options.color = "#222";
+          feedback_widget_options.style = "question";
+          var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
+        </script-->
+
+        <!-- UserEcho -->
+        <script type='text/javascript'>
+            var _ues = {
+            host:'support.lyndir.com',
+            forum:'13031',
+            lang:'en',
+            tab_icon_show:false,
+            tab_corner_radius:5,
+            tab_font_size:20,
+            tab_image_hash:'RmVlZGJhY2s%3D',
+            tab_alignment:'right',
+            tab_text_color:'#FFFFFF',
+            tab_bg_color:'#DDDDDD',
+            tab_hover_color:'#CCCCCC'
+            };
+
+            (function() {
+                var _ue = document.createElement('script'); _ue.type = 'text/javascript'; _ue.async = true;
+                _ue.src = ('https:' == document.location.protocol ? 'https://s3.amazonaws.com/' : 'http://') + 'cdn.userecho.com/js/widget-1.4.gz.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(_ue, s);
+              })();
+        </script>
+
+        <!-- AdWords -->
+        <script type="text/javascript">
+            /* <![CDATA[ */
+            goog_snippet_vars = function() {
+                var w = window;
+                w.google_conversion_id = 1015576061;
+                w.google_conversion_label = "PcXqCPPz5AIQ_euh5AM";
+                w.google_conversion_value = 4;
+            }
+            goog_report_conversion = function(url) {
+                goog_snippet_vars();
+                window.google_conversion_format = "3";
+                window.google_is_call = true;
+                var opt = new Object();
+                opt.onload_callback = function() {
+                    if (typeof(url) != 'undefined') {
+                        window.location = url;
+                    }
+                }
+                var conv_handler = window['google_trackConversion'];
+                if (typeof(conv_handler) == 'function') {
+                    conv_handler(opt);
+                }
+            }
+            /* ]]> */
+        </script>
+        <script type="text/javascript" src="http://www.googleadservices.com/pagead/conversion_async.js"></script>
+    </body>
+
+</html>
