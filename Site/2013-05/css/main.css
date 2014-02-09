@@ -18,6 +18,17 @@ nav {
 h1, h2, h3, h4 {
     margin-top: 1em;
 }
+/*
+*[id]::before {
+position: relative;
+    content: "";
+    display: block;
+    height: 60px;
+width: 5px;
+background: red;
+    margin-top: -60px;
+}
+*/
 
 section {
     padding: 1ex 0;
@@ -46,7 +57,7 @@ section {
     margin-left: -2em;
     padding-left: 3em;
 }
-h3.inline {
+h2.inline, h3.inline, h4.inline {
     display: inline-block;
     line-height: inherit;
 }
