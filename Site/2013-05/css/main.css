@@ -204,3 +204,47 @@ q {
 q::after {
     content: close-quote;
 }
+table {
+    width: 100%;
+}
+thead {
+    background: #DDD;
+}
+tbody {
+    background: #EEE;
+}
+th {
+    background: #E9E9E9;
+}
+td, th {
+    padding: 1ex;
+}
+thead {
+    border: 1px solid #DDD;
+}
+tbody td, tbody th {
+    border: 1px solid #DDD;
+}
+caption {
+    font-weight: bold;
+    font-size: 120%;
+}
+table .box {
+    display: block;
+    width: 15px;
+    height: 15px;
+    float: right;
+    border-radius: 5px;
+}
+table .box.red {
+    background: #A66;
+    border: 1px solid #C33;
+}
+table .box.orange {
+    background: #AA6;
+    border: 1px solid #CC3;
+}
+table .box.green {
+    background: #6A6;
+    border: 1px solid #3C3;
+}
