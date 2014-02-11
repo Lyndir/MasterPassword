@@ -141,12 +141,12 @@
     self.emergencyGeneratorContainer.alpha = 0;
     self.emergencyGeneratorContainer.hidden = YES;
     self.emergencyQueue = [NSOperationQueue new];
-    [self.emergencyCounterStepper addTargetBlock:^(id sender, UIControlEvents event) {
+    [self.emergencyCounterStepper addTargetBlock:^(id sender, UIControlEvents event, id weakSelf) {
         self.emergencyCounter.text = PearlString( @"%lu", (unsigned long)self.emergencyCounterStepper.value );
 
         [self updateEmergencyPassword];
     }                           forControlEvents:UIControlEventValueChanged];
-    [self.emergencyTypeControl addTargetBlock:^(id sender, UIControlEvents event) {
+    [self.emergencyTypeControl addTargetBlock:^(id sender, UIControlEvents event, id weakSelf) {
         [self updateEmergencyPassword];
     }                        forControlEvents:UIControlEventValueChanged];
     self.emergencyContentTipContainer.alpha = 0;
