@@ -5,7 +5,7 @@ shopt -s extglob
 
 
 ## Submodules that need to be checked out.
-dependencies=( External/{FontReplacer,InAppSettingsKit,Pearl{,:External/jrswizzle,:External/uicolor-utilities,:External/iOSPorts},google-plus-ios-sdk,UbiquityStoreManager,RHStatusItemView,LoveLyndir,DCIntrospect} )
+dependencies=( External/{FontReplacer,InAppSettingsKit,Pearl{,:External/jrswizzle,:External/uicolor-utilities},google-plus-ios-sdk,UbiquityStoreManager,RHStatusItemView,LoveLyndir,DCIntrospect} )
 
 ## Custom migration.
 # None yet.
