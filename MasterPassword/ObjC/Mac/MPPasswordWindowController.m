@@ -42,8 +42,6 @@
     self.backgroundQueue = [NSOperationQueue new];
     self.backgroundQueue.maxConcurrentOperationCount = 1;
 
-    [self.tipField setStringValue:@""];
-
     [self.userLabel setStringValue:PearlString( @"%@'s password for:", [[MPMacAppDelegate get] activeUserForMainThread].name )];
     [[MPMacAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
 //        [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
@@ -160,7 +158,6 @@
                 return;
 
             [self.siteField setStringValue:@""];
-            [self.tipField setStringValue:@""];
 
             NSAlert *alert = [NSAlert alertWithMessageText:@"Master Password is locked."
                                              defaultButton:@"Unlock" alternateButton:@"Change" otherButton:@"Cancel"
@@ -265,11 +262,48 @@
     }
 }
 
+#pragma mark - NSCollectionViewDelegate
+
+- (void)setElementSelectionIndexes:(NSIndexSet *)elementSelectionIndexes {
+
+    // First reset bounds.
+    PearlMainThread(^{
+        NSUInteger selectedIndex = self.elementSelectionIndexes.firstIndex;
+        if (selectedIndex != NSNotFound && selectedIndex < self.elements.count)
+            [[self selectedView].animator setBoundsOrigin:NSZeroPoint];
+    } );
+
+    _elementSelectionIndexes = elementSelectionIndexes;
+}
+
+#pragma mark - NSTextFieldDelegate
+
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector {
 
     if (commandSelector == @selector(cancel:)) { // Escape without completion.
         [self close];
         return YES;
+    }
+    if (self.elements.count) {
+        if (commandSelector == @selector(moveUp:)) {
+            self.elementSelectionIndexes =
+                    [NSIndexSet indexSetWithIndex:(self.elementSelectionIndexes.firstIndex - 1 + self.elements.count) % self.elements.count];
+            return NO;
+        }
+        if (commandSelector == @selector(moveDown:)) {
+            self.elementSelectionIndexes =
+                    [NSIndexSet indexSetWithIndex:(self.elementSelectionIndexes.firstIndex + 1) % self.elements.count];
+            return NO;
+        }
+        if (commandSelector == @selector(moveLeft:)) {
+            [[self selectedView].animator setBoundsOrigin:NSZeroPoint];
+            return NO;
+        }
+        if (commandSelector == @selector(moveRight:)) {
+            NSBox *selectedView = [self selectedView];
+            [selectedView.animator setBoundsOrigin:NSMakePoint( selectedView.bounds.size.width / 2, 0 )];
+            return NO;
+        }
     }
 //    if ((self.siteFieldPreventCompletion = [NSStringFromSelector( commandSelector ) hasPrefix:@"delete"])) { // Backspace any time.
 //        _activeElementOID = nil;
@@ -278,7 +312,7 @@
 //    }
     if (commandSelector == @selector(insertNewline:)) { // Return without completion.
         [self useSite];
-        return YES;
+        return NO;
     }
 
     return NO;
@@ -305,6 +339,8 @@
     [self updateElements];
 }
 
+#pragma mark - Private
+
 - (void)updateElements {
     NSString *query = [self.siteField.currentEditor string];
     if (![query length] || ![MPMacAppDelegate get].key) {
@@ -327,17 +363,32 @@
             for (MPElementEntity *element in siteResults)
                 [newElements addObject:[[MPElementModel alloc] initWithEntity:element]];
             self.elements = newElements;
+            if (!self.selectedElement && [newElements count])
+                self.elementSelectionIndexes = [NSIndexSet indexSetWithIndex:0];
         }
     }];
 }
 
-- (MPElementModel *)selectedElement {
+- (NSBox *)selectedView {
 
-    NSIndexSet *selectedIndexes = self.siteCollectionView.selectionIndexes;
-    if (!selectedIndexes.count)
+    NSUInteger selectedIndex = self.elementSelectionIndexes.firstIndex;
+    if (selectedIndex == NSNotFound || selectedIndex >= self.elements.count)
         return nil;
 
-    return (MPElementModel *)self.elements[selectedIndexes.firstIndex];
+    return (NSBox *)[self.siteCollectionView itemAtIndex:selectedIndex].view;
+}
+
+- (MPElementModel *)selectedElement {
+
+    if (!self.elementSelectionIndexes.count)
+        return nil;
+
+    return (MPElementModel *)self.elements[self.elementSelectionIndexes.firstIndex];
+}
+
+- (void)setSelectedElement:(MPElementModel *)element {
+
+    self.elementSelectionIndexes = [NSIndexSet indexSetWithIndex:[self.elements indexOfObject:element]];
 }
 
 - (void)useSite {
@@ -346,60 +397,22 @@
     if (selectedElement) {
         // Performing action while content is available.  Copy it.
         [self copyContent:selectedElement.content];
-
-        self.tipField.alphaValue = 1;
-        self.tipField.stringValue = @"Copied!  Hit ⎋ (ESC) to close window.";
-        dispatch_after( dispatch_time( DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC) ), dispatch_get_main_queue(),
-                ^{
-                    [NSAnimationContext beginGrouping];
-                    [[NSAnimationContext currentContext] setDuration:0.2f];
-                    [self.tipField.animator setAlphaValue:0];
-                    [NSAnimationContext endGrouping];
+        NSBox *selectedView = [self selectedView];
+        dispatch_async( dispatch_get_main_queue(), ^{
+            [selectedView.animator setFillColor:[NSColor controlHighlightColor]];
+            dispatch_after( dispatch_time( DISPATCH_TIME_NOW, (int64_t)(0.3f * NSEC_PER_SEC) ), dispatch_get_main_queue(), ^{
+                dispatch_async( dispatch_get_main_queue(), ^{
+                    [selectedView.animator setFillColor:[NSColor selectedControlColor]];
                 } );
+            } );
+        } );
     }
     else {
         NSString *siteName = [self.siteField stringValue];
-        if ([siteName length]) {
+        if ([siteName length])
             // Performing action without content but a site name is written.
             [self createNewSite:siteName];
-            [self.tipField setStringValue:@""];
-        }
     }
-
-//    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-//        MPElementEntity *activeElement = [self activeElementInContext:context];
-//        NSString *typeName = [activeElement typeShortName];
-//        [activeElement.algorithm resolveContentForElement:activeElement usingKey:[MPAppDelegate_Shared get].key result:
-//                ^(NSString *result) {
-//                    BOOL actionHandled = NO;
-//                    if (doAction) {
-//                    }
-//
-//                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-//                        [self setContent:result];
-//                        if (actionHandled)
-//                            [self.tipField setStringValue:@""];
-//                        else if (![result length]) {
-//                            if ([siteName length])
-//                                [self.tipField setStringValue:@"Hit ⌤ (ENTER) to create a new site."];
-//                            else
-//                                [self.tipField setStringValue:@""];
-//                        }
-//                        else if (!doAction)
-//                            [self.tipField setStringValue:@"Hit ⌤ (ENTER) to copy the password."];
-//                        else {
-//                            [self.tipField setStringValue:@"Copied!  Hit ⎋ (ESC) to close window."];
-//                            dispatch_after( dispatch_time( DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC) ), dispatch_get_main_queue(),
-//                                    ^{
-//                                        [NSAnimationContext beginGrouping];
-//                                        [[NSAnimationContext currentContext] setDuration:0.2f];
-//                                        [self.tipField.animator setAlphaValue:0];
-//                                        [NSAnimationContext endGrouping];
-//                                    } );
-//                        }
-//                    }];
-//                }];
-//    }];
 }
 
 - (void)copyContent:(NSString *)content {
@@ -426,6 +439,8 @@
                          didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertCreateSite];
     }];
 }
+
+#pragma mark - KVO
 
 - (void)insertObject:(MPElementModel *)model inElementsAtIndex:(NSUInteger)index {
 

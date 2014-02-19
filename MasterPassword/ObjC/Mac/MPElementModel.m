@@ -39,9 +39,12 @@
     self.site = entity.name;
     self.lastUsed = entity.lastUsed;
     self.loginName = entity.loginName;
-    self.type = entity.typeName;
+    self.type = entity.type;
+    self.typeName = entity.typeName;
     self.uses = entity.uses_;
+    self.counter = @([entity isKindOfClass:[MPElementGeneratedEntity class]]? [(MPElementGeneratedEntity *)entity counter]: 0);
     self.content = [entity.algorithm resolveContentForElement:entity usingKey:[MPAppDelegate_Shared get].key];
+    self.algorithm = entity.algorithm;
     self.entityOID = entity.objectID;
 
     return self;

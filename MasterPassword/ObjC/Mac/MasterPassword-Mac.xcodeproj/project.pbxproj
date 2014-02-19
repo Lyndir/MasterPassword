@@ -13,7 +13,6 @@
 		93D39C5789EFA607CF788082 /* MPElementModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39E73BF5CBF8E5B005CD3 /* MPElementModel.m */; };
 		93D39C7C2BE7C0E0763B0177 /* MPElementCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D394495528B10D1B61A2C3 /* MPElementCollectionView.m */; };
 		93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */; };
-		DA0933CA1747A56A00DE1CEF /* MPInitialWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA0933C91747A56A00DE1CEF /* MPInitialWindow.xib */; };
 		DA0933CC1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */; };
 		DA0933D01747B91B00DE1CEF /* appstore.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CF1747B91B00DE1CEF /* appstore.png */; };
 		DA16B33F170661D4000A0EAB /* libUbiquityStoreManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */; };
@@ -204,6 +203,7 @@
 		DAEB942718AB0FFD000490CC /* sha256.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB93D618AB0FFD000490CC /* sha256.h */; };
 		DAEB942818AB0FFD000490CC /* sysendian.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB93D718AB0FFD000490CC /* sysendian.h */; };
 		DAEB942918AB0FFD000490CC /* warn.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB93D818AB0FFD000490CC /* warn.h */; };
+		DAEB942E18B47FB3000490CC /* MPInitialWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA0933C91747A56A00DE1CEF /* MPInitialWindow.xib */; };
 		DAFE4A1315039824003ABA7C /* NSObject+PearlExport.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45D815039823003ABA7C /* NSObject+PearlExport.h */; };
 		DAFE4A1415039824003ABA7C /* NSObject+PearlExport.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45D915039823003ABA7C /* NSObject+PearlExport.m */; };
 		DAFE4A1515039824003ABA7C /* NSString+PearlNSArrayFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45DA15039823003ABA7C /* NSString+PearlNSArrayFormat.h */; };
@@ -1452,6 +1452,7 @@
 				DACA27231705DF81002C6C22 /* avatar-15@2x.png in Resources */,
 				DACA27241705DF81002C6C22 /* avatar-5@2x.png in Resources */,
 				DACA27251705DF81002C6C22 /* avatar-6.png in Resources */,
+				DAEB942E18B47FB3000490CC /* MPInitialWindow.xib in Resources */,
 				DACA27261705DF81002C6C22 /* avatar-6@2x.png in Resources */,
 				DACA27271705DF81002C6C22 /* avatar-16@2x.png in Resources */,
 				DACA27281705DF81002C6C22 /* avatar-10.png in Resources */,
@@ -1486,7 +1487,6 @@
 				DA5E5D0A1724A667003798D8 /* InfoPlist.strings in Resources */,
 				DA5E5D0B1724A667003798D8 /* MainMenu.xib in Resources */,
 				DA5E5D551724F9C8003798D8 /* MasterPassword.iconset in Resources */,
-				DA0933CA1747A56A00DE1CEF /* MPInitialWindow.xib in Resources */,
 				DA0933CC1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png in Resources */,
 				DA0933D01747B91B00DE1CEF /* appstore.png in Resources */,
 			);

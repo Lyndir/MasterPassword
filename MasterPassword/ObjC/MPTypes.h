@@ -8,27 +8,27 @@
 
 #import "MPKey.h"
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, MPElementContentType) {
     MPElementContentTypePassword,
     MPElementContentTypeNote,
     MPElementContentTypePicture,
-} MPElementContentType;
+};
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, MPElementTypeClass) {
     /** Generate the password. */
             MPElementTypeClassGenerated = 1 << 4,
     /** Store the password. */
             MPElementTypeClassStored = 1 << 5,
-} MPElementTypeClass;
+};
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, MPElementFeature) {
     /** Export the key-protected content data. */
             MPElementFeatureExportContent = 1 << 10,
     /** Never export content. */
             MPElementFeatureDevicePrivate = 1 << 11,
-} MPElementFeature;
+};
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, MPElementType) {
     MPElementTypeGeneratedMaximum = 0x0 | MPElementTypeClassGenerated | 0x0,
     MPElementTypeGeneratedLong = 0x1 | MPElementTypeClassGenerated | 0x0,
     MPElementTypeGeneratedMedium = 0x2 | MPElementTypeClassGenerated | 0x0,
@@ -38,7 +38,7 @@ typedef enum {
 
     MPElementTypeStoredPersonal = 0x0 | MPElementTypeClassStored | MPElementFeatureExportContent,
     MPElementTypeStoredDevicePrivate = 0x1 | MPElementTypeClassStored | MPElementFeatureDevicePrivate,
-} MPElementType;
+};
 
 #define MPErrorDomain                         @"MPErrorDomain"
 

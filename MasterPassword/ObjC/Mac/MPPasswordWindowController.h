@@ -7,12 +7,13 @@
 //
 
 #import <Cocoa/Cocoa.h>
+@class MPElementModel;
 
-@interface MPPasswordWindowController : NSWindowController<NSTextFieldDelegate>
+@interface MPPasswordWindowController : NSWindowController<NSTextFieldDelegate, NSCollectionViewDelegate>
 
 @property(nonatomic, strong) NSMutableArray *elements;
+@property(nonatomic, strong) NSIndexSet *elementSelectionIndexes;
 @property(nonatomic, weak) IBOutlet NSTextField *siteField;
-@property(nonatomic, weak) IBOutlet NSTextField *tipField;
 @property(nonatomic, weak) IBOutlet NSView *contentContainer;
 @property(nonatomic, weak) IBOutlet NSTextField *userLabel;
 @property(nonatomic, weak) IBOutlet NSCollectionView *siteCollectionView;

@@ -37,6 +37,8 @@
 - (NSString *)shortNameOfType:(MPElementType)type;
 - (NSString *)classNameOfType:(MPElementType)type;
 - (Class)classOfType:(MPElementType)type;
+- (MPElementType)nextType:(MPElementType)type;
+- (MPElementType)previousType:(MPElementType)type;
 
 - (NSString *)generateContentNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter usingKey:(MPKey *)key;
 - (NSString *)storedContentForElement:(MPElementStoredEntity *)element usingKey:(MPKey *)key;

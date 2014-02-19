@@ -21,11 +21,14 @@
 
 @interface MPElementModel : NSObject
 @property (nonatomic) NSString *site;
-@property (nonatomic) NSString *type;
+@property (nonatomic) MPElementType type;
+@property (nonatomic) NSString *typeName;
 @property (nonatomic) NSString *content;
 @property (nonatomic) NSString *loginName;
 @property (nonatomic) NSNumber *uses;
+@property (nonatomic) NSNumber *counter;
 @property (nonatomic) NSDate *lastUsed;
+@property (nonatomic, strong) id<MPAlgorithm> algorithm;
 
 - (MPElementEntity *)entityForMainThread;
 - (MPElementEntity *)entityInContext:(NSManagedObjectContext *)moc;

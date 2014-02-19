@@ -409,6 +409,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         newElement.loginName = element.loginName;
 
         [context deleteObject:element];
+        // TODO: Dodgy... we're not saving consistently here.
+        // Either we should save regardless and change the method signature to saveInContext: or not save at all.
         [context saveToStore];
 
         NSError *error;
@@ -699,7 +701,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
         [export appendFormat:@"%@  %8ld  %8s  %20s\t%@\n",
                              [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed], (long)uses,
-                             [PearlString( @"%u:%lu", type, (unsigned long)version ) UTF8String], [name UTF8String], content
+                             [PearlString( @"%lu:%lu", type, (unsigned long)version ) UTF8String], [name UTF8String], content
                                                                                                                      ? content: @""];
     }
 

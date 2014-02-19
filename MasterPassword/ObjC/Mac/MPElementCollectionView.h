@@ -17,9 +17,17 @@
 //
 
 #import <Foundation/Foundation.h>
+@class MPElementModel;
 
 @interface MPElementCollectionView : NSCollectionViewItem
 
-@property(nonatomic, weak) IBOutlet NSTextField *siteField;
-@property(nonatomic, weak) IBOutlet NSTextField *contentField;
+@property (nonatomic) MPElementModel *representedObject;
+@property (nonatomic) NSString *typeTitle;
+@property (nonatomic) NSString *loginNameTitle;
+@property (nonatomic) NSString *counterTitle;
+
+- (IBAction)toggleType:(id)sender;
+- (IBAction)setLoginName:(id)sender;
+- (IBAction)incrementCounter:(id)sender;
+
 @end
