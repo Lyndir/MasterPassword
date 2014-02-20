@@ -28,6 +28,8 @@
 
 @implementation MPPasswordWindowController
 
+#pragma mark - Life
+
 - (void)windowDidLoad {
 
     if ([[MPMacConfig get].dialogStyleHUD boolValue]) {
@@ -95,85 +97,7 @@
     [super close];
 }
 
-- (BOOL)ensureLoadedAndUnlockedOrCloseIfLoggedOut:(BOOL)closeIfLoggedOut {
-
-    if (![self ensureStoreLoaded])
-        return NO;
-
-    if (self.closing || self.inProgress || !self.window.isKeyWindow)
-        return NO;
-
-    return [self ensureUnlocked:closeIfLoggedOut];
-}
-
-- (BOOL)ensureStoreLoaded {
-
-    if ([MPMacAppDelegate managedObjectContextForMainThreadIfReady]) {
-        // Store loaded.
-        if (self.loadingDataAlert.window)
-            [NSApp endSheet:self.loadingDataAlert.window];
-
-        return YES;
-    }
-
-    [self.loadingDataAlert = [NSAlert alertWithMessageText:@"Opening Your Data" defaultButton:@"..." alternateButton:nil otherButton:nil
-                                 informativeTextWithFormat:@""]
-            beginSheetModalForWindow:self.window modalDelegate:self
-                      didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
-
-    return NO;
-}
-
-- (BOOL)ensureUnlocked:(BOOL)closeIfLoggedOut {
-
-    __block BOOL unlocked = NO;
-    [MPMacAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *moc) {
-        MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:moc];
-        NSString *userName = activeUser.name;
-        if (!activeUser) {
-            // No user to sign in with.
-            if (closeIfLoggedOut)
-                [self close];
-            return;
-        }
-        if ([MPMacAppDelegate get].key) {
-            // Already logged in.
-            unlocked = YES;
-            return;
-        }
-        if (activeUser.saveKey && closeIfLoggedOut) {
-            // App was locked, don't instantly unlock again.
-            [self close];
-            return;
-        }
-        if ([[MPMacAppDelegate get] signInAsUser:activeUser saveInContext:moc usingMasterPassword:nil]) {
-            // Loaded the key from the keychain.
-            unlocked = YES;
-            return;
-        }
-
-        // Ask the user to set the key through his master password.
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            if ([MPMacAppDelegate get].key)
-                return;
-
-            [self.siteField setStringValue:@""];
-
-            NSAlert *alert = [NSAlert alertWithMessageText:@"Master Password is locked."
-                                             defaultButton:@"Unlock" alternateButton:@"Change" otherButton:@"Cancel"
-                                 informativeTextWithFormat:@"The master password is required to unlock the application for:\n\n%@",
-                                                           userName];
-            NSSecureTextField *passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
-            [alert setAccessoryView:passwordField];
-            [alert layout];
-            [passwordField becomeFirstResponder];
-            [alert beginSheetModalForWindow:self.window modalDelegate:self
-                             didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertUnlockMP];
-        }];
-    }];
-
-    return unlocked;
-}
+#pragma mark - NSAlert
 
 - (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 
@@ -264,55 +188,40 @@
 
 #pragma mark - NSCollectionViewDelegate
 
-- (void)setElementSelectionIndexes:(NSIndexSet *)elementSelectionIndexes {
-
-    // First reset bounds.
-    PearlMainThread(^{
-        NSUInteger selectedIndex = self.elementSelectionIndexes.firstIndex;
-        if (selectedIndex != NSNotFound && selectedIndex < self.elements.count)
-            [[self selectedView].animator setBoundsOrigin:NSZeroPoint];
-    } );
-
-    _elementSelectionIndexes = elementSelectionIndexes;
-}
-
 #pragma mark - NSTextFieldDelegate
+- (void)doCommandBySelector:(SEL)commandSelector {
+
+    if (commandSelector == @selector(insertNewline:))
+        [self useSite];
+}
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector {
 
-    if (commandSelector == @selector(cancel:)) { // Escape without completion.
+    if (commandSelector == @selector(cancel:)) {
         [self close];
         return YES;
     }
-    if (self.elements.count) {
-        if (commandSelector == @selector(moveUp:)) {
-            self.elementSelectionIndexes =
-                    [NSIndexSet indexSetWithIndex:(self.elementSelectionIndexes.firstIndex - 1 + self.elements.count) % self.elements.count];
-            return NO;
-        }
-        if (commandSelector == @selector(moveDown:)) {
-            self.elementSelectionIndexes =
-                    [NSIndexSet indexSetWithIndex:(self.elementSelectionIndexes.firstIndex + 1) % self.elements.count];
-            return NO;
-        }
-        if (commandSelector == @selector(moveLeft:)) {
-            [[self selectedView].animator setBoundsOrigin:NSZeroPoint];
-            return NO;
-        }
-        if (commandSelector == @selector(moveRight:)) {
-            NSBox *selectedView = [self selectedView];
-            [selectedView.animator setBoundsOrigin:NSMakePoint( selectedView.bounds.size.width / 2, 0 )];
-            return NO;
-        }
+    if (commandSelector == @selector(moveUp:)) {
+        self.elementSelectionIndexes =
+                [NSIndexSet indexSetWithIndex:MAX(self.elementSelectionIndexes.firstIndex, (NSUInteger)1) - 1];
+        return YES;
     }
-//    if ((self.siteFieldPreventCompletion = [NSStringFromSelector( commandSelector ) hasPrefix:@"delete"])) { // Backspace any time.
-//        _activeElementOID = nil;
-//        [self trySiteWithAction:NO];
-//        return NO;
-//    }
-    if (commandSelector == @selector(insertNewline:)) { // Return without completion.
+    if (commandSelector == @selector(moveDown:)) {
+        self.elementSelectionIndexes =
+                [NSIndexSet indexSetWithIndex:MIN(self.elementSelectionIndexes.firstIndex + 1, self.elements.count - 1)];
+        return YES;
+    }
+    if (commandSelector == @selector(moveLeft:)) {
+        [[self selectedView].animator setBoundsOrigin:NSZeroPoint];
+        return YES;
+    }
+    if (commandSelector == @selector(moveRight:)) {
+        [[self selectedView].animator setBoundsOrigin:NSMakePoint( self.siteCollectionView.frame.size.width / 2, 0 )];
+        return YES;
+    }
+    if (commandSelector == @selector(insertNewline:)) {
         [self useSite];
-        return NO;
+        return YES;
     }
 
     return NO;
@@ -341,7 +250,88 @@
 
 #pragma mark - Private
 
+- (BOOL)ensureLoadedAndUnlockedOrCloseIfLoggedOut:(BOOL)closeIfLoggedOut {
+
+    if (![self ensureStoreLoaded])
+        return NO;
+
+    if (self.closing || self.inProgress || !self.window.isKeyWindow)
+        return NO;
+
+    return [self ensureUnlocked:closeIfLoggedOut];
+}
+
+- (BOOL)ensureStoreLoaded {
+
+    if ([MPMacAppDelegate managedObjectContextForMainThreadIfReady]) {
+        // Store loaded.
+        if (self.loadingDataAlert.window)
+            [NSApp endSheet:self.loadingDataAlert.window];
+
+        return YES;
+    }
+
+    [self.loadingDataAlert = [NSAlert alertWithMessageText:@"Opening Your Data" defaultButton:@"..." alternateButton:nil otherButton:nil
+                                 informativeTextWithFormat:@""]
+            beginSheetModalForWindow:self.window modalDelegate:self
+                      didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
+
+    return NO;
+}
+
+- (BOOL)ensureUnlocked:(BOOL)closeIfLoggedOut {
+
+    __block BOOL unlocked = NO;
+    [MPMacAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *moc) {
+        MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:moc];
+        NSString *userName = activeUser.name;
+        if (!activeUser) {
+            // No user to sign in with.
+            if (closeIfLoggedOut)
+                [self close];
+            return;
+        }
+        if ([MPMacAppDelegate get].key) {
+            // Already logged in.
+            unlocked = YES;
+            return;
+        }
+        if (activeUser.saveKey && closeIfLoggedOut) {
+            // App was locked, don't instantly unlock again.
+            [self close];
+            return;
+        }
+        if ([[MPMacAppDelegate get] signInAsUser:activeUser saveInContext:moc usingMasterPassword:nil]) {
+            // Loaded the key from the keychain.
+            unlocked = YES;
+            return;
+        }
+
+        // Ask the user to set the key through his master password.
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            if ([MPMacAppDelegate get].key)
+                return;
+
+            [self.siteField setStringValue:@""];
+
+            NSAlert *alert = [NSAlert alertWithMessageText:@"Master Password is locked."
+                                             defaultButton:@"Unlock" alternateButton:@"Change" otherButton:@"Cancel"
+                                 informativeTextWithFormat:@"The master password is required to unlock the application for:\n\n%@",
+                                                           userName];
+            NSSecureTextField *passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
+            [alert setAccessoryView:passwordField];
+            [alert layout];
+            [passwordField becomeFirstResponder];
+            [alert beginSheetModalForWindow:self.window modalDelegate:self
+                             didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertUnlockMP];
+        }];
+    }];
+
+    return unlocked;
+}
+
 - (void)updateElements {
+
     NSString *query = [self.siteField.currentEditor string];
     if (![query length] || ![MPMacAppDelegate get].key) {
         self.elements = nil;
@@ -397,20 +387,21 @@
     if (selectedElement) {
         // Performing action while content is available.  Copy it.
         [self copyContent:selectedElement.content];
-        NSBox *selectedView = [self selectedView];
-        dispatch_async( dispatch_get_main_queue(), ^{
-            [selectedView.animator setFillColor:[NSColor controlHighlightColor]];
-            dispatch_after( dispatch_time( DISPATCH_TIME_NOW, (int64_t)(0.3f * NSEC_PER_SEC) ), dispatch_get_main_queue(), ^{
-                dispatch_async( dispatch_get_main_queue(), ^{
-                    [selectedView.animator setFillColor:[NSColor selectedControlColor]];
-                } );
-            } );
-        } );
+
+        [self close];
+
+        NSUserNotification *notification = [NSUserNotification new];
+        notification.title = @"Password Copied";
+        if (selectedElement.loginName.length)
+            notification.subtitle = PearlString( @"%@ at %@", selectedElement.loginName, selectedElement.site );
+        else
+            notification.subtitle = selectedElement.site;
+        [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
     }
     else {
         NSString *siteName = [self.siteField stringValue];
         if ([siteName length])
-            // Performing action without content but a site name is written.
+                // Performing action without content but a site name is written.
             [self createNewSite:siteName];
     }
 }
@@ -441,6 +432,18 @@
 }
 
 #pragma mark - KVO
+
+- (void)setElementSelectionIndexes:(NSIndexSet *)elementSelectionIndexes {
+
+    // First reset bounds.
+    PearlMainThread(^{
+        NSUInteger selectedIndex = self.elementSelectionIndexes.firstIndex;
+        if (selectedIndex != NSNotFound && selectedIndex < self.elements.count)
+            [[self selectedView].animator setBoundsOrigin:NSZeroPoint];
+    } );
+
+    _elementSelectionIndexes = elementSelectionIndexes;
+}
 
 - (void)insertObject:(MPElementModel *)model inElementsAtIndex:(NSUInteger)index {
 

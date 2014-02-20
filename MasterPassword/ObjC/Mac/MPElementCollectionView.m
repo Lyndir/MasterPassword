@@ -40,7 +40,6 @@
     __weak MPElementCollectionView *wSelf = self;
     _representedObjectObserver = [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
         dispatch_async( dispatch_get_main_queue(), ^{
-            dbg(@"updating login name of %@ to: %@", wSelf.representedObject.site, wSelf.representedObject.loginName);
             wSelf.typeTitle = PearlString( @"Type:\n%@", wSelf.representedObject.typeName );
             wSelf.loginNameTitle = PearlString( @"Login Name:\n%@", wSelf.representedObject.loginName );
 
