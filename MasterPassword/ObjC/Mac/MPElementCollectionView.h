@@ -22,12 +22,12 @@
 @interface MPElementCollectionView : NSCollectionViewItem
 
 @property (nonatomic) MPElementModel *representedObject;
-@property (nonatomic) NSString *typeTitle;
-@property (nonatomic) NSString *loginNameTitle;
-@property (nonatomic) NSString *counterTitle;
+@property (nonatomic) BOOL counterHidden;
+@property (nonatomic) BOOL updateContentHidden;
 
 - (IBAction)toggleType:(id)sender;
-- (IBAction)setLoginName:(id)sender;
-- (IBAction)incrementCounter:(id)sender;
+- (IBAction)updateLoginName:(id)sender;
+- (IBAction)updateContent:(id)sender;
+- (IBAction)delete:(id)sender;
 
 @end

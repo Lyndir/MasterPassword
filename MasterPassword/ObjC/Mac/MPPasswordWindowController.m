@@ -197,34 +197,24 @@
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector {
 
-    if (commandSelector == @selector(cancel:)) {
+    if (commandSelector == @selector(cancel:))
         [self close];
-        return YES;
-    }
-    if (commandSelector == @selector(moveUp:)) {
+    if (commandSelector == @selector(moveUp:))
         self.elementSelectionIndexes =
                 [NSIndexSet indexSetWithIndex:MAX(self.elementSelectionIndexes.firstIndex, (NSUInteger)1) - 1];
-        return YES;
-    }
-    if (commandSelector == @selector(moveDown:)) {
+    if (commandSelector == @selector(moveDown:))
         self.elementSelectionIndexes =
                 [NSIndexSet indexSetWithIndex:MIN(self.elementSelectionIndexes.firstIndex + 1, self.elements.count - 1)];
-        return YES;
-    }
-    if (commandSelector == @selector(moveLeft:)) {
+    if (commandSelector == @selector(moveLeft:))
         [[self selectedView].animator setBoundsOrigin:NSZeroPoint];
-        return YES;
-    }
-    if (commandSelector == @selector(moveRight:)) {
+    if (commandSelector == @selector(moveRight:))
         [[self selectedView].animator setBoundsOrigin:NSMakePoint( self.siteCollectionView.frame.size.width / 2, 0 )];
-        return YES;
-    }
-    if (commandSelector == @selector(insertNewline:)) {
+    if (commandSelector == @selector(insertNewline:))
         [self useSite];
-        return YES;
-    }
+    else
+        return NO;
 
-    return NO;
+    return YES;
 }
 
 - (void)controlTextDidChange:(NSNotification *)note {

@@ -23,11 +23,10 @@
 
 #define MPAlertChangeType @"MPAlertChangeType"
 #define MPAlertChangeLogin @"MPAlertChangeLogin"
-#define MPAlertChangeCounter @"MPAlertChangeCounter"
 #define MPAlertChangeContent @"MPAlertChangeContent"
+#define MPAlertDeleteSite @"MPAlertDeleteSite"
 
 @implementation MPElementCollectionView {
-    id _representedObjectObserver;
 }
 
 @dynamic representedObject;
@@ -38,25 +37,14 @@
         return nil;
 
     __weak MPElementCollectionView *wSelf = self;
-    _representedObjectObserver = [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
+    [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
         dispatch_async( dispatch_get_main_queue(), ^{
-            wSelf.typeTitle = PearlString( @"Type:\n%@", wSelf.representedObject.typeName );
-            wSelf.loginNameTitle = PearlString( @"Login Name:\n%@", wSelf.representedObject.loginName );
-
-            if (wSelf.representedObject.type & MPElementTypeClassGenerated)
-                wSelf.counterTitle = PearlString( @"Number:\n%@", wSelf.representedObject.counter );
-            else if (wSelf.representedObject.type & MPElementTypeClassStored)
-                wSelf.counterTitle = PearlString( @"Update Password" );
+            wSelf.counterHidden = !(MPElementTypeClassGenerated & wSelf.representedObject.type);
+            wSelf.updateContentHidden = !(MPElementTypeClassStored & wSelf.representedObject.type);
         } );
-    }                                        forKeyPath:@"representedObject" options:0 context:nil];
+    }           forKeyPath:@"representedObject" options:0 context:nil];
 
     return self;
-}
-
-- (void)dealloc {
-
-    if (_representedObjectObserver)
-        [self removeObserver:_representedObjectObserver forKeyPath:@"representedObject"];
 }
 
 - (IBAction)toggleType:(id)sender {
@@ -74,7 +62,7 @@
                       didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertChangeType];
 }
 
-- (IBAction)setLoginName:(id)sender {
+- (IBAction)updateLoginName:(id)sender {
 
     NSAlert *alert = [NSAlert alertWithMessageText:@"Update Login Name"
                                      defaultButton:@"Update" alternateButton:@"Cancel" otherButton:nil
@@ -87,29 +75,26 @@
                      didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertChangeLogin];
 }
 
-- (IBAction)incrementCounter:(id)sender {
+- (IBAction)updateContent:(id)sender {
 
-    if (self.representedObject.type & MPElementTypeClassGenerated) {
-        [[NSAlert alertWithMessageText:@"Change Password Number"
-                         defaultButton:@"New Password" alternateButton:@"Cancel" otherButton:@"Initial Password"
-             informativeTextWithFormat:@"Increasing the password number gives you a new password for the site.\n"
-                     @"You will need to update your account with the new password.\n\n"
-                     @"Changing back to the initial password will reset the password number to 1."]
-                beginSheetModalForWindow:self.view.window modalDelegate:self
-                          didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertChangeCounter];
-    }
+    NSAlert *alert = [NSAlert alertWithMessageText:@"Update Password"
+                                     defaultButton:@"Update" alternateButton:@"Cancel" otherButton:nil
+                         informativeTextWithFormat:@"Enter the new password for %@:", self.representedObject.site];
+    NSSecureTextField *passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
+    [alert setAccessoryView:passwordField];
+    [alert layout];
+    [passwordField becomeFirstResponder];
+    [alert beginSheetModalForWindow:self.view.window modalDelegate:self
+                     didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertChangeContent];
+}
 
-    else if (self.representedObject.type & MPElementTypeClassStored) {
-        NSAlert *alert = [NSAlert alertWithMessageText:@"Update Password"
-                                         defaultButton:@"Update" alternateButton:@"Cancel" otherButton:nil
-                             informativeTextWithFormat:@"Enter the new password for %@:", self.representedObject.site];
-        NSSecureTextField *passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
-        [alert setAccessoryView:passwordField];
-        [alert layout];
-        [passwordField becomeFirstResponder];
-        [alert beginSheetModalForWindow:self.view.window modalDelegate:self
-                         didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertChangeContent];
-    }
+- (IBAction)delete:(id)sender {
+
+    NSAlert *alert = [NSAlert alertWithMessageText:@"Delete Site"
+                                     defaultButton:@"Delete" alternateButton:@"Cancel" otherButton:nil
+                         informativeTextWithFormat:@"Are you sure you want to delete the site: %@?", self.representedObject.site];
+    [alert beginSheetModalForWindow:self.view.window modalDelegate:self
+                     didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertDeleteSite];
 }
 
 - (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
@@ -178,49 +163,6 @@
 
         return;
     }
-    if (contextInfo == MPAlertChangeCounter) {
-        switch (returnCode) {
-            case NSAlertDefaultReturn: {
-                // "New Password" button.
-                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPElementEntity *element = [self.representedObject entityInContext:context];
-                    if ([element isKindOfClass:[MPElementGeneratedEntity class]]) {
-                        MPElementGeneratedEntity *generatedElement = (MPElementGeneratedEntity *)element;
-                        ++generatedElement.counter;
-                        [context saveToStore];
-
-                        self.representedObject = [[MPElementModel alloc] initWithEntity:element];
-                    }
-                }];
-                break;
-            }
-
-            case NSAlertAlternateReturn: {
-                // "Cancel" button.
-                break;
-            }
-
-            case NSAlertOtherReturn: {
-                // "Initial Password" button.
-                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPElementEntity *element = [self.representedObject entityInContext:context];
-                    if ([element isKindOfClass:[MPElementGeneratedEntity class]]) {
-                        MPElementGeneratedEntity *generatedElement = (MPElementGeneratedEntity *)element;
-                        generatedElement.counter = 1;
-                        [context saveToStore];
-
-                        self.representedObject = [[MPElementModel alloc] initWithEntity:element];
-                    }
-                }];
-                break;
-            }
-
-            default:
-                break;
-        }
-
-        return;
-    }
     if (contextInfo == MPAlertChangeContent) {
         switch (returnCode) {
             case NSAlertDefaultReturn: {
@@ -232,6 +174,29 @@
                     [context saveToStore];
 
                     self.representedObject = [[MPElementModel alloc] initWithEntity:element];
+                }];
+                break;
+            }
+
+            case NSAlertAlternateReturn: {
+                // "Cancel" button.
+                break;
+            }
+
+            default:
+                break;
+        }
+
+        return;
+    }
+    if (contextInfo == MPAlertDeleteSite) {
+        switch (returnCode) {
+            case NSAlertDefaultReturn: {
+                // "Delete" button.
+                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                    MPElementEntity *element = [self.representedObject entityInContext:context];
+                    [context deleteObject:element];
+                    [context saveToStore];
                 }];
                 break;
             }

@@ -20,18 +20,19 @@
 @class MPElementEntity;
 
 @interface MPElementModel : NSObject
-@property (nonatomic) NSString *site;
-@property (nonatomic) MPElementType type;
-@property (nonatomic) NSString *typeName;
-@property (nonatomic) NSString *content;
-@property (nonatomic) NSString *loginName;
-@property (nonatomic) NSNumber *uses;
-@property (nonatomic) NSNumber *counter;
-@property (nonatomic) NSDate *lastUsed;
-@property (nonatomic, strong) id<MPAlgorithm> algorithm;
-
-- (MPElementEntity *)entityForMainThread;
-- (MPElementEntity *)entityInContext:(NSManagedObjectContext *)moc;
+@property (nonatomic, readonly) NSString *site;
+@property (nonatomic, readonly) MPElementType type;
+@property (nonatomic, readonly) NSString *typeName;
+@property (nonatomic, readonly) NSString *content;
+@property (nonatomic, readonly) NSString *loginName;
+@property (nonatomic, readonly) NSNumber *uses;
+@property (nonatomic) NSUInteger counter;
+@property (nonatomic, readonly) NSDate *lastUsed;
+@property (nonatomic, readonly) id<MPAlgorithm> algorithm;
+@property (nonatomic, readonly) NSArray *types;
+@property (nonatomic) NSUInteger typeIndex;
 
 - (id)initWithEntity:(MPElementEntity *)entity;
+- (MPElementEntity *)entityInContext:(NSManagedObjectContext *)moc;
+
 @end
