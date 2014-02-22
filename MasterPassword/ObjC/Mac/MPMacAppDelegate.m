@@ -14,6 +14,12 @@
 
 #define LOGIN_HELPER_BUNDLE_ID @"com.lyndir.lhunath.MasterPassword.Mac.LoginHelper"
 
+@interface UbiquityStoreManager (Private)
+
+- (void)markCloudStoreCorrupted;
+
+@end
+
 @interface MPMacAppDelegate()
 
 @property(nonatomic, strong) NSWindowController *initialWindow;
@@ -129,16 +135,23 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)togglePreference:(id)sender {
 
-    if (sender == self.enableCloudButton)
-        [self storeManager].cloudEnabled = (self.enableCloudButton.state == NSOnState);
+    if (sender == self.enableCloudButton) {
+        if (([self storeManager].cloudEnabled = self.enableCloudButton.state == NSOnState)) {
+            NSAlert *alert = [NSAlert new];
+            alert.messageText = @"iCloud Enabled";
+            alert.informativeText = @"If you already have a user on another iCloud-enabled device, "
+                    @"it may take a moment for that user to sync down to this device.";
+            [alert runModal];
+        }
+    }
     if (sender == self.useCloudItem)
-        [self storeManager].cloudEnabled = !(self.useCloudItem.state == NSOnState);
+        [self storeManager].cloudEnabled = self.useCloudItem.state != NSOnState;
     if (sender == self.rememberPasswordItem)
         [MPConfig get].rememberLogin = [NSNumber numberWithBool:![[MPConfig get].rememberLogin boolValue]];
     if (sender == self.openAtLoginButton)
-        [self setLoginItemEnabled:(self.openAtLoginButton.state == NSOnState)];
+        [self setLoginItemEnabled:self.openAtLoginButton.state == NSOnState];
     if (sender == self.openAtLoginItem)
-        [self setLoginItemEnabled:!(self.openAtLoginItem.state == NSOnState)];
+        [self setLoginItemEnabled:self.openAtLoginItem.state != NSOnState];
     if (sender == self.savePasswordItem) {
         [MPMacAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
             MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:context];
@@ -194,12 +207,22 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)rebuildCloud:(id)sender {
 
-    if ([[NSAlert alertWithMessageText:@"iCloud Truth Sync" defaultButton:@"Continue"
+    if ([[NSAlert alertWithMessageText:@"iCloud Truth Push" defaultButton:@"Continue"
                        alternateButton:nil otherButton:@"Cancel"
-             informativeTextWithFormat:@"This action will force all your iCloud enabled devices to revert to this device's version of the truth."
+             informativeTextWithFormat:@"This action will force all your iCloud enabled devices to switch to this device's version of the truth."
                      @"\n\nThis is only necessary if you notice that your devices aren't syncing properly anymore.  "
                      "Any data on other devices not available from here will be lost."] runModal] == NSAlertDefaultReturn)
         [self.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:NO];
+}
+
+- (IBAction)corruptCloud:(id)sender {
+
+    if ([[NSAlert alertWithMessageText:@"iCloud Truth Pull" defaultButton:@"Continue"
+                       alternateButton:nil otherButton:@"Cancel"
+             informativeTextWithFormat:@"This action will force another iCloud enabled device to push their version of the truth on all."
+                     @"\n\nThis is only necessary if you notice that your devices aren't syncing properly anymore.  "
+                     "Any data on this device not available from the other will be lost."] runModal] == NSAlertDefaultReturn)
+        [self.storeManager markCloudStoreCorrupted];
 }
 
 - (IBAction)terminate:(id)sender {
@@ -301,8 +324,11 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     // Initial display.
     [NSApp activateIgnoringOtherApps:YES];
-    if ([[MPMacConfig get].firstRun boolValue])
-        [self.initialWindow = [[NSWindowController alloc] initWithWindowNibName:@"MPInitialWindow" owner:self] showWindow:self];
+    if ([[MPMacConfig get].firstRun boolValue]) {
+        self.initialWindow = [[NSWindowController alloc] initWithWindowNibName:@"MPInitialWindow" owner:self];
+        [self.initialWindow.window setLevel:NSFloatingWindowLevel];
+        [self.initialWindow showWindow:self];
+    }
 }
 
 - (void)setActiveUser:(MPUserEntity *)activeUser {

@@ -34,6 +34,7 @@
 - (IBAction)newUser:(NSMenuItem *)sender;
 - (IBAction)lock:(id)sender;
 - (IBAction)rebuildCloud:(id)sender;
+- (IBAction)corruptCloud:(id)sender;
 - (IBAction)terminate:(id)sender;
 - (IBAction)iphoneAppStore:(id)sender;
 

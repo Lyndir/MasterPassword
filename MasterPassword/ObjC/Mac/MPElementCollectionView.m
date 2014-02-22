@@ -16,6 +16,7 @@
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "MPElementCollectionView.h"
 #import "MPElementModel.h"
 #import "MPMacAppDelegate.h"
@@ -36,15 +37,22 @@
     if (!(self = [super initWithCoder:coder]))
         return nil;
 
-    __weak MPElementCollectionView *wSelf = self;
-    [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        dispatch_async( dispatch_get_main_queue(), ^{
-            wSelf.counterHidden = !(MPElementTypeClassGenerated & wSelf.representedObject.type);
-            wSelf.updateContentHidden = !(MPElementTypeClassStored & wSelf.representedObject.type);
-        } );
-    }           forKeyPath:@"representedObject" options:0 context:nil];
+    [self addObserver:self forKeyPath:@"representedObject" options:0 context:nil];
 
     return self;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        self.counterHidden = !(MPElementTypeClassGenerated & self.representedObject.type);
+        self.updateContentHidden = !(MPElementTypeClassStored & self.representedObject.type);
+    }];
+}
+
+- (void)dealloc {
+
+    [self removeObserver:self forKeyPath:@"representedObject"];
 }
 
 - (IBAction)toggleType:(id)sender {

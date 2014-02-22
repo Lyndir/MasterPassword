@@ -44,7 +44,6 @@
     self.backgroundQueue = [NSOperationQueue new];
     self.backgroundQueue.maxConcurrentOperationCount = 1;
 
-    [self.userLabel setStringValue:PearlString( @"%@'s password for:", [[MPMacAppDelegate get] activeUserForMainThread].name )];
     [[MPMacAppDelegate get] addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
 //        [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
 //            if (![MPAlgorithmDefault migrateUser:[[MPMacAppDelegate get] activeUserInContext:moc]])
@@ -54,9 +53,9 @@
 //                            @"their passwords to change.  You'll need to update your profile for that site with the new password."];
 //            [moc saveToStore];
 //        }];
-        dispatch_async( dispatch_get_main_queue(), ^{
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self ensureLoadedAndUnlockedOrCloseIfLoggedOut:YES];
-        } );
+        }];
     }                             forKeyPath:@"key" options:NSKeyValueObservingOptionInitial context:nil];
     [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:self.window
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
@@ -77,10 +76,17 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
+                self.userLabel.stringValue = @"";
                 self.siteField.stringValue = @"";
                 self.elements = nil;
 
                 [self ensureLoadedAndUnlockedOrCloseIfLoggedOut:YES];
+            }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedInNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
+            ^(NSNotification *note) {
+                self.userLabel.stringValue = PearlString( @"%@'s password for:",
+                        [[MPMacAppDelegate get] activeUserForMainThread].name );
             }];
     [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
@@ -107,37 +113,7 @@
     }
     if (contextInfo == MPAlertUnlockMP) {
         switch (returnCode) {
-            case NSAlertAlternateReturn: {
-                // "Change" button.
-                NSInteger returnCode_ = [[NSAlert
-                        alertWithMessageText:@"Changing Master Password" defaultButton:nil
-                             alternateButton:[PearlStrings get].commonButtonCancel otherButton:nil informativeTextWithFormat:
-                                @"This will allow you to log in with a different master password.\n\n"
-                                        @"Note that you will only see the sites and passwords for the master password you log in with.\n"
-                                        @"If you log in with a different master password, your current sites will be unavailable.\n\n"
-                                        @"You can always change back to your current master password later.\n"
-                                        @"Your current sites and passwords will then become available again."]
-                        runModal];
-
-                if (returnCode_ == NSAlertDefaultReturn) {
-                    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                        MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:context];
-                        activeUser.keyID = nil;
-                        [[MPMacAppDelegate get] forgetSavedKeyFor:activeUser];
-                        [[MPMacAppDelegate get] signOutAnimated:YES];
-                        [context saveToStore];
-                    }];
-                }
-                break;
-            }
-
-            case NSAlertOtherReturn: {
-                // "Cancel" button.
-                [self close];
-                break;
-            }
-
-            case NSAlertDefaultReturn: {
+            case NSAlertFirstButtonReturn: {
                 // "Unlock" button.
                 self.contentContainer.alphaValue = 0;
                 self.inProgress = YES;
@@ -150,7 +126,7 @@
                                                     usingMasterPassword:password];
                     self.inProgress = NO;
 
-                    dispatch_async( dispatch_get_current_queue(), ^{
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                         if (success)
                             self.contentContainer.alphaValue = 1;
                         else {
@@ -159,8 +135,38 @@
                             }]] beginSheetModalForWindow:self.window modalDelegate:self
                                           didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertIncorrectMP];
                         }
-                    } );
+                    }];
                 }];
+                break;
+            }
+
+            case NSAlertSecondButtonReturn: {
+                // "Change" button.
+                NSAlert *alert_ = [NSAlert new];
+                [alert_ addButtonWithTitle:@"Update"];
+                [alert_ addButtonWithTitle:@"Cancel"];
+                [alert_ setMessageText:@"Changing Master Password"];
+                [alert_ setInformativeText:@"This will allow you to log in with a different master password.\n\n"
+                        @"Note that you will only see the sites and passwords for the master password you log in with.\n"
+                        @"If you log in with a different master password, your current sites will be unavailable.\n\n"
+                        @"You can always change back to your current master password later.\n"
+                        @"Your current sites and passwords will then become available again."];
+
+                if ([alert_ runModal] == NSAlertFirstButtonReturn) {
+                    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                        MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:context];
+                        activeUser.keyID = nil;
+                        [[MPMacAppDelegate get] forgetSavedKeyFor:activeUser];
+                        [[MPMacAppDelegate get] signOutAnimated:YES];
+                        [context saveToStore];
+                    }];
+                }
+                break;
+            }
+
+            case NSAlertThirdButtonReturn: {
+                // "Cancel" button.
+                [self close];
                 break;
             }
 
@@ -304,16 +310,19 @@
 
             [self.siteField setStringValue:@""];
 
-            NSAlert *alert = [NSAlert alertWithMessageText:@"Master Password is locked."
-                                             defaultButton:@"Unlock" alternateButton:@"Change" otherButton:@"Cancel"
-                                 informativeTextWithFormat:@"The master password is required to unlock the application for:\n\n%@",
-                                                           userName];
+            NSAlert *alert = [NSAlert new];
+            [alert addButtonWithTitle:@"Unlock"];
+            [alert addButtonWithTitle:@"Change"];
+            [alert addButtonWithTitle:@"Cancel"];
+            [alert setMessageText:@"Master Password is locked."];
+            [alert setInformativeText:PearlString( @"The master password is required to unlock the application for:\n\n%@", userName )];
+
             NSSecureTextField *passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
             [alert setAccessoryView:passwordField];
             [alert layout];
-            [passwordField becomeFirstResponder];
             [alert beginSheetModalForWindow:self.window modalDelegate:self
                              didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertUnlockMP];
+            [passwordField becomeFirstResponder];
         }];
     }];
 
@@ -413,9 +422,11 @@
 - (void)createNewSite:(NSString *)siteName {
 
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        NSAlert *alert = [NSAlert alertWithMessageText:@"Create site?"
-                                         defaultButton:@"Create" alternateButton:nil otherButton:@"Cancel"
-                             informativeTextWithFormat:@"Do you want to create a new site named:\n\n%@", siteName];
+        NSAlert *alert = [NSAlert new];
+        [alert addButtonWithTitle:@"Create"];
+        [alert addButtonWithTitle:@"Cancel"];
+        [alert setMessageText:@"Create site?"];
+        [alert setInformativeText:PearlString( @"Do you want to create a new site named:\n\n%@", siteName )];
         [alert beginSheetModalForWindow:self.window modalDelegate:self
                          didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertCreateSite];
     }];

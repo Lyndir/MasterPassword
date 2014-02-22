@@ -127,7 +127,7 @@
             return @"Device Private Password";
     }
 
-    Throw(@"Type not supported: %lu", type);
+    Throw(@"Type not supported: %lu", (long)type);
 }
 
 - (NSString *)shortNameOfType:(MPElementType)type {
@@ -161,7 +161,7 @@
             return @"Device";
     }
 
-    Throw(@"Type not supported: %lu", type);
+    Throw(@"Type not supported: %lu", (long)type);
 }
 
 - (NSString *)classNameOfType:(MPElementType)type {
@@ -200,7 +200,7 @@
             return [MPElementStoredEntity class];
     }
 
-    Throw(@"Type not supported: %lu", type);
+    Throw(@"Type not supported: %lu", (long)type);
 }
 
 - (MPElementType)nextType:(MPElementType)type {
@@ -227,7 +227,7 @@
             return MPElementTypeStoredPersonal;
     }
 
-    Throw(@"Type not supported: %lu", type);
+    Throw(@"Type not supported: %lu", (long)type);
 }
 
 - (MPElementType)previousType:(MPElementType)type {
@@ -300,13 +300,13 @@
         case MPElementTypeGeneratedBasic:
         case MPElementTypeGeneratedShort:
         case MPElementTypeGeneratedPIN: {
-            NSAssert(NO, @"Cannot save content to element with generated type %lu.", element.type);
+            NSAssert(NO, @"Cannot save content to element with generated type %lu.", (long)element.type);
             break;
         }
 
         case MPElementTypeStoredPersonal: {
             NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
-            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", element.type, [element class]);
+            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type, [element class]);
 
             NSData *encryptedContent = [[clearContent dataUsingEncoding:NSUTF8StringEncoding]
                     encryptWithSymmetricKey:[elementKey subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
@@ -315,7 +315,7 @@
         }
         case MPElementTypeStoredDevicePrivate: {
             NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
-            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", element.type, [element class]);
+            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type, [element class]);
 
             NSData *encryptedContent = [[clearContent dataUsingEncoding:NSUTF8StringEncoding]
                     encryptWithSymmetricKey:[elementKey subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
@@ -360,7 +360,7 @@
         case MPElementTypeGeneratedShort:
         case MPElementTypeGeneratedPIN: {
             NSAssert([element isKindOfClass:[MPElementGeneratedEntity class]],
-            @"Element with generated type %lu is not an MPElementGeneratedEntity, but a %@.", element.type, [element class]);
+            @"Element with generated type %lu is not an MPElementGeneratedEntity, but a %@.", (long)element.type, [element class]);
 
             NSString *name = element.name;
             MPElementType type = element.type;
@@ -382,7 +382,7 @@
 
         case MPElementTypeStoredPersonal: {
             NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
-            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", element.type, [element class]);
+            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type, [element class]);
 
             NSData *encryptedContent = ((MPElementStoredEntity *)element).contentObject;
 
@@ -394,7 +394,7 @@
         }
         case MPElementTypeStoredDevicePrivate: {
             NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
-            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", element.type, [element class]);
+            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type, [element class]);
 
             NSDictionary *elementQuery = [self queryForDevicePrivateElementNamed:element.name];
             NSData *encryptedContent = [PearlKeyChain dataOfItemForQuery:elementQuery];
@@ -423,7 +423,7 @@
 
         case MPElementTypeStoredPersonal: {
             NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
-            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", element.type, [element class]);
+            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type, [element class]);
             if ([importKey.keyID isEqualToData:elementKey.keyID])
                 ((MPElementStoredEntity *)element).contentObject = [protectedContent decodeBase64];
 
@@ -481,7 +481,7 @@
 
         case MPElementTypeStoredPersonal: {
             NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
-            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", element.type, [element class]);
+            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type, [element class]);
             result = [((MPElementStoredEntity *)element).contentObject encodeBase64];
             break;
         }

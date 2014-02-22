@@ -140,13 +140,30 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Advanced" id="777">
                                     <items>
-                                        <menuItem title="iCloud Truth Sync" id="778">
+                                        <menuItem title="iCloud Truth Push" id="778">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="rebuildCloud:" target="494" id="780"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Force this device's version of the truth upon all others." enabled="NO" id="779">
+                                        <menuItem title="Force our version of the truth upon all other devices." enabled="NO" id="779">
+                                            <attributedString key="attributedTitle">
+                                                <fragment content="Force this device's version of the truth upon all others.">
+                                                    <attributes>
+                                                        <font key="NSFont" size="12" name="Helvetica"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem title="iCloud Truth Pull" id="cLQ-kc-cYN">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="corruptCloud:" target="494" id="asr-sb-Zkz"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Mark ourselves as corrupt and pull the truth from another." enabled="NO" id="6NL-ki-Jff">
                                             <attributedString key="attributedTitle">
                                                 <fragment content="Force this device's version of the truth upon all others.">
                                                     <attributes>
@@ -164,7 +181,7 @@
                     </menu>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="718"/>
-                <menuItem title="Show" keyEquivalent="p" id="719">
+                <menuItem title="Open" keyEquivalent="p" id="719">
                     <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                     <connections>
                         <action selector="showPasswordWindow:" target="494" id="782"/>

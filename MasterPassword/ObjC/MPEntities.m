@@ -54,7 +54,7 @@
     if (!aType || aType == (MPElementType)NSNotFound)
         aType = MPElementTypeGeneratedLong;
     if (![self isKindOfClass:[self.algorithm classOfType:aType]])
-    Throw(@"This object's class does not support the type: %lu", aType);
+    Throw(@"This object's class does not support the type: %lu", (long)aType);
 
     self.type_ = @(aType);
 }
@@ -128,7 +128,7 @@
 - (NSString *)debugDescription {
 
     return PearlString( @"{%@: name=%@, user=%@, type=%lu, uses=%ld, lastUsed=%@, version=%ld, loginName=%@, requiresExplicitMigration=%d}",
-            NSStringFromClass( [self class] ), self.name, self.user.name, self.type, (long)self.uses, self.lastUsed, (long)self.version,
+            NSStringFromClass( [self class] ), self.name, self.user.name, (long)self.type, (long)self.uses, self.lastUsed, (long)self.version,
             self.loginName, self.requiresExplicitMigration );
 }
 

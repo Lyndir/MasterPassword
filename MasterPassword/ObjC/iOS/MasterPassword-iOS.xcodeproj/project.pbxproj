@@ -15,11 +15,11 @@
 		93D395F08A087F8A24689347 /* NSArray+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */; };
 		93D396AA30690B256F30378A /* PearlNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3956915634581E737B38C /* PearlNavigationController.m */; };
 		93D396BA1C74C4A06FD86437 /* PearlOverlay.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D3942A356B639724157982 /* PearlOverlay.h */; };
-		93D397952F5635C793C24DF1 /* NSError+MPFullDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39F9106F2CCFB94283188 /* NSError+MPFullDescription.m */; };
+		93D397952F5635C793C24DF1 /* NSError+PearlFullDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39F9106F2CCFB94283188 /* NSError+PearlFullDescription.m */; };
 		93D3992FA1546E01F498F665 /* PearlNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D398567FD02DB2647B8CF3 /* PearlNavigationController.h */; };
 		93D399433EA75E50656040CB /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93D394077F8FAB8167647187 /* Twitter.framework */; };
 		93D399BBC0A7EC746CB1B19B /* MPLogsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D391943675426839501BB8 /* MPLogsViewController.h */; };
-		93D39B842AB9A5D072810D76 /* NSError+MPFullDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D398C95847261903D781D3 /* NSError+MPFullDescription.h */; };
+		93D39B842AB9A5D072810D76 /* NSError+PearlFullDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D398C95847261903D781D3 /* NSError+PearlFullDescription.h */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
 		93D39C8AD8EAB747856B3A8C /* LLModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3923B42DA2DA18F287092 /* LLModel.m */; };
 		93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */; };
@@ -499,7 +499,7 @@
 		93D3979190DACEBD1F6AE9F4 /* MPLogsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPLogsViewController.m; sourceTree = "<group>"; };
 		93D3983278751A530262F64E /* LLConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLConfig.h; sourceTree = "<group>"; };
 		93D398567FD02DB2647B8CF3 /* PearlNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlNavigationController.h; sourceTree = "<group>"; };
-		93D398C95847261903D781D3 /* NSError+MPFullDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+MPFullDescription.h"; sourceTree = "<group>"; };
+		93D398C95847261903D781D3 /* NSError+PearlFullDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+PearlFullDescription.h"; sourceTree = "<group>"; };
 		93D39A28369954D147E239BA /* MPSetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSetupViewController.m; sourceTree = "<group>"; };
 		93D39A3CC4D8330831FC8CB4 /* LLToggleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLToggleViewController.h; sourceTree = "<group>"; };
 		93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Indexing.m"; sourceTree = "<group>"; };
@@ -507,7 +507,7 @@
 		93D39BF6BCBDFFE844E7D34C /* LLButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLButtonView.m; sourceTree = "<group>"; };
 		93D39C8E26B06F01566785B7 /* LLToggleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLToggleViewController.m; sourceTree = "<group>"; };
 		93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlEMail.h; sourceTree = "<group>"; };
-		93D39F9106F2CCFB94283188 /* NSError+MPFullDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+MPFullDescription.m"; sourceTree = "<group>"; };
+		93D39F9106F2CCFB94283188 /* NSError+PearlFullDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+PearlFullDescription.m"; sourceTree = "<group>"; };
 		DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+PearlMutableInfo.h"; sourceTree = "<group>"; };
 		DA30E9CC15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+PearlMutableInfo.m"; sourceTree = "<group>"; };
@@ -2937,8 +2937,8 @@
 				DAFE45F515039823003ABA7C /* PearlStringUtils.m */,
 				DAFE45F815039823003ABA7C /* README */,
 				DAFE45F915039823003ABA7C /* Resources */,
-				93D39F9106F2CCFB94283188 /* NSError+MPFullDescription.m */,
-				93D398C95847261903D781D3 /* NSError+MPFullDescription.h */,
+				93D39F9106F2CCFB94283188 /* NSError+PearlFullDescription.m */,
+				93D398C95847261903D781D3 /* NSError+PearlFullDescription.h */,
 			);
 			path = Pearl;
 			sourceTree = "<group>";
@@ -3202,7 +3202,7 @@
 				93D396BA1C74C4A06FD86437 /* PearlOverlay.h in Headers */,
 				DAEB937518AA537D000490CC /* ssl.h in Headers */,
 				93D3992FA1546E01F498F665 /* PearlNavigationController.h in Headers */,
-				93D39B842AB9A5D072810D76 /* NSError+MPFullDescription.h in Headers */,
+				93D39B842AB9A5D072810D76 /* NSError+PearlFullDescription.h in Headers */,
 				DAEB936218AA537D000490CC /* obj_mac.h in Headers */,
 				DAEB934218AA537D000490CC /* bn.h in Headers */,
 			);
@@ -3854,7 +3854,7 @@
 				DA3509FF15F101A500C14A8E /* PearlQueue.m in Sources */,
 				93D3922A53E41A54832E90D9 /* PearlOverlay.m in Sources */,
 				93D396AA30690B256F30378A /* PearlNavigationController.m in Sources */,
-				93D397952F5635C793C24DF1 /* NSError+MPFullDescription.m in Sources */,
+				93D397952F5635C793C24DF1 /* NSError+PearlFullDescription.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

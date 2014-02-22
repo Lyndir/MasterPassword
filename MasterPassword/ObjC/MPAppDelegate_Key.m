@@ -75,6 +75,8 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     if (password)
     NSAssert(![NSThread isMainThread], @"Computing key must not happen from the main thread.");
+    if (!user)
+        return NO;
 
     MPKey *tryKey = nil;
 
