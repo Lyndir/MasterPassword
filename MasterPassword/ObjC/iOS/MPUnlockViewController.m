@@ -12,6 +12,7 @@
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
+#import "LLGitTip.h"
 
 @interface MPUnlockViewController()
 
@@ -127,6 +128,7 @@
 
 - (void)viewDidLoad {
 
+    self.gitTipButton.iTunesID = [MPConfig get].iTunesID;
     self.avatarToUserOID = [NSMutableDictionary dictionaryWithCapacity:3];
 
     [self.avatarsView addGestureRecognizer:self.targetedUserActionGesture];
@@ -230,6 +232,7 @@
     self.uiContainer.alpha = 0;
     self.shareContainer.alpha = 0;
     self.spinner.alpha = 0;
+    self.tipsTipContainer.alpha = 0;
 
     [super viewWillAppear:animated];
 }
@@ -249,6 +252,8 @@
         if (finished)
             [UIView animateWithDuration:1 animations:^{
                 self.shareContainer.alpha = 1;
+                if ([MPConfig get].firstVersionRun)
+                    self.tipsTipContainer.alpha = 1;
             }];
     }];
 

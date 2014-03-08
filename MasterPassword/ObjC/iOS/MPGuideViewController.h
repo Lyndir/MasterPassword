@@ -10,6 +10,7 @@
 
 @interface MPGuideViewController : UIViewController<UIScrollViewDelegate>
 
+@property(weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property(weak, nonatomic) IBOutlet UIView *siteNameTip;
 @property(weak, nonatomic) IBOutlet UIView *contentTip;
 @property(weak, nonatomic) IBOutlet UILabel *contentTipText;

@@ -1894,7 +1894,7 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1960,12 +1960,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer: Maarten Billemont (DWGU95U4ZD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
-				PROVISIONING_PROFILE = "9AEC6040-D157-4526-8CA9-FF0254B3A4A5";
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
@@ -1977,12 +1974,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer: Maarten Billemont (DWGU95U4ZD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
-				PROVISIONING_PROFILE = "2A46D0C9-E5F0-4C52-BCC6-96434A0D1C1B";
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
@@ -2009,7 +2003,7 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2075,12 +2069,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "3rd Party Mac Developer Application: Maarten Billemont (HL3Q45LX9N)";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
-				PROVISIONING_PROFILE = "170D83FD-18FE-4A05-B13C-8D16876480C6";
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
