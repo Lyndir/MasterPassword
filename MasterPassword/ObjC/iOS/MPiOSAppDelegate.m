@@ -404,23 +404,23 @@
 
 - (void)showGuide {
 
-    [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
+    //TODO [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
 
     MPCheckpoint( MPCheckpointShowGuide, nil );
 }
 
 - (void)showSetup {
 
-    [self.navigationController performSegueWithIdentifier:@"MP_Setup" sender:self];
+    //TODO [self.navigationController performSegueWithIdentifier:@"MP_Setup" sender:self];
 
     MPCheckpoint( MPCheckpointShowSetup, nil );
 }
 
 - (void)showReview {
 
-    MPCheckpoint( MPCheckpointReview, nil );
-
     [super showReview];
+
+    MPCheckpoint( MPCheckpointReview, nil );
 }
 
 - (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController {

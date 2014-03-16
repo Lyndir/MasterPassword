@@ -46,10 +46,10 @@
     [alert addSubview:alertAvatarScrollView];
 
     CGPoint selectedOffset = CGPointZero;
-    for (int a = 0; a < MPAvatarCount; ++a) {
+    for (NSUInteger a = 0; a < MPAvatarCount; ++a) {
         UIButton *avatar = [self.avatarTemplate cloneAddedTo:alertAvatarScrollView];
 
-        avatar.tag = a;
+        avatar.tag = (NSInteger)a;
         avatar.hidden = NO;
         avatar.center = CGPointMake(
                 (20 + self.avatarTemplate.bounds.size.width / 2) * (a + 1) + self.avatarTemplate.bounds.size.width / 2 * a,
@@ -368,7 +368,7 @@
     avatar.layer.shadowRadius = 20;
     avatar.layer.masksToBounds = NO;
     avatar.backgroundColor = [UIColor clearColor];
-    avatar.tag = user.avatar;
+    avatar.tag = (NSInteger)user.avatar;
 
     [avatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%lu", (unsigned long)user.avatar )]
                       forState:UIControlStateNormal];
@@ -599,7 +599,7 @@
         BOOL isTargeted = avatar == targetedAvatar;
 
         avatar.userInteractionEnabled = isTargeted;
-        avatar.alpha = isTargeted? 1: [self selectedUserForThread]? 0.1: 0.4;
+        avatar.alpha = isTargeted? 1: [self selectedUserForThread]? 0.1F: 0.4F;
 
         [self updateAvatarShadowColor:avatar isTargeted:isTargeted];
     }                           recurse:NO];
@@ -649,7 +649,7 @@
 
 - (void)initializeWordLabel:(UILabel *)wordLabel {
 
-    wordLabel.alpha = 0.05 + (random() % 35) / 100.0F;
+    wordLabel.alpha = 0.05F + (random() % 35) / 100.0F;
     wordLabel.text = (self.wordList)[(NSUInteger)random() % [self.wordList count]];
 }
 

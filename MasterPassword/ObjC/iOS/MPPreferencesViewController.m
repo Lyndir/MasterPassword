@@ -23,9 +23,9 @@
 
     self.avatarTemplate.hidden = YES;
 
-    for (int a = 0; a < MPAvatarCount; ++a) {
+    for (NSUInteger a = 0; a < MPAvatarCount; ++a) {
         UIButton *avatar = [self.avatarTemplate clone];
-        avatar.tag = a;
+        avatar.tag = (NSInteger)a;
         avatar.hidden = NO;
         avatar.center = CGPointMake(
                 self.avatarTemplate.center.x * (a + 1) + self.avatarTemplate.bounds.size.width / 2 * a,

@@ -12,6 +12,7 @@
 		93D39262A8A97DB748213309 /* PearlEMail.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D393BB973253D4BAAC84AA /* PearlEMail.m */; };
 		93D392EC39DA43C46C692C12 /* NSDictionary+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */; };
 		93D3932889B6B4206E66A6D6 /* PearlEMail.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */; };
+		93D3957237D303DE2D38C267 /* MPAvatarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39B381350802A194BF332 /* MPAvatarCell.m */; };
 		93D395F08A087F8A24689347 /* NSArray+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */; };
 		93D396AA30690B256F30378A /* PearlNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3956915634581E737B38C /* PearlNavigationController.m */; };
 		93D396BA1C74C4A06FD86437 /* PearlOverlay.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D3942A356B639724157982 /* PearlOverlay.h */; };
@@ -22,10 +23,17 @@
 		93D39B842AB9A5D072810D76 /* NSError+PearlFullDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D398C95847261903D781D3 /* NSError+PearlFullDescription.h */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
 		93D39C8AD8EAB747856B3A8C /* LLModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3923B42DA2DA18F287092 /* LLModel.m */; };
+		93D39D596A2E376D6F6F5DA1 /* MPCombinedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D393310223DDB35218467A /* MPCombinedViewController.m */; };
 		93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */; };
 		93D39F8A9254177891F38705 /* MPSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A28369954D147E239BA /* MPSetupViewController.m */; };
 		DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */; };
 		DA095E75172F4CD8001C948B /* MPLogsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3979190DACEBD1F6AE9F4 /* MPLogsViewController.m */; };
+		DA2CA4DD18D28859007798F8 /* NSArray+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4D918D28859007798F8 /* NSArray+Pearl.m */; };
+		DA2CA4DE18D28859007798F8 /* NSArray+Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DA2CA4DA18D28859007798F8 /* NSArray+Pearl.h */; };
+		DA2CA4DF18D28859007798F8 /* NSTimer+PearlBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4DB18D28859007798F8 /* NSTimer+PearlBlock.m */; };
+		DA2CA4E018D28859007798F8 /* NSTimer+PearlBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = DA2CA4DC18D28859007798F8 /* NSTimer+PearlBlock.h */; };
+		DA2CA4E418D28866007798F8 /* NSLayoutConstraint+PearlUIKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DA2CA4E218D28866007798F8 /* NSLayoutConstraint+PearlUIKit.h */; };
+		DA2CA4E618D2AC10007798F8 /* NSLayoutConstraint+PearlUIKit.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4E518D2AC10007798F8 /* NSLayoutConstraint+PearlUIKit.m */; };
 		DA30E9CE15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */; };
 		DA30E9CF15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9CC15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m */; };
 		DA30E9D015722ECA00A68B4C /* Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9CD15722ECA00A68B4C /* Pearl.m */; };
@@ -35,6 +43,7 @@
 		DA30E9D815723E6900A68B4C /* PearlLazy.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D615723E6900A68B4C /* PearlLazy.m */; };
 		DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3509FC15F101A500C14A8E /* PearlQueue.h */; };
 		DA3509FF15F101A500C14A8E /* PearlQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3509FD15F101A500C14A8E /* PearlQueue.m */; };
+		DA38D6A318CCB5BF009AEB3E /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */; };
 		DA4425CC1557BED40052177D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA44260A1557D9E40052177D /* libUbiquityStoreManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */; };
 		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
@@ -58,6 +67,8 @@
 		DA70EC801811B13C00F65DB2 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA70EC7F1811B13C00F65DB2 /* StoreKit.framework */; };
 		DA829E52159847E0002417D3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA829E6215984832002417D3 /* libFontReplacer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA829E51159847E0002417D3 /* libFontReplacer.a */; };
+		DA854C8318D4CFBF00106317 /* avatar-add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA854C8118D4CFBF00106317 /* avatar-add@2x.png */; };
+		DA854C8418D4CFBF00106317 /* avatar-add.png in Resources */ = {isa = PBXBuildFile; fileRef = DA854C8218D4CFBF00106317 /* avatar-add.png */; };
 		DA945C8717E3F3FD0053236B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA945C8617E3F3FD0053236B /* Images.xcassets */; };
 		DA95D5F214DF0B2C008D1B94 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */; };
 		DA9B51551895D79E009D2A0B /* gittip.png in Resources */ = {isa = PBXBuildFile; fileRef = DA9B51541895D79E009D2A0B /* gittip.png */; };
@@ -489,6 +500,7 @@
 		93D390FADEB325D8D54A957D /* PearlOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlOverlay.m; sourceTree = "<group>"; };
 		93D391943675426839501BB8 /* MPLogsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPLogsViewController.h; sourceTree = "<group>"; };
 		93D3923B42DA2DA18F287092 /* LLModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLModel.m; sourceTree = "<group>"; };
+		93D393310223DDB35218467A /* MPCombinedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCombinedViewController.m; sourceTree = "<group>"; };
 		93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Indexing.h"; sourceTree = "<group>"; };
 		93D393BB973253D4BAAC84AA /* PearlEMail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlEMail.m; sourceTree = "<group>"; };
 		93D394077F8FAB8167647187 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
@@ -503,12 +515,21 @@
 		93D39A28369954D147E239BA /* MPSetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSetupViewController.m; sourceTree = "<group>"; };
 		93D39A3CC4D8330831FC8CB4 /* LLToggleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLToggleViewController.h; sourceTree = "<group>"; };
 		93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Indexing.m"; sourceTree = "<group>"; };
+		93D39B381350802A194BF332 /* MPAvatarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAvatarCell.m; sourceTree = "<group>"; };
 		93D39BA6C5CB452973918B7D /* LLButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLButtonView.h; sourceTree = "<group>"; };
 		93D39BF6BCBDFFE844E7D34C /* LLButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLButtonView.m; sourceTree = "<group>"; };
 		93D39C8E26B06F01566785B7 /* LLToggleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLToggleViewController.m; sourceTree = "<group>"; };
+		93D39CF8ADF4542CDC4CD385 /* MPCombinedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCombinedViewController.h; sourceTree = "<group>"; };
+		93D39DA27D768B53C8B1330C /* MPAvatarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAvatarCell.h; sourceTree = "<group>"; };
 		93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlEMail.h; sourceTree = "<group>"; };
 		93D39F9106F2CCFB94283188 /* NSError+PearlFullDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+PearlFullDescription.m"; sourceTree = "<group>"; };
 		DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		DA2CA4D918D28859007798F8 /* NSArray+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Pearl.m"; sourceTree = "<group>"; };
+		DA2CA4DA18D28859007798F8 /* NSArray+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Pearl.h"; sourceTree = "<group>"; };
+		DA2CA4DB18D28859007798F8 /* NSTimer+PearlBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+PearlBlock.m"; sourceTree = "<group>"; };
+		DA2CA4DC18D28859007798F8 /* NSTimer+PearlBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+PearlBlock.h"; sourceTree = "<group>"; };
+		DA2CA4E218D28866007798F8 /* NSLayoutConstraint+PearlUIKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSLayoutConstraint+PearlUIKit.h"; sourceTree = "<group>"; };
+		DA2CA4E518D2AC10007798F8 /* NSLayoutConstraint+PearlUIKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSLayoutConstraint+PearlUIKit.m"; sourceTree = "<group>"; };
 		DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+PearlMutableInfo.h"; sourceTree = "<group>"; };
 		DA30E9CC15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+PearlMutableInfo.m"; sourceTree = "<group>"; };
 		DA30E9CD15722ECA00A68B4C /* Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pearl.m; sourceTree = "<group>"; };
@@ -520,6 +541,7 @@
 		DA340E9F17CD830E00712B77 /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
 		DA3509FC15F101A500C14A8E /* PearlQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlQueue.h; sourceTree = "<group>"; };
 		DA3509FD15F101A500C14A8E /* PearlQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlQueue.m; sourceTree = "<group>"; };
+		DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		DA3EF17A15A47744003ABF4E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUbiquityStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5A09DD171A70E4005284AB /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
@@ -538,6 +560,8 @@
 		DA672D2E14F92C6B004A189C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		DA70EC7F1811B13C00F65DB2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		DA829E51159847E0002417D3 /* libFontReplacer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFontReplacer.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA854C8118D4CFBF00106317 /* avatar-add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-add@2x.png"; sourceTree = "<group>"; };
+		DA854C8218D4CFBF00106317 /* avatar-add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-add.png"; sourceTree = "<group>"; };
 		DA945C8617E3F3FD0053236B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		DA9B51541895D79E009D2A0B /* gittip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gittip.png; sourceTree = "<group>"; };
@@ -1854,6 +1878,8 @@
 		DABD366B1711E29400CF925C /* Avatars */ = {
 			isa = PBXGroup;
 			children = (
+				DA854C8118D4CFBF00106317 /* avatar-add@2x.png */,
+				DA854C8218D4CFBF00106317 /* avatar-add.png */,
 				DABD366C1711E29400CF925C /* avatar-0.png */,
 				DABD366D1711E29400CF925C /* avatar-0@2x.png */,
 				DABD366E1711E29400CF925C /* avatar-1.png */,
@@ -2488,6 +2514,11 @@
 				93D39730673227EFF6DEFF19 /* MPSetupViewController.h */,
 				93D3979190DACEBD1F6AE9F4 /* MPLogsViewController.m */,
 				93D391943675426839501BB8 /* MPLogsViewController.h */,
+				93D393310223DDB35218467A /* MPCombinedViewController.m */,
+				93D39CF8ADF4542CDC4CD385 /* MPCombinedViewController.h */,
+				DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */,
+				93D39B381350802A194BF332 /* MPAvatarCell.m */,
+				93D39DA27D768B53C8B1330C /* MPAvatarCell.h */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -2892,6 +2923,10 @@
 		DAFE45D715039823003ABA7C /* Pearl */ = {
 			isa = PBXGroup;
 			children = (
+				DA2CA4D918D28859007798F8 /* NSArray+Pearl.m */,
+				DA2CA4DA18D28859007798F8 /* NSArray+Pearl.h */,
+				DA2CA4DB18D28859007798F8 /* NSTimer+PearlBlock.m */,
+				DA2CA4DC18D28859007798F8 /* NSTimer+PearlBlock.h */,
 				DA3509FC15F101A500C14A8E /* PearlQueue.h */,
 				DA3509FD15F101A500C14A8E /* PearlQueue.m */,
 				93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */,
@@ -2973,6 +3008,8 @@
 		DAFE460715039823003ABA7C /* Pearl-UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				DA2CA4E518D2AC10007798F8 /* NSLayoutConstraint+PearlUIKit.m */,
+				DA2CA4E218D28866007798F8 /* NSLayoutConstraint+PearlUIKit.h */,
 				93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */,
 				93D393BB973253D4BAAC84AA /* PearlEMail.m */,
 				DAFE4A63150399FF003ABA8F /* UIScrollView+PearlFlashingIndicators.h */,
@@ -3102,6 +3139,7 @@
 				DAEB935A18AA537D000490CC /* idea.h in Headers */,
 				DAEB933A18AA537D000490CC /* sysendian.h in Headers */,
 				DAFE4A2415039824003ABA7C /* PearlInfoPlist.h in Headers */,
+				DA2CA4E418D28866007798F8 /* NSLayoutConstraint+PearlUIKit.h in Headers */,
 				DAFE4A2615039824003ABA7C /* PearlLogger.h in Headers */,
 				DAFE4A2815039824003ABA7C /* PearlMathUtils.h in Headers */,
 				DAEB934418AA537D000490CC /* camellia.h in Headers */,
@@ -3113,6 +3151,7 @@
 				DAEB935318AA537D000490CC /* ec.h in Headers */,
 				DAEB937818AA537D000490CC /* ssl3.h in Headers */,
 				DAEB935E18AA537D000490CC /* md4.h in Headers */,
+				DA2CA4E018D28859007798F8 /* NSTimer+PearlBlock.h in Headers */,
 				DAEB933518AA537D000490CC /* memlimit.h in Headers */,
 				DAFE4A3315039824003ABA7C /* Pearl-Crypto.h in Headers */,
 				DAEB937318AA537D000490CC /* seed.h in Headers */,
@@ -3189,6 +3228,7 @@
 				DAEB936C18AA537D000490CC /* pqueue.h in Headers */,
 				DAEB937B18AA537D000490CC /* tls1.h in Headers */,
 				DAEB933818AA537D000490CC /* scryptenc_cpuperf.h in Headers */,
+				DA2CA4DE18D28859007798F8 /* NSArray+Pearl.h in Headers */,
 				93D392EC39DA43C46C692C12 /* NSDictionary+Indexing.h in Headers */,
 				DAEB935418AA537D000490CC /* ecdh.h in Headers */,
 				DAEB937D18AA537D000490CC /* txt_db.h in Headers */,
@@ -3558,6 +3598,7 @@
 				DABD38FF1711E29700CF925C /* ui_navbar_container.png in Resources */,
 				DABD39001711E29700CF925C /* ui_navbar_container@2x.png in Resources */,
 				DABD39011711E29700CF925C /* ui_panel_container.png in Resources */,
+				DA854C8318D4CFBF00106317 /* avatar-add@2x.png in Resources */,
 				DABD39021711E29700CF925C /* ui_panel_container@2x.png in Resources */,
 				DABD39031711E29700CF925C /* ui_panel_display.png in Resources */,
 				DABD39041711E29700CF925C /* ui_panel_display@2x.png in Resources */,
@@ -3678,6 +3719,7 @@
 				DABD3B9D1711E29800CF925C /* social-twitter.png in Resources */,
 				DABD3B9E1711E29800CF925C /* social-twitter@2x.png in Resources */,
 				DABD3C191711E2DC00CF925C /* MPElementListCellView.xib in Resources */,
+				DA854C8418D4CFBF00106317 /* avatar-add.png in Resources */,
 				DABD3C221711E2DC00CF925C /* MainStoryboard_iPhone.storyboard in Resources */,
 				DABD3C241711E2DC00CF925C /* MasterPassword.entitlements in Resources */,
 				DABD3C251711E2DC00CF925C /* Settings.bundle in Resources */,
@@ -3688,6 +3730,7 @@
 				DABD3FCF1714F45C00CF925C /* identity@2x.png in Resources */,
 				DADEF4151810D2940052CA3E /* love-lyndir.button.grey@2x.png in Resources */,
 				DAE1EF2217E942DE00BC0086 /* Localizable.strings in Resources */,
+				DA38D6A318CCB5BF009AEB3E /* Storyboard.storyboard in Resources */,
 				DA5A09DF171A70E4005284AB /* play.png in Resources */,
 				DA5A09E0171A70E4005284AB /* play@2x.png in Resources */,
 				DA5A09EA171BB0F7005284AB /* unlocked.png in Resources */,
@@ -3774,6 +3817,8 @@
 				DABD3C271711E2DC00CF925C /* main.m in Sources */,
 				93D39F8A9254177891F38705 /* MPSetupViewController.m in Sources */,
 				DA095E75172F4CD8001C948B /* MPLogsViewController.m in Sources */,
+				93D39D596A2E376D6F6F5DA1 /* MPCombinedViewController.m in Sources */,
+				93D3957237D303DE2D38C267 /* MPAvatarCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3845,9 +3890,11 @@
 				DA30E9D815723E6900A68B4C /* PearlLazy.m in Sources */,
 				DAFE4A63150399FF003ABA82 /* UIControl+PearlBlocks.m in Sources */,
 				DAFE4A63150399FF003ABA86 /* NSObject+PearlKVO.m in Sources */,
+				DA2CA4DD18D28859007798F8 /* NSArray+Pearl.m in Sources */,
 				DAFE4A63150399FF003ABA8A /* UIControl+PearlSelect.m in Sources */,
 				DAFE4A63150399FF003ABA8E /* UIScrollView+PearlFlashingIndicators.m in Sources */,
 				DAFE4A63150399FF003ABA92 /* NSDateFormatter+RFC3339.m in Sources */,
+				DA2CA4E618D2AC10007798F8 /* NSLayoutConstraint+PearlUIKit.m in Sources */,
 				93D395F08A087F8A24689347 /* NSArray+Indexing.m in Sources */,
 				93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */,
 				93D39262A8A97DB748213309 /* PearlEMail.m in Sources */,
@@ -3855,6 +3902,7 @@
 				93D3922A53E41A54832E90D9 /* PearlOverlay.m in Sources */,
 				93D396AA30690B256F30378A /* PearlNavigationController.m in Sources */,
 				93D397952F5635C793C24DF1 /* NSError+PearlFullDescription.m in Sources */,
+				DA2CA4DF18D28859007798F8 /* NSTimer+PearlBlock.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3980,7 +4028,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = NO;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_OBJC_RECEIVER_WEAK = NO;
@@ -4025,7 +4073,7 @@
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
 				GCC_WARN_MISSING_PARENTHESES = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_SIGN_COMPARE = NO;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = NO;
@@ -4067,7 +4115,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = NO;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_OBJC_RECEIVER_WEAK = NO;
@@ -4116,7 +4164,7 @@
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
 				GCC_WARN_MISSING_PARENTHESES = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_SIGN_COMPARE = NO;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -4225,7 +4273,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = NO;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_OBJC_RECEIVER_WEAK = NO;
@@ -4273,7 +4321,7 @@
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
 				GCC_WARN_MISSING_PARENTHESES = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_SIGN_COMPARE = NO;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
