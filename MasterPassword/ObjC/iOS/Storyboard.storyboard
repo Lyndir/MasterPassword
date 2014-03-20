@@ -16,11 +16,11 @@
                         <viewControllerLayoutGuide type="bottom" id="VGz-R0-vMD"/>
                     </layoutGuides>
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="DOr-Xu-P9q" userLabel="Root">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rWM-08-aab" userLabel="Users Root">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="790-G2-I8g">
@@ -32,32 +32,29 @@
                                         </items>
                                     </navigationBar>
                                     <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="L6J-pd-gcp" userLabel="Avatar Collection">
-                                        <rect key="frame" x="0.0" y="184" width="320" height="200"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="200" id="rzg-26-0FR"/>
-                                        </constraints>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="ATB-kM-EGu">
-                                            <size key="itemSize" width="160" height="200"/>
+                                            <size key="itemSize" width="160" height="568"/>
                                             <size key="headerReferenceSize" width="80" height="0.0"/>
                                             <size key="footerReferenceSize" width="80" height="0.0"/>
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPAvatarCell" id="Zab-uQ-uk9" customClass="MPAvatarCell">
-                                                <rect key="frame" x="80" y="0.0" width="160" height="200"/>
+                                                <rect key="frame" x="80" y="-44" width="160" height="568"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="0.0" y="0.0" width="160" height="200"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="160" height="568"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_spinner.png" translatesAutoresizingMaskIntoConstraints="NO" id="y4j-ds-HM7" userLabel="Spinner">
-                                                            <rect key="frame" x="25" y="45" width="110" height="110"/>
+                                                            <rect key="frame" x="25" y="162" width="110" height="110"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         </imageView>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatar-0.png" translatesAutoresizingMaskIntoConstraints="NO" id="Aca-he-7Qi" userLabel="Avatar">
-                                                            <rect key="frame" x="25" y="45" width="110" height="110"/>
+                                                            <rect key="frame" x="25" y="162" width="110" height="110"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <color key="tintColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
                                                             <constraints>
@@ -66,7 +63,7 @@
                                                             </constraints>
                                                         </imageView>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Sa-Vg-EEI" userLabel="Name Backdrop">
-                                                            <rect key="frame" x="20" y="91" width="120" height="17"/>
+                                                            <rect key="frame" x="20" y="209" width="120" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <subviews>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cLT-s0-4SQ" userLabel="Name Field">
@@ -93,6 +90,7 @@
                                                     <constraint firstAttribute="centerX" secondItem="0Sa-Vg-EEI" secondAttribute="centerX" id="EYH-CQ-6TX"/>
                                                     <constraint firstItem="0Sa-Vg-EEI" firstAttribute="top" secondItem="Aca-he-7Qi" secondAttribute="bottom" priority="500" constant="8" symbolic="YES" id="F67-h9-FDi"/>
                                                     <constraint firstItem="Aca-he-7Qi" firstAttribute="centerY" secondItem="0Sa-Vg-EEI" secondAttribute="centerY" priority="750" id="Ht7-Iz-cAW"/>
+                                                    <constraint firstAttribute="bottom" secondItem="Aca-he-7Qi" secondAttribute="bottom" priority="750" constant="296" id="J75-xU-Pvo"/>
                                                     <constraint firstAttribute="centerX" secondItem="Aca-he-7Qi" secondAttribute="centerX" id="K7L-KI-BH9"/>
                                                     <constraint firstItem="y4j-ds-HM7" firstAttribute="width" secondItem="Aca-he-7Qi" secondAttribute="width" id="MeH-cy-veM"/>
                                                     <constraint firstAttribute="top" secondItem="Aca-he-7Qi" secondAttribute="centerY" priority="250" constant="-22" id="TPa-AD-BhA"/>
@@ -102,21 +100,22 @@
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="avatarImageView" destination="Aca-he-7Qi" id="Me2-jn-hSX"/>
+                                                    <outlet property="avatarRaisedConstraint" destination="J75-xU-Pvo" id="CIX-a1-lw6"/>
                                                     <outlet property="avatarSizeConstraint" destination="Ezz-dq-dfq" id="FLf-Gq-Pdw"/>
-                                                    <outlet property="avatarTopConstraint" destination="TPa-AD-BhA" id="gOw-0q-cIp"/>
-                                                    <outlet property="nameCenterConstraint" destination="Ht7-Iz-cAW" id="zeF-2U-6GW"/>
+                                                    <outlet property="avatarToTopConstraint" destination="TPa-AD-BhA" id="gOw-0q-cIp"/>
                                                     <outlet property="nameContainer" destination="0Sa-Vg-EEI" id="VLy-AI-Yh8"/>
                                                     <outlet property="nameLabel" destination="cLT-s0-4SQ" id="85r-AJ-Zkb"/>
+                                                    <outlet property="nameToCenterConstraint" destination="Ht7-Iz-cAW" id="zeF-2U-6GW"/>
                                                     <outlet property="spinner" destination="y4j-ds-HM7" id="QQ2-SF-ZLd"/>
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>
                                         <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="LD1-mt-htC">
-                                            <rect key="frame" x="0.0" y="0.0" width="80" height="200"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="80" height="480"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </collectionReusableView>
                                         <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="G8v-Sb-ilL">
-                                            <rect key="frame" x="240" y="0.0" width="80" height="200"/>
+                                            <rect key="frame" x="240" y="0.0" width="80" height="480"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </collectionReusableView>
                                         <connections>
@@ -125,27 +124,27 @@
                                         </connections>
                                     </collectionView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qp1-nX-o4i" userLabel="Entry">
-                                        <rect key="frame" x="20" y="392" width="280" height="63"/>
+                                        <rect key="frame" x="20" y="192" width="280" height="63"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Enter your full name:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="5fe-rt-zFa">
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Enter your full name:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="5fe-rt-zFa" userLabel="Entry Label">
                                                 <rect key="frame" x="20" y="0.0" width="240" height="18"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_textfield.png" translatesAutoresizingMaskIntoConstraints="NO" id="UfK-na-vOU">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_textfield.png" translatesAutoresizingMaskIntoConstraints="NO" id="UfK-na-vOU" userLabel="Field Background">
                                                 <rect key="frame" x="0.0" y="26" width="280" height="37"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <rect key="contentStretch" x="0.25" y="0.25" width="0.49999999999999961" height="0.49999999999999961"/>
                                             </imageView>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="z3Z-AB-fG2">
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="z3Z-AB-fG2" userLabel="Entry Field">
                                                 <rect key="frame" x="10" y="30" width="260" height="29"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="28"/>
-                                                <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="alphabet" keyboardAppearance="alert" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
                                                 <connections>
                                                     <outlet property="delegate" destination="S8q-YF-Kt9" id="5u3-XN-LOe"/>
                                                 </connections>
@@ -167,7 +166,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XEP-O3-ayG" userLabel="Footer">
-                                        <rect key="frame" x="0.0" y="455" width="320" height="113"/>
+                                        <rect key="frame" x="0.0" y="367" width="320" height="113"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vHz-dw-oPb" userLabel="GitTip" customClass="LLGitTip">
@@ -229,33 +228,39 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="790-G2-I8g" secondAttribute="trailing" id="2Wb-fS-TFg"/>
+                                    <constraint firstAttribute="bottom" secondItem="qp1-nX-o4i" secondAttribute="bottom" constant="225" id="4aN-54-XmH"/>
+                                    <constraint firstItem="L6J-pd-gcp" firstAttribute="top" secondItem="rWM-08-aab" secondAttribute="top" id="7tX-gM-6hA"/>
                                     <constraint firstAttribute="trailing" secondItem="L6J-pd-gcp" secondAttribute="trailing" id="9fV-8e-y3E"/>
                                     <constraint firstItem="L6J-pd-gcp" firstAttribute="leading" secondItem="rWM-08-aab" secondAttribute="leading" id="BcO-0y-Nih"/>
-                                    <constraint firstAttribute="centerY" secondItem="L6J-pd-gcp" secondAttribute="centerY" priority="750" id="CP5-mM-v8g"/>
                                     <constraint firstItem="qp1-nX-o4i" firstAttribute="leading" secondItem="rWM-08-aab" secondAttribute="leading" constant="20" symbolic="YES" id="DY1-Ad-Mbi"/>
-                                    <constraint firstItem="qp1-nX-o4i" firstAttribute="top" secondItem="L6J-pd-gcp" secondAttribute="bottom" constant="8" symbolic="YES" id="IR6-Kh-W4O"/>
                                     <constraint firstAttribute="bottom" secondItem="XEP-O3-ayG" secondAttribute="bottom" id="PpW-Of-YOc"/>
                                     <constraint firstItem="790-G2-I8g" firstAttribute="leading" secondItem="rWM-08-aab" secondAttribute="leading" id="YWp-yC-ar7"/>
                                     <constraint firstAttribute="trailing" secondItem="qp1-nX-o4i" secondAttribute="trailing" constant="20" symbolic="YES" id="cOq-BS-Xmo"/>
                                     <constraint firstAttribute="top" secondItem="790-G2-I8g" secondAttribute="bottom" priority="1" id="dTp-TY-5bb"/>
+                                    <constraint firstAttribute="bottom" secondItem="L6J-pd-gcp" secondAttribute="bottom" id="jNR-Gp-sIv"/>
                                     <constraint firstItem="XEP-O3-ayG" firstAttribute="leading" secondItem="rWM-08-aab" secondAttribute="leading" id="pAt-0Y-LYv"/>
                                     <constraint firstAttribute="trailing" secondItem="XEP-O3-ayG" secondAttribute="trailing" id="raD-hD-OYt"/>
                                 </constraints>
                             </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="keyboard-dark.png" translatesAutoresizingMaskIntoConstraints="NO" id="WKq-vl-7Xv" userLabel="Keyboard">
+                                <rect key="frame" x="0.0" y="264" width="320" height="216"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="rWM-08-aab" firstAttribute="leading" secondItem="DOr-Xu-P9q" secondAttribute="leading" id="Il8-kg-Dra"/>
-                            <constraint firstItem="L6J-pd-gcp" firstAttribute="top" secondItem="zp4-4O-wZI" secondAttribute="bottom" priority="500" id="LNa-Fa-8yG"/>
+                            <constraint firstItem="VGz-R0-vMD" firstAttribute="top" secondItem="WKq-vl-7Xv" secondAttribute="bottom" id="Jrv-np-2jJ"/>
                             <constraint firstAttribute="trailing" secondItem="rWM-08-aab" secondAttribute="trailing" id="UPP-1n-zIe"/>
+                            <constraint firstItem="WKq-vl-7Xv" firstAttribute="leading" secondItem="DOr-Xu-P9q" secondAttribute="leading" id="fGF-fl-Mfx"/>
                             <constraint firstItem="VGz-R0-vMD" firstAttribute="top" secondItem="rWM-08-aab" secondAttribute="bottom" id="fcH-lm-76a"/>
+                            <constraint firstAttribute="trailing" secondItem="WKq-vl-7Xv" secondAttribute="trailing" id="o32-jm-izi"/>
                             <constraint firstAttribute="top" secondItem="rWM-08-aab" secondAttribute="top" id="xBe-1Q-mz2"/>
                             <constraint firstItem="zp4-4O-wZI" firstAttribute="bottom" secondItem="790-G2-I8g" secondAttribute="top" priority="500" id="y7N-re-Hvm"/>
                         </constraints>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
-                        <outlet property="avatarCollectionCenterConstraint" destination="CP5-mM-v8g" id="35U-gY-EkY"/>
                         <outlet property="avatarCollectionView" destination="L6J-pd-gcp" id="fAq-mC-iVZ"/>
                         <outlet property="entryContainer" destination="qp1-nX-o4i" id="tSJ-e8-W8b"/>
                         <outlet property="entryField" destination="z3Z-AB-fG2" id="iAO-Gd-flO"/>
@@ -306,22 +311,22 @@
                         <viewControllerLayoutGuide type="bottom" id="lXD-AZ-Umi"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="fkJ-D0-yue">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" translatesAutoresizingMaskIntoConstraints="NO" id="Lkg-xn-bce" userLabel="Background">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <containerView clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jDK-5y-QRP" userLabel="Users">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <connections>
                                     <segue destination="S8q-YF-Kt9" kind="embed" identifier="users" id="9AR-TX-BkY"/>
                                 </connections>
                             </containerView>
                             <containerView clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cs4-pY-dDU" userLabel="Passwords" customClass="PearlUIView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="ignoreTouches" value="YES"/>
@@ -366,11 +371,11 @@
                         <viewControllerLayoutGuide type="bottom" id="c12-XI-Rv9"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="MSX-uI-cwS" userLabel="Root" customClass="PearlUIView">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tI8-OT-LrO" userLabel="Passwords Root" customClass="PearlUIView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uuT-jm-2La" userLabel="Navigation" customClass="PearlUINavigationBar">
@@ -388,7 +393,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </navigationBar>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K2e-Gh-7hH" userLabel="Passwords Container">
-                                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="eg. apple.com" showsBookmarkButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oAG-Ea-TOI">
@@ -400,7 +405,7 @@
                                                 </connections>
                                             </searchBar>
                                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="aXw-tn-8Sj" userLabel="Password Collection">
-                                                <rect key="frame" x="0.0" y="44" width="320" height="460"/>
+                                                <rect key="frame" x="0.0" y="44" width="320" height="372"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Mv1-29-TWx">
@@ -1119,6 +1124,7 @@
         <image name="icon_person.png" width="32" height="32"/>
         <image name="icon_plus.png" width="32" height="32"/>
         <image name="icon_up.png" width="32" height="32"/>
+        <image name="keyboard-dark.png" width="320" height="216"/>
         <image name="tip_basic_black.png" width="210" height="60"/>
         <image name="ui_spinner.png" width="75" height="75"/>
         <image name="ui_textfield.png" width="158" height="34"/>
@@ -1127,6 +1133,6 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
+        <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
 </document>

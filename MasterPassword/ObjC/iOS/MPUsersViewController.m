@@ -128,6 +128,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                                                     usingMasterPassword:self.entryField.text];
 
                     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                        self.entryField.text = @"";
                         [self selectedAvatar].spinnerActive = NO;
 
                         if (!signedIn) {
@@ -191,6 +192,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
                     BOOL signedIn = [[MPiOSAppDelegate get] signInAsUser:user saveInContext:context usingMasterPassword:masterPassword];
                     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                        self.entryField.text = @"";
                         [self selectedAvatar].spinnerActive = NO;
 
                         if (!signedIn) {

@@ -1328,6 +1328,7 @@
 		DACA29BB1705E2DE002C6C22 /* UIColor+HSV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+HSV.m"; sourceTree = "<group>"; };
 		DAD3127115528CD200A3F9ED /* libLocalytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLocalytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAD312C01552A20800A3F9ED /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		DADBB55918DB0CFC00D099FE /* keyboard-dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "keyboard-dark@2x.png"; sourceTree = "<group>"; };
 		DADEF4061810D2940052CA3E /* love-lyndir.button.green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.button.green.png"; sourceTree = "<group>"; };
 		DADEF4071810D2940052CA3E /* love-lyndir.button.green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.button.green@2x.png"; sourceTree = "<group>"; };
 		DADEF4081810D2940052CA3E /* love-lyndir.button.grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.button.grey.png"; sourceTree = "<group>"; };
@@ -1763,6 +1764,7 @@
 		DABD360D1711E29400CF925C /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				DADBB55918DB0CFC00D099FE /* keyboard-dark@2x.png */,
 				DA945C8617E3F3FD0053236B /* Images.xcassets */,
 				DA5E5C3C1723681B003798D8 /* Square-bottom.png */,
 				DA5A09E8171BB0F7005284AB /* unlocked.png */,

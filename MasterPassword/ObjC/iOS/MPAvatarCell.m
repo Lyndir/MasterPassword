@@ -26,9 +26,10 @@ const long MPAvatarAdd = 10000;
 @property(strong, nonatomic) IBOutlet UILabel *nameLabel;
 @property(strong, nonatomic) IBOutlet UIView *nameContainer;
 @property(strong, nonatomic) IBOutlet UIImageView *spinner;
-@property(strong, nonatomic) IBOutlet NSLayoutConstraint *nameCenterConstraint;
+@property(strong, nonatomic) IBOutlet NSLayoutConstraint *nameToCenterConstraint;
 @property(strong, nonatomic) IBOutlet NSLayoutConstraint *avatarSizeConstraint;
-@property(strong, nonatomic) IBOutlet NSLayoutConstraint *avatarTopConstraint;
+@property(strong, nonatomic) IBOutlet NSLayoutConstraint *avatarToTopConstraint;
+@property(strong, nonatomic) IBOutlet NSLayoutConstraint *avatarRaisedConstraint;
 
 @end
 
@@ -184,8 +185,9 @@ const long MPAvatarAdd = 10000;
 
             case MPAvatarModeLowered: {
                 self.avatarSizeConstraint.constant = self.avatarImageView.image.size.height;
-                self.avatarTopConstraint.priority = UILayoutPriorityDefaultLow;
-                self.nameCenterConstraint.priority = UILayoutPriorityDefaultLow;
+                self.avatarRaisedConstraint.priority = UILayoutPriorityDefaultLow;
+                self.avatarToTopConstraint.priority = UILayoutPriorityDefaultLow;
+                self.nameToCenterConstraint.priority = UILayoutPriorityDefaultLow;
                 self.nameContainer.alpha = self.visibility;
                 self.nameContainer.backgroundColor = [UIColor clearColor];
                 self.avatarImageView.alpha = self.visibility / 0.7f + 0.3f;
@@ -194,8 +196,9 @@ const long MPAvatarAdd = 10000;
             }
             case MPAvatarModeRaisedButInactive: {
                 self.avatarSizeConstraint.constant = self.avatarImageView.image.size.height;
-                self.avatarTopConstraint.priority = UILayoutPriorityDefaultLow;
-                self.nameCenterConstraint.priority = UILayoutPriorityDefaultLow;
+                self.avatarRaisedConstraint.priority = UILayoutPriorityDefaultHigh;
+                self.avatarToTopConstraint.priority = UILayoutPriorityDefaultLow;
+                self.nameToCenterConstraint.priority = UILayoutPriorityDefaultLow;
                 self.nameContainer.alpha = self.visibility;
                 self.nameContainer.backgroundColor = [UIColor clearColor];
                 self.avatarImageView.alpha = 0;
@@ -204,8 +207,9 @@ const long MPAvatarAdd = 10000;
             }
             case MPAvatarModeRaisedAndActive: {
                 self.avatarSizeConstraint.constant = self.avatarImageView.image.size.height;
-                self.avatarTopConstraint.priority = UILayoutPriorityDefaultLow;
-                self.nameCenterConstraint.priority = UILayoutPriorityDefaultHigh;
+                self.avatarRaisedConstraint.priority = UILayoutPriorityDefaultHigh;
+                self.avatarToTopConstraint.priority = UILayoutPriorityDefaultLow;
+                self.nameToCenterConstraint.priority = UILayoutPriorityDefaultHigh;
                 self.nameContainer.alpha = self.visibility;
                 self.nameContainer.backgroundColor = [UIColor blackColor];
                 self.avatarImageView.alpha = 1;
@@ -214,8 +218,9 @@ const long MPAvatarAdd = 10000;
             }
             case MPAvatarModeRaisedAndHidden: {
                 self.avatarSizeConstraint.constant = self.avatarImageView.image.size.height;
-                self.avatarTopConstraint.priority = UILayoutPriorityDefaultLow;
-                self.nameCenterConstraint.priority = UILayoutPriorityDefaultHigh;
+                self.avatarRaisedConstraint.priority = UILayoutPriorityDefaultHigh;
+                self.avatarToTopConstraint.priority = UILayoutPriorityDefaultLow;
+                self.nameToCenterConstraint.priority = UILayoutPriorityDefaultHigh;
                 self.nameContainer.alpha = 0;
                 self.nameContainer.backgroundColor = [UIColor blackColor];
                 self.avatarImageView.alpha = 0;
@@ -224,8 +229,9 @@ const long MPAvatarAdd = 10000;
             }
             case MPAvatarModeRaisedAndMinimized: {
                 self.avatarSizeConstraint.constant = 36;
-                self.avatarTopConstraint.priority = UILayoutPriorityDefaultHigh;
-                self.nameCenterConstraint.priority = UILayoutPriorityDefaultHigh;
+                self.avatarRaisedConstraint.priority = UILayoutPriorityDefaultLow;
+                self.avatarToTopConstraint.priority = UILayoutPriorityDefaultHigh;
+                self.nameToCenterConstraint.priority = UILayoutPriorityDefaultHigh;
                 self.nameContainer.alpha = 0;
                 self.nameContainer.backgroundColor = [UIColor blackColor];
                 self.avatarImageView.alpha = 1;
@@ -234,8 +240,8 @@ const long MPAvatarAdd = 10000;
             }
         }
         [self.avatarSizeConstraint apply];
-        [self.avatarTopConstraint apply];
-        [self.nameCenterConstraint apply];
+        [self.avatarToTopConstraint apply];
+        [self.nameToCenterConstraint apply];
 
         // Avatar selection and spinner.
         if (self.mode != MPAvatarModeRaisedAndMinimized && (self.selected || self.highlighted) && !self.spinnerActive)
