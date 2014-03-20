@@ -18,7 +18,7 @@
 
 #import "LLGitTip.h"
 
-@interface MPUsersViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegate>
+@interface MPUsersViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextFieldDelegate>
 
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property(weak, nonatomic) IBOutlet UIView *userSelectionContainer;

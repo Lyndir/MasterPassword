@@ -242,6 +242,17 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
 #pragma mark - UICollectionViewDataSource
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
+  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+
+    if (collectionView == self.avatarCollectionView) {
+        CGSize parentSize = self.avatarCollectionView.bounds.size;
+        return CGSizeMake( parentSize.width / 2, parentSize.height );
+    }
+
+    Throw(@"unexpected collection view: %@", collectionView);
+}
+
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 
     if (collectionView == self.avatarCollectionView)
