@@ -29,6 +29,7 @@
 
 @property(assign, nonatomic) BOOL active;
 
+@property(nonatomic, copy) NSString *originalQuery;
 - (void)setActive:(BOOL)active animated:(BOOL)animated;
 
 @end

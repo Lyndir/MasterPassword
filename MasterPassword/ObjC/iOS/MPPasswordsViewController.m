@@ -33,6 +33,7 @@
     __weak id _storeObserver;
     __weak id _mocObserver;
     NSArray *_notificationObservers;
+    __weak UITapGestureRecognizer *_passwordsDismissRecognizer;
 }
 
 - (void)viewDidLoad {
@@ -133,11 +134,13 @@
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
 
     if (searchBar == self.passwordsSearchBar) {
+        self.originalQuery = self.query;
         self.passwordsSearchBar.showsCancelButton = YES;
+        _passwordsDismissRecognizer = [self.view dismissKeyboardForField:self.passwordsSearchBar onTouchForced:NO];
 
-        [UIView animateWithDuration:0.3f animations:^{
-            self.passwordCollectionView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3f];
-        }];
+//        [UIView animateWithDuration:0.3f animations:^{
+//            self.passwordCollectionView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3f];
+//        }];
     }
 }
 
@@ -145,6 +148,8 @@
 
     if (searchBar == self.passwordsSearchBar) {
         self.passwordsSearchBar.showsCancelButton = NO;
+        if (_passwordsDismissRecognizer)
+            [self.view removeGestureRecognizer:_passwordsDismissRecognizer];
 
         [UIView animateWithDuration:0.3f animations:^{
             self.passwordCollectionView.backgroundColor = [UIColor clearColor];
@@ -152,9 +157,19 @@
     }
 }
 
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+
+    [searchBar resignFirstResponder];
+}
+
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
 
     [searchBar resignFirstResponder];
+
+    if (searchBar == self.passwordsSearchBar) {
+        self.passwordsSearchBar.text = self.originalQuery;
+        [self updatePasswords];
+    }
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
