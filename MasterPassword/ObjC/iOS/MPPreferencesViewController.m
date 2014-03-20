@@ -25,12 +25,12 @@
 
     for (NSUInteger a = 0; a < MPAvatarCount; ++a) {
         UIButton *avatar = [self.avatarTemplate clone];
-        avatar.tag = (NSInteger)a;
+        avatar.tag = a;
         avatar.hidden = NO;
         avatar.center = CGPointMake(
                 self.avatarTemplate.center.x * (a + 1) + self.avatarTemplate.bounds.size.width / 2 * a,
                 self.avatarTemplate.center.y );
-        [avatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%d", a )]
+        [avatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%ld", (long)a )]
                           forState:UIControlStateNormal];
         [avatar setSelectionInSuperviewCandidate:YES isClearable:NO];
 

@@ -26,15 +26,21 @@ extern const long MPAvatarAdd;
 typedef NS_ENUM(NSUInteger, MPAvatarMode) {
     MPAvatarModeLowered,
     MPAvatarModeRaisedButInactive,
-    MPAvatarModeRaisedAndActive
+    MPAvatarModeRaisedAndActive,
+    MPAvatarModeRaisedAndHidden,
+    MPAvatarModeRaisedAndMinimized,
 };
 
 @interface MPAvatarCell : UICollectionViewCell 
 @property (copy, nonatomic) NSString *name;
 @property (assign, nonatomic) long avatar;
 @property (assign, nonatomic) MPAvatarMode mode;
-@property (assign, nonatomic) float visibility;
+@property (assign, nonatomic) CGFloat visibility;
+@property (assign, nonatomic) BOOL spinnerActive;
 
 + (NSString *)reuseIdentifier;
+
+- (void)setVisibility:(CGFloat)visibility animated:(BOOL)animated;
+- (void)setMode:(MPAvatarMode)mode animated:(BOOL)animated;
 
 @end

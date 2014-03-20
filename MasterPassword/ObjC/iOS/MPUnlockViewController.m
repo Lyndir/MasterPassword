@@ -54,7 +54,7 @@
         avatar.center = CGPointMake(
                 (20 + self.avatarTemplate.bounds.size.width / 2) * (a + 1) + self.avatarTemplate.bounds.size.width / 2 * a,
                 20 + self.avatarTemplate.bounds.size.height / 2 );
-        [avatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%d", a )] forState:UIControlStateNormal];
+        [avatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%ld", (long)a )] forState:UIControlStateNormal];
         [avatar setSelectionInSuperviewCandidate:YES isClearable:NO];
 
         avatar.layer.cornerRadius = avatar.bounds.size.height / 2;
@@ -276,12 +276,6 @@
     [super viewWillDisappear:animated];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-
-    if ([segue.identifier isEqualToString:@"MP_Settings"])
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
-}
-
 - (BOOL)prefersStatusBarHidden {
 
     return YES;
@@ -290,6 +284,12 @@
 - (UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
 
     return UIStatusBarAnimationSlide;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+
+    if ([segue.identifier isEqualToString:@"MP_Settings"])
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (BOOL)canBecomeFirstResponder {
