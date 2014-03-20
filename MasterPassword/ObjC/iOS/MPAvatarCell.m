@@ -37,7 +37,7 @@ const long MPAvatarAdd = 10000;
 
 + (NSString *)reuseIdentifier {
 
-    return @"MPAvatarCell";
+    return NSStringFromClass( self );
 }
 
 #pragma mark - Life cycle

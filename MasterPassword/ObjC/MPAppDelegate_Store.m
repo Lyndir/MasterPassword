@@ -48,6 +48,32 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     return mainManagedObjectContext;
 }
 
++ (BOOL)managedObjectContextForMainThreadPerformBlock:(void (^)(NSManagedObjectContext *mainContext))mocBlock {
+
+    NSManagedObjectContext *mainManagedObjectContext = [self managedObjectContextForMainThreadIfReady];
+    if (!mainManagedObjectContext)
+        return NO;
+
+    [mainManagedObjectContext performBlock:^{
+        mocBlock( mainManagedObjectContext );
+    }];
+
+    return YES;
+}
+
++ (BOOL)managedObjectContextForMainThreadPerformBlockAndWait:(void (^)(NSManagedObjectContext *mainContext))mocBlock {
+
+    NSManagedObjectContext *mainManagedObjectContext = [self managedObjectContextForMainThreadIfReady];
+    if (!mainManagedObjectContext)
+        return NO;
+
+    [mainManagedObjectContext performBlockAndWait:^{
+        mocBlock( mainManagedObjectContext );
+    }];
+
+    return YES;
+}
+
 + (BOOL)managedObjectContextPerformBlock:(void (^)(NSManagedObjectContext *context))mocBlock {
 
     NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];

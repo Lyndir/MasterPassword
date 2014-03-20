@@ -18,10 +18,11 @@
 
 #import "LLGitTip.h"
 
-@interface MPPasswordsViewController : UIViewController<UISearchBarDelegate, UISearchDisplayDelegate, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegate>
+@interface MPPasswordsViewController : UIViewController<UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegate>
 
 @property(strong, nonatomic) IBOutlet UIView *passwordSelectionContainer;
 @property(strong, nonatomic) IBOutlet UICollectionView *passwordCollectionView;
+@property (strong, nonatomic) IBOutlet UISearchBar *passwordsSearchBar;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *passwordsToBottomConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *navigationBarToTopConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *navigationBarToPasswordsConstraint;

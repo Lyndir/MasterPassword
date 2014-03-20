@@ -145,6 +145,16 @@
     return YES;
 }
 
+- (NSString *)resolveContentUsingKey:(MPKey *)key {
+
+    return [self.algorithm resolveContentForElement:self usingKey:key];
+}
+
+- (void)resolveContentUsingKey:(MPKey *)key result:(void (^)(NSString *))result {
+
+    [self.algorithm resolveContentForElement:self usingKey:key result:result];
+}
+
 @end
 
 @implementation MPElementGeneratedEntity(MP)

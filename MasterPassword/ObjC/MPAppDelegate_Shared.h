@@ -16,6 +16,7 @@
 #endif
 
 @property(strong, nonatomic) MPKey *key;
+@property(strong, nonatomic) NSManagedObjectID *activeUserOID;
 
 + (instancetype)get;
 

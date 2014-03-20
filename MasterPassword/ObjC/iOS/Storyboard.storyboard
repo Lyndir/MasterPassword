@@ -19,7 +19,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rWM-08-aab" userLabel="User Selection">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rWM-08-aab" userLabel="Users Root">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -391,15 +391,10 @@
                                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="oAG-Ea-TOI">
+                                            <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="eg. apple.com" showsBookmarkButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oAG-Ea-TOI">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                                <color key="barTintColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                <textInputTraits key="textInputTraits"/>
-                                                <scopeButtonTitles>
-                                                    <string>Title</string>
-                                                    <string>Title</string>
-                                                </scopeButtonTitles>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
                                                 <connections>
                                                     <outlet property="delegate" destination="nkY-z6-8jd" id="Mfn-aT-vK7"/>
                                                 </connections>
@@ -409,28 +404,31 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Mv1-29-TWx">
-                                                    <size key="itemSize" width="320" height="100"/>
+                                                    <size key="itemSize" width="304" height="100"/>
                                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                 </collectionViewFlowLayout>
                                                 <cells>
-                                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="302-fI-maQ">
-                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
+                                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPPasswordGeneratedCell" id="302-fI-maQ" customClass="MPPasswordGeneratedCell">
+                                                        <rect key="frame" x="8" y="0.0" width="304" height="100"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="304" height="100"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="SadwGafy7^Sidu" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="q75-Uz-86O">
-                                                                    <rect key="frame" x="8" y="20" width="304" height="37"/>
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="SadwGafy7^Sidu" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="q75-Uz-86O">
+                                                                    <rect key="frame" x="8" y="20" width="288" height="37"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="30"/>
                                                                     <textInputTraits key="textInputTraits"/>
+                                                                    <connections>
+                                                                        <outlet property="delegate" destination="302-fI-maQ" id="vji-9t-frp"/>
+                                                                    </connections>
                                                                 </textField>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="qek-2l-YQf" userLabel="Site Name">
-                                                                    <rect key="frame" x="20" y="71" width="280" height="14"/>
+                                                                    <rect key="frame" x="20" y="71" width="264" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                                     <accessibility key="accessibilityConfiguration" label="">
                                                                         <accessibilityTraits key="traits" none="YES" staticText="YES" summaryElement="YES"/>
@@ -442,7 +440,7 @@
                                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                                 </label>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="1" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="I2J-B6-5rE" userLabel="Counter">
-                                                                    <rect key="frame" x="236" y="69" width="11" height="19"/>
+                                                                    <rect key="frame" x="220" y="69" width="11" height="19"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                     <accessibility key="accessibilityConfiguration" hint="Site's counter."/>
                                                                     <fontDescription key="fontDescription" name="Copperplate-Bold" family="Copperplate" pointSize="17"/>
@@ -452,7 +450,7 @@
                                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                                 </label>
                                                                 <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iLD-rv-uZZ" userLabel="Upgrade">
-                                                                    <rect key="frame" x="241" y="56" width="44" height="44"/>
+                                                                    <rect key="frame" x="225" y="56" width="44" height="44"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                     <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
                                                                     <constraints>
@@ -468,9 +466,12 @@
                                                                     <state key="highlighted">
                                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </state>
+                                                                    <connections>
+                                                                        <action selector="doUpgrade:" destination="302-fI-maQ" eventType="touchUpInside" id="iaP-5Y-5re"/>
+                                                                    </connections>
                                                                 </button>
                                                                 <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fQc-Fn-JDq" userLabel="Incrementer">
-                                                                    <rect key="frame" x="241" y="56" width="44" height="44"/>
+                                                                    <rect key="frame" x="225" y="56" width="44" height="44"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                     <accessibility key="accessibilityConfiguration" hint="Increments the site counter."/>
                                                                     <gestureRecognizers/>
@@ -487,9 +488,12 @@
                                                                     <state key="highlighted">
                                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </state>
+                                                                    <connections>
+                                                                        <action selector="doIncrementCounter:" destination="302-fI-maQ" eventType="touchUpInside" id="Aa1-tk-whD"/>
+                                                                    </connections>
                                                                 </button>
                                                                 <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cOv-2G-EAP" userLabel="User">
-                                                                    <rect key="frame" x="276" y="56" width="44" height="44"/>
+                                                                    <rect key="frame" x="260" y="56" width="44" height="44"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                     <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
                                                                     <constraints>
@@ -505,6 +509,9 @@
                                                                     <state key="highlighted">
                                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </state>
+                                                                    <connections>
+                                                                        <action selector="doUser:" destination="302-fI-maQ" eventType="touchUpInside" id="Fp9-L4-hlU"/>
+                                                                    </connections>
                                                                 </button>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -526,23 +533,34 @@
                                                             <constraint firstItem="fQc-Fn-JDq" firstAttribute="centerY" secondItem="I2J-B6-5rE" secondAttribute="centerY" id="uR7-lg-A9q"/>
                                                             <constraint firstItem="qek-2l-YQf" firstAttribute="leading" secondItem="302-fI-maQ" secondAttribute="leading" constant="20" id="wUJ-7N-Z1z"/>
                                                         </constraints>
+                                                        <connections>
+                                                            <outlet property="contentField" destination="q75-Uz-86O" id="so3-qq-0Lv"/>
+                                                            <outlet property="counterButton" destination="fQc-Fn-JDq" id="1QL-JK-tHn"/>
+                                                            <outlet property="counterLabel" destination="I2J-B6-5rE" id="C4b-gE-XHW"/>
+                                                            <outlet property="loginButton" destination="cOv-2G-EAP" id="WoR-eP-Ztq"/>
+                                                            <outlet property="nameLabel" destination="qek-2l-YQf" id="CcC-PM-kMx"/>
+                                                            <outlet property="upgradeButton" destination="iLD-rv-uZZ" id="OKi-9X-R6F"/>
+                                                        </connections>
                                                     </collectionViewCell>
-                                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="GAB-fT-EFv">
-                                                        <rect key="frame" x="0.0" y="110" width="320" height="100"/>
+                                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPPasswordStoredCell" id="GAB-fT-EFv" customClass="MPPasswordStoredCell">
+                                                        <rect key="frame" x="8" y="110" width="304" height="100"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="304" height="100"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Pa$sW0rD" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="45O-9d-keG">
-                                                                    <rect key="frame" x="8" y="20" width="304" height="37"/>
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Pa$sW0rD" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="45O-9d-keG">
+                                                                    <rect key="frame" x="8" y="20" width="288" height="37"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="30"/>
                                                                     <textInputTraits key="textInputTraits"/>
+                                                                    <connections>
+                                                                        <outlet property="delegate" destination="GAB-fT-EFv" id="tBW-n5-SOj"/>
+                                                                    </connections>
                                                                 </textField>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="VNc-fL-Vfa" userLabel="Site Name">
-                                                                    <rect key="frame" x="20" y="71" width="280" height="14"/>
+                                                                    <rect key="frame" x="20" y="71" width="264" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                                     <accessibility key="accessibilityConfiguration" label="">
                                                                         <accessibilityTraits key="traits" none="YES" staticText="YES" summaryElement="YES"/>
@@ -554,7 +572,7 @@
                                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                                 </label>
                                                                 <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UAg-Fn-Iph" userLabel="Edit">
-                                                                    <rect key="frame" x="241" y="56" width="44" height="44"/>
+                                                                    <rect key="frame" x="225" y="56" width="44" height="44"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                     <accessibility key="accessibilityConfiguration" hint="Edits the password."/>
                                                                     <constraints>
@@ -570,9 +588,12 @@
                                                                     <state key="highlighted">
                                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </state>
+                                                                    <connections>
+                                                                        <action selector="doEditContent:" destination="GAB-fT-EFv" eventType="touchUpInside" id="XnF-cN-Z2j"/>
+                                                                    </connections>
                                                                 </button>
                                                                 <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T1f-JH-Ppw" userLabel="User">
-                                                                    <rect key="frame" x="276" y="56" width="44" height="44"/>
+                                                                    <rect key="frame" x="260" y="56" width="44" height="44"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                     <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
                                                                     <constraints>
@@ -588,6 +609,9 @@
                                                                     <state key="highlighted">
                                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </state>
+                                                                    <connections>
+                                                                        <action selector="doUser:" destination="GAB-fT-EFv" eventType="touchUpInside" id="xCm-vG-Hvp"/>
+                                                                    </connections>
                                                                 </button>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -605,6 +629,12 @@
                                                             <constraint firstAttribute="trailing" secondItem="VNc-fL-Vfa" secondAttribute="trailing" constant="20" id="k3u-1Q-cKf"/>
                                                             <constraint firstItem="45O-9d-keG" firstAttribute="top" secondItem="GAB-fT-EFv" secondAttribute="top" constant="20" id="qIK-xa-HCc"/>
                                                         </constraints>
+                                                        <connections>
+                                                            <outlet property="contentField" destination="45O-9d-keG" id="b56-gA-eQD"/>
+                                                            <outlet property="editButton" destination="UAg-Fn-Iph" id="VLe-Hk-a9T"/>
+                                                            <outlet property="loginButton" destination="T1f-JH-Ppw" id="KJN-iM-QFu"/>
+                                                            <outlet property="nameLabel" destination="VNc-fL-Vfa" id="kMh-xS-U1W"/>
+                                                        </connections>
                                                     </collectionViewCell>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="0BZ-lH-jYe">
                                                         <rect key="frame" x="0.0" y="220" width="155" height="100"/>
@@ -613,12 +643,15 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="155" height="100"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="SadwGafy7^Sidu" textAlignment="center" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="GQM-CJ-dQd">
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="SadwGafy7^Sidu" textAlignment="center" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="GQM-CJ-dQd">
                                                                     <rect key="frame" x="8" y="20" width="139" height="37"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="30"/>
                                                                     <textInputTraits key="textInputTraits"/>
+                                                                    <connections>
+                                                                        <outlet property="delegate" destination="0BZ-lH-jYe" id="oQO-GK-fja"/>
+                                                                    </connections>
                                                                 </textField>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="QSz-Qk-OvW" userLabel="Site Name">
                                                                     <rect key="frame" x="20" y="71" width="115" height="14"/>
@@ -686,19 +719,22 @@
                                                         </constraints>
                                                         <size key="customSize" width="155" height="100"/>
                                                     </collectionViewCell>
-                                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="vMF-fk-FYX">
+                                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPPasswordCell" id="vMF-fk-FYX" customClass="MPPasswordCell">
                                                         <rect key="frame" x="165" y="220" width="155" height="100"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                             <rect key="frame" x="0.0" y="0.0" width="155" height="100"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Pa$sW0rD" textAlignment="center" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="fmG-ML-oLT">
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Pa$sW0rD" textAlignment="center" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="fmG-ML-oLT">
                                                                     <rect key="frame" x="8" y="20" width="139" height="37"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="30"/>
                                                                     <textInputTraits key="textInputTraits"/>
+                                                                    <connections>
+                                                                        <outlet property="delegate" destination="vMF-fk-FYX" id="m0K-yd-GFJ"/>
+                                                                    </connections>
                                                                 </textField>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="IgW-NX-sao" userLabel="Site Name">
                                                                     <rect key="frame" x="20" y="71" width="115" height="14"/>
@@ -729,6 +765,9 @@
                                                                     <state key="highlighted">
                                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </state>
+                                                                    <connections>
+                                                                        <action selector="doUser:" destination="vMF-fk-FYX" eventType="touchUpInside" id="bFe-ar-oI7"/>
+                                                                    </connections>
                                                                 </button>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -745,6 +784,11 @@
                                                             <constraint firstAttribute="trailing" secondItem="GLO-mQ-h0v" secondAttribute="trailing" id="yXU-bt-rwt"/>
                                                         </constraints>
                                                         <size key="customSize" width="155" height="100"/>
+                                                        <connections>
+                                                            <outlet property="contentField" destination="fmG-ML-oLT" id="G9g-Nm-5O4"/>
+                                                            <outlet property="loginButton" destination="GLO-mQ-h0v" id="s2n-qw-Pu6"/>
+                                                            <outlet property="nameLabel" destination="IgW-NX-sao" id="zUR-nh-FUZ"/>
+                                                        </connections>
                                                     </collectionViewCell>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="yRD-Rk-pNt">
                                                         <rect key="frame" x="0.0" y="330" width="155" height="100"/>
@@ -753,12 +797,15 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="155" height="100"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Pa$sW0rD" textAlignment="center" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="2iC-wr-tcf">
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Pa$sW0rD" textAlignment="center" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="2iC-wr-tcf">
                                                                     <rect key="frame" x="8" y="20" width="139" height="37"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="30"/>
                                                                     <textInputTraits key="textInputTraits"/>
+                                                                    <connections>
+                                                                        <outlet property="delegate" destination="yRD-Rk-pNt" id="Gcn-G5-0Je"/>
+                                                                    </connections>
                                                                 </textField>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="9DA-ac-KNn" userLabel="Site Name">
                                                                     <rect key="frame" x="20" y="71" width="115" height="14"/>
@@ -813,12 +860,15 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="155" height="100"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Pa$sW0rD" textAlignment="center" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="vmd-6A-sMl">
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Pa$sW0rD" textAlignment="center" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="vmd-6A-sMl">
                                                                     <rect key="frame" x="8" y="20" width="139" height="37"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="30"/>
                                                                     <textInputTraits key="textInputTraits"/>
+                                                                    <connections>
+                                                                        <outlet property="delegate" destination="0w1-b0-Hlj" id="3ia-Ph-fjc"/>
+                                                                    </connections>
                                                                 </textField>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="fmF-pH-pLd" userLabel="Site Name">
                                                                     <rect key="frame" x="20" y="71" width="115" height="14"/>
@@ -873,12 +923,15 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="155" height="100"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Pa$sW0rD" textAlignment="center" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="Ksb-AB-je4">
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Pa$sW0rD" textAlignment="center" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="Ksb-AB-je4">
                                                                     <rect key="frame" x="8" y="20" width="139" height="37"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="30"/>
                                                                     <textInputTraits key="textInputTraits"/>
+                                                                    <connections>
+                                                                        <outlet property="delegate" destination="3uT-QC-zue" id="XFD-25-rYU"/>
+                                                                    </connections>
                                                                 </textField>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="stt-hA-Evt" userLabel="Site Name">
                                                                     <rect key="frame" x="20" y="71" width="115" height="14"/>
@@ -933,12 +986,15 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="155" height="100"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Pa$sW0rD" textAlignment="center" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="8X9-yV-BkP">
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Pa$sW0rD" textAlignment="center" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="8X9-yV-BkP">
                                                                     <rect key="frame" x="8" y="20" width="139" height="37"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="30"/>
                                                                     <textInputTraits key="textInputTraits"/>
+                                                                    <connections>
+                                                                        <outlet property="delegate" destination="Hfe-CZ-2BC" id="hP6-WH-1Gy"/>
+                                                                    </connections>
                                                                 </textField>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="RRk-AC-RlV" userLabel="Site Name">
                                                                     <rect key="frame" x="20" y="71" width="115" height="14"/>
@@ -987,6 +1043,16 @@
                                                         <size key="customSize" width="155" height="100"/>
                                                     </collectionViewCell>
                                                 </cells>
+                                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="ef2-bN-Zyo">
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </collectionReusableView>
+                                                <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="JAE-Ae-oH9">
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </collectionReusableView>
+                                                <connections>
+                                                    <outlet property="dataSource" destination="nkY-z6-8jd" id="5DW-tc-rAp"/>
+                                                    <outlet property="delegate" destination="nkY-z6-8jd" id="xhr-Qn-SBe"/>
+                                                </connections>
                                             </collectionView>
                                         </subviews>
                                         <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
@@ -1036,20 +1102,11 @@
                         <outlet property="navigationBarToTopConstraint" destination="AkN-iE-w6G" id="kw0-4E-iQG"/>
                         <outlet property="passwordCollectionView" destination="aXw-tn-8Sj" id="fNR-qS-qNP"/>
                         <outlet property="passwordSelectionContainer" destination="tI8-OT-LrO" id="J91-sd-kq3"/>
+                        <outlet property="passwordsSearchBar" destination="oAG-Ea-TOI" id="sqL-H5-LCV"/>
                         <outlet property="passwordsToBottomConstraint" destination="dNt-uf-8BC" id="Ta6-eL-z7w"/>
-                        <outlet property="searchDisplayController" destination="y1f-AK-Hd5" id="chz-MM-BSf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="APh-u5-vFI" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="y1f-AK-Hd5">
-                    <connections>
-                        <outlet property="delegate" destination="nkY-z6-8jd" id="Cqs-L6-YSJ"/>
-                        <outlet property="searchBar" destination="oAG-Ea-TOI" id="FFP-s6-tPm"/>
-                        <outlet property="searchContentsController" destination="nkY-z6-8jd" id="SXm-1E-vs9"/>
-                        <outlet property="searchResultsDataSource" destination="nkY-z6-8jd" id="el3-A9-EfV"/>
-                        <outlet property="searchResultsDelegate" destination="nkY-z6-8jd" id="cuI-bo-AX8"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="1350" y="1200"/>
         </scene>

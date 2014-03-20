@@ -21,6 +21,8 @@ typedef enum {
 @interface MPAppDelegate_Shared(Store)<UbiquityStoreManagerDelegate>
 
 + (NSManagedObjectContext *)managedObjectContextForMainThreadIfReady;
++ (BOOL)managedObjectContextForMainThreadPerformBlock:(void (^)(NSManagedObjectContext *mainContext))mocBlock;
++ (BOOL)managedObjectContextForMainThreadPerformBlockAndWait:(void (^)(NSManagedObjectContext *mainContext))mocBlock;
 + (BOOL)managedObjectContextPerformBlock:(void (^)(NSManagedObjectContext *context))mocBlock;
 + (BOOL)managedObjectContextPerformBlockAndWait:(void (^)(NSManagedObjectContext *context))mocBlock;
 

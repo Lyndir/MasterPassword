@@ -19,10 +19,14 @@
 #import "MPPasswordsViewController.h"
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
+#import "MPPasswordCell.h"
 
-@interface MPPasswordsViewController()
-@property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
+@interface MPPasswordsViewController()<NSFetchedResultsControllerDelegate>
 
+@property(strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
+
+@property(nonatomic, readonly) NSString *query;
+@property(nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @end
 
 @implementation MPPasswordsViewController {
@@ -54,28 +58,6 @@
     [self stopObservingStore];
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
-    if (tableView == self.searchDisplayController.searchResultsTableView)
-        return 0;
-
-    NSAssert(NO, @"Unexpected table view: %@", tableView);
-    return 0;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    if (tableView == self.searchDisplayController.searchResultsTableView) {
-
-    }
-
-    NSAssert(NO, @"Unexpected table view: %@", tableView);
-    return nil;
-}
-
-
 #pragma mark - UITextFieldDelegate
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -88,42 +70,98 @@
 
 // This isn't really in UITextFieldDelegate.  We fake it from UITextFieldTextDidChangeNotification.
 - (void)textFieldDidChange:(UITextField *)textField {
-
 }
 
 #pragma mark - UICollectionViewDataSource
 
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+
+    return [self.fetchedResultsController.sections count] + 1;
+}
+
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 
-    if (collectionView == self.passwordCollectionView)
-        return 0;
+    if (collectionView == self.passwordCollectionView) {
+        if (section < [self.fetchedResultsController.sections count])
+            return ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[section]).numberOfObjects;
+
+        // New Site.
+        return [self.query length]? 1: 0;
+    }
 
     Throw(@"unexpected collection view: %@", collectionView);
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    if (collectionView == self.passwordCollectionView)
-        return nil;
+    if (collectionView == self.passwordCollectionView) {
+        MPPasswordCell *cell;
+        if (indexPath.section < [self.fetchedResultsController.sections count]) {
+            MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
+            if (indexPath.item < 2)
+                cell = [collectionView dequeueReusableCellWithReuseIdentifier:[MPPasswordCell reuseIdentifierForElement:element] forIndexPath:indexPath];
+            else
+                cell = [collectionView dequeueReusableCellWithReuseIdentifier:[MPPasswordCell reuseIdentifierForElement:element] forIndexPath:indexPath];
+
+            [cell setElement:element];
+        } else {
+            // New Site.
+            cell = [collectionView dequeueReusableCellWithReuseIdentifier:[MPPasswordCell reuseIdentifier] forIndexPath:indexPath];
+            cell.transientSite = self.query;
+        }
+        return cell;
+    }
 
     Throw(@"unexpected collection view: %@", collectionView);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-
 }
 
 #pragma mark - UILongPressGestureRecognizer
 
 - (void)didLongPress:(UILongPressGestureRecognizer *)recognizer {
-
 }
 
 #pragma mark - UIScrollViewDelegate
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+
+    if (searchBar == self.passwordsSearchBar) {
+        self.passwordsSearchBar.showsCancelButton = YES;
+
+        [UIView animateWithDuration:0.3f animations:^{
+            self.passwordCollectionView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3f];
+        }];
+    }
+}
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+
+    if (searchBar == self.passwordsSearchBar) {
+        self.passwordsSearchBar.showsCancelButton = NO;
+
+        [UIView animateWithDuration:0.3f animations:^{
+            self.passwordCollectionView.backgroundColor = [UIColor clearColor];
+        }];
+    }
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+
+    [searchBar resignFirstResponder];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+
+    if (searchBar == self.passwordsSearchBar)
+        [self updatePasswords];
+}
 
 
 #pragma mark - Private
@@ -164,23 +202,24 @@
 
 - (void)observeStore {
 
-//        Weakify(self);
+        Weakify(self);
 
-        NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
-        if (!_mocObserver && mainContext)
-            _mocObserver = [[NSNotificationCenter defaultCenter]
-                    addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:mainContext
-                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+    NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
+    if (!_mocObserver && mainContext)
+        _mocObserver = [[NSNotificationCenter defaultCenter]
+                addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:mainContext
+                             queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
 //                        Strongify(self);
 //                [self updateMode]; TODO: reload passwords list
-                    }];
-        if (!_storeObserver)
-            _storeObserver = [[NSNotificationCenter defaultCenter]
-                    addObserverForName:USMStoreDidChangeNotification object:nil
-                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-//                        Strongify(self);
-//                [self updateMode]; TODO: reload passwords list
-                    }];
+                }];
+    if (!_storeObserver)
+        _storeObserver = [[NSNotificationCenter defaultCenter]
+                addObserverForName:USMStoreDidChangeNotification object:nil
+                             queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+                    Strongify(self);
+                    self.fetchedResultsController = nil;
+                    [self updatePasswords];
+                }];
 }
 
 - (void)stopObservingStore {
@@ -191,7 +230,48 @@
         [[NSNotificationCenter defaultCenter] removeObserver:_storeObserver];
 }
 
+- (void)updatePasswords {
+
+    [self.fetchedResultsController.managedObjectContext performBlock:^{
+        NSManagedObjectID *activeUserOID = [MPiOSAppDelegate get].activeUserOID;
+        if (!activeUserOID)
+            return;
+
+        NSError *error = nil;
+        self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:
+                @"user == %@ AND name BEGINSWITH[cd] %@", activeUserOID, self.query];
+        if (![self.fetchedResultsController performFetch:&error])
+        err(@"Couldn't fetch elements: %@", error);
+
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self.passwordCollectionView reloadData];
+        }];
+    }];
+}
+
 #pragma mark - Properties
+
+- (NSString *)query {
+
+    return [self.passwordsSearchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+}
+
+- (NSFetchedResultsController *)fetchedResultsController {
+
+    if (!_fetchedResultsController)
+        [MPiOSAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
+            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
+            fetchRequest.sortDescriptors = @[
+                    [[NSSortDescriptor alloc] initWithKey:NSStringFromSelector( @selector(lastUsed) ) ascending:NO]
+            ];
+            fetchRequest.fetchBatchSize = 10;
+            _fetchedResultsController = [[NSFetchedResultsController alloc]
+                    initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:nil cacheName:nil];
+            _fetchedResultsController.delegate = self;
+        }];
+
+    return _fetchedResultsController;
+}
 
 - (void)setActive:(BOOL)active {
 
