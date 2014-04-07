@@ -9,17 +9,23 @@
  */
 
 //
-//  PearlUIView.h
-//  PearlUIView
+//  MPPasswordElementCell.h
+//  MPPasswordElementCell
 //
-//  Created by lhunath on 2014-03-17.
+//  Created by lhunath on 2014-04-03.
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import "MPPasswordCell.h"
 
-@interface PearlUIView : UIView
+@interface MPPasswordElementCell : MPPasswordCell
 
-@property(assign, nonatomic) BOOL ignoreTouches;
+@property(nonatomic, copy) NSString *transientSite;
+
+- (MPElementEntity *)mainElement;
+- (MPElementEntity *)elementInContext:(NSManagedObjectContext *)context;
+- (void)setElement:(MPElementEntity *)element;
+- (void)reloadData;
 
 @end

@@ -17,6 +17,7 @@
 //
 
 #import "MPAvatarCell.h"
+#import "MPPasswordLargeCell.h"
 
 const long MPAvatarAdd = 10000;
 
@@ -34,6 +35,7 @@ const long MPAvatarAdd = 10000;
 @end
 
 @implementation MPAvatarCell {
+    CAAnimationGroup *_targetedShadowAnimation;
 }
 
 + (NSString *)reuseIdentifier {
@@ -46,6 +48,8 @@ const long MPAvatarAdd = 10000;
 - (void)awakeFromNib {
 
     [super awakeFromNib];
+
+    self.alpha = 0;
 
     self.nameContainer.layer.cornerRadius = 5;
 
@@ -73,15 +77,21 @@ const long MPAvatarAdd = 10000;
     pulseShadowOpacityAnimation.autoreverses = YES;
     pulseShadowOpacityAnimation.repeatCount = MAXFLOAT;
 
-    CAAnimationGroup *group = [CAAnimationGroup new];
-    group.animations = @[ toShadowOpacityAnimation, pulseShadowOpacityAnimation ];
-    group.duration = MAXFLOAT;
-    [self.avatarImageView.layer addAnimation:group forKey:@"targetedShadow"];
+    _targetedShadowAnimation = [CAAnimationGroup new];
+    _targetedShadowAnimation.animations = @[ toShadowOpacityAnimation, pulseShadowOpacityAnimation ];
+    _targetedShadowAnimation.duration = MAXFLOAT;
     self.avatarImageView.layer.shadowColor = [UIColor whiteColor].CGColor;
     self.avatarImageView.layer.shadowOffset = CGSizeZero;
+}
 
+- (void)prepareForReuse {
+
+    [super prepareForReuse];
+
+    _newUser = NO;
     [self setVisibility:0 animated:NO];
     [self setMode:MPAvatarModeLowered animated:NO];
+    [self setSpinnerActive:NO animated:NO];
 }
 
 - (void)dealloc {
@@ -95,8 +105,11 @@ const long MPAvatarAdd = 10000;
 
     _avatar = avatar;
 
-    if (avatar == MPAvatarAdd)
+    if (avatar == MPAvatarAdd) {
         self.avatarImageView.image = [UIImage imageNamed:@"avatar-add"];
+        self.name = strl( @"New User" );
+        _newUser = YES;
+    }
     else
         self.avatarImageView.image = [UIImage imageNamed:strf( @"avatar-%ld", avatar )];
 }
@@ -151,6 +164,8 @@ const long MPAvatarAdd = 10000;
 
 - (void)setSpinnerActive:(BOOL)spinnerActive animated:(BOOL)animated {
 
+    if (_spinnerActive == spinnerActive)
+        return;
     _spinnerActive = spinnerActive;
 
     CABasicAnimation *rotate = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
@@ -180,10 +195,20 @@ const long MPAvatarAdd = 10000;
     [UIView animateWithDuration:animated? 0.2f: 0 animations:^{
         self.avatarImageView.transform = CGAffineTransformIdentity;
     }];
-    [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
+    [UIView animateWithDuration:animated? 0.3f: 0 delay:0 options:UIViewAnimationOptionOverrideInheritedDuration animations:^{
+        self.alpha = 1;
+
+        if (self.newUser) {
+            if (self.mode == MPAvatarModeLowered)
+                self.avatar = MPAvatarAdd;
+            else if (self.avatar == MPAvatarAdd)
+                self.avatar = arc4random() % MPAvatarCount;
+        }
+
         switch (self.mode) {
 
             case MPAvatarModeLowered: {
+
                 self.avatarSizeConstraint.constant = self.avatarImageView.image.size.height;
                 self.avatarRaisedConstraint.priority = UILayoutPriorityDefaultLow;
                 self.avatarToTopConstraint.priority = UILayoutPriorityDefaultLow;
@@ -235,13 +260,19 @@ const long MPAvatarAdd = 10000;
                 self.nameContainer.alpha = 0;
                 self.nameContainer.backgroundColor = [UIColor blackColor];
                 self.avatarImageView.alpha = 1;
-                self.avatarImageView.layer.shadowOpacity = 0;
                 break;
             }
         }
         [self.avatarSizeConstraint apply];
+        [self.avatarRaisedConstraint apply];
         [self.avatarToTopConstraint apply];
         [self.nameToCenterConstraint apply];
+
+        // Avatar minimized.
+        if (self.mode == MPAvatarModeRaisedAndMinimized)
+            [self.avatarImageView.layer removeAllAnimations];
+        else if (![self.avatarImageView.layer animationForKey:@"targetedShadow"])
+            [self.avatarImageView.layer addAnimation:_targetedShadowAnimation forKey:@"targetedShadow"];
 
         // Avatar selection and spinner.
         if (self.mode != MPAvatarModeRaisedAndMinimized && (self.selected || self.highlighted) && !self.spinnerActive)
@@ -250,7 +281,7 @@ const long MPAvatarAdd = 10000;
             self.avatarImageView.backgroundColor = [UIColor clearColor];
         self.avatarImageView.layer.cornerRadius = self.avatarImageView.bounds.size.height / 2;
         self.spinner.alpha = self.spinnerActive? 1: 0;
-    }];
+    }                completion:nil];
 }
 
 @end

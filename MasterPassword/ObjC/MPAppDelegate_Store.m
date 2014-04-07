@@ -32,7 +32,8 @@ typedef NS_ENUM(NSInteger, MPMigrationLevelCloudStore) {
 };
 
 @implementation MPAppDelegate_Shared(Store)
-        PearlAssociatedObjectProperty(NSManagedObjectContext*, PrivateManagedObjectContext, privateManagedObjectContext);
+        PearlAssociatedObjectProperty(id, SaveObserver, saveObserver);
+PearlAssociatedObjectProperty(NSManagedObjectContext*, PrivateManagedObjectContext, privateManagedObjectContext);
 PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext, mainManagedObjectContext);
 
 
@@ -50,7 +51,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 + (BOOL)managedObjectContextForMainThreadPerformBlock:(void (^)(NSManagedObjectContext *mainContext))mocBlock {
 
-    NSManagedObjectContext *mainManagedObjectContext = [self managedObjectContextForMainThreadIfReady];
+    NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
     if (!mainManagedObjectContext)
         return NO;
 
@@ -63,7 +64,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 + (BOOL)managedObjectContextForMainThreadPerformBlockAndWait:(void (^)(NSManagedObjectContext *mainContext))mocBlock {
 
-    NSManagedObjectContext *mainManagedObjectContext = [self managedObjectContextForMainThreadIfReady];
+    NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
     if (!mainManagedObjectContext)
         return NO;
 
@@ -318,6 +319,11 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         [moc saveToStore];
         [moc reset];
 
+        if (self.saveObserver) {
+            [[NSNotificationCenter defaultCenter] removeObserver:self.saveObserver];
+            self.saveObserver = nil;
+        }
+
         self.privateManagedObjectContext = nil;
         self.mainManagedObjectContext = nil;
     }];
@@ -334,8 +340,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     } );
 
     // Create our contexts.
-    NSManagedObjectContext
-            *privateManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    NSManagedObjectContext *privateManagedObjectContext =
+            [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     [privateManagedObjectContext performBlockAndWait:^{
         privateManagedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
         privateManagedObjectContext.persistentStoreCoordinator = coordinator;
@@ -357,6 +363,16 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     NSManagedObjectContext *mainManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     mainManagedObjectContext.parentContext = privateManagedObjectContext;
+
+    if (self.saveObserver)
+        [[NSNotificationCenter defaultCenter] removeObserver:self.saveObserver];
+    self.saveObserver = [[NSNotificationCenter defaultCenter]
+            addObserverForName:NSManagedObjectContextDidSaveNotification object:privateManagedObjectContext queue:nil usingBlock:
+                    ^(NSNotification *note) {
+                        [mainManagedObjectContext performBlock:^{
+                            [mainManagedObjectContext mergeChangesFromContextDidSaveNotification:note];
+                        }];
+                    }];
 
     self.privateManagedObjectContext = privateManagedObjectContext;
     self.mainManagedObjectContext = mainManagedObjectContext;
@@ -386,12 +402,12 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     [MPAppDelegate_Shared managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         MPUserEntity *activeUser = [self activeUserInContext:context];
         NSAssert(activeUser, @"Missing user.");
-        if (!activeUser)
+        if (!activeUser) {
+            completion( nil );
             return;
+        }
 
         MPElementType type = activeUser.defaultType;
-        if (!type)
-            type = activeUser.defaultType = MPElementTypeGeneratedLong;
         NSString *typeEntityClassName = [MPAlgorithmDefault classNameOfType:type];
 
         MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:typeEntityClassName
@@ -408,18 +424,19 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         if (element.objectID.isTemporaryID && ![context obtainPermanentIDsForObjects:@[ element ] error:&error])
         err(@"Failed to obtain a permanent object ID after creating new element: %@", error);
 
-        NSManagedObjectID *elementOID = [element objectID];
-        dispatch_async( dispatch_get_main_queue(), ^{
-            completion(
-                    (MPElementEntity *)[[MPAppDelegate_Shared managedObjectContextForMainThreadIfReady] objectRegisteredForID:elementOID] );
-        } );
+        completion( element );
     }];
 }
 
-- (MPElementEntity *)changeElement:(MPElementEntity *)element inContext:(NSManagedObjectContext *)context toType:(MPElementType)type {
+- (MPElementEntity *)changeElement:(MPElementEntity *)element saveInContext:(NSManagedObjectContext *)context toType:(MPElementType)type {
 
-    if ([element.algorithm classOfType:type] == element.typeClass)
+    if (element.type == type)
+        return element;
+
+    if ([element.algorithm classOfType:type] == element.typeClass) {
         element.type = type;
+        [context saveToStore];
+    }
 
     else {
         // Type requires a different class of element.  Recreate the element.
@@ -435,14 +452,13 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         newElement.loginName = element.loginName;
 
         [context deleteObject:element];
-        // TODO: Dodgy... we're not saving consistently here.
-        // Either we should save regardless and change the method signature to saveInContext: or not save at all.
         [context saveToStore];
 
         NSError *error;
         if (![context obtainPermanentIDsForObjects:@[ newElement ] error:&error])
         err(@"Failed to obtain a permanent object ID after changing object type: %@", error);
 
+        [[NSNotificationCenter defaultCenter] postNotificationName:MPElementUpdatedNotification object:element.objectID];
         element = newElement;
     }
 
@@ -728,7 +744,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         [export appendFormat:@"%@  %8ld  %8s  %20s\t%@\n",
                              [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed], (long)uses,
                              [PearlString( @"%lu:%lu", (long)type, (unsigned long)version ) UTF8String], [name UTF8String], content
-                                                                                                                     ? content: @""];
+                                                                                                                            ? content: @""];
     }
 
     MPCheckpoint( MPCheckpointSitesExported, @{

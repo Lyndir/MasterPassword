@@ -30,7 +30,7 @@ typedef enum {
 
 /** @param completion The block to execute after adding the element, executed from the main thread with the new element in the main MOC. */
 - (void)addElementNamed:(NSString *)siteName completion:(void (^)(MPElementEntity *element))completion;
-- (MPElementEntity *)changeElement:(MPElementEntity *)element inContext:(NSManagedObjectContext *)context toType:(MPElementType)type;
+- (MPElementEntity *)changeElement:(MPElementEntity *)element saveInContext:(NSManagedObjectContext *)context toType:(MPElementType)type;
 - (MPImportResult)importSites:(NSString *)importedSitesString
             askImportPassword:(NSString *(^)(NSString *userName))importPassword
               askUserPassword:(NSString *(^)(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword;

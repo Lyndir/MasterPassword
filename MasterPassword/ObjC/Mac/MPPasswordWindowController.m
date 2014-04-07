@@ -182,7 +182,7 @@
                 // "Create" button.
                 [[MPMacAppDelegate get] addElementNamed:[self.siteField stringValue] completion:^(MPElementEntity *element) {
                     if (element)
-                        [self updateElements];
+                        PearlMainQueue( ^{ [self updateElements]; } );
                 }];
                 break;
             }

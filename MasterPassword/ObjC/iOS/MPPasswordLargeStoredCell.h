@@ -9,18 +9,16 @@
  */
 
 //
-//  PearlUINavigationBar.h
-//  PearlUINavigationBar
+//  MPPasswordLargeStoredCell.h
+//  MPPasswordLargeStoredCell
 //
-//  Created by lhunath on 2014-03-17.
+//  Created by lhunath on 2014-03-19.
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import "MPPasswordLargeCell.h"
 
-@interface PearlUINavigationBar : UINavigationBar
-
-@property (assign, nonatomic) BOOL ignoreTouches;
-@property (assign, nonatomic) BOOL invisible;
+@interface MPPasswordLargeStoredCell : MPPasswordLargeCell
 
 @end

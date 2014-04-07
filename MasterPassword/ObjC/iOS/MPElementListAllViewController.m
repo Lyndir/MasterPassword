@@ -66,10 +66,11 @@
 
                      __weak MPElementListAllViewController *wSelf = self;
                      [[MPiOSAppDelegate get] addElementNamed:[alert textFieldAtIndex:0].text completion:^(MPElementEntity *element) {
-                         if (element) {
-                             [wSelf.delegate didSelectElement:element];
-                             [wSelf close:nil];
-                         }
+                         if (element)
+                             PearlMainQueue( ^{
+                                 [wSelf.delegate didSelectElement:element];
+                                 [wSelf close:nil];
+                             } );
                      }];
                  }
                        cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonOkay, nil];
@@ -85,7 +86,7 @@
                 if (buttonIndex == [alert cancelButtonIndex])
                     return;
 
-                PearlOverlay *activity = [PearlOverlay showOverlayWithTitle:@"Upgrading Sites"];
+                PearlOverlay *activity = [PearlOverlay showProgressOverlayWithTitle:@"Upgrading Sites"];
                 [self performUpgradeAllWithCompletion:^(BOOL success, NSDictionary *changes) {
                     dispatch_async( dispatch_get_main_queue(), ^{
                         [self showUpgradeChanges:changes];

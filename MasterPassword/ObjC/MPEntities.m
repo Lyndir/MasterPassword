@@ -8,13 +8,14 @@
 
 #import "MPEntities.h"
 #import "MPAppDelegate_Shared.h"
+#import "MPAppDelegate_Store.h"
 
 @implementation NSManagedObjectContext(MP)
 
 - (BOOL)saveToStore {
 
     __block BOOL success = YES;
-    if ([self hasChanges])
+    if ([self hasChanges]) {
         [self performBlockAndWait:^{
             @try {
                 NSError *error = nil;
@@ -26,6 +27,7 @@
                 err(@"While saving: %@", exception);
             }
         }];
+    }
 
     return success && (!self.parentContext || [self.parentContext saveToStore]);
 }
@@ -42,6 +44,14 @@
         type = [self.user defaultType];
     if (!type || type == (MPElementType)NSNotFound)
         type = MPElementTypeGeneratedLong;
+    if (![self isKindOfClass:[self.algorithm classOfType:type]]) {
+//        NSAssert(NO, @"This object's class does not support the type: %lu", (long)type);
+        for (MPElementType aType = type; type != (aType = [self.algorithm nextType:aType]);)
+            if ([self isKindOfClass:[self.algorithm classOfType:aType]]) {
+                err(@"Invalid type for: %@, type: %lu.  Will use %lu instead.", self.name, (long)type, (long)aType);
+                return aType;
+            }
+    }
 
     return type;
 }
@@ -199,7 +209,7 @@
 
 - (MPElementType)defaultType {
 
-    return (MPElementType)[self.defaultType_ unsignedIntegerValue];
+    return IfElse((MPElementType)[self.defaultType_ unsignedIntegerValue], MPElementTypeGeneratedLong);
 }
 
 - (void)setDefaultType:(MPElementType)aDefaultType {

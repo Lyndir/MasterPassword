@@ -18,19 +18,17 @@
 
 #import <Foundation/Foundation.h>
 #import "MPEntities.h"
+#import "MPCell.h"
 
-@interface MPPasswordCell : UICollectionViewCell <UITextFieldDelegate>
+@interface MPPasswordCell : MPCell
 
-@property(nonatomic, copy) NSString *transientSite;
-@property(strong, nonatomic) IBOutlet UITextField *contentField;
+@property(strong, nonatomic) IBOutlet UILabel *nameLabel;
+@property(strong, nonatomic) IBOutlet UIButton *loginButton;
 
-+ (NSString *)reuseIdentifier;
-
-- (MPElementEntity *)elementInContext:(NSManagedObjectContext *)context;
-+ (NSString *)reuseIdentifierForElement:(MPElementEntity *)entity;
-- (void)setElement:(MPElementEntity *)element;
-
+/** Populate our UI to reflect the current state. */
 - (void)updateAnimated:(BOOL)animated;
-- (void)populateWithElement:(MPElementEntity *)element;
+
+- (void)reloadWithElement:(MPElementEntity *)mainElement;
+- (void)reloadWithTransientSite:(NSString *)siteName;
 
 @end

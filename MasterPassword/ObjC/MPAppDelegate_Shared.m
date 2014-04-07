@@ -30,11 +30,12 @@
 
 - (MPUserEntity *)activeUserInContext:(NSManagedObjectContext *)moc {
 
-    if (!self.activeUserOID || !moc)
+    NSManagedObjectID *activeUserOID = self.activeUserOID;
+    if (!activeUserOID || !moc)
         return nil;
 
     NSError *error;
-    MPUserEntity *activeUser = (MPUserEntity *)[moc existingObjectWithID:self.activeUserOID error:&error];
+    MPUserEntity *activeUser = (MPUserEntity *)[moc existingObjectWithID:activeUserOID error:&error];
     if (!activeUser) {
         [self signOutAnimated:YES];
         err(@"Failed to retrieve active user: %@", error);

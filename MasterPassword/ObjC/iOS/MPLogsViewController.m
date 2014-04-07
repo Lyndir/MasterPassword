@@ -62,7 +62,7 @@
                              if (buttonIndex_ == alert.cancelButtonIndex)
                                  return;
 
-                             _switchCloudStoreProgress = [PearlOverlay showOverlayWithTitle:@"Enumerating Stores"];
+                             _switchCloudStoreProgress = [PearlOverlay showProgressOverlayWithTitle:@"Enumerating Stores"];
                              dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
                                  [self switchCloudStore];
                              } );

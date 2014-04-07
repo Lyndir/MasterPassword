@@ -9,18 +9,16 @@
  */
 
 //
-//  MPPasswordGeneratedCell.h
-//  MPPasswordGeneratedCell
+//  MPCell.h
+//  MPCell
 //
-//  Created by lhunath on 2014-03-19.
+//  Created by lhunath on 2014-03-27.
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "MPPasswordCell.h"
+#import "MPCell.h"
 
-@interface MPPasswordGeneratedCell : MPPasswordCell
-
-- (MPElementGeneratedEntity *)elementInContext:(NSManagedObjectContext *)context;
+@implementation MPCell {
+}
 
 @end

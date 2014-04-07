@@ -89,19 +89,18 @@
 
     [self becomeFirstResponder];
 
-    [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
         switch (self.mode) {
             case MPCombinedModeUserSelection: {
-                [self.usersVC setActive:YES animated:NO];
-                [self.passwordsVC setActive:NO animated:NO];
+                [self.usersVC setActive:YES animated:animated];
+                [self.passwordsVC setActive:NO animated:animated];
 //            MPUsersViewController *usersVC = [self.storyboard instantiateViewControllerWithIdentifier:@"MPUsersViewController"];
 //            [self setViewControllers:@[ usersVC ] direction:UIPageViewControllerNavigationDirectionReverse
 //                            animated:animated completion:nil];
                 break;
             }
             case MPCombinedModePasswordSelection: {
-                [self.usersVC setActive:NO animated:NO];
-                [self.passwordsVC setActive:YES animated:NO];
+                [self.usersVC setActive:NO animated:animated];
+                [self.passwordsVC setActive:YES animated:animated];
 //            MPPasswordsViewController *passwordsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"MPPasswordsViewController"];
 //            [self setViewControllers:@[ passwordsVC ] direction:UIPageViewControllerNavigationDirectionForward
 //                            animated:animated completion:nil];
@@ -110,7 +109,6 @@
         }
 
         [self.passwordsTopConstraint apply];
-    }];
 }
 
 #pragma mark - Private

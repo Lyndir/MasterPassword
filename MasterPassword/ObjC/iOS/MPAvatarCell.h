@@ -37,6 +37,7 @@ typedef NS_ENUM(NSUInteger, MPAvatarMode) {
 @property (assign, nonatomic) MPAvatarMode mode;
 @property (assign, nonatomic) CGFloat visibility;
 @property (assign, nonatomic) BOOL spinnerActive;
+@property (assign, nonatomic, readonly) BOOL newUser;
 
 + (NSString *)reuseIdentifier;
 

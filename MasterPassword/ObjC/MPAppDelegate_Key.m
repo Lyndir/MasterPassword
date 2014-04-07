@@ -168,7 +168,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     MPKey *recoverKey = newKey;
 #ifdef PEARL_UIKIT
-    PearlOverlay *activityOverlay = [PearlOverlay showOverlayWithTitle:PearlString( @"Migrating %ld sites...", (long)[user.elements count] )];
+    PearlOverlay *activityOverlay = [PearlOverlay showProgressOverlayWithTitle:PearlString( @"Migrating %ld sites...", (long)[user.elements count] )];
 #endif
 
     for (MPElementEntity *element in user.elements) {

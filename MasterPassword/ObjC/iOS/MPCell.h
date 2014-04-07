@@ -9,24 +9,15 @@
  */
 
 //
-//  PearlUIView.h
-//  PearlUIView
+//  MPCell.h
+//  MPCell
 //
-//  Created by lhunath on 2014-03-17.
+//  Created by lhunath on 2014-03-27.
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
-#import "PearlUIView.h"
+#import <Foundation/Foundation.h>
 
-@implementation PearlUIView
-
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-
-    UIView *hitView = [super hitTest:point withEvent:event];
-    if (self.ignoreTouches && hitView == self)
-        return nil;
-
-    return hitView;
-}
+@interface MPCell : UICollectionViewCell
 
 @end

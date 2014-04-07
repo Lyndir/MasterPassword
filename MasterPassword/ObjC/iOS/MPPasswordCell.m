@@ -19,46 +19,8 @@
 #import "MPPasswordCell.h"
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
-#import "MPPasswordGeneratedCell.h"
-#import "MPPasswordStoredCell.h"
-
-@interface MPPasswordCell()
-
-@property(strong, nonatomic) IBOutlet UILabel *nameLabel;
-@property(strong, nonatomic) IBOutlet UIButton *loginButton;
-
-@property(nonatomic, strong) NSManagedObjectID *elementOID;
-@end
 
 @implementation MPPasswordCell
-
-+ (NSString *)reuseIdentifier {
-
-    return NSStringFromClass( self );
-}
-
-+ (NSString *)reuseIdentifierForElement:(MPElementEntity *)element {
-
-    if ([element isKindOfClass:[MPElementGeneratedEntity class]])
-        return [MPPasswordGeneratedCell reuseIdentifier];
-
-    if ([element isKindOfClass:[MPElementStoredEntity class]])
-        return [MPPasswordStoredCell reuseIdentifier];
-
-    return [self reuseIdentifier];
-}
-
-#pragma mark - UITextFieldDelegate
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-
-    if (textField == self.contentField && [self.contentField.text length]) {
-        [self.contentField resignFirstResponder];
-        return YES;
-    }
-
-    return NO;
-}
 
 #pragma mark - Life cycle
 
@@ -67,120 +29,68 @@
     [super awakeFromNib];
 
     self.layer.cornerRadius = 5;
+    self.layer.shadowOffset = CGSizeZero;
+    self.layer.shadowRadius = 5;
+    self.layer.shadowOpacity = 0;
+    self.layer.shadowColor = [UIColor whiteColor].CGColor;
 }
 
-- (void)dealloc {
+- (void)prepareForReuse {
 
-    [self removeKeyPathObservers];
+    [super prepareForReuse];
+    [self updateAnimated:NO];
 }
 
-#pragma mark - Actions
+// Unblocks animations for all CALayer properties (eg. shadowOpacity)
+- (id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)event {
 
-- (IBAction)doUser:(id)sender {
+    id<CAAction> defaultAction = [super actionForLayer:layer forKey:event];
+    if (defaultAction == (id)[NSNull null] && [event isEqualToString:@"position"])
+        return defaultAction;
+
+    return NSNullToNil(defaultAction);
 }
 
 #pragma mark - Properties
 
-- (void)setTransientSite:(NSString *)name {
+- (void)setSelected:(BOOL)selected {
 
-    _transientSite = name;
-    _elementOID = nil;
-
-    [self updateAnimated:YES];
-}
-
-- (void)setElement:(MPElementEntity *)element {
-
-    self.elementOID = [element objectID];
-}
-
-- (void)setElementOID:(NSManagedObjectID *)elementOID {
-
-    _transientSite = nil;
-    _elementOID = elementOID;
+    [super setSelected:selected];
 
     [self updateAnimated:YES];
 }
 
-- (MPElementEntity *)elementInContext:(NSManagedObjectContext *)context {
+- (void)setHighlighted:(BOOL)highlighted {
 
-    NSError *error = nil;
-    MPElementEntity *element = _elementOID? (MPElementEntity *)[context existingObjectWithID:_elementOID error:&error]: nil;
-    if (_elementOID && !element)
-    err(@"Failed to load element: %@", error);
+    [super setHighlighted:highlighted];
 
-    return element;
+    [self updateAnimated:YES];
 }
 
 #pragma mark - Private
 
 - (void)updateAnimated:(BOOL)animated {
 
-    Weakify(self);
-
-    if (self.transientSite) {
-        self.alpha = 1;
-        self.nameLabel.text = self.transientSite;
-        self.contentField.text = nil;
-
-        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-            MPKey *key = [MPiOSAppDelegate get].key;
-            if (!key) {
-                self.alpha = 0;
-                return;
-            }
-
-            MPElementType type = [[MPiOSAppDelegate get] activeUserInContext:context].defaultType;
-            if (!type)
-                type = MPElementTypeGeneratedLong;
-            NSString *newContent = [MPAlgorithmDefault generateContentNamed:self.transientSite ofType:type withCounter:1 usingKey:key];
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                self.contentField.text = newContent;
-            }];
+    if (![NSThread isMainThread]) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self updateAnimated:animated];
         }];
+        return;
     }
-    else if (self.elementOID) {
-        NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
-        [mainContext performBlock:^{
-            [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
-                Strongify(self);
-                NSError *error = nil;
-                MPKey *key = [MPiOSAppDelegate get].key;
-                if (!key) {
-                    self.alpha = 0;
-                    return;
-                }
 
-                MPElementEntity *element = (MPElementEntity *)[mainContext existingObjectWithID:_elementOID error:&error];
-                if (!element) {
-                    err(@"Failed to load element: %@", error);
-                    self.alpha = 0;
-                    return;
-                }
-
-                self.alpha = 1;
-                [self populateWithElement:element];
-
-                [element resolveContentUsingKey:key result:^(NSString *result) {
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                        Strongify(self);
-                        self.contentField.text = result;
-                    }];
-                }];
-            }];
-        }];
-    }
-    else {
-        [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
-            self.alpha = 0;
-        }];
-    }
+    [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
+        self.layer.shadowOpacity = self.selected? 1: self.highlighted? 0.3f: 0;
+    }];
 }
 
-- (void)populateWithElement:(MPElementEntity *)element {
+- (void)reloadWithElement:(MPElementEntity *)mainElement {
 
-    self.nameLabel.text = element.name;
-    self.contentField.text = nil;
+    self.nameLabel.text = mainElement.name;
+}
+
+- (void)reloadWithTransientSite:(NSString *)siteName {
+
+    self.nameLabel.text = strl( @"%@ - Tap to create", siteName );
 }
 
 @end

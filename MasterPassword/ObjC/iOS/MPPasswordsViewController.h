@@ -17,8 +17,9 @@
 //
 
 #import "LLGitTip.h"
+@class MPElementEntity;
 
-@interface MPPasswordsViewController : UIViewController<UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegate>
+@interface MPPasswordsViewController : UIViewController<UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property(strong, nonatomic) IBOutlet UIView *passwordSelectionContainer;
 @property(strong, nonatomic) IBOutlet UICollectionView *passwordCollectionView;

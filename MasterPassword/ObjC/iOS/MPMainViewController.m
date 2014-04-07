@@ -776,7 +776,7 @@
                     @"If you continue, the password for this site will change.  "
                     @"You will need to update your account's old password to the new one."
                                       do:^BOOL(MPElementEntity *activeElement, NSManagedObjectContext *context) {
-                                          _activeElementOID = [[MPiOSAppDelegate get] changeElement:activeElement inContext:context
+                                          _activeElementOID = [[MPiOSAppDelegate get] changeElement:activeElement saveInContext:context
                                                                                              toType:type].objectID;
                                           return YES;
                                       }];

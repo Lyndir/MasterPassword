@@ -13,9 +13,10 @@
 
 @interface MPiOSAppDelegate()
 
-@property(nonatomic, strong) PearlAlert *handleCloudContentAlert;
-@property(nonatomic, strong) PearlAlert *fixCloudContentAlert;
-@property(nonatomic, strong) PearlOverlay *storeLoading;
+@property(nonatomic, weak) PearlAlert *handleCloudDisabledAlert;
+@property(nonatomic, weak) PearlAlert *handleCloudContentAlert;
+@property(nonatomic, weak) PearlAlert *fixCloudContentAlert;
+@property(nonatomic, weak) PearlOverlay *storeLoading;
 @end
 
 @implementation MPiOSAppDelegate
@@ -120,12 +121,14 @@
             UIImage *navBarImage = [[UIImage imageNamed:@"ui_navbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
             [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
             [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsLandscapePhone];
+            NSShadow *titleShadow = [NSShadow new];
+            titleShadow.shadowColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f];
+            titleShadow.shadowOffset = CGSizeMake( 0, -1 );
             [[UINavigationBar appearance] setTitleTextAttributes:
                     @{
-                            UITextAttributeTextColor        : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
-                            UITextAttributeTextShadowColor  : [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f],
-                            UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetMake( 0, -1 )],
-                            UITextAttributeFont             : [UIFont fontWithName:@"Exo-Bold" size:20.0f]
+                            NSForegroundColorAttributeName : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
+                            NSShadowAttributeName          : titleShadow,
+                            NSFontAttributeName            : [UIFont fontWithName:@"Exo2.0-Bold" size:20.0f]
                     }];
 
             UIImage *navBarButton = [[UIImage imageNamed:@"ui_navbar_button"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
@@ -136,13 +139,15 @@
                     setBackButtonBackgroundImage:navBarBack forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
             [[UIBarButtonItem appearance]
                     setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
+            NSShadow *barButtonShadow = [NSShadow new];
+            barButtonShadow.shadowColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f];
+            barButtonShadow.shadowOffset = CGSizeMake( 0, 1 );
             [[UIBarButtonItem appearance] setTitleTextAttributes:
                     @{
-                            UITextAttributeTextColor        : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
-                            UITextAttributeTextShadowColor  : [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f],
-                            UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetMake( 0, 1 )]//,
+                            NSForegroundColorAttributeName : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
+                            NSShadowAttributeName          : barButtonShadow,
                             // Causes a bug in iOS where image views get oddly stretched... or something.
-                            //UITextAttributeFont: [UIFont fontWithName:@"HelveticaNeue" size:13.0f]
+                            //NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:13.0f]
                     }
                                                         forState:UIControlStateNormal];
 
@@ -257,7 +262,7 @@
         if (!importedSitesData)
             return;
 
-        PearlOverlay *activityOverlay = [PearlOverlay showOverlayWithTitle:@"Importing"];
+        PearlOverlay *activityOverlay = [PearlOverlay showProgressOverlayWithTitle:@"Importing"];
 
         NSString *importedSitesString = [[NSString alloc] initWithData:importedSitesData encoding:NSUTF8StringEncoding];
         MPImportResult result = [self importSites:importedSitesString askImportPassword:^NSString *(NSString *userName) {
@@ -463,9 +468,9 @@
                                            @"--\n"
                                            @"%@"
                                            @"Master Password %@, build %@",
-                                           userName? ([userName stringByAppendingString:@"\n"]): @"",
-                                           [PearlInfoPlist get].CFBundleShortVersionString,
-                                           [PearlInfoPlist get].CFBundleVersion )
+                                        userName? ([userName stringByAppendingString:@"\n"]): @"",
+                                        [PearlInfoPlist get].CFBundleShortVersionString,
+                                        [PearlInfoPlist get].CFBundleVersion )
 
                             attachments:(logs
                                          ? [[PearlEMailAttachment alloc]
@@ -473,8 +478,8 @@
                                                          dataUsingEncoding:NSUTF8StringEncoding]
                                                         mimeType:@"text/plain"
                                                         fileName:PearlString( @"%@-%@.log",
-                                                                [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
-                                                                [PearlKeyChain deviceIdentifier] )]
+                                                        [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
+                                                        [PearlKeyChain deviceIdentifier] )]
                                          : nil), nil]
             showComposerForVC:viewController];
 }
@@ -526,17 +531,17 @@
                 @"--\n"
                 @"%@\n"
                 @"Master Password %@, build %@",
-                [self activeUserForMainThread].name,
-                [PearlInfoPlist get].CFBundleShortVersionString,
-                [PearlInfoPlist get].CFBundleVersion );
+        [self activeUserForMainThread].name,
+        [PearlInfoPlist get].CFBundleShortVersionString,
+        [PearlInfoPlist get].CFBundleVersion );
     else
         message = PearlString( @"Backup of Master Password sites.\n\n\n"
                 @"--\n"
                 @"%@\n"
                 @"Master Password %@, build %@",
-                [self activeUserForMainThread].name,
-                [PearlInfoPlist get].CFBundleShortVersionString,
-                [PearlInfoPlist get].CFBundleVersion );
+        [self activeUserForMainThread].name,
+        [PearlInfoPlist get].CFBundleShortVersionString,
+        [PearlInfoPlist get].CFBundleVersion );
 
     NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
     [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
@@ -545,7 +550,7 @@
                 attachments:[[PearlEMailAttachment alloc] initWithContent:[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
                                                                  mimeType:@"text/plain" fileName:
                                 PearlString( @"%@ (%@).mpsites", [self activeUserForMainThread].name,
-                                        [exportDateFormatter stringFromDate:[NSDate date]] )],
+                                [exportDateFormatter stringFromDate:[NSDate date]] )],
                             nil];
 }
 
@@ -727,7 +732,7 @@
     dispatch_async( dispatch_get_main_queue(), ^{
         [self.handleCloudContentAlert cancelAlertAnimated:YES];
         if (![self.storeLoading isVisible])
-            self.storeLoading = [PearlOverlay showOverlayWithTitle:@"Loading Sites"];
+            self.storeLoading = [PearlOverlay showProgressOverlayWithTitle:@"Loading Sites"];
     } );
 
     [super ubiquityStoreManager:manager willLoadStoreIsCloud:isCloudStore];
@@ -739,30 +744,45 @@
     [MPiOSConfig get].iCloudEnabled = @(isCloudStore);
     [super ubiquityStoreManager:manager didLoadStoreForCoordinator:coordinator isCloud:isCloudStore];
 
-    dispatch_async( dispatch_get_main_queue(), ^{
-        [self.handleCloudContentAlert cancelAlertAnimated:YES];
-        [self.fixCloudContentAlert cancelAlertAnimated:YES];
-        [self.storeLoading cancelOverlayAnimated:YES];
-    } );
+    [self.handleCloudContentAlert cancelAlertAnimated:YES];
+    [self.fixCloudContentAlert cancelAlertAnimated:YES];
+    [self.storeLoading cancelOverlayAnimated:YES];
+    [self.handleCloudDisabledAlert cancelAlertAnimated:YES];
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager failedLoadingStoreWithCause:(UbiquityStoreErrorCause)cause context:(id)context
                     wasCloud:(BOOL)wasCloudStore {
 
-    dispatch_async( dispatch_get_main_queue(), ^{
-        [self.storeLoading cancelOverlayAnimated:YES];
-    } );
+    [self.storeLoading cancelOverlayAnimated:YES];
+    [self.handleCloudDisabledAlert cancelAlertAnimated:YES];
 }
 
 - (BOOL)ubiquityStoreManager:(UbiquityStoreManager *)manager handleCloudContentCorruptionWithHealthyStore:(BOOL)storeHealthy {
 
-    if (manager.cloudEnabled && !storeHealthy && !([self.handleCloudContentAlert.alertView isVisible] || [self.fixCloudContentAlert.alertView isVisible]))
-        dispatch_async( dispatch_get_main_queue(), ^{
-            [self.storeLoading cancelOverlayAnimated:YES];
-            [self showCloudContentAlert];
-        } );
+    if (manager.cloudEnabled && !storeHealthy && !([self.handleCloudContentAlert.alertView isVisible] || [self.fixCloudContentAlert.alertView isVisible])) {
+        [self.storeLoading cancelOverlayAnimated:YES];
+        [self.handleCloudDisabledAlert cancelAlertAnimated:YES];
+        [self showCloudContentAlert];
+    };
 
     return NO;
+}
+
+- (BOOL)ubiquityStoreManagerHandleCloudDisabled:(UbiquityStoreManager *)manager {
+
+    if (![self.handleCloudDisabledAlert isVisible])
+        self.handleCloudDisabledAlert = [PearlAlert showAlertWithTitle:@"iCloud Login" message:
+                @"You haven't added an iCloud account to your device yet.\n"
+                        @"To add one, tap 'Wait For Me', go into Apple's Settings and add an iCloud account."
+                                                             viewStyle:UIAlertViewStyleDefault initAlert:nil
+                                                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                                         if (buttonIndex == alert.firstOtherButtonIndex)
+                                                             return;
+
+                                                         [self.storeManager reloadStore];
+                                                     } cancelTitle:@"Wait For Me" otherTitles:@"Disable iCloud", nil];
+
+    return YES;
 }
 
 - (void)showCloudContentAlert {

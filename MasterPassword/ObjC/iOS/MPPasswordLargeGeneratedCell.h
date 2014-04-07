@@ -9,18 +9,19 @@
  */
 
 //
-//  MPPasswordStoredCell.h
-//  MPPasswordStoredCell
+//  MPPasswordLargeGeneratedCell.h
+//  MPPasswordLargeGeneratedCell
 //
 //  Created by lhunath on 2014-03-19.
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "MPPasswordCell.h"
+#import "MPPasswordLargeCell.h"
 
-@interface MPPasswordStoredCell : MPPasswordCell
+@interface MPPasswordLargeGeneratedCell : MPPasswordLargeCell
 
-- (MPElementStoredEntity *)elementInContext:(NSManagedObjectContext *)context;
+@property(strong, nonatomic) IBOutlet UILabel *counterLabel;
+@property(strong, nonatomic) IBOutlet UIButton *counterButton;
 
 @end

@@ -52,15 +52,18 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     __weak id _mocObserver;
     NSArray *_notificationObservers;
     NSString *_masterPasswordChoice;
+    NSOperationQueue *_afterUpdates;
 }
 
 - (void)viewDidLoad {
 
     [super viewDidLoad];
 
+    _afterUpdates = [NSOperationQueue new];
+
     self.marqueeTipTexts = @[
-            strl(@"Press and hold to change password or delete."),
-            strl(@"Shake for emergency generator."),
+            strl( @"Press and hold to change password or delete." ),
+            strl( @"Shake for emergency generator." ),
     ];
 
     self.view.backgroundColor = [UIColor clearColor];
@@ -81,7 +84,8 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     [self reloadUsers];
 
     [self.marqueeTipTimer invalidate];
-    self.marqueeTipTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(firedMarqueeTimer:) userInfo:nil repeats:YES];
+    self.marqueeTipTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(firedMarqueeTimer:) userInfo:nil
+                                                           repeats:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -119,6 +123,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 break;
             }
             case MPActiveUserStateLogin: {
+                [self.entryField endEditing:YES];
                 [self selectedAvatar].spinnerActive = YES;
                 [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                     BOOL signedIn = NO, isNew = NO;
@@ -178,6 +183,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                     return NO;
                 }
 
+                [self.entryField endEditing:YES];
                 [self selectedAvatar].spinnerActive = YES;
                 [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                     BOOL isNew = NO;
@@ -240,7 +246,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     }
 }
 
-#pragma mark - UICollectionViewDataSource
+#pragma mark - UICollectionViewDelegateFlowLayout
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -252,6 +258,8 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
     Throw(@"unexpected collection view: %@", collectionView);
 }
+
+#pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 
@@ -272,11 +280,9 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
         BOOL isNew = NO;
         MPUserEntity *user = [self userForIndexPath:indexPath inContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]
                                               isNew:&isNew];
-        if (isNew) {
-            // New User
+        if (isNew)
+                // New User
             cell.avatar = MPAvatarAdd;
-            cell.name = strl( @"New User" );
-        }
         else {
             // Existing User
             cell.avatar = user.avatar;
@@ -305,6 +311,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
         BOOL isNew = NO;
         MPUserEntity *user = [self userForIndexPath:indexPath inContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]
                                               isNew:&isNew];
+
         if (isNew)
             self.activeUserState = MPActiveUserStateUserName;
         else if (!user.keyID)
@@ -316,9 +323,8 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    if (collectionView == self.avatarCollectionView) {
+    if (collectionView == self.avatarCollectionView)
         self.activeUserState = MPActiveUserStateNone;
-    }
 }
 
 #pragma mark - UILongPressGestureRecognizer
@@ -363,13 +369,12 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                     MPUserEntity *user_ = (MPUserEntity *)[context existingObjectWithID:userID error:NULL];
                     if (user_)
                         [[MPiOSAppDelegate get] changeMasterPasswordFor:user_ saveInContext:context didResetBlock:^{
-                            dbg(@"changing mp for user: %@, keyID: %@", user_.name, user_.keyID);
-                            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                            PearlMainQueue( ^{
                                 NSIndexPath *avatarIndexPath = [self.avatarCollectionView indexPathForCell:avatarCell];
                                 [self.avatarCollectionView selectItemAtIndexPath:avatarIndexPath animated:NO
                                                                   scrollPosition:UICollectionViewScrollPositionNone];
                                 [self collectionView:self.avatarCollectionView didSelectItemAtIndexPath:avatarIndexPath];
-                            }];
+                            } );
                         }];
                 }];
         }                  cancelTitle:[PearlStrings get].commonButtonCancel
@@ -383,9 +388,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
               targetContentOffset:(inout CGPoint *)targetContentOffset {
 
     if (scrollView == self.avatarCollectionView) {
-        CGPoint offsetToCenter = CGPointMake(
-                self.avatarCollectionView.bounds.size.width / 2,
-                self.avatarCollectionView.bounds.size.height / 2 );
+        CGPoint offsetToCenter = self.avatarCollectionView.center;
         NSIndexPath *avatarIndexPath = [self.avatarCollectionView indexPathForItemAtPoint:
                 CGPointPlusCGPoint( *targetContentOffset, offsetToCenter )];
         CGPoint targetCenter = [self.avatarCollectionView layoutAttributesForItemAtIndexPath:avatarIndexPath].center;
@@ -502,6 +505,13 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     }
 }
 
+- (void)afterUpdatesMainQueue:(void (^)(void))block {
+
+    [_afterUpdates addOperationWithBlock:^{
+        PearlMainQueue( block );
+    }];
+}
+
 - (void)registerObservers {
 
     if ([_notificationObservers count])
@@ -555,7 +565,13 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:mainContext
                              queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
                     Strongify(self);
-                    [self reloadUsers];
+                    NSSet *insertedObjects = note.userInfo[NSInsertedObjectsKey];
+                    NSSet *deletedObjects = note.userInfo[NSDeletedObjectsKey];
+                    if ([[NSSetUnion(insertedObjects, deletedObjects)
+                            filteredSetUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+                                return [evaluatedObject isKindOfClass:[MPUserEntity class]];
+                            }]] count])
+                        [self reloadUsers];
                 }];
     if (!_storeObserver)
         _storeObserver = [[NSNotificationCenter defaultCenter]
@@ -576,20 +592,25 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
 - (void)reloadUsers {
 
-    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        NSError *error = nil;
-        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
-        fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO] ];
-        NSArray *users = [context executeFetchRequest:fetchRequest error:&error];
-        if (!users) {
-            err(@"Failed to load users: %@", error);
-            self.userIDs = nil;
-        }
+    [self afterUpdatesMainQueue:^{
+        [self observeStore];
+        [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
+            NSError *error = nil;
+            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
+            fetchRequest.sortDescriptors = @[
+                    [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector( @selector(lastUsed) ) ascending:NO]
+            ];
+            NSArray *users = [mainContext executeFetchRequest:fetchRequest error:&error];
+            if (!users) {
+                err(@"Failed to load users: %@", error);
+                self.userIDs = nil;
+            }
 
-        NSMutableArray *userIDs = [NSMutableArray arrayWithCapacity:[users count]];
-        for (MPUserEntity *user in users)
-            [userIDs addObject:user.objectID];
-        self.userIDs = userIDs;
+            NSMutableArray *userIDs = [NSMutableArray arrayWithCapacity:[users count]];
+            for (MPUserEntity *user in users)
+                [userIDs addObject:user.objectID];
+            self.userIDs = userIDs;
+        }];
     }];
 }
 
@@ -616,13 +637,23 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     _userIDs = userIDs;
     dbg(@"userIDs -> %lu", (unsigned long)[userIDs count]);
 
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+    PearlMainQueue( ^{
+        BOOL isNew = NO;
+        NSManagedObjectID *selectUserID = [MPiOSAppDelegate get].activeUserOID;
+        if (!selectUserID)
+            selectUserID = [self selectedUserInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]
+                                                 isNew:&isNew].objectID;
         [self.avatarCollectionView reloadData];
+
+        NSUInteger selectedAvatarItem = isNew? [_userIDs count]: selectUserID? [_userIDs indexOfObject:selectUserID]: NSNotFound;
+        if (selectedAvatarItem != NSNotFound)
+            [self.avatarCollectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:selectedAvatarItem inSection:0] animated:NO
+                                              scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
 
         [UIView animateWithDuration:0.3f animations:^{
             self.userSelectionContainer.alpha = 1;
         }];
-    }];
+    } );
 }
 
 - (void)setActiveUserState:(MPActiveUserState)activeUserState {
@@ -635,11 +666,14 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     _activeUserState = activeUserState;
     _masterPasswordChoice = nil;
 
-    if (activeUserState != MPActiveUserStateMinimized && [MPiOSAppDelegate get].key) {
+    if (activeUserState != MPActiveUserStateMinimized && (!self.active || [MPiOSAppDelegate get].activeUserOID)) {
         [[MPiOSAppDelegate get] signOutAnimated:YES];
         return;
     }
 
+    [_afterUpdates setSuspended:YES];
+    dbg(@"suspend updates");
+    __block BOOL requestFirstResponder = NO;
     [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
         MPAvatarCell *selectedAvatar = [self selectedAvatar];
 
@@ -647,7 +681,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
         for (NSUInteger item = 0; item < [self.avatarCollectionView numberOfItemsInSection:0]; ++item) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:0];
             MPAvatarCell *avatarCell = (MPAvatarCell *)[self.avatarCollectionView cellForItemAtIndexPath:indexPath];
-            [self updateModeForAvatar:avatarCell atIndexPath:indexPath animated:NO];
+            [self updateModeForAvatar:avatarCell atIndexPath:indexPath animated:animated];
 
             if (selectedAvatar && avatarCell == selectedAvatar)
                 [self.avatarCollectionView scrollToItemAtIndexPath:indexPath
@@ -693,16 +727,6 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 break;
         }
 
-        // Manage the random avatar for the new user if selected.
-        if (selectedAvatar.avatar == MPAvatarAdd)
-            selectedAvatar.avatar = arc4random() % MPAvatarCount;
-        else {
-            NSIndexPath *newUserIndexPath = [NSIndexPath indexPathForItem:[_userIDs count] inSection:0];
-            MPAvatarCell *newUserAvatar = (MPAvatarCell *)[[self avatarCollectionView] cellForItemAtIndexPath:newUserIndexPath];
-            newUserAvatar.avatar = MPAvatarAdd;
-            newUserAvatar.name = strl( @"New User" );
-        }
-
         // Manage the entry container depending on whether a user is activate or not.
         switch (activeUserState) {
             case MPActiveUserStateNone: {
@@ -722,6 +746,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 self.avatarCollectionView.scrollEnabled = NO;
                 self.entryContainer.alpha = 1;
                 self.footerContainer.alpha = 1;
+                requestFirstResponder = YES;
                 break;
             }
             case MPActiveUserStateMinimized: {
@@ -737,12 +762,15 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
         [self.avatarCollectionCenterConstraint apply];
 
         // Toggle the keyboard.
-        if (!self.entryContainer.alpha)
-            [self.entryField resignFirstResponder];
     }                completion:^(BOOL finished) {
-        if (finished && self.entryContainer.alpha)
-            [self.entryField becomeFirstResponder];
+        dbg(@"resume updates");
+        [_afterUpdates setSuspended:NO];
     }];
+
+    if (requestFirstResponder)
+        [self.entryField becomeFirstResponder];
+    else
+        [self.entryField resignFirstResponder];
 }
 
 #pragma mark - Actions

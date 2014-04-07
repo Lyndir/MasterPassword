@@ -102,11 +102,7 @@
     UILabel *alertNameLabel = [self.nameLabel cloneAddedTo:container];
     alertNameLabel.center = alertAvatar.center;
     alertNameLabel.text = user.name;
-    alertNameLabel.bounds = CGRectSetHeight( alertNameLabel.bounds,
-            [alertNameLabel.text sizeWithFont:self.nameLabel.font
-                            constrainedToSize:CGSizeMake( alertNameLabel.bounds.size.width - 10,
-                                    100 )
-                                lineBreakMode:self.nameLabel.lineBreakMode].height );
+    [alertNameLabel sizeToFit];
     alertNameLabel.layer.cornerRadius = 5;
     alertNameLabel.backgroundColor = [UIColor blackColor];
 }
@@ -614,10 +610,7 @@
 
     // Lay out user name label.
     self.nameLabel.text = targetedAvatar? (targetedUser? targetedUser.name: @"New User"): nil;
-    self.nameLabel.bounds = CGRectSetHeight( self.nameLabel.bounds,
-            [self.nameLabel.text sizeWithFont:self.nameLabel.font
-                            constrainedToSize:CGSizeMake( self.nameLabel.bounds.size.width - 10, 100 )
-                                lineBreakMode:self.nameLabel.lineBreakMode].height );
+    [self.nameLabel sizeToFit];
     self.oldNameLabel.bounds = self.nameLabel.bounds;
     if (completion)
         completion( YES );
@@ -725,7 +718,7 @@
 
 - (void)setSpinnerActive:(BOOL)active {
 
-    PearlMainThread(^{
+    PearlMainQueue( ^{
         CABasicAnimation *rotate = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
         rotate.toValue = [NSNumber numberWithDouble:2 * M_PI];
         rotate.duration = 5.0;
@@ -751,7 +744,7 @@
             else
                 [self avatarForUser:[self selectedUserForThread]].backgroundColor = self.avatarTemplate.backgroundColor;
         }];
-    });
+    } );
 }
 
 - (void)updateAvatarShadowColor:(UIButton *)avatar isTargeted:(BOOL)targeted {
