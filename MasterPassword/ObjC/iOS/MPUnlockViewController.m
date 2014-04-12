@@ -416,8 +416,7 @@
 - (void)didSelectNewUserAvatar:(UIButton *)newUserAvatar {
 
     if (![MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        MPUserEntity *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass( [MPUserEntity class] )
-                                                              inManagedObjectContext:context];
+        MPUserEntity *newUser = [MPUserEntity insertNewObjectInContext:context];
 
         [self showNewUserNameAlertFor:newUser saveInContext:context completion:^(BOOL finished) {
             newUserAvatar.selected = NO;

@@ -27,14 +27,19 @@
 @property(weak, nonatomic) IBOutlet LLGitTip *gitTipButton;
 @property(weak, nonatomic) IBOutlet UITextField *entryField;
 @property(weak, nonatomic) IBOutlet UILabel *entryLabel;
+@property(weak, nonatomic) IBOutlet UILabel *entryTip;
+@property(weak, nonatomic) IBOutlet UIView *entryTipContainer;
 @property(weak, nonatomic) IBOutlet UIView *entryContainer;
 @property(weak, nonatomic) IBOutlet UIView *footerContainer;
+@property(weak, nonatomic) IBOutlet UIActivityIndicatorView *storeLoadingActivity;
 @property(weak, nonatomic) IBOutlet UICollectionView *avatarCollectionView;
-@property(weak, nonatomic) IBOutlet NSLayoutConstraint *avatarCollectionCenterConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *navigationBarToTopConstraint;
+@property (strong, nonatomic) IBOutlet UIButton *nextAvatarButton;
+@property (strong, nonatomic) IBOutlet UIButton *previousAvatarButton;
 
 @property(assign, nonatomic) BOOL active;
 
 - (void)setActive:(BOOL)active animated:(BOOL)animated;
+- (IBAction)changeAvatar:(UIButton *)sender;
 
 @end

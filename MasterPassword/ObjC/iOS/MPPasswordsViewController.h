@@ -31,6 +31,8 @@
 @property(assign, nonatomic) BOOL active;
 
 @property(nonatomic, copy) NSString *originalQuery;
-- (void)setActive:(BOOL)active animated:(BOOL)animated;
+- (void)setActive:(BOOL)active animated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
+
+- (IBAction)action:(id)sender;
 
 @end

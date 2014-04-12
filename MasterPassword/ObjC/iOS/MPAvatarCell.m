@@ -103,9 +103,9 @@ const long MPAvatarAdd = 10000;
 
 - (void)setAvatar:(long)avatar {
 
-    _avatar = avatar;
+    _avatar = avatar == MPAvatarAdd? MPAvatarAdd: (avatar + MPAvatarCount) % MPAvatarCount;
 
-    if (avatar == MPAvatarAdd) {
+    if (_avatar == MPAvatarAdd) {
         self.avatarImageView.image = [UIImage imageNamed:@"avatar-add"];
         self.name = strl( @"New User" );
         _newUser = YES;

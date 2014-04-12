@@ -10,25 +10,28 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "IASKSettingsReader.h"
+#import "JRSwizzle.h"
 
 @interface MPiOSAppDelegate()
 
 @property(nonatomic, weak) PearlAlert *handleCloudDisabledAlert;
 @property(nonatomic, weak) PearlAlert *handleCloudContentAlert;
 @property(nonatomic, weak) PearlAlert *fixCloudContentAlert;
-@property(nonatomic, weak) PearlOverlay *storeLoading;
+@property(nonatomic, weak) PearlOverlay *storeLoadingOverlay;
 @end
 
 @implementation MPiOSAppDelegate
 
 + (void)initialize {
 
-    [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
+    if ([self class] == [MPiOSAppDelegate class]) {
+        [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
 #ifdef DEBUG
-    [PearlLogger get].printLevel = PearlLogLevelDebug;
+        [PearlLogger get].printLevel = PearlLogLevelDebug;
 #else
-    [PearlLogger get].printLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
+        [PearlLogger get].printLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
 #endif
+    }
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -731,8 +734,8 @@
 
     dispatch_async( dispatch_get_main_queue(), ^{
         [self.handleCloudContentAlert cancelAlertAnimated:YES];
-        if (![self.storeLoading isVisible])
-            self.storeLoading = [PearlOverlay showProgressOverlayWithTitle:@"Loading Sites"];
+        if (!self.storeLoadingOverlay)
+            self.storeLoadingOverlay = [PearlOverlay showProgressOverlayWithTitle:@"Loading Sites"];
     } );
 
     [super ubiquityStoreManager:manager willLoadStoreIsCloud:isCloudStore];
@@ -746,21 +749,21 @@
 
     [self.handleCloudContentAlert cancelAlertAnimated:YES];
     [self.fixCloudContentAlert cancelAlertAnimated:YES];
-    [self.storeLoading cancelOverlayAnimated:YES];
+    [self.storeLoadingOverlay cancelOverlayAnimated:YES];
     [self.handleCloudDisabledAlert cancelAlertAnimated:YES];
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager failedLoadingStoreWithCause:(UbiquityStoreErrorCause)cause context:(id)context
                     wasCloud:(BOOL)wasCloudStore {
 
-    [self.storeLoading cancelOverlayAnimated:YES];
+    [self.storeLoadingOverlay cancelOverlayAnimated:YES];
     [self.handleCloudDisabledAlert cancelAlertAnimated:YES];
 }
 
 - (BOOL)ubiquityStoreManager:(UbiquityStoreManager *)manager handleCloudContentCorruptionWithHealthyStore:(BOOL)storeHealthy {
 
-    if (manager.cloudEnabled && !storeHealthy && !([self.handleCloudContentAlert.alertView isVisible] || [self.fixCloudContentAlert.alertView isVisible])) {
-        [self.storeLoading cancelOverlayAnimated:YES];
+    if (manager.cloudEnabled && !storeHealthy && !(self.handleCloudContentAlert || self.fixCloudContentAlert)) {
+        [self.storeLoadingOverlay cancelOverlayAnimated:YES];
         [self.handleCloudDisabledAlert cancelAlertAnimated:YES];
         [self showCloudContentAlert];
     };
@@ -770,17 +773,19 @@
 
 - (BOOL)ubiquityStoreManagerHandleCloudDisabled:(UbiquityStoreManager *)manager {
 
-    if (![self.handleCloudDisabledAlert isVisible])
+    if (!self.handleCloudDisabledAlert)
         self.handleCloudDisabledAlert = [PearlAlert showAlertWithTitle:@"iCloud Login" message:
                 @"You haven't added an iCloud account to your device yet.\n"
-                        @"To add one, tap 'Wait For Me', go into Apple's Settings and add an iCloud account."
+                        @"To add one, go into Apple's Settings -> iCloud."
                                                              viewStyle:UIAlertViewStyleDefault initAlert:nil
                                                      tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                                                         if (buttonIndex == alert.firstOtherButtonIndex)
+                                                         if (buttonIndex == alert.firstOtherButtonIndex) {
+                                                             [MPiOSConfig get].iCloudEnabled = @NO;
                                                              return;
+                                                         }
 
                                                          [self.storeManager reloadStore];
-                                                     } cancelTitle:@"Wait For Me" otherTitles:@"Disable iCloud", nil];
+                                                     } cancelTitle:@"Try Again" otherTitles:@"Disable iCloud", nil];
 
     return YES;
 }

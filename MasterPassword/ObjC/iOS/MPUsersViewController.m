@@ -98,17 +98,6 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     [self.marqueeTipTimer invalidate];
 }
 
-- (BOOL)canBecomeFirstResponder {
-
-    return YES;
-}
-
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
-
-//    if (motion == UIEventSubtypeMotionShake)
-//        [self emergencyOpenAnimated:YES];
-}
-
 #pragma mark - UITextFieldDelegate
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -138,7 +127,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
                         if (!signedIn) {
                             // Sign in failed.
-                            // TODO: warn user
+                            [self showEntryTip:strl( @"Incorrect password! Typo?" )];
                             return;
                         }
                     }];
@@ -149,7 +138,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 NSString *userName = self.entryField.text;
                 if (![userName length]) {
                     // No name entered.
-                    // TODO: warn user
+                    [self showEntryTip:strl( @"First, enter your name" )];
                     return NO;
                 }
 
@@ -161,7 +150,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 NSString *masterPassword = self.entryField.text;
                 if (![masterPassword length]) {
                     // No password entered.
-                    // TODO: warn user
+                    [self showEntryTip:strl( @"Pick a master password" )];
                     return NO;
                 }
 
@@ -172,43 +161,43 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 NSString *masterPassword = self.entryField.text;
                 if (![masterPassword length]) {
                     // No password entered.
-                    // TODO: warn user
+                    [self showEntryTip:strl( @"Confirm your master password" )];
                     return NO;
                 }
 
                 if (![masterPassword isEqualToString:_masterPasswordChoice]) {
                     // Master password confirmation failed.
-                    // TODO: warn user
+                    [self showEntryTip:strl( @"Looks like a typo! Try again." )];
                     self.activeUserState = MPActiveUserStateMasterPasswordChoice;
                     return NO;
                 }
 
                 [self.entryField endEditing:YES];
-                [self selectedAvatar].spinnerActive = YES;
-                [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                MPAvatarCell *avatarCell = [self selectedAvatar];
+                avatarCell.spinnerActive = YES;
+                if (![MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                     BOOL isNew = NO;
-                    MPUserEntity *user = [self selectedUserInContext:context isNew:&isNew];
+                    MPUserEntity *user = [self userForAvatar:avatarCell inContext:context isNew:&isNew];
                     if (isNew) {
-                        user = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass( [MPUserEntity class] )
-                                                             inManagedObjectContext:context];
-                        MPAvatarCell *avatarCell = [self selectedAvatar];
+                        user = [MPUserEntity insertNewObjectInContext:context];
                         user.avatar = avatarCell.avatar;
                         user.name = avatarCell.name;
                     }
 
                     BOOL signedIn = [[MPiOSAppDelegate get] signInAsUser:user saveInContext:context usingMasterPassword:masterPassword];
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    PearlMainQueue( ^{
                         self.entryField.text = @"";
                         [self selectedAvatar].spinnerActive = NO;
 
                         if (!signedIn) {
                             // Sign in failed, shouldn't happen for a new user.
-                            // TODO: warn user
+                            [self showEntryTip:strl( @"Couldn't create new user." )];
                             self.activeUserState = MPActiveUserStateNone;
                             return;
                         }
-                    }];
-                }];
+                    } );
+                }])
+                    avatarCell.spinnerActive = NO;
 
                 break;
             }
@@ -274,8 +263,8 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     if (collectionView == self.avatarCollectionView) {
         MPAvatarCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[MPAvatarCell reuseIdentifier] forIndexPath:indexPath];
         [cell addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPress:)]];
-        [self updateVisibilityForAvatar:cell atIndexPath:indexPath animated:NO];
         [self updateModeForAvatar:cell atIndexPath:indexPath animated:NO];
+        [self updateVisibilityForAvatar:cell atIndexPath:indexPath animated:NO];
 
         BOOL isNew = NO;
         MPUserEntity *user = [self userForIndexPath:indexPath inContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]
@@ -399,6 +388,21 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
 #pragma mark - Private
 
+- (void)showEntryTip:(NSString *)message {
+
+    self.entryTip.text = message;
+    [UIView animateWithDuration:0.3f animations:^{
+        self.entryTipContainer.alpha = 1;
+    }                completion:^(BOOL finished) {
+        if (finished)
+            PearlMainQueueAfter( 4, ^{
+                [UIView animateWithDuration:0.3f animations:^{
+                    self.entryTipContainer.alpha = 0;
+                }];
+            } );
+    }];
+}
+
 - (void)firedMarqueeTimer:(NSTimer *)timer {
 
     [UIView animateWithDuration:0.5 animations:^{
@@ -464,17 +468,8 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 - (void)updateAvatarAtIndexPath:(NSIndexPath *)indexPath {
 
     MPAvatarCell *cell = (MPAvatarCell *)[self.avatarCollectionView cellForItemAtIndexPath:indexPath];
-    [self updateVisibilityForAvatar:cell atIndexPath:indexPath animated:NO];
     [self updateModeForAvatar:cell atIndexPath:indexPath animated:NO];
-}
-
-- (void)updateVisibilityForAvatar:(MPAvatarCell *)cell atIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated {
-
-    CGFloat current = [self.avatarCollectionView layoutAttributesForItemAtIndexPath:indexPath].center.x -
-                      self.avatarCollectionView.contentOffset.x;
-    CGFloat max = self.avatarCollectionView.bounds.size.width;
-
-    [cell setVisibility:MAX(0, MIN( 1, 1 - ABS( current / (max / 2) - 1 ) )) animated:animated];
+    [self updateVisibilityForAvatar:cell atIndexPath:indexPath animated:NO];
 }
 
 - (void)updateModeForAvatar:(MPAvatarCell *)avatarCell atIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated {
@@ -502,6 +497,21 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 [avatarCell setMode:MPAvatarModeRaisedAndHidden animated:animated];
             break;
         }
+    }
+}
+
+- (void)updateVisibilityForAvatar:(MPAvatarCell *)cell atIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated {
+
+    CGFloat current = [self.avatarCollectionView layoutAttributesForItemAtIndexPath:indexPath].center.x -
+                      self.avatarCollectionView.contentOffset.x;
+    CGFloat max = self.avatarCollectionView.bounds.size.width;
+
+    CGFloat visibility = MAX(0, MIN( 1, 1 - ABS( current / (max / 2) - 1 ) ));
+    [cell setVisibility:visibility animated:animated];
+
+    if (cell.newUser) {
+        self.previousAvatarButton.alpha = cell.mode == MPAvatarModeRaisedAndActive? visibility * 0.7f: 0;
+        self.nextAvatarButton.alpha = cell.mode == MPAvatarModeRaisedAndActive? visibility * 0.7f: 0;
     }
 }
 
@@ -560,6 +570,14 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     Weakify(self);
 
     NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
+    [UIView animateWithDuration:0.3f animations:^{
+        self.avatarCollectionView.alpha = mainContext? 1: 0;
+    }];
+    if (mainContext && self.storeLoadingActivity.isAnimating)
+        [self.storeLoadingActivity stopAnimating];
+    if (!mainContext && !self.storeLoadingActivity.isAnimating)
+        [self.storeLoadingActivity startAnimating];
+
     if (!_mocObserver && mainContext)
         _mocObserver = [[NSNotificationCenter defaultCenter]
                 addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:mainContext
@@ -618,7 +636,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
 - (void)setActive:(BOOL)active {
 
-    [self setActive:active animated:YES];
+    [self setActive:active animated:NO];
 }
 
 - (void)setActive:(BOOL)active animated:(BOOL)animated {
@@ -674,7 +692,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     [_afterUpdates setSuspended:YES];
     dbg(@"suspend updates");
     __block BOOL requestFirstResponder = NO;
-    [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
+    [UIView animateWithDuration:animated? 0.4f: 0 animations:^{
         MPAvatarCell *selectedAvatar = [self selectedAvatar];
 
         // Set avatar modes.
@@ -682,6 +700,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:0];
             MPAvatarCell *avatarCell = (MPAvatarCell *)[self.avatarCollectionView cellForItemAtIndexPath:indexPath];
             [self updateModeForAvatar:avatarCell atIndexPath:indexPath animated:animated];
+            [self updateVisibilityForAvatar:avatarCell atIndexPath:indexPath animated:animated];
 
             if (selectedAvatar && avatarCell == selectedAvatar)
                 [self.avatarCollectionView scrollToItemAtIndexPath:indexPath
@@ -698,6 +717,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 self.entryLabel.text = strl( @"Enter your master password:" );
                 self.entryField.text = nil;
                 self.entryField.secureTextEntry = YES;
+                self.entryField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 break;
             }
             case MPActiveUserStateUserName: {
@@ -705,6 +725,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 self.entryLabel.text = strl( @"Enter your full name:" );
                 self.entryField.text = nil;
                 self.entryField.secureTextEntry = NO;
+                self.entryField.autocapitalizationType = UITextAutocapitalizationTypeWords;
                 break;
             }
             case MPActiveUserStateMasterPasswordChoice: {
@@ -712,6 +733,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 self.entryLabel.text = strl( @"Choose your master password:" );
                 self.entryField.text = nil;
                 self.entryField.secureTextEntry = YES;
+                self.entryField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 break;
             }
             case MPActiveUserStateMasterPasswordConfirmation: {
@@ -720,6 +742,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 self.entryLabel.text = strl( @"Confirm your master password:" );
                 self.entryField.text = nil;
                 self.entryField.secureTextEntry = YES;
+                self.entryField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 break;
             }
             case MPActiveUserStateMinimized:
@@ -731,7 +754,6 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
         switch (activeUserState) {
             case MPActiveUserStateNone: {
                 self.navigationBarToTopConstraint.priority = UILayoutPriorityDefaultHigh;
-                self.avatarCollectionCenterConstraint.priority = UILayoutPriorityDefaultHigh;
                 self.avatarCollectionView.scrollEnabled = YES;
                 self.entryContainer.alpha = 0;
                 self.footerContainer.alpha = 1;
@@ -742,7 +764,6 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
             case MPActiveUserStateMasterPasswordChoice:
             case MPActiveUserStateMasterPasswordConfirmation: {
                 self.navigationBarToTopConstraint.priority = UILayoutPriorityDefaultHigh;
-                self.avatarCollectionCenterConstraint.priority = UILayoutPriorityDefaultLow;
                 self.avatarCollectionView.scrollEnabled = NO;
                 self.entryContainer.alpha = 1;
                 self.footerContainer.alpha = 1;
@@ -751,7 +772,6 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
             }
             case MPActiveUserStateMinimized: {
                 self.navigationBarToTopConstraint.priority = 1;
-                self.avatarCollectionCenterConstraint.priority = UILayoutPriorityDefaultLow;
                 self.avatarCollectionView.scrollEnabled = NO;
                 self.entryContainer.alpha = 0;
                 self.footerContainer.alpha = 0;
@@ -759,25 +779,29 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
             }
         }
         [self.navigationBarToTopConstraint apply];
-        [self.avatarCollectionCenterConstraint apply];
-
-        // Toggle the keyboard.
     }                completion:^(BOOL finished) {
         dbg(@"resume updates");
         [_afterUpdates setSuspended:NO];
     }];
 
+    UIResponder *oldFirstResponder = [UIResponder findFirstResponder];
     if (requestFirstResponder)
         [self.entryField becomeFirstResponder];
     else
         [self.entryField resignFirstResponder];
+    UIResponder *newFirstResponder = [UIResponder findFirstResponder];
+    if (newFirstResponder != oldFirstResponder)
+    dbg(@"first responder: %@ -> %@", oldFirstResponder, newFirstResponder);
 }
 
 #pragma mark - Actions
 
-- (IBAction)doSignOut:(UIBarButtonItem *)sender {
+- (IBAction)changeAvatar:(UIButton *)sender {
 
-    [[MPiOSAppDelegate get] signOutAnimated:YES];
+    if (sender == self.previousAvatarButton)
+        --[self selectedAvatar].avatar;
+    if (sender == self.nextAvatarButton)
+        ++[self selectedAvatar].avatar;
 }
 
 @end

@@ -20,7 +20,6 @@
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
 #import "MPPasswordLargeCell.h"
-#import "UIScrollView+PearlAdjustInsets.h"
 #import "MPPasswordTypesCell.h"
 #import "MPPasswordSmallCell.h"
 #import "UIColor+Expanded.h"
@@ -62,6 +61,7 @@
 
     [self registerObservers];
     [self observeStore];
+    [self updatePasswords];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -94,7 +94,7 @@
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
 
     if (collectionView == self.passwordCollectionView)
-    dbg_return_tr([self.fetchedResultsController.sections count], @);
+        return [self.fetchedResultsController.sections count];
 
     Throw(@"Unexpected collection view: %@", collectionView);
 }
@@ -102,8 +102,9 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 
     if (collectionView == self.passwordCollectionView)
-    dbg_return_tr(!self.query.length? 0: ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[section]).numberOfObjects +
-                                      (_exactMatch? 0: 1), @, @(section));
+        return ![MPiOSAppDelegate get].activeUserOID? 0:
+               ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[section]).numberOfObjects +
+               (!_exactMatch && [[self query] length]? 1: 0);
 
     Throw(@"Unexpected collection view: %@", collectionView);
 }
@@ -121,11 +122,11 @@
                 cell = [MPPasswordSmallCell dequeueCellForElement:element fromCollectionView:collectionView atIndexPath:indexPath];
         }
         else
-            // New Site.
+                // New Site.
             cell = [MPPasswordTypesCell dequeueCellForTransientSite:self.query fromCollectionView:collectionView atIndexPath:indexPath];
 
         [UIView setAnimationsEnabled:YES];
-        dbg_return(cell, indexPath);
+        return cell;
     }
 
     Throw(@"Unexpected collection view: %@", collectionView);
@@ -220,9 +221,11 @@
         if (!updatesForType)
             _fetchedUpdates[@(type)] = updatesForType = [NSMutableArray new];
 
-        [updatesForType addObject:@{ @"object" : NilToNSNull(anObject),
-                                     @"indexPath" : NilToNSNull(indexPath),
-                                     @"newIndexPath" : NilToNSNull(newIndexPath) }];
+        [updatesForType addObject:@{
+                @"object"       : NilToNSNull(anObject),
+                @"indexPath"    : NilToNSNull(indexPath),
+                @"newIndexPath" : NilToNSNull(newIndexPath)
+        }];
         switch (type) {
             case NSFetchedResultsChangeInsert:
                 dbg(@"didChangeObject: insert: %@", [updatesForType lastObject]);
@@ -248,8 +251,10 @@
         if (!updatesForType)
             _fetchedUpdates[@(type << 3)] = updatesForType = [NSMutableArray new];
 
-        [updatesForType addObject:@{ @"sectionInfo" : NilToNSNull(sectionInfo),
-                                     @"index" : @(sectionIndex) }];
+        [updatesForType addObject:@{
+                @"sectionInfo" : NilToNSNull(sectionInfo),
+                @"index"       : @(sectionIndex)
+        }];
         switch (type) {
             case NSFetchedResultsChangeInsert:
                 dbg(@"didChangeSection: insert: %@", [updatesForType lastObject]);
@@ -458,7 +463,7 @@
 
     NSString *query = self.query;
     NSManagedObjectID *activeUserOID = [MPiOSAppDelegate get].activeUserOID;
-    if (!activeUserOID || ![query length]) {
+    if (!activeUserOID) {
         self.passwordsSearchBar.text = nil;
         PearlMainQueue( ^{ [self.passwordCollectionView reloadData]; } );
         return;
@@ -466,8 +471,10 @@
 
     [self.fetchedResultsController.managedObjectContext performBlock:^{
         NSError *error = nil;
-        self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:
-                @"user == %@ AND name BEGINSWITH[cd] %@", activeUserOID, query];
+        self.fetchedResultsController.fetchRequest.predicate =
+                [query length]?
+                [NSPredicate predicateWithFormat:@"user == %@ AND name BEGINSWITH[cd] %@", activeUserOID, query]:
+                [NSPredicate predicateWithFormat:@"user == %@", activeUserOID];
         if (![self.fetchedResultsController performFetch:&error])
         err(@"Couldn't fetch elements: %@", error);
 
@@ -536,14 +543,14 @@
 
 - (void)setActive:(BOOL)active {
 
-    [self setActive:active animated:YES];
+    [self setActive:active animated:NO completion:nil];
 }
 
-- (void)setActive:(BOOL)active animated:(BOOL)animated {
+- (void)setActive:(BOOL)active animated:(BOOL)animated completion:(void (^)(BOOL finished))completion {
 
     _active = active;
 
-    [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
+    [UIView animateWithDuration:animated? 0.4f: 0 animations:^{
         self.navigationBarToPasswordsConstraint.priority = active? UILayoutPriorityDefaultHigh: 1;
         self.navigationBarToTopConstraint.priority = active? 1: UILayoutPriorityDefaultHigh;
         self.passwordsToBottomConstraint.priority = active? 1: UILayoutPriorityDefaultHigh;
@@ -551,9 +558,51 @@
         [self.navigationBarToPasswordsConstraint apply];
         [self.navigationBarToTopConstraint apply];
         [self.passwordsToBottomConstraint apply];
-    }];
+    }                completion:completion];
 }
 
 #pragma mark - Actions
+
+- (IBAction)action:(id)sender {
+
+    [PearlSheet showSheetWithTitle:nil viewStyle:UIActionSheetStyleAutomatic
+                         initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
+        if (buttonIndex == [sheet cancelButtonIndex])
+            return;
+
+        switch (buttonIndex - [sheet firstOtherButtonIndex]) {
+            case 0: {
+                inf(@"Action: Guide");
+                [[MPiOSAppDelegate get] showGuide];
+                break;
+            }
+            case 1: {
+                inf(@"Action: Preferences");
+                [self performSegueWithIdentifier:@"MP_UserProfile" sender:self];
+                break;
+            }
+            case 2: {
+                inf(@"Action: Other Apps");
+                [self performSegueWithIdentifier:@"MP_OtherApps" sender:self];
+                break;
+            }
+            case 3: {
+                inf(@"Action: Feedback via Mail");
+                [[MPiOSAppDelegate get] showFeedbackWithLogs:YES forVC:self];
+                break;
+            }
+            default: {
+                wrn(@"Unsupported action: %ld", (long)(buttonIndex - [sheet firstOtherButtonIndex]));
+                break;
+            }
+        }
+    }
+                       cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:
+            @"Overview",
+            @"User Profile",
+            @"Other Apps",
+            @"Feedback",
+            nil];
+}
 
 @end

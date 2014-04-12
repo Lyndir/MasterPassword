@@ -408,11 +408,9 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         }
 
         MPElementType type = activeUser.defaultType;
-        NSString *typeEntityClassName = [MPAlgorithmDefault classNameOfType:type];
+        NSString *typeEntityName = [MPAlgorithmDefault classNameOfType:type];
 
-        MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:typeEntityClassName
-                                                                 inManagedObjectContext:context];
-
+        MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
         element.name = siteName;
         element.user = activeUser;
         element.type = type;
@@ -440,9 +438,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     else {
         // Type requires a different class of element.  Recreate the element.
-        MPElementEntity *newElement
-                = [NSEntityDescription insertNewObjectForEntityForName:[element.algorithm classNameOfType:type]
-                                                inManagedObjectContext:context];
+        NSString *typeEntityName = [element.algorithm classNameOfType:type];
+        MPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
         newElement.type = type;
         newElement.name = element.name;
         newElement.user = element.user;
@@ -648,8 +645,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     // Make sure there is a user.
     if (!user) {
-        user = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass( [MPUserEntity class] )
-                                             inManagedObjectContext:context];
+        user = [MPUserEntity insertNewObjectInContext:context];
         user.name = importUserName;
         user.keyID = importKeyID;
         dbg(@"Created User: %@", [user debugDescription]);
@@ -665,9 +661,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         NSString *exportContent = siteElements[5];
 
         // Create new site.
-        MPElementEntity
-                *element = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmForVersion( version ) classNameOfType:type]
-                                                         inManagedObjectContext:context];
+        NSString *typeEntityName = [MPAlgorithmForVersion( version ) classNameOfType:type];
+        MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
         element.name = name;
         element.user = user;
         element.type = type;

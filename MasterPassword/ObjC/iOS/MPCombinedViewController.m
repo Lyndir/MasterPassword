@@ -17,21 +17,22 @@
 //
 
 #import "MPCombinedViewController.h"
-#import "MPiOSAppDelegate.h"
-#import "MPAppDelegate_Store.h"
-#import "MPAppDelegate_Key.h"
 #import "MPUsersViewController.h"
 #import "MPPasswordsViewController.h"
+#import "MPEmergencySegue.h"
+#import "MPEmergencyViewController.h"
+#import "MPPasswordsSegue.h"
 
 @interface MPCombinedViewController()
 
 @property(strong, nonatomic) IBOutlet NSLayoutConstraint *passwordsTopConstraint;
-@property(nonatomic, strong) MPUsersViewController *usersVC;
-@property(nonatomic, strong) MPPasswordsViewController *passwordsVC;
+@property(nonatomic, weak) MPUsersViewController *usersVC;
+@property(nonatomic, weak) MPEmergencyViewController *emergencyVC;
 @end
 
 @implementation MPCombinedViewController {
     NSArray *_notificationObservers;
+    MPPasswordsViewController *_passwordsVC;
 }
 
 - (void)viewDidLoad {
@@ -66,8 +67,16 @@
 
     if ([segue.identifier isEqualToString:@"users"])
         self.usersVC = segue.destinationViewController;
-    if ([segue.identifier isEqualToString:@"passwords"])
-        self.passwordsVC = segue.destinationViewController;
+    if ([segue.identifier isEqualToString:@"passwords"]) {
+        NSAssert([segue isKindOfClass:[MPPasswordsSegue class]], @"passwords segue should be MPPasswordsSegue: %@", segue);
+        NSAssert([sender isKindOfClass:[NSDictionary class]], @"sender should be dictionary: %@", sender);
+        NSAssert([[sender objectForKey:@"animated"] isKindOfClass:[NSNumber class]], @"sender should contain 'animated': %@", sender);
+        [(MPPasswordsSegue *)segue setAnimated:[sender[@"animated"] boolValue]];
+        UIViewController *destinationVC = segue.destinationViewController;
+        _passwordsVC = [destinationVC isKindOfClass:[MPPasswordsViewController class]]? (MPPasswordsViewController *)destinationVC: nil;
+    }
+    if ([segue.identifier isEqualToString:@"emergency"])
+        self.emergencyVC = segue.destinationViewController;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -75,6 +84,29 @@
     return UIStatusBarStyleLightContent;
 }
 
+- (BOOL)canBecomeFirstResponder {
+
+    return YES;
+}
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+
+    if (motion == UIEventSubtypeMotionShake && !self.emergencyVC)
+        [self performSegueWithIdentifier:@"emergency" sender:self];
+}
+
+- (UIStoryboardSegue *)segueForUnwindingToViewController:(UIViewController *)toViewController
+                                      fromViewController:(UIViewController *)fromViewController identifier:(NSString *)identifier {
+
+    if ([identifier isEqualToString:@"emergency"]) {
+        MPEmergencySegue *segue = [[MPEmergencySegue alloc] initWithIdentifier:identifier
+                                                                        source:fromViewController destination:toViewController];
+        segue.unwind = YES;
+        dbg_return(segue);
+    }
+
+    dbg_return((id)nil);
+}
 
 #pragma mark - Properties
 
@@ -85,30 +117,30 @@
 
 - (void)setMode:(MPCombinedMode)mode animated:(BOOL)animated {
 
+    if (_mode == mode && animated)
+        return;
     _mode = mode;
 
     [self becomeFirstResponder];
 
-        switch (self.mode) {
-            case MPCombinedModeUserSelection: {
-                [self.usersVC setActive:YES animated:animated];
-                [self.passwordsVC setActive:NO animated:animated];
-//            MPUsersViewController *usersVC = [self.storyboard instantiateViewControllerWithIdentifier:@"MPUsersViewController"];
-//            [self setViewControllers:@[ usersVC ] direction:UIPageViewControllerNavigationDirectionReverse
-//                            animated:animated completion:nil];
-                break;
+    switch (self.mode) {
+        case MPCombinedModeUserSelection: {
+            [self.usersVC setActive:YES animated:animated];
+            if (_passwordsVC) {
+                MPPasswordsSegue *segue = [[MPPasswordsSegue alloc] initWithIdentifier:@"passwords" source:_passwordsVC destination:self];
+                [self prepareForSegue:segue sender:@{ @"animated" : @(animated) }];
+                [segue perform];
             }
-            case MPCombinedModePasswordSelection: {
-                [self.usersVC setActive:NO animated:animated];
-                [self.passwordsVC setActive:YES animated:animated];
-//            MPPasswordsViewController *passwordsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"MPPasswordsViewController"];
-//            [self setViewControllers:@[ passwordsVC ] direction:UIPageViewControllerNavigationDirectionForward
-//                            animated:animated completion:nil];
-                break;
-            }
+            break;
         }
+        case MPCombinedModePasswordSelection: {
+            [self.usersVC setActive:NO animated:animated];
+            [self performSegueWithIdentifier:@"passwords" sender:@{ @"animated" : @(animated) }];
+            break;
+        }
+    }
 
-        [self.passwordsTopConstraint apply];
+    [self.passwordsTopConstraint apply];
 }
 
 #pragma mark - Private
@@ -142,14 +174,6 @@
     for (id observer in _notificationObservers)
         [[NSNotificationCenter defaultCenter] removeObserver:observer];
     _notificationObservers = nil;
-}
-
-
-#pragma mark - Actions
-
-- (IBAction)doSignOut:(UIBarButtonItem *)sender {
-
-    [[MPiOSAppDelegate get] signOutAnimated:YES];
 }
 
 @end

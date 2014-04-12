@@ -28,6 +28,4 @@ typedef NS_ENUM(NSUInteger, MPCombinedMode) {
 
 @property(assign, nonatomic) MPCombinedMode mode;
 
-- (IBAction)doSignOut:(UIBarButtonItem *)sender;
-
 @end
