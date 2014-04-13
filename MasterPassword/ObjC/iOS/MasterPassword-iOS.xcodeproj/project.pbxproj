@@ -3829,7 +3829,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/bash -e";
-			shellScript = "[[ -x /usr/local/bin/moarfonts ]] || {\n    echo >&2 \"moarfonts not installed, embedded fonts will not show up in IB.\"\n    exit\n}\n\nfind \"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}\" -name '*.otf' -exec /usr/local/bin/moarfonts install {} +";
+			shellScript = "[[ -x /usr/local/bin/moarfonts ]] || {\n    echo >&2 \"moarfonts not installed, embedded fonts will not show up in IB.\"\n    exit\n}\n\n[[ -w \"$SDKROOT/System/Library/.lilid/.lilic\" ]] || {\n    /usr/local/bin/moarfonts reset\n}\n\nfind \"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}\" -name '*.otf' -exec /usr/local/bin/moarfonts install {} +";
 			showEnvVarsInLog = 0;
 		};
 		DAD3125D155288AA00A3F9ED /* Run Script: Crashlytics */ = {

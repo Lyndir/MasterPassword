@@ -27,7 +27,8 @@
 @property(weak, nonatomic) IBOutlet LLGitTip *gitTipButton;
 @property(weak, nonatomic) IBOutlet UITextField *entryField;
 @property(weak, nonatomic) IBOutlet UILabel *entryLabel;
-@property(weak, nonatomic) IBOutlet UILabel *entryTip;
+@property(weak, nonatomic) IBOutlet UILabel *entryTipTitleLabel;
+@property(weak, nonatomic) IBOutlet UILabel *entryTipSubtitleLabel;
 @property(weak, nonatomic) IBOutlet UIView *entryTipContainer;
 @property(weak, nonatomic) IBOutlet UIView *entryContainer;
 @property(weak, nonatomic) IBOutlet UIView *footerContainer;

@@ -111,7 +111,7 @@ const long MPAvatarAdd = 10000;
         _newUser = YES;
     }
     else
-        self.avatarImageView.image = [UIImage imageNamed:strf( @"avatar-%ld", avatar )];
+        self.avatarImageView.image = [UIImage imageNamed:strf( @"avatar-%ld", _avatar )];
 }
 
 - (NSString *)name {

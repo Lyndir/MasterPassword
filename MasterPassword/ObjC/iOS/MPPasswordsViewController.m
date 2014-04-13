@@ -37,7 +37,6 @@
     NSArray *_notificationObservers;
     __weak UITapGestureRecognizer *_passwordsDismissRecognizer;
     NSFetchedResultsController *_fetchedResultsController;
-    NSManagedObjectID *_activeElementOID;
     BOOL _exactMatch;
     NSMutableDictionary *_fetchedUpdates;
     UIColor *_backgroundColor;
@@ -143,21 +142,24 @@
                              initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
             if (buttonIndex == [alert cancelButtonIndex]) {
                 // Cancel
-                [collectionView selectItemAtIndexPath:indexPath animated:NO
+                NSIndexPath *indexPath_ = [collectionView indexPathForCell:cell];
+                [collectionView selectItemAtIndexPath:indexPath_ animated:NO
                                        scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
-                [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+                [collectionView deselectItemAtIndexPath:indexPath_ animated:YES];
                 return;
             }
 
             // Create
             [[MPiOSAppDelegate get] addElementNamed:newSiteName completion:^(MPElementEntity *element) {
-                self.activeElement = element;
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                PearlMainQueue( ^{
                     [PearlOverlay showTemporaryOverlayWithTitle:strf( @"Added %@", newSiteName ) dismissAfter:2];
-                    [collectionView selectItemAtIndexPath:indexPath animated:NO
-                                           scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
-                    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-                }];
+                    PearlMainQueueAfter( 0.2f, ^{
+                        NSIndexPath *indexPath_ = [collectionView indexPathForCell:cell];
+                        [collectionView selectItemAtIndexPath:indexPath_ animated:NO
+                                               scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
+                        [collectionView deselectItemAtIndexPath:indexPath_ animated:YES];
+                    } );
+                } );
             }];
         }                  cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonYes, nil];
         return;
@@ -178,24 +180,32 @@
             @"emergency" : @NO
     } );
 
-    [element use];
     [element resolveContentUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
         if (![result length]) {
-            [collectionView selectItemAtIndexPath:indexPath animated:NO
-                                   scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
-            [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+            PearlMainQueue(^{
+                NSIndexPath *indexPath_ = [collectionView indexPathForCell:cell];
+                [collectionView selectItemAtIndexPath:indexPath_ animated:NO
+                                       scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
+                [collectionView deselectItemAtIndexPath:indexPath_ animated:YES];
+            });
             return;
         }
 
         [UIPasteboard generalPasteboard].string = result;
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        PearlMainQueue( ^{
             [PearlOverlay showTemporaryOverlayWithTitle:@"Password Copied" dismissAfter:2];
-            PearlMainQueueAfter( 0.1f, ^{
-                [collectionView selectItemAtIndexPath:indexPath animated:NO
+            PearlMainQueueAfter( 0.2f, ^{
+                NSIndexPath *indexPath_ = [collectionView indexPathForCell:cell];
+                [collectionView selectItemAtIndexPath:indexPath_ animated:NO
                                        scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
-                [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+                [collectionView deselectItemAtIndexPath:indexPath_ animated:YES];
+
+                [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                    [[cell elementInContext:context] use];
+                    [context saveToStore];
+                }];
             } );
-        }];
+        } );
     }];
 }
 
@@ -335,6 +345,16 @@
 
 #pragma mark - UISearchBarDelegate
 
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
+
+    if (searchBar == self.passwordsSearchBar) {
+        searchBar.text = nil;
+        return YES;
+    }
+
+    return NO;
+}
+
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
 
     if (searchBar == self.passwordsSearchBar) {
@@ -404,7 +424,6 @@
                                  queue:nil usingBlock:^(NSNotification *note) {
                 Strongify(self);
 
-                self.activeElement = nil;
                 _fetchedResultsController = nil;
                 self.passwordsSearchBar.text = nil;
                 [self updatePasswords];
@@ -438,8 +457,8 @@
         _mocObserver = [[NSNotificationCenter defaultCenter]
                 addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:mainContext
                              queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                    Strongify(self);
-                    [self updatePasswords];
+//                    Strongify(self);
+//                    [self updatePasswords];
                 }];
     if (!_storeObserver)
         _storeObserver = [[NSNotificationCenter defaultCenter]
@@ -532,13 +551,6 @@
     }
 
     return _fetchedResultsController;
-}
-
-- (void)setActiveElement:(MPElementEntity *)activeElement {
-
-    _activeElementOID = activeElement.objectID;
-
-    [self updatePasswords];
 }
 
 - (void)setActive:(BOOL)active {

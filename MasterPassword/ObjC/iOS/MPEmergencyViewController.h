@@ -20,18 +20,19 @@
 
 @interface MPEmergencyViewController : UIViewController <UITextFieldDelegate>
 
-@property(weak, nonatomic) IBOutlet UIView *emergencyGeneratorDialog;
-@property(weak, nonatomic) IBOutlet UIView *emergencyGeneratorContainer;
-@property(weak, nonatomic) IBOutlet UITextField *emergencyName;
-@property(weak, nonatomic) IBOutlet UITextField *emergencyMasterPassword;
-@property(weak, nonatomic) IBOutlet UITextField *emergencySite;
-@property(weak, nonatomic) IBOutlet UIStepper *emergencyCounterStepper;
-@property(weak, nonatomic) IBOutlet UISegmentedControl *emergencyTypeControl;
-@property(weak, nonatomic) IBOutlet UILabel *emergencyCounter;
-@property(weak, nonatomic) IBOutlet UIActivityIndicatorView *emergencyActivity;
-@property(weak, nonatomic) IBOutlet UIButton *emergencyPassword;
-@property(weak, nonatomic) IBOutlet UIView *emergencyContentTipContainer;
+@property(weak, nonatomic) IBOutlet UIView *dialogView;
+@property(weak, nonatomic) IBOutlet UIView *containerView;
+@property(weak, nonatomic) IBOutlet UITextField *userNameField;
+@property(weak, nonatomic) IBOutlet UITextField *masterPasswordField;
+@property(weak, nonatomic) IBOutlet UITextField *siteField;
+@property(weak, nonatomic) IBOutlet UIStepper *counterStepper;
+@property(weak, nonatomic) IBOutlet UISegmentedControl *typeControl;
+@property(weak, nonatomic) IBOutlet UILabel *counterLabel;
+@property(weak, nonatomic) IBOutlet UIActivityIndicatorView *activity;
+@property(weak, nonatomic) IBOutlet UILabel *passwordLabel;
+@property(weak, nonatomic) IBOutlet UIView *tipContainer;
 
-- (IBAction)emergencyCopy:(id)sender;
+- (IBAction)controlChanged:(UIControl *)control;
+- (IBAction)copyPassword:(UITapGestureRecognizer *)recognizer;
 
 @end

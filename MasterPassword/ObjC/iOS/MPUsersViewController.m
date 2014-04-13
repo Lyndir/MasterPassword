@@ -127,7 +127,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
                         if (!signedIn) {
                             // Sign in failed.
-                            [self showEntryTip:strl( @"Incorrect password! Typo?" )];
+                            [self showEntryTip:strl( @"Looks like a typo!\nTry again; that password was incorrect." )];
                             return;
                         }
                     }];
@@ -138,7 +138,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 NSString *userName = self.entryField.text;
                 if (![userName length]) {
                     // No name entered.
-                    [self showEntryTip:strl( @"First, enter your name" )];
+                    [self showEntryTip:strl( @"First, enter your name." )];
                     return NO;
                 }
 
@@ -150,7 +150,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 NSString *masterPassword = self.entryField.text;
                 if (![masterPassword length]) {
                     // No password entered.
-                    [self showEntryTip:strl( @"Pick a master password" )];
+                    [self showEntryTip:strl( @"Pick a master password." )];
                     return NO;
                 }
 
@@ -161,13 +161,13 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 NSString *masterPassword = self.entryField.text;
                 if (![masterPassword length]) {
                     // No password entered.
-                    [self showEntryTip:strl( @"Confirm your master password" )];
+                    [self showEntryTip:strl( @"Confirm your master password." )];
                     return NO;
                 }
 
                 if (![masterPassword isEqualToString:_masterPasswordChoice]) {
                     // Master password confirmation failed.
-                    [self showEntryTip:strl( @"Looks like a typo! Try again." )];
+                    [self showEntryTip:strl( @"Looks like a typo!\nTry again; enter your master password twice." )];
                     self.activeUserState = MPActiveUserStateMasterPasswordChoice;
                     return NO;
                 }
@@ -390,7 +390,12 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
 - (void)showEntryTip:(NSString *)message {
 
-    self.entryTip.text = message;
+    NSUInteger newlineIndex = [message rangeOfString:@"\n"].location;
+    NSString *messageTitle = newlineIndex == NSNotFound? message: [message substringToIndex:newlineIndex];
+    NSString *messageSubtitle = newlineIndex == NSNotFound? nil: [message substringFromIndex:newlineIndex];
+    self.entryTipTitleLabel.text = messageTitle;
+    self.entryTipSubtitleLabel.text = messageSubtitle;
+
     [UIView animateWithDuration:0.3f animations:^{
         self.entryTipContainer.alpha = 1;
     }                completion:^(BOOL finished) {
