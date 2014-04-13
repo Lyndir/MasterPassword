@@ -949,7 +949,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="p6o-h3-NRH" kind="unwind" unwindAction="unwindToCombined:" id="E2V-ll-ZD7"/>
+                                            <segue destination="p6o-h3-NRH" kind="unwind" identifier="unwind-emergency" unwindAction="unwindToCombined:" id="E2V-ll-ZD7"/>
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1lc-e7-Qme" userLabel="Emergency Generator">
@@ -1060,7 +1060,7 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="p6o-h3-NRH" kind="unwind" identifier="emergency" unwindAction="unwindToCombined:" id="VI2-VR-bQc"/>
+                                                    <segue destination="p6o-h3-NRH" kind="unwind" identifier="unwind-emergency" unwindAction="unwindToCombined:" id="VI2-VR-bQc"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J2u-kc-30c" userLabel="Settings Button">
@@ -1200,6 +1200,7 @@
                         <outlet property="tipContainer" destination="beo-cJ-jIn" id="BdT-0M-8qC"/>
                         <outlet property="typeControl" destination="e4b-Iv-Pk9" id="S69-yO-7bv"/>
                         <outlet property="userNameField" destination="XAC-Da-lpf" id="XCk-0H-IcI"/>
+                        <segue destination="p6o-h3-NRH" kind="unwind" identifier="unwind-emergency" unwindAction="unwindToCombined:" id="XI2-ax-Rkg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2GS-rH-ANj" userLabel="First Responder" sceneMemberID="firstResponder"/>

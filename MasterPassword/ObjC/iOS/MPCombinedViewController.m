@@ -98,7 +98,7 @@
 - (UIStoryboardSegue *)segueForUnwindingToViewController:(UIViewController *)toViewController
                                       fromViewController:(UIViewController *)fromViewController identifier:(NSString *)identifier {
 
-    if ([identifier isEqualToString:@"emergency"]) {
+    if ([identifier isEqualToString:@"unwind-emergency"]) {
         MPEmergencySegue *segue = [[MPEmergencySegue alloc] initWithIdentifier:identifier
                                                                         source:fromViewController destination:toViewController];
         segue.unwind = YES;

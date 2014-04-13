@@ -23,6 +23,7 @@
     MPKey *_key;
     NSOperationQueue *_emergencyKeyQueue;
     NSOperationQueue *_emergencyPasswordQueue;
+    NSArray *_notificationObservers;
 }
 
 - (void)viewDidLoad {
@@ -41,12 +42,14 @@
     [super viewWillAppear:animated];
 
     [self reset];
+    [self registerObservers];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
 
     [super viewDidDisappear:animated];
 
+    [self removeObservers];
     [self reset];
 }
 
@@ -170,6 +173,30 @@
     self.counterStepper.value = 1;
     self.typeControl.selectedSegmentIndex = 1;
     [self updateKey];
+}
+
+- (void)registerObservers {
+
+    if ([_notificationObservers count])
+        return;
+
+    Weakify(self);
+    _notificationObservers = @[
+            [[NSNotificationCenter defaultCenter]
+                    addObserverForName:UIApplicationWillResignActiveNotification object:nil
+                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+                Strongify(self);
+
+                [self performSegueWithIdentifier:@"unwind-emergency" sender:self];
+            }],
+    ];
+}
+
+- (void)removeObservers {
+
+    for (id observer in _notificationObservers)
+        [[NSNotificationCenter defaultCenter] removeObserver:observer];
+    _notificationObservers = nil;
 }
 
 @end
