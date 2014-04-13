@@ -25,7 +25,6 @@
 
 @interface MPCombinedViewController()
 
-@property(strong, nonatomic) IBOutlet NSLayoutConstraint *passwordsTopConstraint;
 @property(nonatomic, weak) MPUsersViewController *usersVC;
 @property(nonatomic, weak) MPEmergencyViewController *emergencyVC;
 @end
@@ -79,6 +78,11 @@
         self.emergencyVC = segue.destinationViewController;
 }
 
+- (BOOL)prefersStatusBarHidden {
+
+    return self.mode == MPCombinedModeUserSelection;
+}
+
 - (UIStatusBarStyle)preferredStatusBarStyle {
 
     return UIStatusBarStyleLightContent;
@@ -121,7 +125,12 @@
         return;
     _mode = mode;
 
+    [self setNeedsStatusBarAppearanceUpdate];
     [self becomeFirstResponder];
+    [self.usersVC setNeedsStatusBarAppearanceUpdate];
+    [self.usersVC.view setNeedsUpdateConstraints];
+    [self.usersVC.view setNeedsLayout];
+    dbg(@"top layout length: %f", self.usersVC.topLayoutGuide.length);
 
     switch (self.mode) {
         case MPCombinedModeUserSelection: {
@@ -139,8 +148,6 @@
             break;
         }
     }
-
-    [self.passwordsTopConstraint apply];
 }
 
 #pragma mark - Private

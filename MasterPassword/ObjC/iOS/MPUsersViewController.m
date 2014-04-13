@@ -98,6 +98,14 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     [self.marqueeTipTimer invalidate];
 }
 
+- (void)viewDidLayoutSubviews {
+
+    [super viewDidLayoutSubviews];
+
+    [self.avatarCollectionView.collectionViewLayout invalidateLayout];
+}
+
+
 #pragma mark - UITextFieldDelegate
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {

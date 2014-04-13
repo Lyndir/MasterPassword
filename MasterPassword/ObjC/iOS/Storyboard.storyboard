@@ -16,18 +16,18 @@
                         <viewControllerLayoutGuide type="bottom" id="VGz-R0-vMD"/>
                     </layoutGuides>
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="DOr-Xu-P9q" userLabel="Root">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rWM-08-aab" userLabel="Users Root">
-                                <rect key="frame" x="0.0" y="0.0" width="321" height="568"/>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rWM-08-aab" userLabel="Users Root">
+                                <rect key="frame" x="0.0" y="0.0" width="321" height="504"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="VDd-oM-ZOO" userLabel="Store Activity">
-                                        <rect key="frame" x="142" y="266" width="37" height="37"/>
+                                        <rect key="frame" x="142" y="234" width="37" height="37"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </activityIndicatorView>
-                                    <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="790-G2-I8g">
+                                    <navigationBar contentMode="scaleToFill" misplaced="YES" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="790-G2-I8g">
                                         <rect key="frame" x="0.0" y="20" width="321" height="44"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <color key="barTintColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -35,33 +35,33 @@
                                             <navigationItem id="WjE-Yw-JEC"/>
                                         </items>
                                     </navigationBar>
-                                    <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="L6J-pd-gcp" userLabel="Avatar Collection">
-                                        <rect key="frame" x="0.0" y="20" width="321" height="548"/>
+                                    <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" misplaced="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="L6J-pd-gcp" userLabel="Avatar Collection">
+                                        <rect key="frame" x="0.0" y="20" width="321" height="484"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="ATB-kM-EGu">
-                                            <size key="itemSize" width="160" height="568"/>
+                                            <size key="itemSize" width="160" height="484"/>
                                             <size key="headerReferenceSize" width="80" height="0.0"/>
                                             <size key="footerReferenceSize" width="80" height="0.0"/>
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPAvatarCell" id="Zab-uQ-uk9" customClass="MPAvatarCell">
-                                                <rect key="frame" x="80" y="-10" width="160" height="568"/>
+                                                <rect key="frame" x="80" y="0.0" width="160" height="484"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <userGuides>
                                                     <userLayoutGuide location="210" affinity="minY"/>
                                                 </userGuides>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="0.0" y="0.0" width="160" height="568"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="160" height="484"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_spinner.png" translatesAutoresizingMaskIntoConstraints="NO" id="y4j-ds-HM7" userLabel="Spinner">
-                                                            <rect key="frame" x="25" y="154" width="110" height="110"/>
+                                                            <rect key="frame" x="25" y="70" width="110" height="110"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         </imageView>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatar-0.png" translatesAutoresizingMaskIntoConstraints="NO" id="Aca-he-7Qi" userLabel="Avatar">
-                                                            <rect key="frame" x="25" y="154" width="110" height="110"/>
+                                                            <rect key="frame" x="25" y="70" width="110" height="110"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <color key="tintColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
                                                             <constraints>
@@ -70,7 +70,7 @@
                                                             </constraints>
                                                         </imageView>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Sa-Vg-EEI" userLabel="Name Backdrop">
-                                                            <rect key="frame" x="16" y="201" width="129" height="16"/>
+                                                            <rect key="frame" x="16" y="117" width="129" height="16"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <subviews>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cLT-s0-4SQ" userLabel="Name Field">
@@ -117,12 +117,12 @@
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>
-                                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="LD1-mt-htC">
-                                            <rect key="frame" x="0.0" y="0.0" width="80" height="548"/>
+                                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPAvatarIndent" id="LD1-mt-htC">
+                                            <rect key="frame" x="0.0" y="0.0" width="80" height="484"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </collectionReusableView>
-                                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="G8v-Sb-ilL">
-                                            <rect key="frame" x="240" y="0.0" width="80" height="548"/>
+                                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPAvatarOutdent" id="G8v-Sb-ilL">
+                                            <rect key="frame" x="240" y="0.0" width="80" height="484"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </collectionReusableView>
                                         <connections>
@@ -131,7 +131,7 @@
                                         </connections>
                                     </collectionView>
                                     <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9u7-pu-Wtv" userLabel="Previous Avatar">
-                                        <rect key="frame" x="0.0" y="171" width="44" height="93"/>
+                                        <rect key="frame" x="0.0" y="107" width="44" height="93"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="44" id="Ay6-Jg-c3T"/>
@@ -146,8 +146,8 @@
                                             <action selector="changeAvatar:" destination="S8q-YF-Kt9" eventType="touchUpInside" id="lNu-mK-3zD"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fUK-gJ-NRE" userLabel="Next Avatar">
-                                        <rect key="frame" x="277" y="191" width="44" height="53"/>
+                                    <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fUK-gJ-NRE" userLabel="Next Avatar">
+                                        <rect key="frame" x="277" y="127" width="44" height="53"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="44" id="oAm-YX-Fx5"/>
@@ -160,23 +160,23 @@
                                             <action selector="changeAvatar:" destination="S8q-YF-Kt9" eventType="touchUpInside" id="kL5-zV-zbb"/>
                                         </connections>
                                     </button>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qp1-nX-o4i" userLabel="Entry" customClass="PearlUIView">
-                                        <rect key="frame" x="20" y="280" width="281" height="63"/>
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qp1-nX-o4i" userLabel="Entry" customClass="PearlUIView">
+                                        <rect key="frame" x="20" y="216" width="281" height="63"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Enter your full name:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="5fe-rt-zFa" userLabel="Entry Label">
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Enter your full name:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="5fe-rt-zFa" userLabel="Entry Label">
                                                 <rect key="frame" x="20" y="0.0" width="241" height="18"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_textfield.png" translatesAutoresizingMaskIntoConstraints="NO" id="UfK-na-vOU" userLabel="Field Background">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" image="ui_textfield.png" translatesAutoresizingMaskIntoConstraints="NO" id="UfK-na-vOU" userLabel="Field Background">
                                                 <rect key="frame" x="0.0" y="26" width="281" height="37"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <rect key="contentStretch" x="0.25" y="0.25" width="0.49999999999999961" height="0.49999999999999961"/>
                                             </imageView>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="z3Z-AB-fG2" userLabel="Entry Field">
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="z3Z-AB-fG2" userLabel="Entry Field">
                                                 <rect key="frame" x="10" y="30" width="261" height="29"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -186,23 +186,23 @@
                                                     <outlet property="delegate" destination="S8q-YF-Kt9" id="5u3-XN-LOe"/>
                                                 </connections>
                                             </textField>
-                                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fdS-zb-K9I" userLabel="Entry Tip">
+                                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fdS-zb-K9I" userLabel="Entry Tip">
                                                 <rect key="frame" x="28" y="-38" width="225" height="82"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <subviews>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" translatesAutoresizingMaskIntoConstraints="NO" id="g2g-5i-er4">
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" image="tip_basic_black.png" translatesAutoresizingMaskIntoConstraints="NO" id="g2g-5i-er4">
                                                         <rect key="frame" x="0.0" y="0.0" width="225" height="82"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <rect key="contentStretch" x="0.15000000000000002" y="0.14999999999999999" width="0.69999999999999973" height="0.44999999999999996"/>
                                                     </imageView>
-                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Looks like a typo!" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="ZI7-qg-7OW">
+                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Looks like a typo!" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="ZI7-qg-7OW">
                                                         <rect key="frame" x="20" y="12" width="185" height="17"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Try again; the password was wrong." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" preferredMaxLayoutWidth="185" translatesAutoresizingMaskIntoConstraints="NO" id="KhE-Yj-Kvm">
+                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Try again; the password was wrong." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" preferredMaxLayoutWidth="185" translatesAutoresizingMaskIntoConstraints="NO" id="KhE-Yj-Kvm">
                                                         <rect key="frame" x="20" y="37" width="185" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
@@ -247,8 +247,8 @@
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="ignoreTouches" value="YES"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XEP-O3-ayG" userLabel="Footer" customClass="PearlUIView">
-                                        <rect key="frame" x="0.0" y="455" width="321" height="113"/>
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XEP-O3-ayG" userLabel="Footer" customClass="PearlUIView">
+                                        <rect key="frame" x="0.0" y="391" width="321" height="113"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vHz-dw-oPb" userLabel="GitTip" customClass="LLGitTip">
@@ -287,7 +287,7 @@
                                                     <constraint firstItem="Z8P-ZK-aS0" firstAttribute="top" secondItem="069-Pu-yXe" secondAttribute="top" id="wre-wd-rRo"/>
                                                 </constraints>
                                             </view>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="Press and hold to delete or reset user." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="N9g-Kk-yjc" userLabel="Hint">
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" misplaced="YES" text="Press and hold to delete or reset user." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="N9g-Kk-yjc" userLabel="Hint">
                                                 <rect key="frame" x="20" y="79" width="281" height="14"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
@@ -375,7 +375,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="1350" y="464"/>
+            <point key="canvasLocation" x="1350" y="496"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="bzn-yi-kMJ">
@@ -409,7 +409,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <containerView clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jDK-5y-QRP" userLabel="Users">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <connections>
                                     <segue destination="S8q-YF-Kt9" kind="embed" identifier="users" id="9AR-TX-BkY"/>
@@ -419,7 +419,7 @@
                         <constraints>
                             <constraint firstItem="lXD-AZ-Umi" firstAttribute="top" secondItem="Lkg-xn-bce" secondAttribute="bottom" id="4xV-YK-k7B"/>
                             <constraint firstItem="Lkg-xn-bce" firstAttribute="top" secondItem="fkJ-D0-yue" secondAttribute="top" id="EIy-Cd-0vW"/>
-                            <constraint firstItem="jDK-5y-QRP" firstAttribute="top" secondItem="fkJ-D0-yue" secondAttribute="top" id="ILt-pX-rHm"/>
+                            <constraint firstItem="jDK-5y-QRP" firstAttribute="top" secondItem="zOG-3W-l4v" secondAttribute="bottom" id="GFh-An-RJs"/>
                             <constraint firstAttribute="trailing" secondItem="jDK-5y-QRP" secondAttribute="trailing" id="L2M-Eb-kwd"/>
                             <constraint firstAttribute="trailing" secondItem="Lkg-xn-bce" secondAttribute="trailing" id="ROW-fK-z92"/>
                             <constraint firstItem="lXD-AZ-Umi" firstAttribute="top" secondItem="jDK-5y-QRP" secondAttribute="bottom" id="TUm-Qo-P4W"/>
@@ -429,7 +429,6 @@
                     </view>
                     <navigationItem key="navigationItem" id="MPa-zX-Kaq"/>
                     <connections>
-                        <outlet property="usersView" destination="jDK-5y-QRP" id="RJ0-04-DDS"/>
                         <segue destination="osn-5H-SWW" kind="custom" identifier="emergency" customClass="MPEmergencySegue" id="gtX-Cx-AA2"/>
                         <segue destination="nkY-z6-8jd" kind="custom" identifier="passwords" customClass="MPPasswordsSegue" id="Ozp-YT-Utx"/>
                     </connections>
