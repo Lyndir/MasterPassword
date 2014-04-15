@@ -372,12 +372,6 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                         // When privateManagedObjectContext is saved, import the changes into mainManagedObjectContext.
                         [mainManagedObjectContext performBlock:^{
                             [mainManagedObjectContext mergeChangesFromContextDidSaveNotification:note];
-
-                            NSError *error = nil;
-                            if (![mainManagedObjectContext obtainPermanentIDsForObjects:
-                                    [mainManagedObjectContext.registeredObjects allObjects]
-                                                                                  error:&error] || error)
-                            err(@"Failed to obtain permanent object IDs for all objects in main context: %@", error);
                         }];
                     }];
 
@@ -423,11 +417,12 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         element.type = type;
         element.lastUsed = [NSDate date];
         element.version = MPAlgorithmDefaultVersion;
-        [context saveToStore];
 
         NSError *error = nil;
         if (element.objectID.isTemporaryID && ![context obtainPermanentIDsForObjects:@[ element ] error:&error])
         err(@"Failed to obtain a permanent object ID after creating new element: %@", error);
+
+        [context saveToStore];
 
         completion( element );
     }];
