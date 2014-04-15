@@ -69,8 +69,8 @@
     [self.contentCollectionView reloadData];
     NSIndexPath *visibleIndexPath = [self contentIndexPathForType:
                 IfElse([[MPiOSAppDelegate get] activeUserForMainThread].defaultType, MPElementTypeGeneratedLong)];
-    [self.contentCollectionView scrollToItemAtIndexPath:visibleIndexPath atScrollPosition:NO
-                                               animated:UICollectionViewScrollPositionCenteredHorizontally];
+    [self.contentCollectionView scrollToItemAtIndexPath:visibleIndexPath
+                                       atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
 }
 
 - (void)reloadWithElement:(MPElementEntity *)mainElement {
@@ -81,8 +81,8 @@
 
     [self.contentCollectionView reloadData];
     NSIndexPath *visibleIndexPath = [self contentIndexPathForType:mainElement.type];
-    [self.contentCollectionView scrollToItemAtIndexPath:visibleIndexPath atScrollPosition:NO
-                                               animated:UICollectionViewScrollPositionCenteredHorizontally];
+    [self.contentCollectionView scrollToItemAtIndexPath:visibleIndexPath
+                                       atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
 }
 
 #pragma mark - UICollectionViewDataSource

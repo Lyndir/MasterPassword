@@ -77,12 +77,12 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 + (BOOL)managedObjectContextPerformBlock:(void (^)(NSManagedObjectContext *context))mocBlock {
 
-    NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
-    if (!mainManagedObjectContext)
+    NSManagedObjectContext *privateManagedObjectContextIfReady = [[self get] privateManagedObjectContextIfReady];
+    if (!privateManagedObjectContextIfReady)
         return NO;
 
     NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    moc.parentContext = mainManagedObjectContext;
+    moc.parentContext = privateManagedObjectContextIfReady;
     [moc performBlock:^{
         mocBlock( moc );
     }];
@@ -92,12 +92,12 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 + (BOOL)managedObjectContextPerformBlockAndWait:(void (^)(NSManagedObjectContext *context))mocBlock {
 
-    NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
-    if (!mainManagedObjectContext)
+    NSManagedObjectContext *privateManagedObjectContextIfReady = [[self get] privateManagedObjectContextIfReady];
+    if (!privateManagedObjectContextIfReady)
         return NO;
 
     NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    moc.parentContext = mainManagedObjectContext;
+    moc.parentContext = privateManagedObjectContextIfReady;
     [moc performBlockAndWait:^{
         mocBlock( moc );
     }];
@@ -366,11 +366,18 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     if (self.saveObserver)
         [[NSNotificationCenter defaultCenter] removeObserver:self.saveObserver];
-    self.saveObserver = [[NSNotificationCenter defaultCenter]
-            addObserverForName:NSManagedObjectContextDidSaveNotification object:privateManagedObjectContext queue:nil usingBlock:
+    self.saveObserver = [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextDidSaveNotification
+                                                                          object:privateManagedObjectContext queue:nil usingBlock:
                     ^(NSNotification *note) {
+                        // When privateManagedObjectContext is saved, import the changes into mainManagedObjectContext.
                         [mainManagedObjectContext performBlock:^{
                             [mainManagedObjectContext mergeChangesFromContextDidSaveNotification:note];
+
+                            NSError *error = nil;
+                            if (![mainManagedObjectContext obtainPermanentIDsForObjects:
+                                    [mainManagedObjectContext.registeredObjects allObjects]
+                                                                                  error:&error] || error)
+                            err(@"Failed to obtain permanent object IDs for all objects in main context: %@", error);
                         }];
                     }];
 
@@ -448,12 +455,12 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         newElement.version = element.version;
         newElement.loginName = element.loginName;
 
-        [context deleteObject:element];
-        [context saveToStore];
-
-        NSError *error;
+        NSError *error = nil;
         if (![context obtainPermanentIDsForObjects:@[ newElement ] error:&error])
         err(@"Failed to obtain a permanent object ID after changing object type: %@", error);
+
+        [context deleteObject:element];
+        [context saveToStore];
 
         [[NSNotificationCenter defaultCenter] postNotificationName:MPElementUpdatedNotification object:element.objectID];
         element = newElement;

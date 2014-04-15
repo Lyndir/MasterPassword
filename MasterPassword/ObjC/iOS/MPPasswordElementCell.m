@@ -48,13 +48,15 @@
 
 - (void)setElement:(MPElementEntity *)element {
 
-    if ([_elementOID isEqual:element.objectID])
+    NSManagedObjectID *newElementOID = element.objectID;
+    NSAssert(!newElementOID.isTemporaryID, @"Element doesn't have a permanent objectID: %@", element);
+    if ([_elementOID isEqual:newElementOID])
         return;
 
-    dbg(@"element: %@ -> %@", _elementOID, element.objectID);
+    dbg(@"element: %@ -> %@", _elementOID, newElementOID);
 
     _transientSite = nil;
-    _elementOID = element.objectID;
+    _elementOID = newElementOID;
 
     [self updateAnimated:YES];
     [self reloadData];

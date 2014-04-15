@@ -20,7 +20,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rWM-08-aab" userLabel="Users Root">
-                                <rect key="frame" x="0.0" y="0.0" width="321" height="504"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="VDd-oM-ZOO" userLabel="Store Activity">
@@ -28,7 +28,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </activityIndicatorView>
                                     <navigationBar contentMode="scaleToFill" misplaced="YES" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="790-G2-I8g">
-                                        <rect key="frame" x="0.0" y="20" width="321" height="44"/>
+                                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <color key="barTintColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
                                         <items>
@@ -36,7 +36,7 @@
                                         </items>
                                     </navigationBar>
                                     <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" misplaced="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="L6J-pd-gcp" userLabel="Avatar Collection">
-                                        <rect key="frame" x="0.0" y="20" width="321" height="484"/>
+                                        <rect key="frame" x="0.0" y="20" width="320" height="484"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="ATB-kM-EGu">
@@ -147,7 +147,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fUK-gJ-NRE" userLabel="Next Avatar">
-                                        <rect key="frame" x="277" y="127" width="44" height="53"/>
+                                        <rect key="frame" x="276" y="127" width="44" height="53"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="44" id="oAm-YX-Fx5"/>
@@ -161,23 +161,23 @@
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qp1-nX-o4i" userLabel="Entry" customClass="PearlUIView">
-                                        <rect key="frame" x="20" y="216" width="281" height="63"/>
+                                        <rect key="frame" x="20" y="216" width="280" height="63"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Enter your full name:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="5fe-rt-zFa" userLabel="Entry Label">
-                                                <rect key="frame" x="20" y="0.0" width="241" height="18"/>
+                                                <rect key="frame" x="20" y="0.0" width="240" height="18"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" image="ui_textfield.png" translatesAutoresizingMaskIntoConstraints="NO" id="UfK-na-vOU" userLabel="Field Background">
-                                                <rect key="frame" x="0.0" y="26" width="281" height="37"/>
+                                                <rect key="frame" x="0.0" y="26" width="280" height="37"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <rect key="contentStretch" x="0.25" y="0.25" width="0.49999999999999961" height="0.49999999999999961"/>
                                             </imageView>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="z3Z-AB-fG2" userLabel="Entry Field">
-                                                <rect key="frame" x="10" y="30" width="261" height="29"/>
+                                                <rect key="frame" x="10" y="30" width="260" height="29"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="28"/>
@@ -187,23 +187,23 @@
                                                 </connections>
                                             </textField>
                                             <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fdS-zb-K9I" userLabel="Entry Tip">
-                                                <rect key="frame" x="28" y="-38" width="225" height="82"/>
+                                                <rect key="frame" x="28" y="-38" width="224" height="82"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" image="tip_basic_black.png" translatesAutoresizingMaskIntoConstraints="NO" id="g2g-5i-er4">
-                                                        <rect key="frame" x="0.0" y="0.0" width="225" height="82"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="224" height="82"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <rect key="contentStretch" x="0.15000000000000002" y="0.14999999999999999" width="0.69999999999999973" height="0.44999999999999996"/>
                                                     </imageView>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Looks like a typo!" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="ZI7-qg-7OW">
-                                                        <rect key="frame" x="20" y="12" width="185" height="17"/>
+                                                        <rect key="frame" x="20" y="12" width="184" height="17"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Try again; the password was wrong." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" preferredMaxLayoutWidth="185" translatesAutoresizingMaskIntoConstraints="NO" id="KhE-Yj-Kvm">
-                                                        <rect key="frame" x="20" y="37" width="185" height="14"/>
+                                                        <rect key="frame" x="19" y="37" width="185" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -248,7 +248,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XEP-O3-ayG" userLabel="Footer" customClass="PearlUIView">
-                                        <rect key="frame" x="0.0" y="391" width="321" height="113"/>
+                                        <rect key="frame" x="0.0" y="403" width="320" height="101"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vHz-dw-oPb" userLabel="GitTip" customClass="LLGitTip">
@@ -288,7 +288,7 @@
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" misplaced="YES" text="Press and hold to delete or reset user." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="N9g-Kk-yjc" userLabel="Hint">
-                                                <rect key="frame" x="20" y="79" width="281" height="14"/>
+                                                <rect key="frame" x="20" y="79" width="280" height="14"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
                                                 <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
@@ -304,7 +304,7 @@
                                             <constraint firstItem="N9g-Kk-yjc" firstAttribute="leading" secondItem="XEP-O3-ayG" secondAttribute="leading" constant="20" symbolic="YES" id="fmq-PK-LJE"/>
                                             <constraint firstAttribute="centerX" secondItem="vHz-dw-oPb" secondAttribute="centerX" id="jxv-pr-0fu"/>
                                             <constraint firstAttribute="trailing" secondItem="N9g-Kk-yjc" secondAttribute="trailing" constant="20" symbolic="YES" id="mi6-gX-BNO"/>
-                                            <constraint firstAttribute="bottom" secondItem="N9g-Kk-yjc" secondAttribute="bottom" constant="20" symbolic="YES" id="ybQ-hS-EaU"/>
+                                            <constraint firstAttribute="bottom" secondItem="N9g-Kk-yjc" secondAttribute="bottom" constant="8" id="ybQ-hS-EaU"/>
                                         </constraints>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="ignoreTouches" value="YES"/>

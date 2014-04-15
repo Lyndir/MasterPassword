@@ -295,8 +295,8 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
     if (collectionView == self.avatarCollectionView) {
-        [self.avatarCollectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
-                                                  animated:YES];
+        [self.avatarCollectionView scrollToItemAtIndexPath:indexPath
+                                          atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
 
         // Deselect all other cells.
         for (NSUInteger otherItem = 0; otherItem < [collectionView numberOfItemsInSection:indexPath.section]; ++otherItem)
