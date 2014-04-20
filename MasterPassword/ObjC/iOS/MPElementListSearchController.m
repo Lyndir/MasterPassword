@@ -105,7 +105,7 @@
 
     UISearchBar *searchBar = self.searchDisplayController.searchBar;
     CGRect searchBarFrame = searchBar.frame;
-    [searchBar.superview enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+    [searchBar.superview enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
 
         if ([subview isKindOfClass:[UIControl class]] &&
             CGPointEqualToPoint(
@@ -118,7 +118,7 @@
 
             *stop = YES;
         }
-    }                              recurse:NO];
+    }                           recurse:NO];
 }
 
 - (BOOL)newSiteSectionNeeded {

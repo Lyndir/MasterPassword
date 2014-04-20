@@ -28,18 +28,20 @@
 
     [super viewDidLoad];
 
+    self.view.backgroundColor = [UIColor clearColor];
+
     [[NSNotificationCenter defaultCenter] addObserverForName:NSUserDefaultsDidChangeNotification object:nil
-                                                       queue:nil usingBlock:
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
-                dispatch_async( dispatch_get_main_queue(), ^{
-                    self.levelControl.selectedSegmentIndex = [[MPiOSConfig get].traceMode boolValue]? 1: 0;
-                } );
+                self.levelControl.selectedSegmentIndex = [[MPiOSConfig get].traceMode boolValue]? 1: 0;
             }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 
     [super viewWillAppear:animated];
+
+    self.logView.contentInset = UIEdgeInsetsMake( 64, 0, 93, 0 );
 
     [self refresh:nil];
 

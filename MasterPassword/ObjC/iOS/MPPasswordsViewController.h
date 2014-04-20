@@ -23,16 +23,21 @@
 
 @property(strong, nonatomic) IBOutlet UIView *passwordSelectionContainer;
 @property(strong, nonatomic) IBOutlet UICollectionView *passwordCollectionView;
-@property (strong, nonatomic) IBOutlet UISearchBar *passwordsSearchBar;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *passwordsToBottomConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *navigationBarToTopConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *navigationBarToPasswordsConstraint;
+@property(strong, nonatomic) IBOutlet UISearchBar *passwordsSearchBar;
+@property(strong, nonatomic) IBOutlet NSLayoutConstraint *passwordsToBottomConstraint;
+@property(strong, nonatomic) IBOutlet NSLayoutConstraint *navigationBarToTopConstraint;
+@property(strong, nonatomic) IBOutlet NSLayoutConstraint *navigationBarToPasswordsConstraint;
+@property(strong, nonatomic) IBOutlet NSLayoutConstraint *popdownToTopConstraint;
+@property(strong, nonatomic) IBOutlet NSLayoutConstraint *popdownToNavigationBarConstraint;
+@property(strong, nonatomic) IBOutlet UIView *popdownView;
+@property(strong, nonatomic) IBOutlet UIView *popdownContainer;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *actionBarButton;
 
 @property(assign, nonatomic) BOOL active;
 
 @property(nonatomic, copy) NSString *originalQuery;
 - (void)setActive:(BOOL)active animated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
 
-- (IBAction)action:(id)sender;
+- (IBAction)dismissPopdown:(id)sender;
 
 @end

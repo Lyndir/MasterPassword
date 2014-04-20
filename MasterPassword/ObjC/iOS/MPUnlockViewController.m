@@ -162,11 +162,11 @@
     self.wordList = wordListLines;
 
     self.wordWall.alpha = 0;
-    [self.wordWall enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+    [self.wordWall enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
         UILabel *wordLabel = (UILabel *)subview;
 
         [self initializeWordLabel:wordLabel];
-    }                        recurse:NO];
+    }                     recurse:NO];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
@@ -585,7 +585,7 @@
         targetedUser = [self userForAvatar:targetedAvatar inContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
     }
 
-    [self.avatarsView enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+    [self.avatarsView enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
         if (![[self.avatarToUserOID allKeys] containsObject:[NSValue valueWithNonretainedObject:subview]])
                 // This subview is not one of the user avatars.
             return;
@@ -597,7 +597,7 @@
         avatar.alpha = isTargeted? 1: [self selectedUserForThread]? 0.1F: 0.4F;
 
         [self updateAvatarShadowColor:avatar isTargeted:isTargeted];
-    }                           recurse:NO];
+    }                        recurse:NO];
 
     if (allowScroll) {
         CGPoint targetContentOffset = CGPointMake(
@@ -617,22 +617,22 @@
 
 - (void)beginWordWallAnimation {
 
-    [self.wordWall enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+    [self.wordWall enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
         UILabel *wordLabel = (UILabel *)subview;
 
         if (wordLabel.frame.origin.x < -self.wordWall.frame.size.width / 3) {
             wordLabel.frame = CGRectSetX( wordLabel.frame, wordLabel.frame.origin.x + self.wordWall.frame.size.width );
             [self initializeWordLabel:wordLabel];
         }
-    }                        recurse:NO];
+    }                     recurse:NO];
 
     if (self.wordWallAnimating)
         [UIView animateWithDuration:15 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
-            [self.wordWall enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+            [self.wordWall enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
                 UILabel *wordLabel = (UILabel *)subview;
 
                 wordLabel.frame = CGRectSetX( wordLabel.frame, wordLabel.frame.origin.x - self.wordWall.frame.size.width / 3 );
-            }                        recurse:NO];
+            }                     recurse:NO];
         }                completion:^(BOOL finished) {
             if (finished)
                 [self beginWordWallAnimation];

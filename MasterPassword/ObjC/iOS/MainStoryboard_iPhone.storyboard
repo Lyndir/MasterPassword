@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="KZF-fe-y9n">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -2266,7 +2266,7 @@ Only site names and custom passwords are sent to iCloud.  Passwords are encrypte
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                     <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
-                                                        <action selector="didToggleSwitch:" destination="oLN-6u-GLb" eventType="valueChanged" id="e5q-mf-XK7"/>
+                                                        <action selector="valueChanged:" destination="oLN-6u-GLb" eventType="valueChanged" id="e5q-mf-XK7"/>
                                                     </connections>
                                                 </switch>
                                             </subviews>
@@ -2323,7 +2323,7 @@ Only site names and custom passwords are sent to iCloud.  Passwords are encrypte
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" id="qoQ-x9-XHs">
-                                                    <rect key="frame" x="20" y="0.0" width="280" height="155"/>
+                                                    <rect key="frame" x="19" y="0.0" width="280" height="155"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <string key="text">"Save Password" will store your master password in the keychain.  This means you won't need the master password anymore to log in (unless your device gets restored or you start using a new device). This is somewhat less secure in the event of theft.  You can compensate for the reduced security by going into Settings and navigating: General-&gt;Passcode Lock, disabling "Simple Passcode", and setting a more secure passcode for your device.</string>
                                                     <fontDescription key="fontDescription" name="GillSans-LightItalic" family="Gill Sans" pointSize="14"/>
@@ -2467,7 +2467,7 @@ Only site names and custom passwords are sent to iCloud.  Passwords are encrypte
             <objects>
                 <tableViewController id="Vrp-Gl-7qn" customClass="IASKAppSettingsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="NCp-ii-ux0">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
@@ -3170,9 +3170,9 @@ However, it means that anyone who finds your device unlocked can do the same.</s
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="X2A-e4-krq"/>
+        <segue reference="KIl-ZW-M7G"/>
+        <segue reference="5Im-dm-qfS"/>
         <segue reference="jgo-j3-gbW"/>
-        <segue reference="9Bs-cD-ddF"/>
-        <segue reference="rWT-Kr-cAs"/>
-        <segue reference="hxY-aA-ngI"/>
     </inferredMetricsTieBreakers>
 </document>

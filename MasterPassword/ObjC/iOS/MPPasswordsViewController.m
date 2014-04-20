@@ -23,6 +23,7 @@
 #import "MPPasswordTypesCell.h"
 #import "MPPasswordSmallCell.h"
 #import "UIColor+Expanded.h"
+#import "MPPopdownSegue.h"
 
 @interface MPPasswordsViewController()<NSFetchedResultsControllerDelegate>
 
@@ -41,7 +42,10 @@
     NSMutableDictionary *_fetchedUpdates;
     UIColor *_backgroundColor;
     UIColor *_darkenedBackgroundColor;
+    __weak UIViewController *_popdownVC;
 }
+
+#pragma mark - Life
 
 - (void)viewDidLoad {
 
@@ -52,6 +56,8 @@
 
     self.view.backgroundColor = [UIColor clearColor];
     [self.passwordCollectionView automaticallyAdjustInsetsForKeyboard];
+
+    [self.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -69,6 +75,12 @@
 
     [self removeObservers];
     [self stopObservingStore];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+
+    if ([segue.identifier isEqualToString:@"popdown"])
+        _popdownVC = segue.destinationViewController;
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -182,12 +194,12 @@
 
     [element resolveContentUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
         if (![result length]) {
-            PearlMainQueue(^{
+            PearlMainQueue( ^{
                 NSIndexPath *indexPath_ = [collectionView indexPathForCell:cell];
                 [collectionView selectItemAtIndexPath:indexPath_ animated:NO
                                        scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
                 [collectionView deselectItemAtIndexPath:indexPath_ animated:YES];
-            });
+            } );
             return;
         }
 
@@ -575,46 +587,12 @@
 
 #pragma mark - Actions
 
-- (IBAction)action:(id)sender {
+- (IBAction)dismissPopdown:(id)sender {
 
-    [PearlSheet showSheetWithTitle:nil viewStyle:UIActionSheetStyleAutomatic
-                         initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
-        if (buttonIndex == [sheet cancelButtonIndex])
-            return;
-
-        switch (buttonIndex - [sheet firstOtherButtonIndex]) {
-            case 0: {
-                inf(@"Action: Guide");
-                [[MPiOSAppDelegate get] showGuide];
-                break;
-            }
-            case 1: {
-                inf(@"Action: Preferences");
-                [self performSegueWithIdentifier:@"MP_UserProfile" sender:self];
-                break;
-            }
-            case 2: {
-                inf(@"Action: Other Apps");
-                [self performSegueWithIdentifier:@"MP_OtherApps" sender:self];
-                break;
-            }
-            case 3: {
-                inf(@"Action: Feedback via Mail");
-                [[MPiOSAppDelegate get] showFeedbackWithLogs:YES forVC:self];
-                break;
-            }
-            default: {
-                wrn(@"Unsupported action: %ld", (long)(buttonIndex - [sheet firstOtherButtonIndex]));
-                break;
-            }
-        }
-    }
-                       cancelTitle:[PearlStrings get].commonButtonCancel destructiveTitle:nil otherTitles:
-            @"Overview",
-            @"User Profile",
-            @"Other Apps",
-            @"Feedback",
-            nil];
+    if (_popdownVC)
+        [[[MPPopdownSegue alloc] initWithIdentifier:@"unwind-popdown" source:_popdownVC destination:self] perform];
+    else
+        self.popdownToTopConstraint.priority = UILayoutPriorityDefaultHigh;
 }
 
 @end

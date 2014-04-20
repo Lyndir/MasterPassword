@@ -6,12 +6,11 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import <QuartzCore/QuartzCore.h>
-
 #import "MPPreferencesViewController.h"
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
+#import "UIColor+Expanded.h"
 
 @interface MPPreferencesViewController()
 
@@ -21,110 +20,36 @@
 
 - (void)viewDidLoad {
 
-    self.avatarTemplate.hidden = YES;
-
-    for (NSUInteger a = 0; a < MPAvatarCount; ++a) {
-        UIButton *avatar = [self.avatarTemplate clone];
-        avatar.tag = a;
-        avatar.hidden = NO;
-        avatar.center = CGPointMake(
-                self.avatarTemplate.center.x * (a + 1) + self.avatarTemplate.bounds.size.width / 2 * a,
-                self.avatarTemplate.center.y );
-        [avatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%ld", (long)a )]
-                          forState:UIControlStateNormal];
-        [avatar setSelectionInSuperviewCandidate:YES isClearable:NO];
-
-        avatar.layer.cornerRadius = avatar.bounds.size.height / 2;
-        avatar.layer.shadowColor = [UIColor blackColor].CGColor;
-        avatar.layer.shadowOpacity = 1;
-        avatar.layer.shadowRadius = 5;
-        avatar.backgroundColor = [UIColor clearColor];
-
-        [avatar onHighlightOrSelect:^(BOOL highlighted, BOOL selected) {
-            if (highlighted || selected)
-                avatar.backgroundColor = self.avatarTemplate.backgroundColor;
-            else
-                avatar.backgroundColor = [UIColor clearColor];
-        }                   options:0];
-        [avatar onSelect:^(BOOL selected) {
-            if (selected) {
-                [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-                    [[MPiOSAppDelegate get] activeUserInContext:moc].avatar = (unsigned)avatar.tag;
-                    [moc saveToStore];
-                }];
-            }
-        }        options:0];
-        avatar.selected = (a == [[MPiOSAppDelegate get] activeUserForMainThread].avatar);
-    }
-
     [super viewDidLoad];
+
+    self.view.backgroundColor = [UIColor clearColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 
     inf(@"Preferences will appear");
-    [self.avatarsView autoSizeContent];
-    [self.avatarsView enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
-        if (subview.tag && ((UIControl *)subview).selected) {
-            [self.avatarsView setContentOffset:CGPointMake( subview.center.x - self.avatarsView.bounds.size.width / 2, 0 )
-                                      animated:animated];
-        }
-    }                           recurse:NO];
+    [super viewWillAppear:animated];
 
     MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForMainThread];
+    self.typeControl.selectedSegmentIndex = [self segmentIndexForType:activeUser.defaultType];
+    self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%ld", (long)activeUser.avatar )];
     self.savePasswordSwitch.on = activeUser.saveKey;
-    self.defaultTypeLabel.text = [[MPiOSAppDelegate get].key.algorithm shortNameOfType:activeUser.defaultType];
 
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Preferences"];
-#endif
-
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-
-    inf(@"Preferences will disappear");
-    [super viewWillDisappear:animated];
-}
-
-- (BOOL)canBecomeFirstResponder {
-
-    return YES;
-}
-
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
-
-    if (motion == UIEventSubtypeMotionShake) {
-        MPCheckpoint( MPCheckpointLogs, @{
-                @"trace" : [MPiOSConfig get].traceMode
-        } );
-        [self performSegueWithIdentifier:@"MP_Logs" sender:self];
-    }
-}
-
-- (BOOL)shouldAutorotate {
-
-    return NO;
-}
-
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
-
-    return UIInterfaceOrientationPortrait;
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-
-    if ([[segue identifier] isEqualToString:@"MP_ChooseType"])
-        ((MPTypeViewController *)[segue destinationViewController]).delegate = self;
+    self.tableView.contentInset = UIEdgeInsetsMake( 64, 0, 49, 0 );
 }
 
 #pragma mark - UITableViewDelegate
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    if (cell.selectionStyle != UITableViewCellSelectionStyleNone) {
+        cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.bounds];
+        cell.selectedBackgroundView.backgroundColor = [UIColor colorWithRGBAHex:0x78DDFB33];
+    }
+
+    return cell;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
@@ -132,47 +57,98 @@
     if (cell == self.exportCell)
         [[MPiOSAppDelegate get] export];
 
-    else if (cell == self.changeMPCell) {
-        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-            MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:moc];
-            [[MPiOSAppDelegate get] changeMasterPasswordFor:activeUser saveInContext:moc didResetBlock:nil];
-        }];
-    }
-
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-#pragma mark - MPTypeDelegate
-
-- (void)didSelectType:(MPElementType)type {
-
-    self.defaultTypeLabel.text = [[MPiOSAppDelegate get].key.algorithm shortNameOfType:type];
-
-    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:context];
-        activeUser.defaultType = type;
-        [context saveToStore];
-    }];
-}
-
-- (MPElementType)selectedType {
-
-    return [[MPiOSAppDelegate get] activeUserForMainThread].defaultType;
 }
 
 #pragma mark - IBActions
 
-- (IBAction)didToggleSwitch:(UISwitch *)sender {
+- (IBAction)valueChanged:(id)sender {
 
     if (sender == self.savePasswordSwitch)
-        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-            MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:moc];
-            if ((activeUser.saveKey = sender.on))
+        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+            MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:context];
+            if ((activeUser.saveKey = self.savePasswordSwitch.on))
                 [[MPiOSAppDelegate get] storeSavedKeyFor:activeUser];
             else
                 [[MPiOSAppDelegate get] forgetSavedKeyFor:activeUser];
-            [moc saveToStore];
+            [context saveToStore];
         }];
+
+    if (sender == self.typeControl)
+        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+            [[MPiOSAppDelegate get] activeUserInContext:context].defaultType = [self typeForSelectedSegment];
+            [context saveToStore];
+        }];
+}
+
+- (IBAction)previousAvatar:(id)sender {
+
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:context];
+        activeUser.avatar = (activeUser.avatar - 1 + MPAvatarCount) % MPAvatarCount;
+        [context saveToStore];
+
+        long avatar = activeUser.avatar;
+        PearlMainQueue( ^{
+            self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%ld", avatar )];
+        } );
+    }];
+}
+
+- (IBAction)nextAvatar:(id)sender {
+
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:context];
+        activeUser.avatar = (activeUser.avatar + 1 + MPAvatarCount) % MPAvatarCount;
+        [context saveToStore];
+
+        long avatar = activeUser.avatar;
+        PearlMainQueue( ^{
+            self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%ld", avatar )];
+        } );
+    }];
+}
+
+#pragma mark - Private
+
+- (enum MPElementType)typeForSelectedSegment {
+
+    switch (self.typeControl.selectedSegmentIndex) {
+        case 0:
+            return MPElementTypeGeneratedMaximum;
+        case 1:
+            return MPElementTypeGeneratedLong;
+        case 2:
+            return MPElementTypeGeneratedMedium;
+        case 3:
+            return MPElementTypeGeneratedBasic;
+        case 4:
+            return MPElementTypeGeneratedShort;
+        case 5:
+            return MPElementTypeGeneratedPIN;
+        default:
+            Throw(@"Unsupported type index: %ld", (long)self.typeControl.selectedSegmentIndex);
+    }
+}
+
+- (NSInteger)segmentIndexForType:(MPElementType)type {
+
+    switch (type) {
+        case MPElementTypeGeneratedMaximum:
+            return 0;
+        case MPElementTypeGeneratedLong:
+            return 1;
+        case MPElementTypeGeneratedMedium:
+            return 2;
+        case MPElementTypeGeneratedBasic:
+            return 3;
+        case MPElementTypeGeneratedShort:
+            return 4;
+        case MPElementTypeGeneratedPIN:
+            return 5;
+        default:
+            Throw(@"Unsupported type index: %ld", (long)self.typeControl.selectedSegmentIndex);
+    }
 }
 
 @end
