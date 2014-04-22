@@ -474,6 +474,8 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
 - (void)updateAvatars {
 
+    self.previousAvatarButton.alpha = 0;
+    self.nextAvatarButton.alpha = 0;
     for (NSIndexPath *indexPath in self.avatarCollectionView.indexPathsForVisibleItems)
         [self updateAvatarAtIndexPath:indexPath];
 }

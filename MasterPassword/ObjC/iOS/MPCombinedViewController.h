@@ -24,5 +24,6 @@ typedef NS_ENUM(NSUInteger, MPCombinedMode) {
 @interface MPCombinedViewController : UIViewController
 
 @property(assign, nonatomic) MPCombinedMode mode;
+@property(strong, nonatomic) IBOutlet UIView *usersView;
 
 @end

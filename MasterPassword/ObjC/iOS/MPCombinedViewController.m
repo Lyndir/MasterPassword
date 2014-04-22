@@ -130,10 +130,10 @@
     [self.usersVC setNeedsStatusBarAppearanceUpdate];
     [self.usersVC.view setNeedsUpdateConstraints];
     [self.usersVC.view setNeedsLayout];
-    dbg(@"top layout length: %f", self.usersVC.topLayoutGuide.length);
 
     switch (self.mode) {
         case MPCombinedModeUserSelection: {
+            self.usersView.userInteractionEnabled = YES;
             [self.usersVC setActive:YES animated:animated];
             if (_passwordsVC) {
                 MPPasswordsSegue *segue = [[MPPasswordsSegue alloc] initWithIdentifier:@"passwords" source:_passwordsVC destination:self];
@@ -143,6 +143,7 @@
             break;
         }
         case MPCombinedModePasswordSelection: {
+            self.usersView.userInteractionEnabled = NO;
             [self.usersVC setActive:NO animated:animated];
             [self performSegueWithIdentifier:@"passwords" sender:@{ @"animated" : @(animated) }];
             break;

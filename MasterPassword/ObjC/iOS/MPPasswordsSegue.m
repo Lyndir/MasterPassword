@@ -18,6 +18,7 @@
 
 #import "MPPasswordsSegue.h"
 #import "MPPasswordsViewController.h"
+#import "MPCombinedViewController.h"
 
 @implementation MPPasswordsSegue {
 }
@@ -36,15 +37,16 @@
 
     if ([self.destinationViewController isKindOfClass:[MPPasswordsViewController class]]) {
         __weak MPPasswordsViewController *passwordsVC = self.destinationViewController;
+        __weak MPCombinedViewController *combinedVC = self.sourceViewController;
 
-        [self.sourceViewController addChildViewController:passwordsVC];
-        [[passwordsVC.parentViewController view] addSubview:passwordsVC.view];
+        [combinedVC addChildViewController:passwordsVC];
+        [combinedVC.view insertSubview:passwordsVC.view belowSubview:combinedVC.usersView];
         passwordsVC.active = NO;
         [passwordsVC setActive:YES animated:self.animated completion:^(BOOL finished) {
             if (!finished)
                 return;
 
-            [passwordsVC didMoveToParentViewController:passwordsVC.parentViewController];
+            [passwordsVC didMoveToParentViewController:combinedVC];
         }];
     } else if ([self.sourceViewController isKindOfClass:[MPPasswordsViewController class]]) {
         __weak MPPasswordsViewController *passwordsVC = self.sourceViewController;

@@ -39,9 +39,6 @@
 
         [UIView animateWithDuration:0.3f animations:^{
             passwordsVC.popdownToTopConstraint.priority = 1;
-            passwordsVC.popdownToNavigationBarConstraint.priority = UILayoutPriorityDefaultHigh;
-
-            [passwordsVC.popdownToNavigationBarConstraint apply];
             [passwordsVC.popdownToTopConstraint apply];
         }                completion:^(BOOL finished) {
             if (finished)
@@ -55,9 +52,6 @@
         [popdownVC willMoveToParentViewController:nil];
         [UIView animateWithDuration:0.3f delay:0 options:UIViewAnimationOptionOverrideInheritedDuration animations:^{
             passwordsVC.popdownToTopConstraint.priority = UILayoutPriorityDefaultHigh;
-            passwordsVC.popdownToNavigationBarConstraint.priority = 1;
-
-            [passwordsVC.popdownToNavigationBarConstraint apply];
             [passwordsVC.popdownToTopConstraint apply];
         }                completion:^(BOOL finished) {
             if (finished) {

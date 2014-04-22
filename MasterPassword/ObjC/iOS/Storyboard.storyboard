@@ -27,19 +27,6 @@
                                         <rect key="frame" x="142" y="234" width="37" height="37"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </activityIndicatorView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PRM-X2-n94">
-                                        <rect key="frame" x="0.0" y="-483" width="321" height="503"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
-                                    </view>
-                                    <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="790-G2-I8g">
-                                        <rect key="frame" x="0.0" y="20" width="321" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <color key="barTintColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="calibratedRGB"/>
-                                        <items>
-                                            <navigationItem id="WjE-Yw-JEC"/>
-                                        </items>
-                                    </navigationBar>
                                     <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="L6J-pd-gcp" userLabel="Avatar Collection">
                                         <rect key="frame" x="0.0" y="20" width="321" height="484"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -316,27 +303,20 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="centerX" secondItem="VDd-oM-ZOO" secondAttribute="centerX" id="0j9-vM-WFA"/>
-                                    <constraint firstAttribute="trailing" secondItem="790-G2-I8g" secondAttribute="trailing" id="2Wb-fS-TFg"/>
                                     <constraint firstAttribute="bottom" secondItem="qp1-nX-o4i" secondAttribute="bottom" constant="225" id="4aN-54-XmH"/>
                                     <constraint firstAttribute="trailing" secondItem="L6J-pd-gcp" secondAttribute="trailing" id="9fV-8e-y3E"/>
                                     <constraint firstItem="L6J-pd-gcp" firstAttribute="leading" secondItem="rWM-08-aab" secondAttribute="leading" id="BcO-0y-Nih"/>
                                     <constraint firstItem="qp1-nX-o4i" firstAttribute="leading" secondItem="rWM-08-aab" secondAttribute="leading" constant="20" symbolic="YES" id="DY1-Ad-Mbi"/>
                                     <constraint firstItem="qp1-nX-o4i" firstAttribute="top" secondItem="fUK-gJ-NRE" secondAttribute="centerY" constant="62" id="KaV-34-aBy"/>
                                     <constraint firstAttribute="bottom" secondItem="XEP-O3-ayG" secondAttribute="bottom" id="PpW-Of-YOc"/>
-                                    <constraint firstAttribute="trailing" secondItem="PRM-X2-n94" secondAttribute="trailing" id="RIe-EH-8BQ"/>
                                     <constraint firstAttribute="trailing" secondItem="fUK-gJ-NRE" secondAttribute="trailing" id="TBr-pS-kEK"/>
-                                    <constraint firstItem="790-G2-I8g" firstAttribute="leading" secondItem="rWM-08-aab" secondAttribute="leading" id="YWp-yC-ar7"/>
-                                    <constraint firstItem="PRM-X2-n94" firstAttribute="leading" secondItem="rWM-08-aab" secondAttribute="leading" id="Znv-SN-wGy"/>
                                     <constraint firstAttribute="trailing" secondItem="qp1-nX-o4i" secondAttribute="trailing" constant="20" symbolic="YES" id="cOq-BS-Xmo"/>
-                                    <constraint firstItem="790-G2-I8g" firstAttribute="top" secondItem="PRM-X2-n94" secondAttribute="bottom" id="cgy-Hq-GuL"/>
-                                    <constraint firstAttribute="top" secondItem="790-G2-I8g" secondAttribute="bottom" priority="1" id="dTp-TY-5bb"/>
                                     <constraint firstAttribute="centerY" secondItem="VDd-oM-ZOO" secondAttribute="centerY" id="dxP-im-1dM"/>
                                     <constraint firstItem="qp1-nX-o4i" firstAttribute="top" secondItem="9u7-pu-Wtv" secondAttribute="centerY" constant="62" id="go1-rO-rVJ"/>
                                     <constraint firstAttribute="bottom" secondItem="L6J-pd-gcp" secondAttribute="bottom" id="jNR-Gp-sIv"/>
                                     <constraint firstItem="XEP-O3-ayG" firstAttribute="leading" secondItem="rWM-08-aab" secondAttribute="leading" id="pAt-0Y-LYv"/>
                                     <constraint firstAttribute="trailing" secondItem="XEP-O3-ayG" secondAttribute="trailing" id="raD-hD-OYt"/>
                                     <constraint firstItem="9u7-pu-Wtv" firstAttribute="leading" secondItem="rWM-08-aab" secondAttribute="leading" id="sez-BC-G3I"/>
-                                    <constraint firstItem="PRM-X2-n94" firstAttribute="height" secondItem="rWM-08-aab" secondAttribute="height" id="wBZ-wR-Qlj"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -347,7 +327,6 @@
                             <constraint firstItem="VGz-R0-vMD" firstAttribute="top" secondItem="rWM-08-aab" secondAttribute="bottom" id="fcH-lm-76a"/>
                             <constraint firstItem="L6J-pd-gcp" firstAttribute="top" secondItem="zp4-4O-wZI" secondAttribute="bottom" id="kNw-eU-W01"/>
                             <constraint firstAttribute="top" secondItem="rWM-08-aab" secondAttribute="top" id="xBe-1Q-mz2"/>
-                            <constraint firstItem="zp4-4O-wZI" firstAttribute="bottom" secondItem="790-G2-I8g" secondAttribute="top" priority="500" id="y7N-re-Hvm"/>
                         </constraints>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
@@ -363,8 +342,6 @@
                         <outlet property="gitTipButton" destination="vHz-dw-oPb" id="3tG-8S-u13"/>
                         <outlet property="gitTipTip" destination="069-Pu-yXe" id="wWf-2X-Ryw"/>
                         <outlet property="hintLabel" destination="N9g-Kk-yjc" id="Tve-2r-t0Q"/>
-                        <outlet property="navigationBar" destination="790-G2-I8g" id="XTa-zJ-6Kv"/>
-                        <outlet property="navigationBarToTopConstraint" destination="dTp-TY-5bb" id="Ulm-4Q-eW9"/>
                         <outlet property="nextAvatarButton" destination="fUK-gJ-NRE" id="5qo-lK-rSa"/>
                         <outlet property="previousAvatarButton" destination="9u7-pu-Wtv" id="Hgv-lN-S1n"/>
                         <outlet property="searchDisplayController" destination="h98-GT-FoS" id="VvS-JO-rqq"/>
@@ -437,6 +414,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="MPa-zX-Kaq"/>
                     <connections>
+                        <outlet property="usersView" destination="jDK-5y-QRP" id="cuP-gN-eBE"/>
                         <segue destination="osn-5H-SWW" kind="custom" identifier="emergency" customClass="MPEmergencySegue" id="gtX-Cx-AA2"/>
                         <segue destination="nkY-z6-8jd" kind="custom" identifier="passwords" customClass="MPPasswordsSegue" id="Ozp-YT-Utx"/>
                     </connections>
@@ -749,7 +727,7 @@
         <!--Passwords View Controller-->
         <scene sceneID="I40-Es-1gK">
             <objects>
-                <viewController storyboardIdentifier="MPPasswordsViewController" id="nkY-z6-8jd" customClass="MPPasswordsViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MPPasswordsViewController" automaticallyAdjustsScrollViewInsets="NO" id="nkY-z6-8jd" customClass="MPPasswordsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="S9X-2T-e1e"/>
                         <viewControllerLayoutGuide type="bottom" id="c12-XI-Rv9"/>
@@ -762,47 +740,29 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <navigationBar opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" barStyle="black" backIndicatorImage="empty.png" translatesAutoresizingMaskIntoConstraints="NO" id="uuT-jm-2La" userLabel="Navigation" customClass="PearlUINavigationBar">
-                                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <items>
-                                            <navigationItem id="JCx-F3-LfN">
-                                                <barButtonItem key="rightBarButtonItem" systemItem="action" id="NHA-Vf-agZ">
-                                                    <connections>
-                                                        <segue destination="0Pk-uR-lak" kind="custom" identifier="popdown" customClass="MPPopdownSegue" id="2Uk-iv-ErE"/>
-                                                    </connections>
-                                                </barButtonItem>
-                                            </navigationItem>
-                                        </items>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="ignoreTouches" value="YES"/>
-                                        </userDefinedRuntimeAttributes>
-                                    </navigationBar>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K2e-Gh-7hH" userLabel="Passwords Container">
-                                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="eg. apple.com" translatesAutoresizingMaskIntoConstraints="NO" id="oAG-Ea-TOI">
-                                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
-                                                <connections>
-                                                    <outlet property="delegate" destination="nkY-z6-8jd" id="Mfn-aT-vK7"/>
-                                                </connections>
-                                            </searchBar>
+                                            <toolbar hidden="YES" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" verticalHuggingPriority="249" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="dcG-Jj-CQY" userLabel="Passwords Blur">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                <items/>
+                                            </toolbar>
                                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" keyboardDismissMode="onDrag" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="aXw-tn-8Sj" userLabel="Password Collection">
-                                                <rect key="frame" x="0.0" y="44" width="320" height="460"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <inset key="scrollIndicatorInsets" minX="0.0" minY="108" maxX="0.0" maxY="0.0"/>
                                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Mv1-29-TWx">
                                                     <size key="itemSize" width="300" height="100"/>
                                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                                    <inset key="sectionInset" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                                                    <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
                                                 </collectionViewFlowLayout>
                                                 <cells>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPPasswordTypesCell" id="vMF-fk-FYX" userLabel="Large" customClass="MPPasswordTypesCell">
-                                                        <rect key="frame" x="10" y="0.0" width="300" height="100"/>
+                                                        <rect key="frame" x="10" y="10" width="300" height="100"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                             <rect key="frame" x="0.0" y="0.0" width="300" height="100"/>
@@ -1104,7 +1064,7 @@
                                                         </connections>
                                                     </collectionViewCell>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPPasswordSmallGeneratedCell" id="yRD-Rk-pNt" userLabel="Small Generated" customClass="MPPasswordSmallGeneratedCell">
-                                                        <rect key="frame" x="10" y="110" width="145" height="44"/>
+                                                        <rect key="frame" x="10" y="120" width="145" height="44"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                             <rect key="frame" x="0.0" y="0.0" width="145" height="44"/>
@@ -1137,7 +1097,7 @@
                                                         </connections>
                                                     </collectionViewCell>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPPasswordSmallStoredCell" id="sBj-8o-NKh" userLabel="Small Stored" customClass="MPPasswordSmallStoredCell">
-                                                        <rect key="frame" x="165" y="110" width="145" height="44"/>
+                                                        <rect key="frame" x="165" y="120" width="145" height="44"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                             <rect key="frame" x="0.0" y="0.0" width="145" height="44"/>
@@ -1175,23 +1135,62 @@
                                                     <outlet property="delegate" destination="nkY-z6-8jd" id="xhr-Qn-SBe"/>
                                                 </connections>
                                             </collectionView>
+                                            <searchBar contentMode="redraw" barStyle="black" placeholder="eg. apple.com" translatesAutoresizingMaskIntoConstraints="NO" id="oAG-Ea-TOI">
+                                                <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="nkY-z6-8jd" id="Mfn-aT-vK7"/>
+                                                </connections>
+                                            </searchBar>
                                         </subviews>
-                                        <color key="backgroundColor" red="0.12156862745098039" green="0.12941176470588237" blue="0.14117647058823529" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
+                                            <constraint firstItem="aXw-tn-8Sj" firstAttribute="top" secondItem="K2e-Gh-7hH" secondAttribute="top" id="0SC-ZK-6ib"/>
                                             <constraint firstAttribute="bottom" secondItem="aXw-tn-8Sj" secondAttribute="bottom" id="4bI-12-Qmv"/>
-                                            <constraint firstItem="aXw-tn-8Sj" firstAttribute="top" secondItem="oAG-Ea-TOI" secondAttribute="bottom" id="Lm8-gO-ew5"/>
+                                            <constraint firstItem="dcG-Jj-CQY" firstAttribute="leading" secondItem="K2e-Gh-7hH" secondAttribute="leading" id="7wm-0b-dS5"/>
+                                            <constraint firstAttribute="trailing" secondItem="dcG-Jj-CQY" secondAttribute="trailing" id="AV5-HZ-fWr"/>
                                             <constraint firstItem="oAG-Ea-TOI" firstAttribute="leading" secondItem="K2e-Gh-7hH" secondAttribute="leading" id="MPa-Wg-e50"/>
                                             <constraint firstItem="aXw-tn-8Sj" firstAttribute="leading" secondItem="K2e-Gh-7hH" secondAttribute="leading" id="Tjh-fE-esc"/>
                                             <constraint firstAttribute="trailing" secondItem="aXw-tn-8Sj" secondAttribute="trailing" id="Z9z-S5-CEh"/>
-                                            <constraint firstItem="oAG-Ea-TOI" firstAttribute="top" secondItem="K2e-Gh-7hH" secondAttribute="top" id="e6Z-kt-oVf"/>
+                                            <constraint firstItem="dcG-Jj-CQY" firstAttribute="top" secondItem="K2e-Gh-7hH" secondAttribute="top" id="h79-2w-VcB"/>
+                                            <constraint firstAttribute="bottom" secondItem="dcG-Jj-CQY" secondAttribute="bottom" id="jMA-Rp-2CT"/>
                                             <constraint firstAttribute="trailing" secondItem="oAG-Ea-TOI" secondAttribute="trailing" id="wDZ-R2-3ul"/>
                                         </constraints>
                                     </view>
+                                    <navigationBar opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="uuT-jm-2La" userLabel="Navigation" customClass="PearlUINavigationBar">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <items>
+                                            <navigationItem id="JCx-F3-LfN">
+                                                <nil key="title"/>
+                                                <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="UWl-Y4-LsH" userLabel="Sign Out">
+                                                    <rect key="frame" x="96" y="26" width="128" height="33"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="signOut:" destination="nkY-z6-8jd" eventType="touchUpInside" id="hvT-Lz-mS2"/>
+                                                    </connections>
+                                                </button>
+                                                <barButtonItem key="rightBarButtonItem" systemItem="action" id="NHA-Vf-agZ">
+                                                    <connections>
+                                                        <segue destination="0Pk-uR-lak" kind="custom" identifier="popdown" customClass="MPPopdownSegue" id="2Uk-iv-ErE"/>
+                                                    </connections>
+                                                </barButtonItem>
+                                            </navigationItem>
+                                        </items>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="ignoreTouches" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </navigationBar>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XNM-XQ-rMe" userLabel="Popdown">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                        <rect key="frame" x="0.0" y="-568" width="320" height="568"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="87Y-Vu-Q7D">
+                                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="87Y-Vu-Q7D" userLabel="Popdown Blur">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 <items/>
@@ -1201,8 +1200,8 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </view>
-                                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" verticalHuggingPriority="251" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="VOY-zU-XQR">
-                                                <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" verticalHuggingPriority="251" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="VOY-zU-XQR" userLabel="Popdown Toolbar">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="632"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 <items>
                                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="gnP-97-6Mt"/>
@@ -1236,17 +1235,19 @@
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="uuT-jm-2La" secondAttribute="trailing" id="2Ep-4f-05N"/>
                                     <constraint firstAttribute="top" secondItem="uuT-jm-2La" secondAttribute="bottom" priority="1" id="AkN-iE-w6G"/>
-                                    <constraint firstAttribute="top" secondItem="XNM-XQ-rMe" secondAttribute="bottom" priority="250" id="BdD-Kc-eHl"/>
+                                    <constraint firstAttribute="top" secondItem="XNM-XQ-rMe" secondAttribute="bottom" priority="750" id="BdD-Kc-eHl"/>
                                     <constraint firstItem="uuT-jm-2La" firstAttribute="leading" secondItem="tI8-OT-LrO" secondAttribute="leading" id="DJd-kO-WGu"/>
+                                    <constraint firstItem="uuT-jm-2La" firstAttribute="top" secondItem="tI8-OT-LrO" secondAttribute="top" id="Evy-zY-OaB"/>
                                     <constraint firstAttribute="trailing" secondItem="K2e-Gh-7hH" secondAttribute="trailing" id="Hnk-mU-GSd"/>
-                                    <constraint firstAttribute="bottom" secondItem="K2e-Gh-7hH" secondAttribute="bottom" priority="1" id="NGV-JV-I6h"/>
                                     <constraint firstItem="XNM-XQ-rMe" firstAttribute="height" secondItem="tI8-OT-LrO" secondAttribute="height" id="OCp-tF-gVL"/>
                                     <constraint firstItem="K2e-Gh-7hH" firstAttribute="leading" secondItem="tI8-OT-LrO" secondAttribute="leading" id="OcX-2p-rfX"/>
                                     <constraint firstItem="XNM-XQ-rMe" firstAttribute="leading" secondItem="tI8-OT-LrO" secondAttribute="leading" id="PDG-pf-cBl"/>
                                     <constraint firstAttribute="bottom" secondItem="XNM-XQ-rMe" secondAttribute="bottom" priority="500" id="ROj-WG-oic"/>
+                                    <constraint firstItem="K2e-Gh-7hH" firstAttribute="height" secondItem="tI8-OT-LrO" secondAttribute="height" id="Xfe-XT-eOn"/>
                                     <constraint firstAttribute="trailing" secondItem="XNM-XQ-rMe" secondAttribute="trailing" id="bgl-u9-shU"/>
                                     <constraint firstItem="K2e-Gh-7hH" firstAttribute="top" secondItem="tI8-OT-LrO" secondAttribute="bottom" priority="1" id="dNt-uf-8BC"/>
-                                    <constraint firstItem="K2e-Gh-7hH" firstAttribute="top" secondItem="uuT-jm-2La" secondAttribute="bottom" priority="750" id="f5D-iu-Jv4"/>
+                                    <constraint firstItem="oAG-Ea-TOI" firstAttribute="top" secondItem="uuT-jm-2La" secondAttribute="bottom" id="f71-9r-QcK"/>
+                                    <constraint firstItem="K2e-Gh-7hH" firstAttribute="top" secondItem="tI8-OT-LrO" secondAttribute="top" priority="500" id="vtB-e4-L8o"/>
                                     <constraint firstItem="uuT-jm-2La" firstAttribute="bottom" secondItem="VOY-zU-XQR" secondAttribute="bottom" id="zRg-DQ-eoM"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -1257,10 +1258,10 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="tI8-OT-LrO" firstAttribute="leading" secondItem="MSX-uI-cwS" secondAttribute="leading" id="3au-dn-EZA"/>
+                            <constraint firstItem="uuT-jm-2La" firstAttribute="bottom" secondItem="S9X-2T-e1e" secondAttribute="bottom" constant="44" id="HAi-jL-BdJ"/>
                             <constraint firstAttribute="top" secondItem="tI8-OT-LrO" secondAttribute="top" id="Vub-z3-GJi"/>
                             <constraint firstItem="c12-XI-Rv9" firstAttribute="top" secondItem="tI8-OT-LrO" secondAttribute="bottom" id="auY-cK-Gh9"/>
                             <constraint firstAttribute="trailing" secondItem="tI8-OT-LrO" secondAttribute="trailing" id="cHT-PO-Feh"/>
-                            <constraint firstItem="uuT-jm-2La" firstAttribute="top" secondItem="S9X-2T-e1e" secondAttribute="bottom" priority="500" id="veX-pt-6RG"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="ignoreTouches" value="YES"/>
@@ -1268,7 +1269,6 @@
                     </view>
                     <connections>
                         <outlet property="navigationBar" destination="uuT-jm-2La" id="lRz-Ok-jvw"/>
-                        <outlet property="navigationBarToPasswordsConstraint" destination="f5D-iu-Jv4" id="2r1-9t-swq"/>
                         <outlet property="navigationBarToTopConstraint" destination="AkN-iE-w6G" id="kw0-4E-iQG"/>
                         <outlet property="passwordCollectionView" destination="aXw-tn-8Sj" id="fNR-qS-qNP"/>
                         <outlet property="passwordSelectionContainer" destination="tI8-OT-LrO" id="J91-sd-kq3"/>
@@ -1748,7 +1748,6 @@
     <resources>
         <image name="avatar-0.png" width="110" height="110"/>
         <image name="background.png" width="568" height="568"/>
-        <image name="empty.png" width="1" height="1"/>
         <image name="gittip.png" width="89" height="18"/>
         <image name="icon_book.png" width="32" height="32"/>
         <image name="icon_cancel.png" width="32" height="32"/>

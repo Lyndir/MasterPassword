@@ -24,6 +24,7 @@
 #import "MPPasswordSmallCell.h"
 #import "UIColor+Expanded.h"
 #import "MPPopdownSegue.h"
+#import "MPAppDelegate_Key.h"
 
 @interface MPPasswordsViewController()<NSFetchedResultsControllerDelegate>
 
@@ -52,12 +53,12 @@
     [super viewDidLoad];
 
     _fetchedUpdates = [NSMutableDictionary dictionaryWithCapacity:4];
-    _darkenedBackgroundColor = [(_backgroundColor = [UIColor colorWithRGBHex:0x1F2124]) colorByMultiplyingBy:0.7f];
+    _backgroundColor = [UIColor clearColor];
+    _darkenedBackgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6f];
 
     self.view.backgroundColor = [UIColor clearColor];
+    self.passwordCollectionView.contentInset = UIEdgeInsetsMake( 108, 0, 0, 0 );
     [self.passwordCollectionView automaticallyAdjustInsetsForKeyboard];
-
-    [self.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -496,7 +497,10 @@
     NSManagedObjectID *activeUserOID = [MPiOSAppDelegate get].activeUserOID;
     if (!activeUserOID) {
         self.passwordsSearchBar.text = nil;
-        PearlMainQueue( ^{ [self.passwordCollectionView reloadData]; } );
+        PearlMainQueue( ^{
+            [self.passwordCollectionView reloadData];
+            [self.passwordCollectionView setContentOffset:CGPointMake( 0, -self.passwordCollectionView.contentInset.top ) animated:YES];
+        } );
         return;
     }
 
@@ -534,7 +538,11 @@
                         [self.passwordCollectionView reloadSections:[NSIndexSet indexSetWithIndex:section]];
                     }
                 }
-            }                                     completion:nil];
+            }                                     completion:^(BOOL finished) {
+                if (finished)
+                    [self.passwordCollectionView setContentOffset:CGPointMake( 0, -self.passwordCollectionView.contentInset.top )
+                                                         animated:YES];
+            }];
         } );
     }];
 }
@@ -575,11 +583,9 @@
     _active = active;
 
     [UIView animateWithDuration:animated? 0.4f: 0 animations:^{
-        self.navigationBarToPasswordsConstraint.priority = active? UILayoutPriorityDefaultHigh: 1;
         self.navigationBarToTopConstraint.priority = active? 1: UILayoutPriorityDefaultHigh;
         self.passwordsToBottomConstraint.priority = active? 1: UILayoutPriorityDefaultHigh;
 
-        [self.navigationBarToPasswordsConstraint apply];
         [self.navigationBarToTopConstraint apply];
         [self.passwordsToBottomConstraint apply];
     }                completion:completion];
@@ -593,6 +599,11 @@
         [[[MPPopdownSegue alloc] initWithIdentifier:@"unwind-popdown" source:_popdownVC destination:self] perform];
     else
         self.popdownToTopConstraint.priority = UILayoutPriorityDefaultHigh;
+}
+
+- (IBAction)signOut:(id)sender {
+
+    [[MPiOSAppDelegate get] signOutAnimated:YES];
 }
 
 @end
