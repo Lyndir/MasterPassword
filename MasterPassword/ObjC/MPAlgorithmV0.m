@@ -33,7 +33,7 @@
 
 - (NSString *)description {
 
-    return strf( @"<%@: version=%d>", NSStringFromClass( [self class] ), self.version );
+    return strf( @"<%@: version=%lu>", NSStringFromClass( [self class] ), (unsigned long)self.version );
 }
 
 - (BOOL)isEqual:(id)other {
