@@ -316,7 +316,6 @@
 		DAE1EF5917ED115E00BC0086 /* DCFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE1EF5217ED115E00BC0086 /* DCFrameView.m */; };
 		DAE1EF5A17ED115E00BC0086 /* DCIntrospect.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE1EF5417ED115E00BC0086 /* DCIntrospect.m */; };
 		DAE1EF5B17ED115E00BC0086 /* DCStatusBarOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE1EF5717ED115E00BC0086 /* DCStatusBarOverlay.m */; };
-		DAE1EF5C17ED118400BC0086 /* libDCIntrospect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAE1EF2917ED112600BC0086 /* libDCIntrospect.a */; };
 		DAEB933318AA537D000490CC /* crypto_aesctr.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92E118AA537D000490CC /* crypto_aesctr.h */; };
 		DAEB933418AA537D000490CC /* crypto_scrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92E218AA537D000490CC /* crypto_scrypt.h */; };
 		DAEB933518AA537D000490CC /* memlimit.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92E318AA537D000490CC /* memlimit.h */; };
@@ -1644,7 +1643,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DADEF44D1810F9BF0052CA3E /* libLoveLyndir.a in Frameworks */,
-				DAE1EF5C17ED118400BC0086 /* libDCIntrospect.a in Frameworks */,
 				DAFC5691172C582A00CB5CC5 /* libInAppSettingsKit.a in Frameworks */,
 				DA6701E016406BB400B61001 /* AdSupport.framework in Frameworks */,
 				DA6701DE16406B7300B61001 /* Social.framework in Frameworks */,
@@ -4363,7 +4361,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				EXCLUDED_SOURCE_FILE_NAMES = "";
+				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
