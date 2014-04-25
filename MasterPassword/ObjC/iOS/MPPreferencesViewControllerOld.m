@@ -130,7 +130,7 @@
 
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
     if (cell == self.exportCell)
-        [[MPiOSAppDelegate get] export];
+        [[MPiOSAppDelegate get] showExportForVC:self];
 
     else if (cell == self.changeMPCell) {
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {

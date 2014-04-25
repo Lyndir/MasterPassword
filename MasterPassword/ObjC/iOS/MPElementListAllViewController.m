@@ -150,7 +150,7 @@
         if (buttonIndex == [alert cancelButtonIndex])
             return;
 
-        [PearlEMail sendEMailTo:nil subject:@"[Master Password] Upgrade Changes" body:formattedChanges];
+        [PearlEMail sendEMailTo:nil fromVC:self subject:@"[Master Password] Upgrade Changes" body:formattedChanges];
     }                  cancelTitle:@"Don't Email" otherTitles:@"Send Email", nil];
 }
 

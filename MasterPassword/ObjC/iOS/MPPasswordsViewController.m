@@ -22,9 +22,9 @@
 #import "MPPasswordLargeCell.h"
 #import "MPPasswordTypesCell.h"
 #import "MPPasswordSmallCell.h"
-#import "UIColor+Expanded.h"
 #import "MPPopdownSegue.h"
 #import "MPAppDelegate_Key.h"
+#import "MPCoachmarkViewController.h"
 
 @interface MPPasswordsViewController()<NSFetchedResultsControllerDelegate>
 
@@ -53,8 +53,9 @@
     [super viewDidLoad];
 
     _fetchedUpdates = [NSMutableDictionary dictionaryWithCapacity:4];
-    _backgroundColor = [UIColor clearColor];
-    _darkenedBackgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6f];
+    _backgroundColor = self.passwordCollectionView.backgroundColor;
+    _darkenedBackgroundColor = [_backgroundColor colorWithAlphaComponent:0.6f];
+    _coachmark = [MPCoachmark coachmarkForClass:[self class] version:0];
 
     self.view.backgroundColor = [UIColor clearColor];
     self.passwordCollectionView.contentInset = UIEdgeInsetsMake( 108, 0, 0, 0 );
@@ -70,6 +71,16 @@
     [self updatePasswords];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+
+    [super viewDidAppear:animated];
+
+    PearlMainQueueAfter( 1, ^{
+        if (!self.coachmark.coached)
+            [self performSegueWithIdentifier:@"coachmarks" sender:self];
+    } );
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
 
     [super viewWillDisappear:animated];
@@ -82,6 +93,8 @@
 
     if ([segue.identifier isEqualToString:@"popdown"])
         _popdownVC = segue.destinationViewController;
+    if ([segue.identifier isEqualToString:@"coachmarks"])
+        ((MPCoachmarkViewController *)segue.destinationViewController).coachmark = self.coachmark;
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -376,7 +389,7 @@
         _passwordsDismissRecognizer = [self.view dismissKeyboardForField:self.passwordsSearchBar onTouchForced:NO];
 
         [UIView animateWithDuration:0.3f animations:^{
-            searchBar.superview.backgroundColor = _darkenedBackgroundColor;
+            self.passwordCollectionView.backgroundColor = _darkenedBackgroundColor;
         }];
     }
 }
@@ -389,7 +402,7 @@
             [self.view removeGestureRecognizer:_passwordsDismissRecognizer];
 
         [UIView animateWithDuration:0.3f animations:^{
-            searchBar.superview.backgroundColor = _backgroundColor;
+            self.passwordCollectionView.backgroundColor = _backgroundColor;
         }];
     }
 }

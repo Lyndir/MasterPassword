@@ -11,6 +11,8 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "UIColor+Expanded.h"
+#import "MPPasswordsViewController.h"
+#import "MPCoachmarkViewController.h"
 
 @interface MPPreferencesViewController()
 
@@ -54,8 +56,19 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+    if (cell == self.feedbackCell)
+        [[MPiOSAppDelegate get] showFeedbackWithLogs:YES forVC:self];
     if (cell == self.exportCell)
-        [[MPiOSAppDelegate get] export];
+        [[MPiOSAppDelegate get] showExportForVC:self];
+    if (cell == self.coachmarksCell) {
+        for (UIViewController *vc = self; (vc = vc.parentViewController); )
+            if ([vc isKindOfClass:[MPPasswordsViewController class]]) {
+                MPPasswordsViewController *passwordsVC = (MPPasswordsViewController *)vc;
+                passwordsVC.coachmark.coached = NO;
+                [passwordsVC dismissPopdown:self];
+                [vc performSegueWithIdentifier:@"coachmarks" sender:self];
+            }
+    }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

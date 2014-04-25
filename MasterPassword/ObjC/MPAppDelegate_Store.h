@@ -34,6 +34,6 @@ typedef enum {
 - (MPImportResult)importSites:(NSString *)importedSitesString
             askImportPassword:(NSString *(^)(NSString *userName))importPassword
               askUserPassword:(NSString *(^)(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword;
-- (NSString *)exportSitesShowingPasswords:(BOOL)showPasswords;
+- (NSString *)exportSitesRevealPasswords:(BOOL)revealPasswords;
 
 @end

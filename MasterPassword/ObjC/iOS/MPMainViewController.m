@@ -715,11 +715,6 @@
                 [self setHelpHidden:NO animated:YES];
                 break;
             }
-            case 1: {
-                inf(@"Action: Guide");
-                [[MPiOSAppDelegate get] showGuide];
-                break;
-            }
             case 2: {
                 inf(@"Action: Preferences");
                 [self performSegueWithIdentifier:@"MP_UserProfile" sender:self];

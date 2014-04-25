@@ -18,6 +18,7 @@
 
 #import "LLGitTip.h"
 @class MPElementEntity;
+@class MPCoachmark;
 
 @interface MPPasswordsViewController : UIViewController<UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
@@ -33,6 +34,8 @@
 @property(assign, nonatomic) BOOL active;
 
 @property(nonatomic, copy) NSString *originalQuery;
+@property(nonatomic, readonly) MPCoachmark *coachmark;
+
 - (void)setActive:(BOOL)active animated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
 
 - (IBAction)dismissPopdown:(id)sender;

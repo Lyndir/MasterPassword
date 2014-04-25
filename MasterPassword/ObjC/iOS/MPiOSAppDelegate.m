@@ -10,7 +10,6 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "IASKSettingsReader.h"
-#import "JRSwizzle.h"
 
 @interface MPiOSAppDelegate()
 
@@ -221,7 +220,7 @@
 
         dispatch_async( dispatch_get_main_queue(), ^{
             if ([[MPiOSConfig get].showSetup boolValue])
-                [[MPiOSAppDelegate get] showSetup];
+                [self.navigationController performSegueWithIdentifier:@"setup" sender:self];
         } );
 
         MPCheckpoint( MPCheckpointStarted, @{
@@ -410,20 +409,6 @@
 
 #pragma mark - Behavior
 
-- (void)showGuide {
-
-    //TODO [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
-
-    MPCheckpoint( MPCheckpointShowGuide, nil );
-}
-
-- (void)showSetup {
-
-    //TODO [self.navigationController performSegueWithIdentifier:@"MP_Setup" sender:self];
-
-    MPCheckpoint( MPCheckpointShowSetup, nil );
-}
-
 - (void)showReview {
 
     [super showReview];
@@ -487,7 +472,7 @@
             showComposerForVC:viewController];
 }
 
-- (void)export {
+- (void)showExportForVC:(UIViewController *)viewController {
 
     [PearlAlert showNotice:
             @"This will export all your site names.\n\n"
@@ -504,15 +489,15 @@
                           tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                               if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 0)
                                       // Safe Export
-                                  [self exportShowPasswords:NO];
+                                  [self showExportRevealPasswords:NO forVC:viewController];
                               if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
                                       // Show Passwords
-                                  [self exportShowPasswords:YES];
+                                  [self showExportRevealPasswords:YES forVC:viewController];
                           } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
          } otherTitles:nil];
 }
 
-- (void)exportShowPasswords:(BOOL)showPasswords {
+- (void)showExportRevealPasswords:(BOOL)revealPasswords forVC:(UIViewController *)viewController {
 
     if (![PearlEMail canSendMail]) {
         [PearlAlert showAlertWithTitle:@"Cannot Send Mail"
@@ -525,10 +510,10 @@
         return;
     }
 
-    NSString *exportedSites = [self exportSitesShowingPasswords:showPasswords];
+    NSString *exportedSites = [self exportSitesRevealPasswords:revealPasswords];
     NSString *message;
 
-    if (showPasswords)
+    if (revealPasswords)
         message = PearlString( @"Export of Master Password sites with passwords included.\n\n"
                 @"REMINDER: Make sure nobody else sees this file!  Passwords are visible!\n\n\n"
                 @"--\n"
@@ -549,7 +534,7 @@
     NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
     [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
 
-    [PearlEMail sendEMailTo:nil subject:@"Master Password Export" body:message
+    [PearlEMail sendEMailTo:nil fromVC:viewController subject:@"Master Password Export" body:message
                 attachments:[[PearlEMailAttachment alloc] initWithContent:[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
                                                                  mimeType:@"text/plain" fileName:
                                 PearlString( @"%@ (%@).mpsites", [self activeUserForMainThread].name,

@@ -694,15 +694,15 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     return MPImportResultSuccess;
 }
 
-- (NSString *)exportSitesShowingPasswords:(BOOL)showPasswords {
+- (NSString *)exportSitesRevealPasswords:(BOOL)revealPasswords {
 
     MPUserEntity *activeUser = [self activeUserForMainThread];
-    inf(@"Exporting sites, %@, for: %@", showPasswords? @"showing passwords": @"omitting passwords", activeUser.userID);
+    inf(@"Exporting sites, %@, for: %@", revealPasswords? @"revealing passwords": @"omitting passwords", activeUser.userID);
 
     // Header.
     NSMutableString *export = [NSMutableString new];
     [export appendFormat:@"# Master Password site export\n"];
-    if (showPasswords)
+    if (revealPasswords)
         [export appendFormat:@"#     Export of site names and passwords in clear-text.\n"];
     else
         [export appendFormat:@"#     Export of site names and stored passwords (unless device-private) encrypted with the master key.\n"];
@@ -712,7 +712,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     [export appendFormat:@"# User Name: %@\n", activeUser.name];
     [export appendFormat:@"# Key ID: %@\n", [activeUser.keyID encodeHex]];
     [export appendFormat:@"# Date: %@\n", [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]]];
-    if (showPasswords)
+    if (revealPasswords)
         [export appendFormat:@"# Passwords: VISIBLE\n"];
     else
         [export appendFormat:@"# Passwords: PROTECTED\n"];
@@ -732,7 +732,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
         // Determine the content to export.
         if (!(type & MPElementFeatureDevicePrivate)) {
-            if (showPasswords)
+            if (revealPasswords)
                 content = [element.algorithm resolveContentForElement:element usingKey:self.key];
             else if (type & MPElementFeatureExportContent)
                 content = [element.algorithm exportContentForElement:element usingKey:self.key];
@@ -745,7 +745,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     }
 
     MPCheckpoint( MPCheckpointSitesExported, @{
-            @"showPasswords" : @(showPasswords)
+            @"showPasswords" : @(revealPasswords)
     } );
 
     return export;

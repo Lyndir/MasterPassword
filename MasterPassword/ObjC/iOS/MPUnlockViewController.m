@@ -1178,7 +1178,7 @@
         }
         if (buttonIndex == [sheet firstOtherButtonIndex] + 3) {
             // Mailing List
-            [PearlEMail sendEMailTo:@"masterpassword-join@lists.lyndir.com" subject:@"Subscribe"
+            [PearlEMail sendEMailTo:@"masterpassword-join@lists.lyndir.com" fromVC:self subject:@"Subscribe"
                                body:@"Press 'Send' now to subscribe to the Master Password mailing list.\n\n"
                                        @"You'll be kept up-to-date on the evolution of and discussions revolving Master Password."];
             return;
