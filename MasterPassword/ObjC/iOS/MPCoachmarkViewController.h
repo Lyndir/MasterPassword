@@ -21,7 +21,7 @@
 @interface MPCoachmark : NSObject
 
 @property(nonatomic, strong) Class coachedClass;
-@property(nonatomic) int coachedVersion;
+@property(nonatomic) NSInteger coachedVersion;
 @property(nonatomic) BOOL coached;
 
 + (instancetype)coachmarkForClass:(Class)class version:(NSInteger)version;

@@ -42,12 +42,12 @@
 
 - (BOOL)coached {
 
-    return [[NSUserDefaults standardUserDefaults] boolForKey:strf( @"%@.%d.coached", self.coachedClass, self.coachedVersion )];
+    return [[NSUserDefaults standardUserDefaults] boolForKey:strf( @"%@.%ld.coached", self.coachedClass, (long)self.coachedVersion )];
 }
 
 - (void)setCoached:(BOOL)coached {
 
-    [[NSUserDefaults standardUserDefaults] setBool:coached forKey:strf( @"%@.%d.coached", self.coachedClass, self.coachedVersion )];
+    [[NSUserDefaults standardUserDefaults] setBool:coached forKey:strf( @"%@.%ld.coached", self.coachedClass, (long)self.coachedVersion )];
 }
 
 @end

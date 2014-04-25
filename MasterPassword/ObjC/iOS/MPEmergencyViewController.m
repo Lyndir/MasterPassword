@@ -128,7 +128,7 @@
     NSString *siteName = self.siteField.text;
     MPElementType siteType = [self siteType];
     NSUInteger siteCounter = (NSUInteger)self.counterStepper.value;
-    self.counterLabel.text = strf( @"%d", siteCounter );
+    self.counterLabel.text = strf( @"%lu", (unsigned long)siteCounter );
 
     self.passwordLabel.text = nil;
     [self.activity startAnimating];
