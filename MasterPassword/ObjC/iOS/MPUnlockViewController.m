@@ -1124,9 +1124,9 @@
 
 - (IBAction)google:(id)sender {
 
-    id<GPPShareBuilder> shareDialog = [[GPPShare sharedInstance] shareDialog];
-    [[[shareDialog setURLToShare:[NSURL URLWithString:@"http://masterpasswordapp.com"]]
-            setPrefillText:@"I've started doing passwords properly thanks to Master Password."] open];
+//    id<GPPShareBuilder> shareDialog = [[GPPShare sharedInstance] shareDialog];
+//    [[[shareDialog setURLToShare:[NSURL URLWithString:@"http://masterpasswordapp.com"]]
+//            setPrefillText:@"I've started doing passwords properly thanks to Master Password."] open];
 }
 
 - (IBAction)mail:(id)sender {

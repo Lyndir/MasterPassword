@@ -62,11 +62,6 @@
                     TESTFLIGHT_SDK_VERSION, [PearlInfoPlist get].CFBundleName, [PearlInfoPlist get].CFBundleVersion );
         }
 #endif
-        NSString *googlePlusClientID = [self googlePlusClientID];
-        if ([googlePlusClientID length]) {
-            inf(@"Initializing Google+");
-            [[GPPSignIn sharedInstance] setClientID:googlePlusClientID];
-        }
 #ifdef CRASHLYTICS
         NSString *crashlyticsAPIKey = [self crashlyticsAPIKey];
         if ([crashlyticsAPIKey length]) {
@@ -117,71 +112,6 @@
     }
     @catch (id exception) {
         err(@"During Analytics Setup: %@", exception);
-    }
-    @try {
-        if (floor( NSFoundationVersionNumber ) <= NSFoundationVersionNumber_iOS_6_1) {
-            UIImage *navBarImage = [[UIImage imageNamed:@"ui_navbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
-            [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
-            [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsLandscapePhone];
-            NSShadow *titleShadow = [NSShadow new];
-            titleShadow.shadowColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f];
-            titleShadow.shadowOffset = CGSizeMake( 0, -1 );
-            [[UINavigationBar appearance] setTitleTextAttributes:
-                    @{
-                            NSForegroundColorAttributeName : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
-                            NSShadowAttributeName          : titleShadow,
-                            NSFontAttributeName            : [UIFont fontWithName:@"Exo2.0-Bold" size:20.0f]
-                    }];
-
-            UIImage *navBarButton = [[UIImage imageNamed:@"ui_navbar_button"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
-            UIImage *navBarBack = [[UIImage imageNamed:@"ui_navbar_back"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 13, 0, 5 )];
-            [[UIBarButtonItem appearance] setBackgroundImage:navBarButton forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-            [[UIBarButtonItem appearance] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
-            [[UIBarButtonItem appearance]
-                    setBackButtonBackgroundImage:navBarBack forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-            [[UIBarButtonItem appearance]
-                    setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
-            NSShadow *barButtonShadow = [NSShadow new];
-            barButtonShadow.shadowColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f];
-            barButtonShadow.shadowOffset = CGSizeMake( 0, 1 );
-            [[UIBarButtonItem appearance] setTitleTextAttributes:
-                    @{
-                            NSForegroundColorAttributeName : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
-                            NSShadowAttributeName          : barButtonShadow,
-                            // Causes a bug in iOS where image views get oddly stretched... or something.
-                            //NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:13.0f]
-                    }
-                                                        forState:UIControlStateNormal];
-
-            UIImage *toolBarImage = [[UIImage imageNamed:@"ui_toolbar_container"]
-                    resizableImageWithCapInsets:UIEdgeInsetsMake( 25, 5, 5, 5 )];
-            [[UISearchBar appearance] setBackgroundImage:toolBarImage];
-            [[UIToolbar appearance] setBackgroundImage:toolBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
-
-            // UIImage *minImage = [[UIImage imageNamed:@"slider-minimum"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
-            // UIImage *maxImage = [[UIImage imageNamed:@"slider-maximum"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
-            // UIImage *thumbImage = [UIImage imageNamed:@"slider-handle"];
-            //
-            // [[UISlider appearance] setMaximumTrackImage:maxImage forState:UIControlStateNormal];
-            // [[UISlider appearance] setMinimumTrackImage:minImage forState:UIControlStateNormal];
-            // [[UISlider appearance] setThumbImage:thumbImage forState:UIControlStateNormal];
-            //
-            // UIImage *segmentSelected = [[UIImage imageNamed:@"segcontrol_sel"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];
-            // UIImage *segmentUnselected = [[UIImage imageNamed:@"segcontrol_uns"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 15)];
-            // UIImage *segmentSelectedUnselected = [UIImage imageNamed:@"segcontrol_sel-uns"];
-            // UIImage *segUnselectedSelected = [UIImage imageNamed:@"segcontrol_uns-sel"];
-            // UIImage *segmentUnselectedUnselected = [UIImage imageNamed:@"segcontrol_uns-uns"];
-            //
-            // [[UISegmentedControl appearance] setBackgroundImage:segmentUnselected forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-            // [[UISegmentedControl appearance] setBackgroundImage:segmentSelected forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
-            //
-            // [[UISegmentedControl appearance] setDividerImage:segmentUnselectedUnselected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-            // [[UISegmentedControl appearance] setDividerImage:segmentSelectedUnselected forLeftSegmentState:UIControlStateSelected rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-            // [[UISegmentedControl appearance] setDividerImage:segUnselectedSelected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
-        }
-    }
-    @catch (id exception) {
-        err(@"During Theme Setup: %@", exception);
     }
     @try {
         [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
@@ -248,10 +178,6 @@
     // No URL?
     if (!url)
         return NO;
-
-    // Google+
-    if ([[GPPSignIn sharedInstance] handleURL:url sourceApplication:sourceApplication annotation:annotation])
-        return YES;
 
     // Arbitrary URL to mpsites data.
     dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
@@ -805,28 +731,6 @@
                         if (buttonIndex == [alert firstOtherButtonIndex] + 1)
                             [MPiOSConfig get].iCloudEnabled = @NO;
                     }                                 cancelTitle:nil otherTitles:@"Fix Now", @"Turn Off", nil];
-}
-
-
-#pragma mark - Google+
-
-- (NSDictionary *)googlePlusInfo {
-
-    static NSDictionary *googlePlusInfo = nil;
-    if (googlePlusInfo == nil)
-        googlePlusInfo = [[NSDictionary alloc] initWithContentsOfURL:
-                [[NSBundle mainBundle] URLForResource:@"Google+" withExtension:@"plist"]];
-
-    return googlePlusInfo;
-}
-
-- (NSString *)googlePlusClientID {
-
-    NSString *googlePlusClientID = NSNullToNil([[self googlePlusInfo] valueForKeyPath:@"ClientID"]);
-    if (![googlePlusClientID length])
-    wrn(@"Google+ client ID not set.  User won't be able to share via Google+.");
-
-    return googlePlusClientID;
 }
 
 

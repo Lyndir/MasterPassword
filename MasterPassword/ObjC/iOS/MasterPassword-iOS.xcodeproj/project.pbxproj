@@ -225,8 +225,6 @@
 		DABD3B981711E29800CF925C /* pull-up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD38D41711E29700CF925C /* pull-up@2x.png */; };
 		DABD3B991711E29800CF925C /* social-facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD38D51711E29700CF925C /* social-facebook.png */; };
 		DABD3B9A1711E29800CF925C /* social-facebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD38D61711E29700CF925C /* social-facebook@2x.png */; };
-		DABD3B9B1711E29800CF925C /* social-google+.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD38D71711E29700CF925C /* social-google+.png */; };
-		DABD3B9C1711E29800CF925C /* social-google+@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD38D81711E29700CF925C /* social-google+@2x.png */; };
 		DABD3B9D1711E29800CF925C /* social-twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD38D91711E29700CF925C /* social-twitter.png */; };
 		DABD3B9E1711E29800CF925C /* social-twitter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD38DA1711E29700CF925C /* social-twitter@2x.png */; };
 		DABD3BFD1711E2DC00CF925C /* MPAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BA11711E2DC00CF925C /* MPAlgorithm.m */; };
@@ -265,8 +263,6 @@
 		DABD3FCB1712446200CF925C /* cloud@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD3FC91712446200CF925C /* cloud@2x.png */; };
 		DABD3FCE1714F45C00CF925C /* identity.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD3FCC1714F45B00CF925C /* identity.png */; };
 		DABD3FCF1714F45C00CF925C /* identity@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD3FCD1714F45B00CF925C /* identity@2x.png */; };
-		DABF632417B744F900DA7E38 /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABF632217B744F900DA7E38 /* GoogleOpenSource.framework */; };
-		DABF632517B744F900DA7E38 /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABF632317B744F900DA7E38 /* GooglePlus.framework */; };
 		DAC6325E1486805C0075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC6326D148680650075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC632891486D9690075AEA5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC632871486D95D0075AEA5 /* Security.framework */; };
@@ -279,7 +275,6 @@
 		DACA22C61705DE9D002C6C22 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DACA22C31705DE9D002C6C22 /* libTestFlight.a */; };
 		DACA296C1705DF81002C6C22 /* TestFlight.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA26941705DF81002C6C22 /* TestFlight.plist */; };
 		DACA296D1705DF81002C6C22 /* Localytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA26961705DF81002C6C22 /* Localytics.plist */; };
-		DACA296E1705DF81002C6C22 /* Google+.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA26981705DF81002C6C22 /* Google+.plist */; };
 		DACA296F1705DF81002C6C22 /* Crashlytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA269A1705DF81002C6C22 /* Crashlytics.plist */; };
 		DACA29731705E1A8002C6C22 /* ciphers.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA29711705E1A8002C6C22 /* ciphers.plist */; };
 		DACA29741705E1A8002C6C22 /* dictionary.lst in Resources */ = {isa = PBXBuildFile; fileRef = DACA29721705E1A8002C6C22 /* dictionary.lst */; };
@@ -311,11 +306,6 @@
 		DADEF44D1810F9BF0052CA3E /* libLoveLyndir.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DADEF4221810D5530052CA3E /* libLoveLyndir.a */; };
 		DADEF44E1810FA3B0052CA3E /* LoveLyndir.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DADEF4481810D5A70052CA3E /* LoveLyndir.storyboard */; };
 		DAE1EF2217E942DE00BC0086 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAE1EF2417E942DE00BC0086 /* Localizable.strings */; };
-		DAE1EF2A17ED112700BC0086 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
-		DAE1EF5817ED115E00BC0086 /* DCCrossHairView.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE1EF5017ED115E00BC0086 /* DCCrossHairView.m */; };
-		DAE1EF5917ED115E00BC0086 /* DCFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE1EF5217ED115E00BC0086 /* DCFrameView.m */; };
-		DAE1EF5A17ED115E00BC0086 /* DCIntrospect.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE1EF5417ED115E00BC0086 /* DCIntrospect.m */; };
-		DAE1EF5B17ED115E00BC0086 /* DCStatusBarOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE1EF5717ED115E00BC0086 /* DCStatusBarOverlay.m */; };
 		DAEB933318AA537D000490CC /* crypto_aesctr.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92E118AA537D000490CC /* crypto_aesctr.h */; };
 		DAEB933418AA537D000490CC /* crypto_scrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92E218AA537D000490CC /* crypto_scrypt.h */; };
 		DAEB933518AA537D000490CC /* memlimit.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92E318AA537D000490CC /* memlimit.h */; };
@@ -511,15 +501,6 @@
 
 /* Begin PBXCopyFilesBuildPhase section */
 		DADEF4201810D5530052CA3E /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DAE1EF2717ED112600BC0086 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
@@ -1286,8 +1267,6 @@
 		DABD38D41711E29700CF925C /* pull-up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pull-up@2x.png"; sourceTree = "<group>"; };
 		DABD38D51711E29700CF925C /* social-facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "social-facebook.png"; sourceTree = "<group>"; };
 		DABD38D61711E29700CF925C /* social-facebook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "social-facebook@2x.png"; sourceTree = "<group>"; };
-		DABD38D71711E29700CF925C /* social-google+.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "social-google+.png"; sourceTree = "<group>"; };
-		DABD38D81711E29700CF925C /* social-google+@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "social-google+@2x.png"; sourceTree = "<group>"; };
 		DABD38D91711E29700CF925C /* social-twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "social-twitter.png"; sourceTree = "<group>"; };
 		DABD38DA1711E29700CF925C /* social-twitter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "social-twitter@2x.png"; sourceTree = "<group>"; };
 		DABD3BA01711E2DC00CF925C /* MPAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAlgorithm.h; sourceTree = "<group>"; };
@@ -1359,8 +1338,6 @@
 		DABD3FC91712446200CF925C /* cloud@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cloud@2x.png"; sourceTree = "<group>"; };
 		DABD3FCC1714F45B00CF925C /* identity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = identity.png; sourceTree = "<group>"; };
 		DABD3FCD1714F45B00CF925C /* identity@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "identity@2x.png"; sourceTree = "<group>"; };
-		DABF632217B744F900DA7E38 /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleOpenSource.framework; sourceTree = "<group>"; };
-		DABF632317B744F900DA7E38 /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GooglePlus.framework; sourceTree = "<group>"; };
 		DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libuicolor-utilities.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC6326C148680650075AEA5 /* libjrswizzle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjrswizzle.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC632871486D95D0075AEA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -1375,7 +1352,6 @@
 		DACA22C31705DE9D002C6C22 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
 		DACA26941705DF81002C6C22 /* TestFlight.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = TestFlight.plist; sourceTree = "<group>"; };
 		DACA26961705DF81002C6C22 /* Localytics.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Localytics.plist; sourceTree = "<group>"; };
-		DACA26981705DF81002C6C22 /* Google+.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Google+.plist"; sourceTree = "<group>"; };
 		DACA269A1705DF81002C6C22 /* Crashlytics.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Crashlytics.plist; sourceTree = "<group>"; };
 		DACA29711705E1A8002C6C22 /* ciphers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ciphers.plist; sourceTree = "<group>"; };
 		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
@@ -1405,17 +1381,7 @@
 		DADEF4491810E7F30052CA3E /* love-lyndir.picker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.picker.png"; sourceTree = "<group>"; };
 		DADEF44A1810E7F30052CA3E /* love-lyndir.picker@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.picker@2x.png"; sourceTree = "<group>"; };
 		DAE1EF2317E942DE00BC0086 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		DAE1EF2917ED112600BC0086 /* libDCIntrospect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDCIntrospect.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE1EF3717ED112700BC0086 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		DAE1EF4F17ED115E00BC0086 /* DCCrossHairView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCCrossHairView.h; sourceTree = "<group>"; };
-		DAE1EF5017ED115E00BC0086 /* DCCrossHairView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCCrossHairView.m; sourceTree = "<group>"; };
-		DAE1EF5117ED115E00BC0086 /* DCFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCFrameView.h; sourceTree = "<group>"; };
-		DAE1EF5217ED115E00BC0086 /* DCFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCFrameView.m; sourceTree = "<group>"; };
-		DAE1EF5317ED115E00BC0086 /* DCIntrospect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCIntrospect.h; sourceTree = "<group>"; };
-		DAE1EF5417ED115E00BC0086 /* DCIntrospect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCIntrospect.m; sourceTree = "<group>"; };
-		DAE1EF5517ED115E00BC0086 /* DCIntrospectSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCIntrospectSettings.h; sourceTree = "<group>"; };
-		DAE1EF5617ED115E00BC0086 /* DCStatusBarOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCStatusBarOverlay.h; sourceTree = "<group>"; };
-		DAE1EF5717ED115E00BC0086 /* DCStatusBarOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCStatusBarOverlay.m; sourceTree = "<group>"; };
 		DAEB92E118AA537D000490CC /* crypto_aesctr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto_aesctr.h; sourceTree = "<group>"; };
 		DAEB92E218AA537D000490CC /* crypto_scrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto_scrypt.h; sourceTree = "<group>"; };
 		DAEB92E318AA537D000490CC /* memlimit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memlimit.h; sourceTree = "<group>"; };
@@ -1503,9 +1469,6 @@
 		DAEC85B318E3DD9A007FC0DF /* PearlUINavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlUINavigationBar.h; sourceTree = "<group>"; };
 		DAEC85B418E3DD9A007FC0DF /* PearlUIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlUIView.h; sourceTree = "<group>"; };
 		DAFC5655172C573B00CB5CC5 /* libInAppSettingsKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libInAppSettingsKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		DAFC5659172C573B00CB5CC5 /* InAppSettingsKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "InAppSettingsKit-Prefix.pch"; sourceTree = "<group>"; };
-		DAFC565A172C573B00CB5CC5 /* InAppSettingsKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InAppSettingsKit.h; sourceTree = "<group>"; };
-		DAFC565C172C573B00CB5CC5 /* InAppSettingsKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InAppSettingsKit.m; sourceTree = "<group>"; };
 		DAFC5664172C57EC00CB5CC5 /* IASKAppSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsViewController.h; sourceTree = "<group>"; };
 		DAFC5665172C57EC00CB5CC5 /* IASKAppSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IASKAppSettingsViewController.m; sourceTree = "<group>"; };
 		DAFC5666172C57EC00CB5CC5 /* IASKAppSettingsWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsWebViewController.h; sourceTree = "<group>"; };
@@ -1664,8 +1627,6 @@
 				93D399433EA75E50656040CB /* Twitter.framework in Frameworks */,
 				DACA22191705DE28002C6C22 /* Crashlytics.framework in Frameworks */,
 				DACA22C61705DE9D002C6C22 /* libTestFlight.a in Frameworks */,
-				DABF632417B744F900DA7E38 /* GoogleOpenSource.framework in Frameworks */,
-				DABF632517B744F900DA7E38 /* GooglePlus.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1713,14 +1674,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DAE1EF2617ED112600BC0086 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DAE1EF2A17ED112700BC0086 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DAFC5652172C573B00CB5CC5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1738,15 +1691,8 @@
 				DABD3B9F1711E2DB00CF925C /* ObjC */,
 				DACA23B41705DF7D002C6C22 /* Resources */,
 				DACA22121705DDC5002C6C22 /* External */,
-				DAFC5657172C573B00CB5CC5 /* InAppSettingsKit */,
 				DA5BFA47147E415C00F98B1E /* Frameworks */,
 				DA5BFA45147E415C00F98B1E /* Products */,
-				93D39975CE5AEC99E3F086C7 /* MPPasswordCell.h */,
-				93D39DEA995041A13DC9CAF7 /* MPPasswordCell.m */,
-				93D39ACBA9F4878B6A1CC33B /* MPEmergencyViewController.m */,
-				93D39CDD434AFD6E1B0DA359 /* MPEmergencyViewController.h */,
-				93D390381D3D3AE241B5D341 /* MPPreferencesViewControllerOld.m */,
-				93D39961CD6A43648CC0B0DB /* MPPreferencesViewControllerOld.h */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1760,7 +1706,6 @@
 				DAD3127115528CD200A3F9ED /* libLocalytics.a */,
 				DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */,
 				DAFC5655172C573B00CB5CC5 /* libInAppSettingsKit.a */,
-				DAE1EF2917ED112600BC0086 /* libDCIntrospect.a */,
 				DADEF4221810D5530052CA3E /* libLoveLyndir.a */,
 			);
 			name = Products;
@@ -1851,8 +1796,6 @@
 				DABD38D41711E29700CF925C /* pull-up@2x.png */,
 				DABD38D51711E29700CF925C /* social-facebook.png */,
 				DABD38D61711E29700CF925C /* social-facebook@2x.png */,
-				DABD38D71711E29700CF925C /* social-google+.png */,
-				DABD38D81711E29700CF925C /* social-google+@2x.png */,
 				DABD38D91711E29700CF925C /* social-twitter.png */,
 				DABD38DA1711E29700CF925C /* social-twitter@2x.png */,
 			);
@@ -2561,6 +2504,12 @@
 		DABD3BD71711E2DC00CF925C /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				93D39975CE5AEC99E3F086C7 /* MPPasswordCell.h */,
+				93D39DEA995041A13DC9CAF7 /* MPPasswordCell.m */,
+				93D39ACBA9F4878B6A1CC33B /* MPEmergencyViewController.m */,
+				93D39CDD434AFD6E1B0DA359 /* MPEmergencyViewController.h */,
+				93D390381D3D3AE241B5D341 /* MPPreferencesViewControllerOld.m */,
+				93D39961CD6A43648CC0B0DB /* MPPreferencesViewControllerOld.h */,
 				DABD3BD81711E2DC00CF925C /* MPiOSAppDelegate.h */,
 				DABD3BD91711E2DC00CF925C /* MPiOSAppDelegate.m */,
 				DABD3BDA1711E2DC00CF925C /* MPAppViewController.h */,
@@ -2654,9 +2603,6 @@
 			isa = PBXGroup;
 			children = (
 				DADEF3E91810D1980052CA3E /* LoveLyndir */,
-				DAE1EF4E17ED115E00BC0086 /* DCIntrospect */,
-				DABF632217B744F900DA7E38 /* GoogleOpenSource.framework */,
-				DABF632317B744F900DA7E38 /* GooglePlus.framework */,
 				DACA22181705DE28002C6C22 /* Crashlytics.framework */,
 				DAFC5662172C57EC00CB5CC5 /* InAppSettingsKit */,
 				DACA22C71705DEB0002C6C22 /* Localytics */,
@@ -2712,7 +2658,6 @@
 				DACA29701705E1A8002C6C22 /* Data */,
 				DABD360D1711E29400CF925C /* Media */,
 				DACA26991705DF81002C6C22 /* Crashlytics */,
-				DACA26971705DF81002C6C22 /* Google+ */,
 				DACA26951705DF81002C6C22 /* Localytics */,
 				DACA26931705DF81002C6C22 /* TestFlight */,
 				DAE1EF2417E942DE00BC0086 /* Localizable.strings */,
@@ -2735,14 +2680,6 @@
 				DACA26961705DF81002C6C22 /* Localytics.plist */,
 			);
 			path = Localytics;
-			sourceTree = "<group>";
-		};
-		DACA26971705DF81002C6C22 /* Google+ */ = {
-			isa = PBXGroup;
-			children = (
-				DACA26981705DF81002C6C22 /* Google+.plist */,
-			);
-			path = "Google+";
 			sourceTree = "<group>";
 		};
 		DACA26991705DF81002C6C22 /* Crashlytics */ = {
@@ -2830,23 +2767,6 @@
 				DADEF4111810D2940052CA3E /* love-lyndir.heart.red@2x.png */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		DAE1EF4E17ED115E00BC0086 /* DCIntrospect */ = {
-			isa = PBXGroup;
-			children = (
-				DAE1EF4F17ED115E00BC0086 /* DCCrossHairView.h */,
-				DAE1EF5017ED115E00BC0086 /* DCCrossHairView.m */,
-				DAE1EF5117ED115E00BC0086 /* DCFrameView.h */,
-				DAE1EF5217ED115E00BC0086 /* DCFrameView.m */,
-				DAE1EF5317ED115E00BC0086 /* DCIntrospect.h */,
-				DAE1EF5417ED115E00BC0086 /* DCIntrospect.m */,
-				DAE1EF5517ED115E00BC0086 /* DCIntrospectSettings.h */,
-				DAE1EF5617ED115E00BC0086 /* DCStatusBarOverlay.h */,
-				DAE1EF5717ED115E00BC0086 /* DCStatusBarOverlay.m */,
-			);
-			name = DCIntrospect;
-			path = DCIntrospect/DCIntrospect;
 			sourceTree = "<group>";
 		};
 		DAEB92E018AA537D000490CC /* scrypt */ = {
@@ -2942,24 +2862,6 @@
 				DAEB933218AA537D000490CC /* x509v3.h */,
 			);
 			path = openssl;
-			sourceTree = "<group>";
-		};
-		DAFC5657172C573B00CB5CC5 /* InAppSettingsKit */ = {
-			isa = PBXGroup;
-			children = (
-				DAFC565A172C573B00CB5CC5 /* InAppSettingsKit.h */,
-				DAFC565C172C573B00CB5CC5 /* InAppSettingsKit.m */,
-				DAFC5658172C573B00CB5CC5 /* Supporting Files */,
-			);
-			path = InAppSettingsKit;
-			sourceTree = "<group>";
-		};
-		DAFC5658172C573B00CB5CC5 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				DAFC5659172C573B00CB5CC5 /* InAppSettingsKit-Prefix.pch */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		DAFC5662172C57EC00CB5CC5 /* InAppSettingsKit */ = {
@@ -3498,23 +3400,6 @@
 			productReference = DADEF4221810D5530052CA3E /* libLoveLyndir.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		DAE1EF2817ED112600BC0086 /* DCIntrospect */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DAE1EF4617ED112700BC0086 /* Build configuration list for PBXNativeTarget "DCIntrospect" */;
-			buildPhases = (
-				DAE1EF2517ED112600BC0086 /* Sources */,
-				DAE1EF2617ED112600BC0086 /* Frameworks */,
-				DAE1EF2717ED112600BC0086 /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = DCIntrospect;
-			productName = DCIntrospect;
-			productReference = DAE1EF2917ED112600BC0086 /* libDCIntrospect.a */;
-			productType = "com.apple.product-type.library.static";
-		};
 		DAFC5654172C573B00CB5CC5 /* InAppSettingsKit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAFC565E172C573B00CB5CC5 /* Build configuration list for PBXNativeTarget "InAppSettingsKit" */;
@@ -3658,7 +3543,6 @@
 				DAD3127015528CD200A3F9ED /* Localytics */,
 				DA4425CA1557BED40052177D /* UbiquityStoreManager */,
 				DAFC5654172C573B00CB5CC5 /* InAppSettingsKit */,
-				DAE1EF2817ED112600BC0086 /* DCIntrospect */,
 				DADEF4211810D5530052CA3E /* LoveLyndir */,
 			);
 		};
@@ -3672,7 +3556,6 @@
 				DAFE4A5A1503982E003ABA7C /* Pearl.strings in Resources */,
 				DACA296C1705DF81002C6C22 /* TestFlight.plist in Resources */,
 				DACA296D1705DF81002C6C22 /* Localytics.plist in Resources */,
-				DACA296E1705DF81002C6C22 /* Google+.plist in Resources */,
 				DACA296F1705DF81002C6C22 /* Crashlytics.plist in Resources */,
 				DADEF4171810D2940052CA3E /* love-lyndir.button.red@2x.png in Resources */,
 				DACA29731705E1A8002C6C22 /* ciphers.plist in Resources */,
@@ -3819,9 +3702,7 @@
 				DA452249190628A1008F650A /* icon_wrench.png in Resources */,
 				DABD3B9A1711E29800CF925C /* social-facebook@2x.png in Resources */,
 				DA45224819062899008F650A /* icon_settings@2x.png in Resources */,
-				DABD3B9B1711E29800CF925C /* social-google+.png in Resources */,
 				DADEF4121810D2940052CA3E /* love-lyndir.button.green.png in Resources */,
-				DABD3B9C1711E29800CF925C /* social-google+@2x.png in Resources */,
 				DABD3B9D1711E29800CF925C /* social-twitter.png in Resources */,
 				DABD3B9E1711E29800CF925C /* social-twitter@2x.png in Resources */,
 				DABD3C191711E2DC00CF925C /* MPElementListCellView.xib in Resources */,
@@ -4062,17 +3943,6 @@
 				93D39C8AD8EAB747856B3A8C /* LLModel.m in Sources */,
 				DA9B51581895D853009D2A0B /* LLGitTip.m in Sources */,
 				93D39233C3EDD9A947ABA52D /* LLButtonView.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DAE1EF2517ED112600BC0086 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DAE1EF5817ED115E00BC0086 /* DCCrossHairView.m in Sources */,
-				DAE1EF5B17ED115E00BC0086 /* DCStatusBarOverlay.m in Sources */,
-				DAE1EF5917ED115E00BC0086 /* DCFrameView.m in Sources */,
-				DAE1EF5A17ED115E00BC0086 /* DCIntrospect.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4660,27 +4530,6 @@
 			};
 			name = "AppStore-iOS";
 		};
-		DAE1EF4717ED112700BC0086 /* Debug-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = "Debug-iOS";
-		};
-		DAE1EF4817ED112700BC0086 /* AdHoc-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = "AdHoc-iOS";
-		};
-		DAE1EF4917ED112700BC0086 /* AppStore-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = "AppStore-iOS";
-		};
 		DAFC565F172C573B00CB5CC5 /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4793,16 +4642,6 @@
 				DADEF43E1810D5540052CA3E /* Debug-iOS */,
 				DADEF43F1810D5540052CA3E /* AdHoc-iOS */,
 				DADEF4401810D5540052CA3E /* AppStore-iOS */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-iOS";
-		};
-		DAE1EF4617ED112700BC0086 /* Build configuration list for PBXNativeTarget "DCIntrospect" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DAE1EF4717ED112700BC0086 /* Debug-iOS */,
-				DAE1EF4817ED112700BC0086 /* AdHoc-iOS */,
-				DAE1EF4917ED112700BC0086 /* AppStore-iOS */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "AdHoc-iOS";
