@@ -107,8 +107,10 @@
 - (void)switchCloudStore {
 
     NSDictionary *cloudStores = [[MPiOSAppDelegate get].storeManager enumerateCloudStores];
-    if (!cloudStores)
-    wrn(@"Failed enumerating cloud stores.");
+    if (!cloudStores) {
+        wrn( @"Failed enumerating cloud stores." );
+        return;
+    }
 
     NSString *currentStoreUUID = nil;
     NSMutableDictionary *stores = [NSMutableDictionary dictionary];
