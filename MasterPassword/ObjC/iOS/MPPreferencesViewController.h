@@ -16,7 +16,8 @@
 @property(weak, nonatomic) IBOutlet UITableViewCell *coachmarksCell;
 @property(weak, nonatomic) IBOutlet UITableViewCell *exportCell;
 @property(weak, nonatomic) IBOutlet UIImageView *avatarImage;
-@property(weak, nonatomic) IBOutlet UISegmentedControl *typeControl;
+@property(weak, nonatomic) IBOutlet UISegmentedControl *generatedTypeControl;
+@property(weak, nonatomic) IBOutlet UISegmentedControl *storedTypeControl;
 
 - (IBAction)previousAvatar:(id)sender;
 - (IBAction)nextAvatar:(id)sender;

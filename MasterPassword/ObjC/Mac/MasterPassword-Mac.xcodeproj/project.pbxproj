@@ -115,9 +115,6 @@
 		DACA27361705DF81002C6C22 /* avatar-0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA24561705DF7D002C6C22 /* avatar-0@2x.png */; };
 		DACA27371705DF81002C6C22 /* avatar-10@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA24571705DF7D002C6C22 /* avatar-10@2x.png */; };
 		DACA27381705DF81002C6C22 /* menu-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA24581705DF7D002C6C22 /* menu-icon.png */; };
-		DACA29641705DF81002C6C22 /* Exo-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DACA268B1705DF81002C6C22 /* Exo-ExtraBold.otf */; };
-		DACA29651705DF81002C6C22 /* Exo-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DACA268C1705DF81002C6C22 /* Exo-Regular.otf */; };
-		DACA29661705DF81002C6C22 /* Exo-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DACA268D1705DF81002C6C22 /* Exo-Bold.otf */; };
 		DACA29671705DF81002C6C22 /* SourceCodePro-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = DACA268E1705DF81002C6C22 /* SourceCodePro-ExtraLight.otf */; };
 		DACA29681705DF81002C6C22 /* SourceCodePro-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = DACA268F1705DF81002C6C22 /* SourceCodePro-Black.otf */; };
 		DACA296D1705DF81002C6C22 /* Localytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA26961705DF81002C6C22 /* Localytics.plist */; };
@@ -210,6 +207,10 @@
 		DAEB942818AB0FFD000490CC /* sysendian.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB93D718AB0FFD000490CC /* sysendian.h */; };
 		DAEB942918AB0FFD000490CC /* warn.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB93D818AB0FFD000490CC /* warn.h */; };
 		DAEB942E18B47FB3000490CC /* MPInitialWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA0933C91747A56A00DE1CEF /* MPInitialWindow.xib */; };
+		DAF4EF56190A828100023C90 /* Exo2.0-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAF4EF52190A828100023C90 /* Exo2.0-Thin.otf */; };
+		DAF4EF57190A828100023C90 /* Exo2.0-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAF4EF53190A828100023C90 /* Exo2.0-Regular.otf */; };
+		DAF4EF58190A828100023C90 /* Exo2.0-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAF4EF54190A828100023C90 /* Exo2.0-ExtraBold.otf */; };
+		DAF4EF59190A828100023C90 /* Exo2.0-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAF4EF55190A828100023C90 /* Exo2.0-Bold.otf */; };
 		DAFE4A1315039824003ABA7C /* NSObject+PearlExport.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45D815039823003ABA7C /* NSObject+PearlExport.h */; };
 		DAFE4A1415039824003ABA7C /* NSObject+PearlExport.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45D915039823003ABA7C /* NSObject+PearlExport.m */; };
 		DAFE4A1515039824003ABA7C /* NSString+PearlNSArrayFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45DA15039823003ABA7C /* NSString+PearlNSArrayFormat.h */; };
@@ -440,9 +441,6 @@
 		DACA24561705DF7D002C6C22 /* avatar-0@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-0@2x.png"; sourceTree = "<group>"; };
 		DACA24571705DF7D002C6C22 /* avatar-10@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-10@2x.png"; sourceTree = "<group>"; };
 		DACA24581705DF7D002C6C22 /* menu-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-icon.png"; sourceTree = "<group>"; };
-		DACA268B1705DF81002C6C22 /* Exo-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-ExtraBold.otf"; sourceTree = "<group>"; };
-		DACA268C1705DF81002C6C22 /* Exo-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Regular.otf"; sourceTree = "<group>"; };
-		DACA268D1705DF81002C6C22 /* Exo-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Bold.otf"; sourceTree = "<group>"; };
 		DACA268E1705DF81002C6C22 /* SourceCodePro-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-ExtraLight.otf"; sourceTree = "<group>"; };
 		DACA268F1705DF81002C6C22 /* SourceCodePro-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Black.otf"; sourceTree = "<group>"; };
 		DACA26961705DF81002C6C22 /* Localytics.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Localytics.plist; sourceTree = "<group>"; };
@@ -536,6 +534,10 @@
 		DAEB93D718AB0FFD000490CC /* sysendian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sysendian.h; sourceTree = "<group>"; };
 		DAEB93D818AB0FFD000490CC /* warn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = warn.h; sourceTree = "<group>"; };
 		DAEBC45214F6364500987BF6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		DAF4EF52190A828100023C90 /* Exo2.0-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Thin.otf"; sourceTree = "<group>"; };
+		DAF4EF53190A828100023C90 /* Exo2.0-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Regular.otf"; sourceTree = "<group>"; };
+		DAF4EF54190A828100023C90 /* Exo2.0-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-ExtraBold.otf"; sourceTree = "<group>"; };
+		DAF4EF55190A828100023C90 /* Exo2.0-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Bold.otf"; sourceTree = "<group>"; };
 		DAFE45D815039823003ABA7C /* NSObject+PearlExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PearlExport.h"; sourceTree = "<group>"; };
 		DAFE45D915039823003ABA7C /* NSObject+PearlExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PearlExport.m"; sourceTree = "<group>"; };
 		DAFE45DA15039823003ABA7C /* NSString+PearlNSArrayFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PearlNSArrayFormat.h"; sourceTree = "<group>"; };
@@ -891,9 +893,10 @@
 		DACA268A1705DF81002C6C22 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				DACA268B1705DF81002C6C22 /* Exo-ExtraBold.otf */,
-				DACA268C1705DF81002C6C22 /* Exo-Regular.otf */,
-				DACA268D1705DF81002C6C22 /* Exo-Bold.otf */,
+				DAF4EF52190A828100023C90 /* Exo2.0-Thin.otf */,
+				DAF4EF53190A828100023C90 /* Exo2.0-Regular.otf */,
+				DAF4EF54190A828100023C90 /* Exo2.0-ExtraBold.otf */,
+				DAF4EF55190A828100023C90 /* Exo2.0-Bold.otf */,
 				DACA268E1705DF81002C6C22 /* SourceCodePro-ExtraLight.otf */,
 				DACA268F1705DF81002C6C22 /* SourceCodePro-Black.otf */,
 			);
@@ -1455,9 +1458,11 @@
 				DACA27121705DF81002C6C22 /* avatar-13@2x.png in Resources */,
 				DACA27131705DF81002C6C22 /* avatar-3@2x.png in Resources */,
 				DACA27141705DF81002C6C22 /* avatar-7.png in Resources */,
+				DAF4EF57190A828100023C90 /* Exo2.0-Regular.otf in Resources */,
 				DACA27151705DF81002C6C22 /* avatar-0.png in Resources */,
 				DACA27161705DF81002C6C22 /* avatar-12.png in Resources */,
 				DACA27171705DF81002C6C22 /* avatar-15.png in Resources */,
+				DAF4EF59190A828100023C90 /* Exo2.0-Bold.otf in Resources */,
 				DACA27181705DF81002C6C22 /* avatar-9.png in Resources */,
 				DACA27191705DF81002C6C22 /* avatar-1@2x.png in Resources */,
 				DACA271A1705DF81002C6C22 /* avatar-11@2x.png in Resources */,
@@ -1486,6 +1491,8 @@
 				DACA272F1705DF81002C6C22 /* avatar-3.png in Resources */,
 				DACA27301705DF81002C6C22 /* avatar-18.png in Resources */,
 				DACA27311705DF81002C6C22 /* avatar-4.png in Resources */,
+				DAF4EF58190A828100023C90 /* Exo2.0-ExtraBold.otf in Resources */,
+				DAF4EF56190A828100023C90 /* Exo2.0-Thin.otf in Resources */,
 				DACA27321705DF81002C6C22 /* avatar-16.png in Resources */,
 				DACA27331705DF81002C6C22 /* avatar-12@2x.png in Resources */,
 				DACA27341705DF81002C6C22 /* avatar-2@2x.png in Resources */,
@@ -1493,9 +1500,6 @@
 				DACA27361705DF81002C6C22 /* avatar-0@2x.png in Resources */,
 				DACA27371705DF81002C6C22 /* avatar-10@2x.png in Resources */,
 				DACA27381705DF81002C6C22 /* menu-icon.png in Resources */,
-				DACA29641705DF81002C6C22 /* Exo-ExtraBold.otf in Resources */,
-				DACA29651705DF81002C6C22 /* Exo-Regular.otf in Resources */,
-				DACA29661705DF81002C6C22 /* Exo-Bold.otf in Resources */,
 				DACA29671705DF81002C6C22 /* SourceCodePro-ExtraLight.otf in Resources */,
 				DACA29681705DF81002C6C22 /* SourceCodePro-Black.otf in Resources */,
 				DACA296D1705DF81002C6C22 /* Localytics.plist in Resources */,

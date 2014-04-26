@@ -33,7 +33,8 @@
     [super viewWillAppear:animated];
 
     MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForMainThread];
-    self.typeControl.selectedSegmentIndex = [self segmentIndexForType:activeUser.defaultType];
+    self.generatedTypeControl.selectedSegmentIndex = [self generatedSegmentIndexForType:activeUser.defaultType];
+    self.storedTypeControl.selectedSegmentIndex = [self storedSegmentIndexForType:activeUser.defaultType];
     self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%ld", (long)activeUser.avatar )];
     self.savePasswordSwitch.on = activeUser.saveKey;
 
@@ -61,7 +62,7 @@
     if (cell == self.exportCell)
         [[MPiOSAppDelegate get] showExportForVC:self];
     if (cell == self.coachmarksCell) {
-        for (UIViewController *vc = self; (vc = vc.parentViewController); )
+        for (UIViewController *vc = self; (vc = vc.parentViewController);)
             if ([vc isKindOfClass:[MPPasswordsViewController class]]) {
                 MPPasswordsViewController *passwordsVC = (MPPasswordsViewController *)vc;
                 passwordsVC.coachmark.coached = NO;
@@ -87,11 +88,22 @@
             [context saveToStore];
         }];
 
-    if (sender == self.typeControl)
+    if (sender == self.generatedTypeControl || sender == self.storedTypeControl) {
+        if (sender == self.generatedTypeControl)
+            self.storedTypeControl.selectedSegmentIndex = -1;
+        else if (sender == self.storedTypeControl)
+            self.generatedTypeControl.selectedSegmentIndex = -1;
+        
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-            [[MPiOSAppDelegate get] activeUserInContext:context].defaultType = [self typeForSelectedSegment];
+            MPElementType defaultType = [[MPiOSAppDelegate get] activeUserInContext:context].defaultType = [self typeForSelectedSegment];
             [context saveToStore];
+
+            PearlMainQueue( ^{
+                self.generatedTypeControl.selectedSegmentIndex = [self generatedSegmentIndexForType:defaultType];
+                self.storedTypeControl.selectedSegmentIndex = [self storedSegmentIndexForType:defaultType];
+            } );
         }];
+    }
 }
 
 - (IBAction)previousAvatar:(id)sender {
@@ -126,7 +138,10 @@
 
 - (enum MPElementType)typeForSelectedSegment {
 
-    switch (self.typeControl.selectedSegmentIndex) {
+    NSInteger selectedGeneratedIndex = self.generatedTypeControl.selectedSegmentIndex;
+    NSInteger selectedStoredIndex = self.storedTypeControl.selectedSegmentIndex;
+
+    switch (selectedGeneratedIndex) {
         case 0:
             return MPElementTypeGeneratedMaximum;
         case 1:
@@ -140,11 +155,19 @@
         case 5:
             return MPElementTypeGeneratedPIN;
         default:
-            Throw(@"Unsupported type index: %ld", (long)self.typeControl.selectedSegmentIndex);
+
+            switch (selectedStoredIndex) {
+                case 0:
+                    return MPElementTypeStoredPersonal;
+                case 1:
+                    return MPElementTypeStoredDevicePrivate;
+                default:
+                    Throw(@"unsupported selected type index: generated=%d, stored=%d", selectedGeneratedIndex, selectedStoredIndex);
+            }
     }
 }
 
-- (NSInteger)segmentIndexForType:(MPElementType)type {
+- (NSInteger)generatedSegmentIndexForType:(MPElementType)type {
 
     switch (type) {
         case MPElementTypeGeneratedMaximum:
@@ -160,7 +183,19 @@
         case MPElementTypeGeneratedPIN:
             return 5;
         default:
-            Throw(@"Unsupported type index: %ld", (long)self.typeControl.selectedSegmentIndex);
+            return -1;
+    }
+}
+
+- (NSInteger)storedSegmentIndexForType:(MPElementType)type {
+
+    switch (type) {
+        case MPElementTypeStoredPersonal:
+            return 0;
+        case MPElementTypeStoredDevicePrivate:
+            return 1;
+        default:
+            return -1;
     }
 }
 
