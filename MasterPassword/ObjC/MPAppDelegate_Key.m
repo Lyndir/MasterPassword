@@ -16,7 +16,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
                                    attributes:@{
                                            (__bridge id)kSecAttrService : @"Saved Master Password",
-                                           (__bridge id)kSecAttrAccount : IfNotNilElse(user.name, @"")
+                                           (__bridge id)kSecAttrAccount : IfNotNilElse( user.name, @"" )
                                    }
                                       matches:nil];
 }
@@ -25,11 +25,11 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     NSData *keyData = [PearlKeyChain dataOfItemForQuery:keyQuery( user )];
     if (!keyData) {
-        inf(@"No key found in keychain for: %@", user.userID);
+        inf( @"No key found in keychain for: %@", user.userID );
         return nil;
     }
 
-    inf(@"Found key in keychain for: %@", user.userID);
+    inf( @"Found key in keychain for: %@", user.userID );
     return [MPAlgorithmDefault keyFromKeyData:keyData];
 }
 
@@ -39,7 +39,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
         NSData *existingKeyData = [PearlKeyChain dataOfItemForQuery:keyQuery( user )];
 
         if (![existingKeyData isEqualToData:self.key.keyData]) {
-            inf(@"Saving key in keychain for: %@", user.userID);
+            inf( @"Saving key in keychain for: %@", user.userID );
 
             [PearlKeyChain addOrUpdateItemForQuery:keyQuery( user )
                                     withAttributes:@{
@@ -56,7 +56,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     OSStatus result = [PearlKeyChain deleteItemForQuery:keyQuery( user )];
     if (result == noErr) {
-        inf(@"Removed key from keychain for: %@", user.userID);
+        inf( @"Removed key from keychain for: %@", user.userID );
 
         [[NSNotificationCenter defaultCenter] postNotificationName:MPKeyForgottenNotification object:self];
     }
@@ -74,7 +74,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 - (BOOL)signInAsUser:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc usingMasterPassword:(NSString *)password {
 
     if (password)
-    NSAssert(![NSThread isMainThread], @"Computing key must not happen from the main thread.");
+        NSAssert( ![NSThread isMainThread], @"Computing key must not happen from the main thread." );
     if (!user)
         return NO;
 
@@ -92,14 +92,14 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     // Method 2: Depending on the user's saveKey, load or remove the key from the keychain.
     if (!user.saveKey)
-            // Key should not be stored in keychain.  Delete it.
+        // Key should not be stored in keychain.  Delete it.
         [self forgetSavedKeyFor:user];
 
     else if (!tryKey) {
         // Key should be saved in keychain.  Load it.
         if ((tryKey = [self loadSavedKeyFor:user]) && ![user.keyID isEqual:tryKey.keyID]) {
             // Loaded password doesn't match user's keyID.  Forget saved password: it is incorrect.
-            inf(@"Saved password doesn't match keyID for: %@", user.userID);
+            inf( @"Saved password doesn't match keyID for: %@", user.userID );
 
             tryKey = nil;
             [self forgetSavedKeyFor:user];
@@ -110,7 +110,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     if (!tryKey) {
         if ([password length]) if ((tryKey = [MPAlgorithmDefault keyForPassword:password
                                                                     ofUserNamed:user.name])) if (![user.keyID isEqual:tryKey.keyID]) {
-            inf(@"Key derived from password doesn't match keyID for: %@", user.userID);
+            inf( @"Key derived from password doesn't match keyID for: %@", user.userID );
 
             tryKey = nil;
         }
@@ -119,13 +119,13 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     // No more methods left, fail if key still not known.
     if (!tryKey) {
         if (password) {
-            inf(@"Login failed for: %@", user.userID);
+            inf( @"Login failed for: %@", user.userID );
             MPCheckpoint( MPCheckpointSignInFailed, nil );
         }
 
         return NO;
     }
-    inf(@"Logged in: %@", user.userID);
+    inf( @"Logged in: %@", user.userID );
 
     if (![self.key isEqualToKey:tryKey]) {
         self.key = tryKey;
@@ -147,12 +147,18 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
         }
     }
     @catch (id exception) {
-        err(@"While setting username: %@", exception);
+        err( @"While setting username: %@", exception );
     }
 
     user.lastUsed = [NSDate date];
     [moc saveToStore];
     self.activeUser = user;
+
+    // Perform a data sanity check now that we're logged in as the user to allow fixes that require the user's key.
+    if ([[MPConfig get].checkInconsistency boolValue])
+        [MPAppDelegate_Shared managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
+            [self findAndFixInconsistenciesSaveInContext:context];
+        }];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedInNotification object:self];
     MPCheckpoint( MPCheckpointSignedIn, nil );
@@ -163,12 +169,13 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 - (void)migrateElementsForUser:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc toKey:(MPKey *)newKey {
 
     if (![user.elements count])
-            // Nothing to migrate.
+        // Nothing to migrate.
         return;
 
     MPKey *recoverKey = newKey;
 #ifdef PEARL_UIKIT
-    PearlOverlay *activityOverlay = [PearlOverlay showProgressOverlayWithTitle:PearlString( @"Migrating %ld sites...", (long)[user.elements count] )];
+    PearlOverlay *activityOverlay = [PearlOverlay showProgressOverlayWithTitle:PearlString( @"Migrating %ld sites...",
+            (long)[user.elements count] )];
 #endif
 
     for (MPElementEntity *element in user.elements) {
@@ -183,12 +190,12 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                 dispatch_group_enter( recoverPasswordGroup );
                 [PearlAlert showAlertWithTitle:@"Enter Old Master Password"
                                        message:PearlString( @"Your old master password is required to migrate the stored password for %@",
-                                               element.name )
+                                                       element.name )
                                      viewStyle:UIAlertViewStyleSecureTextInput
                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                     @try {
                         if (buttonIndex_ == [alert_ cancelButtonIndex])
-                                // Don't Migrate
+                            // Don't Migrate
                             return;
 
                         masterPassword = [alert_ textFieldAtIndex:0].text;
@@ -200,14 +207,14 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                 dispatch_group_wait( recoverPasswordGroup, DISPATCH_TIME_FOREVER );
 #endif
                 if (!masterPassword)
-                        // Don't Migrate
+                    // Don't Migrate
                     break;
 
                 recoverKey = [element.algorithm keyForPassword:masterPassword ofUserNamed:user.name];
             }
 
             if (!content)
-                    // Don't Migrate
+                // Don't Migrate
                 break;
 
             if (![recoverKey isEqualToKey:newKey])

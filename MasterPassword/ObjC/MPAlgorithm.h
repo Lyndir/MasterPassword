@@ -37,6 +37,8 @@
 - (NSString *)shortNameOfType:(MPElementType)type;
 - (NSString *)classNameOfType:(MPElementType)type;
 - (Class)classOfType:(MPElementType)type;
+- (NSArray *)allTypes;
+- (NSArray *)allTypesStartingWith:(MPElementType)startingType;
 - (MPElementType)nextType:(MPElementType)type;
 - (MPElementType)previousType:(MPElementType)type;
 

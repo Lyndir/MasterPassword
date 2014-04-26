@@ -6,12 +6,11 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import "MPConfig.h"
 #import "MPAppDelegate_Shared.h"
 
 @implementation MPConfig
 
-@dynamic sendInfo, rememberLogin, iCloudDecided;
+@dynamic sendInfo, rememberLogin, iCloudDecided, checkInconsistency;
 
 - (id)init {
 
@@ -19,11 +18,12 @@
         return nil;
 
     [self.defaults registerDefaults:@{
-            NSStringFromSelector( @selector(askForReviews) ) : @YES,
+            NSStringFromSelector( @selector( askForReviews ) )      : @YES,
 
-            NSStringFromSelector( @selector(sendInfo) )      : @NO,
-            NSStringFromSelector( @selector(rememberLogin) ) : @NO,
-            NSStringFromSelector( @selector(iCloudDecided) ) : @NO
+            NSStringFromSelector( @selector( sendInfo ) )           : @NO,
+            NSStringFromSelector( @selector( rememberLogin ) )      : @NO,
+            NSStringFromSelector( @selector( iCloudDecided ) )      : @NO,
+            NSStringFromSelector( @selector( checkInconsistency ) ) : @NO
     }];
 
     self.delegate = [MPAppDelegate_Shared get];

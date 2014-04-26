@@ -714,8 +714,42 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="110" id="UdB-BV-AHA" userLabel="Check Inconsistencies">
+                                        <rect key="frame" x="0.0" y="860" width="320" height="110"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UdB-BV-AHA" id="V2Y-nu-jhZ">
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="109"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Check For Inconsistencies" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WXh-sg-l2h">
+                                                    <rect key="frame" x="20" y="20" width="247" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Perform a check to see if there are any inconsistencies in your site data that might cause issues." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="247" translatesAutoresizingMaskIntoConstraints="NO" id="gTs-JA-zmL">
+                                                    <rect key="frame" x="20" y="49" width="247" height="40"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="gTs-JA-zmL" secondAttribute="trailing" constant="20" symbolic="YES" id="E6T-PX-DeO"/>
+                                                <constraint firstItem="gTs-JA-zmL" firstAttribute="leading" secondItem="V2Y-nu-jhZ" secondAttribute="leading" constant="20" symbolic="YES" id="KNx-Ww-XeE"/>
+                                                <constraint firstAttribute="trailing" secondItem="WXh-sg-l2h" secondAttribute="trailing" constant="20" symbolic="YES" id="MTI-sn-fnK"/>
+                                                <constraint firstItem="WXh-sg-l2h" firstAttribute="leading" secondItem="V2Y-nu-jhZ" secondAttribute="leading" constant="20" symbolic="YES" id="cXs-lo-6cy"/>
+                                                <constraint firstItem="gTs-JA-zmL" firstAttribute="top" secondItem="WXh-sg-l2h" secondAttribute="bottom" constant="8" symbolic="YES" id="jA7-sy-qAs"/>
+                                                <constraint firstItem="WXh-sg-l2h" firstAttribute="top" secondItem="V2Y-nu-jhZ" secondAttribute="top" constant="20" symbolic="YES" id="tOD-LM-bbp"/>
+                                                <constraint firstAttribute="bottom" secondItem="gTs-JA-zmL" secondAttribute="bottom" constant="20" symbolic="YES" id="trB-mg-HbI"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="125" id="IVT-Rs-nTu" userLabel="Export">
-                                        <rect key="frame" x="0.0" y="860" width="320" height="125"/>
+                                        <rect key="frame" x="0.0" y="970" width="320" height="125"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IVT-Rs-nTu" id="Q5J-2f-mmz">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="124"/>
@@ -762,6 +796,7 @@
                     <size key="freeformSize" width="320" height="568"/>
                     <connections>
                         <outlet property="avatarImage" destination="tWi-sc-DGp" id="ifT-Ct-WL6"/>
+                        <outlet property="checkInconsistencies" destination="UdB-BV-AHA" id="Cm2-Om-UzP"/>
                         <outlet property="coachmarksCell" destination="eth-Dc-JYn" id="0Tq-I3-SwK"/>
                         <outlet property="exportCell" destination="IVT-Rs-nTu" id="RU0-qr-Bdi"/>
                         <outlet property="feedbackCell" destination="9QG-lM-ymM" id="18X-Ph-0ac"/>

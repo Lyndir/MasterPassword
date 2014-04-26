@@ -47,6 +47,7 @@
 		93D39CB5E2EC1078E898F46A /* MPPasswordLargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3937863061C3916AF7AD2 /* MPPasswordLargeCell.m */; };
 		93D39D596A2E376D6F6F5DA1 /* MPCombinedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D393310223DDB35218467A /* MPCombinedViewController.m */; };
 		93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */; };
+		93D39EAA4D064193074D3021 /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A813CA9D7E192261ED2 /* MPFixable.m */; };
 		93D39EDD960C381D64E4DCDD /* MPPasswordSmallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3952CC60991B97D69F26A /* MPPasswordSmallCell.m */; };
 		93D39F8A9254177891F38705 /* MPSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A28369954D147E239BA /* MPSetupViewController.m */; };
 		93D39FA97F4C3F69A75D5A03 /* MPPasswordLargeGeneratedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3993422E207BF0B21D089 /* MPPasswordLargeGeneratedCell.m */; };
@@ -556,10 +557,12 @@
 		93D39975CE5AEC99E3F086C7 /* MPPasswordCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordCell.h; sourceTree = "<group>"; };
 		93D3999693660C89A7465F4E /* MPCoachmarkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCoachmarkViewController.h; sourceTree = "<group>"; };
 		93D399E571F61E50A9BF8FAF /* MPUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUsersViewController.m; sourceTree = "<group>"; };
+		93D399F244BB522A317811BB /* MPFixable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPFixable.h; sourceTree = "<group>"; };
 		93D39A1DDFA09AE2E14D26DC /* UIResponder+PearlFirstResponder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+PearlFirstResponder.m"; sourceTree = "<group>"; };
 		93D39A28369954D147E239BA /* MPSetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSetupViewController.m; sourceTree = "<group>"; };
 		93D39A3CC4D8330831FC8CB4 /* LLToggleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLToggleViewController.h; sourceTree = "<group>"; };
 		93D39A41340CF778E00D0E6D /* MPEmergencySegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEmergencySegue.h; sourceTree = "<group>"; };
+		93D39A813CA9D7E192261ED2 /* MPFixable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPFixable.m; sourceTree = "<group>"; };
 		93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Indexing.m"; sourceTree = "<group>"; };
 		93D39ACBA9F4878B6A1CC33B /* MPEmergencyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEmergencyViewController.m; sourceTree = "<group>"; };
 		93D39B050DD5F55E9794EFD4 /* MPPopdownSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPopdownSegue.m; sourceTree = "<group>"; };
@@ -2496,6 +2499,8 @@
 				DABD3BB91711E2DC00CF925C /* MPUserEntity.h */,
 				DABD3BBA1711E2DC00CF925C /* MPUserEntity.m */,
 				DABD3BD01711E2DC00CF925C /* MasterPassword.xcdatamodeld */,
+				93D399F244BB522A317811BB /* MPFixable.h */,
+				93D39A813CA9D7E192261ED2 /* MPFixable.m */,
 			);
 			name = ObjC;
 			path = ..;
@@ -3840,6 +3845,7 @@
 				93D39BA1EA3CAAC8A220B4A6 /* MPAppSettingsViewController.m in Sources */,
 				93D396D8B67DA6522CDBA142 /* MPCoachmarkViewController.m in Sources */,
 				93D391C07818F4C2DC1B6956 /* MPPasswordsCoachmarkViewController.m in Sources */,
+				93D39EAA4D064193074D3021 /* MPFixable.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

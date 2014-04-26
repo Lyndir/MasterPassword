@@ -18,5 +18,6 @@
 @property(nonatomic, retain) NSNumber *loginNameTipShown;
 @property(nonatomic, retain) NSNumber *traceMode;
 @property(nonatomic, retain) NSNumber *iCloudEnabled;
+@property(nonatomic, retain) NSNumber *dictationSearch;
 
 @end

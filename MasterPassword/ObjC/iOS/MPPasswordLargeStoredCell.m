@@ -44,10 +44,8 @@
     element = [super saveContentTypeWithElement:element saveInContext:context];
 
     MPElementStoredEntity *storedElement = [self storedElement:element];
-    if (storedElement) {
-        storedElement.contentObject = self.contentField.text;
-        [context saveToStore];
-    }
+    [storedElement.algorithm saveContent:self.contentField.text toElement:storedElement usingKey:[MPiOSAppDelegate get].key];
+    [context saveToStore];
 
     return element;
 }
@@ -78,7 +76,7 @@
 
             switch (self.contentFieldMode) {
                 case MPContentFieldModePassword: {
-                    storedElement.contentObject = newContent;
+                    [storedElement.algorithm saveContent:newContent toElement:storedElement usingKey:[MPiOSAppDelegate get].key];
                     [context saveToStore];
 
                     PearlMainQueue( ^{

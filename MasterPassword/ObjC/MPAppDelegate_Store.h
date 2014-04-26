@@ -9,6 +9,7 @@
 #import "MPAppDelegate_Shared.h"
 
 #import "UbiquityStoreManager.h"
+#import "MPFixable.h"
 
 typedef enum {
     MPImportResultSuccess,
@@ -27,6 +28,7 @@ typedef enum {
 + (BOOL)managedObjectContextPerformBlockAndWait:(void (^)(NSManagedObjectContext *context))mocBlock;
 
 - (UbiquityStoreManager *)storeManager;
+- (MPFixableResult)findAndFixInconsistenciesSaveInContext:(NSManagedObjectContext *)context;
 
 /** @param completion The block to execute after adding the element, executed from the main thread with the new element in the main MOC. */
 - (void)addElementNamed:(NSString *)siteName completion:(void (^)(MPElementEntity *element))completion;

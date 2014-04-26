@@ -29,7 +29,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 
-    inf(@"Preferences will appear");
+    inf( @"Preferences will appear" );
     [super viewWillAppear:animated];
 
     MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForMainThread];
@@ -70,6 +70,14 @@
                 [vc performSegueWithIdentifier:@"coachmarks" sender:self];
             }
     }
+    if (cell == self.checkInconsistencies)
+        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+            if ([[MPiOSAppDelegate get] findAndFixInconsistenciesSaveInContext:context] == MPFixableResultNoProblems)
+                [PearlAlert showAlertWithTitle:@"No Inconsistencies" message:
+                        @"No inconsistencies were detected in your sites."
+                                     viewStyle:UIAlertViewStyleDefault initAlert:nil
+                             tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
+        }];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -93,7 +101,7 @@
             self.storedTypeControl.selectedSegmentIndex = -1;
         else if (sender == self.storedTypeControl)
             self.generatedTypeControl.selectedSegmentIndex = -1;
-        
+
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             MPElementType defaultType = [[MPiOSAppDelegate get] activeUserInContext:context].defaultType = [self typeForSelectedSegment];
             [context saveToStore];
@@ -162,7 +170,7 @@
                 case 1:
                     return MPElementTypeStoredDevicePrivate;
                 default:
-                    Throw(@"unsupported selected type index: generated=%d, stored=%d", selectedGeneratedIndex, selectedStoredIndex);
+                    Throw( @"unsupported selected type index: generated=%d, stored=%d", selectedGeneratedIndex, selectedStoredIndex );
             }
     }
 }

@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "MPFixable.h"
 
 @class MPUserEntity;
 
-@interface MPElementEntity : NSManagedObject
+@interface MPElementEntity : NSManagedObject <MPFixable>
 
 @property(nonatomic, retain) NSDate *lastUsed;
 @property(nonatomic, retain) NSString *loginName;

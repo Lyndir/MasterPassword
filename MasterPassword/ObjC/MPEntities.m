@@ -38,33 +38,10 @@
 
 - (MPElementType)type {
 
-    // Some people got elements with type == 0.
-    MPElementType type = (MPElementType)[self.type_ unsignedIntegerValue];
-    if (!type || type == (MPElementType)NSNotFound)
-        type = [self.user defaultType];
-    if (!type || type == (MPElementType)NSNotFound)
-        type = MPElementTypeGeneratedLong;
-    if (![self isKindOfClass:[self.algorithm classOfType:type]]) {
-//        NSAssert(NO, @"This object's class does not support the type: %lu", (long)type);
-        for (MPElementType aType = type; type != (aType = [self.algorithm nextType:aType]);)
-            if ([self isKindOfClass:[self.algorithm classOfType:aType]]) {
-                err(@"Invalid type for: %@, type: %lu.  Will use %lu instead.", self.name, (long)type, (long)aType);
-                return aType;
-            }
-    }
-
-    return type;
+    return (MPElementType)[self.type_ unsignedIntegerValue];
 }
 
 - (void)setType:(MPElementType)aType {
-
-    // Make sure we don't poison our model data with invalid values.
-    if (!aType || aType == (MPElementType)NSNotFound)
-        aType = [self.user defaultType];
-    if (!aType || aType == (MPElementType)NSNotFound)
-        aType = MPElementTypeGeneratedLong;
-    if (![self isKindOfClass:[self.algorithm classOfType:aType]])
-    Throw(@"This object's class does not support the type: %lu", (long)aType);
 
     self.type_ = @(aType);
 }
@@ -132,12 +109,12 @@
 
 - (NSString *)description {
 
-    return PearlString( @"%@:%@", [self class], [self name] );
+    return strf( @"%@:%@", [self class], [self name] );
 }
 
 - (NSString *)debugDescription {
 
-    return PearlString( @"{%@: name=%@, user=%@, type=%lu, uses=%ld, lastUsed=%@, version=%ld, loginName=%@, requiresExplicitMigration=%d}",
+    return strf( @"{%@: name=%@, user=%@, type=%lu, uses=%ld, lastUsed=%@, version=%ld, loginName=%@, requiresExplicitMigration=%d}",
             NSStringFromClass( [self class] ), self.name, self.user.name, (long)self.type, (long)self.uses, self.lastUsed, (long)self.version,
             self.loginName, self.requiresExplicitMigration );
 }

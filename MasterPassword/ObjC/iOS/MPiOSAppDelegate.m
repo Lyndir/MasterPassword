@@ -111,17 +111,20 @@
 #endif
     }
     @catch (id exception) {
-        err(@"During Analytics Setup: %@", exception);
+        err( @"During Analytics Setup: %@", exception );
     }
     @try {
         [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
                 ^(NSNotification *note) {
-                    [self checkConfig];
-                }];
-        [[NSNotificationCenter defaultCenter]
-                addObserverForName:kIASKAppSettingChanged object:nil queue:nil usingBlock:^(NSNotification *note) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification
-                                                                object:note userInfo:nil];
+            [self updateFromConfig];
+        }];
+        [[NSNotificationCenter defaultCenter] addObserverForName:kIASKAppSettingChanged object:nil queue:nil usingBlock:
+                ^(NSNotification *note) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note userInfo:nil];
+        }];
+        [[NSNotificationCenter defaultCenter] addObserverForName:NSUserDefaultsDidChangeNotification object:nil queue:nil usingBlock:
+                ^(NSNotification *note) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note userInfo:nil];
         }];
 
 #ifdef ADHOC
@@ -137,18 +140,41 @@
 #endif
     }
     @catch (id exception) {
-        err(@"During Config Test: %@", exception);
+        err( @"During Config Test: %@", exception );
     }
     @try {
         [super application:application didFinishLaunchingWithOptions:launchOptions];
     }
     @catch (id exception) {
-        err(@"During Pearl Application Launch: %@", exception);
+        err( @"During Pearl Application Launch: %@", exception );
     }
     @try {
-        inf(@"Started up with device identifier: %@", [PearlKeyChain deviceIdentifier]);
+        inf( @"Started up with device identifier: %@", [PearlKeyChain deviceIdentifier] );
 
-        dispatch_async( dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] addObserverForName:MPFoundInconsistenciesNotification object:nil queue:nil usingBlock:
+                ^(NSNotification *note) {
+            switch ((MPFixableResult)[note.userInfo[MPInconsistenciesFixResultUserKey] unsignedIntegerValue]) {
+
+                case MPFixableResultNoProblems:
+                    break;
+                case MPFixableResultProblemsFixed:
+                    [PearlAlert showAlertWithTitle:@"Inconsistencies Fixed" message:
+                            @"Some inconsistencies were detected in your sites.\n"
+                                    @"All issues were fixed."
+                                         viewStyle:UIAlertViewStyleDefault initAlert:nil
+                                 tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
+                    break;
+                case MPFixableResultProblemsNotFixed:
+                    [PearlAlert showAlertWithTitle:@"Inconsistencies Found" message:
+                            @"Some inconsistencies were detected in your sites.\n"
+                                    @"Not all issues could be fixed.  Try signing in to each user or checking the logs."
+                                         viewStyle:UIAlertViewStyleDefault initAlert:nil
+                                 tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
+                    break;
+            }
+        }];
+
+        PearlMainQueue( ^{
             if ([[MPiOSConfig get].showSetup boolValue])
                 [self.navigationController performSegueWithIdentifier:@"setup" sender:self];
         } );
@@ -166,7 +192,7 @@
         } );
     }
     @catch (id exception) {
-        err(@"During Post-Startup: %@", exception);
+        err( @"During Post-Startup: %@", exception );
     }
 
     return YES;
@@ -186,7 +212,7 @@
         NSData *importedSitesData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
                                                           returningResponse:&response error:&error];
         if (error)
-        err(@"While reading imported sites from %@: %@", url, error);
+            err( @"While reading imported sites from %@: %@", url, error );
         if (!importedSitesData)
             return;
 
@@ -227,7 +253,7 @@
             dispatch_async( dispatch_get_main_queue(), ^{
                 [PearlAlert showAlertWithTitle:PearlString( @"Master Password for\n%@", userName )
                                        message:PearlString( @"Imports %lu sites, overwriting %lu.",
-                                               (unsigned long)importCount, (unsigned long)deleteCount )
+                                                       (unsigned long)importCount, (unsigned long)deleteCount )
                                      viewStyle:UIAlertViewStyleSecureTextInput
                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                     @try {
@@ -270,7 +296,7 @@
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
 
-    inf(@"Received memory warning.");
+    inf( @"Received memory warning." );
 
     [super applicationDidReceiveMemoryWarning:application];
 }
@@ -307,7 +333,7 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application {
 
-    inf(@"Will deactivate");
+    inf( @"Will deactivate" );
     if (![[MPiOSConfig get].rememberLogin boolValue])
         [self signOutAnimated:NO];
 
@@ -321,9 +347,8 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 
-    inf(@"Re-activated");
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification
-                                                        object:application userInfo:nil];
+    inf( @"Re-activated" );
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:application];
 
 #ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] resume];
@@ -377,14 +402,14 @@
 
     [[[PearlEMail alloc] initForEMailTo:@"Master Password Development <masterpassword@lyndir.com>"
                                 subject:PearlString( @"Feedback for Master Password [%@]",
-                                        [[PearlKeyChain deviceIdentifier] stringByDeletingMatchesOf:@"-.*"] )
+                                                [[PearlKeyChain deviceIdentifier] stringByDeletingMatchesOf:@"-.*"] )
                                    body:PearlString( @"\n\n\n"
                                            @"--\n"
                                            @"%@"
                                            @"Master Password %@, build %@",
-                                        userName? ([userName stringByAppendingString:@"\n"]): @"",
-                                        [PearlInfoPlist get].CFBundleShortVersionString,
-                                        [PearlInfoPlist get].CFBundleVersion )
+                                                userName? ([userName stringByAppendingString:@"\n"]): @"",
+                                                [PearlInfoPlist get].CFBundleShortVersionString,
+                                                [PearlInfoPlist get].CFBundleVersion )
 
                             attachments:(logs
                                          ? [[PearlEMailAttachment alloc]
@@ -392,8 +417,8 @@
                                                          dataUsingEncoding:NSUTF8StringEncoding]
                                                         mimeType:@"text/plain"
                                                         fileName:PearlString( @"%@-%@.log",
-                                                        [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
-                                                        [PearlKeyChain deviceIdentifier] )]
+                                                                [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
+                                                                [PearlKeyChain deviceIdentifier] )]
                                          : nil), nil]
             showComposerForVC:viewController];
 }
@@ -405,22 +430,22 @@
                     @"You can open the export with a text editor to get an overview of all your sites.\n\n"
                     @"The file also acts as a personal backup of your site list in case you don't sync with iCloud/iTunes."
          tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-             [PearlAlert showAlertWithTitle:@"Reveal Passwords?" message:
-                     @"Would you like to make all your passwords visible in the export?\n\n"
-                             @"A safe export will only include your stored passwords, in an encrypted manner, "
-                             @"making the result safe from falling in the wrong hands.\n\n"
-                             @"If all your passwords are shown and somebody else finds the export, "
-                             @"they could gain access to all your sites!"
-                                  viewStyle:UIAlertViewStyleDefault initAlert:nil
-                          tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                              if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 0)
-                                      // Safe Export
-                                  [self showExportRevealPasswords:NO forVC:viewController];
-                              if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
-                                      // Show Passwords
-                                  [self showExportRevealPasswords:YES forVC:viewController];
-                          } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
-         } otherTitles:nil];
+        [PearlAlert showAlertWithTitle:@"Reveal Passwords?" message:
+                @"Would you like to make all your passwords visible in the export?\n\n"
+                        @"A safe export will only include your stored passwords, in an encrypted manner, "
+                        @"making the result safe from falling in the wrong hands.\n\n"
+                        @"If all your passwords are shown and somebody else finds the export, "
+                        @"they could gain access to all your sites!"
+                             viewStyle:UIAlertViewStyleDefault initAlert:nil
+                     tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+            if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 0)
+                // Safe Export
+                [self showExportRevealPasswords:NO forVC:viewController];
+            if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
+                // Show Passwords
+                [self showExportRevealPasswords:YES forVC:viewController];
+        } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
+    } otherTitles:nil];
 }
 
 - (void)showExportRevealPasswords:(BOOL)revealPasswords forVC:(UIViewController *)viewController {
@@ -445,17 +470,17 @@
                 @"--\n"
                 @"%@\n"
                 @"Master Password %@, build %@",
-        [self activeUserForMainThread].name,
-        [PearlInfoPlist get].CFBundleShortVersionString,
-        [PearlInfoPlist get].CFBundleVersion );
+                [self activeUserForMainThread].name,
+                [PearlInfoPlist get].CFBundleShortVersionString,
+                [PearlInfoPlist get].CFBundleVersion );
     else
         message = PearlString( @"Backup of Master Password sites.\n\n\n"
                 @"--\n"
                 @"%@\n"
                 @"Master Password %@, build %@",
-        [self activeUserForMainThread].name,
-        [PearlInfoPlist get].CFBundleShortVersionString,
-        [PearlInfoPlist get].CFBundleVersion );
+                [self activeUserForMainThread].name,
+                [PearlInfoPlist get].CFBundleShortVersionString,
+                [PearlInfoPlist get].CFBundleVersion );
 
     NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
     [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
@@ -464,11 +489,11 @@
                 attachments:[[PearlEMailAttachment alloc] initWithContent:[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
                                                                  mimeType:@"text/plain" fileName:
                                 PearlString( @"%@ (%@).mpsites", [self activeUserForMainThread].name,
-                                [exportDateFormatter stringFromDate:[NSDate date]] )],
+                                        [exportDateFormatter stringFromDate:[NSDate date]] )],
                             nil];
 }
 
-- (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void (^)(void))didReset {
+- (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void ( ^ )(void))didReset {
 
     [PearlAlert showAlertWithTitle:@"Changing Master Password"
                            message:
@@ -481,7 +506,7 @@
             return;
 
         [moc performBlockAndWait:^{
-            inf(@"Unsetting master password for: %@.", user.userID);
+            inf( @"Unsetting master password for: %@.", user.userID );
             user.keyID = nil;
             [self forgetSavedKeyFor:user];
             [moc saveToStore];
@@ -497,16 +522,14 @@
                        otherTitles:[PearlStrings get].commonButtonContinue, nil];
 }
 
-
 #pragma mark - PearlConfigDelegate
 
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)value {
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification
-                                                        object:NSStringFromSelector( configKey ) userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:NSStringFromSelector( configKey )];
 }
 
-- (void)checkConfig {
+- (void)updateFromConfig {
 
     // iCloud enabled / disabled
     BOOL iCloudEnabled = [[MPiOSConfig get].iCloudEnabled boolValue];
@@ -519,7 +542,7 @@
                     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
                     NSError *error = nil;
                     if ((siteCount = [context countForFetchRequest:fetchRequest error:&error]) == NSNotFound) {
-                        wrn(@"Couldn't count current sites: %@", error);
+                        wrn( @"Couldn't count current sites: %@", error );
                         return;
                     }
                 }];
@@ -536,11 +559,11 @@
                                                        @"or overwrite them with your current sites."
                                      viewStyle:UIAlertViewStyleDefault initAlert:nil
                              tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                                 if (buttonIndex == [alert cancelButtonIndex])
-                                     setConfirmationAnswer( NO );
-                                 if (buttonIndex == [alert firstOtherButtonIndex])
-                                     setConfirmationAnswer( YES );
-                             }
+                    if (buttonIndex == [alert cancelButtonIndex])
+                        setConfirmationAnswer( NO );
+                    if (buttonIndex == [alert firstOtherButtonIndex])
+                        setConfirmationAnswer( YES );
+                }
                                    cancelTitle:@"Use Old" otherTitles:@"Overwrite", nil];
             }];
         else
@@ -550,7 +573,7 @@
                     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
                     NSError *error = nil;
                     if ((siteCount = [context countForFetchRequest:fetchRequest error:&error]) == NSNotFound) {
-                        wrn(@"Couldn't count current sites: %@", error);
+                        wrn( @"Couldn't count current sites: %@", error );
                         return;
                     }
                 }];
@@ -566,11 +589,11 @@
                                                        @"or overwrite them with your current iCloud sites."
                                      viewStyle:UIAlertViewStyleDefault initAlert:nil
                              tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                                 if (buttonIndex == [alert cancelButtonIndex])
-                                     setConfirmationAnswer( NO );
-                                 if (buttonIndex == [alert firstOtherButtonIndex])
-                                     setConfirmationAnswer( YES );
-                             }
+                    if (buttonIndex == [alert cancelButtonIndex])
+                        setConfirmationAnswer( NO );
+                    if (buttonIndex == [alert firstOtherButtonIndex])
+                        setConfirmationAnswer( YES );
+                }
                                    cancelTitle:@"Use Old" otherTitles:@"Overwrite", nil];
             }];
     }
@@ -630,14 +653,13 @@
                 @"helpHidden"          : @([[MPiOSConfig get].helpHidden boolValue]),
                 @"showQuickStart"      : @([[MPiOSConfig get].showSetup boolValue]),
                 @"firstRun"            : @([[PearlConfig get].firstRun boolValue]),
-                @"launchCount"         : NilToNSNull([PearlConfig get].launchCount),
+                @"launchCount"         : NilToNSNull( [PearlConfig get].launchCount ),
                 @"askForReviews"       : @([[PearlConfig get].askForReviews boolValue]),
-                @"reviewAfterLaunches" : NilToNSNull([PearlConfig get].reviewAfterLaunches),
-                @"reviewedVersion"     : NilToNSNull([PearlConfig get].reviewedVersion)
+                @"reviewAfterLaunches" : NilToNSNull( [PearlConfig get].reviewAfterLaunches ),
+                @"reviewedVersion"     : NilToNSNull( [PearlConfig get].reviewedVersion )
         } );
     }
 }
-
 
 #pragma mark - UbiquityStoreManager
 
@@ -690,13 +712,13 @@
                         @"To add one, go into Apple's Settings -> iCloud."
                                                              viewStyle:UIAlertViewStyleDefault initAlert:nil
                                                      tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                                                         if (buttonIndex == alert.firstOtherButtonIndex) {
-                                                             [MPiOSConfig get].iCloudEnabled = @NO;
-                                                             return;
-                                                         }
+                    if (buttonIndex == alert.firstOtherButtonIndex) {
+                        [MPiOSConfig get].iCloudEnabled = @NO;
+                        return;
+                    }
 
-                                                         [self.storeManager reloadStore];
-                                                     } cancelTitle:@"Try Again" otherTitles:@"Disable iCloud", nil];
+                    [self.storeManager reloadStore];
+                } cancelTitle:@"Try Again" otherTitles:@"Disable iCloud", nil];
 
     return YES;
 }
@@ -710,29 +732,28 @@
                                                           message:@"Waiting for your other device to auto‑correct the problem..."
                                                         viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:
                     ^(UIAlertView *alert, NSInteger buttonIndex) {
-                        if (buttonIndex == [alert firstOtherButtonIndex])
-                            wSelf.fixCloudContentAlert = [PearlAlert showAlertWithTitle:@"Fix iCloud Now" message:
-                                    @"This problem can be auto‑corrected by opening the app on another device where you recently made changes.\n"
-                                            @"You can fix the problem from this device anyway, but recent changes from another device might get lost.\n\n"
-                                            @"You can also turn iCloud off for now."
-                                                                              viewStyle:UIAlertViewStyleDefault
-                                                                              initAlert:nil tappedButtonBlock:
-                                            ^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                                                if (buttonIndex_ == alert_.cancelButtonIndex)
-                                                    [wSelf showCloudContentAlert];
-                                                if (buttonIndex_ == [alert_ firstOtherButtonIndex])
-                                                    [wSelf.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:YES];
-                                                if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
-                                                    [MPiOSConfig get].iCloudEnabled = @NO;
-                                            }
-                                                                            cancelTitle:[PearlStrings get].commonButtonBack
-                                                                            otherTitles:@"Fix Anyway",
-                                                                                        @"Turn Off", nil];
-                        if (buttonIndex == [alert firstOtherButtonIndex] + 1)
-                            [MPiOSConfig get].iCloudEnabled = @NO;
-                    }                                 cancelTitle:nil otherTitles:@"Fix Now", @"Turn Off", nil];
+                if (buttonIndex == [alert firstOtherButtonIndex])
+                    wSelf.fixCloudContentAlert = [PearlAlert showAlertWithTitle:@"Fix iCloud Now" message:
+                            @"This problem can be auto‑corrected by opening the app on another device where you recently made changes.\n"
+                                    @"You can fix the problem from this device anyway, but recent changes from another device might get lost.\n\n"
+                                    @"You can also turn iCloud off for now."
+                                                                      viewStyle:UIAlertViewStyleDefault
+                                                                      initAlert:nil tappedButtonBlock:
+                                    ^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                                if (buttonIndex_ == alert_.cancelButtonIndex)
+                                    [wSelf showCloudContentAlert];
+                                if (buttonIndex_ == [alert_ firstOtherButtonIndex])
+                                    [wSelf.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:YES];
+                                if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
+                                    [MPiOSConfig get].iCloudEnabled = @NO;
+                            }
+                                                                    cancelTitle:[PearlStrings get].commonButtonBack
+                                                                    otherTitles:@"Fix Anyway",
+                                                                                @"Turn Off", nil];
+                if (buttonIndex == [alert firstOtherButtonIndex] + 1)
+                    [MPiOSConfig get].iCloudEnabled = @NO;
+            }                                         cancelTitle:nil otherTitles:@"Fix Now", @"Turn Off", nil];
 }
-
 
 #pragma mark - TestFlight
 
@@ -748,13 +769,12 @@
 
 - (NSString *)testFlightToken {
 
-    NSString *testFlightToken = NSNullToNil([[self testFlightInfo] valueForKeyPath:@"Application Token"]);
+    NSString *testFlightToken = NSNullToNil( [[self testFlightInfo] valueForKeyPath:@"Application Token"] );
     if (![testFlightToken length])
-    wrn(@"TestFlight token not set.  Test Flight won't be aware of this test.");
+        wrn( @"TestFlight token not set.  Test Flight won't be aware of this test." );
 
     return testFlightToken;
 }
-
 
 #pragma mark - Crashlytics
 
@@ -770,13 +790,12 @@
 
 - (NSString *)crashlyticsAPIKey {
 
-    NSString *crashlyticsAPIKey = NSNullToNil([[self crashlyticsInfo] valueForKeyPath:@"API Key"]);
+    NSString *crashlyticsAPIKey = NSNullToNil( [[self crashlyticsInfo] valueForKeyPath:@"API Key"] );
     if (![crashlyticsAPIKey length])
-    wrn(@"Crashlytics API key not set.  Crash logs won't be recorded.");
+        wrn( @"Crashlytics API key not set.  Crash logs won't be recorded." );
 
     return crashlyticsAPIKey;
 }
-
 
 #pragma mark - Localytics
 
@@ -793,12 +812,12 @@
 - (NSString *)localyticsKey {
 
 #ifdef DEBUG
-    NSString *localyticsKey = NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.development"]);
+    NSString *localyticsKey = NSNullToNil( [[self localyticsInfo] valueForKeyPath:@"Key.development"] );
 #else
     NSString *localyticsKey = NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.distribution"]);
 #endif
     if (![localyticsKey length])
-    wrn(@"Localytics key not set.  Demographics won't be collected.");
+        wrn( @"Localytics key not set.  Demographics won't be collected." );
 
     return localyticsKey;
 }

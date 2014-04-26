@@ -19,4 +19,9 @@
 @dynamic version_;
 @dynamic user;
 
+- (MPFixableResult)findAndFixInconsistenciesInContext:(NSManagedObjectContext *)context {
+
+    return MPFixableResultNoProblems;
+}
+
 @end

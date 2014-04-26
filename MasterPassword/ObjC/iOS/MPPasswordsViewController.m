@@ -68,6 +68,7 @@
 
     [self registerObservers];
     [self observeStore];
+    [self updateFromConfig];
     [self updatePasswords];
 }
 
@@ -464,6 +465,11 @@
                     self.passwordSelectionContainer.alpha = 1;
                 }];
             }],
+            [[NSNotificationCenter defaultCenter]
+                    addObserverForName:MPCheckConfigNotification object:nil
+                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+                [self updateFromConfig];
+            }],
     ];
 }
 
@@ -502,6 +508,11 @@
         [[NSNotificationCenter defaultCenter] removeObserver:_mocObserver];
     if (_storeObserver)
         [[NSNotificationCenter defaultCenter] removeObserver:_storeObserver];
+}
+
+- (void)updateFromConfig {
+
+    self.passwordsSearchBar.keyboardType = [[MPiOSConfig get].dictationSearch boolValue]? UIKeyboardTypeDefault: UIKeyboardTypeURL;
 }
 
 - (void)updatePasswords {

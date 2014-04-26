@@ -1,12 +1,12 @@
 /**
- * Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
- *
- * See the enclosed file LICENSE for license information (LGPLv3). If you did
- * not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
- *
- * @author   Maarten Billemont <lhunath@lyndir.com>
- * @license  http://www.gnu.org/licenses/lgpl-3.0.txt
- */
+* Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
+*
+* See the enclosed file LICENSE for license information (LGPLv3). If you did
+* not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
+*
+* @author   Maarten Billemont <lhunath@lyndir.com>
+* @license  http://www.gnu.org/licenses/lgpl-3.0.txt
+*/
 
 //
 //  MPAlgorithmV0
@@ -53,7 +53,7 @@
     migrationRequest.predicate = [NSPredicate predicateWithFormat:@"version_ < %d AND user == %@", self.version, user];
     NSArray *migrationElements = [moc executeFetchRequest:migrationRequest error:&error];
     if (!migrationElements) {
-        err(@"While looking for elements to migrate: %@", error);
+        err( @"While looking for elements to migrate: %@", error );
         return NO;
     }
 
@@ -68,7 +68,7 @@
 - (BOOL)migrateElement:(MPElementEntity *)element explicit:(BOOL)explicit {
 
     if (element.version != [self version] - 1)
-            // Only migrate from previous version.
+        // Only migrate from previous version.
         return NO;
 
     if (!explicit) {
@@ -85,18 +85,19 @@
 
 - (MPKey *)keyForPassword:(NSString *)password ofUserNamed:(NSString *)userName {
 
-    uint32_t nuserNameLength = htonl(userName.length);
+    uint32_t nuserNameLength = htonl( userName.length );
     NSDate *start = [NSDate date];
     NSData *keyData = [PearlSCrypt deriveKeyWithLength:MP_dkLen fromPassword:[password dataUsingEncoding:NSUTF8StringEncoding]
-            usingSalt:[NSData dataByConcatenatingDatas:
-                    [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
-                    [NSData dataWithBytes:&nuserNameLength
-                                   length:sizeof(nuserNameLength)],
-                    [userName dataUsingEncoding:NSUTF8StringEncoding],
-                    nil] N:MP_N r:MP_r p:MP_p];
+                                             usingSalt:[NSData dataByConcatenatingDatas:
+                                                     [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
+                                                     [NSData dataWithBytes:&nuserNameLength
+                                                                    length:sizeof( nuserNameLength )],
+                                                     [userName dataUsingEncoding:NSUTF8StringEncoding],
+                                                     nil] N:MP_N r:MP_r p:MP_p];
 
     MPKey *key = [self keyFromKeyData:keyData];
-    trc(@"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", userName, password, [key.keyID encodeHex], -[start timeIntervalSinceNow]);
+    trc( @"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", userName, password, [key.keyID encodeHex],
+                    -[start timeIntervalSinceNow] );
 
     return key;
 }
@@ -142,7 +143,7 @@
             return @"Device Private Password";
     }
 
-    Throw(@"Type not supported: %lu", (long)type);
+    Throw( @"Type not supported: %lu", (long)type );
 }
 
 - (NSString *)shortNameOfType:(MPElementType)type {
@@ -176,7 +177,7 @@
             return @"Device";
     }
 
-    Throw(@"Type not supported: %lu", (long)type);
+    Throw( @"Type not supported: %lu", (long)type );
 }
 
 - (NSString *)classNameOfType:(MPElementType)type {
@@ -187,7 +188,7 @@
 - (Class)classOfType:(MPElementType)type {
 
     if (!type)
-    Throw(@"No type given.");
+        Throw( @"No type given." );
 
     switch (type) {
         case MPElementTypeGeneratedMaximum:
@@ -215,13 +216,26 @@
             return [MPElementStoredEntity class];
     }
 
-    Throw(@"Type not supported: %lu", (long)type);
+    Throw( @"Type not supported: %lu", (long)type );
+}
+
+- (NSArray *)allTypes {
+
+    return [self allTypesStartingWith:MPElementTypeGeneratedMaximum];
+}
+
+- (NSArray *)allTypesStartingWith:(MPElementType)startingType {
+
+    NSMutableArray *allTypes = [[NSMutableArray alloc] initWithCapacity:8];
+    MPElementType currentType = startingType;
+    do {
+        [allTypes addObject:@(currentType)];
+    } while ((currentType = [self nextType:currentType]) != startingType);
+
+    return allTypes;
 }
 
 - (MPElementType)nextType:(MPElementType)type {
-
-    if (!type)
-    Throw(@"No type given.");
 
     switch (type) {
         case MPElementTypeGeneratedMaximum:
@@ -240,9 +254,9 @@
             return MPElementTypeGeneratedPIN;
         case MPElementTypeStoredDevicePrivate:
             return MPElementTypeStoredPersonal;
+        default:
+            return MPElementTypeGeneratedLong;
     }
-
-    Throw(@"Type not supported: %lu", (long)type);
 }
 
 - (MPElementType)previousType:(MPElementType)type {
@@ -262,38 +276,38 @@
                 [[NSBundle mainBundle] URLForResource:@"ciphers" withExtension:@"plist"]];
 
     // Determine the seed whose bytes will be used for calculating a password
-    uint32_t ncounter = htonl(counter), nnameLength = htonl(name.length);
-    NSData *counterBytes = [NSData dataWithBytes:&ncounter length:sizeof(ncounter)];
-    NSData *nameLengthBytes = [NSData dataWithBytes:&nnameLength length:sizeof(nnameLength)];
-    trc(@"seed from: hmac-sha256(%@, 'com.lyndir.masterpassword' | %@ | %@ | %@)", [key.keyData encodeBase64],
-    [nameLengthBytes encodeHex], name, [counterBytes encodeHex]);
+    uint32_t ncounter = htonl( counter ), nnameLength = htonl( name.length );
+    NSData *counterBytes = [NSData dataWithBytes:&ncounter length:sizeof( ncounter )];
+    NSData *nameLengthBytes = [NSData dataWithBytes:&nnameLength length:sizeof( nnameLength )];
+    trc( @"seed from: hmac-sha256(%@, 'com.lyndir.masterpassword' | %@ | %@ | %@)", [key.keyData encodeBase64],
+                    [nameLengthBytes encodeHex], name, [counterBytes encodeHex] );
     NSData *seed = [[NSData dataByConcatenatingDatas:
             [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
-                    nameLengthBytes, [name dataUsingEncoding:NSUTF8StringEncoding],
-                    counterBytes, nil]
+            nameLengthBytes, [name dataUsingEncoding:NSUTF8StringEncoding],
+            counterBytes, nil]
             hmacWith:PearlHashSHA256 key:key.keyData];
-    trc(@"seed is: %@", [seed encodeBase64]);
+    trc( @"seed is: %@", [seed encodeBase64] );
     const char *seedBytes = seed.bytes;
 
     // Determine the cipher from the first seed byte.
-    NSAssert([seed length], @"Missing seed.");
+    NSAssert( [seed length], @"Missing seed." );
     NSString *typeClass = [self classNameOfType:type];
     NSString *typeName = [self nameOfType:type];
     id classCiphers = [MPTypes_ciphers valueForKey:typeClass];
     NSArray *typeCiphers = [classCiphers valueForKey:typeName];
-    NSString *cipher = typeCiphers[htons(seedBytes[0]) % [typeCiphers count]];
-    trc(@"type %@, ciphers: %@, selected: %@", typeName, typeCiphers, cipher);
+    NSString *cipher = typeCiphers[htons( seedBytes[0] ) % [typeCiphers count]];
+    trc( @"type %@, ciphers: %@, selected: %@", typeName, typeCiphers, cipher );
 
     // Encode the content, character by character, using subsequent seed bytes and the cipher.
-    NSAssert([seed length] >= [cipher length] + 1, @"Insufficient seed bytes to encode cipher.");
+    NSAssert( [seed length] >= [cipher length] + 1, @"Insufficient seed bytes to encode cipher." );
     NSMutableString *content = [NSMutableString stringWithCapacity:[cipher length]];
     for (NSUInteger c = 0; c < [cipher length]; ++c) {
-        uint16_t keyByte = htons(seedBytes[c + 1]);
+        uint16_t keyByte = htons( seedBytes[c + 1] );
         NSString *cipherClass = [cipher substringWithRange:NSMakeRange( c, 1 )];
         NSString *cipherClassCharacters = [[MPTypes_ciphers valueForKey:@"MPCharacterClasses"] valueForKey:cipherClass];
         NSString *character = [cipherClassCharacters substringWithRange:NSMakeRange( keyByte % [cipherClassCharacters length], 1 )];
 
-        trc(@"class %@ has characters: %@, index: %u, selected: %@", cipherClass, cipherClassCharacters, keyByte, character);
+        trc( @"class %@ has characters: %@, index: %u, selected: %@", cipherClass, cipherClassCharacters, keyByte, character );
         [content appendString:character];
     }
 
@@ -307,7 +321,7 @@
 
 - (void)saveContent:(NSString *)clearContent toElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
 
-    NSAssert([elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user.");
+    NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     switch (element.type) {
         case MPElementTypeGeneratedMaximum:
         case MPElementTypeGeneratedLong:
@@ -315,13 +329,14 @@
         case MPElementTypeGeneratedBasic:
         case MPElementTypeGeneratedShort:
         case MPElementTypeGeneratedPIN: {
-            NSAssert(NO, @"Cannot save content to element with generated type %lu.", (long)element.type);
+            NSAssert( NO, @"Cannot save content to element with generated type %lu.", (long)element.type );
             break;
         }
 
         case MPElementTypeStoredPersonal: {
-            NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
-            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type, [element class]);
+            NSAssert( [element isKindOfClass:[MPElementStoredEntity class]],
+                            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type,
+                            [element class] );
 
             NSData *encryptedContent = [[clearContent dataUsingEncoding:NSUTF8StringEncoding]
                     encryptWithSymmetricKey:[elementKey subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
@@ -329,8 +344,9 @@
             break;
         }
         case MPElementTypeStoredDevicePrivate: {
-            NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
-            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type, [element class]);
+            NSAssert( [element isKindOfClass:[MPElementStoredEntity class]],
+                            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type,
+                            [element class] );
 
             NSData *encryptedContent = [[clearContent dataUsingEncoding:NSUTF8StringEncoding]
                     encryptWithSymmetricKey:[elementKey subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
@@ -364,9 +380,9 @@
     return result;
 }
 
-- (void)resolveContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey result:(void (^)(NSString *result))resultBlock {
+- (void)resolveContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey result:(void ( ^ )(NSString *result))resultBlock {
 
-    NSAssert([elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user.");
+    NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     switch (element.type) {
         case MPElementTypeGeneratedMaximum:
         case MPElementTypeGeneratedLong:
@@ -374,17 +390,18 @@
         case MPElementTypeGeneratedBasic:
         case MPElementTypeGeneratedShort:
         case MPElementTypeGeneratedPIN: {
-            NSAssert([element isKindOfClass:[MPElementGeneratedEntity class]],
-            @"Element with generated type %lu is not an MPElementGeneratedEntity, but a %@.", (long)element.type, [element class]);
+            NSAssert( [element isKindOfClass:[MPElementGeneratedEntity class]],
+                            @"Element with generated type %lu is not an MPElementGeneratedEntity, but a %@.", (long)element.type,
+                            [element class] );
 
             NSString *name = element.name;
             MPElementType type = element.type;
             NSUInteger counter = ((MPElementGeneratedEntity *)element).counter;
             id<MPAlgorithm> algorithm = nil;
             if (!element.name.length)
-            err(@"Missing name.");
+                err( @"Missing name." );
             else if (!elementKey.keyData.length)
-            err(@"Missing key.");
+                err( @"Missing key." );
             else
                 algorithm = element.algorithm;
 
@@ -396,8 +413,9 @@
         }
 
         case MPElementTypeStoredPersonal: {
-            NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
-            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type, [element class]);
+            NSAssert( [element isKindOfClass:[MPElementStoredEntity class]],
+                            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type,
+                            [element class] );
 
             NSData *encryptedContent = ((MPElementStoredEntity *)element).contentObject;
 
@@ -408,8 +426,9 @@
             break;
         }
         case MPElementTypeStoredDevicePrivate: {
-            NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
-            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type, [element class]);
+            NSAssert( [element isKindOfClass:[MPElementStoredEntity class]],
+                            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type,
+                            [element class] );
 
             NSDictionary *elementQuery = [self queryForDevicePrivateElementNamed:element.name];
             NSData *encryptedContent = [PearlKeyChain dataOfItemForQuery:elementQuery];
@@ -426,7 +445,7 @@
 - (void)importProtectedContent:(NSString *)protectedContent protectedByKey:(MPKey *)importKey
                    intoElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
 
-    NSAssert([elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user.");
+    NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     switch (element.type) {
         case MPElementTypeGeneratedMaximum:
         case MPElementTypeGeneratedLong:
@@ -437,8 +456,9 @@
             break;
 
         case MPElementTypeStoredPersonal: {
-            NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
-            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type, [element class]);
+            NSAssert( [element isKindOfClass:[MPElementStoredEntity class]],
+                            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type,
+                            [element class] );
             if ([importKey.keyID isEqualToData:elementKey.keyID])
                 ((MPElementStoredEntity *)element).contentObject = [protectedContent decodeBase64];
 
@@ -456,7 +476,7 @@
 
 - (void)importClearTextContent:(NSString *)clearContent intoElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
 
-    NSAssert([elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user.");
+    NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     switch (element.type) {
         case MPElementTypeGeneratedMaximum:
         case MPElementTypeGeneratedLong:
@@ -478,7 +498,7 @@
 
 - (NSString *)exportContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
 
-    NSAssert([elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user.");
+    NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     if (!(element.type & MPElementFeatureExportContent))
         return nil;
 
@@ -495,8 +515,9 @@
         }
 
         case MPElementTypeStoredPersonal: {
-            NSAssert([element isKindOfClass:[MPElementStoredEntity class]],
-            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type, [element class]);
+            NSAssert( [element isKindOfClass:[MPElementStoredEntity class]],
+                            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type,
+                            [element class] );
             result = [((MPElementStoredEntity *)element).contentObject encodeBase64];
             break;
         }

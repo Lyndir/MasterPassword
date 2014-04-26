@@ -15,6 +15,7 @@
 @property(weak, nonatomic) IBOutlet UITableViewCell *feedbackCell;
 @property(weak, nonatomic) IBOutlet UITableViewCell *coachmarksCell;
 @property(weak, nonatomic) IBOutlet UITableViewCell *exportCell;
+@property(weak, nonatomic) IBOutlet UITableViewCell *checkInconsistencies;
 @property(weak, nonatomic) IBOutlet UIImageView *avatarImage;
 @property(weak, nonatomic) IBOutlet UISegmentedControl *generatedTypeControl;
 @property(weak, nonatomic) IBOutlet UISegmentedControl *storedTypeControl;
