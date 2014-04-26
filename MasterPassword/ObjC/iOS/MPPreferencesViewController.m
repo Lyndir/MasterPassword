@@ -170,7 +170,7 @@
                 case 1:
                     return MPElementTypeStoredDevicePrivate;
                 default:
-                    Throw( @"unsupported selected type index: generated=%d, stored=%d", selectedGeneratedIndex, selectedStoredIndex );
+                    Throw( @"unsupported selected type index: generated=%ld, stored=%ld", (long)selectedGeneratedIndex, (long)selectedStoredIndex );
             }
     }
 }
