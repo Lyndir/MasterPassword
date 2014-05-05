@@ -18,4 +18,6 @@
 @property(nonatomic, weak) IBOutlet NSTextField *userLabel;
 @property(nonatomic, weak) IBOutlet NSCollectionView *siteCollectionView;
 
+- (void)updateElements;
+
 @end

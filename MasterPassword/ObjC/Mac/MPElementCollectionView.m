@@ -205,6 +205,8 @@
                     MPElementEntity *element = [self.representedObject entityInContext:context];
                     [context deleteObject:element];
                     [context saveToStore];
+
+                    [((MPPasswordWindowController *)self.collectionView.window.windowController) updateElements];
                 }];
                 break;
             }

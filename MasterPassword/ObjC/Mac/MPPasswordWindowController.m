@@ -178,14 +178,17 @@
     }
     if (contextInfo == MPAlertCreateSite) {
         switch (returnCode) {
-            case NSAlertDefaultReturn: {
+            case NSAlertFirstButtonReturn: {
+                // "Create" button.
                 [[MPMacAppDelegate get] addElementNamed:[self.siteField stringValue] completion:^(MPElementEntity *element) {
-                    if (element) {
+                    if (element)
                         [self updateElements];
-                    }
                 }];
                 break;
             }
+            case NSAlertThirdButtonReturn:
+                // "Cancel" button.
+                break;
             default:
                 break;
         }
@@ -345,23 +348,35 @@
 
         NSError *error = nil;
         NSArray *siteResults = [context executeFetchRequest:fetchRequest error:&error];
-        if (!siteResults)
-        err(@"While fetching elements for completion: %@", error);
-        else if ([siteResults count]) {
-            NSMutableArray *newElements = [NSMutableArray arrayWithCapacity:[siteResults count]];
-            for (MPElementEntity *element in siteResults)
-                [newElements addObject:[[MPElementModel alloc] initWithEntity:element]];
-            self.elements = newElements;
-            if (!self.selectedElement && [newElements count])
-                self.elementSelectionIndexes = [NSIndexSet indexSetWithIndex:0];
+        if (!siteResults) {
+            err(@"While fetching elements for completion: %@", error);
+            return;
         }
+
+        NSMutableArray *newElements = [NSMutableArray arrayWithCapacity:[siteResults count]];
+        for (MPElementEntity *element in siteResults)
+            [newElements addObject:[[MPElementModel alloc] initWithEntity:element]];
+        self.elements = newElements;
+        if (!self.selectedElement)
+            self.elementSelectionIndexes = [newElements count]? [NSIndexSet indexSetWithIndex:0]: nil;
     }];
+}
+
+- (NSUInteger)selectedIndex {
+
+    if (!self.elementSelectionIndexes)
+        return NSNotFound;
+    NSUInteger selectedIndex = self.elementSelectionIndexes.firstIndex;
+    if (selectedIndex >= self.elements.count)
+        return NSNotFound;
+
+    return selectedIndex;
 }
 
 - (NSBox *)selectedView {
 
-    NSUInteger selectedIndex = self.elementSelectionIndexes.firstIndex;
-    if (selectedIndex == NSNotFound || selectedIndex >= self.elements.count)
+    NSUInteger selectedIndex = [self selectedIndex];
+    if (selectedIndex == NSNotFound)
         return nil;
 
     return (NSBox *)[self.siteCollectionView itemAtIndex:selectedIndex].view;
@@ -369,10 +384,11 @@
 
 - (MPElementModel *)selectedElement {
 
-    if (!self.elementSelectionIndexes.count)
+    NSUInteger selectedIndex = [self selectedIndex];
+    if (selectedIndex == NSNotFound)
         return nil;
 
-    return (MPElementModel *)self.elements[self.elementSelectionIndexes.firstIndex];
+    return (MPElementModel *)self.elements[selectedIndex];
 }
 
 - (void)setSelectedElement:(MPElementModel *)element {

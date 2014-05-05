@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LLGitTip.h"
 
 @interface MPUnlockViewController : UIViewController<UITextFieldDelegate, UIScrollViewDelegate, UIWebViewDelegate>
 
@@ -26,6 +27,8 @@
 @property(strong, nonatomic) IBOutlet UILongPressGestureRecognizer *targetedUserActionGesture;
 @property(weak, nonatomic) IBOutlet UIView *uiContainer;
 @property(weak, nonatomic) IBOutlet UIView *shareContainer;
+@property(weak, nonatomic) IBOutlet UIView *tipsTipContainer;
+@property(weak, nonatomic) IBOutlet LLGitTip *gitTipButton;
 @property(weak, nonatomic) IBOutlet UIWebView *newsView;
 @property(weak, nonatomic) IBOutlet UIView *emergencyGeneratorContainer;
 @property(weak, nonatomic) IBOutlet UITextField *emergencyName;

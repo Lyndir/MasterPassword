@@ -64,6 +64,7 @@
         // Via setup
         self.smallPlayButton.hidden = YES;
 
+        self.searchBar.text = nil;
         self.siteNameTip.alpha = 0;
         self.content.alpha = 0;
         self.content.frame = CGRectSetHeight( self.content.frame, 180 );
@@ -81,6 +82,7 @@
         // Via segue
         self.largePlayButton.hidden = YES;
 
+        self.searchBar.text = @"gmail.com";
         self.siteNameTip.alpha = 1;
         self.content.alpha = 1;
         self.content.frame = CGRectSetHeight( self.content.frame, 231 );
@@ -147,6 +149,7 @@
 
     if (self.currentTick < 5) {
         [UIView animateWithDuration:0.5 animations:^{
+            self.searchBar.text = nil;
             self.siteNameTip.alpha = 1;
             self.content.alpha = 0;
             self.content.frame = CGRectSetHeight( self.content.frame, 180 );
@@ -159,6 +162,7 @@
     }
     else if (self.currentTick < 10) {
         [UIView animateWithDuration:0.5 animations:^{
+            self.searchBar.text = @"gmail.com";
             self.siteNameTip.alpha = 0;
             self.content.alpha = 1;
             self.contentTip.alpha = 1;
@@ -171,6 +175,7 @@
     }
     else if (self.currentTick < 15) {
         [UIView animateWithDuration:0.5 animations:^{
+            self.searchBar.text = @"gmail.com";
             self.siteNameTip.alpha = 0;
             self.content.alpha = 1;
             self.contentTip.alpha = 1;
@@ -185,6 +190,7 @@
     }
     else if (self.currentTick < 20) {
         [UIView animateWithDuration:0.5 animations:^{
+            self.searchBar.text = @"gmail.com";
             self.siteNameTip.alpha = 0;
             self.content.alpha = 1;
             self.content.frame = CGRectSetHeight( self.content.frame, 231 );
@@ -199,6 +205,7 @@
     }
     else if (self.currentTick < 25) {
         [UIView animateWithDuration:0.5 animations:^{
+            self.searchBar.text = @"gmail.com";
             self.siteNameTip.alpha = 0;
             self.content.alpha = 1;
             self.contentTip.alpha = 0;
@@ -212,6 +219,7 @@
     }
     else if (self.currentTick < 30) {
         [UIView animateWithDuration:0.5 animations:^{
+            self.searchBar.text = @"gmail.com";
             self.siteNameTip.alpha = 0;
             self.content.alpha = 1;
             self.contentTip.alpha = 0;
@@ -230,6 +238,7 @@
         self.currentTick = 0;
         [UIView animateWithDuration:0.5 animations:^{
             [self.smallPlayButton setImage:[UIImage imageNamed:@"icon_play"] forState:UIControlStateNormal];
+            self.searchBar.text = @"gmail.com";
             self.siteNameTip.alpha = 1;
             self.content.alpha = 1;
             self.contentTip.alpha = 1;
