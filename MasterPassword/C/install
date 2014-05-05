@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+BINDIR=${BINDIR:+${PREFIX:+$PREFIX/bin}}
+[[ $BINDIR ]] && mkdir -p "$BINDIR"
+if [[ ! -w $BINDIR ]]; then
+    for dir in /usr/local/bin ~/.bin ~/bin /usr/bin; do
+        [[ -w $dir ]] && BINDIR=$dir && break
+    done
+    if [[ ! -w $BINDIR ]]; then
+        echo >&2 "Could not find directory to install to."
+        echo >&2 "You can specify a prefix to install to, eg. PREFIX=/usr/local ./install"
+        echo >&2 "You can specify a bin directory to install to, eg. BINDIR=~/bin ./install"
+        echo >&2 "Make sure you have write permission to the bin directory."
+    fi
+fi
+install -v -s mpw "$BINDIR"

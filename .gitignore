@@ -27,3 +27,8 @@ Press/MasterPassword_PressKit/MasterPassword_pressrelease_*.pdf
 
 # Java
 MasterPassword/Java/**/target
+
+# C
+MasterPassword/C/mpw
+MasterPassword/C/lib/*/*
+!MasterPassword/C/lib/*/.source

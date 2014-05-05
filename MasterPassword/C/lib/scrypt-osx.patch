@@ -1,0 +1,38 @@
+diff -ruN /Users/lhunath/.src/scrypt/Makefile ./Makefile
+--- /Users/lhunath/.src/scrypt/Makefile	2014-05-02 11:28:58.000000000 -0400
++++ ./Makefile	2014-05-02 12:07:27.000000000 -0400
+@@ -2,11 +2,11 @@
+ VER?=	nosse
+ SRCS=	main.c
+ LDADD+=	-lcrypto
+-WARNS?=	6
++WARNS?=	0
+ 
+ # We have a config file for FreeBSD
+ CFLAGS	+=	-I .
+-CFLAGS	+=	-DCONFIG_H_FILE=\"config_freebsd.h\"
++CFLAGS	+=	-DCONFIG_H_FILE=\"config_osx.h\"
+ 
+ # Include all possible object files containing built scrypt code.
+ CLEANFILES	+=	crypto_scrypt-ref.o
+diff -ruN /Users/lhunath/.src/scrypt/lib/util/memlimit.c ./lib/util/memlimit.c
+--- /Users/lhunath/.src/scrypt/lib/util/memlimit.c	2014-05-02 11:28:58.000000000 -0400
++++ ./lib/util/memlimit.c	2014-05-02 11:52:42.000000000 -0400
+@@ -75,7 +75,7 @@
+ 	 * have returned to us.
+ 	 */
+ 	if (usermemlen == sizeof(uint64_t))
+-		usermem = *(uint64_t *)usermembuf;
++		usermem = *(uint64_t *)(void *)usermembuf;
+ 	else if (usermemlen == sizeof(uint32_t))
+ 		usermem = SIZE_MAX;
+ 	else
+diff -ruN /Users/lhunath/.src/scrypt/lib/util/memlimit.c ./lib/util/memlimit.c
+--- /Users/lhunath/.src/scrypt/config_osx.h	1969-12-31 19:00:00.000000000 -0500
++++ config_osx.h	2014-05-02 12:06:55.000000000 -0400
+@@ -0,0 +1,5 @@
++/* A default configuration for FreeBSD, used if there is no config.h. */
++
++#define HAVE_POSIX_MEMALIGN 1
++#define HAVE_SYSCTL_HW_USERMEM 1
++#define HAVE_SYS_PARAM_H 1

@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+gcc -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva" -I"lib/proplib/include" -l "crypto_aesctr.o" -l "sha256.o" -l "crypto_scrypt-nosse.o" -l "memlimit.o" -l "scryptenc_cpuperf.o" -l"scryptenc.o" -l"crypto" -l"prop" -L"lib/scrypt" -L"lib/proplib/src/.libs" mpw.c -o mpw
