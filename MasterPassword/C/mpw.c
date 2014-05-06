@@ -132,13 +132,11 @@ int main(int argc, char *const argv[]) {
     char *line = NULL;
     size_t linecap = 0;
     ssize_t linelen;
-    while ((linelen = getline(&line, &linecap, mpwConfig)) > 0) {
-        char *configUserName = strsep(&line, "\t: ");
-        if (configUserName == userName) {
-            while (line[0] && strlen(masterPassword = strsep(&line, "\t: ")) == 0);
+    while ((linelen = getline(&line, &linecap, mpwConfig)) > 0)
+        if (strcmp(strsep(&line, ":"), userName) == 0) {
+            masterPassword = line;
             break;
         }
-    }
     if (!masterPassword) {
         fprintf (stderr, "Missing master password for user: %s\n", userName);
         return 1;
