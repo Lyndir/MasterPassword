@@ -8,14 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		93D391C07818F4C2DC1B6956 /* MPPasswordsCoachmarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D397E3650384498E7E53C4 /* MPPasswordsCoachmarkViewController.m */; };
+		93D391ECBD9BD2C64115B5DD /* PearlSizedTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39156E806BB78E04F78B9 /* PearlSizedTextView.m */; };
 		93D391ED37C9F687FA51EAA1 /* MPEmergencySegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3937712BF1B67623E5764 /* MPEmergencySegue.m */; };
 		93D3922A53E41A54832E90D9 /* PearlOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D390FADEB325D8D54A957D /* PearlOverlay.m */; };
 		93D39233C3EDD9A947ABA52D /* LLButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39BF6BCBDFFE844E7D34C /* LLButtonView.m */; };
 		93D39262A8A97DB748213309 /* PearlEMail.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D393BB973253D4BAAC84AA /* PearlEMail.m */; };
+		93D392A8777DC30C11361647 /* UITextView+PearlAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39AA10CD00D05937671B1 /* UITextView+PearlAttributes.h */; };
 		93D392EC39DA43C46C692C12 /* NSDictionary+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */; };
 		93D3932889B6B4206E66A6D6 /* PearlEMail.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */; };
 		93D39392DEDA376F93C6C718 /* MPCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39BAA71DE51B4D8A1286C /* MPCell.m */; };
 		93D393BA1B8402D08DB40231 /* MPPasswordElementCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39342E5F115EFCC90E976 /* MPPasswordElementCell.m */; };
+		93D393DB5325820241BA90A7 /* PearlSizedTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39A4759186F6D2D34AA6B /* PearlSizedTextView.h */; };
+		93D394982CBD25D46692DD7C /* MPWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3990E0CD1B5CF9FBB2C07 /* MPWebViewController.m */; };
 		93D394B5036C882B33C71872 /* MPPasswordsSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39E7A12CC352B2825AA66 /* MPPasswordsSegue.m */; };
 		93D394F6D3F6E2553AA0D684 /* MPPasswordLargeStoredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3947F6BB69CA9A9124A5D /* MPPasswordLargeStoredCell.m */; };
 		93D39536EB550E811CCD04BC /* UIResponder+PearlFirstResponder.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D394482BB07F90E8FD1314 /* UIResponder+PearlFirstResponder.h */; };
@@ -47,6 +51,7 @@
 		93D39CB5E2EC1078E898F46A /* MPPasswordLargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3937863061C3916AF7AD2 /* MPPasswordLargeCell.m */; };
 		93D39D596A2E376D6F6F5DA1 /* MPCombinedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D393310223DDB35218467A /* MPCombinedViewController.m */; };
 		93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */; };
+		93D39E34FD28D24FE3442C48 /* UITextView+PearlAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3977321EB249981821AB0 /* UITextView+PearlAttributes.m */; };
 		93D39EAA4D064193074D3021 /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A813CA9D7E192261ED2 /* MPFixable.m */; };
 		93D39EDD960C381D64E4DCDD /* MPPasswordSmallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3952CC60991B97D69F26A /* MPPasswordSmallCell.m */; };
 		93D39F8A9254177891F38705 /* MPSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A28369954D147E239BA /* MPSetupViewController.m */; };
@@ -71,6 +76,7 @@
 		DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3509FC15F101A500C14A8E /* PearlQueue.h */; };
 		DA3509FF15F101A500C14A8E /* PearlQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3509FD15F101A500C14A8E /* PearlQueue.m */; };
 		DA38D6A318CCB5BF009AEB3E /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */; };
+		DA3B844E190FC5DF00246EEA /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA3B844D190FC5DF00246EEA /* Crashlytics.framework */; };
 		DA4425CC1557BED40052177D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA44260A1557D9E40052177D /* libUbiquityStoreManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */; };
 		DA4522441902355C008F650A /* icon_book.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD370C1711E29500CF925C /* icon_book.png */; };
@@ -266,7 +272,6 @@
 		DAC6326D148680650075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC632891486D9690075AEA5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC632871486D95D0075AEA5 /* Security.framework */; };
 		DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
-		DACA22191705DE28002C6C22 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DACA22181705DE28002C6C22 /* Crashlytics.framework */; };
 		DACA22BB1705DE7D002C6C22 /* UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA22B71705DE7D002C6C22 /* UbiquityStoreManager.m */; };
 		DACA22BC1705DE7D002C6C22 /* NSError+UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA22B81705DE7D002C6C22 /* NSError+UbiquityStoreManager.h */; };
 		DACA22BD1705DE7D002C6C22 /* NSError+UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA22B91705DE7D002C6C22 /* NSError+UbiquityStoreManager.m */; };
@@ -523,6 +528,7 @@
 		93D390FD93EFCFECB5193DEF /* MPPasswordsCoachmarkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordsCoachmarkViewController.h; sourceTree = "<group>"; };
 		93D391243F64A77798B4D6A4 /* MPPasswordTypesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordTypesCell.h; sourceTree = "<group>"; };
 		93D3914D7597F9A28DB9D85E /* MPPasswordsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordsViewController.h; sourceTree = "<group>"; };
+		93D39156E806BB78E04F78B9 /* PearlSizedTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlSizedTextView.m; sourceTree = "<group>"; };
 		93D3916C1D8F1427DFBDEBCA /* MPAppSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppSettingsViewController.m; sourceTree = "<group>"; };
 		93D391943675426839501BB8 /* MPLogsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPLogsViewController.h; sourceTree = "<group>"; };
 		93D3923B42DA2DA18F287092 /* LLModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLModel.m; sourceTree = "<group>"; };
@@ -545,12 +551,14 @@
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
 		93D3971FE104BB4052484151 /* MPUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUsersViewController.h; sourceTree = "<group>"; };
 		93D39730673227EFF6DEFF19 /* MPSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSetupViewController.h; sourceTree = "<group>"; };
+		93D3977321EB249981821AB0 /* UITextView+PearlAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+PearlAttributes.m"; sourceTree = "<group>"; };
 		93D3979190DACEBD1F6AE9F4 /* MPLogsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPLogsViewController.m; sourceTree = "<group>"; };
 		93D397E3650384498E7E53C4 /* MPPasswordsCoachmarkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordsCoachmarkViewController.m; sourceTree = "<group>"; };
 		93D3983278751A530262F64E /* LLConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLConfig.h; sourceTree = "<group>"; };
 		93D398567FD02DB2647B8CF3 /* PearlNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlNavigationController.h; sourceTree = "<group>"; };
 		93D39888EE06F06264CC963B /* MPPasswordSmallCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordSmallCell.h; sourceTree = "<group>"; };
 		93D398C95847261903D781D3 /* NSError+PearlFullDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+PearlFullDescription.h"; sourceTree = "<group>"; };
+		93D3990E0CD1B5CF9FBB2C07 /* MPWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPWebViewController.m; sourceTree = "<group>"; };
 		93D3993422E207BF0B21D089 /* MPPasswordLargeGeneratedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordLargeGeneratedCell.m; sourceTree = "<group>"; };
 		93D3995B1D4DCE5A30D882BA /* MPCoachmarkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCoachmarkViewController.m; sourceTree = "<group>"; };
 		93D39961CD6A43648CC0B0DB /* MPPreferencesViewControllerOld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPreferencesViewControllerOld.h; sourceTree = "<group>"; };
@@ -562,7 +570,9 @@
 		93D39A28369954D147E239BA /* MPSetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSetupViewController.m; sourceTree = "<group>"; };
 		93D39A3CC4D8330831FC8CB4 /* LLToggleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLToggleViewController.h; sourceTree = "<group>"; };
 		93D39A41340CF778E00D0E6D /* MPEmergencySegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEmergencySegue.h; sourceTree = "<group>"; };
+		93D39A4759186F6D2D34AA6B /* PearlSizedTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlSizedTextView.h; sourceTree = "<group>"; };
 		93D39A813CA9D7E192261ED2 /* MPFixable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPFixable.m; sourceTree = "<group>"; };
+		93D39AA10CD00D05937671B1 /* UITextView+PearlAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+PearlAttributes.h"; sourceTree = "<group>"; };
 		93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Indexing.m"; sourceTree = "<group>"; };
 		93D39ACBA9F4878B6A1CC33B /* MPEmergencyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEmergencyViewController.m; sourceTree = "<group>"; };
 		93D39B050DD5F55E9794EFD4 /* MPPopdownSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPopdownSegue.m; sourceTree = "<group>"; };
@@ -583,6 +593,7 @@
 		93D39DEA995041A13DC9CAF7 /* MPPasswordCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordCell.m; sourceTree = "<group>"; };
 		93D39E02F69CACAB61C056F8 /* MPPasswordLargeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordLargeCell.h; sourceTree = "<group>"; };
 		93D39E7A12CC352B2825AA66 /* MPPasswordsSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordsSegue.m; sourceTree = "<group>"; };
+		93D39F556F2F142740A65E59 /* MPWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPWebViewController.h; sourceTree = "<group>"; };
 		93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlEMail.h; sourceTree = "<group>"; };
 		93D39F9106F2CCFB94283188 /* NSError+PearlFullDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+PearlFullDescription.m"; sourceTree = "<group>"; };
 		DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -606,6 +617,7 @@
 		DA3509FC15F101A500C14A8E /* PearlQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlQueue.h; sourceTree = "<group>"; };
 		DA3509FD15F101A500C14A8E /* PearlQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlQueue.m; sourceTree = "<group>"; };
 		DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
+		DA3B844D190FC5DF00246EEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = ../../../External/iOS/Crashlytics.framework; sourceTree = "<group>"; };
 		DA3EF17A15A47744003ABF4E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUbiquityStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5A09DD171A70E4005284AB /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
@@ -1628,7 +1640,7 @@
 				DA5BFA4D147E415C00F98B1E /* CoreGraphics.framework in Frameworks */,
 				DA5BFA4F147E415C00F98B1E /* CoreData.framework in Frameworks */,
 				93D399433EA75E50656040CB /* Twitter.framework in Frameworks */,
-				DACA22191705DE28002C6C22 /* Crashlytics.framework in Frameworks */,
+				DA3B844E190FC5DF00246EEA /* Crashlytics.framework in Frameworks */,
 				DACA22C61705DE9D002C6C22 /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1717,6 +1729,7 @@
 		DA5BFA47147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA3B844D190FC5DF00246EEA /* Crashlytics.framework */,
 				DA70EC7F1811B13C00F65DB2 /* StoreKit.framework */,
 				DABD3FC617122ADD00CF925C /* libscrypt-bin-ios.a */,
 				DA6701DF16406BB400B61001 /* AdSupport.framework */,
@@ -2587,6 +2600,8 @@
 				93D3999693660C89A7465F4E /* MPCoachmarkViewController.h */,
 				93D397E3650384498E7E53C4 /* MPPasswordsCoachmarkViewController.m */,
 				93D390FD93EFCFECB5193DEF /* MPPasswordsCoachmarkViewController.h */,
+				93D3990E0CD1B5CF9FBB2C07 /* MPWebViewController.m */,
+				93D39F556F2F142740A65E59 /* MPWebViewController.h */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -3079,6 +3094,10 @@
 				93D39B1D8177A86C5B9EDDE3 /* PearlUICollectionView.h */,
 				93D39A1DDFA09AE2E14D26DC /* UIResponder+PearlFirstResponder.m */,
 				93D394482BB07F90E8FD1314 /* UIResponder+PearlFirstResponder.h */,
+				93D39156E806BB78E04F78B9 /* PearlSizedTextView.m */,
+				93D39A4759186F6D2D34AA6B /* PearlSizedTextView.h */,
+				93D3977321EB249981821AB0 /* UITextView+PearlAttributes.m */,
+				93D39AA10CD00D05937671B1 /* UITextView+PearlAttributes.h */,
 			);
 			path = "Pearl-UIKit";
 			sourceTree = "<group>";
@@ -3265,6 +3284,8 @@
 				93D39B76DD5AB108BA8928E8 /* UIScrollView+PearlAdjustInsets.h in Headers */,
 				93D3980046016EFD05B35BC5 /* PearlUICollectionView.h in Headers */,
 				93D39536EB550E811CCD04BC /* UIResponder+PearlFirstResponder.h in Headers */,
+				93D393DB5325820241BA90A7 /* PearlSizedTextView.h in Headers */,
+				93D392A8777DC30C11361647 /* UITextView+PearlAttributes.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3306,8 +3327,8 @@
 			buildPhases = (
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
-				DA5BFA42147E415C00F98B1E /* Resources */,
 				DA67460818DE7B2C00DFE240 /* Run Script: Moarfonts */,
+				DA5BFA42147E415C00F98B1E /* Resources */,
 				DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */,
 				DAD3125D155288AA00A3F9ED /* Run Script: Crashlytics */,
 			);
@@ -3762,7 +3783,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/bash -e";
-			shellScript = "[[ -x /usr/local/bin/moarfonts ]] || {\n    echo >&2 \"moarfonts not installed, embedded fonts will not show up in IB.\"\n    exit\n}\n\n[[ -w \"$SDKROOT/System/Library/.lilid/.lilic\" ]] || {\n    /usr/local/bin/moarfonts reset\n}\n\nfind \"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}\" -name '*.otf' -exec /usr/local/bin/moarfonts install {} +";
+			shellScript = "[[ -x /usr/local/bin/moarfonts ]] || {\n    echo >&2 \"moarfonts not installed, embedded fonts will not show up in IB.\"\n    exit\n}\n\n[[ ! -w \"$SDKROOT/System/Library/.lilid/.lilic\" ]] && {\n    printf 'run:\\nSDKROOT=%q /usr/local/bin/moarfonts reset\\n' \"$SDKROOT\"\n}\n\nfind \"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}\" -name '*.otf' -exec /usr/local/bin/moarfonts install {} +";
 			showEnvVarsInLog = 0;
 		};
 		DAD3125D155288AA00A3F9ED /* Run Script: Crashlytics */ = {
@@ -3777,7 +3798,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/bash -e";
-			shellScript = "../../../External/Crashlytics.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" ../../Resources/Crashlytics/Crashlytics.plist)\" || [[ $DEPLOYMENT_LOCATION != YES ]]";
+			shellScript = "../../../External/iOS/Crashlytics.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" ../../Resources/Crashlytics/Crashlytics.plist)\" || [[ $DEPLOYMENT_LOCATION != YES ]]";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -3846,6 +3867,7 @@
 				93D396D8B67DA6522CDBA142 /* MPCoachmarkViewController.m in Sources */,
 				93D391C07818F4C2DC1B6956 /* MPPasswordsCoachmarkViewController.m in Sources */,
 				93D39EAA4D064193074D3021 /* MPFixable.m in Sources */,
+				93D394982CBD25D46692DD7C /* MPWebViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3928,6 +3950,8 @@
 				93D3954E96236384AFA00453 /* UIScrollView+PearlAdjustInsets.m in Sources */,
 				93D39A8EA1C49CE43B63F47B /* PearlUICollectionView.m in Sources */,
 				93D399246DC90F50913A1287 /* UIResponder+PearlFirstResponder.m in Sources */,
+				93D391ECBD9BD2C64115B5DD /* PearlSizedTextView.m in Sources */,
+				93D39E34FD28D24FE3442C48 /* UITextView+PearlAttributes.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4210,6 +4234,10 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				EXCLUDED_SOURCE_FILE_NAMES = libTestFlight.a;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/iOS,
+				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -4234,6 +4262,10 @@
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				COPY_PHASE_STRIP = YES;
 				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/iOS,
+				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -4347,6 +4379,10 @@
 				EXCLUDED_SOURCE_FILE_NAMES = (
 					libTestFlight.a,
 					libDCIntrospect.a,
+				);
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/iOS,
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";

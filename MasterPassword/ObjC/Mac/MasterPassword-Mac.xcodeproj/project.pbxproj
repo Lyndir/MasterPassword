@@ -35,6 +35,10 @@
 		DA30E9D815723E6900A68B4C /* PearlLazy.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D615723E6900A68B4C /* PearlLazy.m */; };
 		DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3509FC15F101A500C14A8E /* PearlQueue.h */; };
 		DA3509FF15F101A500C14A8E /* PearlQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3509FD15F101A500C14A8E /* PearlQueue.m */; };
+		DA3B844F190FC60900246EEA /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA3B844A190FC5A900246EEA /* Crashlytics.framework */; };
+		DA3B8452190FC86F00246EEA /* NSManagedObject+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3B8450190FC86F00246EEA /* NSManagedObject+Pearl.m */; };
+		DA3B8453190FC86F00246EEA /* NSManagedObject+Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */; };
+		DA3B8456190FC89700246EEA /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3B8454190FC89700246EEA /* MPFixable.m */; };
 		DA3EF17B15A47744003ABF4E /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA3EF17A15A47744003ABF4E /* SenTestingKit.framework */; };
 		DA3EF17D15A47744003ABF4E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA4425CC1557BED40052177D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
@@ -329,6 +333,12 @@
 		DA30E9D615723E6900A68B4C /* PearlLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlLazy.m; sourceTree = "<group>"; };
 		DA3509FC15F101A500C14A8E /* PearlQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlQueue.h; sourceTree = "<group>"; };
 		DA3509FD15F101A500C14A8E /* PearlQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlQueue.m; sourceTree = "<group>"; };
+		DA3B8448190FC5A900246EEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		DA3B844A190FC5A900246EEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		DA3B8450190FC86F00246EEA /* NSManagedObject+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+Pearl.m"; sourceTree = "<group>"; };
+		DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Pearl.h"; sourceTree = "<group>"; };
+		DA3B8454190FC89700246EEA /* MPFixable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPFixable.m; sourceTree = "<group>"; };
+		DA3B8455190FC89700246EEA /* MPFixable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPFixable.h; sourceTree = "<group>"; };
 		DA3EF17915A47744003ABF4E /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA3EF17A15A47744003ABF4E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUbiquityStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -394,7 +404,6 @@
 		DAC632871486D95D0075AEA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		DAC77CAD148291A600BCF976 /* libPearl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPearl.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC77CB1148291A600BCF976 /* Pearl-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Pearl-Prefix.pch"; path = "../../MasterPassword/ObjC/Pearl/Pearl-Prefix.pch"; sourceTree = "<group>"; };
-		DACA22181705DE28002C6C22 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DACA22B71705DE7D002C6C22 /* UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UbiquityStoreManager.m; sourceTree = "<group>"; };
 		DACA22B81705DE7D002C6C22 /* NSError+UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+UbiquityStoreManager.h"; sourceTree = "<group>"; };
 		DACA22B91705DE7D002C6C22 /* NSError+UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+UbiquityStoreManager.m"; sourceTree = "<group>"; };
@@ -612,6 +621,7 @@
 				DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */,
 				DA16B342170661E0000A0EAB /* Security.framework in Frameworks */,
 				DA16B345170661F2000A0EAB /* libPearl.a in Frameworks */,
+				DA3B844F190FC60900246EEA /* Crashlytics.framework in Frameworks */,
 				DA16B344170661EE000A0EAB /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -645,6 +655,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DA3B8447190FC5A900246EEA /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				DA3B8448190FC5A900246EEA /* Crashlytics.framework */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
+		DA3B8449190FC5A900246EEA /* Mac */ = {
+			isa = PBXGroup;
+			children = (
+				DA3B844A190FC5A900246EEA /* Crashlytics.framework */,
+			);
+			path = Mac;
+			sourceTree = "<group>";
+		};
 		DA5BFA39147E415C00F98B1E = {
 			isa = PBXGroup;
 			children = (
@@ -703,6 +729,8 @@
 		DA5E5C961724A667003798D8 /* ObjC */ = {
 			isa = PBXGroup;
 			children = (
+				DA3B8454190FC89700246EEA /* MPFixable.m */,
+				DA3B8455190FC89700246EEA /* MPFixable.h */,
 				DA5E5CB21724A667003798D8 /* Mac */,
 				DA5E5C971724A667003798D8 /* MPAlgorithm.h */,
 				DA5E5C981724A667003798D8 /* MPAlgorithm.m */,
@@ -787,9 +815,10 @@
 		DACA22121705DDC5002C6C22 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				DA3B8447190FC5A900246EEA /* iOS */,
+				DA3B8449190FC5A900246EEA /* Mac */,
 				DABC6C0E175D8CE1000C15D4 /* RHStatusItemView */,
 				DACA29751705E2BD002C6C22 /* jrswizzle */,
-				DACA22181705DE28002C6C22 /* Crashlytics.framework */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
 				DACA22B61705DE7D002C6C22 /* UbiquityStoreManager */,
 			);
@@ -1053,6 +1082,8 @@
 		DAFE45D715039823003ABA7C /* Pearl */ = {
 			isa = PBXGroup;
 			children = (
+				DA3B8450190FC86F00246EEA /* NSManagedObject+Pearl.m */,
+				DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */,
 				DA2CA4E718D323D3007798F8 /* NSError+PearlFullDescription.m */,
 				DA2CA4E818D323D3007798F8 /* NSError+PearlFullDescription.h */,
 				DA2CA4E918D323D3007798F8 /* NSArray+Pearl.m */,
@@ -1176,6 +1207,7 @@
 				DAEB941018AB0FFD000490CC /* seed.h in Headers */,
 				DAEB942618AB0FFD000490CC /* scryptenc_cpuperf.h in Headers */,
 				DAFE4A1715039824003ABA7C /* NSString+PearlSEL.h in Headers */,
+				DA3B8453190FC86F00246EEA /* NSManagedObject+Pearl.h in Headers */,
 				DAEB93F518AB0FFD000490CC /* evp.h in Headers */,
 				DAEB941918AB0FFD000490CC /* ts.h in Headers */,
 				DAEB93F818AB0FFD000490CC /* krb5_asn.h in Headers */,
@@ -1319,9 +1351,9 @@
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
 				DA5BFA42147E415C00F98B1E /* Resources */,
+				DAD9B5EE1762CA3A001835F9 /* Copy LoginHelper */,
 				DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */,
 				DAD3125D155288AA00A3F9ED /* Run Script: Crashlytics */,
-				DAD9B5EE1762CA3A001835F9 /* Copy LoginHelper */,
 			);
 			buildRules = (
 			);
@@ -1560,7 +1592,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/bash -e";
-			shellScript = "../../../External/Crashlytics.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" ../../Resources/Crashlytics/Crashlytics.plist)\"";
+			shellScript = "../../../External/Mac/Crashlytics.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" ../../Resources/Crashlytics/Crashlytics.plist)\"";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1596,6 +1628,7 @@
 				DA5E5CFD1724A667003798D8 /* MPElementEntity.m in Sources */,
 				DA5E5CFE1724A667003798D8 /* MPElementGeneratedEntity.m in Sources */,
 				DA5E5CFF1724A667003798D8 /* MPElementStoredEntity.m in Sources */,
+				DA3B8456190FC89700246EEA /* MPFixable.m in Sources */,
 				DA5E5D001724A667003798D8 /* MPEntities.m in Sources */,
 				DA5E5D011724A667003798D8 /* MPKey.m in Sources */,
 				DA5E5D021724A667003798D8 /* MPUserEntity.m in Sources */,
@@ -1649,6 +1682,7 @@
 				DAFE4A3B15039824003ABA7C /* PearlSCrypt.m in Sources */,
 				DA30E9CF15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m in Sources */,
 				DA2CA4F118D323D3007798F8 /* NSTimer+PearlBlock.m in Sources */,
+				DA3B8452190FC86F00246EEA /* NSManagedObject+Pearl.m in Sources */,
 				DA30E9D015722ECA00A68B4C /* Pearl.m in Sources */,
 				DA30E9D215722EE500A68B4C /* Pearl-Crypto.m in Sources */,
 				DA2CA4EF18D323D3007798F8 /* NSArray+Pearl.m in Sources */,
@@ -1842,7 +1876,6 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1895,7 +1928,6 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
@@ -1922,7 +1954,6 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1974,7 +2005,6 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -1988,12 +2018,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Mac Developer: Maarten Billemont (DWGU95U4ZD)";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Mac,
+				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
-				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
@@ -2005,12 +2037,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Developer ID Application: Maarten Billemont (HL3Q45LX9N)";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Mac,
+				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
-				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
@@ -2037,7 +2071,6 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2089,7 +2122,6 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -2103,12 +2135,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
+				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application: Maarten Billemont (HL3Q45LX9N)";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Mac,
+				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
-				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};

@@ -22,7 +22,7 @@
 
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property(weak, nonatomic) IBOutlet UIView *userSelectionContainer;
-@property(weak, nonatomic) IBOutlet UILabel *hintLabel;
+@property(weak, nonatomic) IBOutlet UIButton *marqueeButton;
 @property(weak, nonatomic) IBOutlet UIView *gitTipTip;
 @property(weak, nonatomic) IBOutlet LLGitTip *gitTipButton;
 @property(weak, nonatomic) IBOutlet UITextField *entryField;

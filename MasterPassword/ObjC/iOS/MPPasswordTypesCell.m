@@ -62,6 +62,16 @@
     [super prepareForReuse];
 }
 
+- (void)applyLayoutAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes {
+
+    [super applyLayoutAttributes:layoutAttributes];
+
+    NSIndexPath *visibleIndexPath = [self.contentCollectionView.indexPathsForVisibleItems firstObject];
+    [self.contentCollectionView.collectionViewLayout invalidateLayout];
+    [self.contentCollectionView scrollToItemAtIndexPath:visibleIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                               animated:YES];
+}
+
 - (void)reloadWithTransientSite:(NSString *)siteName {
 
     [super reloadWithTransientSite:siteName];
@@ -86,6 +96,12 @@
 }
 
 #pragma mark - UICollectionViewDataSource
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
+  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+
+    return collectionView.bounds.size;
+}
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 

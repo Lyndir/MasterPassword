@@ -1,12 +1,12 @@
 /**
- * Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
- *
- * See the enclosed file LICENSE for license information (LGPLv3). If you did
- * not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
- *
- * @author   Maarten Billemont <lhunath@lyndir.com>
- * @license  http://www.gnu.org/licenses/lgpl-3.0.txt
- */
+* Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
+*
+* See the enclosed file LICENSE for license information (LGPLv3). If you did
+* not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
+*
+* @author   Maarten Billemont <lhunath@lyndir.com>
+* @license  http://www.gnu.org/licenses/lgpl-3.0.txt
+*/
 
 //
 //  MPPasswordsSegue.h
@@ -37,18 +37,25 @@
 
     if ([self.destinationViewController isKindOfClass:[MPPasswordsViewController class]]) {
         __weak MPPasswordsViewController *passwordsVC = self.destinationViewController;
-        __weak MPCombinedViewController *combinedVC = self.sourceViewController;
-
+        MPCombinedViewController *combinedVC = self.sourceViewController;
         [combinedVC addChildViewController:passwordsVC];
-        [combinedVC.view insertSubview:passwordsVC.view belowSubview:combinedVC.usersView];
         passwordsVC.active = NO;
+
+        UIView *passwordsView = passwordsVC.view;
+        passwordsView.translatesAutoresizingMaskIntoConstraints = NO;
+        [combinedVC.view insertSubview:passwordsView belowSubview:combinedVC.usersView];
+        [combinedVC.view addConstraintsWithVisualFormats:@[ @"H:|[passwordsView]|", @"V:|[passwordsView]|" ]
+                                                 options:0 metrics:nil
+                                                   views:NSDictionaryOfVariableBindings( passwordsView )];
+
         [passwordsVC setActive:YES animated:self.animated completion:^(BOOL finished) {
             if (!finished)
                 return;
 
             [passwordsVC didMoveToParentViewController:combinedVC];
         }];
-    } else if ([self.sourceViewController isKindOfClass:[MPPasswordsViewController class]]) {
+    }
+    else if ([self.sourceViewController isKindOfClass:[MPPasswordsViewController class]]) {
         __weak MPPasswordsViewController *passwordsVC = self.sourceViewController;
 
         [passwordsVC willMoveToParentViewController:nil];

@@ -98,18 +98,26 @@
         ((MPCoachmarkViewController *)segue.destinationViewController).coachmark = self.coachmark;
 }
 
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+
+    [self.passwordCollectionView.collectionViewLayout invalidateLayout];
+
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+}
+
 #pragma mark - UICollectionViewDelegateFlowLayout
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 
     if (collectionView == self.passwordCollectionView) {
-        if (indexPath.item < 3 ||
-            indexPath.item >= ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[indexPath.section]).numberOfObjects)
-            return CGSizeMake( 300, 100 );
-
         UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)collectionViewLayout;
-        return CGSizeMake( (300 - layout.minimumInteritemSpacing) / 2, 44 );
+        CGFloat itemWidth = UIEdgeInsetsInsetRect(self.passwordCollectionView.bounds, layout.sectionInset).size.width;
+
+        if (indexPath.item < 3 || indexPath.item >= ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[indexPath.section]).numberOfObjects)
+            return CGSizeMake( itemWidth, 100 );
+
+        return CGSizeMake( (itemWidth - layout.minimumInteritemSpacing) / 2, 44 );
     }
 
     Throw(@"Unexpected collection view: %@", collectionView);
@@ -385,9 +393,7 @@
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
 
     if (searchBar == self.passwordsSearchBar) {
-        self.originalQuery = self.query;
-        self.passwordsSearchBar.showsCancelButton = YES;
-        _passwordsDismissRecognizer = [self.view dismissKeyboardForField:self.passwordsSearchBar onTouchForced:NO];
+//        _passwordsDismissRecognizer = [self.view dismissKeyboardForField:self.passwordsSearchBar onTouchForced:NO];
 
         [UIView animateWithDuration:0.3f animations:^{
             self.passwordCollectionView.backgroundColor = _darkenedBackgroundColor;
@@ -411,16 +417,6 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
 
     [searchBar resignFirstResponder];
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-
-    [searchBar resignFirstResponder];
-
-    if (searchBar == self.passwordsSearchBar) {
-        self.passwordsSearchBar.text = self.originalQuery;
-        [self updatePasswords];
-    }
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {

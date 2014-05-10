@@ -22,6 +22,8 @@
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
 #import "MPAppDelegate_Key.h"
+#import "PearlSizedTextView.h"
+#import "MPWebViewController.h"
 
 typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     /** The users are all inactive */
@@ -62,7 +64,8 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     _afterUpdates = [NSOperationQueue new];
 
     self.marqueeTipTexts = @[
-            strl( @"Press and hold to change password or delete." ),
+            strl( @"Thanks, lhunath ➚" ),
+            strl( @"Press and hold to delete or reset user." ),
             strl( @"Shake for emergency generator." ),
     ];
 
@@ -84,8 +87,9 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     [self reloadUsers];
 
     [self.marqueeTipTimer invalidate];
-    self.marqueeTipTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(firedMarqueeTimer:) userInfo:nil
-                                                           repeats:YES];
+    self.marqueeTipTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(firedMarqueeTimer:)
+                                                          userInfo:nil repeats:YES];
+    [self firedMarqueeTimer:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -105,6 +109,11 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     [self.avatarCollectionView.collectionViewLayout invalidateLayout];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+
+    if ([segue.identifier isEqualToString:@"web"])
+        ((MPWebViewController *)segue.destinationViewController).initialURL = [NSURL URLWithString:@"http://thanks.lhunath.com"];
+}
 
 #pragma mark - UITextFieldDelegate
 
@@ -418,15 +427,19 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
 - (void)firedMarqueeTimer:(NSTimer *)timer {
 
-    [UIView animateWithDuration:0.5 animations:^{
-        self.hintLabel.alpha = 0;
+    NSString *nextMarqueeString = self.marqueeTipTexts[self.marqueeTipTextIndex++ % [self.marqueeTipTexts count]];
+    if ([nextMarqueeString isEqualToString:[self.marqueeButton titleForState:UIControlStateNormal]])
+        return;
+
+    [UIView animateWithDuration:timer? 0.5: 0 animations:^{
+        self.marqueeButton.alpha = 0;
     }                completion:^(BOOL finished) {
         if (!finished)
             return;
 
-        self.hintLabel.text = self.marqueeTipTexts[++self.marqueeTipTextIndex % [self.marqueeTipTexts count]];
-        [UIView animateWithDuration:0.5 animations:^{
-            self.hintLabel.alpha = 1;
+        [self.marqueeButton setTitle:nextMarqueeString forState:UIControlStateNormal];
+        [UIView animateWithDuration:timer? 0.5: 0 animations:^{
+            self.marqueeButton.alpha = 0.5;
         }];
     }];
 }
