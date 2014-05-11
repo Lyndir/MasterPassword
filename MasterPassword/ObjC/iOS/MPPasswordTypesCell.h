@@ -26,6 +26,7 @@
 @property(nonatomic, strong) IBOutlet UICollectionView *contentCollectionView;
 @property(nonatomic, strong) id<MPAlgorithm> algorithm;
 
+@property(nonatomic) MPElementType activeType;
 + (instancetype)dequeueCellForElement:(MPElementEntity *)element
                    fromCollectionView:(UICollectionView *)collectionView atIndexPath:(NSIndexPath *)indexPath;
 + (instancetype)dequeueCellForTransientSite:(NSString *)siteName

@@ -22,6 +22,7 @@
 #import "MPPasswordLargeGeneratedCell.h"
 #import "MPPasswordLargeStoredCell.h"
 #import "MPPasswordTypesCell.h"
+#import "MPPasswordLargeDeleteCell.h"
 
 @implementation MPPasswordLargeCell
 
@@ -31,7 +32,9 @@
                         atIndexPath:(NSIndexPath *)indexPath {
 
     NSString *reuseIdentifier;
-    if (type & MPElementTypeClassGenerated)
+    if (indexPath.item == 0)
+        reuseIdentifier = NSStringFromClass( [MPPasswordLargeDeleteCell class] );
+    else if (type & MPElementTypeClassGenerated)
         reuseIdentifier = NSStringFromClass( [MPPasswordLargeGeneratedCell class] );
     else if (type & MPElementTypeClassStored)
         reuseIdentifier = NSStringFromClass( [MPPasswordLargeStoredCell class] );

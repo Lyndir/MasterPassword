@@ -33,6 +33,7 @@
 		93D396D8B67DA6522CDBA142 /* MPCoachmarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3995B1D4DCE5A30D882BA /* MPCoachmarkViewController.m */; };
 		93D397952F5635C793C24DF1 /* NSError+PearlFullDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39F9106F2CCFB94283188 /* NSError+PearlFullDescription.m */; };
 		93D3980046016EFD05B35BC5 /* PearlUICollectionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39B1D8177A86C5B9EDDE3 /* PearlUICollectionView.h */; };
+		93D398BD8B83FEE8BE4EFFFC /* MPPasswordLargeDeleteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39EFBC4D6BA3C8581865F /* MPPasswordLargeDeleteCell.m */; };
 		93D398ECD7D1A0DEDDADF516 /* MPEmergencyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39ACBA9F4878B6A1CC33B /* MPEmergencyViewController.m */; };
 		93D399246DC90F50913A1287 /* UIResponder+PearlFirstResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A1DDFA09AE2E14D26DC /* UIResponder+PearlFirstResponder.m */; };
 		93D399278165FD6D950F0025 /* MPPasswordTypesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39097C0AAE62C1C321BFC /* MPPasswordTypesCell.m */; };
@@ -548,6 +549,7 @@
 		93D3952CC60991B97D69F26A /* MPPasswordSmallCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordSmallCell.m; sourceTree = "<group>"; };
 		93D3956915634581E737B38C /* PearlNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlNavigationController.m; sourceTree = "<group>"; };
 		93D395BA6B2CFF5F49A4D25F /* MPPasswordLargeStoredCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordLargeStoredCell.h; sourceTree = "<group>"; };
+		93D3966B527CA47A0A661CE2 /* MPPasswordLargeDeleteCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordLargeDeleteCell.h; sourceTree = "<group>"; };
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
 		93D3971FE104BB4052484151 /* MPUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUsersViewController.h; sourceTree = "<group>"; };
 		93D39730673227EFF6DEFF19 /* MPSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSetupViewController.h; sourceTree = "<group>"; };
@@ -593,6 +595,7 @@
 		93D39DEA995041A13DC9CAF7 /* MPPasswordCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordCell.m; sourceTree = "<group>"; };
 		93D39E02F69CACAB61C056F8 /* MPPasswordLargeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordLargeCell.h; sourceTree = "<group>"; };
 		93D39E7A12CC352B2825AA66 /* MPPasswordsSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordsSegue.m; sourceTree = "<group>"; };
+		93D39EFBC4D6BA3C8581865F /* MPPasswordLargeDeleteCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordLargeDeleteCell.m; sourceTree = "<group>"; };
 		93D39F556F2F142740A65E59 /* MPWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPWebViewController.h; sourceTree = "<group>"; };
 		93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlEMail.h; sourceTree = "<group>"; };
 		93D39F9106F2CCFB94283188 /* NSError+PearlFullDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+PearlFullDescription.m"; sourceTree = "<group>"; };
@@ -1708,6 +1711,8 @@
 				DACA22121705DDC5002C6C22 /* External */,
 				DA5BFA47147E415C00F98B1E /* Frameworks */,
 				DA5BFA45147E415C00F98B1E /* Products */,
+				93D3966B527CA47A0A661CE2 /* MPPasswordLargeDeleteCell.h */,
+				93D39EFBC4D6BA3C8581865F /* MPPasswordLargeDeleteCell.m */,
 			);
 			sourceTree = "<group>";
 		};
@@ -3868,6 +3873,7 @@
 				93D391C07818F4C2DC1B6956 /* MPPasswordsCoachmarkViewController.m in Sources */,
 				93D39EAA4D064193074D3021 /* MPFixable.m in Sources */,
 				93D394982CBD25D46692DD7C /* MPWebViewController.m in Sources */,
+				93D398BD8B83FEE8BE4EFFFC /* MPPasswordLargeDeleteCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

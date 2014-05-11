@@ -58,7 +58,6 @@
     _coachmark = [MPCoachmark coachmarkForClass:[self class] version:0];
 
     self.view.backgroundColor = [UIColor clearColor];
-    self.passwordCollectionView.contentInset = UIEdgeInsetsMake( 108, 0, 0, 0 );
     [self.passwordCollectionView automaticallyAdjustInsetsForKeyboard];
 }
 
@@ -106,6 +105,12 @@
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
+
+- (CGSize)       collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
+referenceSizeForHeaderInSection:(NSInteger)section {
+
+    return CGSizeMake( collectionView.bounds.size.width, CGPointFromCGRectBottom( self.passwordsSearchBar.frame ).y );
+}
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -160,88 +165,10 @@
             cell = [MPPasswordTypesCell dequeueCellForTransientSite:self.query fromCollectionView:collectionView atIndexPath:indexPath];
 
         [UIView setAnimationsEnabled:YES];
-        return cell;
+        dbg_return(cell, indexPath);
     }
 
     Throw(@"Unexpected collection view: %@", collectionView);
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-
-    MPPasswordElementCell *cell = (MPPasswordElementCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSString *newSiteName = cell.transientSite;
-    if (newSiteName) {
-        [PearlAlert showAlertWithTitle:@"Create Site"
-                               message:strf( @"Do you want to create a new site named:\n%@", newSiteName )
-                             viewStyle:UIAlertViewStyleDefault
-                             initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-            if (buttonIndex == [alert cancelButtonIndex]) {
-                // Cancel
-                NSIndexPath *indexPath_ = [collectionView indexPathForCell:cell];
-                [collectionView selectItemAtIndexPath:indexPath_ animated:NO
-                                       scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
-                [collectionView deselectItemAtIndexPath:indexPath_ animated:YES];
-                return;
-            }
-
-            // Create
-            [[MPiOSAppDelegate get] addElementNamed:newSiteName completion:^(MPElementEntity *element) {
-                PearlMainQueue( ^{
-                    [PearlOverlay showTemporaryOverlayWithTitle:strf( @"Added %@", newSiteName ) dismissAfter:2];
-                    PearlMainQueueAfter( 0.2f, ^{
-                        NSIndexPath *indexPath_ = [collectionView indexPathForCell:cell];
-                        [collectionView selectItemAtIndexPath:indexPath_ animated:NO
-                                               scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
-                        [collectionView deselectItemAtIndexPath:indexPath_ animated:YES];
-                    } );
-                } );
-            }];
-        }                  cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonYes, nil];
-        return;
-    }
-
-    MPElementEntity *element = [cell mainElement];
-    if (!element) {
-        [collectionView selectItemAtIndexPath:indexPath animated:NO
-                               scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
-        [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-        return;
-    }
-
-    inf(@"Copying password for: %@", element.name);
-    MPCheckpoint( MPCheckpointCopyToPasteboard, @{
-            @"type"      : NilToNSNull(element.typeName),
-            @"version"   : @(element.version),
-            @"emergency" : @NO
-    } );
-
-    [element resolveContentUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
-        if (![result length]) {
-            PearlMainQueue( ^{
-                NSIndexPath *indexPath_ = [collectionView indexPathForCell:cell];
-                [collectionView selectItemAtIndexPath:indexPath_ animated:NO
-                                       scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
-                [collectionView deselectItemAtIndexPath:indexPath_ animated:YES];
-            } );
-            return;
-        }
-
-        [UIPasteboard generalPasteboard].string = result;
-        PearlMainQueue( ^{
-            [PearlOverlay showTemporaryOverlayWithTitle:@"Password Copied" dismissAfter:2];
-            PearlMainQueueAfter( 0.2f, ^{
-                NSIndexPath *indexPath_ = [collectionView indexPathForCell:cell];
-                [collectionView selectItemAtIndexPath:indexPath_ animated:NO
-                                       scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
-                [collectionView deselectItemAtIndexPath:indexPath_ animated:YES];
-
-                [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    [[cell elementInContext:context] use];
-                    [context saveToStore];
-                }];
-            } );
-        } );
-    }];
 }
 
 #pragma mark - NSFetchedResultsControllerDelegate
