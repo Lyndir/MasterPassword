@@ -18,10 +18,12 @@
 
 #import <Foundation/Foundation.h>
 #import "MPPasswordCell.h"
+#import "MPPasswordsViewController.h"
 
 @interface MPPasswordElementCell : MPPasswordCell
 
 @property(nonatomic, copy) NSString *transientSite;
+@property(nonatomic, weak) MPPasswordsViewController *passwordsViewController;
 
 - (MPElementEntity *)mainElement;
 - (MPElementEntity *)elementInContext:(NSManagedObjectContext *)context;

@@ -20,6 +20,7 @@
 #import "MPCell.h"
 #import "MPPasswordCell.h"
 #import "MPPasswordElementCell.h"
+#import "MPPasswordsViewController.h"
 
 @interface MPPasswordTypesCell : MPPasswordElementCell <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 

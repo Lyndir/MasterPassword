@@ -360,28 +360,31 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
             if (buttonIndex == [sheet destructiveButtonIndex]) {
                 // Delete User
                 [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    NSManagedObject *user_ = [context existingObjectWithID:userID error:NULL];
-                    if (user_) {
-                        [context deleteObject:user_];
-                        [context saveToStore];
-                    }
+                    MPUserEntity *user_ = [MPUserEntity existingObjectWithID:userID inContext:context];
+                    if (!user_)
+                        return;
+
+                    [context deleteObject:user_];
+                    [context saveToStore];
                 }];
                 return;
             }
 
             if (buttonIndex == [sheet firstOtherButtonIndex])
-                    // Reset Password
+                // Reset Password
                 [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPUserEntity *user_ = (MPUserEntity *)[context existingObjectWithID:userID error:NULL];
-                    if (user_)
-                        [[MPiOSAppDelegate get] changeMasterPasswordFor:user_ saveInContext:context didResetBlock:^{
-                            PearlMainQueue( ^{
-                                NSIndexPath *avatarIndexPath = [self.avatarCollectionView indexPathForCell:avatarCell];
-                                [self.avatarCollectionView selectItemAtIndexPath:avatarIndexPath animated:NO
-                                                                  scrollPosition:UICollectionViewScrollPositionNone];
-                                [self collectionView:self.avatarCollectionView didSelectItemAtIndexPath:avatarIndexPath];
-                            } );
-                        }];
+                    MPUserEntity *user_ = [MPUserEntity existingObjectWithID:userID inContext:context];
+                    if (!user_)
+                        return;
+
+                    [[MPiOSAppDelegate get] changeMasterPasswordFor:user_ saveInContext:context didResetBlock:^{
+                        PearlMainQueue( ^{
+                            NSIndexPath *avatarIndexPath = [self.avatarCollectionView indexPathForCell:avatarCell];
+                            [self.avatarCollectionView selectItemAtIndexPath:avatarIndexPath animated:NO
+                                                              scrollPosition:UICollectionViewScrollPositionNone];
+                            [self collectionView:self.avatarCollectionView didSelectItemAtIndexPath:avatarIndexPath];
+                        } );
+                    }];
                 }];
         }                  cancelTitle:[PearlStrings get].commonButtonCancel
                       destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];
@@ -477,12 +480,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     if ((*isNew = indexPath.item >= [self.userIDs count]))
         return nil;
 
-    NSError *error = nil;
-    MPUserEntity *user = (MPUserEntity *)[context existingObjectWithID:self.userIDs[indexPath.item] error:&error];
-    if (error)
-    wrn(@"Failed to load user into context: %@", error);
-
-    return user;
+    return [MPUserEntity existingObjectWithID:self.userIDs[indexPath.item] inContext:context];
 }
 
 - (void)updateAvatars {

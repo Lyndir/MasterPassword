@@ -69,15 +69,7 @@
 
 - (MPElementEntity *)elementInContext:(NSManagedObjectContext *)context {
 
-    if (!_elementOID)
-        return nil;
-
-    NSError *error = nil;
-    MPElementEntity *element = _elementOID? (MPElementEntity *)[context existingObjectWithID:_elementOID error:&error]: nil;
-    if (_elementOID && !element)
-    err(@"Failed to load element: %@", error);
-
-    return element;
+    return [MPElementEntity existingObjectWithID:_elementOID inContext:context];
 }
 
 - (void)reloadData {

@@ -92,8 +92,17 @@
 
     [super reloadWithElement:mainElement];
 
+    if (!mainElement) {
+        self.loginButton.alpha = 0;
+        self.nameLabel.text = @"";
+        self.contentField.text = @"";
+        return;
+    }
+
+    self.nameLabel.alpha = 1;
     self.loginButton.alpha = 1;
-    self.typeLabel.text = [mainElement.algorithm nameOfType:self.type];
+    if (self.type != (MPElementType)NSNotFound)
+        self.typeLabel.text = [mainElement.algorithm nameOfType:self.type];
 
     if (mainElement.requiresExplicitMigration)
         self.upgradeButton.alpha = 1;
@@ -166,6 +175,8 @@
 
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             MPElementEntity *element = [[MPPasswordElementCell findAsSuperviewOf:self] elementInContext:context];
+            if (!element)
+                return;
 
             switch (self.contentFieldMode) {
                 case MPContentFieldModePassword:

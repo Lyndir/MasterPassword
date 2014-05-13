@@ -68,9 +68,7 @@
     [super applyLayoutAttributes:layoutAttributes];
 
     [self.contentCollectionView.collectionViewLayout invalidateLayout];
-    if (self.activeType)
-        [self.contentCollectionView scrollToItemAtIndexPath:[self contentIndexPathForType:self.activeType]
-                                           atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    [self scrollToActiveType];
 }
 
 - (void)reloadWithTransientSite:(NSString *)siteName {
@@ -104,7 +102,10 @@
     if (!self.algorithm)
         dbg_return_tr( 0, @, @(section) );
 
-    dbg_return_tr( [[self.algorithm allTypes] count] + 1, @, @(section) );
+    if (self.transientSite)
+        dbg_return_tr( [[self.algorithm allTypes] count], @, @(section) );
+
+    dbg_return_tr( [[self.algorithm allTypes] count] + 1 /* Delete */, @, @(section) );
 }
 
 - (MPPasswordLargeCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -125,16 +126,13 @@
 
     NSString *newSiteName = self.transientSite;
     if (newSiteName) {
+        [[UIResponder findFirstResponder] resignFirstResponder];
         [PearlAlert showAlertWithTitle:@"Create Site"
                                message:strf( @"Do you want to create a new site named:\n%@", newSiteName )
                              viewStyle:UIAlertViewStyleDefault
                              initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
             if (buttonIndex == [alert cancelButtonIndex]) {
                 // Cancel
-//                NSIndexPath *indexPath_ = [collectionView indexPathForCell:cell];
-//                [collectionView selectItemAtIndexPath:indexPath animated:NO
-//                                       scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
-//                [collectionView deselectItemAtIndexPath:indexPath animated:YES];
                 for (NSIndexPath *selectedIndexPath in [collectionView indexPathsForSelectedItems])
                     [collectionView deselectItemAtIndexPath:selectedIndexPath animated:YES];
                 return;
@@ -142,70 +140,56 @@
 
             // Create
             [[MPiOSAppDelegate get] addElementNamed:newSiteName completion:^(MPElementEntity *element) {
+                [self copyContentOfElement:element];
                 PearlMainQueue( ^{
-                    [PearlOverlay showTemporaryOverlayWithTitle:strf( @"Added %@", newSiteName ) dismissAfter:2];
-                    PearlMainQueueAfter( 0.2f, ^{
-//                        NSIndexPath *indexPath_ = [collectionView indexPathForCell:cell];
-//                        [collectionView selectItemAtIndexPath:indexPath animated:NO
-//                                               scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
-//                        [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-                        for (NSIndexPath *selectedIndexPath in [collectionView indexPathsForSelectedItems])
-                            [collectionView deselectItemAtIndexPath:selectedIndexPath animated:YES];
-                    } );
+                    [self.passwordsViewController updatePasswords];
                 } );
             }];
         }                  cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonYes, nil];
         return;
     }
 
-    MPElementEntity *element = [self mainElement];
-    if (!element) {
-//        [collectionView selectItemAtIndexPath:indexPath animated:NO
-//                               scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
-//        [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-        for (NSIndexPath *selectedIndexPath in [collectionView indexPathsForSelectedItems])
-            [collectionView deselectItemAtIndexPath:selectedIndexPath animated:YES];
-        return;
-    }
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        BOOL used = NO;
+        MPElementEntity *element = [self elementInContext:context];
+        if (!element)
+            wrn(@"No element to use for: %@", self);
+        else if (indexPath.item == 0) {
+            [context deleteObject:element];
+            [context saveToStore];
+        } else
+            used = [self copyContentOfElement:element];
+
+        PearlMainQueueAfter( 0.2f, ^{
+            for (NSIndexPath *selectedIndexPath in [collectionView indexPathsForSelectedItems])
+                [collectionView deselectItemAtIndexPath:selectedIndexPath animated:YES];
+
+            if (used)
+                [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context_) {
+                    [[self elementInContext:context_] use];
+                    [context_ saveToStore];
+                }];
+        } );
+    }];
+}
+
+- (BOOL)copyContentOfElement:(MPElementEntity *)element {
 
     inf( @"Copying password for: %@", element.name );
     MPCheckpoint( MPCheckpointCopyToPasteboard, @{
-            @"type"      : NilToNSNull( element.typeName ),
-            @"version"   : @(element.version),
-            @"emergency" : @NO
-    } );
-
-    [element resolveContentUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
-        if (![result length]) {
-            PearlMainQueue( ^{
-//                NSIndexPath *indexPath_ = [collectionView indexPathForCell:cell];
-//                [collectionView selectItemAtIndexPath:indexPath animated:NO
-//                                       scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
-//                [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-                for (NSIndexPath *selectedIndexPath in [collectionView indexPathsForSelectedItems])
-                    [collectionView deselectItemAtIndexPath:selectedIndexPath animated:YES];
+                    @"type"      : NilToNSNull( element.typeName ),
+                    @"version"   : @(element.version),
+                    @"emergency" : @NO
             } );
-            return;
-        }
 
+    NSString *result = [element resolveContentUsingKey:[MPAppDelegate_Shared get].key];
+    if ([result length]) {
         [UIPasteboard generalPasteboard].string = result;
-        PearlMainQueue( ^{
-            [PearlOverlay showTemporaryOverlayWithTitle:@"Password Copied" dismissAfter:2];
-            PearlMainQueueAfter( 0.2f, ^{
-//                NSIndexPath *indexPath_ = [collectionView indexPathForCell:cell];
-//                [collectionView selectItemAtIndexPath:indexPath animated:NO
-//                                       scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
-//                [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-                for (NSIndexPath *selectedIndexPath in [collectionView indexPathsForSelectedItems])
-                    [collectionView deselectItemAtIndexPath:selectedIndexPath animated:YES];
+        [PearlOverlay showTemporaryOverlayWithTitle:@"Password Copied" dismissAfter:2];
+        return YES;
+    }
 
-                [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    [[self elementInContext:context] use];
-                    [context saveToStore];
-                }];
-            } );
-        } );
-    }];
+    return NO;
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -235,7 +219,17 @@
 
 #pragma mark - Private
 
+- (void)scrollToActiveType {
+
+    if (self.activeType && self.activeType != (MPElementType)NSNotFound)
+        [self.contentCollectionView scrollToItemAtIndexPath:[self contentIndexPathForType:self.activeType]
+                                           atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+}
+
 - (MPElementType)typeForContentIndexPath:(NSIndexPath *)indexPath {
+
+    if (self.transientSite)
+        return [[self.algorithm allTypesStartingWith:MPElementTypeGeneratedPIN][indexPath.item] unsignedIntegerValue];
 
     if (indexPath.item == 0)
         return (MPElementType)NSNotFound;
@@ -247,20 +241,29 @@
 
     NSArray *types = [self.algorithm allTypesStartingWith:MPElementTypeGeneratedPIN];
     for (NSInteger t = 0; t < [types count]; ++t)
-        if ([types[t] unsignedIntegerValue] == type)
-            return [NSIndexPath indexPathForItem:t + 1 inSection:0];
+        if ([types[t] unsignedIntegerValue] == type) {
+            if (self.transientSite)
+                return [NSIndexPath indexPathForItem:t inSection:0];
+            else
+                return [NSIndexPath indexPathForItem:t + 1 inSection:0];
+        }
 
-    Throw(@"Unsupported type: %d", type);
+    Throw(@"Unsupported type: %lud", (long)type);
 }
 
 - (void)saveContentType {
 
-    if (self.transientSite)
-        return;
-
     CGPoint centerPoint = CGPointFromCGRectCenter( self.contentCollectionView.bounds );
     NSIndexPath *centerIndexPath = [self.contentCollectionView indexPathForItemAtPoint:centerPoint];
-    self.activeType = [self typeForContentIndexPath:centerIndexPath];
+    MPElementType type = [self typeForContentIndexPath:centerIndexPath];
+    if (type == ((MPElementType)NSNotFound))
+        // Active cell is not a type cell.
+        return;
+
+    self.activeType = type;
+
+    if (self.transientSite)
+        return;
 
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         MPPasswordLargeCell *cell = (MPPasswordLargeCell *)[self.contentCollectionView cellForItemAtIndexPath:centerIndexPath];
@@ -270,7 +273,7 @@
         }
 
         MPElementEntity *element = [self elementInContext:context];
-        if (element.type == cell.type)
+        if (!element || element.type == cell.type)
             // Nothing changed.
             return;
 
@@ -284,8 +287,7 @@
 
     _activeType = activeType;
 
-    [self.contentCollectionView scrollToItemAtIndexPath:[self contentIndexPathForType:activeType]
-                                       atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    [self scrollToActiveType];
 }
 
 - (void)setSelected:(BOOL)selected {

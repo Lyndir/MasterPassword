@@ -40,7 +40,6 @@
     __weak UITapGestureRecognizer *_passwordsDismissRecognizer;
     NSFetchedResultsController *_fetchedResultsController;
     BOOL _exactMatch;
-    NSMutableDictionary *_fetchedUpdates;
     UIColor *_backgroundColor;
     UIColor *_darkenedBackgroundColor;
     __weak UIViewController *_popdownVC;
@@ -52,7 +51,6 @@
 
     [super viewDidLoad];
 
-    _fetchedUpdates = [NSMutableDictionary dictionaryWithCapacity:4];
     _backgroundColor = self.passwordCollectionView.backgroundColor;
     _darkenedBackgroundColor = [_backgroundColor colorWithAlphaComponent:0.6f];
     _coachmark = [MPCoachmark coachmarkForClass:[self class] version:0];
@@ -118,11 +116,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
     if (collectionView == self.passwordCollectionView) {
         UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)collectionViewLayout;
         CGFloat itemWidth = UIEdgeInsetsInsetRect(self.passwordCollectionView.bounds, layout.sectionInset).size.width;
-
-        if (indexPath.item < 3 || indexPath.item >= ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[indexPath.section]).numberOfObjects)
-            return CGSizeMake( itemWidth, 100 );
-
-        return CGSizeMake( (itemWidth - layout.minimumInteritemSpacing) / 2, 44 );
+        return CGSizeMake( itemWidth, 100 );
     }
 
     Throw(@"Unexpected collection view: %@", collectionView);
@@ -155,14 +149,12 @@ referenceSizeForHeaderInSection:(NSInteger)section {
         MPPasswordElementCell *cell;
         if (indexPath.item < ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[indexPath.section]).numberOfObjects) {
             MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
-            if (indexPath.item < 3)
-                cell = [MPPasswordTypesCell dequeueCellForElement:element fromCollectionView:collectionView atIndexPath:indexPath];
-            else
-                cell = [MPPasswordSmallCell dequeueCellForElement:element fromCollectionView:collectionView atIndexPath:indexPath];
+            cell = [MPPasswordTypesCell dequeueCellForElement:element fromCollectionView:collectionView atIndexPath:indexPath];
         }
         else
-                // New Site.
+            // New Site.
             cell = [MPPasswordTypesCell dequeueCellForTransientSite:self.query fromCollectionView:collectionView atIndexPath:indexPath];
+        cell.passwordsViewController = self;
 
         [UIView setAnimationsEnabled:YES];
         dbg_return(cell, indexPath);
@@ -171,139 +163,29 @@ referenceSizeForHeaderInSection:(NSInteger)section {
     Throw(@"Unexpected collection view: %@", collectionView);
 }
 
-#pragma mark - NSFetchedResultsControllerDelegate
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind
+                                 atIndexPath:(NSIndexPath *)indexPath {
 
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-
-    if (controller == _fetchedResultsController) {
-        dbg(@"controllerWillChangeContent");
-        NSAssert(![_fetchedUpdates count], @"Didn't finish a previous change update?");
-        if ([_fetchedUpdates count]) {
-            [_fetchedUpdates removeAllObjects];
-            [self.passwordCollectionView reloadData];
-        }
-    }
+    return [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"MPPasswordHeader" forIndexPath:indexPath];
 }
+
+#pragma mark - NSFetchedResultsControllerDelegate
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath
      forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
 
     if (controller == _fetchedResultsController) {
-        NSMutableArray *updatesForType = _fetchedUpdates[@(type)];
-        if (!updatesForType)
-            _fetchedUpdates[@(type)] = updatesForType = [NSMutableArray new];
-
-        [updatesForType addObject:@{
-                @"object"       : NilToNSNull(anObject),
-                @"indexPath"    : NilToNSNull(indexPath),
-                @"newIndexPath" : NilToNSNull(newIndexPath)
-        }];
-        switch (type) {
-            case NSFetchedResultsChangeInsert:
-                dbg(@"didChangeObject: insert: %@", [updatesForType lastObject]);
-                break;
-            case NSFetchedResultsChangeDelete:
-                dbg(@"didChangeObject: delete: %@", [updatesForType lastObject]);
-                break;
-            case NSFetchedResultsChangeMove:
-                dbg(@"didChangeObject: move: %@", [updatesForType lastObject]);
-                break;
-            case NSFetchedResultsChangeUpdate:
-                dbg(@"didChangeObject: update: %@", [updatesForType lastObject]);
-                break;
-        }
+        [self.passwordCollectionView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]];
+        [self.passwordCollectionView reloadSections:[NSIndexSet indexSetWithIndex:newIndexPath.section]];
     }
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
 
-    if (controller == _fetchedResultsController) {
-        NSMutableArray *updatesForType = _fetchedUpdates[@(type << 3)];
-        if (!updatesForType)
-            _fetchedUpdates[@(type << 3)] = updatesForType = [NSMutableArray new];
-
-        [updatesForType addObject:@{
-                @"sectionInfo" : NilToNSNull(sectionInfo),
-                @"index"       : @(sectionIndex)
-        }];
-        switch (type) {
-            case NSFetchedResultsChangeInsert:
-                dbg(@"didChangeSection: insert: %@", [updatesForType lastObject]);
-                break;
-            case NSFetchedResultsChangeDelete:
-                dbg(@"didChangeSection: delete: %@", [updatesForType lastObject]);
-                break;
-            case NSFetchedResultsChangeMove:
-                dbg(@"didChangeSection: move: %@", [updatesForType lastObject]);
-                break;
-            case NSFetchedResultsChangeUpdate:
-                dbg(@"didChangeSection: update: %@", [updatesForType lastObject]);
-                break;
-        }
-    }
+    if (controller == _fetchedResultsController)
+        [self.passwordCollectionView reloadData];
 }
-
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-
-    if (controller == _fetchedResultsController && [_fetchedUpdates count]) {
-        [self.passwordCollectionView performBatchUpdates:^{
-            [_fetchedUpdates enumerateKeysAndObjectsUsingBlock:^(NSNumber *typeNumber, NSArray *updates, BOOL *stop) {
-                BOOL updateIsSection = NO;
-                NSFetchedResultsChangeType type = [typeNumber unsignedIntegerValue];
-                if (type >= 1 << 3) {
-                    updateIsSection = YES;
-                    type = type >> 3;
-                }
-
-                switch (type) {
-                    case NSFetchedResultsChangeInsert:
-                        if (updateIsSection) {
-                            for (NSDictionary *update in updates) {
-                                dbg(@"insertSections:%@", update[@"index"]);
-                                [self.passwordCollectionView insertSections:
-                                        [NSIndexSet indexSetWithIndex:[update[@"index"] unsignedIntegerValue]]];
-                            }
-                        }
-                        else {
-                            dbg(@"insertItemsAtIndexPaths:%@", [updates valueForKeyPath:@"@unionOfObjects.newIndexPath"]);
-                            [self.passwordCollectionView insertItemsAtIndexPaths:[updates valueForKeyPath:@"@unionOfObjects.newIndexPath"]];
-                        }
-                        break;
-                    case NSFetchedResultsChangeDelete:
-                        if (updateIsSection) {
-                            for (NSDictionary *update in updates) {
-                                dbg(@"deleteSections:%@", update[@"index"]);
-                                [self.passwordCollectionView deleteSections:
-                                        [NSIndexSet indexSetWithIndex:[update[@"index"] unsignedIntegerValue]]];
-                            }
-                        }
-                        else {
-                            dbg(@"deleteItemsAtIndexPaths:%@", [updates valueForKeyPath:@"@unionOfObjects.indexPath"]);
-                            [self.passwordCollectionView deleteItemsAtIndexPaths:[updates valueForKeyPath:@"@unionOfObjects.indexPath"]];
-                        }
-                        break;
-                    case NSFetchedResultsChangeMove:
-                        NSAssert(!updateIsSection, @"Move not supported for sections");
-                        for (NSDictionary *update in updates) {
-                            dbg(@"moveItemAtIndexPath:%@ toIndexPath:%@", update[@"indexPath"], update[@"newIndexPath"]);
-                            [self.passwordCollectionView moveItemAtIndexPath:update[@"indexPath"] toIndexPath:update[@"newIndexPath"]];
-                        }
-                        break;
-                    case NSFetchedResultsChangeUpdate:
-                        NSAssert(!updateIsSection, @"Update not supported for sections");
-                        dbg(@"reloadItemsAtIndexPaths:%@", [updates valueForKeyPath:@"@unionOfObjects.indexPath"]);
-                        [self.passwordCollectionView reloadItemsAtIndexPaths:[updates valueForKeyPath:@"@unionOfObjects.indexPath"]];
-                        break;
-                }
-            }];
-        }                                     completion:nil];
-        [_fetchedUpdates removeAllObjects];
-    }
-}
-
-
-#pragma mark - UIScrollViewDelegate
 
 #pragma mark - UISearchBarDelegate
 
@@ -319,13 +201,10 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
 
-    if (searchBar == self.passwordsSearchBar) {
-//        _passwordsDismissRecognizer = [self.view dismissKeyboardForField:self.passwordsSearchBar onTouchForced:NO];
-
+    if (searchBar == self.passwordsSearchBar)
         [UIView animateWithDuration:0.3f animations:^{
             self.passwordCollectionView.backgroundColor = _darkenedBackgroundColor;
         }];
-    }
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {

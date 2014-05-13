@@ -36,6 +36,7 @@
 @property(nonatomic, readonly) MPCoachmark *coachmark;
 
 - (void)setActive:(BOOL)active animated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
+- (void)updatePasswords;
 
 - (IBAction)dismissPopdown:(id)sender;
 - (IBAction)signOut:(id)sender;

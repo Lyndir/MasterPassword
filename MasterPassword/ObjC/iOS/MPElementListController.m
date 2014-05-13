@@ -260,12 +260,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         NSManagedObjectID *elementOID = [self elementForTableIndexPath:indexPath].objectID;
         [MPiOSAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
-            NSError *error = nil;
-            MPElementEntity *element = (MPElementEntity *)[context existingObjectWithID:elementOID error:&error];
-            if (!element) {
-                err(@"Failed to retrieve element to delete: %@", error);
+            MPElementEntity *element = [MPElementEntity existingObjectWithID:elementOID inContext:context];
+            if (!element)
                 return;
-            }
 
             inf(@"Deleting element: %@", element.name);
             [context deleteObject:element];

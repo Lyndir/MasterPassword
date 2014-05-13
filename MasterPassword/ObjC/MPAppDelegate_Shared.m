@@ -28,18 +28,15 @@
     return [self activeUserInContext:[MPAppDelegate_Shared managedObjectContextForMainThreadIfReady]];
 }
 
-- (MPUserEntity *)activeUserInContext:(NSManagedObjectContext *)moc {
+- (MPUserEntity *)activeUserInContext:(NSManagedObjectContext *)context {
 
     NSManagedObjectID *activeUserOID = self.activeUserOID;
-    if (!activeUserOID || !moc)
+    if (!activeUserOID || !context)
         return nil;
 
-    NSError *error;
-    MPUserEntity *activeUser = (MPUserEntity *)[moc existingObjectWithID:activeUserOID error:&error];
-    if (!activeUser) {
+    MPUserEntity *activeUser = [MPUserEntity existingObjectWithID:activeUserOID inContext:context];
+    if (!activeUser)
         [self signOutAnimated:YES];
-        err(@"Failed to retrieve active user: %@", error);
-    }
 
     return activeUser;
 }
