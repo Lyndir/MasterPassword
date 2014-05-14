@@ -17,9 +17,6 @@
 //
 
 #import "MPPasswordLargeDeleteCell.h"
-#import "MPiOSAppDelegate.h"
-#import "MPAppDelegate_Store.h"
-#import "MPPasswordElementCell.h"
 
 @implementation MPPasswordLargeDeleteCell
 

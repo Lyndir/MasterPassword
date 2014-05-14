@@ -24,17 +24,6 @@
 
 #pragma mark - Life cycle
 
-- (void)awakeFromNib {
-
-    [super awakeFromNib];
-
-    self.layer.cornerRadius = 5;
-    self.layer.shadowOffset = CGSizeZero;
-    self.layer.shadowRadius = 5;
-    self.layer.shadowOpacity = 0;
-    self.layer.shadowColor = [UIColor whiteColor].CGColor;
-}
-
 - (void)prepareForReuse {
 
     [super prepareForReuse];
@@ -81,16 +70,6 @@
     [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
         self.layer.shadowOpacity = self.selected? 1: self.highlighted? 0.3f: 0;
     }];
-}
-
-- (void)reloadWithElement:(MPElementEntity *)mainElement {
-
-    self.nameLabel.text = mainElement.name;
-}
-
-- (void)reloadWithTransientSite:(NSString *)siteName {
-
-    self.nameLabel.text = strl( @"%@ - Tap to create", siteName );
 }
 
 @end

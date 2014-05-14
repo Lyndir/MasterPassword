@@ -21,7 +21,6 @@
 #import "MPAppDelegate_Store.h"
 #import "MPPasswordLargeCell.h"
 #import "MPPasswordTypesCell.h"
-#import "MPPasswordSmallCell.h"
 #import "MPPopdownSegue.h"
 #import "MPAppDelegate_Key.h"
 #import "MPCoachmarkViewController.h"
@@ -146,7 +145,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 
     if (collectionView == self.passwordCollectionView) {
         [UIView setAnimationsEnabled:NO];
-        MPPasswordElementCell *cell;
+        MPPasswordTypesCell *cell;
         if (indexPath.item < ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[indexPath.section]).numberOfObjects) {
             MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
             cell = [MPPasswordTypesCell dequeueCellForElement:element fromCollectionView:collectionView atIndexPath:indexPath];

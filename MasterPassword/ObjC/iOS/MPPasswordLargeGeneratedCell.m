@@ -19,7 +19,7 @@
 #import "MPPasswordLargeGeneratedCell.h"
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
-#import "MPPasswordElementCell.h"
+#import "MPPasswordTypesCell.h"
 
 @implementation MPPasswordLargeGeneratedCell
 
@@ -125,7 +125,7 @@
 
 - (MPElementGeneratedEntity *)generatedElementInContext:(NSManagedObjectContext *)context {
 
-    return [self generatedElement:[[MPPasswordElementCell findAsSuperviewOf:self] elementInContext:context]];
+    return [self generatedElement:[[MPPasswordTypesCell findAsSuperviewOf:self] elementInContext:context]];
 }
 
 - (MPElementGeneratedEntity *)generatedElement:(MPElementEntity *)element {

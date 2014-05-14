@@ -51,6 +51,12 @@
 
     [super awakeFromNib];
 
+    self.layer.cornerRadius = 5;
+    self.layer.shadowOffset = CGSizeZero;
+    self.layer.shadowRadius = 5;
+    self.layer.shadowOpacity = 0;
+    self.layer.shadowColor = [UIColor whiteColor].CGColor;
+
     [self prepareForReuse];
 }
 
@@ -64,7 +70,7 @@
 
 - (void)reloadWithTransientSite:(NSString *)siteName {
 
-    [super reloadWithTransientSite:siteName];
+    self.nameLabel.text = strl( @"%@ - Tap to create", siteName );
 
     self.loginButton.alpha = 0;
     self.upgradeButton.alpha = 0;
@@ -90,24 +96,28 @@
 
 - (void)reloadWithElement:(MPElementEntity *)mainElement {
 
-    [super reloadWithElement:mainElement];
-
     if (!mainElement) {
         self.loginButton.alpha = 0;
+        self.upgradeButton.alpha = 0;
+        self.typeLabel.text = @"";
         self.nameLabel.text = @"";
         self.contentField.text = @"";
         return;
     }
 
-    self.nameLabel.alpha = 1;
     self.loginButton.alpha = 1;
-    if (self.type != (MPElementType)NSNotFound)
-        self.typeLabel.text = [mainElement.algorithm nameOfType:self.type];
 
     if (mainElement.requiresExplicitMigration)
         self.upgradeButton.alpha = 1;
     else
         self.upgradeButton.alpha = 0;
+
+    if (self.type == (MPElementType)NSNotFound)
+        self.typeLabel.text = @"Delete";
+    else
+        self.typeLabel.text = [mainElement.algorithm nameOfType:self.type];
+
+    self.nameLabel.text = mainElement.name;
 
     switch (self.contentFieldMode) {
         case MPContentFieldModePassword: {
@@ -174,7 +184,7 @@
         NSString *newContent = textField.text;
 
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-            MPElementEntity *element = [[MPPasswordElementCell findAsSuperviewOf:self] elementInContext:context];
+            MPElementEntity *element = [[MPPasswordTypesCell findAsSuperviewOf:self] elementInContext:context];
             if (!element)
                 return;
 
@@ -215,11 +225,11 @@
 - (IBAction)doUpgrade:(UIButton *)sender {
 
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        if ([[[MPPasswordElementCell findAsSuperviewOf:self] elementInContext:context] migrateExplicitly:YES]) {
+        if ([[[MPPasswordTypesCell findAsSuperviewOf:self] elementInContext:context] migrateExplicitly:YES]) {
             [context saveToStore];
 
             PearlMainQueue( ^{
-                [[MPPasswordElementCell findAsSuperviewOf:self] reloadData];
+                [[MPPasswordTypesCell findAsSuperviewOf:self] reloadData];
                 [PearlOverlay showTemporaryOverlayWithTitle:@"Site Upgraded" dismissAfter:2];
             } );
         }
@@ -239,7 +249,7 @@
 
     _contentFieldMode = contentFieldMode;
 
-    [[MPPasswordElementCell findAsSuperviewOf:self] reloadData];
+    [[MPPasswordTypesCell findAsSuperviewOf:self] reloadData];
 }
 
 @end

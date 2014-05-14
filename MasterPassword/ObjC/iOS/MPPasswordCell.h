@@ -22,13 +22,7 @@
 
 @interface MPPasswordCell : MPCell
 
-@property(strong, nonatomic) IBOutlet UILabel *nameLabel;
-@property(strong, nonatomic) IBOutlet UIButton *loginButton;
-
 /** Populate our UI to reflect the current state. */
 - (void)updateAnimated:(BOOL)animated;
-
-- (void)reloadWithElement:(MPElementEntity *)mainElement;
-- (void)reloadWithTransientSite:(NSString *)siteName;
 
 @end

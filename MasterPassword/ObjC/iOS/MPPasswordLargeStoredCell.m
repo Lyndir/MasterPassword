@@ -19,7 +19,7 @@
 #import "MPPasswordLargeStoredCell.h"
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
-#import "MPPasswordElementCell.h"
+#import "MPPasswordTypesCell.h"
 
 @interface MPPasswordLargeStoredCell()
 
@@ -96,7 +96,7 @@
 
 - (MPElementStoredEntity *)storedElementInContext:(NSManagedObjectContext *)context {
 
-    return [self storedElement:[[MPPasswordElementCell findAsSuperviewOf:self] elementInContext:context]];
+    return [self storedElement:[[MPPasswordTypesCell findAsSuperviewOf:self] elementInContext:context]];
 }
 
 - (MPElementStoredEntity *)storedElement:(MPElementEntity *)element {

@@ -33,8 +33,13 @@ typedef NS_ENUM (NSUInteger, MPContentFieldMode) {
 @property(nonatomic, strong) IBOutlet UILabel *typeLabel;
 @property(nonatomic, strong) IBOutlet UITextField *contentField;
 @property(nonatomic, strong) IBOutlet UIButton *upgradeButton;
+@property(nonatomic, strong) IBOutlet UILabel *nameLabel;
+@property(nonatomic, strong) IBOutlet UIButton *loginButton;
 
 + (instancetype)dequeueCellWithType:(MPElementType)type fromCollectionView:(UICollectionView *)collectionView atIndexPath:(NSIndexPath *)indexPath;
+
+- (void)reloadWithElement:(MPElementEntity *)mainElement;
+- (void)reloadWithTransientSite:(NSString *)siteName;
 
 - (void)resolveContentOfCellTypeForTransientSite:(NSString *)siteName usingKey:(MPKey *)key result:(void (^)(NSString *))resultBlock;
 - (void)resolveContentOfCellTypeForElement:(MPElementEntity *)element usingKey:(MPKey *)key result:(void (^)(NSString *))resultBlock;

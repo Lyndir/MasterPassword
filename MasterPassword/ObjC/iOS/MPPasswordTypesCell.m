@@ -21,7 +21,9 @@
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
 
-@implementation MPPasswordTypesCell
+@implementation MPPasswordTypesCell {
+    NSManagedObjectID *_elementOID;
+}
 
 #pragma mark - Lifecycle
 
@@ -57,6 +59,8 @@
 
 - (void)prepareForReuse {
 
+    _elementOID = nil;
+    _transientSite = nil;
     _activeType = 0;
     _algorithm = MPAlgorithmDefault;
 
@@ -69,24 +73,6 @@
 
     [self.contentCollectionView.collectionViewLayout invalidateLayout];
     [self scrollToActiveType];
-}
-
-- (void)reloadWithTransientSite:(NSString *)siteName {
-
-    [super reloadWithTransientSite:siteName];
-
-    [self.contentCollectionView reloadData];
-    self.activeType = IfElse( [[MPiOSAppDelegate get] activeUserForMainThread].defaultType, MPElementTypeGeneratedLong );
-}
-
-- (void)reloadWithElement:(MPElementEntity *)mainElement {
-
-    [super reloadWithElement:mainElement];
-
-    self.algorithm = IfNotNilElse( [self mainElement].algorithm, MPAlgorithmDefault );
-
-    [self.contentCollectionView reloadData];
-    self.activeType = mainElement.type;
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -219,6 +205,23 @@
 
 #pragma mark - Private
 
+- (void)reloadData {
+
+    if (self.transientSite)
+        PearlMainQueue( ^{
+            [self.contentCollectionView reloadData];
+            self.activeType = IfElse( [[MPiOSAppDelegate get] activeUserForMainThread].defaultType, MPElementTypeGeneratedLong );
+        } );
+    else
+        [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
+            MPElementEntity *mainElement = [self mainElement];
+
+            self.algorithm = IfNotNilElse( mainElement.algorithm, MPAlgorithmDefault );
+            [self.contentCollectionView reloadData];
+            self.activeType = mainElement.type;
+        }];
+}
+
 - (void)scrollToActiveType {
 
     if (self.activeType && self.activeType != (MPElementType)NSNotFound)
@@ -282,6 +285,46 @@
 }
 
 #pragma mark - State
+
+- (void)setTransientSite:(NSString *)transientSite {
+
+    if ([_transientSite isEqualToString:transientSite])
+        return;
+
+    dbg( @"transientSite: %@ -> %@", _transientSite, transientSite );
+
+    _transientSite = transientSite;
+    _elementOID = nil;
+
+    [self updateAnimated:YES];
+    [self reloadData];
+}
+
+- (void)setElement:(MPElementEntity *)element {
+
+    NSManagedObjectID *newElementOID = element.objectID;
+    NSAssert( !newElementOID.isTemporaryID, @"Element doesn't have a permanent objectID: %@", element );
+    if ([_elementOID isEqual:newElementOID])
+        return;
+
+    dbg( @"element: %@ -> %@", _elementOID, newElementOID );
+
+    _transientSite = nil;
+    _elementOID = newElementOID;
+
+    [self updateAnimated:YES];
+    [self reloadData];
+}
+
+- (MPElementEntity *)mainElement {
+
+    return [self elementInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
+}
+
+- (MPElementEntity *)elementInContext:(NSManagedObjectContext *)context {
+
+    return [MPElementEntity existingObjectWithID:_elementOID inContext:context];
+}
 
 - (void)setActiveType:(MPElementType)activeType {
 

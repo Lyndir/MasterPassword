@@ -19,15 +19,23 @@
 #import <Foundation/Foundation.h>
 #import "MPCell.h"
 #import "MPPasswordCell.h"
-#import "MPPasswordElementCell.h"
 #import "MPPasswordsViewController.h"
 
-@interface MPPasswordTypesCell : MPPasswordElementCell <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface MPPasswordTypesCell : MPPasswordCell <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property(nonatomic, strong) IBOutlet UICollectionView *contentCollectionView;
-@property(nonatomic, strong) id<MPAlgorithm> algorithm;
 
+@property(nonatomic, weak) MPPasswordsViewController *passwordsViewController;
+@property(nonatomic, copy) NSString *transientSite;
+
+@property(nonatomic, strong) id<MPAlgorithm> algorithm;
 @property(nonatomic) MPElementType activeType;
+
+- (MPElementEntity *)mainElement;
+- (MPElementEntity *)elementInContext:(NSManagedObjectContext *)context;
+- (void)setElement:(MPElementEntity *)element;
+- (void)reloadData;
+
 + (instancetype)dequeueCellForElement:(MPElementEntity *)element
                    fromCollectionView:(UICollectionView *)collectionView atIndexPath:(NSIndexPath *)indexPath;
 + (instancetype)dequeueCellForTransientSite:(NSString *)siteName
