@@ -176,17 +176,17 @@
                                                     <outlet property="delegate" destination="S8q-YF-Kt9" id="5u3-XN-LOe"/>
                                                 </connections>
                                             </textField>
-                                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fdS-zb-K9I" userLabel="Entry Tip">
-                                                <rect key="frame" x="28" y="-38" width="224" height="82"/>
+                                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fdS-zb-K9I" userLabel="Entry Tip">
+                                                <rect key="frame" x="28" y="-38" width="225" height="82"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <subviews>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" image="tip_basic_black.png" translatesAutoresizingMaskIntoConstraints="NO" id="g2g-5i-er4">
-                                                        <rect key="frame" x="0.0" y="0.0" width="224" height="82"/>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" translatesAutoresizingMaskIntoConstraints="NO" id="g2g-5i-er4">
+                                                        <rect key="frame" x="0.0" y="0.0" width="225" height="82"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <rect key="contentStretch" x="0.15000000000000002" y="0.14999999999999999" width="0.69999999999999973" height="0.44999999999999996"/>
                                                     </imageView>
-                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Looks like a typo!" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="ZI7-qg-7OW">
-                                                        <rect key="frame" x="20" y="12" width="184" height="17"/>
+                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Looks like a typo!" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="ZI7-qg-7OW">
+                                                        <rect key="frame" x="20" y="12" width="185" height="17"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -206,7 +206,6 @@
                                                     <constraint firstItem="g2g-5i-er4" firstAttribute="leading" secondItem="fdS-zb-K9I" secondAttribute="leading" id="5ZK-p5-ihF"/>
                                                     <constraint firstAttribute="trailing" secondItem="g2g-5i-er4" secondAttribute="trailing" id="8hg-ky-ZAt"/>
                                                     <constraint firstItem="ZI7-qg-7OW" firstAttribute="leading" secondItem="fdS-zb-K9I" secondAttribute="leading" constant="20" id="Mh3-5h-v8I"/>
-                                                    <constraint firstItem="ZI7-qg-7OW" firstAttribute="centerX" secondItem="KhE-Yj-Kvm" secondAttribute="centerX" id="aOO-Eh-pPT"/>
                                                     <constraint firstItem="g2g-5i-er4" firstAttribute="top" secondItem="fdS-zb-K9I" secondAttribute="top" id="gg2-xC-JDl"/>
                                                     <constraint firstItem="ZI7-qg-7OW" firstAttribute="top" secondItem="fdS-zb-K9I" secondAttribute="top" constant="12" id="jX5-Hc-Wab"/>
                                                     <constraint firstItem="KhE-Yj-Kvm" firstAttribute="leading" secondItem="fdS-zb-K9I" secondAttribute="leading" constant="20" id="qF3-b1-F3u"/>
@@ -237,12 +236,12 @@
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="ignoreTouches" value="YES"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XEP-O3-ayG" userLabel="Footer" customClass="PearlUIView">
-                                        <rect key="frame" x="0.0" y="430" width="320" height="74"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XEP-O3-ayG" userLabel="Footer" customClass="PearlUIView">
+                                        <rect key="frame" x="0.0" y="433" width="320" height="71"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4md-Gp-SLG">
-                                                <rect key="frame" x="20" y="46" width="280" height="28"/>
+                                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4md-Gp-SLG">
+                                                <rect key="frame" x="20" y="48" width="280" height="23"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="10"/>
                                                 <state key="normal" title="Thanks, lhunath ➚">
@@ -1278,72 +1277,6 @@
                                                             <outlet property="contentCollectionView" destination="7vV-gu-BNS" id="8KS-Ep-xTu"/>
                                                         </connections>
                                                     </collectionViewCell>
-                                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPPasswordSmallGeneratedCell" id="yRD-Rk-pNt" userLabel="Small Generated" customClass="MPPasswordSmallGeneratedCell">
-                                                        <rect key="frame" x="10" y="228" width="145" height="44"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
-                                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                            <rect key="frame" x="0.0" y="0.0" width="145" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
-                                                            <subviews>
-                                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="9DA-ac-KNn" userLabel="Site Name">
-                                                                    <rect key="frame" x="8" y="15" width="129" height="14"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                                                    <accessibility key="accessibilityConfiguration" label="">
-                                                                        <accessibilityTraits key="traits" none="YES" staticText="YES" summaryElement="YES"/>
-                                                                    </accessibility>
-                                                                    <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
-                                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                    <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    <size key="shadowOffset" width="0.0" height="1"/>
-                                                                </label>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        </view>
-                                                        <color key="backgroundColor" red="0.18823529410000001" green="0.18823529410000001" blue="0.18823529410000001" alpha="0.5" colorSpace="calibratedRGB"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="trailing" secondItem="9DA-ac-KNn" secondAttribute="trailing" constant="8" id="7ll-PS-PVv"/>
-                                                            <constraint firstAttribute="bottom" secondItem="9DA-ac-KNn" secondAttribute="bottom" constant="15" id="UE0-fq-ybG"/>
-                                                            <constraint firstItem="9DA-ac-KNn" firstAttribute="leading" secondItem="yRD-Rk-pNt" secondAttribute="leading" constant="8" id="fPx-Rd-uHs"/>
-                                                        </constraints>
-                                                        <size key="customSize" width="145" height="44"/>
-                                                        <connections>
-                                                            <outlet property="nameLabel" destination="9DA-ac-KNn" id="qfr-j0-Sdu"/>
-                                                        </connections>
-                                                    </collectionViewCell>
-                                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPPasswordSmallStoredCell" id="sBj-8o-NKh" userLabel="Small Stored" customClass="MPPasswordSmallStoredCell">
-                                                        <rect key="frame" x="165" y="228" width="145" height="44"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
-                                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                            <rect key="frame" x="0.0" y="0.0" width="145" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
-                                                            <subviews>
-                                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="b8l-gc-zlp" userLabel="Site Name">
-                                                                    <rect key="frame" x="8" y="15" width="129" height="14"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                                                    <accessibility key="accessibilityConfiguration" label="">
-                                                                        <accessibilityTraits key="traits" none="YES" staticText="YES" summaryElement="YES"/>
-                                                                    </accessibility>
-                                                                    <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="12"/>
-                                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                    <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    <size key="shadowOffset" width="0.0" height="1"/>
-                                                                </label>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        </view>
-                                                        <color key="backgroundColor" red="0.18823529410000001" green="0.15686274510000001" blue="0.15686274510000001" alpha="0.5" colorSpace="calibratedRGB"/>
-                                                        <constraints>
-                                                            <constraint firstItem="b8l-gc-zlp" firstAttribute="leading" secondItem="sBj-8o-NKh" secondAttribute="leading" constant="8" id="GmM-eV-uGU"/>
-                                                            <constraint firstAttribute="trailing" secondItem="b8l-gc-zlp" secondAttribute="trailing" constant="8" id="frv-Rx-gkU"/>
-                                                            <constraint firstAttribute="bottom" secondItem="b8l-gc-zlp" secondAttribute="bottom" constant="15" id="yq0-Rv-C4c"/>
-                                                        </constraints>
-                                                        <size key="customSize" width="145" height="44"/>
-                                                        <connections>
-                                                            <outlet property="nameLabel" destination="b8l-gc-zlp" id="kDU-9a-4Wk"/>
-                                                        </connections>
-                                                    </collectionViewCell>
                                                 </cells>
                                                 <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPPasswordHeader" id="yzh-hh-YjZ">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="108"/>
@@ -1828,7 +1761,7 @@
         <!--View Controller-->
         <scene sceneID="9SY-7D-CE9">
             <objects>
-                <viewController id="z9O-w0-6oR" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="x" id="z9O-w0-6oR" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="EnC-Uo-cUP"/>
                         <viewControllerLayoutGuide type="bottom" id="fDn-y8-bUP"/>
@@ -1846,7 +1779,7 @@
         <!--View Controller-->
         <scene sceneID="qiQ-By-IQy">
             <objects>
-                <viewController id="s6d-Gt-PIb" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="y" id="s6d-Gt-PIb" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bJ2-LA-9Ep"/>
                         <viewControllerLayoutGuide type="bottom" id="TpX-Zb-Pw8"/>
@@ -2372,7 +2305,7 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                                         </constraints>
                                                     </collectionViewCell>
                                                 </cells>
-                                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="ttf-pq-CbW">
+                                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPPasswordHeader" id="ttf-pq-CbW">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="108"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </collectionReusableView>
