@@ -77,8 +77,10 @@ typedef NS_ENUM(NSUInteger, MPElementType) {
 #define MPElementUpdatedNotification          @"MPElementUpdatedNotification"
 #define MPCheckConfigNotification             @"MPCheckConfigNotification"
 #define MPSitesImportedNotification           @"MPSitesImportedNotification"
+#define MPFoundInconsistenciesNotification    @"MPFoundInconsistenciesNotification"
 
 #define MPSitesImportedNotificationUserKey    @"MPSitesImportedNotificationUserKey"
+#define MPInconsistenciesFixResultUserKey     @"MPInconsistenciesFixResultUserKey"
 
 static void MPCheckpoint(NSString *checkpoint, NSDictionary *attributes) {
 

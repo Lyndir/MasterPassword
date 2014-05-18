@@ -182,7 +182,7 @@
                 // "Create" button.
                 [[MPMacAppDelegate get] addElementNamed:[self.siteField stringValue] completion:^(MPElementEntity *element) {
                     if (element)
-                        [self updateElements];
+                        PearlMainQueue( ^{ [self updateElements]; } );
                 }];
                 break;
             }
@@ -453,7 +453,7 @@
 - (void)setElementSelectionIndexes:(NSIndexSet *)elementSelectionIndexes {
 
     // First reset bounds.
-    PearlMainThread(^{
+    PearlMainQueue(^{
         NSUInteger selectedIndex = self.elementSelectionIndexes.firstIndex;
         if (selectedIndex != NSNotFound && selectedIndex < self.elements.count)
             [[self selectedView].animator setBoundsOrigin:NSZeroPoint];

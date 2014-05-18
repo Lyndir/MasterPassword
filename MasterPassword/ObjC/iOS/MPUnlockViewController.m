@@ -46,15 +46,15 @@
     [alert addSubview:alertAvatarScrollView];
 
     CGPoint selectedOffset = CGPointZero;
-    for (int a = 0; a < MPAvatarCount; ++a) {
+    for (NSUInteger a = 0; a < MPAvatarCount; ++a) {
         UIButton *avatar = [self.avatarTemplate cloneAddedTo:alertAvatarScrollView];
 
-        avatar.tag = a;
+        avatar.tag = (NSInteger)a;
         avatar.hidden = NO;
         avatar.center = CGPointMake(
                 (20 + self.avatarTemplate.bounds.size.width / 2) * (a + 1) + self.avatarTemplate.bounds.size.width / 2 * a,
                 20 + self.avatarTemplate.bounds.size.height / 2 );
-        [avatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%d", a )] forState:UIControlStateNormal];
+        [avatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%ld", (long)a )] forState:UIControlStateNormal];
         [avatar setSelectionInSuperviewCandidate:YES isClearable:NO];
 
         avatar.layer.cornerRadius = avatar.bounds.size.height / 2;
@@ -102,11 +102,7 @@
     UILabel *alertNameLabel = [self.nameLabel cloneAddedTo:container];
     alertNameLabel.center = alertAvatar.center;
     alertNameLabel.text = user.name;
-    alertNameLabel.bounds = CGRectSetHeight( alertNameLabel.bounds,
-            [alertNameLabel.text sizeWithFont:self.nameLabel.font
-                            constrainedToSize:CGSizeMake( alertNameLabel.bounds.size.width - 10,
-                                    100 )
-                                lineBreakMode:self.nameLabel.lineBreakMode].height );
+    [alertNameLabel sizeToFit];
     alertNameLabel.layer.cornerRadius = 5;
     alertNameLabel.backgroundColor = [UIColor blackColor];
 }
@@ -166,11 +162,11 @@
     self.wordList = wordListLines;
 
     self.wordWall.alpha = 0;
-    [self.wordWall enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+    [self.wordWall enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
         UILabel *wordLabel = (UILabel *)subview;
 
         [self initializeWordLabel:wordLabel];
-    }                        recurse:NO];
+    }                     recurse:NO];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
@@ -276,12 +272,6 @@
     [super viewWillDisappear:animated];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-
-    if ([segue.identifier isEqualToString:@"MP_Settings"])
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
-}
-
 - (BOOL)prefersStatusBarHidden {
 
     return YES;
@@ -290,6 +280,12 @@
 - (UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
 
     return UIStatusBarAnimationSlide;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+
+    if ([segue.identifier isEqualToString:@"MP_Settings"])
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (BOOL)canBecomeFirstResponder {
@@ -368,7 +364,7 @@
     avatar.layer.shadowRadius = 20;
     avatar.layer.masksToBounds = NO;
     avatar.backgroundColor = [UIColor clearColor];
-    avatar.tag = user.avatar;
+    avatar.tag = (NSInteger)user.avatar;
 
     [avatar setBackgroundImage:[UIImage imageNamed:PearlString( @"avatar-%lu", (unsigned long)user.avatar )]
                       forState:UIControlStateNormal];
@@ -420,8 +416,7 @@
 - (void)didSelectNewUserAvatar:(UIButton *)newUserAvatar {
 
     if (![MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        MPUserEntity *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass( [MPUserEntity class] )
-                                                              inManagedObjectContext:context];
+        MPUserEntity *newUser = [MPUserEntity insertNewObjectInContext:context];
 
         [self showNewUserNameAlertFor:newUser saveInContext:context completion:^(BOOL finished) {
             newUserAvatar.selected = NO;
@@ -590,7 +585,7 @@
         targetedUser = [self userForAvatar:targetedAvatar inContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
     }
 
-    [self.avatarsView enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+    [self.avatarsView enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
         if (![[self.avatarToUserOID allKeys] containsObject:[NSValue valueWithNonretainedObject:subview]])
                 // This subview is not one of the user avatars.
             return;
@@ -599,10 +594,10 @@
         BOOL isTargeted = avatar == targetedAvatar;
 
         avatar.userInteractionEnabled = isTargeted;
-        avatar.alpha = isTargeted? 1: [self selectedUserForThread]? 0.1: 0.4;
+        avatar.alpha = isTargeted? 1: [self selectedUserForThread]? 0.1F: 0.4F;
 
         [self updateAvatarShadowColor:avatar isTargeted:isTargeted];
-    }                           recurse:NO];
+    }                        recurse:NO];
 
     if (allowScroll) {
         CGPoint targetContentOffset = CGPointMake(
@@ -614,10 +609,7 @@
 
     // Lay out user name label.
     self.nameLabel.text = targetedAvatar? (targetedUser? targetedUser.name: @"New User"): nil;
-    self.nameLabel.bounds = CGRectSetHeight( self.nameLabel.bounds,
-            [self.nameLabel.text sizeWithFont:self.nameLabel.font
-                            constrainedToSize:CGSizeMake( self.nameLabel.bounds.size.width - 10, 100 )
-                                lineBreakMode:self.nameLabel.lineBreakMode].height );
+    [self.nameLabel sizeToFit];
     self.oldNameLabel.bounds = self.nameLabel.bounds;
     if (completion)
         completion( YES );
@@ -625,22 +617,22 @@
 
 - (void)beginWordWallAnimation {
 
-    [self.wordWall enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+    [self.wordWall enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
         UILabel *wordLabel = (UILabel *)subview;
 
         if (wordLabel.frame.origin.x < -self.wordWall.frame.size.width / 3) {
             wordLabel.frame = CGRectSetX( wordLabel.frame, wordLabel.frame.origin.x + self.wordWall.frame.size.width );
             [self initializeWordLabel:wordLabel];
         }
-    }                        recurse:NO];
+    }                     recurse:NO];
 
     if (self.wordWallAnimating)
         [UIView animateWithDuration:15 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
-            [self.wordWall enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+            [self.wordWall enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
                 UILabel *wordLabel = (UILabel *)subview;
 
                 wordLabel.frame = CGRectSetX( wordLabel.frame, wordLabel.frame.origin.x - self.wordWall.frame.size.width / 3 );
-            }                        recurse:NO];
+            }                     recurse:NO];
         }                completion:^(BOOL finished) {
             if (finished)
                 [self beginWordWallAnimation];
@@ -649,7 +641,7 @@
 
 - (void)initializeWordLabel:(UILabel *)wordLabel {
 
-    wordLabel.alpha = 0.05 + (random() % 35) / 100.0F;
+    wordLabel.alpha = 0.05F + (random() % 35) / 100.0F;
     wordLabel.text = (self.wordList)[(NSUInteger)random() % [self.wordList count]];
 }
 
@@ -725,7 +717,7 @@
 
 - (void)setSpinnerActive:(BOOL)active {
 
-    PearlMainThread(^{
+    PearlMainQueue( ^{
         CABasicAnimation *rotate = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
         rotate.toValue = [NSNumber numberWithDouble:2 * M_PI];
         rotate.duration = 5.0;
@@ -751,7 +743,7 @@
             else
                 [self avatarForUser:[self selectedUserForThread]].backgroundColor = self.avatarTemplate.backgroundColor;
         }];
-    });
+    } );
 }
 
 - (void)updateAvatarShadowColor:(UIButton *)avatar isTargeted:(BOOL)targeted {
@@ -1132,9 +1124,9 @@
 
 - (IBAction)google:(id)sender {
 
-    id<GPPShareBuilder> shareDialog = [[GPPShare sharedInstance] shareDialog];
-    [[[shareDialog setURLToShare:[NSURL URLWithString:@"http://masterpasswordapp.com"]]
-            setPrefillText:@"I've started doing passwords properly thanks to Master Password."] open];
+//    id<GPPShareBuilder> shareDialog = [[GPPShare sharedInstance] shareDialog];
+//    [[[shareDialog setURLToShare:[NSURL URLWithString:@"http://masterpasswordapp.com"]]
+//            setPrefillText:@"I've started doing passwords properly thanks to Master Password."] open];
 }
 
 - (IBAction)mail:(id)sender {
@@ -1186,7 +1178,7 @@
         }
         if (buttonIndex == [sheet firstOtherButtonIndex] + 3) {
             // Mailing List
-            [PearlEMail sendEMailTo:@"masterpassword-join@lists.lyndir.com" subject:@"Subscribe"
+            [PearlEMail sendEMailTo:@"masterpassword-join@lists.lyndir.com" fromVC:self subject:@"Subscribe"
                                body:@"Press 'Send' now to subscribe to the Master Password mailing list.\n\n"
                                        @"You'll be kept up-to-date on the evolution of and discussions revolving Master Password."];
             return;

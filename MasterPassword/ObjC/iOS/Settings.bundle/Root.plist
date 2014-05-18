@@ -71,6 +71,24 @@
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
 		<dict>
+			<key>FooterText</key>
+			<string>Enabling support for dictation in the site search box will enable the dictation button next to the space bar at the bottom of the keyboard.  Press this button and speak the name of your site to look it up.  Enabling dictation will change your keyboard which might make it slightly more difficult to enter a site name manually.</string>
+			<key>Title</key>
+			<string></string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<false/>
+			<key>Key</key>
+			<string>dictationSearch</string>
+			<key>Title</key>
+			<string>Dictation Search</string>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+		</dict>
+		<dict>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
@@ -85,6 +103,24 @@
 			<string>iCloud</string>
 			<key>Key</key>
 			<string>iCloudEnabled</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string></string>
+			<key>FooterText</key>
+			<string>If the app tends to crash on login, enable this to check if there are any inconsistencies in your site data.  It may slow down login a bit, so keep it off when no issues are reported on login.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Check For Inconsistencies</string>
+			<key>Key</key>
+			<string>checkInconsistency</string>
 			<key>DefaultValue</key>
 			<false/>
 		</dict>

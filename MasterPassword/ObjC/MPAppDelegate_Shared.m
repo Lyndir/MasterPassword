@@ -10,9 +10,7 @@
 #import "MPAppDelegate_Store.h"
 #import "MPAppDelegate_Key.h"
 
-@implementation MPAppDelegate_Shared {
-    NSManagedObjectID *_activeUserOID;
-}
+@implementation MPAppDelegate_Shared
 
 + (MPAppDelegate_Shared *)get {
 
@@ -30,17 +28,15 @@
     return [self activeUserInContext:[MPAppDelegate_Shared managedObjectContextForMainThreadIfReady]];
 }
 
-- (MPUserEntity *)activeUserInContext:(NSManagedObjectContext *)moc {
+- (MPUserEntity *)activeUserInContext:(NSManagedObjectContext *)context {
 
-    if (!_activeUserOID || !moc)
+    NSManagedObjectID *activeUserOID = self.activeUserOID;
+    if (!activeUserOID || !context)
         return nil;
 
-    NSError *error;
-    MPUserEntity *activeUser = (MPUserEntity *)[moc existingObjectWithID:_activeUserOID error:&error];
-    if (!activeUser) {
+    MPUserEntity *activeUser = [MPUserEntity existingObjectWithID:activeUserOID inContext:context];
+    if (!activeUser)
         [self signOutAnimated:YES];
-        err(@"Failed to retrieve active user: %@", error);
-    }
 
     return activeUser;
 }
@@ -51,7 +47,7 @@
     if (activeUser.objectID.isTemporaryID && ![activeUser.managedObjectContext obtainPermanentIDsForObjects:@[ activeUser ] error:&error])
     err(@"Failed to obtain a permanent object ID after setting active user: %@", error);
 
-    _activeUserOID = activeUser.objectID;
+    self.activeUserOID = activeUser.objectID;
 }
 
 @end

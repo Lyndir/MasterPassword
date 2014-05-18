@@ -12,6 +12,6 @@
 
 @interface MPElementStoredEntity : MPElementEntity
 
-@property(nonatomic, retain) id contentObject;
+@property(nonatomic, retain) NSData *contentObject;
 
 @end

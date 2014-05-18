@@ -4,9 +4,6 @@
 [submodule "External/InAppSettingsKit"]
 	path = External/InAppSettingsKit
 	url = git://github.com/lhunath/InAppSettingsKit.git
-[submodule "External/FontReplacer"]
-	path = External/FontReplacer
-	url = git://github.com/0xced/FontReplacer.git
 [submodule "External/UbiquityStoreManager"]
 	path = External/UbiquityStoreManager
 	url = git://github.com/lhunath/UbiquityStoreManager.git
@@ -16,6 +13,3 @@
 [submodule "External/LoveLyndir"]
 	path = External/LoveLyndir
 	url = git://github.com/Lyndir/love-lyndir.client.git
-[submodule "External/DCIntrospect"]
-	path = External/DCIntrospect
-	url = https://github.com/lhunath/DCIntrospect.git

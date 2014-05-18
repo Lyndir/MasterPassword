@@ -16,11 +16,12 @@
 #endif
 
 @property(strong, nonatomic) MPKey *key;
+@property(strong, nonatomic) NSManagedObjectID *activeUserOID;
 
 + (instancetype)get;
 
 - (MPUserEntity *)activeUserForMainThread;
-- (MPUserEntity *)activeUserInContext:(NSManagedObjectContext *)moc;
+- (MPUserEntity *)activeUserInContext:(NSManagedObjectContext *)context;
 - (void)setActiveUser:(MPUserEntity *)activeUser;
 
 @end

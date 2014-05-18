@@ -243,8 +243,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)oldValue {
 
-    [[NSNotificationCenter defaultCenter]
-            postNotificationName:MPCheckConfigNotification object:NSStringFromSelector( configKey ) userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:NSStringFromSelector( configKey )];
 }
 
 #pragma mark - NSApplicationDelegate

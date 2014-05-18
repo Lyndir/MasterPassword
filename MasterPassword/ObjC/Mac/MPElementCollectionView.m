@@ -113,9 +113,8 @@
                 // "Next type" button.
                 [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                     MPElementEntity *element = [self.representedObject entityInContext:context];
-                    element = [[MPMacAppDelegate get] changeElement:element inContext:context
+                    element = [[MPMacAppDelegate get] changeElement:element saveInContext:context
                                                              toType:[element.algorithm nextType:element.type]];
-                    [context saveToStore];
 
                     self.representedObject = [[MPElementModel alloc] initWithEntity:element];
                 }];
@@ -131,9 +130,8 @@
                 // "Previous type" button.
                 [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                     MPElementEntity *element = [self.representedObject entityInContext:context];
-                    element = [[MPMacAppDelegate get] changeElement:element inContext:context
+                    element = [[MPMacAppDelegate get] changeElement:element saveInContext:context
                                                              toType:[element.algorithm previousType:element.type]];
-                    [context saveToStore];
 
                     self.representedObject = [[MPElementModel alloc] initWithEntity:element];
                 }];

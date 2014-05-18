@@ -715,11 +715,6 @@
                 [self setHelpHidden:NO animated:YES];
                 break;
             }
-            case 1: {
-                inf(@"Action: Guide");
-                [[MPiOSAppDelegate get] showGuide];
-                break;
-            }
             case 2: {
                 inf(@"Action: Preferences");
                 [self performSegueWithIdentifier:@"MP_UserProfile" sender:self];
@@ -776,7 +771,7 @@
                     @"If you continue, the password for this site will change.  "
                     @"You will need to update your account's old password to the new one."
                                       do:^BOOL(MPElementEntity *activeElement, NSManagedObjectContext *context) {
-                                          _activeElementOID = [[MPiOSAppDelegate get] changeElement:activeElement inContext:context
+                                          _activeElementOID = [[MPiOSAppDelegate get] changeElement:activeElement saveInContext:context
                                                                                              toType:type].objectID;
                                           return YES;
                                       }];

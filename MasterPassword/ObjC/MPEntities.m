@@ -8,13 +8,14 @@
 
 #import "MPEntities.h"
 #import "MPAppDelegate_Shared.h"
+#import "MPAppDelegate_Store.h"
 
 @implementation NSManagedObjectContext(MP)
 
 - (BOOL)saveToStore {
 
     __block BOOL success = YES;
-    if ([self hasChanges])
+    if ([self hasChanges]) {
         [self performBlockAndWait:^{
             @try {
                 NSError *error = nil;
@@ -26,6 +27,7 @@
                 err(@"While saving: %@", exception);
             }
         }];
+    }
 
     return success && (!self.parentContext || [self.parentContext saveToStore]);
 }
@@ -36,25 +38,10 @@
 
 - (MPElementType)type {
 
-    // Some people got elements with type == 0.
-    MPElementType type = (MPElementType)[self.type_ unsignedIntegerValue];
-    if (!type || type == (MPElementType)NSNotFound)
-        type = [self.user defaultType];
-    if (!type || type == (MPElementType)NSNotFound)
-        type = MPElementTypeGeneratedLong;
-
-    return type;
+    return (MPElementType)[self.type_ unsignedIntegerValue];
 }
 
 - (void)setType:(MPElementType)aType {
-
-    // Make sure we don't poison our model data with invalid values.
-    if (!aType || aType == (MPElementType)NSNotFound)
-        aType = [self.user defaultType];
-    if (!aType || aType == (MPElementType)NSNotFound)
-        aType = MPElementTypeGeneratedLong;
-    if (![self isKindOfClass:[self.algorithm classOfType:aType]])
-    Throw(@"This object's class does not support the type: %lu", (long)aType);
 
     self.type_ = @(aType);
 }
@@ -122,12 +109,12 @@
 
 - (NSString *)description {
 
-    return PearlString( @"%@:%@", [self class], [self name] );
+    return strf( @"%@:%@", [self class], [self name] );
 }
 
 - (NSString *)debugDescription {
 
-    return PearlString( @"{%@: name=%@, user=%@, type=%lu, uses=%ld, lastUsed=%@, version=%ld, loginName=%@, requiresExplicitMigration=%d}",
+    return strf( @"{%@: name=%@, user=%@, type=%lu, uses=%ld, lastUsed=%@, version=%ld, loginName=%@, requiresExplicitMigration=%d}",
             NSStringFromClass( [self class] ), self.name, self.user.name, (long)self.type, (long)self.uses, self.lastUsed, (long)self.version,
             self.loginName, self.requiresExplicitMigration );
 }
@@ -143,6 +130,16 @@
         }
 
     return YES;
+}
+
+- (NSString *)resolveContentUsingKey:(MPKey *)key {
+
+    return [self.algorithm resolveContentForElement:self usingKey:key];
+}
+
+- (void)resolveContentUsingKey:(MPKey *)key result:(void (^)(NSString *))result {
+
+    [self.algorithm resolveContentForElement:self usingKey:key result:result];
 }
 
 @end
@@ -189,7 +186,7 @@
 
 - (MPElementType)defaultType {
 
-    return (MPElementType)[self.defaultType_ unsignedIntegerValue];
+    return IfElse((MPElementType)[self.defaultType_ unsignedIntegerValue], MPElementTypeGeneratedLong);
 }
 
 - (void)setDefaultType:(MPElementType)aDefaultType {

@@ -54,12 +54,4 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction)showGuide:(UIBarButtonItem *)sender {
-
-    [MPiOSConfig get].showSetup = @NO;
-    [self dismissViewControllerAnimated:YES completion:^{
-        [[MPiOSAppDelegate get] showGuide];
-    }];
-}
-
 @end

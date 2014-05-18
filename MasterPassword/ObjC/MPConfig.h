@@ -14,5 +14,6 @@
 @property(nonatomic, retain) NSNumber *rememberLogin;
 
 @property(nonatomic, retain) NSNumber *iCloudDecided;
+@property(nonatomic, retain) NSNumber *checkInconsistency;
 
 @end

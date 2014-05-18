@@ -21,6 +21,12 @@
 		DA16B344170661EE000A0EAB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B343170661EE000A0EAB /* Cocoa.framework */; };
 		DA16B345170661F2000A0EAB /* libPearl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC77CAD148291A600BCF976 /* libPearl.a */; };
 		DA1E4D50176E0E280065E0EF /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA1E4D4F176E0E280065E0EF /* Media.xcassets */; };
+		DA2CA4ED18D323D3007798F8 /* NSError+PearlFullDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4E718D323D3007798F8 /* NSError+PearlFullDescription.m */; };
+		DA2CA4EE18D323D3007798F8 /* NSError+PearlFullDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = DA2CA4E818D323D3007798F8 /* NSError+PearlFullDescription.h */; };
+		DA2CA4EF18D323D3007798F8 /* NSArray+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4E918D323D3007798F8 /* NSArray+Pearl.m */; };
+		DA2CA4F018D323D3007798F8 /* NSArray+Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DA2CA4EA18D323D3007798F8 /* NSArray+Pearl.h */; };
+		DA2CA4F118D323D3007798F8 /* NSTimer+PearlBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4EB18D323D3007798F8 /* NSTimer+PearlBlock.m */; };
+		DA2CA4F218D323D3007798F8 /* NSTimer+PearlBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = DA2CA4EC18D323D3007798F8 /* NSTimer+PearlBlock.h */; };
 		DA30E9CE15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */; };
 		DA30E9CF15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9CC15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m */; };
 		DA30E9D015722ECA00A68B4C /* Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9CD15722ECA00A68B4C /* Pearl.m */; };
@@ -29,6 +35,10 @@
 		DA30E9D815723E6900A68B4C /* PearlLazy.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D615723E6900A68B4C /* PearlLazy.m */; };
 		DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3509FC15F101A500C14A8E /* PearlQueue.h */; };
 		DA3509FF15F101A500C14A8E /* PearlQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3509FD15F101A500C14A8E /* PearlQueue.m */; };
+		DA3B844F190FC60900246EEA /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA3B844A190FC5A900246EEA /* Crashlytics.framework */; };
+		DA3B8452190FC86F00246EEA /* NSManagedObject+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3B8450190FC86F00246EEA /* NSManagedObject+Pearl.m */; };
+		DA3B8453190FC86F00246EEA /* NSManagedObject+Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */; };
+		DA3B8456190FC89700246EEA /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3B8454190FC89700246EEA /* MPFixable.m */; };
 		DA3EF17B15A47744003ABF4E /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA3EF17A15A47744003ABF4E /* SenTestingKit.framework */; };
 		DA3EF17D15A47744003ABF4E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA4425CC1557BED40052177D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
@@ -109,9 +119,6 @@
 		DACA27361705DF81002C6C22 /* avatar-0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA24561705DF7D002C6C22 /* avatar-0@2x.png */; };
 		DACA27371705DF81002C6C22 /* avatar-10@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA24571705DF7D002C6C22 /* avatar-10@2x.png */; };
 		DACA27381705DF81002C6C22 /* menu-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA24581705DF7D002C6C22 /* menu-icon.png */; };
-		DACA29641705DF81002C6C22 /* Exo-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DACA268B1705DF81002C6C22 /* Exo-ExtraBold.otf */; };
-		DACA29651705DF81002C6C22 /* Exo-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DACA268C1705DF81002C6C22 /* Exo-Regular.otf */; };
-		DACA29661705DF81002C6C22 /* Exo-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DACA268D1705DF81002C6C22 /* Exo-Bold.otf */; };
 		DACA29671705DF81002C6C22 /* SourceCodePro-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = DACA268E1705DF81002C6C22 /* SourceCodePro-ExtraLight.otf */; };
 		DACA29681705DF81002C6C22 /* SourceCodePro-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = DACA268F1705DF81002C6C22 /* SourceCodePro-Black.otf */; };
 		DACA296D1705DF81002C6C22 /* Localytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA26961705DF81002C6C22 /* Localytics.plist */; };
@@ -204,6 +211,10 @@
 		DAEB942818AB0FFD000490CC /* sysendian.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB93D718AB0FFD000490CC /* sysendian.h */; };
 		DAEB942918AB0FFD000490CC /* warn.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB93D818AB0FFD000490CC /* warn.h */; };
 		DAEB942E18B47FB3000490CC /* MPInitialWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA0933C91747A56A00DE1CEF /* MPInitialWindow.xib */; };
+		DAF4EF56190A828100023C90 /* Exo2.0-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAF4EF52190A828100023C90 /* Exo2.0-Thin.otf */; };
+		DAF4EF57190A828100023C90 /* Exo2.0-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAF4EF53190A828100023C90 /* Exo2.0-Regular.otf */; };
+		DAF4EF58190A828100023C90 /* Exo2.0-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAF4EF54190A828100023C90 /* Exo2.0-ExtraBold.otf */; };
+		DAF4EF59190A828100023C90 /* Exo2.0-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAF4EF55190A828100023C90 /* Exo2.0-Bold.otf */; };
 		DAFE4A1315039824003ABA7C /* NSObject+PearlExport.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45D815039823003ABA7C /* NSObject+PearlExport.h */; };
 		DAFE4A1415039824003ABA7C /* NSObject+PearlExport.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45D915039823003ABA7C /* NSObject+PearlExport.m */; };
 		DAFE4A1515039824003ABA7C /* NSString+PearlNSArrayFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45DA15039823003ABA7C /* NSString+PearlNSArrayFormat.h */; };
@@ -308,6 +319,12 @@
 		DA16B340170661DB000A0EAB /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		DA16B343170661EE000A0EAB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		DA1E4D4F176E0E280065E0EF /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = MasterPassword/Media.xcassets; sourceTree = "<group>"; };
+		DA2CA4E718D323D3007798F8 /* NSError+PearlFullDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+PearlFullDescription.m"; sourceTree = "<group>"; };
+		DA2CA4E818D323D3007798F8 /* NSError+PearlFullDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+PearlFullDescription.h"; sourceTree = "<group>"; };
+		DA2CA4E918D323D3007798F8 /* NSArray+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Pearl.m"; sourceTree = "<group>"; };
+		DA2CA4EA18D323D3007798F8 /* NSArray+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Pearl.h"; sourceTree = "<group>"; };
+		DA2CA4EB18D323D3007798F8 /* NSTimer+PearlBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+PearlBlock.m"; sourceTree = "<group>"; };
+		DA2CA4EC18D323D3007798F8 /* NSTimer+PearlBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+PearlBlock.h"; sourceTree = "<group>"; };
 		DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+PearlMutableInfo.h"; sourceTree = "<group>"; };
 		DA30E9CC15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+PearlMutableInfo.m"; sourceTree = "<group>"; };
 		DA30E9CD15722ECA00A68B4C /* Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pearl.m; sourceTree = "<group>"; };
@@ -316,6 +333,12 @@
 		DA30E9D615723E6900A68B4C /* PearlLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlLazy.m; sourceTree = "<group>"; };
 		DA3509FC15F101A500C14A8E /* PearlQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlQueue.h; sourceTree = "<group>"; };
 		DA3509FD15F101A500C14A8E /* PearlQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlQueue.m; sourceTree = "<group>"; };
+		DA3B8448190FC5A900246EEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		DA3B844A190FC5A900246EEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		DA3B8450190FC86F00246EEA /* NSManagedObject+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+Pearl.m"; sourceTree = "<group>"; };
+		DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Pearl.h"; sourceTree = "<group>"; };
+		DA3B8454190FC89700246EEA /* MPFixable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPFixable.m; sourceTree = "<group>"; };
+		DA3B8455190FC89700246EEA /* MPFixable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPFixable.h; sourceTree = "<group>"; };
 		DA3EF17915A47744003ABF4E /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA3EF17A15A47744003ABF4E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUbiquityStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -381,7 +404,6 @@
 		DAC632871486D95D0075AEA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		DAC77CAD148291A600BCF976 /* libPearl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPearl.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC77CB1148291A600BCF976 /* Pearl-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Pearl-Prefix.pch"; path = "../../MasterPassword/ObjC/Pearl/Pearl-Prefix.pch"; sourceTree = "<group>"; };
-		DACA22181705DE28002C6C22 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DACA22B71705DE7D002C6C22 /* UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UbiquityStoreManager.m; sourceTree = "<group>"; };
 		DACA22B81705DE7D002C6C22 /* NSError+UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+UbiquityStoreManager.h"; sourceTree = "<group>"; };
 		DACA22B91705DE7D002C6C22 /* NSError+UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+UbiquityStoreManager.m"; sourceTree = "<group>"; };
@@ -428,9 +450,6 @@
 		DACA24561705DF7D002C6C22 /* avatar-0@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-0@2x.png"; sourceTree = "<group>"; };
 		DACA24571705DF7D002C6C22 /* avatar-10@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-10@2x.png"; sourceTree = "<group>"; };
 		DACA24581705DF7D002C6C22 /* menu-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-icon.png"; sourceTree = "<group>"; };
-		DACA268B1705DF81002C6C22 /* Exo-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-ExtraBold.otf"; sourceTree = "<group>"; };
-		DACA268C1705DF81002C6C22 /* Exo-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Regular.otf"; sourceTree = "<group>"; };
-		DACA268D1705DF81002C6C22 /* Exo-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo-Bold.otf"; sourceTree = "<group>"; };
 		DACA268E1705DF81002C6C22 /* SourceCodePro-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-ExtraLight.otf"; sourceTree = "<group>"; };
 		DACA268F1705DF81002C6C22 /* SourceCodePro-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Black.otf"; sourceTree = "<group>"; };
 		DACA26961705DF81002C6C22 /* Localytics.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Localytics.plist; sourceTree = "<group>"; };
@@ -524,6 +543,10 @@
 		DAEB93D718AB0FFD000490CC /* sysendian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sysendian.h; sourceTree = "<group>"; };
 		DAEB93D818AB0FFD000490CC /* warn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = warn.h; sourceTree = "<group>"; };
 		DAEBC45214F6364500987BF6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		DAF4EF52190A828100023C90 /* Exo2.0-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Thin.otf"; sourceTree = "<group>"; };
+		DAF4EF53190A828100023C90 /* Exo2.0-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Regular.otf"; sourceTree = "<group>"; };
+		DAF4EF54190A828100023C90 /* Exo2.0-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-ExtraBold.otf"; sourceTree = "<group>"; };
+		DAF4EF55190A828100023C90 /* Exo2.0-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Bold.otf"; sourceTree = "<group>"; };
 		DAFE45D815039823003ABA7C /* NSObject+PearlExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PearlExport.h"; sourceTree = "<group>"; };
 		DAFE45D915039823003ABA7C /* NSObject+PearlExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PearlExport.m"; sourceTree = "<group>"; };
 		DAFE45DA15039823003ABA7C /* NSString+PearlNSArrayFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PearlNSArrayFormat.h"; sourceTree = "<group>"; };
@@ -598,6 +621,7 @@
 				DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */,
 				DA16B342170661E0000A0EAB /* Security.framework in Frameworks */,
 				DA16B345170661F2000A0EAB /* libPearl.a in Frameworks */,
+				DA3B844F190FC60900246EEA /* Crashlytics.framework in Frameworks */,
 				DA16B344170661EE000A0EAB /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -631,6 +655,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DA3B8447190FC5A900246EEA /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				DA3B8448190FC5A900246EEA /* Crashlytics.framework */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
+		DA3B8449190FC5A900246EEA /* Mac */ = {
+			isa = PBXGroup;
+			children = (
+				DA3B844A190FC5A900246EEA /* Crashlytics.framework */,
+			);
+			path = Mac;
+			sourceTree = "<group>";
+		};
 		DA5BFA39147E415C00F98B1E = {
 			isa = PBXGroup;
 			children = (
@@ -689,6 +729,8 @@
 		DA5E5C961724A667003798D8 /* ObjC */ = {
 			isa = PBXGroup;
 			children = (
+				DA3B8454190FC89700246EEA /* MPFixable.m */,
+				DA3B8455190FC89700246EEA /* MPFixable.h */,
 				DA5E5CB21724A667003798D8 /* Mac */,
 				DA5E5C971724A667003798D8 /* MPAlgorithm.h */,
 				DA5E5C981724A667003798D8 /* MPAlgorithm.m */,
@@ -773,9 +815,10 @@
 		DACA22121705DDC5002C6C22 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				DA3B8447190FC5A900246EEA /* iOS */,
+				DA3B8449190FC5A900246EEA /* Mac */,
 				DABC6C0E175D8CE1000C15D4 /* RHStatusItemView */,
 				DACA29751705E2BD002C6C22 /* jrswizzle */,
-				DACA22181705DE28002C6C22 /* Crashlytics.framework */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
 				DACA22B61705DE7D002C6C22 /* UbiquityStoreManager */,
 			);
@@ -879,9 +922,10 @@
 		DACA268A1705DF81002C6C22 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				DACA268B1705DF81002C6C22 /* Exo-ExtraBold.otf */,
-				DACA268C1705DF81002C6C22 /* Exo-Regular.otf */,
-				DACA268D1705DF81002C6C22 /* Exo-Bold.otf */,
+				DAF4EF52190A828100023C90 /* Exo2.0-Thin.otf */,
+				DAF4EF53190A828100023C90 /* Exo2.0-Regular.otf */,
+				DAF4EF54190A828100023C90 /* Exo2.0-ExtraBold.otf */,
+				DAF4EF55190A828100023C90 /* Exo2.0-Bold.otf */,
 				DACA268E1705DF81002C6C22 /* SourceCodePro-ExtraLight.otf */,
 				DACA268F1705DF81002C6C22 /* SourceCodePro-Black.otf */,
 			);
@@ -1038,6 +1082,14 @@
 		DAFE45D715039823003ABA7C /* Pearl */ = {
 			isa = PBXGroup;
 			children = (
+				DA3B8450190FC86F00246EEA /* NSManagedObject+Pearl.m */,
+				DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */,
+				DA2CA4E718D323D3007798F8 /* NSError+PearlFullDescription.m */,
+				DA2CA4E818D323D3007798F8 /* NSError+PearlFullDescription.h */,
+				DA2CA4E918D323D3007798F8 /* NSArray+Pearl.m */,
+				DA2CA4EA18D323D3007798F8 /* NSArray+Pearl.h */,
+				DA2CA4EB18D323D3007798F8 /* NSTimer+PearlBlock.m */,
+				DA2CA4EC18D323D3007798F8 /* NSTimer+PearlBlock.h */,
 				DA3509FC15F101A500C14A8E /* PearlQueue.h */,
 				DA3509FD15F101A500C14A8E /* PearlQueue.m */,
 				93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */,
@@ -1145,6 +1197,7 @@
 				DAEB93FD18AB0FFD000490CC /* mdc2.h in Headers */,
 				DAEB942718AB0FFD000490CC /* sha256.h in Headers */,
 				DAEB940818AB0FFD000490CC /* pkcs7.h in Headers */,
+				DA2CA4F218D323D3007798F8 /* NSTimer+PearlBlock.h in Headers */,
 				DAEB93DF18AB0FFD000490CC /* bn.h in Headers */,
 				DAEB940718AB0FFD000490CC /* pkcs12.h in Headers */,
 				DAEB941A18AB0FFD000490CC /* txt_db.h in Headers */,
@@ -1154,6 +1207,7 @@
 				DAEB941018AB0FFD000490CC /* seed.h in Headers */,
 				DAEB942618AB0FFD000490CC /* scryptenc_cpuperf.h in Headers */,
 				DAFE4A1715039824003ABA7C /* NSString+PearlSEL.h in Headers */,
+				DA3B8453190FC86F00246EEA /* NSManagedObject+Pearl.h in Headers */,
 				DAEB93F518AB0FFD000490CC /* evp.h in Headers */,
 				DAEB941918AB0FFD000490CC /* ts.h in Headers */,
 				DAEB93F818AB0FFD000490CC /* krb5_asn.h in Headers */,
@@ -1172,6 +1226,7 @@
 				DAFE4A2415039824003ABA7C /* PearlInfoPlist.h in Headers */,
 				DAEB940618AB0FFD000490CC /* pem2.h in Headers */,
 				DAFE4A2615039824003ABA7C /* PearlLogger.h in Headers */,
+				DA2CA4F018D323D3007798F8 /* NSArray+Pearl.h in Headers */,
 				DAEB93FC18AB0FFD000490CC /* md5.h in Headers */,
 				DAFE4A2815039824003ABA7C /* PearlMathUtils.h in Headers */,
 				DAFE4A2A15039824003ABA7C /* PearlObjectUtils.h in Headers */,
@@ -1242,6 +1297,7 @@
 				DAEB93DB18AB0FFD000490CC /* asn1_mac.h in Headers */,
 				DAEB940518AB0FFD000490CC /* pem.h in Headers */,
 				DAEB942818AB0FFD000490CC /* sysendian.h in Headers */,
+				DA2CA4EE18D323D3007798F8 /* NSError+PearlFullDescription.h in Headers */,
 				DAEB93FF18AB0FFD000490CC /* obj_mac.h in Headers */,
 				DAEB93E718AB0FFD000490CC /* crypto.h in Headers */,
 				DAEB941318AB0FFD000490CC /* ssl2.h in Headers */,
@@ -1295,9 +1351,9 @@
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
 				DA5BFA42147E415C00F98B1E /* Resources */,
+				DAD9B5EE1762CA3A001835F9 /* Copy LoginHelper */,
 				DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */,
 				DAD3125D155288AA00A3F9ED /* Run Script: Crashlytics */,
-				DAD9B5EE1762CA3A001835F9 /* Copy LoginHelper */,
 			);
 			buildRules = (
 			);
@@ -1434,9 +1490,11 @@
 				DACA27121705DF81002C6C22 /* avatar-13@2x.png in Resources */,
 				DACA27131705DF81002C6C22 /* avatar-3@2x.png in Resources */,
 				DACA27141705DF81002C6C22 /* avatar-7.png in Resources */,
+				DAF4EF57190A828100023C90 /* Exo2.0-Regular.otf in Resources */,
 				DACA27151705DF81002C6C22 /* avatar-0.png in Resources */,
 				DACA27161705DF81002C6C22 /* avatar-12.png in Resources */,
 				DACA27171705DF81002C6C22 /* avatar-15.png in Resources */,
+				DAF4EF59190A828100023C90 /* Exo2.0-Bold.otf in Resources */,
 				DACA27181705DF81002C6C22 /* avatar-9.png in Resources */,
 				DACA27191705DF81002C6C22 /* avatar-1@2x.png in Resources */,
 				DACA271A1705DF81002C6C22 /* avatar-11@2x.png in Resources */,
@@ -1465,6 +1523,8 @@
 				DACA272F1705DF81002C6C22 /* avatar-3.png in Resources */,
 				DACA27301705DF81002C6C22 /* avatar-18.png in Resources */,
 				DACA27311705DF81002C6C22 /* avatar-4.png in Resources */,
+				DAF4EF58190A828100023C90 /* Exo2.0-ExtraBold.otf in Resources */,
+				DAF4EF56190A828100023C90 /* Exo2.0-Thin.otf in Resources */,
 				DACA27321705DF81002C6C22 /* avatar-16.png in Resources */,
 				DACA27331705DF81002C6C22 /* avatar-12@2x.png in Resources */,
 				DACA27341705DF81002C6C22 /* avatar-2@2x.png in Resources */,
@@ -1472,9 +1532,6 @@
 				DACA27361705DF81002C6C22 /* avatar-0@2x.png in Resources */,
 				DACA27371705DF81002C6C22 /* avatar-10@2x.png in Resources */,
 				DACA27381705DF81002C6C22 /* menu-icon.png in Resources */,
-				DACA29641705DF81002C6C22 /* Exo-ExtraBold.otf in Resources */,
-				DACA29651705DF81002C6C22 /* Exo-Regular.otf in Resources */,
-				DACA29661705DF81002C6C22 /* Exo-Bold.otf in Resources */,
 				DACA29671705DF81002C6C22 /* SourceCodePro-ExtraLight.otf in Resources */,
 				DACA29681705DF81002C6C22 /* SourceCodePro-Black.otf in Resources */,
 				DACA296D1705DF81002C6C22 /* Localytics.plist in Resources */,
@@ -1535,7 +1592,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/bash -e";
-			shellScript = "../../../External/Crashlytics.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" ../../Resources/Crashlytics/Crashlytics.plist)\"";
+			shellScript = "../../../External/Mac/Crashlytics.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" ../../Resources/Crashlytics/Crashlytics.plist)\"";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1571,6 +1628,7 @@
 				DA5E5CFD1724A667003798D8 /* MPElementEntity.m in Sources */,
 				DA5E5CFE1724A667003798D8 /* MPElementGeneratedEntity.m in Sources */,
 				DA5E5CFF1724A667003798D8 /* MPElementStoredEntity.m in Sources */,
+				DA3B8456190FC89700246EEA /* MPFixable.m in Sources */,
 				DA5E5D001724A667003798D8 /* MPEntities.m in Sources */,
 				DA5E5D011724A667003798D8 /* MPKey.m in Sources */,
 				DA5E5D021724A667003798D8 /* MPUserEntity.m in Sources */,
@@ -1607,6 +1665,7 @@
 				DAFE4A1415039824003ABA7C /* NSObject+PearlExport.m in Sources */,
 				DAFE4A1615039824003ABA7C /* NSString+PearlNSArrayFormat.m in Sources */,
 				DAFE4A1815039824003ABA7C /* NSString+PearlSEL.m in Sources */,
+				DA2CA4ED18D323D3007798F8 /* NSError+PearlFullDescription.m in Sources */,
 				DAFE4A1B15039824003ABA7C /* PearlAbstractStrings.m in Sources */,
 				DAFE4A1F15039824003ABA7C /* PearlCodeUtils.m in Sources */,
 				DAFE4A2115039824003ABA7C /* PearlConfig.m in Sources */,
@@ -1622,8 +1681,11 @@
 				DAFE4A3915039824003ABA7C /* PearlRSAKey.m in Sources */,
 				DAFE4A3B15039824003ABA7C /* PearlSCrypt.m in Sources */,
 				DA30E9CF15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m in Sources */,
+				DA2CA4F118D323D3007798F8 /* NSTimer+PearlBlock.m in Sources */,
+				DA3B8452190FC86F00246EEA /* NSManagedObject+Pearl.m in Sources */,
 				DA30E9D015722ECA00A68B4C /* Pearl.m in Sources */,
 				DA30E9D215722EE500A68B4C /* Pearl-Crypto.m in Sources */,
+				DA2CA4EF18D323D3007798F8 /* NSArray+Pearl.m in Sources */,
 				DA30E9D815723E6900A68B4C /* PearlLazy.m in Sources */,
 				DAFE4A63150399FF003ABA86 /* NSObject+PearlKVO.m in Sources */,
 				DAFE4A63150399FF003ABA92 /* NSDateFormatter+RFC3339.m in Sources */,
@@ -1814,7 +1876,6 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1867,7 +1928,6 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
@@ -1894,7 +1954,6 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1946,7 +2005,6 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -1960,7 +2018,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer: Maarten Billemont (DWGU95U4ZD)";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Mac,
+				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				SKIP_INSTALL = NO;
@@ -1974,7 +2037,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
+				CODE_SIGN_IDENTITY = "Developer ID Application: Maarten Billemont (HL3Q45LX9N)";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Mac,
+				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				SKIP_INSTALL = NO;
@@ -2003,7 +2071,6 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2055,7 +2122,6 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -2069,7 +2135,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
+				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application: Maarten Billemont (HL3Q45LX9N)";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Mac,
+				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				SKIP_INSTALL = NO;

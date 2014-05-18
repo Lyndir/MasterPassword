@@ -10,16 +10,13 @@
 #import <MessageUI/MessageUI.h>
 
 #import "MPAppDelegate_Shared.h"
-#import <GooglePlus/GooglePlus.h>
 
 @interface MPiOSAppDelegate : MPAppDelegate_Shared
 
-- (void)showGuide;
-- (void)showSetup;
 - (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController;
 - (void)openFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController;
 
-- (void)export;
+- (void)showExportForVC:(UIViewController *)viewController;
 - (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void (^)(void))didReset;
 
 @end

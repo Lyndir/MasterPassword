@@ -28,18 +28,20 @@
 
     [super viewDidLoad];
 
+    self.view.backgroundColor = [UIColor clearColor];
+
     [[NSNotificationCenter defaultCenter] addObserverForName:NSUserDefaultsDidChangeNotification object:nil
-                                                       queue:nil usingBlock:
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
-                dispatch_async( dispatch_get_main_queue(), ^{
-                    self.levelControl.selectedSegmentIndex = [[MPiOSConfig get].traceMode boolValue]? 1: 0;
-                } );
+                self.levelControl.selectedSegmentIndex = [[MPiOSConfig get].traceMode boolValue]? 1: 0;
             }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 
     [super viewWillAppear:animated];
+
+    self.logView.contentInset = UIEdgeInsetsMake( 64, 0, 93, 0 );
 
     [self refresh:nil];
 
@@ -62,7 +64,7 @@
                              if (buttonIndex_ == alert.cancelButtonIndex)
                                  return;
 
-                             _switchCloudStoreProgress = [PearlOverlay showOverlayWithTitle:@"Enumerating Stores"];
+                             _switchCloudStoreProgress = [PearlOverlay showProgressOverlayWithTitle:@"Enumerating Stores"];
                              dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
                                  [self switchCloudStore];
                              } );
@@ -105,8 +107,10 @@
 - (void)switchCloudStore {
 
     NSDictionary *cloudStores = [[MPiOSAppDelegate get].storeManager enumerateCloudStores];
-    if (!cloudStores)
-    wrn(@"Failed enumerating cloud stores.");
+    if (!cloudStores) {
+        wrn( @"Failed enumerating cloud stores." );
+        return;
+    }
 
     NSString *currentStoreUUID = nil;
     NSMutableDictionary *stores = [NSMutableDictionary dictionary];

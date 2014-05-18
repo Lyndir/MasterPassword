@@ -105,7 +105,7 @@
 
     UISearchBar *searchBar = self.searchDisplayController.searchBar;
     CGRect searchBarFrame = searchBar.frame;
-    [searchBar.superview enumerateSubviews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+    [searchBar.superview enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
 
         if ([subview isKindOfClass:[UIControl class]] &&
             CGPointEqualToPoint(
@@ -118,7 +118,7 @@
 
             *stop = YES;
         }
-    }                              recurse:NO];
+    }                           recurse:NO];
 }
 
 - (BOOL)newSiteSectionNeeded {
@@ -193,7 +193,7 @@
     NSString *query = [self.searchDisplayController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     cell.textLabel.text = query;
     cell.detailTextLabel.text = PearlString( @"New site: %@",
-            [MPAlgorithmDefault shortNameOfType:[[[MPiOSAppDelegate get] activeUserForMainThread] defaultType]] );
+    [MPAlgorithmDefault shortNameOfType:[[MPiOSAppDelegate get] activeUserForMainThread].defaultType] );
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -220,7 +220,9 @@
         __weak MPElementListController *wSelf = self;
         [[MPiOSAppDelegate get] addElementNamed:siteName completion:^(MPElementEntity *element) {
             if (element)
-                [wSelf.delegate didSelectElement:element];
+                PearlMainQueue( ^{
+                    [wSelf.delegate didSelectElement:element];
+                } );
         }];
     }                  cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonYes, nil];
 }

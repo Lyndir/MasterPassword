@@ -9,15 +9,20 @@
 #import <UIKit/UIKit.h>
 #import "MPTypeViewController.h"
 
-@interface MPPreferencesViewController : UITableViewController<MPTypeDelegate>
+@interface MPPreferencesViewController : UITableViewController
 
-@property(weak, nonatomic) IBOutlet UIScrollView *avatarsView;
-@property(weak, nonatomic) IBOutlet UIButton *avatarTemplate;
 @property(weak, nonatomic) IBOutlet UISwitch *savePasswordSwitch;
+@property(weak, nonatomic) IBOutlet UITableViewCell *signOutCell;
+@property(weak, nonatomic) IBOutlet UITableViewCell *feedbackCell;
+@property(weak, nonatomic) IBOutlet UITableViewCell *coachmarksCell;
 @property(weak, nonatomic) IBOutlet UITableViewCell *exportCell;
-@property(weak, nonatomic) IBOutlet UITableViewCell *changeMPCell;
-@property(weak, nonatomic) IBOutlet UILabel *defaultTypeLabel;
+@property(weak, nonatomic) IBOutlet UITableViewCell *checkInconsistencies;
+@property(weak, nonatomic) IBOutlet UIImageView *avatarImage;
+@property(weak, nonatomic) IBOutlet UISegmentedControl *generatedTypeControl;
+@property(weak, nonatomic) IBOutlet UISegmentedControl *storedTypeControl;
 
-- (IBAction)didToggleSwitch:(UISwitch *)sender;
+- (IBAction)previousAvatar:(id)sender;
+- (IBAction)nextAvatar:(id)sender;
+- (IBAction)valueChanged:(id)sender;
 
 @end

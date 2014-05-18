@@ -13,21 +13,24 @@
 
 @interface MPiOSAppDelegate()
 
-@property(nonatomic, strong) PearlAlert *handleCloudContentAlert;
-@property(nonatomic, strong) PearlAlert *fixCloudContentAlert;
-@property(nonatomic, strong) PearlOverlay *storeLoading;
+@property(nonatomic, weak) PearlAlert *handleCloudDisabledAlert;
+@property(nonatomic, weak) PearlAlert *handleCloudContentAlert;
+@property(nonatomic, weak) PearlAlert *fixCloudContentAlert;
+@property(nonatomic, weak) PearlOverlay *storeLoadingOverlay;
 @end
 
 @implementation MPiOSAppDelegate
 
 + (void)initialize {
 
-    [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
+    if ([self class] == [MPiOSAppDelegate class]) {
+        [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
 #ifdef DEBUG
-    [PearlLogger get].printLevel = PearlLogLevelDebug;
+        [PearlLogger get].printLevel = PearlLogLevelDebug;
 #else
-    [PearlLogger get].printLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
+        [PearlLogger get].printLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
 #endif
+    }
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -59,11 +62,6 @@
                     TESTFLIGHT_SDK_VERSION, [PearlInfoPlist get].CFBundleName, [PearlInfoPlist get].CFBundleVersion );
         }
 #endif
-        NSString *googlePlusClientID = [self googlePlusClientID];
-        if ([googlePlusClientID length]) {
-            inf(@"Initializing Google+");
-            [[GPPSignIn sharedInstance] setClientID:googlePlusClientID];
-        }
 #ifdef CRASHLYTICS
         NSString *crashlyticsAPIKey = [self crashlyticsAPIKey];
         if ([crashlyticsAPIKey length]) {
@@ -113,78 +111,20 @@
 #endif
     }
     @catch (id exception) {
-        err(@"During Analytics Setup: %@", exception);
-    }
-    @try {
-        if (floor( NSFoundationVersionNumber ) <= NSFoundationVersionNumber_iOS_6_1) {
-            UIImage *navBarImage = [[UIImage imageNamed:@"ui_navbar_container"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
-            [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
-            [[UINavigationBar appearance] setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsLandscapePhone];
-            [[UINavigationBar appearance] setTitleTextAttributes:
-                    @{
-                            UITextAttributeTextColor        : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
-                            UITextAttributeTextShadowColor  : [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f],
-                            UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetMake( 0, -1 )],
-                            UITextAttributeFont             : [UIFont fontWithName:@"Exo-Bold" size:20.0f]
-                    }];
-
-            UIImage *navBarButton = [[UIImage imageNamed:@"ui_navbar_button"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 5, 0, 5 )];
-            UIImage *navBarBack = [[UIImage imageNamed:@"ui_navbar_back"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 13, 0, 5 )];
-            [[UIBarButtonItem appearance] setBackgroundImage:navBarButton forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-            [[UIBarButtonItem appearance] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
-            [[UIBarButtonItem appearance]
-                    setBackButtonBackgroundImage:navBarBack forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-            [[UIBarButtonItem appearance]
-                    setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
-            [[UIBarButtonItem appearance] setTitleTextAttributes:
-                    @{
-                            UITextAttributeTextColor        : [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f],
-                            UITextAttributeTextShadowColor  : [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f],
-                            UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetMake( 0, 1 )]//,
-                            // Causes a bug in iOS where image views get oddly stretched... or something.
-                            //UITextAttributeFont: [UIFont fontWithName:@"HelveticaNeue" size:13.0f]
-                    }
-                                                        forState:UIControlStateNormal];
-
-            UIImage *toolBarImage = [[UIImage imageNamed:@"ui_toolbar_container"]
-                    resizableImageWithCapInsets:UIEdgeInsetsMake( 25, 5, 5, 5 )];
-            [[UISearchBar appearance] setBackgroundImage:toolBarImage];
-            [[UIToolbar appearance] setBackgroundImage:toolBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
-
-            // UIImage *minImage = [[UIImage imageNamed:@"slider-minimum"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
-            // UIImage *maxImage = [[UIImage imageNamed:@"slider-maximum"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
-            // UIImage *thumbImage = [UIImage imageNamed:@"slider-handle"];
-            //
-            // [[UISlider appearance] setMaximumTrackImage:maxImage forState:UIControlStateNormal];
-            // [[UISlider appearance] setMinimumTrackImage:minImage forState:UIControlStateNormal];
-            // [[UISlider appearance] setThumbImage:thumbImage forState:UIControlStateNormal];
-            //
-            // UIImage *segmentSelected = [[UIImage imageNamed:@"segcontrol_sel"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];
-            // UIImage *segmentUnselected = [[UIImage imageNamed:@"segcontrol_uns"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 15)];
-            // UIImage *segmentSelectedUnselected = [UIImage imageNamed:@"segcontrol_sel-uns"];
-            // UIImage *segUnselectedSelected = [UIImage imageNamed:@"segcontrol_uns-sel"];
-            // UIImage *segmentUnselectedUnselected = [UIImage imageNamed:@"segcontrol_uns-uns"];
-            //
-            // [[UISegmentedControl appearance] setBackgroundImage:segmentUnselected forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-            // [[UISegmentedControl appearance] setBackgroundImage:segmentSelected forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
-            //
-            // [[UISegmentedControl appearance] setDividerImage:segmentUnselectedUnselected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-            // [[UISegmentedControl appearance] setDividerImage:segmentSelectedUnselected forLeftSegmentState:UIControlStateSelected rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-            // [[UISegmentedControl appearance] setDividerImage:segUnselectedSelected forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
-        }
-    }
-    @catch (id exception) {
-        err(@"During Theme Setup: %@", exception);
+        err( @"During Analytics Setup: %@", exception );
     }
     @try {
         [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
                 ^(NSNotification *note) {
-                    [self checkConfig];
-                }];
-        [[NSNotificationCenter defaultCenter]
-                addObserverForName:kIASKAppSettingChanged object:nil queue:nil usingBlock:^(NSNotification *note) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification
-                                                                object:note userInfo:nil];
+            [self updateFromConfig];
+        }];
+        [[NSNotificationCenter defaultCenter] addObserverForName:kIASKAppSettingChanged object:nil queue:nil usingBlock:
+                ^(NSNotification *note) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note userInfo:nil];
+        }];
+        [[NSNotificationCenter defaultCenter] addObserverForName:NSUserDefaultsDidChangeNotification object:nil queue:nil usingBlock:
+                ^(NSNotification *note) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note userInfo:nil];
         }];
 
 #ifdef ADHOC
@@ -200,20 +140,43 @@
 #endif
     }
     @catch (id exception) {
-        err(@"During Config Test: %@", exception);
+        err( @"During Config Test: %@", exception );
     }
     @try {
         [super application:application didFinishLaunchingWithOptions:launchOptions];
     }
     @catch (id exception) {
-        err(@"During Pearl Application Launch: %@", exception);
+        err( @"During Pearl Application Launch: %@", exception );
     }
     @try {
-        inf(@"Started up with device identifier: %@", [PearlKeyChain deviceIdentifier]);
+        inf( @"Started up with device identifier: %@", [PearlKeyChain deviceIdentifier] );
 
-        dispatch_async( dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] addObserverForName:MPFoundInconsistenciesNotification object:nil queue:nil usingBlock:
+                ^(NSNotification *note) {
+            switch ((MPFixableResult)[note.userInfo[MPInconsistenciesFixResultUserKey] unsignedIntegerValue]) {
+
+                case MPFixableResultNoProblems:
+                    break;
+                case MPFixableResultProblemsFixed:
+                    [PearlAlert showAlertWithTitle:@"Inconsistencies Fixed" message:
+                            @"Some inconsistencies were detected in your sites.\n"
+                                    @"All issues were fixed."
+                                         viewStyle:UIAlertViewStyleDefault initAlert:nil
+                                 tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
+                    break;
+                case MPFixableResultProblemsNotFixed:
+                    [PearlAlert showAlertWithTitle:@"Inconsistencies Found" message:
+                            @"Some inconsistencies were detected in your sites.\n"
+                                    @"Not all issues could be fixed.  Try signing in to each user or checking the logs."
+                                         viewStyle:UIAlertViewStyleDefault initAlert:nil
+                                 tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
+                    break;
+            }
+        }];
+
+        PearlMainQueue( ^{
             if ([[MPiOSConfig get].showSetup boolValue])
-                [[MPiOSAppDelegate get] showSetup];
+                [self.navigationController performSegueWithIdentifier:@"setup" sender:self];
         } );
 
         MPCheckpoint( MPCheckpointStarted, @{
@@ -229,7 +192,7 @@
         } );
     }
     @catch (id exception) {
-        err(@"During Post-Startup: %@", exception);
+        err( @"During Post-Startup: %@", exception );
     }
 
     return YES;
@@ -242,10 +205,6 @@
     if (!url)
         return NO;
 
-    // Google+
-    if ([[GPPSignIn sharedInstance] handleURL:url sourceApplication:sourceApplication annotation:annotation])
-        return YES;
-
     // Arbitrary URL to mpsites data.
     dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
         NSError *error;
@@ -253,11 +212,11 @@
         NSData *importedSitesData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
                                                           returningResponse:&response error:&error];
         if (error)
-        err(@"While reading imported sites from %@: %@", url, error);
+            err( @"While reading imported sites from %@: %@", url, error );
         if (!importedSitesData)
             return;
 
-        PearlOverlay *activityOverlay = [PearlOverlay showOverlayWithTitle:@"Importing"];
+        PearlOverlay *activityOverlay = [PearlOverlay showProgressOverlayWithTitle:@"Importing"];
 
         NSString *importedSitesString = [[NSString alloc] initWithData:importedSitesData encoding:NSUTF8StringEncoding];
         MPImportResult result = [self importSites:importedSitesString askImportPassword:^NSString *(NSString *userName) {
@@ -294,7 +253,7 @@
             dispatch_async( dispatch_get_main_queue(), ^{
                 [PearlAlert showAlertWithTitle:PearlString( @"Master Password for\n%@", userName )
                                        message:PearlString( @"Imports %lu sites, overwriting %lu.",
-                                               (unsigned long)importCount, (unsigned long)deleteCount )
+                                                       (unsigned long)importCount, (unsigned long)deleteCount )
                                      viewStyle:UIAlertViewStyleSecureTextInput
                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                     @try {
@@ -337,7 +296,7 @@
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
 
-    inf(@"Received memory warning.");
+    inf( @"Received memory warning." );
 
     [super applicationDidReceiveMemoryWarning:application];
 }
@@ -374,7 +333,7 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application {
 
-    inf(@"Will deactivate");
+    inf( @"Will deactivate" );
     if (![[MPiOSConfig get].rememberLogin boolValue])
         [self signOutAnimated:NO];
 
@@ -388,9 +347,8 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 
-    inf(@"Re-activated");
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification
-                                                        object:application userInfo:nil];
+    inf( @"Re-activated" );
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:application];
 
 #ifdef LOCALYTICS
     [[LocalyticsSession sharedLocalyticsSession] resume];
@@ -402,25 +360,11 @@
 
 #pragma mark - Behavior
 
-- (void)showGuide {
-
-    [self.navigationController performSegueWithIdentifier:@"MP_Guide" sender:self];
-
-    MPCheckpoint( MPCheckpointShowGuide, nil );
-}
-
-- (void)showSetup {
-
-    [self.navigationController performSegueWithIdentifier:@"MP_Setup" sender:self];
-
-    MPCheckpoint( MPCheckpointShowSetup, nil );
-}
-
 - (void)showReview {
 
-    MPCheckpoint( MPCheckpointReview, nil );
-
     [super showReview];
+
+    MPCheckpoint( MPCheckpointReview, nil );
 }
 
 - (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController {
@@ -458,14 +402,14 @@
 
     [[[PearlEMail alloc] initForEMailTo:@"Master Password Development <masterpassword@lyndir.com>"
                                 subject:PearlString( @"Feedback for Master Password [%@]",
-                                        [[PearlKeyChain deviceIdentifier] stringByDeletingMatchesOf:@"-.*"] )
+                                                [[PearlKeyChain deviceIdentifier] stringByDeletingMatchesOf:@"-.*"] )
                                    body:PearlString( @"\n\n\n"
                                            @"--\n"
                                            @"%@"
                                            @"Master Password %@, build %@",
-                                           userName? ([userName stringByAppendingString:@"\n"]): @"",
-                                           [PearlInfoPlist get].CFBundleShortVersionString,
-                                           [PearlInfoPlist get].CFBundleVersion )
+                                                userName? ([userName stringByAppendingString:@"\n"]): @"",
+                                                [PearlInfoPlist get].CFBundleShortVersionString,
+                                                [PearlInfoPlist get].CFBundleVersion )
 
                             attachments:(logs
                                          ? [[PearlEMailAttachment alloc]
@@ -479,32 +423,32 @@
             showComposerForVC:viewController];
 }
 
-- (void)export {
+- (void)showExportForVC:(UIViewController *)viewController {
 
     [PearlAlert showNotice:
             @"This will export all your site names.\n\n"
                     @"You can open the export with a text editor to get an overview of all your sites.\n\n"
                     @"The file also acts as a personal backup of your site list in case you don't sync with iCloud/iTunes."
          tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-             [PearlAlert showAlertWithTitle:@"Reveal Passwords?" message:
-                     @"Would you like to make all your passwords visible in the export?\n\n"
-                             @"A safe export will only include your stored passwords, in an encrypted manner, "
-                             @"making the result safe from falling in the wrong hands.\n\n"
-                             @"If all your passwords are shown and somebody else finds the export, "
-                             @"they could gain access to all your sites!"
-                                  viewStyle:UIAlertViewStyleDefault initAlert:nil
-                          tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                              if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 0)
-                                      // Safe Export
-                                  [self exportShowPasswords:NO];
-                              if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
-                                      // Show Passwords
-                                  [self exportShowPasswords:YES];
-                          } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
-         } otherTitles:nil];
+        [PearlAlert showAlertWithTitle:@"Reveal Passwords?" message:
+                @"Would you like to make all your passwords visible in the export?\n\n"
+                        @"A safe export will only include your stored passwords, in an encrypted manner, "
+                        @"making the result safe from falling in the wrong hands.\n\n"
+                        @"If all your passwords are shown and somebody else finds the export, "
+                        @"they could gain access to all your sites!"
+                             viewStyle:UIAlertViewStyleDefault initAlert:nil
+                     tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+            if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 0)
+                // Safe Export
+                [self showExportRevealPasswords:NO forVC:viewController];
+            if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
+                // Show Passwords
+                [self showExportRevealPasswords:YES forVC:viewController];
+        } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
+    } otherTitles:nil];
 }
 
-- (void)exportShowPasswords:(BOOL)showPasswords {
+- (void)showExportRevealPasswords:(BOOL)revealPasswords forVC:(UIViewController *)viewController {
 
     if (![PearlEMail canSendMail]) {
         [PearlAlert showAlertWithTitle:@"Cannot Send Mail"
@@ -517,10 +461,10 @@
         return;
     }
 
-    NSString *exportedSites = [self exportSitesShowingPasswords:showPasswords];
+    NSString *exportedSites = [self exportSitesRevealPasswords:revealPasswords];
     NSString *message;
 
-    if (showPasswords)
+    if (revealPasswords)
         message = PearlString( @"Export of Master Password sites with passwords included.\n\n"
                 @"REMINDER: Make sure nobody else sees this file!  Passwords are visible!\n\n\n"
                 @"--\n"
@@ -541,7 +485,7 @@
     NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
     [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
 
-    [PearlEMail sendEMailTo:nil subject:@"Master Password Export" body:message
+    [PearlEMail sendEMailTo:nil fromVC:viewController subject:@"Master Password Export" body:message
                 attachments:[[PearlEMailAttachment alloc] initWithContent:[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
                                                                  mimeType:@"text/plain" fileName:
                                 PearlString( @"%@ (%@).mpsites", [self activeUserForMainThread].name,
@@ -549,7 +493,7 @@
                             nil];
 }
 
-- (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void (^)(void))didReset {
+- (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void ( ^ )(void))didReset {
 
     [PearlAlert showAlertWithTitle:@"Changing Master Password"
                            message:
@@ -562,7 +506,7 @@
             return;
 
         [moc performBlockAndWait:^{
-            inf(@"Unsetting master password for: %@.", user.userID);
+            inf( @"Unsetting master password for: %@.", user.userID );
             user.keyID = nil;
             [self forgetSavedKeyFor:user];
             [moc saveToStore];
@@ -578,16 +522,14 @@
                        otherTitles:[PearlStrings get].commonButtonContinue, nil];
 }
 
-
 #pragma mark - PearlConfigDelegate
 
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)value {
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification
-                                                        object:NSStringFromSelector( configKey ) userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:NSStringFromSelector( configKey )];
 }
 
-- (void)checkConfig {
+- (void)updateFromConfig {
 
     // iCloud enabled / disabled
     BOOL iCloudEnabled = [[MPiOSConfig get].iCloudEnabled boolValue];
@@ -600,7 +542,7 @@
                     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
                     NSError *error = nil;
                     if ((siteCount = [context countForFetchRequest:fetchRequest error:&error]) == NSNotFound) {
-                        wrn(@"Couldn't count current sites: %@", error);
+                        wrn( @"Couldn't count current sites: %@", error );
                         return;
                     }
                 }];
@@ -617,11 +559,11 @@
                                                        @"or overwrite them with your current sites."
                                      viewStyle:UIAlertViewStyleDefault initAlert:nil
                              tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                                 if (buttonIndex == [alert cancelButtonIndex])
-                                     setConfirmationAnswer( NO );
-                                 if (buttonIndex == [alert firstOtherButtonIndex])
-                                     setConfirmationAnswer( YES );
-                             }
+                    if (buttonIndex == [alert cancelButtonIndex])
+                        setConfirmationAnswer( NO );
+                    if (buttonIndex == [alert firstOtherButtonIndex])
+                        setConfirmationAnswer( YES );
+                }
                                    cancelTitle:@"Use Old" otherTitles:@"Overwrite", nil];
             }];
         else
@@ -631,7 +573,7 @@
                     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
                     NSError *error = nil;
                     if ((siteCount = [context countForFetchRequest:fetchRequest error:&error]) == NSNotFound) {
-                        wrn(@"Couldn't count current sites: %@", error);
+                        wrn( @"Couldn't count current sites: %@", error );
                         return;
                     }
                 }];
@@ -647,11 +589,11 @@
                                                        @"or overwrite them with your current iCloud sites."
                                      viewStyle:UIAlertViewStyleDefault initAlert:nil
                              tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                                 if (buttonIndex == [alert cancelButtonIndex])
-                                     setConfirmationAnswer( NO );
-                                 if (buttonIndex == [alert firstOtherButtonIndex])
-                                     setConfirmationAnswer( YES );
-                             }
+                    if (buttonIndex == [alert cancelButtonIndex])
+                        setConfirmationAnswer( NO );
+                    if (buttonIndex == [alert firstOtherButtonIndex])
+                        setConfirmationAnswer( YES );
+                }
                                    cancelTitle:@"Use Old" otherTitles:@"Overwrite", nil];
             }];
     }
@@ -711,14 +653,13 @@
                 @"helpHidden"          : @([[MPiOSConfig get].helpHidden boolValue]),
                 @"showQuickStart"      : @([[MPiOSConfig get].showSetup boolValue]),
                 @"firstRun"            : @([[PearlConfig get].firstRun boolValue]),
-                @"launchCount"         : NilToNSNull([PearlConfig get].launchCount),
+                @"launchCount"         : NilToNSNull( [PearlConfig get].launchCount ),
                 @"askForReviews"       : @([[PearlConfig get].askForReviews boolValue]),
-                @"reviewAfterLaunches" : NilToNSNull([PearlConfig get].reviewAfterLaunches),
-                @"reviewedVersion"     : NilToNSNull([PearlConfig get].reviewedVersion)
+                @"reviewAfterLaunches" : NilToNSNull( [PearlConfig get].reviewAfterLaunches ),
+                @"reviewedVersion"     : NilToNSNull( [PearlConfig get].reviewedVersion )
         } );
     }
 }
-
 
 #pragma mark - UbiquityStoreManager
 
@@ -726,8 +667,8 @@
 
     dispatch_async( dispatch_get_main_queue(), ^{
         [self.handleCloudContentAlert cancelAlertAnimated:YES];
-        if (![self.storeLoading isVisible])
-            self.storeLoading = [PearlOverlay showOverlayWithTitle:@"Loading Sites"];
+        if (!self.storeLoadingOverlay)
+            self.storeLoadingOverlay = [PearlOverlay showProgressOverlayWithTitle:@"Loading Sites"];
     } );
 
     [super ubiquityStoreManager:manager willLoadStoreIsCloud:isCloudStore];
@@ -739,30 +680,47 @@
     [MPiOSConfig get].iCloudEnabled = @(isCloudStore);
     [super ubiquityStoreManager:manager didLoadStoreForCoordinator:coordinator isCloud:isCloudStore];
 
-    dispatch_async( dispatch_get_main_queue(), ^{
-        [self.handleCloudContentAlert cancelAlertAnimated:YES];
-        [self.fixCloudContentAlert cancelAlertAnimated:YES];
-        [self.storeLoading cancelOverlayAnimated:YES];
-    } );
+    [self.handleCloudContentAlert cancelAlertAnimated:YES];
+    [self.fixCloudContentAlert cancelAlertAnimated:YES];
+    [self.storeLoadingOverlay cancelOverlayAnimated:YES];
+    [self.handleCloudDisabledAlert cancelAlertAnimated:YES];
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager failedLoadingStoreWithCause:(UbiquityStoreErrorCause)cause context:(id)context
                     wasCloud:(BOOL)wasCloudStore {
 
-    dispatch_async( dispatch_get_main_queue(), ^{
-        [self.storeLoading cancelOverlayAnimated:YES];
-    } );
+    [self.storeLoadingOverlay cancelOverlayAnimated:YES];
+    [self.handleCloudDisabledAlert cancelAlertAnimated:YES];
 }
 
 - (BOOL)ubiquityStoreManager:(UbiquityStoreManager *)manager handleCloudContentCorruptionWithHealthyStore:(BOOL)storeHealthy {
 
-    if (manager.cloudEnabled && !storeHealthy && !([self.handleCloudContentAlert.alertView isVisible] || [self.fixCloudContentAlert.alertView isVisible]))
-        dispatch_async( dispatch_get_main_queue(), ^{
-            [self.storeLoading cancelOverlayAnimated:YES];
-            [self showCloudContentAlert];
-        } );
+    if (manager.cloudEnabled && !storeHealthy && !(self.handleCloudContentAlert || self.fixCloudContentAlert)) {
+        [self.storeLoadingOverlay cancelOverlayAnimated:YES];
+        [self.handleCloudDisabledAlert cancelAlertAnimated:YES];
+        [self showCloudContentAlert];
+    };
 
     return NO;
+}
+
+- (BOOL)ubiquityStoreManagerHandleCloudDisabled:(UbiquityStoreManager *)manager {
+
+    if (!self.handleCloudDisabledAlert)
+        self.handleCloudDisabledAlert = [PearlAlert showAlertWithTitle:@"iCloud Login" message:
+                @"You haven't added an iCloud account to your device yet.\n"
+                        @"To add one, go into Apple's Settings -> iCloud."
+                                                             viewStyle:UIAlertViewStyleDefault initAlert:nil
+                                                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                    if (buttonIndex == alert.firstOtherButtonIndex) {
+                        [MPiOSConfig get].iCloudEnabled = @NO;
+                        return;
+                    }
+
+                    [self.storeManager reloadStore];
+                } cancelTitle:@"Try Again" otherTitles:@"Disable iCloud", nil];
+
+    return YES;
 }
 
 - (void)showCloudContentAlert {
@@ -774,51 +732,28 @@
                                                           message:@"Waiting for your other device to auto‑correct the problem..."
                                                         viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:
                     ^(UIAlertView *alert, NSInteger buttonIndex) {
-                        if (buttonIndex == [alert firstOtherButtonIndex])
-                            wSelf.fixCloudContentAlert = [PearlAlert showAlertWithTitle:@"Fix iCloud Now" message:
-                                    @"This problem can be auto‑corrected by opening the app on another device where you recently made changes.\n"
-                                            @"You can fix the problem from this device anyway, but recent changes from another device might get lost.\n\n"
-                                            @"You can also turn iCloud off for now."
-                                                                              viewStyle:UIAlertViewStyleDefault
-                                                                              initAlert:nil tappedButtonBlock:
-                                            ^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                                                if (buttonIndex_ == alert_.cancelButtonIndex)
-                                                    [wSelf showCloudContentAlert];
-                                                if (buttonIndex_ == [alert_ firstOtherButtonIndex])
-                                                    [wSelf.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:YES];
-                                                if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
-                                                    [MPiOSConfig get].iCloudEnabled = @NO;
-                                            }
-                                                                            cancelTitle:[PearlStrings get].commonButtonBack
-                                                                            otherTitles:@"Fix Anyway",
-                                                                                        @"Turn Off", nil];
-                        if (buttonIndex == [alert firstOtherButtonIndex] + 1)
-                            [MPiOSConfig get].iCloudEnabled = @NO;
-                    }                                 cancelTitle:nil otherTitles:@"Fix Now", @"Turn Off", nil];
+                if (buttonIndex == [alert firstOtherButtonIndex])
+                    wSelf.fixCloudContentAlert = [PearlAlert showAlertWithTitle:@"Fix iCloud Now" message:
+                            @"This problem can be auto‑corrected by opening the app on another device where you recently made changes.\n"
+                                    @"You can fix the problem from this device anyway, but recent changes from another device might get lost.\n\n"
+                                    @"You can also turn iCloud off for now."
+                                                                      viewStyle:UIAlertViewStyleDefault
+                                                                      initAlert:nil tappedButtonBlock:
+                                    ^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                                if (buttonIndex_ == alert_.cancelButtonIndex)
+                                    [wSelf showCloudContentAlert];
+                                if (buttonIndex_ == [alert_ firstOtherButtonIndex])
+                                    [wSelf.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:YES];
+                                if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
+                                    [MPiOSConfig get].iCloudEnabled = @NO;
+                            }
+                                                                    cancelTitle:[PearlStrings get].commonButtonBack
+                                                                    otherTitles:@"Fix Anyway",
+                                                                                @"Turn Off", nil];
+                if (buttonIndex == [alert firstOtherButtonIndex] + 1)
+                    [MPiOSConfig get].iCloudEnabled = @NO;
+            }                                         cancelTitle:nil otherTitles:@"Fix Now", @"Turn Off", nil];
 }
-
-
-#pragma mark - Google+
-
-- (NSDictionary *)googlePlusInfo {
-
-    static NSDictionary *googlePlusInfo = nil;
-    if (googlePlusInfo == nil)
-        googlePlusInfo = [[NSDictionary alloc] initWithContentsOfURL:
-                [[NSBundle mainBundle] URLForResource:@"Google+" withExtension:@"plist"]];
-
-    return googlePlusInfo;
-}
-
-- (NSString *)googlePlusClientID {
-
-    NSString *googlePlusClientID = NSNullToNil([[self googlePlusInfo] valueForKeyPath:@"ClientID"]);
-    if (![googlePlusClientID length])
-    wrn(@"Google+ client ID not set.  User won't be able to share via Google+.");
-
-    return googlePlusClientID;
-}
-
 
 #pragma mark - TestFlight
 
@@ -834,13 +769,12 @@
 
 - (NSString *)testFlightToken {
 
-    NSString *testFlightToken = NSNullToNil([[self testFlightInfo] valueForKeyPath:@"Application Token"]);
+    NSString *testFlightToken = NSNullToNil( [[self testFlightInfo] valueForKeyPath:@"Application Token"] );
     if (![testFlightToken length])
-    wrn(@"TestFlight token not set.  Test Flight won't be aware of this test.");
+        wrn( @"TestFlight token not set.  Test Flight won't be aware of this test." );
 
     return testFlightToken;
 }
-
 
 #pragma mark - Crashlytics
 
@@ -856,13 +790,12 @@
 
 - (NSString *)crashlyticsAPIKey {
 
-    NSString *crashlyticsAPIKey = NSNullToNil([[self crashlyticsInfo] valueForKeyPath:@"API Key"]);
+    NSString *crashlyticsAPIKey = NSNullToNil( [[self crashlyticsInfo] valueForKeyPath:@"API Key"] );
     if (![crashlyticsAPIKey length])
-    wrn(@"Crashlytics API key not set.  Crash logs won't be recorded.");
+        wrn( @"Crashlytics API key not set.  Crash logs won't be recorded." );
 
     return crashlyticsAPIKey;
 }
-
 
 #pragma mark - Localytics
 
@@ -879,12 +812,12 @@
 - (NSString *)localyticsKey {
 
 #ifdef DEBUG
-    NSString *localyticsKey = NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.development"]);
+    NSString *localyticsKey = NSNullToNil( [[self localyticsInfo] valueForKeyPath:@"Key.development"] );
 #else
     NSString *localyticsKey = NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.distribution"]);
 #endif
     if (![localyticsKey length])
-    wrn(@"Localytics key not set.  Demographics won't be collected.");
+        wrn( @"Localytics key not set.  Demographics won't be collected." );
 
     return localyticsKey;
 }

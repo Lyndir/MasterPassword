@@ -1,30 +1,45 @@
-## 2.1.4
+## 3.0.0 - February 18, 2014
+
+- Remove checkpoints, feedback, and logs from production apps.
+
+## 2.2.2 - February 5, 2014
+
+- Remove `+ (void)setDeviceIdentifier:(NSString *)deviceIdentifer`, it is no longer used
+- On start up, if unsent events are found only attempt to send some of them (this is in case a device doesn't have internet for a while and unsent events build up)
+- Fix crash if you try to run `TFLog(nil)` (thanks Florian!)
+
+## 2.2.1 - January 16, 2014
 
 - Consolidate both SDK versions into one which removes all access to `ASIdentifierManager`
 
-## 2.1.3
+## 2.2 - December 17, 2013
+
+- Restore In App Updates
+- Automatic identification of beta testers
+
+## 2.1.3 - November 25, 2013
 
 - Fix bug in 2.1.2-noadid which caused adid to be collected
 
-## 2.1.2
+## 2.1.2 - November 19, 2013
 
 - Fix for bug that caused events to not get sent properly when using the `TFOptionSessionKeepAliveTimeout` option
 - Fix for bug that caused logs that were sent immediately after start session to sometimes not be sent to server
 
-## 2.1.1
+## 2.1.1 - October 2, 2013
 
 - Create sdk version that removes all access to `ASIdentifierManager`
 - Add UIDevice's `identifierForVendor`
 
-## 2.1
+## 2.1 - September 30, 2013
 
 - Full support for the iPhone 5s’ ARM64 processor while still supporting down to iOS 4.3
 
-## 2.0.2
+## 2.0.2 - August 30, 2013
 
 - Fixed a bug where the sdk would cause an app's CPU usage to rise significantly if the device had no internet connection when the app started
 
-## 2.0.1
+## 2.0.1 - August 22, 2013
 
 - Fixed rare `8badf00d` crash in TFNetworkManager that happened when the app was in the background
 

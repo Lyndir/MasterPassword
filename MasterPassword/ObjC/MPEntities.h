@@ -35,6 +35,8 @@
 
 - (NSUInteger)use;
 - (BOOL)migrateExplicitly:(BOOL)explicit;
+- (NSString *)resolveContentUsingKey:(MPKey *)key;
+- (void)resolveContentUsingKey:(MPKey *)key result:(void (^)(NSString *))result;
 
 @end
 

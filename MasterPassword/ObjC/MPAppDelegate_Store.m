@@ -18,13 +18,13 @@
 #define MPMigrationLevelLocalStoreKey @"MPMigrationLevelLocalStoreKey"
 #define MPMigrationLevelCloudStoreKey @"MPMigrationLevelCloudStoreKey"
 
-typedef NS_ENUM(NSInteger, MPMigrationLevelLocalStore) {
+typedef NS_ENUM( NSInteger, MPMigrationLevelLocalStore ) {
     MPMigrationLevelLocalStoreV1,
     MPMigrationLevelLocalStoreV2,
     MPMigrationLevelLocalStoreCurrent = MPMigrationLevelLocalStoreV2,
 };
 
-typedef NS_ENUM(NSInteger, MPMigrationLevelCloudStore) {
+typedef NS_ENUM( NSInteger, MPMigrationLevelCloudStore ) {
     MPMigrationLevelCloudStoreV1,
     MPMigrationLevelCloudStoreV2,
     MPMigrationLevelCloudStoreV3,
@@ -32,15 +32,18 @@ typedef NS_ENUM(NSInteger, MPMigrationLevelCloudStore) {
 };
 
 @implementation MPAppDelegate_Shared(Store)
-        PearlAssociatedObjectProperty(NSManagedObjectContext*, PrivateManagedObjectContext, privateManagedObjectContext);
-PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext, mainManagedObjectContext);
 
+PearlAssociatedObjectProperty( id, SaveObserver, saveObserver );
+
+PearlAssociatedObjectProperty( NSManagedObjectContext*, PrivateManagedObjectContext, privateManagedObjectContext );
+
+PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext, mainManagedObjectContext );
 
 #pragma mark - Core Data setup
 
 + (NSManagedObjectContext *)managedObjectContextForMainThreadIfReady {
 
-    NSAssert([[NSThread currentThread] isMainThread], @"Can only access main MOC from the main thread.");
+    NSAssert( [[NSThread currentThread] isMainThread], @"Can only access main MOC from the main thread." );
     NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
     if (!mainManagedObjectContext || ![[NSThread currentThread] isMainThread])
         return nil;
@@ -48,14 +51,40 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     return mainManagedObjectContext;
 }
 
-+ (BOOL)managedObjectContextPerformBlock:(void (^)(NSManagedObjectContext *context))mocBlock {
++ (BOOL)managedObjectContextForMainThreadPerformBlock:(void ( ^ )(NSManagedObjectContext *mainContext))mocBlock {
 
     NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
     if (!mainManagedObjectContext)
         return NO;
 
+    [mainManagedObjectContext performBlock:^{
+        mocBlock( mainManagedObjectContext );
+    }];
+
+    return YES;
+}
+
++ (BOOL)managedObjectContextForMainThreadPerformBlockAndWait:(void ( ^ )(NSManagedObjectContext *mainContext))mocBlock {
+
+    NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
+    if (!mainManagedObjectContext)
+        return NO;
+
+    [mainManagedObjectContext performBlockAndWait:^{
+        mocBlock( mainManagedObjectContext );
+    }];
+
+    return YES;
+}
+
++ (BOOL)managedObjectContextPerformBlock:(void ( ^ )(NSManagedObjectContext *context))mocBlock {
+
+    NSManagedObjectContext *privateManagedObjectContextIfReady = [[self get] privateManagedObjectContextIfReady];
+    if (!privateManagedObjectContextIfReady)
+        return NO;
+
     NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    moc.parentContext = mainManagedObjectContext;
+    moc.parentContext = privateManagedObjectContextIfReady;
     [moc performBlock:^{
         mocBlock( moc );
     }];
@@ -63,14 +92,14 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     return YES;
 }
 
-+ (BOOL)managedObjectContextPerformBlockAndWait:(void (^)(NSManagedObjectContext *context))mocBlock {
++ (BOOL)managedObjectContextPerformBlockAndWait:(void ( ^ )(NSManagedObjectContext *context))mocBlock {
 
-    NSManagedObjectContext *mainManagedObjectContext = [[self get] mainManagedObjectContextIfReady];
-    if (!mainManagedObjectContext)
+    NSManagedObjectContext *privateManagedObjectContextIfReady = [[self get] privateManagedObjectContextIfReady];
+    if (!privateManagedObjectContextIfReady)
         return NO;
 
     NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    moc.parentContext = mainManagedObjectContext;
+    moc.parentContext = privateManagedObjectContextIfReady;
     [moc performBlockAndWait:^{
         mocBlock( moc );
     }];
@@ -105,14 +134,14 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification object:UIApp
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
-                [[self mainManagedObjectContext] saveToStore];
-            }];
+        [[self mainManagedObjectContext] saveToStore];
+    }];
     [[NSNotificationCenter defaultCenter]
             addObserverForName:UIApplicationWillResignActiveNotification object:UIApp
                          queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
-                [[self mainManagedObjectContext] saveToStore];
-            }];
+        [[self mainManagedObjectContext] saveToStore];
+    }];
 #else
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillTerminateNotification object:NSApp
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
@@ -122,6 +151,41 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 #endif
 
     return storeManager;
+}
+
+- (MPFixableResult)findAndFixInconsistenciesSaveInContext:(NSManagedObjectContext *)context {
+
+    NSError *error = nil;
+    NSFetchRequest *fetchRequest = [NSFetchRequest new];
+    fetchRequest.fetchBatchSize = 50;
+
+    MPFixableResult result = MPFixableResultNoProblems;
+    for (NSEntityDescription *entity in [context.persistentStoreCoordinator.managedObjectModel entities])
+        if (class_conformsToProtocol( NSClassFromString( entity.managedObjectClassName ), @protocol(MPFixable) )) {
+            fetchRequest.entity = entity;
+            NSArray *objects = [context executeFetchRequest:fetchRequest error:&error];
+            if (!objects) {
+                err( @"Failed to fetch %@ objects: %@", entity, error );
+                continue;
+            }
+
+            for (NSManagedObject<MPFixable> *object in objects)
+                result = MPApplyFix( result, ^MPFixableResult {
+                    return [object findAndFixInconsistenciesInContext:context];
+                } );
+        }
+
+    if (result == MPFixableResultNoProblems)
+        inf( @"Sanity check found no problems in store." );
+
+    else {
+        [context saveToStore];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MPFoundInconsistenciesNotification object:nil userInfo:@{
+                MPInconsistenciesFixResultUserKey : @(result)
+        }];
+    }
+
+    return result;
 }
 
 - (void)migrateStoreForManager:(UbiquityStoreManager *)manager isCloud:(BOOL)isCloudStore {
@@ -136,42 +200,42 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     MPMigrationLevelLocalStore migrationLevel = (signed)[[NSUserDefaults standardUserDefaults] integerForKey:MPMigrationLevelLocalStoreKey];
     if (migrationLevel >= MPMigrationLevelLocalStoreCurrent)
-            // Local store up-to-date.
+        // Local store up-to-date.
         return;
 
-    inf(@"Local store migration level: %d (current %d)", (signed)migrationLevel, (signed)MPMigrationLevelLocalStoreCurrent);
+    inf( @"Local store migration level: %d (current %d)", (signed)migrationLevel, (signed)MPMigrationLevelLocalStoreCurrent );
     if (migrationLevel <= MPMigrationLevelLocalStoreV1) if (![self migrateV1LocalStore]) {
-        inf(@"Failed to migrate old V1 to new local store.");
+        inf( @"Failed to migrate old V1 to new local store." );
         return;
     }
 
     [[NSUserDefaults standardUserDefaults] setInteger:MPMigrationLevelLocalStoreCurrent forKey:MPMigrationLevelLocalStoreKey];
-    inf(@"Successfully migrated old to new local store.");
+    inf( @"Successfully migrated old to new local store." );
 }
 
 - (void)migrateCloudStore {
 
     MPMigrationLevelCloudStore migrationLevel = (signed)[[NSUserDefaults standardUserDefaults] integerForKey:MPMigrationLevelCloudStoreKey];
     if (migrationLevel >= MPMigrationLevelCloudStoreCurrent)
-            // Cloud store up-to-date.
+        // Cloud store up-to-date.
         return;
 
-    inf(@"Cloud store migration level: %d (current %d)", (signed)migrationLevel, (signed)MPMigrationLevelCloudStoreCurrent);
+    inf( @"Cloud store migration level: %d (current %d)", (signed)migrationLevel, (signed)MPMigrationLevelCloudStoreCurrent );
     if (migrationLevel <= MPMigrationLevelCloudStoreV1) {
         if (![self migrateV1CloudStore]) {
-            inf(@"Failed to migrate old V1 to new cloud store.");
+            inf( @"Failed to migrate old V1 to new cloud store." );
             return;
         }
     }
     else if (migrationLevel <= MPMigrationLevelCloudStoreV2) {
         if (![self migrateV2CloudStore]) {
-            inf(@"Failed to migrate old V2 to new cloud store.");
+            inf( @"Failed to migrate old V2 to new cloud store." );
             return;
         }
     }
 
     [[NSUserDefaults standardUserDefaults] setInteger:MPMigrationLevelCloudStoreCurrent forKey:MPMigrationLevelCloudStoreKey];
-    inf(@"Successfully migrated old to new cloud store.");
+    inf( @"Successfully migrated old to new cloud store." );
 }
 
 - (BOOL)migrateV1CloudStore {
@@ -184,11 +248,11 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     // Migrate cloud store.
     NSString *uuid = [[NSUserDefaults standardUserDefaults] stringForKey:@"LocalUUIDKey"];
     if (!uuid) {
-        inf(@"No V1 cloud store to migrate.");
+        inf( @"No V1 cloud store to migrate." );
         return YES;
     }
 
-    inf(@"Migrating V1 cloud store: %@ -> %@", uuid, [self.storeManager valueForKey:@"storeUUID"]);
+    inf( @"Migrating V1 cloud store: %@ -> %@", uuid, [self.storeManager valueForKey:@"storeUUID"] );
     NSURL *cloudContainerURL = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:MPCloudContainerIdentifier];
     NSURL *oldCloudContentURL = [[cloudContainerURL
             URLByAppendingPathComponent:@"Data" isDirectory:YES]
@@ -205,11 +269,11 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     // Migrate cloud store.
     NSString *uuid = [[NSUbiquitousKeyValueStore defaultStore] stringForKey:@"USMStoreUUIDKey"];
     if (!uuid) {
-        inf(@"No V2 cloud store to migrate.");
+        inf( @"No V2 cloud store to migrate." );
         return YES;
     }
 
-    inf(@"Migrating V2 cloud store: %@ -> %@", uuid, [self.storeManager valueForKey:@"storeUUID"]);
+    inf( @"Migrating V2 cloud store: %@ -> %@", uuid, [self.storeManager valueForKey:@"storeUUID"] );
     NSURL *cloudContainerURL = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:MPCloudContainerIdentifier];
     NSURL *oldCloudContentURL = [[cloudContainerURL
             URLByAppendingPathComponent:@"CloudLogs" isDirectory:YES]
@@ -228,11 +292,11 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     NSURL *oldLocalStoreURL = [[applicationFilesDirectory
             URLByAppendingPathComponent:@"MasterPassword" isDirectory:NO] URLByAppendingPathExtension:@"sqlite"];
     if (![[NSFileManager defaultManager] fileExistsAtPath:oldLocalStoreURL.path isDirectory:NO]) {
-        inf(@"No V1 local store to migrate.");
+        inf( @"No V1 local store to migrate." );
         return YES;
     }
 
-    inf(@"Migrating V1 local store");
+    inf( @"Migrating V1 local store" );
     return [self migrateFromLocalStore:oldLocalStoreURL];
 }
 
@@ -240,7 +304,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     NSURL *newLocalStoreURL = [self.storeManager URLForLocalStore];
     if ([[NSFileManager defaultManager] fileExistsAtPath:newLocalStoreURL.path isDirectory:NO]) {
-        wrn(@"Can't migrate local store: A new local store already exists.");
+        wrn( @"Can't migrate local store: A new local store already exists." );
         return YES;
     }
 
@@ -251,14 +315,14 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         return NO;
     }
 
-    inf(@"Successfully migrated to new local store.");
+    inf( @"Successfully migrated to new local store." );
     return YES;
 }
 
 - (BOOL)migrateFromCloudStore:(NSURL *)oldCloudStoreURL cloudContent:(NSURL *)oldCloudContentURL {
 
     if (![self.storeManager cloudSafeForSeeding]) {
-        inf(@"Can't migrate cloud store: A new cloud store already exists.");
+        inf( @"Can't migrate cloud store: A new cloud store already exists." );
         return YES;
     }
 
@@ -268,7 +332,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                                 strategy:0 error:nil cause:nil context:nil])
         return NO;
 
-    inf(@"Successfully migrated to new cloud store.");
+    inf( @"Successfully migrated to new cloud store." );
     return YES;
 }
 
@@ -282,7 +346,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager log:(NSString *)message {
 
-    inf(@"[StoreManager] %@", message);
+    inf( @"[StoreManager] %@", message );
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager willLoadStoreIsCloud:(BOOL)isCloudStore {
@@ -291,6 +355,11 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     [moc performBlockAndWait:^{
         [moc saveToStore];
         [moc reset];
+
+        if (self.saveObserver) {
+            [[NSNotificationCenter defaultCenter] removeObserver:self.saveObserver];
+            self.saveObserver = nil;
+        }
 
         self.privateManagedObjectContext = nil;
         self.mainManagedObjectContext = nil;
@@ -302,14 +371,14 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didLoadStoreForCoordinator:(NSPersistentStoreCoordinator *)coordinator
                      isCloud:(BOOL)isCloudStore {
 
-    inf(@"Using iCloud? %@", @(isCloudStore));
+    inf( @"Using iCloud? %@", @(isCloudStore) );
     MPCheckpoint( MPCheckpointCloud, @{
             @"enabled" : @(isCloudStore)
     } );
 
     // Create our contexts.
-    NSManagedObjectContext
-            *privateManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    NSManagedObjectContext *privateManagedObjectContext =
+            [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     [privateManagedObjectContext performBlockAndWait:^{
         privateManagedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
         privateManagedObjectContext.persistentStoreCoordinator = coordinator;
@@ -332,25 +401,42 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     NSManagedObjectContext *mainManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     mainManagedObjectContext.parentContext = privateManagedObjectContext;
 
+    if (self.saveObserver)
+        [[NSNotificationCenter defaultCenter] removeObserver:self.saveObserver];
+    self.saveObserver = [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextDidSaveNotification
+                                                                          object:privateManagedObjectContext queue:nil usingBlock:
+                    ^(NSNotification *note) {
+                // When privateManagedObjectContext is saved, import the changes into mainManagedObjectContext.
+                [mainManagedObjectContext performBlock:^{
+                    [mainManagedObjectContext mergeChangesFromContextDidSaveNotification:note];
+                }];
+            }];
+
     self.privateManagedObjectContext = privateManagedObjectContext;
     self.mainManagedObjectContext = mainManagedObjectContext;
+
+    // Perform a data sanity check on the newly loaded store to find and fix any issues.
+    if ([[MPConfig get].checkInconsistency boolValue])
+        [MPAppDelegate_Shared managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
+            [self findAndFixInconsistenciesSaveInContext:context];
+        }];
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didEncounterError:(NSError *)error cause:(UbiquityStoreErrorCause)cause
                      context:(id)context {
 
-    err(@"[StoreManager] ERROR: cause=%@, context=%@, error=%@", NSStringFromUSMCause( cause ), context, error);
+    err( @"[StoreManager] ERROR: cause=%@, context=%@, error=%@", NSStringFromUSMCause( cause ), context, error );
     MPCheckpoint( MPCheckpointMPErrorUbiquity, @{
             @"cause"        : @(cause),
             @"error.code"   : @(error.code),
-            @"error.domain" : NilToNSNull(error.domain),
-            @"error.reason" : NilToNSNull(IfNotNilElse( [error localizedFailureReason], [error localizedDescription] )),
+            @"error.domain" : NilToNSNull( error.domain ),
+            @"error.reason" : NilToNSNull( IfNotNilElse( [error localizedFailureReason], [error localizedDescription] ) ),
     } );
 }
 
 #pragma mark - Utilities
 
-- (void)addElementNamed:(NSString *)siteName completion:(void (^)(MPElementEntity *element))completion {
+- (void)addElementNamed:(NSString *)siteName completion:(void ( ^ )(MPElementEntity *element))completion {
 
     if (![siteName length]) {
         completion( nil );
@@ -359,47 +445,46 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
     [MPAppDelegate_Shared managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         MPUserEntity *activeUser = [self activeUserInContext:context];
-        NSAssert(activeUser, @"Missing user.");
-        if (!activeUser)
+        NSAssert( activeUser, @"Missing user." );
+        if (!activeUser) {
+            completion( nil );
             return;
+        }
 
         MPElementType type = activeUser.defaultType;
-        if (!type)
-            type = activeUser.defaultType = MPElementTypeGeneratedLong;
-        NSString *typeEntityClassName = [MPAlgorithmDefault classNameOfType:type];
+        NSString *typeEntityName = [MPAlgorithmDefault classNameOfType:type];
 
-        MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:typeEntityClassName
-                                                                 inManagedObjectContext:context];
-
+        MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
         element.name = siteName;
         element.user = activeUser;
         element.type = type;
         element.lastUsed = [NSDate date];
         element.version = MPAlgorithmDefaultVersion;
-        [context saveToStore];
 
         NSError *error = nil;
         if (element.objectID.isTemporaryID && ![context obtainPermanentIDsForObjects:@[ element ] error:&error])
-        err(@"Failed to obtain a permanent object ID after creating new element: %@", error);
+            err( @"Failed to obtain a permanent object ID after creating new element: %@", error );
 
-        NSManagedObjectID *elementOID = [element objectID];
-        dispatch_async( dispatch_get_main_queue(), ^{
-            completion(
-                    (MPElementEntity *)[[MPAppDelegate_Shared managedObjectContextForMainThreadIfReady] objectRegisteredForID:elementOID] );
-        } );
+        [context saveToStore];
+
+        completion( element );
     }];
 }
 
-- (MPElementEntity *)changeElement:(MPElementEntity *)element inContext:(NSManagedObjectContext *)context toType:(MPElementType)type {
+- (MPElementEntity *)changeElement:(MPElementEntity *)element saveInContext:(NSManagedObjectContext *)context toType:(MPElementType)type {
 
-    if ([element.algorithm classOfType:type] == element.typeClass)
+    if (element.type == type)
+        return element;
+
+    if ([element.algorithm classOfType:type] == element.typeClass) {
         element.type = type;
+        [context saveToStore];
+    }
 
     else {
         // Type requires a different class of element.  Recreate the element.
-        MPElementEntity *newElement
-                = [NSEntityDescription insertNewObjectForEntityForName:[element.algorithm classNameOfType:type]
-                                                inManagedObjectContext:context];
+        NSString *typeEntityName = [element.algorithm classNameOfType:type];
+        MPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
         newElement.type = type;
         newElement.name = element.name;
         newElement.user = element.user;
@@ -408,15 +493,14 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         newElement.version = element.version;
         newElement.loginName = element.loginName;
 
+        NSError *error = nil;
+        if (![context obtainPermanentIDsForObjects:@[ newElement ] error:&error])
+            err( @"Failed to obtain a permanent object ID after changing object type: %@", error );
+
         [context deleteObject:element];
-        // TODO: Dodgy... we're not saving consistently here.
-        // Either we should save regardless and change the method signature to saveInContext: or not save at all.
         [context saveToStore];
 
-        NSError *error;
-        if (![context obtainPermanentIDsForObjects:@[ newElement ] error:&error])
-        err(@"Failed to obtain a permanent object ID after changing object type: %@", error);
-
+        [[NSNotificationCenter defaultCenter] postNotificationName:MPElementUpdatedNotification object:element.objectID];
         element = newElement;
     }
 
@@ -425,10 +509,10 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 }
 
 - (MPImportResult)importSites:(NSString *)importedSitesString
-            askImportPassword:(NSString *(^)(NSString *userName))importPassword
-              askUserPassword:(NSString *(^)(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword {
+            askImportPassword:(NSString *( ^ )(NSString *userName))importPassword
+              askUserPassword:(NSString *( ^ )(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword {
 
-    NSAssert(![[NSThread currentThread] isMainThread], @"This method should not be invoked from the main thread.");
+    NSAssert( ![[NSThread currentThread] isMainThread], @"This method should not be invoked from the main thread." );
 
     __block MPImportResult result = MPImportResultCancelled;
     do {
@@ -444,8 +528,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 }
 
 - (MPImportResult)importSites:(NSString *)importedSitesString
-            askImportPassword:(NSString *(^)(NSString *userName))askImportPassword
-              askUserPassword:(NSString *(^)(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))askUserPassword
+            askImportPassword:(NSString *( ^ )(NSString *userName))askImportPassword
+              askUserPassword:(NSString *( ^ )(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))askUserPassword
                 saveInContext:(NSManagedObjectContext *)context {
 
     // Compile patterns.
@@ -456,7 +540,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                 initWithPattern:@"^#[[:space:]]*([^:]+): (.*)"
                         options:(NSRegularExpressionOptions)0 error:&error];
         if (error) {
-            err(@"Error loading the header pattern: %@", error);
+            err( @"Error loading the header pattern: %@", error );
             return MPImportResultInternalError;
         }
     }
@@ -465,13 +549,13 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                 initWithPattern:@"^([^[:space:]]+)[[:space:]]+([[:digit:]]+)[[:space:]]+([[:digit:]]+)(:[[:digit:]]+)?[[:space:]]+([^\t]+)\t(.*)"
                         options:(NSRegularExpressionOptions)0 error:&error];
         if (error) {
-            err(@"Error loading the site pattern: %@", error);
+            err( @"Error loading the site pattern: %@", error );
             return MPImportResultInternalError;
         }
     }
 
     // Parse import data.
-    inf(@"Importing sites.");
+    inf( @"Importing sites." );
     __block MPUserEntity *user = nil;
     id<MPAlgorithm> importAlgorithm = nil;
     NSString *importBundleVersion = nil, *importUserName = nil;
@@ -499,7 +583,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
             // Header
             if ([headerPattern numberOfMatchesInString:importedSiteLine options:(NSMatchingOptions)0
                                                  range:NSMakeRange( 0, [importedSiteLine length] )] != 1) {
-                err(@"Invalid header format in line: %@", importedSiteLine);
+                err( @"Invalid header format in line: %@", importedSiteLine );
                 return MPImportResultMalformedInput;
             }
             NSTextCheckingResult *headerElements = [[headerPattern matchesInString:importedSiteLine options:(NSMatchingOptions)0
@@ -513,16 +597,16 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                 userFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", importUserName];
                 NSArray *users = [context executeFetchRequest:userFetchRequest error:&error];
                 if (!users) {
-                    err(@"While looking for user: %@, error: %@", importUserName, error);
+                    err( @"While looking for user: %@, error: %@", importUserName, error );
                     return MPImportResultInternalError;
                 }
                 if ([users count] > 1) {
-                    err(@"While looking for user: %@, found more than one: %lu", importUserName, (unsigned long)[users count]);
+                    err( @"While looking for user: %@, found more than one: %lu", importUserName, (unsigned long)[users count] );
                     return MPImportResultInternalError;
                 }
 
                 user = [users count]? [users lastObject]: nil;
-                dbg(@"Found user: %@", [user debugDescription]);
+                dbg( @"Found user: %@", [user debugDescription] );
             }
             if ([headerName isEqualToString:@"Key ID"])
                 importKeyID = [headerValue decodeHex];
@@ -547,7 +631,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         // Site
         if ([sitePattern numberOfMatchesInString:importedSiteLine options:(NSMatchingOptions)0
                                            range:NSMakeRange( 0, [importedSiteLine length] )] != 1) {
-            err(@"Invalid site format in line: %@", importedSiteLine);
+            err( @"Invalid site format in line: %@", importedSiteLine );
             return MPImportResultMalformedInput;
         }
         NSTextCheckingResult *siteElements = [[sitePattern matchesInString:importedSiteLine options:(NSMatchingOptions)0
@@ -566,25 +650,26 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
             elementFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND user == %@", name, user];
             NSArray *existingSites = [context executeFetchRequest:elementFetchRequest error:&error];
             if (!existingSites) {
-                err(@"Lookup of existing sites failed for site: %@, user: %@, error: %@", name, user.userID, error);
+                err( @"Lookup of existing sites failed for site: %@, user: %@, error: %@", name, user.userID, error );
                 return MPImportResultInternalError;
             }
             if ([existingSites count]) {
-                dbg(@"Existing sites: %@", existingSites);
+                dbg( @"Existing sites: %@", existingSites );
                 [elementsToDelete addObjectsFromArray:existingSites];
             }
         }
         [importedSiteElements addObject:@[ lastUsed, uses, type, version, name, exportContent ]];
-        dbg(@"Will import site: lastUsed=%@, uses=%@, type=%@, version=%@, name=%@, exportContent=%@",
-        lastUsed, uses, type, version, name, exportContent);
+        dbg( @"Will import site: lastUsed=%@, uses=%@, type=%@, version=%@, name=%@, exportContent=%@",
+                        lastUsed, uses, type, version, name, exportContent );
     }
 
     // Ask for confirmation to import these sites and the master password of the user.
-    inf(@"Importing %lu sites, deleting %lu sites, for user: %@", (unsigned long)[importedSiteElements count], (unsigned long)[elementsToDelete count], [MPUserEntity idFor:importUserName]);
+    inf( @"Importing %lu sites, deleting %lu sites, for user: %@", (unsigned long)[importedSiteElements count],
+                    (unsigned long)[elementsToDelete count], [MPUserEntity idFor:importUserName] );
     NSString *userMasterPassword = askUserPassword( user? user.name: importUserName, [importedSiteElements count],
             [elementsToDelete count] );
     if (!userMasterPassword) {
-        inf(@"Import cancelled.");
+        inf( @"Import cancelled." );
         return MPImportResultCancelled;
     }
     MPKey *userKey = [MPAlgorithmDefault keyForPassword:userMasterPassword ofUserNamed:user? user.name: importUserName];
@@ -600,17 +685,16 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     // Delete existing sites.
     if (elementsToDelete.count)
         [elementsToDelete enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
-            inf(@"Deleting site: %@, it will be replaced by an imported site.", [obj name]);
+            inf( @"Deleting site: %@, it will be replaced by an imported site.", [obj name] );
             [context deleteObject:obj];
         }];
 
     // Make sure there is a user.
     if (!user) {
-        user = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass( [MPUserEntity class] )
-                                             inManagedObjectContext:context];
+        user = [MPUserEntity insertNewObjectInContext:context];
         user.name = importUserName;
         user.keyID = importKeyID;
-        dbg(@"Created User: %@", [user debugDescription]);
+        dbg( @"Created User: %@", [user debugDescription] );
     }
 
     // Import new sites.
@@ -623,9 +707,8 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         NSString *exportContent = siteElements[5];
 
         // Create new site.
-        MPElementEntity
-                *element = [NSEntityDescription insertNewObjectForEntityForName:[MPAlgorithmForVersion( version ) classNameOfType:type]
-                                                         inManagedObjectContext:context];
+        NSString *typeEntityName = [MPAlgorithmForVersion( version ) classNameOfType:type];
+        MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
         element.name = name;
         element.user = user;
         element.type = type;
@@ -639,13 +722,13 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
                 [element.algorithm importProtectedContent:exportContent protectedByKey:importKey intoElement:element usingKey:userKey];
         }
 
-        dbg(@"Created Element: %@", [element debugDescription]);
+        dbg( @"Created Element: %@", [element debugDescription] );
     }
 
     if (![context saveToStore])
         return MPImportResultInternalError;
 
-    inf(@"Import completed successfully.");
+    inf( @"Import completed successfully." );
     MPCheckpoint( MPCheckpointSitesImported, nil );
 
     [[NSNotificationCenter defaultCenter] postNotificationName:MPSitesImportedNotification object:nil userInfo:@{
@@ -655,15 +738,15 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     return MPImportResultSuccess;
 }
 
-- (NSString *)exportSitesShowingPasswords:(BOOL)showPasswords {
+- (NSString *)exportSitesRevealPasswords:(BOOL)revealPasswords {
 
     MPUserEntity *activeUser = [self activeUserForMainThread];
-    inf(@"Exporting sites, %@, for: %@", showPasswords? @"showing passwords": @"omitting passwords", activeUser.userID);
+    inf( @"Exporting sites, %@, for: %@", revealPasswords? @"revealing passwords": @"omitting passwords", activeUser.userID );
 
     // Header.
     NSMutableString *export = [NSMutableString new];
     [export appendFormat:@"# Master Password site export\n"];
-    if (showPasswords)
+    if (revealPasswords)
         [export appendFormat:@"#     Export of site names and passwords in clear-text.\n"];
     else
         [export appendFormat:@"#     Export of site names and stored passwords (unless device-private) encrypted with the master key.\n"];
@@ -673,7 +756,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
     [export appendFormat:@"# User Name: %@\n", activeUser.name];
     [export appendFormat:@"# Key ID: %@\n", [activeUser.keyID encodeHex]];
     [export appendFormat:@"# Date: %@\n", [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]]];
-    if (showPasswords)
+    if (revealPasswords)
         [export appendFormat:@"# Passwords: VISIBLE\n"];
     else
         [export appendFormat:@"# Passwords: PROTECTED\n"];
@@ -693,7 +776,7 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
 
         // Determine the content to export.
         if (!(type & MPElementFeatureDevicePrivate)) {
-            if (showPasswords)
+            if (revealPasswords)
                 content = [element.algorithm resolveContentForElement:element usingKey:self.key];
             else if (type & MPElementFeatureExportContent)
                 content = [element.algorithm exportContentForElement:element usingKey:self.key];
@@ -702,11 +785,11 @@ PearlAssociatedObjectProperty(NSManagedObjectContext*, MainManagedObjectContext,
         [export appendFormat:@"%@  %8ld  %8s  %20s\t%@\n",
                              [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed], (long)uses,
                              [PearlString( @"%lu:%lu", (long)type, (unsigned long)version ) UTF8String], [name UTF8String], content
-                                                                                                                     ? content: @""];
+                                                                                                                            ? content: @""];
     }
 
     MPCheckpoint( MPCheckpointSitesExported, @{
-            @"showPasswords" : @(showPasswords)
+            @"showPasswords" : @(revealPasswords)
     } );
 
     return export;

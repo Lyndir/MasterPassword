@@ -9,6 +9,7 @@
 #import "MPAppDelegate_Shared.h"
 
 #import "UbiquityStoreManager.h"
+#import "MPFixable.h"
 
 typedef enum {
     MPImportResultSuccess,
@@ -21,17 +22,20 @@ typedef enum {
 @interface MPAppDelegate_Shared(Store)<UbiquityStoreManagerDelegate>
 
 + (NSManagedObjectContext *)managedObjectContextForMainThreadIfReady;
++ (BOOL)managedObjectContextForMainThreadPerformBlock:(void (^)(NSManagedObjectContext *mainContext))mocBlock;
++ (BOOL)managedObjectContextForMainThreadPerformBlockAndWait:(void (^)(NSManagedObjectContext *mainContext))mocBlock;
 + (BOOL)managedObjectContextPerformBlock:(void (^)(NSManagedObjectContext *context))mocBlock;
 + (BOOL)managedObjectContextPerformBlockAndWait:(void (^)(NSManagedObjectContext *context))mocBlock;
 
 - (UbiquityStoreManager *)storeManager;
+- (MPFixableResult)findAndFixInconsistenciesSaveInContext:(NSManagedObjectContext *)context;
 
 /** @param completion The block to execute after adding the element, executed from the main thread with the new element in the main MOC. */
 - (void)addElementNamed:(NSString *)siteName completion:(void (^)(MPElementEntity *element))completion;
-- (MPElementEntity *)changeElement:(MPElementEntity *)element inContext:(NSManagedObjectContext *)context toType:(MPElementType)type;
+- (MPElementEntity *)changeElement:(MPElementEntity *)element saveInContext:(NSManagedObjectContext *)context toType:(MPElementType)type;
 - (MPImportResult)importSites:(NSString *)importedSitesString
             askImportPassword:(NSString *(^)(NSString *userName))importPassword
               askUserPassword:(NSString *(^)(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword;
-- (NSString *)exportSitesShowingPasswords:(BOOL)showPasswords;
+- (NSString *)exportSitesRevealPasswords:(BOOL)revealPasswords;
 
 @end
