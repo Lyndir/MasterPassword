@@ -99,15 +99,6 @@
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Guide"];
-#endif
-
-    [super viewDidAppear:animated];
-}
-
 - (void)viewWillDisappear:(BOOL)animated {
 
     inf(@"Guide will disappear.");

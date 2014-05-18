@@ -1879,9 +1879,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <inset key="scrollIndicatorInsets" minX="0.0" minY="64" maxX="0.0" maxY="93"/>
                                 <string key="text">119-20:51:52        MPiOSAppDelegate.m:36  | INFO    : Initializing TestFlight
-119-20:51:52        MPiOSAppDelegate.m:70  | INFO    : Initializing Google+
 119-20:51:52        MPiOSAppDelegate.m:80  | INFO    : Initializing Crashlytics
-119-20:51:52        MPiOSAppDelegate.m:109 | INFO    : Initializing Localytics
 119-20:51:53        PearlAppDelegate.m:71  | INFO    : Master Password (MasterPassword) 1.4 (1.4.0) (GIT: 1.4-0-g8a4eecd-dirty)
 119-20:51:53        MPiOSAppDelegate.m:257 | INFO    : Started up with device identifier: A8C51CDA-6F60-4F0C-BFC9-68A08F2F2DD7
 119-20:51:59     MPAppDelegate_Store.m:278 | DEBUG   : [StoreManager] (Re)loading store...

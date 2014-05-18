@@ -43,10 +43,6 @@
             }
         }];
 
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Type Selection"];
-#endif
-
     [super viewDidAppear:animated];
 }
 

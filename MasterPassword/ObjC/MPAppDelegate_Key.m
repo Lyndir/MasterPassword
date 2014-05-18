@@ -141,9 +141,6 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
             [Crashlytics setObjectValue:user.userID forKey:@"username"];
             [Crashlytics setUserName:user.userID];
 #endif
-#ifdef LOCALYTICS
-            [[LocalyticsSession sharedLocalyticsSession] setCustomerName:user.userID];
-#endif
         }
     }
     @catch (id exception) {

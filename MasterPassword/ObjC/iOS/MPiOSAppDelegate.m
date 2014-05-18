@@ -88,27 +88,6 @@
                     [Crashlytics sharedInstance].version, [PearlInfoPlist get].CFBundleName, [PearlInfoPlist get].CFBundleVersion );
         }
 #endif
-#ifdef LOCALYTICS
-        NSString *localyticsKey = [self localyticsKey];
-        if ([localyticsKey length]) {
-            inf(@"Initializing Localytics");
-            [[LocalyticsSession sharedLocalyticsSession] LocalyticsSession:localyticsKey];
-            [[LocalyticsSession sharedLocalyticsSession] open];
-            [LocalyticsSession sharedLocalyticsSession].enableHTTPS = YES;
-            [[LocalyticsSession sharedLocalyticsSession] setCustomerId:[PearlKeyChain deviceIdentifier]];
-            [[LocalyticsSession sharedLocalyticsSession] setCustomerName:@"Anonymous"];
-            [[LocalyticsSession sharedLocalyticsSession] upload];
-            [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
-                if (message.level >= PearlLogLevelWarn)
-                    MPCheckpoint( @"Problem", @{
-                            @"level"   : @(PearlLogLevelStr( message.level )),
-                            @"message" : NilToNSNull(message.message)
-                    } );
-
-                return YES;
-            }];
-        }
-#endif
     }
     @catch (id exception) {
         err( @"During Analytics Setup: %@", exception );
@@ -301,46 +280,11 @@
     [super applicationDidReceiveMemoryWarning:application];
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] close];
-    [[LocalyticsSession sharedLocalyticsSession] upload];
-#endif
-
-    [super applicationDidEnterBackground:application];
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] resume];
-    [[LocalyticsSession sharedLocalyticsSession] upload];
-#endif
-
-    [super applicationWillEnterForeground:application];
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application {
-
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] close];
-    [[LocalyticsSession sharedLocalyticsSession] upload];
-#endif
-
-    [super applicationWillTerminate:application];
-}
-
 - (void)applicationWillResignActive:(UIApplication *)application {
 
     inf( @"Will deactivate" );
     if (![[MPiOSConfig get].rememberLogin boolValue])
         [self signOutAnimated:NO];
-
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] close];
-    [[LocalyticsSession sharedLocalyticsSession] upload];
-#endif
 
     [super applicationWillResignActive:application];
 }
@@ -349,11 +293,6 @@
 
     inf( @"Re-activated" );
     [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:application];
-
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] resume];
-    [[LocalyticsSession sharedLocalyticsSession] upload];
-#endif
 
     [super applicationDidBecomeActive:application];
 }
@@ -795,31 +734,6 @@
         wrn( @"Crashlytics API key not set.  Crash logs won't be recorded." );
 
     return crashlyticsAPIKey;
-}
-
-#pragma mark - Localytics
-
-- (NSDictionary *)localyticsInfo {
-
-    static NSDictionary *localyticsInfo = nil;
-    if (localyticsInfo == nil)
-        localyticsInfo = [[NSDictionary alloc] initWithContentsOfURL:
-                [[NSBundle mainBundle] URLForResource:@"Localytics" withExtension:@"plist"]];
-
-    return localyticsInfo;
-}
-
-- (NSString *)localyticsKey {
-
-#ifdef DEBUG
-    NSString *localyticsKey = NSNullToNil( [[self localyticsInfo] valueForKeyPath:@"Key.development"] );
-#else
-    NSString *localyticsKey = NSNullToNil([[self localyticsInfo] valueForKeyPath:@"Key.distribution"]);
-#endif
-    if (![localyticsKey length])
-        wrn( @"Localytics key not set.  Demographics won't be collected." );
-
-    return localyticsKey;
 }
 
 @end

@@ -163,10 +163,6 @@
             } );
         }];
 
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Main"];
-#endif
-
     [super viewDidAppear:animated];
 }
 

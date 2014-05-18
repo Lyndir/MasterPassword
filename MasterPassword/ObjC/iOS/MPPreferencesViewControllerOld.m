@@ -78,21 +78,6 @@
     [super viewWillAppear:animated];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Preferences"];
-#endif
-
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-
-    inf(@"Preferences will disappear");
-    [super viewWillDisappear:animated];
-}
-
 - (BOOL)canBecomeFirstResponder {
 
     return YES;

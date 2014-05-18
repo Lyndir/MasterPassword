@@ -282,7 +282,6 @@
 		DACA22BE1705DE7D002C6C22 /* UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA22BA1705DE7D002C6C22 /* UbiquityStoreManager.h */; };
 		DACA22C61705DE9D002C6C22 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DACA22C31705DE9D002C6C22 /* libTestFlight.a */; };
 		DACA296C1705DF81002C6C22 /* TestFlight.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA26941705DF81002C6C22 /* TestFlight.plist */; };
-		DACA296D1705DF81002C6C22 /* Localytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA26961705DF81002C6C22 /* Localytics.plist */; };
 		DACA296F1705DF81002C6C22 /* Crashlytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA269A1705DF81002C6C22 /* Crashlytics.plist */; };
 		DACA29731705E1A8002C6C22 /* ciphers.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA29711705E1A8002C6C22 /* ciphers.plist */; };
 		DACA29741705E1A8002C6C22 /* dictionary.lst in Resources */ = {isa = PBXBuildFile; fileRef = DACA29721705E1A8002C6C22 /* dictionary.lst */; };
@@ -292,8 +291,6 @@
 		DACA29BD1705E2DE002C6C22 /* UIColor+HSV.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29B61705E2DE002C6C22 /* UIColor+HSV.h */; };
 		DACA29BE1705E2DE002C6C22 /* UIColor+Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA29BA1705E2DE002C6C22 /* UIColor+Expanded.m */; };
 		DACA29BF1705E2DE002C6C22 /* UIColor+HSV.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA29BB1705E2DE002C6C22 /* UIColor+HSV.m */; };
-		DAD3127215528CD200A3F9ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
-		DAD312BF1552A1BD00A3F9ED /* libLocalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD3127115528CD200A3F9ED /* libLocalytics.a */; };
 		DAD312C21552A22700A3F9ED /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD312C01552A20800A3F9ED /* libsqlite3.dylib */; };
 		DADEF4121810D2940052CA3E /* love-lyndir.button.green.png in Resources */ = {isa = PBXBuildFile; fileRef = DADEF4061810D2940052CA3E /* love-lyndir.button.green.png */; };
 		DADEF4131810D2940052CA3E /* love-lyndir.button.green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DADEF4071810D2940052CA3E /* love-lyndir.button.green@2x.png */; };
@@ -418,14 +415,6 @@
 		DAFC568F172C57EC00CB5CC5 /* IASKSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFC5680172C57EC00CB5CC5 /* IASKSwitch.m */; };
 		DAFC5690172C57EC00CB5CC5 /* IASKTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFC5682172C57EC00CB5CC5 /* IASKTextField.m */; };
 		DAFC5691172C582A00CB5CC5 /* libInAppSettingsKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAFC5655172C573B00CB5CC5 /* libInAppSettingsKit.a */; };
-		DAFC56A2172C6E8500CB5CC5 /* LocalyticsDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFC569A172C6E8500CB5CC5 /* LocalyticsDatabase.h */; };
-		DAFC56A3172C6E8500CB5CC5 /* LocalyticsDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFC569B172C6E8500CB5CC5 /* LocalyticsDatabase.m */; };
-		DAFC56A5172C6E8500CB5CC5 /* LocalyticsSession.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFC569C172C6E8500CB5CC5 /* LocalyticsSession.h */; };
-		DAFC56A6172C6E8500CB5CC5 /* LocalyticsSession.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFC569D172C6E8500CB5CC5 /* LocalyticsSession.m */; };
-		DAFC56A8172C6E8500CB5CC5 /* LocalyticsSession+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFC569E172C6E8500CB5CC5 /* LocalyticsSession+Private.h */; };
-		DAFC56A9172C6E8500CB5CC5 /* LocalyticsUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFC569F172C6E8500CB5CC5 /* LocalyticsUploader.h */; };
-		DAFC56AA172C6E8500CB5CC5 /* LocalyticsUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFC56A0172C6E8500CB5CC5 /* LocalyticsUploader.m */; };
-		DAFC56AC172C6E8500CB5CC5 /* WebserviceConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFC56A1172C6E8500CB5CC5 /* WebserviceConstants.h */; };
 		DAFE4A1315039824003ABA7C /* NSObject+PearlExport.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45D815039823003ABA7C /* NSObject+PearlExport.h */; };
 		DAFE4A1415039824003ABA7C /* NSObject+PearlExport.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE45D915039823003ABA7C /* NSObject+PearlExport.m */; };
 		DAFE4A1515039824003ABA7C /* NSString+PearlNSArrayFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE45DA15039823003ABA7C /* NSString+PearlNSArrayFormat.h */; };
@@ -1370,7 +1359,6 @@
 		DACA22C11705DE9D002C6C22 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		DACA22C31705DE9D002C6C22 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
 		DACA26941705DF81002C6C22 /* TestFlight.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = TestFlight.plist; sourceTree = "<group>"; };
-		DACA26961705DF81002C6C22 /* Localytics.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Localytics.plist; sourceTree = "<group>"; };
 		DACA269A1705DF81002C6C22 /* Crashlytics.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Crashlytics.plist; sourceTree = "<group>"; };
 		DACA29711705E1A8002C6C22 /* ciphers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ciphers.plist; sourceTree = "<group>"; };
 		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
@@ -1380,7 +1368,6 @@
 		DACA29B61705E2DE002C6C22 /* UIColor+HSV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+HSV.h"; sourceTree = "<group>"; };
 		DACA29BA1705E2DE002C6C22 /* UIColor+Expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Expanded.m"; sourceTree = "<group>"; };
 		DACA29BB1705E2DE002C6C22 /* UIColor+HSV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+HSV.m"; sourceTree = "<group>"; };
-		DAD3127115528CD200A3F9ED /* libLocalytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLocalytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAD312C01552A20800A3F9ED /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		DADBB55918DB0CFC00D099FE /* keyboard-dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "keyboard-dark@2x.png"; sourceTree = "<group>"; };
 		DADEF4061810D2940052CA3E /* love-lyndir.button.green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "love-lyndir.button.green.png"; sourceTree = "<group>"; };
@@ -1519,14 +1506,6 @@
 		DAFC5680172C57EC00CB5CC5 /* IASKSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IASKSwitch.m; sourceTree = "<group>"; };
 		DAFC5681172C57EC00CB5CC5 /* IASKTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKTextField.h; sourceTree = "<group>"; };
 		DAFC5682172C57EC00CB5CC5 /* IASKTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IASKTextField.m; sourceTree = "<group>"; };
-		DAFC569A172C6E8500CB5CC5 /* LocalyticsDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsDatabase.h; sourceTree = "<group>"; };
-		DAFC569B172C6E8500CB5CC5 /* LocalyticsDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsDatabase.m; sourceTree = "<group>"; };
-		DAFC569C172C6E8500CB5CC5 /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsSession.h; sourceTree = "<group>"; };
-		DAFC569D172C6E8500CB5CC5 /* LocalyticsSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsSession.m; sourceTree = "<group>"; };
-		DAFC569E172C6E8500CB5CC5 /* LocalyticsSession+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LocalyticsSession+Private.h"; sourceTree = "<group>"; };
-		DAFC569F172C6E8500CB5CC5 /* LocalyticsUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsUploader.h; sourceTree = "<group>"; };
-		DAFC56A0172C6E8500CB5CC5 /* LocalyticsUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalyticsUploader.m; sourceTree = "<group>"; };
-		DAFC56A1172C6E8500CB5CC5 /* WebserviceConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebserviceConstants.h; sourceTree = "<group>"; };
 		DAFE45D815039823003ABA7C /* NSObject+PearlExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PearlExport.h"; sourceTree = "<group>"; };
 		DAFE45D915039823003ABA7C /* NSObject+PearlExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PearlExport.m"; sourceTree = "<group>"; };
 		DAFE45DA15039823003ABA7C /* NSString+PearlNSArrayFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PearlNSArrayFormat.h"; sourceTree = "<group>"; };
@@ -1633,7 +1612,6 @@
 				DA6701B816406A4100B61001 /* Accounts.framework in Frameworks */,
 				DA44260A1557D9E40052177D /* libUbiquityStoreManager.a in Frameworks */,
 				DAD312C21552A22700A3F9ED /* libsqlite3.dylib in Frameworks */,
-				DAD312BF1552A1BD00A3F9ED /* libLocalytics.a in Frameworks */,
 				DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */,
 				DA672D3014F9413D004A189C /* libPearl.a in Frameworks */,
 				DA672D2F14F92C6B004A189C /* libz.dylib in Frameworks */,
@@ -1678,14 +1656,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DAD3126E15528CD200A3F9ED /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DAD3127215528CD200A3F9ED /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DADEF41F1810D5530052CA3E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1726,7 +1696,6 @@
 				DAC77CAD148291A600BCF976 /* libPearl.a */,
 				DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */,
 				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
-				DAD3127115528CD200A3F9ED /* libLocalytics.a */,
 				DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */,
 				DAFC5655172C573B00CB5CC5 /* libInAppSettingsKit.a */,
 				DADEF4221810D5530052CA3E /* libLoveLyndir.a */,
@@ -2654,7 +2623,6 @@
 				DAA1411A1922FED80032B392 /* Mac */,
 				DADEF3E91810D1980052CA3E /* LoveLyndir */,
 				DAFC5662172C57EC00CB5CC5 /* InAppSettingsKit */,
-				DACA22C71705DEB0002C6C22 /* Localytics */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
 				DACA22BF1705DE9D002C6C22 /* TestFlight */,
 				DACA22B61705DE7D002C6C22 /* UbiquityStoreManager */,
@@ -2686,28 +2654,12 @@
 			path = TestFlight;
 			sourceTree = "<group>";
 		};
-		DACA22C71705DEB0002C6C22 /* Localytics */ = {
-			isa = PBXGroup;
-			children = (
-				DAFC569A172C6E8500CB5CC5 /* LocalyticsDatabase.h */,
-				DAFC569B172C6E8500CB5CC5 /* LocalyticsDatabase.m */,
-				DAFC569C172C6E8500CB5CC5 /* LocalyticsSession.h */,
-				DAFC569D172C6E8500CB5CC5 /* LocalyticsSession.m */,
-				DAFC569E172C6E8500CB5CC5 /* LocalyticsSession+Private.h */,
-				DAFC569F172C6E8500CB5CC5 /* LocalyticsUploader.h */,
-				DAFC56A0172C6E8500CB5CC5 /* LocalyticsUploader.m */,
-				DAFC56A1172C6E8500CB5CC5 /* WebserviceConstants.h */,
-			);
-			path = Localytics;
-			sourceTree = "<group>";
-		};
 		DACA23B41705DF7D002C6C22 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				DACA29701705E1A8002C6C22 /* Data */,
 				DABD360D1711E29400CF925C /* Media */,
 				DACA26991705DF81002C6C22 /* Crashlytics */,
-				DACA26951705DF81002C6C22 /* Localytics */,
 				DACA26931705DF81002C6C22 /* TestFlight */,
 				DAE1EF2417E942DE00BC0086 /* Localizable.strings */,
 			);
@@ -2721,14 +2673,6 @@
 				DACA26941705DF81002C6C22 /* TestFlight.plist */,
 			);
 			path = TestFlight;
-			sourceTree = "<group>";
-		};
-		DACA26951705DF81002C6C22 /* Localytics */ = {
-			isa = PBXGroup;
-			children = (
-				DACA26961705DF81002C6C22 /* Localytics.plist */,
-			);
-			path = Localytics;
 			sourceTree = "<group>";
 		};
 		DACA26991705DF81002C6C22 /* Crashlytics */ = {
@@ -3323,18 +3267,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DAD3126F15528CD200A3F9ED /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DAFC56A2172C6E8500CB5CC5 /* LocalyticsDatabase.h in Headers */,
-				DAFC56A5172C6E8500CB5CC5 /* LocalyticsSession.h in Headers */,
-				DAFC56A8172C6E8500CB5CC5 /* LocalyticsSession+Private.h in Headers */,
-				DAFC56A9172C6E8500CB5CC5 /* LocalyticsUploader.h in Headers */,
-				DAFC56AC172C6E8500CB5CC5 /* WebserviceConstants.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -3424,23 +3356,6 @@
 			name = Pearl;
 			productName = Pearl;
 			productReference = DAC77CAD148291A600BCF976 /* libPearl.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-		DAD3127015528CD200A3F9ED /* Localytics */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DAD3127915528CD200A3F9ED /* Build configuration list for PBXNativeTarget "Localytics" */;
-			buildPhases = (
-				DAD3126D15528CD200A3F9ED /* Sources */,
-				DAD3126E15528CD200A3F9ED /* Frameworks */,
-				DAD3126F15528CD200A3F9ED /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Localytics;
-			productName = Localytics;
-			productReference = DAD3127115528CD200A3F9ED /* libLocalytics.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		DADEF4211810D5530052CA3E /* LoveLyndir */ = {
@@ -3600,7 +3515,6 @@
 				DAC77CAC148291A600BCF976 /* Pearl */,
 				DAC6325C1486805C0075AEA5 /* uicolor-utilities */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
-				DAD3127015528CD200A3F9ED /* Localytics */,
 				DA4425CA1557BED40052177D /* UbiquityStoreManager */,
 				DAFC5654172C573B00CB5CC5 /* InAppSettingsKit */,
 				DADEF4211810D5530052CA3E /* LoveLyndir */,
@@ -3615,7 +3529,6 @@
 			files = (
 				DAFE4A5A1503982E003ABA7C /* Pearl.strings in Resources */,
 				DACA296C1705DF81002C6C22 /* TestFlight.plist in Resources */,
-				DACA296D1705DF81002C6C22 /* Localytics.plist in Resources */,
 				DACA296F1705DF81002C6C22 /* Crashlytics.plist in Resources */,
 				DADEF4171810D2940052CA3E /* love-lyndir.button.red@2x.png in Resources */,
 				DACA29731705E1A8002C6C22 /* ciphers.plist in Resources */,
@@ -3805,7 +3718,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/bash -e";
-			shellScript = "PATH+=:/usr/libexec\n\naddPlistWithKey() {\n    local key=$1 type=$2 value=$3 plist=${4:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Delete :'$key'\" \"$plist\" 2>/dev/null || true\n    PlistBuddy -c \"Add :'$key' '$type' '$value'\" \"$plist\"\n}\nsetPlistWithKey() {\n    local key=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Set :'$key' '$value'\" \"$plist\"\n}\ngetPlistWithKey() {\n    local key=$1 plist=${2:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Print :'$key'\" \"$plist\"\n}\nsetSettingWithTitle() {\n    local i title=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Settings.bundle/Root.plist\"}\n    \n    for (( i=0; 1; ++i )); do\n        PlistBuddy -c \"Print :PreferenceSpecifiers:$i\" \"$plist\" &>/dev/null || break\n        echo \"Checking preference specifier $i\"\n    \n        [[ $(PlistBuddy -c \"Print :PreferenceSpecifiers:$i:Title\" \"$plist\" 2>/dev/null) = $title ]] || continue\n    \n        echo \"Correct title, setting value.\"\n        PlistBuddy -c \"Set :PreferenceSpecifiers:$i:DefaultValue $value\" \"$plist\"\n        break\n    done\n}\n\ndescription=$(git describe --always --dirty --long)\nversion=${description%-g*}\nIFS=- read major minor <<< \"$version\"\nprintf -v version '%s.%02d' \"$major\" \"$minor\"\nprintf -v commit '%09d' \"$((16#${description##*-g}))\"\n\naddPlistWithKey GITDescription string \"$description\"\nsetPlistWithKey CFBundleVersion \"${version//.}$commit\" # No separator between version and commit because I had already submitted a CFBundleVersion with a really high major.  Cry.\nsetPlistWithKey CFBundleShortVersionString \"$version\"\n\nsetSettingWithTitle \"Build\" \"$commit\"\nsetSettingWithTitle \"Version\" \"$version\"\nsetSettingWithTitle \"Copyright\" \"$(getPlistWithKey NSHumanReadableCopyright)\"\n\nif [[ $DEPLOYMENT_LOCATION = YES ]]; then\n    # This build is a release.  Do some release checks.\n    passed=1\n    [[ $description != *-dirty ]] || \\\n        { passed=0; echo >&2 \"ERROR: Cannot release a dirty version, first commit any changes.\"; }\n    [[ $(PlistBuddy -c \"Print :'API Key'\" \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Crashlytics.plist\") ]] || \\\n        { passed=0; echo >&2 \"ERROR: Cannot release: Crashlytics API key is missing.\"; }\n    [[ $(PlistBuddy -c \"Print :'ClientID'\" \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Google+.plist\") ]] || \\\n        { passed=0; echo >&2 \"ERROR: Cannot release: Google+ ClientID is missing.\"; }\n    [[ $(PlistBuddy -c \"Print :'Key.distribution'\" \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Localytics.plist\") ]] || \\\n        { passed=0; echo >&2 \"ERROR: Cannot release: Localytics distribution key is missing.\"; }\n    (( passed )) || \\\n        { echo >&2 \"Failed to pass release checks.  Fix the above errors and re-try.  Aborting.\"; exit 1; }\nfi";
+			shellScript = "PATH+=:/usr/libexec\n\naddPlistWithKey() {\n    local key=$1 type=$2 value=$3 plist=${4:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Delete :'$key'\" \"$plist\" 2>/dev/null || true\n    PlistBuddy -c \"Add :'$key' '$type' '$value'\" \"$plist\"\n}\nsetPlistWithKey() {\n    local key=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Set :'$key' '$value'\" \"$plist\"\n}\ngetPlistWithKey() {\n    local key=$1 plist=${2:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Print :'$key'\" \"$plist\"\n}\nsetSettingWithTitle() {\n    local i title=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Settings.bundle/Root.plist\"}\n    \n    for (( i=0; 1; ++i )); do\n        PlistBuddy -c \"Print :PreferenceSpecifiers:$i\" \"$plist\" &>/dev/null || break\n        echo \"Checking preference specifier $i\"\n    \n        [[ $(PlistBuddy -c \"Print :PreferenceSpecifiers:$i:Title\" \"$plist\" 2>/dev/null) = $title ]] || continue\n    \n        echo \"Correct title, setting value.\"\n        PlistBuddy -c \"Set :PreferenceSpecifiers:$i:DefaultValue $value\" \"$plist\"\n        break\n    done\n}\n\ndescription=$(git describe --always --dirty --long)\nversion=${description%-g*}\nIFS=- read major minor <<< \"$version\"\nprintf -v version '%s.%02d' \"$major\" \"$minor\"\nprintf -v commit '%09d' \"$((16#${description##*-g}))\"\n\naddPlistWithKey GITDescription string \"$description\"\nsetPlistWithKey CFBundleVersion \"${version//.}$commit\" # No separator between version and commit because I had already submitted a CFBundleVersion with a really high major.  Cry.\nsetPlistWithKey CFBundleShortVersionString \"$version\"\n\nsetSettingWithTitle \"Build\" \"$commit\"\nsetSettingWithTitle \"Version\" \"$version\"\nsetSettingWithTitle \"Copyright\" \"$(getPlistWithKey NSHumanReadableCopyright)\"\n\nif [[ $DEPLOYMENT_LOCATION = YES ]]; then\n    # This build is a release.  Do some release checks.\n    passed=1\n    [[ $description != *-dirty ]] || \\\n        { passed=0; echo >&2 \"ERROR: Cannot release a dirty version, first commit any changes.\"; }\n    [[ $(PlistBuddy -c \"Print :'API Key'\" \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Crashlytics.plist\") ]] || \\\n        { passed=0; echo >&2 \"ERROR: Cannot release: Crashlytics API key is missing.\"; }\n    (( passed )) || \\\n        { echo >&2 \"Failed to pass release checks.  Fix the above errors and re-try.  Aborting.\"; exit 1; }\nfi";
 		};
 		DA67460818DE7B2C00DFE240 /* Run Script: Moarfonts */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3991,16 +3904,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DAD3126D15528CD200A3F9ED /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DAFC56A3172C6E8500CB5CC5 /* LocalyticsDatabase.m in Sources */,
-				DAFC56A6172C6E8500CB5CC5 /* LocalyticsSession.m in Sources */,
-				DAFC56AA172C6E8500CB5CC5 /* LocalyticsUploader.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DADEF41E1810D5530052CA3E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4092,7 +3995,6 @@
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -4178,7 +4080,6 @@
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_STATIC_ANALYZER_MODE = deep;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -4216,7 +4117,6 @@
 					"NDEBUG=1",
 					"NS_BLOCK_ASSERTIONS=1",
 					"TESTFLIGHT=1",
-					"LOCALYTICS=1",
 					"CRASHLYTICS=1",
 				);
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
@@ -4321,7 +4221,6 @@
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_STATIC_ANALYZER_MODE = deep;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -4359,7 +4258,6 @@
 					"NDEBUG=1",
 					"NS_BLOCK_ASSERTIONS=1",
 					"CRASHLYTICS=1",
-					"LOCALYTICS=1",
 				);
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
@@ -4437,11 +4335,6 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Pearl.dst;
 				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\\\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto\\\"",
-					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
-				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4526,11 +4419,6 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Pearl.dst;
 				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\\\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto\\\"",
-					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
-				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4543,49 +4431,11 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Pearl.dst;
 				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\\\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto\\\"",
-					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
-				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = "AdHoc-iOS";
-		};
-		DAD3127A15528CD200A3F9ED /* Debug-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/Localytics\"",
-				);
-			};
-			name = "Debug-iOS";
-		};
-		DAD3127B15528CD200A3F9ED /* AdHoc-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/Localytics\"",
-				);
-			};
-			name = "AdHoc-iOS";
-		};
-		DAD3127C15528CD200A3F9ED /* AppStore-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/Localytics\"",
-				);
-			};
-			name = "AppStore-iOS";
 		};
 		DADEF43E1810D5540052CA3E /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
@@ -4612,10 +4462,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/Localytics\"",
-				);
 			};
 			name = "Debug-iOS";
 		};
@@ -4623,10 +4469,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/Localytics\"",
-				);
 			};
 			name = "AdHoc-iOS";
 		};
@@ -4634,10 +4476,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/Localytics\"",
-				);
 			};
 			name = "AppStore-iOS";
 		};
@@ -4700,16 +4538,6 @@
 				DAC77CB5148291A600BCF976 /* Debug-iOS */,
 				DAC77CB6148291A600BCF976 /* AdHoc-iOS */,
 				DA95D60B14DF3F3B008D1B94 /* AppStore-iOS */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-iOS";
-		};
-		DAD3127915528CD200A3F9ED /* Build configuration list for PBXNativeTarget "Localytics" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DAD3127A15528CD200A3F9ED /* Debug-iOS */,
-				DAD3127B15528CD200A3F9ED /* AdHoc-iOS */,
-				DAD3127C15528CD200A3F9ED /* AppStore-iOS */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "AdHoc-iOS";

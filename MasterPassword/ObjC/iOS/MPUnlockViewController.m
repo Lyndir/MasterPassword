@@ -256,10 +256,6 @@
     [self.marqueeTipTimer invalidate];
     self.marqueeTipTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(marqueeTip) userInfo:nil repeats:YES];
 
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Unlock"];
-#endif
-
     [super viewDidAppear:animated];
 }
 

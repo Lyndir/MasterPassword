@@ -58,7 +58,7 @@
 
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
     if (cell == self.signOutCell) {
-        MPPasswordsViewController *passwordsVC = [self dismissPopup];
+        [self dismissPopup];
         [[MPiOSAppDelegate get] signOutAnimated:YES];
     }
     if (cell == self.feedbackCell)

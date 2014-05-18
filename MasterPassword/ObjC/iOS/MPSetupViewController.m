@@ -24,10 +24,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 
-#ifdef LOCALYTICS
-    [[LocalyticsSession sharedLocalyticsSession] tagScreen:@"Setup"];
-#endif
-
     [super viewDidAppear:animated];
 
     if (self.cloudSwitch && [[MPiOSConfig get].iCloudDecided boolValue])
