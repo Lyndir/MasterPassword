@@ -57,18 +57,18 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+    if (cell == self.signOutCell) {
+        MPPasswordsViewController *passwordsVC = [self dismissPopup];
+        [[MPiOSAppDelegate get] signOutAnimated:YES];
+    }
     if (cell == self.feedbackCell)
         [[MPiOSAppDelegate get] showFeedbackWithLogs:YES forVC:self];
     if (cell == self.exportCell)
         [[MPiOSAppDelegate get] showExportForVC:self];
     if (cell == self.coachmarksCell) {
-        for (UIViewController *vc = self; (vc = vc.parentViewController);)
-            if ([vc isKindOfClass:[MPPasswordsViewController class]]) {
-                MPPasswordsViewController *passwordsVC = (MPPasswordsViewController *)vc;
-                passwordsVC.coachmark.coached = NO;
-                [passwordsVC dismissPopdown:self];
-                [vc performSegueWithIdentifier:@"coachmarks" sender:self];
-            }
+        MPPasswordsViewController *passwordsVC = [self dismissPopup];
+        passwordsVC.coachmark.coached = NO;
+        [passwordsVC performSegueWithIdentifier:@"coachmarks" sender:self];
     }
     if (cell == self.checkInconsistencies)
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
@@ -144,6 +144,18 @@
 
 #pragma mark - Private
 
+- (MPPasswordsViewController *)dismissPopup {
+
+    for (UIViewController *vc = self; (vc = vc.parentViewController);)
+        if ([vc isKindOfClass:[MPPasswordsViewController class]]) {
+            MPPasswordsViewController *passwordsVC = (MPPasswordsViewController *)vc;
+            [passwordsVC dismissPopdown:self];
+            return passwordsVC;
+        }
+
+    return nil;
+}
+
 - (enum MPElementType)typeForSelectedSegment {
 
     NSInteger selectedGeneratedIndex = self.generatedTypeControl.selectedSegmentIndex;
@@ -170,7 +182,8 @@
                 case 1:
                     return MPElementTypeStoredDevicePrivate;
                 default:
-                    Throw( @"unsupported selected type index: generated=%ld, stored=%ld", (long)selectedGeneratedIndex, (long)selectedStoredIndex );
+                    Throw( @"unsupported selected type index: generated=%ld, stored=%ld", (long)selectedGeneratedIndex,
+                                    (long)selectedStoredIndex );
             }
     }
 }

@@ -38,8 +38,9 @@ typedef NS_ENUM (NSUInteger, MPContentFieldMode) {
 
 + (instancetype)dequeueCellWithType:(MPElementType)type fromCollectionView:(UICollectionView *)collectionView atIndexPath:(NSIndexPath *)indexPath;
 
-- (void)reloadWithElement:(MPElementEntity *)mainElement;
-- (void)reloadWithTransientSite:(NSString *)siteName;
+- (void)update;
+- (void)updateWithElement:(MPElementEntity *)mainElement;
+- (void)updateWithTransientSite:(NSString *)siteName;
 
 - (void)resolveContentOfCellTypeForTransientSite:(NSString *)siteName usingKey:(MPKey *)key result:(void (^)(NSString *))resultBlock;
 - (void)resolveContentOfCellTypeForElement:(MPElementEntity *)element usingKey:(MPKey *)key result:(void (^)(NSString *))resultBlock;

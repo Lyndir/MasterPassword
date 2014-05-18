@@ -1,12 +1,12 @@
 /**
- * Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
- *
- * See the enclosed file LICENSE for license information (LGPLv3). If you did
- * not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
- *
- * @author   Maarten Billemont <lhunath@lyndir.com>
- * @license  http://www.gnu.org/licenses/lgpl-3.0.txt
- */
+* Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
+*
+* See the enclosed file LICENSE for license information (LGPLv3). If you did
+* not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
+*
+* @author   Maarten Billemont <lhunath@lyndir.com>
+* @license  http://www.gnu.org/licenses/lgpl-3.0.txt
+*/
 
 //
 //  MPAvatarCell.h
@@ -22,7 +22,6 @@
 #import "MPPasswordLargeGeneratedCell.h"
 #import "MPPasswordLargeStoredCell.h"
 #import "MPPasswordTypesCell.h"
-#import "MPPasswordLargeDeleteCell.h"
 
 @implementation MPPasswordLargeCell
 
@@ -32,14 +31,12 @@
                         atIndexPath:(NSIndexPath *)indexPath {
 
     NSString *reuseIdentifier;
-    if (indexPath.item == 0)
-        reuseIdentifier = NSStringFromClass( [MPPasswordLargeDeleteCell class] );
-    else if (type & MPElementTypeClassGenerated)
+    if (type & MPElementTypeClassGenerated)
         reuseIdentifier = NSStringFromClass( [MPPasswordLargeGeneratedCell class] );
     else if (type & MPElementTypeClassStored)
         reuseIdentifier = NSStringFromClass( [MPPasswordLargeStoredCell class] );
     else
-            Throw(@"Unexpected password type: %@", [MPAlgorithmDefault nameOfType:type]);
+        Throw( @"Unexpected password type: %@", [MPAlgorithmDefault nameOfType:type] );
 
     MPPasswordLargeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     cell.type = type;
@@ -68,73 +65,63 @@
     [super prepareForReuse];
 }
 
-- (void)reloadWithTransientSite:(NSString *)siteName {
-
-    self.nameLabel.text = strl( @"%@ - Tap to create", siteName );
+- (void)update {
 
     self.loginButton.alpha = 0;
     self.upgradeButton.alpha = 0;
-    self.typeLabel.text = [MPAlgorithmDefault nameOfType:self.type];
-    if (self.type & MPElementTypeClassStored) {
-        self.contentField.enabled = YES;
-        self.contentField.placeholder = strl( @"Set custom password" );
-    }
-    else if (self.type & MPElementTypeClassGenerated) {
-        self.contentField.enabled = NO;
-        self.contentField.placeholder = strl( @"Generating..." );
-    }
-    else {
-        self.contentField.enabled = NO;
-        self.contentField.placeholder = nil;
-    }
+    self.nameLabel.text = @"";
+    self.typeLabel.text = @"";
+    self.contentField.text = @"";
+    self.contentField.placeholder = nil;
+    self.contentField.enabled = self.contentFieldMode == MPContentFieldModeUser;
+    self.loginButton.selected = self.contentFieldMode == MPContentFieldModeUser;
 
-    self.contentField.text = nil;
+    switch (self.contentFieldMode) {
+        case MPContentFieldModePassword: {
+            if (self.type & MPElementTypeClassStored)
+                self.contentField.placeholder = strl( @"Set custom password" );
+            else if (self.type & MPElementTypeClassGenerated)
+                self.contentField.placeholder = strl( @"Generating..." );
+            break;
+        }
+        case MPContentFieldModeUser: {
+            self.contentField.placeholder = strl( @"Enter your login name" );
+            break;
+        }
+    }
+}
+
+- (void)updateWithTransientSite:(NSString *)siteName {
+
+    [self update];
+
+    self.nameLabel.text = strl( @"%@ - Tap to create", siteName );
+    self.typeLabel.text = [MPAlgorithmDefault nameOfType:self.type];
+
     [self resolveContentOfCellTypeForTransientSite:siteName usingKey:[MPiOSAppDelegate get].key result:^(NSString *string) {
         PearlMainQueue( ^{ self.contentField.text = string; } );
     }];
 }
 
-- (void)reloadWithElement:(MPElementEntity *)mainElement {
+- (void)updateWithElement:(MPElementEntity *)mainElement {
 
-    if (!mainElement) {
-        self.loginButton.alpha = 0;
-        self.upgradeButton.alpha = 0;
-        self.typeLabel.text = @"";
-        self.nameLabel.text = @"";
-        self.contentField.text = @"";
+    [self update];
+
+    if (!mainElement)
         return;
-    }
 
     self.loginButton.alpha = 1;
-
     if (mainElement.requiresExplicitMigration)
         self.upgradeButton.alpha = 1;
-    else
-        self.upgradeButton.alpha = 0;
 
+    self.nameLabel.text = mainElement.name;
     if (self.type == (MPElementType)NSNotFound)
         self.typeLabel.text = @"Delete";
     else
         self.typeLabel.text = [mainElement.algorithm nameOfType:self.type];
 
-    self.nameLabel.text = mainElement.name;
-
     switch (self.contentFieldMode) {
         case MPContentFieldModePassword: {
-            if (self.type & MPElementTypeClassStored) {
-                self.contentField.enabled = YES;
-                self.contentField.placeholder = strl( @"Set custom password" );
-            }
-            else if (self.type & MPElementTypeClassGenerated) {
-                self.contentField.enabled = NO;
-                self.contentField.placeholder = strl( @"Generating..." );
-            }
-            else {
-                self.contentField.enabled = NO;
-                self.contentField.placeholder = nil;
-            }
-
-            self.contentField.text = nil;
             MPKey *key = [MPiOSAppDelegate get].key;
             if (self.type == mainElement.type)
                 [mainElement resolveContentUsingKey:key result:^(NSString *string) {
@@ -147,20 +134,18 @@
             break;
         }
         case MPContentFieldModeUser: {
-            self.contentField.enabled = YES;
-            self.contentField.placeholder = strl( @"Enter login name" );
             self.contentField.text = mainElement.loginName;
             break;
         }
     }
 }
 
-- (void)resolveContentOfCellTypeForTransientSite:(NSString *)siteName usingKey:(MPKey *)key result:(void (^)(NSString *))resultBlock {
+- (void)resolveContentOfCellTypeForTransientSite:(NSString *)siteName usingKey:(MPKey *)key result:(void ( ^ )(NSString *))resultBlock {
 
     resultBlock( nil );
 }
 
-- (void)resolveContentOfCellTypeForElement:(MPElementEntity *)element usingKey:(MPKey *)key result:(void (^)(NSString *))resultBlock {
+- (void)resolveContentOfCellTypeForElement:(MPElementEntity *)element usingKey:(MPKey *)key result:(void ( ^ )(NSString *))resultBlock {
 
     resultBlock( nil );
 }
@@ -182,27 +167,22 @@
 
     if (textField == self.contentField) {
         NSString *newContent = textField.text;
+        textField.enabled = NO;
 
-        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-            MPElementEntity *element = [[MPPasswordTypesCell findAsSuperviewOf:self] elementInContext:context];
-            if (!element)
-                return;
+        if (self.contentFieldMode == MPContentFieldModeUser)
+            [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                MPElementEntity *element = [[MPPasswordTypesCell findAsSuperviewOf:self] elementInContext:context];
+                if (!element)
+                    return;
 
-            switch (self.contentFieldMode) {
-                case MPContentFieldModePassword:
-                    break;
-                case MPContentFieldModeUser: {
-                    element.loginName = newContent;
-                    [context saveToStore];
+                element.loginName = newContent;
+                [context saveToStore];
 
-                    PearlMainQueue( ^{
-                        [self updateAnimated:YES];
-                        [PearlOverlay showTemporaryOverlayWithTitle:@"Login Updated" dismissAfter:2];
-                    } );
-                    break;
-                }
-            }
-        }];
+                PearlMainQueue( ^{
+                    [self updateAnimated:YES];
+                    [PearlOverlay showTemporaryOverlayWithTitle:@"Login Updated" dismissAfter:2];
+                } );
+            }];
     }
 }
 

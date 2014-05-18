@@ -31,6 +31,17 @@
 @interface MPCoachmarkViewController : UIViewController
 
 @property(nonatomic, strong) MPCoachmark *coachmark;
+@property(nonatomic, strong) IBOutlet UIView *view0;
+@property(nonatomic, strong) IBOutlet UIView *view1;
+@property(nonatomic, strong) IBOutlet UIView *view2;
+@property(nonatomic, strong) IBOutlet UIView *view3;
+@property(nonatomic, strong) IBOutlet UIView *view4;
+@property(nonatomic, strong) IBOutlet UIView *view5;
+@property(nonatomic, strong) IBOutlet UIView *view6;
+@property(nonatomic, strong) IBOutlet UIView *view7;
+@property(nonatomic, strong) IBOutlet UIView *view8;
+@property(nonatomic, strong) IBOutlet UIView *view9;
+@property(nonatomic, strong) IBOutlet UIProgressView *viewProgress;
 
 - (IBAction)close:(id)sender;
 

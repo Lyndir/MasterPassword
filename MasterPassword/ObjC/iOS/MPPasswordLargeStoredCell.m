@@ -1,12 +1,12 @@
 /**
- * Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
- *
- * See the enclosed file LICENSE for license information (LGPLv3). If you did
- * not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
- *
- * @author   Maarten Billemont <lhunath@lyndir.com>
- * @license  http://www.gnu.org/licenses/lgpl-3.0.txt
- */
+* Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
+*
+* See the enclosed file LICENSE for license information (LGPLv3). If you did
+* not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
+*
+* @author   Maarten Billemont <lhunath@lyndir.com>
+* @license  http://www.gnu.org/licenses/lgpl-3.0.txt
+*/
 
 //
 //  MPPasswordLargeGeneratedCell.h
@@ -31,7 +31,7 @@
 
 #pragma mark - Lifecycle
 
-- (void)resolveContentOfCellTypeForElement:(MPElementEntity *)element usingKey:(MPKey *)key result:(void (^)(NSString *))resultBlock {
+- (void)resolveContentOfCellTypeForElement:(MPElementEntity *)element usingKey:(MPKey *)key result:(void ( ^ )(NSString *))resultBlock {
 
     if (element.type & MPElementTypeClassStored)
         [element resolveContentUsingKey:key result:resultBlock];
@@ -50,14 +50,13 @@
     return element;
 }
 
-
 #pragma mark - Actions
 
 - (IBAction)doEditContent:(UIButton *)sender {
 
-    UITextField *field = self.contentField;
-    field.enabled = YES;
-    [field becomeFirstResponder];
+    UITextField *textField = self.contentField;
+    textField.enabled = YES;
+    [textField becomeFirstResponder];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -69,26 +68,20 @@
     if (textField == self.contentField) {
         NSString *newContent = textField.text;
 
-        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-            MPElementStoredEntity *storedElement = [self storedElementInContext:context];
-            if (!storedElement)
-                return;
+        if (self.contentFieldMode == MPContentFieldModePassword)
+            [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                MPElementStoredEntity *storedElement = [self storedElementInContext:context];
+                if (!storedElement)
+                    return;
 
-            switch (self.contentFieldMode) {
-                case MPContentFieldModePassword: {
-                    [storedElement.algorithm saveContent:newContent toElement:storedElement usingKey:[MPiOSAppDelegate get].key];
-                    [context saveToStore];
+                [storedElement.algorithm saveContent:newContent toElement:storedElement usingKey:[MPiOSAppDelegate get].key];
+                [context saveToStore];
 
-                    PearlMainQueue( ^{
-                        [self updateAnimated:YES];
-                        [PearlOverlay showTemporaryOverlayWithTitle:@"Password Updated" dismissAfter:2];
-                    } );
-                    break;
-                }
-                case MPContentFieldModeUser:
-                    break;
-            }
-        }];
+                PearlMainQueue( ^{
+                    [self updateAnimated:YES];
+                    [PearlOverlay showTemporaryOverlayWithTitle:@"Password Updated" dismissAfter:2];
+                } );
+            }];
     }
 }
 

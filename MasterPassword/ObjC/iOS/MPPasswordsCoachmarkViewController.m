@@ -32,14 +32,14 @@
     if (indexPath.item == 0) {
         MPPasswordLargeGeneratedCell *cell = [MPPasswordLargeGeneratedCell dequeueCellWithType:MPElementTypeGeneratedLong
                                                                             fromCollectionView:collectionView atIndexPath:indexPath];
-        [cell reloadWithTransientSite:@"apple.com"];
+        [cell updateWithTransientSite:@"apple.com"];
 
         return cell;
     }
     else if (indexPath.item == 1) {
         MPPasswordLargeStoredCell *cell = [MPPasswordLargeStoredCell dequeueCellWithType:MPElementTypeStoredPersonal
                                                                       fromCollectionView:collectionView atIndexPath:indexPath];
-        [cell reloadWithTransientSite:@"gmail.com"];
+        [cell updateWithTransientSite:@"gmail.com"];
         [cell.contentField setText:@"PaS$w0rD"];
 
         return cell;

@@ -20,6 +20,7 @@
 #import "MPPasswordLargeCell.h"
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
+#import "MPPasswordLargeDeleteCell.h"
 
 @implementation MPPasswordTypesCell {
     NSManagedObjectID *_elementOID;
@@ -96,12 +97,18 @@
 
 - (MPPasswordLargeCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    MPPasswordLargeCell *cell = [MPPasswordLargeCell dequeueCellWithType:[self typeForContentIndexPath:indexPath]
-                                                      fromCollectionView:collectionView atIndexPath:indexPath];
-    if (self.transientSite)
-        [cell reloadWithTransientSite:self.transientSite];
+    MPPasswordLargeCell *cell;
+    if (indexPath.item == 0)
+        cell = [MPPasswordLargeDeleteCell dequeueCellWithType:(MPElementType)NSNotFound fromCollectionView:collectionView
+                                                  atIndexPath:indexPath];
     else
-        [cell reloadWithElement:self.mainElement];
+        cell = [MPPasswordLargeCell dequeueCellWithType:[self typeForContentIndexPath:indexPath] fromCollectionView:collectionView
+                                            atIndexPath:indexPath];
+
+    if (self.transientSite)
+        [cell updateWithTransientSite:self.transientSite];
+    else
+        [cell updateWithElement:self.mainElement];
 
     dbg_return( cell, indexPath );
 }
@@ -209,16 +216,25 @@
 
     if (self.transientSite)
         PearlMainQueue( ^{
-            [self.contentCollectionView reloadData];
             self.activeType = IfElse( [[MPiOSAppDelegate get] activeUserForMainThread].defaultType, MPElementTypeGeneratedLong );
+
+            for (NSInteger section = 0; section < [self.contentCollectionView numberOfSections]; ++section)
+                for (NSInteger item = 0; item < [self.contentCollectionView numberOfItemsInSection:section]; ++item)
+                    [(MPPasswordLargeCell *)[self.contentCollectionView cellForItemAtIndexPath:
+                            [NSIndexPath indexPathForItem:item inSection:section]] updateWithTransientSite:self.transientSite];
+
         } );
     else
         [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
             MPElementEntity *mainElement = [self mainElement];
 
             self.algorithm = IfNotNilElse( mainElement.algorithm, MPAlgorithmDefault );
-            [self.contentCollectionView reloadData];
             self.activeType = mainElement.type;
+
+            for (NSInteger section = 0; section < [self.contentCollectionView numberOfSections]; ++section)
+                for (NSInteger item = 0; item < [self.contentCollectionView numberOfItemsInSection:section]; ++item)
+                    [(MPPasswordLargeCell *)[self.contentCollectionView cellForItemAtIndexPath:
+                            [NSIndexPath indexPathForItem:item inSection:section]] updateWithElement:mainElement];
         }];
 }
 

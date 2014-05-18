@@ -32,9 +32,9 @@
     [self.counterButton addGestureRecognizer:gestureRecognizer];
 }
 
-- (void)reloadWithElement:(MPElementEntity *)mainElement {
+- (void)updateWithElement:(MPElementEntity *)mainElement {
 
-    [super reloadWithElement:mainElement];
+    [super updateWithElement:mainElement];
 
     MPElementGeneratedEntity *generatedElement = [self generatedElement:mainElement];
     if (generatedElement)

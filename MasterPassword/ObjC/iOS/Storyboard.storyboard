@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Q1S-vU-GGO">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Q1S-vU-GGO">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -19,7 +19,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rWM-08-aab" userLabel="Users Root">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rWM-08-aab" userLabel="Users Root">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -27,7 +27,7 @@
                                         <rect key="frame" x="142" y="234" width="37" height="37"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </activityIndicatorView>
-                                    <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" misplaced="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="L6J-pd-gcp" userLabel="Avatar Collection">
+                                    <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="L6J-pd-gcp" userLabel="Avatar Collection">
                                         <rect key="frame" x="0.0" y="20" width="320" height="484"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -122,7 +122,7 @@
                                             <outlet property="delegate" destination="S8q-YF-Kt9" id="det-Eh-phM"/>
                                         </connections>
                                     </collectionView>
-                                    <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9u7-pu-Wtv" userLabel="Previous Avatar">
+                                    <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9u7-pu-Wtv" userLabel="Previous Avatar">
                                         <rect key="frame" x="0.0" y="127" width="44" height="53"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <constraints>
@@ -136,7 +136,7 @@
                                             <action selector="changeAvatar:" destination="S8q-YF-Kt9" eventType="touchUpInside" id="lNu-mK-3zD"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fUK-gJ-NRE" userLabel="Next Avatar">
+                                    <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fUK-gJ-NRE" userLabel="Next Avatar">
                                         <rect key="frame" x="276" y="127" width="44" height="53"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <constraints>
@@ -150,7 +150,7 @@
                                             <action selector="changeAvatar:" destination="S8q-YF-Kt9" eventType="touchUpInside" id="kL5-zV-zbb"/>
                                         </connections>
                                     </button>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qp1-nX-o4i" userLabel="Entry" customClass="PearlUIView">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qp1-nX-o4i" userLabel="Entry" customClass="PearlUIView">
                                         <rect key="frame" x="20" y="216" width="280" height="63"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <subviews>
@@ -502,8 +502,42 @@
                         <sections>
                             <tableViewSection id="FEv-Rb-jst">
                                 <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="97" id="R30-AU-bR6" userLabel="Sign Out">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="97"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="R30-AU-bR6" id="f6h-Ff-2Qc">
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="96"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign Out" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nr5-ze-6PW">
+                                                    <rect key="frame" x="20" y="20" width="247" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Log yourself out and return to the user selection screen." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="247" translatesAutoresizingMaskIntoConstraints="NO" id="0G1-cX-MT3">
+                                                    <rect key="frame" x="20" y="49" width="247" height="27"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="0G1-cX-MT3" secondAttribute="trailing" constant="20" symbolic="YES" id="CkF-Wf-Bel"/>
+                                                <constraint firstAttribute="trailing" secondItem="nr5-ze-6PW" secondAttribute="trailing" constant="20" symbolic="YES" id="KdG-Ol-v6k"/>
+                                                <constraint firstAttribute="bottom" secondItem="0G1-cX-MT3" secondAttribute="bottom" constant="20" symbolic="YES" id="N9D-cA-sXY"/>
+                                                <constraint firstItem="0G1-cX-MT3" firstAttribute="leading" secondItem="f6h-Ff-2Qc" secondAttribute="leading" constant="20" symbolic="YES" id="WGU-Wr-O6s"/>
+                                                <constraint firstItem="nr5-ze-6PW" firstAttribute="top" secondItem="f6h-Ff-2Qc" secondAttribute="top" constant="20" symbolic="YES" id="b8T-5o-Jdi"/>
+                                                <constraint firstItem="0G1-cX-MT3" firstAttribute="top" secondItem="nr5-ze-6PW" secondAttribute="bottom" constant="8" symbolic="YES" id="iOZ-li-8KV"/>
+                                                <constraint firstItem="nr5-ze-6PW" firstAttribute="leading" secondItem="f6h-Ff-2Qc" secondAttribute="leading" constant="20" symbolic="YES" id="xtw-MQ-74Q"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="216" id="B8R-iE-Ffe" userLabel="Default Password Type">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
+                                        <rect key="frame" x="0.0" y="97" width="320" height="216"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B8R-iE-Ffe" id="8r5-Zc-TRj">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="215"/>
@@ -569,7 +603,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="220" id="Sz1-JP-dw2" userLabel="Avatar">
-                                        <rect key="frame" x="0.0" y="216" width="320" height="220"/>
+                                        <rect key="frame" x="0.0" y="313" width="320" height="220"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Sz1-JP-dw2" id="R4X-LE-ir9">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="219"/>
@@ -649,7 +683,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="230" id="fRZ-Uh-FR8" userLabel="Save Password">
-                                        <rect key="frame" x="0.0" y="436" width="320" height="230"/>
+                                        <rect key="frame" x="0.0" y="533" width="320" height="230"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fRZ-Uh-FR8" id="qCQ-L5-teL">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="229"/>
@@ -693,7 +727,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="97" id="9QG-lM-ymM" userLabel="Feedback">
-                                        <rect key="frame" x="0.0" y="666" width="320" height="97"/>
+                                        <rect key="frame" x="0.0" y="763" width="320" height="97"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9QG-lM-ymM" id="hK8-XQ-lLz">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="96"/>
@@ -727,7 +761,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="97" id="eth-Dc-JYn" userLabel="Reveal Coachmarks">
-                                        <rect key="frame" x="0.0" y="763" width="320" height="97"/>
+                                        <rect key="frame" x="0.0" y="860" width="320" height="97"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eth-Dc-JYn" id="8m6-pP-lda">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="96"/>
@@ -761,7 +795,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="110" id="UdB-BV-AHA" userLabel="Check Inconsistencies">
-                                        <rect key="frame" x="0.0" y="860" width="320" height="110"/>
+                                        <rect key="frame" x="0.0" y="957" width="320" height="110"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UdB-BV-AHA" id="V2Y-nu-jhZ">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="109"/>
@@ -795,7 +829,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="125" id="IVT-Rs-nTu" userLabel="Export">
-                                        <rect key="frame" x="0.0" y="970" width="320" height="125"/>
+                                        <rect key="frame" x="0.0" y="1067" width="320" height="125"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IVT-Rs-nTu" id="Q5J-2f-mmz">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="124"/>
@@ -848,6 +882,7 @@
                         <outlet property="feedbackCell" destination="9QG-lM-ymM" id="18X-Ph-0ac"/>
                         <outlet property="generatedTypeControl" destination="H8F-E0-dqF" id="CWy-G3-lL4"/>
                         <outlet property="savePasswordSwitch" destination="Jr5-mX-nw0" id="eqq-Xo-9Iq"/>
+                        <outlet property="signOutCell" destination="R30-AU-bR6" id="Sam-x5-p3H"/>
                         <outlet property="storedTypeControl" destination="Rei-aO-UBD" id="WGp-D2-DmU"/>
                     </connections>
                 </tableViewController>
@@ -912,8 +947,8 @@
                                                                                 <rect key="frame" x="0.0" y="0.0" width="300" height="100"/>
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                 <subviews>
-                                                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.029999999999999999" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Delete" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AAG-mH-nNg" userLabel="Type">
-                                                                                        <rect key="frame" x="-10" y="19" width="763" height="101"/>
+                                                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.029999999999999999" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AAG-mH-nNg" userLabel="Type">
+                                                                                        <rect key="frame" x="-10" y="19" width="261" height="101"/>
                                                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                                         <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="84"/>
                                                                                         <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
@@ -926,7 +961,7 @@
                                                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
-                                                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" ambiguous="YES" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="VNc-fL-Vfa" userLabel="Site Name">
+                                                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="VNc-fL-Vfa" userLabel="Site Name">
                                                                                         <rect key="frame" x="8" y="71" width="284" height="14"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                                                         <accessibility key="accessibilityConfiguration" label="">
@@ -946,6 +981,7 @@
                                                                                 <constraint firstItem="y9p-dE-unH" firstAttribute="leading" secondItem="GAB-fT-EFv" secondAttribute="leading" constant="8" id="1pO-PG-Rci"/>
                                                                                 <constraint firstItem="AAG-mH-nNg" firstAttribute="leading" secondItem="GAB-fT-EFv" secondAttribute="leading" constant="-10" id="4XF-xn-KAY"/>
                                                                                 <constraint firstItem="y9p-dE-unH" firstAttribute="top" secondItem="GAB-fT-EFv" secondAttribute="top" constant="20" id="6Nq-f6-G38"/>
+                                                                                <constraint firstAttribute="bottom" secondItem="VNc-fL-Vfa" secondAttribute="bottom" constant="15" id="6kW-B3-DMz"/>
                                                                                 <constraint firstItem="VNc-fL-Vfa" firstAttribute="leading" secondItem="GAB-fT-EFv" secondAttribute="leading" constant="8" id="6xg-dp-fSn"/>
                                                                                 <constraint firstAttribute="trailing" secondItem="y9p-dE-unH" secondAttribute="trailing" constant="8" id="CCh-3r-ImT"/>
                                                                                 <constraint firstAttribute="bottom" secondItem="AAG-mH-nNg" secondAttribute="bottom" constant="-20" id="btx-g1-Jei"/>
@@ -992,7 +1028,7 @@
                                                                                         <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                                         <size key="shadowOffset" width="0.0" height="1"/>
                                                                                     </label>
-                                                                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KLg-Jf-XRN" userLabel="Upgrade">
+                                                                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KLg-Jf-XRN" userLabel="Upgrade">
                                                                                         <rect key="frame" x="221" y="56" width="44" height="44"/>
                                                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                                         <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
@@ -1013,7 +1049,7 @@
                                                                                             <action selector="doUpgrade:" destination="W2g-yv-V3V" eventType="touchUpInside" id="ALE-Na-KIS"/>
                                                                                         </connections>
                                                                                     </button>
-                                                                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b7E-cU-HB7" userLabel="Edit">
+                                                                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b7E-cU-HB7" userLabel="Edit">
                                                                                         <rect key="frame" x="221" y="56" width="44" height="44"/>
                                                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                                         <accessibility key="accessibilityConfiguration" hint="Edits the password."/>
@@ -1034,7 +1070,7 @@
                                                                                             <action selector="doEditContent:" destination="W2g-yv-V3V" eventType="touchUpInside" id="N6m-Ib-LQO"/>
                                                                                         </connections>
                                                                                     </button>
-                                                                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SfG-nt-NyC" userLabel="User">
+                                                                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SfG-nt-NyC" userLabel="User">
                                                                                         <rect key="frame" x="256" y="56" width="44" height="44"/>
                                                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                                         <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
@@ -1048,6 +1084,7 @@
                                                                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                                                         </state>
+                                                                                        <state key="selected" image="icon_key.png"/>
                                                                                         <state key="highlighted">
                                                                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                                         </state>
@@ -1130,7 +1167,7 @@
                                                                                         <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                                         <size key="shadowOffset" width="0.0" height="1"/>
                                                                                     </label>
-                                                                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iLD-rv-uZZ" userLabel="Upgrade">
+                                                                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iLD-rv-uZZ" userLabel="Upgrade">
                                                                                         <rect key="frame" x="221" y="56" width="44" height="44"/>
                                                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                                         <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
@@ -1151,7 +1188,7 @@
                                                                                             <action selector="doUpgrade:" destination="302-fI-maQ" eventType="touchUpInside" id="iaP-5Y-5re"/>
                                                                                         </connections>
                                                                                     </button>
-                                                                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fQc-Fn-JDq" userLabel="Incrementer">
+                                                                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fQc-Fn-JDq" userLabel="Incrementer">
                                                                                         <rect key="frame" x="221" y="56" width="44" height="44"/>
                                                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                                         <accessibility key="accessibilityConfiguration" hint="Increments the site counter."/>
@@ -1173,7 +1210,7 @@
                                                                                             <action selector="doIncrementCounter:" destination="302-fI-maQ" eventType="touchUpInside" id="Aa1-tk-whD"/>
                                                                                         </connections>
                                                                                     </button>
-                                                                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cOv-2G-EAP" userLabel="User">
+                                                                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cOv-2G-EAP" userLabel="User">
                                                                                         <rect key="frame" x="256" y="56" width="44" height="44"/>
                                                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                                         <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
@@ -1187,6 +1224,7 @@
                                                                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                                                         </state>
+                                                                                        <state key="selected" image="icon_key.png"/>
                                                                                         <state key="highlighted">
                                                                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                                         </state>
@@ -1331,22 +1369,16 @@
                                         <items>
                                             <navigationItem id="JCx-F3-LfN">
                                                 <nil key="title"/>
-                                                <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="UWl-Y4-LsH" userLabel="Sign Out">
+                                                <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="UWl-Y4-LsH" userLabel="Popdown">
                                                     <rect key="frame" x="96" y="26" width="128" height="33"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="signOut:" destination="nkY-z6-8jd" eventType="touchUpInside" id="hvT-Lz-mS2"/>
+                                                        <segue destination="0Pk-uR-lak" kind="custom" identifier="popdown" customClass="MPPopdownSegue" id="yUM-h4-9AM"/>
                                                     </connections>
                                                 </button>
-                                                <barButtonItem key="rightBarButtonItem" image="icon_gears.png" style="plain" id="NHA-Vf-agZ">
-                                                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <connections>
-                                                        <segue destination="0Pk-uR-lak" kind="custom" identifier="popdown" customClass="MPPopdownSegue" id="2Uk-iv-ErE"/>
-                                                    </connections>
-                                                </barButtonItem>
                                             </navigationItem>
                                         </items>
                                         <userDefinedRuntimeAttributes>
@@ -2153,15 +2185,15 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G6q-gV-ttC" userLabel="Passwords Root" customClass="PearlUIView">
-                                <rect key="frame" x="0.0" y="0.0" width="321" height="568"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="APQ-r2-UhH" userLabel="Passwords Container">
-                                        <rect key="frame" x="0.0" y="0.0" width="321" height="568"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" keyboardDismissMode="onDrag" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="scR-fD-I84" userLabel="Password Collection">
-                                                <rect key="frame" x="0.0" y="0.0" width="321" height="568"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <inset key="scrollIndicatorInsets" minX="0.0" minY="108" maxX="0.0" maxY="0.0"/>
@@ -2173,7 +2205,7 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                                 </collectionViewFlowLayout>
                                                 <cells>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPPasswordLargeGeneratedCell" id="6HR-rB-Aq4" userLabel="Generated" customClass="MPPasswordLargeGeneratedCell">
-                                                        <rect key="frame" x="11" y="118" width="300" height="100"/>
+                                                        <rect key="frame" x="10" y="118" width="300" height="100"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                             <rect key="frame" x="0.0" y="0.0" width="300" height="100"/>
@@ -2192,9 +2224,6 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                                                     <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <fontDescription key="fontDescription" name="SourceCodePro-Black" family="Source Code Pro" pointSize="24"/>
                                                                     <textInputTraits key="textInputTraits"/>
-                                                                    <connections>
-                                                                        <outlet property="delegate" destination="6HR-rB-Aq4" id="kLS-jh-d4g"/>
-                                                                    </connections>
                                                                 </textField>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="osk-LW-Vzb" userLabel="Site Name">
                                                                     <rect key="frame" x="8" y="71" width="284" height="14"/>
@@ -2218,7 +2247,7 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                                                     <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                                 </label>
-                                                                <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kzf-fQ-sjL" userLabel="Incrementer">
+                                                                <button opaque="NO" alpha="0.5" contentMode="scaleToFill" highlighted="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kzf-fQ-sjL" userLabel="Incrementer">
                                                                     <rect key="frame" x="221" y="56" width="44" height="44"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                     <accessibility key="accessibilityConfiguration" hint="Increments the site counter."/>
@@ -2236,11 +2265,8 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                                                     <state key="highlighted">
                                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </state>
-                                                                    <connections>
-                                                                        <action selector="doIncrementCounter:" destination="6HR-rB-Aq4" eventType="touchUpInside" id="wmc-3T-UQp"/>
-                                                                    </connections>
                                                                 </button>
-                                                                <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T3n-dY-rfl" userLabel="User">
+                                                                <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T3n-dY-rfl" userLabel="User">
                                                                     <rect key="frame" x="256" y="56" width="44" height="44"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                     <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
@@ -2257,9 +2283,6 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                                                     <state key="highlighted">
                                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </state>
-                                                                    <connections>
-                                                                        <action selector="doUser:" destination="6HR-rB-Aq4" eventType="touchUpInside" id="RCz-JI-gkd"/>
-                                                                    </connections>
                                                                 </button>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -2281,17 +2304,9 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                                             <constraint firstItem="dUW-Tf-ck9" firstAttribute="top" secondItem="6HR-rB-Aq4" secondAttribute="top" constant="20" id="brm-sc-y3u"/>
                                                             <constraint firstAttribute="bottom" secondItem="T3n-dY-rfl" secondAttribute="bottom" id="cj3-Of-wq2"/>
                                                         </constraints>
-                                                        <connections>
-                                                            <outlet property="contentField" destination="dUW-Tf-ck9" id="1Ui-Dn-LR6"/>
-                                                            <outlet property="counterButton" destination="Kzf-fQ-sjL" id="vN7-xJ-r38"/>
-                                                            <outlet property="counterLabel" destination="IkN-Fh-liV" id="08e-gb-Toj"/>
-                                                            <outlet property="loginButton" destination="T3n-dY-rfl" id="yKZ-J6-gRY"/>
-                                                            <outlet property="nameLabel" destination="osk-LW-Vzb" id="pKF-OL-TQb"/>
-                                                            <outlet property="typeLabel" destination="X3M-0e-7CN" id="gV3-fa-Zsb"/>
-                                                        </connections>
                                                     </collectionViewCell>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPPasswordLargeStoredCell" id="dUb-yf-LDP" userLabel="Stored" customClass="MPPasswordLargeStoredCell">
-                                                        <rect key="frame" x="11" y="228" width="300" height="100"/>
+                                                        <rect key="frame" x="10" y="228" width="300" height="100"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                             <rect key="frame" x="0.0" y="0.0" width="300" height="100"/>
@@ -2310,9 +2325,6 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                                                     <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <fontDescription key="fontDescription" name="SourceCodePro-Black" family="Source Code Pro" pointSize="24"/>
                                                                     <textInputTraits key="textInputTraits"/>
-                                                                    <connections>
-                                                                        <outlet property="delegate" destination="dUb-yf-LDP" id="dsS-hf-jKb"/>
-                                                                    </connections>
                                                                 </textField>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="gmail.com" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="2R5-IF-DAr" userLabel="Site Name">
                                                                     <rect key="frame" x="8" y="71" width="284" height="14"/>
@@ -2326,7 +2338,7 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                                                     <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <size key="shadowOffset" width="0.0" height="1"/>
                                                                 </label>
-                                                                <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fH6-Xn-WgC" userLabel="User">
+                                                                <button opaque="NO" alpha="0.5" contentMode="scaleToFill" highlighted="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fH6-Xn-WgC" userLabel="User">
                                                                     <rect key="frame" x="256" y="56" width="44" height="44"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                                     <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
@@ -2343,9 +2355,6 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                                                     <state key="highlighted">
                                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     </state>
-                                                                    <connections>
-                                                                        <action selector="doUser:" destination="dUb-yf-LDP" eventType="touchUpInside" id="utO-G9-POR"/>
-                                                                    </connections>
                                                                 </button>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -2363,16 +2372,10 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                                             <constraint firstItem="2R5-IF-DAr" firstAttribute="centerY" secondItem="fH6-Xn-WgC" secondAttribute="centerY" id="fAu-Lv-ght"/>
                                                             <constraint firstAttribute="trailing" secondItem="2R5-IF-DAr" secondAttribute="trailing" constant="8" id="pvb-sj-PUV"/>
                                                         </constraints>
-                                                        <connections>
-                                                            <outlet property="contentField" destination="LmU-xM-THl" id="Z46-C9-Llp"/>
-                                                            <outlet property="loginButton" destination="fH6-Xn-WgC" id="QGL-Qb-TRh"/>
-                                                            <outlet property="nameLabel" destination="2R5-IF-DAr" id="wgl-Ou-kfd"/>
-                                                            <outlet property="typeLabel" destination="py5-gO-cD5" id="91N-EW-qHy"/>
-                                                        </connections>
                                                     </collectionViewCell>
                                                 </cells>
                                                 <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="ttf-pq-CbW">
-                                                    <rect key="frame" x="0.0" y="0.0" width="321" height="108"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="108"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </collectionReusableView>
                                                 <connections>
@@ -2390,13 +2393,13 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                         </constraints>
                                     </view>
                                     <navigationBar opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="H1q-gJ-4fo" userLabel="Navigation" customClass="PearlUINavigationBar">
-                                        <rect key="frame" x="0.0" y="0.0" width="321" height="64"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <items>
                                             <navigationItem id="T3y-At-dlY">
                                                 <nil key="title"/>
                                                 <view key="titleView" contentMode="scaleToFill" id="NJ7-FJ-2Rq">
-                                                    <rect key="frame" x="143" y="24" width="36" height="36"/>
+                                                    <rect key="frame" x="142" y="24" width="36" height="36"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatar-0.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ylm-mE-LfW" userLabel="Avatar">
@@ -2417,7 +2420,6 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                                         <constraint firstItem="Ylm-mE-LfW" firstAttribute="leading" secondItem="NJ7-FJ-2Rq" secondAttribute="leading" id="oCP-WA-8Oe"/>
                                                     </constraints>
                                                 </view>
-                                                <barButtonItem key="rightBarButtonItem" image="icon_gears.png" style="done" id="nNb-07-z93"/>
                                             </navigationItem>
                                         </items>
                                         <userDefinedRuntimeAttributes>
@@ -2425,12 +2427,12 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                         </userDefinedRuntimeAttributes>
                                     </navigationBar>
                                     <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="hqP-FG-C0l">
-                                        <rect key="frame" x="0.0" y="64" width="321" height="44"/>
+                                        <rect key="frame" x="0.0" y="64" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <items/>
                                     </toolbar>
                                     <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="eg. apple.com" translatesAutoresizingMaskIntoConstraints="NO" id="Pl5-3l-hZm">
-                                        <rect key="frame" x="0.0" y="64" width="321" height="44"/>
+                                        <rect key="frame" x="0.0" y="64" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
                                         <connections>
@@ -2438,67 +2440,13 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                         </connections>
                                     </searchBar>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kmo-c1-5dK" userLabel="Shade">
-                                        <rect key="frame" x="0.0" y="0.0" width="321" height="568"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign Out" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3eY-lZ-dPZ">
-                                                <rect key="frame" x="128" y="32" width="65" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
-                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name of your site" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SCn-dQ-xrj">
-                                                <rect key="frame" x="92" y="76" width="136" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
-                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Site's password, tap to copy" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ScF-Yu-oFB">
-                                                <rect key="frame" x="53" y="120" width="215" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
-                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="182" translatesAutoresizingMaskIntoConstraints="NO" id="0Qe-Pv-mvu">
-                                                <rect key="frame" x="49" y="170" width="182" height="41"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <string key="text">Site counter,
-tap for a new password</string>
-                                                <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
-                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="197" translatesAutoresizingMaskIntoConstraints="NO" id="sE1-UW-xsu">
-                                                <rect key="frame" x="74" y="280" width="197" height="41"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <string key="text">Login name,
-tap to set your user name</string>
-                                                <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
-                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="195" translatesAutoresizingMaskIntoConstraints="NO" id="fo1-XN-xu3">
-                                                <rect key="frame" x="63" y="350" width="195" height="41"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <string key="text">Swipe left &amp; right
-to change password type</string>
-                                                <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
-                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to dismiss coachmarks" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="147" translatesAutoresizingMaskIntoConstraints="NO" id="Ow6-UF-yHx">
-                                                <rect key="frame" x="87" y="533" width="147" height="15"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
-                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hqT-j3-SlJ" userLabel="Close Button">
-                                                <rect key="frame" x="0.0" y="0.0" width="321" height="568"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.59999999999999998" colorSpace="calibratedWhite"/>
                                                 <state key="normal">
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -2506,14 +2454,77 @@ to change password type</string>
                                                     <action selector="close:" destination="a4U-1y-he6" eventType="touchUpInside" id="dLv-Dh-bHi"/>
                                                 </connections>
                                             </button>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap for user preferences" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3eY-lZ-dPZ">
+                                                <rect key="frame" x="66" y="32" width="188" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter your site name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SCn-dQ-xrj">
+                                                <rect key="frame" x="81" y="76" width="159" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to copy the site's password" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ScF-Yu-oFB">
+                                                <rect key="frame" x="61" y="120" width="199" height="17"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="182" translatesAutoresizingMaskIntoConstraints="NO" id="0Qe-Pv-mvu">
+                                                <rect key="frame" x="38" y="175" width="182" height="34"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <string key="text">Password counter:
+Tap it to get a new password</string>
+                                                <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="139" translatesAutoresizingMaskIntoConstraints="NO" id="sE1-UW-xsu">
+                                                <rect key="frame" x="131" y="285" width="139" height="34"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <string key="text">Tap to see or set
+your site's login name</string>
+                                                <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="231" translatesAutoresizingMaskIntoConstraints="NO" id="fo1-XN-xu3">
+                                                <rect key="frame" x="45" y="350" width="231" height="41"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <string key="text">Swipe sites left &amp; right
+to change type or delete them</string>
+                                                <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to dismiss" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="78" translatesAutoresizingMaskIntoConstraints="NO" id="Ow6-UF-yHx">
+                                                <rect key="frame" x="121" y="533" width="78" height="15"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="U1E-SN-YvR">
+                                                <rect key="frame" x="0.0" y="566" width="320" height="2"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="progressTintColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="trackTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                                            </progressView>
                                         </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.76000000000000001" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="centerX" secondItem="Ow6-UF-yHx" secondAttribute="centerX" constant="0.5" id="7jq-PO-Hfm"/>
                                             <constraint firstItem="hqT-j3-SlJ" firstAttribute="leading" secondItem="kmo-c1-5dK" secondAttribute="leading" id="AVB-1q-IzS"/>
                                             <constraint firstAttribute="bottom" secondItem="hqT-j3-SlJ" secondAttribute="bottom" id="J23-69-b3a"/>
+                                            <constraint firstAttribute="trailing" secondItem="U1E-SN-YvR" secondAttribute="trailing" id="Vii-V2-rrP"/>
+                                            <constraint firstItem="U1E-SN-YvR" firstAttribute="leading" secondItem="kmo-c1-5dK" secondAttribute="leading" id="X5h-Sk-d7Q"/>
                                             <constraint firstAttribute="trailing" secondItem="hqT-j3-SlJ" secondAttribute="trailing" id="Y0c-iq-5u2"/>
                                             <constraint firstItem="hqT-j3-SlJ" firstAttribute="top" secondItem="kmo-c1-5dK" secondAttribute="top" id="aVa-Mp-GeF"/>
+                                            <constraint firstAttribute="bottom" secondItem="U1E-SN-YvR" secondAttribute="bottom" id="kKB-h5-75J"/>
                                             <constraint firstAttribute="bottom" secondItem="Ow6-UF-yHx" secondAttribute="bottom" constant="20" symbolic="YES" id="onU-kU-PZf"/>
                                         </constraints>
                                     </view>
@@ -2529,8 +2540,8 @@ to change password type</string>
                                     <constraint firstItem="APQ-r2-UhH" firstAttribute="leading" secondItem="G6q-gV-ttC" secondAttribute="leading" id="5Bi-F6-Oep"/>
                                     <constraint firstItem="APQ-r2-UhH" firstAttribute="height" secondItem="G6q-gV-ttC" secondAttribute="height" id="8Z1-61-UNR"/>
                                     <constraint firstItem="Pl5-3l-hZm" firstAttribute="leading" secondItem="hqP-FG-C0l" secondAttribute="leading" id="Fg9-fU-Ygs"/>
-                                    <constraint firstItem="0Qe-Pv-mvu" firstAttribute="top" secondItem="scR-fD-I84" secondAttribute="top" constant="170" id="Hmt-fC-YHy"/>
-                                    <constraint firstItem="sE1-UW-xsu" firstAttribute="top" secondItem="scR-fD-I84" secondAttribute="top" constant="280" id="IrP-eO-cwb"/>
+                                    <constraint firstItem="0Qe-Pv-mvu" firstAttribute="top" secondItem="scR-fD-I84" secondAttribute="top" constant="175" id="Hmt-fC-YHy"/>
+                                    <constraint firstItem="sE1-UW-xsu" firstAttribute="top" secondItem="scR-fD-I84" secondAttribute="top" constant="285" id="IrP-eO-cwb"/>
                                     <constraint firstItem="Pl5-3l-hZm" firstAttribute="centerY" secondItem="SCn-dQ-xrj" secondAttribute="centerY" id="KfO-De-Ogw"/>
                                     <constraint firstItem="H1q-gJ-4fo" firstAttribute="leading" secondItem="G6q-gV-ttC" secondAttribute="leading" id="LqD-4f-udU"/>
                                     <constraint firstAttribute="trailing" secondItem="H1q-gJ-4fo" secondAttribute="trailing" id="Lqj-25-GGH"/>
@@ -2540,7 +2551,7 @@ to change password type</string>
                                     <constraint firstAttribute="bottom" secondItem="kmo-c1-5dK" secondAttribute="bottom" id="SdV-Qs-hc8"/>
                                     <constraint firstItem="Pl5-3l-hZm" firstAttribute="top" secondItem="hqP-FG-C0l" secondAttribute="top" id="WAD-ha-hzG"/>
                                     <constraint firstItem="Pl5-3l-hZm" firstAttribute="centerX" secondItem="SCn-dQ-xrj" secondAttribute="centerX" id="XGh-UZ-5oV"/>
-                                    <constraint firstItem="0Qe-Pv-mvu" firstAttribute="trailing" secondItem="scR-fD-I84" secondAttribute="trailing" constant="-90" id="YBh-av-eG6"/>
+                                    <constraint firstItem="0Qe-Pv-mvu" firstAttribute="trailing" secondItem="scR-fD-I84" secondAttribute="trailing" constant="-100" id="YBh-av-eG6"/>
                                     <constraint firstAttribute="trailing" secondItem="Pl5-3l-hZm" secondAttribute="trailing" id="Zih-As-2ck"/>
                                     <constraint firstItem="APQ-r2-UhH" firstAttribute="top" secondItem="G6q-gV-ttC" secondAttribute="bottom" priority="1" id="e2a-e6-60c"/>
                                     <constraint firstItem="H1q-gJ-4fo" firstAttribute="centerY" secondItem="3eY-lZ-dPZ" secondAttribute="centerY" constant="-10" id="f00-OP-SMP"/>
@@ -2570,6 +2581,15 @@ to change password type</string>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="ignoreTouches" value="YES"/>
                         </userDefinedRuntimeAttributes>
                     </view>
+                    <connections>
+                        <outlet property="view0" destination="3eY-lZ-dPZ" id="aVZ-eY-8fv"/>
+                        <outlet property="view1" destination="SCn-dQ-xrj" id="zLZ-LF-18D"/>
+                        <outlet property="view2" destination="ScF-Yu-oFB" id="4PX-Ji-muD"/>
+                        <outlet property="view3" destination="0Qe-Pv-mvu" id="5Bz-2c-nzB"/>
+                        <outlet property="view4" destination="sE1-UW-xsu" id="xiu-ri-2RO"/>
+                        <outlet property="view5" destination="fo1-XN-xu3" id="kSi-5O-QzP"/>
+                        <outlet property="viewProgress" destination="U1E-SN-YvR" id="7rX-5w-Ngz"/>
+                    </connections>
                 </viewController>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign Out" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0sm-0Q-eah">
                     <rect key="frame" x="0.0" y="0.0" width="67" height="21"/>
@@ -2745,6 +2765,7 @@ You can make passwords for anything, like email addresses, sites or real-world t
         <image name="icon_cancel.png" width="32" height="32"/>
         <image name="icon_edit.png" width="32" height="32"/>
         <image name="icon_gears.png" width="32" height="32"/>
+        <image name="icon_key.png" width="32" height="32"/>
         <image name="icon_person.png" width="32" height="32"/>
         <image name="icon_plus.png" width="32" height="32"/>
         <image name="icon_up.png" width="32" height="32"/>

@@ -12,6 +12,7 @@
 @interface MPPreferencesViewController : UITableViewController
 
 @property(weak, nonatomic) IBOutlet UISwitch *savePasswordSwitch;
+@property(weak, nonatomic) IBOutlet UITableViewCell *signOutCell;
 @property(weak, nonatomic) IBOutlet UITableViewCell *feedbackCell;
 @property(weak, nonatomic) IBOutlet UITableViewCell *coachmarksCell;
 @property(weak, nonatomic) IBOutlet UITableViewCell *exportCell;
