@@ -1,12 +1,12 @@
 /**
- * Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
- *
- * See the enclosed file LICENSE for license information (LGPLv3). If you did
- * not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
- *
- * @author   Maarten Billemont <lhunath@lyndir.com>
- * @license  http://www.gnu.org/licenses/lgpl-3.0.txt
- */
+* Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
+*
+* See the enclosed file LICENSE for license information (LGPLv3). If you did
+* not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
+*
+* @author   Maarten Billemont <lhunath@lyndir.com>
+* @license  http://www.gnu.org/licenses/lgpl-3.0.txt
+*/
 
 //
 //  MPElementModel.h
@@ -23,16 +23,10 @@
 #import "MPAppDelegate_Store.h"
 #import "MPMacAppDelegate.h"
 
-@interface MPElementModel()
-
-@property(nonatomic, strong) NSManagedObjectID *entityOID;
-@property(nonatomic, readwrite) NSString *content;
-@property(nonatomic, readwrite) MPElementType type;
-@property(nonatomic, readwrite) NSString *typeName;
-@end
-
 @implementation MPElementModel {
+    NSManagedObjectID *_entityOID;
     NSMutableDictionary *_typesByName;
+    BOOL _initialized;
 }
 
 - (id)initWithEntity:(MPElementEntity *)entity {
@@ -40,27 +34,40 @@
     if (!(self = [super init]))
         return nil;
 
-    _site = entity.name;
-    _lastUsed = entity.lastUsed;
-    _loginName = entity.loginName;
-    _type = entity.type;
-    _typeName = entity.typeName;
-    _uses = entity.uses_;
-    _counter = [entity isKindOfClass:[MPElementGeneratedEntity class]]? [(MPElementGeneratedEntity *)entity counter]: 0;
-    _content = [entity.algorithm resolveContentForElement:entity usingKey:[MPAppDelegate_Shared get].key];
-    _algorithm = entity.algorithm;
+    [self setEntity:entity];
+    _initialized = YES;
+
+    return self;
+}
+
+- (void)setEntity:(MPElementEntity *)entity {
+
+    if ([_entityOID isEqual:entity.objectID])
+        return;
     _entityOID = entity.objectID;
+
+    self.algorithm = entity.algorithm;
+    self.site = entity.name;
+    self.lastUsed = entity.lastUsed;
+    self.loginName = entity.loginName;
+    self.type = entity.type;
+    self.typeName = entity.typeName;
+    self.uses = entity.uses_;
+    self.counter = [entity isKindOfClass:[MPElementGeneratedEntity class]]? [(MPElementGeneratedEntity *)entity counter]: 0;
 
     // Find all password types and the index of the current type amongst them.
     _typesByName = [NSMutableDictionary dictionary];
-    MPElementType type = _type;
+    MPElementType type = self.type;
     do {
-        [_typesByName setObject:@(type) forKey:[_algorithm shortNameOfType:type]];
-    } while (_type != (type = [_algorithm nextType:type]));
-    _types = [_typesByName keysSortedByValueUsingSelector:@selector(compare:)];
-    _typeIndex = [[[_typesByName allValues] sortedArrayUsingSelector:@selector(compare:)] indexOfObject:@(_type)];
+        [_typesByName setObject:@(type) forKey:[self.algorithm shortNameOfType:type]];
+    } while (self.type != (type = [self.algorithm nextType:type]));
+    self.typeNames = [_typesByName keysSortedByValueUsingSelector:@selector( compare: )];
+    self.typeIndex = [[[_typesByName allValues] sortedArrayUsingSelector:@selector( compare: )] indexOfObject:@(self.type)];
 
-    return self;
+    [entity.algorithm resolveContentForElement:entity usingKey:[MPAppDelegate_Shared get].key
+                                        result:^(NSString *result) {
+        PearlMainQueue( ^{ self.content = result; } );
+    }];
 }
 
 - (MPElementEntity *)entityInContext:(NSManagedObjectContext *)moc {
@@ -71,7 +78,7 @@
     NSError *error;
     MPElementEntity *entity = (MPElementEntity *)[moc existingObjectWithID:_entityOID error:&error];
     if (!entity)
-    err(@"Couldn't retrieve active element: %@", error);
+        err( @"Couldn't retrieve active element: %@", error );
 
     return entity;
 }
@@ -82,13 +89,20 @@
         return;
     _counter = counter;
 
+    if (!_initialized)
+        // This wasn't a change to the entity.
+        return;
+
     [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         MPElementEntity *entity = [self entityInContext:context];
         if ([entity isKindOfClass:[MPElementGeneratedEntity class]]) {
             ((MPElementGeneratedEntity *)entity).counter = counter;
             [context saveToStore];
 
-            self.content = [entity.algorithm resolveContentForElement:entity usingKey:[MPAppDelegate_Shared get].key];
+            [entity.algorithm resolveContentForElement:entity usingKey:[MPAppDelegate_Shared get].key
+                                                result:^(NSString *result) {
+                PearlMainQueue( ^{ self.content = result; } );
+            }];
         }
     }];
 }
@@ -99,14 +113,13 @@
         return;
     _typeIndex = typeIndex;
 
-    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        MPElementEntity *entity = [self entityInContext:context];
-        entity.type_ = _typesByName[_types[typeIndex]];
-        [context saveToStore];
+    if (!_initialized)
+        // This wasn't a change to the entity.
+        return;
 
-        self.type = entity.type;
-        self.typeName = entity.typeName;
-        self.content = [entity.algorithm resolveContentForElement:entity usingKey:[MPAppDelegate_Shared get].key];
+    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        [self setEntity:[[MPAppDelegate_Shared get] changeElement:[self entityInContext:context] saveInContext:context
+                                                           toType:[_typesByName[self.typeNames[typeIndex]] unsignedIntegerValue]]];
     }];
 }
 

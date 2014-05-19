@@ -55,6 +55,7 @@
 //        }];
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self ensureLoadedAndUnlockedOrCloseIfLoggedOut:YES];
+            [self updateElements];
         }];
     }                             forKeyPath:@"key" options:NSKeyValueObservingOptionInitial context:nil];
     [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:self.window
@@ -62,7 +63,8 @@
             ^(NSNotification *note) {
                 [self ensureLoadedAndUnlockedOrCloseIfLoggedOut:NO];
                 [self.siteField selectText:nil];
-            }];
+                [self updateElements];
+    }];
     [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillCloseNotification object:self.window
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
@@ -334,17 +336,17 @@
 
 - (void)updateElements {
 
-    NSString *query = [self.siteField.currentEditor string];
-    if (![query length] || ![MPMacAppDelegate get].key) {
+    if (![MPMacAppDelegate get].key) {
         self.elements = nil;
         return;
     }
 
+    NSString *query = [self.siteField.currentEditor string];
     [MPMacAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
         fetchRequest.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"lastUsed" ascending:NO]];
-        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(name BEGINSWITH[cd] %@) AND user == %@",
-                                                                  query, [[MPMacAppDelegate get] activeUserInContext:context]];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@",
+                                                                  query, query, [[MPMacAppDelegate get] activeUserInContext:context]];
 
         NSError *error = nil;
         NSArray *siteResults = [context executeFetchRequest:fetchRequest error:&error];

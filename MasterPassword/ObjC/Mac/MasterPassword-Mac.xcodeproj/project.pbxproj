@@ -68,6 +68,9 @@
 		DA5E5D0C1724A667003798D8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CC61724A667003798D8 /* main.m */; };
 		DA5E5D0D1724A667003798D8 /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CC71724A667003798D8 /* MasterPassword.xcdatamodeld */; };
 		DA5E5D551724F9C8003798D8 /* MasterPassword.iconset in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5D541724F9C8003798D8 /* MasterPassword.iconset */; };
+		DA8ED895192906920099B726 /* PearlTween.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8ED891192906920099B726 /* PearlTween.m */; };
+		DA8ED896192906920099B726 /* PearlTween.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED892192906920099B726 /* PearlTween.h */; };
+		DA8ED897192906920099B726 /* map-macro.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED894192906920099B726 /* map-macro.h */; };
 		DABC6C02175D8C85000C15D4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DABC6C15175D8CE1000C15D4 /* RHStatusItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = DABC6C14175D8CE1000C15D4 /* RHStatusItemView.m */; };
 		DABC6C16175D8E3A000C15D4 /* libRHStatusItemView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DABC6C01175D8C85000C15D4 /* libRHStatusItemView.a */; };
@@ -395,6 +398,9 @@
 		DA6701B716406A4100B61001 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		DA6701DD16406B7300B61001 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		DA672D2E14F92C6B004A189C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		DA8ED891192906920099B726 /* PearlTween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlTween.m; sourceTree = "<group>"; };
+		DA8ED892192906920099B726 /* PearlTween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlTween.h; sourceTree = "<group>"; };
+		DA8ED894192906920099B726 /* map-macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "map-macro.h"; sourceTree = "<group>"; };
 		DABB981515100B4000B05417 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DABC6C01175D8C85000C15D4 /* libRHStatusItemView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRHStatusItemView.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DABC6C13175D8CE1000C15D4 /* RHStatusItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHStatusItemView.h; sourceTree = "<group>"; };
@@ -790,6 +796,14 @@
 			path = Mac;
 			sourceTree = "<group>";
 		};
+		DA8ED893192906920099B726 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				DA8ED894192906920099B726 /* map-macro.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
 		DABC6C0E175D8CE1000C15D4 /* RHStatusItemView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1071,6 +1085,9 @@
 		DAFE45D715039823003ABA7C /* Pearl */ = {
 			isa = PBXGroup;
 			children = (
+				DA8ED891192906920099B726 /* PearlTween.m */,
+				DA8ED892192906920099B726 /* PearlTween.h */,
+				DA8ED893192906920099B726 /* include */,
 				DA3B8450190FC86F00246EEA /* NSManagedObject+Pearl.m */,
 				DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */,
 				DA2CA4E718D323D3007798F8 /* NSError+PearlFullDescription.m */,
@@ -1199,6 +1216,7 @@
 				DA3B8453190FC86F00246EEA /* NSManagedObject+Pearl.h in Headers */,
 				DAEB93F518AB0FFD000490CC /* evp.h in Headers */,
 				DAEB941918AB0FFD000490CC /* ts.h in Headers */,
+				DA8ED897192906920099B726 /* map-macro.h in Headers */,
 				DAEB93F818AB0FFD000490CC /* krb5_asn.h in Headers */,
 				DAFE4A1915039824003ABA7C /* Pearl.h in Headers */,
 				DAEB93F318AB0FFD000490CC /* engine.h in Headers */,
@@ -1211,6 +1229,7 @@
 				DAEB940418AB0FFD000490CC /* ossl_typ.h in Headers */,
 				DAEB93DC18AB0FFD000490CC /* asn1t.h in Headers */,
 				DAFE4A2215039824003ABA7C /* PearlDeviceUtils.h in Headers */,
+				DA8ED896192906920099B726 /* PearlTween.h in Headers */,
 				DAEB93E518AB0FFD000490CC /* conf.h in Headers */,
 				DAFE4A2415039824003ABA7C /* PearlInfoPlist.h in Headers */,
 				DAEB940618AB0FFD000490CC /* pem2.h in Headers */,
@@ -1668,6 +1687,7 @@
 				DAFE4A3715039824003ABA7C /* PearlKeyChain.m in Sources */,
 				DAFE4A3915039824003ABA7C /* PearlRSAKey.m in Sources */,
 				DAFE4A3B15039824003ABA7C /* PearlSCrypt.m in Sources */,
+				DA8ED895192906920099B726 /* PearlTween.m in Sources */,
 				DA30E9CF15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m in Sources */,
 				DA2CA4F118D323D3007798F8 /* NSTimer+PearlBlock.m in Sources */,
 				DA3B8452190FC86F00246EEA /* NSManagedObject+Pearl.m in Sources */,
@@ -2006,7 +2026,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer: Maarten Billemont (DWGU95U4ZD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2014,6 +2033,7 @@
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
+				PROVISIONING_PROFILE = "77750158-06A9-41B0-B992-532E2033463E";
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
@@ -2025,7 +2045,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "Developer ID Application: Maarten Billemont (HL3Q45LX9N)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2033,6 +2052,7 @@
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
+				PROVISIONING_PROFILE = "51A082ED-2873-4B5E-9C73-A74A85EC0CBA";
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
@@ -2123,7 +2143,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application: Maarten Billemont (HL3Q45LX9N)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2131,6 +2150,7 @@
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
+				PROVISIONING_PROFILE = "170D83FD-18FE-4A05-B13C-8D16876480C6";
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
