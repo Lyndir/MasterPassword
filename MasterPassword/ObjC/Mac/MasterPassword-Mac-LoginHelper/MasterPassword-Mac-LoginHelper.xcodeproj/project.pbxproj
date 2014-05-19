@@ -7,10 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DA3B84581915577F00246EEA /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA3B84571915577F00246EEA /* Crashlytics.framework */; };
-		DAD9B5CF176299B9001835F9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAD9B5CD176299B9001835F9 /* InfoPlist.strings */; };
 		DAD9B5D1176299B9001835F9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD9B5D0176299B9001835F9 /* main.m */; };
-		DAD9B5D8176299B9001835F9 /* MPLoginAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD9B5D7176299B9001835F9 /* MPLoginAppDelegate.m */; };
 		DAD9B5EC1762AAA6001835F9 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD9B5EB1762AAA6001835F9 /* AppKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -18,10 +15,7 @@
 		DA3B84571915577F00246EEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = ../../../../External/Mac/Crashlytics.framework; sourceTree = "<group>"; };
 		DAD9B5C1176299B9001835F9 /* MasterPassword-Mac-LoginHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MasterPassword-Mac-LoginHelper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAD9B5CC176299B9001835F9 /* MasterPassword-Mac-LoginHelper-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MasterPassword-Mac-LoginHelper-Info.plist"; sourceTree = "<group>"; };
-		DAD9B5CE176299B9001835F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DAD9B5D0176299B9001835F9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		DAD9B5D6176299B9001835F9 /* MPLoginAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPLoginAppDelegate.h; sourceTree = "<group>"; };
-		DAD9B5D7176299B9001835F9 /* MPLoginAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPLoginAppDelegate.m; sourceTree = "<group>"; };
 		DAD9B5EA17629C56001835F9 /* MasterPassword-Mac-LoginHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MasterPassword-Mac-LoginHelper.entitlements"; sourceTree = "<group>"; };
 		DAD9B5EB1762AAA6001835F9 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -32,7 +26,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAD9B5EC1762AAA6001835F9 /* AppKit.framework in Frameworks */,
-				DA3B84581915577F00246EEA /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,8 +62,6 @@
 			isa = PBXGroup;
 			children = (
 				DAD9B5EA17629C56001835F9 /* MasterPassword-Mac-LoginHelper.entitlements */,
-				DAD9B5D6176299B9001835F9 /* MPLoginAppDelegate.h */,
-				DAD9B5D7176299B9001835F9 /* MPLoginAppDelegate.m */,
 				DAD9B5CB176299B9001835F9 /* Supporting Files */,
 			);
 			path = "MasterPassword-Mac-LoginHelper";
@@ -80,7 +71,6 @@
 			isa = PBXGroup;
 			children = (
 				DAD9B5CC176299B9001835F9 /* MasterPassword-Mac-LoginHelper-Info.plist */,
-				DAD9B5CD176299B9001835F9 /* InfoPlist.strings */,
 				DAD9B5D0176299B9001835F9 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -115,6 +105,16 @@
 				CLASSPREFIX = MP;
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Maarten Billemont";
+				TargetAttributes = {
+					DAD9B5C0176299B9001835F9 = {
+						DevelopmentTeam = HL3Q45LX9N;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
+						};
+					};
+				};
 			};
 			buildConfigurationList = DAD9B5BC176299B9001835F9 /* Build configuration list for PBXProject "MasterPassword-Mac-LoginHelper" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -138,7 +138,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DAD9B5CF176299B9001835F9 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,22 +149,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAD9B5D1176299B9001835F9 /* main.m in Sources */,
-				DAD9B5D8176299B9001835F9 /* MPLoginAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		DAD9B5CD176299B9001835F9 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				DAD9B5CE176299B9001835F9 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		DA3B845A1916AC5100246EEA /* AppStore-Mac */ = {
@@ -219,12 +206,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper.entitlements";
-				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application: Maarten Billemont (HL3Q45LX9N)";
+				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Mac,
-				);
 				INFOPLIST_FILE = "$(SRCROOT)/MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper-Info.plist";
 			};
 			name = "AppStore-Mac";
@@ -334,12 +317,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper.entitlements";
-				CODE_SIGN_IDENTITY = "Mac Developer: Maarten Billemont (DWGU95U4ZD)";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Mac,
-				);
 				INFOPLIST_FILE = "$(SRCROOT)/MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper-Info.plist";
 			};
 			name = "Debug-Mac";
@@ -348,12 +327,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper.entitlements";
-				CODE_SIGN_IDENTITY = "Mac Developer: Maarten Billemont (DWGU95U4ZD)";
+				CODE_SIGN_IDENTITY = "Developer ID Application: Maarten Billemont (HL3Q45LX9N)";
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Mac,
-				);
 				INFOPLIST_FILE = "$(SRCROOT)/MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper-Info.plist";
 			};
 			name = "AdHoc-Mac";

@@ -8,7 +8,21 @@
 
 #import <Cocoa/Cocoa.h>
 
-int main(int argc, char *argv[])
-{
-    return NSApplicationMain(argc, (const char **)argv);
+int main(int argc, char *argv[]) {
+
+    NSURL *bundleURL = [[[[[[NSBundle mainBundle] bundleURL]
+            URLByDeletingLastPathComponent] URLByDeletingLastPathComponent]
+            URLByDeletingLastPathComponent] URLByDeletingLastPathComponent];
+
+    NSError *error = nil;
+    NSRunningApplication *application = [[NSWorkspace sharedWorkspace]
+            launchApplicationAtURL:bundleURL options:NSWorkspaceLaunchWithoutActivation
+                     configuration:nil error:&error];
+
+    if (!application || error) {
+        NSLog( @"Error launching main app: %@", [error debugDescription] );
+        return (int)error.code?: 1;
+    }
+
+    return 0;
 }
