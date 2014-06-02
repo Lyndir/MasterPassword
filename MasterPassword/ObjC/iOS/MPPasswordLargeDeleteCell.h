@@ -21,4 +21,5 @@
 
 @interface MPPasswordLargeDeleteCell : MPPasswordLargeCell
 
++ (MPPasswordLargeCell *)dequeueCellFromCollectionView:(UICollectionView *)view atIndexPath:(NSIndexPath *)path;
 @end

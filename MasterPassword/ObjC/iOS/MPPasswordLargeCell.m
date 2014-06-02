@@ -30,6 +30,8 @@
 + (instancetype)dequeueCellWithType:(MPElementType)type fromCollectionView:(UICollectionView *)collectionView
                         atIndexPath:(NSIndexPath *)indexPath {
 
+    NSAssert(type != 0 && type != (MPElementType)NSNotFound, @"Cannot dequeue a password cell without a type.");
+
     NSString *reuseIdentifier;
     if (type & MPElementTypeClassGenerated)
         reuseIdentifier = NSStringFromClass( [MPPasswordLargeGeneratedCell class] );
@@ -161,6 +163,13 @@
 
     [textField resignFirstResponder];
     return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+
+    UICollectionView *collectionView = [UICollectionView findAsSuperviewOf:self];
+    [collectionView scrollToItemAtIndexPath:[collectionView indexPathForCell:self]
+                           atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {

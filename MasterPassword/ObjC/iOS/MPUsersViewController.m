@@ -129,7 +129,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 break;
             }
             case MPActiveUserStateLogin: {
-                [self.entryField endEditing:YES];
+                self.entryField.enabled = NO;
                 [self selectedAvatar].spinnerActive = YES;
                 [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                     BOOL signedIn = NO, isNew = NO;
@@ -140,6 +140,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
                     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                         self.entryField.text = @"";
+                        self.entryField.enabled = YES;
                         [self selectedAvatar].spinnerActive = NO;
 
                         if (!signedIn) {
@@ -189,7 +190,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                     return NO;
                 }
 
-                [self.entryField endEditing:YES];
+                self.entryField.enabled = NO;
                 MPAvatarCell *avatarCell = [self selectedAvatar];
                 avatarCell.spinnerActive = YES;
                 if (![MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
@@ -204,6 +205,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                     BOOL signedIn = [[MPiOSAppDelegate get] signInAsUser:user saveInContext:context usingMasterPassword:masterPassword];
                     PearlMainQueue( ^{
                         self.entryField.text = @"";
+                        self.entryField.enabled = YES;
                         [self selectedAvatar].spinnerActive = NO;
 
                         if (!signedIn) {
@@ -315,15 +317,29 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
             }
 
         BOOL isNew = NO;
-        MPUserEntity *user = [self userForIndexPath:indexPath inContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]
-                                              isNew:&isNew];
+        NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
+        MPUserEntity *mainUser = [self userForIndexPath:indexPath inContext:mainContext isNew:&isNew];
 
         if (isNew)
             self.activeUserState = MPActiveUserStateUserName;
-        else if (!user.keyID)
+        else if (!mainUser.keyID)
             self.activeUserState = MPActiveUserStateMasterPasswordChoice;
-        else
+        else {
             self.activeUserState = MPActiveUserStateLogin;
+
+            self.entryField.enabled = NO;
+            [self selectedAvatar].spinnerActive = YES;
+            BOOL signedIn = NO;
+            if (!isNew && mainUser)
+                signedIn = [[MPiOSAppDelegate get] signInAsUser:mainUser saveInContext:mainContext usingMasterPassword:nil];
+
+            self.entryField.text = @"";
+            self.entryField.enabled = YES;
+            [self selectedAvatar].spinnerActive = NO;
+
+            if (!signedIn)
+                [self.entryField becomeFirstResponder];
+        }
     }
 }
 

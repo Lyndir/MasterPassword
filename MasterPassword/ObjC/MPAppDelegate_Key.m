@@ -107,13 +107,11 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     }
 
     // Method 3: Check the given master password string.
-    if (!tryKey) {
-        if ([password length]) if ((tryKey = [MPAlgorithmDefault keyForPassword:password
-                                                                    ofUserNamed:user.name])) if (![user.keyID isEqual:tryKey.keyID]) {
-            inf( @"Key derived from password doesn't match keyID for: %@", user.userID );
+    if (!tryKey && [password length] && (tryKey = [MPAlgorithmDefault keyForPassword:password ofUserNamed:user.name]) &&
+        ![user.keyID isEqual:tryKey.keyID]) {
+        inf( @"Key derived from password doesn't match keyID for: %@", user.userID );
 
-            tryKey = nil;
-        }
+        tryKey = nil;
     }
 
     // No more methods left, fail if key still not known.

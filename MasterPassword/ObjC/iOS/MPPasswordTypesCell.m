@@ -87,30 +87,32 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 
     if (!self.algorithm)
-        dbg_return_tr( 0, @, @(section) );
+        return 0;
 
     if (self.transientSite)
-        dbg_return_tr( [[self.algorithm allTypes] count], @, @(section) );
+        return [[self.algorithm allTypes] count];
 
-    dbg_return_tr( [[self.algorithm allTypes] count] + 1 /* Delete */, @, @(section) );
+    return [[self.algorithm allTypes] count] + 1 /* Delete */;
 }
 
 - (MPPasswordLargeCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
     MPPasswordLargeCell *cell;
     if (indexPath.item == 0)
-        cell = [MPPasswordLargeDeleteCell dequeueCellWithType:(MPElementType)NSNotFound fromCollectionView:collectionView
-                                                  atIndexPath:indexPath];
+        cell = [MPPasswordLargeDeleteCell dequeueCellFromCollectionView:collectionView atIndexPath:indexPath];
     else
         cell = [MPPasswordLargeCell dequeueCellWithType:[self typeForContentIndexPath:indexPath] fromCollectionView:collectionView
                                             atIndexPath:indexPath];
+
+    [cell prepareForReuse];
 
     if (self.transientSite)
         [cell updateWithTransientSite:self.transientSite];
     else
         [cell updateWithElement:self.mainElement];
+    dbg( @"cell %d, contentFieldMode: %d", indexPath.item, cell.contentFieldMode );
 
-    dbg_return( cell, indexPath );
+    return cell;
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
