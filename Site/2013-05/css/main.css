@@ -170,12 +170,20 @@ header .content {
     /*background: linear-gradient(to bottom, rgba(0,0,0,0) 85%, rgba(0,0,0,0.7) 85%);*/
     /*background: black url("../img/shot-laptop-leaning-iphone.png") center top / cover no-repeat;*/
 }
+h1, h2 {
+    font-weight: 100;
+}
+h1 {
+    font-size: 3em;
+    margin: 0 0 1ex;
+}
 header h1 {
-    font-size: 4em;
+    font-size: 6em;
+    margin: 0;
 }
 header h2 {
     font-size: 2em;
-    font-weight: normal;
+    font-style: oblique;
 }
 footer {
     overflow: hidden;
