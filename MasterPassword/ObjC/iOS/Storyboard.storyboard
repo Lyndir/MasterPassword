@@ -251,7 +251,7 @@
                                                     <segue destination="Sd5-eW-Cx2" kind="modal" identifier="web" id="gtb-zE-u9H"/>
                                                 </connections>
                                             </button>
-                                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="069-Pu-yXe" userLabel="GitTip Tip">
+                                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="069-Pu-yXe" userLabel="Thanks Tip">
                                                 <rect key="frame" x="42" y="0.0" width="236" height="60"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <subviews>
@@ -410,7 +410,7 @@
         <!--Navigation Controller-->
         <scene sceneID="bzn-yi-kMJ">
             <objects>
-                <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="Q1S-vU-GGO" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="Q1S-vU-GGO" customClass="MPNavigationController" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="4yl-zs-iUd">
                         <autoresizingMask key="autoresizingMask"/>
@@ -504,7 +504,7 @@
                         <sections>
                             <tableViewSection id="FEv-Rb-jst">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="97" id="R30-AU-bR6" userLabel="Sign Out">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="97" id="R30-AU-bR6" userLabel="Sign Out">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="97"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="R30-AU-bR6" id="f6h-Ff-2Qc">
@@ -538,7 +538,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="216" id="B8R-iE-Ffe" userLabel="Default Password Type">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="216" id="B8R-iE-Ffe" userLabel="Default Password Type">
                                         <rect key="frame" x="0.0" y="97" width="320" height="216"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B8R-iE-Ffe" id="8r5-Zc-TRj">
@@ -604,7 +604,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="220" id="Sz1-JP-dw2" userLabel="Avatar">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="220" id="Sz1-JP-dw2" userLabel="Avatar">
                                         <rect key="frame" x="0.0" y="313" width="320" height="220"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Sz1-JP-dw2" id="R4X-LE-ir9">
@@ -684,7 +684,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="230" id="fRZ-Uh-FR8" userLabel="Save Password">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="230" id="fRZ-Uh-FR8" userLabel="Save Password">
                                         <rect key="frame" x="0.0" y="533" width="320" height="230"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fRZ-Uh-FR8" id="qCQ-L5-teL">
@@ -728,7 +728,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="97" id="9QG-lM-ymM" userLabel="Feedback">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="97" id="9QG-lM-ymM" userLabel="Feedback">
                                         <rect key="frame" x="0.0" y="763" width="320" height="97"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9QG-lM-ymM" id="hK8-XQ-lLz">
@@ -762,7 +762,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="97" id="eth-Dc-JYn" userLabel="Reveal Coachmarks">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="97" id="eth-Dc-JYn" userLabel="Reveal Coachmarks">
                                         <rect key="frame" x="0.0" y="860" width="320" height="97"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eth-Dc-JYn" id="8m6-pP-lda">
@@ -796,7 +796,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="110" id="UdB-BV-AHA" userLabel="Check Inconsistencies">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="110" id="UdB-BV-AHA" userLabel="Check Inconsistencies">
                                         <rect key="frame" x="0.0" y="957" width="320" height="110"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UdB-BV-AHA" id="V2Y-nu-jhZ">
@@ -830,7 +830,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="125" id="IVT-Rs-nTu" userLabel="Export">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="125" id="IVT-Rs-nTu" userLabel="Export">
                                         <rect key="frame" x="0.0" y="1067" width="320" height="125"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IVT-Rs-nTu" id="Q5J-2f-mmz">
@@ -861,6 +861,86 @@
                                                 <constraint firstAttribute="trailing" secondItem="KEh-y5-Obc" secondAttribute="trailing" constant="20" symbolic="YES" id="njQ-30-8oI"/>
                                                 <constraint firstAttribute="bottom" secondItem="U77-XF-Bvb" secondAttribute="bottom" constant="20" symbolic="YES" id="yXQ-zQ-vet"/>
                                                 <constraint firstItem="KEh-y5-Obc" firstAttribute="top" secondItem="Q5J-2f-mmz" secondAttribute="top" constant="20" symbolic="YES" id="zuy-l8-JWN"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="153" id="hmf-Wz-9l2" userLabel="Footer">
+                                        <rect key="frame" x="0.0" y="1192" width="320" height="153"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hmf-Wz-9l2" id="AL3-2q-tgO">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="152"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" text="© 2012-2014, Maarten Billemont (lhunath)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sPw-mV-mFF">
+                                                    <rect key="frame" x="20" y="4" width="280" height="12"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="10"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rl7-cr-FHf">
+                                                    <rect key="frame" x="20" y="24" width="280" height="26"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="11"/>
+                                                    <state key="normal" title="Home Page">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="homePageButton:" destination="JFc-sj-awD" eventType="touchUpInside" id="ptD-cv-NMr"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="epW-Rm-9St">
+                                                    <rect key="frame" x="20" y="58" width="280" height="26"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="11"/>
+                                                    <state key="normal" title="Understanding Master Password's Security">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="securityButton:" destination="JFc-sj-awD" eventType="touchUpInside" id="Efv-cp-Xfh"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LTN-ch-h8D">
+                                                    <rect key="frame" x="20" y="92" width="280" height="26"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="11"/>
+                                                    <state key="normal" title="Get the Master Password source code">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="sourceButton:" destination="JFc-sj-awD" eventType="touchUpInside" id="Y3O-di-CZo"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z60-lc-Nka">
+                                                    <rect key="frame" x="20" y="126" width="280" height="26"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="11"/>
+                                                    <state key="normal" title="Send Thanks">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="thanksButton:" destination="JFc-sj-awD" eventType="touchUpInside" id="SqG-hx-mzF"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="LTN-ch-h8D" secondAttribute="trailing" constant="20" symbolic="YES" id="1W6-6Q-Bdv"/>
+                                                <constraint firstItem="LTN-ch-h8D" firstAttribute="top" secondItem="epW-Rm-9St" secondAttribute="bottom" constant="8" symbolic="YES" id="7YP-IL-yTY"/>
+                                                <constraint firstItem="Z60-lc-Nka" firstAttribute="leading" secondItem="AL3-2q-tgO" secondAttribute="leading" constant="20" symbolic="YES" id="Fnk-lP-q0U"/>
+                                                <constraint firstAttribute="bottom" secondItem="Z60-lc-Nka" secondAttribute="bottom" id="Jbk-vs-bo1"/>
+                                                <constraint firstItem="sPw-mV-mFF" firstAttribute="leading" secondItem="AL3-2q-tgO" secondAttribute="leading" constant="20" symbolic="YES" id="Jme-5a-dNH"/>
+                                                <constraint firstItem="LTN-ch-h8D" firstAttribute="leading" secondItem="AL3-2q-tgO" secondAttribute="leading" constant="20" symbolic="YES" id="RpC-WA-bnf"/>
+                                                <constraint firstItem="sPw-mV-mFF" firstAttribute="top" secondItem="AL3-2q-tgO" secondAttribute="top" constant="4" id="X4M-st-0KA"/>
+                                                <constraint firstItem="Z60-lc-Nka" firstAttribute="top" secondItem="LTN-ch-h8D" secondAttribute="bottom" constant="8" symbolic="YES" id="YSW-fw-h4i"/>
+                                                <constraint firstItem="epW-Rm-9St" firstAttribute="top" secondItem="Rl7-cr-FHf" secondAttribute="bottom" constant="8" symbolic="YES" id="b0H-uh-d3G"/>
+                                                <constraint firstItem="Rl7-cr-FHf" firstAttribute="top" secondItem="sPw-mV-mFF" secondAttribute="bottom" constant="8" symbolic="YES" id="gwp-Uq-BEm"/>
+                                                <constraint firstAttribute="trailing" secondItem="Z60-lc-Nka" secondAttribute="trailing" constant="20" symbolic="YES" id="iCv-UX-pPf"/>
+                                                <constraint firstAttribute="trailing" secondItem="Rl7-cr-FHf" secondAttribute="trailing" constant="20" symbolic="YES" id="oej-WB-7Vb"/>
+                                                <constraint firstItem="Rl7-cr-FHf" firstAttribute="leading" secondItem="AL3-2q-tgO" secondAttribute="leading" constant="20" symbolic="YES" id="r2V-pM-d9B"/>
+                                                <constraint firstItem="epW-Rm-9St" firstAttribute="leading" secondItem="AL3-2q-tgO" secondAttribute="leading" constant="20" symbolic="YES" id="rve-aQ-Ggt"/>
+                                                <constraint firstAttribute="trailing" secondItem="epW-Rm-9St" secondAttribute="trailing" constant="20" symbolic="YES" id="sHt-wW-wHU"/>
+                                                <constraint firstAttribute="trailing" secondItem="sPw-mV-mFF" secondAttribute="trailing" constant="20" symbolic="YES" id="xjb-mS-yVZ"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1130,6 +1210,13 @@
                                                                                 <rect key="frame" x="0.0" y="0.0" width="300" height="100"/>
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                 <subviews>
+                                                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="left" text="> age of the universe" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="GrV-gX-eCo" userLabel="Strength">
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="12"/>
+                                                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                                                        <nil key="highlightedColor"/>
+                                                                                    </label>
                                                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.029999999999999999" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Long Password" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qAD-3v-3aq" userLabel="Type">
                                                                                         <rect key="frame" x="-10" y="19" width="604" height="101"/>
                                                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1251,10 +1338,13 @@
                                                                                 <constraint firstAttribute="trailing" secondItem="q75-Uz-86O" secondAttribute="trailing" constant="8" id="ZsY-wg-aJt"/>
                                                                                 <constraint firstItem="q75-Uz-86O" firstAttribute="leading" secondItem="302-fI-maQ" secondAttribute="leading" constant="8" id="cee-Hz-2IS"/>
                                                                                 <constraint firstAttribute="trailing" secondItem="cOv-2G-EAP" secondAttribute="trailing" id="fNx-v1-XM3"/>
+                                                                                <constraint firstItem="GrV-gX-eCo" firstAttribute="leading" secondItem="302-fI-maQ" secondAttribute="leading" id="hX4-Yf-rzp"/>
                                                                                 <constraint firstItem="cOv-2G-EAP" firstAttribute="leading" secondItem="fQc-Fn-JDq" secondAttribute="trailing" constant="-9" id="hqr-ru-rB7"/>
+                                                                                <constraint firstItem="GrV-gX-eCo" firstAttribute="top" secondItem="302-fI-maQ" secondAttribute="top" id="ptG-Jr-1R8"/>
                                                                                 <constraint firstItem="cOv-2G-EAP" firstAttribute="centerY" secondItem="fQc-Fn-JDq" secondAttribute="centerY" id="rrx-LF-Hk9"/>
                                                                                 <constraint firstItem="fQc-Fn-JDq" firstAttribute="centerY" secondItem="I2J-B6-5rE" secondAttribute="centerY" id="uR7-lg-A9q"/>
                                                                                 <constraint firstItem="qek-2l-YQf" firstAttribute="leading" secondItem="302-fI-maQ" secondAttribute="leading" constant="8" id="wUJ-7N-Z1z"/>
+                                                                                <constraint firstAttribute="trailing" secondItem="GrV-gX-eCo" secondAttribute="trailing" id="yDV-ZB-a8l"/>
                                                                             </constraints>
                                                                             <connections>
                                                                                 <outlet property="contentField" destination="q75-Uz-86O" id="nbM-vd-uZi"/>
@@ -1262,6 +1352,7 @@
                                                                                 <outlet property="counterLabel" destination="I2J-B6-5rE" id="C4b-gE-XHW"/>
                                                                                 <outlet property="loginButton" destination="cOv-2G-EAP" id="WoR-eP-Ztq"/>
                                                                                 <outlet property="nameLabel" destination="qek-2l-YQf" id="CcC-PM-kMx"/>
+                                                                                <outlet property="strengthLabel" destination="GrV-gX-eCo" id="e6J-5c-Dln"/>
                                                                                 <outlet property="typeLabel" destination="qAD-3v-3aq" id="rAM-Kf-5xO"/>
                                                                                 <outlet property="upgradeButton" destination="iLD-rv-uZZ" id="OKi-9X-R6F"/>
                                                                             </connections>

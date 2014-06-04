@@ -24,6 +24,7 @@
 
 @implementation MPPasswordTypesCell {
     NSManagedObjectID *_elementOID;
+    BOOL _scrolling;
 }
 
 #pragma mark - Lifecycle
@@ -110,7 +111,9 @@
         [cell updateWithTransientSite:self.transientSite];
     else
         [cell updateWithElement:self.mainElement];
-    dbg( @"cell %d, contentFieldMode: %d", indexPath.item, cell.contentFieldMode );
+
+    if (_scrolling)
+        [cell willBeginDragging];
 
     return cell;
 }
@@ -189,6 +192,13 @@
 
 #pragma mark - UIScrollViewDelegate
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    
+    _scrolling = YES;
+    for (MPPasswordLargeCell *cell in [self.contentCollectionView visibleCells])
+        [cell willBeginDragging];
+}
+
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity
               targetContentOffset:(inout CGPoint *)targetContentOffset {
 
@@ -202,12 +212,14 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
 
+    _scrolling = NO;
     if (scrollView == self.contentCollectionView && !decelerate)
         [self saveContentType];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
 
+    _scrolling = NO;
     if (scrollView == self.contentCollectionView)
         [self saveContentType];
 }

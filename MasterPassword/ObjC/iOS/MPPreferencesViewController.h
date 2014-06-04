@@ -24,5 +24,9 @@
 - (IBAction)previousAvatar:(id)sender;
 - (IBAction)nextAvatar:(id)sender;
 - (IBAction)valueChanged:(id)sender;
+- (IBAction)homePageButton:(id)sender;
+- (IBAction)securityButton:(id)sender;
+- (IBAction)sourceButton:(id)sender;
+- (IBAction)thanksButton:(id)sender;
 
 @end

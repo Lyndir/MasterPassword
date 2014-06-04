@@ -21,6 +21,7 @@
 
 @interface MPPasswordLargeGeneratedCell : MPPasswordLargeCell
 
+@property(strong, nonatomic) IBOutlet UILabel *strengthLabel;
 @property(strong, nonatomic) IBOutlet UILabel *counterLabel;
 @property(strong, nonatomic) IBOutlet UIButton *counterButton;
 

@@ -408,11 +408,8 @@ referenceSizeForHeaderInSection:(NSInteger)section {
     _active = active;
 
     [UIView animateWithDuration:animated? 0.4f: 0 animations:^{
-        self.navigationBarToTopConstraint.priority = active? 1: UILayoutPriorityDefaultHigh;
-        self.passwordsToBottomConstraint.priority = active? 1: UILayoutPriorityDefaultHigh;
-
-        [self.navigationBarToTopConstraint apply];
-        [self.passwordsToBottomConstraint apply];
+        [self.navigationBarToTopConstraint layoutWithPriority:active? 1: UILayoutPriorityDefaultHigh];
+        [self.passwordsToBottomConstraint layoutWithPriority:active? 1: UILayoutPriorityDefaultHigh];
     }                completion:completion];
 }
 

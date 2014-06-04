@@ -9,17 +9,15 @@
  */
 
 //
-//  MPAppViewController
+//  MPNavigationController.h
+//  MPNavigationController
 //
-//  Created by Maarten Billemont on 2012-08-31.
-//  Copyright 2012 lhunath (Maarten Billemont). All rights reserved.
+//  Created by lhunath on 2014-06-03.
+//  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-@interface MPAppViewController : UIViewController
 
-- (IBAction)gorillas:(UIButton *)sender;
-- (IBAction)deblock:(UIButton *)sender;
-
+@interface MPNavigationController : UINavigationController
 @end

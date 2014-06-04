@@ -805,7 +805,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
             case MPActiveUserStateUserName:
             case MPActiveUserStateMasterPasswordChoice:
             case MPActiveUserStateMasterPasswordConfirmation: {
-                self.navigationBarToTopConstraint.priority = UILayoutPriorityDefaultHigh;
+                [self.navigationBarToTopConstraint layoutWithPriority:UILayoutPriorityDefaultHigh];
                 self.avatarCollectionView.scrollEnabled = NO;
                 self.entryContainer.alpha = 1;
                 self.footerContainer.alpha = 1;
@@ -813,14 +813,13 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 break;
             }
             case MPActiveUserStateMinimized: {
-                self.navigationBarToTopConstraint.priority = 1;
+                [self.navigationBarToTopConstraint layoutWithPriority:1];
                 self.avatarCollectionView.scrollEnabled = NO;
                 self.entryContainer.alpha = 0;
                 self.footerContainer.alpha = 0;
                 break;
             }
         }
-        [self.navigationBarToTopConstraint apply];
     }                completion:^(BOOL finished) {
         dbg(@"resume updates");
         [_afterUpdates setSuspended:NO];

@@ -142,6 +142,30 @@
     }];
 }
 
+- (IBAction)homePageButton:(id)sender {
+
+    [[self dismissPopup].navigationController performSegueWithIdentifier:@"web" sender:
+            [NSURL URLWithString:@"http://masterpasswordapp.com"]];
+}
+
+- (IBAction)securityButton:(id)sender {
+
+    [[self dismissPopup].navigationController performSegueWithIdentifier:@"web" sender:
+            [NSURL URLWithString:@"http://masterpasswordapp.com/security.html"]];
+}
+
+- (IBAction)sourceButton:(id)sender {
+
+    [[self dismissPopup].navigationController performSegueWithIdentifier:@"web" sender:
+            [NSURL URLWithString:@"https://github.com/Lyndir/MasterPassword/"]];
+}
+
+- (IBAction)thanksButton:(id)sender {
+
+    [[self dismissPopup].navigationController performSegueWithIdentifier:@"web" sender:
+            [NSURL URLWithString:@"http://thanks.lhunath.com"]];
+}
+
 #pragma mark - Private
 
 - (MPPasswordsViewController *)dismissPopup {

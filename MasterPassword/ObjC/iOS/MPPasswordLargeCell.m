@@ -152,6 +152,9 @@
     resultBlock( nil );
 }
 
+- (void)willBeginDragging {
+}
+
 - (MPElementEntity *)saveContentTypeWithElement:(MPElementEntity *)element saveInContext:(NSManagedObjectContext *)context {
 
     return [[MPiOSAppDelegate get] changeElement:element saveInContext:context toType:self.type];

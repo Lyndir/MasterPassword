@@ -364,27 +364,34 @@
 
 - (void)showExportForVC:(UIViewController *)viewController {
 
-    [PearlAlert showNotice:
-            @"This will export all your site names.\n\n"
-                    @"You can open the export with a text editor to get an overview of all your sites.\n\n"
-                    @"The file also acts as a personal backup of your site list in case you don't sync with iCloud/iTunes."
-         tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-        [PearlAlert showAlertWithTitle:@"Reveal Passwords?" message:
-                @"Would you like to make all your passwords visible in the export?\n\n"
-                        @"A safe export will only include your stored passwords, in an encrypted manner, "
-                        @"making the result safe from falling in the wrong hands.\n\n"
-                        @"If all your passwords are shown and somebody else finds the export, "
-                        @"they could gain access to all your sites!"
-                             viewStyle:UIAlertViewStyleDefault initAlert:nil
-                     tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-            if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 0)
-                // Safe Export
-                [self showExportRevealPasswords:NO forVC:viewController];
-            if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
-                // Show Passwords
-                [self showExportRevealPasswords:YES forVC:viewController];
-        } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
-    } otherTitles:nil];
+    [PearlAlert showAlertWithTitle:@"Exporting Your Sites"
+                           message:@"An export is great for keeping a "
+                                           @"backup list of your accounts.\n\n"
+                                           @"When the file is ready, you will be "
+                                           @"able to mail it to yourself.\n"
+                                           @"You can open it with a text editor or "
+                                           @"with Master Password if you need to "
+                                           @"restore your list of sites."
+                         viewStyle:UIAlertViewStyleDefault initAlert:nil
+                 tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+        if (buttonIndex != [alert cancelButtonIndex])
+            [PearlAlert showAlertWithTitle:@"Show Passwords?"
+                                   message:@"Would you like to make all your passwords "
+                                                   @"visible in the export file?\n\n"
+                                                   @"A safe export will include all sites "
+                                                   @"but make their passwords invisible.\n"
+                                                   @"It is great as a backup and remains "
+                                                   @"safe when fallen in the wrong hands."
+                                 viewStyle:UIAlertViewStyleDefault initAlert:nil
+                         tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 0)
+                    // Safe Export
+                    [self showExportRevealPasswords:NO forVC:viewController];
+                if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
+                    // Show Passwords
+                    [self showExportRevealPasswords:YES forVC:viewController];
+            } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
+    } cancelTitle:@"Cancel" otherTitles:@"Export Sites", nil];
 }
 
 - (void)showExportRevealPasswords:(BOOL)revealPasswords forVC:(UIViewController *)viewController {

@@ -34,6 +34,8 @@
     if (!self.initialURL)
         self.initialURL = [NSURL URLWithString:@"http://masterpasswordapp.com"];
 
+    self.webNavigationItem.title = self.initialURL.host;
+
     self.webView.alpha = 0;
     [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:self.initialURL]];
 }
