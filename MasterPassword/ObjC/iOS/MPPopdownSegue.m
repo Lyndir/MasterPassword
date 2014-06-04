@@ -40,8 +40,7 @@
         [UIView animateWithDuration:0.3f animations:^{
             [passwordsVC.popdownToTopConstraint layoutWithPriority:1];
         } completion:^(BOOL finished) {
-            if (finished)
-                [popdownVC didMoveToParentViewController:passwordsVC];
+            [popdownVC didMoveToParentViewController:passwordsVC];
         }];
     }
     else if ([self.destinationViewController isKindOfClass:[MPPasswordsViewController class]]) {
@@ -52,10 +51,8 @@
         [UIView animateWithDuration:0.3f delay:0 options:UIViewAnimationOptionOverrideInheritedDuration animations:^{
             [passwordsVC.popdownToTopConstraint layoutWithPriority:UILayoutPriorityDefaultHigh];
         }                completion:^(BOOL finished) {
-            if (finished) {
-                [popdownVC.view removeFromSuperview];
-                [popdownVC removeFromParentViewController];
-            }
+            [popdownVC.view removeFromSuperview];
+            [popdownVC removeFromParentViewController];
         }];
     }
 }

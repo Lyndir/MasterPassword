@@ -24,7 +24,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
     if ([segue.identifier isEqualToString:@"web"])
-        ((MPWebViewController *)segue.destinationViewController).initialURL = [NSURL URLWithString:@"http://thanks.lhunath.com"];
+        ((MPWebViewController *)segue.destinationViewController).initialURL = sender;
 }
 
 @end
