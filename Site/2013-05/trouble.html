@@ -6,6 +6,7 @@
         <title itemprop="name">Master Password &mdash; Secure your life, forget your passwords.</title>
         <meta itemprop="description" content="Master Password is an ingenious password solution that makes your passwords truly impossible to lose." />
         <meta itemprop="image" content="http://masterpassword.lyndir.com/img/iTunesArtwork-Rounded.png" />
+        <meta name="apple-itunes-app" content="app-id=510296984" />
         <meta name="viewport" content="width=device-width">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -39,7 +40,7 @@
                             <li><a href="faq.html">FAQ</a></li>
                             <li><a href="algorithm.html">Algorithm</a></li>
                             <li class="active"><a href="support.html">Support</a></li>
-                            <li><a href="http://github.com/Lyndir/MasterPassword">Source (GPL)</a></li>
+                            <li><a href="http://github.com/Lyndir/MasterPassword/">Source (GPL)</a></li>
                         </ul>
                         <ul class="nav pull-right">
                             <li class="divider-vertical"></li>
@@ -81,6 +82,9 @@
                 <p>This may go without saying, but while you're performing these steps, make sure you have a good and stable connection to the Internet.  Wi-Fi is preferred to avoid unexpected connection drops.</p>
 
                 <p>Also consider giving it a few minutes time.  Since iCloud often involves communication between your phone and Apple's servers, this may sometimes take a moment.  Let your phone sit there for up to 10 minutes with the app open.  Your data might just suddenly re-appear.
+
+                <h2>Make sure iCloud is turned on</h2>
+                <p>Some people have reported issues with their app going blank when they had enabled iCloud but didn't have iCloud turned on for their device.  When you choose to use iCloud, make sure you're logged into your iCloud account in Settings and that Document sync is actually enabled.</p>
 
                 <h2>Re-enable iCloud from Settings</h2>
                 <p>Sometimes, iCloud just stops talking to Apple's servers.  There's no indication of why iCloud encounters this problem, but the following steps may jug it back to life.  The idea is to delete your iCloud account from your phone using Settings, and then add it back.  After adding your account back, all your iCloud-stored things will just come back to your phone from the cloud.  Hopefully, this will include your Master Password sites.
@@ -154,6 +158,19 @@
 
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
+
+        <!-- Internet Defense League -->
+        <script type="text/javascript">
+            window._idl = {};
+            _idl.variant = "modal";
+            (function() {
+                var idl = document.createElement('script');
+                idl.type = 'text/javascript';
+                idl.async = true;
+                idl.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'members.internetdefenseleague.org/include/?url=' + (_idl.url || '') + '&campaign=' + (_idl.campaign || '') + '&variant=' + (_idl.variant || 'banner');
+                document.getElementsByTagName('body')[0].appendChild(idl);
+            })();
+        </script>
 
         <!-- Google Analytics -->
         <script>
