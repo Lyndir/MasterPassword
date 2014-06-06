@@ -430,7 +430,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
             @"cause"        : @(cause),
             @"error.code"   : @(error.code),
             @"error.domain" : NilToNSNull( error.domain ),
-            @"error.reason" : NilToNSNull( IfNotNilElse( [error localizedFailureReason], [error localizedDescription] ) ),
+            @"error.reason" : NilToNSNull( [error localizedFailureReason]?: [error localizedDescription] ),
     } );
 }
 
