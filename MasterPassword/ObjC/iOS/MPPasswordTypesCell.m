@@ -99,18 +99,20 @@
 - (MPPasswordLargeCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
     MPPasswordLargeCell *cell;
-    if (indexPath.item == 0)
+    if (!self.transientSite && indexPath.item == 0) {
         cell = [MPPasswordLargeDeleteCell dequeueCellFromCollectionView:collectionView atIndexPath:indexPath];
-    else
+        [cell updateWithElement:self.mainElement];
+    } else {
         cell = [MPPasswordLargeCell dequeueCellWithType:[self typeForContentIndexPath:indexPath] fromCollectionView:collectionView
                                             atIndexPath:indexPath];
 
-    [cell prepareForReuse];
+        [cell prepareForReuse];
 
-    if (self.transientSite)
-        [cell updateWithTransientSite:self.transientSite];
-    else
-        [cell updateWithElement:self.mainElement];
+        if (self.transientSite)
+            [cell updateWithTransientSite:self.transientSite];
+        else
+            [cell updateWithElement:self.mainElement];
+    }
 
     if (_scrolling)
         [cell willBeginDragging];
