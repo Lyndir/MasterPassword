@@ -20,7 +20,7 @@
 
 #include <alg/sha256.h>
 #include <crypto/crypto_scrypt.h>
-#include <prop/proplib.h>
+#include "types.h"
 
 #define MP_N                32768
 #define MP_r                8
@@ -178,38 +178,15 @@ int main(int argc, char *const argv[]) {
     free(sitePasswordInfo);
 
     // Determine the cipher.
-    prop_dictionary_t MPTypes_ciphers = prop_dictionary_internalize_from_file("ciphers.plist");
-    if (!MPTypes_ciphers) {
-        fprintf (stderr, "Could not read cipher definitions: %d\n", errno);
-        return 1;
-    }
-    prop_array_t typeCiphers = prop_dictionary_get(prop_dictionary_get(MPTypes_ciphers, "[self classNameOfType:type]"), "[self nameOfType:type]");
-    if (!typeCiphers) {
-        fprintf (stderr, "Could not find cipher definition for type: %s\n", siteTypeString);
-        return 1;
-    }
-    prop_string_t cipher = prop_array_get(typeCiphers, sitePasswordSeed[0] % prop_array_count(typeCiphers));
-    if (!typeCiphers) {
-        fprintf (stderr, "Missing cipher definitions for type: %s\n", siteTypeString);
-        return 1;
-    }
+    const char *cipher = CipherForType(siteType, sitePasswordSeed);
     //trc(@"type %@, ciphers: %@, selected: %@", [self nameOfType:type], typeCiphers, cipher);
 
     // Encode the password from the seed using the cipher.
     //NSAssert([seed length] >= [cipher length] + 1, @"Insufficient seed bytes to encode cipher.");
-    const prop_dictionary_t characterClasses = prop_dictionary_get(MPTypes_ciphers, "MPCharacterClasses");
-    char *sitePassword = calloc(prop_string_size(cipher) + 1, sizeof(char));
-    char cipherClass[2] = {0, 0};
-    for (int c = 0; c < prop_string_size(cipher); ++c) {
-        
-        const uint16_t keyByte = sitePasswordSeed[c + 1];
-        cipherClass[0] = prop_string_cstring_nocopy(cipher)[c];
-        const prop_string_t cipherClassCharacters = prop_dictionary_get(characterClasses, cipherClass);
-        const char character = prop_string_cstring_nocopy(cipherClassCharacters)[ keyByte % prop_string_size(cipherClassCharacters) ];
-
+    char *sitePassword = calloc(strlen(cipher) + 1, sizeof(char));
+    for (int c = 0; c < strlen(cipher); ++c)
         //trc(@"class %@ has characters: %@, index: %u, selected: %@", cipherClass, cipherClassCharacters, keyByte, character);
-        sitePassword[c] = character;
-    }
+        sitePassword[c] = CharacterFromClass(cipher[c], sitePasswordSeed[c + 1]);
     memset(sitePasswordSeed, 0, sizeof(sitePasswordSeed));
 
     // Output the password.
