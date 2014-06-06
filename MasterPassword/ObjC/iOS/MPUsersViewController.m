@@ -757,34 +757,34 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
             case MPActiveUserStateLogin: {
                 dbg(@"activeUserState -> login");
                 self.entryLabel.text = strl( @"Enter your master password:" );
-                self.entryField.text = nil;
                 self.entryField.secureTextEntry = YES;
                 self.entryField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+                self.entryField.text = nil;
                 break;
             }
             case MPActiveUserStateUserName: {
                 dbg(@"activeUserState -> userName");
                 self.entryLabel.text = strl( @"Enter your full name:" );
-                self.entryField.text = nil;
                 self.entryField.secureTextEntry = NO;
                 self.entryField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+                self.entryField.text = nil;
                 break;
             }
             case MPActiveUserStateMasterPasswordChoice: {
                 dbg(@"activeUserState -> masterPasswordChoice");
                 self.entryLabel.text = strl( @"Choose your master password:" );
-                self.entryField.text = nil;
                 self.entryField.secureTextEntry = YES;
                 self.entryField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+                self.entryField.text = nil;
                 break;
             }
             case MPActiveUserStateMasterPasswordConfirmation: {
                 dbg(@"activeUserState -> masterPasswordConfirmation");
                 _masterPasswordChoice = self.entryField.text;
                 self.entryLabel.text = strl( @"Confirm your master password:" );
-                self.entryField.text = nil;
                 self.entryField.secureTextEntry = YES;
                 self.entryField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+                self.entryField.text = nil;
                 break;
             }
             case MPActiveUserStateMinimized:

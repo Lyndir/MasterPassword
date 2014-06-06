@@ -93,17 +93,17 @@
         err( @"During Analytics Setup: %@", exception );
     }
     @try {
-        [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:nil usingBlock:
-                ^(NSNotification *note) {
-            [self updateFromConfig];
+        [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:[NSOperationQueue mainQueue]
+                                                      usingBlock:^(NSNotification *note) {
+            [self updateConfigKey:note.object];
         }];
         [[NSNotificationCenter defaultCenter] addObserverForName:kIASKAppSettingChanged object:nil queue:nil usingBlock:
                 ^(NSNotification *note) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note userInfo:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note.object];
         }];
         [[NSNotificationCenter defaultCenter] addObserverForName:NSUserDefaultsDidChangeNotification object:nil queue:nil usingBlock:
                 ^(NSNotification *note) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note userInfo:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:nil];
         }];
 
 #ifdef ADHOC
@@ -292,7 +292,7 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 
     inf( @"Re-activated" );
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:application];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:nil];
 
     [super applicationDidBecomeActive:application];
 }
@@ -475,7 +475,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:NSStringFromSelector( configKey )];
 }
 
-- (void)updateFromConfig {
+- (void)updateConfigKey:(NSString *)key {
 
     // iCloud enabled / disabled
     BOOL iCloudEnabled = [[MPiOSConfig get].iCloudEnabled boolValue];

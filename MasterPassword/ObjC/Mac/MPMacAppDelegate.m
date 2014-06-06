@@ -290,21 +290,21 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
-                self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
-                self.savePasswordItem.state = [[MPMacAppDelegate get] activeUserForMainThread].saveKey? NSOnState: NSOffState;
-                self.dialogStyleRegular.state = ![[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
-                self.dialogStyleHUD.state = [[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
-
-                if ([note.object isEqual:NSStringFromSelector( @selector(dialogStyleHUD) )]) {
-                    if (![self.passwordWindow.window isVisible])
-                        self.passwordWindow = nil;
-                    else {
-                        [self.passwordWindow close];
-                        self.passwordWindow = nil;
-                        [self showPasswordWindow:nil];
-                    }
-                }
-            }];
+        NSString *key = note.object;
+        if (!key || [key isEqualToString:NSStringFromSelector( @selector( rememberLogin ) )])
+            self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
+        if (!key || [key isEqualToString:NSStringFromSelector( @selector( dialogStyleHUD ) )]) {
+            self.dialogStyleRegular.state = ![[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
+            self.dialogStyleHUD.state = [[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
+            if (![self.passwordWindow.window isVisible])
+                self.passwordWindow = nil;
+            else {
+                [self.passwordWindow close];
+                self.passwordWindow = nil;
+                [self showPasswordWindow:nil];
+            }
+        }
+    }];
     [self updateUsers];
 
     // Global hotkey.

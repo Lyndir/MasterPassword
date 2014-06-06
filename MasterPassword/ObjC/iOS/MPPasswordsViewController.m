@@ -64,7 +64,7 @@
 
     [self registerObservers];
     [self observeStore];
-    [self updateFromConfig];
+    [self updateConfigKey:nil];
     [self updatePasswords];
 }
 
@@ -175,7 +175,8 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 
     if (controller == _fetchedResultsController) {
         [self.passwordCollectionView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]];
-        [self.passwordCollectionView reloadSections:[NSIndexSet indexSetWithIndex:newIndexPath.section]];
+        if (![newIndexPath isEqual:indexPath])
+            [self.passwordCollectionView reloadSections:[NSIndexSet indexSetWithIndex:newIndexPath.section]];
     }
 }
 
@@ -267,9 +268,9 @@ referenceSizeForHeaderInSection:(NSInteger)section {
                 }];
             }],
             [[NSNotificationCenter defaultCenter]
-                    addObserverForName:MPCheckConfigNotification object:nil
-                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                [self updateFromConfig];
+                    addObserverForName:MPCheckConfigNotification object:nil queue:[NSOperationQueue mainQueue]
+                            usingBlock:^(NSNotification *note) {
+                [self updateConfigKey:note.object];
             }],
     ];
 }
@@ -311,9 +312,10 @@ referenceSizeForHeaderInSection:(NSInteger)section {
         [[NSNotificationCenter defaultCenter] removeObserver:_storeObserver];
 }
 
-- (void)updateFromConfig {
+- (void)updateConfigKey:(NSString *)key {
 
-    self.passwordsSearchBar.keyboardType = [[MPiOSConfig get].dictationSearch boolValue]? UIKeyboardTypeDefault: UIKeyboardTypeURL;
+    if (!key || [key isEqualToString:NSStringFromSelector( @selector(dictationSearch) )])
+        self.passwordsSearchBar.keyboardType = [[MPiOSConfig get].dictationSearch boolValue]? UIKeyboardTypeDefault: UIKeyboardTypeURL;
 }
 
 - (void)updatePasswords {
