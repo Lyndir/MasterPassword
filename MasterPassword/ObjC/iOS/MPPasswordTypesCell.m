@@ -230,7 +230,8 @@
 
     if (self.transientSite)
         PearlMainQueue( ^{
-            self.activeType = IfElse( [[MPiOSAppDelegate get] activeUserForMainThread].defaultType, MPElementTypeGeneratedLong );
+            self.algorithm = MPAlgorithmDefault;
+            self.activeType = [[MPiOSAppDelegate get] activeUserForMainThread].defaultType?: MPElementTypeGeneratedLong;
 
             for (NSInteger section = 0; section < [self.contentCollectionView numberOfSections]; ++section)
                 for (NSInteger item = 0; item < [self.contentCollectionView numberOfItemsInSection:section]; ++item)
@@ -242,7 +243,7 @@
         [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
             MPElementEntity *mainElement = [self mainElement];
 
-            self.algorithm = IfNotNilElse( mainElement.algorithm, MPAlgorithmDefault );
+            self.algorithm = mainElement.algorithm?: MPAlgorithmDefault;
             self.activeType = mainElement.type;
 
             for (NSInteger section = 0; section < [self.contentCollectionView numberOfSections]; ++section)
@@ -373,9 +374,6 @@
 }
 
 - (void)setAlgorithm:(id<MPAlgorithm>)algorithm {
-
-    if ([_algorithm isEqual:algorithm])
-        return;
 
     _algorithm = algorithm;
 

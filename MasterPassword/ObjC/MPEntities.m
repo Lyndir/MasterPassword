@@ -186,7 +186,7 @@
 
 - (MPElementType)defaultType {
 
-    return IfElse((MPElementType)[self.defaultType_ unsignedIntegerValue], MPElementTypeGeneratedLong);
+    return (MPElementType)[self.defaultType_ unsignedIntegerValue]?: MPElementTypeGeneratedLong;
 }
 
 - (void)setDefaultType:(MPElementType)aDefaultType {

@@ -16,7 +16,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
                                    attributes:@{
                                            (__bridge id)kSecAttrService : @"Saved Master Password",
-                                           (__bridge id)kSecAttrAccount : IfNotNilElse( user.name, @"" )
+                                           (__bridge id)kSecAttrAccount : user.name?: @""
                                    }
                                       matches:nil];
 }
