@@ -10,6 +10,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+
+#include <alg/sha256.h>
+
 #include "types.h"
 
 const MPElementType TypeWithName(const char *typeName) {
@@ -118,4 +121,20 @@ const char CharacterFromClass(char characterClass, uint8_t seedByte) {
 
     return classCharacters[seedByte % strlen(classCharacters)];
 }
+const char *IDForBuf(const void *buf, size_t length) {
+    uint8_t hash[32];
+    SHA256_Buf(buf, length, hash);
 
+    char *id = calloc(65, sizeof(char));
+    for (int kH = 0; kH < 32; kH++)
+        sprintf(&(id[kH * 2]), "%02X", hash[kH]);
+
+    return id;
+}
+
+const char *Hex(const void *buf, size_t length) {
+    char *id = calloc(length*2+1, sizeof(char));
+    for (int kH = 0; kH < length; kH++)
+        sprintf(&(id[kH * 2]), "%02X", ((const uint8_t*)buf)[kH]);
+    return id;
+}

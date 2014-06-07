@@ -32,6 +32,23 @@
 #define MP_env_sitetype     "MP_SITETYPE"
 #define MP_env_sitecounter  "MP_SITECOUNTER"
 
+void usage() {
+      fprintf(stderr, "Usage: mpw [-u name] [-t type] [-c counter] site\n\n");
+      fprintf(stderr, "    -u name      Specify the full name of the user.\n"
+                      "                 Defaults to %s in env.\n\n", MP_env_username);
+      fprintf(stderr, "    -t type      Specify the password's template.\n"
+                      "                 Defaults to %s in env or 'long'.\n"
+                      "                     x, max, maximum | 20 characters, contains symbols.\n"
+                      "                     l, long         | Copy-friendly, 14 characters, contains symbols.\n"
+                      "                     m, med, medium  | Copy-friendly, 8 characters, contains symbols.\n"
+                      "                     b, basic        | 8 characters, no symbols.\n"
+                      "                     s, short        | Copy-friendly, 4 characters, no symbols.\n"
+                      "                     p, pin          | 4 numbers.\n\n", MP_env_sitetype);
+      fprintf(stderr, "    -c counter   The value of the counter.\n"
+                      "                 Defaults to %s in env or '1'.\n\n", MP_env_sitecounter);
+      exit(0);
+}
+
 char *homedir(const char *filename) {
     char *homedir = NULL;
 #if defined(__CYGWIN__)
@@ -59,6 +76,9 @@ char *homedir(const char *filename) {
 
 int main(int argc, char *const argv[]) {
 
+    if (argc < 2)
+        usage();
+
     // Read the environment.
     const char *userName = getenv( MP_env_username );
     const char *masterPassword = NULL;
@@ -70,34 +90,37 @@ int main(int argc, char *const argv[]) {
 
     // Read the options.
     char opt;
-    while ((opt = getopt(argc, argv, "u:t:c:")) != -1)
+    while ((opt = getopt(argc, argv, "u:t:c:h")) != -1)
       switch (opt) {
-        case 'u':
-          userName = optarg;
-          break;
-        case 't':
-          siteTypeString = optarg;
-          break;
-        case 'c':
-          siteCounterString = optarg;
-          break;
-        case '?':
-          switch (optopt) {
-            case 'u':
-              fprintf(stderr, "Missing user name to option: -%c\n", optopt);
+          case 'h':
+              usage();
               break;
-            case 't':
-              fprintf(stderr, "Missing type name to option: -%c\n", optopt);
+          case 'u':
+              userName = optarg;
               break;
-            case 'c':
-              fprintf(stderr, "Missing counter value to option: -%c\n", optopt);
+          case 't':
+              siteTypeString = optarg;
               break;
-            default:
-              fprintf(stderr, "Unknown option: -%c\n", optopt);
-          }
-          return 1;
-        default:
-          abort();
+          case 'c':
+              siteCounterString = optarg;
+              break;
+          case '?':
+              switch (optopt) {
+                case 'u':
+                  fprintf(stderr, "Missing user name to option: -%c\n", optopt);
+                  break;
+                case 't':
+                  fprintf(stderr, "Missing type name to option: -%c\n", optopt);
+                  break;
+                case 'c':
+                  fprintf(stderr, "Missing counter value to option: -%c\n", optopt);
+                  break;
+                default:
+                  fprintf(stderr, "Unknown option: -%c\n", optopt);
+              }
+              return 1;
+          default:
+              abort();
       }
     if (optind < argc)
         siteName = argv[optind];
@@ -142,7 +165,7 @@ int main(int argc, char *const argv[]) {
     ssize_t linelen;
     while ((linelen = getline(&line, &linecap, mpwConfig)) > 0)
         if (strcmp(strsep(&line, ":"), userName) == 0) {
-            masterPassword = line;
+            masterPassword = strsep(&line, "\n");
             break;
         }
     if (!masterPassword) {
@@ -151,17 +174,28 @@ int main(int argc, char *const argv[]) {
     }
     trc("masterPassword: %s\n", masterPassword);
 
+    // Calculate the master key salt.
+    char *mpNameSpace = "com.lyndir.masterpassword";
+    const uint32_t n_userNameLength = htonl(strlen(userName));
+    size_t masterKeySaltLength = strlen(mpNameSpace) + sizeof(n_userNameLength) + strlen(userName);
+    char *masterKeySalt = malloc( masterKeySaltLength );
+    if (!masterKeySalt) {
+        fprintf(stderr, "Could not allocate master key salt: %d\n", errno);
+        return 1;
+    }
+
+    char *mKS = masterKeySalt;
+    memcpy(mKS, mpNameSpace, strlen(mpNameSpace)); mKS += strlen(mpNameSpace);
+    memcpy(mKS, &n_userNameLength, sizeof(n_userNameLength)); mKS += sizeof(n_userNameLength);
+    memcpy(mKS, userName, strlen(userName)); mKS += strlen(userName);
+    if (mKS - masterKeySalt != masterKeySaltLength)
+        abort();
+    trc("masterKeySalt ID: %s\n", IDForBuf(masterKeySalt, masterKeySaltLength));
+
     // Calculate the master key.
     uint8_t *masterKey = malloc( MP_dkLen );
     if (!masterKey) {
         fprintf(stderr, "Could not allocate master key: %d\n", errno);
-        return 1;
-    }
-    const uint32_t n_userNameLength = htonl(strlen(userName));
-    char *masterKeySalt = NULL;
-    size_t masterKeySaltLength = asprintf(&masterKeySalt, "com.lyndir.masterpassword%s%s", (const char *) &n_userNameLength, userName);
-    if (!masterKeySalt) {
-        fprintf(stderr, "Could not allocate master key salt: %d\n", errno);
         return 1;
     }
     if (crypto_scrypt( (const uint8_t *)masterPassword, strlen(masterPassword), (const uint8_t *)masterKeySalt, masterKeySaltLength, MP_N, MP_r, MP_p, masterKey, MP_dkLen ) < 0) {
@@ -170,28 +204,45 @@ int main(int argc, char *const argv[]) {
     }
     memset(masterKeySalt, 0, masterKeySaltLength);
     free(masterKeySalt);
+    trc("masterPassword Hex: %s\n", Hex(masterPassword, strlen(masterPassword)));
+    trc("masterPassword ID: %s\n", IDForBuf(masterPassword, strlen(masterPassword)));
+    trc("masterKey ID: %s\n", IDForBuf(masterKey, MP_dkLen));
 
     // Calculate the site seed.
-    const uint32_t n_siteCounter = htonl(siteCounter), n_siteNameLength = htonl(strlen(siteName));
-    char *sitePasswordInfo = NULL;
-    size_t sitePasswordInfoLength = asprintf(&sitePasswordInfo, "com.lyndir.masterpassword%s%s%s", (const char *) &n_siteNameLength, siteName, (const char *) &n_siteCounter);
+    const uint32_t n_siteNameLength = htonl(strlen(siteName));
+    const uint32_t n_siteCounter = htonl(siteCounter);
+    size_t sitePasswordInfoLength = strlen(mpNameSpace) + sizeof(n_siteNameLength) + strlen(siteName) + sizeof(n_siteCounter);
+    char *sitePasswordInfo = malloc( sitePasswordInfoLength );
     if (!sitePasswordInfo) {
         fprintf(stderr, "Could not allocate site seed: %d\n", errno);
         return 1;
     }
+
+    char *sPI = sitePasswordInfo;
+    memcpy(sPI, mpNameSpace, strlen(mpNameSpace)); sPI += strlen(mpNameSpace);
+    memcpy(sPI, &n_siteNameLength, sizeof(n_siteNameLength)); sPI += sizeof(n_siteNameLength);
+    memcpy(sPI, siteName, strlen(siteName)); sPI += strlen(siteName);
+    memcpy(sPI, &n_siteCounter, sizeof(n_siteCounter)); sPI += sizeof(n_siteCounter);
+    if (sPI - sitePasswordInfo != sitePasswordInfoLength)
+        abort();
+    trc("seed from: hmac-sha256(masterKey, 'com.lyndir.masterpassword' | %s | %s | %s)\n", Hex(&n_siteNameLength, sizeof(n_siteNameLength)), siteName, Hex(&n_siteCounter, sizeof(n_siteCounter)));
+    trc("sitePasswordInfo ID: %s\n", IDForBuf(sitePasswordInfo, sitePasswordInfoLength));
+
     uint8_t sitePasswordSeed[32];
     HMAC_SHA256_Buf(masterKey, MP_dkLen, sitePasswordInfo, sitePasswordInfoLength, sitePasswordSeed);
     memset(masterKey, 0, MP_dkLen);
     memset(sitePasswordInfo, 0, sitePasswordInfoLength);
     free(masterKey);
     free(sitePasswordInfo);
+    trc("sitePasswordSeed ID: %s\n", IDForBuf(sitePasswordSeed, 32));
 
     // Determine the cipher.
     const char *cipher = CipherForType(siteType, sitePasswordSeed[0]);
     trc("type %s, cipher: %s\n", siteTypeString, cipher);
+    if (strlen(cipher) > 32)
+        abort();
 
     // Encode the password from the seed using the cipher.
-    //NSAssert([seed length] >= [cipher length] + 1, @"Insufficient seed bytes to encode cipher.");
     char *sitePassword = calloc(strlen(cipher) + 1, sizeof(char));
     for (int c = 0; c < strlen(cipher); ++c) {
         sitePassword[c] = CharacterFromClass(cipher[c], sitePasswordSeed[c + 1]);
