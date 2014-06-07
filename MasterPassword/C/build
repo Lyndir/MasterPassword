@@ -1,3 +1,5 @@
 #!/usr/bin/env bash -e
-gcc types.c -o types.o
-gcc -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva" -l "crypto_aesctr.o" -l "sha256.o" -l "crypto_scrypt-nosse.o" -l "memlimit.o" -l "scryptenc_cpuperf.o" -l"scryptenc.o" -l"types.o" -l"crypto" -L"lib/scrypt" mpw.c -o mpw
+# Run with -DDEBUG to enable trace-level output.
+
+gcc -c types.c -o types.o "$@"
+gcc -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva" -l "crypto_aesctr.o" -l "sha256.o" -l "crypto_scrypt-nosse.o" -l "memlimit.o" -l "scryptenc_cpuperf.o" -l"scryptenc.o" -l"types.o" -l"crypto" -L"." -L"lib/scrypt" mpw.c -o mpw "$@"

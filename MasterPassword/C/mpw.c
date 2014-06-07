@@ -63,6 +63,7 @@ int main(int argc, char *const argv[]) {
     const char *userName = getenv( MP_env_username );
     const char *masterPassword = NULL;
     const char *siteName = NULL;
+    MPElementType siteType = MPElementTypeGeneratedLong;
     const char *siteTypeString = getenv( MP_env_sitetype );
     uint32_t siteCounter = 1;
     const char *siteCounterString = getenv( MP_env_sitecounter );
@@ -83,16 +84,16 @@ int main(int argc, char *const argv[]) {
         case '?':
           switch (optopt) {
             case 'u':
-              fprintf (stderr, "Missing user name to option: -%c\n", optopt);
+              fprintf(stderr, "Missing user name to option: -%c\n", optopt);
               break;
             case 't':
-              fprintf (stderr, "Missing type name to option: -%c\n", optopt);
+              fprintf(stderr, "Missing type name to option: -%c\n", optopt);
               break;
             case 'c':
-              fprintf (stderr, "Missing counter value to option: -%c\n", optopt);
+              fprintf(stderr, "Missing counter value to option: -%c\n", optopt);
               break;
             default:
-              fprintf (stderr, "Unknown option: -%c\n", optopt);
+              fprintf(stderr, "Unknown option: -%c\n", optopt);
           }
           return 1;
         default:
@@ -103,29 +104,36 @@ int main(int argc, char *const argv[]) {
 
     // Convert and validate input.
     if (!userName) {
-        fprintf (stderr, "Missing user name.\n");
+        fprintf(stderr, "Missing user name.\n");
         return 1;
     }
+    trc("userName: %s\n", userName);
     if (!siteName) {
-        fprintf (stderr, "Missing site name.\n");
+        fprintf(stderr, "Missing site name.\n");
         return 1;
     }
+    trc("siteName: %s\n", siteName);
     if (siteCounterString)
         siteCounter = atoi( siteCounterString );
     if (siteCounter < 1) {
-        fprintf (stderr, "Invalid site counter: %d\n", siteCounter);
+        fprintf(stderr, "Invalid site counter: %d\n", siteCounter);
         return 1;
     }
+    trc("siteCounter: %d\n", siteCounter);
+    if (siteTypeString)
+        siteType = TypeWithName( siteTypeString );
+    trc("siteType: %d (%s)\n", siteType, siteTypeString);
 
     // Read the master password.
     char *mpwConfigPath = homedir(".mpw");
     if (!mpwConfigPath) {
-        fprintf (stderr, "Couldn't resolve path for configuration file: %d\n", errno);
+        fprintf(stderr, "Couldn't resolve path for configuration file: %d\n", errno);
         return 1;
     }
+    trc("mpwConfigPath: %s\n", mpwConfigPath);
     FILE *mpwConfig = fopen(mpwConfigPath, "r");
     if (!mpwConfig) {
-        fprintf (stderr, "Couldn't open configuration file: %s: %d\n", mpwConfigPath, errno);
+        fprintf(stderr, "Couldn't open configuration file: %s: %d\n", mpwConfigPath, errno);
         return 1;
     }
     free(mpwConfigPath);
@@ -138,25 +146,26 @@ int main(int argc, char *const argv[]) {
             break;
         }
     if (!masterPassword) {
-        fprintf (stderr, "Missing master password for user: %s\n", userName);
+        fprintf(stderr, "Missing master password for user: %s\n", userName);
         return 1;
     }
+    trc("masterPassword: %s\n", masterPassword);
 
     // Calculate the master key.
     uint8_t *masterKey = malloc( MP_dkLen );
     if (!masterKey) {
-        fprintf (stderr, "Could not allocate master key: %d\n", errno);
+        fprintf(stderr, "Could not allocate master key: %d\n", errno);
         return 1;
     }
     const uint32_t n_userNameLength = htonl(strlen(userName));
     char *masterKeySalt = NULL;
     size_t masterKeySaltLength = asprintf(&masterKeySalt, "com.lyndir.masterpassword%s%s", (const char *) &n_userNameLength, userName);
     if (!masterKeySalt) {
-        fprintf (stderr, "Could not allocate master key salt: %d\n", errno);
+        fprintf(stderr, "Could not allocate master key salt: %d\n", errno);
         return 1;
     }
     if (crypto_scrypt( (const uint8_t *)masterPassword, strlen(masterPassword), (const uint8_t *)masterKeySalt, masterKeySaltLength, MP_N, MP_r, MP_p, masterKey, MP_dkLen ) < 0) {
-        fprintf (stderr, "Could not generate master key: %d\n", errno);
+        fprintf(stderr, "Could not generate master key: %d\n", errno);
         return 1;
     }
     memset(masterKeySalt, 0, masterKeySaltLength);
@@ -167,7 +176,7 @@ int main(int argc, char *const argv[]) {
     char *sitePasswordInfo = NULL;
     size_t sitePasswordInfoLength = asprintf(&sitePasswordInfo, "com.lyndir.masterpassword%s%s%s", (const char *) &n_siteNameLength, siteName, (const char *) &n_siteCounter);
     if (!sitePasswordInfo) {
-        fprintf (stderr, "Could not allocate site seed: %d\n", errno);
+        fprintf(stderr, "Could not allocate site seed: %d\n", errno);
         return 1;
     }
     uint8_t sitePasswordSeed[32];
@@ -178,15 +187,16 @@ int main(int argc, char *const argv[]) {
     free(sitePasswordInfo);
 
     // Determine the cipher.
-    const char *cipher = CipherForType(siteType, sitePasswordSeed);
-    //trc(@"type %@, ciphers: %@, selected: %@", [self nameOfType:type], typeCiphers, cipher);
+    const char *cipher = CipherForType(siteType, sitePasswordSeed[0]);
+    trc("type %s, cipher: %s\n", siteTypeString, cipher);
 
     // Encode the password from the seed using the cipher.
     //NSAssert([seed length] >= [cipher length] + 1, @"Insufficient seed bytes to encode cipher.");
     char *sitePassword = calloc(strlen(cipher) + 1, sizeof(char));
-    for (int c = 0; c < strlen(cipher); ++c)
-        //trc(@"class %@ has characters: %@, index: %u, selected: %@", cipherClass, cipherClassCharacters, keyByte, character);
+    for (int c = 0; c < strlen(cipher); ++c) {
         sitePassword[c] = CharacterFromClass(cipher[c], sitePasswordSeed[c + 1]);
+        trc("class %c, character: %c\n", cipher[c], sitePassword[c]);
+    }
     memset(sitePasswordSeed, 0, sizeof(sitePasswordSeed));
 
     // Output the password.
