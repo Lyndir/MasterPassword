@@ -21,6 +21,7 @@
     <modules>
         <module>masterpassword-algorithm</module>
         <module>masterpassword-cli</module>
+        <module>masterpassword-gui</module>
         <!--module>masterpassword-android</module-->
     </modules>
 
