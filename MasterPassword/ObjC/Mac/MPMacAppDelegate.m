@@ -40,7 +40,7 @@ static EventHotKeyID MPLockHotKey = { .signature = 'lock', .id = 1 };
         [MPMacConfig get];
 
 #ifdef DEBUG
-        [PearlLogger get].printLevel = PearlLogLevelDebug;//Trace;
+        [PearlLogger get].printLevel = PearlLogLevelDebug; //Trace;
 #endif
     } );
 }
@@ -68,7 +68,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (void)updateUsers {
 
     [[[self.usersItem submenu] itemArray] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if (idx > 1)
+        if (idx > 2)
             [[self.usersItem submenu] removeItem:obj];
     }];
 
@@ -77,14 +77,23 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         self.createUserItem.title = @"New User (Not ready)";
         self.createUserItem.enabled = NO;
         self.createUserItem.toolTip = @"Please wait until the app is fully loaded.";
+        self.deleteUserItem.title = @"Delete User (Not ready)";
+        self.deleteUserItem.enabled = NO;
+        self.deleteUserItem.toolTip = @"Please wait until the app is fully loaded.";
         [self.usersItem.submenu addItemWithTitle:@"Loading..." action:NULL keyEquivalent:@""].enabled = NO;
 
         return;
     }
 
+    MPUserEntity *activeUser = [self activeUserInContext:context];
+
     self.createUserItem.title = @"New User";
     self.createUserItem.enabled = YES;
     self.createUserItem.toolTip = nil;
+
+    self.deleteUserItem.title = activeUser? @"Delete User": @"Delete User (None Selected)";
+    self.deleteUserItem.enabled = activeUser != nil;
+    self.deleteUserItem.toolTip = activeUser? nil: @"First select the user to delete.";
 
     NSError *error = nil;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
@@ -100,7 +109,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                 @"Then give iCloud some time to sync the new user to your Mac.";
     }
 
-    MPUserEntity *activeUser = [self activeUserInContext:context];
+    self.usersItem.state = NSMixedState;
     for (MPUserEntity *user in users) {
         NSMenuItem *userItem = [[NSMenuItem alloc] initWithTitle:user.name action:@selector(selectUser:) keyEquivalent:@""];
         [userItem setTarget:self];
@@ -108,7 +117,14 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         [[self.usersItem submenu] addItem:userItem];
 
         if (!activeUser && [user.name isEqualToString:[MPMacConfig get].usedUserName])
-            [self selectUser:userItem];
+            [super setActiveUser:activeUser = user];
+
+        if ([activeUser isEqual:user]) {
+            userItem.state = NSOnState;
+            self.usersItem.state = NSOffState;
+        }
+        else
+            userItem.state = NSOffState;
     }
 
     [self updateMenuItems];
@@ -195,6 +211,26 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self updateUsers];
             [self setActiveUser:newUser];
+            [self showPasswordWindow:nil];
+        }];
+    }];
+}
+
+- (IBAction)deleteUser:(NSMenuItem *)sender {
+
+    NSAlert *alert = [NSAlert alertWithMessageText:@"Delete User"
+                                     defaultButton:@"Delete" alternateButton:nil otherButton:@"Cancel"
+                         informativeTextWithFormat:@"This will delete %@ and all his sites.", self.activeUserForMainThread.name];
+    if ([alert runModal] != NSAlertDefaultReturn)
+        return;
+
+    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+        [moc deleteObject:[self activeUserInContext:moc]];
+        [self setActiveUser:nil];
+        [moc saveToStore];
+
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self updateUsers];
             [self showPasswordWindow:nil];
         }];
     }];
@@ -334,17 +370,11 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     [super setActiveUser:activeUser];
 
-    self.usersItem.state = NSMixedState;
-    [[[self.usersItem submenu] itemArray] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([[obj representedObject] isEqual:[activeUser objectID]]) {
-            [obj setState:NSOnState];
-            self.usersItem.state = NSOffState;
-        }
-        else
-            [obj setState:NSOffState];
-    }];
-
     [MPMacConfig get].usedUserName = activeUser.name;
+
+    PearlMainQueue(^{
+        [self updateUsers];
+    });
 }
 
 - (void)updateMenuItems {

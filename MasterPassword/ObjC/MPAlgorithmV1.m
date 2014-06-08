@@ -47,10 +47,12 @@
 
 - (NSString *)generateContentNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter usingKey:(MPKey *)key {
 
-    static NSDictionary *MPTypes_ciphers = nil;
-    if (MPTypes_ciphers == nil)
+    static __strong NSDictionary *MPTypes_ciphers = nil;
+    static dispatch_once_t once = 0;
+    dispatch_once(&once, ^{
         MPTypes_ciphers = [NSDictionary dictionaryWithContentsOfURL:
-                [[NSBundle mainBundle] URLForResource:@"ciphers" withExtension:@"plist"]];
+                           [[NSBundle mainBundle] URLForResource:@"ciphers" withExtension:@"plist"]];
+    });
 
     // Determine the seed whose bytes will be used for calculating a password
     uint32_t ncounter = htonl(counter), nnameLength = htonl(name.length);

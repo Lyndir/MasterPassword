@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13B3116" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1070" defaultVersion="1080" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4514"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -16,6 +16,7 @@
         <customObject id="494" customClass="MPMacAppDelegate">
             <connections>
                 <outlet property="createUserItem" destination="757" id="763"/>
+                <outlet property="deleteUserItem" destination="ZgZ-p2-463" id="smU-PF-mKA"/>
                 <outlet property="dialogStyleHUD" destination="768" id="771"/>
                 <outlet property="dialogStyleRegular" destination="767" id="772"/>
                 <outlet property="lockItem" destination="720" id="726"/>
@@ -39,6 +40,12 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="newUser:" target="494" id="761"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Delete User" enabled="NO" toolTip="Creating users is not yet supported.  Please use the iOS app with iCloud enabled to create users and sites." id="ZgZ-p2-463">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="deleteUser:" target="494" id="eia-X5-QMc"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="759"/>
@@ -146,7 +153,7 @@
                                                 <action selector="rebuildCloud:" target="494" id="780"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Force our version of the truth upon all other devices." enabled="NO" id="779">
+                                        <menuItem title="Force this device's version of the truth upon all others." enabled="NO" id="779">
                                             <attributedString key="attributedTitle">
                                                 <fragment content="Force this device's version of the truth upon all others.">
                                                     <attributes>
@@ -163,7 +170,7 @@
                                                 <action selector="corruptCloud:" target="494" id="asr-sb-Zkz"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Mark ourselves as corrupt and pull the truth from another." enabled="NO" id="6NL-ki-Jff">
+                                        <menuItem title="Force this device's version of the truth upon all others." enabled="NO" id="6NL-ki-Jff">
                                             <attributedString key="attributedTitle">
                                                 <fragment content="Force this device's version of the truth upon all others.">
                                                     <attributes>

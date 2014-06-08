@@ -26,7 +26,7 @@
     if ([self class] == [MPiOSAppDelegate class]) {
         [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
 #ifdef DEBUG
-        [PearlLogger get].printLevel = PearlLogLevelDebug;
+        [PearlLogger get].printLevel = PearlLogLevelDebug; //Trace;
 #else
         [PearlLogger get].printLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
 #endif

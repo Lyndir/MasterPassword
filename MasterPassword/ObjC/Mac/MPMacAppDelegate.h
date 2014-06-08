@@ -23,6 +23,7 @@
 @property(nonatomic, weak) IBOutlet NSMenuItem *openAtLoginItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *savePasswordItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *createUserItem;
+@property(nonatomic, weak) IBOutlet NSMenuItem *deleteUserItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *usersItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *dialogStyleRegular;
 @property(nonatomic, weak) IBOutlet NSMenuItem *dialogStyleHUD;
