@@ -7,6 +7,40 @@ body {
     font-weight: 300;
 }
 
+a {
+    position: relative;
+    color: inherit;
+}
+a:link, a:visited {
+    color: #08c;
+}
+a:hover {
+    text-decoration: none;
+}
+a:link:hover {
+    text-decoration: underline;
+}
+a .popup {
+    display: none;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid;
+    border-radius: 5px;
+    color: #AAA;
+
+    position: absolute;
+    z-index: 99;
+    right: 0;
+    bottom: 100%;
+    max-width: inherit;
+    max-height: 400px;
+    margin-right: -100px;
+    margin-bottom: 20px;
+    padding: 8px;
+}
+a:hover .popup {
+    display: block;
+}
+
 nav {
     font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
 }
