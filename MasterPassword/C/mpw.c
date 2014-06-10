@@ -1,3 +1,4 @@
+#define _WITH_GETLINE
 #include <stdio.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
@@ -13,7 +14,7 @@
 #include <unistd.h>
 #include <math.h>
 #include <pwd.h>
-#include <uuid/uuid.h>
+#include <netinet/in.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
