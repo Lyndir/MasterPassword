@@ -45,6 +45,15 @@ public class ConfigAuthenticationPanel extends AuthenticationPanel implements It
         return (User) userField.getSelectedItem();
     }
 
+    @Override
+    public String getHelpText() {
+        return "<html>"
+               + "Reads users from ~/.mpw<br><br>"
+               + "Use the following syntax:<br>"
+               + "My Name:mymasterpassword<br><br>"
+               + "Make sure the read permissions<br>to the file are safe!";
+    }
+
     public static boolean hasConfigUsers() {
         return new File( System.getProperty( "user.home" ), ".mpw" ).canRead();
     }

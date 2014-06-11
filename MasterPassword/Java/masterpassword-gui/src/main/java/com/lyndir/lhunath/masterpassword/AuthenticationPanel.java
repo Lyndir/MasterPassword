@@ -19,7 +19,7 @@ public abstract class AuthenticationPanel extends JPanel {
 
         // Avatar
         add( Box.createVerticalGlue() );
-        add( new JLabel( new ImageIcon( Resources.getResource( "media/Avatars/avatar-0.png" ) ) ) {
+        add( new JLabel( Res.avatar(0) ) {
             @Override
             public Dimension getMaximumSize() {
                 return new Dimension( Integer.MAX_VALUE, Integer.MAX_VALUE );
@@ -35,6 +35,10 @@ public abstract class AuthenticationPanel extends JPanel {
     protected abstract User getUser();
 
     public Component getFocusComponent() {
+        return null;
+    }
+
+    public String getHelpText() {
         return null;
     }
 }

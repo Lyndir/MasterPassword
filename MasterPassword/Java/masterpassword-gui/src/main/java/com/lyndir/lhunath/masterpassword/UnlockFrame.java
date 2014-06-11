@@ -1,12 +1,10 @@
 package com.lyndir.lhunath.masterpassword;
 
-import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
 import com.lyndir.lhunath.masterpassword.util.Components;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -15,8 +13,6 @@ import javax.swing.border.*;
  * @author lhunath, 2014-06-08
  */
 public class UnlockFrame extends JFrame {
-
-    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private final SignInCallback signInCallback;
     private final JPanel         root;
@@ -77,13 +73,13 @@ public class UnlockFrame extends JFrame {
         authenticationPanel.updateUser();
         authenticationContainer.add( authenticationPanel, BorderLayout.CENTER );
 
-        final JCheckBox configCheckBox = new JCheckBox( "Use Config File" );
-        configCheckBox.setAlignmentX( LEFT_ALIGNMENT );
-        configCheckBox.setSelected( useConfig );
-        configCheckBox.addItemListener( new ItemListener() {
+        final JCheckBox typeCheckBox = new JCheckBox( "Use Config File" );
+        typeCheckBox.setAlignmentX( LEFT_ALIGNMENT );
+        typeCheckBox.setSelected( useConfig );
+        typeCheckBox.addItemListener( new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
-                useConfig = configCheckBox.isSelected();
+                useConfig = typeCheckBox.isSelected();
                 SwingUtilities.invokeLater( new Runnable() {
                     @Override
                     public void run() {
@@ -92,11 +88,47 @@ public class UnlockFrame extends JFrame {
                 } );
             }
         } );
-        authenticationContainer.add( configCheckBox );
+
+        JButton typeHelp = new JButton( Res.iconQuestion() );
+        typeHelp.setMargin( new Insets( 0, 0, 0, 0 ) );
+        typeHelp.setBackground( Color.red );
+        typeHelp.setAlignmentX( RIGHT_ALIGNMENT );
+        typeHelp.setBorder( null );
+        typeHelp.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                final JDialog dialog = new JDialog( UnlockFrame.this, "Help", true );
+                dialog.setContentPane( new JPanel( new BorderLayout( 8, 8 ) ) {
+                    {
+                        setBorder( new EmptyBorder( 8, 8, 8, 8 ) );
+                    }
+                } );
+                dialog.add( new JLabel( authenticationPanel.getHelpText() ), BorderLayout.CENTER );
+                dialog.add( new JButton( "OK" ) {
+                    {
+                        addActionListener( new ActionListener() {
+                            @Override
+                            public void actionPerformed(final ActionEvent e) {
+                                dialog.dispose();
+                            }
+                        } );
+                    }
+                }, BorderLayout.SOUTH );
+                dialog.pack();
+                dialog.setLocationRelativeTo( UnlockFrame.this );
+                dialog.setVisible( true );
+            }
+        } );
+        if (authenticationPanel.getHelpText() == null) {
+            typeHelp.setVisible( false );
+        }
+        JComponent typePanel = Components.boxLayout( BoxLayout.LINE_AXIS, typeCheckBox, Box.createGlue(), typeHelp );
+        typePanel.setAlignmentX( Component.LEFT_ALIGNMENT );
+        authenticationContainer.add( typePanel );
+
         checkSignIn();
         validate();
         repack();
-
 
         SwingUtilities.invokeLater( new Runnable() {
             @Override
@@ -130,7 +162,7 @@ public class UnlockFrame extends JFrame {
         signInButton.setEnabled( false );
         signInButton.setText( "Signing In..." );
 
-        executor.submit( new Runnable() {
+        Res.execute( new Runnable() {
             @Override
             public void run() {
                 final boolean success = signInCallback.signedIn( user );
