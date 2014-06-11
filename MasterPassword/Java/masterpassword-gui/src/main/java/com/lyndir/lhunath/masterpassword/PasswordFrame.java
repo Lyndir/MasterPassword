@@ -40,7 +40,8 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         root.setBorder( new EmptyBorder( 20, 20, 20, 20 ) );
 
         // User
-        add( new JLabel( strf( "Generating passwords for: %s", user.getName() ) ), BorderLayout.NORTH );
+        add( label = new JLabel( strf( "Generating passwords for: %s", user.getName() ) ), BorderLayout.NORTH );
+        label.setAlignmentX( LEFT_ALIGNMENT );
 
         // Site
         JPanel sitePanel = new JPanel();
@@ -49,13 +50,16 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         add( sitePanel, BorderLayout.CENTER );
 
         // Site Name
-        sitePanel.add( new JLabel( "Site Name:", JLabel.LEADING ) );
+        sitePanel.add( label = new JLabel( "Site Name:", JLabel.LEADING ) );
+        label.setAlignmentX( LEFT_ALIGNMENT );
+
         sitePanel.add( siteNameField = new JTextField() {
             @Override
             public Dimension getMaximumSize() {
                 return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
             }
         } );
+        siteNameField.setAlignmentX( LEFT_ALIGNMENT );
         siteNameField.getDocument().addDocumentListener( this );
         siteNameField.addActionListener( new ActionListener() {
             @Override
@@ -86,7 +90,9 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                                                      return new Dimension( 50, getPreferredSize().height );
                                                  }
                                              } ) );
+        siteTypeField.setAlignmentX( LEFT_ALIGNMENT );
         siteTypeField.setSelectedItem( MPElementType.GeneratedLong );
+        siteCounterField.setAlignmentX( LEFT_ALIGNMENT );
         siteCounterField.addChangeListener( new ChangeListener() {
             @Override
             public void stateChanged(final ChangeEvent e) {
@@ -96,6 +102,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
         // Password
         add( passwordLabel = new JLabel( " ", JLabel.CENTER ), BorderLayout.SOUTH );
+        passwordLabel.setAlignmentX( LEFT_ALIGNMENT );
         passwordLabel.setFont( passwordLabel.getFont().deriveFont( 40f ) );
 
         pack();

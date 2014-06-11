@@ -15,7 +15,8 @@
  */
 package com.lyndir.lhunath.masterpassword;
 
-import com.apple.eawt.*;
+import com.google.common.base.Optional;
+import com.lyndir.lhunath.opal.system.util.TypeUtils;
 import java.io.IOException;
 import javax.swing.*;
 
@@ -33,37 +34,18 @@ public class GUI implements UnlockFrame.SignInCallback {
     public static void main(final String[] args)
             throws IOException {
 
+        // Apple
+        Optional<? extends GUI> appleGUI = TypeUtils.newInstance( AppleGUI.class );
+        if (appleGUI.isPresent()) {
+            appleGUI.get().open();
+            return;
+        }
+
+        // All others
         new GUI().open();
     }
 
-    public GUI() {
-
-        try {
-            getClass().getClassLoader().loadClass( "com.apple.eawt.Application" );
-            Application application = Application.getApplication();
-            application.addAppEventListener( new AppForegroundListener() {
-
-                @Override
-                public void appMovedToBackground(AppEvent.AppForegroundEvent arg0) {
-                }
-
-                @Override
-                public void appRaisedToForeground(AppEvent.AppForegroundEvent arg0) {
-                    open();
-                }
-            } );
-            application.addAppEventListener( new AppReOpenedListener() {
-                @Override
-                public void appReOpened(AppEvent.AppReOpenedEvent arg0) {
-                    open();
-                }
-            } );
-        }
-        catch (ClassNotFoundException | NoClassDefFoundError ignored) {
-        }
-    }
-
-    private void open() {
+    void open() {
         SwingUtilities.invokeLater( new Runnable() {
             @Override
             public void run() {
@@ -77,9 +59,13 @@ public class GUI implements UnlockFrame.SignInCallback {
     }
 
     @Override
-    public boolean signedIn(final String userName, final String masterPassword) {
-        final byte[] key = MasterPassword.keyForPassword( masterPassword, userName );
-        passwordFrame = new PasswordFrame( new User( userName, key ) );
+    public boolean signedIn(final User user) {
+        if (!user.hasKey()) {
+            return false;
+        }
+        user.getKey();
+
+        passwordFrame = new PasswordFrame( user );
 
         open();
         return true;
