@@ -243,7 +243,7 @@
         } );
     else
         [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
-            MPElementEntity *mainElement = [self mainElement];
+            MPElementEntity *mainElement = [self elementInContext:mainContext];
 
             self.algorithm = mainElement.algorithm?: MPAlgorithmDefault;
             self.activeType = mainElement.type;
