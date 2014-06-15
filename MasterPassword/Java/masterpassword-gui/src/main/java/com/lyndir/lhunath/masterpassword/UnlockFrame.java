@@ -97,26 +97,8 @@ public class UnlockFrame extends JFrame {
         typeHelp.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                final JDialog dialog = new JDialog( UnlockFrame.this, "Help", true );
-                dialog.setContentPane( new JPanel( new BorderLayout( 8, 8 ) ) {
-                    {
-                        setBorder( new EmptyBorder( 8, 8, 8, 8 ) );
-                    }
-                } );
-                dialog.add( new JLabel( authenticationPanel.getHelpText() ), BorderLayout.CENTER );
-                dialog.add( new JButton( "OK" ) {
-                    {
-                        addActionListener( new ActionListener() {
-                            @Override
-                            public void actionPerformed(final ActionEvent e) {
-                                dialog.dispose();
-                            }
-                        } );
-                    }
-                }, BorderLayout.SOUTH );
-                dialog.pack();
-                dialog.setLocationRelativeTo( UnlockFrame.this );
-                dialog.setVisible( true );
+                JOptionPane.showMessageDialog( UnlockFrame.this, authenticationPanel.getHelpText(), "Help",
+                                               JOptionPane.INFORMATION_MESSAGE );
             }
         } );
         if (authenticationPanel.getHelpText() == null) {

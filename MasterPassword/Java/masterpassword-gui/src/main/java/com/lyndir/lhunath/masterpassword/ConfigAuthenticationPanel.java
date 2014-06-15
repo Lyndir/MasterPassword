@@ -1,5 +1,7 @@
 package com.lyndir.lhunath.masterpassword;
 
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
+
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
@@ -8,6 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import javax.swing.*;
 
 
@@ -45,13 +48,9 @@ public class ConfigAuthenticationPanel extends AuthenticationPanel implements It
         return (User) userField.getSelectedItem();
     }
 
-    @Override
     public String getHelpText() {
-        return "<html>"
-               + "Reads users from ~/.mpw<br><br>"
-               + "Use the following syntax:<br>"
-               + "My Name:mymasterpassword<br><br>"
-               + "Make sure the read permissions<br>to the file are safe!";
+        return "Reads users from ~/.mpw, the following syntax applies:\nUser Name:masterpassword"
+               + "\n\nEnsure the file's permissions make it only readable by you!";
     }
 
     public static boolean hasConfigUsers() {
@@ -75,11 +74,21 @@ public class ConfigAuthenticationPanel extends AuthenticationPanel implements It
             return Iterables.toArray( users.build(), User.class );
         }
         catch (FileNotFoundException e) {
-            return null;
+            JOptionPane.showMessageDialog( this, "First create the config file at:\n" + mpwConfig.getAbsolutePath() +
+                                                 "\n\nIt should contain a line for each user of the following format:" +
+                                                 "\nUser Name:masterpassword" +
+                                                 "\n\nEnsure the file's permissions make it only readable by you!", //
+                                           "Config File Not Found", JOptionPane.WARNING_MESSAGE );
+            return new User[0];
         }
-        catch (IOException e) {
+        catch (IOException | NoSuchElementException e) {
             e.printStackTrace();
-            return null;
+            String error = ifNotNullElse( e.getLocalizedMessage(), ifNotNullElse( e.getMessage(), e.toString() ) );
+            JOptionPane.showMessageDialog( this, //
+                                           "Problem reading config file:\n" + mpwConfig.getAbsolutePath() //
+                                           + "\n\n" + error, //
+                                           "Config File Not Readable", JOptionPane.WARNING_MESSAGE );
+            return new User[0];
         }
     }
 
