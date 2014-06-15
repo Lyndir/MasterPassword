@@ -102,7 +102,8 @@
     if (!self.transientSite && indexPath.item == 0) {
         cell = [MPPasswordLargeDeleteCell dequeueCellFromCollectionView:collectionView atIndexPath:indexPath];
         [cell updateWithElement:self.mainElement];
-    } else {
+    }
+    else {
         cell = [MPPasswordLargeCell dequeueCellWithType:[self typeForContentIndexPath:indexPath] fromCollectionView:collectionView
                                             atIndexPath:indexPath];
 
@@ -140,7 +141,7 @@
 
             // Create
             [[MPiOSAppDelegate get] addElementNamed:newSiteName completion:^(MPElementEntity *element) {
-                [self copyContentOfElement:element];
+                [self copyContentOfElement:element inCell:nil];
                 PearlMainQueue( ^{
                     [self.passwordsViewController updatePasswords];
                 } );
@@ -152,13 +153,15 @@
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         BOOL used = NO;
         MPElementEntity *element = [self elementInContext:context];
+        MPPasswordLargeCell *cell = (MPPasswordLargeCell *)[self.contentCollectionView cellForItemAtIndexPath:indexPath];
         if (!element)
-            wrn(@"No element to use for: %@", self);
+            wrn( @"No element to use for: %@", self );
         else if (indexPath.item == 0) {
             [context deleteObject:element];
             [context saveToStore];
-        } else
-            used = [self copyContentOfElement:element];
+        }
+        else
+            used = [self copyContentOfElement:element inCell:cell];
 
         PearlMainQueueAfter( 0.2f, ^{
             for (NSIndexPath *selectedIndexPath in [collectionView indexPathsForSelectedItems])
@@ -173,19 +176,25 @@
     }];
 }
 
-- (BOOL)copyContentOfElement:(MPElementEntity *)element {
+- (BOOL)copyContentOfElement:(MPElementEntity *)element inCell:(MPPasswordLargeCell *)cell {
 
-    inf( @"Copying password for: %@", element.name );
-    MPCheckpoint( MPCheckpointCopyToPasteboard, @{
-                    @"type"      : NilToNSNull( element.typeName ),
-                    @"version"   : @(element.version),
-                    @"emergency" : @NO
-            } );
+    NSString *used, *pasteboardContent;
+    switch (cell.contentFieldMode) {
+        case MPContentFieldModePassword:
+            inf( @"Copying password for: %@", element.name );
+            used = strl( @"Password" );
+            pasteboardContent = [element resolveContentUsingKey:[MPAppDelegate_Shared get].key];
+            break;
+        case MPContentFieldModeUser:
+            inf( @"Copying login for: %@", element.name );
+            used = strl( @"Login" );
+            pasteboardContent = element.loginName;
+            break;
+    }
 
-    NSString *result = [element resolveContentUsingKey:[MPAppDelegate_Shared get].key];
-    if ([result length]) {
-        [UIPasteboard generalPasteboard].string = result;
-        [PearlOverlay showTemporaryOverlayWithTitle:@"Password Copied" dismissAfter:2];
+    if ([pasteboardContent length]) {
+        [UIPasteboard generalPasteboard].string = pasteboardContent;
+        [PearlOverlay showTemporaryOverlayWithTitle:strl(@"%@ Copied", used) dismissAfter:2];
         return YES;
     }
 
@@ -195,7 +204,7 @@
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    
+
     _scrolling = YES;
     for (MPPasswordLargeCell *cell in [self.contentCollectionView visibleCells])
         [cell willBeginDragging];
@@ -239,20 +248,37 @@
                 for (NSInteger item = 0; item < [self.contentCollectionView numberOfItemsInSection:section]; ++item)
                     [(MPPasswordLargeCell *)[self.contentCollectionView cellForItemAtIndexPath:
                             [NSIndexPath indexPathForItem:item inSection:section]] updateWithTransientSite:self.transientSite];
-
         } );
     else
         [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
-            MPElementEntity *mainElement = [self elementInContext:mainContext];
+            MPElementEntity *mainElement = self.transientSite? nil: [self elementInContext:mainContext];
 
             self.algorithm = mainElement.algorithm?: MPAlgorithmDefault;
-            self.activeType = mainElement.type;
+            self.activeType = mainElement.type?: [[MPiOSAppDelegate get] activeUserInContext:mainContext].defaultType?:
+                                                 MPElementTypeGeneratedLong;
 
             for (NSInteger section = 0; section < [self.contentCollectionView numberOfSections]; ++section)
-                for (NSInteger item = 0; item < [self.contentCollectionView numberOfItemsInSection:section]; ++item)
-                    [(MPPasswordLargeCell *)[self.contentCollectionView cellForItemAtIndexPath:
-                            [NSIndexPath indexPathForItem:item inSection:section]] updateWithElement:mainElement];
+                for (NSInteger item = 0; item < [self.contentCollectionView numberOfItemsInSection:section]; ++item) {
+                    MPPasswordLargeCell *cell = (MPPasswordLargeCell *)[self.contentCollectionView cellForItemAtIndexPath:
+                            [NSIndexPath indexPathForItem:item inSection:section]];
+                    [self reloadData:cell withElement:mainElement];
+                }
         }];
+}
+
+- (void)reloadData:(MPPasswordLargeCell *)cell {
+
+    [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
+        [self reloadData:cell withElement:[self elementInContext:mainContext]];
+    }];
+}
+
+- (void)reloadData:(MPPasswordLargeCell *)cell withElement:(MPElementEntity *)element {
+
+    if (element)
+        [cell updateWithElement:element];
+    else
+        [cell updateWithTransientSite:self.transientSite];
 }
 
 - (void)scrollToActiveType {
@@ -284,7 +310,7 @@
                 return [NSIndexPath indexPathForItem:t + 1 inSection:0];
         }
 
-    Throw(@"Unsupported type: %lud", (long)type);
+    Throw( @"Unsupported type: %lud", (long)type );
 }
 
 - (void)saveContentType {

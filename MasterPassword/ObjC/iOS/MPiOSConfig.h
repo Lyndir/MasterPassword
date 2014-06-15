@@ -19,5 +19,6 @@
 @property(nonatomic, retain) NSNumber *traceMode;
 @property(nonatomic, retain) NSNumber *iCloudEnabled;
 @property(nonatomic, retain) NSNumber *dictationSearch;
+@property(nonatomic, retain) NSNumber *hidePasswords;
 
 @end

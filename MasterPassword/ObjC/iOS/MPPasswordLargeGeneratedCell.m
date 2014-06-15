@@ -132,7 +132,7 @@
 
 - (void)doResetCounterRecognizer:(UILongPressGestureRecognizer *)gestureRecognizer {
 
-    if (gestureRecognizer.state != UIGestureRecognizerStateRecognized)
+    if (gestureRecognizer.state != UIGestureRecognizerStateBegan)
         return;
 
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {

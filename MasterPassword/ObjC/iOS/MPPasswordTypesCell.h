@@ -20,6 +20,7 @@
 #import "MPCell.h"
 #import "MPPasswordCell.h"
 #import "MPPasswordsViewController.h"
+#import "MPPasswordLargeCell.h"
 
 @interface MPPasswordTypesCell : MPPasswordCell <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
@@ -35,6 +36,7 @@
 - (MPElementEntity *)elementInContext:(NSManagedObjectContext *)context;
 - (void)setElement:(MPElementEntity *)element;
 - (void)reloadData;
+- (void)reloadData:(MPPasswordLargeCell *)cell;
 
 + (instancetype)dequeueCellForElement:(MPElementEntity *)element
                    fromCollectionView:(UICollectionView *)collectionView atIndexPath:(NSIndexPath *)indexPath;

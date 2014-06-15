@@ -42,8 +42,8 @@ typedef NS_ENUM (NSUInteger, MPContentFieldMode) {
 - (void)updateWithElement:(MPElementEntity *)mainElement;
 - (void)updateWithTransientSite:(NSString *)siteName;
 
-- (void)resolveContentOfCellTypeForTransientSite:(NSString *)siteName usingKey:(MPKey *)key result:(void (^)(NSString *))resultBlock;
-- (void)resolveContentOfCellTypeForElement:(MPElementEntity *)element usingKey:(MPKey *)key result:(void (^)(NSString *))resultBlock;
+- (void)resolveContentOfCellTypeForTransientSite:(NSString *)siteName usingKey:(MPKey *)key result:(void (^)(NSString *result))resultBlock;
+- (void)resolveContentOfCellTypeForElement:(MPElementEntity *)element usingKey:(MPKey *)key result:(void (^)(NSString *result))resultBlock;
 
 - (void)willBeginDragging;
 - (MPElementEntity *)saveContentTypeWithElement:(MPElementEntity *)element saveInContext:(NSManagedObjectContext *)context;

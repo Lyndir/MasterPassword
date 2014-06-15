@@ -42,7 +42,6 @@
 - (MPElementEntity *)saveContentTypeWithElement:(MPElementEntity *)element saveInContext:(NSManagedObjectContext *)context {
 
     element = [super saveContentTypeWithElement:element saveInContext:context];
-
     MPElementStoredEntity *storedElement = [self storedElement:element];
     [storedElement.algorithm saveContent:self.contentField.text toElement:storedElement usingKey:[MPiOSAppDelegate get].key];
     [context saveToStore];

@@ -89,6 +89,26 @@
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
 		<dict>
+			<key>FooterText</key>
+			<string>This will keep your site&apos;s passwords hidden from view.  Enable this if you&apos;re worried about people watching your screen while you use the app.
+
+To see a site&apos;s password anyway, tap and hold your finger down for a while until the password appears.</string>
+			<key>Title</key>
+			<string></string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<false/>
+			<key>Key</key>
+			<string>hidePasswords</string>
+			<key>Title</key>
+			<string>Hide Passwords</string>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+		</dict>
+		<dict>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>

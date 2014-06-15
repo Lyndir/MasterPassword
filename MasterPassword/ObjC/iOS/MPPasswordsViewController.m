@@ -56,6 +56,10 @@
 
     self.view.backgroundColor = [UIColor clearColor];
     [self.passwordCollectionView automaticallyAdjustInsetsForKeyboard];
+    [self.passwordsSearchBar enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+        if ([subview isKindOfClass:[UITextField class]])
+            ((UITextField *)subview).keyboardAppearance = UIKeyboardAppearanceDark;
+    } recurse:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -156,7 +160,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
         cell.passwordsViewController = self;
 
         [UIView setAnimationsEnabled:YES];
-        dbg_return(cell, indexPath);
+        return cell;
     }
 
     Throw(@"Unexpected collection view: %@", collectionView);
@@ -201,16 +205,18 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
 
-    if (searchBar == self.passwordsSearchBar)
+    if (searchBar == self.passwordsSearchBar) {
+        [self.passwordsSearchBar setShowsCancelButton:YES animated:YES];
         [UIView animateWithDuration:0.3f animations:^{
             self.passwordCollectionView.backgroundColor = _darkenedBackgroundColor;
         }];
+    }
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
 
     if (searchBar == self.passwordsSearchBar) {
-        self.passwordsSearchBar.showsCancelButton = NO;
+        [self.passwordsSearchBar setShowsCancelButton:NO animated:YES];
         if (_passwordsDismissRecognizer)
             [self.view removeGestureRecognizer:_passwordsDismissRecognizer];
 
@@ -218,6 +224,11 @@ referenceSizeForHeaderInSection:(NSInteger)section {
             self.passwordCollectionView.backgroundColor = _backgroundColor;
         }];
     }
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+
+    [searchBar resignFirstResponder];
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
@@ -316,6 +327,8 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 
     if (!key || [key isEqualToString:NSStringFromSelector( @selector(dictationSearch) )])
         self.passwordsSearchBar.keyboardType = [[MPiOSConfig get].dictationSearch boolValue]? UIKeyboardTypeDefault: UIKeyboardTypeURL;
+    if (!key || [key isEqualToString:NSStringFromSelector( @selector(hidePasswords) )])
+        [self updatePasswords];
 }
 
 - (void)updatePasswords {

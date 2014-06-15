@@ -30,7 +30,7 @@
 + (instancetype)dequeueCellWithType:(MPElementType)type fromCollectionView:(UICollectionView *)collectionView
                         atIndexPath:(NSIndexPath *)indexPath {
 
-    NSAssert(type != 0 && type != (MPElementType)NSNotFound, @"Cannot dequeue a password cell without a type.");
+    NSAssert( type != 0 && type != (MPElementType)NSNotFound, @"Cannot dequeue a password cell without a type." );
 
     NSString *reuseIdentifier;
     if (type & MPElementTypeClassGenerated)
@@ -56,7 +56,22 @@
     self.layer.shadowOpacity = 0;
     self.layer.shadowColor = [UIColor whiteColor].CGColor;
 
+    [self addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector( didLongPress: )]];
+
     [self prepareForReuse];
+}
+
+- (void)didLongPress:(UILongPressGestureRecognizer *)recognizer {
+
+    if (recognizer.state != UIGestureRecognizerStateBegan)
+        return;
+
+    if (self.contentField.secureTextEntry) {
+        self.contentField.secureTextEntry = NO;
+        PearlMainQueueAfter( 3, ^{
+            self.contentField.secureTextEntry = [[MPiOSConfig get].hidePasswords boolValue];
+        } );
+    }
 }
 
 - (void)prepareForReuse {
@@ -74,20 +89,29 @@
     self.nameLabel.text = @"";
     self.typeLabel.text = @"";
     self.contentField.text = @"";
-    self.contentField.placeholder = nil;
+    self.contentField.secureTextEntry = [[MPiOSConfig get].hidePasswords boolValue];
+    self.contentField.attributedPlaceholder = nil;
     self.contentField.enabled = self.contentFieldMode == MPContentFieldModeUser;
     self.loginButton.selected = self.contentFieldMode == MPContentFieldModeUser;
 
     switch (self.contentFieldMode) {
         case MPContentFieldModePassword: {
+            self.contentField.keyboardType = UIKeyboardTypeDefault;
             if (self.type & MPElementTypeClassStored)
-                self.contentField.placeholder = strl( @"Set custom password" );
+                self.contentField.attributedPlaceholder = stra( strl( @"Set custom password" ), @{
+                        NSForegroundColorAttributeName : [UIColor whiteColor]
+                } );
             else if (self.type & MPElementTypeClassGenerated)
-                self.contentField.placeholder = strl( @"Generating..." );
+                self.contentField.attributedPlaceholder = stra( strl( @"Generating..." ), @{
+                        NSForegroundColorAttributeName : [UIColor whiteColor]
+                } );
             break;
         }
         case MPContentFieldModeUser: {
-            self.contentField.placeholder = strl( @"Enter your login name" );
+            self.contentField.keyboardType = UIKeyboardTypeEmailAddress;
+            self.contentField.attributedPlaceholder = stra( strl( @"Enter your login name" ), @{
+                    NSForegroundColorAttributeName : [UIColor whiteColor]
+            } );
             break;
         }
     }
@@ -100,8 +124,8 @@
     self.nameLabel.text = strl( @"%@ - Tap to create", siteName );
     self.typeLabel.text = [MPAlgorithmDefault nameOfType:self.type];
 
-    [self resolveContentOfCellTypeForTransientSite:siteName usingKey:[MPiOSAppDelegate get].key result:^(NSString *string) {
-        PearlMainQueue( ^{ self.contentField.text = string; } );
+    [self resolveContentOfCellTypeForTransientSite:siteName usingKey:[MPiOSAppDelegate get].key result:^(NSString *result) {
+        PearlMainQueue( ^{ self.contentField.text = result; } );
     }];
 }
 
@@ -126,12 +150,12 @@
         case MPContentFieldModePassword: {
             MPKey *key = [MPiOSAppDelegate get].key;
             if (self.type == mainElement.type)
-                [mainElement resolveContentUsingKey:key result:^(NSString *string) {
-                    PearlMainQueue( ^{ self.contentField.text = string; } );
+                [mainElement resolveContentUsingKey:key result:^(NSString *result) {
+                    PearlMainQueue( ^{ self.contentField.text = result; } );
                 }];
             else
-                [self resolveContentOfCellTypeForElement:mainElement usingKey:key result:^(NSString *string) {
-                    PearlMainQueue( ^{ self.contentField.text = string; } );
+                [self resolveContentOfCellTypeForElement:mainElement usingKey:key result:^(NSString *result) {
+                    PearlMainQueue( ^{ self.contentField.text = result; } );
                 }];
             break;
         }
@@ -241,7 +265,7 @@
 
     _contentFieldMode = contentFieldMode;
 
-    [[MPPasswordTypesCell findAsSuperviewOf:self] reloadData];
+    [[MPPasswordTypesCell findAsSuperviewOf:self] reloadData:self];
 }
 
 @end
