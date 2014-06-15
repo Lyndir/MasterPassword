@@ -1,6 +1,6 @@
 package com.lyndir.lhunath.masterpassword;
 
-import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
@@ -12,14 +12,18 @@ import java.io.*;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 
 /**
  * @author lhunath, 2014-06-11
  */
-public class ConfigAuthenticationPanel extends AuthenticationPanel implements ItemListener, ActionListener {
+public class ConfigAuthenticationPanel extends AuthenticationPanel implements ItemListener, ActionListener, DocumentListener {
 
-    private final JComboBox userField;
+    private final JComboBox      userField;
+    private final JLabel         masterPasswordLabel;
+    private final JPasswordField masterPasswordField;
 
     public ConfigAuthenticationPanel(final UnlockFrame unlockFrame) {
 
@@ -41,11 +45,51 @@ public class ConfigAuthenticationPanel extends AuthenticationPanel implements It
         userField.addItemListener( this );
         userField.addActionListener( this );
         add( userField );
+
+        // Master Password
+        masterPasswordLabel = new JLabel( "Master Password:" );
+        masterPasswordLabel.setAlignmentX( Component.LEFT_ALIGNMENT );
+        masterPasswordLabel.setHorizontalAlignment( SwingConstants.CENTER );
+        masterPasswordLabel.setVerticalAlignment( SwingConstants.BOTTOM );
+        add( masterPasswordLabel );
+
+        masterPasswordField = new JPasswordField() {
+            @Override
+            public Dimension getMaximumSize() {
+                return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
+            }
+        };
+        masterPasswordField.setAlignmentX( Component.LEFT_ALIGNMENT );
+        masterPasswordField.addActionListener( this );
+        masterPasswordField.getDocument().addDocumentListener( this );
+        add( masterPasswordField );
+    }
+
+    @Override
+    public Component getFocusComponent() {
+        return masterPasswordField.isVisible()? masterPasswordField: null;
+    }
+
+    @Override
+    protected void updateUser(boolean repack) {
+        boolean masterPasswordMissing = userField.getSelectedItem() == null || !((User) userField.getSelectedItem()).hasKey();
+        if (masterPasswordField.isVisible() != masterPasswordMissing) {
+            masterPasswordLabel.setVisible( masterPasswordMissing );
+            masterPasswordField.setVisible( masterPasswordMissing );
+            repack = true;
+        }
+
+        super.updateUser( repack );
     }
 
     @Override
     protected User getUser() {
-        return (User) userField.getSelectedItem();
+        User selectedUser = (User) userField.getSelectedItem();
+        if (selectedUser.hasKey()) {
+            return selectedUser;
+        }
+
+        return new User( selectedUser.getName(), new String( masterPasswordField.getPassword() ) );
     }
 
     public String getHelpText() {
@@ -94,12 +138,27 @@ public class ConfigAuthenticationPanel extends AuthenticationPanel implements It
 
     @Override
     public void itemStateChanged(final ItemEvent e) {
-        updateUser();
+        updateUser( false );
     }
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        updateUser();
+        updateUser( false );
         unlockFrame.trySignIn( userField );
+    }
+
+    @Override
+    public void insertUpdate(final DocumentEvent e) {
+        updateUser( false );
+    }
+
+    @Override
+    public void removeUpdate(final DocumentEvent e) {
+        updateUser( false );
+    }
+
+    @Override
+    public void changedUpdate(final DocumentEvent e) {
+        updateUser( false );
     }
 }

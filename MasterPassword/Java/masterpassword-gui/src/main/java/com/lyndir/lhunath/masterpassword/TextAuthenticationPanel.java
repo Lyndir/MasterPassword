@@ -1,7 +1,8 @@
 package com.lyndir.lhunath.masterpassword;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -12,7 +13,7 @@ import javax.swing.event.DocumentListener;
  */
 public class TextAuthenticationPanel extends AuthenticationPanel implements DocumentListener, ActionListener {
 
-    private final JTextField userNameField;
+    private final JTextField     userNameField;
     private final JPasswordField masterPasswordField;
 
     public TextAuthenticationPanel(final UnlockFrame unlockFrame) {
@@ -67,22 +68,22 @@ public class TextAuthenticationPanel extends AuthenticationPanel implements Docu
 
     @Override
     public void insertUpdate(final DocumentEvent e) {
-        updateUser();
+        updateUser( false );
     }
 
     @Override
     public void removeUpdate(final DocumentEvent e) {
-        updateUser();
+        updateUser( false );
     }
 
     @Override
     public void changedUpdate(final DocumentEvent e) {
-        updateUser();
+        updateUser( false );
     }
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        updateUser();
-        unlockFrame.trySignIn(userNameField,masterPasswordField );
+        updateUser( false );
+        unlockFrame.trySignIn( userNameField, masterPasswordField );
     }
 }

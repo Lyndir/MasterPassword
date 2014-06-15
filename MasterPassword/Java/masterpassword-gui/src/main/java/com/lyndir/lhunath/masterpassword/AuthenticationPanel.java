@@ -28,8 +28,12 @@ public abstract class AuthenticationPanel extends JPanel {
         add( Box.createVerticalGlue() );
     }
 
-    protected void updateUser() {
+    protected void updateUser(boolean repack) {
         unlockFrame.setUser( getUser() );
+        validate();
+
+        if (repack)
+            unlockFrame.repack();
     }
 
     protected abstract User getUser();

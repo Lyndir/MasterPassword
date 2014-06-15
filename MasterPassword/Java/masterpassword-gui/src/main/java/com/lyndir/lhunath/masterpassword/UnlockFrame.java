@@ -53,7 +53,7 @@ public class UnlockFrame extends JFrame {
         setLocationRelativeTo( null );
     }
 
-    private void repack() {
+    protected void repack() {
         setPreferredSize( null );
         pack();
         setMinimumSize( getSize() );
@@ -70,7 +70,7 @@ public class UnlockFrame extends JFrame {
         } else {
             authenticationPanel = new TextAuthenticationPanel( this );
         }
-        authenticationPanel.updateUser();
+        authenticationPanel.updateUser( false );
         authenticationContainer.add( authenticationPanel, BorderLayout.CENTER );
 
         final JCheckBox typeCheckBox = new JCheckBox( "Use Config File" );
