@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env bash
 # Run with -DDEBUG to enable trace-level output.
 
 [[ -e lib/scrypt/scryptenc.o ]] || { echo >&2 "Missing scrypt.  First get and build the scrypt source in lib/scrypt from <$(<lib/scrypt/.source)>.\n"; exit 1; }
