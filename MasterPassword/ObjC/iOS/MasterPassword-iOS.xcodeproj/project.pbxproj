@@ -259,8 +259,6 @@
 		DACA22BC1705DE7D002C6C22 /* NSError+UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA22B81705DE7D002C6C22 /* NSError+UbiquityStoreManager.h */; };
 		DACA22BD1705DE7D002C6C22 /* NSError+UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA22B91705DE7D002C6C22 /* NSError+UbiquityStoreManager.m */; };
 		DACA22BE1705DE7D002C6C22 /* UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA22BA1705DE7D002C6C22 /* UbiquityStoreManager.h */; };
-		DACA22C61705DE9D002C6C22 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DACA22C31705DE9D002C6C22 /* libTestFlight.a */; };
-		DACA296C1705DF81002C6C22 /* TestFlight.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA26941705DF81002C6C22 /* TestFlight.plist */; };
 		DACA296F1705DF81002C6C22 /* Crashlytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA269A1705DF81002C6C22 /* Crashlytics.plist */; };
 		DACA29731705E1A8002C6C22 /* ciphers.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA29711705E1A8002C6C22 /* ciphers.plist */; };
 		DACA29741705E1A8002C6C22 /* dictionary.lst in Resources */ = {isa = PBXBuildFile; fileRef = DACA29721705E1A8002C6C22 /* dictionary.lst */; };
@@ -610,8 +608,6 @@
 		DA30E9D315722EF400A68B4C /* Pearl-UIKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Pearl-UIKit.m"; sourceTree = "<group>"; };
 		DA30E9D515723E6900A68B4C /* PearlLazy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlLazy.h; sourceTree = "<group>"; };
 		DA30E9D615723E6900A68B4C /* PearlLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlLazy.m; sourceTree = "<group>"; };
-		DA340E9E17CD830E00712B77 /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
-		DA340E9F17CD830E00712B77 /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
 		DA3509FC15F101A500C14A8E /* PearlQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlQueue.h; sourceTree = "<group>"; };
 		DA3509FD15F101A500C14A8E /* PearlQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlQueue.m; sourceTree = "<group>"; };
 		DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
@@ -1335,9 +1331,6 @@
 		DACA22B81705DE7D002C6C22 /* NSError+UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+UbiquityStoreManager.h"; sourceTree = "<group>"; };
 		DACA22B91705DE7D002C6C22 /* NSError+UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+UbiquityStoreManager.m"; sourceTree = "<group>"; };
 		DACA22BA1705DE7D002C6C22 /* UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UbiquityStoreManager.h; sourceTree = "<group>"; };
-		DACA22C11705DE9D002C6C22 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
-		DACA22C31705DE9D002C6C22 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
-		DACA26941705DF81002C6C22 /* TestFlight.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = TestFlight.plist; sourceTree = "<group>"; };
 		DACA269A1705DF81002C6C22 /* Crashlytics.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Crashlytics.plist; sourceTree = "<group>"; };
 		DACA29711705E1A8002C6C22 /* ciphers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ciphers.plist; sourceTree = "<group>"; };
 		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
@@ -1603,7 +1596,6 @@
 				DA5BFA4F147E415C00F98B1E /* CoreData.framework in Frameworks */,
 				93D399433EA75E50656040CB /* Twitter.framework in Frameworks */,
 				DA3B844E190FC5DF00246EEA /* Crashlytics.framework in Frameworks */,
-				DACA22C61705DE9D002C6C22 /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2605,7 +2597,6 @@
 				DADEF3E91810D1980052CA3E /* LoveLyndir */,
 				DAFC5662172C57EC00CB5CC5 /* InAppSettingsKit */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
-				DACA22BF1705DE9D002C6C22 /* TestFlight */,
 				DACA22B61705DE7D002C6C22 /* UbiquityStoreManager */,
 			);
 			name = External;
@@ -2624,36 +2615,16 @@
 			path = UbiquityStoreManager/UbiquityStoreManager;
 			sourceTree = "<group>";
 		};
-		DACA22BF1705DE9D002C6C22 /* TestFlight */ = {
-			isa = PBXGroup;
-			children = (
-				DA340E9E17CD830E00712B77 /* TestFlight+AsyncLogging.h */,
-				DA340E9F17CD830E00712B77 /* TestFlight+ManualSessions.h */,
-				DACA22C11705DE9D002C6C22 /* TestFlight.h */,
-				DACA22C31705DE9D002C6C22 /* libTestFlight.a */,
-			);
-			path = TestFlight;
-			sourceTree = "<group>";
-		};
 		DACA23B41705DF7D002C6C22 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				DACA29701705E1A8002C6C22 /* Data */,
 				DABD360D1711E29400CF925C /* Media */,
 				DACA26991705DF81002C6C22 /* Crashlytics */,
-				DACA26931705DF81002C6C22 /* TestFlight */,
 				DAE1EF2417E942DE00BC0086 /* Localizable.strings */,
 			);
 			name = Resources;
 			path = ../../Resources;
-			sourceTree = "<group>";
-		};
-		DACA26931705DF81002C6C22 /* TestFlight */ = {
-			isa = PBXGroup;
-			children = (
-				DACA26941705DF81002C6C22 /* TestFlight.plist */,
-			);
-			path = TestFlight;
 			sourceTree = "<group>";
 		};
 		DACA26991705DF81002C6C22 /* Crashlytics */ = {
@@ -3515,7 +3486,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAFE4A5A1503982E003ABA7C /* Pearl.strings in Resources */,
-				DACA296C1705DF81002C6C22 /* TestFlight.plist in Resources */,
 				DACA296F1705DF81002C6C22 /* Crashlytics.plist in Resources */,
 				DADEF4171810D2940052CA3E /* love-lyndir.button.red@2x.png in Resources */,
 				DACA29731705E1A8002C6C22 /* ciphers.plist in Resources */,
@@ -3687,7 +3657,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/bash -e";
-			shellScript = "PATH+=:/usr/libexec\n\naddPlistWithKey() {\n    local key=$1 type=$2 value=$3 plist=${4:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Delete :'$key'\" \"$plist\" 2>/dev/null || true\n    PlistBuddy -c \"Add :'$key' '$type' '$value'\" \"$plist\"\n}\nsetPlistWithKey() {\n    local key=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Set :'$key' '$value'\" \"$plist\"\n}\ngetPlistWithKey() {\n    local key=$1 plist=${2:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Print :'$key'\" \"$plist\"\n}\nsetSettingWithTitle() {\n    local i title=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Settings.bundle/Root.plist\"}\n    \n    for (( i=0; 1; ++i )); do\n        PlistBuddy -c \"Print :PreferenceSpecifiers:$i\" \"$plist\" &>/dev/null || break\n        echo \"Checking preference specifier $i\"\n    \n        [[ $(PlistBuddy -c \"Print :PreferenceSpecifiers:$i:Title\" \"$plist\" 2>/dev/null) = $title ]] || continue\n    \n        echo \"Correct title, setting value.\"\n        PlistBuddy -c \"Set :PreferenceSpecifiers:$i:DefaultValue $value\" \"$plist\"\n        break\n    done\n}\n\ndescription=$(git describe --always --dirty --long)\nversion=${description%-g*}\nIFS=- read major minor <<< \"$version\"\nprintf -v version '%s.%02d' \"$major\" \"$minor\"\nprintf -v commit '%09d' \"$((16#${description##*-g}))\"\n\naddPlistWithKey GITDescription string \"$description\"\nsetPlistWithKey CFBundleVersion \"${version//.}$commit\" # No separator between version and commit because I had already submitted a CFBundleVersion with a really high major.  Cry.\nsetPlistWithKey CFBundleShortVersionString \"$version\"\n\nsetSettingWithTitle \"Build\" \"$commit\"\nsetSettingWithTitle \"Version\" \"$version\"\nsetSettingWithTitle \"Copyright\" \"$(getPlistWithKey NSHumanReadableCopyright)\"\n\nif [[ $DEPLOYMENT_LOCATION = YES ]]; then\n    # This build is a release.  Do some release checks.\n    passed=1\n    [[ $description != *-dirty ]] || \\\n        { passed=0; echo >&2 \"ERROR: Cannot release a dirty version, first commit any changes.\"; }\n    [[ $(PlistBuddy -c \"Print :'API Key'\" \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Crashlytics.plist\") ]] || \\\n        { passed=0; echo >&2 \"ERROR: Cannot release: Crashlytics API key is missing.\"; }\n    [[ $CONFIGURATION = AdHoc-iOS ]] && { [[ $(PlistBuddy -c \"Print :'Application Token'\" \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/TestFlight.plist\") ]] || \\\n        { passed=0; echo >&2 \"ERROR: Cannot release: TestFlight Application Token is missing.\"; }; }\n    (( passed )) || \\\n        { echo >&2 \"Failed to pass release checks.  Fix the above errors and re-try.  Aborting.\"; exit 1; }\nfi";
+			shellScript = "PATH+=:/usr/libexec\n\naddPlistWithKey() {\n    local key=$1 type=$2 value=$3 plist=${4:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Delete :'$key'\" \"$plist\" 2>/dev/null || true\n    PlistBuddy -c \"Add :'$key' '$type' '$value'\" \"$plist\"\n}\nsetPlistWithKey() {\n    local key=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Set :'$key' '$value'\" \"$plist\"\n}\ngetPlistWithKey() {\n    local key=$1 plist=${2:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Print :'$key'\" \"$plist\"\n}\nsetSettingWithTitle() {\n    local i title=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Settings.bundle/Root.plist\"}\n    \n    for (( i=0; 1; ++i )); do\n        PlistBuddy -c \"Print :PreferenceSpecifiers:$i\" \"$plist\" &>/dev/null || break\n        echo \"Checking preference specifier $i\"\n    \n        [[ $(PlistBuddy -c \"Print :PreferenceSpecifiers:$i:Title\" \"$plist\" 2>/dev/null) = $title ]] || continue\n    \n        echo \"Correct title, setting value.\"\n        PlistBuddy -c \"Set :PreferenceSpecifiers:$i:DefaultValue $value\" \"$plist\"\n        break\n    done\n}\n\ndescription=$(git describe --always --dirty --long)\nversion=${description%-g*}\nIFS=- read major minor <<< \"$version\"\nprintf -v version '%s.%02d' \"$major\" \"$minor\"\nprintf -v commit '%09d' \"$((16#${description##*-g}))\"\n\naddPlistWithKey GITDescription string \"$description\"\nsetPlistWithKey CFBundleVersion \"${version//.}$commit\" # No separator between version and commit because I had already submitted a CFBundleVersion with a really high major.  Cry.\nsetPlistWithKey CFBundleShortVersionString \"$version\"\n\nsetSettingWithTitle \"Build\" \"$commit\"\nsetSettingWithTitle \"Version\" \"$version\"\nsetSettingWithTitle \"Copyright\" \"$(getPlistWithKey NSHumanReadableCopyright)\"\n\nif [[ $DEPLOYMENT_LOCATION = YES ]]; then\n    # This build is a release.  Do some release checks.\n    passed=1\n    [[ $description != *-dirty ]] || \\\n        { passed=0; echo >&2 \"ERROR: Cannot release a dirty version, first commit any changes.\"; }\n    [[ $(PlistBuddy -c \"Print :'API Key'\" \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Crashlytics.plist\") ]] || \\\n        { passed=0; echo >&2 \"ERROR: Cannot release: Crashlytics API key is missing.\"; }\n    (( passed )) || \\\n        { echo >&2 \"Failed to pass release checks.  Fix the above errors and re-try.  Aborting.\"; exit 1; }\nfi";
 		};
 		DA67460818DE7B2C00DFE240 /* Run Script: Moarfonts */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4078,7 +4048,6 @@
 					"$(inherited)",
 					"NDEBUG=1",
 					"NS_BLOCK_ASSERTIONS=1",
-					"TESTFLIGHT=1",
 					"CRASHLYTICS=1",
 				);
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
@@ -4131,7 +4100,6 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				EXCLUDED_SOURCE_FILE_NAMES = libTestFlight.a;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/iOS,
@@ -4271,10 +4239,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				COPY_PHASE_STRIP = YES;
-				EXCLUDED_SOURCE_FILE_NAMES = (
-					libTestFlight.a,
-					libDCIntrospect.a,
-				);
+				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/iOS,

@@ -39,29 +39,6 @@
         [[NSBundle mainBundle] mutableInfoDictionary][@"CFBundleDisplayName"] = @"Master Password";
         [[NSBundle mainBundle] mutableLocalizedInfoDictionary][@"CFBundleDisplayName"] = @"Master Password";
 
-#ifdef TESTFLIGHT_SDK_VERSION
-        NSString *testFlightToken = [self testFlightToken];
-        if ([testFlightToken length]) {
-            inf(@"Initializing TestFlight");
-            [TestFlight addCustomEnvironmentInformation:@"Anonymous" forKey:@"username"];
-            [TestFlight addCustomEnvironmentInformation:[PearlKeyChain deviceIdentifier] forKey:@"deviceIdentifier"];
-            [TestFlight setOptions:@{
-                    @"logToConsole" : @NO,
-                    @"logToSTDERR"  : @NO
-            }];
-            [TestFlight takeOff:testFlightToken];
-            [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
-                PearlLogLevel level = PearlLogLevelDebug;
-
-                if (message.level >= level)
-                    TFLog( @"%@", [message messageDescription] );
-
-                return YES;
-            }];
-            TFLog( @"TestFlight (%@) initialized for: %@ v%@.", //
-                    TESTFLIGHT_SDK_VERSION, [PearlInfoPlist get].CFBundleName, [PearlInfoPlist get].CFBundleVersion );
-        }
-#endif
 #ifdef CRASHLYTICS
         NSString *crashlyticsAPIKey = [self crashlyticsAPIKey];
         if ([crashlyticsAPIKey length]) {
@@ -567,30 +544,6 @@
                         [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
 #endif
 
-#ifdef TESTFLIGHT_SDK_VERSION
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPConfig get].rememberLogin )
-                                                             forKey:@"rememberLogin"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].iCloudEnabled )
-                                                             forKey:@"iCloudEnabled"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPConfig get].iCloudDecided )
-                                                             forKey:@"iCloudDecided"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].sendInfo )
-                                                             forKey:@"sendInfo"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].helpHidden )
-                                                             forKey:@"helpHidden"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [MPiOSConfig get].showSetup )
-                                                             forKey:@"showQuickStart"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].firstRun )
-                                                             forKey:@"firstRun"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].launchCount )
-                                                             forKey:@"launchCount"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].askForReviews )
-                                                             forKey:@"askForReviews"];
-                        [TestFlight addCustomEnvironmentInformation:PearlStringNSB( [PearlConfig get].reviewAfterLaunches )
-                                                             forKey:@"reviewAfterLaunches"];
-                        [TestFlight addCustomEnvironmentInformation:[PearlConfig get].reviewedVersion
-                                                             forKey:@"reviewedVersion"];
-#endif
         MPCheckpoint( MPCheckpointConfig, @{
                 @"rememberLogin"       : @([[MPConfig get].rememberLogin boolValue]),
                 @"iCloudEnabled"       : @([[MPiOSConfig get].iCloudEnabled boolValue]),
@@ -699,27 +652,6 @@
                 if (buttonIndex == [alert firstOtherButtonIndex] + 1)
                     [MPiOSConfig get].iCloudEnabled = @NO;
             }                                         cancelTitle:nil otherTitles:@"Fix Now", @"Turn Off", nil];
-}
-
-#pragma mark - TestFlight
-
-- (NSDictionary *)testFlightInfo {
-
-    static NSDictionary *testFlightInfo = nil;
-    if (testFlightInfo == nil)
-        testFlightInfo = [[NSDictionary alloc] initWithContentsOfURL:
-                [[NSBundle mainBundle] URLForResource:@"TestFlight" withExtension:@"plist"]];
-
-    return testFlightInfo;
-}
-
-- (NSString *)testFlightToken {
-
-    NSString *testFlightToken = NSNullToNil( [[self testFlightInfo] valueForKeyPath:@"Application Token"] );
-    if (![testFlightToken length])
-        wrn( @"TestFlight token not set.  Test Flight won't be aware of this test." );
-
-    return testFlightToken;
 }
 
 #pragma mark - Crashlytics

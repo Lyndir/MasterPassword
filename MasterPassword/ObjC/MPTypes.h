@@ -85,7 +85,4 @@ typedef NS_ENUM(NSUInteger, MPElementType) {
 static void MPCheckpoint(NSString *checkpoint, NSDictionary *attributes) {
 
     inf(@"%@: %@", checkpoint, attributes);
-#ifdef TESTFLIGHT_SDK_VERSION
-    [TestFlight passCheckpoint:checkpoint];
-#endif
 }

@@ -132,9 +132,6 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     @try {
         if ([[MPConfig get].sendInfo boolValue]) {
-#ifdef TESTFLIGHT_SDK_VERSION
-            [TestFlight addCustomEnvironmentInformation:user.userID forKey:@"username"];
-#endif
 #ifdef CRASHLYTICS
             [Crashlytics setObjectValue:user.userID forKey:@"username"];
             [Crashlytics setUserName:user.userID];
