@@ -26,6 +26,8 @@
 
     [super viewDidAppear:animated];
 
+    self.cloudSwitch.enabled = [[MPAppDelegate_Shared get].storeManager cloudAvailable];
+
     if (self.cloudSwitch && [[MPiOSConfig get].iCloudDecided boolValue])
         self.cloudSwitch.on = [[MPiOSConfig get].iCloudEnabled boolValue];
     if (self.rememberLoginSwitch)
