@@ -8,8 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 #import "MPAppDelegate_Shared.h"
-#import "MPPasswordWindowController.h"
 #import "RHStatusItemView.h"
+#import "MPPasswordWindowController.h"
 
 @interface MPMacAppDelegate : MPAppDelegate_Shared<NSApplicationDelegate>
 

@@ -9,19 +9,15 @@
  */
 
 //
-//  MPPasswordWindowController.h
-//  MPPasswordWindowController
+//  MPPasswordWindow.h
+//  MPPasswordWindow
 //
-//  Created by lhunath on 2014-06-18.
+//  Created by lhunath on 2014-06-19.
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
 
-@interface MPPasswordWindowController : NSWindowController<NSTextFieldDelegate, NSCollectionViewDelegate>
 
-@property(nonatomic, weak) IBOutlet NSImageView *blurView;
-@property(nonatomic, weak) IBOutlet NSTextField *userLabel;
-@property(nonatomic, weak) IBOutlet NSSearchField *siteField;
-
+@interface MPPasswordWindow : NSWindow
 @end

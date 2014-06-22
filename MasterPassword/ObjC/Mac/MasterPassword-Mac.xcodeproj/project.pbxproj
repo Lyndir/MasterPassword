@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		93D390C676DF52DA7E459F19 /* MPPasswordWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D9D0061FF1159998F06 /* MPPasswordWindow.m */; };
 		93D392EC39DA43C46C692C12 /* NSDictionary+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */; };
 		93D395F08A087F8A24689347 /* NSArray+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
 		93D39C5789EFA607CF788082 /* MPElementModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39E73BF5CBF8E5B005CD3 /* MPElementModel.m */; };
 		93D39C7C2BE7C0E0763B0177 /* MPElementCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D394495528B10D1B61A2C3 /* MPElementCollectionView.m */; };
 		93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */; };
+		93D39F833DEC1C89B2F795AC /* MPPasswordWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A57A7823DE98A0FF83C /* MPPasswordWindowController.m */; };
 		DA0933CC1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */; };
 		DA0933D01747B91B00DE1CEF /* appstore.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CF1747B91B00DE1CEF /* appstore.png */; };
 		DA16B33F170661D4000A0EAB /* libUbiquityStoreManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */; };
@@ -21,6 +23,10 @@
 		DA16B344170661EE000A0EAB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B343170661EE000A0EAB /* Cocoa.framework */; };
 		DA16B345170661F2000A0EAB /* libPearl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC77CAD148291A600BCF976 /* libPearl.a */; };
 		DA1E4D50176E0E280065E0EF /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA1E4D4F176E0E280065E0EF /* Media.xcassets */; };
+		DA2508F119511D3600AC23F1 /* MPPasswordWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */; };
+		DA2508F719513C1400AC23F1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B343170661EE000A0EAB /* Cocoa.framework */; };
+		DA250924195148B300AC23F1 /* libRMBlurredView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA2508F619513C1400AC23F1 /* libRMBlurredView.a */; };
+		DA250925195148E200AC23F1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
 		DA2CA4ED18D323D3007798F8 /* NSError+PearlFullDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4E718D323D3007798F8 /* NSError+PearlFullDescription.m */; };
 		DA2CA4EE18D323D3007798F8 /* NSError+PearlFullDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = DA2CA4E818D323D3007798F8 /* NSError+PearlFullDescription.h */; };
 		DA2CA4EF18D323D3007798F8 /* NSArray+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4E918D323D3007798F8 /* NSArray+Pearl.m */; };
@@ -57,8 +63,8 @@
 		DA5E5D021724A667003798D8 /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB11724A667003798D8 /* MPUserEntity.m */; };
 		DA5E5D031724A667003798D8 /* MPMacAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB41724A667003798D8 /* MPMacAppDelegate.m */; };
 		DA5E5D041724A667003798D8 /* MPMacConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB61724A667003798D8 /* MPMacConfig.m */; };
-		DA5E5D051724A667003798D8 /* MPPasswordWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB81724A667003798D8 /* MPPasswordWindowController.m */; };
-		DA5E5D061724A667003798D8 /* MPPasswordWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5CB91724A667003798D8 /* MPPasswordWindowController.xib */; };
+		DA5E5D051724A667003798D8 /* MPPasswordDialogController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB81724A667003798D8 /* MPPasswordDialogController.m */; };
+		DA5E5D061724A667003798D8 /* MPPasswordDialogController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5CB91724A667003798D8 /* MPPasswordDialogController.xib */; };
 		DA5E5D081724A667003798D8 /* MasterPassword.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5CBF1724A667003798D8 /* MasterPassword.entitlements */; };
 		DA5E5D091724A667003798D8 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5CC01724A667003798D8 /* Credits.rtf */; };
 		DA5E5D0A1724A667003798D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5CC21724A667003798D8 /* InfoPlist.strings */; };
@@ -300,11 +306,15 @@
 /* Begin PBXFileReference section */
 		93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Indexing.m"; sourceTree = "<group>"; };
 		93D39240B5143E01F0B75E96 /* MPElementModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementModel.h; sourceTree = "<group>"; };
+		93D392C3918763B3B72CF366 /* MPPasswordWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindowController.h; sourceTree = "<group>"; };
 		93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Indexing.h"; sourceTree = "<group>"; };
 		93D394495528B10D1B61A2C3 /* MPElementCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementCollectionView.m; sourceTree = "<group>"; };
 		93D3960D320FF8A072B092E3 /* MPElementCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementCollectionView.h; sourceTree = "<group>"; };
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
+		93D3977484534E99F9BA579D /* MPPasswordWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindow.h; sourceTree = "<group>"; };
+		93D39A57A7823DE98A0FF83C /* MPPasswordWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordWindowController.m; sourceTree = "<group>"; };
 		93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Indexing.m"; sourceTree = "<group>"; };
+		93D39D9D0061FF1159998F06 /* MPPasswordWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordWindow.m; sourceTree = "<group>"; };
 		93D39E73BF5CBF8E5B005CD3 /* MPElementModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementModel.m; sourceTree = "<group>"; };
 		DA0933C91747A56A00DE1CEF /* MPInitialWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPInitialWindow.xib; sourceTree = "<group>"; };
 		DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shot-laptop-leaning-iphone.png"; sourceTree = "<group>"; };
@@ -312,6 +322,14 @@
 		DA16B340170661DB000A0EAB /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		DA16B343170661EE000A0EAB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		DA1E4D4F176E0E280065E0EF /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = MasterPassword/Media.xcassets; sourceTree = "<group>"; };
+		DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPPasswordWindowController.xib; sourceTree = "<group>"; };
+		DA2508F619513C1400AC23F1 /* libRMBlurredView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRMBlurredView.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA2508F919513C1400AC23F1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		DA2508FA19513C1400AC23F1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		DA2508FB19513C1400AC23F1 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		DA25090719513C1400AC23F1 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		DA2509261951B86C00AC23F1 /* small-screen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "small-screen.png"; sourceTree = "<group>"; };
+		DA2509271951B86C00AC23F1 /* screen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screen.png; sourceTree = "<group>"; };
 		DA2CA4E718D323D3007798F8 /* NSError+PearlFullDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+PearlFullDescription.m"; sourceTree = "<group>"; };
 		DA2CA4E818D323D3007798F8 /* NSError+PearlFullDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+PearlFullDescription.h"; sourceTree = "<group>"; };
 		DA2CA4E918D323D3007798F8 /* NSArray+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Pearl.m"; sourceTree = "<group>"; };
@@ -369,9 +387,9 @@
 		DA5E5CB41724A667003798D8 /* MPMacAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPMacAppDelegate.m; sourceTree = "<group>"; };
 		DA5E5CB51724A667003798D8 /* MPMacConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPMacConfig.h; sourceTree = "<group>"; };
 		DA5E5CB61724A667003798D8 /* MPMacConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPMacConfig.m; sourceTree = "<group>"; };
-		DA5E5CB71724A667003798D8 /* MPPasswordWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindowController.h; sourceTree = "<group>"; };
-		DA5E5CB81724A667003798D8 /* MPPasswordWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordWindowController.m; sourceTree = "<group>"; };
-		DA5E5CB91724A667003798D8 /* MPPasswordWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPPasswordWindowController.xib; sourceTree = "<group>"; };
+		DA5E5CB71724A667003798D8 /* MPPasswordDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordDialogController.h; sourceTree = "<group>"; };
+		DA5E5CB81724A667003798D8 /* MPPasswordDialogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordDialogController.m; sourceTree = "<group>"; };
+		DA5E5CB91724A667003798D8 /* MPPasswordDialogController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPPasswordDialogController.xib; sourceTree = "<group>"; };
 		DA5E5CBA1724A667003798D8 /* MasterPassword-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MasterPassword-Info.plist"; sourceTree = "<group>"; };
 		DA5E5CBE1724A667003798D8 /* MasterPassword-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MasterPassword-Prefix.pch"; sourceTree = "<group>"; };
 		DA5E5CBF1724A667003798D8 /* MasterPassword.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = MasterPassword.entitlements; sourceTree = "<group>"; };
@@ -587,6 +605,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		DA2508F319513C1400AC23F1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA2508F719513C1400AC23F1 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DA4425C81557BED40052177D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -599,6 +625,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA250925195148E200AC23F1 /* QuartzCore.framework in Frameworks */,
+				DA250924195148B300AC23F1 /* libRMBlurredView.a in Frameworks */,
 				DAD9B5F01762CAA4001835F9 /* ServiceManagement.framework in Frameworks */,
 				DABC6C16175D8E3A000C15D4 /* libRHStatusItemView.a in Frameworks */,
 				DA16B33F170661D4000A0EAB /* libUbiquityStoreManager.a in Frameworks */,
@@ -639,6 +667,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DA2508F819513C1400AC23F1 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DA2508F919513C1400AC23F1 /* Foundation.framework */,
+				DA2508FA19513C1400AC23F1 /* CoreData.framework */,
+				DA2508FB19513C1400AC23F1 /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
 		DA3B8447190FC5A900246EEA /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -675,6 +713,7 @@
 				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
 				DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */,
 				DABC6C01175D8C85000C15D4 /* libRHStatusItemView.a */,
+				DA2508F619513C1400AC23F1 /* libRMBlurredView.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -695,6 +734,8 @@
 				DA5BFA4A147E415C00F98B1E /* Foundation.framework */,
 				DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */,
 				DA5BFA4E147E415C00F98B1E /* CoreData.framework */,
+				DA25090719513C1400AC23F1 /* XCTest.framework */,
+				DA2508F819513C1400AC23F1 /* Other Frameworks */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -755,9 +796,9 @@
 				DA5E5CB41724A667003798D8 /* MPMacAppDelegate.m */,
 				DA5E5CB51724A667003798D8 /* MPMacConfig.h */,
 				DA5E5CB61724A667003798D8 /* MPMacConfig.m */,
-				DA5E5CB71724A667003798D8 /* MPPasswordWindowController.h */,
-				DA5E5CB81724A667003798D8 /* MPPasswordWindowController.m */,
-				DA5E5CB91724A667003798D8 /* MPPasswordWindowController.xib */,
+				DA5E5CB71724A667003798D8 /* MPPasswordDialogController.h */,
+				DA5E5CB81724A667003798D8 /* MPPasswordDialogController.m */,
+				DA5E5CB91724A667003798D8 /* MPPasswordDialogController.xib */,
 				DA5E5CBA1724A667003798D8 /* MasterPassword-Info.plist */,
 				DA5E5CBE1724A667003798D8 /* MasterPassword-Prefix.pch */,
 				DA5E5CBF1724A667003798D8 /* MasterPassword.entitlements */,
@@ -770,6 +811,11 @@
 				93D3960D320FF8A072B092E3 /* MPElementCollectionView.h */,
 				93D39E73BF5CBF8E5B005CD3 /* MPElementModel.m */,
 				93D39240B5143E01F0B75E96 /* MPElementModel.h */,
+				DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */,
+				93D39A57A7823DE98A0FF83C /* MPPasswordWindowController.m */,
+				93D392C3918763B3B72CF366 /* MPPasswordWindowController.h */,
+				93D39D9D0061FF1159998F06 /* MPPasswordWindow.m */,
+				93D3977484534E99F9BA579D /* MPPasswordWindow.h */,
 			);
 			path = Mac;
 			sourceTree = "<group>";
@@ -842,6 +888,8 @@
 		DACA23B51705DF7D002C6C22 /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				DA2509261951B86C00AC23F1 /* small-screen.png */,
+				DA2509271951B86C00AC23F1 /* screen.png */,
 				DA0933CF1747B91B00DE1CEF /* appstore.png */,
 				DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */,
 				DA5E5D541724F9C8003798D8 /* MasterPassword.iconset */,
@@ -1153,6 +1201,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		DA2508F419513C1400AC23F1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DA4425C91557BED40052177D /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1294,6 +1349,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		DA2508F519513C1400AC23F1 /* RMBlurredView */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA25091519513C1500AC23F1 /* Build configuration list for PBXNativeTarget "RMBlurredView" */;
+			buildPhases = (
+				DA2508F219513C1400AC23F1 /* Sources */,
+				DA2508F319513C1400AC23F1 /* Frameworks */,
+				DA2508F419513C1400AC23F1 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RMBlurredView;
+			productName = RMBlurredView;
+			productReference = DA2508F619513C1400AC23F1 /* libRMBlurredView.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		DA4425CA1557BED40052177D /* UbiquityStoreManager */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DA4425D31557BED40052177D /* Build configuration list for PBXNativeTarget "UbiquityStoreManager" */;
@@ -1424,6 +1496,7 @@
 				DAC6326B148680650075AEA5 /* jrswizzle */,
 				DA4425CA1557BED40052177D /* UbiquityStoreManager */,
 				DABC6C00175D8C85000C15D4 /* RHStatusItemView */,
+				DA2508F519513C1400AC23F1 /* RMBlurredView */,
 			);
 		};
 /* End PBXProject section */
@@ -1457,6 +1530,7 @@
 				DAF4EF59190A828100023C90 /* Exo2.0-Bold.otf in Resources */,
 				DACA27181705DF81002C6C22 /* avatar-9.png in Resources */,
 				DACA27191705DF81002C6C22 /* avatar-1@2x.png in Resources */,
+				DA2508F119511D3600AC23F1 /* MPPasswordWindowController.xib in Resources */,
 				DACA271A1705DF81002C6C22 /* avatar-11@2x.png in Resources */,
 				DACA271B1705DF81002C6C22 /* avatar-7@2x.png in Resources */,
 				DACA271C1705DF81002C6C22 /* avatar-17@2x.png in Resources */,
@@ -1497,7 +1571,7 @@
 				DACA296F1705DF81002C6C22 /* Crashlytics.plist in Resources */,
 				DACA29731705E1A8002C6C22 /* ciphers.plist in Resources */,
 				DACA29741705E1A8002C6C22 /* dictionary.lst in Resources */,
-				DA5E5D061724A667003798D8 /* MPPasswordWindowController.xib in Resources */,
+				DA5E5D061724A667003798D8 /* MPPasswordDialogController.xib in Resources */,
 				DA5E5D081724A667003798D8 /* MasterPassword.entitlements in Resources */,
 				DA5E5D091724A667003798D8 /* Credits.rtf in Resources */,
 				DA5E5D0A1724A667003798D8 /* InfoPlist.strings in Resources */,
@@ -1544,6 +1618,13 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		DA2508F219513C1400AC23F1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DA4425C71557BED40052177D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1573,11 +1654,13 @@
 				DA5E5D021724A667003798D8 /* MPUserEntity.m in Sources */,
 				DA5E5D031724A667003798D8 /* MPMacAppDelegate.m in Sources */,
 				DA5E5D041724A667003798D8 /* MPMacConfig.m in Sources */,
-				DA5E5D051724A667003798D8 /* MPPasswordWindowController.m in Sources */,
+				DA5E5D051724A667003798D8 /* MPPasswordDialogController.m in Sources */,
 				DA5E5D0C1724A667003798D8 /* main.m in Sources */,
 				DA5E5D0D1724A667003798D8 /* MasterPassword.xcdatamodeld in Sources */,
 				93D39C7C2BE7C0E0763B0177 /* MPElementCollectionView.m in Sources */,
 				93D39C5789EFA607CF788082 /* MPElementModel.m in Sources */,
+				93D39F833DEC1C89B2F795AC /* MPPasswordWindowController.m in Sources */,
+				93D390C676DF52DA7E459F19 /* MPPasswordWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1686,6 +1769,27 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		DA25091619513C1500AC23F1 /* Debug-Mac */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+			};
+			name = "Debug-Mac";
+		};
+		DA25091719513C1500AC23F1 /* AdHoc-Mac */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+			};
+			name = "AdHoc-Mac";
+		};
+		DA25091819513C1500AC23F1 /* AppStore-Mac */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+			};
+			name = "AppStore-Mac";
+		};
 		DA4425D41557BED40052177D /* Debug-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2108,6 +2212,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		DA25091519513C1500AC23F1 /* Build configuration list for PBXNativeTarget "RMBlurredView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA25091619513C1500AC23F1 /* Debug-Mac */,
+				DA25091719513C1500AC23F1 /* AdHoc-Mac */,
+				DA25091819513C1500AC23F1 /* AppStore-Mac */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "AdHoc-Mac";
+		};
 		DA4425D31557BED40052177D /* Build configuration list for PBXNativeTarget "UbiquityStoreManager" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

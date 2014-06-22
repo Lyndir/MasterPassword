@@ -21,6 +21,7 @@
 #import "MPElementModel.h"
 #import "MPMacAppDelegate.h"
 #import "MPAppDelegate_Store.h"
+#import "MPPasswordDialogController.h"
 
 #define MPAlertChangeType @"MPAlertChangeType"
 #define MPAlertChangeLogin @"MPAlertChangeLogin"
@@ -204,7 +205,7 @@
                     [context deleteObject:element];
                     [context saveToStore];
 
-                    [((MPPasswordWindowController *)self.collectionView.window.windowController) updateElements];
+                    [((MPPasswordDialogController *)self.collectionView.window.windowController) updateElements];
                 }];
                 break;
             }

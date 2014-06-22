@@ -9,12 +9,13 @@
 #import "MPMacAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
+#import "MPPasswordWindowController.h"
 #import <Carbon/Carbon.h>
 #import <ServiceManagement/ServiceManagement.h>
 
 #define LOGIN_HELPER_BUNDLE_ID @"com.lyndir.lhunath.MasterPassword.Mac.LoginHelper"
 
-@interface UbiquityStoreManager (Private)
+@interface UbiquityStoreManager(Private)
 
 - (void)markCloudStoreCorrupted;
 
@@ -25,7 +26,7 @@
 @property(nonatomic, strong) NSWindowController *initialWindow;
 @end
 
-@implementation MPMacAppDelegate
+@implementation MPMacAppDelegate { NSWindow *_window; }
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wfour-char-constants"
@@ -50,7 +51,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     // Extract the hotkey ID.
     EventHotKeyID hotKeyID;
     GetEventParameter( theEvent, kEventParamDirectObject, typeEventHotKeyID,
-            NULL, sizeof(hotKeyID), NULL, &hotKeyID );
+            NULL, sizeof( hotKeyID ), NULL, &hotKeyID );
 
     // Check which hotkey this was.
     if (hotKeyID.signature == MPShowHotKey.signature && hotKeyID.id == MPShowHotKey.id) {
@@ -100,7 +101,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO] ];
     NSArray *users = [context executeFetchRequest:fetchRequest error:&error];
     if (!users)
-    err(@"Failed to load users: %@", error);
+        err( @"Failed to load users: %@", error );
 
     if (![users count]) {
         NSMenuItem *noUsersItem = [self.usersItem.submenu addItemWithTitle:@"No users" action:NULL keyEquivalent:@""];
@@ -111,7 +112,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     self.usersItem.state = NSMixedState;
     for (MPUserEntity *user in users) {
-        NSMenuItem *userItem = [[NSMenuItem alloc] initWithTitle:user.name action:@selector(selectUser:) keyEquivalent:@""];
+        NSMenuItem *userItem = [[NSMenuItem alloc] initWithTitle:user.name action:@selector( selectUser: ) keyEquivalent:@""];
         [userItem setTarget:self];
         [userItem setRepresentedObject:[user objectID]];
         [[self.usersItem submenu] addItem:userItem];
@@ -139,7 +140,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     self.activeUser = (MPUserEntity *)[context existingObjectWithID:[item representedObject] error:&error];
 
     if (error)
-    err(@"While looking up selected user: %@", error);
+        err( @"While looking up selected user: %@", error );
 }
 
 - (void)showMenu {
@@ -206,7 +207,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         [moc saveToStore];
         NSError *error = nil;
         if (![moc obtainPermanentIDsForObjects:@[ newUser ] error:&error])
-        err(@"Failed to obtain permanent object ID for new user: %@", error);
+            err( @"Failed to obtain permanent object ID for new user: %@", error );
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self updateUsers];
@@ -290,19 +291,19 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     [MPConfig get].delegate = self;
     __weak id weakSelf = self;
     [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async( dispatch_get_main_queue(), ^{
             [weakSelf updateMenuItems];
-        });
+        } );
     }           forKeyPath:@"key" options:0 context:nil];
     [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async( dispatch_get_main_queue(), ^{
             [weakSelf updateMenuItems];
-        });
+        } );
     }           forKeyPath:@"activeUser" options:0 context:nil];
     [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async( dispatch_get_main_queue(), ^{
             [weakSelf updateMenuItems];
-        });
+        } );
     }           forKeyPath:@"storeManager.cloudAvailable" options:0 context:nil];
 
     // Status item.
@@ -311,18 +312,18 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     self.statusView.image = [NSImage imageNamed:@"menu-icon"];
     self.statusView.menu = self.statusMenu;
     self.statusView.target = self;
-    self.statusView.action = @selector(showMenu);
+    self.statusView.action = @selector( showMenu );
 
     [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
-                [self updateUsers];
-            }];
+        [self updateUsers];
+    }];
     [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidImportChangesNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
-                [self updateUsers];
-            }];
+        [self updateUsers];
+    }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
@@ -346,16 +347,16 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     // Global hotkey.
     EventHotKeyRef hotKeyRef;
     EventTypeSpec hotKeyEvents[1] = { { .eventClass = kEventClassKeyboard, .eventKind = kEventHotKeyPressed } };
-    OSStatus status = InstallApplicationEventHandler(NewEventHandlerUPP( MPHotKeyHander ), GetEventTypeCount( hotKeyEvents ),
-    hotKeyEvents, (__bridge void *)self, NULL);
+    OSStatus status = InstallApplicationEventHandler( NewEventHandlerUPP( MPHotKeyHander ), GetEventTypeCount( hotKeyEvents ),
+            hotKeyEvents, (__bridge void *)self, NULL );
     if (status != noErr)
-    err(@"Error installing application event handler: %i", (int)status);
+        err( @"Error installing application event handler: %i", (int)status );
     status = RegisterEventHotKey( 35 /* p */, controlKey + cmdKey, MPShowHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
     if (status != noErr)
-    err(@"Error registering 'show' hotkey: %i", (int)status);
+        err( @"Error registering 'show' hotkey: %i", (int)status );
     status = RegisterEventHotKey( 35 /* p */, controlKey + optionKey + cmdKey, MPLockHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
     if (status != noErr)
-    err(@"Error registering 'lock' hotkey: %i", (int)status);
+        err( @"Error registering 'lock' hotkey: %i", (int)status );
 
     // Initial display.
     [NSApp activateIgnoringOtherApps:YES];
@@ -372,9 +373,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     [MPMacConfig get].usedUserName = activeUser.name;
 
-    PearlMainQueue(^{
+    PearlMainQueue( ^{
         [self updateUsers];
-    });
+    } );
 }
 
 - (void)updateMenuItems {
@@ -467,7 +468,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         if (SMLoginItemSetEnabled( (__bridge CFStringRef)LOGIN_HELPER_BUNDLE_ID, (Boolean)enabled ) == true)
             loginItemEnabled = enabled;
         else
-            wrn(@"Failed to set login item.");
+            wrn( @"Failed to set login item." );
     }
 
     self.openAtLoginItem.state = loginItemEnabled? NSOnState: NSOffState;
@@ -481,11 +482,11 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     for (NSDictionary *job in jobs)
         if ([LOGIN_HELPER_BUNDLE_ID isEqualToString:[job objectForKey:@"Label"]]) {
-            dbg(@"loginItemEnabled: %@", @([[job objectForKey:@"OnDemand"] boolValue]));
+            dbg( @"loginItemEnabled: %@", @([[job objectForKey:@"OnDemand"] boolValue]) );
             return [[job objectForKey:@"OnDemand"] boolValue];
         }
 
-    dbg(@"loginItemEnabled: not found");
+    dbg( @"loginItemEnabled: not found" );
     return NO;
 }
 

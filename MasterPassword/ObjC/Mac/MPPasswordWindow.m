@@ -9,19 +9,35 @@
  */
 
 //
-//  MPPasswordWindowController.h
-//  MPPasswordWindowController
+//  MPPasswordWindow.h
+//  MPPasswordWindow
 //
-//  Created by lhunath on 2014-06-18.
+//  Created by lhunath on 2014-06-19.
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import "MPPasswordWindow.h"
 
-@interface MPPasswordWindowController : NSWindowController<NSTextFieldDelegate, NSCollectionViewDelegate>
 
-@property(nonatomic, weak) IBOutlet NSImageView *blurView;
-@property(nonatomic, weak) IBOutlet NSTextField *userLabel;
-@property(nonatomic, weak) IBOutlet NSSearchField *siteField;
+@implementation MPPasswordWindow
+
+#pragma mark - Life
+
+- (void)awakeFromNib {
+
+    [super awakeFromNib];
+
+    self.level = NSScreenSaverWindowLevel;
+    self.alphaValue = 0;
+}
+
+- (BOOL)canBecomeKeyWindow {
+
+    return YES;
+}
+
+#pragma mark - State
+
+#pragma mark - Private
 
 @end
