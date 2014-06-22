@@ -14,7 +14,7 @@
 @property(weak, nonatomic) IBOutlet UISwitch *savePasswordSwitch;
 @property(weak, nonatomic) IBOutlet UITableViewCell *signOutCell;
 @property(weak, nonatomic) IBOutlet UITableViewCell *feedbackCell;
-@property(weak, nonatomic) IBOutlet UITableViewCell *coachmarksCell;
+@property(weak, nonatomic) IBOutlet UITableViewCell *showHelpCell;
 @property(weak, nonatomic) IBOutlet UITableViewCell *exportCell;
 @property(weak, nonatomic) IBOutlet UITableViewCell *checkInconsistencies;
 @property(weak, nonatomic) IBOutlet UIImageView *avatarImage;

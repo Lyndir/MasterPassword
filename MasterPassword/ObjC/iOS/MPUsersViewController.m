@@ -684,7 +684,6 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 - (void)setActive:(BOOL)active animated:(BOOL)animated {
 
     _active = active;
-    dbg(@"active -> %d", active);
 
     if (active)
         [self setActiveUserState:MPActiveUserStateNone animated:animated];
@@ -695,7 +694,6 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 - (void)setUserIDs:(NSArray *)userIDs {
 
     _userIDs = userIDs;
-    dbg(@"userIDs -> %lu", (unsigned long)[userIDs count]);
 
     PearlMainQueue( ^{
         BOOL isNew = NO;
@@ -732,7 +730,6 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     }
 
     [_afterUpdates setSuspended:YES];
-    dbg(@"suspend updates");
     __block BOOL requestFirstResponder = NO;
     [UIView animateWithDuration:animated? 0.4f: 0 animations:^{
         MPAvatarCell *selectedAvatar = [self selectedAvatar];
@@ -752,10 +749,8 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
         // Set the entry container's contents.
         switch (activeUserState) {
             case MPActiveUserStateNone:
-                dbg(@"activeUserState -> none");
                 break;
             case MPActiveUserStateLogin: {
-                dbg(@"activeUserState -> login");
                 self.entryLabel.text = strl( @"Enter your master password:" );
                 self.entryField.secureTextEntry = YES;
                 self.entryField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -763,7 +758,6 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 break;
             }
             case MPActiveUserStateUserName: {
-                dbg(@"activeUserState -> userName");
                 self.entryLabel.text = strl( @"Enter your full name:" );
                 self.entryField.secureTextEntry = NO;
                 self.entryField.autocapitalizationType = UITextAutocapitalizationTypeWords;
@@ -771,7 +765,6 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 break;
             }
             case MPActiveUserStateMasterPasswordChoice: {
-                dbg(@"activeUserState -> masterPasswordChoice");
                 self.entryLabel.text = strl( @"Choose your master password:" );
                 self.entryField.secureTextEntry = YES;
                 self.entryField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -779,7 +772,6 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 break;
             }
             case MPActiveUserStateMasterPasswordConfirmation: {
-                dbg(@"activeUserState -> masterPasswordConfirmation");
                 _masterPasswordChoice = self.entryField.text;
                 self.entryLabel.text = strl( @"Confirm your master password:" );
                 self.entryField.secureTextEntry = YES;
@@ -788,7 +780,6 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 break;
             }
             case MPActiveUserStateMinimized:
-                dbg(@"activeUserState -> minimized");
                 break;
         }
 
@@ -821,18 +812,12 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
             }
         }
     }                completion:^(BOOL finished) {
-        dbg(@"resume updates");
         [_afterUpdates setSuspended:NO];
     }];
 
-    UIResponder *oldFirstResponder = [UIResponder findFirstResponder];
+    [self.entryField resignFirstResponder];
     if (requestFirstResponder)
         [self.entryField becomeFirstResponder];
-    else
-        [self.entryField resignFirstResponder];
-    UIResponder *newFirstResponder = [UIResponder findFirstResponder];
-    if (newFirstResponder != oldFirstResponder)
-    dbg(@"first responder: %@ -> %@", oldFirstResponder, newFirstResponder);
 }
 
 #pragma mark - Actions

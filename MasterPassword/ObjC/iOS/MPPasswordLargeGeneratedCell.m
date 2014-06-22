@@ -158,16 +158,16 @@
 
     switch (type) {
         case MPElementTypeGeneratedMaximum:
-            self.strengthLabel.text = @"> age of the universe";
+            self.strengthLabel.text = @"422 quintillion years";
             break;
         case MPElementTypeGeneratedLong:
-            self.strengthLabel.text = @"196 billion years";
+            self.strengthLabel.text = @"1.4 years";
             break;
         case MPElementTypeGeneratedMedium:
-            self.strengthLabel.text = @"5 months";
+            self.strengthLabel.text = @"2 seconds";
             break;
         case MPElementTypeGeneratedBasic:
-            self.strengthLabel.text = @"12 days";
+            self.strengthLabel.text = @"trivial";
             break;
         case MPElementTypeGeneratedShort:
             self.strengthLabel.text = @"trivial";

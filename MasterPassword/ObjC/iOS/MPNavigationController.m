@@ -21,6 +21,14 @@
 
 @implementation MPNavigationController
 
+- (void)viewDidAppear:(BOOL)animated {
+
+    [super viewDidAppear:animated];
+
+    if ([[MPiOSConfig get].showSetup boolValue])
+        [self performSegueWithIdentifier:@"setup" sender:self];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
     if ([segue.identifier isEqualToString:@"web"])

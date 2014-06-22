@@ -65,10 +65,9 @@
         [[MPiOSAppDelegate get] showFeedbackWithLogs:YES forVC:self];
     if (cell == self.exportCell)
         [[MPiOSAppDelegate get] showExportForVC:self];
-    if (cell == self.coachmarksCell) {
+    if (cell == self.showHelpCell) {
         MPPasswordsViewController *passwordsVC = [self dismissPopup];
-        passwordsVC.coachmark.coached = NO;
-        [passwordsVC performSegueWithIdentifier:@"coachmarks" sender:self];
+        [passwordsVC performSegueWithIdentifier:@"guide" sender:self];
     }
     if (cell == self.checkInconsistencies)
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {

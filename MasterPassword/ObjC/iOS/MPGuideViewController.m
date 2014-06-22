@@ -8,16 +8,85 @@
 
 #import "MPGuideViewController.h"
 
+@interface MPGuideStep : NSObject
+
+@property(nonatomic) UIImage *image;
+@property(nonatomic) NSString *caption;
+
++ (instancetype)stepWithImage:(UIImage *)image caption:(NSString *)caption;
+
+@end
+
+@interface MPGuideStepCell : UICollectionViewCell
+
+@property(nonatomic) IBOutlet UIImageView *imageView;
+
+@end
+
 @interface MPGuideViewController()
 
-@property(nonatomic, strong) NSTimer *timer;
-@property(nonatomic) int tickCount;
-@property(nonatomic) int currentTick;
-@property(nonatomic) int lastTick;
-@property(nonatomic) BOOL muted;
+@property(nonatomic, strong) NSArray *steps;
 @end
 
 @implementation MPGuideViewController
+
+#pragma mark - Life
+
+- (void)viewDidLoad {
+
+    [super viewDidLoad];
+
+    self.steps = @[
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-0"] caption:
+                    @"To begin, tap the \"New User\" icon and add yourself as a user to the application."],
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-1"] caption:
+                    @"Enter your full name.  Double-check that you have spelled your name correctly and capitalized it appropriately.  Your passwords will depend on it."],
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-2"] caption:
+                    @"Choose a master password: Use something new and long.  A short sentence is ideal.\nDO NOT FORGET THIS ONE PASSWORD."],
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-3"] caption:
+                    @"After logging in, you'll see an empty screen with a search box.\nTap the search box to begin adding sites."],
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-4"] caption:
+                    @"To add a site, just enter its name fully and tap the result.  Names can be anything, but we recommend using a site's bare domain name."],
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-5"] caption:
+                    @"Your sites are easy to find and sorted by recency.\nTap any site to copy its password.\nYou can now switch and paste it in another app."],
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-6"] caption:
+                    @"If the site you're looking for isn't easy to find, just type a few letters in the search box to filter the site list."],
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-7"] caption:
+                    @"If you ever need a new password for the site, just tap the plus icon to increment its counter.\nYou can hold down to reset it back to 1."],
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-8"] caption:
+                    @"The user icon lets you save your site's login.\nThis is useful if you find it hard to remember the user name for this site."],
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-9"] caption:
+                    @"Master Password lets you swipe to upgrade or downgrade your password's complexity.\nSome sites won't let you use complex passwords."],
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-10"] caption:
+                    @"To delete a site, swipe it all the way left to find the \"Delete Site\" button."],
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-11"] caption:
+                    @"If you have a password that you cannot change, you can save it as a Personal password.  Device Private means the site will not be backed up."],
+    ];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+
+    [super viewWillAppear:animated];
+
+    [self.pageControl observeKeyPath:@"currentPage"
+                           withBlock:^(id from, id to, NSKeyValueChange cause, UIPageControl *pageControl) {
+        MPGuideStep *activeStep = self.steps[pageControl.currentPage];
+        self.captionLabel.text = activeStep.caption;
+    }];
+
+    [self.collectionView setContentOffset:CGPointZero];
+    self.pageControl.currentPage = 0;
+
+    if (self.navigationController)
+        [self.navigationBar removeFromSuperview];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+
+    [super viewWillDisappear:animated];
+
+    [self.pageControl removeKeyPathObservers];
+}
 
 - (BOOL)shouldAutorotate {
 
@@ -39,207 +108,72 @@
     return UIInterfaceOrientationPortrait;
 }
 
-- (void)viewDidLoad {
+#pragma mark - UICollectionViewDataSource
 
-    [super viewDidLoad];
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 
-    self.siteNameTip.hidden = NO;
-    self.contentTip.hidden = NO;
-    self.usernameTip.hidden = NO;
-    self.typeTip.hidden = NO;
-    self.toolTip.hidden = NO;
-    self.alertTip.hidden = NO;
-
-    self.tickCount = 30;
+    return self.pageControl.numberOfPages = [self.steps count];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    MPGuideStepCell *cell = [MPGuideStepCell dequeueCellFromCollectionView:collectionView indexPath:indexPath];
+    cell.imageView.image = ((MPGuideStep *)self.steps[indexPath.item]).image;
 
-    inf(@"Guide will appear.");
-    [super viewWillAppear:animated];
-
-    if (self.navigationController) {
-        // Via setup
-        self.smallPlayButton.hidden = YES;
-
-        self.searchBar.text = nil;
-        self.siteNameTip.alpha = 0;
-        self.content.alpha = 0;
-        self.content.frame = CGRectSetHeight( self.content.frame, 180 );
-        self.contentTip.alpha = 0;
-        self.contentButton.highlighted = NO;
-        self.usernameTip.alpha = 0;
-        self.usernameButton.highlighted = NO;
-        self.typeTip.alpha = 0;
-        self.typeButton.highlighted = NO;
-        self.toolTip.alpha = 0;
-        self.toolButton.highlighted = NO;
-        self.alertTip.alpha = 0;
-    }
-    else {
-        // Via segue
-        self.largePlayButton.hidden = YES;
-
-        self.searchBar.text = @"gmail.com";
-        self.siteNameTip.alpha = 1;
-        self.content.alpha = 1;
-        self.content.frame = CGRectSetHeight( self.content.frame, 231 );
-        self.contentTip.alpha = 1;
-        self.contentTipText.text = @"Tap to copy";
-        self.contentButton.highlighted = NO;
-        self.usernameTip.alpha = 1;
-        self.usernameButton.highlighted = NO;
-        self.typeTip.alpha = 1;
-        self.typeButton.highlighted = NO;
-        self.toolTip.alpha = 0;
-        self.toolButton.highlighted = NO;
-        self.alertTip.alpha = 1;
-    }
+    return cell;
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
+#pragma mark - UICollectionViewDelegateFlowLayout
 
-    inf(@"Guide will disappear.");
-    [super viewWillDisappear:animated];
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
+  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+
+    return collectionView.bounds.size;
 }
 
-- (IBAction)play {
+#pragma mark - UIScrollViewDelegate
 
-    if (self.timer) {
-        // Pause
-        [self.timer invalidate];
-        self.timer = nil;
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 
-        self.smallPlayButton.hidden = NO;
-        [self.smallPlayButton setImage:[UIImage imageNamed:@"icon_play"] forState:UIControlStateNormal];
-    }
-
-    else {
-        // Play
-        self.smallPlayButton.hidden = NO;
-        self.largePlayButton.hidden = YES;
-        [self.smallPlayButton setImage:[UIImage imageNamed:@"icon_pause"] forState:UIControlStateNormal];
-
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(tick:)
-                                                    userInfo:nil repeats:YES];
-    }
+    if (scrollView == self.collectionView)
+        self.pageControl.currentPage = [self.collectionView indexPathForItemAtPoint:CGRectGetCenter( self.collectionView.bounds )].item;
 }
 
-- (IBAction)close {
+#pragma mark - Actions
 
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+- (IBAction)close:(id)sender {
+
+    [MPiOSConfig get].showSetup = @NO;
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)tick:(NSTimer *)timer {
+#pragma mark - Private
 
-    self.lastTick = self.currentTick;
-    ++self.currentTick;
-    [self.progress setProgress:(float)self.currentTick / self.tickCount animated:YES];
+@end
 
-    if (self.currentTick < 5) {
-        [UIView animateWithDuration:0.5 animations:^{
-            self.searchBar.text = nil;
-            self.siteNameTip.alpha = 1;
-            self.content.alpha = 0;
-            self.content.frame = CGRectSetHeight( self.content.frame, 180 );
-            self.contentTip.alpha = 0;
-            self.usernameTip.alpha = 0;
-            self.typeTip.alpha = 0;
-            self.toolTip.alpha = 0;
-            self.alertTip.alpha = 0;
-        }];
-    }
-    else if (self.currentTick < 10) {
-        [UIView animateWithDuration:0.5 animations:^{
-            self.searchBar.text = @"gmail.com";
-            self.siteNameTip.alpha = 0;
-            self.content.alpha = 1;
-            self.contentTip.alpha = 1;
-            self.contentTipText.text = @"Your password";
-            self.usernameTip.alpha = 0;
-            self.typeTip.alpha = 0;
-            self.toolTip.alpha = 0;
-            self.alertTip.alpha = 0;
-        }];
-    }
-    else if (self.currentTick < 15) {
-        [UIView animateWithDuration:0.5 animations:^{
-            self.searchBar.text = @"gmail.com";
-            self.siteNameTip.alpha = 0;
-            self.content.alpha = 1;
-            self.contentTip.alpha = 1;
-            self.contentTipText.text = @"Tap to copy";
-            self.contentButton.highlighted = YES;
-            self.usernameTip.alpha = 0;
-            self.typeTip.alpha = 0;
-            self.toolButton.highlighted = NO;
-            self.toolTip.alpha = 0;
-            self.alertTip.alpha = 0;
-        }];
-    }
-    else if (self.currentTick < 20) {
-        [UIView animateWithDuration:0.5 animations:^{
-            self.searchBar.text = @"gmail.com";
-            self.siteNameTip.alpha = 0;
-            self.content.alpha = 1;
-            self.content.frame = CGRectSetHeight( self.content.frame, 231 );
-            self.contentTip.alpha = 0;
-            self.contentButton.highlighted = NO;
-            self.usernameButton.highlighted = YES;
-            self.usernameTip.alpha = 1;
-            self.typeTip.alpha = 0;
-            self.toolTip.alpha = 0;
-            self.alertTip.alpha = 0;
-        }];
-    }
-    else if (self.currentTick < 25) {
-        [UIView animateWithDuration:0.5 animations:^{
-            self.searchBar.text = @"gmail.com";
-            self.siteNameTip.alpha = 0;
-            self.content.alpha = 1;
-            self.contentTip.alpha = 0;
-            self.usernameButton.highlighted = NO;
-            self.usernameTip.alpha = 0;
-            self.typeTip.alpha = 1;
-            self.typeButton.highlighted = YES;
-            self.toolTip.alpha = 0;
-            self.alertTip.alpha = 0;
-        }];
-    }
-    else if (self.currentTick < 30) {
-        [UIView animateWithDuration:0.5 animations:^{
-            self.searchBar.text = @"gmail.com";
-            self.siteNameTip.alpha = 0;
-            self.content.alpha = 1;
-            self.contentTip.alpha = 0;
-            self.usernameTip.alpha = 0;
-            self.typeTip.alpha = 0;
-            self.typeButton.highlighted = NO;
-            self.toolButton.highlighted = YES;
-            self.toolTip.alpha = 1;
-            self.alertTip.alpha = 0;
-            self.contentText.text = @"XupuMajf4'Hafh";
-        }];
-    }
-    else if (self.currentTick <= self.tickCount) {
-        [self.timer invalidate];
-        self.timer = nil;
-        self.currentTick = 0;
-        [UIView animateWithDuration:0.5 animations:^{
-            [self.smallPlayButton setImage:[UIImage imageNamed:@"icon_play"] forState:UIControlStateNormal];
-            self.searchBar.text = @"gmail.com";
-            self.siteNameTip.alpha = 1;
-            self.content.alpha = 1;
-            self.contentTip.alpha = 1;
-            self.usernameTip.alpha = 1;
-            self.typeTip.alpha = 1;
-            self.toolButton.highlighted = NO;
-            self.toolTip.alpha = 0;
-            self.alertTip.alpha = 1;
-        }];
-    }
+@implementation MPGuideStep
+
++ (instancetype)stepWithImage:(UIImage *)image caption:(NSString *)caption {
+
+    MPGuideStep *step = [self new];
+    step.image = image;
+    step.caption = caption;
+
+    return step;
+}
+
+@end
+
+@implementation MPGuideStepCell
+
+- (void)awakeFromNib {
+
+    [super awakeFromNib];
+
+    self.imageView.layer.shadowColor = [UIColor grayColor].CGColor;
+    self.imageView.layer.shadowOffset = CGSizeZero;
+    self.imageView.layer.shadowOpacity = 0.5f;
 }
 
 @end

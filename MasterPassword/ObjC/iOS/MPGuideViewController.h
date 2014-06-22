@@ -8,27 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MPGuideViewController : UIViewController<UIScrollViewDelegate>
+@interface MPGuideViewController : UIViewController<UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
-@property(weak, nonatomic) IBOutlet UISearchBar *searchBar;
-@property(weak, nonatomic) IBOutlet UIView *siteNameTip;
-@property(weak, nonatomic) IBOutlet UIView *contentTip;
-@property(weak, nonatomic) IBOutlet UILabel *contentTipText;
-@property(weak, nonatomic) IBOutlet UIButton *usernameButton;
-@property(weak, nonatomic) IBOutlet UIView *usernameTip;
-@property(weak, nonatomic) IBOutlet UIButton *typeButton;
-@property(weak, nonatomic) IBOutlet UIView *typeTip;
-@property(weak, nonatomic) IBOutlet UIButton *toolButton;
-@property(weak, nonatomic) IBOutlet UIView *toolTip;
-@property(weak, nonatomic) IBOutlet UIProgressView *progress;
-@property(weak, nonatomic) IBOutlet UIView *content;
-@property(weak, nonatomic) IBOutlet UIButton *contentButton;
-@property(weak, nonatomic) IBOutlet UITextField *contentText;
-@property(weak, nonatomic) IBOutlet UIButton *largePlayButton;
-@property(weak, nonatomic) IBOutlet UIButton *smallPlayButton;
-@property(weak, nonatomic) IBOutlet UIView *alertTip;
+@property(nonatomic) IBOutlet UICollectionView *collectionView;
+@property(nonatomic) IBOutlet UILabel *captionLabel;
+@property(nonatomic) IBOutlet UIPageControl *pageControl;
+@property(nonatomic) IBOutlet UINavigationBar *navigationBar;
 
-- (IBAction)play;
-- (IBAction)close;
+- (IBAction)close:(id)sender;
 
 @end

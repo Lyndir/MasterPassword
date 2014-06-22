@@ -52,7 +52,6 @@
 
     _backgroundColor = self.passwordCollectionView.backgroundColor;
     _darkenedBackgroundColor = [_backgroundColor colorWithAlphaComponent:0.6f];
-    _coachmark = [MPCoachmark coachmarkForClass:[self class] version:0];
 
     self.view.backgroundColor = [UIColor clearColor];
     [self.passwordCollectionView automaticallyAdjustInsetsForKeyboard];
@@ -72,16 +71,6 @@
     [self updatePasswords];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-
-    [super viewDidAppear:animated];
-
-    PearlMainQueueAfter( 1, ^{
-        if (!self.coachmark.coached)
-            [self performSegueWithIdentifier:@"coachmarks" sender:self];
-    } );
-}
-
 - (void)viewWillDisappear:(BOOL)animated {
 
     [super viewWillDisappear:animated];
@@ -94,8 +83,6 @@
 
     if ([segue.identifier isEqualToString:@"popdown"])
         _popdownVC = segue.destinationViewController;
-    if ([segue.identifier isEqualToString:@"coachmarks"])
-        ((MPCoachmarkViewController *)segue.destinationViewController).coachmark = self.coachmark;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -110,7 +97,7 @@
 - (CGSize)       collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
 referenceSizeForHeaderInSection:(NSInteger)section {
 
-    return CGSizeMake( collectionView.bounds.size.width, CGPointFromCGRectBottom( self.passwordsSearchBar.frame ).y );
+    return CGSizeMake( collectionView.bounds.size.width, CGRectGetBottom( self.passwordsSearchBar.frame ).y );
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout

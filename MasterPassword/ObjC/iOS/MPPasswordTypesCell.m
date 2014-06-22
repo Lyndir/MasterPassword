@@ -216,7 +216,7 @@
     if (scrollView == self.contentCollectionView) {
         NSIndexPath *targetIndexPath = [self.contentCollectionView indexPathForItemAtPoint:
                 CGPointPlusCGPoint( *targetContentOffset, self.contentCollectionView.center )];
-        *targetContentOffset = CGPointFromCGRectTopLeft(
+        *targetContentOffset = CGRectGetTopLeft(
                 [self.contentCollectionView layoutAttributesForItemAtIndexPath:targetIndexPath].frame );
     }
 }
@@ -315,7 +315,7 @@
 
 - (void)saveContentType {
 
-    CGPoint centerPoint = CGPointFromCGRectCenter( self.contentCollectionView.bounds );
+    CGPoint centerPoint = CGRectGetCenter( self.contentCollectionView.bounds );
     NSIndexPath *centerIndexPath = [self.contentCollectionView indexPathForItemAtPoint:centerPoint];
     MPElementType type = [self typeForContentIndexPath:centerIndexPath];
     if (type == ((MPElementType)NSNotFound))
