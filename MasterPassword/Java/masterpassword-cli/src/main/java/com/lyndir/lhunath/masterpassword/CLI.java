@@ -18,10 +18,10 @@ package com.lyndir.lhunath.masterpassword;
 import com.google.common.io.LineReader;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-
 
 /**
  * <p> <i>Jun 10, 2008</i> </p>
@@ -118,8 +118,18 @@ public class CLI {
                 userName = lineReader.readLine();
             }
             if (masterPassword == null) {
-                System.err.format( "%s's master password: ", userName );
-                masterPassword = lineReader.readLine();
+                Console cons;
+                //Hide the password if possible
+                if((cons = System.console()) != null)
+                {
+                    char[] passwordChar = cons.readPassword(userName + "'s master password: ");
+                    masterPassword = new String(passwordChar);
+                }
+                else
+                {
+                    System.err.format( "%s's master password: ", userName );
+                    masterPassword = lineReader.readLine();
+                }
             }
 
             byte[] masterKey = MasterPassword.keyForPassword( masterPassword, userName );
