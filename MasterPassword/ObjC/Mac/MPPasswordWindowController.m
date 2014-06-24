@@ -26,7 +26,12 @@
 #define MPAlertIncorrectMP  @"MPAlertIncorrectMP"
 #define MPAlertCreateSite   @"MPAlertCreateSite"
 
-@implementation MPPasswordWindowController
+@interface MPPasswordWindowController()
+
+@property(nonatomic, copy) NSString *currentSiteText;
+@end
+
+@implementation MPPasswordWindowController { BOOL _skipTextChange; }
 
 #pragma mark - Life
 
@@ -47,7 +52,7 @@
         [self fadeIn];
         [self updateUser];
     }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidResignMainNotification object:self.window
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillResignActiveNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
         [self fadeOut];
     }];
@@ -58,6 +63,10 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
         [self updateUser];
+    }];
+    [self.elementsController observeKeyPath:@"selection"
+                                  withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
+        [self updateSelection];
     }];
 }
 
@@ -103,15 +112,24 @@
             [self.elementsController selectNext:self];
             return YES;
         }
+//        if ([NSStringFromSelector( commandSelector ) rangeOfString:@"delete"].location == 0) {
+//            _skipTextChange = YES;
+//            return NO;
+//        }
     }
 
     return [self handleCommand:commandSelector];
 }
 
+- (IBAction)doSearchElements:(id)sender {
+
+    [self updateElements];
+}
+
 - (void)controlTextDidChange:(NSNotification *)note {
 
-    if (note.object == self.siteField) {
-        [self updateElements];
+//    if (note.object == self.siteField) {
+//        [self updateElements];
 
         // Update the site content as the site name changes.
 //    if ([[NSApp currentEvent] type] == NSKeyDown &&
@@ -125,7 +143,7 @@
 //        [self trySiteWithAction:NO];
 //        return;
 //    }
-    }
+//    }
 }
 
 #pragma mark - NSTextViewDelegate
@@ -146,10 +164,8 @@
 
 - (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 
-    if (contextInfo == MPAlertIncorrectMP) {
-        [self close];
+    if (contextInfo == MPAlertIncorrectMP)
         return;
-    }
     if (contextInfo == MPAlertCreateSite) {
         switch (returnCode) {
             case NSAlertFirstButtonReturn: {
@@ -263,6 +279,27 @@
     }];
 }
 
+- (void)updateSelection {
+
+    if (_skipTextChange) {
+        _skipTextChange = NO;
+        return;
+    }
+
+    NSString *selectedSiteName = self.selectedElement.siteName;
+    if (!selectedSiteName)
+        return;
+
+    NSString *querySiteText = [self.siteField.stringValue stringByReplacingCharactersInRange:self.siteField.currentEditor.selectedRange
+                                                                                       withString:@""];
+    NSRange selectedSiteNameQueryRange = [selectedSiteName rangeOfString:querySiteText];
+    self.siteField.stringValue = selectedSiteName;
+
+    if (selectedSiteNameQueryRange.location == 0)
+        self.siteField.currentEditor.selectedRange = NSMakeRange(
+                selectedSiteNameQueryRange.length, selectedSiteName.length - selectedSiteNameQueryRange.length );
+}
+
 - (void)useSite {
 
     MPElementModel *selectedElement = [self selectedElement];
@@ -270,7 +307,7 @@
         // Performing action while content is available.  Copy it.
         [self copyContent:selectedElement.content];
 
-        [self close];
+        [self fadeOut];
 
         NSUserNotification *notification = [NSUserNotification new];
         notification.title = @"Password Copied";
@@ -317,6 +354,9 @@
 
 - (void)fadeIn {
 
+    if ([self.window isOnActiveSpace] && self.window.alphaValue)
+        return;
+
     CGWindowID windowID = (CGWindowID)[self.window windowNumber];
     CGImageRef capturedImage = CGWindowListCreateImage( CGRectInfinite, kCGWindowListOptionOnScreenBelowWindow, windowID,
             kCGWindowImageBoundsIgnoreFraming );
@@ -343,8 +383,12 @@
 
 - (void)fadeOut {
 
+    if (![NSApp isActive] && !self.window.alphaValue)
+        return;
+
     [[NSAnimationContext currentContext] setCompletionHandler:^{
         [self close];
+        [NSApp hide:self];
     }];
     [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
     [[self.window animator] setAlphaValue:0.0];
