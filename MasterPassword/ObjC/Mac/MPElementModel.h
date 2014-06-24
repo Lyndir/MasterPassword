@@ -20,7 +20,8 @@
 @class MPElementEntity;
 
 @interface MPElementModel : NSObject
-@property (nonatomic) NSString *site;
+
+@property (nonatomic) NSString *siteName;
 @property (nonatomic) MPElementType type;
 @property (nonatomic) NSString *typeName;
 @property (nonatomic) NSString *content;

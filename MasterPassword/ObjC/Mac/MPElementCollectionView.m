@@ -16,7 +16,6 @@
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "MPElementCollectionView.h"
 #import "MPElementModel.h"
 #import "MPMacAppDelegate.h"
@@ -75,7 +74,7 @@
 
     NSAlert *alert = [NSAlert alertWithMessageText:@"Update Login Name"
                                      defaultButton:@"Update" alternateButton:@"Cancel" otherButton:nil
-                         informativeTextWithFormat:@"Enter the login name for %@:", self.representedObject.site];
+                         informativeTextWithFormat:@"Enter the login name for %@:", self.representedObject.siteName];
     NSTextField *passwordField = [[NSTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
     [alert setAccessoryView:passwordField];
     [alert layout];
@@ -88,7 +87,7 @@
 
     NSAlert *alert = [NSAlert alertWithMessageText:@"Update Password"
                                      defaultButton:@"Update" alternateButton:@"Cancel" otherButton:nil
-                         informativeTextWithFormat:@"Enter the new password for %@:", self.representedObject.site];
+                         informativeTextWithFormat:@"Enter the new password for %@:", self.representedObject.siteName];
     NSSecureTextField *passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
     [alert setAccessoryView:passwordField];
     [alert layout];
@@ -101,9 +100,9 @@
 
     NSAlert *alert = [NSAlert alertWithMessageText:@"Delete Site"
                                      defaultButton:@"Delete" alternateButton:@"Cancel" otherButton:nil
-                         informativeTextWithFormat:@"Are you sure you want to delete the site: %@?", self.representedObject.site];
+                         informativeTextWithFormat:@"Are you sure you want to delete the site: %@?", self.representedObject.siteName];
     [alert beginSheetModalForWindow:self.view.window modalDelegate:self
-                     didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:MPAlertDeleteSite];
+                     didEndSelector:@selector( alertDidEnd:returnCode:contextInfo: ) contextInfo:MPAlertDeleteSite];
 }
 
 - (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {

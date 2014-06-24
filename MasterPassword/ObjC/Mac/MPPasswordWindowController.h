@@ -17,11 +17,22 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "MPElementModel.h"
 
-@interface MPPasswordWindowController : NSWindowController<NSTextFieldDelegate, NSCollectionViewDelegate>
+@interface MPPasswordWindowController : NSWindowController<NSTextViewDelegate, NSTextFieldDelegate, NSTableViewDataSource, NSTableViewDelegate>
 
+@property(nonatomic, strong) NSMutableArray *elements;
+
+@property(nonatomic, weak) IBOutlet NSArrayController *elementsController;
 @property(nonatomic, weak) IBOutlet NSImageView *blurView;
-@property(nonatomic, weak) IBOutlet NSTextField *userLabel;
+@property(nonatomic, weak) IBOutlet NSTextField *inputLabel;
 @property(nonatomic, weak) IBOutlet NSSearchField *siteField;
+@property(nonatomic, weak) IBOutlet NSSecureTextField *passwordField;
+@property(nonatomic, weak) IBOutlet NSTableView *siteTable;
+@property(nonatomic, weak) IBOutlet NSProgressIndicator *progressView;
+@property(nonatomic, weak) IBOutlet NSButton *typeButton;
+@property(nonatomic, weak) IBOutlet NSView *counterContainer;
+@property(nonatomic, weak) IBOutlet NSStepper *counterStepper;
+@property(nonatomic, weak) IBOutlet NSTextField *counterLabel;
 
 @end

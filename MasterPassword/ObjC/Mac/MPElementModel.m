@@ -47,7 +47,7 @@
     _entityOID = entity.objectID;
 
     self.algorithm = entity.algorithm;
-    self.site = entity.name;
+    self.siteName = entity.name;
     self.lastUsed = entity.lastUsed;
     self.loginName = entity.loginName;
     self.type = entity.type;

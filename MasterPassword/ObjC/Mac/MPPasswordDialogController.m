@@ -200,6 +200,7 @@
 #pragma mark - NSCollectionViewDelegate
 
 #pragma mark - NSTextFieldDelegate
+
 - (void)doCommandBySelector:(SEL)commandSelector {
 
     if (commandSelector == @selector(insertNewline:))
@@ -410,9 +411,9 @@
         NSUserNotification *notification = [NSUserNotification new];
         notification.title = @"Password Copied";
         if (selectedElement.loginName.length)
-            notification.subtitle = PearlString( @"%@ at %@", selectedElement.loginName, selectedElement.site );
+            notification.subtitle = PearlString( @"%@ at %@", selectedElement.loginName, selectedElement.siteName );
         else
-            notification.subtitle = selectedElement.site;
+            notification.subtitle = selectedElement.siteName;
         [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
     }
     else {
