@@ -291,7 +291,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
             URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
     NSURL *oldLocalStoreURL = [[applicationFilesDirectory
             URLByAppendingPathComponent:@"MasterPassword" isDirectory:NO] URLByAppendingPathExtension:@"sqlite"];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:oldLocalStoreURL.path isDirectory:NO]) {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:oldLocalStoreURL.path isDirectory:NULL]) {
         inf( @"No V1 local store to migrate." );
         return YES;
     }
@@ -303,7 +303,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
 - (BOOL)migrateFromLocalStore:(NSURL *)oldLocalStoreURL {
 
     NSURL *newLocalStoreURL = [self.storeManager URLForLocalStore];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:newLocalStoreURL.path isDirectory:NO]) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:newLocalStoreURL.path isDirectory:NULL]) {
         wrn( @"Can't migrate local store: A new local store already exists." );
         return YES;
     }
