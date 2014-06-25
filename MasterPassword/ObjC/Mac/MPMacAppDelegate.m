@@ -26,7 +26,7 @@
 @property(nonatomic, strong) NSWindowController *initialWindow;
 @end
 
-@implementation MPMacAppDelegate { NSWindow *_window; }
+@implementation MPMacAppDelegate
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wfour-char-constants"
@@ -66,70 +66,156 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     return eventNotHandledErr;
 }
 
-- (void)updateUsers {
+#pragma mark - Life
 
-    [[[self.usersItem submenu] itemArray] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if (idx > 2)
-            [[self.usersItem submenu] removeItem:obj];
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+
+    // Setup delegates and listeners.
+    [MPConfig get].delegate = self;
+    __weak id weakSelf = self;
+    [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
+        dispatch_async( dispatch_get_main_queue(), ^{
+            [weakSelf updateMenuItems];
+        } );
+    }           forKeyPath:@"key" options:0 context:nil];
+    [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
+        dispatch_async( dispatch_get_main_queue(), ^{
+            [weakSelf updateMenuItems];
+        } );
+    }           forKeyPath:@"activeUser" options:0 context:nil];
+    [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
+        dispatch_async( dispatch_get_main_queue(), ^{
+            [weakSelf updateMenuItems];
+        } );
+    }           forKeyPath:@"storeManager.cloudAvailable" options:0 context:nil];
+
+    // Status item.
+    self.statusView = [[RHStatusItemView alloc] initWithStatusBarItem:
+            [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength]];
+    self.statusView.image = [NSImage imageNamed:@"menu-icon"];
+    self.statusView.menu = self.statusMenu;
+    self.statusView.target = self;
+    self.statusView.action = @selector( showMenu );
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
+            ^(NSNotification *note) {
+        [self updateUsers];
     }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidImportChangesNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
+            ^(NSNotification *note) {
+        [self updateUsers];
+    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
+            ^(NSNotification *note) {
+        NSString *key = note.object;
+        if (!key || [key isEqualToString:NSStringFromSelector( @selector( rememberLogin ) )])
+            self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
+        if (!key || [key isEqualToString:NSStringFromSelector( @selector( dialogStyleHUD ) )]) {
+            self.dialogStyleRegular.state = ![[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
+            self.dialogStyleHUD.state = [[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
+            if (![self.passwordWindow.window isVisible])
+                self.passwordWindow = nil;
+            else {
+                [self.passwordWindow close];
+                self.passwordWindow = nil;
+                [self showPasswordWindow:nil];
+            }
+        }
+    }];
+    [self updateUsers];
+
+    // Global hotkey.
+    EventHotKeyRef hotKeyRef;
+    EventTypeSpec hotKeyEvents[1] = { { .eventClass = kEventClassKeyboard, .eventKind = kEventHotKeyPressed } };
+    OSStatus status = InstallApplicationEventHandler( NewEventHandlerUPP( MPHotKeyHander ), GetEventTypeCount( hotKeyEvents ),
+            hotKeyEvents, (__bridge void *)self, NULL );
+    if (status != noErr)
+        err( @"Error installing application event handler: %i", (int)status );
+    status = RegisterEventHotKey( 35 /* p */, controlKey + cmdKey, MPShowHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
+    if (status != noErr)
+        err( @"Error registering 'show' hotkey: %i", (int)status );
+    status = RegisterEventHotKey( 35 /* p */, controlKey + optionKey + cmdKey, MPLockHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
+    if (status != noErr)
+        err( @"Error registering 'lock' hotkey: %i", (int)status );
+
+    // Initial display.
+    [NSApp activateIgnoringOtherApps:YES];
+    if ([[MPMacConfig get].firstRun boolValue]) {
+        self.initialWindow = [[NSWindowController alloc] initWithWindowNibName:@"MPInitialWindow" owner:self];
+        [self.initialWindow.window setLevel:NSFloatingWindowLevel];
+        [self.initialWindow showWindow:self];
+    }
+}
+
+- (void)applicationWillResignActive:(NSNotification *)notification {
+
+    if (![[MPConfig get].rememberLogin boolValue])
+        [self lock:nil];
+}
+
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
+    // Save changes in the application's managed object context before the application terminates.
 
     NSManagedObjectContext *context = [MPMacAppDelegate managedObjectContextForMainThreadIfReady];
-    if (!context) {
-        self.createUserItem.title = @"New User (Not ready)";
-        self.createUserItem.enabled = NO;
-        self.createUserItem.toolTip = @"Please wait until the app is fully loaded.";
-        self.deleteUserItem.title = @"Delete User (Not ready)";
-        self.deleteUserItem.enabled = NO;
-        self.deleteUserItem.toolTip = @"Please wait until the app is fully loaded.";
-        [self.usersItem.submenu addItemWithTitle:@"Loading..." action:NULL keyEquivalent:@""].enabled = NO;
+    if (!context)
+        return NSTerminateNow;
 
-        return;
-    }
+    if (![context commitEditing])
+        return NSTerminateCancel;
 
-    MPUserEntity *activeUser = [self activeUserInContext:context];
+    if (![context hasChanges])
+        return NSTerminateNow;
 
-    self.createUserItem.title = @"New User";
-    self.createUserItem.enabled = YES;
-    self.createUserItem.toolTip = nil;
-
-    self.deleteUserItem.title = activeUser? @"Delete User": @"Delete User (None Selected)";
-    self.deleteUserItem.enabled = activeUser != nil;
-    self.deleteUserItem.toolTip = activeUser? nil: @"First select the user to delete.";
-
-    NSError *error = nil;
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
-    fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO] ];
-    NSArray *users = [context executeFetchRequest:fetchRequest error:&error];
-    if (!users)
-        err( @"Failed to load users: %@", error );
-
-    if (![users count]) {
-        NSMenuItem *noUsersItem = [self.usersItem.submenu addItemWithTitle:@"No users" action:NULL keyEquivalent:@""];
-        noUsersItem.enabled = NO;
-        noUsersItem.toolTip = @"Use the iOS app to create users and make sure iCloud is enabled in its preferences as well.  "
-                @"Then give iCloud some time to sync the new user to your Mac.";
-    }
-
-    self.usersItem.state = NSMixedState;
-    for (MPUserEntity *user in users) {
-        NSMenuItem *userItem = [[NSMenuItem alloc] initWithTitle:user.name action:@selector( selectUser: ) keyEquivalent:@""];
-        [userItem setTarget:self];
-        [userItem setRepresentedObject:[user objectID]];
-        [[self.usersItem submenu] addItem:userItem];
-
-        if (!activeUser && [user.name isEqualToString:[MPMacConfig get].usedUserName])
-            [super setActiveUser:activeUser = user];
-
-        if ([activeUser isEqual:user]) {
-            userItem.state = NSOnState;
-            self.usersItem.state = NSOffState;
-        }
-        else
-            userItem.state = NSOffState;
-    }
-
-    [self updateMenuItems];
+    [context saveToStore];
+    return NSTerminateNow;
 }
+
+#pragma mark - State
+
+- (void)setActiveUser:(MPUserEntity *)activeUser {
+
+    [super setActiveUser:activeUser];
+
+    [MPMacConfig get].usedUserName = activeUser.name;
+
+    PearlMainQueue( ^{
+        [self updateUsers];
+    } );
+}
+
+- (void)setLoginItemEnabled:(BOOL)enabled {
+
+    BOOL loginItemEnabled = [self loginItemEnabled];
+    if (loginItemEnabled != enabled) {
+        if (SMLoginItemSetEnabled( (__bridge CFStringRef)LOGIN_HELPER_BUNDLE_ID, (Boolean)enabled ) == true)
+            loginItemEnabled = enabled;
+        else
+            wrn( @"Failed to set login item." );
+    }
+
+    self.openAtLoginItem.state = loginItemEnabled? NSOnState: NSOffState;
+    self.openAtLoginButton.state = loginItemEnabled? NSOnState: NSOffState;
+}
+
+- (BOOL)loginItemEnabled {
+
+    // The easy and sane method (SMJobCopyDictionary) can pose problems when the app is sandboxed. -_-
+    NSArray *jobs = (__bridge_transfer NSArray *)SMCopyAllJobDictionaries( kSMDomainUserLaunchd );
+
+    for (NSDictionary *job in jobs)
+        if ([LOGIN_HELPER_BUNDLE_ID isEqualToString:[job objectForKey:@"Label"]]) {
+            dbg( @"loginItemEnabled: %@", @([[job objectForKey:@"OnDemand"] boolValue]) );
+            return [[job objectForKey:@"OnDemand"] boolValue];
+        }
+
+    dbg( @"loginItemEnabled: not found" );
+    return NO;
+}
+
+#pragma mark - Actions
 
 - (void)selectUser:(NSMenuItem *)item {
 
@@ -141,13 +227,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     if (error)
         err( @"While looking up selected user: %@", error );
-}
-
-- (void)showMenu {
-
-    [self updateMenuItems];
-
-    [self.statusView popUpMenu];
 }
 
 - (IBAction)togglePreference:(id)sender {
@@ -278,104 +357,99 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     self.initialWindow = nil;
 }
 
-- (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)oldValue {
+- (IBAction)showPasswordWindow:(id)sender {
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:NSStringFromSelector( configKey )];
-}
-
-#pragma mark - NSApplicationDelegate
-
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-
-    // Setup delegates and listeners.
-    [MPConfig get].delegate = self;
-    __weak id weakSelf = self;
-    [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        dispatch_async( dispatch_get_main_queue(), ^{
-            [weakSelf updateMenuItems];
-        } );
-    }           forKeyPath:@"key" options:0 context:nil];
-    [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        dispatch_async( dispatch_get_main_queue(), ^{
-            [weakSelf updateMenuItems];
-        } );
-    }           forKeyPath:@"activeUser" options:0 context:nil];
-    [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        dispatch_async( dispatch_get_main_queue(), ^{
-            [weakSelf updateMenuItems];
-        } );
-    }           forKeyPath:@"storeManager.cloudAvailable" options:0 context:nil];
-
-    // Status item.
-    self.statusView = [[RHStatusItemView alloc] initWithStatusBarItem:
-            [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength]];
-    self.statusView.image = [NSImage imageNamed:@"menu-icon"];
-    self.statusView.menu = self.statusMenu;
-    self.statusView.target = self;
-    self.statusView.action = @selector( showMenu );
-
-    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:
-            ^(NSNotification *note) {
-        [self updateUsers];
-    }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidImportChangesNotification object:nil
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:
-            ^(NSNotification *note) {
-        [self updateUsers];
-    }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:
-            ^(NSNotification *note) {
-        NSString *key = note.object;
-        if (!key || [key isEqualToString:NSStringFromSelector( @selector( rememberLogin ) )])
-            self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
-        if (!key || [key isEqualToString:NSStringFromSelector( @selector( dialogStyleHUD ) )]) {
-            self.dialogStyleRegular.state = ![[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
-            self.dialogStyleHUD.state = [[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
-            if (![self.passwordWindow.window isVisible])
-                self.passwordWindow = nil;
-            else {
-                [self.passwordWindow close];
-                self.passwordWindow = nil;
-                [self showPasswordWindow:nil];
-            }
-        }
-    }];
-    [self updateUsers];
-
-    // Global hotkey.
-    EventHotKeyRef hotKeyRef;
-    EventTypeSpec hotKeyEvents[1] = { { .eventClass = kEventClassKeyboard, .eventKind = kEventHotKeyPressed } };
-    OSStatus status = InstallApplicationEventHandler( NewEventHandlerUPP( MPHotKeyHander ), GetEventTypeCount( hotKeyEvents ),
-            hotKeyEvents, (__bridge void *)self, NULL );
-    if (status != noErr)
-        err( @"Error installing application event handler: %i", (int)status );
-    status = RegisterEventHotKey( 35 /* p */, controlKey + cmdKey, MPShowHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
-    if (status != noErr)
-        err( @"Error registering 'show' hotkey: %i", (int)status );
-    status = RegisterEventHotKey( 35 /* p */, controlKey + optionKey + cmdKey, MPLockHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
-    if (status != noErr)
-        err( @"Error registering 'lock' hotkey: %i", (int)status );
-
-    // Initial display.
     [NSApp activateIgnoringOtherApps:YES];
-    if ([[MPMacConfig get].firstRun boolValue]) {
-        self.initialWindow = [[NSWindowController alloc] initWithWindowNibName:@"MPInitialWindow" owner:self];
-        [self.initialWindow.window setLevel:NSFloatingWindowLevel];
-        [self.initialWindow showWindow:self];
+
+    // If no user, can't activate.
+    if (![self activeUserForMainThread]) {
+        [[NSAlert alertWithMessageText:@"No User Selected" defaultButton:[PearlStrings get].commonButtonOkay alternateButton:nil
+                           otherButton:nil informativeTextWithFormat:
+                        @"Begin by selecting or creating your user from the status menu (●●●|) next to the clock."]
+                runModal];
+        [self.statusView popUpMenu];
+        return;
     }
+
+    // Don't show window if we weren't already running (ie. if we haven't been activated before).
+    if (!self.passwordWindow)
+        self.passwordWindow = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
+
+    [self.passwordWindow showWindow:self];
 }
 
-- (void)setActiveUser:(MPUserEntity *)activeUser {
+#pragma mark - Private
 
-    [super setActiveUser:activeUser];
+- (void)updateUsers {
 
-    [MPMacConfig get].usedUserName = activeUser.name;
+    [[[self.usersItem submenu] itemArray] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if (idx > 2)
+            [[self.usersItem submenu] removeItem:obj];
+    }];
 
-    PearlMainQueue( ^{
-        [self updateUsers];
-    } );
+    NSManagedObjectContext *context = [MPMacAppDelegate managedObjectContextForMainThreadIfReady];
+    if (!context) {
+        self.createUserItem.title = @"New User (Not ready)";
+        self.createUserItem.enabled = NO;
+        self.createUserItem.toolTip = @"Please wait until the app is fully loaded.";
+        self.deleteUserItem.title = @"Delete User (Not ready)";
+        self.deleteUserItem.enabled = NO;
+        self.deleteUserItem.toolTip = @"Please wait until the app is fully loaded.";
+        [self.usersItem.submenu addItemWithTitle:@"Loading..." action:NULL keyEquivalent:@""].enabled = NO;
+
+        return;
+    }
+
+    MPUserEntity *activeUser = [self activeUserInContext:context];
+
+    self.createUserItem.title = @"New User";
+    self.createUserItem.enabled = YES;
+    self.createUserItem.toolTip = nil;
+
+    self.deleteUserItem.title = activeUser? @"Delete User": @"Delete User (None Selected)";
+    self.deleteUserItem.enabled = activeUser != nil;
+    self.deleteUserItem.toolTip = activeUser? nil: @"First select the user to delete.";
+
+    NSError *error = nil;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
+    fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO] ];
+    NSArray *users = [context executeFetchRequest:fetchRequest error:&error];
+    if (!users)
+        err( @"Failed to load users: %@", error );
+
+    if (![users count]) {
+        NSMenuItem *noUsersItem = [self.usersItem.submenu addItemWithTitle:@"No users" action:NULL keyEquivalent:@""];
+        noUsersItem.enabled = NO;
+        noUsersItem.toolTip = @"Use the iOS app to create users and make sure iCloud is enabled in its preferences as well.  "
+                @"Then give iCloud some time to sync the new user to your Mac.";
+    }
+
+    self.usersItem.state = NSMixedState;
+    for (MPUserEntity *user in users) {
+        NSMenuItem *userItem = [[NSMenuItem alloc] initWithTitle:user.name action:@selector( selectUser: ) keyEquivalent:@""];
+        [userItem setTarget:self];
+        [userItem setRepresentedObject:[user objectID]];
+        [[self.usersItem submenu] addItem:userItem];
+
+        if (!activeUser && [user.name isEqualToString:[MPMacConfig get].usedUserName])
+            [super setActiveUser:activeUser = user];
+
+        if ([activeUser isEqual:user]) {
+            userItem.state = NSOnState;
+            self.usersItem.state = NSOffState;
+        }
+        else
+            userItem.state = NSOffState;
+    }
+
+    [self updateMenuItems];
+}
+
+- (void)showMenu {
+
+    [self updateMenuItems];
+
+    [self.statusView popUpMenu];
 }
 
 - (void)updateMenuItems {
@@ -440,77 +514,11 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }
 }
 
-- (IBAction)showPasswordWindow:(id)sender {
+#pragma mark - PearlConfigDelegate
 
-    [NSApp activateIgnoringOtherApps:YES];
+- (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)oldValue {
 
-    // If no user, can't activate.
-    if (![self activeUserForMainThread]) {
-        [[NSAlert alertWithMessageText:@"No User Selected" defaultButton:[PearlStrings get].commonButtonOkay alternateButton:nil
-                           otherButton:nil informativeTextWithFormat:
-                        @"Begin by selecting or creating your user from the status menu (●●●|) next to the clock."]
-                runModal];
-        [self.statusView popUpMenu];
-        return;
-    }
-
-    // Don't show window if we weren't already running (ie. if we haven't been activated before).
-    if (!self.passwordWindow)
-        self.passwordWindow = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
-
-    [self.passwordWindow showWindow:self];
-}
-
-- (void)setLoginItemEnabled:(BOOL)enabled {
-
-    BOOL loginItemEnabled = [self loginItemEnabled];
-    if (loginItemEnabled != enabled) {
-        if (SMLoginItemSetEnabled( (__bridge CFStringRef)LOGIN_HELPER_BUNDLE_ID, (Boolean)enabled ) == true)
-            loginItemEnabled = enabled;
-        else
-            wrn( @"Failed to set login item." );
-    }
-
-    self.openAtLoginItem.state = loginItemEnabled? NSOnState: NSOffState;
-    self.openAtLoginButton.state = loginItemEnabled? NSOnState: NSOffState;
-}
-
-- (BOOL)loginItemEnabled {
-
-    // The easy and sane method (SMJobCopyDictionary) can pose problems when the app is sandboxed. -_-
-    NSArray *jobs = (__bridge_transfer NSArray *)SMCopyAllJobDictionaries( kSMDomainUserLaunchd );
-
-    for (NSDictionary *job in jobs)
-        if ([LOGIN_HELPER_BUNDLE_ID isEqualToString:[job objectForKey:@"Label"]]) {
-            dbg( @"loginItemEnabled: %@", @([[job objectForKey:@"OnDemand"] boolValue]) );
-            return [[job objectForKey:@"OnDemand"] boolValue];
-        }
-
-    dbg( @"loginItemEnabled: not found" );
-    return NO;
-}
-
-- (void)applicationWillResignActive:(NSNotification *)notification {
-
-    if (![[MPConfig get].rememberLogin boolValue])
-        [self lock:nil];
-}
-
-- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
-    // Save changes in the application's managed object context before the application terminates.
-
-    NSManagedObjectContext *context = [MPMacAppDelegate managedObjectContextForMainThreadIfReady];
-    if (!context)
-        return NSTerminateNow;
-
-    if (![context commitEditing])
-        return NSTerminateCancel;
-
-    if (![context hasChanges])
-        return NSTerminateNow;
-
-    [context saveToStore];
-    return NSTerminateNow;
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:NSStringFromSelector( configKey )];
 }
 
 @end

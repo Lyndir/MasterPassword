@@ -22,6 +22,7 @@
 #import "MPAppDelegate_Store.h"
 #import "MPElementModel.h"
 #import "MPAppDelegate_Key.h"
+#import "PearlProfiler.h"
 
 #define MPAlertIncorrectMP  @"MPAlertIncorrectMP"
 #define MPAlertCreateSite   @"MPAlertCreateSite"
@@ -357,12 +358,15 @@
     if ([self.window isOnActiveSpace] && self.window.alphaValue)
         return;
 
+    PearlProfiler *profiler = [PearlProfiler new];
     CGWindowID windowID = (CGWindowID)[self.window windowNumber];
     CGImageRef capturedImage = CGWindowListCreateImage( CGRectInfinite, kCGWindowListOptionOnScreenBelowWindow, windowID,
             kCGWindowImageBoundsIgnoreFraming );
+    [profiler finishJob:@"captured window: %d, on screen: %@", windowID, self.window.screen];
     NSImage *screenImage = [[NSImage alloc] initWithCGImage:capturedImage size:NSMakeSize(
             CGImageGetWidth( capturedImage ) / self.window.backingScaleFactor,
             CGImageGetHeight( capturedImage ) / self.window.backingScaleFactor )];
+    [profiler finishJob:@"image size: %@, bytes: %ld", NSStringFromSize( screenImage.size ), screenImage.TIFFRepresentation.length ];
 
     NSImage *smallImage = [[NSImage alloc] initWithSize:NSMakeSize(
             CGImageGetWidth( capturedImage ) / 20,
@@ -373,12 +377,16 @@
                   operation:NSCompositeSourceOver
                    fraction:1.0];
     [smallImage unlockFocus];
+    [profiler finishJob:@"small image size: %@, bytes: %ld", NSStringFromSize( screenImage.size ), screenImage.TIFFRepresentation.length];
 
     self.blurView.image = smallImage;
+    [profiler finishJob:@"assigned image"];
 
     [self.window setFrame:self.window.screen.frame display:YES];
+    [profiler finishJob:@"assigned frame"];
     [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
     [[self.window animator] setAlphaValue:1.0];
+    [profiler finishJob:@"animating window"];
 }
 
 - (void)fadeOut {
