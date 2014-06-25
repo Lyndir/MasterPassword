@@ -69,6 +69,10 @@
                                   withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
         [self updateSelection];
     }];
+
+    NSSearchFieldCell *siteFieldCell = self.siteField.cell;
+    siteFieldCell.searchButtonCell = nil;
+    siteFieldCell.cancelButtonCell = nil;
 }
 
 #pragma mark - NSResponder
@@ -113,10 +117,10 @@
             [self.elementsController selectNext:self];
             return YES;
         }
-//        if ([NSStringFromSelector( commandSelector ) rangeOfString:@"delete"].location == 0) {
-//            _skipTextChange = YES;
-//            return NO;
-//        }
+        if ([NSStringFromSelector( commandSelector ) rangeOfString:@"delete"].location == 0) {
+            _skipTextChange = YES;
+            return NO;
+        }
     }
 
     return [self handleCommand:commandSelector];
@@ -125,26 +129,6 @@
 - (IBAction)doSearchElements:(id)sender {
 
     [self updateElements];
-}
-
-- (void)controlTextDidChange:(NSNotification *)note {
-
-//    if (note.object == self.siteField) {
-//        [self updateElements];
-
-        // Update the site content as the site name changes.
-//    if ([[NSApp currentEvent] type] == NSKeyDown &&
-//        [[[NSApp currentEvent] charactersIgnoringModifiers] isEqualToString:@"\r"]) { // Return while completing.
-//        [self useSite];
-//        return;
-//    }
-
-//    if ([[NSApp currentEvent] type] == NSKeyDown &&
-//        [[[NSApp currentEvent] charactersIgnoringModifiers] characterAtIndex:0] == 0x1b) { // Escape while completing.
-//        [self trySiteWithAction:NO];
-//        return;
-//    }
-//    }
 }
 
 #pragma mark - NSTextViewDelegate
@@ -173,7 +157,7 @@
                 // "Create" button.
                 [[MPMacAppDelegate get] addElementNamed:[self.siteField stringValue] completion:^(MPElementEntity *element) {
                     if (element)
-                        PearlMainQueue( ^{ [self updateElements]; } );
+                        [self updateElements];
                 }];
                 break;
             }
@@ -187,6 +171,11 @@
 }
 
 #pragma mark - State
+
+- (NSString *)query {
+
+    return [self.siteField.stringValue stringByReplacingCharactersInRange:self.siteField.currentEditor.selectedRange withString:@""];
+}
 
 - (void)insertObject:(MPElementModel *)model inElementsAtIndex:(NSUInteger)index {
 
@@ -222,32 +211,29 @@
 - (void)updateUser {
 
     [MPMacAppDelegate managedObjectContextForMainThreadPerformBlock:^(NSManagedObjectContext *mainContext) {
+        self.passwordField.hidden = YES;
+        self.siteField.hidden = YES;
+        self.siteTable.hidden = YES;
+
+        self.inputLabel.stringValue = @"";
+        self.passwordField.stringValue = @"";
+        self.siteField.stringValue = @"";
+
         MPUserEntity *mainActiveUser = [[MPMacAppDelegate get] activeUserInContext:mainContext];
         if (mainActiveUser) {
             if ([MPMacAppDelegate get].key) {
                 self.inputLabel.stringValue = strf( @"%@'s password for:", mainActiveUser.name );
-                [self.passwordField setHidden:YES];
-                [self.siteField setHidden:NO];
-                [self.siteTable setHidden:NO];
+                self.siteField.hidden = NO;
+                self.siteTable.hidden = NO;
                 [self.siteField becomeFirstResponder];
             }
             else {
                 self.inputLabel.stringValue = strf( @"Enter %@'s master password:", mainActiveUser.name );
-                [self.passwordField setHidden:NO];
-                [self.siteField setHidden:YES];
-                [self.siteTable setHidden:YES];
+                self.passwordField.hidden = NO;
                 [self.passwordField becomeFirstResponder];
             }
         }
-        else {
-            self.inputLabel.stringValue = @"";
-            [self.passwordField setHidden:YES];
-            [self.siteField setHidden:YES];
-            [self.siteTable setHidden:YES];
-        }
 
-        self.passwordField.stringValue = @"";
-        self.siteField.stringValue = @"";
         [self updateElements];
     }];
 }
@@ -259,12 +245,15 @@
         return;
     }
 
-    NSString *query = [self.siteField stringValue];
+    PearlProfiler *profiler = [PearlProfiler profilerForTask:@"updateElements"];
+    NSString *query = [self query];
+    [profiler finishJob:@"query"];
     [MPMacAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
         fetchRequest.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"lastUsed" ascending:NO]];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@",
                                                                   query, query, [[MPMacAppDelegate get] activeUserInContext:context]];
+        [profiler finishJob:@"setup fetch"];
 
         NSError *error = nil;
         NSArray *siteResults = [context executeFetchRequest:fetchRequest error:&error];
@@ -272,12 +261,16 @@
             err( @"While fetching elements for completion: %@", error );
             return;
         }
+        [profiler finishJob:@"do fetch"];
 
         NSMutableArray *newElements = [NSMutableArray arrayWithCapacity:[siteResults count]];
         for (MPElementEntity *element in siteResults)
             [newElements addObject:[[MPElementModel alloc] initWithEntity:element]];
+        [profiler finishJob:@"make models"];
         self.elements = newElements;
+        [profiler finishJob:@"update elements"];
     }];
+    [profiler finishJob:@"done"];
 }
 
 - (void)updateSelection {
@@ -287,18 +280,15 @@
         return;
     }
 
-    NSString *selectedSiteName = self.selectedElement.siteName;
-    if (!selectedSiteName)
+    NSString *siteName = self.selectedElement.siteName;
+    if (!siteName)
         return;
 
-    NSString *querySiteText = [self.siteField.stringValue stringByReplacingCharactersInRange:self.siteField.currentEditor.selectedRange
-                                                                                       withString:@""];
-    NSRange selectedSiteNameQueryRange = [selectedSiteName rangeOfString:querySiteText];
-    self.siteField.stringValue = selectedSiteName;
+    NSRange siteNameQueryRange = [siteName rangeOfString:[self query]];
+    self.siteField.stringValue = siteName;
 
-    if (selectedSiteNameQueryRange.location == 0)
-        self.siteField.currentEditor.selectedRange = NSMakeRange(
-                selectedSiteNameQueryRange.length, selectedSiteName.length - selectedSiteNameQueryRange.length );
+    if (siteNameQueryRange.location == 0)
+        self.siteField.currentEditor.selectedRange = NSMakeRange( siteNameQueryRange.length, siteName.length - siteNameQueryRange.length );
 }
 
 - (void)useSite {
@@ -358,7 +348,7 @@
     if ([self.window isOnActiveSpace] && self.window.alphaValue)
         return;
 
-    PearlProfiler *profiler = [PearlProfiler new];
+    PearlProfiler *profiler = [PearlProfiler profilerForTask:@"fadeIn"];
     CGWindowID windowID = (CGWindowID)[self.window windowNumber];
     CGImageRef capturedImage = CGWindowListCreateImage( CGRectInfinite, kCGWindowListOptionOnScreenBelowWindow, windowID,
             kCGWindowImageBoundsIgnoreFraming );

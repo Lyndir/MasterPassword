@@ -10,6 +10,7 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "MPPasswordWindowController.h"
+#import "PearlProfiler.h"
 #import <Carbon/Carbon.h>
 #import <ServiceManagement/ServiceManagement.h>
 
@@ -70,6 +71,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
+    PearlProfiler *profiler = [PearlProfiler profilerForTask:@"applicationDidFinishLaunching"];
     // Setup delegates and listeners.
     [MPConfig get].delegate = self;
     __weak id weakSelf = self;
@@ -88,6 +90,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             [weakSelf updateMenuItems];
         } );
     }           forKeyPath:@"storeManager.cloudAvailable" options:0 context:nil];
+    [profiler finishJob:@"observers"];
 
     // Status item.
     self.statusView = [[RHStatusItemView alloc] initWithStatusBarItem:
@@ -96,6 +99,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     self.statusView.menu = self.statusMenu;
     self.statusView.target = self;
     self.statusView.action = @selector( showMenu );
+    [profiler finishJob:@"statusView"];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
@@ -125,7 +129,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             }
         }
     }];
+    [profiler finishJob:@"notificationCenter"];
     [self updateUsers];
+    [profiler finishJob:@"updateUsers"];
 
     // Global hotkey.
     EventHotKeyRef hotKeyRef;
@@ -140,14 +146,15 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     status = RegisterEventHotKey( 35 /* p */, controlKey + optionKey + cmdKey, MPLockHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
     if (status != noErr)
         err( @"Error registering 'lock' hotkey: %i", (int)status );
+    [profiler finishJob:@"hotKey"];
 
     // Initial display.
-    [NSApp activateIgnoringOtherApps:YES];
     if ([[MPMacConfig get].firstRun boolValue]) {
         self.initialWindow = [[NSWindowController alloc] initWithWindowNibName:@"MPInitialWindow" owner:self];
         [self.initialWindow.window setLevel:NSFloatingWindowLevel];
         [self.initialWindow showWindow:self];
     }
+    [profiler finishJob:@"initial display"];
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification {
