@@ -24,8 +24,12 @@
 #import "MPAppDelegate_Key.h"
 #import "PearlProfiler.h"
 
-#define MPAlertIncorrectMP  @"MPAlertIncorrectMP"
-#define MPAlertCreateSite   @"MPAlertCreateSite"
+#define MPAlertIncorrectMP      @"MPAlertIncorrectMP"
+#define MPAlertCreateSite       @"MPAlertCreateSite"
+#define MPAlertChangeType       @"MPAlertChangeType"
+#define MPAlertChangeLogin      @"MPAlertChangeLogin"
+#define MPAlertChangeContent    @"MPAlertChangeContent"
+#define MPAlertDeleteSite       @"MPAlertDeleteSite"
 
 @interface MPPasswordWindowController()
 
@@ -73,6 +77,12 @@
     NSSearchFieldCell *siteFieldCell = self.siteField.cell;
     siteFieldCell.searchButtonCell = nil;
     siteFieldCell.cancelButtonCell = nil;
+
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.colors = @[ (__bridge id)[NSColor whiteColor].CGColor, (__bridge id)[NSColor clearColor].CGColor ];
+    gradient.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+    gradient.frame = self.siteTable.bounds;
+    self.siteTable.superview.superview.layer.mask = gradient;
 }
 
 #pragma mark - NSResponder
@@ -157,13 +167,75 @@
                 // "Create" button.
                 [[MPMacAppDelegate get] addElementNamed:[self.siteField stringValue] completion:^(MPElementEntity *element) {
                     if (element)
-                        [self updateElements];
+                        PearlMainQueue( ^{ [self updateElements]; } );
                 }];
                 break;
             }
-            case NSAlertThirdButtonReturn:
-                // "Cancel" button.
+            default:
                 break;
+        }
+    }
+    if (contextInfo == MPAlertChangeType) {
+        switch (returnCode) {
+            case NSAlertFirstButtonReturn: {
+                // "Save" button.
+                MPElementType type = (MPElementType)[self.passwordTypesMatrix.selectedCell tag];
+                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                    MPElementEntity *entity = [[MPMacAppDelegate get] changeElement:[self.selectedElement entityInContext:context]
+                                                                      saveInContext:context toType:type];
+                    if ([entity isKindOfClass:[MPElementStoredEntity class]] && ![(MPElementStoredEntity *)entity contentObject].length)
+                        PearlMainQueue( ^{
+                            [self changePassword:nil];
+                        } );
+                }];
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    if (contextInfo == MPAlertChangeLogin) {
+        switch (returnCode) {
+            case NSAlertFirstButtonReturn: {
+                // "Save" button.
+                NSString *loginName = [(NSSecureTextField *)alert.accessoryView stringValue];
+                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                    MPElementEntity *entity = [self.selectedElement entityInContext:context];
+                    entity.loginName = loginName;
+                    [context saveToStore];
+                }];
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    if (contextInfo == MPAlertChangeContent) {
+        switch (returnCode) {
+            case NSAlertFirstButtonReturn: {
+                // "Save" button.
+                NSString *password = [(NSSecureTextField *)alert.accessoryView stringValue];
+                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                    MPElementEntity *entity = [self.selectedElement entityInContext:context];
+                    [entity.algorithm saveContent:password toElement:entity usingKey:[MPMacAppDelegate get].key];
+                    [context saveToStore];
+                }];
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    if (contextInfo == MPAlertDeleteSite) {
+        switch (returnCode) {
+            case NSAlertFirstButtonReturn: {
+                // "Delete" button.
+                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                    [context deleteObject:[self.selectedElement entityInContext:context]];
+                    [context saveToStore];
+                }];
+                break;
+            }
             default:
                 break;
         }
@@ -190,6 +262,80 @@
 - (MPElementModel *)selectedElement {
 
     return [self.elementsController.selectedObjects firstObject];
+}
+
+#pragma mark - Actions
+
+- (IBAction)deleteElement:(id)sender {
+
+    NSAlert *alert = [NSAlert new];
+    [alert addButtonWithTitle:@"Delete"];
+    [alert addButtonWithTitle:@"Cancel"];
+    [alert setMessageText:@"Delete Site?"];
+    [alert setInformativeText:strf( @"Do you want to delete the site named:\n\n%@", self.selectedElement.siteName )];
+    [alert beginSheetModalForWindow:self.window modalDelegate:self
+                     didEndSelector:@selector( alertDidEnd:returnCode:contextInfo: ) contextInfo:MPAlertDeleteSite];
+}
+
+- (IBAction)changeLogin:(id)sender {
+
+    NSAlert *alert = [NSAlert new];
+    [alert addButtonWithTitle:@"Save"];
+    [alert addButtonWithTitle:@"Cancel"];
+    [alert setMessageText:@"Change Login Name"];
+    [alert setInformativeText:strf( @"Enter the login name for:\n\n%@", self.selectedElement.siteName )];
+    NSTextField *loginField = [[NSTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
+    loginField.stringValue = self.selectedElement.loginName?: @"";
+    [loginField selectText:self];
+    [alert setAccessoryView:loginField];
+    [alert layout];
+    [alert beginSheetModalForWindow:self.window modalDelegate:self
+                     didEndSelector:@selector( alertDidEnd:returnCode:contextInfo: ) contextInfo:MPAlertChangeLogin];
+}
+
+- (IBAction)changePassword:(id)sender {
+
+    if (!self.selectedElement.stored)
+        return;
+
+    NSAlert *alert = [NSAlert new];
+    [alert addButtonWithTitle:@"Save"];
+    [alert addButtonWithTitle:@"Cancel"];
+    [alert setMessageText:@"Change Password"];
+    [alert setInformativeText:strf( @"Enter the new password for:\n\n%@", self.selectedElement.siteName )];
+    [alert setAccessoryView:[[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )]];
+    [alert layout];
+    [alert beginSheetModalForWindow:self.window modalDelegate:self
+                     didEndSelector:@selector( alertDidEnd:returnCode:contextInfo: ) contextInfo:MPAlertChangeContent];
+}
+
+- (IBAction)changeType:(id)sender {
+
+    MPElementModel *element = self.selectedElement;
+    NSArray *types = [element.algorithm allTypesStartingWith:MPElementTypeGeneratedPIN];
+    [self.passwordTypesMatrix renewRows:(NSInteger)[types count] columns:1];
+    for (NSUInteger t = 0; t < [types count]; ++t) {
+        MPElementType type = [types[t] unsignedIntegerValue];
+        NSString *title = [element.algorithm nameOfType:type];
+        if (type & MPElementTypeClassGenerated)
+            title = [element.algorithm generateContentNamed:element.siteName ofType:type
+                                                withCounter:element.counter usingKey:[MPMacAppDelegate get].key];
+
+        NSButtonCell *cell = [self.passwordTypesMatrix cellAtRow:(NSInteger)t column:0];
+        cell.tag = type;
+        cell.state = type == element.type? NSOnState: NSOffState;
+        cell.title = title;
+    }
+
+    NSAlert *alert = [NSAlert new];
+    [alert addButtonWithTitle:@"Save"];
+    [alert addButtonWithTitle:@"Cancel"];
+    [alert setMessageText:@"Change Password Type"];
+    [alert setInformativeText:strf( @"Choose a new password type for:\n\n%@", element.siteName )];
+    [alert setAccessoryView:self.passwordTypesBox];
+    [alert layout];
+    [alert beginSheetModalForWindow:self.window modalDelegate:self
+                     didEndSelector:@selector( alertDidEnd:returnCode:contextInfo: ) contextInfo:MPAlertChangeType];
 }
 
 #pragma mark - Private
@@ -289,6 +435,9 @@
 
     if (siteNameQueryRange.location == 0)
         self.siteField.currentEditor.selectedRange = NSMakeRange( siteNameQueryRange.length, siteName.length - siteNameQueryRange.length );
+
+    NSRect selectedCellFrame = [self.siteTable frameOfCellAtColumn:0 row:((NSInteger)self.elementsController.selectionIndex)];
+    [[(NSClipView *)self.siteTable.superview animator] setBoundsOrigin:selectedCellFrame.origin];
 }
 
 - (void)useSite {
@@ -352,11 +501,16 @@
     CGWindowID windowID = (CGWindowID)[self.window windowNumber];
     CGImageRef capturedImage = CGWindowListCreateImage( CGRectInfinite, kCGWindowListOptionOnScreenBelowWindow, windowID,
             kCGWindowImageBoundsIgnoreFraming );
+    if (CGImageGetWidth( capturedImage ) <= 1) {
+        wrn( @"Failed to capture screen image for window: %d", windowID );
+        return;
+    }
+
     [profiler finishJob:@"captured window: %d, on screen: %@", windowID, self.window.screen];
     NSImage *screenImage = [[NSImage alloc] initWithCGImage:capturedImage size:NSMakeSize(
             CGImageGetWidth( capturedImage ) / self.window.backingScaleFactor,
             CGImageGetHeight( capturedImage ) / self.window.backingScaleFactor )];
-    [profiler finishJob:@"image size: %@, bytes: %ld", NSStringFromSize( screenImage.size ), screenImage.TIFFRepresentation.length ];
+    [profiler finishJob:@"image size: %@, bytes: %ld", NSStringFromSize( screenImage.size ), screenImage.TIFFRepresentation.length];
 
     NSImage *smallImage = [[NSImage alloc] initWithSize:NSMakeSize(
             CGImageGetWidth( capturedImage ) / 20,

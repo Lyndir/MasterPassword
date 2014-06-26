@@ -30,8 +30,8 @@
 @property (nonatomic) NSUInteger counter;
 @property (nonatomic) NSDate *lastUsed;
 @property (nonatomic) id<MPAlgorithm> algorithm;
-@property (nonatomic) NSArray *typeNames;
-@property (nonatomic) NSUInteger typeIndex;
+@property (nonatomic) BOOL generated;
+@property (nonatomic) BOOL stored;
 
 - (id)initWithEntity:(MPElementEntity *)entity;
 - (MPElementEntity *)entityInContext:(NSManagedObjectContext *)moc;

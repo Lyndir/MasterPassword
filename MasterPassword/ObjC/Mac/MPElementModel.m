@@ -25,7 +25,6 @@
 
 @implementation MPElementModel {
     NSManagedObjectID *_entityOID;
-    NSMutableDictionary *_typesByName;
     BOOL _initialized;
 }
 
@@ -56,16 +55,7 @@
     self.counter = [entity isKindOfClass:[MPElementGeneratedEntity class]]? [(MPElementGeneratedEntity *)entity counter]: 0;
 
     // Find all password types and the index of the current type amongst them.
-    _typesByName = [NSMutableDictionary dictionary];
-    MPElementType type = self.type;
-    do {
-        [_typesByName setObject:@(type) forKey:[self.algorithm shortNameOfType:type]];
-    } while (self.type != (type = [self.algorithm nextType:type]));
-    self.typeNames = [_typesByName keysSortedByValueUsingSelector:@selector( compare: )];
-    self.typeIndex = [[[_typesByName allValues] sortedArrayUsingSelector:@selector( compare: )] indexOfObject:@(self.type)];
-
-    [entity.algorithm resolveContentForElement:entity usingKey:[MPAppDelegate_Shared get].key
-                                        result:^(NSString *result) {
+    [entity resolveContentUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
         PearlMainQueue( ^{ self.content = result; } );
     }];
 }
@@ -107,20 +97,14 @@
     }];
 }
 
-- (void)setTypeIndex:(NSUInteger)typeIndex {
+- (BOOL)generated {
 
-    if (typeIndex == _typeIndex)
-        return;
-    _typeIndex = typeIndex;
+    return self.type & MPElementTypeClassGenerated;
+}
 
-    if (!_initialized)
-        // This wasn't a change to the entity.
-        return;
+- (BOOL)stored {
 
-    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        [self setEntity:[[MPAppDelegate_Shared get] changeElement:[self entityInContext:context] saveInContext:context
-                                                           toType:[_typesByName[self.typeNames[typeIndex]] unsignedIntegerValue]]];
-    }];
+    return self.type & MPElementTypeClassStored;
 }
 
 @end
