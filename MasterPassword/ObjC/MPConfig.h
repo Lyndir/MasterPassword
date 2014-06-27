@@ -12,6 +12,7 @@
 
 @property(nonatomic, retain) NSNumber *sendInfo;
 @property(nonatomic, retain) NSNumber *rememberLogin;
+@property(nonatomic, retain) NSNumber *hidePasswords;
 
 @property(nonatomic, retain) NSNumber *iCloudDecided;
 @property(nonatomic, retain) NSNumber *checkInconsistency;

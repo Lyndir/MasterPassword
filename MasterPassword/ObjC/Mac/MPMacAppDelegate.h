@@ -19,6 +19,7 @@
 @property(nonatomic, weak) IBOutlet NSMenuItem *showItem;
 @property(nonatomic, strong) IBOutlet NSMenu *statusMenu;
 @property(nonatomic, weak) IBOutlet NSMenuItem *useCloudItem;
+@property(nonatomic, weak) IBOutlet NSMenuItem *hidePasswordsItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *rememberPasswordItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *openAtLoginItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *savePasswordItem;
@@ -38,5 +39,6 @@
 - (IBAction)corruptCloud:(id)sender;
 - (IBAction)terminate:(id)sender;
 - (IBAction)iphoneAppStore:(id)sender;
+- (IBAction)showPopup:(id)sender;
 
 @end

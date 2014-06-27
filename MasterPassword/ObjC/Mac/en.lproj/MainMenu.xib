@@ -19,6 +19,7 @@
                 <outlet property="deleteUserItem" destination="ZgZ-p2-463" id="smU-PF-mKA"/>
                 <outlet property="dialogStyleHUD" destination="768" id="771"/>
                 <outlet property="dialogStyleRegular" destination="767" id="772"/>
+                <outlet property="hidePasswordsItem" destination="9G7-17-PzY" id="qPX-VT-jVx"/>
                 <outlet property="lockItem" destination="720" id="726"/>
                 <outlet property="openAtLoginItem" destination="785" id="788"/>
                 <outlet property="rememberPasswordItem" destination="744" id="750"/>
@@ -90,13 +91,30 @@
                                 </attributedString>
                                 <modifierMask key="keyEquivalentModifierMask"/>
                             </menuItem>
+                            <menuItem title="Hide Passwords" id="9G7-17-PzY">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="togglePreference:" target="494" id="xgz-pN-csV"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Don't show site passwords (hold alt ⌥ to reveal them)." enabled="NO" id="HnK-hQ-cM9">
+                                <attributedString key="attributedTitle">
+                                    <fragment content="Remember the password while the application is running.">
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
                             <menuItem title="Remember Password" id="744">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="togglePreference:" target="494" id="753"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Remember the password while the application is running." enabled="NO" id="745">
+                            <menuItem title="Remember the password while the application is running." enabled="NO" id="Avu-uY-2Rh">
                                 <attributedString key="attributedTitle">
                                     <fragment content="Remember the password while the application is running.">
                                         <attributes>

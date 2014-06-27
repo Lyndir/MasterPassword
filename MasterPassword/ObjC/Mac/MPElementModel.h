@@ -36,4 +36,5 @@
 - (id)initWithEntity:(MPElementEntity *)entity;
 - (MPElementEntity *)entityInContext:(NSManagedObjectContext *)moc;
 
+- (void)updateContent;
 @end

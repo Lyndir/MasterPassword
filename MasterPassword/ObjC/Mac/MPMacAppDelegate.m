@@ -115,6 +115,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
         NSString *key = note.object;
+        if (!key || [key isEqualToString:NSStringFromSelector( @selector( hidePasswords ) )])
+            self.hidePasswordsItem.state = [[MPConfig get].hidePasswords boolValue]? NSOnState: NSOffState;
         if (!key || [key isEqualToString:NSStringFromSelector( @selector( rememberLogin ) )])
             self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
         if (!key || [key isEqualToString:NSStringFromSelector( @selector( dialogStyleHUD ) )]) {
@@ -249,6 +251,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }
     if (sender == self.useCloudItem)
         [self storeManager].cloudEnabled = self.useCloudItem.state != NSOnState;
+    if (sender == self.hidePasswordsItem)
+        [MPConfig get].hidePasswords = [NSNumber numberWithBool:![[MPConfig get].hidePasswords boolValue]];
     if (sender == self.rememberPasswordItem)
         [MPConfig get].rememberLogin = [NSNumber numberWithBool:![[MPConfig get].rememberLogin boolValue]];
     if (sender == self.openAtLoginButton)
@@ -269,6 +273,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         [MPMacConfig get].dialogStyleHUD = @NO;
     if (sender == self.dialogStyleHUD)
         [MPMacConfig get].dialogStyleHUD = @YES;
+
+    [MPMacConfig flush];
 }
 
 - (IBAction)newUser:(NSMenuItem *)sender {
@@ -364,17 +370,22 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     self.initialWindow = nil;
 }
 
+- (IBAction)showPopup:(id)sender {
+
+    [self.statusView popUpMenu];
+}
+
 - (IBAction)showPasswordWindow:(id)sender {
 
     [NSApp activateIgnoringOtherApps:YES];
 
     // If no user, can't activate.
     if (![self activeUserForMainThread]) {
+        [self showPopup:nil];
         [[NSAlert alertWithMessageText:@"No User Selected" defaultButton:[PearlStrings get].commonButtonOkay alternateButton:nil
                            otherButton:nil informativeTextWithFormat:
                         @"Begin by selecting or creating your user from the status menu (●●●|) next to the clock."]
                 runModal];
-        [self.statusView popUpMenu];
         return;
     }
 

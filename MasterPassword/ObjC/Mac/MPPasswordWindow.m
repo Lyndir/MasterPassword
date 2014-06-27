@@ -27,6 +27,8 @@
 
     [super awakeFromNib];
 
+    self.opaque = NO;
+    self.backgroundColor = [NSColor clearColor];
     self.level = NSScreenSaverWindowLevel;
     self.alphaValue = 0;
 }

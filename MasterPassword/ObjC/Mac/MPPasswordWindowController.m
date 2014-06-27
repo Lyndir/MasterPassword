@@ -85,6 +85,17 @@
     self.siteTable.superview.superview.layer.mask = gradient;
 }
 
+- (void)flagsChanged:(NSEvent *)theEvent {
+
+    BOOL alternatePressed = (theEvent.modifierFlags & NSAlternateKeyMask) != 0;
+    if (alternatePressed != self.alternatePressed) {
+        self.alternatePressed = alternatePressed;
+        [self.selectedElement updateContent];
+    }
+
+    [super flagsChanged:theEvent];
+}
+
 #pragma mark - NSResponder
 
 - (void)doCommandBySelector:(SEL)commandSelector {
@@ -134,6 +145,14 @@
     }
 
     return [self handleCommand:commandSelector];
+}
+
+- (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor {
+
+    if (control == self.siteField)
+        [fieldEditor replaceCharactersInRange:fieldEditor.selectedRange withString:@""];
+
+    return YES;
 }
 
 - (IBAction)doSearchElements:(id)sender {
@@ -266,6 +285,12 @@
 
 #pragma mark - Actions
 
+- (IBAction)settings:(id)sender {
+
+    [self fadeOut:NO];
+    [[MPMacAppDelegate get] showPopup:sender];
+}
+
 - (IBAction)deleteElement:(id)sender {
 
     NSAlert *alert = [NSAlert new];
@@ -283,7 +308,7 @@
     [alert addButtonWithTitle:@"Save"];
     [alert addButtonWithTitle:@"Cancel"];
     [alert setMessageText:@"Change Login Name"];
-    [alert setInformativeText:strf( @"Enter the login name for:\n\n%@", self.selectedElement.siteName )];
+    [alert setInformativeText:strf( @"Enter the login name for: %@", self.selectedElement.siteName )];
     NSTextField *loginField = [[NSTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
     loginField.stringValue = self.selectedElement.loginName?: @"";
     [loginField selectText:self];
@@ -302,7 +327,7 @@
     [alert addButtonWithTitle:@"Save"];
     [alert addButtonWithTitle:@"Cancel"];
     [alert setMessageText:@"Change Password"];
-    [alert setInformativeText:strf( @"Enter the new password for:\n\n%@", self.selectedElement.siteName )];
+    [alert setInformativeText:strf( @"Enter the new password for: %@", self.selectedElement.siteName )];
     [alert setAccessoryView:[[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )]];
     [alert layout];
     [alert beginSheetModalForWindow:self.window modalDelegate:self
@@ -331,7 +356,7 @@
     [alert addButtonWithTitle:@"Save"];
     [alert addButtonWithTitle:@"Cancel"];
     [alert setMessageText:@"Change Password Type"];
-    [alert setInformativeText:strf( @"Choose a new password type for:\n\n%@", element.siteName )];
+    [alert setInformativeText:strf( @"Choose a new password type for: %@", element.siteName )];
     [alert setAccessoryView:self.passwordTypesBox];
     [alert layout];
     [alert beginSheetModalForWindow:self.window modalDelegate:self
@@ -430,11 +455,14 @@
     if (!siteName)
         return;
 
-    NSRange siteNameQueryRange = [siteName rangeOfString:[self query]];
-    self.siteField.stringValue = siteName;
+    if ([self.window isKeyWindow] && [self.siteField isEqual:[self.window firstResponder]]) {
+        NSRange siteNameQueryRange = [siteName rangeOfString:[self query]];
+        self.siteField.stringValue = siteName;
 
-    if (siteNameQueryRange.location == 0)
-        self.siteField.currentEditor.selectedRange = NSMakeRange( siteNameQueryRange.length, siteName.length - siteNameQueryRange.length );
+        if (siteNameQueryRange.location == 0)
+            self.siteField.currentEditor.selectedRange =
+                    NSMakeRange( siteNameQueryRange.length, siteName.length - siteNameQueryRange.length );
+    }
 
     NSRect selectedCellFrame = [self.siteTable frameOfCellAtColumn:0 row:((NSInteger)self.elementsController.selectionIndex)];
     [[(NSClipView *)self.siteTable.superview animator] setBoundsOrigin:selectedCellFrame.origin];
@@ -528,22 +556,29 @@
 
     [self.window setFrame:self.window.screen.frame display:YES];
     [profiler finishJob:@"assigned frame"];
-    [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
-    [[self.window animator] setAlphaValue:1.0];
+    [NSAnimationContext currentContext].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+    self.window.animator.alphaValue = 1.0;
     [profiler finishJob:@"animating window"];
 }
 
 - (void)fadeOut {
+
+    [self fadeOut:YES];
+}
+
+- (void)fadeOut:(BOOL)hide {
 
     if (![NSApp isActive] && !self.window.alphaValue)
         return;
 
     [[NSAnimationContext currentContext] setCompletionHandler:^{
         [self close];
-        [NSApp hide:self];
+
+        if (hide)
+            [NSApp hide:self];
     }];
-    [[NSAnimationContext currentContext] setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
-    [[self.window animator] setAlphaValue:0.0];
+    [NSAnimationContext currentContext].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+    [self.window animator].alphaValue = 0.0;
 }
 
 @end

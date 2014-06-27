@@ -22,6 +22,7 @@
 @interface MPPasswordWindowController : NSWindowController<NSTextViewDelegate, NSTextFieldDelegate, NSTableViewDataSource, NSTableViewDelegate>
 
 @property(nonatomic, strong) NSMutableArray *elements;
+@property(nonatomic) BOOL alternatePressed;
 
 @property(nonatomic, weak) IBOutlet NSArrayController *elementsController;
 @property(nonatomic, weak) IBOutlet NSImageView *blurView;

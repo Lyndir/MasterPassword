@@ -55,9 +55,7 @@
     self.counter = [entity isKindOfClass:[MPElementGeneratedEntity class]]? [(MPElementGeneratedEntity *)entity counter]: 0;
 
     // Find all password types and the index of the current type amongst them.
-    [entity resolveContentUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
-        PearlMainQueue( ^{ self.content = result; } );
-    }];
+    [self updateContent:entity];
 }
 
 - (MPElementEntity *)entityInContext:(NSManagedObjectContext *)moc {
@@ -89,10 +87,7 @@
             ((MPElementGeneratedEntity *)entity).counter = counter;
             [context saveToStore];
 
-            [entity.algorithm resolveContentForElement:entity usingKey:[MPAppDelegate_Shared get].key
-                                                result:^(NSString *result) {
-                PearlMainQueue( ^{ self.content = result; } );
-            }];
+            [self updateContent:entity];
         }
     }];
 }
@@ -105,6 +100,25 @@
 - (BOOL)stored {
 
     return self.type & MPElementTypeClassStored;
+}
+
+- (void)updateContent {
+
+    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        [self updateContent:[MPElementEntity existingObjectWithID:_entityOID inContext:context]];
+    }];
+}
+
+- (void)updateContent:(MPElementEntity *)entity {
+
+    [entity resolveContentUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
+        if ([[MPConfig get].hidePasswords boolValue] && !([NSEvent modifierFlags] & NSAlternateKeyMask))
+            result = [result stringByReplacingMatchesOfExpression:
+                    [NSRegularExpression regularExpressionWithPattern:@"." options:0 error:nil]
+                                                     withTemplate:@"●"];
+
+        PearlMainQueue( ^{ self.content = result; } );
+    }];
 }
 
 @end
