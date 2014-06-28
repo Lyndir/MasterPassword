@@ -526,15 +526,14 @@
         return;
 
     PearlProfiler *profiler = [PearlProfiler profilerForTask:@"fadeIn"];
-    CGWindowID windowID = (CGWindowID)[self.window windowNumber];
-    CGImageRef capturedImage = CGWindowListCreateImage( CGRectInfinite, kCGWindowListOptionOnScreenBelowWindow, windowID,
-            kCGWindowImageBoundsIgnoreFraming );
-    if (CGImageGetWidth( capturedImage ) <= 1) {
-        wrn( @"Failed to capture screen image for window: %d", windowID );
+    CGDirectDisplayID displayID = [self.window.screen.deviceDescription[@"NSScreenNumber"] unsignedIntValue];
+    CGImageRef capturedImage = CGDisplayCreateImage( displayID );
+    if (!capturedImage || CGImageGetWidth( capturedImage ) <= 1) {
+        wrn( @"Failed to capture screen image for display: %d", displayID );
         return;
     }
 
-    [profiler finishJob:@"captured window: %d, on screen: %@", windowID, self.window.screen];
+    [profiler finishJob:@"captured window: %d, on screen: %@", displayID, self.window.screen.deviceDescription];
     NSImage *screenImage = [[NSImage alloc] initWithCGImage:capturedImage size:NSMakeSize(
             CGImageGetWidth( capturedImage ) / self.window.backingScaleFactor,
             CGImageGetHeight( capturedImage ) / self.window.backingScaleFactor )];
@@ -543,6 +542,7 @@
     NSImage *smallImage = [[NSImage alloc] initWithSize:NSMakeSize(
             CGImageGetWidth( capturedImage ) / 20,
             CGImageGetHeight( capturedImage ) / 20 )];
+    CFRelease( capturedImage );
     [smallImage lockFocus];
     [screenImage drawInRect:(NSRect){ .origin = CGPointZero, .size = smallImage.size, }
                    fromRect:NSZeroRect
