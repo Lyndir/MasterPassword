@@ -95,9 +95,21 @@
                                     <action selector="togglePreference:" target="494" id="xgz-pN-csV"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Remember the password while the application is running." enabled="NO" id="HnK-hQ-cM9">
+                            <menuItem title="Don't display the password.  Hold alt ⌥ to reveal temporarily." enabled="NO" id="HnK-hQ-cM9">
                                 <attributedString key="attributedTitle">
-                                    <fragment content="Remember the password while the application is running.">
+                                    <fragment content="Don't display the password.  Hold alt ">
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="⌥">
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="LucidaGrande"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=" to reveal temporarily.">
                                         <attributes>
                                             <font key="NSFont" size="12" name="Helvetica"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
