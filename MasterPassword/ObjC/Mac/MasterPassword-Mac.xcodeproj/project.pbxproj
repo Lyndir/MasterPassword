@@ -13,7 +13,6 @@
 		93D3970BCF85F7902E611168 /* PearlProfiler.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39DB3A8ADED08C39A6228 /* PearlProfiler.m */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
 		93D39C5789EFA607CF788082 /* MPElementModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39E73BF5CBF8E5B005CD3 /* MPElementModel.m */; };
-		93D39C7C2BE7C0E0763B0177 /* MPElementCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D394495528B10D1B61A2C3 /* MPElementCollectionView.m */; };
 		93D39D304F73B3BBA031522A /* PearlProfiler.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D394EEFF5BF555A55AF361 /* PearlProfiler.h */; };
 		93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */; };
 		93D39F833DEC1C89B2F795AC /* MPPasswordWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A57A7823DE98A0FF83C /* MPPasswordWindowController.m */; };
@@ -64,10 +63,7 @@
 		DA5E5D021724A667003798D8 /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB11724A667003798D8 /* MPUserEntity.m */; };
 		DA5E5D031724A667003798D8 /* MPMacAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB41724A667003798D8 /* MPMacAppDelegate.m */; };
 		DA5E5D041724A667003798D8 /* MPMacConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB61724A667003798D8 /* MPMacConfig.m */; };
-		DA5E5D051724A667003798D8 /* MPPasswordDialogController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB81724A667003798D8 /* MPPasswordDialogController.m */; };
-		DA5E5D061724A667003798D8 /* MPPasswordDialogController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5CB91724A667003798D8 /* MPPasswordDialogController.xib */; };
 		DA5E5D081724A667003798D8 /* MasterPassword.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5CBF1724A667003798D8 /* MasterPassword.entitlements */; };
-		DA5E5D091724A667003798D8 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5CC01724A667003798D8 /* Credits.rtf */; };
 		DA5E5D0A1724A667003798D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5CC21724A667003798D8 /* InfoPlist.strings */; };
 		DA5E5D0B1724A667003798D8 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5CC41724A667003798D8 /* MainMenu.xib */; };
 		DA5E5D0C1724A667003798D8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CC61724A667003798D8 /* main.m */; };
@@ -312,9 +308,7 @@
 		93D39240B5143E01F0B75E96 /* MPElementModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementModel.h; sourceTree = "<group>"; };
 		93D392C3918763B3B72CF366 /* MPPasswordWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindowController.h; sourceTree = "<group>"; };
 		93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Indexing.h"; sourceTree = "<group>"; };
-		93D394495528B10D1B61A2C3 /* MPElementCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementCollectionView.m; sourceTree = "<group>"; };
 		93D394EEFF5BF555A55AF361 /* PearlProfiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PearlProfiler.h; path = ../../../External/Pearl/Pearl/PearlProfiler.h; sourceTree = "<group>"; };
-		93D3960D320FF8A072B092E3 /* MPElementCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementCollectionView.h; sourceTree = "<group>"; };
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
 		93D3977484534E99F9BA579D /* MPPasswordWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindow.h; sourceTree = "<group>"; };
 		93D39A57A7823DE98A0FF83C /* MPPasswordWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordWindowController.m; sourceTree = "<group>"; };
@@ -393,13 +387,9 @@
 		DA5E5CB41724A667003798D8 /* MPMacAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPMacAppDelegate.m; sourceTree = "<group>"; };
 		DA5E5CB51724A667003798D8 /* MPMacConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPMacConfig.h; sourceTree = "<group>"; };
 		DA5E5CB61724A667003798D8 /* MPMacConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPMacConfig.m; sourceTree = "<group>"; };
-		DA5E5CB71724A667003798D8 /* MPPasswordDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordDialogController.h; sourceTree = "<group>"; };
-		DA5E5CB81724A667003798D8 /* MPPasswordDialogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordDialogController.m; sourceTree = "<group>"; };
-		DA5E5CB91724A667003798D8 /* MPPasswordDialogController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPPasswordDialogController.xib; sourceTree = "<group>"; };
 		DA5E5CBA1724A667003798D8 /* MasterPassword-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MasterPassword-Info.plist"; sourceTree = "<group>"; };
 		DA5E5CBE1724A667003798D8 /* MasterPassword-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MasterPassword-Prefix.pch"; sourceTree = "<group>"; };
 		DA5E5CBF1724A667003798D8 /* MasterPassword.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = MasterPassword.entitlements; sourceTree = "<group>"; };
-		DA5E5CC11724A667003798D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		DA5E5CC31724A667003798D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DA5E5CC51724A667003798D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		DA5E5CC61724A667003798D8 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -1206,19 +1196,13 @@
 				DA5E5CB41724A667003798D8 /* MPMacAppDelegate.m */,
 				DA5E5CB51724A667003798D8 /* MPMacConfig.h */,
 				DA5E5CB61724A667003798D8 /* MPMacConfig.m */,
-				DA5E5CB71724A667003798D8 /* MPPasswordDialogController.h */,
-				DA5E5CB81724A667003798D8 /* MPPasswordDialogController.m */,
-				DA5E5CB91724A667003798D8 /* MPPasswordDialogController.xib */,
 				DA5E5CBA1724A667003798D8 /* MasterPassword-Info.plist */,
 				DA5E5CBE1724A667003798D8 /* MasterPassword-Prefix.pch */,
 				DA5E5CBF1724A667003798D8 /* MasterPassword.entitlements */,
-				DA5E5CC01724A667003798D8 /* Credits.rtf */,
 				DA5E5CC21724A667003798D8 /* InfoPlist.strings */,
 				DA5E5CC41724A667003798D8 /* MainMenu.xib */,
 				DA5E5CC61724A667003798D8 /* main.m */,
 				DA0933C91747A56A00DE1CEF /* MPInitialWindow.xib */,
-				93D394495528B10D1B61A2C3 /* MPElementCollectionView.m */,
-				93D3960D320FF8A072B092E3 /* MPElementCollectionView.h */,
 				93D39E73BF5CBF8E5B005CD3 /* MPElementModel.m */,
 				93D39240B5143E01F0B75E96 /* MPElementModel.h */,
 				DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */,
@@ -2396,9 +2380,7 @@
 				DACA296F1705DF81002C6C22 /* Crashlytics.plist in Resources */,
 				DACA29731705E1A8002C6C22 /* ciphers.plist in Resources */,
 				DACA29741705E1A8002C6C22 /* dictionary.lst in Resources */,
-				DA5E5D061724A667003798D8 /* MPPasswordDialogController.xib in Resources */,
 				DA5E5D081724A667003798D8 /* MasterPassword.entitlements in Resources */,
-				DA5E5D091724A667003798D8 /* Credits.rtf in Resources */,
 				DA5E5D0A1724A667003798D8 /* InfoPlist.strings in Resources */,
 				DA5E5D0B1724A667003798D8 /* MainMenu.xib in Resources */,
 				DA5E5D551724F9C8003798D8 /* MasterPassword.iconset in Resources */,
@@ -2479,10 +2461,8 @@
 				DA5E5D021724A667003798D8 /* MPUserEntity.m in Sources */,
 				DA5E5D031724A667003798D8 /* MPMacAppDelegate.m in Sources */,
 				DA5E5D041724A667003798D8 /* MPMacConfig.m in Sources */,
-				DA5E5D051724A667003798D8 /* MPPasswordDialogController.m in Sources */,
 				DA5E5D0C1724A667003798D8 /* main.m in Sources */,
 				DA5E5D0D1724A667003798D8 /* MasterPassword.xcdatamodeld in Sources */,
-				93D39C7C2BE7C0E0763B0177 /* MPElementCollectionView.m in Sources */,
 				93D39C5789EFA607CF788082 /* MPElementModel.m in Sources */,
 				93D39F833DEC1C89B2F795AC /* MPPasswordWindowController.m in Sources */,
 				93D390C676DF52DA7E459F19 /* MPPasswordWindow.m in Sources */,
@@ -2560,14 +2540,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		DA5E5CC01724A667003798D8 /* Credits.rtf */ = {
-			isa = PBXVariantGroup;
-			children = (
-				DA5E5CC11724A667003798D8 /* en */,
-			);
-			name = Credits.rtf;
-			sourceTree = "<group>";
-		};
 		DA5E5CC21724A667003798D8 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2798,7 +2770,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2818,7 +2789,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

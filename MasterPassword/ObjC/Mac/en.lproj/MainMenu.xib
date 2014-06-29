@@ -17,8 +17,6 @@
             <connections>
                 <outlet property="createUserItem" destination="757" id="763"/>
                 <outlet property="deleteUserItem" destination="ZgZ-p2-463" id="smU-PF-mKA"/>
-                <outlet property="dialogStyleHUD" destination="768" id="771"/>
-                <outlet property="dialogStyleRegular" destination="767" id="772"/>
                 <outlet property="hidePasswordsItem" destination="9G7-17-PzY" id="qPX-VT-jVx"/>
                 <outlet property="lockItem" destination="720" id="726"/>
                 <outlet property="openAtLoginItem" destination="785" id="788"/>
@@ -97,7 +95,7 @@
                                     <action selector="togglePreference:" target="494" id="xgz-pN-csV"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Don't show site passwords (hold alt ⌥ to reveal them)." enabled="NO" id="HnK-hQ-cM9">
+                            <menuItem title="Remember the password while the application is running." enabled="NO" id="HnK-hQ-cM9">
                                 <attributedString key="attributedTitle">
                                     <fragment content="Remember the password while the application is running.">
                                         <attributes>
@@ -142,24 +140,52 @@
                                 </attributedString>
                                 <modifierMask key="keyEquivalentModifierMask"/>
                             </menuItem>
-                            <menuItem title="Password Dialog Style" id="765">
+                            <menuItem title="Export Sites" id="r1P-hr-mh5">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Password Dialog Style" id="766">
+                                <menu key="submenu" title="Export Sites" id="fnk-gK-yCi">
                                     <items>
-                                        <menuItem title="Regular" id="767">
+                                        <menuItem title="Secure Export" id="06i-og-eLt">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="togglePreference:" target="494" id="773"/>
+                                                <action selector="exportSitesSecure:" target="494" id="LVH-es-imA"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="HUD" tag="1" id="768">
+                                        <menuItem title="Your passwords are not visible." enabled="NO" id="ybY-P3-eao">
+                                            <attributedString key="attributedTitle">
+                                                <fragment content="Your passwords are not visible.">
+                                                    <attributes>
+                                                        <font key="NSFont" size="12" name="Helvetica"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem title="Reveal Passwords" id="fMG-TT-bTn">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="togglePreference:" target="494" id="774"/>
+                                                <action selector="exportSitesReveal:" target="494" id="1IW-VT-Oeu"/>
                                             </connections>
+                                        </menuItem>
+                                        <menuItem title="Keep this file secure or delete it when you're done with it!" enabled="NO" id="cQu-oR-SUa">
+                                            <attributedString key="attributedTitle">
+                                                <fragment content="Keep this file secure or delete it when you're done with it!">
+                                                    <attributes>
+                                                        <font key="NSFont" size="12" name="Helvetica"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
+                                            <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
                                     </items>
                                 </menu>
+                            </menuItem>
+                            <menuItem title="Import Sites..." id="EFK-zt-EvJ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="importSites:" target="494" id="CNv-4j-036"/>
+                                </connections>
                             </menuItem>
                             <menuItem title="Advanced" id="776">
                                 <modifierMask key="keyEquivalentModifierMask"/>

@@ -182,7 +182,7 @@
             dispatch_group_enter( importPasswordGroup );
             dispatch_async( dispatch_get_main_queue(), ^{
                 [PearlAlert showAlertWithTitle:@"Import File's Master Password"
-                                       message:PearlString( @"%@'s export was done using a different master password.\n"
+                                       message:strf( @"%@'s export was done using a different master password.\n"
                                                @"Enter that master password to unlock the exported data.", userName )
                                      viewStyle:UIAlertViewStyleSecureTextInput
                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
@@ -405,6 +405,7 @@
                 [PearlInfoPlist get].CFBundleShortVersionString,
                 [PearlInfoPlist get].CFBundleVersion );
 
+    NSString *exportedSites = [self exportSitesRevealPasswords:revealPasswords];
     NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
     [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
 

@@ -26,8 +26,6 @@
 @property(nonatomic, weak) IBOutlet NSMenuItem *createUserItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *deleteUserItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *usersItem;
-@property(nonatomic, weak) IBOutlet NSMenuItem *dialogStyleRegular;
-@property(nonatomic, weak) IBOutlet NSMenuItem *dialogStyleHUD;
 @property(nonatomic, weak) IBOutlet NSButton *openAtLoginButton;
 @property(nonatomic, weak) IBOutlet NSButton *enableCloudButton;
 

@@ -111,13 +111,21 @@
 
 - (void)updateContent:(MPElementEntity *)entity {
 
-    [entity resolveContentUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
-        if ([[MPConfig get].hidePasswords boolValue] && !([NSEvent modifierFlags] & NSAlternateKeyMask))
-            result = [result stringByReplacingMatchesOfExpression:
-                    [NSRegularExpression regularExpressionWithPattern:@"." options:0 error:nil]
-                                                     withTemplate:@"●"];
+    static NSRegularExpression *re_anyChar;
+    static dispatch_once_t once = 0;
+    dispatch_once( &once, ^{
+        re_anyChar = [NSRegularExpression regularExpressionWithPattern:@"." options:0 error:nil];
+    } );
 
-        PearlMainQueue( ^{ self.content = result; } );
+    [entity resolveContentUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
+        NSString *displayResult = result;
+        if ([[MPConfig get].hidePasswords boolValue] && !([NSEvent modifierFlags] & NSAlternateKeyMask))
+            displayResult = [displayResult stringByReplacingMatchesOfExpression:re_anyChar withTemplate:@"●"];
+
+        PearlMainQueue( ^{
+            self.content = result;
+            self.contentDisplay = displayResult;
+        } );
     }];
 }
 

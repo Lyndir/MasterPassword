@@ -37,7 +37,7 @@ static EventHotKeyID MPLockHotKey = { .signature = 'lock', .id = 1 };
 
 + (void)initialize {
 
-    static dispatch_once_t initialize;
+    static dispatch_once_t initialize = 0;
     dispatch_once( &initialize, ^{
         [MPMacConfig get];
 
@@ -71,7 +71,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
-    PearlProfiler *profiler = [PearlProfiler profilerForTask:@"applicationDidFinishLaunching"];
     // Setup delegates and listeners.
     [MPConfig get].delegate = self;
     __weak id weakSelf = self;
@@ -90,7 +89,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             [weakSelf updateMenuItems];
         } );
     }           forKeyPath:@"storeManager.cloudAvailable" options:0 context:nil];
-    [profiler finishJob:@"observers"];
 
     // Status item.
     self.statusView = [[RHStatusItemView alloc] initWithStatusBarItem:
@@ -99,41 +97,24 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     self.statusView.menu = self.statusMenu;
     self.statusView.target = self;
     self.statusView.action = @selector( showMenu );
-    [profiler finishJob:@"statusView"];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:
-            ^(NSNotification *note) {
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
         [self updateUsers];
     }];
     [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidImportChangesNotification object:nil
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:
-            ^(NSNotification *note) {
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
         [self updateUsers];
     }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:
-            ^(NSNotification *note) {
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
         NSString *key = note.object;
         if (!key || [key isEqualToString:NSStringFromSelector( @selector( hidePasswords ) )])
             self.hidePasswordsItem.state = [[MPConfig get].hidePasswords boolValue]? NSOnState: NSOffState;
         if (!key || [key isEqualToString:NSStringFromSelector( @selector( rememberLogin ) )])
             self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
-        if (!key || [key isEqualToString:NSStringFromSelector( @selector( dialogStyleHUD ) )]) {
-            self.dialogStyleRegular.state = ![[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
-            self.dialogStyleHUD.state = [[MPMacConfig get].dialogStyleHUD boolValue]? NSOnState: NSOffState;
-            if (![self.passwordWindow.window isVisible])
-                self.passwordWindow = nil;
-            else {
-                [self.passwordWindow close];
-                self.passwordWindow = nil;
-                [self showPasswordWindow:nil];
-            }
-        }
     }];
-    [profiler finishJob:@"notificationCenter"];
     [self updateUsers];
-    [profiler finishJob:@"updateUsers"];
 
     // Global hotkey.
     EventHotKeyRef hotKeyRef;
@@ -148,7 +129,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     status = RegisterEventHotKey( 35 /* p */, controlKey + optionKey + cmdKey, MPLockHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
     if (status != noErr)
         err( @"Error registering 'lock' hotkey: %i", (int)status );
-    [profiler finishJob:@"hotKey"];
 
     // Initial display.
     if ([[MPMacConfig get].firstRun boolValue]) {
@@ -156,7 +136,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         [self.initialWindow.window setLevel:NSFloatingWindowLevel];
         [self.initialWindow showWindow:self];
     }
-    [profiler finishJob:@"initial display"];
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification {
@@ -230,12 +209,113 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     [self signOutAnimated:NO];
 
-    NSError *error = nil;
-    NSManagedObjectContext *context = [MPMacAppDelegate managedObjectContextForMainThreadIfReady];
-    self.activeUser = (MPUserEntity *)[context existingObjectWithID:[item representedObject] error:&error];
+    NSManagedObjectContext *mainContext = [MPMacAppDelegate managedObjectContextForMainThreadIfReady];
+    self.activeUser = [MPUserEntity existingObjectWithID:[item representedObject] inContext:mainContext];
+}
 
-    if (error)
-        err( @"While looking up selected user: %@", error );
+- (IBAction)exportSitesSecure:(id)sender {
+
+    [self exportSitesAndRevealPasswords:NO];
+}
+
+- (IBAction)exportSitesReveal:(id)sender {
+
+    [self exportSitesAndRevealPasswords:YES];
+}
+
+- (IBAction)importSites:(id)sender {
+
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+    openPanel.allowsMultipleSelection = NO;
+    openPanel.canChooseDirectories = NO;
+    openPanel.title = @"Master Password";
+    openPanel.message = @"Locate the Master Password export file to import.";
+    openPanel.prompt = @"Import";
+    openPanel.directoryURL = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].firstObject;
+    openPanel.allowedFileTypes = @[ @"mpsites" ];
+    [NSApp activateIgnoringOtherApps:YES];
+    if ([openPanel runModal] == NSFileHandlingPanelCancelButton)
+        return;
+
+    NSURL *url = openPanel.URL;
+
+    PearlNotMainQueue( ^{
+        NSError *error;
+        NSURLResponse *response;
+        NSData *importedSitesData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
+                                                          returningResponse:&response error:&error];
+        if (error)
+            err( @"While reading imported sites from %@: %@", url, error );
+        if (!importedSitesData)
+            return;
+
+        NSString *importedSitesString = [[NSString alloc] initWithData:importedSitesData encoding:NSUTF8StringEncoding];
+        MPImportResult result = [self importSites:importedSitesString askImportPassword:^NSString *(NSString *userName) {
+            __block NSString *masterPassword = nil;
+
+            PearlMainQueueWait( ^{
+                NSAlert *alert = [NSAlert new];
+                [alert addButtonWithTitle:@"Unlock"];
+                [alert addButtonWithTitle:@"Cancel"];
+                alert.messageText = @"Import File's Master Password";
+                alert.informativeText = strf( @"%@'s export was done using a different master password.\n"
+                        @"Enter that master password to unlock the exported data.", userName );
+                alert.accessoryView = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
+                [alert layout];
+                if ([alert runModal] == NSAlertFirstButtonReturn)
+                    masterPassword = ((NSTextField *)alert.accessoryView).stringValue;
+            } );
+
+            return masterPassword;
+        }                         askUserPassword:^NSString *(NSString *userName, NSUInteger importCount, NSUInteger deleteCount) {
+            __block NSString *masterPassword = nil;
+
+            PearlMainQueueWait( ^{
+                NSAlert *alert = [NSAlert new];
+                [alert addButtonWithTitle:@"Import"];
+                [alert addButtonWithTitle:@"Cancel"];
+                alert.messageText = strf( @"Master Password for\n%@", userName );
+                alert.informativeText = strf( @"Imports %lu sites, overwriting %lu.",
+                        (unsigned long)importCount, (unsigned long)deleteCount );
+                alert.accessoryView = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
+                [alert layout];
+                if ([alert runModal] == NSAlertFirstButtonReturn)
+                    masterPassword = ((NSTextField *)alert.accessoryView).stringValue;
+            } );
+
+            return masterPassword;
+        }];
+
+        PearlMainQueue( ^{
+            switch (result) {
+                case MPImportResultSuccess: {
+                    [self updateUsers];
+
+                    NSAlert *alert = [NSAlert new];
+                    alert.messageText = @"Successfully imported sites.";
+                    [alert runModal];
+                    break;
+                }
+                case MPImportResultCancelled:
+                    break;
+                case MPImportResultInternalError:
+                    [NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
+                            NSLocalizedDescriptionKey : @"Import failed because of an internal error."
+                    }]];
+                    break;
+                case MPImportResultMalformedInput:
+                    [NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
+                            NSLocalizedDescriptionKey : @"The import doesn't look like a Master Password export."
+                    }]];
+                    break;
+                case MPImportResultInvalidPassword:
+                    [NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
+                            NSLocalizedDescriptionKey : @"Incorrect master password for the import sites."
+                    }]];
+                    break;
+            }
+        } );
+    } );
 }
 
 - (IBAction)togglePreference:(id)sender {
@@ -269,10 +349,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             [context saveToStore];
         }];
     }
-    if (sender == self.dialogStyleRegular)
-        [MPMacConfig get].dialogStyleHUD = @NO;
-    if (sender == self.dialogStyleHUD)
-        [MPMacConfig get].dialogStyleHUD = @YES;
 
     [MPMacConfig flush];
 }
@@ -381,22 +457,80 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     // If no user, can't activate.
     if (![self activeUserForMainThread]) {
+        NSAlert *alert = [NSAlert new];
+        alert.messageText = @"No User Selected";
+        alert.informativeText = @"Begin by selecting or creating your user from the status menu (●●●|) next to the clock.";
+        [alert runModal];
         [self showPopup:nil];
-        [[NSAlert alertWithMessageText:@"No User Selected" defaultButton:[PearlStrings get].commonButtonOkay alternateButton:nil
-                           otherButton:nil informativeTextWithFormat:
-                        @"Begin by selecting or creating your user from the status menu (●●●|) next to the clock."]
-                runModal];
         return;
     }
 
     // Don't show window if we weren't already running (ie. if we haven't been activated before).
+    PearlProfiler *profiler = [PearlProfiler profilerForTask:@"passwordWindow"];
     if (!self.passwordWindow)
         self.passwordWindow = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
+    [profiler finishJob:@"init"];
 
     [self.passwordWindow showWindow:self];
+    [profiler finishJob:@"show"];
 }
 
 #pragma mark - Private
+
+- (void)exportSitesAndRevealPasswords:(BOOL)revealPasswords {
+
+    MPUserEntity *mainActiveUser = [self activeUserForMainThread];
+    if (!mainActiveUser) {
+        NSAlert *alert = [NSAlert new];
+        alert.messageText = @"No User Selected";
+        alert.informativeText = @"To export your sites, first select the user whose sites to export.";
+        [alert runModal];
+        [self showPopup:nil];
+        return;
+    }
+
+    if (!self.key) {
+        NSAlert *alert = [NSAlert new];
+        alert.messageText = @"User Locked";
+        alert.informativeText = @"To export your sites, first unlock your user by opening Master Password.";
+        [alert runModal];
+        [self showPopup:nil];
+        return;
+    }
+
+    NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
+    [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
+
+    NSSavePanel *savePanel = [NSSavePanel savePanel];
+    savePanel.title = @"Master Password";
+    savePanel.message = @"Pick a location for the export Master Password's sites.";
+    if (revealPasswords)
+        savePanel.message = strf( @"%@\nWARNING: Your passwords will be visible.  Make sure to always keep the file in a secure location.",
+                savePanel.message );
+    savePanel.prompt = @"Export";
+    savePanel.directoryURL = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].firstObject;
+    savePanel.nameFieldStringValue = strf( @"%@ (%@).mpsites", mainActiveUser.name,
+            [exportDateFormatter stringFromDate:[NSDate date]] );
+    savePanel.allowedFileTypes = @[ @"mpsites" ];
+    [NSApp activateIgnoringOtherApps:YES];
+    if ([savePanel runModal] == NSFileHandlingPanelCancelButton)
+        return;
+
+    NSError *coordinateError = nil;
+    NSString *exportedSites = [self exportSitesRevealPasswords:revealPasswords];
+    [[[NSFileCoordinator alloc] initWithFilePresenter:nil] coordinateWritingItemAtURL:savePanel.URL options:0 error:&coordinateError
+                                                                           byAccessor:^(NSURL *newURL) {
+        NSError *writeError = nil;
+        if (![exportedSites writeToURL:newURL atomically:NO encoding:NSUTF8StringEncoding error:&writeError])
+            PearlMainQueue( ^{
+                [[NSAlert alertWithError:writeError] runModal];
+            } );
+    }];
+    if (coordinateError)
+        PearlMainQueue( ^{
+            [[NSAlert alertWithError:coordinateError] runModal];
+        } );
+}
 
 - (void)updateUsers {
 
@@ -405,8 +539,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             [[self.usersItem submenu] removeItem:obj];
     }];
 
-    NSManagedObjectContext *context = [MPMacAppDelegate managedObjectContextForMainThreadIfReady];
-    if (!context) {
+    NSManagedObjectContext *mainContext = [MPMacAppDelegate managedObjectContextForMainThreadIfReady];
+    if (!mainContext) {
         self.createUserItem.title = @"New User (Not ready)";
         self.createUserItem.enabled = NO;
         self.createUserItem.toolTip = @"Please wait until the app is fully loaded.";
@@ -418,20 +552,20 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         return;
     }
 
-    MPUserEntity *activeUser = [self activeUserInContext:context];
+    MPUserEntity *mainActiveUser = [self activeUserInContext:mainContext];
 
     self.createUserItem.title = @"New User";
     self.createUserItem.enabled = YES;
     self.createUserItem.toolTip = nil;
 
-    self.deleteUserItem.title = activeUser? @"Delete User": @"Delete User (None Selected)";
-    self.deleteUserItem.enabled = activeUser != nil;
-    self.deleteUserItem.toolTip = activeUser? nil: @"First select the user to delete.";
+    self.deleteUserItem.title = mainActiveUser? @"Delete User": @"Delete User (None Selected)";
+    self.deleteUserItem.enabled = mainActiveUser != nil;
+    self.deleteUserItem.toolTip = mainActiveUser? nil: @"First select the user to delete.";
 
     NSError *error = nil;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
     fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO] ];
-    NSArray *users = [context executeFetchRequest:fetchRequest error:&error];
+    NSArray *users = [mainContext executeFetchRequest:fetchRequest error:&error];
     if (!users)
         err( @"Failed to load users: %@", error );
 
@@ -449,10 +583,10 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         [userItem setRepresentedObject:[user objectID]];
         [[self.usersItem submenu] addItem:userItem];
 
-        if (!activeUser && [user.name isEqualToString:[MPMacConfig get].usedUserName])
-            [super setActiveUser:activeUser = user];
+        if (!mainActiveUser && [user.name isEqualToString:[MPMacConfig get].usedUserName])
+            [super setActiveUser:mainActiveUser = user];
 
-        if ([activeUser isEqual:user]) {
+        if ([mainActiveUser isEqual:user]) {
             userItem.state = NSOnState;
             self.usersItem.state = NSOffState;
         }

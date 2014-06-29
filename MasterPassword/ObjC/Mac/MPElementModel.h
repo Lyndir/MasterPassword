@@ -25,6 +25,7 @@
 @property (nonatomic) MPElementType type;
 @property (nonatomic) NSString *typeName;
 @property (nonatomic) NSString *content;
+@property (nonatomic) NSString *contentDisplay;
 @property (nonatomic) NSString *loginName;
 @property (nonatomic) NSNumber *uses;
 @property (nonatomic) NSUInteger counter;

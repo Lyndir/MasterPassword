@@ -784,7 +784,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
 
         [export appendFormat:@"%@  %8ld  %8s  %20s\t%@\n",
                              [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed], (long)uses,
-                             [PearlString( @"%lu:%lu", (long)type, (unsigned long)version ) UTF8String], [name UTF8String], content
+                             [strf( @"%lu:%lu", (long)type, (unsigned long)version ) UTF8String], [name UTF8String], content
                                                                                                                             ? content: @""];
     }
 
