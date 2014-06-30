@@ -10,11 +10,13 @@
 #import "MPAppDelegate_Shared.h"
 #import "RHStatusItemView.h"
 #import "MPPasswordWindowController.h"
+#import "MPInitialWindowController.h"
 
 @interface MPMacAppDelegate : MPAppDelegate_Shared<NSApplicationDelegate>
 
 @property(nonatomic, strong) RHStatusItemView *statusView;
-@property(nonatomic, strong) MPPasswordWindowController *passwordWindow;
+@property(nonatomic, strong) MPPasswordWindowController *passwordWindowController;
+@property(nonatomic, strong) MPInitialWindowController *initialWindowController;
 @property(nonatomic, weak) IBOutlet NSMenuItem *lockItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *showItem;
 @property(nonatomic, strong) IBOutlet NSMenu *statusMenu;
@@ -26,17 +28,15 @@
 @property(nonatomic, weak) IBOutlet NSMenuItem *createUserItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *deleteUserItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *usersItem;
-@property(nonatomic, weak) IBOutlet NSButton *openAtLoginButton;
-@property(nonatomic, weak) IBOutlet NSButton *enableCloudButton;
 
 - (IBAction)showPasswordWindow:(id)sender;
+- (void)setLoginItemEnabled:(BOOL)enabled;
 - (IBAction)togglePreference:(id)sender;
 - (IBAction)newUser:(NSMenuItem *)sender;
 - (IBAction)lock:(id)sender;
 - (IBAction)rebuildCloud:(id)sender;
 - (IBAction)corruptCloud:(id)sender;
 - (IBAction)terminate:(id)sender;
-- (IBAction)iphoneAppStore:(id)sender;
 - (IBAction)showPopup:(id)sender;
 
 @end

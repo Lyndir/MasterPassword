@@ -22,11 +22,6 @@
 
 @end
 
-@interface MPMacAppDelegate()
-
-@property(nonatomic, strong) NSWindowController *initialWindow;
-@end
-
 @implementation MPMacAppDelegate
 
 #pragma clang diagnostic push
@@ -131,10 +126,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         err( @"Error registering 'lock' hotkey: %i", (int)status );
 
     // Initial display.
-    if ([[MPMacConfig get].firstRun boolValue]) {
-        self.initialWindow = [[NSWindowController alloc] initWithWindowNibName:@"MPInitialWindow" owner:self];
-        [self.initialWindow.window setLevel:NSFloatingWindowLevel];
-        [self.initialWindow showWindow:self];
+    if ([[MPMacConfig get].firstRun boolValue]){
+        [(self.initialWindowController = [[MPInitialWindowController alloc] initWithWindowNibName:@"MPInitialWindow"]).window makeKeyAndOrderFront:self];
+        [NSApp activateIgnoringOtherApps:YES];
     }
 }
 
@@ -185,7 +179,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }
 
     self.openAtLoginItem.state = loginItemEnabled? NSOnState: NSOffState;
-    self.openAtLoginButton.state = loginItemEnabled? NSOnState: NSOffState;
+    self.initialWindowController.openAtLoginButton.state = loginItemEnabled? NSOnState: NSOffState;
 }
 
 - (BOOL)loginItemEnabled {
@@ -320,23 +314,12 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)togglePreference:(id)sender {
 
-    if (sender == self.enableCloudButton) {
-        if (([self storeManager].cloudEnabled = self.enableCloudButton.state == NSOnState)) {
-            NSAlert *alert = [NSAlert new];
-            alert.messageText = @"iCloud Enabled";
-            alert.informativeText = @"If you already have a user on another iCloud-enabled device, "
-                    @"it may take a moment for that user to sync down to this device.";
-            [alert runModal];
-        }
-    }
     if (sender == self.useCloudItem)
         [self storeManager].cloudEnabled = self.useCloudItem.state != NSOnState;
     if (sender == self.hidePasswordsItem)
         [MPConfig get].hidePasswords = [NSNumber numberWithBool:![[MPConfig get].hidePasswords boolValue]];
     if (sender == self.rememberPasswordItem)
         [MPConfig get].rememberLogin = [NSNumber numberWithBool:![[MPConfig get].rememberLogin boolValue]];
-    if (sender == self.openAtLoginButton)
-        [self setLoginItemEnabled:self.openAtLoginButton.state == NSOnState];
     if (sender == self.openAtLoginItem)
         [self setLoginItemEnabled:self.openAtLoginItem.state != NSOnState];
     if (sender == self.savePasswordItem) {
@@ -432,18 +415,10 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)terminate:(id)sender {
 
-    [self.passwordWindow close];
-    self.passwordWindow = nil;
+    [self.passwordWindowController close];
+    self.passwordWindowController = nil;
 
     [NSApp terminate:nil];
-}
-
-- (IBAction)iphoneAppStore:(id)sender {
-
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://itunes.apple.com/app/id510296984"]];
-
-    [self.initialWindow close];
-    self.initialWindow = nil;
 }
 
 - (IBAction)showPopup:(id)sender {
@@ -466,12 +441,12 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }
 
     // Don't show window if we weren't already running (ie. if we haven't been activated before).
-    PearlProfiler *profiler = [PearlProfiler profilerForTask:@"passwordWindow"];
-    if (!self.passwordWindow)
-        self.passwordWindow = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
+    PearlProfiler *profiler = [PearlProfiler profilerForTask:@"passwordWindowController"];
+    if (!self.passwordWindowController)
+        self.passwordWindowController = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
     [profiler finishJob:@"init"];
 
-    [self.passwordWindow showWindow:self];
+    [self.passwordWindowController showWindow:self];
     [profiler finishJob:@"show"];
 }
 
@@ -607,7 +582,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (void)updateMenuItems {
 
     MPUserEntity *activeUser = [self activeUserForMainThread];
-//    if (!(self.showItem.enabled = ![self.passwordWindow.window isVisible])) {
+//    if (!(self.showItem.enabled = ![self.passwordWindowController.window isVisible])) {
 //        self.showItem.title = @"Show (Showing)";
 //        self.showItem.toolTip = @"Master Password is already showing.";
 //    }
@@ -633,7 +608,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     BOOL loginItemEnabled = [self loginItemEnabled];
     self.openAtLoginItem.state = loginItemEnabled? NSOnState: NSOffState;
-    self.openAtLoginButton.state = loginItemEnabled? NSOnState: NSOffState;
+    self.initialWindowController.openAtLoginButton.state = loginItemEnabled? NSOnState: NSOffState;
     self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
 
     self.savePasswordItem.state = activeUser.saveKey? NSOnState: NSOffState;
@@ -654,7 +629,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }
 
     self.useCloudItem.state = self.storeManager.cloudEnabled? NSOnState: NSOffState;
-    self.enableCloudButton.state = self.storeManager.cloudEnabled? NSOnState: NSOffState;
+    self.initialWindowController.enableCloudButton.state = self.storeManager.cloudEnabled? NSOnState: NSOffState;
     self.useCloudItem.enabled = self.storeManager.cloudAvailable;
     if (self.storeManager.cloudAvailable) {
         self.useCloudItem.title = @"Use iCloud";
