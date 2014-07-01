@@ -18,6 +18,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "MPElementModel.h"
+#import "MPElementsTableView.h"
 
 @class MPMacAppDelegate;
 
@@ -34,10 +35,12 @@
 @property(nonatomic, weak) IBOutlet NSTextField *securePasswordField;
 @property(nonatomic, weak) IBOutlet NSTextField *revealPasswordField;
 @property(nonatomic, weak) IBOutlet NSSearchField *siteField;
-@property(nonatomic, weak) IBOutlet NSTableView *siteTable;
+@property(nonatomic, weak) IBOutlet MPElementsTableView *siteTable;
 @property(nonatomic, weak) IBOutlet NSProgressIndicator *progressView;
 
 @property(nonatomic, strong) IBOutlet NSBox *passwordTypesBox;
 @property(nonatomic, weak) IBOutlet NSMatrix *passwordTypesMatrix;
+
+- (BOOL)handleCommand:(SEL)commandSelector;
 
 @end

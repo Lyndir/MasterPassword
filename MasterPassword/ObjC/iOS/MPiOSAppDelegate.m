@@ -207,8 +207,8 @@
             dispatch_group_t userPasswordGroup = dispatch_group_create();
             dispatch_group_enter( userPasswordGroup );
             dispatch_async( dispatch_get_main_queue(), ^{
-                [PearlAlert showAlertWithTitle:PearlString( @"Master Password for\n%@", userName )
-                                       message:PearlString( @"Imports %lu sites, overwriting %lu.",
+                [PearlAlert showAlertWithTitle:strf( @"Master Password for\n%@", userName )
+                                       message:strf( @"Imports %lu sites, overwriting %lu.",
                                                        (unsigned long)importCount, (unsigned long)deleteCount )
                                      viewStyle:UIAlertViewStyleSecureTextInput
                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
@@ -317,9 +317,9 @@
         logLevel = PearlLogLevelDebug;
 
     [[[PearlEMail alloc] initForEMailTo:@"Master Password Development <masterpassword@lyndir.com>"
-                                subject:PearlString( @"Feedback for Master Password [%@]",
+                                subject:strf( @"Feedback for Master Password [%@]",
                                                 [[PearlKeyChain deviceIdentifier] stringByDeletingMatchesOf:@"-.*"] )
-                                   body:PearlString( @"\n\n\n"
+                                   body:strf( @"\n\n\n"
                                            @"--\n"
                                            @"%@"
                                            @"Master Password %@, build %@",
@@ -332,7 +332,7 @@
                                                  initWithContent:[[[PearlLogger get] formatMessagesWithLevel:logLevel]
                                                          dataUsingEncoding:NSUTF8StringEncoding]
                                                         mimeType:@"text/plain"
-                                                        fileName:PearlString( @"%@-%@.log",
+                                                        fileName:strf( @"%@-%@.log",
                                                                 [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]],
                                                                 [PearlKeyChain deviceIdentifier] )]
                                          : nil), nil]
@@ -388,7 +388,7 @@
     NSString *message;
 
     if (revealPasswords)
-        message = PearlString( @"Export of Master Password sites with passwords included.\n\n"
+        message = strf( @"Export of Master Password sites with passwords included.\n\n"
                 @"REMINDER: Make sure nobody else sees this file!  Passwords are visible!\n\n\n"
                 @"--\n"
                 @"%@\n"
@@ -397,7 +397,7 @@
                 [PearlInfoPlist get].CFBundleShortVersionString,
                 [PearlInfoPlist get].CFBundleVersion );
     else
-        message = PearlString( @"Backup of Master Password sites.\n\n\n"
+        message = strf( @"Backup of Master Password sites.\n\n\n"
                 @"--\n"
                 @"%@\n"
                 @"Master Password %@, build %@",
@@ -412,7 +412,7 @@
     [PearlEMail sendEMailTo:nil fromVC:viewController subject:@"Master Password Export" body:message
                 attachments:[[PearlEMailAttachment alloc] initWithContent:[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
                                                                  mimeType:@"text/plain" fileName:
-                                PearlString( @"%@ (%@).mpsites", [self activeUserForMainThread].name,
+                                strf( @"%@ (%@).mpsites", [self activeUserForMainThread].name,
                                         [exportDateFormatter stringFromDate:[NSDate date]] )],
                             nil];
 }

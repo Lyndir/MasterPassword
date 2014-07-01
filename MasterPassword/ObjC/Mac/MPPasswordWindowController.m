@@ -91,6 +91,8 @@
     self.siteGradient.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
     self.siteGradient.frame = self.siteTable.bounds;
     self.siteTable.superview.superview.layer.mask = self.siteGradient;
+
+    self.siteTable.controller = self;
 }
 
 - (void)flagsChanged:(NSEvent *)theEvent {
@@ -116,6 +118,7 @@
 
 - (void)doCommandBySelector:(SEL)commandSelector {
 
+    dbg( @"doCommandBySelector: %@", NSStringFromSelector( commandSelector ) );
     [self handleCommand:commandSelector];
 }
 
@@ -123,23 +126,16 @@
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector {
 
+    dbg( @"@control:%@ textView:%@ doCommandBySelector:%@", control, fieldEditor, NSStringFromSelector( commandSelector ) );
     if (control == self.siteField) {
-        if (commandSelector == @selector( insertNewline: )) {
-            [self useSite];
-            return YES;
-        }
-        if (commandSelector == @selector( moveUp: )) {
-            [self.elementsController selectPrevious:self];
-            return YES;
-        }
-        if (commandSelector == @selector( moveDown: )) {
-            [self.elementsController selectNext:self];
-            return YES;
-        }
         if ([NSStringFromSelector( commandSelector ) rangeOfString:@"delete"].location == 0) {
             _skipTextChange = YES;
             return NO;
         }
+    }
+    if (control == self.securePasswordField || control == self.revealPasswordField) {
+        if (commandSelector == @selector( insertNewline: ))
+            return NO;
     }
 
     return [self handleCommand:commandSelector];
@@ -166,7 +162,7 @@
             [self.progressView stopAnimation:self];
             if (!success)
                 [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
-                        NSLocalizedDescriptionKey : PearlString( @"Incorrect master password for user %@", userName )
+                        NSLocalizedDescriptionKey : strf( @"Incorrect master password for user %@", userName )
                 }]] beginSheetModalForWindow:self.window modalDelegate:self
                               didEndSelector:@selector( alertDidEnd:returnCode:contextInfo: ) contextInfo:MPAlertIncorrectMP];
         } );
@@ -182,6 +178,7 @@
 
 - (BOOL)textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
 
+    dbg( @"textView:%@doCommandBySelector:%@", textView, NSStringFromSelector( commandSelector ) );
     return [self handleCommand:commandSelector];
 }
 
@@ -191,6 +188,8 @@
 
     return (NSInteger)[self.elements count];
 }
+
+#pragma mark - NSTableViewDelegate
 
 #pragma mark - NSAlert
 
@@ -428,6 +427,18 @@
 
 - (BOOL)handleCommand:(SEL)commandSelector {
 
+    if (commandSelector == @selector( moveUp: )) {
+        [self.elementsController selectPrevious:self];
+        return YES;
+    }
+    if (commandSelector == @selector( moveDown: )) {
+        [self.elementsController selectNext:self];
+        return YES;
+    }
+    if (commandSelector == @selector( insertNewline: )) {
+        [self useSite];
+        return YES;
+    }
     if (commandSelector == @selector( cancel: ) || commandSelector == @selector( cancelOperation: )) {
         [self fadeOut];
         return YES;
@@ -448,7 +459,7 @@
         NSUserNotification *notification = [NSUserNotification new];
         notification.title = @"Password Copied";
         if (selectedElement.loginName.length)
-            notification.subtitle = PearlString( @"%@ at %@", selectedElement.loginName, selectedElement.siteName );
+            notification.subtitle = strf( @"%@ at %@", selectedElement.loginName, selectedElement.siteName );
         else
             notification.subtitle = selectedElement.siteName;
         [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
@@ -567,7 +578,7 @@
         [alert addButtonWithTitle:@"Create"];
         [alert addButtonWithTitle:@"Cancel"];
         [alert setMessageText:@"Create site?"];
-        [alert setInformativeText:PearlString( @"Do you want to create a new site named:\n\n%@", siteName )];
+        [alert setInformativeText:strf( @"Do you want to create a new site named:\n\n%@", siteName )];
         [alert beginSheetModalForWindow:self.window modalDelegate:self
                          didEndSelector:@selector( alertDidEnd:returnCode:contextInfo: ) contextInfo:MPAlertCreateSite];
     } );
