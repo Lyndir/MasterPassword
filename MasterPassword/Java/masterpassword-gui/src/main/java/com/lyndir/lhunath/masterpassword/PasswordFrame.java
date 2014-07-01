@@ -2,14 +2,11 @@ package com.lyndir.lhunath.masterpassword;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
-import com.google.common.io.Resources;
+import com.google.common.collect.Iterables;
 import com.lyndir.lhunath.masterpassword.util.Components;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -38,7 +35,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
             {
                 setBorder( new EmptyBorder( 20, 20, 20, 20 ) );
             }
-        });
+        } );
 
         // User
         add( label = new JLabel( strf( "Generating passwords for: %s", user.getName() ) ), BorderLayout.NORTH );
@@ -83,19 +80,28 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         } );
 
         // Site Type & Counter
+        MPElementType[] types = Iterables.toArray( MPElementType.forClass( MPElementTypeClass.Generated ), MPElementType.class );
         JComponent siteSettings = Components.boxLayout( BoxLayout.LINE_AXIS, //
-                                                siteTypeField = new JComboBox<>( MPElementType.values() ),
-                                                siteCounterField = new JSpinner( new SpinnerNumberModel( 1, 1, Integer.MAX_VALUE, 1 ) ) {
-                                                    @Override
-                                                    public Dimension getMaximumSize() {
-                                                        return new Dimension( 20, getPreferredSize().height );
-                                                    }
-                                                } );
+                                                        siteTypeField = new JComboBox<>( types ), //
+                                                        siteCounterField = new JSpinner(
+                                                                new SpinnerNumberModel( 1, 1, Integer.MAX_VALUE, 1 ) ) {
+                                                            @Override
+                                                            public Dimension getMaximumSize() {
+                                                                return new Dimension( 20, getPreferredSize().height );
+                                                            }
+                                                        } );
         siteSettings.setAlignmentX( LEFT_ALIGNMENT );
         sitePanel.add( siteSettings );
         siteTypeField.setAlignmentX( LEFT_ALIGNMENT );
         siteTypeField.setAlignmentY( CENTER_ALIGNMENT );
         siteTypeField.setSelectedItem( MPElementType.GeneratedLong );
+        siteTypeField.addItemListener( new ItemListener() {
+            @Override
+            public void itemStateChanged(final ItemEvent e) {
+                updatePassword( null );
+            }
+        } );
+
         siteCounterField.setAlignmentX( RIGHT_ALIGNMENT );
         siteCounterField.setAlignmentY( CENTER_ALIGNMENT );
         siteCounterField.addChangeListener( new ChangeListener() {
@@ -123,6 +129,11 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         final MPElementType siteType = (MPElementType) siteTypeField.getSelectedItem();
         final String siteName = siteNameField.getText();
         final int siteCounter = (Integer) siteCounterField.getValue();
+
+        if (siteType.getTypeClass() != MPElementTypeClass.Generated || siteName == null || siteName.isEmpty() || !user.hasKey()) {
+            passwordLabel.setText( null );
+            return;
+        }
 
         Res.execute( new Runnable() {
             @Override
