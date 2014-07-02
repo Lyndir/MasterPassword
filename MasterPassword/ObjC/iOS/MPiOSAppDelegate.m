@@ -405,7 +405,6 @@
                 [PearlInfoPlist get].CFBundleShortVersionString,
                 [PearlInfoPlist get].CFBundleVersion );
 
-    NSString *exportedSites = [self exportSitesRevealPasswords:revealPasswords];
     NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
     [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
 
