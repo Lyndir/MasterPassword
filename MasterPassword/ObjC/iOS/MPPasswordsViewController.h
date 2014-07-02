@@ -16,7 +16,6 @@
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
-#import "LLGitTip.h"
 @class MPElementEntity;
 @class MPCoachmark;
 
