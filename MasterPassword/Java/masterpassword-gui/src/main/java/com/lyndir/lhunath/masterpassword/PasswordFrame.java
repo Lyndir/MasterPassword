@@ -132,7 +132,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         final int siteCounter = (Integer) siteCounterField.getValue();
 
         if (siteType.getTypeClass() != MPElementTypeClass.Generated || siteName == null || siteName.isEmpty() || !user.hasKey()) {
-            passwordLabel.setText( null );
+            passwordTextField.setText( null );
             return;
         }
 
