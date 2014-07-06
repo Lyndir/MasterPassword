@@ -11,13 +11,13 @@
 #import "UbiquityStoreManager.h"
 #import "MPFixable.h"
 
-typedef enum {
+typedef NS_ENUM( NSUInteger, MPImportResult ) {
     MPImportResultSuccess,
     MPImportResultCancelled,
     MPImportResultInvalidPassword,
     MPImportResultMalformedInput,
     MPImportResultInternalError,
-} MPImportResult;
+};
 
 @interface MPAppDelegate_Shared(Store)<UbiquityStoreManagerDelegate>
 

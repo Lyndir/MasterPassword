@@ -11,6 +11,5 @@
 @interface MPMacConfig : MPConfig
 
 @property(nonatomic, retain) NSString *usedUserName;
-@property(nonatomic, retain) NSNumber *dialogStyleHUD;
 
 @end

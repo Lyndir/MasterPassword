@@ -10,6 +10,3 @@
 [submodule "External/RHStatusItemView"]
 	path = External/RHStatusItemView
 	url = git://github.com/lhunath/RHStatusItemView.git
-[submodule "External/LoveLyndir"]
-	path = External/LoveLyndir
-	url = git://github.com/Lyndir/love-lyndir.client.git

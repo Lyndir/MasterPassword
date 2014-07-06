@@ -124,7 +124,7 @@
             NSError *error = nil;
             NSPersistentStore *store = nil;
             NSUInteger firstDash = [storeUUID rangeOfString:@"-" options:0].location;
-            NSString *storeDescription = PearlString( @"%@ v%@",
+            NSString *storeDescription = strf( @"%@ v%@",
                     firstDash == NSNotFound? storeUUID: [storeUUID substringToIndex:firstDash],
                     cloudStoreOptions[USMCloudVersionKey] );
             if ([cloudStoreOptions[USMCloudCurrentKey] boolValue])
@@ -148,7 +148,7 @@
                     continue;
                 }
 
-                storeDescription = PearlString( @"%@: %luU, %luS", storeDescription, (unsigned long)userCount, (unsigned long)siteCount );
+                storeDescription = strf( @"%@: %luU, %luS", storeDescription, (unsigned long)userCount, (unsigned long)siteCount );
             }
             @catch (NSException *exception) {
                 wrn(@"Couldn't describe store %@: %@", storeDescription, exception);
@@ -166,7 +166,7 @@
 
     PearlArrayTVC *vc = [[PearlArrayTVC alloc] initWithStyle:UITableViewStylePlain];
     NSUInteger firstDash = [currentStoreUUID rangeOfString:@"-" options:0].location;
-    vc.title = PearlString( @"Active: %@", firstDash == NSNotFound? currentStoreUUID: [currentStoreUUID substringToIndex:firstDash] );
+    vc.title = strf( @"Active: %@", firstDash == NSNotFound? currentStoreUUID: [currentStoreUUID substringToIndex:firstDash] );
     [stores enumerateKeysAndObjectsUsingBlock:^(id storeDescription, id cloudStoreOptions, BOOL *stop) {
         [vc addRowWithName:storeDescription style:PearlArrayTVCRowStyleLink toggled:[cloudStoreOptions[USMCloudCurrentKey] boolValue]
                  toSection:@"Cloud Stores" activationBlock:^BOOL(BOOL wasToggled) {

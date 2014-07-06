@@ -291,7 +291,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
             URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
     NSURL *oldLocalStoreURL = [[applicationFilesDirectory
             URLByAppendingPathComponent:@"MasterPassword" isDirectory:NO] URLByAppendingPathExtension:@"sqlite"];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:oldLocalStoreURL.path isDirectory:NO]) {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:oldLocalStoreURL.path isDirectory:NULL]) {
         inf( @"No V1 local store to migrate." );
         return YES;
     }
@@ -303,7 +303,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
 - (BOOL)migrateFromLocalStore:(NSURL *)oldLocalStoreURL {
 
     NSURL *newLocalStoreURL = [self.storeManager URLForLocalStore];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:newLocalStoreURL.path isDirectory:NO]) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:newLocalStoreURL.path isDirectory:NULL]) {
         wrn( @"Can't migrate local store: A new local store already exists." );
         return YES;
     }
@@ -784,7 +784,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
 
         [export appendFormat:@"%@  %8ld  %8s  %20s\t%@\n",
                              [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed], (long)uses,
-                             [PearlString( @"%lu:%lu", (long)type, (unsigned long)version ) UTF8String], [name UTF8String], content
+                             [strf( @"%lu:%lu", (long)type, (unsigned long)version ) UTF8String], [name UTF8String], content
                                                                                                                             ? content: @""];
     }
 

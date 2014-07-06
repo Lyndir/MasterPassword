@@ -24,7 +24,7 @@ id<MPAlgorithm> MPAlgorithmForVersion(NSUInteger version) {
         versionToAlgorithm = [NSMutableDictionary dictionary];
 
     id<MPAlgorithm> algorithm = versionToAlgorithm[@(version)];
-    if (!algorithm) if ((algorithm = [NSClassFromString( PearlString( @"MPAlgorithmV%lu", (unsigned long)version ) ) new]))
+    if (!algorithm) if ((algorithm = [NSClassFromString( strf( @"MPAlgorithmV%lu", (unsigned long)version ) ) new]))
         versionToAlgorithm[@(version)] = algorithm;
 
     return algorithm;
