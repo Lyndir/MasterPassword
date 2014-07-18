@@ -56,17 +56,25 @@
         <header>
             <div class="background" data-stellar-ratio="0.4"></div>
             <div class="container">
-            
-                <!-- <div class="box effect-8">
-                    iframe id="ytplayer" type="text/html" width="640" height="360" frameborder="0"
-                        src="http://www.youtube.com/embed/QTfA0O7YnHQ?origin=http://masterpassword.lyndir.com&autohide=1&autoplay=0&rel=0&showinfo=0&theme=light&color=white"></iframe
-                    <iframe width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen
-                        src="http://player.vimeo.com/video/45803664?title=0&amp;byline=0&amp;portrait=0&amp;color=ffffff"></iframe>
-                </div> -->
 
                 <div class="content">
                     <h1>Master Password</h1>
                     <h2>Secure your life, forget your passwords.</h2>
+                </div>
+            
+                <div class="box effect-8" onclick="$(this).toggleClass('active')">
+                    <div class="minimized">
+                        <img class="fit-height" src="http://i.vimeocdn.com/video/318668169_960.jpg" />
+                        <div class="middle">▷</div>
+                    </div>
+                    <div class="maximized">
+                        <iframe id="youtube" type="text/html" width="853" height="480" frameborder="0"
+                            webkitAllowFullScreen mozallowfullscreen allowFullScreen
+                            src="http://www.youtube-nocookie.com/embed/QTfA0O7YnHQ?autohide=1&amp;autoplay=0&amp;rel=0&amp;showinfo=0&amp;theme=light&amp;color=white"></iframe>
+                        <!--iframe id="vimeo" type="text/html" width="853" height="480" frameborder="0"
+                            webkitAllowFullScreen mozallowfullscreen allowFullScreen
+                            src="http://player.vimeo.com/video/45803664?autoplay=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;color=ffffff"></iframe-->
+                    </div>
                 </div>
 
             </div>
