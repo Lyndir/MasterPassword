@@ -137,6 +137,20 @@ h2.inline, h3.inline, h4.inline {
     margin-left: -2px;
     vertical-align: middle;
 }
+.middle.play::after {
+    content: "▶";
+    display: inline-block;
+    background: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 1px white;
+    border-radius: 50%;
+    padding: 1ex;
+    font-size: 200%;
+    vertical-align: middle;
+    transition: box-shadow 0.3s;
+}
+.middle.play:hover::after {
+    box-shadow: 0 0 10px white;
+}
 
 .column {
     display: inline-block;
@@ -181,6 +195,9 @@ header .container {
     background: radial-gradient(70% 50% at 30% 50%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.8) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#44000000', endColorstr='#cc000000',GradientType=1 );
 }
+header a:link, header a:visited, header *[onclick] {
+    color: white;
+}
 header .background {
     position: absolute;
     width: 100%;
@@ -217,6 +234,7 @@ header .box .minimized,
 header .box .maximized {
     position: relative;
     vertical-align: middle;
+    font-size: 12pt;
 }
 header .box .minimized,
 header .box.active .maximized {
