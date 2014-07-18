@@ -40,10 +40,10 @@
                             <li><a href="faq.html">FAQ</a></li>
                             <li class="active"><a href="algorithm.html">Algorithm</a></li>
                             <li><a href="support.html">Support</a></li>
-                            <li><a href="http://github.com/Lyndir/MasterPassword/">Source (GPL)</a></li>
+                            <li><a href="http://github.com/Lyndir/MasterPassword/" onclick="_gaq.push(['_trackPageview', '/outbound/github']);">Source (GPL)</a></li>
                         </ul>
                         <ul class="nav pull-right">
-                            <li><a href="irc://irc.freenode.net/#masterpassword">#masterpassword (freenode)</a></li>
+                            <li><a href="irc://irc.freenode.net/#masterpassword" onclick="_gaq.push(['_trackPageview', '/outbound/irc']);">#masterpassword (freenode)</a></li>
                             <li class="divider-vertical"></li>
                             <li><a href="MasterPassword_PressKit.zip" onclick="_gaq.push(['_trackPageview', '/outbound/presskit']);">⬇ Press Kit</a></li>
                             <li><a href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-fixed-header');_gaq.push(['_trackPageview', '/outbound/itunes']);" class="img"><img src="img/appstore.svg" /></a></li>
@@ -76,7 +76,7 @@
             <div class="thumb clearfix">
                 <p><b>Master Password is <em>an algorithm used to generate unique passwords</em></b> for websites, email accounts, or anything else <em>based only on easily reproducible input</em>.<br />
                     The goal is a process that avoids all the problems involved with other password solutions.</p>
-                    <p>The Master Password algorithm is <i>open</i>: this page describes its inner workings in detail.  We believe the following is an important lesson we should all learn: Regardless of how much encryption a solution claims, <a href="http://www.geekzone.co.nz/foobar/5823">if you don't know how it works, you <strong>cannot</strong> assume it is secure</a> (at least, not the kind of secure you care about).</p>
+                    <p>The Master Password algorithm is <i>open</i>: this page describes its inner workings in detail.  We believe the following is an important lesson we should all learn: Regardless of how much encryption a solution claims, <a href="http://www.geekzone.co.nz/foobar/5823" onclick="_gaq.push(['_trackPageview', '/outbound/skype']);">if you don't know how it works, you <strong>cannot</strong> assume it is secure</a> (at least, not the kind of secure you care about).</p>
 
                 <h1>The Password Problem</h1>
                 <img class="pull-right" src="img/thumb-authenticate.png" />
@@ -159,7 +159,7 @@ dkLen = 64</pre>
                 <h1>The Template Seed</h1>
                 <p>With the master <code>key</code> known, we can proceed to calculate a template <code>seed</code> for the site.  The template <code>seed</code> is essentially the site-specific secret in binary form.</p>
                 <p>To generate the template <code>seed</code>, we construct an authentication code for the site's <code>name</code> and <code>counter</code> using the user's master <code>key</code>.</p>
-                <p>We employ the <a href="https://tools.ietf.org/html/rfc4868">HMAC-SHA-256</a> algorithm to obtain a large enough <code>seed</code> for the encoding step that follows.</p>
+                <p>We employ the <a href="https://tools.ietf.org/html/rfc4868" onclick="_gaq.push(['_trackPageview', '/outbound/sha-256']);">HMAC-SHA-256</a> algorithm to obtain a large enough <code>seed</code> for the encoding step that follows.</p>
 
                 <pre>seed = hmac-sha256( key, "com.lyndir.masterpassword" . site name length . site name . counter )</pre>
 
@@ -309,8 +309,8 @@ passWord[i] = passChar</pre>
 
         <footer><div class="muted content">
         
-            <p><em>Master Password is a security product and algorithm by <a href="http://www.lhunath.com">Maarten Billemont</a>, <a href="http://www.lyndir.com">Lyndir</a> (&copy; 2011-2013).</em></p>
-            <p><a href="http://gorillas.lyndir.com">Gorillas</a> ● <a href="http://deblock.lyndir.com">DeBlock</a> ● <a href="http://github.com/Lyndir">GitHub</a> ● <a href="http://thanks.lhunath.com">Send Thanks</a></p>
+            <p><em>Master Password is a security product and algorithm by <a href="http://www.lhunath.com" onclick="_gaq.push(['_trackPageview', '/outbound/lhunath']);">Maarten Billemont</a>, <a href="http://www.lyndir.com" onclick="_gaq.push(['_trackPageview', '/outbound/lyndir']);">Lyndir</a> (&copy; 2011-2013).</em></p>
+            <p><a href="http://gorillas.lyndir.com" onclick="_gaq.push(['_trackPageview', '/outbound/gorillas']);">Gorillas</a> ● <a href="http://deblock.lyndir.com" onclick="_gaq.push(['_trackPageview', '/outbound/deblock']);">DeBlock</a> ● <a href="http://github.com/Lyndir" onclick="_gaq.push(['_trackPageview', '/outbound/github']);">GitHub</a> ● <a href="http://thanks.lhunath.com" onclick="_gaq.push(['_trackPageview', '/outbound/thanks']);">Send Thanks</a></p>
 
         </div></footer>
 
