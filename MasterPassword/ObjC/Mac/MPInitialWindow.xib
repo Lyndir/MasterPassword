@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment defaultVersion="1080" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
@@ -7,7 +7,6 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MPInitialWindowController">
             <connections>
-                <outlet property="enableCloudButton" destination="409" id="572"/>
                 <outlet property="openAtLoginButton" destination="508" id="571"/>
                 <outlet property="window" destination="1" id="ngh-EA-JYN"/>
             </connections>
@@ -17,26 +16,23 @@
         <window title="Welcome to Master Password" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" animationBehavior="default" id="1">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" moveToActiveSpace="YES"/>
-            <rect key="contentRect" x="196" y="240" width="833" height="540"/>
+            <rect key="contentRect" x="196" y="240" width="1000" height="640"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="900"/>
             <view key="contentView" id="2" userLabel="Container">
-                <rect key="frame" x="0.0" y="0.0" width="833" height="540"/>
+                <rect key="frame" x="0.0" y="0.0" width="1000" height="640"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <customView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="369">
-                        <rect key="frame" x="0.0" y="40" width="833" height="500"/>
+                        <rect key="frame" x="0.0" y="40" width="1000" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
                             <imageView translatesAutoresizingMaskIntoConstraints="NO" id="3" userLabel="Image">
-                                <rect key="frame" x="0.0" y="0.0" width="833" height="500"/>
+                                <rect key="frame" x="0.0" y="0.0" width="1000" height="600"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="500" id="396"/>
-                                </constraints>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="shot-laptop-leaning-iphone" id="4"/>
                             </imageView>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="268">
-                                <rect key="frame" x="18" y="402" width="797" height="78"/>
+                                <rect key="frame" x="18" y="502" width="964" height="78"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <shadow key="shadow" blurRadius="1">
                                     <size key="offset" width="0.0" height="1"/>
@@ -51,7 +47,7 @@ from anywhere.</string>
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="283">
-                                <rect key="frame" x="245" y="72" width="344" height="29"/>
+                                <rect key="frame" x="328" y="72" width="344" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <shadow key="shadow" blurRadius="1">
                                     <size key="offset" width="0.0" height="1"/>
@@ -64,7 +60,7 @@ from anywhere.</string>
                                 </textFieldCell>
                             </textField>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="173" userLabel="Store">
-                                <rect key="frame" x="342" y="20" width="150" height="44"/>
+                                <rect key="frame" x="425" y="20" width="150" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <shadow key="shadow" blurRadius="1">
                                     <size key="offset" width="0.0" height="1"/>
@@ -93,22 +89,8 @@ from anywhere.</string>
                             <constraint firstItem="283" firstAttribute="centerX" secondItem="268" secondAttribute="centerX" id="544"/>
                         </constraints>
                     </customView>
-                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="409">
-                        <rect key="frame" x="691" y="8" width="122" height="25"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="122" id="444"/>
-                        </constraints>
-                        <buttonCell key="cell" type="roundTextured" title="Use iCloud" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="410">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="togglePreference:" target="-2" id="573"/>
-                        </connections>
-                    </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="508">
-                        <rect key="frame" x="561" y="8" width="122" height="25"/>
+                        <rect key="frame" x="858" y="8" width="122" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="122" id="509"/>
@@ -122,11 +104,8 @@ from anywhere.</string>
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="562">
-                        <rect key="frame" x="21" y="13" width="534" height="17"/>
+                        <rect key="frame" x="21" y="13" width="831" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="530" id="566"/>
-                        </constraints>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="To begin, hold: command, control and P (⌘⌃P) or access the ●●●| menu icon." id="563">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -137,16 +116,13 @@ from anywhere.</string>
                 <constraints>
                     <constraint firstItem="369" firstAttribute="top" secondItem="2" secondAttribute="top" id="374"/>
                     <constraint firstItem="369" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="375"/>
-                    <constraint firstAttribute="trailing" secondItem="409" secondAttribute="trailing" constant="20" symbolic="YES" id="507"/>
-                    <constraint firstItem="508" firstAttribute="baseline" secondItem="409" secondAttribute="baseline" id="513"/>
                     <constraint firstItem="508" firstAttribute="top" secondItem="369" secondAttribute="bottom" constant="8" symbolic="YES" id="514"/>
-                    <constraint firstItem="409" firstAttribute="leading" secondItem="508" secondAttribute="trailing" constant="8" symbolic="YES" id="515"/>
                     <constraint firstAttribute="bottom" secondItem="508" secondAttribute="bottom" constant="10" id="545"/>
-                    <constraint firstAttribute="bottom" secondItem="409" secondAttribute="bottom" constant="10" id="546"/>
                     <constraint firstItem="562" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="23" id="565"/>
                     <constraint firstItem="369" firstAttribute="trailing" secondItem="2" secondAttribute="trailing" id="567"/>
                     <constraint firstItem="508" firstAttribute="leading" secondItem="562" secondAttribute="trailing" constant="8" symbolic="YES" id="568"/>
                     <constraint firstItem="562" firstAttribute="baseline" secondItem="508" secondAttribute="baseline" id="569"/>
+                    <constraint firstAttribute="trailing" secondItem="508" secondAttribute="trailing" constant="20" symbolic="YES" id="nH9-cd-trF"/>
                 </constraints>
             </view>
         </window>

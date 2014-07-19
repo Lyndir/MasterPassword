@@ -21,7 +21,6 @@
 @interface MPInitialWindowController : NSWindowController
 
 @property(nonatomic, weak) IBOutlet NSButton *openAtLoginButton;
-@property(nonatomic, weak) IBOutlet NSButton *enableCloudButton;
 
 - (IBAction)iphoneAppStore:(id)sender;
 - (IBAction)togglePreference:(id)sender;

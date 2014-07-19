@@ -476,12 +476,15 @@
 
     [MPMacAppDelegate managedObjectContextForMainThreadPerformBlock:^(NSManagedObjectContext *mainContext) {
         self.locked = YES;
+        self.newUser = YES;
 
         self.inputLabel.stringValue = @"";
         self.siteField.stringValue = @"";
 
         MPUserEntity *mainActiveUser = [[MPMacAppDelegate get] activeUserInContext:mainContext];
         if (mainActiveUser) {
+            self.newUser = mainActiveUser.keyID == nil;
+
             if ([MPMacAppDelegate get].key) {
                 self.inputLabel.stringValue = strf( @"%@'s password for:", mainActiveUser.name );
                 self.locked = NO;

@@ -16,12 +16,6 @@
 
 #define LOGIN_HELPER_BUNDLE_ID @"com.lyndir.lhunath.MasterPassword.Mac.LoginHelper"
 
-@interface UbiquityStoreManager(Private)
-
-- (void)markCloudStoreCorrupted;
-
-@end
-
 @implementation MPMacAppDelegate
 
 #pragma clang diagnostic push
@@ -79,11 +73,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             [weakSelf updateMenuItems];
         } );
     }           forKeyPath:@"activeUser" options:0 context:nil];
-    [self addObserverBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context) {
-        dispatch_async( dispatch_get_main_queue(), ^{
-            [weakSelf updateMenuItems];
-        } );
-    }           forKeyPath:@"storeManager.cloudAvailable" options:0 context:nil];
 
     // Status item.
     self.statusView = [[RHStatusItemView alloc] initWithStatusBarItem:
@@ -126,8 +115,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         err( @"Error registering 'lock' hotkey: %i", (int)status );
 
     // Initial display.
-    if ([[MPMacConfig get].firstRun boolValue]){
-        [(self.initialWindowController = [[MPInitialWindowController alloc] initWithWindowNibName:@"MPInitialWindow"]).window makeKeyAndOrderFront:self];
+    if ([[MPMacConfig get].firstRun boolValue]) {
+        [(self.initialWindowController = [[MPInitialWindowController alloc] initWithWindowNibName:@"MPInitialWindow"])
+                .window makeKeyAndOrderFront:self];
         [NSApp activateIgnoringOtherApps:YES];
     }
 }
@@ -314,8 +304,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)togglePreference:(id)sender {
 
-    if (sender == self.useCloudItem)
-        [self storeManager].cloudEnabled = self.useCloudItem.state != NSOnState;
     if (sender == self.hidePasswordsItem)
         [MPConfig get].hidePasswords = [NSNumber numberWithBool:![[MPConfig get].hidePasswords boolValue]];
     if (sender == self.rememberPasswordItem)
@@ -391,26 +379,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (IBAction)lock:(id)sender {
 
     self.key = nil;
-}
-
-- (IBAction)rebuildCloud:(id)sender {
-
-    if ([[NSAlert alertWithMessageText:@"iCloud Truth Push" defaultButton:@"Continue"
-                       alternateButton:nil otherButton:@"Cancel"
-             informativeTextWithFormat:@"This action will force all your iCloud enabled devices to switch to this device's version of the truth."
-                     @"\n\nThis is only necessary if you notice that your devices aren't syncing properly anymore.  "
-                     "Any data on other devices not available from here will be lost."] runModal] == NSAlertDefaultReturn)
-        [self.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:NO];
-}
-
-- (IBAction)corruptCloud:(id)sender {
-
-    if ([[NSAlert alertWithMessageText:@"iCloud Truth Pull" defaultButton:@"Continue"
-                       alternateButton:nil otherButton:@"Cancel"
-             informativeTextWithFormat:@"This action will force another iCloud enabled device to push their version of the truth on all."
-                     @"\n\nThis is only necessary if you notice that your devices aren't syncing properly anymore.  "
-                     "Any data on this device not available from the other will be lost."] runModal] == NSAlertDefaultReturn)
-        [self.storeManager markCloudStoreCorrupted];
 }
 
 - (IBAction)terminate:(id)sender {
@@ -547,8 +515,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     if (![users count]) {
         NSMenuItem *noUsersItem = [self.usersItem.submenu addItemWithTitle:@"No users" action:NULL keyEquivalent:@""];
         noUsersItem.enabled = NO;
-        noUsersItem.toolTip = @"Use the iOS app to create users and make sure iCloud is enabled in its preferences as well.  "
-                @"Then give iCloud some time to sync the new user to your Mac.";
+        noUsersItem.toolTip = @"Begin by creating a user.";
     }
 
     self.usersItem.state = NSMixedState;
@@ -627,17 +594,29 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         self.savePasswordItem.enabled = YES;
         self.savePasswordItem.toolTip = nil;
     }
+}
 
-    self.useCloudItem.state = self.storeManager.cloudEnabled? NSOnState: NSOffState;
-    self.initialWindowController.enableCloudButton.state = self.storeManager.cloudEnabled? NSOnState: NSOffState;
-    self.useCloudItem.enabled = self.storeManager.cloudAvailable;
-    if (self.storeManager.cloudAvailable) {
-        self.useCloudItem.title = @"Use iCloud";
-        self.useCloudItem.toolTip = nil;
-    }
-    else {
-        self.useCloudItem.title = @"Use iCloud (Unavailable)";
-        self.useCloudItem.toolTip = @"iCloud is not set up for your Mac user.";
+#pragma mark - UbiquityStoreManagerDelegate
+
+- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didLoadStoreForCoordinator:(NSPersistentStoreCoordinator *)coordinator
+                     isCloud:(BOOL)isCloudStore {
+
+    [super ubiquityStoreManager:manager didLoadStoreForCoordinator:coordinator isCloud:isCloudStore];
+
+    if (isCloudStore) {
+        NSAlert *alert = [NSAlert new];
+        alert.messageText = @"iCloud Support Deprecated";
+        alert.informativeText = @"Master Password is moving away from iCloud due to limited platform support and reliability issues.  "
+                @"\n\nMaster Password's generated passwords do not require syncing.  "
+                @"Your sites will always have the same passwords on all your devices.  "
+                @"\n\niCloud continues to work for now but will be deactivated in a future update.  "
+                @"Disable iCloud now to copy your iCloud sites to your device and avoid losing them when iCloud becomes discontinued.";
+        [alert addButtonWithTitle:@"Disable iCloud"];
+        [alert addButtonWithTitle:@"Ignore For Now"];
+
+        NSInteger response = [alert runModal];
+        if (response == NSAlertFirstButtonReturn)
+            [[self storeManager] migrateCloudToLocal];
     }
 }
 

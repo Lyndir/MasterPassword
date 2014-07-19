@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1070" defaultVersion="1080" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
@@ -24,7 +24,6 @@
                 <outlet property="savePasswordItem" destination="747" id="751"/>
                 <outlet property="showItem" destination="719" id="783"/>
                 <outlet property="statusMenu" destination="716" id="731"/>
-                <outlet property="useCloudItem" destination="743" id="749"/>
                 <outlet property="usersItem" destination="755" id="762"/>
             </connections>
         </customObject>
@@ -55,23 +54,6 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Preferences" autoenablesItems="NO" id="742">
                         <items>
-                            <menuItem title="Use iCloud" id="743">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="togglePreference:" target="494" id="752"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Synchronize available sites from your iCloud account." enabled="NO" id="746">
-                                <attributedString key="attributedTitle">
-                                    <fragment content="Synchronize available sites from your iCloud account.">
-                                        <attributes>
-                                            <font key="NSFont" size="12" name="Helvetica"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                            </menuItem>
                             <menuItem title="Open At Login" id="785">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -198,47 +180,6 @@
                                 <connections>
                                     <action selector="importSites:" target="494" id="CNv-4j-036"/>
                                 </connections>
-                            </menuItem>
-                            <menuItem title="Advanced" id="776">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Advanced" id="777">
-                                    <items>
-                                        <menuItem title="iCloud Truth Push" id="778">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="rebuildCloud:" target="494" id="780"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Force this device's version of the truth upon all others." enabled="NO" id="779">
-                                            <attributedString key="attributedTitle">
-                                                <fragment content="Force this device's version of the truth upon all others.">
-                                                    <attributes>
-                                                        <font key="NSFont" size="12" name="Helvetica"/>
-                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                    </attributes>
-                                                </fragment>
-                                            </attributedString>
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                        <menuItem title="iCloud Truth Pull" id="cLQ-kc-cYN">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="corruptCloud:" target="494" id="asr-sb-Zkz"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Force this device's version of the truth upon all others." enabled="NO" id="6NL-ki-Jff">
-                                            <attributedString key="attributedTitle">
-                                                <fragment content="Force this device's version of the truth upon all others.">
-                                                    <attributes>
-                                                        <font key="NSFont" size="12" name="Helvetica"/>
-                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                    </attributes>
-                                                </fragment>
-                                            </attributedString>
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                    </items>
-                                </menu>
                             </menuItem>
                         </items>
                     </menu>

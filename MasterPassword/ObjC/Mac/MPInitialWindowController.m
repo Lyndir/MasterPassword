@@ -44,15 +44,6 @@
 
 - (IBAction)togglePreference:(id)sender {
 
-    if (sender == self.enableCloudButton) {
-        if (([MPMacAppDelegate get].storeManager.cloudEnabled = self.enableCloudButton.state == NSOnState)) {
-            NSAlert *alert = [NSAlert new];
-            alert.messageText = @"iCloud Enabled";
-            alert.informativeText = @"If you already have a user on another iCloud-enabled device, "
-                    @"it may take a moment for that user to sync down to this device.";
-            [alert runModal];
-        }
-    }
     if (sender == self.openAtLoginButton)
         [[MPMacAppDelegate get] setLoginItemEnabled:self.openAtLoginButton.state == NSOnState];
 }
