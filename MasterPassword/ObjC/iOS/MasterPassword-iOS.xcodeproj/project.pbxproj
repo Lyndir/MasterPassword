@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		93D391C07818F4C2DC1B6956 /* MPPasswordsCoachmarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D397E3650384498E7E53C4 /* MPPasswordsCoachmarkViewController.m */; };
 		93D391ECBD9BD2C64115B5DD /* PearlSizedTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39156E806BB78E04F78B9 /* PearlSizedTextView.m */; };
 		93D391ED37C9F687FA51EAA1 /* MPEmergencySegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3937712BF1B67623E5764 /* MPEmergencySegue.m */; };
 		93D3922A53E41A54832E90D9 /* PearlOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D390FADEB325D8D54A957D /* PearlOverlay.m */; };
@@ -19,7 +18,6 @@
 		93D393DB5325820241BA90A7 /* PearlSizedTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39A4759186F6D2D34AA6B /* PearlSizedTextView.h */; };
 		93D394982CBD25D46692DD7C /* MPWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3990E0CD1B5CF9FBB2C07 /* MPWebViewController.m */; };
 		93D394B5036C882B33C71872 /* MPPasswordsSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39E7A12CC352B2825AA66 /* MPPasswordsSegue.m */; };
-		93D394F6D3F6E2553AA0D684 /* MPPasswordLargeStoredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3947F6BB69CA9A9124A5D /* MPPasswordLargeStoredCell.m */; };
 		93D39536EB550E811CCD04BC /* UIResponder+PearlFirstResponder.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D394482BB07F90E8FD1314 /* UIResponder+PearlFirstResponder.h */; };
 		93D3954E96236384AFA00453 /* UIScrollView+PearlAdjustInsets.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D390FB3110DCCE68E600DC /* UIScrollView+PearlAdjustInsets.m */; };
 		93D3954FCE045A3CC7E804B7 /* MPUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D399E571F61E50A9BF8FAF /* MPUsersViewController.m */; };
@@ -31,10 +29,8 @@
 		93D396D8B67DA6522CDBA142 /* MPCoachmarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3995B1D4DCE5A30D882BA /* MPCoachmarkViewController.m */; };
 		93D397952F5635C793C24DF1 /* NSError+PearlFullDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39F9106F2CCFB94283188 /* NSError+PearlFullDescription.m */; };
 		93D3980046016EFD05B35BC5 /* PearlUICollectionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39B1D8177A86C5B9EDDE3 /* PearlUICollectionView.h */; };
-		93D398BD8B83FEE8BE4EFFFC /* MPPasswordLargeDeleteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39EFBC4D6BA3C8581865F /* MPPasswordLargeDeleteCell.m */; };
 		93D398ECD7D1A0DEDDADF516 /* MPEmergencyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39ACBA9F4878B6A1CC33B /* MPEmergencyViewController.m */; };
 		93D399246DC90F50913A1287 /* UIResponder+PearlFirstResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A1DDFA09AE2E14D26DC /* UIResponder+PearlFirstResponder.m */; };
-		93D399278165FD6D950F0025 /* MPPasswordTypesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39097C0AAE62C1C321BFC /* MPPasswordTypesCell.m */; };
 		93D3992FA1546E01F498F665 /* PearlNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D398567FD02DB2647B8CF3 /* PearlNavigationController.h */; };
 		93D399433EA75E50656040CB /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93D394077F8FAB8167647187 /* Twitter.framework */; };
 		93D399BBC0A7EC746CB1B19B /* MPLogsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D391943675426839501BB8 /* MPLogsViewController.h */; };
@@ -45,14 +41,12 @@
 		93D39B8F90F58A5D158DDBA3 /* MPPasswordsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3924EE15017F8A12CB436 /* MPPasswordsViewController.m */; };
 		93D39BA1EA3CAAC8A220B4A6 /* MPAppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3916C1D8F1427DFBDEBCA /* MPAppSettingsViewController.m */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
-		93D39CB5E2EC1078E898F46A /* MPPasswordLargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3937863061C3916AF7AD2 /* MPPasswordLargeCell.m */; };
 		93D39D596A2E376D6F6F5DA1 /* MPCombinedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D393310223DDB35218467A /* MPCombinedViewController.m */; };
 		93D39D8F78978196D6ABDEDE /* MPNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39CC01630D0421205C4C4 /* MPNavigationController.m */; };
 		93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */; };
 		93D39E34FD28D24FE3442C48 /* UITextView+PearlAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3977321EB249981821AB0 /* UITextView+PearlAttributes.m */; };
 		93D39EAA4D064193074D3021 /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A813CA9D7E192261ED2 /* MPFixable.m */; };
 		93D39F8A9254177891F38705 /* MPSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A28369954D147E239BA /* MPSetupViewController.m */; };
-		93D39FA97F4C3F69A75D5A03 /* MPPasswordLargeGeneratedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3993422E207BF0B21D089 /* MPPasswordLargeGeneratedCell.m */; };
 		DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */; };
 		DA071BF3190187FE00179766 /* empty@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA071BF1190187FE00179766 /* empty@2x.png */; };
 		DA071BF4190187FE00179766 /* empty.png in Resources */ = {isa = PBXBuildFile; fileRef = DA071BF2190187FE00179766 /* empty.png */; };
@@ -85,6 +79,8 @@
 		DA250A18195665A100AC23F1 /* UITableView+PearlReloadFromArray.h in Headers */ = {isa = PBXBuildFile; fileRef = DA250A14195665A100AC23F1 /* UITableView+PearlReloadFromArray.h */; };
 		DA250A19195665A100AC23F1 /* UICollectionReusableView+PearlDequeue.m in Sources */ = {isa = PBXBuildFile; fileRef = DA250A15195665A100AC23F1 /* UICollectionReusableView+PearlDequeue.m */; };
 		DA250A1A195665A100AC23F1 /* UICollectionReusableView+PearlDequeue.h in Headers */ = {isa = PBXBuildFile; fileRef = DA250A16195665A100AC23F1 /* UICollectionReusableView+PearlDequeue.h */; };
+		DA25C5F8197AFFB40046CDCF /* icon_tools.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD384C1711E29700CF925C /* icon_tools.png */; };
+		DA25C5F9197AFFB40046CDCF /* icon_tools@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD384D1711E29700CF925C /* icon_tools@2x.png */; };
 		DA2CA4DD18D28859007798F8 /* NSArray+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4D918D28859007798F8 /* NSArray+Pearl.m */; };
 		DA2CA4DE18D28859007798F8 /* NSArray+Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DA2CA4DA18D28859007798F8 /* NSArray+Pearl.h */; };
 		DA2CA4DF18D28859007798F8 /* NSTimer+PearlBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4DB18D28859007798F8 /* NSTimer+PearlBlock.m */; };
@@ -347,10 +343,10 @@
 		DAEB938218AA537D000490CC /* x509_vfy.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB933118AA537D000490CC /* x509_vfy.h */; };
 		DAEB938318AA537D000490CC /* x509v3.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB933218AA537D000490CC /* x509v3.h */; };
 		DAEBC45314F6364500987BF6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
-		DAEC85B518E3DD9A007FC0DF /* PearlUIView.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEC85B118E3DD9A007FC0DF /* PearlUIView.m */; };
+		DAEC85B518E3DD9A007FC0DF /* UIView+Touches.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEC85B118E3DD9A007FC0DF /* UIView+Touches.m */; };
 		DAEC85B618E3DD9A007FC0DF /* PearlUINavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEC85B218E3DD9A007FC0DF /* PearlUINavigationBar.m */; };
 		DAEC85B718E3DD9A007FC0DF /* PearlUINavigationBar.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEC85B318E3DD9A007FC0DF /* PearlUINavigationBar.h */; };
-		DAEC85B818E3DD9A007FC0DF /* PearlUIView.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEC85B418E3DD9A007FC0DF /* PearlUIView.h */; };
+		DAEC85B818E3DD9A007FC0DF /* UIView+Touches.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEC85B418E3DD9A007FC0DF /* UIView+Touches.h */; };
 		DAF4EF50190A81E400023C90 /* NSManagedObject+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF4EF4E190A81E400023C90 /* NSManagedObject+Pearl.m */; };
 		DAF4EF51190A81E400023C90 /* NSManagedObject+Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DAF4EF4F190A81E400023C90 /* NSManagedObject+Pearl.h */; };
 		DAFC5656172C573B00CB5CC5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
@@ -455,11 +451,8 @@
 /* Begin PBXFileReference section */
 		93D390519405B76CC6A57C4F /* MPCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCell.h; sourceTree = "<group>"; };
 		93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Indexing.m"; sourceTree = "<group>"; };
-		93D39097C0AAE62C1C321BFC /* MPPasswordTypesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordTypesCell.m; sourceTree = "<group>"; };
 		93D390FADEB325D8D54A957D /* PearlOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlOverlay.m; sourceTree = "<group>"; };
 		93D390FB3110DCCE68E600DC /* UIScrollView+PearlAdjustInsets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+PearlAdjustInsets.m"; sourceTree = "<group>"; };
-		93D390FD93EFCFECB5193DEF /* MPPasswordsCoachmarkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordsCoachmarkViewController.h; sourceTree = "<group>"; };
-		93D391243F64A77798B4D6A4 /* MPPasswordTypesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordTypesCell.h; sourceTree = "<group>"; };
 		93D3914D7597F9A28DB9D85E /* MPPasswordsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordsViewController.h; sourceTree = "<group>"; };
 		93D39156E806BB78E04F78B9 /* PearlSizedTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlSizedTextView.m; sourceTree = "<group>"; };
 		93D3916C1D8F1427DFBDEBCA /* MPAppSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppSettingsViewController.m; sourceTree = "<group>"; };
@@ -468,27 +461,21 @@
 		93D392876BE5C011DE73B43F /* MPPopdownSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPopdownSegue.h; sourceTree = "<group>"; };
 		93D393310223DDB35218467A /* MPCombinedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCombinedViewController.m; sourceTree = "<group>"; };
 		93D3937712BF1B67623E5764 /* MPEmergencySegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEmergencySegue.m; sourceTree = "<group>"; };
-		93D3937863061C3916AF7AD2 /* MPPasswordLargeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordLargeCell.m; sourceTree = "<group>"; };
 		93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Indexing.h"; sourceTree = "<group>"; };
 		93D393BB973253D4BAAC84AA /* PearlEMail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlEMail.m; sourceTree = "<group>"; };
 		93D394077F8FAB8167647187 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		93D3942A356B639724157982 /* PearlOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlOverlay.h; sourceTree = "<group>"; };
 		93D394482BB07F90E8FD1314 /* UIResponder+PearlFirstResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+PearlFirstResponder.h"; sourceTree = "<group>"; };
-		93D3947F6BB69CA9A9124A5D /* MPPasswordLargeStoredCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordLargeStoredCell.m; sourceTree = "<group>"; };
 		93D3956915634581E737B38C /* PearlNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlNavigationController.m; sourceTree = "<group>"; };
-		93D395BA6B2CFF5F49A4D25F /* MPPasswordLargeStoredCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordLargeStoredCell.h; sourceTree = "<group>"; };
-		93D3966B527CA47A0A661CE2 /* MPPasswordLargeDeleteCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordLargeDeleteCell.h; sourceTree = "<group>"; };
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
 		93D3970502644794E8A027BE /* MPNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNavigationController.h; sourceTree = "<group>"; };
 		93D3971FE104BB4052484151 /* MPUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUsersViewController.h; sourceTree = "<group>"; };
 		93D39730673227EFF6DEFF19 /* MPSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSetupViewController.h; sourceTree = "<group>"; };
 		93D3977321EB249981821AB0 /* UITextView+PearlAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+PearlAttributes.m"; sourceTree = "<group>"; };
 		93D3979190DACEBD1F6AE9F4 /* MPLogsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPLogsViewController.m; sourceTree = "<group>"; };
-		93D397E3650384498E7E53C4 /* MPPasswordsCoachmarkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordsCoachmarkViewController.m; sourceTree = "<group>"; };
 		93D398567FD02DB2647B8CF3 /* PearlNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlNavigationController.h; sourceTree = "<group>"; };
 		93D398C95847261903D781D3 /* NSError+PearlFullDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+PearlFullDescription.h"; sourceTree = "<group>"; };
 		93D3990E0CD1B5CF9FBB2C07 /* MPWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPWebViewController.m; sourceTree = "<group>"; };
-		93D3993422E207BF0B21D089 /* MPPasswordLargeGeneratedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordLargeGeneratedCell.m; sourceTree = "<group>"; };
 		93D3995B1D4DCE5A30D882BA /* MPCoachmarkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCoachmarkViewController.m; sourceTree = "<group>"; };
 		93D39975CE5AEC99E3F086C7 /* MPPasswordCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordCell.h; sourceTree = "<group>"; };
 		93D3999693660C89A7465F4E /* MPCoachmarkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCoachmarkViewController.h; sourceTree = "<group>"; };
@@ -510,15 +497,12 @@
 		93D39C86E984EC65DA5ACB1D /* MPAppSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppSettingsViewController.h; sourceTree = "<group>"; };
 		93D39CC01630D0421205C4C4 /* MPNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNavigationController.m; sourceTree = "<group>"; };
 		93D39CDD434AFD6E1B0DA359 /* MPEmergencyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEmergencyViewController.h; sourceTree = "<group>"; };
-		93D39CE1138FDA4D3D1B847A /* MPPasswordLargeGeneratedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordLargeGeneratedCell.h; sourceTree = "<group>"; };
 		93D39CF8ADF4542CDC4CD385 /* MPCombinedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCombinedViewController.h; sourceTree = "<group>"; };
 		93D39D8A953779B35403AF6E /* PearlUICollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlUICollectionView.m; sourceTree = "<group>"; };
 		93D39DA27D768B53C8B1330C /* MPAvatarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAvatarCell.h; sourceTree = "<group>"; };
 		93D39DE2CB351D4E3789462B /* UIScrollView+PearlAdjustInsets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+PearlAdjustInsets.h"; sourceTree = "<group>"; };
 		93D39DEA995041A13DC9CAF7 /* MPPasswordCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordCell.m; sourceTree = "<group>"; };
-		93D39E02F69CACAB61C056F8 /* MPPasswordLargeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordLargeCell.h; sourceTree = "<group>"; };
 		93D39E7A12CC352B2825AA66 /* MPPasswordsSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordsSegue.m; sourceTree = "<group>"; };
-		93D39EFBC4D6BA3C8581865F /* MPPasswordLargeDeleteCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordLargeDeleteCell.m; sourceTree = "<group>"; };
 		93D39F556F2F142740A65E59 /* MPWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPWebViewController.h; sourceTree = "<group>"; };
 		93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlEMail.h; sourceTree = "<group>"; };
 		93D39F9106F2CCFB94283188 /* NSError+PearlFullDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+PearlFullDescription.m"; sourceTree = "<group>"; };
@@ -1380,10 +1364,10 @@
 		DAEB933118AA537D000490CC /* x509_vfy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x509_vfy.h; sourceTree = "<group>"; };
 		DAEB933218AA537D000490CC /* x509v3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x509v3.h; sourceTree = "<group>"; };
 		DAEBC45214F6364500987BF6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		DAEC85B118E3DD9A007FC0DF /* PearlUIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlUIView.m; sourceTree = "<group>"; };
+		DAEC85B118E3DD9A007FC0DF /* UIView+Touches.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Touches.m"; sourceTree = "<group>"; };
 		DAEC85B218E3DD9A007FC0DF /* PearlUINavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlUINavigationBar.m; sourceTree = "<group>"; };
 		DAEC85B318E3DD9A007FC0DF /* PearlUINavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlUINavigationBar.h; sourceTree = "<group>"; };
-		DAEC85B418E3DD9A007FC0DF /* PearlUIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlUIView.h; sourceTree = "<group>"; };
+		DAEC85B418E3DD9A007FC0DF /* UIView+Touches.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Touches.h"; sourceTree = "<group>"; };
 		DAF4EF4E190A81E400023C90 /* NSManagedObject+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+Pearl.m"; sourceTree = "<group>"; };
 		DAF4EF4F190A81E400023C90 /* NSManagedObject+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Pearl.h"; sourceTree = "<group>"; };
 		DAFC5655172C573B00CB5CC5 /* libInAppSettingsKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libInAppSettingsKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1614,8 +1598,6 @@
 				DACA22121705DDC5002C6C22 /* External */,
 				DA5BFA47147E415C00F98B1E /* Frameworks */,
 				DA5BFA45147E415C00F98B1E /* Products */,
-				93D3966B527CA47A0A661CE2 /* MPPasswordLargeDeleteCell.h */,
-				93D39EFBC4D6BA3C8581865F /* MPPasswordLargeDeleteCell.m */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2441,6 +2423,7 @@
 		DABD3BD71711E2DC00CF925C /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */,
 				93D39975CE5AEC99E3F086C7 /* MPPasswordCell.h */,
 				93D39DEA995041A13DC9CAF7 /* MPPasswordCell.m */,
 				93D39ACBA9F4878B6A1CC33B /* MPEmergencyViewController.m */,
@@ -2469,21 +2452,12 @@
 				93D3914D7597F9A28DB9D85E /* MPPasswordsViewController.h */,
 				93D393310223DDB35218467A /* MPCombinedViewController.m */,
 				93D39CF8ADF4542CDC4CD385 /* MPCombinedViewController.h */,
-				DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */,
 				93D39B381350802A194BF332 /* MPAvatarCell.m */,
 				93D39DA27D768B53C8B1330C /* MPAvatarCell.h */,
-				93D3993422E207BF0B21D089 /* MPPasswordLargeGeneratedCell.m */,
-				93D39CE1138FDA4D3D1B847A /* MPPasswordLargeGeneratedCell.h */,
 				93D399E571F61E50A9BF8FAF /* MPUsersViewController.m */,
 				93D3971FE104BB4052484151 /* MPUsersViewController.h */,
-				93D39E02F69CACAB61C056F8 /* MPPasswordLargeCell.h */,
-				93D3937863061C3916AF7AD2 /* MPPasswordLargeCell.m */,
-				93D395BA6B2CFF5F49A4D25F /* MPPasswordLargeStoredCell.h */,
-				93D3947F6BB69CA9A9124A5D /* MPPasswordLargeStoredCell.m */,
 				93D39BAA71DE51B4D8A1286C /* MPCell.m */,
 				93D390519405B76CC6A57C4F /* MPCell.h */,
-				93D39097C0AAE62C1C321BFC /* MPPasswordTypesCell.m */,
-				93D391243F64A77798B4D6A4 /* MPPasswordTypesCell.h */,
 				93D3937712BF1B67623E5764 /* MPEmergencySegue.m */,
 				93D39A41340CF778E00D0E6D /* MPEmergencySegue.h */,
 				93D39E7A12CC352B2825AA66 /* MPPasswordsSegue.m */,
@@ -2494,8 +2468,6 @@
 				93D39C86E984EC65DA5ACB1D /* MPAppSettingsViewController.h */,
 				93D3995B1D4DCE5A30D882BA /* MPCoachmarkViewController.m */,
 				93D3999693660C89A7465F4E /* MPCoachmarkViewController.h */,
-				93D397E3650384498E7E53C4 /* MPPasswordsCoachmarkViewController.m */,
-				93D390FD93EFCFECB5193DEF /* MPPasswordsCoachmarkViewController.h */,
 				93D3990E0CD1B5CF9FBB2C07 /* MPWebViewController.m */,
 				93D39F556F2F142740A65E59 /* MPWebViewController.h */,
 				93D39CC01630D0421205C4C4 /* MPNavigationController.m */,
@@ -2846,10 +2818,10 @@
 				DA250A14195665A100AC23F1 /* UITableView+PearlReloadFromArray.h */,
 				DA250A15195665A100AC23F1 /* UICollectionReusableView+PearlDequeue.m */,
 				DA250A16195665A100AC23F1 /* UICollectionReusableView+PearlDequeue.h */,
-				DAEC85B118E3DD9A007FC0DF /* PearlUIView.m */,
+				DAEC85B118E3DD9A007FC0DF /* UIView+Touches.m */,
 				DAEC85B218E3DD9A007FC0DF /* PearlUINavigationBar.m */,
 				DAEC85B318E3DD9A007FC0DF /* PearlUINavigationBar.h */,
-				DAEC85B418E3DD9A007FC0DF /* PearlUIView.h */,
+				DAEC85B418E3DD9A007FC0DF /* UIView+Touches.h */,
 				DA2CA4E518D2AC10007798F8 /* NSLayoutConstraint+PearlUIKit.m */,
 				DA2CA4E218D28866007798F8 /* NSLayoutConstraint+PearlUIKit.h */,
 				93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */,
@@ -3016,7 +2988,7 @@
 				DAEB933C18AA537D000490CC /* aes.h in Headers */,
 				DAEB937618AA537D000490CC /* ssl2.h in Headers */,
 				DAFE4A3C15039824003ABA7C /* Pearl-UIKit-Dependencies.h in Headers */,
-				DAEC85B818E3DD9A007FC0DF /* PearlUIView.h in Headers */,
+				DAEC85B818E3DD9A007FC0DF /* UIView+Touches.h in Headers */,
 				DAEB935B18AA537D000490CC /* krb5_asn.h in Headers */,
 				DAEB935818AA537D000490CC /* evp.h in Headers */,
 				DAEB934118AA537D000490CC /* blowfish.h in Headers */,
@@ -3452,6 +3424,7 @@
 				DABD3B8D1711E29800CF925C /* keypad.png in Resources */,
 				DABD3B8E1711E29800CF925C /* logo-bare.png in Resources */,
 				DA7304E6194E025900E72520 /* tip_basic_black@2x.png in Resources */,
+				DA25C5F9197AFFB40046CDCF /* icon_tools@2x.png in Resources */,
 				DABD3B8F1711E29800CF925C /* menu-icon.png in Resources */,
 				DABD3B901711E29800CF925C /* menu-icon@2x.png in Resources */,
 				DABD3B951711E29800CF925C /* pull-down.png in Resources */,
@@ -3466,6 +3439,7 @@
 				DABD3C241711E2DC00CF925C /* MasterPassword.entitlements in Resources */,
 				DABD3C251711E2DC00CF925C /* Settings.bundle in Resources */,
 				DABD3C261711E2DC00CF925C /* InfoPlist.strings in Resources */,
+				DA25C5F8197AFFB40046CDCF /* icon_tools.png in Resources */,
 				DA2509FB1956484D00AC23F1 /* image-11@2x.png in Resources */,
 				DA250A0B1956484D00AC23F1 /* image-3@2x.png in Resources */,
 				DABD3FCA1712446200CF925C /* cloud.png in Resources */,
@@ -3560,11 +3534,7 @@
 				93D3957237D303DE2D38C267 /* MPAvatarCell.m in Sources */,
 				93D39B8F90F58A5D158DDBA3 /* MPPasswordsViewController.m in Sources */,
 				93D3954FCE045A3CC7E804B7 /* MPUsersViewController.m in Sources */,
-				93D39CB5E2EC1078E898F46A /* MPPasswordLargeCell.m in Sources */,
-				93D39FA97F4C3F69A75D5A03 /* MPPasswordLargeGeneratedCell.m in Sources */,
-				93D394F6D3F6E2553AA0D684 /* MPPasswordLargeStoredCell.m in Sources */,
 				93D39392DEDA376F93C6C718 /* MPCell.m in Sources */,
-				93D399278165FD6D950F0025 /* MPPasswordTypesCell.m in Sources */,
 				93D39A5FF670957C0AF8298D /* MPPasswordCell.m in Sources */,
 				93D398ECD7D1A0DEDDADF516 /* MPEmergencyViewController.m in Sources */,
 				93D391ED37C9F687FA51EAA1 /* MPEmergencySegue.m in Sources */,
@@ -3572,10 +3542,8 @@
 				93D39673DDC085BE72C34D7C /* MPPopdownSegue.m in Sources */,
 				93D39BA1EA3CAAC8A220B4A6 /* MPAppSettingsViewController.m in Sources */,
 				93D396D8B67DA6522CDBA142 /* MPCoachmarkViewController.m in Sources */,
-				93D391C07818F4C2DC1B6956 /* MPPasswordsCoachmarkViewController.m in Sources */,
 				93D39EAA4D064193074D3021 /* MPFixable.m in Sources */,
 				93D394982CBD25D46692DD7C /* MPWebViewController.m in Sources */,
-				93D398BD8B83FEE8BE4EFFFC /* MPPasswordLargeDeleteCell.m in Sources */,
 				93D39D8F78978196D6ABDEDE /* MPNavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3643,7 +3611,7 @@
 				DA30E9D815723E6900A68B4C /* PearlLazy.m in Sources */,
 				DAFE4A63150399FF003ABA82 /* UIControl+PearlBlocks.m in Sources */,
 				DAFE4A63150399FF003ABA86 /* NSObject+PearlKVO.m in Sources */,
-				DAEC85B518E3DD9A007FC0DF /* PearlUIView.m in Sources */,
+				DAEC85B518E3DD9A007FC0DF /* UIView+Touches.m in Sources */,
 				DA2CA4DD18D28859007798F8 /* NSArray+Pearl.m in Sources */,
 				DAFE4A63150399FF003ABA8A /* UIControl+PearlSelect.m in Sources */,
 				DAFE4A63150399FF003ABA8E /* UIScrollView+PearlFlashingIndicators.m in Sources */,
@@ -3931,7 +3899,7 @@
 					Reveal,
 				);
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1F49F193-0915-40B1-8792-BBDE74185E45";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "94333D7F-68F7-473D-B3B1-86AA41F33449";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

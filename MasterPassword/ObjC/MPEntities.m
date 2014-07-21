@@ -20,11 +20,11 @@
             @try {
                 NSError *error = nil;
                 if (!(success = [self save:&error]))
-                err(@"While saving: %@", error);
+                    err( @"While saving: %@", error );
             }
             @catch (NSException *exception) {
                 success = NO;
-                err(@"While saving: %@", exception);
+                err( @"While saving: %@", exception );
             }
         }];
     }
@@ -115,7 +115,8 @@
 - (NSString *)debugDescription {
 
     return strf( @"{%@: name=%@, user=%@, type=%lu, uses=%ld, lastUsed=%@, version=%ld, loginName=%@, requiresExplicitMigration=%d}",
-            NSStringFromClass( [self class] ), self.name, self.user.name, (long)self.type, (long)self.uses, self.lastUsed, (long)self.version,
+            NSStringFromClass( [self class] ), self.name, self.user.name, (long)self.type, (long)self.uses, self.lastUsed,
+            (long)self.version,
             self.loginName, self.requiresExplicitMigration );
 }
 
@@ -123,9 +124,11 @@
 
     while (self.version < MPAlgorithmDefaultVersion)
         if ([MPAlgorithmForVersion( self.version + 1 ) migrateElement:self explicit:explicit])
-        inf(@"%@ migration to version: %ld succeeded for element: %@", explicit? @"Explicit": @"Automatic", (long)self.version + 1, self);
+            inf( @"%@ migration to version: %ld succeeded for element: %@",
+                            explicit? @"Explicit": @"Automatic", (long)self.version + 1, self );
         else {
-            wrn(@"%@ migration to version: %ld failed for element: %@", explicit? @"Explicit": @"Automatic", (long)self.version + 1, self);
+            wrn( @"%@ migration to version: %ld failed for element: %@",
+                            explicit? @"Explicit": @"Automatic", (long)self.version + 1, self );
             return NO;
         }
 
@@ -137,7 +140,7 @@
     return [self.algorithm resolveContentForElement:self usingKey:key];
 }
 
-- (void)resolveContentUsingKey:(MPKey *)key result:(void (^)(NSString *))result {
+- (void)resolveContentUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result {
 
     [self.algorithm resolveContentForElement:self usingKey:key result:result];
 }

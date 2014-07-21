@@ -20,9 +20,15 @@
 #import "MPEntities.h"
 #import "MPCell.h"
 
-@interface MPPasswordCell : MPCell
+typedef NS_ENUM ( NSUInteger, MPPasswordCellMode ) {
+    MPPasswordCellModePassword,
+    MPPasswordCellModeSettings,
+};
 
-/** Populate our UI to reflect the current state. */
-- (void)updateAnimated:(BOOL)animated;
+@interface MPPasswordCell : MPCell <UIScrollViewDelegate>
+
+- (void)setElement:(MPElementEntity *)element animated:(BOOL)animated;
+- (void)setTransientSite:(NSString *)siteName animated:(BOOL)animated;
+- (void)setMode:(MPPasswordCellMode)mode animated:(BOOL)animated;
 
 @end

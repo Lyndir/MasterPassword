@@ -229,7 +229,7 @@
         switch (returnCode) {
             case NSAlertFirstButtonReturn: {
                 // "Create" button.
-                [[MPMacAppDelegate get] addElementNamed:[self.siteField stringValue] completion:^(MPElementEntity *element) {
+                [[MPMacAppDelegate get] addElementNamed:[self.siteField stringValue] completion:^(MPElementEntity *element, NSManagedObjectContext *context) {
                     if (element)
                         PearlMainQueue( ^{ [self updateElements]; } );
                 }];

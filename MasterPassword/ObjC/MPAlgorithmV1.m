@@ -1,12 +1,12 @@
 /**
- * Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
- *
- * See the enclosed file LICENSE for license information (LGPLv3). If you did
- * not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
- *
- * @author   Maarten Billemont <lhunath@lyndir.com>
- * @license  http://www.gnu.org/licenses/lgpl-3.0.txt
- */
+* Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
+*
+* See the enclosed file LICENSE for license information (LGPLv3). If you did
+* not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
+*
+* @author   Maarten Billemont <lhunath@lyndir.com>
+* @license  http://www.gnu.org/licenses/lgpl-3.0.txt
+*/
 
 //
 //  MPAlgorithmV1
@@ -28,7 +28,7 @@
 - (BOOL)migrateElement:(MPElementEntity *)element explicit:(BOOL)explicit {
 
     if (element.version != [self version] - 1)
-            // Only migrate from previous version.
+        // Only migrate from previous version.
         return NO;
 
     if (!explicit) {
@@ -49,16 +49,17 @@
 
     static __strong NSDictionary *MPTypes_ciphers = nil;
     static dispatch_once_t once = 0;
-    dispatch_once(&once, ^{
+    dispatch_once( &once, ^{
         MPTypes_ciphers = [NSDictionary dictionaryWithContentsOfURL:
-                           [[NSBundle mainBundle] URLForResource:@"ciphers" withExtension:@"plist"]];
-    });
+                [[NSBundle mainBundle] URLForResource:@"ciphers" withExtension:@"plist"]];
+    } );
 
     // Determine the seed whose bytes will be used for calculating a password
-    uint32_t ncounter = htonl(counter), nnameLength = htonl(name.length);
-    NSData *counterBytes = [NSData dataWithBytes:&ncounter length:sizeof(ncounter)];
-    NSData *nameLengthBytes = [NSData dataWithBytes:&nnameLength length:sizeof(nnameLength)];
-    trc(@"seed from: hmac-sha256(%@, 'com.lyndir.masterpassword' | %@ | %@ | %@)", [key.keyData encodeBase64], [nameLengthBytes encodeHex], name, [counterBytes encodeHex]);
+    uint32_t ncounter = htonl( counter ), nnameLength = htonl( name.length );
+    NSData *counterBytes = [NSData dataWithBytes:&ncounter length:sizeof( ncounter )];
+    NSData *nameLengthBytes = [NSData dataWithBytes:&nnameLength length:sizeof( nnameLength )];
+    trc( @"seed from: hmac-sha256(%@, 'com.lyndir.masterpassword' | %@ | %@ | %@)", [key.keyData encodeBase64], [nameLengthBytes encodeHex],
+                    name, [counterBytes encodeHex] );
     NSData *seed = [[NSData dataByConcatenatingDatas:
             [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
             nameLengthBytes,
@@ -66,17 +67,17 @@
             counterBytes,
             nil]
             hmacWith:PearlHashSHA256 key:key.keyData];
-    trc(@"seed is: %@", [seed encodeBase64]);
+    trc( @"seed is: %@", [seed encodeBase64] );
     const unsigned char *seedBytes = seed.bytes;
 
     // Determine the cipher from the first seed byte.
-    NSAssert([seed length], @"Missing seed.");
+    NSAssert( [seed length], @"Missing seed." );
     NSArray *typeCiphers = [[MPTypes_ciphers valueForKey:[self classNameOfType:type]] valueForKey:[self nameOfType:type]];
     NSString *cipher = typeCiphers[seedBytes[0] % [typeCiphers count]];
-    trc(@"type %@, ciphers: %@, selected: %@", [self nameOfType:type], typeCiphers, cipher);
+    trc( @"type %@, ciphers: %@, selected: %@", [self nameOfType:type], typeCiphers, cipher );
 
     // Encode the content, character by character, using subsequent seed bytes and the cipher.
-    NSAssert([seed length] >= [cipher length] + 1, @"Insufficient seed bytes to encode cipher.");
+    NSAssert( [seed length] >= [cipher length] + 1, @"Insufficient seed bytes to encode cipher." );
     NSMutableString *content = [NSMutableString stringWithCapacity:[cipher length]];
     for (NSUInteger c = 0; c < [cipher length]; ++c) {
         uint16_t keyByte = seedBytes[c + 1];
@@ -84,7 +85,7 @@
         NSString *cipherClassCharacters = [[MPTypes_ciphers valueForKey:@"MPCharacterClasses"] valueForKey:cipherClass];
         NSString *character = [cipherClassCharacters substringWithRange:NSMakeRange( keyByte % [cipherClassCharacters length], 1 )];
 
-        trc(@"class %@ has characters: %@, index: %u, selected: %@", cipherClass, cipherClassCharacters, keyByte, character);
+        trc( @"class %@ has characters: %@, index: %u, selected: %@", cipherClass, cipherClassCharacters, keyByte, character );
         [content appendString:character];
     }
 

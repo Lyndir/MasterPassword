@@ -38,7 +38,7 @@
                                                               metrics:nil views:NSDictionaryOfVariableBindings(popdownView)];
 
         [UIView animateWithDuration:0.3f animations:^{
-            [passwordsVC.popdownToTopConstraint layoutWithPriority:1];
+            [[passwordsVC.popdownToTopConstraint updatePriority:1] layoutIfNeeded];
         } completion:^(BOOL finished) {
             [popdownVC didMoveToParentViewController:passwordsVC];
         }];
@@ -49,7 +49,7 @@
 
         [popdownVC willMoveToParentViewController:nil];
         [UIView animateWithDuration:0.3f delay:0 options:UIViewAnimationOptionOverrideInheritedDuration animations:^{
-            [passwordsVC.popdownToTopConstraint layoutWithPriority:UILayoutPriorityDefaultHigh];
+            [[passwordsVC.popdownToTopConstraint updatePriority:UILayoutPriorityDefaultHigh] layoutIfNeeded];
         }                completion:^(BOOL finished) {
             [popdownVC.view removeFromSuperview];
             [popdownVC removeFromParentViewController];

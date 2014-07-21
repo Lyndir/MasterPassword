@@ -24,7 +24,7 @@
 
     [super viewDidLoad];
 
-    [self.view adjustContentInsets];
+    [self.webView.scrollView insetOcclusion];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
