@@ -239,21 +239,21 @@
 
     switch (type) {
         case MPElementTypeGeneratedMaximum:
-            return MPElementTypeStoredDevicePrivate;
-        case MPElementTypeGeneratedLong:
-            return MPElementTypeGeneratedMaximum;
-        case MPElementTypeGeneratedMedium:
             return MPElementTypeGeneratedLong;
-        case MPElementTypeGeneratedBasic:
+        case MPElementTypeGeneratedLong:
             return MPElementTypeGeneratedMedium;
-        case MPElementTypeGeneratedShort:
+        case MPElementTypeGeneratedMedium:
             return MPElementTypeGeneratedBasic;
-        case MPElementTypeGeneratedPIN:
+        case MPElementTypeGeneratedBasic:
             return MPElementTypeGeneratedShort;
-        case MPElementTypeStoredPersonal:
+        case MPElementTypeGeneratedShort:
             return MPElementTypeGeneratedPIN;
-        case MPElementTypeStoredDevicePrivate:
+        case MPElementTypeGeneratedPIN:
             return MPElementTypeStoredPersonal;
+        case MPElementTypeStoredPersonal:
+            return MPElementTypeStoredDevicePrivate;
+        case MPElementTypeStoredDevicePrivate:
+            return MPElementTypeGeneratedMaximum;
         default:
             return MPElementTypeGeneratedLong;
     }
