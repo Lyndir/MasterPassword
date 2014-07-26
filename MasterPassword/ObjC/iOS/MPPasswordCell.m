@@ -80,7 +80,8 @@
 
     _elementOID = nil;
     self.loginModeButton.selected = NO;
-    [self setMode:MPPasswordCellModePassword animated:NO];
+    self.mode = MPPasswordCellModePassword;
+    [self updateAnimated:NO];
 }
 
 #pragma mark - State
@@ -119,6 +120,24 @@
     UICollectionView *collectionView = [UICollectionView findAsSuperviewOf:self];
     [collectionView scrollToItemAtIndexPath:[collectionView indexPathForCell:self]
                            atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+}
+
+- (IBAction)textFieldDidChange:(UITextField *)textField {
+
+    if (textField == self.passwordField) {
+        NSString *password = self.passwordField.text;
+        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+            TimeToCrack timeToCrack;
+            MPElementEntity *element = [self elementInContext:context];
+            id<MPAlgorithm> algorithm = element.algorithm?: MPAlgorithmDefault;
+            MPAttacker attackHardware = [[MPConfig get].attackHardware unsignedIntegerValue];
+            if ([algorithm timeToCrack:&timeToCrack passwordOfType:[self elementInContext:context].type byAttacker:attackHardware] ||
+                [algorithm timeToCrack:&timeToCrack passwordString:password byAttacker:attackHardware])
+                PearlMainQueue( ^{
+                    self.strengthLabel.text = NSStringFromTimeToCrack( timeToCrack );
+                } );
+        }];
+    }
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -207,7 +226,8 @@
     if (self.loginModeButton.selected) {
         self.loginNameField.enabled = YES;
         [self.loginNameField becomeFirstResponder];
-    } else if ([self elementInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]].type & MPElementTypeClassStored) {
+    }
+    else if ([self elementInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]].type & MPElementTypeClassStored) {
         self.passwordField.enabled = YES;
         [self.passwordField becomeFirstResponder];
     }
@@ -326,7 +346,7 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
 
-    if (roundf( scrollView.contentOffset.x / self.bounds.size.width ) == 0.0f)
+    if (roundf( (float)(scrollView.contentOffset.x / self.bounds.size.width) ) == 0.0f)
         [self setMode:MPPasswordCellModePassword animated:YES];
     else
         [self setMode:MPPasswordCellModeSettings animated:YES];
@@ -367,8 +387,8 @@
         self.passwordField.enabled = NO;
         self.passwordField.secureTextEntry = [[MPiOSConfig get].hidePasswords boolValue];
         self.passwordField.attributedPlaceholder = stra(
-                mainElement.type & MPElementTypeClassStored? strl( @"Set custom password" ):
-                mainElement.type & MPElementTypeClassGenerated? strl( @"Generating..." ): @"", @{
+                mainElement.type & MPElementTypeClassStored? strl( @"No password" ):
+                mainElement.type & MPElementTypeClassGenerated? strl( @"..." ): @"", @{
                         NSForegroundColorAttributeName : [UIColor whiteColor]
                 } );
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
@@ -380,8 +400,17 @@
             else
                 password = [[self elementInContext:context] resolveContentUsingKey:[MPiOSAppDelegate get].key];
 
+            MPAttacker attackHardware = [[MPConfig get].attackHardware unsignedIntegerValue];
+            TimeToCrack timeToCrack;
+            NSString *timeToCrackString = nil;
+            id<MPAlgorithm> algorithm = mainElement.algorithm?: MPAlgorithmDefault;
+            if ([algorithm timeToCrack:&timeToCrack passwordOfType:[self elementInContext:context].type byAttacker:attackHardware] ||
+                [algorithm timeToCrack:&timeToCrack passwordString:password byAttacker:attackHardware])
+                timeToCrackString = NSStringFromTimeToCrack( timeToCrack );
+
             PearlMainQueue( ^{
                 self.passwordField.text = password;
+                self.strengthLabel.text = timeToCrackString;
             } );
         }];
 
@@ -395,9 +424,6 @@
         self.loginNameField.attributedPlaceholder = stra( strl( @"Set login name" ), @{
                 NSForegroundColorAttributeName : [UIColor whiteColor]
         } );
-
-        // Strength Label
-//#warning TODO
     }];
 }
 

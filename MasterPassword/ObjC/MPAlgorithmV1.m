@@ -47,13 +47,6 @@
 
 - (NSString *)generateContentNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter usingKey:(MPKey *)key {
 
-    static __strong NSDictionary *MPTypes_ciphers = nil;
-    static dispatch_once_t once = 0;
-    dispatch_once( &once, ^{
-        MPTypes_ciphers = [NSDictionary dictionaryWithContentsOfURL:
-                [[NSBundle mainBundle] URLForResource:@"ciphers" withExtension:@"plist"]];
-    } );
-
     // Determine the seed whose bytes will be used for calculating a password
     uint32_t ncounter = htonl( counter ), nnameLength = htonl( name.length );
     NSData *counterBytes = [NSData dataWithBytes:&ncounter length:sizeof( ncounter )];
@@ -72,7 +65,7 @@
 
     // Determine the cipher from the first seed byte.
     NSAssert( [seed length], @"Missing seed." );
-    NSArray *typeCiphers = [[MPTypes_ciphers valueForKey:[self classNameOfType:type]] valueForKey:[self nameOfType:type]];
+    NSArray *typeCiphers = [self ciphersForType:type];
     NSString *cipher = typeCiphers[seedBytes[0] % [typeCiphers count]];
     trc( @"type %@, ciphers: %@, selected: %@", [self nameOfType:type], typeCiphers, cipher );
 
@@ -82,7 +75,7 @@
     for (NSUInteger c = 0; c < [cipher length]; ++c) {
         uint16_t keyByte = seedBytes[c + 1];
         NSString *cipherClass = [cipher substringWithRange:NSMakeRange( c, 1 )];
-        NSString *cipherClassCharacters = [[MPTypes_ciphers valueForKey:@"MPCharacterClasses"] valueForKey:cipherClass];
+        NSString *cipherClassCharacters = [self charactersForCipherClass:cipherClass];
         NSString *character = [cipherClassCharacters substringWithRange:NSMakeRange( keyByte % [cipherClassCharacters length], 1 )];
 
         trc( @"class %@ has characters: %@, index: %u, selected: %@", cipherClass, cipherClassCharacters, keyByte, character );

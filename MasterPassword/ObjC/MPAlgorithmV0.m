@@ -17,6 +17,8 @@
 
 #import "MPAlgorithmV0.h"
 #import "MPEntities.h"
+#include <openssl/bn.h>
+#include <openssl/err.h>
 
 #define MP_N        32768
 #define MP_r        8
@@ -24,7 +26,29 @@
 #define MP_dkLen    64
 #define MP_hash     PearlHashSHA256
 
-@implementation MPAlgorithmV0
+/* An AMD HD 6990 calculates 3833M SHA-1 hashes per second at a cost of ~350$ per GPU */
+#define CRACKING_BCRYPTS_PER_SECOND 3833000000
+#define CRACKING_PRICE              350
+
+@implementation MPAlgorithmV0 {
+    BN_CTX *ctx;
+}
+
+- (id)init {
+
+    if (!(self = [super init]))
+        return nil;
+
+    ctx = BN_CTX_new();
+
+    return self;
+}
+
+- (void)dealloc {
+
+    BN_CTX_free( ctx );
+    ctx = NULL;
+}
 
 - (NSUInteger)version {
 
@@ -268,12 +292,41 @@
     return previousType;
 }
 
-- (NSString *)generateContentNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter usingKey:(MPKey *)key {
+- (NSDictionary *)allCiphers {
 
-    static NSDictionary *MPTypes_ciphers = nil;
-    if (MPTypes_ciphers == nil)
-        MPTypes_ciphers = [NSDictionary dictionaryWithContentsOfURL:
+    static NSDictionary *ciphers = nil;
+    static dispatch_once_t once = 0;
+    dispatch_once( &once, ^{
+        ciphers = [NSDictionary dictionaryWithContentsOfURL:
                 [[NSBundle mainBundle] URLForResource:@"ciphers" withExtension:@"plist"]];
+    } );
+
+    return ciphers;
+}
+
+- (NSArray *)ciphersForType:(MPElementType)type {
+
+    NSString *typeClass = [self classNameOfType:type];
+    NSString *typeName = [self nameOfType:type];
+    return [[[self allCiphers] valueForKey:typeClass] valueForKey:typeName];
+}
+
+- (NSArray *)cipherClasses {
+
+    return [[[self allCiphers] valueForKey:@"MPCharacterClasses"] allKeys];
+}
+
+- (NSArray *)cipherClassCharacters {
+
+    return [[[self allCiphers] valueForKey:@"MPCharacterClasses"] allValues];
+}
+
+- (NSString *)charactersForCipherClass:(NSString *)cipherClass {
+
+    return [NSNullToNil( [NSNullToNil( [[self allCiphers] valueForKey:@"MPCharacterClasses"] ) valueForKey:cipherClass] ) copy];
+}
+
+- (NSString *)generateContentNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter usingKey:(MPKey *)key {
 
     // Determine the seed whose bytes will be used for calculating a password
     uint32_t ncounter = htonl( counter ), nnameLength = htonl( name.length );
@@ -291,12 +344,9 @@
 
     // Determine the cipher from the first seed byte.
     NSAssert( [seed length], @"Missing seed." );
-    NSString *typeClass = [self classNameOfType:type];
-    NSString *typeName = [self nameOfType:type];
-    id classCiphers = [MPTypes_ciphers valueForKey:typeClass];
-    NSArray *typeCiphers = [classCiphers valueForKey:typeName];
+    NSArray *typeCiphers = [self ciphersForType:type];
     NSString *cipher = typeCiphers[htons( seedBytes[0] ) % [typeCiphers count]];
-    trc( @"type %@, ciphers: %@, selected: %@", typeName, typeCiphers, cipher );
+    trc( @"type %@, ciphers: %@, selected: %@", [self nameOfType:type], typeCiphers, cipher );
 
     // Encode the content, character by character, using subsequent seed bytes and the cipher.
     NSAssert( [seed length] >= [cipher length] + 1, @"Insufficient seed bytes to encode cipher." );
@@ -304,7 +354,7 @@
     for (NSUInteger c = 0; c < [cipher length]; ++c) {
         uint16_t keyByte = htons( seedBytes[c + 1] );
         NSString *cipherClass = [cipher substringWithRange:NSMakeRange( c, 1 )];
-        NSString *cipherClassCharacters = [[MPTypes_ciphers valueForKey:@"MPCharacterClasses"] valueForKey:cipherClass];
+        NSString *cipherClassCharacters = [self charactersForCipherClass:cipherClass];
         NSString *character = [cipherClassCharacters substringWithRange:NSMakeRange( keyByte % [cipherClassCharacters length], 1 )];
 
         trc( @"class %@ has characters: %@, index: %u, selected: %@", cipherClass, cipherClassCharacters, keyByte, character );
@@ -355,7 +405,7 @@
                 [PearlKeyChain deleteItemForQuery:elementQuery];
             else
                 [PearlKeyChain addOrUpdateItemForQuery:elementQuery withAttributes:@{
-                        (__bridge id)kSecValueData      : encryptedContent,
+                        (__bridge id)kSecValueData : encryptedContent,
 #if TARGET_OS_IPHONE
                         (__bridge id)kSecAttrAccessible : (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
 #endif
@@ -555,6 +605,136 @@
         return nil;
 
     return [[NSString alloc] initWithBytes:decryptedContent.bytes length:decryptedContent.length encoding:NSUTF8StringEncoding];
+}
+
+- (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordOfType:(MPElementType)type byAttacker:(MPAttacker)attacker {
+
+    if (!type)
+        return NO;
+    NSArray *ciphers = [self ciphersForType:type];
+    if (!ciphers)
+        return NO;
+
+    BIGNUM *permutations = BN_new(), *cipherPermutations = BN_new();
+    for (NSString *cipher in ciphers) {
+        BN_one( cipherPermutations );
+
+        for (NSUInteger c = 0; c < [cipher length]; ++c)
+            BN_mul_word( cipherPermutations,
+                    (BN_ULONG)[[self charactersForCipherClass:[cipher substringWithRange:NSMakeRange( c, 1 )]] length] );
+
+        BN_add( permutations, permutations, cipherPermutations );
+    }
+    BN_free( cipherPermutations );
+
+    return [self timeToCrack:timeToCrack permutations:permutations forAttacker:attacker];
+}
+
+- (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordString:(NSString *)password byAttacker:(MPAttacker)attacker {
+
+    BIGNUM *permutations = BN_new();
+    BN_one( permutations );
+
+    NSMutableString *cipher = [NSMutableString new];
+    for (NSUInteger c = 0; c < [password length]; ++c) {
+        NSString *passwordCharacter = [password substringWithRange:NSMakeRange( c, 1 )];
+
+        NSUInteger characterEntropy = 0;
+        for (NSString *cipherClass in @[ @"v", @"c", @"a", @"x" ]) {
+            NSString *charactersForClass = [self charactersForCipherClass:cipherClass];
+
+            if ([charactersForClass rangeOfString:passwordCharacter].location != NSNotFound) {
+                // Found class for password character.
+                characterEntropy = [charactersForClass length];
+                [cipher appendString:cipherClass];
+                break;
+            }
+        }
+        if (!characterEntropy) {
+            [cipher appendString:@"b"];
+            characterEntropy = 256 /* a byte */;
+        }
+
+        BN_mul_word( permutations, (BN_ULONG)characterEntropy );
+    }
+
+    return [self timeToCrack:timeToCrack permutations:permutations forAttacker:attacker];
+}
+
+- (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack permutations:(BIGNUM *)permutations forAttacker:(MPAttacker)attacker {
+
+    BN_div_word( permutations, CRACKING_BCRYPTS_PER_SECOND );
+    switch (attacker) {
+        case MPAttacker5K:
+            BN_mul_word( permutations, (BN_ULONG)5000LLU );
+            break;
+        case MPAttacker20M:
+            BN_mul_word( permutations, (BN_ULONG)20000000LLU );
+            break;
+        case MPAttacker5B:
+            BN_mul_word( permutations, (BN_ULONG)5000000000LLU );
+            break;
+    }
+    BN_div_word( permutations, CRACKING_PRICE );
+
+    BIGNUM *max = BN_new();
+    BN_set_word( max, (BN_ULONG)-1 );
+
+    BIGNUM *hoursToCrack = BN_dup( permutations );
+    BN_div_word( hoursToCrack, 3600 );
+    if (BN_cmp( hoursToCrack, max ) < 0)
+        timeToCrack->hours = BN_get_word( hoursToCrack );
+    else
+        timeToCrack->hours = (BN_ULONG)-1;
+
+    BIGNUM *daysToCrack = BN_dup( hoursToCrack );
+    BN_div_word( daysToCrack, 24 );
+    if (BN_cmp( daysToCrack, max ) < 0)
+        timeToCrack->days = BN_get_word( daysToCrack );
+    else
+        timeToCrack->days = (BN_ULONG)-1;
+
+    BIGNUM *weeksToCrack = BN_dup( daysToCrack );
+    BN_div_word( weeksToCrack, 7 );
+    if (BN_cmp( weeksToCrack, max ) < 0)
+        timeToCrack->weeks = BN_get_word( weeksToCrack );
+    else
+        timeToCrack->weeks = (BN_ULONG)-1;
+
+    BIGNUM *monthsToCrack = BN_dup( daysToCrack );
+    BN_div_word( monthsToCrack, 31 );
+    if (BN_cmp( monthsToCrack, max ) < 0)
+        timeToCrack->months = BN_get_word( monthsToCrack );
+    else
+        timeToCrack->months = (BN_ULONG)-1;
+
+    BIGNUM *yearsToCrack = BN_dup( daysToCrack );
+    BN_div_word( yearsToCrack, 356 );
+    if (BN_cmp( yearsToCrack, max ) < 0)
+        timeToCrack->years = BN_get_word( yearsToCrack );
+    else
+        timeToCrack->years = (BN_ULONG)-1;
+
+    BIGNUM *universesToCrack = BN_dup( yearsToCrack );
+    BN_div_word( universesToCrack, (BN_ULONG)14000000000LLU );
+    if (BN_cmp( universesToCrack, max ) < 0)
+        timeToCrack->universes = BN_get_word( universesToCrack );
+    else
+        timeToCrack->universes = (BN_ULONG)-1;
+
+    for (unsigned long error = ERR_get_error(); error; error = ERR_get_error())
+        err( @"bignum error: %lu", error );
+
+    BN_free( max );
+    BN_free( permutations );
+    BN_free( hoursToCrack );
+    BN_free( daysToCrack );
+    BN_free( weeksToCrack );
+    BN_free( monthsToCrack );
+    BN_free( yearsToCrack );
+    BN_free( universesToCrack );
+
+    return YES;
 }
 
 @end

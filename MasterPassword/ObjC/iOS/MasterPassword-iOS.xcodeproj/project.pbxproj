@@ -89,6 +89,8 @@
 		DA25C5FF197DBF200046CDCF /* icon_thumbs-up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD384B1711E29700CF925C /* icon_thumbs-up@2x.png */; };
 		DA25C600197DBF260046CDCF /* icon_trash.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD38501711E29700CF925C /* icon_trash.png */; };
 		DA25C601197DBF260046CDCF /* icon_trash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD38511711E29700CF925C /* icon_trash@2x.png */; };
+		DA25C6B41980D3C50046CDCF /* openssl in Headers */ = {isa = PBXBuildFile; fileRef = DA25C6B31980D3C10046CDCF /* openssl */; settings = {ATTRIBUTES = (Public, ); }; };
+		DA25C6B61980D3DF0046CDCF /* scrypt in Headers */ = {isa = PBXBuildFile; fileRef = DA25C6B51980D3DD0046CDCF /* scrypt */; settings = {ATTRIBUTES = (Public, ); }; };
 		DA2CA4DD18D28859007798F8 /* NSArray+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4D918D28859007798F8 /* NSArray+Pearl.m */; };
 		DA2CA4DE18D28859007798F8 /* NSArray+Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DA2CA4DA18D28859007798F8 /* NSArray+Pearl.h */; };
 		DA2CA4DF18D28859007798F8 /* NSTimer+PearlBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4DB18D28859007798F8 /* NSTimer+PearlBlock.m */; };
@@ -269,87 +271,6 @@
 		DACA29BF1705E2DE002C6C22 /* UIColor+HSV.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA29BB1705E2DE002C6C22 /* UIColor+HSV.m */; };
 		DAD312C21552A22700A3F9ED /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD312C01552A20800A3F9ED /* libsqlite3.dylib */; };
 		DAE1EF2217E942DE00BC0086 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAE1EF2417E942DE00BC0086 /* Localizable.strings */; };
-		DAEB933318AA537D000490CC /* crypto_aesctr.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92E118AA537D000490CC /* crypto_aesctr.h */; };
-		DAEB933418AA537D000490CC /* crypto_scrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92E218AA537D000490CC /* crypto_scrypt.h */; };
-		DAEB933518AA537D000490CC /* memlimit.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92E318AA537D000490CC /* memlimit.h */; };
-		DAEB933618AA537D000490CC /* readpass.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92E418AA537D000490CC /* readpass.h */; };
-		DAEB933718AA537D000490CC /* scryptenc.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92E518AA537D000490CC /* scryptenc.h */; };
-		DAEB933818AA537D000490CC /* scryptenc_cpuperf.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92E618AA537D000490CC /* scryptenc_cpuperf.h */; };
-		DAEB933918AA537D000490CC /* sha256.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92E718AA537D000490CC /* sha256.h */; };
-		DAEB933A18AA537D000490CC /* sysendian.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92E818AA537D000490CC /* sysendian.h */; };
-		DAEB933B18AA537D000490CC /* warn.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92E918AA537D000490CC /* warn.h */; };
-		DAEB933C18AA537D000490CC /* aes.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92EB18AA537D000490CC /* aes.h */; };
-		DAEB933D18AA537D000490CC /* asn1.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92EC18AA537D000490CC /* asn1.h */; };
-		DAEB933E18AA537D000490CC /* asn1_mac.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92ED18AA537D000490CC /* asn1_mac.h */; };
-		DAEB933F18AA537D000490CC /* asn1t.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92EE18AA537D000490CC /* asn1t.h */; };
-		DAEB934018AA537D000490CC /* bio.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92EF18AA537D000490CC /* bio.h */; };
-		DAEB934118AA537D000490CC /* blowfish.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92F018AA537D000490CC /* blowfish.h */; };
-		DAEB934218AA537D000490CC /* bn.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92F118AA537D000490CC /* bn.h */; };
-		DAEB934318AA537D000490CC /* buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92F218AA537D000490CC /* buffer.h */; };
-		DAEB934418AA537D000490CC /* camellia.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92F318AA537D000490CC /* camellia.h */; };
-		DAEB934518AA537D000490CC /* cast.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92F418AA537D000490CC /* cast.h */; };
-		DAEB934618AA537D000490CC /* cms.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92F518AA537D000490CC /* cms.h */; };
-		DAEB934718AA537D000490CC /* comp.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92F618AA537D000490CC /* comp.h */; };
-		DAEB934818AA537D000490CC /* conf.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92F718AA537D000490CC /* conf.h */; };
-		DAEB934918AA537D000490CC /* conf_api.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92F818AA537D000490CC /* conf_api.h */; };
-		DAEB934A18AA537D000490CC /* crypto.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92F918AA537D000490CC /* crypto.h */; };
-		DAEB934B18AA537D000490CC /* des.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92FA18AA537D000490CC /* des.h */; };
-		DAEB934C18AA537D000490CC /* des_old.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92FB18AA537D000490CC /* des_old.h */; };
-		DAEB934D18AA537D000490CC /* dh.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92FC18AA537D000490CC /* dh.h */; };
-		DAEB934E18AA537D000490CC /* dsa.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92FD18AA537D000490CC /* dsa.h */; };
-		DAEB934F18AA537D000490CC /* dso.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92FE18AA537D000490CC /* dso.h */; };
-		DAEB935018AA537D000490CC /* dtls1.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB92FF18AA537D000490CC /* dtls1.h */; };
-		DAEB935118AA537D000490CC /* e_os2.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB930018AA537D000490CC /* e_os2.h */; };
-		DAEB935218AA537D000490CC /* ebcdic.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB930118AA537D000490CC /* ebcdic.h */; };
-		DAEB935318AA537D000490CC /* ec.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB930218AA537D000490CC /* ec.h */; };
-		DAEB935418AA537D000490CC /* ecdh.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB930318AA537D000490CC /* ecdh.h */; };
-		DAEB935518AA537D000490CC /* ecdsa.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB930418AA537D000490CC /* ecdsa.h */; };
-		DAEB935618AA537D000490CC /* engine.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB930518AA537D000490CC /* engine.h */; };
-		DAEB935718AA537D000490CC /* err.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB930618AA537D000490CC /* err.h */; };
-		DAEB935818AA537D000490CC /* evp.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB930718AA537D000490CC /* evp.h */; };
-		DAEB935918AA537D000490CC /* hmac.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB930818AA537D000490CC /* hmac.h */; };
-		DAEB935A18AA537D000490CC /* idea.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB930918AA537D000490CC /* idea.h */; };
-		DAEB935B18AA537D000490CC /* krb5_asn.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB930A18AA537D000490CC /* krb5_asn.h */; };
-		DAEB935C18AA537D000490CC /* kssl.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB930B18AA537D000490CC /* kssl.h */; };
-		DAEB935D18AA537D000490CC /* lhash.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB930C18AA537D000490CC /* lhash.h */; };
-		DAEB935E18AA537D000490CC /* md4.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB930D18AA537D000490CC /* md4.h */; };
-		DAEB935F18AA537D000490CC /* md5.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB930E18AA537D000490CC /* md5.h */; };
-		DAEB936018AA537D000490CC /* mdc2.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB930F18AA537D000490CC /* mdc2.h */; };
-		DAEB936118AA537D000490CC /* modes.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB931018AA537D000490CC /* modes.h */; };
-		DAEB936218AA537D000490CC /* obj_mac.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB931118AA537D000490CC /* obj_mac.h */; };
-		DAEB936318AA537D000490CC /* objects.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB931218AA537D000490CC /* objects.h */; };
-		DAEB936418AA537D000490CC /* ocsp.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB931318AA537D000490CC /* ocsp.h */; };
-		DAEB936518AA537D000490CC /* opensslconf.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB931418AA537D000490CC /* opensslconf.h */; };
-		DAEB936618AA537D000490CC /* opensslv.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB931518AA537D000490CC /* opensslv.h */; };
-		DAEB936718AA537D000490CC /* ossl_typ.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB931618AA537D000490CC /* ossl_typ.h */; };
-		DAEB936818AA537D000490CC /* pem.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB931718AA537D000490CC /* pem.h */; };
-		DAEB936918AA537D000490CC /* pem2.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB931818AA537D000490CC /* pem2.h */; };
-		DAEB936A18AA537D000490CC /* pkcs12.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB931918AA537D000490CC /* pkcs12.h */; };
-		DAEB936B18AA537D000490CC /* pkcs7.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB931A18AA537D000490CC /* pkcs7.h */; };
-		DAEB936C18AA537D000490CC /* pqueue.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB931B18AA537D000490CC /* pqueue.h */; };
-		DAEB936D18AA537D000490CC /* rand.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB931C18AA537D000490CC /* rand.h */; };
-		DAEB936E18AA537D000490CC /* rc2.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB931D18AA537D000490CC /* rc2.h */; };
-		DAEB936F18AA537D000490CC /* rc4.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB931E18AA537D000490CC /* rc4.h */; };
-		DAEB937018AA537D000490CC /* ripemd.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB931F18AA537D000490CC /* ripemd.h */; };
-		DAEB937118AA537D000490CC /* rsa.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB932018AA537D000490CC /* rsa.h */; };
-		DAEB937218AA537D000490CC /* safestack.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB932118AA537D000490CC /* safestack.h */; };
-		DAEB937318AA537D000490CC /* seed.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB932218AA537D000490CC /* seed.h */; };
-		DAEB937418AA537D000490CC /* sha.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB932318AA537D000490CC /* sha.h */; };
-		DAEB937518AA537D000490CC /* ssl.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB932418AA537D000490CC /* ssl.h */; };
-		DAEB937618AA537D000490CC /* ssl2.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB932518AA537D000490CC /* ssl2.h */; };
-		DAEB937718AA537D000490CC /* ssl23.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB932618AA537D000490CC /* ssl23.h */; };
-		DAEB937818AA537D000490CC /* ssl3.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB932718AA537D000490CC /* ssl3.h */; };
-		DAEB937918AA537D000490CC /* stack.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB932818AA537D000490CC /* stack.h */; };
-		DAEB937A18AA537D000490CC /* symhacks.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB932918AA537D000490CC /* symhacks.h */; };
-		DAEB937B18AA537D000490CC /* tls1.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB932A18AA537D000490CC /* tls1.h */; };
-		DAEB937C18AA537D000490CC /* ts.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB932B18AA537D000490CC /* ts.h */; };
-		DAEB937D18AA537D000490CC /* txt_db.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB932C18AA537D000490CC /* txt_db.h */; };
-		DAEB937E18AA537D000490CC /* ui.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB932D18AA537D000490CC /* ui.h */; };
-		DAEB937F18AA537D000490CC /* ui_compat.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB932E18AA537D000490CC /* ui_compat.h */; };
-		DAEB938018AA537D000490CC /* whrlpool.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB932F18AA537D000490CC /* whrlpool.h */; };
-		DAEB938118AA537D000490CC /* x509.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB933018AA537D000490CC /* x509.h */; };
-		DAEB938218AA537D000490CC /* x509_vfy.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB933118AA537D000490CC /* x509_vfy.h */; };
-		DAEB938318AA537D000490CC /* x509v3.h in Headers */ = {isa = PBXBuildFile; fileRef = DAEB933218AA537D000490CC /* x509v3.h */; };
 		DAEBC45314F6364500987BF6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
 		DAEC85B518E3DD9A007FC0DF /* UIView+Touches.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEC85B118E3DD9A007FC0DF /* UIView+Touches.m */; };
 		DAEC85B618E3DD9A007FC0DF /* PearlUINavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEC85B218E3DD9A007FC0DF /* PearlUINavigationBar.m */; };
@@ -545,6 +466,8 @@
 		DA250A14195665A100AC23F1 /* UITableView+PearlReloadFromArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+PearlReloadFromArray.h"; sourceTree = "<group>"; };
 		DA250A15195665A100AC23F1 /* UICollectionReusableView+PearlDequeue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionReusableView+PearlDequeue.m"; sourceTree = "<group>"; };
 		DA250A16195665A100AC23F1 /* UICollectionReusableView+PearlDequeue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionReusableView+PearlDequeue.h"; sourceTree = "<group>"; };
+		DA25C6B31980D3C10046CDCF /* openssl */ = {isa = PBXFileReference; lastKnownFileType = folder; path = openssl; sourceTree = "<group>"; };
+		DA25C6B51980D3DD0046CDCF /* scrypt */ = {isa = PBXFileReference; lastKnownFileType = folder; path = scrypt; sourceTree = "<group>"; };
 		DA2CA4D918D28859007798F8 /* NSArray+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Pearl.m"; sourceTree = "<group>"; };
 		DA2CA4DA18D28859007798F8 /* NSArray+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Pearl.h"; sourceTree = "<group>"; };
 		DA2CA4DB18D28859007798F8 /* NSTimer+PearlBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+PearlBlock.m"; sourceTree = "<group>"; };
@@ -1290,87 +1213,6 @@
 		DAD312C01552A20800A3F9ED /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		DADBB55918DB0CFC00D099FE /* keyboard-dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "keyboard-dark@2x.png"; sourceTree = "<group>"; };
 		DAE1EF2317E942DE00BC0086 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		DAEB92E118AA537D000490CC /* crypto_aesctr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto_aesctr.h; sourceTree = "<group>"; };
-		DAEB92E218AA537D000490CC /* crypto_scrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto_scrypt.h; sourceTree = "<group>"; };
-		DAEB92E318AA537D000490CC /* memlimit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memlimit.h; sourceTree = "<group>"; };
-		DAEB92E418AA537D000490CC /* readpass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = readpass.h; sourceTree = "<group>"; };
-		DAEB92E518AA537D000490CC /* scryptenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scryptenc.h; sourceTree = "<group>"; };
-		DAEB92E618AA537D000490CC /* scryptenc_cpuperf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scryptenc_cpuperf.h; sourceTree = "<group>"; };
-		DAEB92E718AA537D000490CC /* sha256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha256.h; sourceTree = "<group>"; };
-		DAEB92E818AA537D000490CC /* sysendian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sysendian.h; sourceTree = "<group>"; };
-		DAEB92E918AA537D000490CC /* warn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = warn.h; sourceTree = "<group>"; };
-		DAEB92EB18AA537D000490CC /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
-		DAEB92EC18AA537D000490CC /* asn1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn1.h; sourceTree = "<group>"; };
-		DAEB92ED18AA537D000490CC /* asn1_mac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn1_mac.h; sourceTree = "<group>"; };
-		DAEB92EE18AA537D000490CC /* asn1t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn1t.h; sourceTree = "<group>"; };
-		DAEB92EF18AA537D000490CC /* bio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bio.h; sourceTree = "<group>"; };
-		DAEB92F018AA537D000490CC /* blowfish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blowfish.h; sourceTree = "<group>"; };
-		DAEB92F118AA537D000490CC /* bn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bn.h; sourceTree = "<group>"; };
-		DAEB92F218AA537D000490CC /* buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = buffer.h; sourceTree = "<group>"; };
-		DAEB92F318AA537D000490CC /* camellia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camellia.h; sourceTree = "<group>"; };
-		DAEB92F418AA537D000490CC /* cast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cast.h; sourceTree = "<group>"; };
-		DAEB92F518AA537D000490CC /* cms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cms.h; sourceTree = "<group>"; };
-		DAEB92F618AA537D000490CC /* comp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = comp.h; sourceTree = "<group>"; };
-		DAEB92F718AA537D000490CC /* conf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = conf.h; sourceTree = "<group>"; };
-		DAEB92F818AA537D000490CC /* conf_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = conf_api.h; sourceTree = "<group>"; };
-		DAEB92F918AA537D000490CC /* crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto.h; sourceTree = "<group>"; };
-		DAEB92FA18AA537D000490CC /* des.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = des.h; sourceTree = "<group>"; };
-		DAEB92FB18AA537D000490CC /* des_old.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = des_old.h; sourceTree = "<group>"; };
-		DAEB92FC18AA537D000490CC /* dh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dh.h; sourceTree = "<group>"; };
-		DAEB92FD18AA537D000490CC /* dsa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dsa.h; sourceTree = "<group>"; };
-		DAEB92FE18AA537D000490CC /* dso.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dso.h; sourceTree = "<group>"; };
-		DAEB92FF18AA537D000490CC /* dtls1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dtls1.h; sourceTree = "<group>"; };
-		DAEB930018AA537D000490CC /* e_os2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = e_os2.h; sourceTree = "<group>"; };
-		DAEB930118AA537D000490CC /* ebcdic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ebcdic.h; sourceTree = "<group>"; };
-		DAEB930218AA537D000490CC /* ec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ec.h; sourceTree = "<group>"; };
-		DAEB930318AA537D000490CC /* ecdh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecdh.h; sourceTree = "<group>"; };
-		DAEB930418AA537D000490CC /* ecdsa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecdsa.h; sourceTree = "<group>"; };
-		DAEB930518AA537D000490CC /* engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = engine.h; sourceTree = "<group>"; };
-		DAEB930618AA537D000490CC /* err.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = err.h; sourceTree = "<group>"; };
-		DAEB930718AA537D000490CC /* evp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = evp.h; sourceTree = "<group>"; };
-		DAEB930818AA537D000490CC /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmac.h; sourceTree = "<group>"; };
-		DAEB930918AA537D000490CC /* idea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = idea.h; sourceTree = "<group>"; };
-		DAEB930A18AA537D000490CC /* krb5_asn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = krb5_asn.h; sourceTree = "<group>"; };
-		DAEB930B18AA537D000490CC /* kssl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kssl.h; sourceTree = "<group>"; };
-		DAEB930C18AA537D000490CC /* lhash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lhash.h; sourceTree = "<group>"; };
-		DAEB930D18AA537D000490CC /* md4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md4.h; sourceTree = "<group>"; };
-		DAEB930E18AA537D000490CC /* md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
-		DAEB930F18AA537D000490CC /* mdc2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mdc2.h; sourceTree = "<group>"; };
-		DAEB931018AA537D000490CC /* modes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = modes.h; sourceTree = "<group>"; };
-		DAEB931118AA537D000490CC /* obj_mac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = obj_mac.h; sourceTree = "<group>"; };
-		DAEB931218AA537D000490CC /* objects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objects.h; sourceTree = "<group>"; };
-		DAEB931318AA537D000490CC /* ocsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ocsp.h; sourceTree = "<group>"; };
-		DAEB931418AA537D000490CC /* opensslconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opensslconf.h; sourceTree = "<group>"; };
-		DAEB931518AA537D000490CC /* opensslv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opensslv.h; sourceTree = "<group>"; };
-		DAEB931618AA537D000490CC /* ossl_typ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ossl_typ.h; sourceTree = "<group>"; };
-		DAEB931718AA537D000490CC /* pem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pem.h; sourceTree = "<group>"; };
-		DAEB931818AA537D000490CC /* pem2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pem2.h; sourceTree = "<group>"; };
-		DAEB931918AA537D000490CC /* pkcs12.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pkcs12.h; sourceTree = "<group>"; };
-		DAEB931A18AA537D000490CC /* pkcs7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pkcs7.h; sourceTree = "<group>"; };
-		DAEB931B18AA537D000490CC /* pqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pqueue.h; sourceTree = "<group>"; };
-		DAEB931C18AA537D000490CC /* rand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rand.h; sourceTree = "<group>"; };
-		DAEB931D18AA537D000490CC /* rc2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rc2.h; sourceTree = "<group>"; };
-		DAEB931E18AA537D000490CC /* rc4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rc4.h; sourceTree = "<group>"; };
-		DAEB931F18AA537D000490CC /* ripemd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ripemd.h; sourceTree = "<group>"; };
-		DAEB932018AA537D000490CC /* rsa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rsa.h; sourceTree = "<group>"; };
-		DAEB932118AA537D000490CC /* safestack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = safestack.h; sourceTree = "<group>"; };
-		DAEB932218AA537D000490CC /* seed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = seed.h; sourceTree = "<group>"; };
-		DAEB932318AA537D000490CC /* sha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha.h; sourceTree = "<group>"; };
-		DAEB932418AA537D000490CC /* ssl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssl.h; sourceTree = "<group>"; };
-		DAEB932518AA537D000490CC /* ssl2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssl2.h; sourceTree = "<group>"; };
-		DAEB932618AA537D000490CC /* ssl23.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssl23.h; sourceTree = "<group>"; };
-		DAEB932718AA537D000490CC /* ssl3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssl3.h; sourceTree = "<group>"; };
-		DAEB932818AA537D000490CC /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
-		DAEB932918AA537D000490CC /* symhacks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = symhacks.h; sourceTree = "<group>"; };
-		DAEB932A18AA537D000490CC /* tls1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tls1.h; sourceTree = "<group>"; };
-		DAEB932B18AA537D000490CC /* ts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ts.h; sourceTree = "<group>"; };
-		DAEB932C18AA537D000490CC /* txt_db.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = txt_db.h; sourceTree = "<group>"; };
-		DAEB932D18AA537D000490CC /* ui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui.h; sourceTree = "<group>"; };
-		DAEB932E18AA537D000490CC /* ui_compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_compat.h; sourceTree = "<group>"; };
-		DAEB932F18AA537D000490CC /* whrlpool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = whrlpool.h; sourceTree = "<group>"; };
-		DAEB933018AA537D000490CC /* x509.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x509.h; sourceTree = "<group>"; };
-		DAEB933118AA537D000490CC /* x509_vfy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x509_vfy.h; sourceTree = "<group>"; };
-		DAEB933218AA537D000490CC /* x509v3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x509v3.h; sourceTree = "<group>"; };
 		DAEBC45214F6364500987BF6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DAEC85B118E3DD9A007FC0DF /* UIView+Touches.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Touches.m"; sourceTree = "<group>"; };
 		DAEC85B218E3DD9A007FC0DF /* PearlUINavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlUINavigationBar.m; sourceTree = "<group>"; };
@@ -1660,8 +1502,8 @@
 		DA5E5C6417248959003798D8 /* include */ = {
 			isa = PBXGroup;
 			children = (
-				DAEB92E018AA537D000490CC /* scrypt */,
-				DAEB92EA18AA537D000490CC /* openssl */,
+				DA25C6B51980D3DD0046CDCF /* scrypt */,
+				DA25C6B31980D3C10046CDCF /* openssl */,
 			);
 			path = include;
 			sourceTree = "<group>";
@@ -2573,101 +2415,6 @@
 			path = "External/uicolor-utilities";
 			sourceTree = "<group>";
 		};
-		DAEB92E018AA537D000490CC /* scrypt */ = {
-			isa = PBXGroup;
-			children = (
-				DAEB92E118AA537D000490CC /* crypto_aesctr.h */,
-				DAEB92E218AA537D000490CC /* crypto_scrypt.h */,
-				DAEB92E318AA537D000490CC /* memlimit.h */,
-				DAEB92E418AA537D000490CC /* readpass.h */,
-				DAEB92E518AA537D000490CC /* scryptenc.h */,
-				DAEB92E618AA537D000490CC /* scryptenc_cpuperf.h */,
-				DAEB92E718AA537D000490CC /* sha256.h */,
-				DAEB92E818AA537D000490CC /* sysendian.h */,
-				DAEB92E918AA537D000490CC /* warn.h */,
-			);
-			path = scrypt;
-			sourceTree = "<group>";
-		};
-		DAEB92EA18AA537D000490CC /* openssl */ = {
-			isa = PBXGroup;
-			children = (
-				DAEB92EB18AA537D000490CC /* aes.h */,
-				DAEB92EC18AA537D000490CC /* asn1.h */,
-				DAEB92ED18AA537D000490CC /* asn1_mac.h */,
-				DAEB92EE18AA537D000490CC /* asn1t.h */,
-				DAEB92EF18AA537D000490CC /* bio.h */,
-				DAEB92F018AA537D000490CC /* blowfish.h */,
-				DAEB92F118AA537D000490CC /* bn.h */,
-				DAEB92F218AA537D000490CC /* buffer.h */,
-				DAEB92F318AA537D000490CC /* camellia.h */,
-				DAEB92F418AA537D000490CC /* cast.h */,
-				DAEB92F518AA537D000490CC /* cms.h */,
-				DAEB92F618AA537D000490CC /* comp.h */,
-				DAEB92F718AA537D000490CC /* conf.h */,
-				DAEB92F818AA537D000490CC /* conf_api.h */,
-				DAEB92F918AA537D000490CC /* crypto.h */,
-				DAEB92FA18AA537D000490CC /* des.h */,
-				DAEB92FB18AA537D000490CC /* des_old.h */,
-				DAEB92FC18AA537D000490CC /* dh.h */,
-				DAEB92FD18AA537D000490CC /* dsa.h */,
-				DAEB92FE18AA537D000490CC /* dso.h */,
-				DAEB92FF18AA537D000490CC /* dtls1.h */,
-				DAEB930018AA537D000490CC /* e_os2.h */,
-				DAEB930118AA537D000490CC /* ebcdic.h */,
-				DAEB930218AA537D000490CC /* ec.h */,
-				DAEB930318AA537D000490CC /* ecdh.h */,
-				DAEB930418AA537D000490CC /* ecdsa.h */,
-				DAEB930518AA537D000490CC /* engine.h */,
-				DAEB930618AA537D000490CC /* err.h */,
-				DAEB930718AA537D000490CC /* evp.h */,
-				DAEB930818AA537D000490CC /* hmac.h */,
-				DAEB930918AA537D000490CC /* idea.h */,
-				DAEB930A18AA537D000490CC /* krb5_asn.h */,
-				DAEB930B18AA537D000490CC /* kssl.h */,
-				DAEB930C18AA537D000490CC /* lhash.h */,
-				DAEB930D18AA537D000490CC /* md4.h */,
-				DAEB930E18AA537D000490CC /* md5.h */,
-				DAEB930F18AA537D000490CC /* mdc2.h */,
-				DAEB931018AA537D000490CC /* modes.h */,
-				DAEB931118AA537D000490CC /* obj_mac.h */,
-				DAEB931218AA537D000490CC /* objects.h */,
-				DAEB931318AA537D000490CC /* ocsp.h */,
-				DAEB931418AA537D000490CC /* opensslconf.h */,
-				DAEB931518AA537D000490CC /* opensslv.h */,
-				DAEB931618AA537D000490CC /* ossl_typ.h */,
-				DAEB931718AA537D000490CC /* pem.h */,
-				DAEB931818AA537D000490CC /* pem2.h */,
-				DAEB931918AA537D000490CC /* pkcs12.h */,
-				DAEB931A18AA537D000490CC /* pkcs7.h */,
-				DAEB931B18AA537D000490CC /* pqueue.h */,
-				DAEB931C18AA537D000490CC /* rand.h */,
-				DAEB931D18AA537D000490CC /* rc2.h */,
-				DAEB931E18AA537D000490CC /* rc4.h */,
-				DAEB931F18AA537D000490CC /* ripemd.h */,
-				DAEB932018AA537D000490CC /* rsa.h */,
-				DAEB932118AA537D000490CC /* safestack.h */,
-				DAEB932218AA537D000490CC /* seed.h */,
-				DAEB932318AA537D000490CC /* sha.h */,
-				DAEB932418AA537D000490CC /* ssl.h */,
-				DAEB932518AA537D000490CC /* ssl2.h */,
-				DAEB932618AA537D000490CC /* ssl23.h */,
-				DAEB932718AA537D000490CC /* ssl3.h */,
-				DAEB932818AA537D000490CC /* stack.h */,
-				DAEB932918AA537D000490CC /* symhacks.h */,
-				DAEB932A18AA537D000490CC /* tls1.h */,
-				DAEB932B18AA537D000490CC /* ts.h */,
-				DAEB932C18AA537D000490CC /* txt_db.h */,
-				DAEB932D18AA537D000490CC /* ui.h */,
-				DAEB932E18AA537D000490CC /* ui_compat.h */,
-				DAEB932F18AA537D000490CC /* whrlpool.h */,
-				DAEB933018AA537D000490CC /* x509.h */,
-				DAEB933118AA537D000490CC /* x509_vfy.h */,
-				DAEB933218AA537D000490CC /* x509v3.h */,
-			);
-			path = openssl;
-			sourceTree = "<group>";
-		};
 		DAFC5662172C57EC00CB5CC5 /* InAppSettingsKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -2934,146 +2681,67 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DAEB938118AA537D000490CC /* x509.h in Headers */,
+				DA25C6B61980D3DF0046CDCF /* scrypt in Headers */,
+				DA25C6B41980D3C50046CDCF /* openssl in Headers */,
 				DAFE4A1315039824003ABA7C /* NSObject+PearlExport.h in Headers */,
-				DAEB936118AA537D000490CC /* modes.h in Headers */,
 				DAFE4A1515039824003ABA7C /* NSString+PearlNSArrayFormat.h in Headers */,
 				DAFE4A1715039824003ABA7C /* NSString+PearlSEL.h in Headers */,
-				DAEB936F18AA537D000490CC /* rc4.h in Headers */,
-				DAEB933318AA537D000490CC /* crypto_aesctr.h in Headers */,
-				DAEB936718AA537D000490CC /* ossl_typ.h in Headers */,
 				DA250A1A195665A100AC23F1 /* UICollectionReusableView+PearlDequeue.h in Headers */,
-				DAEB937018AA537D000490CC /* ripemd.h in Headers */,
-				DAEB933F18AA537D000490CC /* asn1t.h in Headers */,
-				DAEB936418AA537D000490CC /* ocsp.h in Headers */,
-				DAEB934518AA537D000490CC /* cast.h in Headers */,
-				DAEB936E18AA537D000490CC /* rc2.h in Headers */,
-				DAEB937718AA537D000490CC /* ssl23.h in Headers */,
-				DAEB937918AA537D000490CC /* stack.h in Headers */,
-				DAEB936B18AA537D000490CC /* pkcs7.h in Headers */,
 				DAFE4A1915039824003ABA7C /* Pearl.h in Headers */,
 				DAFE4A1A15039824003ABA7C /* PearlAbstractStrings.h in Headers */,
-				DAEB938218AA537D000490CC /* x509_vfy.h in Headers */,
-				DAEB937118AA537D000490CC /* rsa.h in Headers */,
-				DAEB936318AA537D000490CC /* objects.h in Headers */,
 				DAFE4A1E15039824003ABA7C /* PearlCodeUtils.h in Headers */,
-				DAEB935018AA537D000490CC /* dtls1.h in Headers */,
 				DAFE4A2015039824003ABA7C /* PearlConfig.h in Headers */,
 				DAFE4A2215039824003ABA7C /* PearlDeviceUtils.h in Headers */,
-				DAEB934E18AA537D000490CC /* dsa.h in Headers */,
-				DAEB935A18AA537D000490CC /* idea.h in Headers */,
-				DAEB933A18AA537D000490CC /* sysendian.h in Headers */,
 				DAFE4A2415039824003ABA7C /* PearlInfoPlist.h in Headers */,
 				DA2CA4E418D28866007798F8 /* NSLayoutConstraint+PearlUIKit.h in Headers */,
 				DAFE4A2615039824003ABA7C /* PearlLogger.h in Headers */,
 				DAFE4A2815039824003ABA7C /* PearlMathUtils.h in Headers */,
-				DAEB934418AA537D000490CC /* camellia.h in Headers */,
 				DAFE4A2A15039824003ABA7C /* PearlObjectUtils.h in Headers */,
 				DA250A18195665A100AC23F1 /* UITableView+PearlReloadFromArray.h in Headers */,
-				DAEB936D18AA537D000490CC /* rand.h in Headers */,
 				DAFE4A2C15039824003ABA7C /* PearlResettable.h in Headers */,
 				DAFE4A2D15039824003ABA7C /* PearlStrings.h in Headers */,
 				DAFE4A2F15039824003ABA7C /* PearlStringUtils.h in Headers */,
-				DAEB935318AA537D000490CC /* ec.h in Headers */,
-				DAEB937818AA537D000490CC /* ssl3.h in Headers */,
-				DAEB935E18AA537D000490CC /* md4.h in Headers */,
 				DA2CA4E018D28859007798F8 /* NSTimer+PearlBlock.h in Headers */,
-				DAEB933518AA537D000490CC /* memlimit.h in Headers */,
 				DAFE4A3315039824003ABA7C /* Pearl-Crypto.h in Headers */,
-				DAEB937318AA537D000490CC /* seed.h in Headers */,
-				DAEB935918AA537D000490CC /* hmac.h in Headers */,
-				DAEB936018AA537D000490CC /* mdc2.h in Headers */,
 				DAFE4A3415039824003ABA7C /* PearlCryptUtils.h in Headers */,
-				DAEB933918AA537D000490CC /* sha256.h in Headers */,
 				DAFE4A3615039824003ABA7C /* PearlKeyChain.h in Headers */,
-				DAEB936818AA537D000490CC /* pem.h in Headers */,
 				DAFE4A3815039824003ABA7C /* PearlRSAKey.h in Headers */,
-				DAEB934618AA537D000490CC /* cms.h in Headers */,
-				DAEB935F18AA537D000490CC /* md5.h in Headers */,
-				DAEB934B18AA537D000490CC /* des.h in Headers */,
-				DAEB934018AA537D000490CC /* bio.h in Headers */,
 				DAFE4A3A15039824003ABA7C /* PearlSCrypt.h in Headers */,
-				DAEB933C18AA537D000490CC /* aes.h in Headers */,
-				DAEB937618AA537D000490CC /* ssl2.h in Headers */,
 				DAFE4A3C15039824003ABA7C /* Pearl-UIKit-Dependencies.h in Headers */,
 				DAEC85B818E3DD9A007FC0DF /* UIView+Touches.h in Headers */,
-				DAEB935B18AA537D000490CC /* krb5_asn.h in Headers */,
-				DAEB935818AA537D000490CC /* evp.h in Headers */,
-				DAEB934118AA537D000490CC /* blowfish.h in Headers */,
-				DAEB935218AA537D000490CC /* ebcdic.h in Headers */,
-				DAEB937218AA537D000490CC /* safestack.h in Headers */,
 				DAFE4A3D15039824003ABA7C /* Pearl-UIKit.h in Headers */,
 				DAFE4A3E15039824003ABA7C /* PearlAlert.h in Headers */,
 				DAFE4A4015039824003ABA7C /* PearlArrayTVC.h in Headers */,
-				DAEB934718AA537D000490CC /* comp.h in Headers */,
-				DAEB933E18AA537D000490CC /* asn1_mac.h in Headers */,
 				DAFE4A4215039824003ABA7C /* PearlBoxView.h in Headers */,
-				DAEB936618AA537D000490CC /* opensslv.h in Headers */,
-				DAEB936518AA537D000490CC /* opensslconf.h in Headers */,
-				DAEB935D18AA537D000490CC /* lhash.h in Headers */,
-				DAEB937E18AA537D000490CC /* ui.h in Headers */,
-				DAEB935518AA537D000490CC /* ecdsa.h in Headers */,
-				DAEB935718AA537D000490CC /* err.h in Headers */,
 				DAFE4A4415039824003ABA7C /* PearlGradientView.h in Headers */,
-				DAEB937C18AA537D000490CC /* ts.h in Headers */,
 				DAFE4A4615039824003ABA7C /* PearlLayout.h in Headers */,
-				DAEB937A18AA537D000490CC /* symhacks.h in Headers */,
 				DAFE4A4815039824003ABA7C /* PearlLayoutView.h in Headers */,
-				DAEB933618AA537D000490CC /* readpass.h in Headers */,
 				DAFE4A4A15039824003ABA7C /* PearlMessageView.h in Headers */,
-				DAEB934818AA537D000490CC /* conf.h in Headers */,
 				DAFE4A4C15039824003ABA7C /* PearlRootViewController.h in Headers */,
 				DAFE4A4E15039824003ABA7C /* PearlSheet.h in Headers */,
 				DAFE4A5015039824003ABA7C /* PearlUIDebug.h in Headers */,
 				DAFE4A5215039824003ABA7C /* PearlUIUtils.h in Headers */,
-				DAEB937418AA537D000490CC /* sha.h in Headers */,
-				DAEB938018AA537D000490CC /* whrlpool.h in Headers */,
-				DAEB933718AA537D000490CC /* scryptenc.h in Headers */,
 				DAFE4A5415039824003ABA7C /* PearlValidatingTextField.h in Headers */,
-				DAEB933D18AA537D000490CC /* asn1.h in Headers */,
-				DAEB933B18AA537D000490CC /* warn.h in Headers */,
 				DAFE4A5615039824003ABA7C /* PearlWebViewController.h in Headers */,
-				DAEB934318AA537D000490CC /* buffer.h in Headers */,
-				DAEB936A18AA537D000490CC /* pkcs12.h in Headers */,
 				DAFE4A5815039824003ABA7C /* UIImage+PearlScaling.h in Headers */,
 				DAFE4A63150399FF003ABA7C /* PearlAppDelegate.h in Headers */,
 				DA30E9CE15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h in Headers */,
 				DA30E9D715723E6900A68B4C /* PearlLazy.h in Headers */,
-				DAEB936918AA537D000490CC /* pem2.h in Headers */,
-				DAEB937F18AA537D000490CC /* ui_compat.h in Headers */,
 				DAA141211922FF020032B392 /* PearlTween.h in Headers */,
 				DAFE4A63150399FF003ABA84 /* UIControl+PearlBlocks.h in Headers */,
-				DAEB934A18AA537D000490CC /* crypto.h in Headers */,
-				DAEB935618AA537D000490CC /* engine.h in Headers */,
-				DAEB935118AA537D000490CC /* e_os2.h in Headers */,
 				DAFE4A63150399FF003ABA88 /* NSObject+PearlKVO.h in Headers */,
 				DAFE4A63150399FF003ABA8C /* UIControl+PearlSelect.h in Headers */,
 				DAFE4A63150399FF003ABA90 /* UIScrollView+PearlFlashingIndicators.h in Headers */,
-				DAEB934F18AA537D000490CC /* dso.h in Headers */,
 				DAFE4A63150399FF003ABA94 /* NSDateFormatter+RFC3339.h in Headers */,
-				DAEB934C18AA537D000490CC /* des_old.h in Headers */,
 				93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */,
-				DAEB936C18AA537D000490CC /* pqueue.h in Headers */,
-				DAEB937B18AA537D000490CC /* tls1.h in Headers */,
-				DAEB933818AA537D000490CC /* scryptenc_cpuperf.h in Headers */,
 				DA2CA4DE18D28859007798F8 /* NSArray+Pearl.h in Headers */,
 				93D392EC39DA43C46C692C12 /* NSDictionary+Indexing.h in Headers */,
-				DAEB935418AA537D000490CC /* ecdh.h in Headers */,
-				DAEB937D18AA537D000490CC /* txt_db.h in Headers */,
 				93D3932889B6B4206E66A6D6 /* PearlEMail.h in Headers */,
-				DAEB934D18AA537D000490CC /* dh.h in Headers */,
-				DAEB938318AA537D000490CC /* x509v3.h in Headers */,
-				DAEB935C18AA537D000490CC /* kssl.h in Headers */,
-				DAEB933418AA537D000490CC /* crypto_scrypt.h in Headers */,
 				DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */,
 				DAEC85B718E3DD9A007FC0DF /* PearlUINavigationBar.h in Headers */,
-				DAEB934918AA537D000490CC /* conf_api.h in Headers */,
 				93D396BA1C74C4A06FD86437 /* PearlOverlay.h in Headers */,
-				DAEB937518AA537D000490CC /* ssl.h in Headers */,
 				93D3992FA1546E01F498F665 /* PearlNavigationController.h in Headers */,
 				93D39B842AB9A5D072810D76 /* NSError+PearlFullDescription.h in Headers */,
-				DAEB936218AA537D000490CC /* obj_mac.h in Headers */,
-				DAEB934218AA537D000490CC /* bn.h in Headers */,
 				DAF4EF51190A81E400023C90 /* NSManagedObject+Pearl.h in Headers */,
 				DAA141221922FF020032B392 /* map-macro.h in Headers */,
 				93D39B76DD5AB108BA8928E8 /* UIScrollView+PearlAdjustInsets.h in Headers */,
@@ -3161,9 +2829,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAC77CB7148291A600BCF976 /* Build configuration list for PBXNativeTarget "Pearl" */;
 			buildPhases = (
+				DA25C6C91983702E0046CDCF /* ShellScript */,
+				DAC77CAB148291A600BCF976 /* Headers */,
 				DAC77CA9148291A600BCF976 /* Sources */,
 				DAC77CAA148291A600BCF976 /* Frameworks */,
-				DAC77CAB148291A600BCF976 /* Headers */,
 			);
 			buildRules = (
 			);
@@ -3479,6 +3148,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		DA25C6C91983702E0046CDCF /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = ":";
+		};
 		DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -4065,6 +3747,7 @@
 				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "../../BuildProductsPath/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/include";
 				SKIP_INSTALL = YES;
 			};
 			name = "AppStore-iOS";
@@ -4149,6 +3832,7 @@
 				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "../../BuildProductsPath/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/include";
 				SKIP_INSTALL = YES;
 			};
 			name = "Debug-iOS";
@@ -4161,6 +3845,7 @@
 				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "../../BuildProductsPath/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/include";
 				SKIP_INSTALL = YES;
 			};
 			name = "AdHoc-iOS";

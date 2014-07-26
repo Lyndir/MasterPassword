@@ -17,4 +17,6 @@
 @property(nonatomic, retain) NSNumber *iCloudDecided;
 @property(nonatomic, retain) NSNumber *checkInconsistency;
 
+@property(nonatomic, strong) NSNumber *attackHardware;
+
 @end

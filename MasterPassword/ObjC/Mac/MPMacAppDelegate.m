@@ -26,8 +26,8 @@ static EventHotKeyID MPLockHotKey = { .signature = 'lock', .id = 1 };
 
 + (void)initialize {
 
-    static dispatch_once_t initialize = 0;
-    dispatch_once( &initialize, ^{
+    static dispatch_once_t once = 0;
+    dispatch_once( &once, ^{
         [MPMacConfig get];
 
 #ifdef DEBUG

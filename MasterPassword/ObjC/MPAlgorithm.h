@@ -22,6 +22,23 @@
 #define MPAlgorithmDefaultVersion 1
 #define MPAlgorithmDefault MPAlgorithmForVersion(MPAlgorithmDefaultVersion)
 
+id<MPAlgorithm> MPAlgorithmForVersion(NSUInteger version);
+id<MPAlgorithm> MPAlgorithmDefaultForBundleVersion(NSString *bundleVersion);
+
+PearlEnum( MPAttacker,
+        MPAttacker5K, MPAttacker20M, MPAttacker5B );
+
+typedef struct TimeToCrack {
+    unsigned long long hours;
+    unsigned long long days;
+    unsigned long long weeks;
+    unsigned long long months;
+    unsigned long long years;
+    unsigned long long universes;
+} TimeToCrack;
+
+NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
+
 @protocol MPAlgorithm<NSObject>
 
 @required
@@ -56,7 +73,7 @@
                       usingKey:(MPKey *)elementKey;
 - (NSString *)exportContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
 
-@end
+- (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordOfType:(MPElementType)type byAttacker:(MPAttacker)attacker;
+- (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordString:(NSString *)password byAttacker:(MPAttacker)attacker;
 
-id<MPAlgorithm> MPAlgorithmForVersion(NSUInteger version);
-id<MPAlgorithm> MPAlgorithmDefaultForBundleVersion(NSString *bundleVersion);
+@end

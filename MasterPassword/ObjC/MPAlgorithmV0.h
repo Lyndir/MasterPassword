@@ -18,4 +18,11 @@
 #import "MPAlgorithm.h"
 
 @interface MPAlgorithmV0 : NSObject<MPAlgorithm>
+
+- (NSDictionary *)allCiphers;
+- (NSArray *)ciphersForType:(MPElementType)type;
+- (NSArray *)cipherClasses;
+- (NSArray *)cipherClassCharacters;
+- (NSString *)charactersForCipherClass:(NSString *)cipherClass;
+
 @end
