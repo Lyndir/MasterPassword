@@ -26,7 +26,7 @@ id<MPAlgorithm> MPAlgorithmForVersion(NSUInteger version);
 id<MPAlgorithm> MPAlgorithmDefaultForBundleVersion(NSString *bundleVersion);
 
 PearlEnum( MPAttacker,
-        MPAttacker5K, MPAttacker20M, MPAttacker5B );
+        MPAttacker1, MPAttacker5K, MPAttacker20M, MPAttacker5B );
 
 typedef struct TimeToCrack {
     unsigned long long hours;

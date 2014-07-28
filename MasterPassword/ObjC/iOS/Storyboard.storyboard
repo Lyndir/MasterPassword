@@ -483,8 +483,8 @@
                     </tabBar>
                     <connections>
                         <segue destination="JFc-sj-awD" kind="relationship" relationship="viewControllers" id="bwn-ao-Y5g"/>
-                        <segue destination="IJT-xV-jHt" kind="relationship" relationship="viewControllers" id="MMX-ly-cXu"/>
                         <segue destination="C0Q-RC-szS" kind="relationship" relationship="viewControllers" id="wap-5K-BMD"/>
+                        <segue destination="LBn-EA-NAH" kind="relationship" relationship="viewControllers" id="sGh-gf-eKK"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Z1-Y7-eUn" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1795,6 +1795,22 @@
             </objects>
             <point key="canvasLocation" x="1350" y="-272"/>
         </scene>
+        <!--Navigation Controller - Settings-->
+        <scene sceneID="jGj-Je-kyC">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="LBn-EA-NAH" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Settings" image="icon_gears.png" id="6n3-Ay-Knn"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="h6j-1o-LHf">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="IJT-xV-jHt" kind="relationship" relationship="rootViewController" id="ymU-OE-v4t"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PQz-c8-3Ww" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2424" y="464"/>
+        </scene>
         <!--App Settings View Controller - Settings-->
         <scene sceneID="fmc-CS-nuo">
             <objects>
@@ -1828,7 +1844,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sDE-fE-FNc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2424" y="464"/>
+            <point key="canvasLocation" x="2961" y="464"/>
         </scene>
         <!--Guide View Controller - Usage-->
         <scene sceneID="9SY-7D-CE9">
@@ -1974,7 +1990,7 @@ CgoKCgoKCgoKCgoKCg
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OKk-Ht-Uzq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2961" y="-272"/>
+            <point key="canvasLocation" x="2424" y="-272"/>
         </scene>
         <!--Logs View Controller - Logbook-->
         <scene sceneID="cks-mO-kuy">
@@ -2507,7 +2523,7 @@ See </string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6di-Zc-lpO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3498" y="-272"/>
+            <point key="canvasLocation" x="2961" y="-272"/>
         </scene>
     </scenes>
     <resources>

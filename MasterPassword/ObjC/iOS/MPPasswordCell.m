@@ -130,7 +130,7 @@
             TimeToCrack timeToCrack;
             MPElementEntity *element = [self elementInContext:context];
             id<MPAlgorithm> algorithm = element.algorithm?: MPAlgorithmDefault;
-            MPAttacker attackHardware = [[MPConfig get].attackHardware unsignedIntegerValue];
+            MPAttacker attackHardware = [[MPConfig get].siteAttacker unsignedIntegerValue];
             if ([algorithm timeToCrack:&timeToCrack passwordOfType:[self elementInContext:context].type byAttacker:attackHardware] ||
                 [algorithm timeToCrack:&timeToCrack passwordString:password byAttacker:attackHardware])
                 PearlMainQueue( ^{
@@ -400,10 +400,10 @@
             else
                 password = [[self elementInContext:context] resolveContentUsingKey:[MPiOSAppDelegate get].key];
 
-            MPAttacker attackHardware = [[MPConfig get].attackHardware unsignedIntegerValue];
             TimeToCrack timeToCrack;
             NSString *timeToCrackString = nil;
             id<MPAlgorithm> algorithm = mainElement.algorithm?: MPAlgorithmDefault;
+            MPAttacker attackHardware = [[MPConfig get].siteAttacker unsignedIntegerValue];
             if ([algorithm timeToCrack:&timeToCrack passwordOfType:[self elementInContext:context].type byAttacker:attackHardware] ||
                 [algorithm timeToCrack:&timeToCrack passwordString:password byAttacker:attackHardware])
                 timeToCrackString = NSStringFromTimeToCrack( timeToCrack );

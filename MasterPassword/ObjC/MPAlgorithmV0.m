@@ -26,9 +26,9 @@
 #define MP_dkLen    64
 #define MP_hash     PearlHashSHA256
 
-/* An AMD HD 6990 calculates 3833M SHA-1 hashes per second at a cost of ~350$ per GPU */
-#define CRACKING_BCRYPTS_PER_SECOND 3833000000
-#define CRACKING_PRICE              350
+/* An AMD HD 7970 calculates 2495M SHA-1 hashes per second at a cost of ~350$ per GPU */
+#define CRACKING_PER_SECOND 2495000000UL
+#define CRACKING_PRICE      350
 
 @implementation MPAlgorithmV0 {
     BN_CTX *ctx;
@@ -384,9 +384,11 @@
         }
 
         case MPElementTypeStoredPersonal: {
-            NSAssert( [element isKindOfClass:[MPElementStoredEntity class]],
-                            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type,
-                            [element class] );
+            if (![element isKindOfClass:[MPElementStoredEntity class]]) {
+                wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
+                                (long)element.type, [element class] );
+                break;
+            }
 
             NSData *encryptedContent = [[clearContent dataUsingEncoding:NSUTF8StringEncoding]
                     encryptWithSymmetricKey:[elementKey subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
@@ -394,9 +396,11 @@
             break;
         }
         case MPElementTypeStoredDevicePrivate: {
-            NSAssert( [element isKindOfClass:[MPElementStoredEntity class]],
-                            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type,
-                            [element class] );
+            if (![element isKindOfClass:[MPElementStoredEntity class]]) {
+                wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
+                                (long)element.type, [element class] );
+                break;
+            }
 
             NSData *encryptedContent = [[clearContent dataUsingEncoding:NSUTF8StringEncoding]
                     encryptWithSymmetricKey:[elementKey subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
@@ -440,9 +444,11 @@
         case MPElementTypeGeneratedBasic:
         case MPElementTypeGeneratedShort:
         case MPElementTypeGeneratedPIN: {
-            NSAssert( [element isKindOfClass:[MPElementGeneratedEntity class]],
-                            @"Element with generated type %lu is not an MPElementGeneratedEntity, but a %@.", (long)element.type,
-                            [element class] );
+            if (![element isKindOfClass:[MPElementGeneratedEntity class]]) {
+                wrn( @"Element with generated type %lu is not an MPElementGeneratedEntity, but a %@.",
+                                (long)element.type, [element class] );
+                break;
+            }
 
             NSString *name = element.name;
             MPElementType type = element.type;
@@ -463,9 +469,11 @@
         }
 
         case MPElementTypeStoredPersonal: {
-            NSAssert( [element isKindOfClass:[MPElementStoredEntity class]],
-                            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type,
-                            [element class] );
+            if (![element isKindOfClass:[MPElementStoredEntity class]]) {
+                wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
+                                (long)element.type, [element class] );
+                break;
+            }
 
             NSData *encryptedContent = ((MPElementStoredEntity *)element).contentObject;
 
@@ -506,9 +514,11 @@
             break;
 
         case MPElementTypeStoredPersonal: {
-            NSAssert( [element isKindOfClass:[MPElementStoredEntity class]],
-                            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type,
-                            [element class] );
+            if (![element isKindOfClass:[MPElementStoredEntity class]]) {
+                wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
+                                (long)element.type, [element class] );
+                break;
+            }
             if ([importKey.keyID isEqualToData:elementKey.keyID])
                 ((MPElementStoredEntity *)element).contentObject = [protectedContent decodeBase64];
 
@@ -565,9 +575,11 @@
         }
 
         case MPElementTypeStoredPersonal: {
-            NSAssert( [element isKindOfClass:[MPElementStoredEntity class]],
-                            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type,
-                            [element class] );
+            if (![element isKindOfClass:[MPElementStoredEntity class]]) {
+                wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
+                                (long)element.type, [element class] );
+                break;
+            }
             result = [((MPElementStoredEntity *)element).contentObject encodeBase64];
             break;
         }
@@ -639,13 +651,13 @@
     for (NSUInteger c = 0; c < [password length]; ++c) {
         NSString *passwordCharacter = [password substringWithRange:NSMakeRange( c, 1 )];
 
-        NSUInteger characterEntropy = 0;
+        unsigned int characterEntropy = 0;
         for (NSString *cipherClass in @[ @"v", @"c", @"a", @"x" ]) {
             NSString *charactersForClass = [self charactersForCipherClass:cipherClass];
 
             if ([charactersForClass rangeOfString:passwordCharacter].location != NSNotFound) {
                 // Found class for password character.
-                characterEntropy = [charactersForClass length];
+                characterEntropy = (BN_ULONG)[charactersForClass length];
                 [cipher appendString:cipherClass];
                 break;
             }
@@ -655,7 +667,7 @@
             characterEntropy = 256 /* a byte */;
         }
 
-        BN_mul_word( permutations, (BN_ULONG)characterEntropy );
+        BN_mul_word( permutations, characterEntropy );
     }
 
     return [self timeToCrack:timeToCrack permutations:permutations forAttacker:attacker];
@@ -663,24 +675,33 @@
 
 - (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack permutations:(BIGNUM *)permutations forAttacker:(MPAttacker)attacker {
 
-    BN_div_word( permutations, CRACKING_BCRYPTS_PER_SECOND );
+    // Determine base seconds needed to calculate the permutations.
+    BIGNUM *secondsToCrack = BN_dup( permutations );
+    BN_div_word( secondsToCrack, CRACKING_PER_SECOND );
+
+    // Modify seconds needed by applying our hardware budget.
     switch (attacker) {
+        case MPAttacker1:
+            break;
         case MPAttacker5K:
-            BN_mul_word( permutations, (BN_ULONG)5000LLU );
+            BN_mul_word( secondsToCrack, CRACKING_PRICE );
+            BN_div_word( secondsToCrack, 5000 );
             break;
         case MPAttacker20M:
-            BN_mul_word( permutations, (BN_ULONG)20000000LLU );
+            BN_mul_word( secondsToCrack, CRACKING_PRICE );
+            BN_div_word( secondsToCrack, 20000000 );
             break;
         case MPAttacker5B:
-            BN_mul_word( permutations, (BN_ULONG)5000000000LLU );
+            BN_mul_word( secondsToCrack, CRACKING_PRICE );
+            BN_div_word( secondsToCrack, 5000 );
+            BN_div_word( secondsToCrack, 1000000 );
             break;
     }
-    BN_div_word( permutations, CRACKING_PRICE );
 
     BIGNUM *max = BN_new();
     BN_set_word( max, (BN_ULONG)-1 );
 
-    BIGNUM *hoursToCrack = BN_dup( permutations );
+    BIGNUM *hoursToCrack = BN_dup( secondsToCrack );
     BN_div_word( hoursToCrack, 3600 );
     if (BN_cmp( hoursToCrack, max ) < 0)
         timeToCrack->hours = BN_get_word( hoursToCrack );
@@ -716,7 +737,8 @@
         timeToCrack->years = (BN_ULONG)-1;
 
     BIGNUM *universesToCrack = BN_dup( yearsToCrack );
-    BN_div_word( universesToCrack, (BN_ULONG)14000000000LLU );
+    BN_div_word( universesToCrack, 14000 );
+    BN_div_word( universesToCrack, 1000000 );
     if (BN_cmp( universesToCrack, max ) < 0)
         timeToCrack->universes = BN_get_word( universesToCrack );
     else
@@ -727,6 +749,7 @@
 
     BN_free( max );
     BN_free( permutations );
+    BN_free( secondsToCrack );
     BN_free( hoursToCrack );
     BN_free( daysToCrack );
     BN_free( weeksToCrack );

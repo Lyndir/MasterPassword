@@ -271,6 +271,7 @@
 		DACA29BF1705E2DE002C6C22 /* UIColor+HSV.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA29BB1705E2DE002C6C22 /* UIColor+HSV.m */; };
 		DAD312C21552A22700A3F9ED /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD312C01552A20800A3F9ED /* libsqlite3.dylib */; };
 		DAE1EF2217E942DE00BC0086 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAE1EF2417E942DE00BC0086 /* Localizable.strings */; };
+		DAE8E65219867AB500416A0F /* libopensslcrypto-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAE8E65119867AB500416A0F /* libopensslcrypto-ios.a */; };
 		DAEBC45314F6364500987BF6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
 		DAEC85B518E3DD9A007FC0DF /* UIView+Touches.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEC85B118E3DD9A007FC0DF /* UIView+Touches.m */; };
 		DAEC85B618E3DD9A007FC0DF /* PearlUINavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEC85B218E3DD9A007FC0DF /* PearlUINavigationBar.m */; };
@@ -1187,7 +1188,6 @@
 		DABD3BF91711E2DC00CF925C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		DABD3BFB1711E2DC00CF925C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DABD3BFC1711E2DC00CF925C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		DABD3FC617122ADD00CF925C /* libscrypt-bin-ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libscrypt-bin-ios.a"; path = "../../../External/Pearl/External/iOSPorts/ports/security/scrypt/build/Release-iphoneos/libscrypt-bin-ios.a"; sourceTree = "<group>"; };
 		DABD3FC81712446200CF925C /* cloud.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cloud.png; sourceTree = "<group>"; };
 		DABD3FC91712446200CF925C /* cloud@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cloud@2x.png"; sourceTree = "<group>"; };
 		DABD3FCC1714F45B00CF925C /* identity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = identity.png; sourceTree = "<group>"; };
@@ -1213,6 +1213,7 @@
 		DAD312C01552A20800A3F9ED /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		DADBB55918DB0CFC00D099FE /* keyboard-dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "keyboard-dark@2x.png"; sourceTree = "<group>"; };
 		DAE1EF2317E942DE00BC0086 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		DAE8E65119867AB500416A0F /* libopensslcrypto-ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopensslcrypto-ios.a"; sourceTree = "<group>"; };
 		DAEBC45214F6364500987BF6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DAEC85B118E3DD9A007FC0DF /* UIView+Touches.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Touches.m"; sourceTree = "<group>"; };
 		DAEC85B218E3DD9A007FC0DF /* PearlUINavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlUINavigationBar.m; sourceTree = "<group>"; };
@@ -1358,6 +1359,7 @@
 				DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */,
 				DA672D3014F9413D004A189C /* libPearl.a in Frameworks */,
 				DA672D2F14F92C6B004A189C /* libz.dylib in Frameworks */,
+				DAE8E65219867AB500416A0F /* libopensslcrypto-ios.a in Frameworks */,
 				DAEBC45314F6364500987BF6 /* QuartzCore.framework in Frameworks */,
 				DA95D5F214DF0B2C008D1B94 /* MessageUI.framework in Frameworks */,
 				DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */,
@@ -1469,7 +1471,6 @@
 			children = (
 				DA3B844D190FC5DF00246EEA /* Crashlytics.framework */,
 				DA70EC7F1811B13C00F65DB2 /* StoreKit.framework */,
-				DABD3FC617122ADD00CF925C /* libscrypt-bin-ios.a */,
 				DA6701DF16406BB400B61001 /* AdSupport.framework */,
 				DA6701DD16406B7300B61001 /* Social.framework */,
 				DA6701B716406A4100B61001 /* Accounts.framework */,
@@ -1493,6 +1494,7 @@
 		DA5E5C6317248959003798D8 /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				DAE8E65119867AB500416A0F /* libopensslcrypto-ios.a */,
 				DAFFC63E17EDDA7C007BB020 /* libscryptenc-ios.a */,
 				DA5E5C6417248959003798D8 /* include */,
 			);
@@ -3591,6 +3593,10 @@
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -3619,6 +3625,10 @@
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
+				);
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6407ECED-9FF3-4F04-B40E-5B3E771D603D";
 				SKIP_INSTALL = NO;
@@ -3731,6 +3741,10 @@
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
+				);
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "36641E9D-D5E0-4E80-94F4-B2CF898CFE10";
 				SKIP_INSTALL = NO;
@@ -3853,6 +3867,7 @@
 		DAFC565F172C573B00CB5CC5 /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
 			name = "Debug-iOS";
@@ -3860,6 +3875,7 @@
 		DAFC5660172C573B00CB5CC5 /* AdHoc-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
 			name = "AdHoc-iOS";
@@ -3867,6 +3883,7 @@
 		DAFC5661172C573B00CB5CC5 /* AppStore-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
 			name = "AppStore-iOS";
