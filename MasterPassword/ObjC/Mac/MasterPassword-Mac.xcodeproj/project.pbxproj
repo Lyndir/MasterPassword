@@ -20,6 +20,8 @@
 		93D39F833DEC1C89B2F795AC /* MPPasswordWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A57A7823DE98A0FF83C /* MPPasswordWindowController.m */; };
 		DA0933CC1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */; };
 		DA0933D01747B91B00DE1CEF /* appstore.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CF1747B91B00DE1CEF /* appstore.png */; };
+		DA10007F1998A4C6002B873F /* scrypt in Headers */ = {isa = PBXBuildFile; fileRef = DAE8E65619867AF500416A0F /* scrypt */; settings = {ATTRIBUTES = (Public, ); }; };
+		DA1000801998A4C6002B873F /* openssl in Headers */ = {isa = PBXBuildFile; fileRef = DAE8E65719867AF500416A0F /* openssl */; settings = {ATTRIBUTES = (Public, ); }; };
 		DA16B33F170661D4000A0EAB /* libUbiquityStoreManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */; };
 		DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B340170661DB000A0EAB /* Carbon.framework */; };
 		DA16B342170661E0000A0EAB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC632871486D95D0075AEA5 /* Security.framework */; };
@@ -270,7 +272,6 @@
 		DA30E9D615723E6900A68B4C /* PearlLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlLazy.m; sourceTree = "<group>"; };
 		DA3509FC15F101A500C14A8E /* PearlQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlQueue.h; sourceTree = "<group>"; };
 		DA3509FD15F101A500C14A8E /* PearlQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlQueue.m; sourceTree = "<group>"; };
-		DA3B8448190FC5A900246EEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DA3B844A190FC5A900246EEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DA3B8450190FC86F00246EEA /* NSManagedObject+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+Pearl.m"; sourceTree = "<group>"; };
 		DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Pearl.h"; sourceTree = "<group>"; };
@@ -924,14 +925,6 @@
 			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
-		DA3B8447190FC5A900246EEA /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				DA3B8448190FC5A900246EEA /* Crashlytics.framework */,
-			);
-			path = iOS;
-			sourceTree = "<group>";
-		};
 		DA3B8449190FC5A900246EEA /* Mac */ = {
 			isa = PBXGroup;
 			children = (
@@ -1508,7 +1501,6 @@
 		DACA22121705DDC5002C6C22 /* External */ = {
 			isa = PBXGroup;
 			children = (
-				DA3B8447190FC5A900246EEA /* iOS */,
 				DA3B8449190FC5A900246EEA /* Mac */,
 				DABC6C0E175D8CE1000C15D4 /* RHStatusItemView */,
 				DACA29751705E2BD002C6C22 /* jrswizzle */,
@@ -1793,6 +1785,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA10007F1998A4C6002B873F /* scrypt in Headers */,
+				DA1000801998A4C6002B873F /* openssl in Headers */,
 				DA2CA4F218D323D3007798F8 /* NSTimer+PearlBlock.h in Headers */,
 				DAFE4A1315039824003ABA7C /* NSObject+PearlExport.h in Headers */,
 				DAFE4A1515039824003ABA7C /* NSString+PearlNSArrayFormat.h in Headers */,
@@ -1925,9 +1919,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAC77CB7148291A600BCF976 /* Build configuration list for PBXNativeTarget "Pearl" */;
 			buildPhases = (
+				DA10008119994255002B873F /* ShellScript */,
+				DAC77CAB148291A600BCF976 /* Headers */,
 				DAC77CA9148291A600BCF976 /* Sources */,
 				DAC77CAA148291A600BCF976 /* Frameworks */,
-				DAC77CAB148291A600BCF976 /* Headers */,
 			);
 			buildRules = (
 			);
@@ -1952,6 +1947,11 @@
 				TargetAttributes = {
 					DA5BFA43147E415C00F98B1E = {
 						DevelopmentTeam = HL3Q45LX9N;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -2070,6 +2070,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		DA10008119994255002B873F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "";
+		};
 		DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2311,10 +2324,6 @@
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherit)",
-					"\"$(SRCROOT)/../../../External\"",
-				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2388,10 +2397,6 @@
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherit)",
-					"\"$(SRCROOT)/../../../External\"",
-				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -2450,6 +2455,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2461,7 +2467,7 @@
 					"$(inherited)",
 					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
 				);
-				PROVISIONING_PROFILE = "0FAB9494-7BD5-4638-9B60-66DED5D23B9A";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
@@ -2473,6 +2479,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2484,7 +2491,7 @@
 					"$(inherited)",
 					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
 				);
-				PROVISIONING_PROFILE = "0FAB9494-7BD5-4638-9B60-66DED5D23B9A";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
@@ -2512,10 +2519,6 @@
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherit)",
-					"\"$(SRCROOT)/../../../External\"",
-				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -2586,7 +2589,7 @@
 					"$(inherited)",
 					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
 				);
-				PROVISIONING_PROFILE = "16F3EA2E-5241-42F7-8F39-125ED9FCD536";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
@@ -2606,6 +2609,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "../../BuildProductsPath/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/include";
 				SKIP_INSTALL = YES;
 			};
 			name = "AppStore-Mac";
@@ -2678,6 +2682,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = include;
 				SKIP_INSTALL = YES;
 			};
 			name = "Debug-Mac";
@@ -2696,6 +2701,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "../../BuildProductsPath/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/include";
 				SKIP_INSTALL = YES;
 			};
 			name = "AdHoc-Mac";

@@ -511,7 +511,6 @@
 		DA945C8617E3F3FD0053236B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		DAA141191922FED80032B392 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
-		DAA1411B1922FED80032B392 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DAA1411C1922FF020032B392 /* PearlTween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlTween.m; sourceTree = "<group>"; };
 		DAA1411D1922FF020032B392 /* PearlTween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlTween.h; sourceTree = "<group>"; };
 		DAA1411F1922FF020032B392 /* map-macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "map-macro.h"; sourceTree = "<group>"; };
@@ -1518,14 +1517,6 @@
 			path = iOS;
 			sourceTree = "<group>";
 		};
-		DAA1411A1922FED80032B392 /* Mac */ = {
-			isa = PBXGroup;
-			children = (
-				DAA1411B1922FED80032B392 /* Crashlytics.framework */,
-			);
-			path = Mac;
-			sourceTree = "<group>";
-		};
 		DAA1411E1922FF020032B392 /* include */ = {
 			isa = PBXGroup;
 			children = (
@@ -2345,7 +2336,6 @@
 			isa = PBXGroup;
 			children = (
 				DAA141181922FED80032B392 /* iOS */,
-				DAA1411A1922FED80032B392 /* Mac */,
 				DAFC5662172C57EC00CB5CC5 /* InAppSettingsKit */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
 				DACA22B61705DE7D002C6C22 /* UbiquityStoreManager */,
@@ -2831,7 +2821,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAC77CB7148291A600BCF976 /* Build configuration list for PBXNativeTarget "Pearl" */;
 			buildPhases = (
-				DA25C6C91983702E0046CDCF /* ShellScript */,
 				DAC77CAB148291A600BCF976 /* Headers */,
 				DAC77CA9148291A600BCF976 /* Sources */,
 				DAC77CAA148291A600BCF976 /* Frameworks */,
@@ -3150,19 +3139,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		DA25C6C91983702E0046CDCF /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = ":";
-		};
 		DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3436,10 +3412,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = "/tmp/${PRODUCT_NAME}.dst";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherit)",
-					"\"$(SRCROOT)/../../../External\"/**",
-				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3522,10 +3494,6 @@
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = "/tmp/${PRODUCT_NAME}.dst";
 				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherit)",
-					"\"$(SRCROOT)/../../../External\"/**",
-				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3668,10 +3636,6 @@
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = "/tmp/${PRODUCT_NAME}.dst";
 				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherit)",
-					"\"$(SRCROOT)/../../../External\"/**",
-				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3846,7 +3810,7 @@
 				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "../../BuildProductsPath/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/include";
+				PUBLIC_HEADERS_FOLDER_PATH = include;
 				SKIP_INSTALL = YES;
 			};
 			name = "Debug-iOS";
