@@ -1,4 +1,4 @@
-<configuration scan="true">
+<configuration scan="false">
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
