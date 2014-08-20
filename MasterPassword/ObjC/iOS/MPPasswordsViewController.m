@@ -1,12 +1,12 @@
 /**
- * Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
- *
- * See the enclosed file LICENSE for license information (LGPLv3). If you did
- * not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
- *
- * @author   Maarten Billemont <lhunath@lyndir.com>
- * @license  http://www.gnu.org/licenses/lgpl-3.0.txt
- */
+* Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
+*
+* See the enclosed file LICENSE for license information (LGPLv3). If you did
+* not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
+*
+* @author   Maarten Billemont <lhunath@lyndir.com>
+* @license  http://www.gnu.org/licenses/lgpl-3.0.txt
+*/
 
 //
 //  MPPasswordsViewController.h
@@ -19,11 +19,9 @@
 #import "MPPasswordsViewController.h"
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
-#import "MPPasswordLargeCell.h"
-#import "MPPasswordTypesCell.h"
 #import "MPPopdownSegue.h"
 #import "MPAppDelegate_Key.h"
-#import "MPCoachmarkViewController.h"
+#import "MPPasswordCell.h"
 
 @interface MPPasswordsViewController()<NSFetchedResultsControllerDelegate>
 
@@ -58,7 +56,7 @@
     [self.passwordsSearchBar enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
         if ([subview isKindOfClass:[UITextField class]])
             ((UITextField *)subview).keyboardAppearance = UIKeyboardAppearanceDark;
-    } recurse:YES];
+    }                               recurse:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -103,54 +101,34 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    if (collectionView == self.passwordCollectionView) {
-        UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)collectionViewLayout;
-        CGFloat itemWidth = UIEdgeInsetsInsetRect(self.passwordCollectionView.bounds, layout.sectionInset).size.width;
-        return CGSizeMake( itemWidth, 100 );
-    }
-
-    Throw(@"Unexpected collection view: %@", collectionView);
+    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)collectionViewLayout;
+    CGFloat itemWidth = UIEdgeInsetsInsetRect( self.passwordCollectionView.bounds, layout.sectionInset ).size.width;
+    return CGSizeMake( itemWidth, 100 );
 }
 
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
 
-    if (collectionView == self.passwordCollectionView)
-        return [self.fetchedResultsController.sections count];
-
-    Throw(@"Unexpected collection view: %@", collectionView);
+    return [self.fetchedResultsController.sections count];
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 
-    if (collectionView == self.passwordCollectionView)
-        return ![MPiOSAppDelegate get].activeUserOID? 0:
-               ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[section]).numberOfObjects +
-               (!_exactMatch && [[self query] length]? 1: 0);
-
-    Throw(@"Unexpected collection view: %@", collectionView);
+    return ![MPiOSAppDelegate get].activeUserOID? 0:
+           ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[section]).numberOfObjects +
+           (!_exactMatch && [[self query] length]? 1: 0);
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    if (collectionView == self.passwordCollectionView) {
-        [UIView setAnimationsEnabled:NO];
-        MPPasswordTypesCell *cell;
-        if (indexPath.item < ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[indexPath.section]).numberOfObjects) {
-            MPElementEntity *element = [self.fetchedResultsController objectAtIndexPath:indexPath];
-            cell = [MPPasswordTypesCell dequeueCellForElement:element fromCollectionView:collectionView atIndexPath:indexPath];
-        }
-        else
-            // New Site.
-            cell = [MPPasswordTypesCell dequeueCellForTransientSite:self.query fromCollectionView:collectionView atIndexPath:indexPath];
-        cell.passwordsViewController = self;
+    MPPasswordCell *cell = [MPPasswordCell dequeueCellFromCollectionView:collectionView indexPath:indexPath];
+    if (indexPath.item < ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[indexPath.section]).numberOfObjects)
+        [cell setElement:[self.fetchedResultsController objectAtIndexPath:indexPath] animated:NO];
+    else
+        [cell setTransientSite:self.query animated:NO];
 
-        [UIView setAnimationsEnabled:YES];
-        return cell;
-    }
-
-    Throw(@"Unexpected collection view: %@", collectionView);
+    return cell;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind
@@ -159,15 +137,35 @@ referenceSizeForHeaderInSection:(NSInteger)section {
     return [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"MPPasswordHeader" forIndexPath:indexPath];
 }
 
+#pragma mark - UIScrollDelegate
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+
+    if (scrollView == self.passwordCollectionView)
+        for (MPPasswordCell *cell in [self.passwordCollectionView visibleCells])
+            [cell setMode:MPPasswordCellModePassword animated:YES];
+}
+
 #pragma mark - NSFetchedResultsControllerDelegate
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath
      forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
 
     if (controller == _fetchedResultsController) {
-        [self.passwordCollectionView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]];
-        if (![newIndexPath isEqual:indexPath])
-            [self.passwordCollectionView reloadSections:[NSIndexSet indexSetWithIndex:newIndexPath.section]];
+        switch (type) {
+            case NSFetchedResultsChangeInsert:
+                [self.passwordCollectionView insertItemsAtIndexPaths:@[ newIndexPath ]];
+                break;
+            case NSFetchedResultsChangeDelete:
+                [self.passwordCollectionView deleteItemsAtIndexPaths:@[ indexPath ]];
+                break;
+            case NSFetchedResultsChangeMove:
+                [self.passwordCollectionView moveItemAtIndexPath:indexPath toIndexPath:newIndexPath];
+                break;
+            case NSFetchedResultsChangeUpdate:
+                [self.passwordCollectionView reloadItemsAtIndexPaths:@[ indexPath ]];
+                break;
+        }
     }
 }
 
@@ -229,7 +227,6 @@ referenceSizeForHeaderInSection:(NSInteger)section {
         [self updatePasswords];
 }
 
-
 #pragma mark - Private
 
 - (void)registerObservers {
@@ -237,19 +234,19 @@ referenceSizeForHeaderInSection:(NSInteger)section {
     if ([_notificationObservers count])
         return;
 
-    Weakify(self);
+    Weakify( self );
     _notificationObservers = @[
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:UIApplicationWillResignActiveNotification object:nil
                                  queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                Strongify(self);
+                Strongify( self );
 
                 self.passwordSelectionContainer.alpha = 0;
             }],
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:MPSignedOutNotification object:nil
                                  queue:nil usingBlock:^(NSNotification *note) {
-                Strongify(self);
+                Strongify( self );
 
                 _fetchedResultsController = nil;
                 self.passwordsSearchBar.text = nil;
@@ -258,7 +255,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:UIApplicationDidBecomeActiveNotification object:nil
                                  queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                Strongify(self);
+                Strongify( self );
 
                 [self updatePasswords];
                 [UIView animateWithDuration:1 animations:^{
@@ -282,7 +279,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 
 - (void)observeStore {
 
-    Weakify(self);
+    Weakify( self );
 
     NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
     if (!_mocObserver && mainContext)
@@ -296,7 +293,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
         _storeObserver = [[NSNotificationCenter defaultCenter]
                 addObserverForName:USMStoreDidChangeNotification object:nil
                              queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                    Strongify(self);
+                    Strongify( self );
                     _fetchedResultsController = nil;
                     [self updatePasswords];
                 }];
@@ -312,9 +309,9 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 
 - (void)updateConfigKey:(NSString *)key {
 
-    if (!key || [key isEqualToString:NSStringFromSelector( @selector(dictationSearch) )])
+    if (!key || [key isEqualToString:NSStringFromSelector( @selector( dictationSearch ) )])
         self.passwordsSearchBar.keyboardType = [[MPiOSConfig get].dictationSearch boolValue]? UIKeyboardTypeDefault: UIKeyboardTypeURL;
-    if (!key || [key isEqualToString:NSStringFromSelector( @selector(hidePasswords) )])
+    if (!key || [key isEqualToString:NSStringFromSelector( @selector( hidePasswords ) )])
         [self updatePasswords];
 }
 
@@ -338,7 +335,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
                 [NSPredicate predicateWithFormat:@"user == %@ AND name BEGINSWITH[cd] %@", activeUserOID, query]:
                 [NSPredicate predicateWithFormat:@"user == %@", activeUserOID];
         if (![self.fetchedResultsController performFetch:&error])
-        err(@"Couldn't fetch elements: %@", error);
+            err( @"Couldn't fetch elements: %@", error );
 
         _exactMatch = NO;
         for (MPElementEntity *entity in self.fetchedResultsController.fetchedObjects)
@@ -351,17 +348,17 @@ referenceSizeForHeaderInSection:(NSInteger)section {
             [self.passwordCollectionView performBatchUpdates:^{
                 NSInteger fromSections = self.passwordCollectionView.numberOfSections;
                 NSInteger toSections = [self numberOfSectionsInCollectionView:self.passwordCollectionView];
-                for (int section = 0; section < MAX(toSections, fromSections); section++) {
+                for (int section = 0; section < MAX( toSections, fromSections ); section++) {
                     if (section >= fromSections) {
-                        dbg(@"insertSections:%d", section);
+                        dbg( @"insertSections:%d", section );
                         [self.passwordCollectionView insertSections:[NSIndexSet indexSetWithIndex:section]];
                     }
                     else if (section >= toSections) {
-                        dbg(@"deleteSections:%d", section);
+                        dbg( @"deleteSections:%d", section );
                         [self.passwordCollectionView deleteSections:[NSIndexSet indexSetWithIndex:section]];
                     }
                     else {
-                        dbg(@"reloadSections:%d", section);
+                        dbg( @"reloadSections:%d", section );
                         [self.passwordCollectionView reloadSections:[NSIndexSet indexSetWithIndex:section]];
                     }
                 }
@@ -387,7 +384,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
         [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
             NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
             fetchRequest.sortDescriptors = @[
-                    [[NSSortDescriptor alloc] initWithKey:NSStringFromSelector( @selector(lastUsed) ) ascending:NO]
+                    [[NSSortDescriptor alloc] initWithKey:NSStringFromSelector( @selector( lastUsed ) ) ascending:NO]
             ];
             fetchRequest.fetchBatchSize = 10;
             _fetchedResultsController = [[NSFetchedResultsController alloc]
@@ -405,13 +402,13 @@ referenceSizeForHeaderInSection:(NSInteger)section {
     [self setActive:active animated:NO completion:nil];
 }
 
-- (void)setActive:(BOOL)active animated:(BOOL)animated completion:(void (^)(BOOL finished))completion {
+- (void)setActive:(BOOL)active animated:(BOOL)animated completion:(void ( ^ )(BOOL finished))completion {
 
     _active = active;
 
     [UIView animateWithDuration:animated? 0.4f: 0 animations:^{
-        [self.navigationBarToTopConstraint layoutWithPriority:active? 1: UILayoutPriorityDefaultHigh];
-        [self.passwordsToBottomConstraint layoutWithPriority:active? 1: UILayoutPriorityDefaultHigh];
+        [[self.navigationBarToTopConstraint updatePriority:active? 1: UILayoutPriorityDefaultHigh] layoutIfNeeded];
+        [[self.passwordsToBottomConstraint updatePriority:active? 1: UILayoutPriorityDefaultHigh] layoutIfNeeded];
     }                completion:completion];
 }
 

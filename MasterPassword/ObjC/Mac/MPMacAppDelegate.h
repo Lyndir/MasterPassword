@@ -20,7 +20,6 @@
 @property(nonatomic, weak) IBOutlet NSMenuItem *lockItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *showItem;
 @property(nonatomic, strong) IBOutlet NSMenu *statusMenu;
-@property(nonatomic, weak) IBOutlet NSMenuItem *useCloudItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *hidePasswordsItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *rememberPasswordItem;
 @property(nonatomic, weak) IBOutlet NSMenuItem *openAtLoginItem;
@@ -34,8 +33,6 @@
 - (IBAction)togglePreference:(id)sender;
 - (IBAction)newUser:(NSMenuItem *)sender;
 - (IBAction)lock:(id)sender;
-- (IBAction)rebuildCloud:(id)sender;
-- (IBAction)corruptCloud:(id)sender;
 - (IBAction)terminate:(id)sender;
 - (IBAction)showPopup:(id)sender;
 

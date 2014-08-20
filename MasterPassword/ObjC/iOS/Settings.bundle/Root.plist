@@ -109,6 +109,44 @@ To see a site&apos;s password anyway, tap and hold your finger down for a while 
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
 		<dict>
+			<key>FooterText</key>
+			<string>The password strength indicator estimates the time necessary to break the password from a stolen database of SHA-1 hashes.  Use this setting to choose the budget the attacker is willing to devote to breaking your site password.</string>
+			<key>Title</key>
+			<string></string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<integer>0</integer>
+			<key>Key</key>
+			<string>siteAttacker</string>
+			<key>Title</key>
+			<string>Attacker Budget</string>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Titles</key>
+			<array>
+				<string>Regular Hardware</string>
+				<string>Dedicated GPUs, 5000 $ US</string>
+				<string>Large Organization, 20 M$ US</string>
+				<string>State Department, 5 B$ US</string>
+			</array>
+			<key>ShortTitles</key>
+			<array>
+				<string>Regular</string>
+				<string>5k $</string>
+				<string>20M $</string>
+				<string>5B $</string>
+			</array>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+			</array>
+		</dict>
+		<dict>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>

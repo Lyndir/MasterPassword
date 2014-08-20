@@ -10,7 +10,7 @@
 
 @implementation MPConfig
 
-@dynamic sendInfo, rememberLogin, iCloudDecided, checkInconsistency, hidePasswords;
+@dynamic sendInfo, rememberLogin, iCloudDecided, checkInconsistency, hidePasswords, siteAttacker;
 
 - (id)init {
 
@@ -24,7 +24,8 @@
             NSStringFromSelector( @selector( rememberLogin ) )      : @NO,
             NSStringFromSelector( @selector( hidePasswords ) )      : @NO,
             NSStringFromSelector( @selector( iCloudDecided ) )      : @NO,
-            NSStringFromSelector( @selector( checkInconsistency ) ) : @NO
+            NSStringFromSelector( @selector( checkInconsistency ) ) : @NO,
+            NSStringFromSelector( @selector( siteAttacker ) )       : @(MPAttacker1),
     }];
 
     self.delegate = [MPAppDelegate_Shared get];

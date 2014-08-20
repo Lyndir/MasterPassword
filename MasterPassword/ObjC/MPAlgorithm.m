@@ -38,3 +38,21 @@ id<MPAlgorithm> MPAlgorithmDefaultForBundleVersion(NSString *bundleVersion) {
 
     return MPAlgorithmDefault;
 }
+
+NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack) {
+
+    if (timeToCrack.universes > 1)
+        return strl( @"> age of the universe" );
+    else if (timeToCrack.years > 1)
+        return strl( @"%d years", timeToCrack.years );
+    else if (timeToCrack.months > 1)
+        return strl( @"%d months", timeToCrack.months );
+    else if (timeToCrack.weeks > 1)
+        return strl( @"%d weeks", timeToCrack.weeks );
+    else if (timeToCrack.days > 1)
+        return strl( @"%d days", timeToCrack.days );
+    else if (timeToCrack.hours > 1)
+        return strl( @"%d hours", timeToCrack.hours );
+    else
+        return strl( @"trivial" );
+}

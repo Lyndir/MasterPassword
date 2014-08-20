@@ -28,6 +28,7 @@
 @property(nonatomic) NSString *masterPassword;
 @property(nonatomic) BOOL alternatePressed;
 @property(nonatomic) BOOL locked;
+@property(nonatomic) BOOL newUser;
 
 @property(nonatomic, weak) IBOutlet NSArrayController *elementsController;
 @property(nonatomic, weak) IBOutlet NSImageView *blurView;

@@ -136,9 +136,8 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
             ^(NSNotification *note) {
         [[self mainManagedObjectContext] saveToStore];
     }];
-    [[NSNotificationCenter defaultCenter]
-            addObserverForName:UIApplicationWillResignActiveNotification object:UIApp
-                         queue:[NSOperationQueue mainQueue] usingBlock:
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:UIApp
+                                                       queue:[NSOperationQueue mainQueue] usingBlock:
             ^(NSNotification *note) {
         [[self mainManagedObjectContext] saveToStore];
     }];
@@ -436,10 +435,10 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
 
 #pragma mark - Utilities
 
-- (void)addElementNamed:(NSString *)siteName completion:(void ( ^ )(MPElementEntity *element))completion {
+- (void)addElementNamed:(NSString *)siteName completion:(void ( ^ )(MPElementEntity *element, NSManagedObjectContext *context))completion {
 
     if (![siteName length]) {
-        completion( nil );
+        completion( nil, nil );
         return;
     }
 
@@ -447,7 +446,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
         MPUserEntity *activeUser = [self activeUserInContext:context];
         NSAssert( activeUser, @"Missing user." );
         if (!activeUser) {
-            completion( nil );
+            completion( nil, nil );
             return;
         }
 
@@ -467,7 +466,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
 
         [context saveToStore];
 
-        completion( element );
+        completion( element, context );
     }];
 }
 
