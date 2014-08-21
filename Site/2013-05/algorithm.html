@@ -134,12 +134,21 @@
                 </p>
                 <p>In practice, the secret master password is the only extra thing users will actually need to remember.  Their full name, they'll hopefully remember regardless.  If the site is always named after the bare domain name, it needn't explicitly be remembered but can be found in the browser's address bar.  The counter and type need only be remembered if they are changed from their default values.</p>
 
+                <hr />
+
                 <p>In short, the algorithm involves the following steps:
                     <ol>
                         <li>Calculate the <strong>master key</strong> from a user's name and master password.</li>
                         <li>Calculate the <strong>template seed</strong> from the site's name and counter.</li>
                         <li>Encode a <strong>site password</strong> using the site's type template.</li>
                     </ol>
+                </p>
+
+                <p>To ensure cross-platform compatibility, we define all data as byte streams using the following encodings for other types:
+                    <ul>
+                        <li>Strings (eg. <code>"com.lyndir"</code>) are encoded as UTF-8.</li>
+                        <li>Numbers (eg. <code>name length</code>) are encoded as 32-bit unsigned integers in network byte order.</li>
+                    </ul>
                 </p>
 
                 <h1>The Master Key</h1>
