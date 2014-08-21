@@ -22,8 +22,16 @@
         <module>masterpassword-algorithm</module>
         <module>masterpassword-cli</module>
         <module>masterpassword-gui</module>
-        <!--module>masterpassword-android</module-->
     </modules>
+
+    <profiles>
+        <profile>
+            <id>mod:android</id>
+            <modules>
+                <module>masterpassword-android</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <!-- REMOTE ARTIFACT REPOSITORIES -->
     <repositories>

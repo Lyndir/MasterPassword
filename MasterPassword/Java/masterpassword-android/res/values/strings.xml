@@ -2,4 +2,5 @@
 <resources>
     <string name="hello">Hello masterpassword-android!</string>
     <string name="app_name">masterpassword-android</string>
+    <string name="avatar">User Avatar</string>
 </resources>
