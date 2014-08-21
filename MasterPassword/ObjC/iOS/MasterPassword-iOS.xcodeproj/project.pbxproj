@@ -107,7 +107,6 @@
 		DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3509FC15F101A500C14A8E /* PearlQueue.h */; };
 		DA3509FF15F101A500C14A8E /* PearlQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3509FD15F101A500C14A8E /* PearlQueue.m */; };
 		DA38D6A318CCB5BF009AEB3E /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */; };
-		DA3B844E190FC5DF00246EEA /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA3B844D190FC5DF00246EEA /* Crashlytics.framework */; };
 		DA4425CC1557BED40052177D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA44260A1557D9E40052177D /* libUbiquityStoreManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */; };
 		DA4522441902355C008F650A /* icon_book.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD370C1711E29500CF925C /* icon_book.png */; };
@@ -118,6 +117,8 @@
 		DA45224A190628A1008F650A /* icon_wrench@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD386B1711E29700CF925C /* icon_wrench@2x.png */; };
 		DA45224B190628B2008F650A /* icon_gear.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37821711E29500CF925C /* icon_gear.png */; };
 		DA45224C190628B2008F650A /* icon_gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37831711E29500CF925C /* icon_gear@2x.png */; };
+		DA48856019A5A82E000C2D79 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAA141191922FED80032B392 /* Crashlytics.framework */; };
+		DA48856119A5AC1E000C2D79 /* libopensslcrypto-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAE8E65119867AB500416A0F /* libopensslcrypto-ios.a */; };
 		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
 		DA4DA1DA1564471F00F6F596 /* libuicolor-utilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */; };
 		DA5A09DF171A70E4005284AB /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5A09DD171A70E4005284AB /* play.png */; };
@@ -271,7 +272,6 @@
 		DACA29BF1705E2DE002C6C22 /* UIColor+HSV.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA29BB1705E2DE002C6C22 /* UIColor+HSV.m */; };
 		DAD312C21552A22700A3F9ED /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD312C01552A20800A3F9ED /* libsqlite3.dylib */; };
 		DAE1EF2217E942DE00BC0086 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAE1EF2417E942DE00BC0086 /* Localizable.strings */; };
-		DAE8E65219867AB500416A0F /* libopensslcrypto-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAE8E65119867AB500416A0F /* libopensslcrypto-ios.a */; };
 		DAEBC45314F6364500987BF6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
 		DAEC85B518E3DD9A007FC0DF /* UIView+Touches.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEC85B118E3DD9A007FC0DF /* UIView+Touches.m */; };
 		DAEC85B618E3DD9A007FC0DF /* PearlUINavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEC85B218E3DD9A007FC0DF /* PearlUINavigationBar.m */; };
@@ -1349,6 +1349,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA48856119A5AC1E000C2D79 /* libopensslcrypto-ios.a in Frameworks */,
 				DAFC5691172C582A00CB5CC5 /* libInAppSettingsKit.a in Frameworks */,
 				DA6701E016406BB400B61001 /* AdSupport.framework in Frameworks */,
 				DA6701DE16406B7300B61001 /* Social.framework in Frameworks */,
@@ -1358,17 +1359,16 @@
 				DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */,
 				DA672D3014F9413D004A189C /* libPearl.a in Frameworks */,
 				DA672D2F14F92C6B004A189C /* libz.dylib in Frameworks */,
-				DAE8E65219867AB500416A0F /* libopensslcrypto-ios.a in Frameworks */,
 				DAEBC45314F6364500987BF6 /* QuartzCore.framework in Frameworks */,
 				DA95D5F214DF0B2C008D1B94 /* MessageUI.framework in Frameworks */,
 				DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */,
+				DA48856019A5A82E000C2D79 /* Crashlytics.framework in Frameworks */,
 				DAC632891486D9690075AEA5 /* Security.framework in Frameworks */,
 				DA5BFA49147E415C00F98B1E /* UIKit.framework in Frameworks */,
 				DA5BFA4B147E415C00F98B1E /* Foundation.framework in Frameworks */,
 				DA5BFA4D147E415C00F98B1E /* CoreGraphics.framework in Frameworks */,
 				DA5BFA4F147E415C00F98B1E /* CoreData.framework in Frameworks */,
 				93D399433EA75E50656040CB /* Twitter.framework in Frameworks */,
-				DA3B844E190FC5DF00246EEA /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3449,10 +3449,6 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherit)",
-					"\"$(SRCROOT)/../../../External\"/**",
-				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
@@ -3532,10 +3528,6 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherit)",
-					"\"$(SRCROOT)/../../../External\"/**",
-				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -3556,12 +3548,13 @@
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/iOS,
+					"\"$(SRCROOT)/../../../External/iOS\"",
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
 				);
@@ -3588,12 +3581,13 @@
 				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/iOS,
+					"\"$(SRCROOT)/../../../External/iOS\"",
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
 				);
@@ -3674,10 +3668,6 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherit)",
-					"\"$(SRCROOT)/../../../External\"/**",
-				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -3700,12 +3690,13 @@
 				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/iOS,
+					"\"$(SRCROOT)/../../../External/iOS\"",
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
 				);
@@ -3723,7 +3714,10 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Pearl.dst;
 				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
-				OTHER_LDFLAGS = "-ObjC";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = "../../BuildProductsPath/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/include";
 				SKIP_INSTALL = YES;
@@ -3808,7 +3802,10 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Pearl.dst;
 				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
-				OTHER_LDFLAGS = "-ObjC";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = include;
 				SKIP_INSTALL = YES;
@@ -3821,7 +3818,10 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Pearl.dst;
 				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
-				OTHER_LDFLAGS = "-ObjC";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = "../../BuildProductsPath/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/include";
 				SKIP_INSTALL = YES;

@@ -26,10 +26,6 @@
 
     [super viewDidAppear:animated];
 
-    self.cloudSwitch.enabled = [[MPAppDelegate_Shared get].storeManager cloudAvailable];
-
-    if (self.cloudSwitch && [[MPiOSConfig get].iCloudDecided boolValue])
-        self.cloudSwitch.on = [[MPiOSConfig get].iCloudEnabled boolValue];
     if (self.rememberLoginSwitch)
         self.rememberLoginSwitch.on = [[MPiOSConfig get].rememberLogin boolValue];
 }
@@ -38,10 +34,6 @@
 
     [super viewWillDisappear:animated];
 
-    if (self.cloudSwitch) {
-        [MPiOSConfig get].iCloudDecided = @YES;
-        [MPiOSConfig get].iCloudEnabled = @(self.cloudSwitch.on);
-    }
     if (self.rememberLoginSwitch)
         [MPiOSConfig get].rememberLogin = @(self.rememberLoginSwitch.on);
 }

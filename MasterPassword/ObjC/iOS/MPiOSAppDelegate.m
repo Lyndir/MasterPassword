@@ -72,16 +72,16 @@
     @try {
         [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:[NSOperationQueue mainQueue]
                                                       usingBlock:^(NSNotification *note) {
-            [self updateConfigKey:note.object];
-        }];
+                                                          [self updateConfigKey:note.object];
+                                                      }];
         [[NSNotificationCenter defaultCenter] addObserverForName:kIASKAppSettingChanged object:nil queue:nil usingBlock:
                 ^(NSNotification *note) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note.object];
-        }];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note.object];
+                }];
         [[NSNotificationCenter defaultCenter] addObserverForName:NSUserDefaultsDidChangeNotification object:nil queue:nil usingBlock:
                 ^(NSNotification *note) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:nil];
-        }];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:nil];
+                }];
 
 #ifdef ADHOC
         [PearlAlert showAlertWithTitle:@"Welcome, tester!" message:
@@ -109,26 +109,26 @@
 
         [[NSNotificationCenter defaultCenter] addObserverForName:MPFoundInconsistenciesNotification object:nil queue:nil usingBlock:
                 ^(NSNotification *note) {
-            switch ((MPFixableResult)[note.userInfo[MPInconsistenciesFixResultUserKey] unsignedIntegerValue]) {
+                    switch ((MPFixableResult)[note.userInfo[MPInconsistenciesFixResultUserKey] unsignedIntegerValue]) {
 
-                case MPFixableResultNoProblems:
-                    break;
-                case MPFixableResultProblemsFixed:
-                    [PearlAlert showAlertWithTitle:@"Inconsistencies Fixed" message:
-                            @"Some inconsistencies were detected in your sites.\n"
-                                    @"All issues were fixed."
-                                         viewStyle:UIAlertViewStyleDefault initAlert:nil
-                                 tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
-                    break;
-                case MPFixableResultProblemsNotFixed:
-                    [PearlAlert showAlertWithTitle:@"Inconsistencies Found" message:
-                            @"Some inconsistencies were detected in your sites.\n"
-                                    @"Not all issues could be fixed.  Try signing in to each user or checking the logs."
-                                         viewStyle:UIAlertViewStyleDefault initAlert:nil
-                                 tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
-                    break;
-            }
-        }];
+                        case MPFixableResultNoProblems:
+                            break;
+                        case MPFixableResultProblemsFixed:
+                            [PearlAlert showAlertWithTitle:@"Inconsistencies Fixed" message:
+                                            @"Some inconsistencies were detected in your sites.\n"
+                                                    @"All issues were fixed."
+                                                 viewStyle:UIAlertViewStyleDefault initAlert:nil
+                                         tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
+                            break;
+                        case MPFixableResultProblemsNotFixed:
+                            [PearlAlert showAlertWithTitle:@"Inconsistencies Found" message:
+                                            @"Some inconsistencies were detected in your sites.\n"
+                                                    @"Not all issues could be fixed.  Try signing in to each user or checking the logs."
+                                                 viewStyle:UIAlertViewStyleDefault initAlert:nil
+                                         tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
+                            break;
+                    }
+                }];
 
         PearlMainQueue( ^{
             if ([[MPiOSConfig get].showSetup boolValue])
@@ -186,16 +186,16 @@
                                                @"Enter that master password to unlock the exported data.", userName )
                                      viewStyle:UIAlertViewStyleSecureTextInput
                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                    @try {
-                        if (buttonIndex_ == [alert_ cancelButtonIndex])
-                            return;
+                            @try {
+                                if (buttonIndex_ == [alert_ cancelButtonIndex])
+                                    return;
 
-                        masterPassword = [alert_ textFieldAtIndex:0].text;
-                    }
-                    @finally {
-                        dispatch_group_leave( importPasswordGroup );
-                    }
-                }
+                                masterPassword = [alert_ textFieldAtIndex:0].text;
+                            }
+                            @finally {
+                                dispatch_group_leave( importPasswordGroup );
+                            }
+                        }
                                    cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Unlock Import", nil];
             } );
             dispatch_group_wait( importPasswordGroup, DISPATCH_TIME_FOREVER );
@@ -209,19 +209,19 @@
             dispatch_async( dispatch_get_main_queue(), ^{
                 [PearlAlert showAlertWithTitle:strf( @"Master Password for\n%@", userName )
                                        message:strf( @"Imports %lu sites, overwriting %lu.",
-                                                       (unsigned long)importCount, (unsigned long)deleteCount )
+                                               (unsigned long)importCount, (unsigned long)deleteCount )
                                      viewStyle:UIAlertViewStyleSecureTextInput
                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                    @try {
-                        if (buttonIndex_ == [alert_ cancelButtonIndex])
-                            return;
+                            @try {
+                                if (buttonIndex_ == [alert_ cancelButtonIndex])
+                                    return;
 
-                        masterPassword = [alert_ textFieldAtIndex:0].text;
-                    }
-                    @finally {
-                        dispatch_group_leave( userPasswordGroup );
-                    }
-                }
+                                masterPassword = [alert_ textFieldAtIndex:0].text;
+                            }
+                            @finally {
+                                dispatch_group_leave( userPasswordGroup );
+                            }
+                        }
                                    cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Import", nil];
             } );
             dispatch_group_wait( userPasswordGroup, DISPATCH_TIME_FOREVER );
@@ -303,8 +303,8 @@
                                                @"and then include log files in your message."
                              viewStyle:UIAlertViewStyleDefault
                              initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-            [self openFeedbackWithLogs:(buttonIndex_ == [alert_ firstOtherButtonIndex]) forVC:viewController];
-        }                  cancelTitle:nil otherTitles:@"Include Logs", @"No Logs", nil];
+                    [self openFeedbackWithLogs:(buttonIndex_ == [alert_ firstOtherButtonIndex]) forVC:viewController];
+                }          cancelTitle:nil otherTitles:@"Include Logs", @"No Logs", nil];
     else
         [self openFeedbackWithLogs:NO forVC:viewController];
 }
@@ -318,14 +318,14 @@
 
     [[[PearlEMail alloc] initForEMailTo:@"Master Password Development <masterpassword@lyndir.com>"
                                 subject:strf( @"Feedback for Master Password [%@]",
-                                                [[PearlKeyChain deviceIdentifier] stringByDeletingMatchesOf:@"-.*"] )
+                                        [[PearlKeyChain deviceIdentifier] stringByDeletingMatchesOf:@"-.*"] )
                                    body:strf( @"\n\n\n"
-                                           @"--\n"
-                                           @"%@"
-                                           @"Master Password %@, build %@",
-                                                userName? ([userName stringByAppendingString:@"\n"]): @"",
-                                                [PearlInfoPlist get].CFBundleShortVersionString,
-                                                [PearlInfoPlist get].CFBundleVersion )
+                                                   @"--\n"
+                                                   @"%@"
+                                                   @"Master Password %@, build %@",
+                                           userName? ([userName stringByAppendingString:@"\n"]): @"",
+                                           [PearlInfoPlist get].CFBundleShortVersionString,
+                                           [PearlInfoPlist get].CFBundleVersion )
 
                             attachments:(logs
                                          ? [[PearlEMailAttachment alloc]
@@ -351,24 +351,25 @@
                                            @"restore your list of sites."
                          viewStyle:UIAlertViewStyleDefault initAlert:nil
                  tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-        if (buttonIndex != [alert cancelButtonIndex])
-            [PearlAlert showAlertWithTitle:@"Show Passwords?"
-                                   message:@"Would you like to make all your passwords "
-                                                   @"visible in the export file?\n\n"
-                                                   @"A safe export will include all sites "
-                                                   @"but make their passwords invisible.\n"
-                                                   @"It is great as a backup and remains "
-                                                   @"safe when fallen in the wrong hands."
-                                 viewStyle:UIAlertViewStyleDefault initAlert:nil
-                         tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 0)
-                    // Safe Export
-                    [self showExportRevealPasswords:NO forVC:viewController];
-                if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
-                    // Show Passwords
-                    [self showExportRevealPasswords:YES forVC:viewController];
-            } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords", nil];
-    } cancelTitle:@"Cancel" otherTitles:@"Export Sites", nil];
+                     if (buttonIndex != [alert cancelButtonIndex])
+                         [PearlAlert showAlertWithTitle:@"Show Passwords?"
+                                                message:@"Would you like to make all your passwords "
+                                                                @"visible in the export file?\n\n"
+                                                                @"A safe export will include all sites "
+                                                                @"but make their passwords invisible.\n"
+                                                                @"It is great as a backup and remains "
+                                                                @"safe when fallen in the wrong hands."
+                                              viewStyle:UIAlertViewStyleDefault initAlert:nil
+                                      tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                                          if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 0)
+                                              // Safe Export
+                                              [self showExportRevealPasswords:NO forVC:viewController];
+                                          if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
+                                              // Show Passwords
+                                              [self showExportRevealPasswords:YES forVC:viewController];
+                                      } cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Safe Export", @"Show Passwords",
+                                                                                          nil];
+                 } cancelTitle:@"Cancel" otherTitles:@"Export Sites", nil];
 }
 
 - (void)showExportRevealPasswords:(BOOL)revealPasswords forVC:(UIViewController *)viewController {
@@ -389,18 +390,18 @@
 
     if (revealPasswords)
         message = strf( @"Export of Master Password sites with passwords included.\n\n"
-                @"REMINDER: Make sure nobody else sees this file!  Passwords are visible!\n\n\n"
-                @"--\n"
-                @"%@\n"
-                @"Master Password %@, build %@",
+                        @"REMINDER: Make sure nobody else sees this file!  Passwords are visible!\n\n\n"
+                        @"--\n"
+                        @"%@\n"
+                        @"Master Password %@, build %@",
                 [self activeUserForMainThread].name,
                 [PearlInfoPlist get].CFBundleShortVersionString,
                 [PearlInfoPlist get].CFBundleVersion );
     else
         message = strf( @"Backup of Master Password sites.\n\n\n"
-                @"--\n"
-                @"%@\n"
-                @"Master Password %@, build %@",
+                        @"--\n"
+                        @"%@\n"
+                        @"Master Password %@, build %@",
                 [self activeUserForMainThread].name,
                 [PearlInfoPlist get].CFBundleShortVersionString,
                 [PearlInfoPlist get].CFBundleVersion );
@@ -425,22 +426,22 @@
                                            @"Changing the master password back to the old one will cause your passwords to revert as well."
                          viewStyle:UIAlertViewStyleDefault
                          initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-        if (buttonIndex == [alert cancelButtonIndex])
-            return;
+                if (buttonIndex == [alert cancelButtonIndex])
+                    return;
 
-        [moc performBlockAndWait:^{
-            inf( @"Unsetting master password for: %@.", user.userID );
-            user.keyID = nil;
-            [self forgetSavedKeyFor:user];
-            [moc saveToStore];
-        }];
+                [moc performBlockAndWait:^{
+                    inf( @"Unsetting master password for: %@.", user.userID );
+                    user.keyID = nil;
+                    [self forgetSavedKeyFor:user];
+                    [moc saveToStore];
+                }];
 
-        [self signOutAnimated:YES];
-        if (didReset)
-            didReset();
+                [self signOutAnimated:YES];
+                if (didReset)
+                    didReset();
 
-        MPCheckpoint( MPCheckpointChangeMP, nil );
-    }
+                MPCheckpoint( MPCheckpointChangeMP, nil );
+            }
                        cancelTitle:[PearlStrings get].commonButtonAbort
                        otherTitles:[PearlStrings get].commonButtonContinue, nil];
 }
@@ -482,11 +483,11 @@
                                                        @"or overwrite them with your current sites."
                                      viewStyle:UIAlertViewStyleDefault initAlert:nil
                              tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                    if (buttonIndex == [alert cancelButtonIndex])
-                        setConfirmationAnswer( NO );
-                    if (buttonIndex == [alert firstOtherButtonIndex])
-                        setConfirmationAnswer( YES );
-                }
+                                 if (buttonIndex == [alert cancelButtonIndex])
+                                     setConfirmationAnswer( NO );
+                                 if (buttonIndex == [alert firstOtherButtonIndex])
+                                     setConfirmationAnswer( YES );
+                             }
                                    cancelTitle:@"Use Old" otherTitles:@"Overwrite", nil];
             }];
         else
@@ -512,11 +513,11 @@
                                                        @"or overwrite them with your current iCloud sites."
                                      viewStyle:UIAlertViewStyleDefault initAlert:nil
                              tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                    if (buttonIndex == [alert cancelButtonIndex])
-                        setConfirmationAnswer( NO );
-                    if (buttonIndex == [alert firstOtherButtonIndex])
-                        setConfirmationAnswer( YES );
-                }
+                                 if (buttonIndex == [alert cancelButtonIndex])
+                                     setConfirmationAnswer( NO );
+                                 if (buttonIndex == [alert firstOtherButtonIndex])
+                                     setConfirmationAnswer( YES );
+                             }
                                    cancelTitle:@"Use Old" otherTitles:@"Overwrite", nil];
             }];
     }
@@ -547,7 +548,6 @@
         MPCheckpoint( MPCheckpointConfig, @{
                 @"rememberLogin"       : @([[MPConfig get].rememberLogin boolValue]),
                 @"iCloudEnabled"       : @([[MPiOSConfig get].iCloudEnabled boolValue]),
-                @"iCloudDecided"       : @([[MPConfig get].iCloudDecided boolValue]),
                 @"sendInfo"            : @([[MPiOSConfig get].sendInfo boolValue]),
                 @"helpHidden"          : @([[MPiOSConfig get].helpHidden boolValue]),
                 @"showQuickStart"      : @([[MPiOSConfig get].showSetup boolValue]),
@@ -583,6 +583,23 @@
     [self.fixCloudContentAlert cancelAlertAnimated:YES];
     [self.storeLoadingOverlay cancelOverlayAnimated:YES];
     [self.handleCloudDisabledAlert cancelAlertAnimated:YES];
+
+    if (isCloudStore)
+        [PearlAlert showAlertWithTitle:@"iCloud Support Deprecated" message:
+                        @"Master Password is moving away from iCloud due to limited platform support and reliability issues.  "
+                                @"\n\nMaster Password's generated passwords do not require syncing.  "
+                                @"Your sites will always have the same passwords on all your devices, even without iCloud.  "
+                                @"\n\niCloud continues to work for now but will be deactivated in a future update.  "
+                                @"Disable iCloud now to copy your iCloud sites to your device and avoid having to recreate them "
+                                @"when iCloud becomes discontinued."
+                             viewStyle:UIAlertViewStyleDefault initAlert:nil
+                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                         if (buttonIndex == [alert cancelButtonIndex])
+                             return;
+
+                         [[self storeManager] migrateCloudToLocal];
+                     }
+                           cancelTitle:@"Ignore For Now" otherTitles:@"Disable iCloud", nil];
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager failedLoadingStoreWithCause:(UbiquityStoreErrorCause)cause context:(id)context
@@ -607,17 +624,17 @@
 
     if (!self.handleCloudDisabledAlert)
         self.handleCloudDisabledAlert = [PearlAlert showAlertWithTitle:@"iCloud Login" message:
-                @"You haven't added an iCloud account to your device yet.\n"
-                        @"To add one, go into Apple's Settings -> iCloud."
+                        @"You haven't added an iCloud account to your device yet.\n"
+                                @"To add one, go into Apple's Settings -> iCloud."
                                                              viewStyle:UIAlertViewStyleDefault initAlert:nil
                                                      tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                    if (buttonIndex == alert.firstOtherButtonIndex) {
-                        [MPiOSConfig get].iCloudEnabled = @NO;
-                        return;
-                    }
+                                                         if (buttonIndex == alert.firstOtherButtonIndex) {
+                                                             [MPiOSConfig get].iCloudEnabled = @NO;
+                                                             return;
+                                                         }
 
-                    [self.storeManager reloadStore];
-                } cancelTitle:@"Try Again" otherTitles:@"Disable iCloud", nil];
+                                                         [self.storeManager reloadStore];
+                                                     } cancelTitle:@"Try Again" otherTitles:@"Disable iCloud", nil];
 
     return YES;
 }
@@ -631,27 +648,27 @@
                                                           message:@"Waiting for your other device to auto‑correct the problem..."
                                                         viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:
                     ^(UIAlertView *alert, NSInteger buttonIndex) {
-                if (buttonIndex == [alert firstOtherButtonIndex])
-                    wSelf.fixCloudContentAlert = [PearlAlert showAlertWithTitle:@"Fix iCloud Now" message:
-                            @"This problem can be auto‑corrected by opening the app on another device where you recently made changes.\n"
-                                    @"You can fix the problem from this device anyway, but recent changes from another device might get lost.\n\n"
-                                    @"You can also turn iCloud off for now."
-                                                                      viewStyle:UIAlertViewStyleDefault
-                                                                      initAlert:nil tappedButtonBlock:
-                                    ^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                                if (buttonIndex_ == alert_.cancelButtonIndex)
-                                    [wSelf showCloudContentAlert];
-                                if (buttonIndex_ == [alert_ firstOtherButtonIndex])
-                                    [wSelf.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:YES];
-                                if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
-                                    [MPiOSConfig get].iCloudEnabled = @NO;
-                            }
-                                                                    cancelTitle:[PearlStrings get].commonButtonBack
-                                                                    otherTitles:@"Fix Anyway",
-                                                                                @"Turn Off", nil];
-                if (buttonIndex == [alert firstOtherButtonIndex] + 1)
-                    [MPiOSConfig get].iCloudEnabled = @NO;
-            }                                         cancelTitle:nil otherTitles:@"Fix Now", @"Turn Off", nil];
+                        if (buttonIndex == [alert firstOtherButtonIndex])
+                            wSelf.fixCloudContentAlert = [PearlAlert showAlertWithTitle:@"Fix iCloud Now" message:
+                                            @"This problem can be auto‑corrected by opening the app on another device where you recently made changes.\n"
+                                                    @"You can fix the problem from this device anyway, but recent changes from another device might get lost.\n\n"
+                                                    @"You can also turn iCloud off for now."
+                                                                              viewStyle:UIAlertViewStyleDefault
+                                                                              initAlert:nil tappedButtonBlock:
+                                            ^(UIAlertView *alert_, NSInteger buttonIndex_) {
+                                                if (buttonIndex_ == alert_.cancelButtonIndex)
+                                                    [wSelf showCloudContentAlert];
+                                                if (buttonIndex_ == [alert_ firstOtherButtonIndex])
+                                                    [wSelf.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:YES];
+                                                if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
+                                                    [MPiOSConfig get].iCloudEnabled = @NO;
+                                            }
+                                                                            cancelTitle:[PearlStrings get].commonButtonBack
+                                                                            otherTitles:@"Fix Anyway",
+                                                                                        @"Turn Off", nil];
+                        if (buttonIndex == [alert firstOtherButtonIndex] + 1)
+                            [MPiOSConfig get].iCloudEnabled = @NO;
+                    }                                 cancelTitle:nil otherTitles:@"Fix Now", @"Turn Off", nil];
 }
 
 #pragma mark - Crashlytics

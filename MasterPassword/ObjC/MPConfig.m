@@ -10,7 +10,7 @@
 
 @implementation MPConfig
 
-@dynamic sendInfo, rememberLogin, iCloudDecided, checkInconsistency, hidePasswords, siteAttacker;
+@dynamic sendInfo, rememberLogin, checkInconsistency, hidePasswords, siteAttacker;
 
 - (id)init {
 
@@ -23,7 +23,6 @@
             NSStringFromSelector( @selector( sendInfo ) )           : @NO,
             NSStringFromSelector( @selector( rememberLogin ) )      : @NO,
             NSStringFromSelector( @selector( hidePasswords ) )      : @NO,
-            NSStringFromSelector( @selector( iCloudDecided ) )      : @NO,
             NSStringFromSelector( @selector( checkInconsistency ) ) : @NO,
             NSStringFromSelector( @selector( siteAttacker ) )       : @(MPAttacker1),
     }];

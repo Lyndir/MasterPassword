@@ -14,7 +14,6 @@
 @property(nonatomic, retain) NSNumber *rememberLogin;
 @property(nonatomic, retain) NSNumber *hidePasswords;
 
-@property(nonatomic, retain) NSNumber *iCloudDecided;
 @property(nonatomic, retain) NSNumber *checkInconsistency;
 
 @property(nonatomic, strong) NSNumber *siteAttacker;
