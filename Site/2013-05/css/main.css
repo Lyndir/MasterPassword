@@ -104,6 +104,13 @@ h2.inline, h3.inline, h4.inline {
 .box img {
     border:                     1px solid white;
 }
+img.block {
+    display:                    block;
+    border:                     1px solid black;
+    padding:                    4px;
+    margin:                     auto 1em;
+    width:                      640px;
+}
 
 .thumb {
     clear: both;
