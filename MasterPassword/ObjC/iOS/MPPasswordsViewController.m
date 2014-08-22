@@ -247,21 +247,15 @@ referenceSizeForHeaderInSection:(NSInteger)section {
         [[[self.fetchedResultsController.fetchedObjects firstObject] name] isEqualToString:query])
         _showTransientItem = NO;
     if ([self.passwordCollectionView numberOfSections] > 0) {
-        if (!_showTransientItem && _transientItem != NSNotFound) {
-            dbg( @"delete transient item: %d", [self.passwordCollectionView numberOfItemsInSection:0] - 1 );
+        if (!_showTransientItem && _transientItem != NSNotFound)
             [self.passwordCollectionView deleteItemsAtIndexPaths:
                     @[ [NSIndexPath indexPathForItem:_transientItem inSection:0] ]];
-        }
-        else if (_showTransientItem && _transientItem == NSNotFound) {
-            dbg( @"insert transient item: %d", objects );
+        else if (_showTransientItem && _transientItem == NSNotFound)
             [self.passwordCollectionView insertItemsAtIndexPaths:
                     @[ [NSIndexPath indexPathForItem:objects inSection:0] ]];
-        }
-        else if (_transientItem != NSNotFound) {
-            dbg( @"reload transient item: %d", objects );
+        else if (_transientItem != NSNotFound)
             [self.passwordCollectionView reloadItemsAtIndexPaths:
                     @[ [NSIndexPath indexPathForItem:_transientItem inSection:0] ]];
-        }
     }
 }
 
@@ -381,20 +375,14 @@ referenceSizeForHeaderInSection:(NSInteger)section {
             NSInteger fromSections = self.passwordCollectionView.numberOfSections;
             NSInteger toSections = [self numberOfSectionsInCollectionView:self.passwordCollectionView];
             for (NSInteger section = 0; section < MAX( toSections, fromSections ); ++section) {
-                if (section >= fromSections) {
-                    dbg( @"insertSections:%d", section );
+                if (section >= fromSections)
                     [self.passwordCollectionView insertSections:[NSIndexSet indexSetWithIndex:section]];
-                }
-                else if (section >= toSections) {
-                    dbg( @"deleteSections:%d", section );
+                else if (section >= toSections)
                     [self.passwordCollectionView deleteSections:[NSIndexSet indexSetWithIndex:section]];
-                }
-                else {
-                    dbg( @"reloadItemsInSection:%d", section );
+                else
                     [self.passwordCollectionView reloadItemsFromArray:[oldSections[section] objects]
                                                               toArray:[[self.fetchedResultsController sections][section] objects]
                                                             inSection:section];
-                }
             }
         }                                     completion:^(BOOL finished) {
             if (finished)
