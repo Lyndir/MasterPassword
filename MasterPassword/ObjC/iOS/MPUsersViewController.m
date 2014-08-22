@@ -786,7 +786,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
         // Manage the entry container depending on whether a user is activate or not.
         switch (activeUserState) {
             case MPActiveUserStateNone: {
-                [[self.navigationBarToTopConstraint updatePriority:UILayoutPriorityDefaultHigh] layoutIfNeeded];
+                [self.navigationBarToTopConstraint updatePriority:UILayoutPriorityDefaultHigh];
                 self.avatarCollectionView.scrollEnabled = YES;
                 self.entryContainer.alpha = 0;
                 self.footerContainer.alpha = 1;
@@ -796,7 +796,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
             case MPActiveUserStateUserName:
             case MPActiveUserStateMasterPasswordChoice:
             case MPActiveUserStateMasterPasswordConfirmation: {
-                [[self.navigationBarToTopConstraint updatePriority:UILayoutPriorityDefaultHigh] layoutIfNeeded];
+                [self.navigationBarToTopConstraint updatePriority:UILayoutPriorityDefaultHigh];
                 self.avatarCollectionView.scrollEnabled = NO;
                 self.entryContainer.alpha = 1;
                 self.footerContainer.alpha = 1;
@@ -804,13 +804,15 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 break;
             }
             case MPActiveUserStateMinimized: {
-                [[self.navigationBarToTopConstraint updatePriority:1] layoutIfNeeded];
+                [self.navigationBarToTopConstraint updatePriority:1];
                 self.avatarCollectionView.scrollEnabled = NO;
                 self.entryContainer.alpha = 0;
                 self.footerContainer.alpha = 0;
                 break;
             }
         }
+
+        [self.view layoutIfNeeded];
     }                completion:^(BOOL finished) {
         [_afterUpdates setSuspended:NO];
     }];
