@@ -50,16 +50,14 @@
             [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-5"] caption:
                     @"Your sites are easy to find and sorted by recency.\nTap any site to copy its password.\nYou can now switch and paste it in another app."],
             [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-6"] caption:
-                    @"If the site you're looking for isn't easy to find, just type a few letters in the search box to filter the site list."],
-            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-7"] caption:
-                    @"If you ever need a new password for the site, just tap the plus icon to increment its counter.\nYou can hold down to reset it back to 1."],
-            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-8"] caption:
                     @"The user icon lets you save your site's login.\nThis is useful if you find it hard to remember the user name for this site."],
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-7"] caption:
+                    @"To make changes to the site password, tap the settings icon or swipe left to reveal extra buttons."],
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-8"] caption:
+                    @"If you ever need a new password for the site, just tap the plus icon to increment its counter.\nYou can hold down to reset it back to 1."],
             [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-9"] caption:
-                    @"Master Password lets you swipe to upgrade or downgrade your password's complexity.\nSome sites won't let you use complex passwords."],
+                    @"Use the list icon to upgrade or downgrade your password's complexity.\nSome sites won't let you use complex passwords."],
             [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-10"] caption:
-                    @"To delete a site, swipe it all the way left to find the \"Delete Site\" button."],
-            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-11"] caption:
                     @"If you have a password that you cannot change, you can save it as a Personal password.  Device Private means the site will not be backed up."],
     ];
 }

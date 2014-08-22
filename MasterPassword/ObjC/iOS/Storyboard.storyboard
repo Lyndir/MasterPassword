@@ -2435,7 +2435,7 @@ See </string>
         <image name="icon_trash.png" width="32" height="32"/>
         <image name="icon_up.png" width="32" height="32"/>
         <image name="identity.png" width="82" height="80"/>
-        <image name="image-0.png" width="256" height="384"/>
+        <image name="image-0.png" width="320" height="568"/>
         <image name="tip_basic_black.png" width="210" height="60"/>
         <image name="ui_spinner.png" width="75" height="75"/>
         <image name="ui_textfield.png" width="158" height="34"/>

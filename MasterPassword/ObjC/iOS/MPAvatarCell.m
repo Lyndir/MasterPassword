@@ -273,7 +273,7 @@ const long MPAvatarAdd = 10000;
         self.avatarImageView.layer.cornerRadius = self.avatarImageView.bounds.size.height / 2;
         self.spinner.alpha = self.spinnerActive? 1: 0;
 
-        [self layoutIfNeeded];
+        [self layoutSubviews];
     }                completion:nil];
 }
 

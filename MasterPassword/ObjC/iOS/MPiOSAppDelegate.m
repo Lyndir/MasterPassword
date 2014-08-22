@@ -565,6 +565,7 @@
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager willLoadStoreIsCloud:(BOOL)isCloudStore {
 
     dispatch_async( dispatch_get_main_queue(), ^{
+        [self signOutAnimated:YES];
         [self.handleCloudContentAlert cancelAlertAnimated:YES];
         if (!self.storeLoadingOverlay)
             self.storeLoadingOverlay = [PearlOverlay showProgressOverlayWithTitle:@"Loading Sites"];
