@@ -3592,7 +3592,7 @@
 					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
 				);
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6407ECED-9FF3-4F04-B40E-5B3E771D603D";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "923E2981-1F88-4F05-9408-9EC085C53225";
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
 				TARGETED_DEVICE_FAMILY = 1;
