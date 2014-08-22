@@ -1262,6 +1262,13 @@
                                                                                         <action selector="doMode:" destination="W2g-yv-V3V" eventType="touchUpInside" id="72U-sh-nce"/>
                                                                                     </connections>
                                                                                 </button>
+                                                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⬇︎" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tuh-Au-J9k">
+                                                                                    <rect key="frame" x="270" y="35" width="17" height="21"/>
+                                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                                                    <nil key="highlightedColor"/>
+                                                                                </label>
                                                                                 <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="5SS-x0-icl">
                                                                                     <rect key="frame" x="138" y="77" width="23" height="37"/>
                                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1273,6 +1280,7 @@
                                                                                 <constraint firstAttribute="bottom" secondItem="tl3-hd-x35" secondAttribute="bottom" id="2x2-iA-utK"/>
                                                                                 <constraint firstItem="b5f-wN-2xb" firstAttribute="centerY" secondItem="I0v-ou-hDb" secondAttribute="centerY" id="KPv-e0-uR0"/>
                                                                                 <constraint firstItem="LvK-28-fbm" firstAttribute="leading" secondItem="tl3-hd-x35" secondAttribute="trailing" id="NXL-Fd-whf"/>
+                                                                                <constraint firstItem="b5f-wN-2xb" firstAttribute="top" secondItem="tuh-Au-J9k" secondAttribute="bottom" id="SBC-kJ-Gku"/>
                                                                                 <constraint firstItem="b5f-wN-2xb" firstAttribute="centerY" secondItem="Agd-0J-z5o" secondAttribute="centerY" id="W01-oa-2rY"/>
                                                                                 <constraint firstAttribute="bottom" secondItem="LvK-28-fbm" secondAttribute="bottom" id="ZBx-Lf-XHF"/>
                                                                                 <constraint firstItem="b5f-wN-2xb" firstAttribute="centerY" secondItem="vGk-t6-hZn" secondAttribute="centerY" id="fGB-8g-u5b"/>
@@ -1280,6 +1288,7 @@
                                                                                 <constraint firstItem="tl3-hd-x35" firstAttribute="top" secondItem="bff-RU-OcY" secondAttribute="top" id="jc9-39-FY3"/>
                                                                                 <constraint firstItem="OwP-sb-Wxl" firstAttribute="centerY" secondItem="b5f-wN-2xb" secondAttribute="centerY" id="m22-uE-sVm"/>
                                                                                 <constraint firstItem="K8q-bM-tzh" firstAttribute="centerY" secondItem="b5f-wN-2xb" secondAttribute="centerY" id="ofO-r3-bjz"/>
+                                                                                <constraint firstItem="b5f-wN-2xb" firstAttribute="centerX" secondItem="tuh-Au-J9k" secondAttribute="centerX" id="pYG-bz-kd8"/>
                                                                                 <constraint firstAttribute="trailing" secondItem="LvK-28-fbm" secondAttribute="trailing" id="r9d-ym-Frs"/>
                                                                                 <constraint firstItem="LvK-28-fbm" firstAttribute="top" secondItem="bff-RU-OcY" secondAttribute="top" id="uqb-hB-Iq8"/>
                                                                                 <constraint firstItem="b5f-wN-2xb" firstAttribute="centerY" secondItem="uZi-FT-Fe8" secondAttribute="centerY" id="xz2-kK-B4g"/>
@@ -1337,6 +1346,7 @@
                                                             <outlet property="counterButton" destination="uZi-FT-Fe8" id="oaF-bB-Sgc"/>
                                                             <outlet property="counterLabel" destination="PKP-M9-T8E" id="m9u-Qx-Z9N"/>
                                                             <outlet property="editButton" destination="qBo-Kw-vN9" id="g0S-0o-e3D"/>
+                                                            <outlet property="indicatorView" destination="tuh-Au-J9k" id="K2E-de-G5P"/>
                                                             <outlet property="loginModeButton" destination="Agd-0J-z5o" id="VQI-nl-5Yh"/>
                                                             <outlet property="loginNameField" destination="3I9-vf-IZK" id="jK4-LI-4ST"/>
                                                             <outlet property="modeButton" destination="b5f-wN-2xb" id="m2X-BZ-Lbv"/>
@@ -2439,6 +2449,6 @@ See </string>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="GZk-I4-JyH"/>
-        <segue reference="k2G-nL-x3l"/>
+        <segue reference="Ql4-wf-T8u"/>
     </inferredMetricsTieBreakers>
 </document>

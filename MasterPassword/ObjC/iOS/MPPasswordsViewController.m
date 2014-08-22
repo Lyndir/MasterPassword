@@ -22,6 +22,7 @@
 #import "MPPopdownSegue.h"
 #import "MPAppDelegate_Key.h"
 #import "MPPasswordCell.h"
+#import "UICollectionView+PearlReloadFromArray.h"
 
 @interface MPPasswordsViewController()<NSFetchedResultsControllerDelegate>
 
@@ -36,10 +37,11 @@
     NSArray *_notificationObservers;
     __weak UITapGestureRecognizer *_passwordsDismissRecognizer;
     NSFetchedResultsController *_fetchedResultsController;
-    BOOL _exactMatch;
     UIColor *_backgroundColor;
     UIColor *_darkenedBackgroundColor;
     __weak UIViewController *_popdownVC;
+    BOOL _showTransientItem;
+    NSUInteger _transientItem;
 }
 
 #pragma mark - Life
@@ -50,6 +52,7 @@
 
     _backgroundColor = self.passwordCollectionView.backgroundColor;
     _darkenedBackgroundColor = [_backgroundColor colorWithAlphaComponent:0.6f];
+    _transientItem = NSNotFound;
 
     self.view.backgroundColor = [UIColor clearColor];
     [self.passwordCollectionView automaticallyAdjustInsetsForKeyboard];
@@ -115,9 +118,12 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 
-    return ![MPiOSAppDelegate get].activeUserOID? 0:
-           ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[section]).numberOfObjects +
-           (!_exactMatch && [[self query] length]? 1: 0);
+    if (![MPiOSAppDelegate get].activeUserOID)
+        return 0;
+
+    NSUInteger objects = ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[section]).numberOfObjects;
+    _transientItem = _showTransientItem? objects: NSNotFound;
+    return objects + (_showTransientItem? 1: 0);
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -152,20 +158,23 @@ referenceSizeForHeaderInSection:(NSInteger)section {
      forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
 
     if (controller == _fetchedResultsController) {
-        switch (type) {
-            case NSFetchedResultsChangeInsert:
-                [self.passwordCollectionView insertItemsAtIndexPaths:@[ newIndexPath ]];
-                break;
-            case NSFetchedResultsChangeDelete:
-                [self.passwordCollectionView deleteItemsAtIndexPaths:@[ indexPath ]];
-                break;
-            case NSFetchedResultsChangeMove:
-                [self.passwordCollectionView moveItemAtIndexPath:indexPath toIndexPath:newIndexPath];
-                break;
-            case NSFetchedResultsChangeUpdate:
-                [self.passwordCollectionView reloadItemsAtIndexPaths:@[ indexPath ]];
-                break;
-        }
+        [self.passwordCollectionView performBatchUpdates:^{
+            [self fetchedItemsDidUpdate];
+            switch (type) {
+                case NSFetchedResultsChangeInsert:
+                    [self.passwordCollectionView insertItemsAtIndexPaths:@[ newIndexPath ]];
+                    break;
+                case NSFetchedResultsChangeDelete:
+                    [self.passwordCollectionView deleteItemsAtIndexPaths:@[ indexPath ]];
+                    break;
+                case NSFetchedResultsChangeMove:
+                    [self.passwordCollectionView moveItemAtIndexPath:indexPath toIndexPath:newIndexPath];
+                    break;
+                case NSFetchedResultsChangeUpdate:
+                    [self.passwordCollectionView reloadItemsAtIndexPaths:@[ indexPath ]];
+                    break;
+            }
+        }                                     completion:nil];
     }
 }
 
@@ -229,6 +238,33 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 
 #pragma mark - Private
 
+- (void)fetchedItemsDidUpdate {
+
+    NSString *query = self.query;
+    _showTransientItem = [query length] > 0;
+    NSUInteger objects = ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[0]).numberOfObjects;
+    if (_showTransientItem && objects == 1 &&
+        [[[self.fetchedResultsController.fetchedObjects firstObject] name] isEqualToString:query])
+        _showTransientItem = NO;
+    if ([self.passwordCollectionView numberOfSections] > 0) {
+        if (!_showTransientItem && _transientItem != NSNotFound) {
+            dbg( @"delete transient item: %d", [self.passwordCollectionView numberOfItemsInSection:0] - 1 );
+            [self.passwordCollectionView deleteItemsAtIndexPaths:
+                    @[ [NSIndexPath indexPathForItem:_transientItem inSection:0] ]];
+        }
+        else if (_showTransientItem && _transientItem == NSNotFound) {
+            dbg( @"insert transient item: %d", objects );
+            [self.passwordCollectionView insertItemsAtIndexPaths:
+                    @[ [NSIndexPath indexPathForItem:objects inSection:0] ]];
+        }
+        else if (_transientItem != NSNotFound) {
+            dbg( @"reload transient item: %d", objects );
+            [self.passwordCollectionView reloadItemsAtIndexPaths:
+                    @[ [NSIndexPath indexPathForItem:_transientItem inSection:0] ]];
+        }
+    }
+}
+
 - (void)registerObservers {
 
     if ([_notificationObservers count])
@@ -239,34 +275,34 @@ referenceSizeForHeaderInSection:(NSInteger)section {
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:UIApplicationWillResignActiveNotification object:nil
                                  queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                Strongify( self );
+                        Strongify( self );
 
-                self.passwordSelectionContainer.alpha = 0;
-            }],
+                        self.passwordSelectionContainer.alpha = 0;
+                    }],
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:MPSignedOutNotification object:nil
                                  queue:nil usingBlock:^(NSNotification *note) {
-                Strongify( self );
+                        Strongify( self );
 
-                _fetchedResultsController = nil;
-                self.passwordsSearchBar.text = nil;
-                [self updatePasswords];
-            }],
+                        _fetchedResultsController = nil;
+                        self.passwordsSearchBar.text = nil;
+                        [self updatePasswords];
+                    }],
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:UIApplicationDidBecomeActiveNotification object:nil
                                  queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                Strongify( self );
+                        Strongify( self );
 
-                [self updatePasswords];
-                [UIView animateWithDuration:1 animations:^{
-                    self.passwordSelectionContainer.alpha = 1;
-                }];
-            }],
+                        [self updatePasswords];
+                        [UIView animateWithDuration:1 animations:^{
+                            self.passwordSelectionContainer.alpha = 1;
+                        }];
+                    }],
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:MPCheckConfigNotification object:nil queue:[NSOperationQueue mainQueue]
                             usingBlock:^(NSNotification *note) {
-                [self updateConfigKey:note.object];
-            }],
+                                [self updateConfigKey:note.object];
+                            }],
     ];
 }
 
@@ -329,6 +365,8 @@ referenceSizeForHeaderInSection:(NSInteger)section {
     }
 
     [self.fetchedResultsController.managedObjectContext performBlock:^{
+        NSArray *oldSections = [self.fetchedResultsController sections];
+
         NSError *error = nil;
         self.fetchedResultsController.fetchRequest.predicate =
                 [query length]?
@@ -337,37 +375,32 @@ referenceSizeForHeaderInSection:(NSInteger)section {
         if (![self.fetchedResultsController performFetch:&error])
             err( @"Couldn't fetch elements: %@", error );
 
-        _exactMatch = NO;
-        for (MPElementEntity *entity in self.fetchedResultsController.fetchedObjects)
-            if ([entity.name isEqualToString:query]) {
-                _exactMatch = YES;
-                break;
-            }
+        [self.passwordCollectionView performBatchUpdates:^{
+            [self fetchedItemsDidUpdate];
 
-        PearlMainQueue( ^{
-            [self.passwordCollectionView performBatchUpdates:^{
-                NSInteger fromSections = self.passwordCollectionView.numberOfSections;
-                NSInteger toSections = [self numberOfSectionsInCollectionView:self.passwordCollectionView];
-                for (int section = 0; section < MAX( toSections, fromSections ); section++) {
-                    if (section >= fromSections) {
-                        dbg( @"insertSections:%d", section );
-                        [self.passwordCollectionView insertSections:[NSIndexSet indexSetWithIndex:section]];
-                    }
-                    else if (section >= toSections) {
-                        dbg( @"deleteSections:%d", section );
-                        [self.passwordCollectionView deleteSections:[NSIndexSet indexSetWithIndex:section]];
-                    }
-                    else {
-                        dbg( @"reloadSections:%d", section );
-                        [self.passwordCollectionView reloadSections:[NSIndexSet indexSetWithIndex:section]];
-                    }
+            NSInteger fromSections = self.passwordCollectionView.numberOfSections;
+            NSInteger toSections = [self numberOfSectionsInCollectionView:self.passwordCollectionView];
+            for (NSInteger section = 0; section < MAX( toSections, fromSections ); ++section) {
+                if (section >= fromSections) {
+                    dbg( @"insertSections:%d", section );
+                    [self.passwordCollectionView insertSections:[NSIndexSet indexSetWithIndex:section]];
                 }
-            }                                     completion:^(BOOL finished) {
-                if (finished)
-                    [self.passwordCollectionView setContentOffset:CGPointMake( 0, -self.passwordCollectionView.contentInset.top )
-                                                         animated:YES];
-            }];
-        } );
+                else if (section >= toSections) {
+                    dbg( @"deleteSections:%d", section );
+                    [self.passwordCollectionView deleteSections:[NSIndexSet indexSetWithIndex:section]];
+                }
+                else {
+                    dbg( @"reloadItemsInSection:%d", section );
+                    [self.passwordCollectionView reloadItemsFromArray:[oldSections[section] objects]
+                                                              toArray:[[self.fetchedResultsController sections][section] objects]
+                                                            inSection:section];
+                }
+            }
+        }                                     completion:^(BOOL finished) {
+            if (finished)
+                [self.passwordCollectionView setContentOffset:CGPointMake( 0, -self.passwordCollectionView.contentInset.top )
+                                                     animated:YES];
+        }];
     }];
 }
 

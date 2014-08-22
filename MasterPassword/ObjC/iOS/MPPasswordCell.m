@@ -35,6 +35,7 @@
 @property(nonatomic, strong) IBOutlet UIButton *editButton;
 @property(nonatomic, strong) IBOutlet UIScrollView *modeScrollView;
 @property(nonatomic, strong) IBOutlet UIButton *selectionButton;
+@property(nonatomic, strong) IBOutlet UIView *indicatorView;
 
 @property(nonatomic) MPPasswordCellMode mode;
 @property(nonatomic, copy) NSString *transientSite;
@@ -66,12 +67,19 @@
 
     [self.selectionButton observeKeyPath:@"highlighted"
                                withBlock:^(id from, id to, NSKeyValueChange cause, UIButton *button) {
-        button.layer.shadowOpacity = button.selected? 1: button.highlighted? 0.3f: 0;
-    }];
+                                   button.layer.shadowOpacity = button.selected? 1: button.highlighted? 0.3f: 0;
+                               }];
     [self.selectionButton observeKeyPath:@"selected"
                                withBlock:^(id from, id to, NSKeyValueChange cause, UIButton *button) {
-        button.layer.shadowOpacity = button.selected? 1: button.highlighted? 0.3f: 0;
-    }];
+                                   button.layer.shadowOpacity = button.selected? 1: button.highlighted? 0.3f: 0;
+                               }];
+
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position.y"];
+    animation.byValue = @(10);
+    animation.repeatCount = HUGE_VALF;
+    animation.autoreverses = YES;
+    animation.duration = 0.3f;
+    [self.indicatorView.layer addAnimation:animation forKey:@"bounce"];
 }
 
 - (void)prepareForReuse {
@@ -79,6 +87,7 @@
     [super prepareForReuse];
 
     _elementOID = nil;
+    self.transientSite = nil;
     self.loginModeButton.selected = NO;
     self.mode = MPPasswordCellModePassword;
     [self updateAnimated:NO];
@@ -182,14 +191,14 @@
 
     [PearlSheet showSheetWithTitle:strf( @"Delete %@?", element.name ) viewStyle:UIActionSheetStyleAutomatic
                          initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
-        if (buttonIndex == [sheet cancelButtonIndex])
-            return;
+                if (buttonIndex == [sheet cancelButtonIndex])
+                    return;
 
-        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-            [context deleteObject:[self elementInContext:context]];
-            [context saveToStore];
-        }];
-    }                  cancelTitle:@"Cancel" destructiveTitle:@"Delete Site" otherTitles:nil];
+                [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                    [context deleteObject:[self elementInContext:context]];
+                    [context saveToStore];
+                }];
+            }          cancelTitle:@"Cancel" destructiveTitle:@"Delete Site" otherTitles:nil];
 }
 
 - (IBAction)doChangeType:(UIButton *)sender {
@@ -198,27 +207,28 @@
 
     [PearlSheet showSheetWithTitle:@"Change Password Type" viewStyle:UIActionSheetStyleAutomatic
                          initSheet:^(UIActionSheet *sheet) {
-        MPElementEntity *mainElement = [self elementInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
-        for (NSNumber *typeNumber in [MPAlgorithmDefault allTypes]) {
-            MPElementType type = [typeNumber unsignedIntegerValue];
-            NSString *typeName = [MPAlgorithmDefault nameOfType:type];
-            if (type == mainElement.type)
-                [sheet addButtonWithTitle:strf( @"● %@", typeName )];
-            else
-                [sheet addButtonWithTitle:typeName];
-        }
-    } tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
-        if (buttonIndex == [sheet cancelButtonIndex])
-            return;
+                             MPElementEntity
+                                     *mainElement = [self elementInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
+                             for (NSNumber *typeNumber in [MPAlgorithmDefault allTypes]) {
+                                 MPElementType type = [typeNumber unsignedIntegerValue];
+                                 NSString *typeName = [MPAlgorithmDefault nameOfType:type];
+                                 if (type == mainElement.type)
+                                     [sheet addButtonWithTitle:strf( @"● %@", typeName )];
+                                 else
+                                     [sheet addButtonWithTitle:typeName];
+                             }
+                         } tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
+                if (buttonIndex == [sheet cancelButtonIndex])
+                    return;
 
-        MPElementType type = [[MPAlgorithmDefault allTypes][buttonIndex] unsignedIntegerValue]?: MPElementTypeGeneratedLong;
+                MPElementType type = [[MPAlgorithmDefault allTypes][buttonIndex] unsignedIntegerValue]?: MPElementTypeGeneratedLong;
 
-        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-            MPElementEntity *element = [self elementInContext:context];
-            element = [[MPiOSAppDelegate get] changeElement:element saveInContext:context toType:type];
-            [self setElement:element animated:YES];
-        }];
-    }                  cancelTitle:@"Cancel" destructiveTitle:nil otherTitles:nil];
+                [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                    MPElementEntity *element = [self elementInContext:context];
+                    element = [[MPiOSAppDelegate get] changeElement:element saveInContext:context toType:type];
+                    [self setElement:element animated:YES];
+                }];
+            }          cancelTitle:@"Cancel" destructiveTitle:nil otherTitles:nil];
 }
 
 - (IBAction)doEdit:(UIButton *)sender {
@@ -318,19 +328,19 @@
                                message:strf( @"Remember site named:\n%@", self.transientSite )
                              viewStyle:UIAlertViewStyleDefault
                              initAlert:nil tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-            if (buttonIndex == [alert cancelButtonIndex]) {
-                self.selectionButton.selected = NO;
-                return;
-            }
+                    if (buttonIndex == [alert cancelButtonIndex]) {
+                        self.selectionButton.selected = NO;
+                        return;
+                    }
 
-            [[MPiOSAppDelegate get]
-                    addElementNamed:self.transientSite completion:^(MPElementEntity *element, NSManagedObjectContext *context) {
-                [self copyContentOfElement:element saveInContext:context];
-                PearlMainQueue( ^{
-                    self.selectionButton.selected = NO;
-                } );
-            }];
-        }                  cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonYes, nil];
+                    [[MPiOSAppDelegate get]
+                            addElementNamed:self.transientSite completion:^(MPElementEntity *element, NSManagedObjectContext *context) {
+                        [self copyContentOfElement:element saveInContext:context];
+                        PearlMainQueue( ^{
+                            self.selectionButton.selected = NO;
+                        } );
+                    }];
+                }          cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:[PearlStrings get].commonButtonYes, nil];
         return;
     }
 
@@ -372,12 +382,38 @@
         self.passwordField.alpha = self.loginModeButton.selected? 0: 1;
         self.loginNameField.alpha = self.loginModeButton.selected? 1: 0;
         self.modeButton.alpha = self.transientSite? 0: 1;
+        self.loginModeButton.alpha = self.transientSite? 0: 1;
         self.counterLabel.alpha = self.counterButton.alpha = mainElement.type & MPElementTypeClassGenerated? 1: 0;
         self.modeButton.selected = self.mode == MPPasswordCellModeSettings;
         self.pageControl.currentPage = self.mode == MPPasswordCellModePassword? 0: 1;
         self.strengthLabel.alpha = self.mode == MPPasswordCellModePassword? 0: 1;
         self.editButton.enabled = self.loginModeButton.selected || mainElement.type & MPElementTypeClassStored;
+        self.modeScrollView.scrollEnabled = !self.transientSite;
+        self.pageControl.alpha = self.transientSite? 0: 1;
         [self.modeScrollView setContentOffset:CGPointMake( self.mode * self.modeScrollView.frame.size.width, 0 ) animated:animated];
+
+        // Indicator
+        if (self.loginModeButton.selected) {
+            if ([mainElement.loginName length])
+                self.indicatorView.alpha = 0;
+            else {
+                self.indicatorView.alpha = 1;
+                [self.indicatorView removeFromSuperview];
+                [self.modeScrollView addSubview:self.indicatorView];
+                [self.contentView addConstraintsWithVisualFormat:@"V:[indicator][view]" options:NSLayoutFormatAlignAllCenterX
+                                                         metrics:nil views:@{
+                                @"indicator" : self.indicatorView,
+                                @"view"      : self.mode == MPPasswordCellModeSettings? self.editButton: self.modeButton
+                        }];
+            }
+        }
+        switch (self.mode) {
+            case MPPasswordCellModePassword:
+                if (mainElement.type & MPElementTypeClassStored)
+                    break;
+            case MPPasswordCellModeSettings:
+                break;
+        }
 
         // Site Name
         self.siteNameLabel.text = strl( @"%@ - %@", self.transientSite?: mainElement.name,
@@ -389,13 +425,13 @@
         self.passwordField.attributedPlaceholder = stra(
                 mainElement.type & MPElementTypeClassStored? strl( @"No password" ):
                 mainElement.type & MPElementTypeClassGenerated? strl( @"..." ): @"", @{
-                        NSForegroundColorAttributeName : [UIColor whiteColor]
-                } );
+                NSForegroundColorAttributeName : [UIColor whiteColor]
+        } );
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             NSString *password;
             if (self.transientSite)
                 password = [MPAlgorithmDefault generateContentNamed:self.transientSite ofType:
-                        [[MPiOSAppDelegate get] activeUserInContext:context].defaultType?: MPElementTypeGeneratedLong
+                                [[MPiOSAppDelegate get] activeUserInContext:context].defaultType?: MPElementTypeGeneratedLong
                                                         withCounter:1 usingKey:[MPiOSAppDelegate get].key];
             else
                 password = [[self elementInContext:context] resolveContentUsingKey:[MPiOSAppDelegate get].key];
@@ -411,6 +447,21 @@
             PearlMainQueue( ^{
                 self.passwordField.text = password;
                 self.strengthLabel.text = timeToCrackString;
+
+                if (!self.loginModeButton.selected) {
+                    if ([password length])
+                        self.indicatorView.alpha = 0;
+                    else {
+                        self.indicatorView.alpha = 1;
+                        [self.indicatorView removeFromSuperview];
+                        [self.modeScrollView addSubview:self.indicatorView];
+                        [self.contentView addConstraintsWithVisualFormat:@"V:[indicator][view]" options:NSLayoutFormatAlignAllCenterX
+                                                                 metrics:nil views:@{
+                                        @"indicator" : self.indicatorView,
+                                        @"view"      : self.mode == MPPasswordCellModeSettings? self.editButton: self.modeButton
+                                }];
+                    }
+                }
             } );
         }];
 
