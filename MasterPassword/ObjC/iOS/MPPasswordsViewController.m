@@ -32,7 +32,8 @@
 @end
 
 @implementation MPPasswordsViewController {
-    __weak id _storeObserver;
+    __weak id _storeChangingObserver;
+    __weak id _storeChangedObserver;
     __weak id _mocObserver;
     NSArray *_notificationObservers;
     __weak UITapGestureRecognizer *_passwordsDismissRecognizer;
@@ -275,7 +276,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
                     }],
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:MPSignedOutNotification object:nil
-                                 queue:nil usingBlock:^(NSNotification *note) {
+                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
                         Strongify( self );
 
                         _fetchedResultsController = nil;
@@ -293,8 +294,8 @@ referenceSizeForHeaderInSection:(NSInteger)section {
                         }];
                     }],
             [[NSNotificationCenter defaultCenter]
-                    addObserverForName:MPCheckConfigNotification object:nil queue:[NSOperationQueue mainQueue]
-                            usingBlock:^(NSNotification *note) {
+                    addObserverForName:MPCheckConfigNotification object:nil
+                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
                                 [self updateConfigKey:note.object];
                             }],
     ];
@@ -314,17 +315,25 @@ referenceSizeForHeaderInSection:(NSInteger)section {
     NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
     if (!_mocObserver && mainContext)
         _mocObserver = [[NSNotificationCenter defaultCenter]
-                addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:mainContext
-                             queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-//                    Strongify(self);
-//                    [self updatePasswords];
+                addObserverForName:NSManagedObjectContextDidSaveNotification object:mainContext
+                             queue:nil usingBlock:^(NSNotification *note) {
+                    if (![[MPiOSAppDelegate get] activeUserInContext:mainContext])
+                        [[MPiOSAppDelegate get] signOutAnimated:YES];
                 }];
-    if (!_storeObserver)
-        _storeObserver = [[NSNotificationCenter defaultCenter]
-                addObserverForName:USMStoreDidChangeNotification object:nil
-                             queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+    if (!_storeChangingObserver)
+        _storeChangingObserver = [[NSNotificationCenter defaultCenter]
+                addObserverForName:USMStoreWillChangeNotification object:nil
+                             queue:nil usingBlock:^(NSNotification *note) {
                     Strongify( self );
-                    _fetchedResultsController = nil;
+                    if (self->_mocObserver)
+                        [[NSNotificationCenter defaultCenter] removeObserver:self->_mocObserver];
+                }];
+    if (!_storeChangedObserver)
+        _storeChangedObserver = [[NSNotificationCenter defaultCenter]
+                addObserverForName:USMStoreDidChangeNotification object:nil
+                             queue:nil usingBlock:^(NSNotification *note) {
+                    Strongify( self );
+                    self->_fetchedResultsController = nil;
                     [self updatePasswords];
                 }];
 }
@@ -333,8 +342,10 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 
     if (_mocObserver)
         [[NSNotificationCenter defaultCenter] removeObserver:_mocObserver];
-    if (_storeObserver)
-        [[NSNotificationCenter defaultCenter] removeObserver:_storeObserver];
+    if (_storeChangingObserver)
+        [[NSNotificationCenter defaultCenter] removeObserver:_storeChangingObserver];
+    if (_storeChangedObserver)
+        [[NSNotificationCenter defaultCenter] removeObserver:_storeChangedObserver];
 }
 
 - (void)updateConfigKey:(NSString *)key {
@@ -350,8 +361,8 @@ referenceSizeForHeaderInSection:(NSInteger)section {
     NSString *query = self.query;
     NSManagedObjectID *activeUserOID = [MPiOSAppDelegate get].activeUserOID;
     if (!activeUserOID) {
-        self.passwordsSearchBar.text = nil;
         PearlMainQueue( ^{
+            self.passwordsSearchBar.text = nil;
             [self.passwordCollectionView reloadData];
             [self.passwordCollectionView setContentOffset:CGPointMake( 0, -self.passwordCollectionView.contentInset.top ) animated:YES];
         } );
@@ -442,11 +453,6 @@ referenceSizeForHeaderInSection:(NSInteger)section {
         [[[MPPopdownSegue alloc] initWithIdentifier:@"unwind-popdown" source:_popdownVC destination:self] perform];
     else
         self.popdownToTopConstraint.priority = UILayoutPriorityDefaultHigh;
-}
-
-- (IBAction)signOut:(id)sender {
-
-    [[MPiOSAppDelegate get] signOutAnimated:YES];
 }
 
 @end

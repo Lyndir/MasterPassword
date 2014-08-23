@@ -50,7 +50,8 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 @end
 
 @implementation MPUsersViewController {
-    __weak id _storeObserver;
+    __weak id _storeChangingObserver;
+    __weak id _storeChangedObserver;
     __weak id _mocObserver;
     NSArray *_notificationObservers;
     NSString *_masterPasswordChoice;
@@ -382,6 +383,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
                     [context deleteObject:user_];
                     [context saveToStore];
+                    [self reloadUsers]; // I do NOT understand why our ObjectsDidChangeNotification isn't firing on saveToStore.
                 }];
                 return;
             }
@@ -623,7 +625,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     if (!_mocObserver && mainContext)
         _mocObserver = [[NSNotificationCenter defaultCenter]
                 addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:mainContext
-                             queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+                             queue:nil usingBlock:^(NSNotification *note) {
                     Strongify(self);
                     NSSet *insertedObjects = note.userInfo[NSInsertedObjectsKey];
                     NSSet *deletedObjects = note.userInfo[NSDeletedObjectsKey];
@@ -633,10 +635,18 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                             }]] count])
                         [self reloadUsers];
                 }];
-    if (!_storeObserver)
-        _storeObserver = [[NSNotificationCenter defaultCenter]
+    if (!_storeChangingObserver)
+        _storeChangingObserver = [[NSNotificationCenter defaultCenter]
+                addObserverForName:USMStoreWillChangeNotification object:nil
+                             queue:nil usingBlock:^(NSNotification *note) {
+                    Strongify(self);
+                    if (self->_mocObserver)
+                        [[NSNotificationCenter defaultCenter] removeObserver:self->_mocObserver];
+                }];
+    if (!_storeChangedObserver)
+        _storeChangedObserver = [[NSNotificationCenter defaultCenter]
                 addObserverForName:USMStoreDidChangeNotification object:nil
-                             queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+                             queue:nil usingBlock:^(NSNotification *note) {
                     Strongify(self);
                     [self reloadUsers];
                 }];
@@ -646,8 +656,10 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
     if (_mocObserver)
         [[NSNotificationCenter defaultCenter] removeObserver:_mocObserver];
-    if (_storeObserver)
-        [[NSNotificationCenter defaultCenter] removeObserver:_storeObserver];
+    if (_storeChangingObserver)
+        [[NSNotificationCenter defaultCenter] removeObserver:_storeChangingObserver];
+    if (_storeChangedObserver)
+        [[NSNotificationCenter defaultCenter] removeObserver:_storeChangedObserver];
 }
 
 - (void)reloadUsers {

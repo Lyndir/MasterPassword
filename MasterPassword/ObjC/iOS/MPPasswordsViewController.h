@@ -36,6 +36,5 @@
 - (void)updatePasswords;
 
 - (IBAction)dismissPopdown:(id)sender;
-- (IBAction)signOut:(id)sender;
 
 @end

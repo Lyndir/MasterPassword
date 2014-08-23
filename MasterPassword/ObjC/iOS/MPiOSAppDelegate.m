@@ -597,9 +597,14 @@
                          if (buttonIndex == [alert cancelButtonIndex])
                              return;
 
-                         [[self storeManager] migrateCloudToLocal];
+                         if (buttonIndex == [alert firstOtherButtonIndex])
+                             [UIApp openURL:[NSURL URLWithString:
+                                     @"http://support.lyndir.com/topic/486731-why-doesnt-the-mac-version-have-icloud-support/#comment-755394"]];
+
+                         if (buttonIndex == [alert firstOtherButtonIndex] + 1)
+                             [MPiOSConfig get].iCloudEnabled = @NO;
                      }
-                           cancelTitle:@"Ignore For Now" otherTitles:@"Disable iCloud", nil];
+                           cancelTitle:@"Ignore For Now" otherTitles:@"Why?", @"Disable iCloud", nil];
 }
 
 - (void)ubiquityStoreManager:(UbiquityStoreManager *)manager failedLoadingStoreWithCause:(UbiquityStoreErrorCause)cause context:(id)context

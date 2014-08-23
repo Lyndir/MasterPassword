@@ -20,7 +20,7 @@
             @try {
                 NSError *error = nil;
                 if (!(success = [self save:&error]))
-                    err( @"While saving: %@", error );
+                    err( @"While saving: %@", [error fullDescription] );
             }
             @catch (NSException *exception) {
                 success = NO;

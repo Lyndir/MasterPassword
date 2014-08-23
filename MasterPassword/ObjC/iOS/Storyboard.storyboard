@@ -150,7 +150,7 @@
                                             <action selector="changeAvatar:" destination="S8q-YF-Kt9" eventType="touchUpInside" id="kL5-zV-zbb"/>
                                         </connections>
                                     </button>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qp1-nX-o4i" userLabel="Entry" customClass="UIView+Touches">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qp1-nX-o4i" userLabel="Entry">
                                         <rect key="frame" x="20" y="255" width="280" height="68"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <subviews>
@@ -236,7 +236,7 @@
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="ignoreTouches" value="YES"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XEP-O3-ayG" userLabel="Footer" customClass="UIView+Touches">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XEP-O3-ayG" userLabel="Footer">
                                         <rect key="frame" x="0.0" y="477" width="320" height="71"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
@@ -980,11 +980,11 @@
                         <viewControllerLayoutGuide type="top" id="S9X-2T-e1e"/>
                         <viewControllerLayoutGuide type="bottom" id="c12-XI-Rv9"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="MSX-uI-cwS" userLabel="Root" customClass="UIView+Touches">
+                    <view key="view" contentMode="scaleToFill" id="MSX-uI-cwS" userLabel="Root">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tI8-OT-LrO" userLabel="Passwords Root" customClass="UIView+Touches">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tI8-OT-LrO" userLabel="Passwords Root">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
