@@ -624,7 +624,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
             if ([headerName isEqualToString:@"Format"]) {
                 importFormat = [headerValue integerValue];
                 if (importFormat >= [sitePatterns count]) {
-                    err( @"Unsupported import format: %d", importFormat );
+                    err( @"Unsupported import format: %lu", (unsigned long)importFormat );
                     return MPImportResultInternalError;
                 }
             }
@@ -682,7 +682,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
                 exportContent = [importedSiteLine substringWithRange:[siteElements rangeAtIndex:8]];
                 break;
             default:
-                err( @"Unexpected import format: %d", importFormat );
+                err( @"Unexpected import format: %lu", (unsigned long)importFormat );
                 return MPImportResultInternalError;
         }
 
@@ -805,7 +805,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
     [export appendFormat:@"# \n"];
     [export appendFormat:@"##\n"];
     [export appendFormat:@"# User Name: %@\n", activeUser.name];
-    [export appendFormat:@"# Avatar: %d\n", activeUser.avatar];
+    [export appendFormat:@"# Avatar: %lu\n", (unsigned long)activeUser.avatar];
     [export appendFormat:@"# Key ID: %@\n", [activeUser.keyID encodeHex]];
     [export appendFormat:@"# Date: %@\n", [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]]];
     [export appendFormat:@"# Version: %@\n", [PearlInfoPlist get].CFBundleVersion];
