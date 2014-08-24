@@ -15,17 +15,30 @@ downsize() {
 
 
 inf "Converting appiconsets"
-icons=(
-    [114]="Icon@2x.png"
-    [120]="Icon-60@2x.png"
-    [80]="Icon-40@2x.png"
-    [144]="Icon-72@2x.png"
-    [58]="Icon-Small@2x.png"
-    [100]="Icon-Small-50@2x.png"
-    [512]="iTunesArtwork"
+declare -A icons=(
+    ["Icon-60@2x.png"]=120
+    ["Icon-40@2x.png"]=80
+    ["Icon-40~ipad.png"]=40
+    ["Icon-40~ipad@2x.png"]=80
+    ["Icon-Small@2x.png"]=58
+    ["Icon-Small~ipad.png"]=29
+    ["Icon-Small~ipad@2x.png"]=58
+    ["Icon-76~ipad.png"]=76
+    ["Icon-76~ipad@2x.png"]=152
+    ["icon_512x512.png"]=512
+    ["icon_512x512@2x.png"]=1024
+    ["icon_256x256@2x.png"]=512
+    ["icon_256x256.png"]=256
+    ["icon_128x128@2x.png"]=256
+    ["icon_128x128.png"]=128
+    ["icon_32x32@2x.png"]=64
+    ["icon_32x32.png"]=32
+    ["icon_16x16@2x.png"]=32
+    ["icon_16x16.png"]=16
 )
-for size in $(reverse "${!icons[@]}"); do
-    file=Images.xcassets/AppIcon.appiconset/${icons[size]}
+for name in "${!icons[@]}"; do
+    size=${icons[$name]}
+    file=Images.xcassets/AppIcon.appiconset/$name
     echo "$PWD/$file"
 
     if [[ "iTunesArtwork@2x.png" -nt $file ]]; then
@@ -35,37 +48,6 @@ for size in $(reverse "${!icons[@]}"); do
     fi
 done
 
-
-
-inf "Populating iconsets"
-icons=(
-    "icon_512x512.png"
-    "icon_256x256@2x.png"
-    "icon_256x256.png"
-    "icon_128x128@2x.png"
-    "icon_128x128.png"
-    "icon_32x32@2x.png"
-    "icon_32x32.png"
-    "icon_16x16@2x.png"
-    "icon_16x16.png"
-)
-for iconset in *.iconset; do
-    [[ -d $iconset ]] || continue
-
-    for dest in "${icons[@]}"; do
-        src=$iconset/icon_512x512@2x.png
-        dest=$iconset/$dest
-        IFS='_x@.' read _ _ points scale _ <<< "${dest##*/}"
-        [[ $scale = *[^[:digit:]]* ]] && scale=1
-        size=$(( points * scale ))
-
-        if [[ ! -e $dest || "$src" -nt "$dest" ]]; then
-            pinf "$src -> $dest ($size px)"
-                downsize "$src" "$dest" "$size"
-            fnip
-        fi
-    done
-done
 
 
 hr

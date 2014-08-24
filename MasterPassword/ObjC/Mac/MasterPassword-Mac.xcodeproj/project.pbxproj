@@ -27,7 +27,6 @@
 		DA16B342170661E0000A0EAB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC632871486D95D0075AEA5 /* Security.framework */; };
 		DA16B344170661EE000A0EAB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B343170661EE000A0EAB /* Cocoa.framework */; };
 		DA16B345170661F2000A0EAB /* libPearl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC77CAD148291A600BCF976 /* libPearl.a */; };
-		DA1E4D50176E0E280065E0EF /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA1E4D4F176E0E280065E0EF /* Media.xcassets */; };
 		DA2508F119511D3600AC23F1 /* MPPasswordWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */; };
 		DA2508F719513C1400AC23F1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B343170661EE000A0EAB /* Cocoa.framework */; };
 		DA250925195148E200AC23F1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
@@ -72,9 +71,9 @@
 		DA5E5D0B1724A667003798D8 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5CC41724A667003798D8 /* MainMenu.xib */; };
 		DA5E5D0C1724A667003798D8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CC61724A667003798D8 /* main.m */; };
 		DA5E5D0D1724A667003798D8 /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CC71724A667003798D8 /* MasterPassword.xcdatamodeld */; };
-		DA5E5D551724F9C8003798D8 /* MasterPassword.iconset in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5D541724F9C8003798D8 /* MasterPassword.iconset */; };
 		DA60717C195D040500CA98B5 /* icon_gear.png in Resources */ = {isa = PBXBuildFile; fileRef = DA607092195D03E200CA98B5 /* icon_gear.png */; };
 		DA60717D195D040500CA98B5 /* icon_gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA607093195D03E200CA98B5 /* icon_gear@2x.png */; };
+		DA6558A419A99609009A0BEB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA6558A319A99609009A0BEB /* Images.xcassets */; };
 		DA8ED895192906920099B726 /* PearlTween.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8ED891192906920099B726 /* PearlTween.m */; };
 		DA8ED896192906920099B726 /* PearlTween.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED892192906920099B726 /* PearlTween.h */; };
 		DA8ED897192906920099B726 /* map-macro.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED894192906920099B726 /* map-macro.h */; };
@@ -249,7 +248,6 @@
 		DA0933CF1747B91B00DE1CEF /* appstore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = appstore.png; sourceTree = "<group>"; };
 		DA16B340170661DB000A0EAB /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		DA16B343170661EE000A0EAB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		DA1E4D4F176E0E280065E0EF /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = MasterPassword/Media.xcassets; sourceTree = "<group>"; };
 		DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPPasswordWindowController.xib; sourceTree = "<group>"; };
 		DA2508F619513C1400AC23F1 /* libRMBlurredView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRMBlurredView.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA2508F919513C1400AC23F1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -324,7 +322,6 @@
 		DA5E5CC91724A667003798D8 /* MasterPassword 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 2.xcdatamodel"; sourceTree = "<group>"; };
 		DA5E5CCA1724A667003798D8 /* MasterPassword 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 3.xcdatamodel"; sourceTree = "<group>"; };
 		DA5E5CCB1724A667003798D8 /* MasterPassword 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 4.xcdatamodel"; sourceTree = "<group>"; };
-		DA5E5D541724F9C8003798D8 /* MasterPassword.iconset */ = {isa = PBXFileReference; lastKnownFileType = folder.iconset; path = MasterPassword.iconset; sourceTree = "<group>"; };
 		DA606FEA195D03E200CA98B5 /* icon_action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_action.png; sourceTree = "<group>"; };
 		DA606FEB195D03E200CA98B5 /* icon_action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_action@2x.png"; sourceTree = "<group>"; };
 		DA606FEC195D03E200CA98B5 /* icon_addressbook-person.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_addressbook-person.png"; sourceTree = "<group>"; };
@@ -727,6 +724,7 @@
 		DA607179195D03E300CA98B5 /* icon_volume-mute@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_volume-mute@2x.png"; sourceTree = "<group>"; };
 		DA60717A195D03E300CA98B5 /* icon_wrench.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_wrench.png; sourceTree = "<group>"; };
 		DA60717B195D03E300CA98B5 /* icon_wrench@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_wrench@2x.png"; sourceTree = "<group>"; };
+		DA6558A319A99609009A0BEB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DA6701B716406A4100B61001 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		DA6701DD16406B7300B61001 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		DA672D2E14F92C6B004A189C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -936,7 +934,6 @@
 		DA5BFA39147E415C00F98B1E = {
 			isa = PBXGroup;
 			children = (
-				DA1E4D4F176E0E280065E0EF /* Media.xcassets */,
 				DA5E5C961724A667003798D8 /* ObjC */,
 				DACA23B41705DF7D002C6C22 /* Resources */,
 				DACA22121705DDC5002C6C22 /* External */,
@@ -1537,13 +1534,13 @@
 		DACA23B51705DF7D002C6C22 /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				DA6558A319A99609009A0BEB /* Images.xcassets */,
 				DA606FE9195D03E200CA98B5 /* Insignia */,
 				DAAA81AF195A8D1300FA30D9 /* gradient.png */,
 				DA2509261951B86C00AC23F1 /* small-screen.png */,
 				DA2509271951B86C00AC23F1 /* screen.png */,
 				DA0933CF1747B91B00DE1CEF /* appstore.png */,
 				DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */,
-				DA5E5D541724F9C8003798D8 /* MasterPassword.iconset */,
 				DACA24161705DF7D002C6C22 /* Background */,
 				DACA24311705DF7D002C6C22 /* Avatars */,
 				DACA241C1705DF7D002C6C22 /* logo-bare.png */,
@@ -2009,6 +2006,7 @@
 				DACA27141705DF81002C6C22 /* avatar-7.png in Resources */,
 				DAF4EF57190A828100023C90 /* Exo2.0-Regular.otf in Resources */,
 				DACA27151705DF81002C6C22 /* avatar-0.png in Resources */,
+				DA6558A419A99609009A0BEB /* Images.xcassets in Resources */,
 				DACA27161705DF81002C6C22 /* avatar-12.png in Resources */,
 				DACA27171705DF81002C6C22 /* avatar-15.png in Resources */,
 				DAF4EF59190A828100023C90 /* Exo2.0-Bold.otf in Resources */,
@@ -2021,7 +2019,6 @@
 				DACA271B1705DF81002C6C22 /* avatar-7@2x.png in Resources */,
 				DACA271C1705DF81002C6C22 /* avatar-17@2x.png in Resources */,
 				DACA271D1705DF81002C6C22 /* avatar-14.png in Resources */,
-				DA1E4D50176E0E280065E0EF /* Media.xcassets in Resources */,
 				DACA271E1705DF81002C6C22 /* avatar-18@2x.png in Resources */,
 				DACA271F1705DF81002C6C22 /* avatar-8.png in Resources */,
 				DACA27201705DF81002C6C22 /* avatar-13.png in Resources */,
@@ -2061,7 +2058,6 @@
 				DA5E5D081724A667003798D8 /* MasterPassword.entitlements in Resources */,
 				DA5E5D0A1724A667003798D8 /* InfoPlist.strings in Resources */,
 				DA5E5D0B1724A667003798D8 /* MainMenu.xib in Resources */,
-				DA5E5D551724F9C8003798D8 /* MasterPassword.iconset in Resources */,
 				DA0933CC1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png in Resources */,
 				DA0933D01747B91B00DE1CEF /* appstore.png in Resources */,
 			);
