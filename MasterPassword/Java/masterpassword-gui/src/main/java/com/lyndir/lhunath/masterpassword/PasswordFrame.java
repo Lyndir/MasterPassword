@@ -21,7 +21,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
     private final JTextField               siteNameField;
     private final JComboBox<MPElementType> siteTypeField;
     private final JSpinner                 siteCounterField;
-    private final JLabel                   passwordLabel;
+    private final JTextField               passwordTextField;
 
     public PasswordFrame(User user)
             throws HeadlessException {
@@ -112,9 +112,10 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         } );
 
         // Password
-        add( passwordLabel = new JLabel( " ", JLabel.CENTER ), BorderLayout.SOUTH );
-        passwordLabel.setAlignmentX( LEFT_ALIGNMENT );
-        passwordLabel.setFont( Res.sourceCodeProBlack().deriveFont( 40f ) );
+        add ( passwordTextField = new JTextField( " ", JTextField.CENTER ), BorderLayout.SOUTH );
+        passwordTextField.setAlignmentX( LEFT_ALIGNMENT );
+        passwordTextField.setFont (Res.sourceCodeProBlack().deriveFont( 40f ));
+        passwordTextField.setEditable(false);
 
         pack();
         setMinimumSize( getSize() );
@@ -131,7 +132,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         final int siteCounter = (Integer) siteCounterField.getValue();
 
         if (siteType.getTypeClass() != MPElementTypeClass.Generated || siteName == null || siteName.isEmpty() || !user.hasKey()) {
-            passwordLabel.setText( null );
+            passwordTextField.setText( null );
             return;
         }
 
@@ -146,7 +147,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                 SwingUtilities.invokeLater( new Runnable() {
                     @Override
                     public void run() {
-                        passwordLabel.setText( sitePassword );
+                        passwordTextField.setText( sitePassword );
                     }
                 } );
             }
