@@ -16,34 +16,35 @@ downsize() {
 
 inf "Converting appiconsets"
 declare -A icons=(
-    ["Icon-60@2x.png"]=120
-    ["Icon-40@2x.png"]=80
-    ["Icon-40~ipad.png"]=40
-    ["Icon-40~ipad@2x.png"]=80
-    ["Icon-Small@2x.png"]=58
-    ["Icon-Small~ipad.png"]=29
-    ["Icon-Small~ipad@2x.png"]=58
-    ["Icon-76~ipad.png"]=76
-    ["Icon-76~ipad@2x.png"]=152
-    ["icon_512x512.png"]=512
-    ["icon_512x512@2x.png"]=1024
-    ["icon_256x256@2x.png"]=512
-    ["icon_256x256.png"]=256
-    ["icon_128x128@2x.png"]=256
-    ["icon_128x128.png"]=128
-    ["icon_32x32@2x.png"]=64
-    ["icon_32x32.png"]=32
-    ["icon_16x16@2x.png"]=32
-    ["icon_16x16.png"]=16
+    ["ios-Icon-60@2x.png"]=120
+    ["ios-Icon-40@2x.png"]=80
+    ["ios-Icon-40~ipad.png"]=40
+    ["ios-Icon-40~ipad@2x.png"]=80
+    ["ios-Icon-Small@2x.png"]=58
+    ["ios-Icon-Small~ipad.png"]=29
+    ["ios-Icon-Small~ipad@2x.png"]=58
+    ["ios-Icon-76~ipad.png"]=76
+    ["ios-Icon-76~ipad@2x.png"]=152
+    ["mac-icon_512x512.png"]=512
+    ["mac-icon_512x512@2x.png"]=1024
+    ["mac-icon_256x256@2x.png"]=512
+    ["mac-icon_256x256.png"]=256
+    ["mac-icon_128x128@2x.png"]=256
+    ["mac-icon_128x128.png"]=128
+    ["mac-icon_32x32@2x.png"]=64
+    ["mac-icon_32x32.png"]=32
+    ["mac-icon_16x16@2x.png"]=32
+    ["mac-icon_16x16.png"]=16
 )
 for name in "${!icons[@]}"; do
     size=${icons[$name]}
-    file=Images.xcassets/AppIcon.appiconset/$name
+    source=${name%%-*}-icon@2x.png
+    file=Images.xcassets/AppIcon.appiconset/${name#*-}
     echo "$PWD/$file"
 
-    if [[ "iTunesArtwork@2x.png" -nt $file ]]; then
+    if [[ $source -nt $file ]]; then
         pinf "$file ($size px)"
-            downsize "iTunesArtwork@2x.png" "$file" "${size}x${size}"
+            downsize "$source" "$file" "${size}x${size}"
         fnip
     fi
 done
