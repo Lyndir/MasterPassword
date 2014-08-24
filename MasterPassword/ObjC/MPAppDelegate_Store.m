@@ -622,14 +622,14 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
                 importAlgorithm = MPAlgorithmDefaultForBundleVersion( importBundleVersion );
             }
             if ([headerName isEqualToString:@"Format"]) {
-                importFormat = [headerValue integerValue];
+                importFormat = (NSUInteger)[headerValue integerValue];
                 if (importFormat >= [sitePatterns count]) {
                     err( @"Unsupported import format: %lu", (unsigned long)importFormat );
                     return MPImportResultInternalError;
                 }
             }
             if ([headerName isEqualToString:@"Avatar"])
-                importAvatar = [headerValue integerValue];
+                importAvatar = (NSUInteger)[headerValue integerValue];
             if ([headerName isEqualToString:@"Passwords"]) {
                 if ([headerValue isEqualToString:@"VISIBLE"])
                     clearText = YES;
