@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.lyndir.lhunath.masterpassword" android:versionCode="1" android:versionName="GIT-SNAPSHOT">
+          package="com.lyndir.masterpassword"
+          android:versionCode="1"
+          android:versionName="GIT-SNAPSHOT">
 
-  <uses-sdk android:minSdkVersion="11"
-            android:targetSdkVersion="16" />
+    <uses-sdk
+            android:minSdkVersion="11"
+            android:targetSdkVersion="19" />
 
-  <application android:icon="@drawable/icon" android:label="@string/app_name">
-    <activity android:name=".UsersActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity>
-  </application>
+    <application
+            android:icon="@drawable/icon"
+            android:label="@string/app_name"
+            android:allowBackup="true">
+        <activity android:name=".UsersActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
 
 </manifest>
 

@@ -7,13 +7,13 @@
     <parent>
         <groupId>com.lyndir.lhunath</groupId>
         <artifactId>lyndir</artifactId>
-        <version>GIT-SNAPSHOT</version>
+        <version>1.19</version>
     </parent>
 
     <name>Master Password</name>
     <description>A Java implementation of the Master Password algorithm.</description>
 
-    <groupId>com.lyndir.lhunath.masterpassword</groupId>
+    <groupId>com.lyndir.masterpassword</groupId>
     <artifactId>masterpassword</artifactId>
     <version>GIT-SNAPSHOT</version>
     <packaging>pom</packaging>

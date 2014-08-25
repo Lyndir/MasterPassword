@@ -5,7 +5,7 @@
 
     <!-- PROJECT METADATA -->
     <parent>
-        <groupId>com.lyndir.lhunath.masterpassword</groupId>
+        <groupId>com.lyndir.masterpassword</groupId>
         <artifactId>masterpassword</artifactId>
         <version>GIT-SNAPSHOT</version>
     </parent>
@@ -13,7 +13,7 @@
     <name>Master Password Android</name>
     <description>An Android application to the Master Password algorithm</description>
 
-    <groupId>com.lyndir.lhunath.masterpassword</groupId>
+    <groupId>com.lyndir.masterpassword</groupId>
     <artifactId>masterpassword-android</artifactId>
     <packaging>apk</packaging>
 
@@ -24,12 +24,9 @@
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
 
-                <!--configuration>
-                    <proguard>
-                        <skip>false</skip>
-                        <config>proguard.cfg</config>
-                    </proguard>
-                </configuration-->
+                <configuration>
+                    <sdk>19</sdk>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -39,7 +36,7 @@
 
         <!-- PROJECT REFERENCES -->
         <dependency>
-            <groupId>com.lyndir.lhunath.masterpassword</groupId>
+            <groupId>com.lyndir.masterpassword</groupId>
             <artifactId>masterpassword-algorithm</artifactId>
             <version>GIT-SNAPSHOT</version>
         </dependency>
@@ -47,18 +44,13 @@
         <dependency>
             <groupId>com.jakewharton</groupId>
             <artifactId>butterknife</artifactId>
-            <version>5.1.2</version>
         </dependency>
 
+        <!-- clone https://github.com/mosabua/maven-android-sdk-deployer.git
+             run   mvn install -P 4.4 -->
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.android</groupId>
+            <groupId>android</groupId>
             <artifactId>android</artifactId>
-            <version>4.1.1.4</version>
-            <scope>provided</scope>
         </dependency>
 
     </dependencies>

@@ -5,7 +5,7 @@
 
     <!-- PROJECT METADATA -->
     <parent>
-        <groupId>com.lyndir.lhunath.masterpassword</groupId>
+        <groupId>com.lyndir.masterpassword</groupId>
         <artifactId>masterpassword</artifactId>
         <version>GIT-SNAPSHOT</version>
     </parent>
@@ -13,7 +13,7 @@
     <name>Master Password Algorithm Implementation</name>
     <description>The implementation of the Master Password algorithm</description>
 
-    <groupId>com.lyndir.lhunath.masterpassword</groupId>
+    <groupId>com.lyndir.masterpassword</groupId>
     <artifactId>masterpassword-algorithm</artifactId>
     <packaging>jar</packaging>
 
@@ -24,12 +24,12 @@
         <dependency>
             <groupId>com.lyndir.lhunath.opal</groupId>
             <artifactId>opal-system</artifactId>
-            <version>GIT-SNAPSHOT</version>
+            <version>1.6-p6</version>
         </dependency>
         <dependency>
             <groupId>com.lyndir.lhunath.opal</groupId>
             <artifactId>opal-crypto</artifactId>
-            <version>GIT-SNAPSHOT</version>
+            <version>1.6-p6</version>
         </dependency>
 
         <!-- EXTERNAL DEPENDENCIES -->
