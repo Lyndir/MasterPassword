@@ -1,5 +1,6 @@
 package com.lyndir.masterpassword;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.util.Set;
@@ -93,14 +94,12 @@ public enum MPElementType {
      *
      * @return All types that support the given class.
      */
-    public static ImmutableSet<MPElementType> forClass(final MPElementTypeClass typeClass) {
+    public static ImmutableList<MPElementType> forClass(final MPElementTypeClass typeClass) {
 
-        ImmutableSet.Builder<MPElementType> types = ImmutableSet.builder();
-        for (final MPElementType type : values()) {
-            if (type.getTypeClass() == typeClass) {
+        ImmutableList.Builder<MPElementType> types = ImmutableList.builder();
+        for (final MPElementType type : values())
+            if (type.getTypeClass() == typeClass)
                 types.add( type );
-            }
-        }
 
         return types.build();
     }
