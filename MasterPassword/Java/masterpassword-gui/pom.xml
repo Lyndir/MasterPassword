@@ -48,7 +48,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <SCM-Revision>${buildNumber}</SCM-Revision>
+                            <Implementation-Version>${buildNumber}</Implementation-Version>
                         </manifestEntries>
                     </archive>
                 </configuration>

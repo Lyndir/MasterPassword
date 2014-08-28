@@ -18,8 +18,7 @@
 package com.lyndir.masterpassword;
 
 import com.google.common.base.Charsets;
-import com.google.common.io.ByteStreams;
-import com.google.common.io.CharStreams;
+import com.google.common.io.*;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.MessageDigests;
 import com.lyndir.lhunath.opal.system.logging.Logger;
@@ -27,6 +26,9 @@ import com.lyndir.lhunath.opal.system.util.TypeUtils;
 import java.io.*;
 import java.net.URI;
 import java.net.URL;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.jar.*;
 import javax.swing.*;
 
 
@@ -47,18 +49,26 @@ public class GUI implements UnlockFrame.SignInCallback {
             throws IOException {
 
         try {
-            byte[] manifest = ByteStreams.toByteArray( GUI.class.getClassLoader().getResourceAsStream( "META-INF/MANIFEST.MF" ) );
-            String manifestHash = CodeUtils.encodeHex( CodeUtils.digest( MessageDigests.SHA1, manifest ) );
-            InputStream upstream = URI.create( "http://masterpasswordapp.com/masterpassword-gui.jar.mf.sha1" ).toURL().openStream();
-            String upstreamHash = CharStreams.toString( new InputStreamReader( upstream, Charsets.UTF_8 ) );
-            logger.inf( "Local Manifest Hash:    %s", manifestHash );
-            logger.inf( "Upstream Manifest Hash: %s", upstreamHash );
-            if (!manifestHash.equalsIgnoreCase( upstreamHash )) {
-                logger.wrn( "You are not running the current official version.  Please update from:\n"
-                            + "http://masterpasswordapp.com/masterpassword-gui.jar" );
-                JOptionPane.showMessageDialog( null, "A new version of Master Password is available.\n"
-                                                     + "Please download the latest version from http://masterpasswordapp.com",
-                                               "Update Available", JOptionPane.WARNING_MESSAGE );
+            Enumeration<URL> manifestURLs = Thread.currentThread().getContextClassLoader().getResources( JarFile.MANIFEST_NAME );
+            while (manifestURLs.hasMoreElements()) {
+                InputStream manifestStream = manifestURLs.nextElement().openStream();
+                Attributes attributes = new Manifest( manifestStream ).getMainAttributes();
+                if (!GUI.class.getCanonicalName().equals( attributes.getValue( Attributes.Name.MAIN_CLASS ) ))
+                    continue;
+
+                String manifestRevision = attributes.getValue( Attributes.Name.IMPLEMENTATION_VERSION );
+                String upstreamRevisionURL = "http://masterpasswordapp.com/masterpassword-gui.jar.rev";
+                CharSource upstream = Resources.asCharSource( URI.create( upstreamRevisionURL ).toURL(), Charsets.UTF_8 );
+                String upstreamRevision = upstream.readFirstLine();
+                logger.inf( "Local Revision:    <%s>", manifestRevision );
+                logger.inf( "Upstream Revision: <%s>", upstreamRevision );
+                if (!manifestRevision.equalsIgnoreCase( upstreamRevision )) {
+                    logger.wrn( "You are not running the current official version.  Please update from:\n"
+                                + "http://masterpasswordapp.com/masterpassword-gui.jar" );
+                    JOptionPane.showMessageDialog( null, "A new version of Master Password is available.\n"
+                                                         + "Please download the latest version from http://masterpasswordapp.com",
+                                                   "Update Available", JOptionPane.WARNING_MESSAGE );
+                }
             }
         }
         catch (IOException e) {
