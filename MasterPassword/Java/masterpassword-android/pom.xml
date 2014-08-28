@@ -25,6 +25,10 @@
                 <artifactId>android-maven-plugin</artifactId>
 
                 <configuration>
+                    <zipalign>
+                        <verbose>true</verbose>
+                        <skip>false</skip>
+                    </zipalign>
                     <sdk>
                         <platform>19</platform>
                     </sdk>
@@ -32,6 +36,54 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>sign</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jarsigner-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>signing</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <inherited>true</inherited>
+                                <configuration>
+                                    <archiveDirectory></archiveDirectory>
+                                    <includes>
+                                        <include>target/*.apk</include>
+                                    </includes>
+                                    <keystore>release.jks</keystore>
+                                    <storepass>${env.PASSWORD}</storepass>
+                                    <keypass>${env.PASSWORD}</keypass>
+                                    <alias>android</alias>
+                                    <arguments>
+                                      <argument>-sigalg</argument><argument>MD5withRSA</argument>
+                                      <argument>-digestalg</argument><argument>SHA1</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                        <artifactId>android-maven-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <configuration>
+                            <sign>
+                                <debug>false</debug>
+                            </sign>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <!-- DEPENDENCY MANAGEMENT -->
     <dependencies>

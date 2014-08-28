@@ -79,7 +79,7 @@ public class GUI implements UnlockFrame.SignInCallback {
         try {
             gui = TypeUtils.newInstance( AppleGUI.class );
         }
-        catch (RuntimeException e) {
+        catch (NoClassDefFoundError e) {
             gui = new GUI();
         }
         gui.open();
