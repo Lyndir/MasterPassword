@@ -22,6 +22,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
     private final JComboBox<MPElementType> siteTypeField;
     private final JSpinner                 siteCounterField;
     private final JLabel                   passwordLabel;
+    private final JLabel                   tipLabel;
 
     public PasswordFrame(User user)
             throws HeadlessException {
@@ -30,7 +31,6 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
         JLabel label;
 
-        setDefaultCloseOperation( DISPOSE_ON_CLOSE );
         setContentPane( new JPanel( new BorderLayout( 20, 20 ) ) {
             {
                 setBorder( new EmptyBorder( 20, 20, 20, 20 ) );
@@ -39,6 +39,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
         // User
         add( label = new JLabel( strf( "Generating passwords for: %s", user.getName() ) ), BorderLayout.NORTH );
+        label.setFont( Res.exoRegular().deriveFont( 12f ) );
         label.setAlignmentX( LEFT_ALIGNMENT );
 
         // Site
@@ -49,6 +50,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
         // Site Name
         sitePanel.add( label = new JLabel( "Site Name:", JLabel.LEADING ) );
+        label.setFont( Res.exoRegular().deriveFont( 12f ) );
         label.setAlignmentX( LEFT_ALIGNMENT );
 
         sitePanel.add( siteNameField = new JTextField() {
@@ -57,6 +59,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                 return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
             }
         } );
+        siteNameField.setFont( Res.exoRegular().deriveFont( 12f ) );
         siteNameField.setAlignmentX( LEFT_ALIGNMENT );
         siteNameField.getDocument().addDocumentListener( this );
         siteNameField.addActionListener( new ActionListener() {
@@ -71,7 +74,10 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                         SwingUtilities.invokeLater( new Runnable() {
                             @Override
                             public void run() {
-                                dispose();
+                                if (getDefaultCloseOperation() == WindowConstants.EXIT_ON_CLOSE)
+                                    System.exit( 0 );
+                                else
+                                    dispose();
                             }
                         } );
                     }
@@ -92,6 +98,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                                                         } );
         siteSettings.setAlignmentX( LEFT_ALIGNMENT );
         sitePanel.add( siteSettings );
+        siteTypeField.setFont( Res.exoRegular().deriveFont( 12f ) );
         siteTypeField.setAlignmentX( LEFT_ALIGNMENT );
         siteTypeField.setAlignmentY( CENTER_ALIGNMENT );
         siteTypeField.setSelectedItem( MPElementType.GeneratedLong );
@@ -102,6 +109,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
             }
         } );
 
+        siteCounterField.setFont( Res.exoRegular().deriveFont( 12f ) );
         siteCounterField.setAlignmentX( RIGHT_ALIGNMENT );
         siteCounterField.setAlignmentY( CENTER_ALIGNMENT );
         siteCounterField.addChangeListener( new ChangeListener() {
@@ -112,9 +120,16 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         } );
 
         // Password
-        add( passwordLabel = new JLabel( " ", JLabel.CENTER ), BorderLayout.SOUTH );
-        passwordLabel.setAlignmentX( LEFT_ALIGNMENT );
+        passwordLabel = new JLabel( " ", JLabel.CENTER );
         passwordLabel.setFont( Res.sourceCodeProBlack().deriveFont( 40f ) );
+        passwordLabel.setAlignmentX( Component.CENTER_ALIGNMENT );
+
+        // Tip
+        tipLabel = new JLabel( " ", JLabel.CENTER );
+        tipLabel.setFont( Res.exoThin().deriveFont( 9f ) );
+        tipLabel.setAlignmentX( Component.CENTER_ALIGNMENT );
+
+        add( Components.boxLayout( BoxLayout.PAGE_AXIS, passwordLabel, tipLabel ), BorderLayout.SOUTH );
 
         pack();
         setMinimumSize( getSize() );
@@ -132,6 +147,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
         if (siteType.getTypeClass() != MPElementTypeClass.Generated || siteName == null || siteName.isEmpty() || !user.hasKey()) {
             passwordLabel.setText( null );
+            tipLabel.setText( null );
             return;
         }
 
@@ -139,14 +155,14 @@ public class PasswordFrame extends JFrame implements DocumentListener {
             @Override
             public void run() {
                 final String sitePassword = MasterPassword.generateContent( siteType, siteName, user.getKey(), siteCounter );
-                if (callback != null) {
+                if (callback != null)
                     callback.passwordGenerated( siteName, sitePassword );
-                }
 
                 SwingUtilities.invokeLater( new Runnable() {
                     @Override
                     public void run() {
                         passwordLabel.setText( sitePassword );
+                        tipLabel.setText( "Press [Enter] to copy the password." );
                     }
                 } );
             }

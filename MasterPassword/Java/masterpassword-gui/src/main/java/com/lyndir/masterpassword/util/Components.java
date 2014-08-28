@@ -9,7 +9,7 @@ import javax.swing.*;
  */
 public abstract class Components {
 
-    public static JComponent boxLayout(int axis, Component... components) {
+    public static JPanel boxLayout(int axis, Component... components) {
         JPanel container = new JPanel();
         container.setLayout( new BoxLayout( container, axis ) );
         for (Component component : components)

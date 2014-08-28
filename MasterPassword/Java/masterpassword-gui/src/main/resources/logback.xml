@@ -6,7 +6,7 @@
         </layout>
     </appender>
 
-    <logger name="com.lyndir" level="TRACE" />
+    <logger name="com.lyndir" level="INFO" />
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />

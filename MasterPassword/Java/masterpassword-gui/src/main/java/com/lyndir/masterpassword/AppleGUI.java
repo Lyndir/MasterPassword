@@ -1,6 +1,7 @@
 package com.lyndir.masterpassword;
 
 import com.apple.eawt.*;
+import javax.swing.*;
 
 
 /**
@@ -28,5 +29,13 @@ public class AppleGUI extends GUI {
                 open();
             }
         } );
+    }
+
+    @Override
+    protected PasswordFrame newPasswordFrame(final User user) {
+        PasswordFrame frame = super.newPasswordFrame( user );
+        frame.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
+
+        return frame;
     }
 }

@@ -26,6 +26,10 @@ public abstract class Res {
     private static final Logger          logger   = Logger.get( Res.class );
 
     private static Font sourceCodeProBlack;
+    private static Font exoBold;
+    private static Font exoExtraBold;
+    private static Font exoRegular;
+    private static Font exoThin;
 
     public static void execute(final Runnable job) {
         executor.submit( new Runnable() {
@@ -55,6 +59,54 @@ public abstract class Res {
             Font font = Font.createFont( Font.TRUETYPE_FONT, resource.openStream() );
             return sourceCodeProBlack != null? sourceCodeProBlack: //
                     (sourceCodeProBlack = font);
+        }
+        catch (FontFormatException | IOException e) {
+            throw Throwables.propagate( e );
+        }
+    }
+
+    public static Font exoBold() {
+        try {
+            URL resource = Resources.getResource( "fonts/Exo2.0-Bold.otf" );
+            Font font = Font.createFont( Font.TRUETYPE_FONT, resource.openStream() );
+            return exoBold != null? exoBold: //
+                    (exoBold = font);
+        }
+        catch (FontFormatException | IOException e) {
+            throw Throwables.propagate( e );
+        }
+    }
+
+    public static Font exoExtraBold() {
+        try {
+            URL resource = Resources.getResource( "fonts/Exo2.0-ExtraBold.otf" );
+            Font font = Font.createFont( Font.TRUETYPE_FONT, resource.openStream() );
+            return exoExtraBold != null? exoExtraBold: //
+                    (exoExtraBold = font);
+        }
+        catch (FontFormatException | IOException e) {
+            throw Throwables.propagate( e );
+        }
+    }
+
+    public static Font exoRegular() {
+        try {
+            URL resource = Resources.getResource( "fonts/Exo2.0-Regular.otf" );
+            Font font = Font.createFont( Font.TRUETYPE_FONT, resource.openStream() );
+            return exoRegular != null? exoRegular: //
+                    (exoRegular = font);
+        }
+        catch (FontFormatException | IOException e) {
+            throw Throwables.propagate( e );
+        }
+    }
+
+    public static Font exoThin() {
+        try {
+            URL resource = Resources.getResource( "fonts/Exo2.0-Thin.otf" );
+            Font font = Font.createFont( Font.TRUETYPE_FONT, resource.openStream() );
+            return exoThin != null? exoThin: //
+                    (exoThin = font);
         }
         catch (FontFormatException | IOException e) {
             throw Throwables.propagate( e );
