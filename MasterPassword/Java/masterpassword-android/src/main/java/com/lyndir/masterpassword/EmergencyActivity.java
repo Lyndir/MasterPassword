@@ -1,7 +1,9 @@
 package com.lyndir.masterpassword;
 
+import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+
 import android.app.Activity;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Editable;
@@ -85,7 +87,8 @@ public class EmergencyActivity extends Activity {
         sitePasswordField.setTypeface( Res.sourceCodePro_Black );
         sitePasswordField.setPaintFlags( userNameField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
 
-        typeField.setAdapter( new ArrayAdapter<>( this, R.layout.type_item, MPElementType.forClass( MPElementTypeClass.Generated ) ) );
+        typeField.setAdapter(
+                new ArrayAdapter<MPElementType>( this, R.layout.type_item, MPElementType.forClass( MPElementTypeClass.Generated ) ) );
         typeField.setSelection( MPElementType.GeneratedLong.ordinal() );
 
         counterField.setMinValue( 1 );
@@ -144,7 +147,11 @@ public class EmergencyActivity extends Activity {
             public byte[] call()
                     throws Exception {
                 try {
-                    return MasterPassword.keyForPassword( masterPassword, userName );
+                    long start = System.currentTimeMillis();
+                    byte[] masterKey = MasterPassword.keyForPassword( masterPassword, userName );
+                    logger.inf( "masterKey time: %d", System.currentTimeMillis() - start );
+
+                    return masterKey;
                 }
                 catch (RuntimeException e) {
                     sitePasswordField.setText( "" );
@@ -182,7 +189,9 @@ public class EmergencyActivity extends Activity {
             @Override
             public void run() {
                 try {
+                    long start = System.currentTimeMillis();
                     final String sitePassword = MasterPassword.generateContent( type, siteName, masterKeyFuture.get(), counter );
+                    logger.inf( "sitePassword time: %d", System.currentTimeMillis() - start );
 
                     runOnUiThread( new Runnable() {
                         @Override
@@ -210,6 +219,22 @@ public class EmergencyActivity extends Activity {
                 }
             }
         } );
+    }
+
+    public void copySitePassword(View view) {
+        String sitePassword = sitePasswordField.getText().toString();
+        if (sitePassword.isEmpty())
+            return;
+
+        ClipDescription description = new ClipDescription( strf( "Password for %s", siteNameField.getText() ),
+                                                           new String[]{ ClipDescription.MIMETYPE_TEXT_PLAIN } );
+        ((ClipboardManager) getSystemService( CLIPBOARD_SERVICE )).setPrimaryClip(
+                new ClipData( description, new ClipData.Item( sitePassword ) ) );
+
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
     }
 
     private abstract class ValueChangedListener

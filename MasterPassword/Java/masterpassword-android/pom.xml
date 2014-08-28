@@ -25,7 +25,9 @@
                 <artifactId>android-maven-plugin</artifactId>
 
                 <configuration>
-                    <sdk>19</sdk>
+                    <sdk>
+                        <platform>19</platform>
+                    </sdk>
                 </configuration>
             </plugin>
         </plugins>
@@ -57,6 +59,15 @@
         <dependency>
             <groupId>android</groupId>
             <artifactId>android</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.lambdaworks</groupId>
+            <artifactId>libscrypt</artifactId>
+            <version>1.4.0</version>
+            <type>so</type>
+            <classifier>android</classifier>
+            <scope>runtime</scope>
         </dependency>
 
     </dependencies>

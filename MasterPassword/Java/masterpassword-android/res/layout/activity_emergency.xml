@@ -64,14 +64,16 @@
                 android:textColor="#FFFFFF"
                 android:textSize="26sp" />
 
-        <TextView
+        <Button
                 android:id="@+id/sitePasswordField"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:background="@null"
                 android:textColor="#FFFFFF"
                 android:textSize="32sp"
-                android:text="LuxdZozvDuma4[" />
+                android:text="LuxdZozvDuma4["
+                android:onClick="copySitePassword" />
 
         <Spinner
                 android:id="@+id/typeField"
