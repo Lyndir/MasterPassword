@@ -42,7 +42,7 @@ a:hover .popup {
     display: block;
 }
 
-nav {
+nav, h4 {
     font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
 }
 
@@ -250,6 +250,18 @@ header .box.active .maximized {
 header .box.active .minimized,
 header .box .maximized {
     display: none;
+}
+#scrollDown {
+    position: fixed;
+    z-index: -1;
+    left: 0;
+    width: 100%;
+    bottom: 0;
+    height: 1ex;
+    text-align: center;
+
+    color: #DDD;
+    font-size: 7em;
 }
 #app header {
     height: 80%;
