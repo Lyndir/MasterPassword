@@ -117,6 +117,9 @@ img.block {
     border-bottom: 2px ridge white;
     margin-bottom: 4em;
 }
+.thumb img.pull-right, img.pull-left {
+    width: 400px;
+}
 .thumb .pull-right {
     margin-left: 5ex;
 }
