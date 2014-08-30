@@ -23,8 +23,6 @@ a:link:hover {
 }
 a .popup {
     display: none;
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid;
     border-radius: 5px;
     color: #AAA;
 
@@ -35,7 +33,6 @@ a .popup {
     max-width: inherit;
     max-height: 400px;
     margin-right: -100px;
-    margin-bottom: 20px;
     padding: 8px;
 }
 a:hover .popup {

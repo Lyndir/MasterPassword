@@ -1,4 +1,4 @@
-<configuration scan="true">
+<configuration scan="false">
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -6,7 +6,7 @@
         </layout>
     </appender>
 
-    <logger name="com.lyndir" level="TRACE" />
+    <logger name="com.lyndir" level="${log.level:-INFO}" />
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />
