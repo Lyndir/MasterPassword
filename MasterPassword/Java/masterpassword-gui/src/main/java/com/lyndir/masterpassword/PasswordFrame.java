@@ -21,7 +21,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
     private final JTextField               siteNameField;
     private final JComboBox<MPElementType> siteTypeField;
     private final JSpinner                 siteCounterField;
-    private final JLabel                   passwordLabel;
+    private final JTextField               passwordField;
     private final JLabel                   tipLabel;
 
     public PasswordFrame(User user)
@@ -38,7 +38,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         } );
 
         // User
-        add( label = new JLabel( strf( "Generating passwords for: %s", user.getName() ) ), BorderLayout.NORTH );
+        add( label = new JLabel( strf( "Generating passwords for: %s", user.getUserName() ) ), BorderLayout.NORTH );
         label.setFont( Res.exoRegular().deriveFont( 12f ) );
         label.setAlignmentX( LEFT_ALIGNMENT );
 
@@ -74,6 +74,9 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                         SwingUtilities.invokeLater( new Runnable() {
                             @Override
                             public void run() {
+                                passwordField.setText( null );
+                                siteNameField.setText( null );
+
                                 if (getDefaultCloseOperation() == WindowConstants.EXIT_ON_CLOSE)
                                     System.exit( 0 );
                                 else
@@ -120,16 +123,18 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         } );
 
         // Password
-        passwordLabel = new JLabel( " ", JLabel.CENTER );
-        passwordLabel.setFont( Res.sourceCodeProBlack().deriveFont( 40f ) );
-        passwordLabel.setAlignmentX( Component.CENTER_ALIGNMENT );
+        passwordField = new JTextField( " " );
+        passwordField.setFont( Res.sourceCodeProBlack().deriveFont( 40f ) );
+        passwordField.setHorizontalAlignment( JTextField.CENTER );
+        passwordField.setAlignmentX( Component.CENTER_ALIGNMENT );
+        passwordField.setEditable( false );
 
         // Tip
         tipLabel = new JLabel( " ", JLabel.CENTER );
         tipLabel.setFont( Res.exoThin().deriveFont( 9f ) );
         tipLabel.setAlignmentX( Component.CENTER_ALIGNMENT );
 
-        add( Components.boxLayout( BoxLayout.PAGE_AXIS, passwordLabel, tipLabel ), BorderLayout.SOUTH );
+        add( Components.boxLayout( BoxLayout.PAGE_AXIS, passwordField, tipLabel ), BorderLayout.SOUTH );
 
         pack();
         setMinimumSize( getSize() );
@@ -146,7 +151,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         final int siteCounter = (Integer) siteCounterField.getValue();
 
         if (siteType.getTypeClass() != MPElementTypeClass.Generated || siteName == null || siteName.isEmpty() || !user.hasKey()) {
-            passwordLabel.setText( null );
+            passwordField.setText( null );
             tipLabel.setText( null );
             return;
         }
@@ -154,14 +159,17 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         Res.execute( new Runnable() {
             @Override
             public void run() {
-                final String sitePassword = MasterPassword.generateContent( siteType, siteName, user.getKey(), siteCounter );
+                final String sitePassword = user.getKey().encode( siteName, siteType, siteCounter );
                 if (callback != null)
                     callback.passwordGenerated( siteName, sitePassword );
 
                 SwingUtilities.invokeLater( new Runnable() {
                     @Override
                     public void run() {
-                        passwordLabel.setText( sitePassword );
+                        if (!siteName.equals( siteNameField.getText() ))
+                            return;
+
+                        passwordField.setText( sitePassword );
                         tipLabel.setText( "Press [Enter] to copy the password." );
                     }
                 } );

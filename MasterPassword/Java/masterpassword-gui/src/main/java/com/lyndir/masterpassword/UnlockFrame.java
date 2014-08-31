@@ -126,7 +126,7 @@ public class UnlockFrame extends JFrame {
     }
 
     boolean checkSignIn() {
-        boolean enabled = user != null && !user.getName().isEmpty() && user.hasKey();
+        boolean enabled = user != null && !user.getUserName().isEmpty() && user.hasKey();
         signInButton.setEnabled( enabled );
 
         return enabled;

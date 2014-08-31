@@ -89,7 +89,7 @@ public class ConfigAuthenticationPanel extends AuthenticationPanel implements It
             return selectedUser;
         }
 
-        return new User( selectedUser.getName(), new String( masterPasswordField.getPassword() ) );
+        return new User( selectedUser.getUserName(), new String( masterPasswordField.getPassword() ) );
     }
 
     public String getHelpText() {

@@ -8,29 +8,29 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
  */
 public class User {
 
-    private final String name;
-    private final String masterPassword;
-    private       byte[] key;
+    private final String    userName;
+    private final String    masterPassword;
+    private       MasterKey key;
 
-    public User(final String name, final String masterPassword) {
-        this.name = name;
+    public User(final String userName, final String masterPassword) {
+        this.userName = userName;
         this.masterPassword = masterPassword;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
     public boolean hasKey() {
         return key != null || (masterPassword != null && !masterPassword.isEmpty());
     }
 
-    public byte[] getKey() {
+    public MasterKey getKey() {
         if (key == null) {
             if (!hasKey()) {
-                throw new IllegalStateException( strf( "Master password unknown for user: %s", name ) );
+                throw new IllegalStateException( strf( "Master password unknown for user: %s", userName ) );
             } else {
-                key = MasterPassword.keyForPassword( masterPassword, name );
+                key = new MasterKey( userName, masterPassword );
             }
         }
 
@@ -39,11 +39,11 @@ public class User {
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return userName.hashCode();
     }
 
     @Override
     public String toString() {
-        return name;
+        return userName;
     }
 }

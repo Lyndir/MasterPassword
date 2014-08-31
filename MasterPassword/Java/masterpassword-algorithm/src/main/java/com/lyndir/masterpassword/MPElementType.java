@@ -80,11 +80,9 @@ public enum MPElementType {
      */
     public static MPElementType forName(final String name) {
 
-        for (final MPElementType type : values()) {
-            if (type.getName().equalsIgnoreCase( name ) || type.getShortName().equalsIgnoreCase( name )) {
+        for (final MPElementType type : values())
+            if (type.getName().equalsIgnoreCase( name ) || type.getShortName().equalsIgnoreCase( name ))
                 return type;
-            }
-        }
 
         throw logger.bug( "Element type not known: %s", name );
     }

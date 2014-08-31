@@ -2,6 +2,8 @@ package com.lyndir.masterpassword;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
+import com.google.common.io.CharSource;
+import com.google.common.io.CharStreams;
 import com.google.common.primitives.Bytes;
 import com.lambdaworks.crypto.SCrypt;
 import com.lyndir.lhunath.opal.crypto.CryptUtils;
@@ -11,18 +13,17 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
+import javax.xml.stream.events.Characters;
 
 
 /**
- * Implementation of the Master Password algorithm.
- *
- * <i>07 04, 2012</i>
- *
- * @author lhunath
+ * @author lhunath, 2014-08-30
  */
-public abstract class MasterPassword {
+public class MasterKey {
 
-    static final         Logger                       logger       = Logger.get( MasterPassword.class );
+    @SuppressWarnings("UnusedDeclaration")
+    private static final Logger                       logger       = Logger.get( MasterKey.class );
     private static final int                          MP_N         = 32768;
     private static final int                          MP_r         = 8;
     private static final int                          MP_p         = 2;
@@ -33,52 +34,60 @@ public abstract class MasterPassword {
     private static final MessageAuthenticationDigests MP_mac       = MessageAuthenticationDigests.HmacSHA256;
     private static final MPTemplates                  templates    = MPTemplates.load();
 
-    public static byte[] keyForPassword(final String password, final String username) {
+    private final String userName;
+    private final byte[] key;
+
+    private boolean valid;
+
+    public MasterKey(final String userName, final String masterPassword) {
+
+        this.userName = userName;
 
         long start = System.currentTimeMillis();
-        byte[] nusernameLengthBytes = ByteBuffer.allocate( Integer.SIZE / Byte.SIZE )
-                                                .order( MP_byteOrder )
-                                                .putInt( username.length() )
-                                                .array();
+        byte[] userNameLengthBytes = ByteBuffer.allocate( Integer.SIZE / Byte.SIZE )
+                                               .order( MP_byteOrder )
+                                               .putInt( userName.length() )
+                                               .array();
         byte[] salt = Bytes.concat( "com.lyndir.masterpassword".getBytes( MP_charset ), //
-                                    nusernameLengthBytes, //
-                                    username.getBytes( MP_charset ) );
+                                    userNameLengthBytes, userName.getBytes( MP_charset ) );
 
         try {
-            byte[] key = SCrypt.scrypt( password.getBytes( MP_charset ), salt, MP_N, MP_r, MP_p, MP_dkLen );
-            logger.trc( "User: %s, password: %s derives to key ID: %s (took %.2fs)", username, password,
-                        CodeUtils.encodeHex( keyIDForKey( key ) ), (double) (System.currentTimeMillis() - start) / 1000 );
+            key = SCrypt.scrypt( masterPassword.getBytes( MP_charset ), salt, MP_N, MP_r, MP_p, MP_dkLen );
+            valid = true;
 
-            return key;
+            logger.trc( "User: %s, master password derives to key ID: %s (took %.2fs)", //
+                        userName, getKeyID(), (double) (System.currentTimeMillis() - start) / 1000 );
         }
         catch (GeneralSecurityException e) {
             throw logger.bug( e );
         }
     }
 
-    public static byte[] subkeyForKey(final byte[] key, final int subkeyLength) {
+    public String getUserName() {
 
+        return userName;
+    }
+
+    public String getKeyID() {
+
+        Preconditions.checkState( valid );
+        return CodeUtils.encodeHex( MP_hash.of( key ) );
+    }
+
+    private byte[] getSubkey(final int subkeyLength) {
+
+        Preconditions.checkState( valid );
         byte[] subkey = new byte[Math.min( subkeyLength, key.length )];
         System.arraycopy( key, 0, subkey, 0, subkey.length );
 
         return subkey;
     }
 
-    public static byte[] keyIDForPassword(final String password, final String username) {
+    public String encode(final String name, final MPElementType type, int counter) {
 
-        return keyIDForKey( keyForPassword( password, username ) );
-    }
-
-    public static byte[] keyIDForKey(final byte[] key) {
-
-        return MP_hash.of( key );
-    }
-
-    public static String generateContent(final MPElementType type, final String name, final byte[] key, int counter) {
-
+        Preconditions.checkState( valid );
         Preconditions.checkArgument( type.getTypeClass() == MPElementTypeClass.Generated );
         Preconditions.checkArgument( !name.isEmpty() );
-        Preconditions.checkArgument( key.length > 0 );
 
         if (counter == 0)
             counter = (int) (System.currentTimeMillis() / (300 * 1000)) * 300;
@@ -112,17 +121,9 @@ public abstract class MasterPassword {
         return password.toString();
     }
 
-    public static void main(final String... arguments) {
+    public void invalidate() {
 
-        String masterPassword = "test-mp";
-        String username = "test-user";
-        String siteName = "test-site";
-        MPElementType siteType = MPElementType.GeneratedLong;
-        int siteCounter = 42;
-
-        String sitePassword = generateContent( siteType, siteName, keyForPassword( masterPassword, username ), siteCounter );
-
-        logger.inf( "master password: %s, username: %s\nsite name: %s, site type: %s, site counter: %d\n    => site password: %s",
-                    masterPassword, username, siteName, siteType, siteCounter, sitePassword );
+        valid = false;
+        Arrays.fill( key, (byte) 0 );
     }
 }

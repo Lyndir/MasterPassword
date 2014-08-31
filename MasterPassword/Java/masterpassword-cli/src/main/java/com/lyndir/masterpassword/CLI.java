@@ -13,13 +13,16 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
+
+
 package com.lyndir.masterpassword;
+
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
 
 import com.google.common.io.LineReader;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Arrays;
 
 
@@ -30,22 +33,24 @@ import java.util.Arrays;
  */
 public class CLI {
 
-    static final Logger logger = Logger.get( CLI.class );
-    private static final String ENV_USERNAME = "MP_USERNAME";
-    private static final String ENV_PASSWORD = "MP_PASSWORD";
+    private static final String ENV_USERNAME    = "MP_USERNAME";
+    private static final String ENV_PASSWORD    = "MP_PASSWORD";
+    private static final String ENV_SITETYPE    = "MP_SITETYPE";
+    private static final String ENV_SITECOUNTER = "MP_SITECOUNTER";
 
     public static void main(final String[] args)
             throws IOException {
 
-        String userName, masterPassword, siteName = null;
+        // Read information from the environment.
+        String siteName = null;
+        String userName = System.getenv().get( ENV_USERNAME );
+        String masterPassword = System.getenv().get( ENV_PASSWORD );
+        String siteTypeName = ifNotNullElse( System.getenv().get( ENV_SITETYPE ), "" );
+        MPElementType siteType = siteTypeName.isEmpty()? MPElementType.GeneratedLong: MPElementType.forName( siteTypeName );
+        String siteCounterName = ifNotNullElse( System.getenv().get( ENV_SITECOUNTER ), "" );
+        int siteCounter = siteCounterName.isEmpty()? 1: Integer.parseInt( siteCounterName );
 
-        /* Environment. */
-        userName = System.getenv().get( ENV_USERNAME );
-        masterPassword = System.getenv().get( ENV_PASSWORD );
-
-        /* Arguments. */
-        int counter = 1;
-        MPElementType type = MPElementType.GeneratedLong;
+        // Parse information from option arguments.
         boolean typeArg = false, counterArg = false, userNameArg = false;
         for (final String arg : Arrays.asList( args ))
             if ("-t".equals( arg ) || "--type".equals( arg ))
@@ -58,12 +63,12 @@ public class CLI {
                     System.exit( 0 );
                 }
 
-                type = MPElementType.forName( arg );
+                siteType = MPElementType.forName( arg );
                 typeArg = false;
             } else if ("-c".equals( arg ) || "--counter".equals( arg ))
                 counterArg = true;
             else if (counterArg) {
-                counter = ConversionUtils.toIntegerNN( arg );
+                siteCounter = ConversionUtils.toIntegerNN( arg );
                 counterArg = false;
             } else if ("-u".equals( arg ) || "--username".equals( arg ))
                 userNameArg = true;
@@ -80,12 +85,12 @@ public class CLI {
                 System.out.println( "Available options:" );
 
                 System.out.println( "\t-t | --type [site password type]" );
-                System.out.format( "\t\tDefault: %s.  The password type to use for this site.\n", type.getName() );
+                System.out.format( "\t\tDefault: %s.  The password type to use for this site.\n", siteType.getName() );
                 System.out.println( "\t\tUse 'list' to see the available types." );
 
                 System.out.println();
                 System.out.println( "\t-c | --counter [site counter]" );
-                System.out.format( "\t\tDefault: %d.  The counter to use for this site.\n", counter );
+                System.out.format( "\t\tDefault: %d.  The counter to use for this site.\n", siteCounter );
                 System.out.println( "\t\tIncrement the counter if you need a new password." );
 
                 System.out.println();
@@ -106,28 +111,33 @@ public class CLI {
             } else
                 siteName = arg;
 
-        InputStreamReader inReader = new InputStreamReader( System.in );
-        try {
+        // Read missing information from the console.
+        Console console = System.console();
+        try (InputStreamReader inReader = new InputStreamReader( System.in )) {
             LineReader lineReader = new LineReader( inReader );
+
             if (siteName == null) {
                 System.err.format( "Site name: " );
                 siteName = lineReader.readLine();
             }
+
             if (userName == null) {
                 System.err.format( "User's name: " );
                 userName = lineReader.readLine();
             }
-            if (masterPassword == null) {
-                System.err.format( "%s's master password: ", userName );
-                masterPassword = lineReader.readLine();
-            }
 
-            byte[] masterKey = MasterPassword.keyForPassword( masterPassword, userName );
-            String sitePassword = MasterPassword.generateContent( type, siteName, masterKey, counter );
-            System.out.println( sitePassword );
+            if (masterPassword == null) {
+                if (console != null)
+                    masterPassword = new String( console.readPassword( "%s's master password: ", userName ) );
+
+                else {
+                    System.err.format( "%s's master password: ", userName );
+                    masterPassword = lineReader.readLine();
+                }
+            }
         }
-        finally {
-            inReader.close();
-        }
+
+        // Encode and write out the site password.
+        System.out.println( new MasterKey( userName, masterPassword ).encode( siteName, siteType, siteCounter ) );
     }
 }

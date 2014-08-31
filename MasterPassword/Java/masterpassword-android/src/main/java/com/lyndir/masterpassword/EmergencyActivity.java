@@ -16,7 +16,6 @@ import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.util.concurrent.*;
-import java.util.prefs.Preferences;
 
 
 public class EmergencyActivity extends Activity {
@@ -38,7 +37,7 @@ public class EmergencyActivity extends Activity {
         }
     };
 
-    private ListenableFuture<byte[]> masterKeyFuture;
+    private ListenableFuture<MasterKey> masterKeyFuture;
 
     @InjectView(R.id.progressView)
     ProgressBar progressView;
@@ -142,16 +141,12 @@ public class EmergencyActivity extends Activity {
         }
 
         progressView.setVisibility( View.VISIBLE );
-        (masterKeyFuture = executor.submit( new Callable<byte[]>() {
+        (masterKeyFuture = executor.submit( new Callable<MasterKey>() {
             @Override
-            public byte[] call()
+            public MasterKey call()
                     throws Exception {
                 try {
-                    long start = System.currentTimeMillis();
-                    byte[] masterKey = MasterPassword.keyForPassword( masterPassword, userName );
-                    logger.inf( "masterKey time: %d", System.currentTimeMillis() - start );
-
-                    return masterKey;
+                    return new MasterKey( userName, masterPassword );
                 }
                 catch (RuntimeException e) {
                     sitePasswordField.setText( "" );
@@ -189,9 +184,7 @@ public class EmergencyActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    long start = System.currentTimeMillis();
-                    final String sitePassword = MasterPassword.generateContent( type, siteName, masterKeyFuture.get(), counter );
-                    logger.inf( "sitePassword time: %d", System.currentTimeMillis() - start );
+                    final String sitePassword = masterKeyFuture.get().encode( siteName, type, counter );
 
                     runOnUiThread( new Runnable() {
                         @Override
