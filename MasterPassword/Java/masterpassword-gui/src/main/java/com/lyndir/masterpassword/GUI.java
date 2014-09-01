@@ -48,6 +48,20 @@ public class GUI implements UnlockFrame.SignInCallback {
     public static void main(final String[] args)
             throws IOException {
 
+        if (Config.get().checkForUpdates())
+            checkUpdate();
+
+        GUI gui;
+        try {
+            gui = TypeUtils.newInstance( AppleGUI.class );
+        }
+        catch (NoClassDefFoundError e) {
+            gui = new GUI();
+        }
+        gui.open();
+    }
+
+    private static void checkUpdate() {
         try {
             Enumeration<URL> manifestURLs = Thread.currentThread().getContextClassLoader().getResources( JarFile.MANIFEST_NAME );
             while (manifestURLs.hasMoreElements()) {
@@ -74,15 +88,6 @@ public class GUI implements UnlockFrame.SignInCallback {
         catch (IOException e) {
             logger.wrn( e, "Couldn't check for version update." );
         }
-
-        GUI gui;
-        try {
-            gui = TypeUtils.newInstance( AppleGUI.class );
-        }
-        catch (NoClassDefFoundError e) {
-            gui = new GUI();
-        }
-        gui.open();
     }
 
     void open() {

@@ -6,7 +6,7 @@
         </layout>
     </appender>
 
-    <logger name="com.lyndir" level="${log.level:-INFO}" />
+    <logger name="com.lyndir" level="${mp.log.level:-INFO}" />
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />
