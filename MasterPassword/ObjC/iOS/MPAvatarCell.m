@@ -58,10 +58,10 @@ const long MPAvatarAdd = 10000;
     self.avatarImageView.backgroundColor = [UIColor clearColor];
 
     [self observeKeyPath:@"selected" withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
-        [_self updateAnimated:YES];
+        [_self updateAnimated:self.superview != nil];
     }];
     [self observeKeyPath:@"highlighted" withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
-        [_self updateAnimated:YES];
+        [_self updateAnimated:self.superview != nil];
     }];
 
     CABasicAnimation *toShadowOpacityAnimation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
