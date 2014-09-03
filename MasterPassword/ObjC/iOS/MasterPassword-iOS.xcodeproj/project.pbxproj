@@ -3564,7 +3564,7 @@
 					Reveal,
 				);
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "94333D7F-68F7-473D-B3B1-86AA41F33449";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "78fbee53-abe7-4a47-b917-c223df3a6952";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -3592,7 +3592,7 @@
 					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
 				);
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "923E2981-1F88-4F05-9408-9EC085C53225";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7142c408-252a-43c0-94c6-1ae1f43173f4";
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -3701,7 +3701,7 @@
 					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
 				);
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "36641E9D-D5E0-4E80-94F4-B2CF898CFE10";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "48f9bae8-b80e-41c7-8792-663102bed54f";
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
 				TARGETED_DEVICE_FAMILY = 1;

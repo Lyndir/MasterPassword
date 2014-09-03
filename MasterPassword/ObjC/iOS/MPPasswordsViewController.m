@@ -370,7 +370,10 @@ referenceSizeForHeaderInSection:(NSInteger)section {
     }
 
     [self.fetchedResultsController.managedObjectContext performBlock:^{
-        NSArray *oldSections = [self.fetchedResultsController sections];
+        NSArray *oldSectionInfos = [self.fetchedResultsController sections];
+        NSMutableArray *oldSections = [[NSMutableArray alloc] initWithCapacity:[oldSectionInfos count]];
+        for (id<NSFetchedResultsSectionInfo> sectionInfo in oldSectionInfos)
+            [oldSections addObject:[sectionInfo.objects copy]];
 
         NSError *error = nil;
         self.fetchedResultsController.fetchRequest.predicate =
@@ -391,7 +394,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
                 else if (section >= toSections)
                     [self.passwordCollectionView deleteSections:[NSIndexSet indexSetWithIndex:section]];
                 else
-                    [self.passwordCollectionView reloadItemsFromArray:[oldSections[section] objects]
+                    [self.passwordCollectionView reloadItemsFromArray:oldSections[section]
                                                               toArray:[[self.fetchedResultsController sections][section] objects]
                                                             inSection:section];
             }
