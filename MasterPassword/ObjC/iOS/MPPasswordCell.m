@@ -57,11 +57,21 @@
     [self.counterButton addGestureRecognizer:
             [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector( doResetCounter: )]];
 
-    self.selectionButton.layer.cornerRadius = 5;
+    self.selectionButton.layer.cornerRadius = 4;
     self.selectionButton.layer.shadowOffset = CGSizeZero;
     self.selectionButton.layer.shadowRadius = 5;
     self.selectionButton.layer.shadowOpacity = 0;
     self.selectionButton.layer.shadowColor = [UIColor whiteColor].CGColor;
+    self.selectionButton.layer.borderWidth = 1;
+    self.selectionButton.layer.borderColor = [UIColor colorWithWhite:0.15f alpha:0.6f].CGColor;
+    self.contentView.layer.shadowRadius = 5;
+    self.contentView.layer.shadowOpacity = 1;
+    self.contentView.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.6f].CGColor;
+    self.contentView.layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:self.contentView.bounds cornerRadius:4].CGPath;
+    self.contentView.layer.masksToBounds = NO;
+    self.contentView.clipsToBounds = NO;
+    self.layer.masksToBounds = NO;
+    self.clipsToBounds = NO;
 
     self.pageControl.transform = CGAffineTransformMakeScale( 0.4f, 0.4f );
 
