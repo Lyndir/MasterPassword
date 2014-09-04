@@ -292,6 +292,9 @@ header .box .maximized {
     background: radial-gradient(50% 50% at 50% 30%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.8) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#44000000', endColorstr='#cc000000',GradientType=1 );
 }
+#tender_toggler {
+    z-index: 2;
+}
 header .content {
     position: absolute;
     bottom: 5px;
