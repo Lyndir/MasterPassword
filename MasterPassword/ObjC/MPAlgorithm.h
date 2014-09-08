@@ -62,7 +62,7 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 - (NSString *)generateContentNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter usingKey:(MPKey *)key;
 - (NSString *)storedContentForElement:(MPElementStoredEntity *)element usingKey:(MPKey *)key;
 
-- (void)saveContent:(NSString *)clearContent toElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
+- (BOOL)saveContent:(NSString *)clearContent toElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
 - (NSString *)resolveContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
 - (void)resolveContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey
                           result:(void (^)(NSString *result))resultBlock;

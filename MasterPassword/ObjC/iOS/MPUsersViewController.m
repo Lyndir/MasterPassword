@@ -24,6 +24,7 @@
 #import "MPAppDelegate_Key.h"
 #import "PearlSizedTextView.h"
 #import "MPWebViewController.h"
+#import "UIView+FontScale.h"
 
 typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     /** The users are all inactive */

@@ -48,6 +48,7 @@
 		DA3B8452190FC86F00246EEA /* NSManagedObject+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3B8450190FC86F00246EEA /* NSManagedObject+Pearl.m */; };
 		DA3B8453190FC86F00246EEA /* NSManagedObject+Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */; };
 		DA3B8456190FC89700246EEA /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3B8454190FC89700246EEA /* MPFixable.m */; };
+		DA3BCFCD19BD09E0006B2681 /* SourceCodePro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */; };
 		DA4425CC1557BED40052177D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
 		DA5E5C9417248AA1003798D8 /* libscryptenc-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5E5C8717248AA1003798D8 /* libscryptenc-osx.a */; };
@@ -275,6 +276,7 @@
 		DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Pearl.h"; sourceTree = "<group>"; };
 		DA3B8454190FC89700246EEA /* MPFixable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPFixable.m; sourceTree = "<group>"; };
 		DA3B8455190FC89700246EEA /* MPFixable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPFixable.h; sourceTree = "<group>"; };
+		DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Regular.otf"; sourceTree = "<group>"; };
 		DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUbiquityStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5BFA44147E415C00F98B1E /* Master Password.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Master Password.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5BFA4A147E415C00F98B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -1607,6 +1609,7 @@
 		DACA268A1705DF81002C6C22 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */,
 				DAF4EF52190A828100023C90 /* Exo2.0-Thin.otf */,
 				DAF4EF53190A828100023C90 /* Exo2.0-Regular.otf */,
 				DAF4EF54190A828100023C90 /* Exo2.0-ExtraBold.otf */,
@@ -2041,6 +2044,7 @@
 				DACA27301705DF81002C6C22 /* avatar-18.png in Resources */,
 				DACA27311705DF81002C6C22 /* avatar-4.png in Resources */,
 				DAF4EF58190A828100023C90 /* Exo2.0-ExtraBold.otf in Resources */,
+				DA3BCFCD19BD09E0006B2681 /* SourceCodePro-Regular.otf in Resources */,
 				DAF4EF56190A828100023C90 /* Exo2.0-Thin.otf in Resources */,
 				DACA27321705DF81002C6C22 /* avatar-16.png in Resources */,
 				DACA27331705DF81002C6C22 /* avatar-12@2x.png in Resources */,

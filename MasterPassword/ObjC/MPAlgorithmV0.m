@@ -369,7 +369,7 @@
     return [self decryptContent:element.contentObject usingKey:key];
 }
 
-- (void)saveContent:(NSString *)clearContent toElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+- (BOOL)saveContent:(NSString *)clearContent toElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
 
     NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     switch (element.type) {
@@ -380,26 +380,29 @@
         case MPElementTypeGeneratedShort:
         case MPElementTypeGeneratedPIN: {
             NSAssert( NO, @"Cannot save content to element with generated type %lu.", (long)element.type );
-            break;
+            return NO;
         }
 
         case MPElementTypeStoredPersonal: {
             if (![element isKindOfClass:[MPElementStoredEntity class]]) {
                 wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
                                 (long)element.type, [element class] );
-                break;
+                return NO;
             }
 
             NSData *encryptedContent = [[clearContent dataUsingEncoding:NSUTF8StringEncoding]
                     encryptWithSymmetricKey:[elementKey subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
+            if ([((MPElementStoredEntity *)element).contentObject isEqualToData:encryptedContent])
+                return NO;
+
             ((MPElementStoredEntity *)element).contentObject = encryptedContent;
-            break;
+            return YES;
         }
         case MPElementTypeStoredDevicePrivate: {
             if (![element isKindOfClass:[MPElementStoredEntity class]]) {
                 wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
                                 (long)element.type, [element class] );
-                break;
+                return NO;
             }
 
             NSData *encryptedContent = [[clearContent dataUsingEncoding:NSUTF8StringEncoding]
@@ -415,9 +418,11 @@
 #endif
                 }];
             ((MPElementStoredEntity *)element).contentObject = nil;
-            break;
+            return YES;
         }
     }
+
+    Throw( @"Unsupported type: %d", element.type );
 }
 
 - (NSString *)resolveContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {

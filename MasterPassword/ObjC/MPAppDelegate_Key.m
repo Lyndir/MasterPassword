@@ -143,8 +143,8 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     }
 
     user.lastUsed = [NSDate date];
-    [moc saveToStore];
     self.activeUser = user;
+    [moc saveToStore];
 
     // Perform a data sanity check now that we're logged in as the user to allow fixes that require the user's key.
     if ([[MPConfig get].checkInconsistency boolValue])
