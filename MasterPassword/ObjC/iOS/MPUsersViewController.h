@@ -19,7 +19,6 @@
 
 @interface MPUsersViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextFieldDelegate>
 
-@property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property(weak, nonatomic) IBOutlet UIView *userSelectionContainer;
 @property(weak, nonatomic) IBOutlet UIButton *marqueeButton;
 @property(weak, nonatomic) IBOutlet UIView *gitTipTip;
@@ -32,7 +31,6 @@
 @property(weak, nonatomic) IBOutlet UIView *footerContainer;
 @property(weak, nonatomic) IBOutlet UIActivityIndicatorView *storeLoadingActivity;
 @property(weak, nonatomic) IBOutlet UICollectionView *avatarCollectionView;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *navigationBarToTopConstraint;
 @property (strong, nonatomic) IBOutlet UIButton *nextAvatarButton;
 @property (strong, nonatomic) IBOutlet UIButton *previousAvatarButton;
 

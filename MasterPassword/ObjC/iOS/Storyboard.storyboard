@@ -46,7 +46,6 @@
             <string>Exo2.0-Regular</string>
             <string>Exo2.0-Regular</string>
             <string>Exo2.0-Regular</string>
-            <string>Exo2.0-Regular</string>
         </mutableArray>
         <mutableArray key="Exo2.0-Thin.otf">
             <string>Exo2.0-Thin</string>
@@ -126,10 +125,10 @@
                                                             </constraints>
                                                         </imageView>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Sa-Vg-EEI" userLabel="Name Backdrop">
-                                                            <rect key="frame" x="16" y="117" width="129" height="16"/>
+                                                            <rect key="frame" x="16" y="117" width="128.5" height="16"/>
                                                             <subviews>
-                                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cLT-s0-4SQ" userLabel="Name Field">
-                                                                    <rect key="frame" x="5" y="0.0" width="119" height="16"/>
+                                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="1000" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cLT-s0-4SQ" userLabel="Name Field">
+                                                                    <rect key="frame" x="5" y="0.0" width="118.5" height="16"/>
                                                                     <fontDescription key="fontDescription" name="Exo2.0-ExtraBold" family="Exo 2.0" pointSize="13"/>
                                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <nil key="highlightedColor"/>
@@ -226,7 +225,7 @@
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="MyMasterPassword" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="z3Z-AB-fG2" userLabel="Entry Field">
                                                 <rect key="frame" x="10" y="32" width="315" height="34"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="28"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardAppearance="alert" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
                                                 <connections>
                                                     <outlet property="delegate" destination="S8q-YF-Kt9" id="5u3-XN-LOe"/>

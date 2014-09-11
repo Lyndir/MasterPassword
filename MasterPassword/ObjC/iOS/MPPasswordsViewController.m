@@ -215,6 +215,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
         if (_passwordsDismissRecognizer)
             [self.view removeGestureRecognizer:_passwordsDismissRecognizer];
 
+        [self updatePasswords];
         [UIView animateWithDuration:0.3f animations:^{
             self.passwordCollectionView.backgroundColor = _backgroundColor;
         }];
@@ -223,6 +224,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
 
+    searchBar.text = nil;
     [searchBar resignFirstResponder];
 }
 

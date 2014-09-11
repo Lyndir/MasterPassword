@@ -142,6 +142,7 @@
 		DA69540717D975D900BF294E /* icon_gears@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37851711E29500CF925C /* icon_gears@2x.png */; };
 		DA72BD7519C133BF00E6ACFE /* libscryptenc-ios-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA72BD7419C133BF00E6ACFE /* libscryptenc-ios-dev.a */; };
 		DA72BD7919C137DE00E6ACFE /* libopensslcrypto-ios-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA72BD7719C137D500E6ACFE /* libopensslcrypto-ios-dev.a */; };
+		DA72BD7B19C1510C00E6ACFE /* UIView+FontScale.m in Sources */ = {isa = PBXBuildFile; fileRef = DACE2F6719BA6A2A0010F92E /* UIView+FontScale.m */; };
 		DA73049D194E022700E72520 /* ui_spinner.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD36511711E29400CF925C /* ui_spinner.png */; };
 		DA73049E194E022700E72520 /* ui_spinner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD36521711E29400CF925C /* ui_spinner@2x.png */; };
 		DA73049F194E022B00E72520 /* ui_textfield.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD365B1711E29400CF925C /* ui_textfield.png */; };
@@ -274,7 +275,6 @@
 		DACA29BF1705E2DE002C6C22 /* UIColor+HSV.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA29BB1705E2DE002C6C22 /* UIColor+HSV.m */; };
 		DACE2F6519BA6A0A0010F92E /* PearlProfiler.m in Sources */ = {isa = PBXBuildFile; fileRef = DACE2F6319BA6A0A0010F92E /* PearlProfiler.m */; };
 		DACE2F6619BA6A0A0010F92E /* PearlProfiler.h in Headers */ = {isa = PBXBuildFile; fileRef = DACE2F6419BA6A0A0010F92E /* PearlProfiler.h */; };
-		DACE2F6B19BA6A2A0010F92E /* UIView+FontScale.m in Sources */ = {isa = PBXBuildFile; fileRef = DACE2F6719BA6A2A0010F92E /* UIView+FontScale.m */; };
 		DACE2F6C19BA6A2A0010F92E /* PearlMutableStaticTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DACE2F6819BA6A2A0010F92E /* PearlMutableStaticTableViewController.m */; };
 		DACE2F6D19BA6A2A0010F92E /* PearlMutableStaticTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = DACE2F6919BA6A2A0010F92E /* PearlMutableStaticTableViewController.h */; };
 		DACE2F6E19BA6A2A0010F92E /* UIView+FontScale.h in Headers */ = {isa = PBXBuildFile; fileRef = DACE2F6A19BA6A2A0010F92E /* UIView+FontScale.h */; };
@@ -3296,6 +3296,7 @@
 				DAFE4A3015039824003ABA7C /* PearlStringUtils.m in Sources */,
 				DAFE4A3515039824003ABA7C /* PearlCryptUtils.m in Sources */,
 				DAFE4A3715039824003ABA7C /* PearlKeyChain.m in Sources */,
+				DA72BD7B19C1510C00E6ACFE /* UIView+FontScale.m in Sources */,
 				DA250A17195665A100AC23F1 /* UITableView+PearlReloadFromArray.m in Sources */,
 				DAFE4A3915039824003ABA7C /* PearlRSAKey.m in Sources */,
 				DAFE4A3B15039824003ABA7C /* PearlSCrypt.m in Sources */,
@@ -3328,7 +3329,6 @@
 				DAEC85B518E3DD9A007FC0DF /* UIView+Touches.m in Sources */,
 				DA2CA4DD18D28859007798F8 /* NSArray+Pearl.m in Sources */,
 				DAFE4A63150399FF003ABA8A /* UIControl+PearlSelect.m in Sources */,
-				DACE2F6B19BA6A2A0010F92E /* UIView+FontScale.m in Sources */,
 				DAFE4A63150399FF003ABA8E /* UIScrollView+PearlFlashingIndicators.m in Sources */,
 				DAFE4A63150399FF003ABA92 /* NSDateFormatter+RFC3339.m in Sources */,
 				DA2CA4E618D2AC10007798F8 /* NSLayoutConstraint+PearlUIKit.m in Sources */,
