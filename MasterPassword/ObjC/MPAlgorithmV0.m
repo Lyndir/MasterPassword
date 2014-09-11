@@ -422,7 +422,7 @@
         }
     }
 
-    Throw( @"Unsupported type: %d", element.type );
+    Throw( @"Unsupported type: %ld", (long)element.type );
 }
 
 - (NSString *)resolveContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
