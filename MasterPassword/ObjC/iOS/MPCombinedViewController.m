@@ -38,7 +38,7 @@
 
     [super viewDidLoad];
 
-    [self setMode:MPCombinedModeUserSelection animated:NO];
+    _mode = MPCombinedModeUserSelection;
 }
 
 - (void)viewWillAppear:(BOOL)animated {

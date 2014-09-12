@@ -74,8 +74,6 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
     self.view.backgroundColor = [UIColor clearColor];
     self.avatarCollectionView.allowsMultipleSelection = YES;
     [self.entryField addTarget:self action:@selector( textFieldEditingChanged: ) forControlEvents:UIControlEventEditingChanged];
-
-    [self setActive:YES animated:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -83,15 +81,7 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
     [super viewWillAppear:animated];
 
     self.userSelectionContainer.alpha = 0;
-
-    [self observeStore];
-    [self registerObservers];
-    [self reloadUsers];
-
-    [self.marqueeTipTimer invalidate];
-    self.marqueeTipTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector( firedMarqueeTimer: )
-                                                          userInfo:nil repeats:YES];
-    [self firedMarqueeTimer:nil];
+    [self setActive:YES animated:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -102,6 +92,20 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
     [self stopObservingStore];
 
     [self.marqueeTipTimer invalidate];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+
+    [super viewDidAppear:animated];
+
+    [self observeStore];
+    [self registerObservers];
+    [self reloadUsers];
+
+    [self.marqueeTipTimer invalidate];
+    self.marqueeTipTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector( firedMarqueeTimer: )
+                                                          userInfo:nil repeats:YES];
+    [self firedMarqueeTimer:nil];
 }
 
 - (void)viewDidLayoutSubviews {
