@@ -287,6 +287,7 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
 
     if (collectionView == self.avatarCollectionView) {
         MPAvatarCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[MPAvatarCell reuseIdentifier] forIndexPath:indexPath];
+        cell.contentView.frame = cell.bounds;
         [cell addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector( didLongPress: )]];
         [self updateModeForAvatar:cell atIndexPath:indexPath animated:NO];
         [self updateVisibilityForAvatar:cell atIndexPath:indexPath animated:NO];

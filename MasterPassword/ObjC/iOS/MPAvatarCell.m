@@ -197,7 +197,7 @@ const long MPAvatarAdd = 10000;
     [UIView animateWithDuration:animated? 0.2f: 0 animations:^{
         self.avatarImageView.transform = CGAffineTransformIdentity;
     }];
-    [UIView animateWithDuration:animated? 0.7f: 0 delay:0
+    [UIView animateWithDuration:animated? 0.5f: 0 delay:0
                         options:UIViewAnimationOptionOverrideInheritedDuration | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          self.alpha = 1;
