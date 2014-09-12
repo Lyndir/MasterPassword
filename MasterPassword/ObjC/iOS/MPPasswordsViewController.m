@@ -106,7 +106,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)collectionViewLayout;
-    CGFloat itemWidth = UIEdgeInsetsInsetRect( self.passwordCollectionView.bounds, layout.sectionInset ).size.width;
+    CGFloat itemWidth = UIEdgeInsetsInsetRect( collectionView.bounds, layout.sectionInset ).size.width;
     return CGSizeMake( itemWidth, 100 );
 }
 

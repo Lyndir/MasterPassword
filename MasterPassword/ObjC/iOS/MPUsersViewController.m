@@ -108,9 +108,15 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
     [self firedMarqueeTimer:nil];
 }
 
-- (void)viewDidLayoutSubviews {
+- (void)viewWillLayoutSubviews {
 
-    [super viewDidLayoutSubviews];
+    [self.avatarCollectionView.collectionViewLayout invalidateLayout];
+    [super viewWillLayoutSubviews];
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+
+    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 
     [self.avatarCollectionView.collectionViewLayout invalidateLayout];
 }
@@ -262,15 +268,25 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 
+- (CGSize)       collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
+referenceSizeForHeaderInSection:(NSInteger)section {
+
+    CGSize parentSize = self.avatarCollectionView.bounds.size;
+    return CGSizeMake( parentSize.width / 4, parentSize.height );
+}
+
+- (CGSize)       collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
+referenceSizeForFooterInSection:(NSInteger)section {
+
+    CGSize parentSize = self.avatarCollectionView.bounds.size;
+    return CGSizeMake( parentSize.width / 4, parentSize.height );
+}
+
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    if (collectionView == self.avatarCollectionView) {
-        CGSize parentSize = self.avatarCollectionView.bounds.size;
-        return CGSizeMake( parentSize.width / 2, parentSize.height );
-    }
-
-    Throw( @"unexpected collection view: %@", collectionView );
+    CGSize parentSize = self.avatarCollectionView.bounds.size;
+    return CGSizeMake( parentSize.width / 2, parentSize.height );
 }
 
 #pragma mark - UICollectionViewDataSource
