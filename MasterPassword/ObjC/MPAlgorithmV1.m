@@ -45,29 +45,31 @@
     return YES;
 }
 
-- (NSString *)generateContentNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter usingKey:(MPKey *)key {
+- (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter
+                                  variant:(MPElementVariant)variant usingKey:(MPKey *)key {
 
     // Determine the seed whose bytes will be used for calculating a password
     uint32_t ncounter = htonl( counter ), nnameLength = htonl( name.length );
     NSData *counterBytes = [NSData dataWithBytes:&ncounter length:sizeof( ncounter )];
     NSData *nameLengthBytes = [NSData dataWithBytes:&nnameLength length:sizeof( nnameLength )];
-    trc( @"seed from: hmac-sha256(%@, 'com.lyndir.masterpassword' | %@ | %@ | %@)", [key.keyData encodeBase64], [nameLengthBytes encodeHex],
-                    name, [counterBytes encodeHex] );
+    NSString *scope = [self scopeForVariant:variant];
+    trc( @"seed from: hmac-sha256(%@, %@ | %@ | %@ | %@)",
+            [[key keyID] encodeHex], scope, [nameLengthBytes encodeHex], name, [counterBytes encodeHex] );
     NSData *seed = [[NSData dataByConcatenatingDatas:
-            [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
+            [scope dataUsingEncoding:NSUTF8StringEncoding],
             nameLengthBytes,
             [name dataUsingEncoding:NSUTF8StringEncoding],
             counterBytes,
-            nil]
+                    nil]
             hmacWith:PearlHashSHA256 key:key.keyData];
-    trc( @"seed is: %@", [seed encodeBase64] );
+    trc( @"seed is: %@", [seed encodeHex] );
     const unsigned char *seedBytes = seed.bytes;
 
     // Determine the cipher from the first seed byte.
     NSAssert( [seed length], @"Missing seed." );
     NSArray *typeCiphers = [self ciphersForType:type];
     NSString *cipher = typeCiphers[seedBytes[0] % [typeCiphers count]];
-    trc( @"type %@, ciphers: %@, selected: %@", [self nameOfType:type], typeCiphers, cipher );
+    trc( @"type %@ (%d), ciphers: %@, selected: %@", [self nameOfType:type], type, typeCiphers, cipher );
 
     // Encode the content, character by character, using subsequent seed bytes and the cipher.
     NSAssert( [seed length] >= [cipher length] + 1, @"Insufficient seed bytes to encode cipher." );

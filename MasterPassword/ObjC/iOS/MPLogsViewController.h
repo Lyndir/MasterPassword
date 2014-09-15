@@ -23,7 +23,6 @@
 @property (weak, nonatomic) IBOutlet UITextView *logView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *levelControl;
 
-- (IBAction)action:(id)sender;
 - (IBAction)toggleLevelControl:(UISegmentedControl *)sender;
 - (IBAction)refresh:(UIBarButtonItem *)sender;
 - (IBAction)mail:(UIBarButtonItem *)sender;

@@ -119,7 +119,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 
-    if (![MPiOSAppDelegate get].activeUserOID)
+    if (![MPiOSAppDelegate get].activeUserOID || !_fetchedResultsController)
         return 0;
 
     NSUInteger objects = ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[section]).numberOfObjects;
@@ -283,7 +283,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 
                         _fetchedResultsController = nil;
                         self.passwordsSearchBar.text = nil;
-                        [self updatePasswords];
+                        [self.passwordCollectionView reloadData];
                     }],
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:UIApplicationDidBecomeActiveNotification object:nil
@@ -324,18 +324,19 @@ referenceSizeForHeaderInSection:(NSInteger)section {
                 }];
     if (!_storeChangingObserver)
         _storeChangingObserver = [[NSNotificationCenter defaultCenter]
-                addObserverForName:USMStoreWillChangeNotification object:nil
-                             queue:nil usingBlock:^(NSNotification *note) {
-                    Strongify( self );
-                    if (self->_mocObserver)
-                        [[NSNotificationCenter defaultCenter] removeObserver:self->_mocObserver];
-                }];
-    if (!_storeChangedObserver)
-        _storeChangedObserver = [[NSNotificationCenter defaultCenter]
-                addObserverForName:USMStoreDidChangeNotification object:nil
+                addObserverForName:NSPersistentStoreCoordinatorStoresWillChangeNotification object:nil
                              queue:nil usingBlock:^(NSNotification *note) {
                     Strongify( self );
                     self->_fetchedResultsController = nil;
+                    if (self->_mocObserver)
+                        [[NSNotificationCenter defaultCenter] removeObserver:self->_mocObserver];
+                    [self.passwordCollectionView reloadData];
+                }];
+    if (!_storeChangedObserver)
+        _storeChangedObserver = [[NSNotificationCenter defaultCenter]
+                addObserverForName:NSPersistentStoreCoordinatorStoresDidChangeNotification object:nil
+                             queue:nil usingBlock:^(NSNotification *note) {
+                    Strongify( self );
                     [self updatePasswords];
                 }];
 }
@@ -418,6 +419,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 - (NSFetchedResultsController *)fetchedResultsController {
 
     if (!_fetchedResultsController) {
+        _showTransientItem = NO;
         [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
             NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
             fetchRequest.sortDescriptors = @[

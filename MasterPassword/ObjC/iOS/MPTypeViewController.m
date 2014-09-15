@@ -80,8 +80,8 @@
             counter = ((MPElementGeneratedEntity *)selectedElement).counter;
 
         dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
-            NSString *typeContent = [MPAlgorithmDefault generateContentNamed:name ofType:cellType
-                                                                 withCounter:counter usingKey:[MPiOSAppDelegate get].key];
+            NSString *typeContent = [MPAlgorithmDefault generatePasswordForSiteNamed:name ofType:cellType
+                                                                         withCounter:counter usingKey:[MPiOSAppDelegate get].key];
 
             dispatch_async( dispatch_get_main_queue(), ^{
                 [(UITextField *)[[tableView cellForRowAtIndexPath:indexPath] viewWithTag:2] setText:typeContent];

@@ -30,6 +30,7 @@
 		DA2508F119511D3600AC23F1 /* MPPasswordWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */; };
 		DA2508F719513C1400AC23F1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B343170661EE000A0EAB /* Cocoa.framework */; };
 		DA250925195148E200AC23F1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
+		DA29992C19C6A89900AF7DF1 /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA29992619C6A89900AF7DF1 /* MasterPassword.xcdatamodeld */; };
 		DA2CA4ED18D323D3007798F8 /* NSError+PearlFullDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4E718D323D3007798F8 /* NSError+PearlFullDescription.m */; };
 		DA2CA4EE18D323D3007798F8 /* NSError+PearlFullDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = DA2CA4E818D323D3007798F8 /* NSError+PearlFullDescription.h */; };
 		DA2CA4EF18D323D3007798F8 /* NSArray+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4E918D323D3007798F8 /* NSArray+Pearl.m */; };
@@ -71,7 +72,6 @@
 		DA5E5D0A1724A667003798D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5CC21724A667003798D8 /* InfoPlist.strings */; };
 		DA5E5D0B1724A667003798D8 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5CC41724A667003798D8 /* MainMenu.xib */; };
 		DA5E5D0C1724A667003798D8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CC61724A667003798D8 /* main.m */; };
-		DA5E5D0D1724A667003798D8 /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CC71724A667003798D8 /* MasterPassword.xcdatamodeld */; };
 		DA60717C195D040500CA98B5 /* icon_gear.png in Resources */ = {isa = PBXBuildFile; fileRef = DA607092195D03E200CA98B5 /* icon_gear.png */; };
 		DA60717D195D040500CA98B5 /* icon_gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA607093195D03E200CA98B5 /* icon_gear@2x.png */; };
 		DA6558A419A99609009A0BEB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA6558A319A99609009A0BEB /* Images.xcassets */; };
@@ -257,6 +257,11 @@
 		DA25090719513C1400AC23F1 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		DA2509261951B86C00AC23F1 /* small-screen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "small-screen.png"; sourceTree = "<group>"; };
 		DA2509271951B86C00AC23F1 /* screen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screen.png; sourceTree = "<group>"; };
+		DA29992719C6A89900AF7DF1 /* MasterPassword 1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 1.xcdatamodel"; sourceTree = "<group>"; };
+		DA29992819C6A89900AF7DF1 /* MasterPassword 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 2.xcdatamodel"; sourceTree = "<group>"; };
+		DA29992919C6A89900AF7DF1 /* MasterPassword 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 3.xcdatamodel"; sourceTree = "<group>"; };
+		DA29992A19C6A89900AF7DF1 /* MasterPassword 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 4.xcdatamodel"; sourceTree = "<group>"; };
+		DA29992B19C6A89900AF7DF1 /* MasterPassword 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 5.xcdatamodel"; sourceTree = "<group>"; };
 		DA2CA4E718D323D3007798F8 /* NSError+PearlFullDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+PearlFullDescription.m"; sourceTree = "<group>"; };
 		DA2CA4E818D323D3007798F8 /* NSError+PearlFullDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+PearlFullDescription.h"; sourceTree = "<group>"; };
 		DA2CA4E918D323D3007798F8 /* NSArray+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Pearl.m"; sourceTree = "<group>"; };
@@ -320,10 +325,6 @@
 		DA5E5CC31724A667003798D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DA5E5CC51724A667003798D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		DA5E5CC61724A667003798D8 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		DA5E5CC81724A667003798D8 /* MasterPassword 1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 1.xcdatamodel"; sourceTree = "<group>"; };
-		DA5E5CC91724A667003798D8 /* MasterPassword 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 2.xcdatamodel"; sourceTree = "<group>"; };
-		DA5E5CCA1724A667003798D8 /* MasterPassword 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 3.xcdatamodel"; sourceTree = "<group>"; };
-		DA5E5CCB1724A667003798D8 /* MasterPassword 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 4.xcdatamodel"; sourceTree = "<group>"; };
 		DA606FEA195D03E200CA98B5 /* icon_action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_action.png; sourceTree = "<group>"; };
 		DA606FEB195D03E200CA98B5 /* icon_action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_action@2x.png"; sourceTree = "<group>"; };
 		DA606FEC195D03E200CA98B5 /* icon_addressbook-person.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_addressbook-person.png"; sourceTree = "<group>"; };
@@ -1024,7 +1025,7 @@
 				DA5E5CAF1724A667003798D8 /* MPTypes.h */,
 				DA5E5CB01724A667003798D8 /* MPUserEntity.h */,
 				DA5E5CB11724A667003798D8 /* MPUserEntity.m */,
-				DA5E5CC71724A667003798D8 /* MasterPassword.xcdatamodeld */,
+				DA29992619C6A89900AF7DF1 /* MasterPassword.xcdatamodeld */,
 			);
 			name = ObjC;
 			path = ..;
@@ -2146,6 +2147,7 @@
 				DA5E5CFD1724A667003798D8 /* MPElementEntity.m in Sources */,
 				DA5E5CFE1724A667003798D8 /* MPElementGeneratedEntity.m in Sources */,
 				DA5E5CFF1724A667003798D8 /* MPElementStoredEntity.m in Sources */,
+				DA29992C19C6A89900AF7DF1 /* MasterPassword.xcdatamodeld in Sources */,
 				DA3B8456190FC89700246EEA /* MPFixable.m in Sources */,
 				DA5E5D001724A667003798D8 /* MPEntities.m in Sources */,
 				DA5E5D011724A667003798D8 /* MPKey.m in Sources */,
@@ -2153,7 +2155,6 @@
 				DA5E5D031724A667003798D8 /* MPMacAppDelegate.m in Sources */,
 				DA5E5D041724A667003798D8 /* MPMacConfig.m in Sources */,
 				DA5E5D0C1724A667003798D8 /* main.m in Sources */,
-				DA5E5D0D1724A667003798D8 /* MasterPassword.xcdatamodeld in Sources */,
 				93D39C5789EFA607CF788082 /* MPElementModel.m in Sources */,
 				93D39F833DEC1C89B2F795AC /* MPPasswordWindowController.m in Sources */,
 				93D390C676DF52DA7E459F19 /* MPPasswordWindow.m in Sources */,
@@ -2782,15 +2783,16 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		DA5E5CC71724A667003798D8 /* MasterPassword.xcdatamodeld */ = {
+		DA29992619C6A89900AF7DF1 /* MasterPassword.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				DA5E5CC81724A667003798D8 /* MasterPassword 1.xcdatamodel */,
-				DA5E5CC91724A667003798D8 /* MasterPassword 2.xcdatamodel */,
-				DA5E5CCA1724A667003798D8 /* MasterPassword 3.xcdatamodel */,
-				DA5E5CCB1724A667003798D8 /* MasterPassword 4.xcdatamodel */,
+				DA29992719C6A89900AF7DF1 /* MasterPassword 1.xcdatamodel */,
+				DA29992819C6A89900AF7DF1 /* MasterPassword 2.xcdatamodel */,
+				DA29992919C6A89900AF7DF1 /* MasterPassword 3.xcdatamodel */,
+				DA29992A19C6A89900AF7DF1 /* MasterPassword 4.xcdatamodel */,
+				DA29992B19C6A89900AF7DF1 /* MasterPassword 5.xcdatamodel */,
 			);
-			currentVersion = DA5E5CCB1724A667003798D8 /* MasterPassword 4.xcdatamodel */;
+			currentVersion = DA29992B19C6A89900AF7DF1 /* MasterPassword 5.xcdatamodel */;
 			path = MasterPassword.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

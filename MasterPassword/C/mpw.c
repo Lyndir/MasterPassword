@@ -38,15 +38,20 @@ void usage() {
       fprintf(stderr, "    -u name      Specify the full name of the user.\n"
                       "                 Defaults to %s in env.\n\n", MP_env_username);
       fprintf(stderr, "    -t type      Specify the password's template.\n"
-                      "                 Defaults to %s in env or 'long'.\n"
+                      "                 Defaults to %s in env or 'long' for password, 'name' for login.\n"
                       "                     x, max, maximum | 20 characters, contains symbols.\n"
                       "                     l, long         | Copy-friendly, 14 characters, contains symbols.\n"
                       "                     m, med, medium  | Copy-friendly, 8 characters, contains symbols.\n"
                       "                     b, basic        | 8 characters, no symbols.\n"
                       "                     s, short        | Copy-friendly, 4 characters, no symbols.\n"
-                      "                     p, pin          | 4 numbers.\n\n", MP_env_sitetype);
+                      "                     p, pin          | 4 numbers.\n"
+                      "                     n, name         | 9 letter name.\n\n", MP_env_sitetype);
       fprintf(stderr, "    -c counter   The value of the counter.\n"
                       "                 Defaults to %s in env or '1'.\n\n", MP_env_sitecounter);
+      fprintf(stderr, "    -v variant   The kind of content to generate.\n"
+                      "                 Defaults to 'password'.\n"
+                      "                     p, password | The password to log in with.\n"
+                      "                     l, login    | The username to log in as.\n\n");
       exit(0);
 }
 
@@ -86,12 +91,14 @@ int main(int argc, char *const argv[]) {
     const char *siteName = NULL;
     MPElementType siteType = MPElementTypeGeneratedLong;
     const char *siteTypeString = getenv( MP_env_sitetype );
+    MPElementVariant siteVariant = MPElementVariantPassword;
+    const char *siteVariantString = NULL;
     uint32_t siteCounter = 1;
     const char *siteCounterString = getenv( MP_env_sitecounter );
 
     // Read the options.
     char opt;
-    while ((opt = getopt(argc, argv, "u:t:c:h")) != -1)
+    while ((opt = getopt(argc, argv, "u:t:c:v:h")) != -1)
       switch (opt) {
           case 'h':
               usage();
@@ -101,6 +108,9 @@ int main(int argc, char *const argv[]) {
               break;
           case 't':
               siteTypeString = optarg;
+              break;
+          case 'v':
+              siteVariantString = optarg;
               break;
           case 'c':
               siteCounterString = optarg;
@@ -144,6 +154,11 @@ int main(int argc, char *const argv[]) {
         return 1;
     }
     trc("siteCounter: %d\n", siteCounter);
+    if (siteVariantString)
+        siteVariant = VariantWithName( siteVariantString );
+    trc("siteVariant: %d (%s)\n", siteVariant, siteVariantString);
+    if (siteVariant == MPElementVariantLogin)
+        siteType = MPElementTypeGeneratedName;
     if (siteTypeString)
         siteType = TypeWithName( siteTypeString );
     trc("siteType: %d (%s)\n", siteType, siteTypeString);
@@ -176,9 +191,10 @@ int main(int argc, char *const argv[]) {
     trc("masterPassword: %s\n", masterPassword);
 
     // Calculate the master key salt.
-    char *mpNameSpace = "com.lyndir.masterpassword";
+    const char *mpKeyScope = ScopeForVariant(MPElementVariantPassword);
+    trc("key scope: %s\n", mpKeyScope);
     const uint32_t n_userNameLength = htonl(strlen(userName));
-    size_t masterKeySaltLength = strlen(mpNameSpace) + sizeof(n_userNameLength) + strlen(userName);
+    size_t masterKeySaltLength = strlen(mpKeyScope) + sizeof(n_userNameLength) + strlen(userName);
     char *masterKeySalt = malloc( masterKeySaltLength );
     if (!masterKeySalt) {
         fprintf(stderr, "Could not allocate master key salt: %d\n", errno);
@@ -186,7 +202,7 @@ int main(int argc, char *const argv[]) {
     }
 
     char *mKS = masterKeySalt;
-    memcpy(mKS, mpNameSpace, strlen(mpNameSpace)); mKS += strlen(mpNameSpace);
+    memcpy(mKS, mpKeyScope, strlen(mpKeyScope)); mKS += strlen(mpKeyScope);
     memcpy(mKS, &n_userNameLength, sizeof(n_userNameLength)); mKS += sizeof(n_userNameLength);
     memcpy(mKS, userName, strlen(userName)); mKS += strlen(userName);
     if (mKS - masterKeySalt != masterKeySaltLength)
@@ -210,9 +226,11 @@ int main(int argc, char *const argv[]) {
     trc("masterKey ID: %s\n", IDForBuf(masterKey, MP_dkLen));
 
     // Calculate the site seed.
+    const char *mpSiteScope = ScopeForVariant(siteVariant);
+    trc("site scope: %s\n", mpSiteScope);
     const uint32_t n_siteNameLength = htonl(strlen(siteName));
     const uint32_t n_siteCounter = htonl(siteCounter);
-    size_t sitePasswordInfoLength = strlen(mpNameSpace) + sizeof(n_siteNameLength) + strlen(siteName) + sizeof(n_siteCounter);
+    size_t sitePasswordInfoLength = strlen(mpSiteScope) + sizeof(n_siteNameLength) + strlen(siteName) + sizeof(n_siteCounter);
     char *sitePasswordInfo = malloc( sitePasswordInfoLength );
     if (!sitePasswordInfo) {
         fprintf(stderr, "Could not allocate site seed: %d\n", errno);
@@ -220,13 +238,13 @@ int main(int argc, char *const argv[]) {
     }
 
     char *sPI = sitePasswordInfo;
-    memcpy(sPI, mpNameSpace, strlen(mpNameSpace)); sPI += strlen(mpNameSpace);
+    memcpy(sPI, mpSiteScope, strlen(mpSiteScope)); sPI += strlen(mpSiteScope);
     memcpy(sPI, &n_siteNameLength, sizeof(n_siteNameLength)); sPI += sizeof(n_siteNameLength);
     memcpy(sPI, siteName, strlen(siteName)); sPI += strlen(siteName);
     memcpy(sPI, &n_siteCounter, sizeof(n_siteCounter)); sPI += sizeof(n_siteCounter);
     if (sPI - sitePasswordInfo != sitePasswordInfoLength)
         abort();
-    trc("seed from: hmac-sha256(masterKey, 'com.lyndir.masterpassword' | %s | %s | %s)\n", Hex(&n_siteNameLength, sizeof(n_siteNameLength)), siteName, Hex(&n_siteCounter, sizeof(n_siteCounter)));
+    trc("seed from: hmac-sha256(masterKey, %s | %s | %s | %s)\n", mpSiteScope, Hex(&n_siteNameLength, sizeof(n_siteNameLength)), siteName, Hex(&n_siteCounter, sizeof(n_siteCounter)));
     trc("sitePasswordInfo ID: %s\n", IDForBuf(sitePasswordInfo, sitePasswordInfoLength));
 
     uint8_t sitePasswordSeed[32];

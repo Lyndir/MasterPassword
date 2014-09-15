@@ -8,7 +8,6 @@
 
 #import "MPAppDelegate_Shared.h"
 
-#import "UbiquityStoreManager.h"
 #import "MPFixable.h"
 
 typedef NS_ENUM( NSUInteger, MPImportResult ) {
@@ -19,7 +18,7 @@ typedef NS_ENUM( NSUInteger, MPImportResult ) {
     MPImportResultInternalError,
 };
 
-@interface MPAppDelegate_Shared(Store)<UbiquityStoreManagerDelegate>
+@interface MPAppDelegate_Shared(Store)
 
 + (NSManagedObjectContext *)managedObjectContextForMainThreadIfReady;
 + (BOOL)managedObjectContextForMainThreadPerformBlock:(void (^)(NSManagedObjectContext *mainContext))mocBlock;
@@ -27,7 +26,6 @@ typedef NS_ENUM( NSUInteger, MPImportResult ) {
 + (BOOL)managedObjectContextPerformBlock:(void (^)(NSManagedObjectContext *context))mocBlock;
 + (BOOL)managedObjectContextPerformBlockAndWait:(void (^)(NSManagedObjectContext *context))mocBlock;
 
-- (UbiquityStoreManager *)storeManager;
 - (MPFixableResult)findAndFixInconsistenciesSaveInContext:(NSManagedObjectContext *)context;
 
 /** @param completion The block to execute after adding the element, executed from the main thread with the new element in the main MOC. */

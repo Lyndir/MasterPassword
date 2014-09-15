@@ -654,15 +654,16 @@ referenceSizeForFooterInSection:(NSInteger)section {
                 }];
     if (!_storeChangingObserver)
         _storeChangingObserver = [[NSNotificationCenter defaultCenter]
-                addObserverForName:USMStoreWillChangeNotification object:nil
+                addObserverForName:NSPersistentStoreCoordinatorStoresWillChangeNotification object:nil
                              queue:nil usingBlock:^(NSNotification *note) {
                     Strongify( self );
                     if (self->_mocObserver)
                         [[NSNotificationCenter defaultCenter] removeObserver:self->_mocObserver];
+                    self.userIDs = nil;
                 }];
     if (!_storeChangedObserver)
         _storeChangedObserver = [[NSNotificationCenter defaultCenter]
-                addObserverForName:USMStoreDidChangeNotification object:nil
+                addObserverForName:NSPersistentStoreCoordinatorStoresDidChangeNotification object:nil
                              queue:nil usingBlock:^(NSNotification *note) {
                     Strongify( self );
                     [self reloadUsers];
@@ -683,7 +684,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
 
     [self afterUpdatesMainQueue:^{
         [self observeStore];
-        [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
+        if (![MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
             NSError *error = nil;
             NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
             fetchRequest.sortDescriptors = @[
@@ -699,7 +700,8 @@ referenceSizeForFooterInSection:(NSInteger)section {
             for (MPUserEntity *user in users)
                 [userIDs addObject:user.objectID];
             self.userIDs = userIDs;
-        }];
+        }])
+            self.userIDs = nil;
     }];
 }
 

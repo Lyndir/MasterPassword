@@ -117,11 +117,11 @@
                                                      [NSData dataWithBytes:&nuserNameLength
                                                                     length:sizeof( nuserNameLength )],
                                                      [userName dataUsingEncoding:NSUTF8StringEncoding],
-                                                     nil] N:MP_N r:MP_r p:MP_p];
+                                                             nil] N:MP_N r:MP_r p:MP_p];
 
     MPKey *key = [self keyFromKeyData:keyData];
     trc( @"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", userName, password, [key.keyID encodeHex],
-                    -[start timeIntervalSinceNow] );
+            -[start timeIntervalSinceNow] );
 
     return key;
 }
@@ -134,6 +134,18 @@
 - (NSData *)keyIDForKeyData:(NSData *)keyData {
 
     return [keyData hashWith:MP_hash];
+}
+
+- (NSString *)scopeForVariant:(MPElementVariant)variant {
+
+    switch (variant) {
+        case MPElementVariantPassword:
+            return @"com.lyndir.masterpassword";
+        case MPElementVariantLogin:
+            return @"com.lyndir.masterpassword.login";
+    }
+
+    Throw( @"Unsupported variant: %ld", (long)variant );
 }
 
 - (NSString *)nameOfType:(MPElementType)type {
@@ -159,6 +171,9 @@
 
         case MPElementTypeGeneratedPIN:
             return @"PIN";
+
+        case MPElementTypeGeneratedName:
+            return @"Login Name";
 
         case MPElementTypeStoredPersonal:
             return @"Personal Password";
@@ -193,6 +208,9 @@
 
         case MPElementTypeGeneratedPIN:
             return @"PIN";
+
+        case MPElementTypeGeneratedName:
+            return @"Name";
 
         case MPElementTypeStoredPersonal:
             return @"Personal";
@@ -231,6 +249,9 @@
             return [MPElementGeneratedEntity class];
 
         case MPElementTypeGeneratedPIN:
+            return [MPElementGeneratedEntity class];
+
+        case MPElementTypeGeneratedName:
             return [MPElementGeneratedEntity class];
 
         case MPElementTypeStoredPersonal:
@@ -326,18 +347,35 @@
     return [NSNullToNil( [NSNullToNil( [[self allCiphers] valueForKey:@"MPCharacterClasses"] ) valueForKey:cipherClass] ) copy];
 }
 
-- (NSString *)generateContentNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter usingKey:(MPKey *)key {
+- (NSString *)generateLoginForSiteNamed:(NSString *)name usingKey:(MPKey *)key {
+
+    return [self generateContentForSiteNamed:name ofType:MPElementTypeGeneratedName withCounter:1
+                                     variant:MPElementVariantLogin usingKey:key];
+}
+
+- (NSString *)generatePasswordForSiteNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter
+                                  usingKey:(MPKey *)key {
+
+    return [self generateContentForSiteNamed:name ofType:type withCounter:counter
+                                     variant:MPElementVariantPassword usingKey:key];
+}
+
+- (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter
+                                  variant:(MPElementVariant)variant usingKey:(MPKey *)key {
 
     // Determine the seed whose bytes will be used for calculating a password
     uint32_t ncounter = htonl( counter ), nnameLength = htonl( name.length );
     NSData *counterBytes = [NSData dataWithBytes:&ncounter length:sizeof( ncounter )];
     NSData *nameLengthBytes = [NSData dataWithBytes:&nnameLength length:sizeof( nnameLength )];
-    trc( @"seed from: hmac-sha256(%@, 'com.lyndir.masterpassword' | %@ | %@ | %@)", [key.keyData encodeBase64],
-                    [nameLengthBytes encodeHex], name, [counterBytes encodeHex] );
+    NSString *scope = [self scopeForVariant:variant];;
+    trc( @"seed from: hmac-sha256(%@, %@ | %@ | %@ | %@)",
+            [key.keyData encodeBase64], scope, [nameLengthBytes encodeHex], name, [counterBytes encodeHex] );
     NSData *seed = [[NSData dataByConcatenatingDatas:
-            [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
-            nameLengthBytes, [name dataUsingEncoding:NSUTF8StringEncoding],
-            counterBytes, nil]
+            [scope dataUsingEncoding:NSUTF8StringEncoding],
+            nameLengthBytes,
+            [name dataUsingEncoding:NSUTF8StringEncoding],
+            counterBytes,
+                    nil]
             hmacWith:PearlHashSHA256 key:key.keyData];
     trc( @"seed is: %@", [seed encodeBase64] );
     const char *seedBytes = seed.bytes;
@@ -364,12 +402,17 @@
     return content;
 }
 
-- (NSString *)storedContentForElement:(MPElementStoredEntity *)element usingKey:(MPKey *)key {
+- (NSString *)storedLoginForElement:(MPElementStoredEntity *)element usingKey:(MPKey *)key {
+
+    return nil;
+}
+
+- (NSString *)storedPasswordForElement:(MPElementStoredEntity *)element usingKey:(MPKey *)key {
 
     return [self decryptContent:element.contentObject usingKey:key];
 }
 
-- (BOOL)saveContent:(NSString *)clearContent toElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+- (BOOL)savePassword:(NSString *)clearContent toElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
 
     NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     switch (element.type) {
@@ -378,7 +421,8 @@
         case MPElementTypeGeneratedMedium:
         case MPElementTypeGeneratedBasic:
         case MPElementTypeGeneratedShort:
-        case MPElementTypeGeneratedPIN: {
+        case MPElementTypeGeneratedPIN:
+        case MPElementTypeGeneratedName: {
             NSAssert( NO, @"Cannot save content to element with generated type %lu.", (long)element.type );
             return NO;
         }
@@ -386,7 +430,7 @@
         case MPElementTypeStoredPersonal: {
             if (![element isKindOfClass:[MPElementStoredEntity class]]) {
                 wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
-                                (long)element.type, [element class] );
+                        (long)element.type, [element class] );
                 return NO;
             }
 
@@ -401,7 +445,7 @@
         case MPElementTypeStoredDevicePrivate: {
             if (![element isKindOfClass:[MPElementStoredEntity class]]) {
                 wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
-                                (long)element.type, [element class] );
+                        (long)element.type, [element class] );
                 return NO;
             }
 
@@ -412,7 +456,7 @@
                 [PearlKeyChain deleteItemForQuery:elementQuery];
             else
                 [PearlKeyChain addOrUpdateItemForQuery:elementQuery withAttributes:@{
-                        (__bridge id)kSecValueData : encryptedContent,
+                        (__bridge id)kSecValueData      : encryptedContent,
 #if TARGET_OS_IPHONE
                         (__bridge id)kSecAttrAccessible : (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
 #endif
@@ -425,12 +469,12 @@
     Throw( @"Unsupported type: %ld", (long)element.type );
 }
 
-- (NSString *)resolveContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+- (NSString *)resolveLoginForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
 
     dispatch_group_t group = dispatch_group_create();
     dispatch_group_enter( group );
     __block NSString *result = nil;
-    [self resolveContentForElement:element usingKey:elementKey result:^(NSString *result_) {
+    [self resolveLoginForElement:element usingKey:elementKey result:^(NSString *result_) {
         result = result_;
         dispatch_group_leave( group );
     }];
@@ -439,7 +483,43 @@
     return result;
 }
 
-- (void)resolveContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey result:(void ( ^ )(NSString *result))resultBlock {
+- (NSString *)resolvePasswordForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_group_enter( group );
+    __block NSString *result = nil;
+    [self resolvePasswordForElement:element usingKey:elementKey result:^(NSString *result_) {
+        result = result_;
+        dispatch_group_leave( group );
+    }];
+    dispatch_group_wait( group, DISPATCH_TIME_FOREVER );
+
+    return result;
+}
+
+- (void)resolveLoginForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey result:(void ( ^ )(NSString *result))resultBlock {
+
+    NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
+    NSString *name = element.name;
+    BOOL loginGenerated = element.loginGenerated;
+    NSString *loginName = loginGenerated? nil: element.loginName;
+    id<MPAlgorithm> algorithm = nil;
+    if (!name.length)
+        err( @"Missing name." );
+    else if (!elementKey.keyData.length)
+        err( @"Missing key." );
+    else
+        algorithm = element.algorithm;
+
+    dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
+        if (loginGenerated)
+            resultBlock( [algorithm generateLoginForSiteNamed:name usingKey:elementKey] );
+        else
+            resultBlock( loginName );
+    } );
+}
+
+- (void)resolvePasswordForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey result:(void ( ^ )(NSString *result))resultBlock {
 
     NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     switch (element.type) {
@@ -448,10 +528,11 @@
         case MPElementTypeGeneratedMedium:
         case MPElementTypeGeneratedBasic:
         case MPElementTypeGeneratedShort:
-        case MPElementTypeGeneratedPIN: {
+        case MPElementTypeGeneratedPIN:
+        case MPElementTypeGeneratedName: {
             if (![element isKindOfClass:[MPElementGeneratedEntity class]]) {
                 wrn( @"Element with generated type %lu is not an MPElementGeneratedEntity, but a %@.",
-                                (long)element.type, [element class] );
+                        (long)element.type, [element class] );
                 break;
             }
 
@@ -467,7 +548,7 @@
                 algorithm = element.algorithm;
 
             dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
-                NSString *result = [algorithm generateContentNamed:name ofType:type withCounter:counter usingKey:elementKey];
+                NSString *result = [algorithm generatePasswordForSiteNamed:name ofType:type withCounter:counter usingKey:elementKey];
                 resultBlock( result );
             } );
             break;
@@ -476,7 +557,7 @@
         case MPElementTypeStoredPersonal: {
             if (![element isKindOfClass:[MPElementStoredEntity class]]) {
                 wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
-                                (long)element.type, [element class] );
+                        (long)element.type, [element class] );
                 break;
             }
 
@@ -490,8 +571,8 @@
         }
         case MPElementTypeStoredDevicePrivate: {
             NSAssert( [element isKindOfClass:[MPElementStoredEntity class]],
-                            @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type,
-                            [element class] );
+                    @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type,
+                    [element class] );
 
             NSDictionary *elementQuery = [self queryForDevicePrivateElementNamed:element.name];
             NSData *encryptedContent = [PearlKeyChain dataOfItemForQuery:elementQuery];
@@ -505,8 +586,8 @@
     }
 }
 
-- (void)importProtectedContent:(NSString *)protectedContent protectedByKey:(MPKey *)importKey
-                   intoElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+- (void)importProtectedPassword:(NSString *)protectedContent protectedByKey:(MPKey *)importKey
+                    intoElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
 
     NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     switch (element.type) {
@@ -516,12 +597,13 @@
         case MPElementTypeGeneratedBasic:
         case MPElementTypeGeneratedShort:
         case MPElementTypeGeneratedPIN:
+        case MPElementTypeGeneratedName:
             break;
 
         case MPElementTypeStoredPersonal: {
             if (![element isKindOfClass:[MPElementStoredEntity class]]) {
                 wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
-                                (long)element.type, [element class] );
+                        (long)element.type, [element class] );
                 break;
             }
             if ([importKey.keyID isEqualToData:elementKey.keyID])
@@ -529,7 +611,7 @@
 
             else {
                 NSString *clearContent = [self decryptContent:[protectedContent decodeBase64] usingKey:importKey];
-                [self importClearTextContent:clearContent intoElement:element usingKey:elementKey];
+                [self importClearTextPassword:clearContent intoElement:element usingKey:elementKey];
             }
             break;
         }
@@ -539,7 +621,7 @@
     }
 }
 
-- (void)importClearTextContent:(NSString *)clearContent intoElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+- (void)importClearTextPassword:(NSString *)clearContent intoElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
 
     NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     switch (element.type) {
@@ -549,10 +631,11 @@
         case MPElementTypeGeneratedBasic:
         case MPElementTypeGeneratedShort:
         case MPElementTypeGeneratedPIN:
+        case MPElementTypeGeneratedName:
             break;
 
         case MPElementTypeStoredPersonal: {
-            [self saveContent:clearContent toElement:element usingKey:elementKey];
+            [self savePassword:clearContent toElement:element usingKey:elementKey];
             break;
         }
 
@@ -561,7 +644,7 @@
     }
 }
 
-- (NSString *)exportContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+- (NSString *)exportPasswordForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
 
     NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     if (!(element.type & MPElementFeatureExportContent))
@@ -574,7 +657,8 @@
         case MPElementTypeGeneratedMedium:
         case MPElementTypeGeneratedBasic:
         case MPElementTypeGeneratedShort:
-        case MPElementTypeGeneratedPIN: {
+        case MPElementTypeGeneratedPIN:
+        case MPElementTypeGeneratedName: {
             result = nil;
             break;
         }
@@ -582,7 +666,7 @@
         case MPElementTypeStoredPersonal: {
             if (![element isKindOfClass:[MPElementStoredEntity class]]) {
                 wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
-                                (long)element.type, [element class] );
+                        (long)element.type, [element class] );
                 break;
             }
             result = [((MPElementStoredEntity *)element).contentObject encodeBase64];

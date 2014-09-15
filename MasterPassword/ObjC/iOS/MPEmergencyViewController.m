@@ -136,7 +136,7 @@
     [_emergencyPasswordQueue addOperationWithBlock:^{
         NSString *sitePassword = nil;
         if (_key && [siteName length])
-            sitePassword = [MPAlgorithmDefault generateContentNamed:siteName ofType:siteType withCounter:siteCounter usingKey:_key];
+            sitePassword = [MPAlgorithmDefault generatePasswordForSiteNamed:siteName ofType:siteType withCounter:siteCounter usingKey:_key];
 
         PearlMainQueue( ^{
             [self.activity stopAnimating];

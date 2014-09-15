@@ -19,6 +19,7 @@
 #import "MPPasswordCell.h"
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
+#import "UIColor+Expanded.h"
 
 @interface MPPasswordCell()
 
@@ -167,6 +168,11 @@
     UICollectionView *collectionView = [UICollectionView findAsSuperviewOf:self];
     [collectionView scrollToItemAtIndexPath:[collectionView indexPathForCell:self]
                            atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+    if (textField == self.loginNameField)
+        [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
+            if (![[self elementInContext:mainContext].loginName length])
+                self.loginNameField.text = nil;
+        }];
 }
 
 - (IBAction)textFieldDidChange:(UITextField *)textField {
@@ -199,7 +205,7 @@
                 return;
 
             if (textField == self.passwordField) {
-                if ([element.algorithm saveContent:text toElement:element usingKey:[MPiOSAppDelegate get].key])
+                if ([element.algorithm savePassword:text toElement:element usingKey:[MPiOSAppDelegate get].key])
                     [PearlOverlay showTemporaryOverlayWithTitle:@"Password Updated" dismissAfter:2];
             }
             else if (textField == self.loginNameField && ![text isEqualToString:element.loginName]) {
@@ -398,7 +404,12 @@
     }];
 
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        [self copyLoginOfElement:[self elementInContext:context] saveInContext:context];
+        MPElementEntity *element = [self elementInContext:context];
+        if (![self copyLoginOfElement:element saveInContext:context]) {
+            element.loginGenerated = YES;
+            [context saveToStore];
+            [self updateAnimated:YES];
+        }
 
         PearlMainQueueAfter( .3f, ^{
             [UIView animateWithDuration:.2f animations:^{
@@ -434,7 +445,9 @@
 
         // UI
         self.upgradeButton.alpha = mainElement.requiresExplicitMigration? 1: 0;
-        self.loginNameContainer.alpha = [mainElement.loginName length] || self.mode == MPPasswordCellModeSettings? 1: 0;
+        self.loginNameContainer.alpha = self.mode == MPPasswordCellModeSettings ||
+                                                mainElement.loginGenerated || [mainElement.loginName length]? 0.7f: 0;
+        self.loginNameField.textColor = [UIColor colorWithHexString:[mainElement.loginName length]? @"6D5E63": @"5E636D"];
         self.modeButton.alpha = self.transientSite? 0: self.mode == MPPasswordCellModePassword? 0.1f: 0.5f;
         self.counterLabel.alpha = self.counterButton.alpha = mainElement.type & MPElementTypeClassGenerated? 0.5f: 0;
         self.modeButton.selected = self.mode == MPPasswordCellModeSettings;
@@ -464,23 +477,27 @@
                 NSForegroundColorAttributeName : [UIColor whiteColor]
         } );
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-            NSString *password;
+            MPElementEntity *element = [self elementInContext:context];
+            MPKey *key = [MPiOSAppDelegate get].key;
+            NSString *password, *loginName = [element resolveLoginUsingKey:key];
             if (self.transientSite)
-                password = [MPAlgorithmDefault generateContentNamed:self.transientSite ofType:
+                password = [MPAlgorithmDefault generatePasswordForSiteNamed:self.transientSite ofType:
                                 [[MPiOSAppDelegate get] activeUserInContext:context].defaultType?: MPElementTypeGeneratedLong
-                                                        withCounter:1 usingKey:[MPiOSAppDelegate get].key];
-            else
-                password = [[self elementInContext:context] resolveContentUsingKey:[MPiOSAppDelegate get].key];
+                                                                withCounter:1 usingKey:key];
+            else {
+                password = [element resolvePasswordUsingKey:key];
+            }
 
             TimeToCrack timeToCrack;
             NSString *timeToCrackString = nil;
             id<MPAlgorithm> algorithm = mainElement.algorithm?: MPAlgorithmDefault;
             MPAttacker attackHardware = [[MPConfig get].siteAttacker unsignedIntegerValue];
-            if ([algorithm timeToCrack:&timeToCrack passwordOfType:[self elementInContext:context].type byAttacker:attackHardware] ||
+            if ([algorithm timeToCrack:&timeToCrack passwordOfType:element.type byAttacker:attackHardware] ||
                 [algorithm timeToCrack:&timeToCrack passwordString:password byAttacker:attackHardware])
                 timeToCrackString = NSStringFromTimeToCrack( timeToCrack );
 
             PearlMainQueue( ^{
+                self.loginNameField.text = loginName;
                 self.passwordField.text = password;
                 self.strengthLabel.text = timeToCrackString;
 
@@ -504,8 +521,7 @@
             self.counterLabel.text = strf( @"%lu", (unsigned long)((MPElementGeneratedEntity *)mainElement).counter );
 
         // Site Login Name
-        self.loginNameField.text = mainElement.loginName;
-        self.loginNameField.attributedPlaceholder = stra( strl( @"Set login name" ), @{
+        self.loginNameField.attributedPlaceholder = stra( self.loginNameField.placeholder, @{
                 NSForegroundColorAttributeName : [UIColor whiteColor]
         } );
         self.loginNameField.enabled = self.passwordField.enabled = //
@@ -515,12 +531,12 @@
     }];
 }
 
-- (void)copyContentOfElement:(MPElementEntity *)element saveInContext:(NSManagedObjectContext *)context {
+- (BOOL)copyContentOfElement:(MPElementEntity *)element saveInContext:(NSManagedObjectContext *)context {
 
     inf( @"Copying password for: %@", element.name );
-    NSString *password = [element resolveContentUsingKey:[MPAppDelegate_Shared get].key];
+    NSString *password = [element resolvePasswordUsingKey:[MPAppDelegate_Shared get].key];
     if (![password length])
-        return;
+        return NO;
 
     PearlMainQueue( ^{
         [PearlOverlay showTemporaryOverlayWithTitle:strl( @"Password Copied" ) dismissAfter:2];
@@ -529,14 +545,15 @@
 
     [element use];
     [context saveToStore];
+    return YES;
 }
 
-- (void)copyLoginOfElement:(MPElementEntity *)element saveInContext:(NSManagedObjectContext *)context {
+- (BOOL)copyLoginOfElement:(MPElementEntity *)element saveInContext:(NSManagedObjectContext *)context {
 
     inf( @"Copying login for: %@", element.name );
-    NSString *loginName = element.loginName;
+    NSString *loginName = [element.algorithm resolveLoginForElement:element usingKey:[MPiOSAppDelegate get].key];
     if (![loginName length])
-        return;
+        return NO;
 
     PearlMainQueue( ^{
         [PearlOverlay showTemporaryOverlayWithTitle:strl( @"Login Name Copied" ) dismissAfter:2];
@@ -545,6 +562,7 @@
 
     [element use];
     [context saveToStore];
+    return YES;
 }
 
 - (MPElementEntity *)elementInContext:(NSManagedObjectContext *)context {

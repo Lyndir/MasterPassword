@@ -33,7 +33,6 @@
 		93D399246DC90F50913A1287 /* UIResponder+PearlFirstResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A1DDFA09AE2E14D26DC /* UIResponder+PearlFirstResponder.m */; };
 		93D3992FA1546E01F498F665 /* PearlNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D398567FD02DB2647B8CF3 /* PearlNavigationController.h */; };
 		93D399433EA75E50656040CB /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93D394077F8FAB8167647187 /* Twitter.framework */; };
-		93D399BBC0A7EC746CB1B19B /* MPLogsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D391943675426839501BB8 /* MPLogsViewController.h */; };
 		93D39A53D76CA70786423458 /* UICollectionView+PearlReloadFromArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39246FC21C6E63E35D615 /* UICollectionView+PearlReloadFromArray.h */; };
 		93D39A5FF670957C0AF8298D /* MPPasswordCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39DEA995041A13DC9CAF7 /* MPPasswordCell.m */; };
 		93D39A8EA1C49CE43B63F47B /* PearlUICollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D8A953779B35403AF6E /* PearlUICollectionView.m */; };
@@ -108,8 +107,6 @@
 		DA3509FF15F101A500C14A8E /* PearlQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3509FD15F101A500C14A8E /* PearlQueue.m */; };
 		DA38D6A318CCB5BF009AEB3E /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */; };
 		DA3BCFCB19BD09D5006B2681 /* SourceCodePro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA3BCFCA19BD09D5006B2681 /* SourceCodePro-Regular.otf */; };
-		DA4425CC1557BED40052177D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
-		DA44260A1557D9E40052177D /* libUbiquityStoreManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */; };
 		DA4522441902355C008F650A /* icon_book.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD370C1711E29500CF925C /* icon_book.png */; };
 		DA4522451902355C008F650A /* icon_book@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD370D1711E29500CF925C /* icon_book@2x.png */; };
 		DA45224719062899008F650A /* icon_settings.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD38141711E29600CF925C /* icon_settings.png */; };
@@ -234,12 +231,8 @@
 		DABD3C011711E2DC00CF925C /* MPAppDelegate_Shared.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BA91711E2DC00CF925C /* MPAppDelegate_Shared.m */; };
 		DABD3C021711E2DC00CF925C /* MPAppDelegate_Store.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BAB1711E2DC00CF925C /* MPAppDelegate_Store.m */; };
 		DABD3C031711E2DC00CF925C /* MPConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BAD1711E2DC00CF925C /* MPConfig.m */; };
-		DABD3C041711E2DC00CF925C /* MPElementEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BAF1711E2DC00CF925C /* MPElementEntity.m */; };
-		DABD3C051711E2DC00CF925C /* MPElementGeneratedEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BB11711E2DC00CF925C /* MPElementGeneratedEntity.m */; };
-		DABD3C061711E2DC00CF925C /* MPElementStoredEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BB31711E2DC00CF925C /* MPElementStoredEntity.m */; };
 		DABD3C071711E2DC00CF925C /* MPEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BB51711E2DC00CF925C /* MPEntities.m */; };
 		DABD3C081711E2DC00CF925C /* MPKey.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BB71711E2DC00CF925C /* MPKey.m */; };
-		DABD3C091711E2DC00CF925C /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BBA1711E2DC00CF925C /* MPUserEntity.m */; };
 		DABD3C141711E2DC00CF925C /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BD01711E2DC00CF925C /* MasterPassword.xcdatamodeld */; };
 		DABD3C151711E2DC00CF925C /* MPiOSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BD91711E2DC00CF925C /* MPiOSAppDelegate.m */; };
 		DABD3C1C1711E2DC00CF925C /* MPGuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DABD3BE71711E2DC00CF925C /* MPGuideViewController.m */; };
@@ -260,10 +253,6 @@
 		DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC8DF47192831E100BA7D71 /* icon_key.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD379A1711E29600CF925C /* icon_key.png */; };
 		DAC8DF48192831E100BA7D71 /* icon_key@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD379B1711E29600CF925C /* icon_key@2x.png */; };
-		DACA22BB1705DE7D002C6C22 /* UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA22B71705DE7D002C6C22 /* UbiquityStoreManager.m */; };
-		DACA22BC1705DE7D002C6C22 /* NSError+UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA22B81705DE7D002C6C22 /* NSError+UbiquityStoreManager.h */; };
-		DACA22BD1705DE7D002C6C22 /* NSError+UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA22B91705DE7D002C6C22 /* NSError+UbiquityStoreManager.m */; };
-		DACA22BE1705DE7D002C6C22 /* UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA22BA1705DE7D002C6C22 /* UbiquityStoreManager.h */; };
 		DACA296F1705DF81002C6C22 /* Crashlytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA269A1705DF81002C6C22 /* Crashlytics.plist */; };
 		DACA29731705E1A8002C6C22 /* ciphers.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA29711705E1A8002C6C22 /* ciphers.plist */; };
 		DACA29741705E1A8002C6C22 /* dictionary.lst in Resources */ = {isa = PBXBuildFile; fileRef = DACA29721705E1A8002C6C22 /* dictionary.lst */; };
@@ -279,6 +268,10 @@
 		DACE2F6D19BA6A2A0010F92E /* PearlMutableStaticTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = DACE2F6919BA6A2A0010F92E /* PearlMutableStaticTableViewController.h */; };
 		DACE2F6E19BA6A2A0010F92E /* UIView+FontScale.h in Headers */ = {isa = PBXBuildFile; fileRef = DACE2F6A19BA6A2A0010F92E /* UIView+FontScale.h */; };
 		DAD312C21552A22700A3F9ED /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD312C01552A20800A3F9ED /* libsqlite3.dylib */; };
+		DADB4EC719C66FB60065A78D /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DADB4EC619C66FB60065A78D /* MPUserEntity.m */; };
+		DADB4ECA19C66FB60065A78D /* MPElementEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DADB4EC919C66FB60065A78D /* MPElementEntity.m */; };
+		DADB4ECD19C66FB60065A78D /* MPElementGeneratedEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DADB4ECC19C66FB60065A78D /* MPElementGeneratedEntity.m */; };
+		DADB4ED019C66FB70065A78D /* MPElementStoredEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DADB4ECF19C66FB70065A78D /* MPElementStoredEntity.m */; };
 		DAE1EF2217E942DE00BC0086 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAE1EF2417E942DE00BC0086 /* Localizable.strings */; };
 		DAEBC45314F6364500987BF6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
 		DAEC85B518E3DD9A007FC0DF /* UIView+Touches.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEC85B118E3DD9A007FC0DF /* UIView+Touches.m */; };
@@ -496,7 +489,6 @@
 		DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		DA3B844D190FC5DF00246EEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = ../../../External/iOS/Crashlytics.framework; sourceTree = "<group>"; };
 		DA3BCFCA19BD09D5006B2681 /* SourceCodePro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Regular.otf"; sourceTree = "<group>"; };
-		DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUbiquityStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5A09DD171A70E4005284AB /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		DA5A09DE171A70E4005284AB /* play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x.png"; sourceTree = "<group>"; };
 		DA5A09E8171BB0F7005284AB /* unlocked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unlocked.png; sourceTree = "<group>"; };
@@ -507,6 +499,7 @@
 		DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		DA5BFA4E147E415C00F98B1E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		DA5E5C3C1723681B003798D8 /* Square-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Square-bottom.png"; path = "Dividers/Square-bottom.png"; sourceTree = "<group>"; };
+		DA62140919C66A9700375240 /* MasterPassword 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 5.xcdatamodel"; sourceTree = "<group>"; };
 		DA6701B716406A4100B61001 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		DA6701DD16406B7300B61001 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		DA6701DF16406BB400B61001 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -1208,10 +1201,6 @@
 		DAC632871486D95D0075AEA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		DAC77CAD148291A600BCF976 /* libPearl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPearl.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC77CB1148291A600BCF976 /* Pearl-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Pearl-Prefix.pch"; path = "../../MasterPassword/ObjC/Pearl/Pearl-Prefix.pch"; sourceTree = "<group>"; };
-		DACA22B71705DE7D002C6C22 /* UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UbiquityStoreManager.m; sourceTree = "<group>"; };
-		DACA22B81705DE7D002C6C22 /* NSError+UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+UbiquityStoreManager.h"; sourceTree = "<group>"; };
-		DACA22B91705DE7D002C6C22 /* NSError+UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+UbiquityStoreManager.m"; sourceTree = "<group>"; };
-		DACA22BA1705DE7D002C6C22 /* UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UbiquityStoreManager.h; sourceTree = "<group>"; };
 		DACA269A1705DF81002C6C22 /* Crashlytics.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Crashlytics.plist; sourceTree = "<group>"; };
 		DACA29711705E1A8002C6C22 /* ciphers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ciphers.plist; sourceTree = "<group>"; };
 		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
@@ -1228,6 +1217,14 @@
 		DACE2F6919BA6A2A0010F92E /* PearlMutableStaticTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlMutableStaticTableViewController.h; sourceTree = "<group>"; };
 		DACE2F6A19BA6A2A0010F92E /* UIView+FontScale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+FontScale.h"; sourceTree = "<group>"; };
 		DAD312C01552A20800A3F9ED /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		DADB4EC519C66FB50065A78D /* MPUserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUserEntity.h; sourceTree = "<group>"; };
+		DADB4EC619C66FB60065A78D /* MPUserEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUserEntity.m; sourceTree = "<group>"; };
+		DADB4EC819C66FB60065A78D /* MPElementEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementEntity.h; sourceTree = "<group>"; };
+		DADB4EC919C66FB60065A78D /* MPElementEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementEntity.m; sourceTree = "<group>"; };
+		DADB4ECB19C66FB60065A78D /* MPElementGeneratedEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementGeneratedEntity.h; sourceTree = "<group>"; };
+		DADB4ECC19C66FB60065A78D /* MPElementGeneratedEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementGeneratedEntity.m; sourceTree = "<group>"; };
+		DADB4ECE19C66FB60065A78D /* MPElementStoredEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementStoredEntity.h; sourceTree = "<group>"; };
+		DADB4ECF19C66FB70065A78D /* MPElementStoredEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementStoredEntity.m; sourceTree = "<group>"; };
 		DADBB55918DB0CFC00D099FE /* keyboard-dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "keyboard-dark@2x.png"; sourceTree = "<group>"; };
 		DAE1EF2317E942DE00BC0086 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DAE8E65119867AB500416A0F /* libopensslcrypto-ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopensslcrypto-ios.a"; sourceTree = "<group>"; };
@@ -1357,14 +1354,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		DA4425C81557BED40052177D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DA4425CC1557BED40052177D /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DA5BFA41147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1373,7 +1362,6 @@
 				DA6701E016406BB400B61001 /* AdSupport.framework in Frameworks */,
 				DA6701DE16406B7300B61001 /* Social.framework in Frameworks */,
 				DA6701B816406A4100B61001 /* Accounts.framework in Frameworks */,
-				DA44260A1557D9E40052177D /* libUbiquityStoreManager.a in Frameworks */,
 				DAD312C21552A22700A3F9ED /* libsqlite3.dylib in Frameworks */,
 				DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */,
 				DA672D3014F9413D004A189C /* libPearl.a in Frameworks */,
@@ -1477,7 +1465,6 @@
 				DAC77CAD148291A600BCF976 /* libPearl.a */,
 				DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */,
 				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
-				DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */,
 				DAFC5655172C573B00CB5CC5 /* libInAppSettingsKit.a */,
 			);
 			name = Products;
@@ -2249,6 +2236,14 @@
 			isa = PBXGroup;
 			children = (
 				DABD3BD71711E2DC00CF925C /* iOS */,
+				DADB4ECE19C66FB60065A78D /* MPElementStoredEntity.h */,
+				DADB4ECF19C66FB70065A78D /* MPElementStoredEntity.m */,
+				DADB4ECB19C66FB60065A78D /* MPElementGeneratedEntity.h */,
+				DADB4ECC19C66FB60065A78D /* MPElementGeneratedEntity.m */,
+				DADB4EC819C66FB60065A78D /* MPElementEntity.h */,
+				DADB4EC919C66FB60065A78D /* MPElementEntity.m */,
+				DADB4EC519C66FB50065A78D /* MPUserEntity.h */,
+				DADB4EC619C66FB60065A78D /* MPUserEntity.m */,
 				DABD3BA01711E2DC00CF925C /* MPAlgorithm.h */,
 				DABD3BA11711E2DC00CF925C /* MPAlgorithm.m */,
 				DABD3BA21711E2DC00CF925C /* MPAlgorithmV0.h */,
@@ -2359,22 +2354,9 @@
 				DAA141181922FED80032B392 /* iOS */,
 				DAFC5662172C57EC00CB5CC5 /* InAppSettingsKit */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
-				DACA22B61705DE7D002C6C22 /* UbiquityStoreManager */,
 			);
 			name = External;
 			path = ../../../External;
-			sourceTree = "<group>";
-		};
-		DACA22B61705DE7D002C6C22 /* UbiquityStoreManager */ = {
-			isa = PBXGroup;
-			children = (
-				DACA22BA1705DE7D002C6C22 /* UbiquityStoreManager.h */,
-				DACA22B71705DE7D002C6C22 /* UbiquityStoreManager.m */,
-				DACA22B81705DE7D002C6C22 /* NSError+UbiquityStoreManager.h */,
-				DACA22B91705DE7D002C6C22 /* NSError+UbiquityStoreManager.m */,
-			);
-			name = UbiquityStoreManager;
-			path = UbiquityStoreManager/UbiquityStoreManager;
 			sourceTree = "<group>";
 		};
 		DACA23B41705DF7D002C6C22 /* Resources */ = {
@@ -2673,16 +2655,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		DA4425C91557BED40052177D /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DACA22BC1705DE7D002C6C22 /* NSError+UbiquityStoreManager.h in Headers */,
-				DACA22BE1705DE7D002C6C22 /* UbiquityStoreManager.h in Headers */,
-				93D399BBC0A7EC746CB1B19B /* MPLogsViewController.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DAC6325B1486805C0075AEA5 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -2783,23 +2755,6 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		DA4425CA1557BED40052177D /* UbiquityStoreManager */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DA4425D31557BED40052177D /* Build configuration list for PBXNativeTarget "UbiquityStoreManager" */;
-			buildPhases = (
-				DA4425C71557BED40052177D /* Sources */,
-				DA4425C81557BED40052177D /* Frameworks */,
-				DA4425C91557BED40052177D /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = UbiquityStoreManager;
-			productName = iCloudStoreManager;
-			productReference = DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */;
-			productType = "com.apple.product-type.library.static";
-		};
 		DA5BFA43147E415C00F98B1E /* MasterPassword */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */;
@@ -3010,7 +2965,6 @@
 				DAC77CAC148291A600BCF976 /* Pearl */,
 				DAC6325C1486805C0075AEA5 /* uicolor-utilities */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
-				DA4425CA1557BED40052177D /* UbiquityStoreManager */,
 				DAFC5654172C573B00CB5CC5 /* InAppSettingsKit */,
 			);
 		};
@@ -3206,15 +3160,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		DA4425C71557BED40052177D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DACA22BB1705DE7D002C6C22 /* UbiquityStoreManager.m in Sources */,
-				DACA22BD1705DE7D002C6C22 /* NSError+UbiquityStoreManager.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DA5BFA40147E415C00F98B1E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3226,12 +3171,8 @@
 				DABD3C011711E2DC00CF925C /* MPAppDelegate_Shared.m in Sources */,
 				DABD3C021711E2DC00CF925C /* MPAppDelegate_Store.m in Sources */,
 				DABD3C031711E2DC00CF925C /* MPConfig.m in Sources */,
-				DABD3C041711E2DC00CF925C /* MPElementEntity.m in Sources */,
-				DABD3C051711E2DC00CF925C /* MPElementGeneratedEntity.m in Sources */,
-				DABD3C061711E2DC00CF925C /* MPElementStoredEntity.m in Sources */,
 				DABD3C071711E2DC00CF925C /* MPEntities.m in Sources */,
 				DABD3C081711E2DC00CF925C /* MPKey.m in Sources */,
-				DABD3C091711E2DC00CF925C /* MPUserEntity.m in Sources */,
 				DABD3C141711E2DC00CF925C /* MasterPassword.xcdatamodeld in Sources */,
 				DABD3C151711E2DC00CF925C /* MPiOSAppDelegate.m in Sources */,
 				DABD3C1C1711E2DC00CF925C /* MPGuideViewController.m in Sources */,
@@ -3239,11 +3180,14 @@
 				DABD3C1F1711E2DC00CF925C /* MPTypeViewController.m in Sources */,
 				DABD3C211711E2DC00CF925C /* MPiOSConfig.m in Sources */,
 				DABD3C271711E2DC00CF925C /* main.m in Sources */,
+				DADB4EC719C66FB60065A78D /* MPUserEntity.m in Sources */,
 				93D39F8A9254177891F38705 /* MPSetupViewController.m in Sources */,
 				DA095E75172F4CD8001C948B /* MPLogsViewController.m in Sources */,
 				93D39D596A2E376D6F6F5DA1 /* MPCombinedViewController.m in Sources */,
+				DADB4ECD19C66FB60065A78D /* MPElementGeneratedEntity.m in Sources */,
 				93D3957237D303DE2D38C267 /* MPAvatarCell.m in Sources */,
 				93D39B8F90F58A5D158DDBA3 /* MPPasswordsViewController.m in Sources */,
+				DADB4ED019C66FB70065A78D /* MPElementStoredEntity.m in Sources */,
 				93D3954FCE045A3CC7E804B7 /* MPUsersViewController.m in Sources */,
 				93D39392DEDA376F93C6C718 /* MPCell.m in Sources */,
 				93D39A5FF670957C0AF8298D /* MPPasswordCell.m in Sources */,
@@ -3253,6 +3197,7 @@
 				93D39673DDC085BE72C34D7C /* MPPopdownSegue.m in Sources */,
 				93D39BA1EA3CAAC8A220B4A6 /* MPAppSettingsViewController.m in Sources */,
 				93D396D8B67DA6522CDBA142 /* MPCoachmarkViewController.m in Sources */,
+				DADB4ECA19C66FB60065A78D /* MPElementEntity.m in Sources */,
 				93D39EAA4D064193074D3021 /* MPFixable.m in Sources */,
 				93D394982CBD25D46692DD7C /* MPWebViewController.m in Sources */,
 				93D39D8F78978196D6ABDEDE /* MPNavigationController.m in Sources */,
@@ -3402,27 +3347,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		DA4425D41557BED40052177D /* Debug-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-			};
-			name = "Debug-iOS";
-		};
-		DA4425D51557BED40052177D /* AdHoc-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-			};
-			name = "AdHoc-iOS";
-		};
-		DA4425D61557BED40052177D /* AppStore-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-			};
-			name = "AppStore-iOS";
-		};
 		DA5BFA6B147E415C00F98B1E /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3892,16 +3816,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DA4425D31557BED40052177D /* Build configuration list for PBXNativeTarget "UbiquityStoreManager" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DA4425D41557BED40052177D /* Debug-iOS */,
-				DA4425D51557BED40052177D /* AdHoc-iOS */,
-				DA4425D61557BED40052177D /* AppStore-iOS */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-iOS";
-		};
 		DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -3972,8 +3886,9 @@
 				DABD3BD21711E2DC00CF925C /* MasterPassword 2.xcdatamodel */,
 				DABD3BD31711E2DC00CF925C /* MasterPassword 3.xcdatamodel */,
 				DABD3BD41711E2DC00CF925C /* MasterPassword 4.xcdatamodel */,
+				DA62140919C66A9700375240 /* MasterPassword 5.xcdatamodel */,
 			);
-			currentVersion = DABD3BD41711E2DC00CF925C /* MasterPassword 4.xcdatamodel */;
+			currentVersion = DA62140919C66A9700375240 /* MasterPassword 5.xcdatamodel */;
 			path = MasterPassword.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

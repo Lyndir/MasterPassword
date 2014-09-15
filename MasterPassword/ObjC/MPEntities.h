@@ -12,6 +12,7 @@
 #import "MPElementGeneratedEntity.h"
 #import "MPUserEntity.h"
 #import "MPAlgorithm.h"
+#import "MPFixable.h"
 
 #define MPAvatarCount 19
 
@@ -21,8 +22,9 @@
 
 @end
 
-@interface MPElementEntity(MP)
+@interface MPElementEntity(MP)<MPFixable>
 
+@property(assign) BOOL loginGenerated;
 @property(assign) MPElementType type;
 @property(readonly) NSString *typeName;
 @property(readonly) NSString *typeShortName;
@@ -35,8 +37,10 @@
 
 - (NSUInteger)use;
 - (BOOL)migrateExplicitly:(BOOL)explicit;
-- (NSString *)resolveContentUsingKey:(MPKey *)key;
-- (void)resolveContentUsingKey:(MPKey *)key result:(void (^)(NSString *))result;
+- (NSString *)resolveLoginUsingKey:(MPKey *)key;
+- (NSString *)resolvePasswordUsingKey:(MPKey *)key;
+- (void)resolveLoginUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result;
+- (void)resolvePasswordUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result;
 
 @end
 

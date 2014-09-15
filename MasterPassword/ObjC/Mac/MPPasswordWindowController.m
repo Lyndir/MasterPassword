@@ -281,7 +281,7 @@
                 NSString *password = [(NSSecureTextField *)alert.accessoryView stringValue];
                 [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                     MPElementEntity *entity = [self.selectedElement entityInContext:context];
-                    [entity.algorithm saveContent:password toElement:entity usingKey:[MPMacAppDelegate get].key];
+                    [entity.algorithm savePassword:password toElement:entity usingKey:[MPMacAppDelegate get].key];
                     [context saveToStore];
                 }];
                 break;
@@ -403,8 +403,8 @@
         MPElementType type = [types[t] unsignedIntegerValue];
         NSString *title = [element.algorithm nameOfType:type];
         if (type & MPElementTypeClassGenerated)
-            title = [element.algorithm generateContentNamed:element.siteName ofType:type
-                                                withCounter:element.counter usingKey:[MPMacAppDelegate get].key];
+            title = [element.algorithm generatePasswordForSiteNamed:element.siteName ofType:type
+                                                        withCounter:element.counter usingKey:[MPMacAppDelegate get].key];
 
         NSButtonCell *cell = [self.passwordTypesMatrix cellAtRow:(NSInteger)t column:0];
         cell.tag = type;

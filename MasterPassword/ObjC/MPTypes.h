@@ -8,17 +8,18 @@
 
 #import "MPKey.h"
 
-typedef NS_ENUM(NSUInteger, MPElementContentType) {
-    MPElementContentTypePassword,
-    MPElementContentTypeNote,
-    MPElementContentTypePicture,
-};
-
 typedef NS_ENUM(NSUInteger, MPElementTypeClass) {
     /** Generate the password. */
             MPElementTypeClassGenerated = 1 << 4,
     /** Store the password. */
             MPElementTypeClassStored = 1 << 5,
+};
+
+typedef NS_ENUM(NSUInteger, MPElementVariant) {
+    /** Generate the password. */
+            MPElementVariantPassword,
+    /** Generate the login name. */
+            MPElementVariantLogin,
 };
 
 typedef NS_ENUM(NSUInteger, MPElementFeature) {
@@ -35,6 +36,7 @@ typedef NS_ENUM(NSUInteger, MPElementType) {
     MPElementTypeGeneratedBasic = 0x4 | MPElementTypeClassGenerated | 0x0,
     MPElementTypeGeneratedShort = 0x3 | MPElementTypeClassGenerated | 0x0,
     MPElementTypeGeneratedPIN = 0x5 | MPElementTypeClassGenerated | 0x0,
+    MPElementTypeGeneratedName = 0xF | MPElementTypeClassGenerated | 0x0,
 
     MPElementTypeStoredPersonal = 0x0 | MPElementTypeClassStored | MPElementFeatureExportContent,
     MPElementTypeStoredDevicePrivate = 0x1 | MPElementTypeClassStored | MPElementFeatureDevicePrivate,

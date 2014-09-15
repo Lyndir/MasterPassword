@@ -1,12 +1,12 @@
 /**
- * Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
- *
- * See the enclosed file LICENSE for license information (LGPLv3). If you did
- * not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
- *
- * @author   Maarten Billemont <lhunath@lyndir.com>
- * @license  http://www.gnu.org/licenses/lgpl-3.0.txt
- */
+* Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
+*
+* See the enclosed file LICENSE for license information (LGPLv3). If you did
+* not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
+*
+* @author   Maarten Billemont <lhunath@lyndir.com>
+* @license  http://www.gnu.org/licenses/lgpl-3.0.txt
+*/
 
 //
 //  MPAlgorithm
@@ -50,6 +50,7 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 - (MPKey *)keyFromKeyData:(NSData *)keyData;
 - (NSData *)keyIDForKeyData:(NSData *)keyData;
 
+- (NSString *)scopeForVariant:(MPElementVariant)variant;
 - (NSString *)nameOfType:(MPElementType)type;
 - (NSString *)shortNameOfType:(MPElementType)type;
 - (NSString *)classNameOfType:(MPElementType)type;
@@ -59,19 +60,30 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 - (MPElementType)nextType:(MPElementType)type;
 - (MPElementType)previousType:(MPElementType)type;
 
-- (NSString *)generateContentNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter usingKey:(MPKey *)key;
-- (NSString *)storedContentForElement:(MPElementStoredEntity *)element usingKey:(MPKey *)key;
+- (NSString *)generateLoginForSiteNamed:(NSString *)name usingKey:(MPKey *)key;
+- (NSString *)generatePasswordForSiteNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter
+                                  usingKey:(MPKey *)key;
+- (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter
+                                  variant:(MPElementVariant)variant usingKey:(MPKey *)key;
 
-- (BOOL)saveContent:(NSString *)clearContent toElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
-- (NSString *)resolveContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
-- (void)resolveContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey
-                          result:(void (^)(NSString *result))resultBlock;
+- (NSString *)storedLoginForElement:(MPElementStoredEntity *)element usingKey:(MPKey *)key;
+- (NSString *)storedPasswordForElement:(MPElementStoredEntity *)element usingKey:(MPKey *)key;
 
-- (void)importProtectedContent:(NSString *)protectedContent protectedByKey:(MPKey *)importKey
-                   intoElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
-- (void)importClearTextContent:(NSString *)clearContent intoElement:(MPElementEntity *)element
-                      usingKey:(MPKey *)elementKey;
-- (NSString *)exportContentForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
+- (BOOL)savePassword:(NSString *)clearPassword toElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
+
+- (NSString *)resolveLoginForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
+- (NSString *)resolvePasswordForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
+
+- (void)resolveLoginForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey
+                        result:(void ( ^ )(NSString *result))resultBlock;
+- (void)resolvePasswordForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey
+                           result:(void ( ^ )(NSString *result))resultBlock;
+
+- (void)importProtectedPassword:(NSString *)protectedPassword protectedByKey:(MPKey *)importKey
+                    intoElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
+- (void)importClearTextPassword:(NSString *)clearPassword intoElement:(MPElementEntity *)element
+                       usingKey:(MPKey *)elementKey;
+- (NSString *)exportPasswordForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
 
 - (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordOfType:(MPElementType)type byAttacker:(MPAttacker)attacker;
 - (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordString:(NSString *)password byAttacker:(MPAttacker)attacker;

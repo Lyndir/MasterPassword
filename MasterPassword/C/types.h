@@ -7,10 +7,11 @@
 //
 
 typedef enum {
-    MPElementContentTypePassword,
-    MPElementContentTypeNote,
-    MPElementContentTypePicture,
-} MPElementContentType;
+    /** Generate the password to log in with. */
+    MPElementVariantPassword,
+    /** Generate the login name to log in as. */
+    MPElementVariantLogin,
+} MPElementVariant;
 
 typedef enum {
     /** Generate the password. */
@@ -33,6 +34,7 @@ typedef enum {
     MPElementTypeGeneratedBasic = 0x4 | MPElementTypeClassGenerated | 0x0,
     MPElementTypeGeneratedShort = 0x3 | MPElementTypeClassGenerated | 0x0,
     MPElementTypeGeneratedPIN = 0x5 | MPElementTypeClassGenerated | 0x0,
+    MPElementTypeGeneratedName = 0xF | MPElementTypeClassGenerated | 0x0,
 
     MPElementTypeStoredPersonal = 0x0 | MPElementTypeClassStored | MPElementFeatureExportContent,
     MPElementTypeStoredDevicePrivate = 0x1 | MPElementTypeClassStored | MPElementFeatureDevicePrivate,
@@ -44,6 +46,8 @@ typedef enum {
 #define trc(...) do {} while (0)
 #endif
 
+const MPElementVariant VariantWithName(const char *variantName);
+const char *ScopeForVariant(MPElementVariant variant);
 const MPElementType TypeWithName(const char *typeName);
 const char *CipherForType(MPElementType type, uint8_t seedByte);
 const char CharacterFromClass(char characterClass, uint8_t seedByte);

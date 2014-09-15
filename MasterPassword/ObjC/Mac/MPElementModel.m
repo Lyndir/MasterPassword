@@ -117,7 +117,7 @@
         re_anyChar = [NSRegularExpression regularExpressionWithPattern:@"." options:0 error:nil];
     } );
 
-    [entity resolveContentUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
+    [entity resolvePasswordUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
         NSString *displayResult = result;
         if ([[MPConfig get].hidePasswords boolValue] && !([NSEvent modifierFlags] & NSAlternateKeyMask))
             displayResult = [displayResult stringByReplacingMatchesOfExpression:re_anyChar withTemplate:@"●"];
