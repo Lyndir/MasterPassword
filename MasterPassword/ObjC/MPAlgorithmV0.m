@@ -423,7 +423,7 @@
         case MPElementTypeGeneratedShort:
         case MPElementTypeGeneratedPIN:
         case MPElementTypeGeneratedName: {
-            NSAssert( NO, @"Cannot save content to element with generated type %lu.", (long)element.type );
+            wrn( @"Cannot save content to element with generated type %lu.", (long)element.type );
             return NO;
         }
 

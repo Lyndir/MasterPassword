@@ -146,10 +146,17 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
         [self migrateStore];
 
         // Create a new store coordinator.
-        self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:
-                [NSManagedObjectModel mergedModelFromBundles:nil]];
+        if (!self.persistentStoreCoordinator)
+            self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:
+                                               [NSManagedObjectModel mergedModelFromBundles:nil]];
         NSError *error = nil;
-        [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[self localStoreURL]
+        NSURL *localStoreURL = [self localStoreURL];
+        if (![[NSFileManager defaultManager] createDirectoryAtURL:[localStoreURL URLByDeletingLastPathComponent]
+                                      withIntermediateDirectories:YES attributes:nil error:&error]) {
+            err( @"Couldn't create our application support directory: %@", [error fullDescription] );
+            return;
+        }
+        [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:localStoreURL
                                                             options:@{
                                                                     NSMigratePersistentStoresAutomaticallyOption : @YES,
                                                                     NSInferMappingModelAutomaticallyOption       : @YES,
