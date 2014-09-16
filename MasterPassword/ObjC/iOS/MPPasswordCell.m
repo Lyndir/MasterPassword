@@ -62,28 +62,36 @@
 
     [self observeKeyPath:@"bounds" withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
         if (from && !CGSizeEqualToSize( [from CGRectValue].size, [to CGRectValue].size ))
-            [self setupLayer];
+            [_self setupLayer];
     }];
 
     [self.contentButton observeKeyPath:@"highlighted"
                              withBlock:^(id from, id to, NSKeyValueChange cause, UIButton *button) {
-                                 button.layer.shadowOpacity = button.selected? 0.7f: button.highlighted? 0.3f: 0;
+                                 [UIView animateWithDuration:.2f delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+                                     button.layer.shadowOpacity = button.selected? 0.7f: button.highlighted? 0.3f: 0;
+                                 }                completion:nil];
                              }];
     [self.contentButton observeKeyPath:@"selected"
                              withBlock:^(id from, id to, NSKeyValueChange cause, UIButton *button) {
-                                 button.layer.shadowOpacity = button.selected? 0.7f: button.highlighted? 0.3f: 0;
+                                 [UIView animateWithDuration:.2f delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+                                     button.layer.shadowOpacity = button.selected? 0.7f: button.highlighted? 0.3f: 0;
+                                 }                completion:nil];
                              }];
     [self.loginNameButton observeKeyPath:@"highlighted"
                                withBlock:^(id from, id to, NSKeyValueChange cause, UIButton *button) {
-                                   button.backgroundColor = [button.backgroundColor colorWithAlphaComponent:
-                                           button.selected || button.highlighted? 0.1f: 0];
-                                   button.layer.shadowOpacity = button.selected? 0.7f: button.highlighted? 0.3f: 0;
+                                   [UIView animateWithDuration:.2f delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+                                       button.backgroundColor = [button.backgroundColor colorWithAlphaComponent:
+                                               button.selected || button.highlighted? 0.1f: 0];
+                                       button.layer.shadowOpacity = button.selected? 0.7f: button.highlighted? 0.3f: 0;
+                                   }                completion:nil];
                                }];
     [self.loginNameButton observeKeyPath:@"selected"
                                withBlock:^(id from, id to, NSKeyValueChange cause, UIButton *button) {
-                                   button.backgroundColor = [button.backgroundColor colorWithAlphaComponent:
-                                           button.selected || button.highlighted? 0.1f: 0];
-                                   button.layer.shadowOpacity = button.selected? 0.7f: button.highlighted? 0.3f: 0;
+                                   [UIView animateWithDuration:.2f delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+                                       button.backgroundColor = [button.backgroundColor colorWithAlphaComponent:
+                                               button.selected || button.highlighted? 0.1f: 0];
+                                       button.layer.shadowOpacity = button.selected? 0.7f: button.highlighted? 0.3f: 0;
+                                   }                completion:nil];
                                }];
 
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position.y"];
@@ -96,6 +104,7 @@
 
 - (void)setupLayer {
 
+    self.contentView.frame = self.bounds;
     self.contentButton.layer.cornerRadius = 4;
     self.contentButton.layer.shadowOffset = CGSizeZero;
     self.contentButton.layer.shadowRadius = 5;
@@ -126,6 +135,12 @@
     self.transientSite = nil;
     self.mode = MPPasswordCellModePassword;
     [self updateAnimated:NO];
+}
+
+- (void)dealloc {
+
+    [self.contentButton removeKeyPathObservers];
+    [self.loginNameButton removeKeyPathObservers];
 }
 
 #pragma mark - State
@@ -168,11 +183,9 @@
     UICollectionView *collectionView = [UICollectionView findAsSuperviewOf:self];
     [collectionView scrollToItemAtIndexPath:[collectionView indexPathForCell:self]
                            atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+
     if (textField == self.loginNameField)
-        [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
-            if (![[self elementInContext:mainContext].loginName length])
-                self.loginNameField.text = nil;
-        }];
+        self.loginNameButton.titleLabel.alpha = [self.loginNameField.text length] || self.loginNameField.enabled? 0: 1;
 }
 
 - (IBAction)textFieldDidChange:(UITextField *)textField {
@@ -208,9 +221,15 @@
                 if ([element.algorithm savePassword:text toElement:element usingKey:[MPiOSAppDelegate get].key])
                     [PearlOverlay showTemporaryOverlayWithTitle:@"Password Updated" dismissAfter:2];
             }
-            else if (textField == self.loginNameField && ![text isEqualToString:element.loginName]) {
+            else if (textField == self.loginNameField &&
+                     ((element.loginGenerated && ![text length]) ||
+                      (!element.loginGenerated && ![text isEqualToString:element.loginName]))) {
                 element.loginName = text;
-                [PearlOverlay showTemporaryOverlayWithTitle:@"Login Updated" dismissAfter:2];
+                element.loginGenerated = NO;
+                if ([text length])
+                    [PearlOverlay showTemporaryOverlayWithTitle:@"Login Name Saved" dismissAfter:2];
+                else
+                    [PearlOverlay showTemporaryOverlayWithTitle:@"Login Name Cleared" dismissAfter:2];
             }
 
             [context saveToStore];
@@ -408,6 +427,7 @@
         if (![self copyLoginOfElement:element saveInContext:context]) {
             element.loginGenerated = YES;
             [context saveToStore];
+            [PearlOverlay showTemporaryOverlayWithTitle:@"Login Name Generated" dismissAfter:2];
             [self updateAnimated:YES];
         }
 
@@ -445,24 +465,18 @@
 
         // UI
         self.upgradeButton.alpha = mainElement.requiresExplicitMigration? 1: 0;
-        self.loginNameContainer.alpha = self.mode == MPPasswordCellModeSettings ||
-                                                mainElement.loginGenerated || [mainElement.loginName length]? 0.7f: 0;
-        self.loginNameField.textColor = [UIColor colorWithHexString:[mainElement.loginName length]? @"6D5E63": @"5E636D"];
-        self.modeButton.alpha = self.transientSite? 0: self.mode == MPPasswordCellModePassword? 0.1f: 0.5f;
+        BOOL settingsMode = self.mode == MPPasswordCellModeSettings;
+        self.loginNameContainer.alpha = settingsMode || mainElement.loginGenerated || [mainElement.loginName length]? 0.7f: 0;
+        self.loginNameField.textColor = [UIColor colorWithHexString:mainElement.loginGenerated? @"5E636D": @"6D5E63"];
+        self.modeButton.alpha = self.transientSite? 0: settingsMode? 0.5f: 0.1f;
         self.counterLabel.alpha = self.counterButton.alpha = mainElement.type & MPElementTypeClassGenerated? 0.5f: 0;
-        self.modeButton.selected = self.mode == MPPasswordCellModeSettings;
-        self.strengthLabel.gone = self.mode == MPPasswordCellModePassword;
+        self.modeButton.selected = settingsMode;
+        self.strengthLabel.gone = !settingsMode;
         self.modeScrollView.scrollEnabled = !self.transientSite;
         [self.modeScrollView setContentOffset:CGPointMake( self.mode * self.modeScrollView.frame.size.width, 0 ) animated:animated];
-
-        // Indicator
-        switch (self.mode) {
-            case MPPasswordCellModePassword:
-                [self.loginNameField resignFirstResponder];
-                [self.passwordField resignFirstResponder];
-                break;
-            case MPPasswordCellModeSettings:
-                break;
+        if (!settingsMode) {
+            [self.loginNameField resignFirstResponder];
+            [self.passwordField resignFirstResponder];
         }
 
         // Site Name
@@ -484,13 +498,14 @@
                 password = [MPAlgorithmDefault generatePasswordForSiteNamed:self.transientSite ofType:
                                 [[MPiOSAppDelegate get] activeUserInContext:context].defaultType?: MPElementTypeGeneratedLong
                                                                 withCounter:1 usingKey:key];
-            else {
+            else if (element)
                 password = [element resolvePasswordUsingKey:key];
-            }
+            else
+                return;
 
             TimeToCrack timeToCrack;
             NSString *timeToCrackString = nil;
-            id<MPAlgorithm> algorithm = mainElement.algorithm?: MPAlgorithmDefault;
+            id<MPAlgorithm> algorithm = element.algorithm?: MPAlgorithmDefault;
             MPAttacker attackHardware = [[MPConfig get].siteAttacker unsignedIntegerValue];
             if ([algorithm timeToCrack:&timeToCrack passwordOfType:element.type byAttacker:attackHardware] ||
                 [algorithm timeToCrack:&timeToCrack passwordString:password byAttacker:attackHardware])
@@ -500,6 +515,7 @@
                 self.loginNameField.text = loginName;
                 self.passwordField.text = password;
                 self.strengthLabel.text = timeToCrackString;
+                self.loginNameButton.titleLabel.alpha = [loginName length] || self.loginNameField.enabled? 0: 1;
 
                 if ([password length])
                     self.indicatorView.alpha = 0;
@@ -510,7 +526,7 @@
                     [self.contentView addConstraintsWithVisualFormat:@"V:[indicator][target]" options:NSLayoutFormatAlignAllCenterX
                                                              metrics:nil views:@{
                                     @"indicator" : self.indicatorView,
-                                    @"target"    : self.mode == MPPasswordCellModeSettings? self.editButton: self.modeButton
+                                    @"target"    : settingsMode? self.editButton: self.modeButton
                             }];
                 }
             } );
@@ -521,9 +537,6 @@
             self.counterLabel.text = strf( @"%lu", (unsigned long)((MPElementGeneratedEntity *)mainElement).counter );
 
         // Site Login Name
-        self.loginNameField.attributedPlaceholder = stra( self.loginNameField.placeholder, @{
-                NSForegroundColorAttributeName : [UIColor whiteColor]
-        } );
         self.loginNameField.enabled = self.passwordField.enabled = //
                 [self.loginNameField isFirstResponder] || [self.passwordField isFirstResponder];
 

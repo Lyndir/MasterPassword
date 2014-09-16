@@ -356,7 +356,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
     if (!key || [key isEqualToString:NSStringFromSelector( @selector( dictationSearch ) )])
         self.passwordsSearchBar.keyboardType = [[MPiOSConfig get].dictationSearch boolValue]? UIKeyboardTypeDefault: UIKeyboardTypeURL;
     if (!key || [key isEqualToString:NSStringFromSelector( @selector( hidePasswords ) )])
-        [self updatePasswords];
+        [self.passwordCollectionView reloadData];
 }
 
 - (void)updatePasswords {

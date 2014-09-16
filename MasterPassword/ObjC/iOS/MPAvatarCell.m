@@ -57,11 +57,14 @@ const long MPAvatarAdd = 10000;
     self.avatarImageView.layer.masksToBounds = NO;
     self.avatarImageView.backgroundColor = [UIColor clearColor];
 
-    [self observeKeyPath:@"selected" withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
-        [_self updateAnimated:self.superview != nil];
+    [self observeKeyPath:@"bounds" withBlock:^(id from, id to, NSKeyValueChange cause, MPAvatarCell *_self) {
+        _self.contentView.frame = _self.bounds;
     }];
-    [self observeKeyPath:@"highlighted" withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
-        [_self updateAnimated:self.superview != nil];
+    [self observeKeyPath:@"selected" withBlock:^(id from, id to, NSKeyValueChange cause, MPAvatarCell *_self) {
+        [_self updateAnimated:_self.superview != nil];
+    }];
+    [self observeKeyPath:@"highlighted" withBlock:^(id from, id to, NSKeyValueChange cause, MPAvatarCell *_self) {
+        [_self updateAnimated:_self.superview != nil];
     }];
 
     CABasicAnimation *toShadowOpacityAnimation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
