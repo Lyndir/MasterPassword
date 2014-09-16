@@ -69,7 +69,7 @@
     NSAssert( [seed length], @"Missing seed." );
     NSArray *typeCiphers = [self ciphersForType:type];
     NSString *cipher = typeCiphers[seedBytes[0] % [typeCiphers count]];
-    trc( @"type %@ (%d), ciphers: %@, selected: %@", [self nameOfType:type], type, typeCiphers, cipher );
+    trc( @"type %@ (%lu), ciphers: %@, selected: %@", [self nameOfType:type], (unsigned long)type, typeCiphers, cipher );
 
     // Encode the content, character by character, using subsequent seed bytes and the cipher.
     NSAssert( [seed length] >= [cipher length] + 1, @"Insufficient seed bytes to encode cipher." );
