@@ -6,12 +6,13 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
+#import <Crashlytics/Crashlytics.h>
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "IASKSettingsReader.h"
 
-@interface MPiOSAppDelegate()
+@interface MPiOSAppDelegate()<SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
 @property(nonatomic, weak) PearlAlert *handleCloudDisabledAlert;
 @property(nonatomic, weak) PearlAlert *handleCloudContentAlert;
@@ -23,14 +24,15 @@
 
 + (void)initialize {
 
-    if ([self class] == [MPiOSAppDelegate class]) {
+    static dispatch_once_t once = 0;
+    dispatch_once( &once, ^{
         [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
 #ifdef DEBUG
         [PearlLogger get].printLevel = PearlLogLevelDebug; //Trace;
 #else
         [PearlLogger get].printLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
 #endif
-    }
+    } );
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -146,6 +148,12 @@
                 @"legal"      : @"YES",
 #endif
         } );
+
+        [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
+        SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[[NSSet alloc] initWithObjects:
+                MPProductGenerateLogins, nil]];
+        productsRequest.delegate = self;
+        [productsRequest start];
     }
     @catch (id exception) {
         err( @"During Post-Startup: %@", exception );
@@ -272,6 +280,48 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:nil];
 
     [super applicationDidBecomeActive:application];
+}
+
+#pragma mark - SKProductsRequestDelegate
+
+- (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
+
+    inf( @"products: %@, invalid: %@", response.products, response.invalidProductIdentifiers );
+    self.products = response.products;
+}
+
+- (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
+
+    err( @"StoreKit request (%@) failed: %@", request, error );
+}
+
+#pragma mark - SKPaymentTransactionObserver
+
+- (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions {
+
+    for (SKPaymentTransaction *transaction in transactions) {
+        dbg( @"transaction updated: %@", transaction );
+        switch (transaction.transactionState) {
+            case SKPaymentTransactionStatePurchased:
+            case SKPaymentTransactionStateRestored: {
+                inf( @"purchased: %@", transaction.payment.productIdentifier );
+                [[NSUserDefaults standardUserDefaults] setObject:transaction.transactionIdentifier
+                                                          forKey:transaction.payment.productIdentifier];
+                break;
+            }
+            case SKPaymentTransactionStatePurchasing:
+            case SKPaymentTransactionStateFailed:
+            case SKPaymentTransactionStateDeferred:
+                break;
+        }
+    }
+
+    self.productTransactions = transactions;
+}
+
+- (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {
+
+    err( @"StoreKit restore failed: %@", error );
 }
 
 #pragma mark - Behavior

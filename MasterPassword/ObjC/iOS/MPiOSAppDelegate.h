@@ -8,10 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
+#import <StoreKit/StoreKit.h>
 
 #import "MPAppDelegate_Shared.h"
 
 @interface MPiOSAppDelegate : MPAppDelegate_Shared
+
+@property(nonatomic, strong) NSArray /* SKProduct */ *products;
+
+@property(nonatomic, strong) NSArray *productTransactions;
 
 - (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController;
 - (void)openFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController;

@@ -478,6 +478,10 @@
             [self.loginNameField resignFirstResponder];
             [self.passwordField resignFirstResponder];
         }
+        if ([[MPiOSAppDelegate get] isPurchased:MPProductGenerateLogins])
+            [self.loginNameButton setTitle:@"Tap to generate username or use pencil to save one" forState:UIControlStateNormal];
+        else
+            [self.loginNameButton setTitle:@"Tap the pencil to save a username" forState:UIControlStateNormal];
 
         // Site Name
         self.siteNameLabel.text = strl( @"%@ - %@", self.transientSite?: mainElement.name,

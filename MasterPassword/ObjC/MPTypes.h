@@ -84,6 +84,8 @@ typedef NS_ENUM(NSUInteger, MPElementType) {
 #define MPSitesImportedNotificationUserKey    @"MPSitesImportedNotificationUserKey"
 #define MPInconsistenciesFixResultUserKey     @"MPInconsistenciesFixResultUserKey"
 
+#define MPProductGenerateLogins               @"MPProductGenerateLogins"
+
 static void MPCheckpoint(NSString *checkpoint, NSDictionary *attributes) {
 
     inf(@"%@: %@", checkpoint, attributes);

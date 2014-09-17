@@ -17,6 +17,7 @@
 
 #import "MPAlgorithmV0.h"
 #import "MPEntities.h"
+#import "MPAppDelegate_Shared.h"
 #include <openssl/bn.h>
 #include <openssl/err.h>
 
@@ -501,7 +502,7 @@
 
     NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     NSString *name = element.name;
-    BOOL loginGenerated = element.loginGenerated;
+    BOOL loginGenerated = element.loginGenerated && [[MPAppDelegate_Shared get] isPurchased:MPProductGenerateLogins];
     NSString *loginName = loginGenerated? nil: element.loginName;
     id<MPAlgorithm> algorithm = nil;
     if (!name.length)

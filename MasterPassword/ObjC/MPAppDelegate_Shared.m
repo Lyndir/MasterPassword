@@ -50,4 +50,9 @@
     self.activeUserOID = activeUser.objectID;
 }
 
+- (BOOL)isPurchased:(NSString *)productIdentifier {
+
+    return [[NSUserDefaults standardUserDefaults] objectForKey:productIdentifier] != nil;
+}
+
 @end

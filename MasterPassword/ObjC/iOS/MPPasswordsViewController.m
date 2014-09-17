@@ -389,7 +389,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
         [self.passwordCollectionView performBatchUpdates:^{
             [self fetchedItemsDidUpdate];
 
-            NSInteger fromSections = self.passwordCollectionView.numberOfSections;
+            NSInteger fromSections = [oldSections count];
             NSInteger toSections = [self numberOfSectionsInCollectionView:self.passwordCollectionView];
             for (NSInteger section = 0; section < MAX( toSections, fromSections ); ++section) {
                 if (section >= fromSections)

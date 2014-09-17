@@ -24,4 +24,6 @@
 - (MPUserEntity *)activeUserInContext:(NSManagedObjectContext *)context;
 - (void)setActiveUser:(MPUserEntity *)activeUser;
 
+- (BOOL)isPurchased:(NSString *)productIdentifier;
+
 @end
