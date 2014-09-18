@@ -102,6 +102,21 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+#pragma mark - Actions
+
+- (IBAction)restorePurchases:(id)sender {
+
+    [PearlAlert showAlertWithTitle:@"Restore Previous Purchases" message:
+                    @"This will check with Apple to find and activate any purchases you made from other devices."
+                         viewStyle:UIAlertViewStyleDefault initAlert:nil
+                 tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                     if (buttonIndex == [alert cancelButtonIndex])
+                         return;
+
+                     [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
+                 } cancelTitle:@"Cancel" otherTitles:@"Find Purchases", nil];
+}
+
 #pragma mark - Private
 
 - (SKProduct *)productForCell:(MPStoreProductCell *)cell {
@@ -144,8 +159,9 @@
     [showCells addObject:cell];
 
     self.currencyFormatter.locale = product.priceLocale;
-    cell.priceLabel.text = [self.currencyFormatter stringFromNumber:product.price];
-    cell.purchasedIndicator.alpha = [[MPiOSAppDelegate get] isPurchased:productIdentifier]? 1: 0;
+    BOOL purchased = [[MPiOSAppDelegate get] isPurchased:productIdentifier];
+    cell.priceLabel.text = purchased? @"": [self.currencyFormatter stringFromNumber:product.price];
+    cell.purchasedIndicator.alpha = purchased? 1: 0;
 }
 
 - (void)updateWithTransactions:(NSArray *)transactions {

@@ -389,17 +389,19 @@ referenceSizeForHeaderInSection:(NSInteger)section {
         [self.passwordCollectionView performBatchUpdates:^{
             [self fetchedItemsDidUpdate];
 
-            NSInteger fromSections = [oldSections count];
+            NSInteger fromSections = self.passwordCollectionView.numberOfSections;
             NSInteger toSections = [self numberOfSectionsInCollectionView:self.passwordCollectionView];
             for (NSInteger section = 0; section < MAX( toSections, fromSections ); ++section) {
                 if (section >= fromSections)
                     [self.passwordCollectionView insertSections:[NSIndexSet indexSetWithIndex:section]];
                 else if (section >= toSections)
                     [self.passwordCollectionView deleteSections:[NSIndexSet indexSetWithIndex:section]];
-                else
+                else if (section < [oldSections count])
                     [self.passwordCollectionView reloadItemsFromArray:oldSections[section]
                                                               toArray:[[self.fetchedResultsController sections][section] objects]
                                                             inSection:section];
+                else
+                    [self.passwordCollectionView reloadSections:[NSIndexSet indexSetWithIndex:section]];
             }
         }                                     completion:^(BOOL finished) {
             if (finished)

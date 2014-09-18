@@ -295,6 +295,11 @@
     err( @"StoreKit request (%@) failed: %@", request, error );
 }
 
+- (void)requestDidFinish:(SKRequest *)request {
+
+    dbg( @"StoreKit request (%@) finished.", request );
+}
+
 #pragma mark - SKPaymentTransactionObserver
 
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions {

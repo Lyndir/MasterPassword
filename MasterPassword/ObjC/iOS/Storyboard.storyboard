@@ -63,6 +63,7 @@
             <string>Exo2.0-Regular</string>
             <string>Exo2.0-Regular</string>
             <string>Exo2.0-Regular</string>
+            <string>Exo2.0-Regular</string>
         </mutableArray>
         <mutableArray key="Exo2.0-Thin.otf">
             <string>Exo2.0-Thin</string>
@@ -1019,6 +1020,7 @@
                     </tableView>
                     <tabBarItem key="tabBarItem" title="Preferences" image="icon_person.png" id="wmG-G2-TA9"/>
                     <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="avatarImage" destination="tWi-sc-DGp" id="ifT-Ct-WL6"/>
                         <outlet property="checkInconsistencies" destination="UdB-BV-AHA" id="Cm2-Om-UzP"/>
@@ -2486,8 +2488,11 @@ See </string>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumb_generated_login.png" translatesAutoresizingMaskIntoConstraints="NO" id="6km-y3-4gu">
                                                     <rect key="frame" x="88" y="20" width="198" height="198"/>
                                                 </imageView>
+                                                <activityIndicatorView hidden="YES" opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="X2g-Go-2Hz">
+                                                    <rect key="frame" x="169" y="100.5" width="37" height="37"/>
+                                                </activityIndicatorView>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✔︎" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N9y-ue-L8d">
-                                                    <rect key="frame" x="126" y="32.5" width="121" height="173"/>
+                                                    <rect key="frame" x="126" y="32" width="121" height="173"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="144"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -2500,6 +2505,7 @@ See </string>
                                                 </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="6km-y3-4gu" firstAttribute="centerY" secondItem="X2g-Go-2Hz" secondAttribute="centerY" id="8cn-tp-Vfc"/>
                                                 <constraint firstItem="yRH-27-edZ" firstAttribute="leading" secondItem="FWE-cE-L02" secondAttribute="leading" constant="20" symbolic="YES" id="DSv-a4-VPg"/>
                                                 <constraint firstItem="9ct-IM-QKR" firstAttribute="leading" secondItem="Kkl-gT-YAO" secondAttribute="trailing" constant="8" symbolic="YES" id="Fov-kQ-Wkn"/>
                                                 <constraint firstItem="6km-y3-4gu" firstAttribute="top" secondItem="FWE-cE-L02" secondAttribute="top" constant="20" symbolic="YES" id="Kdx-UC-Q2x"/>
@@ -2507,6 +2513,7 @@ See </string>
                                                 <constraint firstItem="Kkl-gT-YAO" firstAttribute="bottom" secondItem="9ct-IM-QKR" secondAttribute="bottom" id="Oo3-Q5-Dzd"/>
                                                 <constraint firstItem="N9y-ue-L8d" firstAttribute="centerX" secondItem="6km-y3-4gu" secondAttribute="centerX" id="PNi-RN-ybE"/>
                                                 <constraint firstItem="Kkl-gT-YAO" firstAttribute="top" secondItem="6km-y3-4gu" secondAttribute="bottom" constant="8" symbolic="YES" id="UPs-VG-2ND"/>
+                                                <constraint firstItem="6km-y3-4gu" firstAttribute="centerX" secondItem="X2g-Go-2Hz" secondAttribute="centerX" id="Zpt-vq-iVk"/>
                                                 <constraint firstItem="yRH-27-edZ" firstAttribute="top" secondItem="Kkl-gT-YAO" secondAttribute="bottom" constant="8" symbolic="YES" id="eHf-L3-Ong"/>
                                                 <constraint firstAttribute="trailing" secondItem="yRH-27-edZ" secondAttribute="trailing" constant="20" id="eUN-6Y-FEC"/>
                                                 <constraint firstAttribute="centerX" secondItem="6km-y3-4gu" secondAttribute="centerX" id="gv6-jC-Gaa"/>
@@ -2517,6 +2524,11 @@ See </string>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="activityIndicator" destination="X2g-Go-2Hz" id="PvQ-bP-exW"/>
+                                            <outlet property="priceLabel" destination="9ct-IM-QKR" id="UTQ-L7-vbu"/>
+                                            <outlet property="purchasedIndicator" destination="N9y-ue-L8d" id="Ppv-ay-M1J"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="328" id="tm3-IM-pJw" userLabel="Advanced Export" customClass="MPStoreProductCell">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="97"/>
@@ -2541,8 +2553,11 @@ See </string>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumb_generated_login.png" translatesAutoresizingMaskIntoConstraints="NO" id="dPE-KG-tzV">
                                                     <rect key="frame" x="88" y="20" width="198" height="198"/>
                                                 </imageView>
+                                                <activityIndicatorView hidden="YES" opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="27T-E7-pLh">
+                                                    <rect key="frame" x="169" y="100.5" width="37" height="37"/>
+                                                </activityIndicatorView>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✔︎" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n6J-iw-bme">
-                                                    <rect key="frame" x="126.5" y="32.5" width="121" height="173"/>
+                                                    <rect key="frame" x="126" y="32" width="121" height="173"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="144"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -2556,9 +2571,11 @@ See </string>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="dPE-KG-tzV" firstAttribute="top" secondItem="Dgo-0O-fuB" secondAttribute="top" constant="20" symbolic="YES" id="2Qu-OE-0ae"/>
+                                                <constraint firstItem="dPE-KG-tzV" firstAttribute="centerY" secondItem="27T-E7-pLh" secondAttribute="centerY" id="5oj-xv-SNg"/>
                                                 <constraint firstAttribute="bottom" secondItem="a2i-1c-ULU" secondAttribute="bottom" constant="20" symbolic="YES" id="9Mz-44-ycF"/>
                                                 <constraint firstItem="qh5-l2-zT3" firstAttribute="bottom" secondItem="WjS-Ru-h33" secondAttribute="bottom" id="CJa-c0-bZ9"/>
                                                 <constraint firstItem="a2i-1c-ULU" firstAttribute="top" secondItem="qh5-l2-zT3" secondAttribute="bottom" constant="8" symbolic="YES" id="KXf-Fw-wHt"/>
+                                                <constraint firstItem="dPE-KG-tzV" firstAttribute="centerX" secondItem="27T-E7-pLh" secondAttribute="centerX" id="SbF-4Z-IYn"/>
                                                 <constraint firstItem="WjS-Ru-h33" firstAttribute="leading" secondItem="qh5-l2-zT3" secondAttribute="trailing" constant="8" symbolic="YES" id="Sd1-e0-2o9"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="WjS-Ru-h33" secondAttribute="trailing" constant="20" id="X2h-dc-lKk"/>
                                                 <constraint firstItem="a2i-1c-ULU" firstAttribute="leading" secondItem="Dgo-0O-fuB" secondAttribute="leading" constant="20" symbolic="YES" id="Yy6-fO-a4a"/>
@@ -2572,6 +2589,11 @@ See </string>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="activityIndicator" destination="27T-E7-pLh" id="r0e-Vd-2Gt"/>
+                                            <outlet property="priceLabel" destination="WjS-Ru-h33" id="Sa4-uw-e77"/>
+                                            <outlet property="purchasedIndicator" destination="n6J-iw-bme" id="u2Z-Cp-QyH"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="341" id="9Na-CL-jBq" userLabel="iOS Integration" customClass="MPStoreProductCell">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="97"/>
@@ -2596,8 +2618,11 @@ See </string>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumb_generated_login.png" translatesAutoresizingMaskIntoConstraints="NO" id="yAc-Sm-IVo">
                                                     <rect key="frame" x="88" y="20" width="198" height="198"/>
                                                 </imageView>
+                                                <activityIndicatorView hidden="YES" opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="yUe-TX-fli">
+                                                    <rect key="frame" x="169" y="100.5" width="37" height="37"/>
+                                                </activityIndicatorView>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✔︎" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ec8-P9-KPY">
-                                                    <rect key="frame" x="126.5" y="32.5" width="121" height="173"/>
+                                                    <rect key="frame" x="126" y="32" width="121" height="173"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="144"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -2620,13 +2645,20 @@ See </string>
                                                 <constraint firstItem="Zch-DS-J3I" firstAttribute="top" secondItem="3jH-eX-9N2" secondAttribute="top" id="gZU-lV-XZJ"/>
                                                 <constraint firstAttribute="bottom" secondItem="riF-bB-x5g" secondAttribute="bottom" constant="20" symbolic="YES" id="hQZ-Qb-A7u"/>
                                                 <constraint firstAttribute="trailing" secondItem="riF-bB-x5g" secondAttribute="trailing" constant="20" id="iCn-kq-xNy"/>
+                                                <constraint firstItem="yAc-Sm-IVo" firstAttribute="centerX" secondItem="yUe-TX-fli" secondAttribute="centerX" id="kUQ-lP-EQP"/>
                                                 <constraint firstItem="3jH-eX-9N2" firstAttribute="leading" secondItem="Zch-DS-J3I" secondAttribute="trailing" constant="8" symbolic="YES" id="qqB-1E-QPE"/>
                                                 <constraint firstItem="yAc-Sm-IVo" firstAttribute="centerY" secondItem="ec8-P9-KPY" secondAttribute="centerY" id="swf-Ua-uwD"/>
+                                                <constraint firstItem="yAc-Sm-IVo" firstAttribute="centerY" secondItem="yUe-TX-fli" secondAttribute="centerY" id="tha-UC-Hwi"/>
                                                 <constraint firstItem="Zch-DS-J3I" firstAttribute="leading" secondItem="ETY-Ou-DW7" secondAttribute="leading" constant="20" symbolic="YES" id="uV9-xY-ayE"/>
                                                 <constraint firstItem="riF-bB-x5g" firstAttribute="leading" secondItem="ETY-Ou-DW7" secondAttribute="leading" constant="20" symbolic="YES" id="y9l-fO-HMK"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="activityIndicator" destination="yUe-TX-fli" id="DH6-pK-fse"/>
+                                            <outlet property="priceLabel" destination="3jH-eX-9N2" id="agT-az-dVU"/>
+                                            <outlet property="purchasedIndicator" destination="ec8-P9-KPY" id="M39-bc-Ksp"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="354" id="8en-6R-GvR" userLabel="TouchID" customClass="MPStoreProductCell">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="97"/>
@@ -2651,8 +2683,11 @@ See </string>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumb_generated_login.png" translatesAutoresizingMaskIntoConstraints="NO" id="8v7-JH-mzu">
                                                     <rect key="frame" x="88" y="20" width="198" height="198"/>
                                                 </imageView>
+                                                <activityIndicatorView hidden="YES" opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Dv5-t7-lL1">
+                                                    <rect key="frame" x="169" y="100.5" width="37" height="37"/>
+                                                </activityIndicatorView>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✔︎" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yZX-ns-8oV">
-                                                    <rect key="frame" x="126.5" y="32.5" width="121" height="173"/>
+                                                    <rect key="frame" x="126" y="32" width="121" height="173"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="144"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -2667,6 +2702,7 @@ See </string>
                                             <constraints>
                                                 <constraint firstItem="Yxc-Lr-382" firstAttribute="top" secondItem="e1D-jp-GBs" secondAttribute="bottom" constant="8" symbolic="YES" id="BMp-dh-Elb"/>
                                                 <constraint firstItem="e1D-jp-GBs" firstAttribute="top" secondItem="8v7-JH-mzu" secondAttribute="bottom" constant="8" symbolic="YES" id="CCe-dk-eBT"/>
+                                                <constraint firstItem="Dv5-t7-lL1" firstAttribute="centerY" secondItem="8v7-JH-mzu" secondAttribute="centerY" id="DUJ-Xb-503"/>
                                                 <constraint firstItem="e1D-jp-GBs" firstAttribute="bottom" secondItem="ZGg-O6-rsg" secondAttribute="bottom" id="MPG-Zj-vDr"/>
                                                 <constraint firstItem="e1D-jp-GBs" firstAttribute="leading" secondItem="NKB-rd-1Vy" secondAttribute="leading" constant="20" symbolic="YES" id="N8Z-X2-ir7"/>
                                                 <constraint firstItem="8v7-JH-mzu" firstAttribute="top" secondItem="NKB-rd-1Vy" secondAttribute="top" constant="20" symbolic="YES" id="PEc-aa-i3N"/>
@@ -2674,6 +2710,7 @@ See </string>
                                                 <constraint firstItem="Yxc-Lr-382" firstAttribute="leading" secondItem="NKB-rd-1Vy" secondAttribute="leading" constant="20" symbolic="YES" id="UvU-wL-3WN"/>
                                                 <constraint firstAttribute="centerX" secondItem="8v7-JH-mzu" secondAttribute="centerX" id="XVh-6p-4qT"/>
                                                 <constraint firstAttribute="trailing" secondItem="Yxc-Lr-382" secondAttribute="trailing" constant="20" id="YMA-ID-9KD"/>
+                                                <constraint firstItem="Dv5-t7-lL1" firstAttribute="centerX" secondItem="8v7-JH-mzu" secondAttribute="centerX" id="bWe-Wx-6CH"/>
                                                 <constraint firstItem="8v7-JH-mzu" firstAttribute="centerY" secondItem="yZX-ns-8oV" secondAttribute="centerY" id="n0h-tr-yA0"/>
                                                 <constraint firstItem="e1D-jp-GBs" firstAttribute="top" secondItem="ZGg-O6-rsg" secondAttribute="top" id="oZN-4h-Awv"/>
                                                 <constraint firstAttribute="bottom" secondItem="Yxc-Lr-382" secondAttribute="bottom" constant="20" symbolic="YES" id="pFY-vd-3UR"/>
@@ -2682,26 +2719,49 @@ See </string>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="activityIndicator" destination="Dv5-t7-lL1" id="AFu-Dd-TgU"/>
+                                            <outlet property="priceLabel" destination="ZGg-O6-rsg" id="dAn-xu-gut"/>
+                                            <outlet property="purchasedIndicator" destination="yZX-ns-8oV" id="7x0-eq-oSs"/>
+                                        </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="checkmark" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="29" id="yzp-Oe-wUi" userLabel="Footer">
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection id="hN1-J4-w3w">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="59" id="UUA-xl-CAh" userLabel="Footer">
                                         <rect key="frame" x="0.0" y="1192" width="320" height="153"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yzp-Oe-wUi" id="sWn-jr-aER">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UUA-xl-CAh" id="4Zu-Ig-Ws4">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="152"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" text="© 2012-2014, Maarten Billemont (lhunath)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EPK-Eb-NS4">
-                                                    <rect key="frame" x="20" y="4" width="296" height="16.5"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" text="© 2012-2014, Maarten Billemont (lhunath)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DxV-2L-bxL">
+                                                    <rect key="frame" x="20" y="4" width="335" height="12"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="10"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IOk-WZ-HJ8">
+                                                    <rect key="frame" x="20" y="24" width="335" height="26"/>
+                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="11"/>
+                                                    <state key="normal" title="Restore Previous Purchases">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="homePageButton:" destination="JFc-sj-awD" eventType="touchUpInside" id="L6I-je-0By"/>
+                                                        <action selector="restorePurchases:" destination="pdl-xv-zjX" eventType="touchUpInside" id="lKu-PL-PfX"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="EPK-Eb-NS4" firstAttribute="leading" secondItem="sWn-jr-aER" secondAttribute="leading" constant="20" symbolic="YES" id="amD-dp-nq0"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="EPK-Eb-NS4" secondAttribute="bottom" id="dFl-Oz-nlg"/>
-                                                <constraint firstAttribute="trailing" secondItem="EPK-Eb-NS4" secondAttribute="trailing" constant="20" symbolic="YES" id="ovS-6O-Bkx"/>
-                                                <constraint firstItem="EPK-Eb-NS4" firstAttribute="top" secondItem="sWn-jr-aER" secondAttribute="top" constant="4" id="vpq-LI-jEH"/>
+                                                <constraint firstAttribute="trailing" secondItem="IOk-WZ-HJ8" secondAttribute="trailing" constant="20" symbolic="YES" id="CuJ-h7-aGJ"/>
+                                                <constraint firstAttribute="trailing" secondItem="DxV-2L-bxL" secondAttribute="trailing" constant="20" symbolic="YES" id="QHU-Jw-LPy"/>
+                                                <constraint firstItem="DxV-2L-bxL" firstAttribute="leading" secondItem="4Zu-Ig-Ws4" secondAttribute="leading" constant="20" symbolic="YES" id="fAD-At-gqS"/>
+                                                <constraint firstItem="DxV-2L-bxL" firstAttribute="top" secondItem="4Zu-Ig-Ws4" secondAttribute="top" constant="4" id="hTN-Cx-hOS"/>
+                                                <constraint firstItem="IOk-WZ-HJ8" firstAttribute="leading" secondItem="4Zu-Ig-Ws4" secondAttribute="leading" constant="20" symbolic="YES" id="mx2-Jk-5jo"/>
+                                                <constraint firstItem="IOk-WZ-HJ8" firstAttribute="top" secondItem="DxV-2L-bxL" secondAttribute="bottom" constant="8" symbolic="YES" id="r7u-I6-33F"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="IOk-WZ-HJ8" secondAttribute="bottom" id="xeG-0w-yL5"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -2716,6 +2776,7 @@ See </string>
                     </tableView>
                     <tabBarItem key="tabBarItem" title="Store" image="icon_star-hollow.png" id="j4c-Kp-fnH"/>
                     <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="advancedExportCell" destination="tm3-IM-pJw" id="a6E-H8-fma"/>
                         <outlet property="generateAnswersCell" destination="l1g-Ul-Vg8" id="GlG-iZ-7FP"/>
