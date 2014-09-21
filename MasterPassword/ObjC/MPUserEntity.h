@@ -1,6 +1,6 @@
 //
 //  MPUserEntity.h
-//  MasterPassword-iOS
+//  MasterPassword-Mac
 //
 //  Created by Maarten Billemont on 2014-09-21.
 //  Copyright (c) 2014 Lyndir. All rights reserved.
@@ -19,14 +19,14 @@
 @property (nonatomic, retain) NSDate * lastUsed;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * saveKey_;
-@property (nonatomic, retain) NSSet *elements;
+@property (nonatomic, retain) NSSet *sites;
 @end
 
 @interface MPUserEntity (CoreDataGeneratedAccessors)
 
-- (void)addElementsObject:(MPSiteEntity *)value;
-- (void)removeElementsObject:(MPSiteEntity *)value;
-- (void)addElements:(NSSet *)values;
-- (void)removeElements:(NSSet *)values;
+- (void)addSitesObject:(MPSiteEntity *)value;
+- (void)removeSitesObject:(MPSiteEntity *)value;
+- (void)addSites:(NSSet *)values;
+- (void)removeSites:(NSSet *)values;
 
 @end

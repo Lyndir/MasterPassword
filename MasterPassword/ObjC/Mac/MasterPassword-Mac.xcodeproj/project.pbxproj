@@ -43,6 +43,11 @@
 		DA30E9D215722EE500A68B4C /* Pearl-Crypto.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D115722EE500A68B4C /* Pearl-Crypto.m */; };
 		DA30E9D715723E6900A68B4C /* PearlLazy.h in Headers */ = {isa = PBXBuildFile; fileRef = DA30E9D515723E6900A68B4C /* PearlLazy.h */; };
 		DA30E9D815723E6900A68B4C /* PearlLazy.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D615723E6900A68B4C /* PearlLazy.m */; };
+		DA32CFD919CF1C70004F3F0E /* MPGeneratedSiteEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFD819CF1C70004F3F0E /* MPGeneratedSiteEntity.m */; };
+		DA32CFDC19CF1C70004F3F0E /* MPStoredSiteEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFDB19CF1C70004F3F0E /* MPStoredSiteEntity.m */; };
+		DA32CFDF19CF1C70004F3F0E /* MPSiteEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFDE19CF1C70004F3F0E /* MPSiteEntity.m */; };
+		DA32CFE219CF1C71004F3F0E /* MPSiteQuestionEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFE119CF1C71004F3F0E /* MPSiteQuestionEntity.m */; };
+		DA32CFE519CF1C71004F3F0E /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFE419CF1C71004F3F0E /* MPUserEntity.m */; };
 		DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3509FC15F101A500C14A8E /* PearlQueue.h */; };
 		DA3509FF15F101A500C14A8E /* PearlQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3509FD15F101A500C14A8E /* PearlQueue.m */; };
 		DA3B844F190FC60900246EEA /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA3B844A190FC5A900246EEA /* Crashlytics.framework */; };
@@ -62,7 +67,6 @@
 		DA5E5CFC1724A667003798D8 /* MPConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CA41724A667003798D8 /* MPConfig.m */; };
 		DA5E5D001724A667003798D8 /* MPEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CAC1724A667003798D8 /* MPEntities.m */; };
 		DA5E5D011724A667003798D8 /* MPKey.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CAE1724A667003798D8 /* MPKey.m */; };
-		DA5E5D021724A667003798D8 /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB11724A667003798D8 /* MPUserEntity.m */; };
 		DA5E5D031724A667003798D8 /* MPMacAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB41724A667003798D8 /* MPMacAppDelegate.m */; };
 		DA5E5D041724A667003798D8 /* MPMacConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB61724A667003798D8 /* MPMacConfig.m */; };
 		DA5E5D081724A667003798D8 /* MasterPassword.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DA5E5CBF1724A667003798D8 /* MasterPassword.entitlements */; };
@@ -75,10 +79,6 @@
 		DA8ED895192906920099B726 /* PearlTween.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8ED891192906920099B726 /* PearlTween.m */; };
 		DA8ED896192906920099B726 /* PearlTween.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED892192906920099B726 /* PearlTween.h */; };
 		DA8ED897192906920099B726 /* map-macro.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED894192906920099B726 /* map-macro.h */; };
-		DA9521BD19CEA3FD002E3AD5 /* MPSiteStoredEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9521B519CEA3FD002E3AD5 /* MPSiteStoredEntity.m */; };
-		DA9521BE19CEA3FD002E3AD5 /* MPSiteQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9521B719CEA3FD002E3AD5 /* MPSiteQuestion.m */; };
-		DA9521BF19CEA3FD002E3AD5 /* MPSiteGeneratedEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9521B919CEA3FD002E3AD5 /* MPSiteGeneratedEntity.m */; };
-		DA9521C019CEA3FD002E3AD5 /* MPSiteEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9521BB19CEA3FD002E3AD5 /* MPSiteEntity.m */; };
 		DAAA81B0195A8D1300FA30D9 /* gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAA81AF195A8D1300FA30D9 /* gradient.png */; };
 		DABC6C02175D8C85000C15D4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DABC6C15175D8CE1000C15D4 /* RHStatusItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = DABC6C14175D8CE1000C15D4 /* RHStatusItemView.m */; };
@@ -275,6 +275,16 @@
 		DA30E9D115722EE500A68B4C /* Pearl-Crypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Pearl-Crypto.m"; sourceTree = "<group>"; };
 		DA30E9D515723E6900A68B4C /* PearlLazy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlLazy.h; sourceTree = "<group>"; };
 		DA30E9D615723E6900A68B4C /* PearlLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlLazy.m; sourceTree = "<group>"; };
+		DA32CFD719CF1C70004F3F0E /* MPGeneratedSiteEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPGeneratedSiteEntity.h; sourceTree = "<group>"; };
+		DA32CFD819CF1C70004F3F0E /* MPGeneratedSiteEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPGeneratedSiteEntity.m; sourceTree = "<group>"; };
+		DA32CFDA19CF1C70004F3F0E /* MPStoredSiteEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPStoredSiteEntity.h; sourceTree = "<group>"; };
+		DA32CFDB19CF1C70004F3F0E /* MPStoredSiteEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPStoredSiteEntity.m; sourceTree = "<group>"; };
+		DA32CFDD19CF1C70004F3F0E /* MPSiteEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteEntity.h; sourceTree = "<group>"; };
+		DA32CFDE19CF1C70004F3F0E /* MPSiteEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteEntity.m; sourceTree = "<group>"; };
+		DA32CFE019CF1C71004F3F0E /* MPSiteQuestionEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteQuestionEntity.h; sourceTree = "<group>"; };
+		DA32CFE119CF1C71004F3F0E /* MPSiteQuestionEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteQuestionEntity.m; sourceTree = "<group>"; };
+		DA32CFE319CF1C71004F3F0E /* MPUserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUserEntity.h; sourceTree = "<group>"; };
+		DA32CFE419CF1C71004F3F0E /* MPUserEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUserEntity.m; sourceTree = "<group>"; };
 		DA3509FC15F101A500C14A8E /* PearlQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlQueue.h; sourceTree = "<group>"; };
 		DA3509FD15F101A500C14A8E /* PearlQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlQueue.m; sourceTree = "<group>"; };
 		DA3B844A190FC5A900246EEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
@@ -308,8 +318,6 @@
 		DA5E5CAD1724A667003798D8 /* MPKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPKey.h; sourceTree = "<group>"; };
 		DA5E5CAE1724A667003798D8 /* MPKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPKey.m; sourceTree = "<group>"; };
 		DA5E5CAF1724A667003798D8 /* MPTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTypes.h; sourceTree = "<group>"; };
-		DA5E5CB01724A667003798D8 /* MPUserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUserEntity.h; sourceTree = "<group>"; };
-		DA5E5CB11724A667003798D8 /* MPUserEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUserEntity.m; sourceTree = "<group>"; };
 		DA5E5CB31724A667003798D8 /* MPMacAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPMacAppDelegate.h; sourceTree = "<group>"; };
 		DA5E5CB41724A667003798D8 /* MPMacAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPMacAppDelegate.m; sourceTree = "<group>"; };
 		DA5E5CB51724A667003798D8 /* MPMacConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPMacConfig.h; sourceTree = "<group>"; };
@@ -729,14 +737,6 @@
 		DA8ED891192906920099B726 /* PearlTween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlTween.m; sourceTree = "<group>"; };
 		DA8ED892192906920099B726 /* PearlTween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlTween.h; sourceTree = "<group>"; };
 		DA8ED894192906920099B726 /* map-macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "map-macro.h"; sourceTree = "<group>"; };
-		DA9521B519CEA3FD002E3AD5 /* MPSiteStoredEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteStoredEntity.m; sourceTree = "<group>"; };
-		DA9521B619CEA3FD002E3AD5 /* MPSiteStoredEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteStoredEntity.h; sourceTree = "<group>"; };
-		DA9521B719CEA3FD002E3AD5 /* MPSiteQuestion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteQuestion.m; sourceTree = "<group>"; };
-		DA9521B819CEA3FD002E3AD5 /* MPSiteQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteQuestion.h; sourceTree = "<group>"; };
-		DA9521B919CEA3FD002E3AD5 /* MPSiteGeneratedEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteGeneratedEntity.m; sourceTree = "<group>"; };
-		DA9521BA19CEA3FD002E3AD5 /* MPSiteGeneratedEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteGeneratedEntity.h; sourceTree = "<group>"; };
-		DA9521BB19CEA3FD002E3AD5 /* MPSiteEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteEntity.m; sourceTree = "<group>"; };
-		DA9521BC19CEA3FD002E3AD5 /* MPSiteEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteEntity.h; sourceTree = "<group>"; };
 		DAAA81AF195A8D1300FA30D9 /* gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient.png; sourceTree = "<group>"; };
 		DABB981515100B4000B05417 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DABC6C01175D8C85000C15D4 /* libRHStatusItemView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRHStatusItemView.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -998,14 +998,16 @@
 		DA5E5C961724A667003798D8 /* ObjC */ = {
 			isa = PBXGroup;
 			children = (
-				DA9521B519CEA3FD002E3AD5 /* MPSiteStoredEntity.m */,
-				DA9521B619CEA3FD002E3AD5 /* MPSiteStoredEntity.h */,
-				DA9521B719CEA3FD002E3AD5 /* MPSiteQuestion.m */,
-				DA9521B819CEA3FD002E3AD5 /* MPSiteQuestion.h */,
-				DA9521B919CEA3FD002E3AD5 /* MPSiteGeneratedEntity.m */,
-				DA9521BA19CEA3FD002E3AD5 /* MPSiteGeneratedEntity.h */,
-				DA9521BB19CEA3FD002E3AD5 /* MPSiteEntity.m */,
-				DA9521BC19CEA3FD002E3AD5 /* MPSiteEntity.h */,
+				DA32CFE319CF1C71004F3F0E /* MPUserEntity.h */,
+				DA32CFE419CF1C71004F3F0E /* MPUserEntity.m */,
+				DA32CFE019CF1C71004F3F0E /* MPSiteQuestionEntity.h */,
+				DA32CFE119CF1C71004F3F0E /* MPSiteQuestionEntity.m */,
+				DA32CFDD19CF1C70004F3F0E /* MPSiteEntity.h */,
+				DA32CFDE19CF1C70004F3F0E /* MPSiteEntity.m */,
+				DA32CFDA19CF1C70004F3F0E /* MPStoredSiteEntity.h */,
+				DA32CFDB19CF1C70004F3F0E /* MPStoredSiteEntity.m */,
+				DA32CFD719CF1C70004F3F0E /* MPGeneratedSiteEntity.h */,
+				DA32CFD819CF1C70004F3F0E /* MPGeneratedSiteEntity.m */,
 				DA3B8454190FC89700246EEA /* MPFixable.m */,
 				DA3B8455190FC89700246EEA /* MPFixable.h */,
 				DA5E5CB21724A667003798D8 /* Mac */,
@@ -1028,8 +1030,6 @@
 				DA5E5CAD1724A667003798D8 /* MPKey.h */,
 				DA5E5CAE1724A667003798D8 /* MPKey.m */,
 				DA5E5CAF1724A667003798D8 /* MPTypes.h */,
-				DA5E5CB01724A667003798D8 /* MPUserEntity.h */,
-				DA5E5CB11724A667003798D8 /* MPUserEntity.m */,
 				DA29992619C6A89900AF7DF1 /* MasterPassword.xcdatamodeld */,
 			);
 			name = ObjC;
@@ -2142,11 +2142,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA9521BF19CEA3FD002E3AD5 /* MPSiteGeneratedEntity.m in Sources */,
 				DA5E5CF61724A667003798D8 /* MPAlgorithm.m in Sources */,
+				DA32CFE219CF1C71004F3F0E /* MPSiteQuestionEntity.m in Sources */,
+				DA32CFE519CF1C71004F3F0E /* MPUserEntity.m in Sources */,
 				DA5E5CF71724A667003798D8 /* MPAlgorithmV0.m in Sources */,
 				DA5E5CF81724A667003798D8 /* MPAlgorithmV1.m in Sources */,
-				DA9521BE19CEA3FD002E3AD5 /* MPSiteQuestion.m in Sources */,
 				DA5E5CF91724A667003798D8 /* MPAppDelegate_Key.m in Sources */,
 				DA5E5CFA1724A667003798D8 /* MPAppDelegate_Shared.m in Sources */,
 				DA5E5CFB1724A667003798D8 /* MPAppDelegate_Store.m in Sources */,
@@ -2155,16 +2155,16 @@
 				DA3B8456190FC89700246EEA /* MPFixable.m in Sources */,
 				DA5E5D001724A667003798D8 /* MPEntities.m in Sources */,
 				DA5E5D011724A667003798D8 /* MPKey.m in Sources */,
-				DA5E5D021724A667003798D8 /* MPUserEntity.m in Sources */,
-				DA9521BD19CEA3FD002E3AD5 /* MPSiteStoredEntity.m in Sources */,
+				DA32CFDC19CF1C70004F3F0E /* MPStoredSiteEntity.m in Sources */,
 				DA5E5D031724A667003798D8 /* MPMacAppDelegate.m in Sources */,
-				DA9521C019CEA3FD002E3AD5 /* MPSiteEntity.m in Sources */,
 				DA5E5D041724A667003798D8 /* MPMacConfig.m in Sources */,
 				DA5E5D0C1724A667003798D8 /* main.m in Sources */,
 				93D39C5789EFA607CF788082 /* MPElementModel.m in Sources */,
 				93D39F833DEC1C89B2F795AC /* MPPasswordWindowController.m in Sources */,
+				DA32CFD919CF1C70004F3F0E /* MPGeneratedSiteEntity.m in Sources */,
 				93D390C676DF52DA7E459F19 /* MPPasswordWindow.m in Sources */,
 				93D39784E725A34D1EE3FB3B /* MPInitialWindowController.m in Sources */,
+				DA32CFDF19CF1C70004F3F0E /* MPSiteEntity.m in Sources */,
 				93D394C4254EEB45FB335AFB /* MPElementsTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

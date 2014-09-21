@@ -111,6 +111,11 @@
 		DA30E9D415722EF400A68B4C /* Pearl-UIKit.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D315722EF400A68B4C /* Pearl-UIKit.m */; };
 		DA30E9D715723E6900A68B4C /* PearlLazy.h in Headers */ = {isa = PBXBuildFile; fileRef = DA30E9D515723E6900A68B4C /* PearlLazy.h */; };
 		DA30E9D815723E6900A68B4C /* PearlLazy.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D615723E6900A68B4C /* PearlLazy.m */; };
+		DA32CFF019CF1C8F004F3F0E /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFE619CF1C8F004F3F0E /* MPUserEntity.m */; };
+		DA32CFF119CF1C8F004F3F0E /* MPStoredSiteEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFE819CF1C8F004F3F0E /* MPStoredSiteEntity.m */; };
+		DA32CFF219CF1C8F004F3F0E /* MPSiteQuestionEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFEA19CF1C8F004F3F0E /* MPSiteQuestionEntity.m */; };
+		DA32CFF319CF1C8F004F3F0E /* MPSiteEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFEC19CF1C8F004F3F0E /* MPSiteEntity.m */; };
+		DA32CFF419CF1C8F004F3F0E /* MPGeneratedSiteEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFEE19CF1C8F004F3F0E /* MPGeneratedSiteEntity.m */; };
 		DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3509FC15F101A500C14A8E /* PearlQueue.h */; };
 		DA3509FF15F101A500C14A8E /* PearlQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3509FD15F101A500C14A8E /* PearlQueue.m */; };
 		DA38D6A318CCB5BF009AEB3E /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */; };
@@ -158,11 +163,6 @@
 		DA854C8318D4CFBF00106317 /* avatar-add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA854C8118D4CFBF00106317 /* avatar-add@2x.png */; };
 		DA854C8418D4CFBF00106317 /* avatar-add.png in Resources */ = {isa = PBXBuildFile; fileRef = DA854C8218D4CFBF00106317 /* avatar-add.png */; };
 		DA945C8717E3F3FD0053236B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA945C8617E3F3FD0053236B /* Images.xcassets */; };
-		DA9521A819CEA3DE002E3AD5 /* MPSiteEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9521A719CEA3DE002E3AD5 /* MPSiteEntity.m */; };
-		DA9521AB19CEA3DE002E3AD5 /* MPSiteQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9521AA19CEA3DE002E3AD5 /* MPSiteQuestion.m */; };
-		DA9521AE19CEA3DE002E3AD5 /* MPSiteStoredEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9521AD19CEA3DE002E3AD5 /* MPSiteStoredEntity.m */; };
-		DA9521B119CEA3DE002E3AD5 /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9521B019CEA3DE002E3AD5 /* MPUserEntity.m */; };
-		DA9521B419CEA3DE002E3AD5 /* MPSiteGeneratedEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9521B319CEA3DE002E3AD5 /* MPSiteGeneratedEntity.m */; };
 		DA95D5F214DF0B2C008D1B94 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */; };
 		DAA141201922FF020032B392 /* PearlTween.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA1411C1922FF020032B392 /* PearlTween.m */; };
 		DAA141211922FF020032B392 /* PearlTween.h in Headers */ = {isa = PBXBuildFile; fileRef = DAA1411D1922FF020032B392 /* PearlTween.h */; };
@@ -508,6 +508,16 @@
 		DA30E9D315722EF400A68B4C /* Pearl-UIKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Pearl-UIKit.m"; sourceTree = "<group>"; };
 		DA30E9D515723E6900A68B4C /* PearlLazy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlLazy.h; sourceTree = "<group>"; };
 		DA30E9D615723E6900A68B4C /* PearlLazy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlLazy.m; sourceTree = "<group>"; };
+		DA32CFE619CF1C8F004F3F0E /* MPUserEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUserEntity.m; sourceTree = "<group>"; };
+		DA32CFE719CF1C8F004F3F0E /* MPUserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUserEntity.h; sourceTree = "<group>"; };
+		DA32CFE819CF1C8F004F3F0E /* MPStoredSiteEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPStoredSiteEntity.m; sourceTree = "<group>"; };
+		DA32CFE919CF1C8F004F3F0E /* MPStoredSiteEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPStoredSiteEntity.h; sourceTree = "<group>"; };
+		DA32CFEA19CF1C8F004F3F0E /* MPSiteQuestionEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteQuestionEntity.m; sourceTree = "<group>"; };
+		DA32CFEB19CF1C8F004F3F0E /* MPSiteQuestionEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteQuestionEntity.h; sourceTree = "<group>"; };
+		DA32CFEC19CF1C8F004F3F0E /* MPSiteEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteEntity.m; sourceTree = "<group>"; };
+		DA32CFED19CF1C8F004F3F0E /* MPSiteEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteEntity.h; sourceTree = "<group>"; };
+		DA32CFEE19CF1C8F004F3F0E /* MPGeneratedSiteEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPGeneratedSiteEntity.m; sourceTree = "<group>"; };
+		DA32CFEF19CF1C8F004F3F0E /* MPGeneratedSiteEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPGeneratedSiteEntity.h; sourceTree = "<group>"; };
 		DA3509FC15F101A500C14A8E /* PearlQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlQueue.h; sourceTree = "<group>"; };
 		DA3509FD15F101A500C14A8E /* PearlQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlQueue.m; sourceTree = "<group>"; };
 		DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
@@ -538,16 +548,6 @@
 		DA854C8118D4CFBF00106317 /* avatar-add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-add@2x.png"; sourceTree = "<group>"; };
 		DA854C8218D4CFBF00106317 /* avatar-add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-add.png"; sourceTree = "<group>"; };
 		DA945C8617E3F3FD0053236B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		DA9521A619CEA3DE002E3AD5 /* MPSiteEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteEntity.h; sourceTree = "<group>"; };
-		DA9521A719CEA3DE002E3AD5 /* MPSiteEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteEntity.m; sourceTree = "<group>"; };
-		DA9521A919CEA3DE002E3AD5 /* MPSiteQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteQuestion.h; sourceTree = "<group>"; };
-		DA9521AA19CEA3DE002E3AD5 /* MPSiteQuestion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteQuestion.m; sourceTree = "<group>"; };
-		DA9521AC19CEA3DE002E3AD5 /* MPSiteStoredEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteStoredEntity.h; sourceTree = "<group>"; };
-		DA9521AD19CEA3DE002E3AD5 /* MPSiteStoredEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteStoredEntity.m; sourceTree = "<group>"; };
-		DA9521AF19CEA3DE002E3AD5 /* MPUserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUserEntity.h; sourceTree = "<group>"; };
-		DA9521B019CEA3DE002E3AD5 /* MPUserEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUserEntity.m; sourceTree = "<group>"; };
-		DA9521B219CEA3DE002E3AD5 /* MPSiteGeneratedEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteGeneratedEntity.h; sourceTree = "<group>"; };
-		DA9521B319CEA3DE002E3AD5 /* MPSiteGeneratedEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteGeneratedEntity.m; sourceTree = "<group>"; };
 		DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		DAA141191922FED80032B392 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DAA1411C1922FF020032B392 /* PearlTween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlTween.m; sourceTree = "<group>"; };
@@ -2269,6 +2269,16 @@
 		DABD3B9F1711E2DB00CF925C /* ObjC */ = {
 			isa = PBXGroup;
 			children = (
+				DA32CFE619CF1C8F004F3F0E /* MPUserEntity.m */,
+				DA32CFE719CF1C8F004F3F0E /* MPUserEntity.h */,
+				DA32CFE819CF1C8F004F3F0E /* MPStoredSiteEntity.m */,
+				DA32CFE919CF1C8F004F3F0E /* MPStoredSiteEntity.h */,
+				DA32CFEA19CF1C8F004F3F0E /* MPSiteQuestionEntity.m */,
+				DA32CFEB19CF1C8F004F3F0E /* MPSiteQuestionEntity.h */,
+				DA32CFEC19CF1C8F004F3F0E /* MPSiteEntity.m */,
+				DA32CFED19CF1C8F004F3F0E /* MPSiteEntity.h */,
+				DA32CFEE19CF1C8F004F3F0E /* MPGeneratedSiteEntity.m */,
+				DA32CFEF19CF1C8F004F3F0E /* MPGeneratedSiteEntity.h */,
 				DABD3BD71711E2DC00CF925C /* iOS */,
 				DABD3BA01711E2DC00CF925C /* MPAlgorithm.h */,
 				DABD3BA11711E2DC00CF925C /* MPAlgorithm.m */,
@@ -2290,16 +2300,6 @@
 				DABD3BB71711E2DC00CF925C /* MPKey.m */,
 				DABD3BB81711E2DC00CF925C /* MPTypes.h */,
 				DABD3BD01711E2DC00CF925C /* MasterPassword.xcdatamodeld */,
-				DA9521AC19CEA3DE002E3AD5 /* MPSiteStoredEntity.h */,
-				DA9521AF19CEA3DE002E3AD5 /* MPUserEntity.h */,
-				DA9521B019CEA3DE002E3AD5 /* MPUserEntity.m */,
-				DA9521AD19CEA3DE002E3AD5 /* MPSiteStoredEntity.m */,
-				DA9521B219CEA3DE002E3AD5 /* MPSiteGeneratedEntity.h */,
-				DA9521B319CEA3DE002E3AD5 /* MPSiteGeneratedEntity.m */,
-				DA9521A919CEA3DE002E3AD5 /* MPSiteQuestion.h */,
-				DA9521AA19CEA3DE002E3AD5 /* MPSiteQuestion.m */,
-				DA9521A619CEA3DE002E3AD5 /* MPSiteEntity.h */,
-				DA9521A719CEA3DE002E3AD5 /* MPSiteEntity.m */,
 				93D399F244BB522A317811BB /* MPFixable.h */,
 				93D39A813CA9D7E192261ED2 /* MPFixable.m */,
 				93D394C78C7B879C9AD9152C /* MPAppDelegate_InApp.m */,
@@ -3219,22 +3219,22 @@
 				DABD3C021711E2DC00CF925C /* MPAppDelegate_Store.m in Sources */,
 				DABD3C031711E2DC00CF925C /* MPConfig.m in Sources */,
 				DABD3C071711E2DC00CF925C /* MPEntities.m in Sources */,
+				DA32CFF319CF1C8F004F3F0E /* MPSiteEntity.m in Sources */,
 				DABD3C081711E2DC00CF925C /* MPKey.m in Sources */,
 				DABD3C141711E2DC00CF925C /* MasterPassword.xcdatamodeld in Sources */,
 				DABD3C151711E2DC00CF925C /* MPiOSAppDelegate.m in Sources */,
-				DA9521A819CEA3DE002E3AD5 /* MPSiteEntity.m in Sources */,
 				DABD3C1C1711E2DC00CF925C /* MPGuideViewController.m in Sources */,
 				DABD3C1E1711E2DC00CF925C /* MPPreferencesViewController.m in Sources */,
 				DABD3C1F1711E2DC00CF925C /* MPTypeViewController.m in Sources */,
 				DABD3C211711E2DC00CF925C /* MPiOSConfig.m in Sources */,
 				DABD3C271711E2DC00CF925C /* main.m in Sources */,
 				93D39F8A9254177891F38705 /* MPSetupViewController.m in Sources */,
-				DA9521AE19CEA3DE002E3AD5 /* MPSiteStoredEntity.m in Sources */,
+				DA32CFF219CF1C8F004F3F0E /* MPSiteQuestionEntity.m in Sources */,
 				DA095E75172F4CD8001C948B /* MPLogsViewController.m in Sources */,
 				93D39D596A2E376D6F6F5DA1 /* MPCombinedViewController.m in Sources */,
+				DA32CFF419CF1C8F004F3F0E /* MPGeneratedSiteEntity.m in Sources */,
 				93D3957237D303DE2D38C267 /* MPAvatarCell.m in Sources */,
 				93D39B8F90F58A5D158DDBA3 /* MPPasswordsViewController.m in Sources */,
-				DA9521B419CEA3DE002E3AD5 /* MPSiteGeneratedEntity.m in Sources */,
 				93D3954FCE045A3CC7E804B7 /* MPUsersViewController.m in Sources */,
 				93D39392DEDA376F93C6C718 /* MPCell.m in Sources */,
 				93D39A5FF670957C0AF8298D /* MPPasswordCell.m in Sources */,
@@ -3245,11 +3245,11 @@
 				93D39BA1EA3CAAC8A220B4A6 /* MPAppSettingsViewController.m in Sources */,
 				93D396D8B67DA6522CDBA142 /* MPCoachmarkViewController.m in Sources */,
 				93D39EAA4D064193074D3021 /* MPFixable.m in Sources */,
+				DA32CFF119CF1C8F004F3F0E /* MPStoredSiteEntity.m in Sources */,
 				93D394982CBD25D46692DD7C /* MPWebViewController.m in Sources */,
-				DA9521B119CEA3DE002E3AD5 /* MPUserEntity.m in Sources */,
 				93D39D8F78978196D6ABDEDE /* MPNavigationController.m in Sources */,
 				93D3939661CE37180AF7CD6A /* MPStoreViewController.m in Sources */,
-				DA9521AB19CEA3DE002E3AD5 /* MPSiteQuestion.m in Sources */,
+				DA32CFF019CF1C8F004F3F0E /* MPUserEntity.m in Sources */,
 				93D39D38356F59DBEF934D70 /* MPAppDelegate_InApp.m in Sources */,
 				93D390C1B93F9D3AE37DD0A5 /* MPAnswersViewController.m in Sources */,
 			);
