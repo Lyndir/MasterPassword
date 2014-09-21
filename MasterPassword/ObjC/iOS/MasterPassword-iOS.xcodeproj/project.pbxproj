@@ -284,9 +284,6 @@
 		DAE1EF2217E942DE00BC0086 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAE1EF2417E942DE00BC0086 /* Localizable.strings */; };
 		DAE2725919C93B80007C5262 /* libInAppSettingsKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAFC5655172C573B00CB5CC5 /* libInAppSettingsKit.a */; };
 		DAE2725A19C93B8E007C5262 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA70EC7F1811B13C00F65DB2 /* StoreKit.framework */; };
-		DAE2725E19CA98A5007C5262 /* thumb_advanced_export.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE2725B19CA98A5007C5262 /* thumb_advanced_export.png */; };
-		DAE2725F19CA98A5007C5262 /* thumb_advanced_export@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE2725C19CA98A5007C5262 /* thumb_advanced_export@2x.png */; };
-		DAE2726019CA98A5007C5262 /* thumb_advanced_export@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE2725D19CA98A5007C5262 /* thumb_advanced_export@3x.png */; };
 		DAE2726319CE9CB3007C5262 /* UITableViewCell+PearlDeque.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE2726119CE9CB3007C5262 /* UITableViewCell+PearlDeque.m */; };
 		DAE2726419CE9CB3007C5262 /* UITableViewCell+PearlDeque.h in Headers */ = {isa = PBXBuildFile; fileRef = DAE2726219CE9CB3007C5262 /* UITableViewCell+PearlDeque.h */; };
 		DAEBC45314F6364500987BF6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
@@ -1245,9 +1242,6 @@
 		DAD312C01552A20800A3F9ED /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		DADBB55918DB0CFC00D099FE /* keyboard-dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "keyboard-dark@2x.png"; sourceTree = "<group>"; };
 		DAE1EF2317E942DE00BC0086 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		DAE2725B19CA98A5007C5262 /* thumb_advanced_export.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumb_advanced_export.png; sourceTree = "<group>"; };
-		DAE2725C19CA98A5007C5262 /* thumb_advanced_export@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumb_advanced_export@2x.png"; sourceTree = "<group>"; };
-		DAE2725D19CA98A5007C5262 /* thumb_advanced_export@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumb_advanced_export@3x.png"; sourceTree = "<group>"; };
 		DAE2726119CE9CB3007C5262 /* UITableViewCell+PearlDeque.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+PearlDeque.m"; sourceTree = "<group>"; };
 		DAE2726219CE9CB3007C5262 /* UITableViewCell+PearlDeque.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+PearlDeque.h"; sourceTree = "<group>"; };
 		DAE8E65119867AB500416A0F /* libopensslcrypto-ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopensslcrypto-ios.a"; sourceTree = "<group>"; };
@@ -1563,9 +1557,6 @@
 		DABD360D1711E29400CF925C /* Media */ = {
 			isa = PBXGroup;
 			children = (
-				DAE2725B19CA98A5007C5262 /* thumb_advanced_export.png */,
-				DAE2725C19CA98A5007C5262 /* thumb_advanced_export@2x.png */,
-				DAE2725D19CA98A5007C5262 /* thumb_advanced_export@3x.png */,
 				DA29993119C9132F00AF7DF1 /* thumb_generated_login@3x.png */,
 				DA29992D19C86F5700AF7DF1 /* thumb_generated_login@2x.png */,
 				DA29992E19C86F5700AF7DF1 /* thumb_generated_login.png */,
@@ -3081,7 +3072,6 @@
 				DA250A031956484D00AC23F1 /* image-7@2x.png in Resources */,
 				DA25C5FA197CCAE00046CDCF /* icon_delete.png in Resources */,
 				DA25C601197DBF260046CDCF /* icon_trash@2x.png in Resources */,
-				DAE2725E19CA98A5007C5262 /* thumb_advanced_export.png in Resources */,
 				DABD39551711E29700CF925C /* avatar-6.png in Resources */,
 				DABD39561711E29700CF925C /* avatar-6@2x.png in Resources */,
 				DABD39571711E29700CF925C /* avatar-7.png in Resources */,
@@ -3103,7 +3093,6 @@
 				DABD39881711E29700CF925C /* SourceCodePro-ExtraLight.otf in Resources */,
 				DABD39A01711E29700CF925C /* icon_action.png in Resources */,
 				DABD39A11711E29700CF925C /* icon_action@2x.png in Resources */,
-				DAE2726019CA98A5007C5262 /* thumb_advanced_export@3x.png in Resources */,
 				DABD39F21711E29700CF925C /* icon_cancel.png in Resources */,
 				DA25C5FB197CCAE00046CDCF /* icon_delete@2x.png in Resources */,
 				DA29993219C9132F00AF7DF1 /* thumb_generated_login@3x.png in Resources */,
@@ -3118,7 +3107,6 @@
 				DABD3AA01711E29800CF925C /* icon_pause.png in Resources */,
 				DABD3AA11711E29800CF925C /* icon_pause@2x.png in Resources */,
 				DABD3AAA1711E29800CF925C /* icon_person.png in Resources */,
-				DAE2725F19CA98A5007C5262 /* thumb_advanced_export@2x.png in Resources */,
 				DABD3AAB1711E29800CF925C /* icon_person@2x.png in Resources */,
 				DABD3ABC1711E29800CF925C /* icon_play.png in Resources */,
 				DABD3ABD1711E29800CF925C /* icon_play@2x.png in Resources */,

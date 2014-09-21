@@ -21,7 +21,7 @@ PearlAssociatedObjectProperty( NSArray*, PaymentTransactions, paymentTransaction
     } );
 
     SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:
-            [[NSSet alloc] initWithObjects:MPProductGenerateLogins, MPProductAdvancedExport, nil]];
+            [[NSSet alloc] initWithObjects:MPProductGenerateLogins, MPProductGenerateAnswers, nil]];
     productsRequest.delegate = self;
     [productsRequest start];
 }

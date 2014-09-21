@@ -14,7 +14,6 @@
 
 @property(weak, nonatomic) IBOutlet MPStoreProductCell *generateLoginCell;
 @property(weak, nonatomic) IBOutlet MPStoreProductCell *generateAnswersCell;
-@property(weak, nonatomic) IBOutlet MPStoreProductCell *advancedExportCell;
 @property(weak, nonatomic) IBOutlet MPStoreProductCell *iOSIntegrationCell;
 @property(weak, nonatomic) IBOutlet MPStoreProductCell *touchIDCell;
 

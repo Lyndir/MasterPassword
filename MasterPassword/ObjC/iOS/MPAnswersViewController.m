@@ -38,9 +38,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
-
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+//    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+//
+//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

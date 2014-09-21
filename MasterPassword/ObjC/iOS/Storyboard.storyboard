@@ -28,14 +28,11 @@
             <string>Exo2.0-Bold</string>
             <string>Exo2.0-Bold</string>
             <string>Exo2.0-Bold</string>
-            <string>Exo2.0-Bold</string>
         </mutableArray>
         <mutableArray key="Exo2.0-ExtraBold.otf">
             <string>Exo2.0-ExtraBold</string>
         </mutableArray>
         <mutableArray key="Exo2.0-Regular.otf">
-            <string>Exo2.0-Regular</string>
-            <string>Exo2.0-Regular</string>
             <string>Exo2.0-Regular</string>
             <string>Exo2.0-Regular</string>
             <string>Exo2.0-Regular</string>
@@ -87,7 +84,6 @@
             <string>Exo2.0-Thin</string>
             <string>Exo2.0-Thin</string>
             <string>Exo2.0-Thin</string>
-            <string>Exo2.0-Thin</string>
         </mutableArray>
         <mutableArray key="SourceCodePro-Black.otf">
             <string>SourceCodePro-Black</string>
@@ -120,7 +116,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X8H-vh-j7B" userLabel="Keyboard">
-                                <rect key="frame" x="16" y="431" width="343" height="216"/>
+                                <rect key="frame" x="0.0" y="431" width="375" height="216"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="216" id="GcG-kq-fq2"/>
@@ -413,14 +409,14 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="VGz-R0-vMD" firstAttribute="top" secondItem="X8H-vh-j7B" secondAttribute="bottom" id="8Ed-3Y-ll0"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="X8H-vh-j7B" secondAttribute="trailing" id="8Gr-Dq-UpZ"/>
+                            <constraint firstAttribute="trailing" secondItem="X8H-vh-j7B" secondAttribute="trailing" id="8Gr-Dq-UpZ"/>
                             <constraint firstItem="X8H-vh-j7B" firstAttribute="top" secondItem="9u7-pu-Wtv" secondAttribute="centerY" constant="180" id="Gp5-h6-53S"/>
                             <constraint firstItem="rWM-08-aab" firstAttribute="leading" secondItem="DOr-Xu-P9q" secondAttribute="leading" id="Il8-kg-Dra"/>
                             <constraint firstItem="X8H-vh-j7B" firstAttribute="top" secondItem="fUK-gJ-NRE" secondAttribute="centerY" constant="180" id="PgC-ZL-cQo"/>
                             <constraint firstAttribute="trailing" secondItem="rWM-08-aab" secondAttribute="trailing" id="UPP-1n-zIe"/>
                             <constraint firstItem="X8H-vh-j7B" firstAttribute="top" secondItem="qp1-nX-o4i" secondAttribute="bottom" constant="20" id="WdK-tA-njz"/>
                             <constraint firstItem="VGz-R0-vMD" firstAttribute="top" secondItem="rWM-08-aab" secondAttribute="bottom" id="fcH-lm-76a"/>
-                            <constraint firstItem="X8H-vh-j7B" firstAttribute="leading" secondItem="DOr-Xu-P9q" secondAttribute="leadingMargin" id="jbn-ko-MPq"/>
+                            <constraint firstItem="X8H-vh-j7B" firstAttribute="leading" secondItem="DOr-Xu-P9q" secondAttribute="leading" id="jbn-ko-MPq"/>
                             <constraint firstAttribute="top" secondItem="rWM-08-aab" secondAttribute="top" id="xBe-1Q-mz2"/>
                         </constraints>
                     </view>
@@ -2539,71 +2535,6 @@ See </string>
                                             <outlet property="purchasedIndicator" destination="N9y-ue-L8d" id="Ppv-ay-M1J"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="328" id="tm3-IM-pJw" userLabel="Advanced Export" customClass="MPStoreProductCell">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="97"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tm3-IM-pJw" id="Dgo-0O-fuB">
-                                            <rect key="frame" x="0.0" y="0.0" width="287" height="96"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Advanced Import &amp; Export" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qh5-l2-zT3">
-                                                    <rect key="frame" x="20" y="226" width="283.5" height="20.5"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a2i-1c-ULU">
-                                                    <rect key="frame" x="20" y="254" width="335" height="53.5"/>
-                                                    <string key="text">Master Password allows you to export your sites, allowing you to send them to another device or keep a backup.  Advanced Import &amp; Export improves this feature, allowing you to import and export from other applications, such as Dropbox, Box, Drive etc.</string>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumb_advanced_export.png" translatesAutoresizingMaskIntoConstraints="NO" id="dPE-KG-tzV">
-                                                    <rect key="frame" x="88" y="20" width="198" height="198"/>
-                                                </imageView>
-                                                <activityIndicatorView hidden="YES" opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="27T-E7-pLh">
-                                                    <rect key="frame" x="169" y="100.5" width="37" height="37"/>
-                                                </activityIndicatorView>
-                                                <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✔︎" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n6J-iw-bme">
-                                                    <rect key="frame" x="126" y="32" width="121" height="173"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="144"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$0.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WjS-Ru-h33">
-                                                    <rect key="frame" x="311" y="226" width="35.5" height="20.5"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="dPE-KG-tzV" firstAttribute="top" secondItem="Dgo-0O-fuB" secondAttribute="top" constant="20" symbolic="YES" id="2Qu-OE-0ae"/>
-                                                <constraint firstItem="dPE-KG-tzV" firstAttribute="centerY" secondItem="27T-E7-pLh" secondAttribute="centerY" id="5oj-xv-SNg"/>
-                                                <constraint firstAttribute="bottom" secondItem="a2i-1c-ULU" secondAttribute="bottom" constant="20" symbolic="YES" id="9Mz-44-ycF"/>
-                                                <constraint firstItem="qh5-l2-zT3" firstAttribute="bottom" secondItem="WjS-Ru-h33" secondAttribute="bottom" id="CJa-c0-bZ9"/>
-                                                <constraint firstItem="a2i-1c-ULU" firstAttribute="top" secondItem="qh5-l2-zT3" secondAttribute="bottom" constant="8" symbolic="YES" id="KXf-Fw-wHt"/>
-                                                <constraint firstItem="dPE-KG-tzV" firstAttribute="centerX" secondItem="27T-E7-pLh" secondAttribute="centerX" id="SbF-4Z-IYn"/>
-                                                <constraint firstItem="WjS-Ru-h33" firstAttribute="leading" secondItem="qh5-l2-zT3" secondAttribute="trailing" constant="8" symbolic="YES" id="Sd1-e0-2o9"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="WjS-Ru-h33" secondAttribute="trailing" constant="20" id="X2h-dc-lKk"/>
-                                                <constraint firstItem="a2i-1c-ULU" firstAttribute="leading" secondItem="Dgo-0O-fuB" secondAttribute="leading" constant="20" symbolic="YES" id="Yy6-fO-a4a"/>
-                                                <constraint firstItem="dPE-KG-tzV" firstAttribute="centerY" secondItem="n6J-iw-bme" secondAttribute="centerY" id="dwJ-oN-MXF"/>
-                                                <constraint firstItem="qh5-l2-zT3" firstAttribute="top" secondItem="WjS-Ru-h33" secondAttribute="top" id="hLo-be-orX"/>
-                                                <constraint firstAttribute="centerX" secondItem="dPE-KG-tzV" secondAttribute="centerX" id="jfW-7Y-aQF"/>
-                                                <constraint firstAttribute="trailing" secondItem="a2i-1c-ULU" secondAttribute="trailing" constant="20" id="uaW-Dp-Rxg"/>
-                                                <constraint firstItem="qh5-l2-zT3" firstAttribute="leading" secondItem="Dgo-0O-fuB" secondAttribute="leading" constant="20" symbolic="YES" id="vBq-eS-EHc"/>
-                                                <constraint firstItem="qh5-l2-zT3" firstAttribute="top" secondItem="dPE-KG-tzV" secondAttribute="bottom" constant="8" symbolic="YES" id="vw5-dN-x3a"/>
-                                                <constraint firstItem="dPE-KG-tzV" firstAttribute="centerX" secondItem="n6J-iw-bme" secondAttribute="centerX" id="zNB-fs-s65"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <connections>
-                                            <outlet property="activityIndicator" destination="27T-E7-pLh" id="r0e-Vd-2Gt"/>
-                                            <outlet property="priceLabel" destination="WjS-Ru-h33" id="Sa4-uw-e77"/>
-                                            <outlet property="purchasedIndicator" destination="n6J-iw-bme" id="u2Z-Cp-QyH"/>
-                                        </connections>
-                                    </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="341" id="9Na-CL-jBq" userLabel="iOS Integration" customClass="MPStoreProductCell">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="97"/>
                                         <autoresizingMask key="autoresizingMask"/>
@@ -2787,7 +2718,6 @@ See </string>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="advancedExportCell" destination="tm3-IM-pJw" id="a6E-H8-fma"/>
                         <outlet property="generateAnswersCell" destination="l1g-Ul-Vg8" id="GlG-iZ-7FP"/>
                         <outlet property="generateLoginCell" destination="JVW-tG-xxe" id="PXM-WX-8Qe"/>
                         <outlet property="iOSIntegrationCell" destination="9Na-CL-jBq" id="LSO-OV-9KA"/>
@@ -2798,7 +2728,7 @@ See </string>
             </objects>
             <point key="canvasLocation" x="2624.5" y="463.5"/>
         </scene>
-        <!--Preferences-->
+        <!--Answers View Controller-->
         <scene sceneID="u8w-6D-Zhe">
             <objects>
                 <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="koB-V2-GYf" customClass="MPAnswersViewController" sceneMemberID="viewController">
@@ -2832,7 +2762,7 @@ See </string>
                                                 <outlet property="delegate" destination="W2g-yv-V3V" id="TeI-f1-KlA"/>
                                             </connections>
                                         </textField>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use this as the answer for each of the security questions on this site." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EUe-A5-H8h">
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use this as the answer for each of the security questions on this site." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="359" translatesAutoresizingMaskIntoConstraints="NO" id="EUe-A5-H8h">
                                             <rect key="frame" x="8" y="99" width="359" height="13.5"/>
                                             <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2962,12 +2892,8 @@ See </string>
                             <outlet property="delegate" destination="koB-V2-GYf" id="dJF-bd-2ux"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Preferences" image="icon_person.png" id="GwN-2X-LQ6"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
-                    <connections>
-                        <outlet property="showHelpCell" destination="5MB-qb-oPk" id="7Db-6P-bBY"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kXh-18-fq5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -2991,7 +2917,6 @@ See </string>
         <image name="icon_up.png" width="32" height="32"/>
         <image name="identity.png" width="82" height="80"/>
         <image name="image-0.png" width="320" height="568"/>
-        <image name="thumb_advanced_export.png" width="198" height="198"/>
         <image name="thumb_generated_login.png" width="198" height="198"/>
         <image name="tip_basic_black.png" width="210" height="60"/>
         <image name="ui_spinner.png" width="75" height="75"/>

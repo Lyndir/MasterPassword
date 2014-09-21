@@ -134,8 +134,8 @@
 
     if ([productIdentifier isEqualToString:MPProductGenerateLogins])
         return self.generateLoginCell;
-    if ([productIdentifier isEqualToString:MPProductAdvancedExport])
-        return self.advancedExportCell;
+    if ([productIdentifier isEqualToString:MPProductGenerateAnswers])
+        return self.generateAnswersCell;
 
     return nil;
 }
@@ -148,7 +148,7 @@
 
     for (SKProduct *product in products) {
         [self showCellForProductWithIdentifier:MPProductGenerateLogins ifProduct:product showingCells:showCells];
-        [self showCellForProductWithIdentifier:MPProductAdvancedExport ifProduct:product showingCells:showCells];
+        [self showCellForProductWithIdentifier:MPProductGenerateAnswers ifProduct:product showingCells:showCells];
     }
 
     [hideCells removeObjectsInArray:showCells];

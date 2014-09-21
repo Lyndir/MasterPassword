@@ -416,28 +416,36 @@
 
     NSString *exportFileName = strf( @"%@ (%@).mpsites",
             [self activeUserForMainThread].name, [exportDateFormatter stringFromDate:[NSDate date]] );
-    if (![[MPiOSAppDelegate get] isPurchased:MPProductAdvancedExport])
-        [PearlEMail sendEMailTo:nil fromVC:viewController subject:@"Master Password Export" body:message
-                    attachments:[[PearlEMailAttachment alloc] initWithContent:[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
-                                                                     mimeType:@"text/plain" fileName:exportFileName],
-                                nil];
-    else {
-        NSURL *applicationSupportURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory
-                                                                               inDomains:NSUserDomainMask] lastObject];
-        NSURL *exportURL = [[applicationSupportURL
-                URLByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier isDirectory:YES]
-                URLByAppendingPathComponent:exportFileName isDirectory:NO];
-        NSError *error = nil;
-        if (![[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
-                writeToURL:exportURL options:NSDataWritingFileProtectionComplete error:&error])
-            err( @"Failed to write export data to URL %@: %@", exportURL, error );
-        else {
-            self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:exportURL];
-            self.interactionController.UTI = @"com.lyndir.masterpassword.sites";
-            self.interactionController.delegate = self;
-            [self.interactionController presentOpenInMenuFromRect:CGRectZero inView:viewController.view animated:YES];
-        }
-    }
+    [PearlSheet showSheetWithTitle:@"Export Destination" viewStyle:UIActionSheetStyleBlackTranslucent initSheet:nil
+                 tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
+                     if (buttonIndex == [sheet cancelButtonIndex])
+                         return;
+
+                     if (buttonIndex == [sheet firstOtherButtonIndex]) {
+                         [PearlEMail sendEMailTo:nil fromVC:viewController subject:@"Master Password Export" body:message
+                                     attachments:[[PearlEMailAttachment alloc]
+                                                         initWithContent:[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
+                                                                mimeType:@"text/plain" fileName:exportFileName],
+                                                 nil];
+                         return;
+                     }
+
+                     NSURL *applicationSupportURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory
+                                                                                            inDomains:NSUserDomainMask] lastObject];
+                     NSURL *exportURL = [[applicationSupportURL
+                             URLByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier isDirectory:YES]
+                             URLByAppendingPathComponent:exportFileName isDirectory:NO];
+                     NSError *error = nil;
+                     if (![[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
+                             writeToURL:exportURL options:NSDataWritingFileProtectionComplete error:&error])
+                         err( @"Failed to write export data to URL %@: %@", exportURL, error );
+                     else {
+                         self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:exportURL];
+                         self.interactionController.UTI = @"com.lyndir.masterpassword.sites";
+                         self.interactionController.delegate = self;
+                         [self.interactionController presentOpenInMenuFromRect:CGRectZero inView:viewController.view animated:YES];
+                     }
+                 } cancelTitle:@"Cancel" destructiveTitle:nil otherTitles:@"Send As E-Mail", @"Share / Airdrop", nil];
 }
 
 - (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void ( ^ )(void))didReset {
