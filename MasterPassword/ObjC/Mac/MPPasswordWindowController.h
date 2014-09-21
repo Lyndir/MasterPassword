@@ -17,26 +17,26 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "MPElementModel.h"
-#import "MPElementsTableView.h"
+#import "MPSiteModel.h"
+#import "MPSitesTableView.h"
 
 @class MPMacAppDelegate;
 
 @interface MPPasswordWindowController : NSWindowController<NSTextViewDelegate, NSTextFieldDelegate, NSTableViewDataSource, NSTableViewDelegate>
 
-@property(nonatomic) NSMutableArray *elements;
+@property(nonatomic) NSMutableArray *sites;
 @property(nonatomic) NSString *masterPassword;
 @property(nonatomic) BOOL alternatePressed;
 @property(nonatomic) BOOL locked;
 @property(nonatomic) BOOL newUser;
 
-@property(nonatomic, weak) IBOutlet NSArrayController *elementsController;
+@property(nonatomic, weak) IBOutlet NSArrayController *sitesController;
 @property(nonatomic, weak) IBOutlet NSImageView *blurView;
 @property(nonatomic, weak) IBOutlet NSTextField *inputLabel;
 @property(nonatomic, weak) IBOutlet NSTextField *securePasswordField;
 @property(nonatomic, weak) IBOutlet NSTextField *revealPasswordField;
 @property(nonatomic, weak) IBOutlet NSSearchField *siteField;
-@property(nonatomic, weak) IBOutlet MPElementsTableView *siteTable;
+@property(nonatomic, weak) IBOutlet MPSitesTableView *siteTable;
 @property(nonatomic, weak) IBOutlet NSProgressIndicator *progressView;
 
 @property(nonatomic, strong) IBOutlet NSBox *passwordTypesBox;

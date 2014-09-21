@@ -9,8 +9,8 @@
  */
 
 //
-//  MPElementModel.h
-//  MPElementModel
+//  MPSiteModel.h
+//  MPSiteModel
 //
 //  Created by lhunath on 2/11/2014.
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
@@ -19,7 +19,7 @@
 #import <Foundation/Foundation.h>
 @class MPSiteEntity;
 
-@interface MPElementModel : NSObject
+@interface MPSiteModel : NSObject
 
 @property (nonatomic) NSString *siteName;
 @property (nonatomic) MPSiteType type;

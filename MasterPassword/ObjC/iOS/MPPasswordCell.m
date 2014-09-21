@@ -45,7 +45,7 @@
 @end
 
 @implementation MPPasswordCell {
-    NSManagedObjectID *_elementOID;
+    NSManagedObjectID *_siteOID;
 }
 
 #pragma mark - Life cycle
@@ -132,7 +132,7 @@
 
     [super prepareForReuse];
 
-    _elementOID = nil;
+    _siteOID = nil;
     self.transientSite = nil;
     self.mode = MPPasswordCellModePassword;
     [self updateAnimated:NO];
@@ -155,9 +155,9 @@
     [self updateAnimated:animated];
 }
 
-- (void)setElement:(MPSiteEntity *)element animated:(BOOL)animated {
+- (void)setSite:(MPSiteEntity *)site animated:(BOOL)animated {
 
-    _elementOID = [element objectID];
+    _siteOID = [site objectID];
     [self updateAnimated:animated];
 }
 
@@ -195,10 +195,10 @@
         NSString *password = self.passwordField.text;
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             TimeToCrack timeToCrack;
-            MPSiteEntity *element = [self elementInContext:context];
-            id<MPAlgorithm> algorithm = element.algorithm?: MPAlgorithmDefault;
+            MPSiteEntity *site = [self siteInContext:context];
+            id<MPAlgorithm> algorithm = site.algorithm?: MPAlgorithmDefault;
             MPAttacker attackHardware = [[MPConfig get].siteAttacker unsignedIntegerValue];
-            if ([algorithm timeToCrack:&timeToCrack passwordOfType:[self elementInContext:context].type byAttacker:attackHardware] ||
+            if ([algorithm timeToCrack:&timeToCrack passwordOfType:[self siteInContext:context].type byAttacker:attackHardware] ||
                 [algorithm timeToCrack:&timeToCrack passwordString:password byAttacker:attackHardware])
                 PearlMainQueue( ^{
                     self.strengthLabel.text = NSStringFromTimeToCrack( timeToCrack );
@@ -214,19 +214,19 @@
         NSString *text = textField.text;
 
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-            MPSiteEntity *element = [self elementInContext:context];
-            if (!element)
+            MPSiteEntity *site = [self siteInContext:context];
+            if (!site)
                 return;
 
             if (textField == self.passwordField) {
-                if ([element.algorithm savePassword:text toSite:element usingKey:[MPiOSAppDelegate get].key])
+                if ([site.algorithm savePassword:text toSite:site usingKey:[MPiOSAppDelegate get].key])
                     [PearlOverlay showTemporaryOverlayWithTitle:@"Password Updated" dismissAfter:2];
             }
             else if (textField == self.loginNameField &&
-                     ((element.loginGenerated && ![text length]) ||
-                      (!element.loginGenerated && ![text isEqualToString:element.loginName]))) {
-                element.loginName = text;
-                element.loginGenerated = NO;
+                     ((site.loginGenerated && ![text length]) ||
+                      (!site.loginGenerated && ![text isEqualToString:site.loginName]))) {
+                site.loginName = text;
+                site.loginGenerated = NO;
                 if ([text length])
                     [PearlOverlay showTemporaryOverlayWithTitle:@"Login Name Saved" dismissAfter:2];
                 else
@@ -243,17 +243,17 @@
 
 - (IBAction)doDelete:(UIButton *)sender {
 
-    MPSiteEntity *element = [self elementInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
-    if (!element)
+    MPSiteEntity *site = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
+    if (!site)
         return;
 
-    [PearlSheet showSheetWithTitle:strf( @"Delete %@?", element.name ) viewStyle:UIActionSheetStyleAutomatic
+    [PearlSheet showSheetWithTitle:strf( @"Delete %@?", site.name ) viewStyle:UIActionSheetStyleAutomatic
                          initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
                 if (buttonIndex == [sheet cancelButtonIndex])
                     return;
 
                 [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    [context deleteObject:[self elementInContext:context]];
+                    [context deleteObject:[self siteInContext:context]];
                     [context saveToStore];
                 }];
             }          cancelTitle:@"Cancel" destructiveTitle:@"Delete Site" otherTitles:nil];
@@ -265,12 +265,11 @@
 
     [PearlSheet showSheetWithTitle:@"Change Password Type" viewStyle:UIActionSheetStyleAutomatic
                          initSheet:^(UIActionSheet *sheet) {
-                             MPSiteEntity
-                                     *mainElement = [self elementInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
+                             MPSiteEntity *mainSite = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
                              for (NSNumber *typeNumber in [MPAlgorithmDefault allTypes]) {
                                  MPSiteType type = [typeNumber unsignedIntegerValue];
                                  NSString *typeName = [MPAlgorithmDefault nameOfType:type];
-                                 if (type == mainElement.type)
+                                 if (type == mainSite.type)
                                      [sheet addButtonWithTitle:strf( @"● %@", typeName )];
                                  else
                                      [sheet addButtonWithTitle:typeName];
@@ -282,9 +281,9 @@
                 MPSiteType type = [[MPAlgorithmDefault allTypes][buttonIndex] unsignedIntegerValue]?: MPSiteTypeGeneratedLong;
 
                 [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPSiteEntity *element = [self elementInContext:context];
-                    element = [[MPiOSAppDelegate get] changeSite:element saveInContext:context toType:type];
-                    [self setElement:element animated:YES];
+                    MPSiteEntity *site = [self siteInContext:context];
+                    site = [[MPiOSAppDelegate get] changeSite:site saveInContext:context toType:type];
+                    [self setSite:site animated:YES];
                 }];
             }          cancelTitle:@"Cancel" destructiveTitle:nil otherTitles:nil];
 }
@@ -294,7 +293,7 @@
     self.loginNameField.enabled = YES;
     self.passwordField.enabled = YES;
 
-    if ([self elementInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]].type & MPSiteTypeClassStored)
+    if ([self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]].type & MPSiteTypeClassStored)
         [self.passwordField becomeFirstResponder];
     else
         [self.loginNameField becomeFirstResponder];
@@ -317,7 +316,7 @@
 - (IBAction)doUpgrade:(UIButton *)sender {
 
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        if (![[self elementInContext:context] migrateExplicitly:YES]) {
+        if (![[self siteInContext:context] migrateExplicitly:YES]) {
             [PearlOverlay showTemporaryOverlayWithTitle:@"Couldn't Upgrade Site" dismissAfter:2];
             return;
         }
@@ -331,11 +330,11 @@
 - (IBAction)doIncrementCounter:(UIButton *)sender {
 
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        MPSiteEntity *element = [self elementInContext:context];
-        if (!element || ![element isKindOfClass:[MPElementGeneratedEntity class]])
+        MPSiteEntity *site = [self siteInContext:context];
+        if (!site || ![site isKindOfClass:[MPGeneratedSiteEntity class]])
             return;
 
-        ++((MPElementGeneratedEntity *)element).counter;
+        ++((MPGeneratedSiteEntity *)site).counter;
         [context saveToStore];
 
         [PearlOverlay showTemporaryOverlayWithTitle:@"Generating New Password" dismissAfter:2];
@@ -363,11 +362,11 @@
         return;
 
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        MPSiteEntity *element = [self elementInContext:context];
-        if (!element || ![element isKindOfClass:[MPElementGeneratedEntity class]])
+        MPSiteEntity *site = [self siteInContext:context];
+        if (!site || ![site isKindOfClass:[MPGeneratedSiteEntity class]])
             return;
 
-        ((MPElementGeneratedEntity *)element).counter = 1;
+        ((MPGeneratedSiteEntity *)site).counter = 1;
         [context saveToStore];
 
         [PearlOverlay showTemporaryOverlayWithTitle:@"Counter Reset" dismissAfter:2];
@@ -393,8 +392,8 @@
                     }
 
                     [[MPiOSAppDelegate get]
-                            addSiteNamed:self.transientSite completion:^(MPSiteEntity *element, NSManagedObjectContext *context) {
-                        [self copyContentOfElement:element saveInContext:context];
+                            addSiteNamed:self.transientSite completion:^(MPSiteEntity *site, NSManagedObjectContext *context) {
+                        [self copyContentOfSite:site saveInContext:context];
 
                         PearlMainQueueAfter( .3f, ^{
                             [UIView animateWithDuration:.2f animations:^{
@@ -407,7 +406,7 @@
     }
 
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        [self copyContentOfElement:[self elementInContext:context] saveInContext:context];
+        [self copyContentOfSite:[self siteInContext:context] saveInContext:context];
 
         PearlMainQueueAfter( .3f, ^{
             [UIView animateWithDuration:.2f animations:^{
@@ -424,9 +423,9 @@
     }];
 
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        MPSiteEntity *element = [self elementInContext:context];
-        if (![self copyLoginOfElement:element saveInContext:context]) {
-            element.loginGenerated = YES;
+        MPSiteEntity *site = [self siteInContext:context];
+        if (![self copyLoginOfSite:site saveInContext:context]) {
+            site.loginGenerated = YES;
             [context saveToStore];
             [PearlOverlay showTemporaryOverlayWithTitle:@"Login Name Generated" dismissAfter:2];
             [self updateAnimated:YES];
@@ -462,15 +461,15 @@
     }
 
     [UIView animateWithDuration:animated? .3f: 0 animations:^{
-        MPSiteEntity *mainElement = [self elementInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
+        MPSiteEntity *mainSite = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
 
         // UI
-        self.upgradeButton.alpha = mainElement.requiresExplicitMigration? 1: 0;
+        self.upgradeButton.alpha = mainSite.requiresExplicitMigration? 1: 0;
         BOOL settingsMode = self.mode == MPPasswordCellModeSettings;
-        self.loginNameContainer.alpha = settingsMode || mainElement.loginGenerated || [mainElement.loginName length]? 0.7f: 0;
-        self.loginNameField.textColor = [UIColor colorWithHexString:mainElement.loginGenerated? @"5E636D": @"6D5E63"];
+        self.loginNameContainer.alpha = settingsMode || mainSite.loginGenerated || [mainSite.loginName length]? 0.7f: 0;
+        self.loginNameField.textColor = [UIColor colorWithHexString:mainSite.loginGenerated? @"5E636D": @"6D5E63"];
         self.modeButton.alpha = self.transientSite? 0: settingsMode? 0.5f: 0.1f;
-        self.counterLabel.alpha = self.counterButton.alpha = mainElement.type & MPSiteTypeClassGenerated? 0.5f: 0;
+        self.counterLabel.alpha = self.counterButton.alpha = mainSite.type & MPSiteTypeClassGenerated? 0.5f: 0;
         self.modeButton.selected = settingsMode;
         self.strengthLabel.gone = !settingsMode;
         self.modeScrollView.scrollEnabled = !self.transientSite;
@@ -485,34 +484,34 @@
             [self.loginNameButton setTitle:@"Tap the pencil to save a username" forState:UIControlStateNormal];
 
         // Site Name
-        self.siteNameLabel.text = strl( @"%@ - %@", self.transientSite?: mainElement.name,
-                self.transientSite? @"Tap to create": [mainElement.algorithm shortNameOfType:mainElement.type] );
+        self.siteNameLabel.text = strl( @"%@ - %@", self.transientSite?: mainSite.name,
+                self.transientSite? @"Tap to create": [mainSite.algorithm shortNameOfType:mainSite.type] );
 
         // Site Password
         self.passwordField.secureTextEntry = [[MPiOSConfig get].hidePasswords boolValue];
         self.passwordField.attributedPlaceholder = stra(
-                mainElement.type & MPSiteTypeClassStored? strl( @"No password" ):
-                mainElement.type & MPSiteTypeClassGenerated? strl( @"..." ): @"", @{
+                mainSite.type & MPSiteTypeClassStored? strl( @"No password" ):
+                mainSite.type & MPSiteTypeClassGenerated? strl( @"..." ): @"", @{
                 NSForegroundColorAttributeName : [UIColor whiteColor]
         } );
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-            MPSiteEntity *element = [self elementInContext:context];
+            MPSiteEntity *site = [self siteInContext:context];
             MPKey *key = [MPiOSAppDelegate get].key;
-            NSString *password, *loginName = [element resolveLoginUsingKey:key];
+            NSString *password, *loginName = [site resolveLoginUsingKey:key];
             if (self.transientSite)
                 password = [MPAlgorithmDefault generatePasswordForSiteNamed:self.transientSite ofType:
                                 [[MPiOSAppDelegate get] activeUserInContext:context].defaultType?: MPSiteTypeGeneratedLong
                                                                 withCounter:1 usingKey:key];
-            else if (element)
-                password = [element resolvePasswordUsingKey:key];
+            else if (site)
+                password = [site resolvePasswordUsingKey:key];
             else
                 return;
 
             TimeToCrack timeToCrack;
             NSString *timeToCrackString = nil;
-            id<MPAlgorithm> algorithm = element.algorithm?: MPAlgorithmDefault;
+            id<MPAlgorithm> algorithm = site.algorithm?: MPAlgorithmDefault;
             MPAttacker attackHardware = [[MPConfig get].siteAttacker unsignedIntegerValue];
-            if ([algorithm timeToCrack:&timeToCrack passwordOfType:element.type byAttacker:attackHardware] ||
+            if ([algorithm timeToCrack:&timeToCrack passwordOfType:site.type byAttacker:attackHardware] ||
                 [algorithm timeToCrack:&timeToCrack passwordString:password byAttacker:attackHardware])
                 timeToCrackString = NSStringFromTimeToCrack( timeToCrack );
 
@@ -538,8 +537,8 @@
         }];
 
         // Site Counter
-        if ([mainElement isKindOfClass:[MPElementGeneratedEntity class]])
-            self.counterLabel.text = strf( @"%lu", (unsigned long)((MPElementGeneratedEntity *)mainElement).counter );
+        if ([mainSite isKindOfClass:[MPGeneratedSiteEntity class]])
+            self.counterLabel.text = strf( @"%lu", (unsigned long)((MPGeneratedSiteEntity *)mainSite).counter );
 
         // Site Login Name
         self.loginNameField.enabled = self.passwordField.enabled = //
@@ -549,10 +548,10 @@
     }];
 }
 
-- (BOOL)copyContentOfElement:(MPSiteEntity *)element saveInContext:(NSManagedObjectContext *)context {
+- (BOOL)copyContentOfSite:(MPSiteEntity *)site saveInContext:(NSManagedObjectContext *)context {
 
-    inf( @"Copying password for: %@", element.name );
-    NSString *password = [element resolvePasswordUsingKey:[MPAppDelegate_Shared get].key];
+    inf( @"Copying password for: %@", site.name );
+    NSString *password = [site resolvePasswordUsingKey:[MPAppDelegate_Shared get].key];
     if (![password length])
         return NO;
 
@@ -561,15 +560,15 @@
         [UIPasteboard generalPasteboard].string = password;
     } );
 
-    [element use];
+    [site use];
     [context saveToStore];
     return YES;
 }
 
-- (BOOL)copyLoginOfElement:(MPSiteEntity *)element saveInContext:(NSManagedObjectContext *)context {
+- (BOOL)copyLoginOfSite:(MPSiteEntity *)site saveInContext:(NSManagedObjectContext *)context {
 
-    inf( @"Copying login for: %@", element.name );
-    NSString *loginName = [element.algorithm resolveLoginForSite:element usingKey:[MPiOSAppDelegate get].key];
+    inf( @"Copying login for: %@", site.name );
+    NSString *loginName = [site.algorithm resolveLoginForSite:site usingKey:[MPiOSAppDelegate get].key];
     if (![loginName length])
         return NO;
 
@@ -578,14 +577,14 @@
         [UIPasteboard generalPasteboard].string = loginName;
     } );
 
-    [element use];
+    [site use];
     [context saveToStore];
     return YES;
 }
 
-- (MPSiteEntity *)elementInContext:(NSManagedObjectContext *)context {
+- (MPSiteEntity *)siteInContext:(NSManagedObjectContext *)context {
 
-    return [MPSiteEntity existingObjectWithID:_elementOID inContext:context];
+    return [MPSiteEntity existingObjectWithID:_siteOID inContext:context];
 }
 
 @end

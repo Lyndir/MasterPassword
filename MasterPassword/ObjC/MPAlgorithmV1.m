@@ -25,23 +25,23 @@
     return 1;
 }
 
-- (BOOL)migrateSite:(MPSiteEntity *)element explicit:(BOOL)explicit {
+- (BOOL)migrateSite:(MPSiteEntity *)site explicit:(BOOL)explicit {
 
-    if (element.version != [self version] - 1)
+    if (site.version != [self version] - 1)
         // Only migrate from previous version.
         return NO;
 
     if (!explicit) {
-        if (element.type & MPSiteTypeClassGenerated) {
+        if (site.type & MPSiteTypeClassGenerated) {
             // This migration requires explicit permission for types of the generated class.
-            element.requiresExplicitMigration = YES;
+            site.requiresExplicitMigration = YES;
             return NO;
         }
     }
 
     // Apply migration.
-    element.requiresExplicitMigration = NO;
-    element.version = [self version];
+    site.requiresExplicitMigration = NO;
+    site.version = [self version];
     return YES;
 }
 

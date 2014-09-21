@@ -9,21 +9,21 @@
 */
 
 //
-//  MPElementModel.h
-//  MPElementModel
+//  MPSiteModel.h
+//  MPSiteModel
 //
 //  Created by lhunath on 2/11/2014.
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
-#import "MPElementModel.h"
+#import "MPSiteModel.h"
 #import "MPSiteEntity.h"
 #import "MPEntities.h"
 #import "MPAppDelegate_Shared.h"
 #import "MPAppDelegate_Store.h"
 #import "MPMacAppDelegate.h"
 
-@implementation MPElementModel {
+@implementation MPSiteModel {
     NSManagedObjectID *_entityOID;
     BOOL _initialized;
 }
@@ -52,7 +52,7 @@
     self.type = entity.type;
     self.typeName = entity.typeName;
     self.uses = entity.uses_;
-    self.counter = [entity isKindOfClass:[MPElementGeneratedEntity class]]? [(MPElementGeneratedEntity *)entity counter]: 0;
+    self.counter = [entity isKindOfClass:[MPGeneratedSiteEntity class]]? [(MPGeneratedSiteEntity *)entity counter]: 0;
 
     // Find all password types and the index of the current type amongst them.
     [self updateContent:entity];
@@ -66,7 +66,7 @@
     NSError *error;
     MPSiteEntity *entity = (MPSiteEntity *)[moc existingObjectWithID:_entityOID error:&error];
     if (!entity)
-        err( @"Couldn't retrieve active element: %@", error );
+        err( @"Couldn't retrieve active site: %@", error );
 
     return entity;
 }
@@ -83,8 +83,8 @@
 
     [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         MPSiteEntity *entity = [self entityInContext:context];
-        if ([entity isKindOfClass:[MPElementGeneratedEntity class]]) {
-            ((MPElementGeneratedEntity *)entity).counter = counter;
+        if ([entity isKindOfClass:[MPGeneratedSiteEntity class]]) {
+            ((MPGeneratedSiteEntity *)entity).counter = counter;
             [context saveToStore];
 
             [self updateContent:entity];

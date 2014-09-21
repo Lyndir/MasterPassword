@@ -9,17 +9,17 @@
 */
 
 //
-//  MPElementsTableView.h
-//  MPElementsTableView
+//  MPSitesTableView.h
+//  MPSitesTableView
 //
 //  Created by lhunath on 2014-06-30.
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
-#import "MPElementsTableView.h"
+#import "MPSitesTableView.h"
 #import "MPPasswordWindowController.h"
 
-@implementation MPElementsTableView
+@implementation MPSitesTableView
 
 - (void)doCommandBySelector:(SEL)aSelector {
 

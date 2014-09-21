@@ -9,8 +9,8 @@
  */
 
 //
-//  MPElementsTableView.h
-//  MPElementsTableView
+//  MPSitesTableView.h
+//  MPSitesTableView
 //
 //  Created by lhunath on 2014-06-30.
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
@@ -20,7 +20,7 @@
 
 @class MPPasswordWindowController;
 
-@interface MPElementsTableView : NSTableView
+@interface MPSitesTableView : NSTableView
 
 @property(nonatomic, weak) MPPasswordWindowController *controller;
 

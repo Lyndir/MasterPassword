@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "MPSiteEntity.h"
-#import "MPSiteStoredEntity.h"
-#import "MPSiteGeneratedEntity.h"
+#import "MPStoredSiteEntity.h"
+#import "MPGeneratedSiteEntity.h"
 #import "MPUserEntity.h"
 #import "MPAlgorithm.h"
 #import "MPFixable.h"
@@ -44,7 +44,7 @@
 
 @end
 
-@interface MPSiteGeneratedEntity(MP)
+@interface MPGeneratedSiteEntity(MP)
 
 @property(assign) NSUInteger counter;
 

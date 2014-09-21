@@ -8,7 +8,6 @@
 
 #import "MPEntities.h"
 #import "MPAppDelegate_Shared.h"
-#import "MPAppDelegate_Store.h"
 
 @implementation NSManagedObjectContext(MP)
 
@@ -172,7 +171,7 @@
 
 @end
 
-@implementation MPSiteGeneratedEntity(MP)
+@implementation MPGeneratedSiteEntity(MP)
 
 - (MPFixableResult)findAndFixInconsistenciesInContext:(NSManagedObjectContext *)context {
 
@@ -225,7 +224,7 @@
 
 @end
 
-@implementation MPSiteStoredEntity(MP)
+@implementation MPStoredSiteEntity(MP)
 
 - (MPFixableResult)findAndFixInconsistenciesInContext:(NSManagedObjectContext *)context {
 

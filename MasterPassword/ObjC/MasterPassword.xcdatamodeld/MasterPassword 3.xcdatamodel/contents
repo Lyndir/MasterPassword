@@ -13,10 +13,10 @@
         <attribute name="version_" attributeType="Integer 16" minValueString="0" defaultValueString="0" syncable="YES"/>
         <relationship name="user" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MPUserEntity" inverseName="elements" inverseEntity="MPUserEntity" elementID="FC8AE32E-7BE3-4FA6-8611-B7DC0DB063EF" syncable="YES"/>
     </entity>
-    <entity name="MPElementGeneratedEntity" representedClassName="MPSiteGeneratedEntity" parentEntity="MPElementEntity" elementID="789304EA-070D-4982-8C20-54EECFC20CB6" syncable="YES">
+    <entity name="MPElementGeneratedEntity" representedClassName="MPGeneratedSiteEntity" parentEntity="MPElementEntity" elementID="789304EA-070D-4982-8C20-54EECFC20CB6" syncable="YES">
         <attribute name="counter_" optional="YES" attributeType="Integer 32" defaultValueString="1" syncable="YES"/>
     </entity>
-    <entity name="MPElementStoredEntity" representedClassName="MPSiteStoredEntity" parentEntity="MPElementEntity" elementID="BEEF1688-0CCD-4699-A86A-4D860FE2CEB8" syncable="YES">
+    <entity name="MPElementStoredEntity" representedClassName="MPStoredSiteEntity" parentEntity="MPElementEntity" elementID="BEEF1688-0CCD-4699-A86A-4D860FE2CEB8" syncable="YES">
         <attribute name="contentObject" optional="YES" attributeType="Transformable" storedInTruthFile="YES" syncable="YES"/>
     </entity>
     <entity name="MPUserEntity" representedClassName="MPUserEntity" syncable="YES">

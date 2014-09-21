@@ -17,7 +17,7 @@
 - (MPSiteType)selectedType;
 
 @optional
-- (MPSiteEntity *)selectedElement;
+- (MPSiteEntity *)selectedSite;
 
 @end
 

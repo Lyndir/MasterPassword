@@ -131,7 +131,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 
     MPPasswordCell *cell = [MPPasswordCell dequeueCellFromCollectionView:collectionView indexPath:indexPath];
     if (indexPath.item < ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[indexPath.section]).numberOfObjects)
-        [cell setElement:[self.fetchedResultsController objectAtIndexPath:indexPath] animated:NO];
+        [cell setSite:[self.fetchedResultsController objectAtIndexPath:indexPath] animated:NO];
     else
         [cell setTransientSite:self.query animated:NO];
 
@@ -384,7 +384,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
                 [NSPredicate predicateWithFormat:@"user == %@ AND name BEGINSWITH[cd] %@", activeUserOID, query]:
                 [NSPredicate predicateWithFormat:@"user == %@", activeUserOID];
         if (![self.fetchedResultsController performFetch:&error])
-            err( @"Couldn't fetch elements: %@", error );
+            err( @"Couldn't fetch sites: %@", error );
 
         [self.passwordCollectionView performBatchUpdates:^{
             [self fetchedItemsDidUpdate];

@@ -63,21 +63,21 @@
 
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
 
-    MPSiteEntity *selectedElement = nil;
-    if ([self.delegate respondsToSelector:@selector(selectedElement)])
-        selectedElement = [self.delegate selectedElement];
+    MPSiteEntity *selectedSite = nil;
+    if ([self.delegate respondsToSelector:@selector( selectedSite )])
+        selectedSite = [self.delegate selectedSite];
 
     MPSiteType cellType = [self typeAtIndexPath:indexPath];
-    MPSiteType selectedType = selectedElement? selectedElement.type: [self.delegate selectedType];
+    MPSiteType selectedType = selectedSite? selectedSite.type: [self.delegate selectedType];
     cell.selected = (selectedType == cellType);
 
     if (cellType != (MPSiteType)NSNotFound && cellType & MPSiteTypeClassGenerated) {
         [(UITextField *)[cell viewWithTag:2] setText:@"..."];
 
-        NSString *name = selectedElement.name;
+        NSString *name = selectedSite.name;
         NSUInteger counter = 0;
-        if ([selectedElement isKindOfClass:[MPElementGeneratedEntity class]])
-            counter = ((MPElementGeneratedEntity *)selectedElement).counter;
+        if ([selectedSite isKindOfClass:[MPGeneratedSiteEntity class]])
+            counter = ((MPGeneratedSiteEntity *)selectedSite).counter;
 
         dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
             NSString *typeContent = [MPAlgorithmDefault generatePasswordForSiteNamed:name ofType:cellType
@@ -129,7 +129,7 @@
                     return (MPSiteType)NSNotFound;
 
                 default: {
-                    Throw(@"Unsupported row: %ld, when selecting generated element type.", (long)indexPath.row);
+                    Throw(@"Unsupported row: %ld, when selecting generated site type.", (long)indexPath.row);
                 }
             }
         }
@@ -147,13 +147,13 @@
                     return (MPSiteType)NSNotFound;
 
                 default: {
-                    Throw(@"Unsupported row: %ld, when selecting stored element type.", (long)indexPath.row);
+                    Throw(@"Unsupported row: %ld, when selecting stored site type.", (long)indexPath.row);
                 }
             }
         }
 
         default:
-            Throw(@"Unsupported section: %ld, when selecting element type.", (long)indexPath.section);
+            Throw(@"Unsupported section: %ld, when selecting site type.", (long)indexPath.section);
     }
 }
 

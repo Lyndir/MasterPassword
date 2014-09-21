@@ -16,8 +16,8 @@
 //
 
 #import "MPKey.h"
-#import "MPSiteStoredEntity.h"
-#import "MPSiteGeneratedEntity.h"
+#import "MPStoredSiteEntity.h"
+#import "MPGeneratedSiteEntity.h"
 
 #define MPAlgorithmDefaultVersion 1
 #define MPAlgorithmDefault MPAlgorithmForVersion(MPAlgorithmDefaultVersion)
@@ -66,8 +66,8 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 - (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
                                   variant:(MPSiteVariant)variant usingKey:(MPKey *)key;
 
-- (NSString *)storedLoginForSite:(MPSiteStoredEntity *)site usingKey:(MPKey *)key;
-- (NSString *)storedPasswordForSite:(MPSiteStoredEntity *)site usingKey:(MPKey *)key;
+- (NSString *)storedLoginForSite:(MPStoredSiteEntity *)site usingKey:(MPKey *)key;
+- (NSString *)storedPasswordForSite:(MPStoredSiteEntity *)site usingKey:(MPKey *)key;
 
 - (BOOL)savePassword:(NSString *)clearPassword toSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
 

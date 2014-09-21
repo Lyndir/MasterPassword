@@ -7,6 +7,7 @@
 //
 
 #import "MPAppDelegate_Store.h"
+#import "MPGeneratedSiteEntity.h"
 
 #if TARGET_OS_IPHONE
 #define STORE_OPTIONS NSPersistentStoreFileProtectionKey : NSFileProtectionComplete,
@@ -656,24 +657,24 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
 
         // Create new site.
         NSString *typeEntityName = [MPAlgorithmForVersion( version ) classNameOfType:type];
-        MPSiteEntity *element = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
-        element.name = siteName;
-        element.loginName = loginName;
-        element.user = user;
-        element.type = type;
-        element.uses = uses;
-        element.lastUsed = lastUsed;
-        element.version = version;
+        MPSiteEntity *site = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
+        site.name = siteName;
+        site.loginName = loginName;
+        site.user = user;
+        site.type = type;
+        site.uses = uses;
+        site.lastUsed = lastUsed;
+        site.version = version;
         if ([exportContent length]) {
             if (clearText)
-                [element.algorithm importClearTextPassword:exportContent intoSite:element usingKey:userKey];
+                [site.algorithm importClearTextPassword:exportContent intoSite:site usingKey:userKey];
             else
-                [element.algorithm importProtectedPassword:exportContent protectedByKey:importKey intoSite:element usingKey:userKey];
+                [site.algorithm importProtectedPassword:exportContent protectedByKey:importKey intoSite:site usingKey:userKey];
         }
-        if ([element isKindOfClass:[MPElementGeneratedEntity class]] && counter != NSNotFound)
-            ((MPElementGeneratedEntity *)element).counter = counter;
+        if ([site isKindOfClass:[MPGeneratedSiteEntity class]] && counter != NSNotFound)
+            ((MPGeneratedSiteEntity *)site).counter = counter;
 
-        dbg( @"Created Element: %@", [element debugDescription] );
+        dbg( @"Created Site: %@", [site debugDescription] );
     }
 
     if (![context saveToStore])
@@ -719,27 +720,27 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
     [export appendFormat:@"#               used      used      type                       name\t                     name\tpassword\n"];
 
     // Sites.
-    for (MPSiteEntity *element in activeUser.elements) {
-        NSDate *lastUsed = element.lastUsed;
-        NSUInteger uses = element.uses;
-        MPSiteType type = element.type;
-        NSUInteger version = element.version;
+    for (MPSiteEntity *site in activeUser.sites) {
+        NSDate *lastUsed = site.lastUsed;
+        NSUInteger uses = site.uses;
+        MPSiteType type = site.type;
+        NSUInteger version = site.version;
         NSUInteger counter = 0;
-        NSString *loginName = element.loginName;
-        NSString *siteName = element.name;
+        NSString *loginName = site.loginName;
+        NSString *siteName = site.name;
         NSString *content = nil;
 
         // Generated-specific
-        if ([element isKindOfClass:[MPElementGeneratedEntity class]])
-            counter = ((MPElementGeneratedEntity *)element).counter;
+        if ([site isKindOfClass:[MPGeneratedSiteEntity class]])
+            counter = ((MPGeneratedSiteEntity *)site).counter;
 
 
         // Determine the content to export.
         if (!(type & MPSiteFeatureDevicePrivate)) {
             if (revealPasswords)
-                content = [element.algorithm resolvePasswordForSite:element usingKey:self.key];
+                content = [site.algorithm resolvePasswordForSite:site usingKey:self.key];
             else if (type & MPSiteFeatureExportContent)
-                content = [element.algorithm exportPasswordForSite:element usingKey:self.key];
+                content = [site.algorithm exportPasswordForSite:site usingKey:self.key];
         }
 
         [export appendFormat:@"%@  %8ld  %8s  %25s\t%25s\t%@\n",
