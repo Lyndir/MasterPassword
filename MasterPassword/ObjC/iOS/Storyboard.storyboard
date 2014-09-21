@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Q1S-vU-GGO">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="Exo2.0-Bold.otf">
@@ -2412,13 +2410,13 @@ See </string>
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="96"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Generate Login Names" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pax-1J-IZi">
-                                                    <rect key="frame" x="20" y="226" width="283.5" height="20.5"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Generate Login Names" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="292" translatesAutoresizingMaskIntoConstraints="NO" id="Pax-1J-IZi">
+                                                    <rect key="frame" x="20" y="226" width="292" height="20.5"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ra0-yS-99P">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="335" translatesAutoresizingMaskIntoConstraints="NO" id="Ra0-yS-99P">
                                                     <rect key="frame" x="20" y="254" width="335" height="92.5"/>
                                                     <string key="text">Master Password is great for making your passwords immune to loss, and it even lets you save your login name.  But saved login names can't be recovered when all is lost.  Generated login names use the same algorithm to generate a good login name to use for each of your sites.  In addition, using unique non-identifying login names for your sites helps protect against companies working together to build a bigger picture on your identity.</string>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
@@ -2437,8 +2435,8 @@ See </string>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$0.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="68f-wn-UlS">
-                                                    <rect key="frame" x="311" y="226" width="35.5" height="20.5"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$0.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="35.5" translatesAutoresizingMaskIntoConstraints="NO" id="68f-wn-UlS">
+                                                    <rect key="frame" x="319.5" y="226" width="35.5" height="20.5"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -2454,7 +2452,7 @@ See </string>
                                                 <constraint firstItem="Pax-1J-IZi" firstAttribute="top" secondItem="68f-wn-UlS" secondAttribute="top" id="aeI-88-vEl"/>
                                                 <constraint firstItem="Pax-1J-IZi" firstAttribute="bottom" secondItem="68f-wn-UlS" secondAttribute="bottom" id="dwX-cl-uGl"/>
                                                 <constraint firstAttribute="centerX" secondItem="DMJ-sd-eNJ" secondAttribute="centerX" id="eep-uR-mt1"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="68f-wn-UlS" secondAttribute="trailing" constant="20" id="evt-4g-dcO"/>
+                                                <constraint firstAttribute="trailing" secondItem="68f-wn-UlS" secondAttribute="trailing" constant="20" id="evt-4g-dcO"/>
                                                 <constraint firstItem="Pax-1J-IZi" firstAttribute="leading" secondItem="CLQ-CW-NGn" secondAttribute="leading" constant="20" symbolic="YES" id="gxx-4T-jjl"/>
                                                 <constraint firstItem="FWu-V6-mLT" firstAttribute="centerY" secondItem="DMJ-sd-eNJ" secondAttribute="centerY" id="ruj-0V-F34"/>
                                                 <constraint firstItem="FWu-V6-mLT" firstAttribute="centerX" secondItem="DMJ-sd-eNJ" secondAttribute="centerX" id="tho-ED-1LI"/>
@@ -2477,13 +2475,13 @@ See </string>
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="96"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Generate Security Answers" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kkl-gT-YAO">
-                                                    <rect key="frame" x="20" y="226" width="283.5" height="20.5"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Generate Security Answers" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="292" translatesAutoresizingMaskIntoConstraints="NO" id="Kkl-gT-YAO">
+                                                    <rect key="frame" x="20" y="226" width="292" height="20.5"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yRH-27-edZ">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="335" translatesAutoresizingMaskIntoConstraints="NO" id="yRH-27-edZ">
                                                     <rect key="frame" x="20" y="254" width="335" height="132"/>
                                                     <string key="text">The infamous security questions are in fact a veritable assault on your security.  For starters, they weaken the protection of your account by allowing an attacker in by simply knowing enough about you, allowing him to bypass guessing your strong password.  Arguably worse is the amount of highly personal and private information you're "willingly" divulging to these websites, under the assumption that only you know the answers.  Generating security answers allows you to stop sharing your highly personal details and weakening your acccounts by generating unguessable answers to these questions.</string>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
@@ -2502,8 +2500,8 @@ See </string>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$0.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9ct-IM-QKR">
-                                                    <rect key="frame" x="311" y="226" width="35.5" height="20.5"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$0.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="35.5" translatesAutoresizingMaskIntoConstraints="NO" id="9ct-IM-QKR">
+                                                    <rect key="frame" x="319.5" y="226" width="35.5" height="20.5"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -2522,7 +2520,7 @@ See </string>
                                                 <constraint firstItem="yRH-27-edZ" firstAttribute="top" secondItem="Kkl-gT-YAO" secondAttribute="bottom" constant="8" symbolic="YES" id="eHf-L3-Ong"/>
                                                 <constraint firstAttribute="trailing" secondItem="yRH-27-edZ" secondAttribute="trailing" constant="20" id="eUN-6Y-FEC"/>
                                                 <constraint firstAttribute="centerX" secondItem="6km-y3-4gu" secondAttribute="centerX" id="gv6-jC-Gaa"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="9ct-IM-QKR" secondAttribute="trailing" constant="20" id="iAM-za-9Ev"/>
+                                                <constraint firstAttribute="trailing" secondItem="9ct-IM-QKR" secondAttribute="trailing" constant="20" id="iAM-za-9Ev"/>
                                                 <constraint firstAttribute="bottom" secondItem="yRH-27-edZ" secondAttribute="bottom" constant="20" symbolic="YES" id="krK-MM-VKm"/>
                                                 <constraint firstItem="Kkl-gT-YAO" firstAttribute="top" secondItem="9ct-IM-QKR" secondAttribute="top" id="lie-rM-flE"/>
                                                 <constraint firstItem="N9y-ue-L8d" firstAttribute="centerY" secondItem="6km-y3-4gu" secondAttribute="centerY" id="z16-aI-lwY"/>
@@ -2542,13 +2540,13 @@ See </string>
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="96"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="iOS Integration" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zch-DS-J3I">
-                                                    <rect key="frame" x="20" y="226" width="283.5" height="20.5"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="iOS Integration" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="292" translatesAutoresizingMaskIntoConstraints="NO" id="Zch-DS-J3I">
+                                                    <rect key="frame" x="20" y="226" width="292" height="20.5"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="riF-bB-x5g">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="335" translatesAutoresizingMaskIntoConstraints="NO" id="riF-bB-x5g">
                                                     <rect key="frame" x="20" y="254" width="335" height="66.5"/>
                                                     <string key="text">Up to now, the best way to use your passwords in other iOS apps was by copy/pasting them from Master Password.  With iOS integration, you can access your Master Password passwords directly from other applications, without having to switch back and forth between it and Master Password.</string>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
@@ -2567,8 +2565,8 @@ See </string>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$0.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3jH-eX-9N2">
-                                                    <rect key="frame" x="311" y="226" width="35.5" height="20.5"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$0.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="35.5" translatesAutoresizingMaskIntoConstraints="NO" id="3jH-eX-9N2">
+                                                    <rect key="frame" x="319.5" y="226" width="35.5" height="20.5"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -2580,7 +2578,7 @@ See </string>
                                                 <constraint firstItem="yAc-Sm-IVo" firstAttribute="top" secondItem="ETY-Ou-DW7" secondAttribute="top" constant="20" symbolic="YES" id="PnQ-1d-y9S"/>
                                                 <constraint firstItem="Zch-DS-J3I" firstAttribute="bottom" secondItem="3jH-eX-9N2" secondAttribute="bottom" id="XMk-An-t5v"/>
                                                 <constraint firstItem="riF-bB-x5g" firstAttribute="top" secondItem="Zch-DS-J3I" secondAttribute="bottom" constant="8" symbolic="YES" id="ZMH-Sv-ttk"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="3jH-eX-9N2" secondAttribute="trailing" constant="20" id="diQ-Rs-Vrj"/>
+                                                <constraint firstAttribute="trailing" secondItem="3jH-eX-9N2" secondAttribute="trailing" constant="20" id="diQ-Rs-Vrj"/>
                                                 <constraint firstAttribute="centerX" secondItem="yAc-Sm-IVo" secondAttribute="centerX" id="fsX-dO-EGx"/>
                                                 <constraint firstItem="Zch-DS-J3I" firstAttribute="top" secondItem="3jH-eX-9N2" secondAttribute="top" id="gZU-lV-XZJ"/>
                                                 <constraint firstAttribute="bottom" secondItem="riF-bB-x5g" secondAttribute="bottom" constant="20" symbolic="YES" id="hQZ-Qb-A7u"/>
@@ -2607,13 +2605,13 @@ See </string>
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="96"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="TouchID Login" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e1D-jp-GBs">
-                                                    <rect key="frame" x="20" y="226" width="283.5" height="20.5"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="TouchID Login" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="292" translatesAutoresizingMaskIntoConstraints="NO" id="e1D-jp-GBs">
+                                                    <rect key="frame" x="20" y="226" width="292" height="20.5"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yxc-Lr-382">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="335" translatesAutoresizingMaskIntoConstraints="NO" id="Yxc-Lr-382">
                                                     <rect key="frame" x="20" y="254" width="335" height="79.5"/>
                                                     <string key="text">Since the iPhone 5s, all iPhones are now equipped with an advanced Touch ID fingerprint sensor in the home button.  This sensor allows you to quickly and easily identify yourself to the system.  With Touch ID support, you will be able to skip the step of entering your Master Password manually and gain the ability to unlock your user using Touch ID instead.</string>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
@@ -2632,8 +2630,8 @@ See </string>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$0.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZGg-O6-rsg">
-                                                    <rect key="frame" x="311" y="226" width="35.5" height="20.5"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$0.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="35.5" translatesAutoresizingMaskIntoConstraints="NO" id="ZGg-O6-rsg">
+                                                    <rect key="frame" x="319.5" y="226" width="35.5" height="20.5"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -2646,7 +2644,7 @@ See </string>
                                                 <constraint firstItem="e1D-jp-GBs" firstAttribute="bottom" secondItem="ZGg-O6-rsg" secondAttribute="bottom" id="MPG-Zj-vDr"/>
                                                 <constraint firstItem="e1D-jp-GBs" firstAttribute="leading" secondItem="NKB-rd-1Vy" secondAttribute="leading" constant="20" symbolic="YES" id="N8Z-X2-ir7"/>
                                                 <constraint firstItem="8v7-JH-mzu" firstAttribute="top" secondItem="NKB-rd-1Vy" secondAttribute="top" constant="20" symbolic="YES" id="PEc-aa-i3N"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="ZGg-O6-rsg" secondAttribute="trailing" constant="20" id="QAy-Rp-XJc"/>
+                                                <constraint firstAttribute="trailing" secondItem="ZGg-O6-rsg" secondAttribute="trailing" constant="20" id="QAy-Rp-XJc"/>
                                                 <constraint firstItem="Yxc-Lr-382" firstAttribute="leading" secondItem="NKB-rd-1Vy" secondAttribute="leading" constant="20" symbolic="YES" id="UvU-wL-3WN"/>
                                                 <constraint firstAttribute="centerX" secondItem="8v7-JH-mzu" secondAttribute="centerX" id="XVh-6p-4qT"/>
                                                 <constraint firstAttribute="trailing" secondItem="Yxc-Lr-382" secondAttribute="trailing" constant="20" id="YMA-ID-9KD"/>
@@ -2669,19 +2667,13 @@ See </string>
                             </tableViewSection>
                             <tableViewSection id="hN1-J4-w3w">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="59" id="UUA-xl-CAh" userLabel="Footer">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" rowHeight="50" id="UUA-xl-CAh" userLabel="Footer">
                                         <rect key="frame" x="0.0" y="1192" width="320" height="153"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UUA-xl-CAh" id="4Zu-Ig-Ws4">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="152"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" text="© 2012-2014, Maarten Billemont (lhunath)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DxV-2L-bxL">
-                                                    <rect key="frame" x="20" y="4" width="335" height="12"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="10"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IOk-WZ-HJ8">
                                                     <rect key="frame" x="20" y="24" width="335" height="26"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="11"/>
@@ -2693,6 +2685,12 @@ See </string>
                                                         <action selector="restorePurchases:" destination="pdl-xv-zjX" eventType="touchUpInside" id="lKu-PL-PfX"/>
                                                     </connections>
                                                 </button>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" text="© 2012-2014, Maarten Billemont (lhunath)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DxV-2L-bxL">
+                                                    <rect key="frame" x="20" y="4" width="335" height="12"/>
+                                                    <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="10"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="IOk-WZ-HJ8" secondAttribute="trailing" constant="20" symbolic="YES" id="CuJ-h7-aGJ"/>
@@ -2701,7 +2699,7 @@ See </string>
                                                 <constraint firstItem="DxV-2L-bxL" firstAttribute="top" secondItem="4Zu-Ig-Ws4" secondAttribute="top" constant="4" id="hTN-Cx-hOS"/>
                                                 <constraint firstItem="IOk-WZ-HJ8" firstAttribute="leading" secondItem="4Zu-Ig-Ws4" secondAttribute="leading" constant="20" symbolic="YES" id="mx2-Jk-5jo"/>
                                                 <constraint firstItem="IOk-WZ-HJ8" firstAttribute="top" secondItem="DxV-2L-bxL" secondAttribute="bottom" constant="8" symbolic="YES" id="r7u-I6-33F"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="IOk-WZ-HJ8" secondAttribute="bottom" id="xeG-0w-yL5"/>
+                                                <constraint firstAttribute="bottom" secondItem="IOk-WZ-HJ8" secondAttribute="bottom" id="xEZ-X4-5oi"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -2757,10 +2755,6 @@ See </string>
                                             <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" name="SourceCodePro-Black" family="Source Code Pro" pointSize="24"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="alphabet" keyboardAppearance="alert" returnKeyType="next"/>
-                                            <connections>
-                                                <action selector="textFieldDidChange:" destination="W2g-yv-V3V" eventType="editingChanged" id="fY9-xg-DPG"/>
-                                                <outlet property="delegate" destination="W2g-yv-V3V" id="TeI-f1-KlA"/>
-                                            </connections>
                                         </textField>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use this as the answer for each of the security questions on this site." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="359" translatesAutoresizingMaskIntoConstraints="NO" id="EUe-A5-H8h">
                                             <rect key="frame" x="8" y="99" width="359" height="13.5"/>
@@ -2855,12 +2849,8 @@ See </string>
                                             <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" name="SourceCodePro-Black" family="Source Code Pro" pointSize="24"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="alphabet" keyboardAppearance="alert" returnKeyType="next"/>
-                                            <connections>
-                                                <action selector="textFieldDidChange:" destination="W2g-yv-V3V" eventType="editingChanged" id="nFl-TF-gF7"/>
-                                                <outlet property="delegate" destination="W2g-yv-V3V" id="U4z-82-k15"/>
-                                            </connections>
                                         </textField>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Enter the single most significant word in the question above." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qqg-Ny-7Po">
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Enter the single most significant word in the question above." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="359" translatesAutoresizingMaskIntoConstraints="NO" id="Qqg-Ny-7Po">
                                             <rect key="frame" x="8" y="57" width="359" height="13.5"/>
                                             <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
