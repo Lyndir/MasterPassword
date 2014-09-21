@@ -14,6 +14,7 @@
 #import "UIColor+Expanded.h"
 #import "MPPasswordsViewController.h"
 #import "MPCoachmarkViewController.h"
+#import "MPAppDelegate_InApp.h"
 
 @interface MPStoreViewController()
 
@@ -53,7 +54,7 @@
                 [self updateWithProducts:to];
             } );
     }];
-    [[MPiOSAppDelegate get] observeKeyPath:@"productTransactions" withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
+    [[MPiOSAppDelegate get] observeKeyPath:@"paymentTransactions" withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
         if (NSNullToNil( to ))
             PearlMainQueue( ^{
                 [self updateWithTransactions:to];
@@ -63,6 +64,8 @@
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
                 [self updateWithProducts:[MPiOSAppDelegate get].products];
             }];
+
+    [[MPiOSAppDelegate get] updateProducts];
 }
 
 #pragma mark - UITableViewDelegate
@@ -70,6 +73,10 @@
 - (MPStoreProductCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     MPStoreProductCell *cell = (MPStoreProductCell *)[super tableView:tableView cellForRowAtIndexPath:indexPath];
+    if (indexPath.section == 0)
+        cell.selectionStyle = [[MPiOSAppDelegate get] isPurchased:[self productForCell:cell].productIdentifier]?
+                              UITableViewCellSelectionStyleDefault: UITableViewCellSelectionStyleNone;
+
     if (cell.selectionStyle != UITableViewCellSelectionStyleNone) {
         cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.bounds];
         cell.selectedBackgroundView.backgroundColor = [UIColor colorWithRGBAHex:0x78DDFB33];
@@ -80,24 +87,19 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
+    if (![SKPaymentQueue canMakePayments]) {
+        [PearlAlert showAlertWithTitle:@"Store Not Set Up" message:
+                             @"Try logging using the App Store or from Settings."
+                             viewStyle:UIAlertViewStyleDefault initAlert:nil
+                     tappedButtonBlock:nil cancelTitle:@"Thanks" otherTitles:nil];
+        return;
+    }
+
     MPStoreProductCell *cell = (MPStoreProductCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
     SKProduct *product = [self productForCell:cell];
 
-    if (product && [SKPaymentQueue canMakePayments]) {
-        SKPayment *payment = nil;
-        if (cell == self.generateLoginCell)
-            payment = [SKPayment paymentWithProduct:product];
-        if (cell == self.generateAnswersCell) {
-        }
-        if (cell == self.advancedExportCell) {
-        }
-        if (cell == self.iOSIntegrationCell) {
-        }
-        if (cell == self.touchIDCell) {
-        }
-
-        [[SKPaymentQueue defaultQueue] addPayment:payment];
-    }
+    if (product)
+        [[SKPaymentQueue defaultQueue] addPayment:[SKPayment paymentWithProduct:product]];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

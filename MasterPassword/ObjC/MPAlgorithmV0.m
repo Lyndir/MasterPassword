@@ -18,6 +18,7 @@
 #import "MPAlgorithmV0.h"
 #import "MPEntities.h"
 #import "MPAppDelegate_Shared.h"
+#import "MPAppDelegate_InApp.h"
 #include <openssl/bn.h>
 #include <openssl/err.h>
 

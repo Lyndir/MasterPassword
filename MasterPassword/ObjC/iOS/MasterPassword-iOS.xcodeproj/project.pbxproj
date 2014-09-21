@@ -42,6 +42,7 @@
 		93D39B8F90F58A5D158DDBA3 /* MPPasswordsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3924EE15017F8A12CB436 /* MPPasswordsViewController.m */; };
 		93D39BA1EA3CAAC8A220B4A6 /* MPAppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3916C1D8F1427DFBDEBCA /* MPAppSettingsViewController.m */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
+		93D39D38356F59DBEF934D70 /* MPAppDelegate_InApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D394C78C7B879C9AD9152C /* MPAppDelegate_InApp.m */; };
 		93D39D47FC623E91FC39D20C /* UICollectionView+PearlReloadFromArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3908DF8EABBD952065DC0 /* UICollectionView+PearlReloadFromArray.m */; };
 		93D39D596A2E376D6F6F5DA1 /* MPCombinedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D393310223DDB35218467A /* MPCombinedViewController.m */; };
 		93D39D8F78978196D6ABDEDE /* MPNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39CC01630D0421205C4C4 /* MPNavigationController.m */; };
@@ -408,6 +409,7 @@
 		93D394077F8FAB8167647187 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		93D3942A356B639724157982 /* PearlOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlOverlay.h; sourceTree = "<group>"; };
 		93D394482BB07F90E8FD1314 /* UIResponder+PearlFirstResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+PearlFirstResponder.h"; sourceTree = "<group>"; };
+		93D394C78C7B879C9AD9152C /* MPAppDelegate_InApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_InApp.m; sourceTree = "<group>"; };
 		93D3956915634581E737B38C /* PearlNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlNavigationController.m; sourceTree = "<group>"; };
 		93D3957D76F71A652716EECC /* MPStoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPStoreViewController.m; sourceTree = "<group>"; };
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
@@ -440,6 +442,7 @@
 		93D39C86E984EC65DA5ACB1D /* MPAppSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppSettingsViewController.h; sourceTree = "<group>"; };
 		93D39CC01630D0421205C4C4 /* MPNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNavigationController.m; sourceTree = "<group>"; };
 		93D39CDD434AFD6E1B0DA359 /* MPEmergencyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEmergencyViewController.h; sourceTree = "<group>"; };
+		93D39CECA10BCCB0BA581BF1 /* MPAppDelegate_InApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_InApp.h; sourceTree = "<group>"; };
 		93D39CF8ADF4542CDC4CD385 /* MPCombinedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCombinedViewController.h; sourceTree = "<group>"; };
 		93D39D8A953779B35403AF6E /* PearlUICollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlUICollectionView.m; sourceTree = "<group>"; };
 		93D39DA27D768B53C8B1330C /* MPAvatarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAvatarCell.h; sourceTree = "<group>"; };
@@ -1370,6 +1373,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */,
 				DAE2725A19C93B8E007C5262 /* StoreKit.framework in Frameworks */,
 				DAE2725919C93B80007C5262 /* libInAppSettingsKit.a in Frameworks */,
 				DA6701E016406BB400B61001 /* AdSupport.framework in Frameworks */,
@@ -1381,7 +1385,6 @@
 				DA672D2F14F92C6B004A189C /* libz.dylib in Frameworks */,
 				DAEBC45314F6364500987BF6 /* QuartzCore.framework in Frameworks */,
 				DA95D5F214DF0B2C008D1B94 /* MessageUI.framework in Frameworks */,
-				DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */,
 				DA48856019A5A82E000C2D79 /* Crashlytics.framework in Frameworks */,
 				DAC632891486D9690075AEA5 /* Security.framework in Frameworks */,
 				DA72BD7919C137DE00E6ACFE /* libopensslcrypto-ios-dev.a in Frameworks */,
@@ -2292,6 +2295,8 @@
 				DABD3BD01711E2DC00CF925C /* MasterPassword.xcdatamodeld */,
 				93D399F244BB522A317811BB /* MPFixable.h */,
 				93D39A813CA9D7E192261ED2 /* MPFixable.m */,
+				93D394C78C7B879C9AD9152C /* MPAppDelegate_InApp.m */,
+				93D39CECA10BCCB0BA581BF1 /* MPAppDelegate_InApp.h */,
 			);
 			name = ObjC;
 			path = ..;
@@ -3231,6 +3236,9 @@
 				93D394982CBD25D46692DD7C /* MPWebViewController.m in Sources */,
 				93D39D8F78978196D6ABDEDE /* MPNavigationController.m in Sources */,
 				93D3939661CE37180AF7CD6A /* MPStoreViewController.m in Sources */,
+				DA9521AB19CEA3DE002E3AD5 /* MPSiteQuestion.m in Sources */,
+				93D39D38356F59DBEF934D70 /* MPAppDelegate_InApp.m in Sources */,
+				93D390C1B93F9D3AE37DD0A5 /* MPAnswersViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

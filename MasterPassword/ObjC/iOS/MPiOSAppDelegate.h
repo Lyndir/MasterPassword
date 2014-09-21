@@ -14,10 +14,6 @@
 
 @interface MPiOSAppDelegate : MPAppDelegate_Shared
 
-@property(nonatomic, strong) NSArray /* SKProduct */ *products;
-
-@property(nonatomic, strong) NSArray *productTransactions;
-
 - (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController;
 - (void)openFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController;
 

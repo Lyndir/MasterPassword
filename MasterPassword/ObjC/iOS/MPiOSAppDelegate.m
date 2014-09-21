@@ -7,17 +7,20 @@
 //
 
 #import <Crashlytics/Crashlytics.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "IASKSettingsReader.h"
+#import "MPAppDelegate_InApp.h"
 
-@interface MPiOSAppDelegate()<SKProductsRequestDelegate, SKPaymentTransactionObserver>
+@interface MPiOSAppDelegate()<UIDocumentInteractionControllerDelegate>
 
 @property(nonatomic, weak) PearlAlert *handleCloudDisabledAlert;
 @property(nonatomic, weak) PearlAlert *handleCloudContentAlert;
 @property(nonatomic, weak) PearlAlert *fixCloudContentAlert;
 @property(nonatomic, weak) PearlOverlay *storeLoadingOverlay;
+@property(nonatomic, strong) UIDocumentInteractionController *interactionController;
 @end
 
 @implementation MPiOSAppDelegate
@@ -148,12 +151,6 @@
                 @"legal"      : @"YES",
 #endif
         } );
-
-        [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
-        SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[[NSSet alloc] initWithObjects:
-                MPProductGenerateLogins, nil]];
-        productsRequest.delegate = self;
-        [productsRequest start];
     }
     @catch (id exception) {
         err( @"During Post-Startup: %@", exception );
@@ -280,53 +277,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:nil];
 
     [super applicationDidBecomeActive:application];
-}
-
-#pragma mark - SKProductsRequestDelegate
-
-- (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
-
-    inf( @"products: %@, invalid: %@", response.products, response.invalidProductIdentifiers );
-    self.products = response.products;
-}
-
-- (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
-
-    err( @"StoreKit request (%@) failed: %@", request, error );
-}
-
-- (void)requestDidFinish:(SKRequest *)request {
-
-    dbg( @"StoreKit request (%@) finished.", request );
-}
-
-#pragma mark - SKPaymentTransactionObserver
-
-- (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions {
-
-    for (SKPaymentTransaction *transaction in transactions) {
-        dbg( @"transaction updated: %@", transaction );
-        switch (transaction.transactionState) {
-            case SKPaymentTransactionStatePurchased:
-            case SKPaymentTransactionStateRestored: {
-                inf( @"purchased: %@", transaction.payment.productIdentifier );
-                [[NSUserDefaults standardUserDefaults] setObject:transaction.transactionIdentifier
-                                                          forKey:transaction.payment.productIdentifier];
-                break;
-            }
-            case SKPaymentTransactionStatePurchasing:
-            case SKPaymentTransactionStateFailed:
-            case SKPaymentTransactionStateDeferred:
-                break;
-        }
-    }
-
-    self.productTransactions = transactions;
-}
-
-- (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {
-
-    err( @"StoreKit restore failed: %@", error );
 }
 
 #pragma mark - Behavior
@@ -464,12 +414,30 @@
     NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
     [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
 
-    [PearlEMail sendEMailTo:nil fromVC:viewController subject:@"Master Password Export" body:message
-                attachments:[[PearlEMailAttachment alloc] initWithContent:[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
-                                                                 mimeType:@"text/plain" fileName:
-                                strf( @"%@ (%@).mpsites", [self activeUserForMainThread].name,
-                                        [exportDateFormatter stringFromDate:[NSDate date]] )],
-                            nil];
+    NSString *exportFileName = strf( @"%@ (%@).mpsites",
+            [self activeUserForMainThread].name, [exportDateFormatter stringFromDate:[NSDate date]] );
+    if (![[MPiOSAppDelegate get] isPurchased:MPProductAdvancedExport])
+        [PearlEMail sendEMailTo:nil fromVC:viewController subject:@"Master Password Export" body:message
+                    attachments:[[PearlEMailAttachment alloc] initWithContent:[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
+                                                                     mimeType:@"text/plain" fileName:exportFileName],
+                                nil];
+    else {
+        NSURL *applicationSupportURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory
+                                                                               inDomains:NSUserDomainMask] lastObject];
+        NSURL *exportURL = [[applicationSupportURL
+                URLByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier isDirectory:YES]
+                URLByAppendingPathComponent:exportFileName isDirectory:NO];
+        NSError *error = nil;
+        if (![[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
+                writeToURL:exportURL options:NSDataWritingFileProtectionComplete error:&error])
+            err( @"Failed to write export data to URL %@: %@", exportURL, error );
+        else {
+            self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:exportURL];
+            self.interactionController.UTI = @"com.lyndir.masterpassword.sites";
+            self.interactionController.delegate = self;
+            [self.interactionController presentOpenInMenuFromRect:CGRectZero inView:viewController.view animated:YES];
+        }
+    }
 }
 
 - (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void ( ^ )(void))didReset {
@@ -499,6 +467,13 @@
             }
                        cancelTitle:[PearlStrings get].commonButtonAbort
                        otherTitles:[PearlStrings get].commonButtonContinue, nil];
+}
+
+#pragma mark - UIDocumentInteractionControllerDelegate
+
+- (void)documentInteractionController:(UIDocumentInteractionController *)controller didEndSendingToApplication:(NSString *)application {
+
+//    self.interactionController = nil;
 }
 
 #pragma mark - PearlConfigDelegate

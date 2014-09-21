@@ -20,6 +20,7 @@
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
 #import "UIColor+Expanded.h"
+#import "MPAppDelegate_InApp.h"
 
 @interface MPPasswordCell()
 

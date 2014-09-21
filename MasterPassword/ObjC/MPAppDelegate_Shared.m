@@ -10,6 +10,13 @@
 #import "MPAppDelegate_Store.h"
 #import "MPAppDelegate_Key.h"
 
+@interface MPAppDelegate_Shared ()
+
+@property(strong, nonatomic) MPKey *key;
+@property(strong, nonatomic) NSManagedObjectID *activeUserOID;
+
+@end
+
 @implementation MPAppDelegate_Shared
 
 + (MPAppDelegate_Shared *)get {
@@ -48,11 +55,6 @@
     err(@"Failed to obtain a permanent object ID after setting active user: %@", error);
 
     self.activeUserOID = activeUser.objectID;
-}
-
-- (BOOL)isPurchased:(NSString *)productIdentifier {
-
-    return [[NSUserDefaults standardUserDefaults] objectForKey:productIdentifier] != nil;
 }
 
 @end

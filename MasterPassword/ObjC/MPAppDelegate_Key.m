@@ -9,6 +9,12 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 
+@interface MPAppDelegate_Shared()
+
+@property(strong, nonatomic) MPKey *key;
+
+@end
+
 @implementation MPAppDelegate_Shared(Key)
 
 static NSDictionary *keyQuery(MPUserEntity *user) {
