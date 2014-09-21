@@ -44,8 +44,9 @@ void usage() {
                       "                     m, med, medium  | Copy-friendly, 8 characters, contains symbols.\n"
                       "                     b, basic        | 8 characters, no symbols.\n"
                       "                     s, short        | Copy-friendly, 4 characters, no symbols.\n"
-                      "                     p, pin          | 4 numbers.\n"
-                      "                     n, name         | 9 letter name.\n\n", MP_env_sitetype);
+                      "                     i, pin          | 4 numbers.\n"
+                      "                     n, name         | 9 letter name.\n"
+                      "                     p, phrase       | 20 character sentence.\n\n", MP_env_sitetype);
       fprintf(stderr, "    -c counter   The value of the counter.\n"
                       "                 Defaults to %s in env or '1'.\n\n", MP_env_sitecounter);
       fprintf(stderr, "    -v variant   The kind of content to generate.\n"

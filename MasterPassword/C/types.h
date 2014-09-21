@@ -34,7 +34,8 @@ typedef enum {
     MPElementTypeGeneratedBasic = 0x4 | MPElementTypeClassGenerated | 0x0,
     MPElementTypeGeneratedShort = 0x3 | MPElementTypeClassGenerated | 0x0,
     MPElementTypeGeneratedPIN = 0x5 | MPElementTypeClassGenerated | 0x0,
-    MPElementTypeGeneratedName = 0xF | MPElementTypeClassGenerated | 0x0,
+    MPElementTypeGeneratedName = 0xE | MPElementTypeClassGenerated | 0x0,
+    MPElementTypeGeneratedPhrase = 0xF | MPElementTypeClassGenerated | 0x0,
 
     MPElementTypeStoredPersonal = 0x0 | MPElementTypeClassStored | MPElementFeatureExportContent,
     MPElementTypeStoredDevicePrivate = 0x1 | MPElementTypeClassStored | MPElementFeatureDevicePrivate,

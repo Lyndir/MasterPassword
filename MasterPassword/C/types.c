@@ -31,10 +31,12 @@ const MPElementType TypeWithName(const char *typeName) {
         return MPElementTypeGeneratedBasic;
     if (0 == strcmp(lowerTypeName, "s") || 0 == strcmp(lowerTypeName, "short"))
         return MPElementTypeGeneratedShort;
-    if (0 == strcmp(lowerTypeName, "p") || 0 == strcmp(lowerTypeName, "pin"))
+    if (0 == strcmp(lowerTypeName, "i") || 0 == strcmp(lowerTypeName, "pin"))
         return MPElementTypeGeneratedPIN;
     if (0 == strcmp(lowerTypeName, "n") || 0 == strcmp(lowerTypeName, "name"))
         return MPElementTypeGeneratedName;
+    if (0 == strcmp(lowerTypeName, "p") || 0 == strcmp(lowerTypeName, "phrase"))
+        return MPElementTypeGeneratedPhrase;
 
     fprintf(stderr, "Not a generated type name: %s", lowerTypeName);
     abort();
@@ -71,6 +73,10 @@ const char *CipherForType(MPElementType type, uint8_t seedByte) {
         }
         case MPElementTypeGeneratedName: {
             return "cvccvcvcv";
+        }
+        case MPElementTypeGeneratedPhrase: {
+            char *ciphers[] = { "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" };
+            return ciphers[seedByte % 3];
         }
         default: {
             fprintf(stderr, "Unknown generated type: %d", type);
@@ -146,6 +152,10 @@ const char CharacterFromClass(char characterClass, uint8_t seedByte) {
         }
         case 'x': {
             classCharacters = "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789!@#$%^&*()";
+            break;
+        }
+        case ' ': {
+            classCharacters = " ";
             break;
         }
         default: {
