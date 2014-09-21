@@ -285,6 +285,7 @@
 		DA32CFE119CF1C71004F3F0E /* MPSiteQuestionEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteQuestionEntity.m; sourceTree = "<group>"; };
 		DA32CFE319CF1C71004F3F0E /* MPUserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUserEntity.h; sourceTree = "<group>"; };
 		DA32CFE419CF1C71004F3F0E /* MPUserEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUserEntity.m; sourceTree = "<group>"; };
+		DA32D00019CF470E004F3F0E /* MasterPassword 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 6.xcdatamodel"; sourceTree = "<group>"; };
 		DA3509FC15F101A500C14A8E /* PearlQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlQueue.h; sourceTree = "<group>"; };
 		DA3509FD15F101A500C14A8E /* PearlQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlQueue.m; sourceTree = "<group>"; };
 		DA3B844A190FC5A900246EEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
@@ -2816,8 +2817,9 @@
 				DA29992919C6A89900AF7DF1 /* MasterPassword 3.xcdatamodel */,
 				DA29992A19C6A89900AF7DF1 /* MasterPassword 4.xcdatamodel */,
 				DA29992B19C6A89900AF7DF1 /* MasterPassword 5.xcdatamodel */,
+				DA32D00019CF470E004F3F0E /* MasterPassword 6.xcdatamodel */,
 			);
-			currentVersion = DA29992B19C6A89900AF7DF1 /* MasterPassword 5.xcdatamodel */;
+			currentVersion = DA32D00019CF470E004F3F0E /* MasterPassword 6.xcdatamodel */;
 			path = MasterPassword.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
