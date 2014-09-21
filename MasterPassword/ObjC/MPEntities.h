@@ -1,5 +1,5 @@
 //
-//  MPElementEntities.h
+//  MPEntities.h
 //  MasterPassword-iOS
 //
 //  Created by Maarten Billemont on 31/05/12.
@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MPElementEntity.h"
-#import "MPElementStoredEntity.h"
-#import "MPElementGeneratedEntity.h"
+#import "MPSiteEntity.h"
+#import "MPSiteStoredEntity.h"
+#import "MPSiteGeneratedEntity.h"
 #import "MPUserEntity.h"
 #import "MPAlgorithm.h"
 #import "MPFixable.h"
@@ -22,10 +22,10 @@
 
 @end
 
-@interface MPElementEntity(MP)<MPFixable>
+@interface MPSiteEntity(MP)<MPFixable>
 
 @property(assign) BOOL loginGenerated;
-@property(assign) MPElementType type;
+@property(assign) MPSiteType type;
 @property(readonly) NSString *typeName;
 @property(readonly) NSString *typeShortName;
 @property(readonly) NSString *typeClassName;
@@ -44,7 +44,7 @@
 
 @end
 
-@interface MPElementGeneratedEntity(MP)
+@interface MPSiteGeneratedEntity(MP)
 
 @property(assign) NSUInteger counter;
 
@@ -54,7 +54,7 @@
 
 @property(assign) NSUInteger avatar;
 @property(assign) BOOL saveKey;
-@property(assign) MPElementType defaultType;
+@property(assign) MPSiteType defaultType;
 @property(readonly) NSString *userID;
 
 + (NSString *)idFor:(NSString *)userName;

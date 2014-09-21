@@ -134,6 +134,8 @@
 
     if ([productIdentifier isEqualToString:MPProductGenerateLogins])
         return self.generateLoginCell;
+    if ([productIdentifier isEqualToString:MPProductAdvancedExport])
+        return self.advancedExportCell;
 
     return nil;
 }
@@ -145,19 +147,24 @@
     [hideCells addObjectsFromArray:self.allCellsBySection[0]];
 
     for (SKProduct *product in products) {
-        [self showCell:self.generateLoginCell ifProduct:product hasProductIdentifier:MPProductGenerateLogins showingCells:showCells];
+        [self showCellForProductWithIdentifier:MPProductGenerateLogins ifProduct:product showingCells:showCells];
+        [self showCellForProductWithIdentifier:MPProductAdvancedExport ifProduct:product showingCells:showCells];
     }
 
     [hideCells removeObjectsInArray:showCells];
-    [self updateCellsHiding:hideCells showing:showCells animation:UITableViewRowAnimationAutomatic];
+    if ([self.tableView numberOfRowsInSection:0])
+        [self updateCellsHiding:hideCells showing:showCells animation:UITableViewRowAnimationAutomatic];
+    else
+        [self updateCellsHiding:hideCells showing:showCells animation:UITableViewRowAnimationNone];
 }
 
-- (void)showCell:(MPStoreProductCell *)cell ifProduct:(SKProduct *)product hasProductIdentifier:(NSString *)productIdentifier
-    showingCells:(NSMutableArray *)showCells {
+- (void)showCellForProductWithIdentifier:(NSString *)productIdentifier ifProduct:(SKProduct *)product
+                            showingCells:(NSMutableArray *)showCells {
 
     if (![product.productIdentifier isEqualToString:productIdentifier])
         return;
 
+    MPStoreProductCell *cell = [self cellForProductIdentifier:productIdentifier];
     [showCells addObject:cell];
 
     self.currencyFormatter.locale = product.priceLocale;

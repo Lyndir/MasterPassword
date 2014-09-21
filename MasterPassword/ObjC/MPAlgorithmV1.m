@@ -25,14 +25,14 @@
     return 1;
 }
 
-- (BOOL)migrateElement:(MPElementEntity *)element explicit:(BOOL)explicit {
+- (BOOL)migrateSite:(MPSiteEntity *)element explicit:(BOOL)explicit {
 
     if (element.version != [self version] - 1)
         // Only migrate from previous version.
         return NO;
 
     if (!explicit) {
-        if (element.type & MPElementTypeClassGenerated) {
+        if (element.type & MPSiteTypeClassGenerated) {
             // This migration requires explicit permission for types of the generated class.
             element.requiresExplicitMigration = YES;
             return NO;
@@ -45,8 +45,8 @@
     return YES;
 }
 
-- (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter
-                                  variant:(MPElementVariant)variant usingKey:(MPKey *)key {
+- (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
+                                  variant:(MPSiteVariant)variant usingKey:(MPKey *)key {
 
     // Determine the seed whose bytes will be used for calculating a password
     uint32_t ncounter = htonl( counter ), nnameLength = htonl( name.length );

@@ -17,12 +17,12 @@
 //
 
 #import <Foundation/Foundation.h>
-@class MPElementEntity;
+@class MPSiteEntity;
 
 @interface MPElementModel : NSObject
 
 @property (nonatomic) NSString *siteName;
-@property (nonatomic) MPElementType type;
+@property (nonatomic) MPSiteType type;
 @property (nonatomic) NSString *typeName;
 @property (nonatomic) NSString *content;
 @property (nonatomic) NSString *contentDisplay;
@@ -34,8 +34,8 @@
 @property (nonatomic) BOOL generated;
 @property (nonatomic) BOOL stored;
 
-- (id)initWithEntity:(MPElementEntity *)entity;
-- (MPElementEntity *)entityInContext:(NSManagedObjectContext *)moc;
+- (id)initWithEntity:(MPSiteEntity *)entity;
+- (MPSiteEntity *)entityInContext:(NSManagedObjectContext *)moc;
 
 - (void)updateContent;
 @end

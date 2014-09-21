@@ -75,7 +75,7 @@
 - (BOOL)migrateUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc {
 
     NSError *error = nil;
-    NSFetchRequest *migrationRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
+    NSFetchRequest *migrationRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
     migrationRequest.predicate = [NSPredicate predicateWithFormat:@"version_ < %d AND user == %@", self.version, user];
     NSArray *migrationElements = [moc executeFetchRequest:migrationRequest error:&error];
     if (!migrationElements) {
@@ -84,14 +84,14 @@
     }
 
     BOOL requiresExplicitMigration = NO;
-    for (MPElementEntity *migrationElement in migrationElements)
+    for (MPSiteEntity *migrationElement in migrationElements)
         if (![migrationElement migrateExplicitly:NO])
             requiresExplicitMigration = YES;
 
     return requiresExplicitMigration;
 }
 
-- (BOOL)migrateElement:(MPElementEntity *)element explicit:(BOOL)explicit {
+- (BOOL)migrateSite:(MPSiteEntity *)element explicit:(BOOL)explicit {
 
     if (element.version != [self version] - 1)
         // Only migrate from previous version.
@@ -138,129 +138,138 @@
     return [keyData hashWith:MP_hash];
 }
 
-- (NSString *)scopeForVariant:(MPElementVariant)variant {
+- (NSString *)scopeForVariant:(MPSiteVariant)variant {
 
     switch (variant) {
-        case MPElementVariantPassword:
+        case MPSiteVariantPassword:
             return @"com.lyndir.masterpassword";
-        case MPElementVariantLogin:
+        case MPSiteVariantLogin:
             return @"com.lyndir.masterpassword.login";
     }
 
     Throw( @"Unsupported variant: %ld", (long)variant );
 }
 
-- (NSString *)nameOfType:(MPElementType)type {
+- (NSString *)nameOfType:(MPSiteType)type {
 
     if (!type)
         return nil;
 
     switch (type) {
-        case MPElementTypeGeneratedMaximum:
+        case MPSiteTypeGeneratedMaximum:
             return @"Maximum Security Password";
 
-        case MPElementTypeGeneratedLong:
+        case MPSiteTypeGeneratedLong:
             return @"Long Password";
 
-        case MPElementTypeGeneratedMedium:
+        case MPSiteTypeGeneratedMedium:
             return @"Medium Password";
 
-        case MPElementTypeGeneratedBasic:
+        case MPSiteTypeGeneratedBasic:
             return @"Basic Password";
 
-        case MPElementTypeGeneratedShort:
+        case MPSiteTypeGeneratedShort:
             return @"Short Password";
 
-        case MPElementTypeGeneratedPIN:
+        case MPSiteTypeGeneratedPIN:
             return @"PIN";
 
-        case MPElementTypeGeneratedName:
+        case MPSiteTypeGeneratedName:
             return @"Login Name";
 
-        case MPElementTypeStoredPersonal:
+        case MPSiteTypeGeneratedPhrase:
+            return @"Phrase";
+
+        case MPSiteTypeStoredPersonal:
             return @"Personal Password";
 
-        case MPElementTypeStoredDevicePrivate:
+        case MPSiteTypeStoredDevicePrivate:
             return @"Device Private Password";
     }
 
     Throw( @"Type not supported: %lu", (long)type );
 }
 
-- (NSString *)shortNameOfType:(MPElementType)type {
+- (NSString *)shortNameOfType:(MPSiteType)type {
 
     if (!type)
         return nil;
 
     switch (type) {
-        case MPElementTypeGeneratedMaximum:
+        case MPSiteTypeGeneratedMaximum:
             return @"Maximum";
 
-        case MPElementTypeGeneratedLong:
+        case MPSiteTypeGeneratedLong:
             return @"Long";
 
-        case MPElementTypeGeneratedMedium:
+        case MPSiteTypeGeneratedMedium:
             return @"Medium";
 
-        case MPElementTypeGeneratedBasic:
+        case MPSiteTypeGeneratedBasic:
             return @"Basic";
 
-        case MPElementTypeGeneratedShort:
+        case MPSiteTypeGeneratedShort:
             return @"Short";
 
-        case MPElementTypeGeneratedPIN:
+        case MPSiteTypeGeneratedPIN:
             return @"PIN";
 
-        case MPElementTypeGeneratedName:
+        case MPSiteTypeGeneratedName:
             return @"Name";
 
-        case MPElementTypeStoredPersonal:
+        case MPSiteTypeGeneratedPhrase:
+            return @"Phrase";
+
+        case MPSiteTypeStoredPersonal:
             return @"Personal";
 
-        case MPElementTypeStoredDevicePrivate:
+        case MPSiteTypeStoredDevicePrivate:
             return @"Device";
     }
 
     Throw( @"Type not supported: %lu", (long)type );
 }
 
-- (NSString *)classNameOfType:(MPElementType)type {
+- (NSString *)classNameOfType:(MPSiteType)type {
 
     return NSStringFromClass( [self classOfType:type] );
 }
 
-- (Class)classOfType:(MPElementType)type {
+- (Class)classOfType:(MPSiteType)type {
 
     if (!type)
         Throw( @"No type given." );
 
     switch (type) {
-        case MPElementTypeGeneratedMaximum:
+        case MPSiteTypeGeneratedMaximum:
             return [MPElementGeneratedEntity class];
 
-        case MPElementTypeGeneratedLong:
+        case MPSiteTypeGeneratedLong:
             return [MPElementGeneratedEntity class];
 
-        case MPElementTypeGeneratedMedium:
+        case MPSiteTypeGeneratedMedium:
             return [MPElementGeneratedEntity class];
 
-        case MPElementTypeGeneratedBasic:
+        case MPSiteTypeGeneratedBasic:
             return [MPElementGeneratedEntity class];
 
-        case MPElementTypeGeneratedShort:
+        case MPSiteTypeGeneratedShort:
             return [MPElementGeneratedEntity class];
 
-        case MPElementTypeGeneratedPIN:
+        case MPSiteTypeGeneratedPIN:
             return [MPElementGeneratedEntity class];
 
-        case MPElementTypeGeneratedName:
+        case MPSiteTypeGeneratedName:
             return [MPElementGeneratedEntity class];
 
-        case MPElementTypeStoredPersonal:
-            return [MPElementStoredEntity class];
+        case MPSiteTypeGeneratedPhrase:
+            return [MPElementGeneratedEntity class];
 
-        case MPElementTypeStoredDevicePrivate:
-            return [MPElementStoredEntity class];
+        case MPSiteTypeStoredPersonal:
+            return [MPSiteStoredEntity class];
+
+        case MPSiteTypeStoredDevicePrivate:
+            return [MPSiteStoredEntity class];
     }
 
     Throw( @"Type not supported: %lu", (long)type );
@@ -268,13 +277,13 @@
 
 - (NSArray *)allTypes {
 
-    return [self allTypesStartingWith:MPElementTypeGeneratedMaximum];
+    return [self allTypesStartingWith:MPSiteTypeGeneratedMaximum];
 }
 
-- (NSArray *)allTypesStartingWith:(MPElementType)startingType {
+- (NSArray *)allTypesStartingWith:(MPSiteType)startingType {
 
     NSMutableArray *allTypes = [[NSMutableArray alloc] initWithCapacity:8];
-    MPElementType currentType = startingType;
+    MPSiteType currentType = startingType;
     do {
         [allTypes addObject:@(currentType)];
     } while ((currentType = [self nextType:currentType]) != startingType);
@@ -282,33 +291,33 @@
     return allTypes;
 }
 
-- (MPElementType)nextType:(MPElementType)type {
+- (MPSiteType)nextType:(MPSiteType)type {
 
     switch (type) {
-        case MPElementTypeGeneratedMaximum:
-            return MPElementTypeGeneratedLong;
-        case MPElementTypeGeneratedLong:
-            return MPElementTypeGeneratedMedium;
-        case MPElementTypeGeneratedMedium:
-            return MPElementTypeGeneratedBasic;
-        case MPElementTypeGeneratedBasic:
-            return MPElementTypeGeneratedShort;
-        case MPElementTypeGeneratedShort:
-            return MPElementTypeGeneratedPIN;
-        case MPElementTypeGeneratedPIN:
-            return MPElementTypeStoredPersonal;
-        case MPElementTypeStoredPersonal:
-            return MPElementTypeStoredDevicePrivate;
-        case MPElementTypeStoredDevicePrivate:
-            return MPElementTypeGeneratedMaximum;
+        case MPSiteTypeGeneratedMaximum:
+            return MPSiteTypeGeneratedLong;
+        case MPSiteTypeGeneratedLong:
+            return MPSiteTypeGeneratedMedium;
+        case MPSiteTypeGeneratedMedium:
+            return MPSiteTypeGeneratedBasic;
+        case MPSiteTypeGeneratedBasic:
+            return MPSiteTypeGeneratedShort;
+        case MPSiteTypeGeneratedShort:
+            return MPSiteTypeGeneratedPIN;
+        case MPSiteTypeGeneratedPIN:
+            return MPSiteTypeStoredPersonal;
+        case MPSiteTypeStoredPersonal:
+            return MPSiteTypeStoredDevicePrivate;
+        case MPSiteTypeStoredDevicePrivate:
+            return MPSiteTypeGeneratedMaximum;
         default:
-            return MPElementTypeGeneratedLong;
+            return MPSiteTypeGeneratedLong;
     }
 }
 
-- (MPElementType)previousType:(MPElementType)type {
+- (MPSiteType)previousType:(MPSiteType)type {
 
-    MPElementType previousType = type, nextType = type;
+    MPSiteType previousType = type, nextType = type;
     while ((nextType = [self nextType:nextType]) != type)
         previousType = nextType;
 
@@ -327,7 +336,7 @@
     return ciphers;
 }
 
-- (NSArray *)ciphersForType:(MPElementType)type {
+- (NSArray *)ciphersForType:(MPSiteType)type {
 
     NSString *typeClass = [self classNameOfType:type];
     NSString *typeName = [self nameOfType:type];
@@ -351,19 +360,19 @@
 
 - (NSString *)generateLoginForSiteNamed:(NSString *)name usingKey:(MPKey *)key {
 
-    return [self generateContentForSiteNamed:name ofType:MPElementTypeGeneratedName withCounter:1
-                                     variant:MPElementVariantLogin usingKey:key];
+    return [self generateContentForSiteNamed:name ofType:MPSiteTypeGeneratedName withCounter:1
+                                                 variant:MPSiteVariantLogin usingKey:key];
 }
 
-- (NSString *)generatePasswordForSiteNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter
-                                  usingKey:(MPKey *)key {
+- (NSString *)generatePasswordForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
+              usingKey:(MPKey *)key {
 
     return [self generateContentForSiteNamed:name ofType:type withCounter:counter
-                                     variant:MPElementVariantPassword usingKey:key];
+                                     variant:MPSiteVariantPassword usingKey:key];
 }
 
-- (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter
-                                  variant:(MPElementVariant)variant usingKey:(MPKey *)key {
+- (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
+              variant:(MPSiteVariant)variant usingKey:(MPKey *)key {
 
     // Determine the seed whose bytes will be used for calculating a password
     uint32_t ncounter = htonl( counter ), nnameLength = htonl( name.length );
@@ -404,49 +413,50 @@
     return content;
 }
 
-- (NSString *)storedLoginForElement:(MPElementStoredEntity *)element usingKey:(MPKey *)key {
+- (NSString *)storedLoginForSite:(MPSiteStoredEntity *)element usingKey:(MPKey *)key {
 
     return nil;
 }
 
-- (NSString *)storedPasswordForElement:(MPElementStoredEntity *)element usingKey:(MPKey *)key {
+- (NSString *)storedPasswordForSite:(MPSiteStoredEntity *)element usingKey:(MPKey *)key {
 
     return [self decryptContent:element.contentObject usingKey:key];
 }
 
-- (BOOL)savePassword:(NSString *)clearContent toElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+- (BOOL)savePassword:(NSString *)clearContent toSite:(MPSiteEntity *)element usingKey:(MPKey *)elementKey {
 
     NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     switch (element.type) {
-        case MPElementTypeGeneratedMaximum:
-        case MPElementTypeGeneratedLong:
-        case MPElementTypeGeneratedMedium:
-        case MPElementTypeGeneratedBasic:
-        case MPElementTypeGeneratedShort:
-        case MPElementTypeGeneratedPIN:
-        case MPElementTypeGeneratedName: {
+        case MPSiteTypeGeneratedMaximum:
+        case MPSiteTypeGeneratedLong:
+        case MPSiteTypeGeneratedMedium:
+        case MPSiteTypeGeneratedBasic:
+        case MPSiteTypeGeneratedShort:
+        case MPSiteTypeGeneratedPIN:
+        case MPSiteTypeGeneratedName:
+        case MPSiteTypeGeneratedPhrase: {
             wrn( @"Cannot save content to element with generated type %lu.", (long)element.type );
             return NO;
         }
 
-        case MPElementTypeStoredPersonal: {
-            if (![element isKindOfClass:[MPElementStoredEntity class]]) {
-                wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
+        case MPSiteTypeStoredPersonal: {
+            if (![element isKindOfClass:[MPSiteStoredEntity class]]) {
+                wrn( @"Element with stored type %lu is not an MPSiteStoredEntity, but a %@.",
                         (long)element.type, [element class] );
                 return NO;
             }
 
             NSData *encryptedContent = [[clearContent dataUsingEncoding:NSUTF8StringEncoding]
                     encryptWithSymmetricKey:[elementKey subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
-            if ([((MPElementStoredEntity *)element).contentObject isEqualToData:encryptedContent])
+            if ([((MPSiteStoredEntity *)element).contentObject isEqualToData:encryptedContent])
                 return NO;
 
-            ((MPElementStoredEntity *)element).contentObject = encryptedContent;
+            ((MPSiteStoredEntity *)element).contentObject = encryptedContent;
             return YES;
         }
-        case MPElementTypeStoredDevicePrivate: {
-            if (![element isKindOfClass:[MPElementStoredEntity class]]) {
-                wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
+        case MPSiteTypeStoredDevicePrivate: {
+            if (![element isKindOfClass:[MPSiteStoredEntity class]]) {
+                wrn( @"Element with stored type %lu is not an MPSiteStoredEntity, but a %@.",
                         (long)element.type, [element class] );
                 return NO;
             }
@@ -463,7 +473,7 @@
                         (__bridge id)kSecAttrAccessible : (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
 #endif
                 }];
-            ((MPElementStoredEntity *)element).contentObject = nil;
+            ((MPSiteStoredEntity *)element).contentObject = nil;
             return YES;
         }
     }
@@ -471,12 +481,12 @@
     Throw( @"Unsupported type: %ld", (long)element.type );
 }
 
-- (NSString *)resolveLoginForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+- (NSString *)resolveLoginForSite:(MPSiteEntity *)element usingKey:(MPKey *)elementKey {
 
     dispatch_group_t group = dispatch_group_create();
     dispatch_group_enter( group );
     __block NSString *result = nil;
-    [self resolveLoginForElement:element usingKey:elementKey result:^(NSString *result_) {
+    [self resolveLoginForSite:element usingKey:elementKey result:^(NSString *result_) {
         result = result_;
         dispatch_group_leave( group );
     }];
@@ -485,12 +495,12 @@
     return result;
 }
 
-- (NSString *)resolvePasswordForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+- (NSString *)resolvePasswordForSite:(MPSiteEntity *)element usingKey:(MPKey *)elementKey {
 
     dispatch_group_t group = dispatch_group_create();
     dispatch_group_enter( group );
     __block NSString *result = nil;
-    [self resolvePasswordForElement:element usingKey:elementKey result:^(NSString *result_) {
+    [self resolvePasswordForSite:element usingKey:elementKey result:^(NSString *result_) {
         result = result_;
         dispatch_group_leave( group );
     }];
@@ -499,7 +509,7 @@
     return result;
 }
 
-- (void)resolveLoginForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey result:(void ( ^ )(NSString *result))resultBlock {
+- (void)resolveLoginForSite:(MPSiteEntity *)element usingKey:(MPKey *)elementKey result:(void ( ^ )(NSString *result))resultBlock {
 
     NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     NSString *name = element.name;
@@ -521,25 +531,26 @@
     } );
 }
 
-- (void)resolvePasswordForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey result:(void ( ^ )(NSString *result))resultBlock {
+- (void)resolvePasswordForSite:(MPSiteEntity *)element usingKey:(MPKey *)elementKey result:(void ( ^ )(NSString *result))resultBlock {
 
     NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     switch (element.type) {
-        case MPElementTypeGeneratedMaximum:
-        case MPElementTypeGeneratedLong:
-        case MPElementTypeGeneratedMedium:
-        case MPElementTypeGeneratedBasic:
-        case MPElementTypeGeneratedShort:
-        case MPElementTypeGeneratedPIN:
-        case MPElementTypeGeneratedName: {
+        case MPSiteTypeGeneratedMaximum:
+        case MPSiteTypeGeneratedLong:
+        case MPSiteTypeGeneratedMedium:
+        case MPSiteTypeGeneratedBasic:
+        case MPSiteTypeGeneratedShort:
+        case MPSiteTypeGeneratedPIN:
+        case MPSiteTypeGeneratedName:
+        case MPSiteTypeGeneratedPhrase: {
             if (![element isKindOfClass:[MPElementGeneratedEntity class]]) {
-                wrn( @"Element with generated type %lu is not an MPElementGeneratedEntity, but a %@.",
+                wrn( @"Element with generated type %lu is not an MPSiteGeneratedEntity, but a %@.",
                         (long)element.type, [element class] );
                 break;
             }
 
             NSString *name = element.name;
-            MPElementType type = element.type;
+            MPSiteType type = element.type;
             NSUInteger counter = ((MPElementGeneratedEntity *)element).counter;
             id<MPAlgorithm> algorithm = nil;
             if (!element.name.length)
@@ -556,14 +567,14 @@
             break;
         }
 
-        case MPElementTypeStoredPersonal: {
-            if (![element isKindOfClass:[MPElementStoredEntity class]]) {
-                wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
+        case MPSiteTypeStoredPersonal: {
+            if (![element isKindOfClass:[MPSiteStoredEntity class]]) {
+                wrn( @"Element with stored type %lu is not an MPSiteStoredEntity, but a %@.",
                         (long)element.type, [element class] );
                 break;
             }
 
-            NSData *encryptedContent = ((MPElementStoredEntity *)element).contentObject;
+            NSData *encryptedContent = ((MPSiteStoredEntity *)element).contentObject;
 
             dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
                 NSString *result = [self decryptContent:encryptedContent usingKey:elementKey];
@@ -571,9 +582,9 @@
             } );
             break;
         }
-        case MPElementTypeStoredDevicePrivate: {
-            NSAssert( [element isKindOfClass:[MPElementStoredEntity class]],
-                    @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.", (long)element.type,
+        case MPSiteTypeStoredDevicePrivate: {
+            NSAssert( [element isKindOfClass:[MPSiteStoredEntity class]],
+                    @"Element with stored type %lu is not an MPSiteStoredEntity, but a %@.", (long)element.type,
                     [element class] );
 
             NSDictionary *elementQuery = [self queryForDevicePrivateElementNamed:element.name];
@@ -589,93 +600,96 @@
 }
 
 - (void)importProtectedPassword:(NSString *)protectedContent protectedByKey:(MPKey *)importKey
-                    intoElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+                                                                   intoSite:(MPSiteEntity *)element usingKey:(MPKey *)elementKey {
 
     NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     switch (element.type) {
-        case MPElementTypeGeneratedMaximum:
-        case MPElementTypeGeneratedLong:
-        case MPElementTypeGeneratedMedium:
-        case MPElementTypeGeneratedBasic:
-        case MPElementTypeGeneratedShort:
-        case MPElementTypeGeneratedPIN:
-        case MPElementTypeGeneratedName:
+        case MPSiteTypeGeneratedMaximum:
+        case MPSiteTypeGeneratedLong:
+        case MPSiteTypeGeneratedMedium:
+        case MPSiteTypeGeneratedBasic:
+        case MPSiteTypeGeneratedShort:
+        case MPSiteTypeGeneratedPIN:
+        case MPSiteTypeGeneratedName:
+        case MPSiteTypeGeneratedPhrase:
             break;
 
-        case MPElementTypeStoredPersonal: {
-            if (![element isKindOfClass:[MPElementStoredEntity class]]) {
-                wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
+        case MPSiteTypeStoredPersonal: {
+            if (![element isKindOfClass:[MPSiteStoredEntity class]]) {
+                wrn( @"Element with stored type %lu is not an MPSiteStoredEntity, but a %@.",
                         (long)element.type, [element class] );
                 break;
             }
             if ([importKey.keyID isEqualToData:elementKey.keyID])
-                ((MPElementStoredEntity *)element).contentObject = [protectedContent decodeBase64];
+                ((MPSiteStoredEntity *)element).contentObject = [protectedContent decodeBase64];
 
             else {
                 NSString *clearContent = [self decryptContent:[protectedContent decodeBase64] usingKey:importKey];
-                [self importClearTextPassword:clearContent intoElement:element usingKey:elementKey];
+                [self importClearTextPassword:clearContent intoSite:element usingKey:elementKey];
             }
             break;
         }
 
-        case MPElementTypeStoredDevicePrivate:
+        case MPSiteTypeStoredDevicePrivate:
             break;
     }
 }
 
-- (void)importClearTextPassword:(NSString *)clearContent intoElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+- (void)importClearTextPassword:(NSString *)clearContent intoSite:(MPSiteEntity *)element usingKey:(MPKey *)elementKey {
 
     NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
     switch (element.type) {
-        case MPElementTypeGeneratedMaximum:
-        case MPElementTypeGeneratedLong:
-        case MPElementTypeGeneratedMedium:
-        case MPElementTypeGeneratedBasic:
-        case MPElementTypeGeneratedShort:
-        case MPElementTypeGeneratedPIN:
-        case MPElementTypeGeneratedName:
+        case MPSiteTypeGeneratedMaximum:
+        case MPSiteTypeGeneratedLong:
+        case MPSiteTypeGeneratedMedium:
+        case MPSiteTypeGeneratedBasic:
+        case MPSiteTypeGeneratedShort:
+        case MPSiteTypeGeneratedPIN:
+        case MPSiteTypeGeneratedName:
+        case MPSiteTypeGeneratedPhrase:
             break;
 
-        case MPElementTypeStoredPersonal: {
-            [self savePassword:clearContent toElement:element usingKey:elementKey];
+        case MPSiteTypeStoredPersonal: {
+            [self savePassword:clearContent toSite:element usingKey:elementKey];
             break;
         }
 
-        case MPElementTypeStoredDevicePrivate:
+        case MPSiteTypeStoredDevicePrivate:
             break;
     }
 }
 
-- (NSString *)exportPasswordForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey {
+- (NSString *)exportPasswordForSite:(MPSiteEntity *)element usingKey:(MPKey *)elementKey {
 
     NSAssert( [elementKey.keyID isEqualToData:element.user.keyID], @"Element does not belong to current user." );
-    if (!(element.type & MPElementFeatureExportContent))
+    if (!(element.type & MPSiteFeatureExportContent))
         return nil;
 
     NSString *result = nil;
     switch (element.type) {
-        case MPElementTypeGeneratedMaximum:
-        case MPElementTypeGeneratedLong:
-        case MPElementTypeGeneratedMedium:
-        case MPElementTypeGeneratedBasic:
-        case MPElementTypeGeneratedShort:
-        case MPElementTypeGeneratedPIN:
-        case MPElementTypeGeneratedName: {
+        case MPSiteTypeGeneratedMaximum:
+        case MPSiteTypeGeneratedLong:
+        case MPSiteTypeGeneratedMedium:
+        case MPSiteTypeGeneratedBasic:
+        case MPSiteTypeGeneratedShort:
+        case MPSiteTypeGeneratedPIN:
+        case MPSiteTypeGeneratedName:
+        case MPSiteTypeGeneratedPhrase: {
             result = nil;
             break;
         }
 
-        case MPElementTypeStoredPersonal: {
-            if (![element isKindOfClass:[MPElementStoredEntity class]]) {
-                wrn( @"Element with stored type %lu is not an MPElementStoredEntity, but a %@.",
+        case MPSiteTypeStoredPersonal: {
+            if (![element isKindOfClass:[MPSiteStoredEntity class]]) {
+                wrn( @"Element with stored type %lu is not an MPSiteStoredEntity, but a %@.",
                         (long)element.type, [element class] );
                 break;
             }
-            result = [((MPElementStoredEntity *)element).contentObject encodeBase64];
+            result = [((MPSiteStoredEntity *)element).contentObject encodeBase64];
             break;
         }
 
-        case MPElementTypeStoredDevicePrivate: {
+        case MPSiteTypeStoredDevicePrivate: {
             result = nil;
             break;
         }
@@ -710,7 +724,7 @@
     return [[NSString alloc] initWithBytes:decryptedContent.bytes length:decryptedContent.length encoding:NSUTF8StringEncoding];
 }
 
-- (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordOfType:(MPElementType)type byAttacker:(MPAttacker)attacker {
+- (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordOfType:(MPSiteType)type byAttacker:(MPAttacker)attacker {
 
     if (!type)
         return NO;

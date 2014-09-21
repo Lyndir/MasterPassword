@@ -1,5 +1,5 @@
 //
-//  MPElementEntities.m
+//  MPEntities.m
 //  MasterPassword-iOS
 //
 //  Created by Maarten Billemont on 31/05/12.
@@ -34,16 +34,16 @@
 
 @end
 
-@implementation MPElementEntity(MP)
+@implementation MPSiteEntity(MP)
 
 - (MPFixableResult)findAndFixInconsistenciesInContext:(NSManagedObjectContext *)context {
 
     return MPFixableResultNoProblems;
 }
 
-- (MPElementType)type {
+- (MPSiteType)type {
 
-    return (MPElementType)[self.type_ unsignedIntegerValue];
+    return (MPSiteType)[self.type_ unsignedIntegerValue];
 }
 
 - (void)setLoginGenerated:(BOOL)aLoginGenerated {
@@ -56,7 +56,7 @@
     return [self.loginGenerated_ boolValue];
 }
 
-- (void)setType:(MPElementType)aType {
+- (void)setType:(MPSiteType)aType {
 
     self.type_ = @(aType);
 }
@@ -138,11 +138,11 @@
 - (BOOL)migrateExplicitly:(BOOL)explicit {
 
     while (self.version < MPAlgorithmDefaultVersion)
-        if ([MPAlgorithmForVersion( self.version + 1 ) migrateElement:self explicit:explicit])
-            inf( @"%@ migration to version: %ld succeeded for element: %@",
+        if ([MPAlgorithmForVersion( self.version + 1 ) migrateSite:self explicit:explicit])
+            inf( @"%@ migration to version: %ld succeeded for site: %@",
                     explicit? @"Explicit": @"Automatic", (long)self.version + 1, self );
         else {
-            wrn( @"%@ migration to version: %ld failed for element: %@",
+            wrn( @"%@ migration to version: %ld failed for site: %@",
                     explicit? @"Explicit": @"Automatic", (long)self.version + 1, self );
             return NO;
         }
@@ -152,33 +152,33 @@
 
 - (NSString *)resolveLoginUsingKey:(MPKey *)key {
 
-    return [self.algorithm resolveLoginForElement:self usingKey:key];
+    return [self.algorithm resolveLoginForSite:self usingKey:key];
 }
 
 - (NSString *)resolvePasswordUsingKey:(MPKey *)key {
 
-    return [self.algorithm resolvePasswordForElement:self usingKey:key];
+    return [self.algorithm resolvePasswordForSite:self usingKey:key];
 }
 
 - (void)resolveLoginUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result {
 
-    [self.algorithm resolveLoginForElement:self usingKey:key result:result];
+    [self.algorithm resolveLoginForSite:self usingKey:key result:result];
 }
 
 - (void)resolvePasswordUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result {
 
-    [self.algorithm resolvePasswordForElement:self usingKey:key result:result];
+    [self.algorithm resolvePasswordForSite:self usingKey:key result:result];
 }
 
 @end
 
-@implementation MPElementGeneratedEntity(MP)
+@implementation MPSiteGeneratedEntity(MP)
 
 - (MPFixableResult)findAndFixInconsistenciesInContext:(NSManagedObjectContext *)context {
 
     MPFixableResult result = [super findAndFixInconsistenciesInContext:context];
 
-    if (!self.type || self.type == (MPElementType)NSNotFound || ![[self.algorithm allTypes] containsObject:self.type_])
+    if (!self.type || self.type == (MPSiteType)NSNotFound || ![[self.algorithm allTypes] containsObject:self.type_])
         // Invalid self.type
         result = MPApplyFix( result, ^MPFixableResult {
             wrn( @"Invalid type for: %@ of %@, type: %ld.  Will use %ld instead.",
@@ -186,18 +186,18 @@
             self.type = self.user.defaultType;
             return MPFixableResultProblemsFixed;
         } );
-    if (!self.type || self.type == (MPElementType)NSNotFound || ![[self.algorithm allTypes] containsObject:self.type_])
+    if (!self.type || self.type == (MPSiteType)NSNotFound || ![[self.algorithm allTypes] containsObject:self.type_])
         // Invalid self.user.defaultType
         result = MPApplyFix( result, ^MPFixableResult {
             wrn( @"Invalid type for: %@ of %@, type: %ld.  Will use %ld instead.",
-                    self.name, self.user.name, (long)self.type, (long)MPElementTypeGeneratedLong );
-            self.type = MPElementTypeGeneratedLong;
+                    self.name, self.user.name, (long)self.type, (long)MPSiteTypeGeneratedLong );
+            self.type = MPSiteTypeGeneratedLong;
             return MPFixableResultProblemsFixed;
         } );
     if (![self isKindOfClass:[self.algorithm classOfType:self.type]])
         // Mismatch between self.type and self.class
         result = MPApplyFix( result, ^MPFixableResult {
-            for (MPElementType newType = self.type; self.type != (newType = [self.algorithm nextType:newType]);)
+            for (MPSiteType newType = self.type; self.type != (newType = [self.algorithm nextType:newType]);)
                 if ([self isKindOfClass:[self.algorithm classOfType:newType]]) {
                     wrn( @"Mismatching type for: %@ of %@, type: %lu, class: %@.  Will use %ld instead.",
                             self.name, self.user.name, (long)self.type, self.class, (long)newType );
@@ -225,7 +225,7 @@
 
 @end
 
-@implementation MPElementStoredEntity(MP)
+@implementation MPSiteStoredEntity(MP)
 
 - (MPFixableResult)findAndFixInconsistenciesInContext:(NSManagedObjectContext *)context {
 
@@ -236,7 +236,7 @@
             MPKey *key = [MPAppDelegate_Shared get].key;
             if (key && [[MPAppDelegate_Shared get] activeUserInContext:context] == self.user) {
                 wrn( @"Content object not encrypted for: %@ of %@.  Will re-encrypt.", self.name, self.user.name );
-                [self.algorithm savePassword:[self.contentObject description] toElement:self usingKey:key];
+                [self.algorithm savePassword:[self.contentObject description] toSite:self usingKey:key];
                 return MPFixableResultProblemsFixed;
             }
 
@@ -271,12 +271,12 @@
     self.saveKey_ = @(aSaveKey);
 }
 
-- (MPElementType)defaultType {
+- (MPSiteType)defaultType {
 
-    return (MPElementType)[self.defaultType_ unsignedIntegerValue]?: MPElementTypeGeneratedLong;
+    return (MPSiteType)[self.defaultType_ unsignedIntegerValue]?: MPSiteTypeGeneratedLong;
 }
 
-- (void)setDefaultType:(MPElementType)aDefaultType {
+- (void)setDefaultType:(MPSiteType)aDefaultType {
 
     self.defaultType_ = @(aDefaultType);
 }

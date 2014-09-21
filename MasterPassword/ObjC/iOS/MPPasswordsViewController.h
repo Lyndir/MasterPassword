@@ -16,7 +16,7 @@
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
-@class MPElementEntity;
+@class MPSiteEntity;
 @class MPCoachmark;
 
 @interface MPPasswordsViewController : UIViewController<UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>

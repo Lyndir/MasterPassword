@@ -60,9 +60,6 @@
 		DA5E5CFA1724A667003798D8 /* MPAppDelegate_Shared.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CA01724A667003798D8 /* MPAppDelegate_Shared.m */; };
 		DA5E5CFB1724A667003798D8 /* MPAppDelegate_Store.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CA21724A667003798D8 /* MPAppDelegate_Store.m */; };
 		DA5E5CFC1724A667003798D8 /* MPConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CA41724A667003798D8 /* MPConfig.m */; };
-		DA5E5CFD1724A667003798D8 /* MPElementEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CA61724A667003798D8 /* MPElementEntity.m */; };
-		DA5E5CFE1724A667003798D8 /* MPElementGeneratedEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CA81724A667003798D8 /* MPElementGeneratedEntity.m */; };
-		DA5E5CFF1724A667003798D8 /* MPElementStoredEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CAA1724A667003798D8 /* MPElementStoredEntity.m */; };
 		DA5E5D001724A667003798D8 /* MPEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CAC1724A667003798D8 /* MPEntities.m */; };
 		DA5E5D011724A667003798D8 /* MPKey.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CAE1724A667003798D8 /* MPKey.m */; };
 		DA5E5D021724A667003798D8 /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CB11724A667003798D8 /* MPUserEntity.m */; };
@@ -78,6 +75,10 @@
 		DA8ED895192906920099B726 /* PearlTween.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8ED891192906920099B726 /* PearlTween.m */; };
 		DA8ED896192906920099B726 /* PearlTween.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED892192906920099B726 /* PearlTween.h */; };
 		DA8ED897192906920099B726 /* map-macro.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED894192906920099B726 /* map-macro.h */; };
+		DA9521BD19CEA3FD002E3AD5 /* MPSiteStoredEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9521B519CEA3FD002E3AD5 /* MPSiteStoredEntity.m */; };
+		DA9521BE19CEA3FD002E3AD5 /* MPSiteQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9521B719CEA3FD002E3AD5 /* MPSiteQuestion.m */; };
+		DA9521BF19CEA3FD002E3AD5 /* MPSiteGeneratedEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9521B919CEA3FD002E3AD5 /* MPSiteGeneratedEntity.m */; };
+		DA9521C019CEA3FD002E3AD5 /* MPSiteEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9521BB19CEA3FD002E3AD5 /* MPSiteEntity.m */; };
 		DAAA81B0195A8D1300FA30D9 /* gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAA81AF195A8D1300FA30D9 /* gradient.png */; };
 		DABC6C02175D8C85000C15D4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DABC6C15175D8CE1000C15D4 /* RHStatusItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = DABC6C14175D8CE1000C15D4 /* RHStatusItemView.m */; };
@@ -302,12 +303,6 @@
 		DA5E5CA21724A667003798D8 /* MPAppDelegate_Store.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_Store.m; sourceTree = "<group>"; };
 		DA5E5CA31724A667003798D8 /* MPConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPConfig.h; sourceTree = "<group>"; };
 		DA5E5CA41724A667003798D8 /* MPConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPConfig.m; sourceTree = "<group>"; };
-		DA5E5CA51724A667003798D8 /* MPElementEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementEntity.h; sourceTree = "<group>"; };
-		DA5E5CA61724A667003798D8 /* MPElementEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementEntity.m; sourceTree = "<group>"; };
-		DA5E5CA71724A667003798D8 /* MPElementGeneratedEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementGeneratedEntity.h; sourceTree = "<group>"; };
-		DA5E5CA81724A667003798D8 /* MPElementGeneratedEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementGeneratedEntity.m; sourceTree = "<group>"; };
-		DA5E5CA91724A667003798D8 /* MPElementStoredEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPElementStoredEntity.h; sourceTree = "<group>"; };
-		DA5E5CAA1724A667003798D8 /* MPElementStoredEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPElementStoredEntity.m; sourceTree = "<group>"; };
 		DA5E5CAB1724A667003798D8 /* MPEntities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEntities.h; sourceTree = "<group>"; };
 		DA5E5CAC1724A667003798D8 /* MPEntities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEntities.m; sourceTree = "<group>"; };
 		DA5E5CAD1724A667003798D8 /* MPKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPKey.h; sourceTree = "<group>"; };
@@ -734,6 +729,14 @@
 		DA8ED891192906920099B726 /* PearlTween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlTween.m; sourceTree = "<group>"; };
 		DA8ED892192906920099B726 /* PearlTween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlTween.h; sourceTree = "<group>"; };
 		DA8ED894192906920099B726 /* map-macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "map-macro.h"; sourceTree = "<group>"; };
+		DA9521B519CEA3FD002E3AD5 /* MPSiteStoredEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteStoredEntity.m; sourceTree = "<group>"; };
+		DA9521B619CEA3FD002E3AD5 /* MPSiteStoredEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteStoredEntity.h; sourceTree = "<group>"; };
+		DA9521B719CEA3FD002E3AD5 /* MPSiteQuestion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteQuestion.m; sourceTree = "<group>"; };
+		DA9521B819CEA3FD002E3AD5 /* MPSiteQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteQuestion.h; sourceTree = "<group>"; };
+		DA9521B919CEA3FD002E3AD5 /* MPSiteGeneratedEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteGeneratedEntity.m; sourceTree = "<group>"; };
+		DA9521BA19CEA3FD002E3AD5 /* MPSiteGeneratedEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteGeneratedEntity.h; sourceTree = "<group>"; };
+		DA9521BB19CEA3FD002E3AD5 /* MPSiteEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteEntity.m; sourceTree = "<group>"; };
+		DA9521BC19CEA3FD002E3AD5 /* MPSiteEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteEntity.h; sourceTree = "<group>"; };
 		DAAA81AF195A8D1300FA30D9 /* gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient.png; sourceTree = "<group>"; };
 		DABB981515100B4000B05417 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DABC6C01175D8C85000C15D4 /* libRHStatusItemView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRHStatusItemView.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -995,6 +998,14 @@
 		DA5E5C961724A667003798D8 /* ObjC */ = {
 			isa = PBXGroup;
 			children = (
+				DA9521B519CEA3FD002E3AD5 /* MPSiteStoredEntity.m */,
+				DA9521B619CEA3FD002E3AD5 /* MPSiteStoredEntity.h */,
+				DA9521B719CEA3FD002E3AD5 /* MPSiteQuestion.m */,
+				DA9521B819CEA3FD002E3AD5 /* MPSiteQuestion.h */,
+				DA9521B919CEA3FD002E3AD5 /* MPSiteGeneratedEntity.m */,
+				DA9521BA19CEA3FD002E3AD5 /* MPSiteGeneratedEntity.h */,
+				DA9521BB19CEA3FD002E3AD5 /* MPSiteEntity.m */,
+				DA9521BC19CEA3FD002E3AD5 /* MPSiteEntity.h */,
 				DA3B8454190FC89700246EEA /* MPFixable.m */,
 				DA3B8455190FC89700246EEA /* MPFixable.h */,
 				DA5E5CB21724A667003798D8 /* Mac */,
@@ -1012,12 +1023,6 @@
 				DA5E5CA21724A667003798D8 /* MPAppDelegate_Store.m */,
 				DA5E5CA31724A667003798D8 /* MPConfig.h */,
 				DA5E5CA41724A667003798D8 /* MPConfig.m */,
-				DA5E5CA51724A667003798D8 /* MPElementEntity.h */,
-				DA5E5CA61724A667003798D8 /* MPElementEntity.m */,
-				DA5E5CA71724A667003798D8 /* MPElementGeneratedEntity.h */,
-				DA5E5CA81724A667003798D8 /* MPElementGeneratedEntity.m */,
-				DA5E5CA91724A667003798D8 /* MPElementStoredEntity.h */,
-				DA5E5CAA1724A667003798D8 /* MPElementStoredEntity.m */,
 				DA5E5CAB1724A667003798D8 /* MPEntities.h */,
 				DA5E5CAC1724A667003798D8 /* MPEntities.m */,
 				DA5E5CAD1724A667003798D8 /* MPKey.h */,
@@ -2137,22 +2142,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA9521BF19CEA3FD002E3AD5 /* MPSiteGeneratedEntity.m in Sources */,
 				DA5E5CF61724A667003798D8 /* MPAlgorithm.m in Sources */,
 				DA5E5CF71724A667003798D8 /* MPAlgorithmV0.m in Sources */,
 				DA5E5CF81724A667003798D8 /* MPAlgorithmV1.m in Sources */,
+				DA9521BE19CEA3FD002E3AD5 /* MPSiteQuestion.m in Sources */,
 				DA5E5CF91724A667003798D8 /* MPAppDelegate_Key.m in Sources */,
 				DA5E5CFA1724A667003798D8 /* MPAppDelegate_Shared.m in Sources */,
 				DA5E5CFB1724A667003798D8 /* MPAppDelegate_Store.m in Sources */,
 				DA5E5CFC1724A667003798D8 /* MPConfig.m in Sources */,
-				DA5E5CFD1724A667003798D8 /* MPElementEntity.m in Sources */,
-				DA5E5CFE1724A667003798D8 /* MPElementGeneratedEntity.m in Sources */,
-				DA5E5CFF1724A667003798D8 /* MPElementStoredEntity.m in Sources */,
 				DA29992C19C6A89900AF7DF1 /* MasterPassword.xcdatamodeld in Sources */,
 				DA3B8456190FC89700246EEA /* MPFixable.m in Sources */,
 				DA5E5D001724A667003798D8 /* MPEntities.m in Sources */,
 				DA5E5D011724A667003798D8 /* MPKey.m in Sources */,
 				DA5E5D021724A667003798D8 /* MPUserEntity.m in Sources */,
+				DA9521BD19CEA3FD002E3AD5 /* MPSiteStoredEntity.m in Sources */,
 				DA5E5D031724A667003798D8 /* MPMacAppDelegate.m in Sources */,
+				DA9521C019CEA3FD002E3AD5 /* MPSiteEntity.m in Sources */,
 				DA5E5D041724A667003798D8 /* MPMacConfig.m in Sources */,
 				DA5E5D0C1724A667003798D8 /* main.m in Sources */,
 				93D39C5789EFA607CF788082 /* MPElementModel.m in Sources */,

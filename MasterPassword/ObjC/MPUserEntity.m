@@ -2,12 +2,12 @@
 //  MPUserEntity.m
 //  MasterPassword-iOS
 //
-//  Created by Maarten Billemont on 2014-09-14.
+//  Created by Maarten Billemont on 2014-09-21.
 //  Copyright (c) 2014 Lyndir. All rights reserved.
 //
 
 #import "MPUserEntity.h"
-#import "MPElementEntity.h"
+#import "MPSiteEntity.h"
 
 
 @implementation MPUserEntity

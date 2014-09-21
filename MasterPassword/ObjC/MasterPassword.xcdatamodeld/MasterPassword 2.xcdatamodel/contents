@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0"
-       lastSavedToolsVersion="2057" systemVersion="12C60" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="MPElementEntity" representedClassName="MPElementEntity" isAbstract="YES" syncable="YES">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13E28" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="MPElementEntity" representedClassName="MPSiteEntity" isAbstract="YES" elementID="58EE245C-6827-4C11-BB7E-5722F2426EC2" syncable="YES">
         <attribute name="content" optional="YES" transient="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="lastUsed" attributeType="Date" indexed="YES" syncable="YES"/>
         <attribute name="name" attributeType="String" minValueString="1" indexed="YES" syncable="YES"/>
@@ -12,13 +11,12 @@
         <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uses_" attributeType="Integer 16" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="version_" attributeType="Integer 16" minValueString="0" defaultValueString="0" syncable="YES"/>
-        <relationship name="user" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MPUserEntity" inverseName="elements"
-                      inverseEntity="MPUserEntity" syncable="YES"/>
+        <relationship name="user" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MPUserEntity" inverseName="elements" inverseEntity="MPUserEntity" syncable="YES"/>
     </entity>
-    <entity name="MPElementGeneratedEntity" representedClassName="MPElementGeneratedEntity" parentEntity="MPElementEntity" syncable="YES">
+    <entity name="MPElementGeneratedEntity" representedClassName="MPSiteGeneratedEntity" parentEntity="MPElementEntity" elementID="789304EA-070D-4982-8C20-54EECFC20CB6" syncable="YES">
         <attribute name="counter_" optional="YES" attributeType="Integer 32" defaultValueString="1" syncable="YES"/>
     </entity>
-    <entity name="MPElementStoredEntity" representedClassName="MPElementStoredEntity" parentEntity="MPElementEntity" syncable="YES">
+    <entity name="MPElementStoredEntity" representedClassName="MPSiteStoredEntity" parentEntity="MPElementEntity" elementID="BEEF1688-0CCD-4699-A86A-4D860FE2CEB8" syncable="YES">
         <attribute name="contentObject" optional="YES" attributeType="Transformable" storedInTruthFile="YES" syncable="YES"/>
     </entity>
     <entity name="MPUserEntity" representedClassName="MPUserEntity" syncable="YES">
@@ -31,8 +29,7 @@
         <attribute name="saveKey_" attributeType="Boolean" defaultValueString="NO">
             <userInfo/>
         </attribute>
-        <relationship name="elements" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MPElementEntity"
-                      inverseName="user" inverseEntity="MPElementEntity" syncable="YES"/>
+        <relationship name="elements" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MPElementEntity" inverseName="user" inverseEntity="MPElementEntity" syncable="YES"/>
     </entity>
     <elements>
         <element name="MPElementEntity" positionX="0" positionY="0" width="128" height="180"/>

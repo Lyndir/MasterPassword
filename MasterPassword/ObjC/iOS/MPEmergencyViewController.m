@@ -126,7 +126,7 @@
 - (void)updatePassword {
 
     NSString *siteName = self.siteField.text;
-    MPElementType siteType = [self siteType];
+    MPSiteType siteType = [self siteType];
     NSUInteger siteCounter = (NSUInteger)self.counterStepper.value;
     self.counterLabel.text = strf( @"%lu", (unsigned long)siteCounter );
 
@@ -145,21 +145,21 @@
     }];
 }
 
-- (enum MPElementType)siteType {
+- (enum MPSiteType)siteType {
 
     switch (self.typeControl.selectedSegmentIndex) {
         case 0:
-            return MPElementTypeGeneratedMaximum;
+            return MPSiteTypeGeneratedMaximum;
         case 1:
-            return MPElementTypeGeneratedLong;
+            return MPSiteTypeGeneratedLong;
         case 2:
-            return MPElementTypeGeneratedMedium;
+            return MPSiteTypeGeneratedMedium;
         case 3:
-            return MPElementTypeGeneratedBasic;
+            return MPSiteTypeGeneratedBasic;
         case 4:
-            return MPElementTypeGeneratedShort;
+            return MPSiteTypeGeneratedShort;
         case 5:
-            return MPElementTypeGeneratedPIN;
+            return MPSiteTypeGeneratedPIN;
         default:
             Throw(@"Unsupported type index: %ld", (long)self.typeControl.selectedSegmentIndex);
     }

@@ -333,7 +333,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
 
 #pragma mark - Utilities
 
-- (void)addElementNamed:(NSString *)siteName completion:(void ( ^ )(MPElementEntity *element, NSManagedObjectContext *context))completion {
+- (void)addSiteNamed:(NSString *)siteName completion:(void ( ^ )(MPSiteEntity *site, NSManagedObjectContext *context))completion {
 
     if (![siteName length]) {
         completion( nil, nil );
@@ -348,61 +348,61 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
             return;
         }
 
-        MPElementType type = activeUser.defaultType;
+        MPSiteType type = activeUser.defaultType;
         NSString *typeEntityName = [MPAlgorithmDefault classNameOfType:type];
 
-        MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
-        element.name = siteName;
-        element.user = activeUser;
-        element.type = type;
-        element.lastUsed = [NSDate date];
-        element.version = MPAlgorithmDefaultVersion;
+        MPSiteEntity *site = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
+        site.name = siteName;
+        site.user = activeUser;
+        site.type = type;
+        site.lastUsed = [NSDate date];
+        site.version = MPAlgorithmDefaultVersion;
 
         NSError *error = nil;
-        if (element.objectID.isTemporaryID && ![context obtainPermanentIDsForObjects:@[ element ] error:&error])
-            err( @"Failed to obtain a permanent object ID after creating new element: %@", error );
+        if (site.objectID.isTemporaryID && ![context obtainPermanentIDsForObjects:@[ site ] error:&error])
+            err( @"Failed to obtain a permanent object ID after creating new site: %@", error );
 
         [context saveToStore];
 
-        completion( element, context );
+        completion( site, context );
     }];
 }
 
-- (MPElementEntity *)changeElement:(MPElementEntity *)element saveInContext:(NSManagedObjectContext *)context toType:(MPElementType)type {
+- (MPSiteEntity *)changeSite:(MPSiteEntity *)site saveInContext:(NSManagedObjectContext *)context toType:(MPSiteType)type {
 
-    if (element.type == type)
-        return element;
+    if (site.type == type)
+        return site;
 
-    if ([element.algorithm classOfType:type] == element.typeClass) {
-        element.type = type;
+    if ([site.algorithm classOfType:type] == site.typeClass) {
+        site.type = type;
         [context saveToStore];
     }
 
     else {
-        // Type requires a different class of element.  Recreate the element.
-        NSString *typeEntityName = [element.algorithm classNameOfType:type];
-        MPElementEntity *newElement = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
-        newElement.type = type;
-        newElement.name = element.name;
-        newElement.user = element.user;
-        newElement.uses = element.uses;
-        newElement.lastUsed = element.lastUsed;
-        newElement.version = element.version;
-        newElement.loginName = element.loginName;
+        // Type requires a different class of site.  Recreate the site.
+        NSString *typeEntityName = [site.algorithm classNameOfType:type];
+        MPSiteEntity *newSite = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
+        newSite.type = type;
+        newSite.name = site.name;
+        newSite.user = site.user;
+        newSite.uses = site.uses;
+        newSite.lastUsed = site.lastUsed;
+        newSite.version = site.version;
+        newSite.loginName = site.loginName;
 
         NSError *error = nil;
-        if (![context obtainPermanentIDsForObjects:@[ newElement ] error:&error])
+        if (![context obtainPermanentIDsForObjects:@[ newSite ] error:&error])
             err( @"Failed to obtain a permanent object ID after changing object type: %@", error );
 
-        [context deleteObject:element];
+        [context deleteObject:site];
         [context saveToStore];
 
-        [[NSNotificationCenter defaultCenter] postNotificationName:MPElementUpdatedNotification object:element.objectID];
-        element = newElement;
+        [[NSNotificationCenter defaultCenter] postNotificationName:MPSiteUpdatedNotification object:site.objectID];
+        site = newSite;
     }
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPElementUpdatedNotification object:element.objectID];
-    return element;
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPSiteUpdatedNotification object:site.objectID];
+    return site;
 }
 
 - (MPImportResult)importSites:(NSString *)importedSitesString
@@ -467,9 +467,9 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
     NSData *importKeyID = nil;
     BOOL headerStarted = NO, headerEnded = NO, clearText = NO;
     NSArray *importedSiteLines = [importedSitesString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    NSMutableSet *elementsToDelete = [NSMutableSet set];
-    NSMutableArray *importedSiteElements = [NSMutableArray arrayWithCapacity:[importedSiteLines count]];
-    NSFetchRequest *elementFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
+    NSMutableSet *sitesToDelete = [NSMutableSet set];
+    NSMutableArray *importedSiteSites = [NSMutableArray arrayWithCapacity:[importedSiteLines count]];
+    NSFetchRequest *siteFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
     for (NSString *importedSiteLine in importedSiteLines) {
         if ([importedSiteLine hasPrefix:@"#"]) {
             // Comment or header
@@ -491,10 +491,10 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
                 err( @"Invalid header format in line: %@", importedSiteLine );
                 return MPImportResultMalformedInput;
             }
-            NSTextCheckingResult *headerElements = [[headerPattern matchesInString:importedSiteLine options:(NSMatchingOptions)0
+            NSTextCheckingResult *headerSites = [[headerPattern matchesInString:importedSiteLine options:(NSMatchingOptions)0
                                                                              range:NSMakeRange( 0, [importedSiteLine length] )] lastObject];
-            NSString *headerName = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:1]];
-            NSString *headerValue = [importedSiteLine substringWithRange:[headerElements rangeAtIndex:2]];
+            NSString *headerName = [importedSiteLine substringWithRange:[headerSites rangeAtIndex:1]];
+            NSString *headerValue = [importedSiteLine substringWithRange:[headerSites rangeAtIndex:2]];
             if ([headerName isEqualToString:@"User Name"]) {
                 importUserName = headerValue;
 
@@ -586,27 +586,27 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
 
         // Find existing site.
         if (user) {
-            elementFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND user == %@", siteName, user];
-            NSArray *existingSites = [context executeFetchRequest:elementFetchRequest error:&error];
+            siteFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND user == %@", siteName, user];
+            NSArray *existingSites = [context executeFetchRequest:siteFetchRequest error:&error];
             if (!existingSites) {
                 err( @"Lookup of existing sites failed for site: %@, user: %@, error: %@", siteName, user.userID, error );
                 return MPImportResultInternalError;
             }
             if ([existingSites count]) {
                 dbg( @"Existing sites: %@", existingSites );
-                [elementsToDelete addObjectsFromArray:existingSites];
+                [sitesToDelete addObjectsFromArray:existingSites];
             }
         }
-        [importedSiteElements addObject:@[ lastUsed, uses, type, version, counter, loginName, siteName, exportContent ]];
+        [importedSiteSites addObject:@[ lastUsed, uses, type, version, counter, loginName, siteName, exportContent ]];
         dbg( @"Will import site: lastUsed=%@, uses=%@, type=%@, version=%@, counter=%@, loginName=%@, siteName=%@, exportContent=%@",
                 lastUsed, uses, type, version, counter, loginName, siteName, exportContent );
     }
 
     // Ask for confirmation to import these sites and the master password of the user.
-    inf( @"Importing %lu sites, deleting %lu sites, for user: %@", (unsigned long)[importedSiteElements count],
-            (unsigned long)[elementsToDelete count], [MPUserEntity idFor:importUserName] );
-    NSString *userMasterPassword = askUserPassword( user? user.name: importUserName, [importedSiteElements count],
-            [elementsToDelete count] );
+    inf( @"Importing %lu sites, deleting %lu sites, for user: %@", (unsigned long)[importedSiteSites count],
+            (unsigned long)[sitesToDelete count], [MPUserEntity idFor:importUserName] );
+    NSString *userMasterPassword = askUserPassword( user? user.name: importUserName, [importedSiteSites count],
+            [sitesToDelete count] );
     if (!userMasterPassword) {
         inf( @"Import cancelled." );
         return MPImportResultCancelled;
@@ -622,8 +622,8 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
 
 
     // Delete existing sites.
-    if (elementsToDelete.count)
-        [elementsToDelete enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+    if (sitesToDelete.count)
+        [sitesToDelete enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
             inf( @"Deleting site: %@, it will be replaced by an imported site.", [obj name] );
             [context deleteObject:obj];
         }];
@@ -644,10 +644,10 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
     }
 
     // Import new sites.
-    for (NSArray *siteElements in importedSiteElements) {
+    for (NSArray *siteElements in importedSiteSites) {
         NSDate *lastUsed = [[NSDateFormatter rfc3339DateFormatter] dateFromString:siteElements[0]];
         NSUInteger uses = (unsigned)[siteElements[1] integerValue];
-        MPElementType type = (MPElementType)[siteElements[2] integerValue];
+        MPSiteType type = (MPSiteType)[siteElements[2] integerValue];
         NSUInteger version = (unsigned)[siteElements[3] integerValue];
         NSUInteger counter = [siteElements[4] length]? (unsigned)[siteElements[4] integerValue]: NSNotFound;
         NSString *loginName = [siteElements[5] length]? siteElements[5]: nil;
@@ -656,7 +656,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
 
         // Create new site.
         NSString *typeEntityName = [MPAlgorithmForVersion( version ) classNameOfType:type];
-        MPElementEntity *element = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
+        MPSiteEntity *element = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
         element.name = siteName;
         element.loginName = loginName;
         element.user = user;
@@ -666,9 +666,9 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
         element.version = version;
         if ([exportContent length]) {
             if (clearText)
-                [element.algorithm importClearTextPassword:exportContent intoElement:element usingKey:userKey];
+                [element.algorithm importClearTextPassword:exportContent intoSite:element usingKey:userKey];
             else
-                [element.algorithm importProtectedPassword:exportContent protectedByKey:importKey intoElement:element usingKey:userKey];
+                [element.algorithm importProtectedPassword:exportContent protectedByKey:importKey intoSite:element usingKey:userKey];
         }
         if ([element isKindOfClass:[MPElementGeneratedEntity class]] && counter != NSNotFound)
             ((MPElementGeneratedEntity *)element).counter = counter;
@@ -719,10 +719,10 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
     [export appendFormat:@"#               used      used      type                       name\t                     name\tpassword\n"];
 
     // Sites.
-    for (MPElementEntity *element in activeUser.elements) {
+    for (MPSiteEntity *element in activeUser.elements) {
         NSDate *lastUsed = element.lastUsed;
         NSUInteger uses = element.uses;
-        MPElementType type = element.type;
+        MPSiteType type = element.type;
         NSUInteger version = element.version;
         NSUInteger counter = 0;
         NSString *loginName = element.loginName;
@@ -735,11 +735,11 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
 
 
         // Determine the content to export.
-        if (!(type & MPElementFeatureDevicePrivate)) {
+        if (!(type & MPSiteFeatureDevicePrivate)) {
             if (revealPasswords)
-                content = [element.algorithm resolvePasswordForElement:element usingKey:self.key];
-            else if (type & MPElementFeatureExportContent)
-                content = [element.algorithm exportPasswordForElement:element usingKey:self.key];
+                content = [element.algorithm resolvePasswordForSite:element usingKey:self.key];
+            else if (type & MPSiteFeatureExportContent)
+                content = [element.algorithm exportPasswordForSite:element usingKey:self.key];
         }
 
         [export appendFormat:@"%@  %8ld  %8s  %25s\t%25s\t%@\n",

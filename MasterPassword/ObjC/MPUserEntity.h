@@ -2,14 +2,14 @@
 //  MPUserEntity.h
 //  MasterPassword-iOS
 //
-//  Created by Maarten Billemont on 2014-09-14.
+//  Created by Maarten Billemont on 2014-09-21.
 //  Copyright (c) 2014 Lyndir. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class MPElementEntity;
+@class MPSiteEntity;
 
 @interface MPUserEntity : NSManagedObject
 
@@ -24,8 +24,8 @@
 
 @interface MPUserEntity (CoreDataGeneratedAccessors)
 
-- (void)addElementsObject:(MPElementEntity *)value;
-- (void)removeElementsObject:(MPElementEntity *)value;
+- (void)addElementsObject:(MPSiteEntity *)value;
+- (void)removeElementsObject:(MPSiteEntity *)value;
 - (void)addElements:(NSSet *)values;
 - (void)removeElements:(NSSet *)values;
 

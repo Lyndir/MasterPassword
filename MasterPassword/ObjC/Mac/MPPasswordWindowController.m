@@ -229,7 +229,8 @@
         switch (returnCode) {
             case NSAlertFirstButtonReturn: {
                 // "Create" button.
-                [[MPMacAppDelegate get] addElementNamed:[self.siteField stringValue] completion:^(MPElementEntity *element, NSManagedObjectContext *context) {
+                [[MPMacAppDelegate get]
+                        addSiteNamed:[self.siteField stringValue] completion:^(MPSiteEntity *element, NSManagedObjectContext *context) {
                     if (element)
                         PearlMainQueue( ^{ [self updateElements]; } );
                 }];
@@ -243,10 +244,10 @@
         switch (returnCode) {
             case NSAlertFirstButtonReturn: {
                 // "Save" button.
-                MPElementType type = (MPElementType)[self.passwordTypesMatrix.selectedCell tag];
+                MPSiteType type = (MPSiteType)[self.passwordTypesMatrix.selectedCell tag];
                 [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPElementEntity *entity = [[MPMacAppDelegate get] changeElement:[self.selectedElement entityInContext:context]
-                                                                      saveInContext:context toType:type];
+                    MPSiteEntity *entity = [[MPMacAppDelegate get] changeSite:[self.selectedElement entityInContext:context]
+                                                                saveInContext:context toType:type];
                     if ([entity isKindOfClass:[MPElementStoredEntity class]] && ![(MPElementStoredEntity *)entity contentObject].length)
                         PearlMainQueue( ^{
                             [self changePassword:nil];
@@ -264,7 +265,7 @@
                 // "Save" button.
                 NSString *loginName = [(NSSecureTextField *)alert.accessoryView stringValue];
                 [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPElementEntity *entity = [self.selectedElement entityInContext:context];
+                    MPSiteEntity *entity = [self.selectedElement entityInContext:context];
                     entity.loginName = loginName;
                     [context saveToStore];
                 }];
@@ -280,8 +281,8 @@
                 // "Save" button.
                 NSString *password = [(NSSecureTextField *)alert.accessoryView stringValue];
                 [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPElementEntity *entity = [self.selectedElement entityInContext:context];
-                    [entity.algorithm savePassword:password toElement:entity usingKey:[MPMacAppDelegate get].key];
+                    MPSiteEntity *entity = [self.selectedElement entityInContext:context];
+                    [entity.algorithm savePassword:password toSite:entity usingKey:[MPMacAppDelegate get].key];
                     [context saveToStore];
                 }];
                 break;
@@ -397,12 +398,12 @@
 - (IBAction)changeType:(id)sender {
 
     MPElementModel *element = self.selectedElement;
-    NSArray *types = [element.algorithm allTypesStartingWith:MPElementTypeGeneratedPIN];
+    NSArray *types = [element.algorithm allTypesStartingWith:MPSiteTypeGeneratedPIN];
     [self.passwordTypesMatrix renewRows:(NSInteger)[types count] columns:1];
     for (NSUInteger t = 0; t < [types count]; ++t) {
-        MPElementType type = [types[t] unsignedIntegerValue];
+        MPSiteType type = [types[t] unsignedIntegerValue];
         NSString *title = [element.algorithm nameOfType:type];
-        if (type & MPElementTypeClassGenerated)
+        if (type & MPSiteTypeClassGenerated)
             title = [element.algorithm generatePasswordForSiteNamed:element.siteName ofType:type
                                                         withCounter:element.counter usingKey:[MPMacAppDelegate get].key];
 
@@ -514,7 +515,7 @@
     NSString *query = [self query];
     [profiler finishJob:@"query"];
     [MPMacAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
-        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
         fetchRequest.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"lastUsed" ascending:NO]];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@",
                                                                   query, query, [[MPMacAppDelegate get] activeUserInContext:context]];
@@ -529,7 +530,7 @@
         [profiler finishJob:@"do fetch"];
 
         NSMutableArray *newElements = [NSMutableArray arrayWithCapacity:[siteResults count]];
-        for (MPElementEntity *element in siteResults)
+        for (MPSiteEntity *element in siteResults)
             [newElements addObject:[[MPElementModel alloc] initWithEntity:element]];
         [profiler finishJob:@"make models"];
         self.elements = newElements;

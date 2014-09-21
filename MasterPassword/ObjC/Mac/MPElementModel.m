@@ -17,7 +17,7 @@
 //
 
 #import "MPElementModel.h"
-#import "MPElementEntity.h"
+#import "MPSiteEntity.h"
 #import "MPEntities.h"
 #import "MPAppDelegate_Shared.h"
 #import "MPAppDelegate_Store.h"
@@ -28,7 +28,7 @@
     BOOL _initialized;
 }
 
-- (id)initWithEntity:(MPElementEntity *)entity {
+- (id)initWithEntity:(MPSiteEntity *)entity {
 
     if (!(self = [super init]))
         return nil;
@@ -39,7 +39,7 @@
     return self;
 }
 
-- (void)setEntity:(MPElementEntity *)entity {
+- (void)setEntity:(MPSiteEntity *)entity {
 
     if ([_entityOID isEqual:entity.objectID])
         return;
@@ -58,13 +58,13 @@
     [self updateContent:entity];
 }
 
-- (MPElementEntity *)entityInContext:(NSManagedObjectContext *)moc {
+- (MPSiteEntity *)entityInContext:(NSManagedObjectContext *)moc {
 
     if (!_entityOID)
         return nil;
 
     NSError *error;
-    MPElementEntity *entity = (MPElementEntity *)[moc existingObjectWithID:_entityOID error:&error];
+    MPSiteEntity *entity = (MPSiteEntity *)[moc existingObjectWithID:_entityOID error:&error];
     if (!entity)
         err( @"Couldn't retrieve active element: %@", error );
 
@@ -82,7 +82,7 @@
         return;
 
     [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        MPElementEntity *entity = [self entityInContext:context];
+        MPSiteEntity *entity = [self entityInContext:context];
         if ([entity isKindOfClass:[MPElementGeneratedEntity class]]) {
             ((MPElementGeneratedEntity *)entity).counter = counter;
             [context saveToStore];
@@ -94,22 +94,22 @@
 
 - (BOOL)generated {
 
-    return self.type & MPElementTypeClassGenerated;
+    return self.type & MPSiteTypeClassGenerated;
 }
 
 - (BOOL)stored {
 
-    return self.type & MPElementTypeClassStored;
+    return self.type & MPSiteTypeClassStored;
 }
 
 - (void)updateContent {
 
     [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        [self updateContent:[MPElementEntity existingObjectWithID:_entityOID inContext:context]];
+        [self updateContent:[MPSiteEntity existingObjectWithID:_entityOID inContext:context]];
     }];
 }
 
-- (void)updateContent:(MPElementEntity *)entity {
+- (void)updateContent:(MPSiteEntity *)entity {
 
     static NSRegularExpression *re_anyChar;
     static dispatch_once_t once = 0;

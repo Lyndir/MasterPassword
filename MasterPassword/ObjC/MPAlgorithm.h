@@ -16,8 +16,8 @@
 //
 
 #import "MPKey.h"
-#import "MPElementStoredEntity.h"
-#import "MPElementGeneratedEntity.h"
+#import "MPSiteStoredEntity.h"
+#import "MPSiteGeneratedEntity.h"
 
 #define MPAlgorithmDefaultVersion 1
 #define MPAlgorithmDefault MPAlgorithmForVersion(MPAlgorithmDefaultVersion)
@@ -44,48 +44,48 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 @required
 - (NSUInteger)version;
 - (BOOL)migrateUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc;
-- (BOOL)migrateElement:(MPElementEntity *)element explicit:(BOOL)explicit;
+- (BOOL)migrateSite:(MPSiteEntity *)site explicit:(BOOL)explicit;
 
 - (MPKey *)keyForPassword:(NSString *)password ofUserNamed:(NSString *)userName;
 - (MPKey *)keyFromKeyData:(NSData *)keyData;
 - (NSData *)keyIDForKeyData:(NSData *)keyData;
 
-- (NSString *)scopeForVariant:(MPElementVariant)variant;
-- (NSString *)nameOfType:(MPElementType)type;
-- (NSString *)shortNameOfType:(MPElementType)type;
-- (NSString *)classNameOfType:(MPElementType)type;
-- (Class)classOfType:(MPElementType)type;
+- (NSString *)scopeForVariant:(MPSiteVariant)variant;
+- (NSString *)nameOfType:(MPSiteType)type;
+- (NSString *)shortNameOfType:(MPSiteType)type;
+- (NSString *)classNameOfType:(MPSiteType)type;
+- (Class)classOfType:(MPSiteType)type;
 - (NSArray *)allTypes;
-- (NSArray *)allTypesStartingWith:(MPElementType)startingType;
-- (MPElementType)nextType:(MPElementType)type;
-- (MPElementType)previousType:(MPElementType)type;
+- (NSArray *)allTypesStartingWith:(MPSiteType)startingType;
+- (MPSiteType)nextType:(MPSiteType)type;
+- (MPSiteType)previousType:(MPSiteType)type;
 
 - (NSString *)generateLoginForSiteNamed:(NSString *)name usingKey:(MPKey *)key;
-- (NSString *)generatePasswordForSiteNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter
+- (NSString *)generatePasswordForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
                                   usingKey:(MPKey *)key;
-- (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPElementType)type withCounter:(NSUInteger)counter
-                                  variant:(MPElementVariant)variant usingKey:(MPKey *)key;
+- (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
+                                  variant:(MPSiteVariant)variant usingKey:(MPKey *)key;
 
-- (NSString *)storedLoginForElement:(MPElementStoredEntity *)element usingKey:(MPKey *)key;
-- (NSString *)storedPasswordForElement:(MPElementStoredEntity *)element usingKey:(MPKey *)key;
+- (NSString *)storedLoginForSite:(MPSiteStoredEntity *)site usingKey:(MPKey *)key;
+- (NSString *)storedPasswordForSite:(MPSiteStoredEntity *)site usingKey:(MPKey *)key;
 
-- (BOOL)savePassword:(NSString *)clearPassword toElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
+- (BOOL)savePassword:(NSString *)clearPassword toSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
 
-- (NSString *)resolveLoginForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
-- (NSString *)resolvePasswordForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
+- (NSString *)resolveLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
+- (NSString *)resolvePasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
 
-- (void)resolveLoginForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey
+- (void)resolveLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey
+                     result:(void ( ^ )(NSString *result))resultBlock;
+- (void)resolvePasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey
                         result:(void ( ^ )(NSString *result))resultBlock;
-- (void)resolvePasswordForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey
-                           result:(void ( ^ )(NSString *result))resultBlock;
 
 - (void)importProtectedPassword:(NSString *)protectedPassword protectedByKey:(MPKey *)importKey
-                    intoElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
-- (void)importClearTextPassword:(NSString *)clearPassword intoElement:(MPElementEntity *)element
-                       usingKey:(MPKey *)elementKey;
-- (NSString *)exportPasswordForElement:(MPElementEntity *)element usingKey:(MPKey *)elementKey;
+                       intoSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
+- (void)importClearTextPassword:(NSString *)clearPassword intoSite:(MPSiteEntity *)site
+                       usingKey:(MPKey *)siteKey;
+- (NSString *)exportPasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
 
-- (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordOfType:(MPElementType)type byAttacker:(MPAttacker)attacker;
+- (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordOfType:(MPSiteType)type byAttacker:(MPAttacker)attacker;
 - (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordString:(NSString *)password byAttacker:(MPAttacker)attacker;
 
 @end
