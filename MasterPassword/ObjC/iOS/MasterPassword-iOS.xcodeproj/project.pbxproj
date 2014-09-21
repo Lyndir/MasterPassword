@@ -229,7 +229,6 @@
 		DABD3ABF1711E29800CF925C /* icon_plus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37F91711E29600CF925C /* icon_plus@2x.png */; };
 		DABD3B1C1711E29800CF925C /* icon_up.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD38561711E29700CF925C /* icon_up.png */; };
 		DABD3B1D1711E29800CF925C /* icon_up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD38571711E29700CF925C /* icon_up@2x.png */; };
-		DABD3B8A1711E29800CF925C /* help.html in Resources */ = {isa = PBXBuildFile; fileRef = DABD38C61711E29700CF925C /* help.html */; };
 		DABD3B8D1711E29800CF925C /* keypad.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD38C91711E29700CF925C /* keypad.png */; };
 		DABD3B8E1711E29800CF925C /* logo-bare.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD38CA1711E29700CF925C /* logo-bare.png */; };
 		DABD3B8F1711E29800CF925C /* menu-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD38CB1711E29700CF925C /* menu-icon.png */; };
@@ -1171,7 +1170,6 @@
 		DABD38C11711E29700CF925C /* tip_location_teal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tip_location_teal@2x.png"; sourceTree = "<group>"; };
 		DABD38C21711E29700CF925C /* tip_location_wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tip_location_wood.png; sourceTree = "<group>"; };
 		DABD38C31711E29700CF925C /* tip_location_wood@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tip_location_wood@2x.png"; sourceTree = "<group>"; };
-		DABD38C61711E29700CF925C /* help.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = help.html; sourceTree = "<group>"; };
 		DABD38C81711E29700CF925C /* jquery-1.6.1.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "jquery-1.6.1.min.js"; sourceTree = "<group>"; };
 		DABD38C91711E29700CF925C /* keypad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = keypad.png; sourceTree = "<group>"; };
 		DABD38CA1711E29700CF925C /* logo-bare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-bare.png"; sourceTree = "<group>"; };
@@ -1579,7 +1577,6 @@
 				DABD38751711E29700CF925C /* Tooltips */,
 				DABD3FC81712446200CF925C /* cloud.png */,
 				DABD3FC91712446200CF925C /* cloud@2x.png */,
-				DABD38C61711E29700CF925C /* help.html */,
 				DABD3FCC1714F45B00CF925C /* identity.png */,
 				DABD3FCD1714F45B00CF925C /* identity@2x.png */,
 				DABD38C81711E29700CF925C /* jquery-1.6.1.min.js */,
@@ -3120,7 +3117,6 @@
 				DA3BCFCB19BD09D5006B2681 /* SourceCodePro-Regular.otf in Resources */,
 				DA250A121956484D00AC23F1 /* image-0.png in Resources */,
 				DA4522441902355C008F650A /* icon_book.png in Resources */,
-				DABD3B8A1711E29800CF925C /* help.html in Resources */,
 				DA2509FF1956484D00AC23F1 /* image-9@2x.png in Resources */,
 				DABD3B8D1711E29800CF925C /* keypad.png in Resources */,
 				DABD3B8E1711E29800CF925C /* logo-bare.png in Resources */,
