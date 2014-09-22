@@ -23,6 +23,7 @@
 #import "MPAppDelegate_Key.h"
 #import "MPPasswordCell.h"
 #import "UICollectionView+PearlReloadFromArray.h"
+#import "MPAnswersViewController.h"
 
 @interface MPPasswordsViewController()<NSFetchedResultsControllerDelegate>
 
@@ -85,6 +86,9 @@
 
     if ([segue.identifier isEqualToString:@"popdown"])
         _popdownVC = segue.destinationViewController;
+    if ([segue.identifier isEqualToString:@"answers"])
+        ((MPAnswersViewController *)segue.destinationViewController).site =
+                [[MPPasswordCell findAsSuperviewOf:sender] siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -298,8 +302,8 @@ referenceSizeForHeaderInSection:(NSInteger)section {
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:MPCheckConfigNotification object:nil
                                  queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                                [self updateConfigKey:note.object];
-                            }],
+                        [self updateConfigKey:note.object];
+                    }],
     ];
 }
 

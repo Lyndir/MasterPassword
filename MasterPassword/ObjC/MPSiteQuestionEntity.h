@@ -14,6 +14,5 @@
 @interface MPSiteQuestionEntity : NSManagedObject
 
 @property (nonatomic, retain) NSString * keyword;
-@property (nonatomic, retain) MPSiteEntity *site;
 
 @end

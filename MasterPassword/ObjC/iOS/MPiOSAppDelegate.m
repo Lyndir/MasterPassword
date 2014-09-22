@@ -16,11 +16,8 @@
 
 @interface MPiOSAppDelegate()<UIDocumentInteractionControllerDelegate>
 
-@property(nonatomic, weak) PearlAlert *handleCloudDisabledAlert;
-@property(nonatomic, weak) PearlAlert *handleCloudContentAlert;
-@property(nonatomic, weak) PearlAlert *fixCloudContentAlert;
-@property(nonatomic, weak) PearlOverlay *storeLoadingOverlay;
 @property(nonatomic, strong) UIDocumentInteractionController *interactionController;
+
 @end
 
 @implementation MPiOSAppDelegate

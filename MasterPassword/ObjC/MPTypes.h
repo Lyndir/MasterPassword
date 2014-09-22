@@ -20,6 +20,8 @@ typedef NS_ENUM( NSUInteger, MPSiteVariant ) {
             MPSiteVariantPassword,
     /** Generate the login name. */
             MPSiteVariantLogin,
+    /** Generate a security answer. */
+            MPSiteVariantAnswer,
 };
 
 typedef NS_ENUM( NSUInteger, MPSiteFeature ) {

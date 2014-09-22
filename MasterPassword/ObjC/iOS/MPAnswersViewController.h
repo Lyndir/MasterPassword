@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "MPTypeViewController.h"
+#import "MPSiteQuestionEntity.h"
 
 @interface MPAnswersViewController : UITableViewController
+
+- (void)setSite:(MPSiteEntity *)site;
+- (MPSiteEntity *)siteInContext:(NSManagedObjectContext *)context;
 
 @end
 
@@ -18,13 +22,15 @@
 @property (nonatomic) IBOutlet UILabel *titleLabel;
 @property (nonatomic) IBOutlet UITextField *answerField;
 
+- (void)setSite:(MPSiteEntity *)site;
+
 @end
 
 @interface MPSendAnswersCell : UITableViewCell
 
 @end
 
-@interface MPMultipleAnswersCell : UITableViewCell
+@interface MPMultipleAnswersCell : UITableViewCell <UITextFieldDelegate>
 
 @end
 
@@ -32,5 +38,7 @@
 
 @property(nonatomic) IBOutlet UITextField *questionField;
 @property(nonatomic) IBOutlet UITextField *answerField;
+
+- (void)setQuestion:(MPSiteQuestionEntity *)question forSite:(MPSiteEntity *)site;
 
 @end

@@ -63,8 +63,9 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 - (NSString *)generateLoginForSiteNamed:(NSString *)name usingKey:(MPKey *)key;
 - (NSString *)generatePasswordForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
                                   usingKey:(MPKey *)key;
+- (NSString *)generateAnswerForSiteNamed:(NSString *)name onQuestion:(NSString *)question usingKey:(MPKey *)key;
 - (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
-                                  variant:(MPSiteVariant)variant usingKey:(MPKey *)key;
+                                  variant:(MPSiteVariant)variant context:(NSString *)context usingKey:(MPKey *)key;
 
 - (NSString *)storedLoginForSite:(MPStoredSiteEntity *)site usingKey:(MPKey *)key;
 - (NSString *)storedPasswordForSite:(MPStoredSiteEntity *)site usingKey:(MPKey *)key;
@@ -73,10 +74,16 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 
 - (NSString *)resolveLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
 - (NSString *)resolvePasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
+- (NSString *)resolveAnswerForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
+- (NSString *)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question ofSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
 
 - (void)resolveLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey
                      result:(void ( ^ )(NSString *result))resultBlock;
 - (void)resolvePasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey
+                        result:(void ( ^ )(NSString *result))resultBlock;
+- (void)resolveAnswerForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey
+                        result:(void ( ^ )(NSString *result))resultBlock;
+- (void)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question ofSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey
                         result:(void ( ^ )(NSString *result))resultBlock;
 
 - (void)importProtectedPassword:(NSString *)protectedPassword protectedByKey:(MPKey *)importKey

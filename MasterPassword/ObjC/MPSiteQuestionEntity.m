@@ -13,6 +13,5 @@
 @implementation MPSiteQuestionEntity
 
 @dynamic keyword;
-@dynamic site;
 
 @end

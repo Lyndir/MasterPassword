@@ -32,6 +32,7 @@
 @property(nonatomic, strong) IBOutlet UILabel *counterLabel;
 @property(nonatomic, strong) IBOutlet UIButton *counterButton;
 @property(nonatomic, strong) IBOutlet UIButton *upgradeButton;
+@property(nonatomic, strong) IBOutlet UIButton *answersButton;
 @property(nonatomic, strong) IBOutlet UIButton *modeButton;
 @property(nonatomic, strong) IBOutlet UIButton *editButton;
 @property(nonatomic, strong) IBOutlet UIScrollView *modeScrollView;
@@ -464,7 +465,8 @@
         MPSiteEntity *mainSite = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
 
         // UI
-        self.upgradeButton.alpha = mainSite.requiresExplicitMigration? 1: 0;
+        self.upgradeButton.gone = !mainSite.requiresExplicitMigration;
+        self.answersButton.gone = ![[MPiOSAppDelegate get] isPurchased:MPProductGenerateAnswers];
         BOOL settingsMode = self.mode == MPPasswordCellModeSettings;
         self.loginNameContainer.alpha = settingsMode || mainSite.loginGenerated || [mainSite.loginName length]? 0.7f: 0;
         self.loginNameField.textColor = [UIColor colorWithHexString:mainSite.loginGenerated? @"5E636D": @"6D5E63"];

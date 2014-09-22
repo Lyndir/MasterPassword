@@ -28,7 +28,7 @@ PearlAssociatedObjectProperty( NSArray*, PaymentTransactions, paymentTransaction
 
 - (BOOL)isPurchased:(NSString *)productIdentifier {
 
-    return [[NSUserDefaults standardUserDefaults] objectForKey:productIdentifier] != nil;
+    return YES; //[[NSUserDefaults standardUserDefaults] objectForKey:productIdentifier] != nil;
 }
 
 #pragma mark - SKProductsRequestDelegate

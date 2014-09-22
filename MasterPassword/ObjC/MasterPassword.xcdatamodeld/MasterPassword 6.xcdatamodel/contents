@@ -15,12 +15,11 @@
         <attribute name="type_" attributeType="Integer 16" defaultValueString="17" syncable="YES"/>
         <attribute name="uses_" attributeType="Integer 16" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="version_" attributeType="Integer 16" minValueString="0" defaultValueString="0" syncable="YES"/>
-        <relationship name="questions" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="MPSiteQuestionEntity" inverseName="site" inverseEntity="MPSiteQuestionEntity" syncable="YES"/>
+        <relationship name="questions" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="MPSiteQuestionEntity" syncable="YES"/>
         <relationship name="user" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MPUserEntity" inverseName="sites" inverseEntity="MPUserEntity" elementID="FC8AE32E-7BE3-4FA6-8611-B7DC0DB063EF" syncable="YES"/>
     </entity>
     <entity name="MPSiteQuestionEntity" representedClassName="MPSiteQuestionEntity" syncable="YES">
         <attribute name="keyword" attributeType="String" syncable="YES"/>
-        <relationship name="site" maxCount="1" deletionRule="Nullify" destinationEntity="MPSiteEntity" inverseName="questions" inverseEntity="MPSiteEntity" syncable="YES"/>
     </entity>
     <entity name="MPStoredSiteEntity" representedClassName="MPStoredSiteEntity" parentEntity="MPSiteEntity" elementID="BEEF1688-0CCD-4699-A86A-4D860FE2CEB8" syncable="YES">
         <attribute name="contentObject" optional="YES" attributeType="Transformable" storedInTruthFile="YES" syncable="YES"/>
@@ -37,9 +36,9 @@
         <relationship name="sites" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MPSiteEntity" inverseName="user" inverseEntity="MPSiteEntity" elementID="D18D6772-040E-4CFE-8F32-A34B08E9E9BC" syncable="YES"/>
     </entity>
     <elements>
-        <element name="MPSiteEntity" positionX="-0" positionY="-286" width="128" height="208"/>
         <element name="MPGeneratedSiteEntity" positionX="216" positionY="-288" width="128" height="58"/>
-        <element name="MPSiteQuestionEntity" positionX="-2" positionY="-9" width="128" height="73"/>
+        <element name="MPSiteEntity" positionX="-0" positionY="-286" width="128" height="208"/>
+        <element name="MPSiteQuestionEntity" positionX="-2" positionY="-9" width="128" height="58"/>
         <element name="MPStoredSiteEntity" positionX="214" positionY="-171" width="128" height="58"/>
         <element name="MPUserEntity" positionX="-218" positionY="-288" width="128" height="148"/>
     </elements>

@@ -19,6 +19,7 @@
 #import "MPEntities.h"
 #import "MPAppDelegate_Shared.h"
 #import "MPAppDelegate_InApp.h"
+#import "MPSiteQuestionEntity.h"
 #include <openssl/bn.h>
 #include <openssl/err.h>
 
@@ -145,6 +146,8 @@
             return @"com.lyndir.masterpassword";
         case MPSiteVariantLogin:
             return @"com.lyndir.masterpassword.login";
+        case MPSiteVariantAnswer:
+            return @"com.lyndir.masterpassword.answer";
     }
 
     Throw( @"Unsupported variant: %ld", (long)variant );
@@ -361,32 +364,41 @@
 - (NSString *)generateLoginForSiteNamed:(NSString *)name usingKey:(MPKey *)key {
 
     return [self generateContentForSiteNamed:name ofType:MPSiteTypeGeneratedName withCounter:1
-                                                 variant:MPSiteVariantLogin usingKey:key];
+                                                 variant:MPSiteVariantLogin context:nil usingKey:key];
 }
 
 - (NSString *)generatePasswordForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
               usingKey:(MPKey *)key {
 
     return [self generateContentForSiteNamed:name ofType:type withCounter:counter
-                                     variant:MPSiteVariantPassword usingKey:key];
+                                     variant:MPSiteVariantPassword context:nil usingKey:key];
+}
+
+- (NSString *)generateAnswerForSiteNamed:(NSString *)name onQuestion:(NSString *)question usingKey:(MPKey *)key {
+
+    return [self generateContentForSiteNamed:name ofType:MPSiteTypeGeneratedPhrase withCounter:1
+                                     variant:MPSiteVariantAnswer context:question usingKey:key];
 }
 
 - (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
-              variant:(MPSiteVariant)variant usingKey:(MPKey *)key {
+              variant:(MPSiteVariant)variant context:(NSString *)context usingKey:(MPKey *)key {
 
     // Determine the seed whose bytes will be used for calculating a password
-    uint32_t ncounter = htonl( counter ), nnameLength = htonl( name.length );
+    uint32_t ncounter = htonl( counter ), nnameLength = htonl( name.length ), ncontextLength = htonl( context.length );
     NSData *counterBytes = [NSData dataWithBytes:&ncounter length:sizeof( ncounter )];
     NSData *nameLengthBytes = [NSData dataWithBytes:&nnameLength length:sizeof( nnameLength )];
+    NSData *contextLengthBytes = [NSData dataWithBytes:&ncontextLength length:sizeof( ncontextLength )];
     NSString *scope = [self scopeForVariant:variant];
-    trc( @"seed from: hmac-sha256(%@, %@ | %@ | %@ | %@)",
-            [[key keyID] encodeHex], scope, [nameLengthBytes encodeHex], name, [counterBytes encodeHex] );
+    trc( @"seed from: hmac-sha256(%@, %@ | %@ | %@ | %@ | %@)",
+            [[key keyID] encodeHex], scope, [nameLengthBytes encodeHex], name, [counterBytes encodeHex], context );
     NSData *seed = [[NSData dataByConcatenatingDatas:
             [scope dataUsingEncoding:NSUTF8StringEncoding],
             nameLengthBytes,
             [name dataUsingEncoding:NSUTF8StringEncoding],
             counterBytes,
-                    nil]
+            context? contextLengthBytes: nil,
+            [context dataUsingEncoding:NSUTF8StringEncoding],
+            nil]
             hmacWith:PearlHashSHA256 key:key.keyData];
     trc( @"seed is: %@", [seed encodeHex] );
     const char *seedBytes = seed.bytes;
@@ -509,6 +521,34 @@
     return result;
 }
 
+- (NSString *)resolveAnswerForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey {
+
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_group_enter( group );
+    __block NSString *result = nil;
+    [self resolveAnswerForSite:site usingKey:siteKey result:^(NSString *result_) {
+        result = result_;
+        dispatch_group_leave( group );
+    }];
+    dispatch_group_wait( group, DISPATCH_TIME_FOREVER );
+
+    return result;
+}
+
+- (NSString *)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question ofSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey {
+
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_group_enter( group );
+    __block NSString *result = nil;
+    [self resolveAnswerForQuestion:question ofSite:site usingKey:siteKey result:^(NSString *result_) {
+        result = result_;
+        dispatch_group_leave( group );
+    }];
+    dispatch_group_wait( group, DISPATCH_TIME_FOREVER );
+
+    return result;
+}
+
 - (void)resolveLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey result:(void ( ^ )(NSString *result))resultBlock {
 
     NSAssert( [siteKey.keyID isEqualToData:site.user.keyID], @"Site does not belong to current user." );
@@ -597,6 +637,44 @@
             break;
         }
     }
+}
+
+- (void)resolveAnswerForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey result:(void ( ^ )(NSString *result))resultBlock {
+
+    NSAssert( [siteKey.keyID isEqualToData:site.user.keyID], @"Site does not belong to current user." );
+    NSString *name = site.name;
+    id<MPAlgorithm> algorithm = nil;
+    if (!site.name.length)
+        err( @"Missing name." );
+    else if (!siteKey.keyData.length)
+        err( @"Missing key." );
+    else
+        algorithm = site.algorithm;
+
+    dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
+        NSString *result = [algorithm generateAnswerForSiteNamed:name onQuestion:nil usingKey:siteKey];
+        resultBlock( result );
+    } );
+}
+
+- (void)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question ofSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey
+                          result:(void ( ^ )(NSString *result))resultBlock {
+
+    NSAssert( [siteKey.keyID isEqualToData:site.user.keyID], @"Site does not belong to current user." );
+    NSString *name = site.name;
+    NSString *keyword = question.keyword;
+    id<MPAlgorithm> algorithm = nil;
+    if (!site.name.length)
+        err( @"Missing name." );
+    else if (!siteKey.keyData.length)
+        err( @"Missing key." );
+    else
+        algorithm = site.algorithm;
+
+    dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
+        NSString *result = [algorithm generateAnswerForSiteNamed:name onQuestion:keyword usingKey:siteKey];
+        resultBlock( result );
+    } );
 }
 
 - (void)importProtectedPassword:(NSString *)protectedContent protectedByKey:(MPKey *)importKey

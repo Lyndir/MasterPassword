@@ -1203,12 +1203,12 @@
                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LvK-28-fbm" userLabel="Settings Container">
                                                                                     <rect key="frame" x="300" y="0.0" width="300" height="100"/>
                                                                                     <subviews>
-                                                                                        <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vGk-t6-hZn" userLabel="Upgrade">
-                                                                                            <rect key="frame" x="29" y="56" width="44" height="44"/>
+                                                                                        <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IKd-Ot-0n4" userLabel="Upgrade">
+                                                                                            <rect key="frame" x="-15" y="56" width="44" height="44"/>
                                                                                             <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
                                                                                             <constraints>
-                                                                                                <constraint firstAttribute="width" constant="44" id="8gK-8v-Q0K"/>
-                                                                                                <constraint firstAttribute="height" constant="44" id="hQh-jZ-41x"/>
+                                                                                                <constraint firstAttribute="width" constant="44" id="5DT-m6-RYu"/>
+                                                                                                <constraint firstAttribute="height" constant="44" id="kyZ-o1-ntZ"/>
                                                                                             </constraints>
                                                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                                                             <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
@@ -1220,7 +1220,27 @@
                                                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                                             </state>
                                                                                             <connections>
-                                                                                                <action selector="doUpgrade:" destination="W2g-yv-V3V" eventType="touchUpInside" id="H3Y-gA-0MY"/>
+                                                                                                <action selector="doUpgrade:" destination="W2g-yv-V3V" eventType="touchUpInside" id="kTZ-AM-qGa"/>
+                                                                                            </connections>
+                                                                                        </button>
+                                                                                        <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vGk-t6-hZn" userLabel="Answers">
+                                                                                            <rect key="frame" x="29" y="56" width="44" height="44"/>
+                                                                                            <accessibility key="accessibilityConfiguration" hint="Upgrades the password."/>
+                                                                                            <constraints>
+                                                                                                <constraint firstAttribute="width" constant="44" id="8gK-8v-Q0K"/>
+                                                                                                <constraint firstAttribute="height" constant="44" id="hQh-jZ-41x"/>
+                                                                                            </constraints>
+                                                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                                                            <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                                                                                            <state key="normal" image="icon_question.png">
+                                                                                                <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                                                            </state>
+                                                                                            <state key="highlighted">
+                                                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                                            </state>
+                                                                                            <connections>
+                                                                                                <segue destination="koB-V2-GYf" kind="modal" identifier="answers" id="gQR-Xm-ATO"/>
                                                                                             </connections>
                                                                                         </button>
                                                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="1" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="PKP-M9-T8E" userLabel="Counter">
@@ -1316,9 +1336,11 @@
                                                                                     </subviews>
                                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                                     <constraints>
+                                                                                        <constraint firstItem="PKP-M9-T8E" firstAttribute="leading" secondItem="IKd-Ot-0n4" secondAttribute="trailing" priority="750" id="3sN-hc-iUd"/>
                                                                                         <constraint firstItem="PKP-M9-T8E" firstAttribute="leading" secondItem="vGk-t6-hZn" secondAttribute="trailing" id="47y-gh-Ibs"/>
                                                                                         <constraint firstItem="PKP-M9-T8E" firstAttribute="centerY" secondItem="uZi-FT-Fe8" secondAttribute="centerY" id="KEK-0r-cob"/>
                                                                                         <constraint firstItem="qBo-Kw-vN9" firstAttribute="leading" secondItem="uZi-FT-Fe8" secondAttribute="trailing" id="LLk-5B-1g9"/>
+                                                                                        <constraint firstItem="vGk-t6-hZn" firstAttribute="leading" secondItem="IKd-Ot-0n4" secondAttribute="trailing" id="e2D-Rg-OQz"/>
                                                                                         <constraint firstItem="K8q-bM-tzh" firstAttribute="leading" secondItem="I0v-ou-hDb" secondAttribute="trailing" id="il2-7H-Hgk"/>
                                                                                         <constraint firstItem="I0v-ou-hDb" firstAttribute="leading" secondItem="qBo-Kw-vN9" secondAttribute="trailing" id="myx-31-6tz"/>
                                                                                         <constraint firstAttribute="trailing" secondItem="K8q-bM-tzh" secondAttribute="trailing" constant="44" id="qQK-ts-seh"/>
@@ -1366,6 +1388,7 @@
                                                                                 <constraint firstItem="b5f-wN-2xb" firstAttribute="centerY" secondItem="vGk-t6-hZn" secondAttribute="centerY" id="fGB-8g-u5b"/>
                                                                                 <constraint firstItem="tl3-hd-x35" firstAttribute="leading" secondItem="bff-RU-OcY" secondAttribute="leading" id="fx5-KQ-LSM"/>
                                                                                 <constraint firstItem="tl3-hd-x35" firstAttribute="top" secondItem="bff-RU-OcY" secondAttribute="top" id="jc9-39-FY3"/>
+                                                                                <constraint firstItem="b5f-wN-2xb" firstAttribute="centerY" secondItem="IKd-Ot-0n4" secondAttribute="centerY" id="mCJ-ug-mmv"/>
                                                                                 <constraint firstItem="K8q-bM-tzh" firstAttribute="centerY" secondItem="b5f-wN-2xb" secondAttribute="centerY" id="ofO-r3-bjz"/>
                                                                                 <constraint firstItem="b5f-wN-2xb" firstAttribute="centerX" secondItem="tuh-Au-J9k" secondAttribute="centerX" id="pYG-bz-kd8"/>
                                                                                 <constraint firstAttribute="trailing" secondItem="LvK-28-fbm" secondAttribute="trailing" id="r9d-ym-Frs"/>
@@ -1417,6 +1440,7 @@
                                                             <constraint firstAttribute="bottom" secondItem="xph-TW-9QO" secondAttribute="bottom" id="W1r-47-bqe"/>
                                                         </constraints>
                                                         <connections>
+                                                            <outlet property="answersButton" destination="vGk-t6-hZn" id="0oi-2F-M1S"/>
                                                             <outlet property="contentButton" destination="aDw-qY-VjU" id="R3R-kq-XMd"/>
                                                             <outlet property="counterButton" destination="uZi-FT-Fe8" id="oaF-bB-Sgc"/>
                                                             <outlet property="counterLabel" destination="PKP-M9-T8E" id="m9u-Qx-Z9N"/>
@@ -1430,7 +1454,7 @@
                                                             <outlet property="passwordField" destination="blw-Ou-8I8" id="bov-At-Wpd"/>
                                                             <outlet property="siteNameLabel" destination="OwP-sb-Wxl" id="6GN-Ou-K0F"/>
                                                             <outlet property="strengthLabel" destination="wfM-xz-roR" id="dzk-dB-OfP"/>
-                                                            <outlet property="upgradeButton" destination="vGk-t6-hZn" id="m2T-CA-HmJ"/>
+                                                            <outlet property="upgradeButton" destination="IKd-Ot-0n4" id="c1P-UY-odx"/>
                                                         </connections>
                                                     </collectionViewCell>
                                                 </cells>
@@ -1578,7 +1602,6 @@
                         <outlet property="popdownToTopConstraint" destination="BdD-Kc-eHl" id="59Y-ap-Yn4"/>
                         <outlet property="popdownView" destination="XNM-XQ-rMe" id="FaW-4m-Fff"/>
                         <segue destination="z9O-w0-6oR" kind="modal" identifier="guide" id="Ql4-wf-T8u"/>
-                        <segue destination="koB-V2-GYf" kind="modal" identifier="answers" id="PbR-2r-Ebm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="APh-u5-vFI" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2842,7 +2865,8 @@ See </string>
                                             <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="28"/>
                                             <textInputTraits key="textInputTraits" keyboardType="namePhonePad" keyboardAppearance="alert" returnKeyType="done"/>
                                             <connections>
-                                                <outlet property="delegate" destination="S8q-YF-Kt9" id="TtZ-rC-HTB"/>
+                                                <action selector="textFieldDidChange:" destination="iFm-3w-hOv" eventType="editingChanged" id="V9g-YU-rIb"/>
+                                                <outlet property="delegate" destination="iFm-3w-hOv" id="olS-Rx-56Y"/>
                                             </connections>
                                         </textField>
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="pifm gup balvabi yiz" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="3xA-ez-efa" userLabel="Answer Field">
@@ -2901,6 +2925,7 @@ See </string>
         <image name="icon_list-names.png" width="32" height="32"/>
         <image name="icon_person.png" width="32" height="32"/>
         <image name="icon_plus.png" width="32" height="32"/>
+        <image name="icon_question.png" width="32" height="32"/>
         <image name="icon_star-hollow.png" width="32" height="32"/>
         <image name="icon_thumbs-up.png" width="32" height="32"/>
         <image name="icon_tools.png" width="32" height="32"/>

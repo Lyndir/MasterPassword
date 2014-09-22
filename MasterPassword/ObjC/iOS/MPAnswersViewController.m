@@ -13,50 +13,235 @@
 #import "UIColor+Expanded.h"
 #import "MPPasswordsViewController.h"
 #import "MPCoachmarkViewController.h"
+#import "MPSiteQuestionEntity.h"
 
 @interface MPAnswersViewController()
 
 @end
 
-@implementation MPAnswersViewController
+@implementation MPAnswersViewController {
+    NSManagedObjectID *_siteOID;
+    BOOL _multiple;
+}
+
+#pragma mark - Life
+
+- (void)viewDidLoad {
+
+    [super viewDidLoad];
+
+    self.tableView.tableHeaderView = [UIView new];
+    self.tableView.tableFooterView = [UIView new];
+}
+
+#pragma mark - State
+
+- (void)setSite:(MPSiteEntity *)site {
+
+    _siteOID = [site objectID];
+    _multiple = [site.questions count] > 0;
+    [self.tableView reloadData];
+}
+
+- (MPSiteEntity *)siteInContext:(NSManagedObjectContext *)context {
+
+    return [MPSiteEntity existingObjectWithID:_siteOID inContext:context];
+}
 
 #pragma mark - UITableViewDelegate
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+
+    return 2;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+
+    if (section == 0)
+        return 3;
+
+    if (!_multiple)
+        return 0;
+
+    return MAX( 2, [[self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]].questions count] );
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    if (indexPath.item == 0)
-        return [MPGlobalAnswersCell dequeueCellFromTableView:tableView indexPath:indexPath];
-    if (indexPath.item == 1)
-        return [MPSendAnswersCell dequeueCellFromTableView:tableView indexPath:indexPath];
-    if (indexPath.item == 2)
-        return [MPMultipleAnswersCell dequeueCellFromTableView:tableView indexPath:indexPath];
+    MPSiteEntity *site = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
+    if (indexPath.section == 0) {
+        if (indexPath.item == 0) {
+            MPGlobalAnswersCell *cell = [MPGlobalAnswersCell dequeueCellFromTableView:tableView indexPath:indexPath];
+            [cell setSite:site];
+            return cell;
+        }
+        if (indexPath.item == 1)
+            return [MPSendAnswersCell dequeueCellFromTableView:tableView indexPath:indexPath];
+        if (indexPath.item == 2) {
+            MPMultipleAnswersCell *cell = [MPMultipleAnswersCell dequeueCellFromTableView:tableView indexPath:indexPath];
+            cell.accessoryType = _multiple? UITableViewCellAccessoryCheckmark: UITableViewCellAccessoryNone;
+            return cell;
+        }
+        Throw( @"Unsupported row index: %@", indexPath );
+    }
 
     MPAnswersQuestionCell *cell = [MPAnswersQuestionCell dequeueCellFromTableView:tableView indexPath:indexPath];
+    MPSiteQuestionEntity *question = nil;
+    if ([site.questions count] > indexPath.item)
+        question = site.questions[indexPath.item];
+    [cell setQuestion:question forSite:site];
 
     return cell;
 }
 
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    if (indexPath.section == 0) {
+        if (indexPath.item == 0)
+            return 133;
+        return 44;
+    }
+
+    return 130;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-//    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
-//
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    MPSiteEntity *site = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+
+    if ([cell isKindOfClass:[MPGlobalAnswersCell class]]) {
+        [PearlOverlay showTemporaryOverlayWithTitle:strl( @"Answer Copied" ) dismissAfter:2];
+        [UIPasteboard generalPasteboard].string = ((MPGlobalAnswersCell *)cell).answerField.text;
+    }
+    else if ([cell isKindOfClass:[MPMultipleAnswersCell class]]) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            _multiple = !_multiple;
+            [tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }];
+    }
+    else if ([cell isKindOfClass:[MPSendAnswersCell class]]) {
+        NSString *body;
+        if (!_multiple) {
+            NSObject *answer = [site.algorithm resolveAnswerForSite:site usingKey:[MPiOSAppDelegate get].key];
+            body = strf( @"Master Password generated the following security answer for your site: %@\n\n"
+                    @"%@\n"
+                    @"\n\nYou should use this as the answer to each security question the site asks you.\n"
+                    @"Do not share this answer with others!", site.name, answer );
+        }
+        else {
+            NSMutableString *bodyBuilder = [NSMutableString string];
+            [bodyBuilder appendFormat:@"Master Password generated the following security answers for your site: %@\n\n", site.name];
+            for (MPSiteQuestionEntity *question in site.questions) {
+                NSObject *answer = [site.algorithm resolveAnswerForQuestion:question ofSite:site usingKey:[MPiOSAppDelegate get].key];
+                [bodyBuilder appendFormat:@"For question: '%@', use answer: %@\n", question.keyword, answer];
+            }
+            [bodyBuilder appendFormat:@"\n\nUse the answer for the matching security question.\n"
+                    @"Do not share this answer with others!"];
+            body = bodyBuilder;
+        }
+
+        [PearlEMail sendEMailTo:nil fromVC:self subject:strf( @"Master Password security answers for %@", site.name ) body:body];
+    }
+    else if ([cell isKindOfClass:[MPAnswersQuestionCell class]]) {
+        [PearlOverlay showTemporaryOverlayWithTitle:strl( @"Answer Copied" ) dismissAfter:2];
+        [UIPasteboard generalPasteboard].string = ((MPAnswersQuestionCell *)cell).answerField.text;
+    }
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end
 
-@implementation MPGlobalAnswersCell : UITableViewCell
+@implementation MPGlobalAnswersCell
+
+#pragma mark - State
+
+- (void)setSite:(MPSiteEntity *)site {
+
+    self.answerField.text = @"...";
+    [site.algorithm resolveAnswerForSite:site usingKey:[MPiOSAppDelegate get].key result:^(NSString *result) {
+        PearlMainQueue( ^{
+            self.answerField.text = result;
+        } );
+    }];
+}
 
 @end
 
-@implementation MPSendAnswersCell : UITableViewCell
+@implementation MPSendAnswersCell
 
 @end
 
-@implementation MPMultipleAnswersCell : UITableViewCell
+@implementation MPMultipleAnswersCell
 
 @end
 
-@implementation MPAnswersQuestionCell : UITableViewCell
+@implementation MPAnswersQuestionCell {
+    NSManagedObjectID *_siteOID;
+    NSManagedObjectID *_questionOID;
+}
+
+#pragma mark - State
+
+- (void)setQuestion:(MPSiteQuestionEntity *)question forSite:(MPSiteEntity *)site {
+
+    _siteOID = site.objectID;
+    _questionOID = question.objectID;
+
+    [self updateAnswerForQuestion:question ofSite:site];
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+
+    [textField resignFirstResponder];
+
+    return NO;
+}
+
+- (IBAction)textFieldDidChange:(UITextField *)textField {
+
+    NSString *keyword = textField.text;
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        MPSiteEntity *site = [MPSiteEntity existingObjectWithID:_siteOID inContext:context];
+        MPSiteQuestionEntity *question = [MPSiteQuestionEntity existingObjectWithID:_questionOID inContext:context];
+        if (!question)
+            [site addQuestionsObject:question = [MPSiteQuestionEntity insertNewObjectInContext:context]];
+
+        question.keyword = keyword;
+
+        if ([context saveToStore]) {
+            _questionOID = question.objectID;
+            [self updateAnswerForQuestion:question ofSite:site];
+        }
+    }];
+}
+
+#pragma mark - Private
+
+- (void)updateAnswerForQuestion:(MPSiteQuestionEntity *)question ofSite:(MPSiteEntity *)site {
+
+    if (!question)
+        PearlMainQueue( ^{
+            self.questionField.text = self.answerField.text = nil;
+        } );
+
+    else {
+        NSString *keyword = question.keyword;
+        PearlMainQueue( ^{
+            self.answerField.text = @"...";
+        } );
+        [site.algorithm resolveAnswerForQuestion:question ofSite:site usingKey:[MPiOSAppDelegate get].key result:^(NSString *result) {
+            PearlMainQueue( ^{
+                self.questionField.text = keyword;
+                self.answerField.text = result;
+            } );
+        }];
+    }
+}
 
 @end

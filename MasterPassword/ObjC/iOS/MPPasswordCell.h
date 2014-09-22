@@ -30,5 +30,6 @@ typedef NS_ENUM ( NSUInteger, MPPasswordCellMode ) {
 - (void)setSite:(MPSiteEntity *)site animated:(BOOL)animated;
 - (void)setTransientSite:(NSString *)siteName animated:(BOOL)animated;
 - (void)setMode:(MPPasswordCellMode)mode animated:(BOOL)animated;
+- (MPSiteEntity *)siteInContext:(NSManagedObjectContext *)context;
 
 @end
