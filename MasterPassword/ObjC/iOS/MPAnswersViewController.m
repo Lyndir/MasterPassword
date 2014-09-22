@@ -118,8 +118,32 @@
     }
     else if ([cell isKindOfClass:[MPMultipleAnswersCell class]]) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            _multiple = !_multiple;
-            [tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+            if (!_multiple) {
+                _multiple = YES;
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                [tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                         withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
+            else if (_multiple && [site.questions count])
+                [PearlAlert showAlertWithTitle:@"Remove Site Questions?" message:
+                                @"Do you want to remove the questions you have configured for this site?"
+                                     viewStyle:UIAlertViewStyleDefault initAlert:nil
+                             tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                                 if (buttonIndex == [alert cancelButtonIndex])
+                                     return;
+
+                                 [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                                     MPSiteEntity *site_ = [self siteInContext:context];
+                                     [site_ removeQuestions:site_.questions];
+                                     [context saveToStore];
+                                     PearlMainQueue( ^{
+                                         _multiple = NO;
+                                         cell.accessoryType = UITableViewCellAccessoryNone;
+                                         [tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+                                     } );
+                                 }];
+                             } cancelTitle:@"Cancel" otherTitles:@"Remove Questions", nil];
         }];
     }
     else if ([cell isKindOfClass:[MPSendAnswersCell class]]) {
@@ -215,6 +239,13 @@
         question.keyword = keyword;
 
         if ([context saveToStore]) {
+            if ([question.objectID isTemporaryID]) {
+                NSError *error = nil;
+                [context obtainPermanentIDsForObjects:@[ question ] error:&error];
+                if (error)
+                    err( @"Failed to obtain permanent object ID: %@", [error fullDescription] );
+            }
+
             _questionOID = question.objectID;
             [self updateAnswerForQuestion:question ofSite:site];
         }
