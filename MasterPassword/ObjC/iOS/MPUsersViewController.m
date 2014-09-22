@@ -692,7 +692,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
             ];
             NSArray *users = [mainContext executeFetchRequest:fetchRequest error:&error];
             if (!users) {
-                err( @"Failed to load users: %@", error );
+                err( @"Failed to load users: %@", [error fullDescription] );
                 self.userIDs = nil;
             }
 

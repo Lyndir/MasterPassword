@@ -229,7 +229,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         NSData *importedSitesData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
                                                           returningResponse:&response error:&error];
         if (error)
-            err( @"While reading imported sites from %@: %@", url, error );
+            err( @"While reading imported sites from %@: %@", url, [error fullDescription] );
         if (!importedSitesData)
             return;
 
@@ -346,7 +346,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         [moc saveToStore];
         NSError *error = nil;
         if (![moc obtainPermanentIDsForObjects:@[ newUser ] error:&error])
-            err( @"Failed to obtain permanent object ID for new user: %@", error );
+            err( @"Failed to obtain permanent object ID for new user: %@", [error fullDescription] );
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self updateUsers];
@@ -510,7 +510,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO] ];
     NSArray *users = [mainContext executeFetchRequest:fetchRequest error:&error];
     if (!users)
-        err( @"Failed to load users: %@", error );
+        err( @"Failed to load users: %@", [error fullDescription] );
 
     if (![users count]) {
         NSMenuItem *noUsersItem = [self.usersItem.submenu addItemWithTitle:@"No users" action:NULL keyEquivalent:@""];

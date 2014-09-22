@@ -524,7 +524,7 @@
         NSError *error = nil;
         NSArray *siteResults = [context executeFetchRequest:fetchRequest error:&error];
         if (!siteResults) {
-            err( @"While fetching sites for completion: %@", error );
+            err( @"While fetching sites for completion: %@", [error fullDescription] );
             return;
         }
         [profiler finishJob:@"do fetch"];

@@ -80,7 +80,7 @@
     migrationRequest.predicate = [NSPredicate predicateWithFormat:@"version_ < %d AND user == %@", self.version, user];
     NSArray *migrationSites = [moc executeFetchRequest:migrationRequest error:&error];
     if (!migrationSites) {
-        err( @"While looking for sites to migrate: %@", error );
+        err( @"While looking for sites to migrate: %@", [error fullDescription] );
         return NO;
     }
 

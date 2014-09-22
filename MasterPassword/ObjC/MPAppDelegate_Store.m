@@ -163,7 +163,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
                                                                          NSInferMappingModelAutomaticallyOption       : @YES,
                                                                          STORE_OPTIONS
                                                                  } error:&error]) {
-            err( @"Failed to open store: %@", error );
+            err( @"Failed to open store: %@", [error fullDescription] );
             [self handleCoordinatorError:error];
             return;
         }
@@ -231,11 +231,11 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
         NSError *error = nil;
         for (NSPersistentStore *store in self.persistentStoreCoordinator.persistentStores) {
             if (![self.persistentStoreCoordinator removePersistentStore:store error:&error])
-                err( @"Couldn't remove persistence store from coordinator: %@", error );
+                err( @"Couldn't remove persistence store from coordinator: %@", [error fullDescription] );
         }
         self.persistentStoreCoordinator = nil;
         if (![[NSFileManager defaultManager] removeItemAtURL:self.localStoreURL error:&error])
-            err( @"Couldn't remove persistence store at URL %@: %@", self.localStoreURL, error );
+            err( @"Couldn't remove persistence store at URL %@: %@", self.localStoreURL, [error fullDescription] );
 
         [self loadStore];
     }
@@ -253,7 +253,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
             fetchRequest.entity = entity;
             NSArray *objects = [context executeFetchRequest:fetchRequest error:&error];
             if (!objects) {
-                err( @"Failed to fetch %@ objects: %@", entity, error );
+                err( @"Failed to fetch %@ objects: %@", entity, [error fullDescription] );
                 continue;
             }
 
@@ -392,7 +392,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
 
         NSError *error = nil;
         if (site.objectID.isTemporaryID && ![context obtainPermanentIDsForObjects:@[ site ] error:&error])
-            err( @"Failed to obtain a permanent object ID after creating new site: %@", error );
+            err( @"Failed to obtain a permanent object ID after creating new site: %@", [error fullDescription] );
 
         [context saveToStore];
 
@@ -424,7 +424,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
 
         NSError *error = nil;
         if (![context obtainPermanentIDsForObjects:@[ newSite ] error:&error])
-            err( @"Failed to obtain a permanent object ID after changing object type: %@", error );
+            err( @"Failed to obtain a permanent object ID after changing object type: %@", [error fullDescription] );
 
         [context deleteObject:site];
         [context saveToStore];
@@ -470,7 +470,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
                 initWithPattern:@"^#[[:space:]]*([^:]+): (.*)"
                         options:(NSRegularExpressionOptions)0 error:&error];
         if (error) {
-            err( @"Error loading the header pattern: %@", error );
+            err( @"Error loading the header pattern: %@", [error fullDescription] );
             return MPImportResultInternalError;
         }
     }
@@ -484,7 +484,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
                                 options:(NSRegularExpressionOptions)0 error:&error]
         ];
         if (error) {
-            err( @"Error loading the site patterns: %@", error );
+            err( @"Error loading the site patterns: %@", [error fullDescription] );
             return MPImportResultInternalError;
         }
     }
@@ -534,7 +534,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
                 userFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", importUserName];
                 NSArray *users = [context executeFetchRequest:userFetchRequest error:&error];
                 if (!users) {
-                    err( @"While looking for user: %@, error: %@", importUserName, error );
+                    err( @"While looking for user: %@, error: %@", importUserName, [error fullDescription] );
                     return MPImportResultInternalError;
                 }
                 if ([users count] > 1) {
@@ -621,7 +621,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
             siteFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND user == %@", siteName, user];
             NSArray *existingSites = [context executeFetchRequest:siteFetchRequest error:&error];
             if (!existingSites) {
-                err( @"Lookup of existing sites failed for site: %@, user: %@, error: %@", siteName, user.userID, error );
+                err( @"Lookup of existing sites failed for site: %@, user: %@, error: %@", siteName, user.userID, [error fullDescription] );
                 return MPImportResultInternalError;
             }
             if ([existingSites count]) {

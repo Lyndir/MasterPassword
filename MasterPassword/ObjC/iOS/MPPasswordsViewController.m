@@ -388,7 +388,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
                 [NSPredicate predicateWithFormat:@"user == %@ AND name BEGINSWITH[cd] %@", activeUserOID, query]:
                 [NSPredicate predicateWithFormat:@"user == %@", activeUserOID];
         if (![self.fetchedResultsController performFetch:&error])
-            err( @"Couldn't fetch sites: %@", error );
+            err( @"Couldn't fetch sites: %@", [error fullDescription] );
 
         [self.passwordCollectionView performBatchUpdates:^{
             [self fetchedItemsDidUpdate];

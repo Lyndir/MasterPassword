@@ -41,7 +41,7 @@ PearlAssociatedObjectProperty( NSArray*, PaymentTransactions, paymentTransaction
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
 
-    err( @"StoreKit request (%@) failed: %@", request, error );
+    err( @"StoreKit request (%@) failed: %@", request, [error fullDescription] );
 }
 
 - (void)requestDidFinish:(SKRequest *)request {
@@ -75,7 +75,7 @@ PearlAssociatedObjectProperty( NSArray*, PaymentTransactions, paymentTransaction
 
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {
 
-    err( @"StoreKit restore failed: %@", error );
+    err( @"StoreKit restore failed: %@", [error fullDescription] );
 }
 
 @end

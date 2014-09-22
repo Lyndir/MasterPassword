@@ -170,7 +170,7 @@
         NSData *importedSitesData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
                                                           returningResponse:&response error:&error];
         if (error)
-            err( @"While reading imported sites from %@: %@", url, error );
+            err( @"While reading imported sites from %@: %@", url, [error fullDescription] );
         if (!importedSitesData)
             return;
 
@@ -455,7 +455,7 @@
                      NSError *error = nil;
                      if (![[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
                              writeToURL:exportURL options:NSDataWritingFileProtectionComplete error:&error])
-                         err( @"Failed to write export data to URL %@: %@", exportURL, error );
+                         err( @"Failed to write export data to URL %@: %@", exportURL, [error fullDescription] );
                      else {
                          self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:exportURL];
                          self.interactionController.UTI = @"com.lyndir.masterpassword.sites";

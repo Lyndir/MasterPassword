@@ -52,7 +52,7 @@
 
     NSError *error;
     if (activeUser.objectID.isTemporaryID && ![activeUser.managedObjectContext obtainPermanentIDsForObjects:@[ activeUser ] error:&error])
-    err(@"Failed to obtain a permanent object ID after setting active user: %@", error);
+    err(@"Failed to obtain a permanent object ID after setting active user: %@", [error fullDescription]);
 
     self.activeUserOID = activeUser.objectID;
 }
