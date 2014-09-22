@@ -27,6 +27,7 @@ typedef NS_ENUM( NSUInteger, MPImportResult ) {
 + (BOOL)managedObjectContextPerformBlockAndWait:(void (^)(NSManagedObjectContext *context))mocBlock;
 
 - (MPFixableResult)findAndFixInconsistenciesSaveInContext:(NSManagedObjectContext *)context;
+- (void)deleteAndResetStore;
 
 /** @param completion The block to execute after adding the site, executed from the main thread with the new site in the main MOC. */
 - (void)addSiteNamed:(NSString *)siteName completion:(void ( ^ )(MPSiteEntity *site, NSManagedObjectContext *context))completion;

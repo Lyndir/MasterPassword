@@ -341,6 +341,26 @@
             showComposerForVC:viewController];
 }
 
+- (void)handleCoordinatorError:(NSError *)error {
+
+    static dispatch_once_t once = 0;
+    dispatch_once( &once, ^{
+        [PearlAlert showAlertWithTitle:@"Failed To Load Sites" message:
+                        @"Master Password was unable to open your sites history.\n"
+                                @"This may be due to corruption.  You can either reset Master Password and "
+                                @"recreate your user, or E-Mail us your logs and leave your corrupt store as-is for now."
+                             viewStyle:UIAlertViewStyleDefault initAlert:nil
+                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                         if (buttonIndex == [alert cancelButtonIndex])
+                             return;
+                         if (buttonIndex == [alert firstOtherButtonIndex])
+                             [self openFeedbackWithLogs:YES forVC:nil];
+                         if (buttonIndex == [alert firstOtherButtonIndex] + 1)
+                             [self deleteAndResetStore];
+                     } cancelTitle:@"Ignore" otherTitles:@"E-Mail Logs", @"Reset", nil];
+    } );
+}
+
 - (void)showExportForVC:(UIViewController *)viewController {
 
     [PearlAlert showAlertWithTitle:@"Exporting Your Sites"

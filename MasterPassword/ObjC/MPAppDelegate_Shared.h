@@ -22,5 +22,6 @@
 - (MPUserEntity *)activeUserForMainThread;
 - (MPUserEntity *)activeUserInContext:(NSManagedObjectContext *)context;
 - (void)setActiveUser:(MPUserEntity *)activeUser;
+- (void)handleCoordinatorError:(NSError *)error;
 
 @end

@@ -157,12 +157,16 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
             err( @"Couldn't create our application support directory: %@", [error fullDescription] );
             return;
         }
-        [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:localStoreURL
-                                                            options:@{
-                                                                    NSMigratePersistentStoresAutomaticallyOption : @YES,
-                                                                    NSInferMappingModelAutomaticallyOption       : @YES,
-                                                                    STORE_OPTIONS
-                                                            } error:&error];
+        if (![self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[self localStoreURL]
+                                                                 options:@{
+                                                                         NSMigratePersistentStoresAutomaticallyOption : @YES,
+                                                                         NSInferMappingModelAutomaticallyOption       : @YES,
+                                                                         STORE_OPTIONS
+                                                                 } error:&error]) {
+            err( @"Failed to open store: %@", error );
+            [self handleCoordinatorError:error];
+            return;
+        }
 
         // Create our contexts and observer.
         self.privateManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
@@ -184,16 +188,16 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
                         }];
 
 #if TARGET_OS_IPHONE
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification object:UIApp
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:
-                    ^(NSNotification *note) {
-                        [self.mainManagedObjectContext saveToStore];
-                    }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:UIApp
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:
-                    ^(NSNotification *note) {
-                        [self.mainManagedObjectContext saveToStore];
-                    }];
+        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification object:UIApp
+                                                           queue:[NSOperationQueue mainQueue] usingBlock:
+                        ^(NSNotification *note) {
+                            [self.mainManagedObjectContext saveToStore];
+                        }];
+        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:UIApp
+                                                           queue:[NSOperationQueue mainQueue] usingBlock:
+                        ^(NSNotification *note) {
+                            [self.mainManagedObjectContext saveToStore];
+                        }];
 #else
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillTerminateNotification object:NSApp
                                                        queue:[NSOperationQueue mainQueue] usingBlock:
@@ -207,6 +211,33 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
             [MPAppDelegate_Shared managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
                 [self findAndFixInconsistenciesSaveInContext:context];
             }];
+    }
+}
+
+- (void)deleteAndResetStore {
+
+    @synchronized (self) {
+        // Unregister any existing observers and contexts.
+        if (self.saveObserver)
+            [[NSNotificationCenter defaultCenter] removeObserver:self.saveObserver];
+        [self.mainManagedObjectContext performBlockAndWait:^{
+            [self.mainManagedObjectContext reset];
+            self.mainManagedObjectContext = nil;
+        }];
+        [self.privateManagedObjectContext performBlockAndWait:^{
+            [self.privateManagedObjectContext reset];
+            self.privateManagedObjectContext = nil;
+        }];
+        NSError *error = nil;
+        for (NSPersistentStore *store in self.persistentStoreCoordinator.persistentStores) {
+            if (![self.persistentStoreCoordinator removePersistentStore:store error:&error])
+                err( @"Couldn't remove persistence store from coordinator: %@", error );
+        }
+        self.persistentStoreCoordinator = nil;
+        if (![[NSFileManager defaultManager] removeItemAtURL:self.localStoreURL error:&error])
+            err( @"Couldn't remove persistence store at URL %@: %@", self.localStoreURL, error );
+
+        [self loadStore];
     }
 }
 

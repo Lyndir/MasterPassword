@@ -57,4 +57,8 @@
     self.activeUserOID = activeUser.objectID;
 }
 
+- (void)handleCoordinatorError:(NSError *)error {
+
+}
+
 @end
