@@ -10,7 +10,9 @@
 #import "MPTypeViewController.h"
 #import "MPSiteQuestionEntity.h"
 
-@interface MPAnswersViewController : UITableViewController
+@interface MPAnswersViewController : UIViewController
+
+@property (nonatomic) IBOutlet UITableView *tableView;
 
 - (void)setSite:(MPSiteEntity *)site;
 - (MPSiteEntity *)siteInContext:(NSManagedObjectContext *)context;

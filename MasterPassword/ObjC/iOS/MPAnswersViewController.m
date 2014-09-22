@@ -32,6 +32,20 @@
 
     self.tableView.tableHeaderView = [UIView new];
     self.tableView.tableFooterView = [UIView new];
+    self.tableView.layer.shadowOpacity = 1;
+    self.view.backgroundColor = [UIColor clearColor];
+}
+
+- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
+
+    return [self respondsToSelector:action];
+}
+
+#pragma mark - Actions
+
+- (IBAction)unwindToCombined:(UIStoryboardSegue *)sender {
+
+    dbg( @"unwindToCombined:%@", sender );
 }
 
 #pragma mark - State

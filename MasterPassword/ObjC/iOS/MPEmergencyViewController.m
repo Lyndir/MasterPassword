@@ -187,7 +187,7 @@
                                  queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
                 Strongify(self);
 
-                [self performSegueWithIdentifier:@"unwind-emergency" sender:self];
+                [self performSegueWithIdentifier:@"unwind-popover" sender:self];
             }],
     ];
 }

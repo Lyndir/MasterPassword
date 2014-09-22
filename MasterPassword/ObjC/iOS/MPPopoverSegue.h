@@ -9,8 +9,8 @@
  */
 
 //
-//  MPEmergencySegue.h
-//  MPEmergencySegue
+//  MPPopoverSegue.h
+//  MPPopoverSegue
 //
 //  Created by lhunath on 2014-04-09.
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
@@ -18,7 +18,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MPEmergencySegue : UIStoryboardSegue
+@interface MPPopoverSegue : UIStoryboardSegue
 
-@property(nonatomic) BOOL unwind;
 @end
