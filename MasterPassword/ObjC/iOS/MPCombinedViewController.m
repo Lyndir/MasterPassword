@@ -19,7 +19,6 @@
 #import "MPCombinedViewController.h"
 #import "MPUsersViewController.h"
 #import "MPPasswordsViewController.h"
-#import "MPPopoverSegue.h"
 #import "MPEmergencyViewController.h"
 #import "MPPasswordsSegue.h"
 
@@ -33,6 +32,8 @@
     NSArray *_notificationObservers;
     MPPasswordsViewController *_passwordsVC;
 }
+
+#pragma mark - Life
 
 - (void)viewDidLoad {
 
@@ -99,16 +100,14 @@
         [self performSegueWithIdentifier:@"emergency" sender:self];
 }
 
-- (UIStoryboardSegue *)segueForUnwindingToViewController:(UIViewController *)toViewController
-                                      fromViewController:(UIViewController *)fromViewController identifier:(NSString *)identifier {
+#pragma mark - Actions
 
-    if ([identifier isEqualToString:@"unwind-popover"])
-        return [[MPPopoverSegue alloc] initWithIdentifier:identifier source:fromViewController destination:toViewController];
+- (IBAction)unwindToCombined:(UIStoryboardSegue *)sender {
 
-    return nil;
+    dbg( @"unwindToCombined:%@", sender );
 }
 
-#pragma mark - Properties
+#pragma mark - State
 
 - (void)setMode:(MPCombinedMode)mode {
 

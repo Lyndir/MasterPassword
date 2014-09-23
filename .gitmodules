@@ -10,3 +10,6 @@
 [submodule "External/RHStatusItemView"]
 	path = External/RHStatusItemView
 	url = git://github.com/lhunath/RHStatusItemView.git
+[submodule "External/KCOrderedAccessorFix"]
+	path = External/KCOrderedAccessorFix
+	url = https://github.com/CFKevinRef/KCOrderedAccessorFix.git

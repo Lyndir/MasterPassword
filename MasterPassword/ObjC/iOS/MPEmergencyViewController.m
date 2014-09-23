@@ -53,18 +53,6 @@
     [self reset];
 }
 
-- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
-
-    return [self respondsToSelector:action];
-}
-
-#pragma mark - Actions
-
-- (IBAction)unwindToCombined:(UIStoryboardSegue *)sender {
-
-    dbg(@"unwindToCombined:%@", sender);
-}
-
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

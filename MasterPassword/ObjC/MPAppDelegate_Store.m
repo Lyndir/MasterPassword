@@ -8,6 +8,7 @@
 
 #import "MPAppDelegate_Store.h"
 #import "MPGeneratedSiteEntity.h"
+#import "NSManagedObjectModel+KCOrderedAccessorFix.h"
 
 #if TARGET_OS_IPHONE
 #define STORE_OPTIONS NSPersistentStoreFileProtectionKey : NSFileProtectionComplete,
@@ -147,9 +148,12 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
         [self migrateStore];
 
         // Create a new store coordinator.
-        if (!self.persistentStoreCoordinator)
-            self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:
-                                               [NSManagedObjectModel mergedModelFromBundles:nil]];
+        if (!self.persistentStoreCoordinator) {
+            NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
+            [model kc_generateOrderedSetAccessors];
+            self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+        }
+
         NSError *error = nil;
         NSURL *localStoreURL = [self localStoreURL];
         if (![[NSFileManager defaultManager] createDirectoryAtURL:[localStoreURL URLByDeletingLastPathComponent]

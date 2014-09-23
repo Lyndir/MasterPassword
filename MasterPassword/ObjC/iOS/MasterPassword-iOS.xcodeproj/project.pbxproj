@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		93D390C1B93F9D3AE37DD0A5 /* MPAnswersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39C426E03358384018E85 /* MPAnswersViewController.m */; };
 		93D391ECBD9BD2C64115B5DD /* PearlSizedTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39156E806BB78E04F78B9 /* PearlSizedTextView.m */; };
-		93D391ED37C9F687FA51EAA1 /* MPPopoverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3937712BF1B67623E5764 /* MPPopoverSegue.m */; };
 		93D3922A53E41A54832E90D9 /* PearlOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D390FADEB325D8D54A957D /* PearlOverlay.m */; };
 		93D39262A8A97DB748213309 /* PearlEMail.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D393BB973253D4BAAC84AA /* PearlEMail.m */; };
 		93D392A8777DC30C11361647 /* UITextView+PearlAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39AA10CD00D05937671B1 /* UITextView+PearlAttributes.h */; };
@@ -35,6 +34,7 @@
 		93D399246DC90F50913A1287 /* UIResponder+PearlFirstResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A1DDFA09AE2E14D26DC /* UIResponder+PearlFirstResponder.m */; };
 		93D3992FA1546E01F498F665 /* PearlNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D398567FD02DB2647B8CF3 /* PearlNavigationController.h */; };
 		93D399433EA75E50656040CB /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93D394077F8FAB8167647187 /* Twitter.framework */; };
+		93D399D7E08A142776A74CB8 /* MPOverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D395105935859D71679931 /* MPOverlayViewController.m */; };
 		93D39A53D76CA70786423458 /* UICollectionView+PearlReloadFromArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39246FC21C6E63E35D615 /* UICollectionView+PearlReloadFromArray.h */; };
 		93D39A5FF670957C0AF8298D /* MPPasswordCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39DEA995041A13DC9CAF7 /* MPPasswordCell.m */; };
 		93D39A8EA1C49CE43B63F47B /* PearlUICollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D8A953779B35403AF6E /* PearlUICollectionView.m */; };
@@ -121,6 +121,8 @@
 		DA32D00A19CF5C55004F3F0E /* icon_question@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37FF1711E29600CF925C /* icon_question@2x.png */; };
 		DA32D01A19D046E1004F3F0E /* PearlFixedTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32D01819D046E1004F3F0E /* PearlFixedTableView.m */; };
 		DA32D01B19D046E1004F3F0E /* PearlFixedTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = DA32D01919D046E1004F3F0E /* PearlFixedTableView.h */; };
+		DA32D03C19D111EB004F3F0E /* NSManagedObjectModel+KCOrderedAccessorFix.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32D03A19D111EB004F3F0E /* NSManagedObjectModel+KCOrderedAccessorFix.m */; };
+		DA32D03E19D11293004F3F0E /* libKCOrderedAccessorFix.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA32D02019D111C6004F3F0E /* libKCOrderedAccessorFix.a */; };
 		DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3509FC15F101A500C14A8E /* PearlQueue.h */; };
 		DA3509FF15F101A500C14A8E /* PearlQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3509FD15F101A500C14A8E /* PearlQueue.m */; };
 		DA38D6A318CCB5BF009AEB3E /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */; };
@@ -395,6 +397,18 @@
 		DAFE4A63150399FF003ABA94 /* NSDateFormatter+RFC3339.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE4A63150399FF003ABA93 /* NSDateFormatter+RFC3339.h */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		DA32D01E19D111C6004F3F0E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		93D390519405B76CC6A57C4F /* MPCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCell.h; sourceTree = "<group>"; };
 		93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Indexing.m"; sourceTree = "<group>"; };
@@ -410,13 +424,13 @@
 		93D3924EE15017F8A12CB436 /* MPPasswordsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordsViewController.m; sourceTree = "<group>"; };
 		93D392876BE5C011DE73B43F /* MPPopdownSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPopdownSegue.h; sourceTree = "<group>"; };
 		93D393310223DDB35218467A /* MPCombinedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCombinedViewController.m; sourceTree = "<group>"; };
-		93D3937712BF1B67623E5764 /* MPPopoverSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPopoverSegue.m; sourceTree = "<group>"; };
 		93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Indexing.h"; sourceTree = "<group>"; };
 		93D393BB973253D4BAAC84AA /* PearlEMail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlEMail.m; sourceTree = "<group>"; };
 		93D394077F8FAB8167647187 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		93D3942A356B639724157982 /* PearlOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlOverlay.h; sourceTree = "<group>"; };
 		93D394482BB07F90E8FD1314 /* UIResponder+PearlFirstResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+PearlFirstResponder.h"; sourceTree = "<group>"; };
 		93D394C78C7B879C9AD9152C /* MPAppDelegate_InApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_InApp.m; sourceTree = "<group>"; };
+		93D395105935859D71679931 /* MPOverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPOverlayViewController.m; sourceTree = "<group>"; };
 		93D3956915634581E737B38C /* PearlNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlNavigationController.m; sourceTree = "<group>"; };
 		93D3957D76F71A652716EECC /* MPStoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPStoreViewController.m; sourceTree = "<group>"; };
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
@@ -435,7 +449,6 @@
 		93D399F244BB522A317811BB /* MPFixable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPFixable.h; sourceTree = "<group>"; };
 		93D39A1DDFA09AE2E14D26DC /* UIResponder+PearlFirstResponder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+PearlFirstResponder.m"; sourceTree = "<group>"; };
 		93D39A28369954D147E239BA /* MPSetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSetupViewController.m; sourceTree = "<group>"; };
-		93D39A41340CF778E00D0E6D /* MPPopoverSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPopoverSegue.h; sourceTree = "<group>"; };
 		93D39A4759186F6D2D34AA6B /* PearlSizedTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlSizedTextView.h; sourceTree = "<group>"; };
 		93D39A813CA9D7E192261ED2 /* MPFixable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPFixable.m; sourceTree = "<group>"; };
 		93D39AA10CD00D05937671B1 /* UITextView+PearlAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+PearlAttributes.h"; sourceTree = "<group>"; };
@@ -444,6 +457,7 @@
 		93D39B050DD5F55E9794EFD4 /* MPPopdownSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPopdownSegue.m; sourceTree = "<group>"; };
 		93D39B1D8177A86C5B9EDDE3 /* PearlUICollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlUICollectionView.h; sourceTree = "<group>"; };
 		93D39B381350802A194BF332 /* MPAvatarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAvatarCell.m; sourceTree = "<group>"; };
+		93D39B455A71EC98C749E623 /* MPOverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPOverlayViewController.h; sourceTree = "<group>"; };
 		93D39BAA71DE51B4D8A1286C /* MPCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCell.m; sourceTree = "<group>"; };
 		93D39C426E03358384018E85 /* MPAnswersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAnswersViewController.m; sourceTree = "<group>"; };
 		93D39C44361BE57AF0B3071F /* MPPasswordsSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordsSegue.h; sourceTree = "<group>"; };
@@ -526,6 +540,9 @@
 		DA32D00719CF4735004F3F0E /* MasterPassword 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 6.xcdatamodel"; sourceTree = "<group>"; };
 		DA32D01819D046E1004F3F0E /* PearlFixedTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlFixedTableView.m; sourceTree = "<group>"; };
 		DA32D01919D046E1004F3F0E /* PearlFixedTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlFixedTableView.h; sourceTree = "<group>"; };
+		DA32D02019D111C6004F3F0E /* libKCOrderedAccessorFix.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libKCOrderedAccessorFix.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA32D03919D111EB004F3F0E /* NSManagedObjectModel+KCOrderedAccessorFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectModel+KCOrderedAccessorFix.h"; sourceTree = "<group>"; };
+		DA32D03A19D111EB004F3F0E /* NSManagedObjectModel+KCOrderedAccessorFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectModel+KCOrderedAccessorFix.m"; sourceTree = "<group>"; };
 		DA3509FC15F101A500C14A8E /* PearlQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlQueue.h; sourceTree = "<group>"; };
 		DA3509FD15F101A500C14A8E /* PearlQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlQueue.m; sourceTree = "<group>"; };
 		DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
@@ -1376,10 +1393,18 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		DA32D01D19D111C6004F3F0E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DA5BFA41147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA32D03E19D11293004F3F0E /* libKCOrderedAccessorFix.a in Frameworks */,
 				DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */,
 				DAE2725A19C93B8E007C5262 /* StoreKit.framework in Frameworks */,
 				DAE2725919C93B80007C5262 /* libInAppSettingsKit.a in Frameworks */,
@@ -1470,6 +1495,15 @@
 			path = Guide;
 			sourceTree = "<group>";
 		};
+		DA32D03719D111EB004F3F0E /* KCOrderedAccessorFix */ = {
+			isa = PBXGroup;
+			children = (
+				DA32D03919D111EB004F3F0E /* NSManagedObjectModel+KCOrderedAccessorFix.h */,
+				DA32D03A19D111EB004F3F0E /* NSManagedObjectModel+KCOrderedAccessorFix.m */,
+			);
+			path = KCOrderedAccessorFix;
+			sourceTree = "<group>";
+		};
 		DA5BFA39147E415C00F98B1E = {
 			isa = PBXGroup;
 			children = (
@@ -1493,6 +1527,7 @@
 				DAC6325D1486805C0075AEA5 /* libuicolor-utilities.a */,
 				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
 				DAFC5655172C573B00CB5CC5 /* libInAppSettingsKit.a */,
+				DA32D02019D111C6004F3F0E /* libKCOrderedAccessorFix.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2342,8 +2377,6 @@
 				93D3971FE104BB4052484151 /* MPUsersViewController.h */,
 				93D39BAA71DE51B4D8A1286C /* MPCell.m */,
 				93D390519405B76CC6A57C4F /* MPCell.h */,
-				93D3937712BF1B67623E5764 /* MPPopoverSegue.m */,
-				93D39A41340CF778E00D0E6D /* MPPopoverSegue.h */,
 				93D39E7A12CC352B2825AA66 /* MPPasswordsSegue.m */,
 				93D39C44361BE57AF0B3071F /* MPPasswordsSegue.h */,
 				93D39B050DD5F55E9794EFD4 /* MPPopdownSegue.m */,
@@ -2356,6 +2389,8 @@
 				93D39F556F2F142740A65E59 /* MPWebViewController.h */,
 				93D39CC01630D0421205C4C4 /* MPNavigationController.m */,
 				93D3970502644794E8A027BE /* MPNavigationController.h */,
+				93D395105935859D71679931 /* MPOverlayViewController.m */,
+				93D39B455A71EC98C749E623 /* MPOverlayViewController.h */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -2376,6 +2411,7 @@
 		DACA22121705DDC5002C6C22 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				DA32D03719D111EB004F3F0E /* KCOrderedAccessorFix */,
 				DAA141181922FED80032B392 /* iOS */,
 				DAFC5662172C57EC00CB5CC5 /* InAppSettingsKit */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
@@ -2786,6 +2822,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		DA32D01F19D111C6004F3F0E /* KCOrderedAccessorFix */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA32D03419D111C7004F3F0E /* Build configuration list for PBXNativeTarget "KCOrderedAccessorFix" */;
+			buildPhases = (
+				DA32D01C19D111C6004F3F0E /* Sources */,
+				DA32D01D19D111C6004F3F0E /* Frameworks */,
+				DA32D01E19D111C6004F3F0E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KCOrderedAccessorFix;
+			productName = KCOrderedAccessorFix;
+			productReference = DA32D02019D111C6004F3F0E /* libKCOrderedAccessorFix.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		DA5BFA43147E415C00F98B1E /* MasterPassword */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */;
@@ -2882,6 +2935,9 @@
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = Lyndir;
 				TargetAttributes = {
+					DA32D01F19D111C6004F3F0E = {
+						CreatedOnToolsVersion = 6.0;
+					};
 					DA5BFA43147E415C00F98B1E = {
 						DevelopmentTeam = HL3Q45LX9N;
 						SystemCapabilities = {
@@ -3003,6 +3059,7 @@
 				DAC6325C1486805C0075AEA5 /* uicolor-utilities */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
 				DAFC5654172C573B00CB5CC5 /* InAppSettingsKit */,
+				DA32D01F19D111C6004F3F0E /* KCOrderedAccessorFix */,
 			);
 		};
 /* End PBXProject section */
@@ -3203,6 +3260,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		DA32D01C19D111C6004F3F0E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA32D03C19D111EB004F3F0E /* NSManagedObjectModel+KCOrderedAccessorFix.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DA5BFA40147E415C00F98B1E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3235,7 +3300,6 @@
 				93D39A5FF670957C0AF8298D /* MPPasswordCell.m in Sources */,
 				93D398ECD7D1A0DEDDADF516 /* MPEmergencyViewController.m in Sources */,
 				DA32D00819CF4735004F3F0E /* MasterPassword.xcdatamodeld in Sources */,
-				93D391ED37C9F687FA51EAA1 /* MPPopoverSegue.m in Sources */,
 				93D394B5036C882B33C71872 /* MPPasswordsSegue.m in Sources */,
 				93D39673DDC085BE72C34D7C /* MPPopdownSegue.m in Sources */,
 				93D39BA1EA3CAAC8A220B4A6 /* MPAppSettingsViewController.m in Sources */,
@@ -3248,6 +3312,7 @@
 				DA32CFF019CF1C8F004F3F0E /* MPUserEntity.m in Sources */,
 				93D39D38356F59DBEF934D70 /* MPAppDelegate_InApp.m in Sources */,
 				93D390C1B93F9D3AE37DD0A5 /* MPAnswersViewController.m in Sources */,
+				93D399D7E08A142776A74CB8 /* MPOverlayViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3396,6 +3461,24 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		DA32D02E19D111C7004F3F0E /* Debug-iOS */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = "Debug-iOS";
+		};
+		DA32D02F19D111C7004F3F0E /* AdHoc-iOS */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = "AdHoc-iOS";
+		};
+		DA32D03019D111C7004F3F0E /* AppStore-iOS */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = "AppStore-iOS";
+		};
 		DA5BFA6B147E415C00F98B1E /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3747,11 +3830,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
-				DSTROOT = /tmp/jrswizzle.dst;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
 			};
 			name = "AppStore-iOS";
 		};
@@ -3783,11 +3862,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
-				DSTROOT = /tmp/jrswizzle.dst;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
 			};
 			name = "Debug-iOS";
 		};
@@ -3795,11 +3870,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
-				DSTROOT = /tmp/jrswizzle.dst;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
 			};
 			name = "AdHoc-iOS";
 		};
@@ -3862,6 +3933,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		DA32D03419D111C7004F3F0E /* Build configuration list for PBXNativeTarget "KCOrderedAccessorFix" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA32D02E19D111C7004F3F0E /* Debug-iOS */,
+				DA32D02F19D111C7004F3F0E /* AdHoc-iOS */,
+				DA32D03019D111C7004F3F0E /* AppStore-iOS */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -36,18 +36,6 @@
     self.view.backgroundColor = [UIColor clearColor];
 }
 
-- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
-
-    return [self respondsToSelector:action];
-}
-
-#pragma mark - Actions
-
-- (IBAction)unwindToCombined:(UIStoryboardSegue *)sender {
-
-    dbg( @"unwindToCombined:%@", sender );
-}
-
 #pragma mark - State
 
 - (void)setSite:(MPSiteEntity *)site {
@@ -55,6 +43,13 @@
     _siteOID = [site objectID];
     _multiple = [site.questions count] > 0;
     [self.tableView reloadData];
+    [self updateAnimated:NO];
+}
+
+- (void)setMultiple:(BOOL)multiple animated:(BOOL)animated {
+
+    _multiple = multiple;
+    [self updateAnimated:animated];
 }
 
 - (MPSiteEntity *)siteInContext:(NSManagedObjectContext *)context {
@@ -131,14 +126,14 @@
         [UIPasteboard generalPasteboard].string = ((MPGlobalAnswersCell *)cell).answerField.text;
     }
     else if ([cell isKindOfClass:[MPMultipleAnswersCell class]]) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            if (!_multiple) {
-                _multiple = YES;
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-                [tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                         withRowAnimation:UITableViewRowAnimationAutomatic];
-            }
-            else if (_multiple && [site.questions count])
+        if (!_multiple)
+            [self setMultiple:YES animated:YES];
+
+        else if (_multiple) {
+            if (![site.questions count])
+                [self setMultiple:NO animated:YES];
+
+            else
                 [PearlAlert showAlertWithTitle:@"Remove Site Questions?" message:
                                 @"Do you want to remove the questions you have configured for this site?"
                                      viewStyle:UIAlertViewStyleDefault initAlert:nil
@@ -150,15 +145,10 @@
                                      MPSiteEntity *site_ = [self siteInContext:context];
                                      [site_ removeQuestions:site_.questions];
                                      [context saveToStore];
-                                     PearlMainQueue( ^{
-                                         _multiple = NO;
-                                         cell.accessoryType = UITableViewCellAccessoryNone;
-                                         [tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                                                  withRowAnimation:UITableViewRowAnimationAutomatic];
-                                     } );
+                                     [self setMultiple:NO animated:YES];
                                  }];
                              } cancelTitle:@"Cancel" otherTitles:@"Remove Questions", nil];
-        }];
+        }
     }
     else if ([cell isKindOfClass:[MPSendAnswersCell class]]) {
         NSString *body;
@@ -189,6 +179,20 @@
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Private
+
+- (void)updateAnimated:(BOOL)animated {
+
+    PearlMainQueue( ^{
+        UITableViewCell *multipleAnswersCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:0]];
+        multipleAnswersCell.accessoryType = _multiple? UITableViewCellAccessoryCheckmark: UITableViewCellAccessoryNone;
+
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }];
+    } );
 }
 
 @end
