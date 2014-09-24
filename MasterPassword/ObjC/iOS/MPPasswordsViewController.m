@@ -74,6 +74,18 @@
     [self updatePasswords];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+
+    [super viewDidAppear:animated];
+
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:context];
+        if (![MPAlgorithmDefault tryMigrateUser:activeUser inContext:context])
+            [PearlOverlay showTemporaryOverlayWithTitle:@"Some Sites Need Upgrade" dismissAfter:2];
+        [context saveToStore];
+    }];
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
 
     [super viewWillDisappear:animated];

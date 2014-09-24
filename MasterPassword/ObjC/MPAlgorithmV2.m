@@ -15,14 +15,15 @@
 //  Copyright 2012 lhunath (Maarten Billemont). All rights reserved.
 //
 
-#import "MPAlgorithmV1.h"
+#import <objc/runtime.h>
+#import "MPAlgorithmV2.h"
 #import "MPEntities.h"
 
-@implementation MPAlgorithmV1
+@implementation MPAlgorithmV2
 
 - (NSUInteger)version {
 
-    return 1;
+    return 2;
 }
 
 - (BOOL)tryMigrateSite:(MPSiteEntity *)site explicit:(BOOL)explicit {
@@ -32,7 +33,7 @@
         return NO;
 
     if (!explicit) {
-        if (site.type & MPSiteTypeClassGenerated) {
+        if (site.type & MPSiteTypeClassGenerated && site.name.length != [site.name dataUsingEncoding:NSUTF8StringEncoding].length) {
             // This migration requires explicit permission for types of the generated class.
             site.requiresExplicitMigration = YES;
             return NO;
@@ -49,20 +50,23 @@
                                   variant:(MPSiteVariant)variant context:(NSString *)context usingKey:(MPKey *)key {
 
     // Determine the seed whose bytes will be used for calculating a password
-    uint32_t ncounter = htonl( counter ), nnameLength = htonl( name.length ), ncontextLength = htonl( context.length );
+    NSData *nameBytes = [name dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *contextBytes = [context dataUsingEncoding:NSUTF8StringEncoding];
+    uint32_t ncounter = htonl( counter ), nnameLength = htonl( nameBytes.length ), ncontextLength = htonl( contextBytes.length );
     NSData *counterBytes = [NSData dataWithBytes:&ncounter length:sizeof( ncounter )];
     NSData *nameLengthBytes = [NSData dataWithBytes:&nnameLength length:sizeof( nnameLength )];
     NSData *contextLengthBytes = [NSData dataWithBytes:&ncontextLength length:sizeof( ncontextLength )];
     NSString *scope = [self scopeForVariant:variant];
+    NSData *scopeBytes = [scope dataUsingEncoding:NSUTF8StringEncoding];
     trc( @"seed from: hmac-sha256(%@, %@ | %@ | %@ | %@)",
             [[key keyID] encodeHex], scope, [nameLengthBytes encodeHex], name, [counterBytes encodeHex] );
     NSData *seed = [[NSData dataByConcatenatingDatas:
-            [scope dataUsingEncoding:NSUTF8StringEncoding],
+            scopeBytes,
             nameLengthBytes,
-            [name dataUsingEncoding:NSUTF8StringEncoding],
+            nameBytes,
             counterBytes,
                     context? contextLengthBytes: nil,
-            [context dataUsingEncoding:NSUTF8StringEncoding],
+            contextBytes,
                     nil]
             hmacWith:PearlHashSHA256 key:key.keyData];
     trc( @"seed is: %@", [seed encodeHex] );

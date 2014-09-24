@@ -19,7 +19,7 @@
 #import "MPStoredSiteEntity.h"
 #import "MPGeneratedSiteEntity.h"
 
-#define MPAlgorithmDefaultVersion 1
+#define MPAlgorithmDefaultVersion 2
 #define MPAlgorithmDefault MPAlgorithmForVersion(MPAlgorithmDefaultVersion)
 
 id<MPAlgorithm> MPAlgorithmForVersion(NSUInteger version);
@@ -43,8 +43,8 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 
 @required
 - (NSUInteger)version;
-- (BOOL)migrateUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc;
-- (BOOL)migrateSite:(MPSiteEntity *)site explicit:(BOOL)explicit;
+- (BOOL)tryMigrateUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc;
+- (BOOL)tryMigrateSite:(MPSiteEntity *)site explicit:(BOOL)explicit;
 
 - (MPKey *)keyForPassword:(NSString *)password ofUserNamed:(NSString *)userName;
 - (MPKey *)keyFromKeyData:(NSData *)keyData;

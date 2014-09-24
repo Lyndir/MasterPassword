@@ -36,7 +36,7 @@
 @property(readonly) id<MPAlgorithm> algorithm;
 
 - (NSUInteger)use;
-- (BOOL)migrateExplicitly:(BOOL)explicit;
+- (BOOL)tryMigrateExplicitly:(BOOL)explicit;
 - (NSString *)resolveLoginUsingKey:(MPKey *)key;
 - (NSString *)resolvePasswordUsingKey:(MPKey *)key;
 - (void)resolveLoginUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result;

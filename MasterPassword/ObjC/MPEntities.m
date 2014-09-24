@@ -134,17 +134,19 @@
             self.loginName, self.requiresExplicitMigration );
 }
 
-- (BOOL)migrateExplicitly:(BOOL)explicit {
+- (BOOL)tryMigrateExplicitly:(BOOL)explicit {
 
-    while (self.version < MPAlgorithmDefaultVersion)
-        if ([MPAlgorithmForVersion( self.version + 1 ) migrateSite:self explicit:explicit])
-            inf( @"%@ migration to version: %ld succeeded for site: %@",
-                    explicit? @"Explicit": @"Automatic", (long)self.version + 1, self );
-        else {
+    while (self.version < MPAlgorithmDefaultVersion) {
+        NSUInteger toVersion = self.version + 1;
+        if (![MPAlgorithmForVersion( toVersion ) tryMigrateSite:self explicit:explicit]) {
             wrn( @"%@ migration to version: %ld failed for site: %@",
-                    explicit? @"Explicit": @"Automatic", (long)self.version + 1, self );
+                    explicit? @"Explicit": @"Automatic", (long)toVersion, self );
             return NO;
         }
+
+        inf( @"%@ migration to version: %ld succeeded for site: %@",
+                explicit? @"Explicit": @"Automatic", (long)toVersion, self );
+    }
 
     return YES;
 }

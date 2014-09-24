@@ -35,6 +35,9 @@ id<MPAlgorithm> MPAlgorithmDefaultForBundleVersion(NSString *bundleVersion) {
     if (PearlCFBundleVersionCompare( bundleVersion, @"1.3" ) == NSOrderedAscending)
         // Pre-1.3
         return MPAlgorithmForVersion( 0 );
+    if (PearlCFBundleVersionCompare( bundleVersion, @"2.1" ) == NSOrderedAscending)
+        // Pre-2.1
+        return MPAlgorithmForVersion( 1 );
 
     return MPAlgorithmDefault;
 }

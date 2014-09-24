@@ -317,7 +317,7 @@
 - (IBAction)doUpgrade:(UIButton *)sender {
 
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        if (![[self siteInContext:context] migrateExplicitly:YES]) {
+        if (![[self siteInContext:context] tryMigrateExplicitly:YES]) {
             [PearlOverlay showTemporaryOverlayWithTitle:@"Couldn't Upgrade Site" dismissAfter:2];
             return;
         }

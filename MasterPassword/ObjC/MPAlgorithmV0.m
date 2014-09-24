@@ -73,7 +73,7 @@
     return [(id<MPAlgorithm>)other version] == [self version];
 }
 
-- (BOOL)migrateUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc {
+- (BOOL)tryMigrateUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc {
 
     NSError *error = nil;
     NSFetchRequest *migrationRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
@@ -84,15 +84,15 @@
         return NO;
     }
 
-    BOOL requiresExplicitMigration = NO;
+    BOOL success = YES;
     for (MPSiteEntity *migrationSite in migrationSites)
-        if (![migrationSite migrateExplicitly:NO])
-            requiresExplicitMigration = YES;
+        if (![migrationSite tryMigrateExplicitly:NO])
+            success = NO;
 
-    return requiresExplicitMigration;
+    return success;
 }
 
-- (BOOL)migrateSite:(MPSiteEntity *)site explicit:(BOOL)explicit {
+- (BOOL)tryMigrateSite:(MPSiteEntity *)site explicit:(BOOL)explicit {
 
     if (site.version != [self version] - 1)
         // Only migrate from previous version.
@@ -364,11 +364,11 @@
 - (NSString *)generateLoginForSiteNamed:(NSString *)name usingKey:(MPKey *)key {
 
     return [self generateContentForSiteNamed:name ofType:MPSiteTypeGeneratedName withCounter:1
-                                                 variant:MPSiteVariantLogin context:nil usingKey:key];
+                                     variant:MPSiteVariantLogin context:nil usingKey:key];
 }
 
 - (NSString *)generatePasswordForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
-              usingKey:(MPKey *)key {
+                                  usingKey:(MPKey *)key {
 
     return [self generateContentForSiteNamed:name ofType:type withCounter:counter
                                      variant:MPSiteVariantPassword context:nil usingKey:key];
@@ -381,7 +381,7 @@
 }
 
 - (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
-              variant:(MPSiteVariant)variant context:(NSString *)context usingKey:(MPKey *)key {
+                                  variant:(MPSiteVariant)variant context:(NSString *)context usingKey:(MPKey *)key {
 
     // Determine the seed whose bytes will be used for calculating a password
     uint32_t ncounter = htonl( counter ), nnameLength = htonl( name.length ), ncontextLength = htonl( context.length );
@@ -396,9 +396,9 @@
             nameLengthBytes,
             [name dataUsingEncoding:NSUTF8StringEncoding],
             counterBytes,
-            context? contextLengthBytes: nil,
+                    context? contextLengthBytes: nil,
             [context dataUsingEncoding:NSUTF8StringEncoding],
-            nil]
+                    nil]
             hmacWith:PearlHashSHA256 key:key.keyData];
     trc( @"seed is: %@", [seed encodeHex] );
     const char *seedBytes = seed.bytes;
@@ -678,7 +678,7 @@
 }
 
 - (void)importProtectedPassword:(NSString *)protectedContent protectedByKey:(MPKey *)importKey
-                                                                   intoSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey {
+                       intoSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey {
 
     NSAssert( [siteKey.keyID isEqualToData:site.user.keyID], @"Site does not belong to current user." );
     switch (site.type) {
