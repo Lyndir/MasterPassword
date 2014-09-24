@@ -32,8 +32,12 @@
 
     self.tableView.tableHeaderView = [UIView new];
     self.tableView.tableFooterView = [UIView new];
-    self.tableView.layer.shadowOpacity = 1;
     self.view.backgroundColor = [UIColor clearColor];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+
+    return UIStatusBarStyleLightContent;
 }
 
 #pragma mark - State
@@ -203,6 +207,7 @@
 
 - (void)setSite:(MPSiteEntity *)site {
 
+    self.titleLabel.text = strl( @"Answer for %@:", site.name );
     self.answerField.text = @"...";
     [site.algorithm resolveAnswerForSite:site usingKey:[MPiOSAppDelegate get].key result:^(NSString *result) {
         PearlMainQueue( ^{

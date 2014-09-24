@@ -19,23 +19,6 @@
 #import "MPAppSettingsViewController.h"
 #import "UIColor+Expanded.h"
 
-@interface MPTableView:UITableView
-@end
-
-@implementation MPTableView
-
-- (void)layoutSubviews {
-
-    [super layoutSubviews];
-}
-
-- (void)setContentInset:(UIEdgeInsets)contentInset {
-
-    [super setContentInset:contentInset];
-}
-
-@end
-
 @implementation MPAppSettingsViewController {
 }
 

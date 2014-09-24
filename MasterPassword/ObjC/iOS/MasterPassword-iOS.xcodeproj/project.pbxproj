@@ -123,6 +123,9 @@
 		DA32D01B19D046E1004F3F0E /* PearlFixedTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = DA32D01919D046E1004F3F0E /* PearlFixedTableView.h */; };
 		DA32D03C19D111EB004F3F0E /* NSManagedObjectModel+KCOrderedAccessorFix.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32D03A19D111EB004F3F0E /* NSManagedObjectModel+KCOrderedAccessorFix.m */; };
 		DA32D03E19D11293004F3F0E /* libKCOrderedAccessorFix.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA32D02019D111C6004F3F0E /* libKCOrderedAccessorFix.a */; };
+		DA32D04219D27093004F3F0E /* thumb_generated_answers@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32D03F19D27093004F3F0E /* thumb_generated_answers@3x.png */; };
+		DA32D04319D27093004F3F0E /* thumb_generated_answers@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32D04019D27093004F3F0E /* thumb_generated_answers@2x.png */; };
+		DA32D04419D27093004F3F0E /* thumb_generated_answers.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32D04119D27093004F3F0E /* thumb_generated_answers.png */; };
 		DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3509FC15F101A500C14A8E /* PearlQueue.h */; };
 		DA3509FF15F101A500C14A8E /* PearlQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3509FD15F101A500C14A8E /* PearlQueue.m */; };
 		DA38D6A318CCB5BF009AEB3E /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */; };
@@ -543,6 +546,9 @@
 		DA32D02019D111C6004F3F0E /* libKCOrderedAccessorFix.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libKCOrderedAccessorFix.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA32D03919D111EB004F3F0E /* NSManagedObjectModel+KCOrderedAccessorFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectModel+KCOrderedAccessorFix.h"; sourceTree = "<group>"; };
 		DA32D03A19D111EB004F3F0E /* NSManagedObjectModel+KCOrderedAccessorFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectModel+KCOrderedAccessorFix.m"; sourceTree = "<group>"; };
+		DA32D03F19D27093004F3F0E /* thumb_generated_answers@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumb_generated_answers@3x.png"; sourceTree = "<group>"; };
+		DA32D04019D27093004F3F0E /* thumb_generated_answers@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumb_generated_answers@2x.png"; sourceTree = "<group>"; };
+		DA32D04119D27093004F3F0E /* thumb_generated_answers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumb_generated_answers.png; sourceTree = "<group>"; };
 		DA3509FC15F101A500C14A8E /* PearlQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlQueue.h; sourceTree = "<group>"; };
 		DA3509FD15F101A500C14A8E /* PearlQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlQueue.m; sourceTree = "<group>"; };
 		DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
@@ -1597,6 +1603,9 @@
 		DABD360D1711E29400CF925C /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				DA32D03F19D27093004F3F0E /* thumb_generated_answers@3x.png */,
+				DA32D04019D27093004F3F0E /* thumb_generated_answers@2x.png */,
+				DA32D04119D27093004F3F0E /* thumb_generated_answers.png */,
 				DA29993119C9132F00AF7DF1 /* thumb_generated_login@3x.png */,
 				DA29992D19C86F5700AF7DF1 /* thumb_generated_login@2x.png */,
 				DA29992E19C86F5700AF7DF1 /* thumb_generated_login.png */,
@@ -3116,9 +3125,11 @@
 				DABD394A1711E29700CF925C /* avatar-18.png in Resources */,
 				DABD394B1711E29700CF925C /* avatar-18@2x.png in Resources */,
 				DABD394C1711E29700CF925C /* avatar-1@2x.png in Resources */,
+				DA32D04319D27093004F3F0E /* thumb_generated_answers@2x.png in Resources */,
 				DA29993319C9214600AF7DF1 /* icon_star-hollow.png in Resources */,
 				DA29993019C86F5700AF7DF1 /* thumb_generated_login.png in Resources */,
 				DA071BF3190187FE00179766 /* empty@2x.png in Resources */,
+				DA32D04219D27093004F3F0E /* thumb_generated_answers@3x.png in Resources */,
 				DA67460E18DE7F0C00DFE240 /* Exo2.0-Regular.otf in Resources */,
 				DABD394D1711E29700CF925C /* avatar-2.png in Resources */,
 				DABD394E1711E29700CF925C /* avatar-2@2x.png in Resources */,
@@ -3181,6 +3192,7 @@
 				DABD3ABF1711E29800CF925C /* icon_plus@2x.png in Resources */,
 				DA69540717D975D900BF294E /* icon_gears@2x.png in Resources */,
 				DABD3B1C1711E29800CF925C /* icon_up.png in Resources */,
+				DA32D04419D27093004F3F0E /* thumb_generated_answers.png in Resources */,
 				DABD3B1D1711E29800CF925C /* icon_up@2x.png in Resources */,
 				DA3BCFCB19BD09D5006B2681 /* SourceCodePro-Regular.otf in Resources */,
 				DA250A121956484D00AC23F1 /* image-0.png in Resources */,

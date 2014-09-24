@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MPTypeViewController.h"
+
 @class MPStoreProductCell;
 
 @interface MPStoreViewController : PearlMutableStaticTableViewController

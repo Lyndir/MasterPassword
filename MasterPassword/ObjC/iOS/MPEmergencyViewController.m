@@ -53,6 +53,11 @@
     [self reset];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle {
+
+    return UIStatusBarStyleLightContent;
+}
+
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

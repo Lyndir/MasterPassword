@@ -7,8 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MessageUI/MessageUI.h>
-#import <StoreKit/StoreKit.h>
 
 #import "MPAppDelegate_Shared.h"
 

@@ -6,13 +6,10 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import <Crashlytics/Crashlytics.h>
-#import <MobileCoreServices/MobileCoreServices.h>
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "IASKSettingsReader.h"
-#import "MPAppDelegate_InApp.h"
 
 @interface MPiOSAppDelegate()<UIDocumentInteractionControllerDelegate>
 

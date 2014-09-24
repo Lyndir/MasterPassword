@@ -6,6 +6,7 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
+#import <StoreKit/StoreKit.h>
 #import "MPAppDelegate_Shared.h"
 #import "MPAppDelegate_Store.h"
 #import "MPAppDelegate_Key.h"

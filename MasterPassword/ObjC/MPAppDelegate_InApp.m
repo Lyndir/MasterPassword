@@ -7,6 +7,10 @@
 //
 
 #import "MPAppDelegate_InApp.h"
+#import <StoreKit/StoreKit.h>
+
+@interface MPAppDelegate_Shared(InApp_Private)<SKProductsRequestDelegate, SKPaymentTransactionObserver>
+@end
 
 @implementation MPAppDelegate_Shared(InApp)
 
@@ -15,20 +19,44 @@ PearlAssociatedObjectProperty( NSArray*, PaymentTransactions, paymentTransaction
 
 - (void)updateProducts {
 
-    static dispatch_once_t once = 0;
-    dispatch_once( &once, ^{
-        [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
-    } );
-
     SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:
             [[NSSet alloc] initWithObjects:MPProductGenerateLogins, MPProductGenerateAnswers, nil]];
     productsRequest.delegate = self;
     [productsRequest start];
 }
 
+- (SKPaymentQueue *)paymentQueue {
+
+    static dispatch_once_t once = 0;
+    dispatch_once( &once, ^{
+        [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
+    } );
+
+    return [SKPaymentQueue defaultQueue];
+}
+
+- (BOOL)canMakePayments {
+
+    return [SKPaymentQueue canMakePayments];
+}
+
 - (BOOL)isPurchased:(NSString *)productIdentifier {
 
     return YES; //[[NSUserDefaults standardUserDefaults] objectForKey:productIdentifier] != nil;
+}
+
+- (void)restoreCompletedTransactions {
+
+    [[self paymentQueue] restoreCompletedTransactions];
+}
+
+- (void)purchaseProductWithIdentifier:(NSString *)productIdentifier {
+
+    for (SKProduct *product in self.products)
+        if ([product.productIdentifier isEqualToString:productIdentifier]) {
+            [[self paymentQueue] addPayment:[SKPayment paymentWithProduct:product]];
+            return;
+        }
 }
 
 #pragma mark - SKProductsRequestDelegate

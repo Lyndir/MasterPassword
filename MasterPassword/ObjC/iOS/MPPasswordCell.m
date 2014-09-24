@@ -62,11 +62,10 @@
 
     [self setupLayer];
 
-    [self observeKeyPath:@"bounds" withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
+    [self observeKeyPath:@"bounds" withBlock:^(id from, id to, NSKeyValueChange cause, MPPasswordCell *_self) {
         if (from && !CGSizeEqualToSize( [from CGRectValue].size, [to CGRectValue].size ))
             [_self setupLayer];
     }];
-
     [self.contentButton observeKeyPath:@"highlighted"
                              withBlock:^(id from, id to, NSKeyValueChange cause, UIButton *button) {
                                  [UIView animateWithDuration:.2f delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
@@ -141,6 +140,7 @@
 
 - (void)dealloc {
 
+    [self removeKeyPathObservers];
     [self.contentButton removeKeyPathObservers];
     [self.loginNameButton removeKeyPathObservers];
 }

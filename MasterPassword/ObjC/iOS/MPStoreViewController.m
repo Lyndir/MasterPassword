@@ -6,15 +6,11 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#import <StoreKit/StoreKit.h>
 #import "MPStoreViewController.h"
 #import "MPiOSAppDelegate.h"
-#import "MPAppDelegate_Key.h"
-#import "MPAppDelegate_Store.h"
 #import "UIColor+Expanded.h"
-#import "MPPasswordsViewController.h"
-#import "MPCoachmarkViewController.h"
 #import "MPAppDelegate_InApp.h"
+#import <StoreKit/StoreKit.h>
 
 @interface MPStoreViewController()
 
@@ -31,6 +27,9 @@
     self.currencyFormatter = [NSNumberFormatter new];
     self.currencyFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
 
+    self.tableView.tableHeaderView = [UIView new];
+    self.tableView.tableFooterView = [UIView new];
+    self.tableView.estimatedRowHeight = 400;
     self.view.backgroundColor = [UIColor clearColor];
 }
 
@@ -73,6 +72,13 @@
 - (MPStoreProductCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     MPStoreProductCell *cell = (MPStoreProductCell *)[super tableView:tableView cellForRowAtIndexPath:indexPath];
+    if (cell.contentView.translatesAutoresizingMaskIntoConstraints) {
+        cell.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+        [cell addConstraint:
+                [NSLayoutConstraint constraintWithItem:cell attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual
+                                                toItem:cell.contentView attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
+    }
+
     if (indexPath.section == 0)
         cell.selectionStyle = [[MPiOSAppDelegate get] isPurchased:[self productForCell:cell].productIdentifier]?
                               UITableViewCellSelectionStyleDefault: UITableViewCellSelectionStyleNone;
@@ -85,11 +91,19 @@
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+    [cell layoutIfNeeded];
+
+    return cell.contentView.bounds.size.height;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    if (![SKPaymentQueue canMakePayments]) {
+    if (![[MPAppDelegate_Shared get] canMakePayments]) {
         [PearlAlert showAlertWithTitle:@"Store Not Set Up" message:
-                             @"Try logging using the App Store or from Settings."
+                        @"Try logging using the App Store or from Settings."
                              viewStyle:UIAlertViewStyleDefault initAlert:nil
                      tappedButtonBlock:nil cancelTitle:@"Thanks" otherTitles:nil];
         return;
@@ -99,7 +113,7 @@
     SKProduct *product = [self productForCell:cell];
 
     if (product)
-        [[SKPaymentQueue defaultQueue] addPayment:[SKPayment paymentWithProduct:product]];
+        [[MPAppDelegate_Shared get] purchaseProductWithIdentifier:product.productIdentifier];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -115,7 +129,7 @@
                      if (buttonIndex == [alert cancelButtonIndex])
                          return;
 
-                     [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
+                     [[MPAppDelegate_Shared get] restoreCompletedTransactions];
                  } cancelTitle:@"Cancel" otherTitles:@"Find Purchases", nil];
 }
 
