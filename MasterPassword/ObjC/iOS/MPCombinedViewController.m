@@ -1,12 +1,12 @@
 /**
- * Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
- *
- * See the enclosed file LICENSE for license information (LGPLv3). If you did
- * not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
- *
- * @author   Maarten Billemont <lhunath@lyndir.com>
- * @license  http://www.gnu.org/licenses/lgpl-3.0.txt
- */
+* Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
+*
+* See the enclosed file LICENSE for license information (LGPLv3). If you did
+* not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
+*
+* @author   Maarten Billemont <lhunath@lyndir.com>
+* @license  http://www.gnu.org/licenses/lgpl-3.0.txt
+*/
 
 //
 //  MPCombinedViewController.h
@@ -19,7 +19,6 @@
 #import "MPCombinedViewController.h"
 #import "MPUsersViewController.h"
 #import "MPPasswordsViewController.h"
-#import "MPEmergencySegue.h"
 #import "MPEmergencyViewController.h"
 #import "MPPasswordsSegue.h"
 
@@ -34,11 +33,13 @@
     MPPasswordsViewController *_passwordsVC;
 }
 
+#pragma mark - Life
+
 - (void)viewDidLoad {
 
     [super viewDidLoad];
 
-    [self setMode:MPCombinedModeUserSelection animated:NO];
+    _mode = MPCombinedModeUserSelection;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -67,9 +68,9 @@
     if ([segue.identifier isEqualToString:@"users"])
         self.usersVC = segue.destinationViewController;
     if ([segue.identifier isEqualToString:@"passwords"]) {
-        NSAssert([segue isKindOfClass:[MPPasswordsSegue class]], @"passwords segue should be MPPasswordsSegue: %@", segue);
-        NSAssert([sender isKindOfClass:[NSDictionary class]], @"sender should be dictionary: %@", sender);
-        NSAssert([[sender objectForKey:@"animated"] isKindOfClass:[NSNumber class]], @"sender should contain 'animated': %@", sender);
+        NSAssert( [segue isKindOfClass:[MPPasswordsSegue class]], @"passwords segue should be MPPasswordsSegue: %@", segue );
+        NSAssert( [sender isKindOfClass:[NSDictionary class]], @"sender should be dictionary: %@", sender );
+        NSAssert( [[sender objectForKey:@"animated"] isKindOfClass:[NSNumber class]], @"sender should contain 'animated': %@", sender );
         [(MPPasswordsSegue *)segue setAnimated:[sender[@"animated"] boolValue]];
         UIViewController *destinationVC = segue.destinationViewController;
         _passwordsVC = [destinationVC isKindOfClass:[MPPasswordsViewController class]]? (MPPasswordsViewController *)destinationVC: nil;
@@ -99,20 +100,14 @@
         [self performSegueWithIdentifier:@"emergency" sender:self];
 }
 
-- (UIStoryboardSegue *)segueForUnwindingToViewController:(UIViewController *)toViewController
-                                      fromViewController:(UIViewController *)fromViewController identifier:(NSString *)identifier {
+#pragma mark - Actions
 
-    if ([identifier isEqualToString:@"unwind-emergency"]) {
-        MPEmergencySegue *segue = [[MPEmergencySegue alloc] initWithIdentifier:identifier
-                                                                        source:fromViewController destination:toViewController];
-        segue.unwind = YES;
-        dbg_return(segue);
-    }
+- (IBAction)unwindToCombined:(UIStoryboardSegue *)sender {
 
-    dbg_return((id)nil);
+    dbg( @"unwindToCombined:%@", sender );
 }
 
-#pragma mark - Properties
+#pragma mark - State
 
 - (void)setMode:(MPCombinedMode)mode {
 
@@ -158,22 +153,22 @@
     if ([_notificationObservers count])
         return;
 
-    Weakify(self);
+    Weakify( self );
     _notificationObservers = @[
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:MPSignedInNotification object:nil
                                  queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                Strongify(self);
+                        Strongify( self );
 
-                [self setMode:MPCombinedModePasswordSelection];
-            }],
+                        [self setMode:MPCombinedModePasswordSelection];
+                    }],
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:MPSignedOutNotification object:nil
                                  queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                Strongify(self);
+                        Strongify( self );
 
-                [self setMode:MPCombinedModeUserSelection animated:[note.userInfo[@"animated"] boolValue]];
-            }],
+                        [self setMode:MPCombinedModeUserSelection animated:[note.userInfo[@"animated"] boolValue]];
+                    }],
     ];
 }
 

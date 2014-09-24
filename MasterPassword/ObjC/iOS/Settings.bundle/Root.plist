@@ -152,24 +152,6 @@ To see a site&apos;s password anyway, tap and hold your finger down for a while 
 			<key>Title</key>
 			<string></string>
 			<key>FooterText</key>
-			<string>Synchronizes your sites with your other Apple devices. It&apos;s also a good way of keeping automatic backups.</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>iCloud</string>
-			<key>Key</key>
-			<string>iCloudEnabled</string>
-			<key>DefaultValue</key>
-			<false/>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-			<key>Title</key>
-			<string></string>
-			<key>FooterText</key>
 			<string>If the app tends to crash on login, enable this to check if there are any inconsistencies in your site data.  It may slow down login a bit, so keep it off when no issues are reported on login.</string>
 		</dict>
 		<dict>

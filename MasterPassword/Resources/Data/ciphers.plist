@@ -2,8 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>MPElementGeneratedEntity</key>
+	<key>MPGeneratedSiteEntity</key>
 	<dict>
+		<key>Login Name</key>
+		<array>
+			<string>cvccvcvcv</string>
+		</array>
+		<key>Phrase</key>
+		<array>
+			<string>cvcc cvc cvccvcv cvc</string>
+			<string>cvc cvccvcvcv cvcv</string>
+			<string>cv cvccv cvc cvcvccv</string>
+		</array>
 		<key>Maximum Security Password</key>
 		<array>
 			<string>anoxxxxxxxxxxxxxxxxx</string>
@@ -73,6 +83,8 @@
 		<string>@&amp;%?,=[]_:-+*$#!'^~;()/.</string>
 		<key>x</key>
 		<string>AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789!@#$%^&amp;*()</string>
+		<key> </key>
+		<string> </string>
 	</dict>
 </dict>
 </plist>

@@ -20,7 +20,7 @@
 #import "MPPasswordWindowController.h"
 #import "MPMacAppDelegate.h"
 #import "MPAppDelegate_Store.h"
-#import "MPElementModel.h"
+#import "MPSiteModel.h"
 #import "MPAppDelegate_Key.h"
 #import "PearlProfiler.h"
 
@@ -77,7 +77,7 @@
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
         [self updateUser];
     }];
-    [self observeKeyPath:@"elementsController.selection"
+    [self observeKeyPath:@"sitesController.selection"
                withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
         [_self updateSelection];
     }];
@@ -100,7 +100,7 @@
     BOOL alternatePressed = (theEvent.modifierFlags & NSAlternateKeyMask) != 0;
     if (alternatePressed != self.alternatePressed) {
         self.alternatePressed = alternatePressed;
-        [self.selectedElement updateContent];
+        [self.selectedSite updateContent];
 
         if (self.locked) {
             NSTextField *passwordField = self.securePasswordField;
@@ -169,9 +169,9 @@
     }];
 }
 
-- (IBAction)doSearchElements:(id)sender {
+- (IBAction)doSearchSites:(id)sender {
 
-    [self updateElements];
+    [self updateSites];
 }
 
 #pragma mark - NSTextViewDelegate
@@ -186,7 +186,7 @@
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
 
-    return (NSInteger)[self.elements count];
+    return (NSInteger)[self.sites count];
 }
 
 #pragma mark - NSTableViewDelegate
@@ -229,9 +229,10 @@
         switch (returnCode) {
             case NSAlertFirstButtonReturn: {
                 // "Create" button.
-                [[MPMacAppDelegate get] addElementNamed:[self.siteField stringValue] completion:^(MPElementEntity *element, NSManagedObjectContext *context) {
-                    if (element)
-                        PearlMainQueue( ^{ [self updateElements]; } );
+                [[MPMacAppDelegate get] addSiteNamed:[self.siteField stringValue] completion:
+                        ^(MPSiteEntity *site, NSManagedObjectContext *context) {
+                    if (site)
+                        PearlMainQueue( ^{ [self updateSites]; } );
                 }];
                 break;
             }
@@ -243,11 +244,11 @@
         switch (returnCode) {
             case NSAlertFirstButtonReturn: {
                 // "Save" button.
-                MPElementType type = (MPElementType)[self.passwordTypesMatrix.selectedCell tag];
+                MPSiteType type = (MPSiteType)[self.passwordTypesMatrix.selectedCell tag];
                 [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPElementEntity *entity = [[MPMacAppDelegate get] changeElement:[self.selectedElement entityInContext:context]
-                                                                      saveInContext:context toType:type];
-                    if ([entity isKindOfClass:[MPElementStoredEntity class]] && ![(MPElementStoredEntity *)entity contentObject].length)
+                    MPSiteEntity *entity = [[MPMacAppDelegate get] changeSite:[self.selectedSite entityInContext:context]
+                                                                saveInContext:context toType:type];
+                    if ([entity isKindOfClass:[MPStoredSiteEntity class]] && ![(MPStoredSiteEntity *)entity contentObject].length)
                         PearlMainQueue( ^{
                             [self changePassword:nil];
                         } );
@@ -264,7 +265,7 @@
                 // "Save" button.
                 NSString *loginName = [(NSSecureTextField *)alert.accessoryView stringValue];
                 [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPElementEntity *entity = [self.selectedElement entityInContext:context];
+                    MPSiteEntity *entity = [self.selectedSite entityInContext:context];
                     entity.loginName = loginName;
                     [context saveToStore];
                 }];
@@ -280,8 +281,8 @@
                 // "Save" button.
                 NSString *password = [(NSSecureTextField *)alert.accessoryView stringValue];
                 [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPElementEntity *entity = [self.selectedElement entityInContext:context];
-                    [entity.algorithm saveContent:password toElement:entity usingKey:[MPMacAppDelegate get].key];
+                    MPSiteEntity *entity = [self.selectedSite entityInContext:context];
+                    [entity.algorithm savePassword:password toSite:entity usingKey:[MPMacAppDelegate get].key];
                     [context saveToStore];
                 }];
                 break;
@@ -295,7 +296,7 @@
             case NSAlertFirstButtonReturn: {
                 // "Delete" button.
                 [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    [context deleteObject:[self.selectedElement entityInContext:context]];
+                    [context deleteObject:[self.selectedSite entityInContext:context]];
                     [context saveToStore];
                 }];
                 break;
@@ -313,19 +314,19 @@
     return [self.siteField.stringValue stringByReplacingCharactersInRange:self.siteField.currentEditor.selectedRange withString:@""]?: @"";
 }
 
-- (void)insertObject:(MPElementModel *)model inElementsAtIndex:(NSUInteger)index {
+- (void)insertObject:(MPSiteModel *)model inSitesAtIndex:(NSUInteger)index {
 
-    [self.elements insertObject:model atIndex:index];
+    [self.sites insertObject:model atIndex:index];
 }
 
-- (void)removeObjectFromElementsAtIndex:(NSUInteger)index {
+- (void)removeObjectFromSitesAtIndex:(NSUInteger)index {
 
-    [self.elements removeObjectAtIndex:index];
+    [self.sites removeObjectAtIndex:index];
 }
 
-- (MPElementModel *)selectedElement {
+- (MPSiteModel *)selectedSite {
 
-    return [self.elementsController.selectedObjects firstObject];
+    return [self.sitesController.selectedObjects firstObject];
 }
 
 #pragma mark - Actions
@@ -336,13 +337,13 @@
     [[MPMacAppDelegate get] showPopup:sender];
 }
 
-- (IBAction)deleteElement:(id)sender {
+- (IBAction)deleteSite:(id)sender {
 
     NSAlert *alert = [NSAlert new];
     [alert addButtonWithTitle:@"Delete"];
     [alert addButtonWithTitle:@"Cancel"];
     [alert setMessageText:@"Delete Site?"];
-    [alert setInformativeText:strf( @"Do you want to delete the site named:\n\n%@", self.selectedElement.siteName )];
+    [alert setInformativeText:strf( @"Do you want to delete the site named:\n\n%@", self.selectedSite.siteName )];
     [alert beginSheetModalForWindow:self.window modalDelegate:self
                      didEndSelector:@selector( alertDidEnd:returnCode:contextInfo: ) contextInfo:MPAlertDeleteSite];
 }
@@ -353,9 +354,9 @@
     [alert addButtonWithTitle:@"Save"];
     [alert addButtonWithTitle:@"Cancel"];
     [alert setMessageText:@"Change Login Name"];
-    [alert setInformativeText:strf( @"Enter the login name for: %@", self.selectedElement.siteName )];
+    [alert setInformativeText:strf( @"Enter the login name for: %@", self.selectedSite.siteName )];
     NSTextField *loginField = [[NSTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
-    loginField.stringValue = self.selectedElement.loginName?: @"";
+    loginField.stringValue = self.selectedSite.loginName?: @"";
     [loginField selectText:self];
     [alert setAccessoryView:loginField];
     [alert layout];
@@ -380,14 +381,14 @@
 
 - (IBAction)changePassword:(id)sender {
 
-    if (!self.selectedElement.stored)
+    if (!self.selectedSite.stored)
         return;
 
     NSAlert *alert = [NSAlert new];
     [alert addButtonWithTitle:@"Save"];
     [alert addButtonWithTitle:@"Cancel"];
     [alert setMessageText:@"Change Password"];
-    [alert setInformativeText:strf( @"Enter the new password for: %@", self.selectedElement.siteName )];
+    [alert setInformativeText:strf( @"Enter the new password for: %@", self.selectedSite.siteName )];
     [alert setAccessoryView:[[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )]];
     [alert layout];
     [alert beginSheetModalForWindow:self.window modalDelegate:self
@@ -396,19 +397,19 @@
 
 - (IBAction)changeType:(id)sender {
 
-    MPElementModel *element = self.selectedElement;
-    NSArray *types = [element.algorithm allTypesStartingWith:MPElementTypeGeneratedPIN];
+    MPSiteModel *site = self.selectedSite;
+    NSArray *types = [site.algorithm allTypesStartingWith:MPSiteTypeGeneratedPIN];
     [self.passwordTypesMatrix renewRows:(NSInteger)[types count] columns:1];
     for (NSUInteger t = 0; t < [types count]; ++t) {
-        MPElementType type = [types[t] unsignedIntegerValue];
-        NSString *title = [element.algorithm nameOfType:type];
-        if (type & MPElementTypeClassGenerated)
-            title = [element.algorithm generateContentNamed:element.siteName ofType:type
-                                                withCounter:element.counter usingKey:[MPMacAppDelegate get].key];
+        MPSiteType type = [types[t] unsignedIntegerValue];
+        NSString *title = [site.algorithm nameOfType:type];
+        if (type & MPSiteTypeClassGenerated)
+            title = [site.algorithm generatePasswordForSiteNamed:site.siteName ofType:type
+                                                        withCounter:site.counter usingKey:[MPMacAppDelegate get].key];
 
         NSButtonCell *cell = [self.passwordTypesMatrix cellAtRow:(NSInteger)t column:0];
         cell.tag = type;
-        cell.state = type == element.type? NSOnState: NSOffState;
+        cell.state = type == site.type? NSOnState: NSOffState;
         cell.title = title;
     }
 
@@ -416,7 +417,7 @@
     [alert addButtonWithTitle:@"Save"];
     [alert addButtonWithTitle:@"Cancel"];
     [alert setMessageText:@"Change Password Type"];
-    [alert setInformativeText:strf( @"Choose a new password type for: %@", element.siteName )];
+    [alert setInformativeText:strf( @"Choose a new password type for: %@", site.siteName )];
     [alert setAccessoryView:self.passwordTypesBox];
     [alert layout];
     [alert beginSheetModalForWindow:self.window modalDelegate:self
@@ -428,11 +429,11 @@
 - (BOOL)handleCommand:(SEL)commandSelector {
 
     if (commandSelector == @selector( moveUp: )) {
-        [self.elementsController selectPrevious:self];
+        [self.sitesController selectPrevious:self];
         return YES;
     }
     if (commandSelector == @selector( moveDown: )) {
-        [self.elementsController selectNext:self];
+        [self.sitesController selectNext:self];
         return YES;
     }
     if (commandSelector == @selector( insertNewline: )) {
@@ -449,19 +450,19 @@
 
 - (void)useSite {
 
-    MPElementModel *selectedElement = [self selectedElement];
-    if (selectedElement) {
+    MPSiteModel *selectedSite = [self selectedSite];
+    if (selectedSite) {
         // Performing action while content is available.  Copy it.
-        [self copyContent:selectedElement.content];
+        [self copyContent:selectedSite.content];
 
         [self fadeOut];
 
         NSUserNotification *notification = [NSUserNotification new];
         notification.title = @"Password Copied";
-        if (selectedElement.loginName.length)
-            notification.subtitle = strf( @"%@ at %@", selectedElement.loginName, selectedElement.siteName );
+        if (selectedSite.loginName.length)
+            notification.subtitle = strf( @"%@ at %@", selectedSite.loginName, selectedSite.siteName );
         else
-            notification.subtitle = selectedElement.siteName;
+            notification.subtitle = selectedSite.siteName;
         [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
     }
     else {
@@ -499,22 +500,22 @@
             }
         }
 
-        [self updateElements];
+        [self updateSites];
     }];
 }
 
-- (void)updateElements {
+- (void)updateSites {
 
     if (![MPMacAppDelegate get].key) {
-        self.elements = nil;
+        self.sites = nil;
         return;
     }
 
-    PearlProfiler *profiler = [PearlProfiler profilerForTask:@"updateElements"];
+    PearlProfiler *profiler = [PearlProfiler profilerForTask:@"updateSites"];
     NSString *query = [self query];
     [profiler finishJob:@"query"];
     [MPMacAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
-        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
         fetchRequest.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"lastUsed" ascending:NO]];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@",
                                                                   query, query, [[MPMacAppDelegate get] activeUserInContext:context]];
@@ -523,17 +524,17 @@
         NSError *error = nil;
         NSArray *siteResults = [context executeFetchRequest:fetchRequest error:&error];
         if (!siteResults) {
-            err( @"While fetching elements for completion: %@", error );
+            err( @"While fetching sites for completion: %@", [error fullDescription] );
             return;
         }
         [profiler finishJob:@"do fetch"];
 
-        NSMutableArray *newElements = [NSMutableArray arrayWithCapacity:[siteResults count]];
-        for (MPElementEntity *element in siteResults)
-            [newElements addObject:[[MPElementModel alloc] initWithEntity:element]];
+        NSMutableArray *newSites = [NSMutableArray arrayWithCapacity:[siteResults count]];
+        for (MPSiteEntity *site in siteResults)
+            [newSites addObject:[[MPSiteModel alloc] initWithEntity:site]];
         [profiler finishJob:@"make models"];
-        self.elements = newElements;
-        [profiler finishJob:@"update elements"];
+        self.sites = newSites;
+        [profiler finishJob:@"update sites"];
     }];
     [profiler finishJob:@"done"];
 }
@@ -545,7 +546,7 @@
         return;
     }
 
-    NSString *siteName = self.selectedElement.siteName;
+    NSString *siteName = self.selectedSite.siteName;
     if (!siteName)
         return;
 
@@ -558,14 +559,14 @@
                     NSMakeRange( siteNameQueryRange.length, siteName.length - siteNameQueryRange.length );
     }
 
-    [self.siteTable scrollRowToVisible:(NSInteger)self.elementsController.selectionIndex];
+    [self.siteTable scrollRowToVisible:(NSInteger)self.sitesController.selectionIndex];
     [self updateGradient];
 }
 
 - (void)updateGradient {
 
     NSView *siteScrollView = self.siteTable.superview.superview;
-    NSRect selectedCellFrame = [self.siteTable frameOfCellAtColumn:0 row:((NSInteger)self.elementsController.selectionIndex)];
+    NSRect selectedCellFrame = [self.siteTable frameOfCellAtColumn:0 row:((NSInteger)self.sitesController.selectionIndex)];
     CGFloat selectedOffset = [siteScrollView convertPoint:selectedCellFrame.origin fromView:self.siteTable].y;
     CGFloat gradientOpacity = selectedOffset / siteScrollView.bounds.size.height;
     self.siteGradient.colors = @[
@@ -596,7 +597,7 @@
     }
 
     [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-        [[self.selectedElement entityInContext:moc] use];
+        [[self.selectedSite entityInContext:moc] use];
         [moc saveToStore];
     }];
 }

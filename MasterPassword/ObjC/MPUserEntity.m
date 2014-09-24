@@ -1,12 +1,14 @@
 //
 //  MPUserEntity.m
-//  MasterPassword-iOS
+//  MasterPassword-Mac
 //
-//  Created by Maarten Billemont on 2013-01-29.
-//  Copyright (c) 2013 Lyndir. All rights reserved.
+//  Created by Maarten Billemont on 2014-09-21.
+//  Copyright (c) 2014 Lyndir. All rights reserved.
 //
 
 #import "MPUserEntity.h"
+#import "MPSiteEntity.h"
+
 
 @implementation MPUserEntity
 
@@ -16,6 +18,6 @@
 @dynamic lastUsed;
 @dynamic name;
 @dynamic saveKey_;
-@dynamic elements;
+@dynamic sites;
 
 @end

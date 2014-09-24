@@ -1,5 +1,5 @@
 //
-//  MPElementEntities.h
+//  MPEntities.h
 //  MasterPassword-iOS
 //
 //  Created by Maarten Billemont on 31/05/12.
@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MPElementEntity.h"
-#import "MPElementStoredEntity.h"
-#import "MPElementGeneratedEntity.h"
+#import "MPSiteEntity.h"
+#import "MPStoredSiteEntity.h"
+#import "MPGeneratedSiteEntity.h"
 #import "MPUserEntity.h"
 #import "MPAlgorithm.h"
+#import "MPFixable.h"
 
 #define MPAvatarCount 19
 
@@ -21,9 +22,10 @@
 
 @end
 
-@interface MPElementEntity(MP)
+@interface MPSiteEntity(MP)<MPFixable>
 
-@property(assign) MPElementType type;
+@property(assign) BOOL loginGenerated;
+@property(assign) MPSiteType type;
 @property(readonly) NSString *typeName;
 @property(readonly) NSString *typeShortName;
 @property(readonly) NSString *typeClassName;
@@ -34,13 +36,15 @@
 @property(readonly) id<MPAlgorithm> algorithm;
 
 - (NSUInteger)use;
-- (BOOL)migrateExplicitly:(BOOL)explicit;
-- (NSString *)resolveContentUsingKey:(MPKey *)key;
-- (void)resolveContentUsingKey:(MPKey *)key result:(void (^)(NSString *))result;
+- (BOOL)tryMigrateExplicitly:(BOOL)explicit;
+- (NSString *)resolveLoginUsingKey:(MPKey *)key;
+- (NSString *)resolvePasswordUsingKey:(MPKey *)key;
+- (void)resolveLoginUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result;
+- (void)resolvePasswordUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result;
 
 @end
 
-@interface MPElementGeneratedEntity(MP)
+@interface MPGeneratedSiteEntity(MP)
 
 @property(assign) NSUInteger counter;
 
@@ -50,7 +54,7 @@
 
 @property(assign) NSUInteger avatar;
 @property(assign) BOOL saveKey;
-@property(assign) MPElementType defaultType;
+@property(assign) MPSiteType defaultType;
 @property(readonly) NSString *userID;
 
 + (NSString *)idFor:(NSString *)userName;

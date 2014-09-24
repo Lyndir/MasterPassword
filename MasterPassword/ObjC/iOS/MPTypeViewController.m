@@ -12,7 +12,7 @@
 
 @interface MPTypeViewController()
 
-- (MPElementType)typeAtIndexPath:(NSIndexPath *)indexPath;
+- (MPSiteType)typeAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
@@ -63,25 +63,25 @@
 
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
 
-    MPElementEntity *selectedElement = nil;
-    if ([self.delegate respondsToSelector:@selector(selectedElement)])
-        selectedElement = [self.delegate selectedElement];
+    MPSiteEntity *selectedSite = nil;
+    if ([self.delegate respondsToSelector:@selector( selectedSite )])
+        selectedSite = [self.delegate selectedSite];
 
-    MPElementType cellType = [self typeAtIndexPath:indexPath];
-    MPElementType selectedType = selectedElement? selectedElement.type: [self.delegate selectedType];
+    MPSiteType cellType = [self typeAtIndexPath:indexPath];
+    MPSiteType selectedType = selectedSite? selectedSite.type: [self.delegate selectedType];
     cell.selected = (selectedType == cellType);
 
-    if (cellType != (MPElementType)NSNotFound && cellType & MPElementTypeClassGenerated) {
+    if (cellType != (MPSiteType)NSNotFound && cellType & MPSiteTypeClassGenerated) {
         [(UITextField *)[cell viewWithTag:2] setText:@"..."];
 
-        NSString *name = selectedElement.name;
+        NSString *name = selectedSite.name;
         NSUInteger counter = 0;
-        if ([selectedElement isKindOfClass:[MPElementGeneratedEntity class]])
-            counter = ((MPElementGeneratedEntity *)selectedElement).counter;
+        if ([selectedSite isKindOfClass:[MPGeneratedSiteEntity class]])
+            counter = ((MPGeneratedSiteEntity *)selectedSite).counter;
 
         dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
-            NSString *typeContent = [MPAlgorithmDefault generateContentNamed:name ofType:cellType
-                                                                 withCounter:counter usingKey:[MPiOSAppDelegate get].key];
+            NSString *typeContent = [MPAlgorithmDefault generatePasswordForSiteNamed:name ofType:cellType
+                                                                         withCounter:counter usingKey:[MPiOSAppDelegate get].key];
 
             dispatch_async( dispatch_get_main_queue(), ^{
                 [(UITextField *)[[tableView cellForRowAtIndexPath:indexPath] viewWithTag:2] setText:typeContent];
@@ -96,8 +96,8 @@
 
     NSAssert(self.navigationController.topViewController == self, @"Not the currently active navigation item.");
 
-    MPElementType type = [self typeAtIndexPath:indexPath];
-    if (type == (MPElementType)NSNotFound)
+    MPSiteType type = [self typeAtIndexPath:indexPath];
+    if (type == (MPSiteType)NSNotFound)
             // Selected a non-type row.
         return;
 
@@ -105,31 +105,31 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (MPElementType)typeAtIndexPath:(NSIndexPath *)indexPath {
+- (MPSiteType)typeAtIndexPath:(NSIndexPath *)indexPath {
 
     switch (indexPath.section) {
         case 0: {
             // Generated
             switch (indexPath.row) {
                 case 0:
-                    return (MPElementType)NSNotFound;
+                    return (MPSiteType)NSNotFound;
                 case 1:
-                    return MPElementTypeGeneratedMaximum;
+                    return MPSiteTypeGeneratedMaximum;
                 case 2:
-                    return MPElementTypeGeneratedLong;
+                    return MPSiteTypeGeneratedLong;
                 case 3:
-                    return MPElementTypeGeneratedMedium;
+                    return MPSiteTypeGeneratedMedium;
                 case 4:
-                    return MPElementTypeGeneratedBasic;
+                    return MPSiteTypeGeneratedBasic;
                 case 5:
-                    return MPElementTypeGeneratedShort;
+                    return MPSiteTypeGeneratedShort;
                 case 6:
-                    return MPElementTypeGeneratedPIN;
+                    return MPSiteTypeGeneratedPIN;
                 case 7:
-                    return (MPElementType)NSNotFound;
+                    return (MPSiteType)NSNotFound;
 
                 default: {
-                    Throw(@"Unsupported row: %ld, when selecting generated element type.", (long)indexPath.row);
+                    Throw(@"Unsupported row: %ld, when selecting generated site type.", (long)indexPath.row);
                 }
             }
         }
@@ -138,22 +138,22 @@
             // Stored
             switch (indexPath.row) {
                 case 0:
-                    return (MPElementType)NSNotFound;
+                    return (MPSiteType)NSNotFound;
                 case 1:
-                    return MPElementTypeStoredPersonal;
+                    return MPSiteTypeStoredPersonal;
                 case 2:
-                    return MPElementTypeStoredDevicePrivate;
+                    return MPSiteTypeStoredDevicePrivate;
                 case 3:
-                    return (MPElementType)NSNotFound;
+                    return (MPSiteType)NSNotFound;
 
                 default: {
-                    Throw(@"Unsupported row: %ld, when selecting stored element type.", (long)indexPath.row);
+                    Throw(@"Unsupported row: %ld, when selecting stored site type.", (long)indexPath.row);
                 }
             }
         }
 
         default:
-            Throw(@"Unsupported section: %ld, when selecting element type.", (long)indexPath.section);
+            Throw(@"Unsupported section: %ld, when selecting site type.", (long)indexPath.section);
     }
 }
 

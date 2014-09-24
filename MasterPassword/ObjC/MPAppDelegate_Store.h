@@ -8,7 +8,6 @@
 
 #import "MPAppDelegate_Shared.h"
 
-#import "UbiquityStoreManager.h"
 #import "MPFixable.h"
 
 typedef NS_ENUM( NSUInteger, MPImportResult ) {
@@ -19,7 +18,7 @@ typedef NS_ENUM( NSUInteger, MPImportResult ) {
     MPImportResultInternalError,
 };
 
-@interface MPAppDelegate_Shared(Store)<UbiquityStoreManagerDelegate>
+@interface MPAppDelegate_Shared(Store)
 
 + (NSManagedObjectContext *)managedObjectContextForMainThreadIfReady;
 + (BOOL)managedObjectContextForMainThreadPerformBlock:(void (^)(NSManagedObjectContext *mainContext))mocBlock;
@@ -27,12 +26,12 @@ typedef NS_ENUM( NSUInteger, MPImportResult ) {
 + (BOOL)managedObjectContextPerformBlock:(void (^)(NSManagedObjectContext *context))mocBlock;
 + (BOOL)managedObjectContextPerformBlockAndWait:(void (^)(NSManagedObjectContext *context))mocBlock;
 
-- (UbiquityStoreManager *)storeManager;
 - (MPFixableResult)findAndFixInconsistenciesSaveInContext:(NSManagedObjectContext *)context;
+- (void)deleteAndResetStore;
 
-/** @param completion The block to execute after adding the element, executed from the main thread with the new element in the main MOC. */
-- (void)addElementNamed:(NSString *)siteName completion:(void ( ^ )(MPElementEntity *element, NSManagedObjectContext *context))completion;
-- (MPElementEntity *)changeElement:(MPElementEntity *)element saveInContext:(NSManagedObjectContext *)context toType:(MPElementType)type;
+/** @param completion The block to execute after adding the site, executed from the main thread with the new site in the main MOC. */
+- (void)addSiteNamed:(NSString *)siteName completion:(void ( ^ )(MPSiteEntity *site, NSManagedObjectContext *context))completion;
+- (MPSiteEntity *)changeSite:(MPSiteEntity *)site saveInContext:(NSManagedObjectContext *)context toType:(MPSiteType)type;
 - (MPImportResult)importSites:(NSString *)importedSitesString
             askImportPassword:(NSString *(^)(NSString *userName))importPassword
               askUserPassword:(NSString *(^)(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword;

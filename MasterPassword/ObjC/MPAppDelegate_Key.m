@@ -9,6 +9,12 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 
+@interface MPAppDelegate_Shared()
+
+@property(strong, nonatomic) MPKey *key;
+
+@end
+
 @implementation MPAppDelegate_Shared(Key)
 
 static NSDictionary *keyQuery(MPUserEntity *user) {
@@ -85,8 +91,8 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
         if ([password length] && (tryKey = [MPAlgorithmDefault keyForPassword:password ofUserNamed:user.name])) {
             user.keyID = tryKey.keyID;
 
-            // Migrate existing elements.
-            [self migrateElementsForUser:user saveInContext:moc toKey:tryKey];
+            // Migrate existing sites.
+            [self migrateSitesForUser:user saveInContext:moc toKey:tryKey];
         }
     }
 
@@ -143,8 +149,8 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     }
 
     user.lastUsed = [NSDate date];
-    [moc saveToStore];
     self.activeUser = user;
+    [moc saveToStore];
 
     // Perform a data sanity check now that we're logged in as the user to allow fixes that require the user's key.
     if ([[MPConfig get].checkInconsistency boolValue])
@@ -158,23 +164,23 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     return YES;
 }
 
-- (void)migrateElementsForUser:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc toKey:(MPKey *)newKey {
+- (void)migrateSitesForUser:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc toKey:(MPKey *)newKey {
 
-    if (![user.elements count])
+    if (![user.sites count])
         // Nothing to migrate.
         return;
 
     MPKey *recoverKey = newKey;
 #ifdef PEARL_UIKIT
     PearlOverlay *activityOverlay = [PearlOverlay showProgressOverlayWithTitle:PearlString( @"Migrating %ld sites...",
-            (long)[user.elements count] )];
+            (long)[user.sites count] )];
 #endif
 
-    for (MPElementEntity *element in user.elements) {
-        if (element.type & MPElementTypeClassStored) {
+    for (MPSiteEntity *site in user.sites) {
+        if (site.type & MPSiteTypeClassStored) {
             NSString *content;
-            while (!(content = [element.algorithm storedContentForElement:(MPElementStoredEntity *)element usingKey:recoverKey])) {
-                // Failed to decrypt element with the current recoveryKey.  Ask user for a new one to use.
+            while (!(content = [site.algorithm storedPasswordForSite:(MPStoredSiteEntity *)site usingKey:recoverKey])) {
+                // Failed to decrypt site with the current recoveryKey.  Ask user for a new one to use.
                 __block NSString *masterPassword = nil;
 
 #ifdef PEARL_UIKIT
@@ -182,7 +188,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                 dispatch_group_enter( recoverPasswordGroup );
                 [PearlAlert showAlertWithTitle:@"Enter Old Master Password"
                                        message:PearlString( @"Your old master password is required to migrate the stored password for %@",
-                                                       element.name )
+                                                       site.name )
                                      viewStyle:UIAlertViewStyleSecureTextInput
                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                     @try {
@@ -202,7 +208,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                     // Don't Migrate
                     break;
 
-                recoverKey = [element.algorithm keyForPassword:masterPassword ofUserNamed:user.name];
+                recoverKey = [site.algorithm keyForPassword:masterPassword ofUserNamed:user.name];
             }
 
             if (!content)
@@ -210,7 +216,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                 break;
 
             if (![recoverKey isEqualToKey:newKey])
-                [element.algorithm saveContent:content toElement:element usingKey:newKey];
+                [site.algorithm savePassword:content toSite:site usingKey:newKey];
         }
     }
 

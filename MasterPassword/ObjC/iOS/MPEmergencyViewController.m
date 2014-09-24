@@ -53,16 +53,9 @@
     [self reset];
 }
 
-- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
+- (UIStatusBarStyle)preferredStatusBarStyle {
 
-    return [self respondsToSelector:action];
-}
-
-#pragma mark - Actions
-
-- (IBAction)unwindToCombined:(UIStoryboardSegue *)sender {
-
-    dbg(@"unwindToCombined:%@", sender);
+    return UIStatusBarStyleLightContent;
 }
 
 #pragma mark - UITextFieldDelegate
@@ -126,7 +119,7 @@
 - (void)updatePassword {
 
     NSString *siteName = self.siteField.text;
-    MPElementType siteType = [self siteType];
+    MPSiteType siteType = [self siteType];
     NSUInteger siteCounter = (NSUInteger)self.counterStepper.value;
     self.counterLabel.text = strf( @"%lu", (unsigned long)siteCounter );
 
@@ -136,7 +129,7 @@
     [_emergencyPasswordQueue addOperationWithBlock:^{
         NSString *sitePassword = nil;
         if (_key && [siteName length])
-            sitePassword = [MPAlgorithmDefault generateContentNamed:siteName ofType:siteType withCounter:siteCounter usingKey:_key];
+            sitePassword = [MPAlgorithmDefault generatePasswordForSiteNamed:siteName ofType:siteType withCounter:siteCounter usingKey:_key];
 
         PearlMainQueue( ^{
             [self.activity stopAnimating];
@@ -145,21 +138,21 @@
     }];
 }
 
-- (enum MPElementType)siteType {
+- (enum MPSiteType)siteType {
 
     switch (self.typeControl.selectedSegmentIndex) {
         case 0:
-            return MPElementTypeGeneratedMaximum;
+            return MPSiteTypeGeneratedMaximum;
         case 1:
-            return MPElementTypeGeneratedLong;
+            return MPSiteTypeGeneratedLong;
         case 2:
-            return MPElementTypeGeneratedMedium;
+            return MPSiteTypeGeneratedMedium;
         case 3:
-            return MPElementTypeGeneratedBasic;
+            return MPSiteTypeGeneratedBasic;
         case 4:
-            return MPElementTypeGeneratedShort;
+            return MPSiteTypeGeneratedShort;
         case 5:
-            return MPElementTypeGeneratedPIN;
+            return MPSiteTypeGeneratedPIN;
         default:
             Throw(@"Unsupported type index: %ld", (long)self.typeControl.selectedSegmentIndex);
     }
@@ -187,7 +180,7 @@
                                  queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
                 Strongify(self);
 
-                [self performSegueWithIdentifier:@"unwind-emergency" sender:self];
+                [self performSegueWithIdentifier:@"unwind-popover" sender:self];
             }],
     ];
 }

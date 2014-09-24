@@ -31,8 +31,12 @@ const MPElementType TypeWithName(const char *typeName) {
         return MPElementTypeGeneratedBasic;
     if (0 == strcmp(lowerTypeName, "s") || 0 == strcmp(lowerTypeName, "short"))
         return MPElementTypeGeneratedShort;
-    if (0 == strcmp(lowerTypeName, "p") || 0 == strcmp(lowerTypeName, "pin"))
+    if (0 == strcmp(lowerTypeName, "i") || 0 == strcmp(lowerTypeName, "pin"))
         return MPElementTypeGeneratedPIN;
+    if (0 == strcmp(lowerTypeName, "n") || 0 == strcmp(lowerTypeName, "name"))
+        return MPElementTypeGeneratedName;
+    if (0 == strcmp(lowerTypeName, "p") || 0 == strcmp(lowerTypeName, "phrase"))
+        return MPElementTypeGeneratedPhrase;
 
     fprintf(stderr, "Not a generated type name: %s", lowerTypeName);
     abort();
@@ -67,8 +71,45 @@ const char *CipherForType(MPElementType type, uint8_t seedByte) {
         case MPElementTypeGeneratedPIN: {
             return "nnnn";
         }
+        case MPElementTypeGeneratedName: {
+            return "cvccvcvcv";
+        }
+        case MPElementTypeGeneratedPhrase: {
+            char *ciphers[] = { "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" };
+            return ciphers[seedByte % 3];
+        }
         default: {
             fprintf(stderr, "Unknown generated type: %d", type);
+            abort();
+        }
+    }
+}
+
+const MPElementVariant VariantWithName(const char *variantName) {
+    char lowerVariantName[strlen(variantName)];
+    strcpy(lowerVariantName, variantName);
+    for (char *vN = lowerVariantName; *vN; ++vN)
+        *vN = tolower(*vN);
+
+    if (0 == strcmp(lowerVariantName, "p") || 0 == strcmp(lowerVariantName, "password"))
+        return MPElementVariantPassword;
+    if (0 == strcmp(lowerVariantName, "l") || 0 == strcmp(lowerVariantName, "login"))
+        return MPElementVariantLogin;
+
+    fprintf(stderr, "Not a variant name: %s", lowerVariantName);
+    abort();
+}
+
+const char *ScopeForVariant(MPElementVariant variant) {
+    switch (variant) {
+        case MPElementVariantPassword: {
+            return "com.lyndir.masterpassword";
+        }
+        case MPElementVariantLogin: {
+            return "com.lyndir.masterpassword.login";
+        }
+        default: {
+            fprintf(stderr, "Unknown variant: %d", variant);
             abort();
         }
     }
@@ -111,6 +152,10 @@ const char CharacterFromClass(char characterClass, uint8_t seedByte) {
         }
         case 'x': {
             classCharacters = "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789!@#$%^&*()";
+            break;
+        }
+        case ' ': {
+            classCharacters = " ";
             break;
         }
         default: {

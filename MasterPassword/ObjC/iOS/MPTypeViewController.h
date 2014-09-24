@@ -13,11 +13,11 @@
 @protocol MPTypeDelegate<NSObject>
 
 @required
-- (void)didSelectType:(MPElementType)type;
-- (MPElementType)selectedType;
+- (void)didSelectType:(MPSiteType)type;
+- (MPSiteType)selectedType;
 
 @optional
-- (MPElementEntity *)selectedElement;
+- (MPSiteEntity *)selectedSite;
 
 @end
 

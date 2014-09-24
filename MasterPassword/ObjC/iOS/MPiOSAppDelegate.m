@@ -11,26 +11,25 @@
 #import "MPAppDelegate_Store.h"
 #import "IASKSettingsReader.h"
 
-@interface MPiOSAppDelegate()
+@interface MPiOSAppDelegate()<UIDocumentInteractionControllerDelegate>
 
-@property(nonatomic, weak) PearlAlert *handleCloudDisabledAlert;
-@property(nonatomic, weak) PearlAlert *handleCloudContentAlert;
-@property(nonatomic, weak) PearlAlert *fixCloudContentAlert;
-@property(nonatomic, weak) PearlOverlay *storeLoadingOverlay;
+@property(nonatomic, strong) UIDocumentInteractionController *interactionController;
+
 @end
 
 @implementation MPiOSAppDelegate
 
 + (void)initialize {
 
-    if ([self class] == [MPiOSAppDelegate class]) {
+    static dispatch_once_t once = 0;
+    dispatch_once( &once, ^{
         [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
 #ifdef DEBUG
         [PearlLogger get].printLevel = PearlLogLevelDebug; //Trace;
 #else
         [PearlLogger get].printLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelDebug: PearlLogLevelInfo;
 #endif
-    }
+    } );
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -168,7 +167,7 @@
         NSData *importedSitesData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
                                                           returningResponse:&response error:&error];
         if (error)
-            err( @"While reading imported sites from %@: %@", url, error );
+            err( @"While reading imported sites from %@: %@", url, [error fullDescription] );
         if (!importedSitesData)
             return;
 
@@ -339,6 +338,26 @@
             showComposerForVC:viewController];
 }
 
+- (void)handleCoordinatorError:(NSError *)error {
+
+    static dispatch_once_t once = 0;
+    dispatch_once( &once, ^{
+        [PearlAlert showAlertWithTitle:@"Failed To Load Sites" message:
+                        @"Master Password was unable to open your sites history.\n"
+                                @"This may be due to corruption.  You can either reset Master Password and "
+                                @"recreate your user, or E-Mail us your logs and leave your corrupt store as-is for now."
+                             viewStyle:UIAlertViewStyleDefault initAlert:nil
+                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                         if (buttonIndex == [alert cancelButtonIndex])
+                             return;
+                         if (buttonIndex == [alert firstOtherButtonIndex])
+                             [self openFeedbackWithLogs:YES forVC:nil];
+                         if (buttonIndex == [alert firstOtherButtonIndex] + 1)
+                             [self deleteAndResetStore];
+                     } cancelTitle:@"Ignore" otherTitles:@"E-Mail Logs", @"Reset", nil];
+    } );
+}
+
 - (void)showExportForVC:(UIViewController *)viewController {
 
     [PearlAlert showAlertWithTitle:@"Exporting Your Sites"
@@ -409,12 +428,38 @@
     NSDateFormatter *exportDateFormatter = [NSDateFormatter new];
     [exportDateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
 
-    [PearlEMail sendEMailTo:nil fromVC:viewController subject:@"Master Password Export" body:message
-                attachments:[[PearlEMailAttachment alloc] initWithContent:[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
-                                                                 mimeType:@"text/plain" fileName:
-                                strf( @"%@ (%@).mpsites", [self activeUserForMainThread].name,
-                                        [exportDateFormatter stringFromDate:[NSDate date]] )],
-                            nil];
+    NSString *exportFileName = strf( @"%@ (%@).mpsites",
+            [self activeUserForMainThread].name, [exportDateFormatter stringFromDate:[NSDate date]] );
+    [PearlSheet showSheetWithTitle:@"Export Destination" viewStyle:UIActionSheetStyleBlackTranslucent initSheet:nil
+                 tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
+                     if (buttonIndex == [sheet cancelButtonIndex])
+                         return;
+
+                     if (buttonIndex == [sheet firstOtherButtonIndex]) {
+                         [PearlEMail sendEMailTo:nil fromVC:viewController subject:@"Master Password Export" body:message
+                                     attachments:[[PearlEMailAttachment alloc]
+                                                         initWithContent:[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
+                                                                mimeType:@"text/plain" fileName:exportFileName],
+                                                 nil];
+                         return;
+                     }
+
+                     NSURL *applicationSupportURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory
+                                                                                            inDomains:NSUserDomainMask] lastObject];
+                     NSURL *exportURL = [[applicationSupportURL
+                             URLByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier isDirectory:YES]
+                             URLByAppendingPathComponent:exportFileName isDirectory:NO];
+                     NSError *error = nil;
+                     if (![[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
+                             writeToURL:exportURL options:NSDataWritingFileProtectionComplete error:&error])
+                         err( @"Failed to write export data to URL %@: %@", exportURL, [error fullDescription] );
+                     else {
+                         self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:exportURL];
+                         self.interactionController.UTI = @"com.lyndir.masterpassword.sites";
+                         self.interactionController.delegate = self;
+                         [self.interactionController presentOpenInMenuFromRect:CGRectZero inView:viewController.view animated:YES];
+                     }
+                 } cancelTitle:@"Cancel" destructiveTitle:nil otherTitles:@"Send As E-Mail", @"Share / Airdrop", nil];
 }
 
 - (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void ( ^ )(void))didReset {
@@ -446,6 +491,13 @@
                        otherTitles:[PearlStrings get].commonButtonContinue, nil];
 }
 
+#pragma mark - UIDocumentInteractionControllerDelegate
+
+- (void)documentInteractionController:(UIDocumentInteractionController *)controller didEndSendingToApplication:(NSString *)application {
+
+//    self.interactionController = nil;
+}
+
 #pragma mark - PearlConfigDelegate
 
 - (void)didUpdateConfigForKey:(SEL)configKey fromValue:(id)value {
@@ -454,73 +506,6 @@
 }
 
 - (void)updateConfigKey:(NSString *)key {
-
-    // iCloud enabled / disabled
-    BOOL iCloudEnabled = [[MPiOSConfig get].iCloudEnabled boolValue];
-    BOOL cloudEnabled = self.storeManager.cloudEnabled;
-    if (iCloudEnabled != cloudEnabled) {
-        if ([[MPiOSConfig get].iCloudEnabled boolValue])
-            [self.storeManager setCloudEnabledAndOverwriteCloudWithLocalIfConfirmed:^(void (^setConfirmationAnswer)(BOOL answer)) {
-                __block NSUInteger siteCount = NSNotFound;
-                [MPAppDelegate_Shared managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
-                    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
-                    NSError *error = nil;
-                    if ((siteCount = [context countForFetchRequest:fetchRequest error:&error]) == NSNotFound) {
-                        wrn( @"Couldn't count current sites: %@", error );
-                        return;
-                    }
-                }];
-
-                // If we currently have no sites, don't bother asking to copy them.
-                if (siteCount == 0) {
-                    setConfirmationAnswer( NO );
-                    return;
-                }
-
-                // The current store has sites, ask the user if he wants to copy them to the cloud
-                [PearlAlert showAlertWithTitle:@"Copy Sites To iCloud?"
-                                       message:@"You can either switch to your old iCloud sites "
-                                                       @"or overwrite them with your current sites."
-                                     viewStyle:UIAlertViewStyleDefault initAlert:nil
-                             tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                                 if (buttonIndex == [alert cancelButtonIndex])
-                                     setConfirmationAnswer( NO );
-                                 if (buttonIndex == [alert firstOtherButtonIndex])
-                                     setConfirmationAnswer( YES );
-                             }
-                                   cancelTitle:@"Use Old" otherTitles:@"Overwrite", nil];
-            }];
-        else
-            [self.storeManager setCloudDisabledAndOverwriteLocalWithCloudIfConfirmed:^(void (^setConfirmationAnswer)(BOOL answer)) {
-                __block NSUInteger siteCount = NSNotFound;
-                [MPAppDelegate_Shared managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
-                    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPElementEntity class] )];
-                    NSError *error = nil;
-                    if ((siteCount = [context countForFetchRequest:fetchRequest error:&error]) == NSNotFound) {
-                        wrn( @"Couldn't count current sites: %@", error );
-                        return;
-                    }
-                }];
-
-                // If we currently have no sites, don't bother asking to copy them.
-                if (siteCount == 0) {
-                    setConfirmationAnswer( NO );
-                    return;
-                }
-
-                [PearlAlert showAlertWithTitle:@"Copy iCloud Sites?"
-                                       message:@"You can either switch to the old sites on your device "
-                                                       @"or overwrite them with your current iCloud sites."
-                                     viewStyle:UIAlertViewStyleDefault initAlert:nil
-                             tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                                 if (buttonIndex == [alert cancelButtonIndex])
-                                     setConfirmationAnswer( NO );
-                                 if (buttonIndex == [alert firstOtherButtonIndex])
-                                     setConfirmationAnswer( YES );
-                             }
-                                   cancelTitle:@"Use Old" otherTitles:@"Overwrite", nil];
-            }];
-    }
 
     // Trace mode
     [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
@@ -532,21 +517,18 @@
 
 #ifdef CRASHLYTICS
                         [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].rememberLogin boolValue] forKey:@"rememberLogin"];
-                        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].iCloudEnabled boolValue] forKey:@"iCloudEnabled"];
                         [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].sendInfo boolValue] forKey:@"sendInfo"];
                         [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].helpHidden boolValue] forKey:@"helpHidden"];
                         [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].showSetup boolValue] forKey:@"showQuickStart"];
                         [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].firstRun boolValue] forKey:@"firstRun"];
                         [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].launchCount intValue] forKey:@"launchCount"];
                         [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].askForReviews boolValue] forKey:@"askForReviews"];
-                        [[Crashlytics sharedInstance]
-                                setIntValue:[[PearlConfig get].reviewAfterLaunches intValue] forKey:@"reviewAfterLaunches"];
+                        [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].reviewAfterLaunches intValue] forKey:@"reviewAfterLaunches"];
                         [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
 #endif
 
         MPCheckpoint( MPCheckpointConfig, @{
                 @"rememberLogin"       : @([[MPConfig get].rememberLogin boolValue]),
-                @"iCloudEnabled"       : @([[MPiOSConfig get].iCloudEnabled boolValue]),
                 @"sendInfo"            : @([[MPiOSConfig get].sendInfo boolValue]),
                 @"helpHidden"          : @([[MPiOSConfig get].helpHidden boolValue]),
                 @"showQuickStart"      : @([[MPiOSConfig get].showSetup boolValue]),
@@ -557,123 +539,6 @@
                 @"reviewedVersion"     : NilToNSNull( [PearlConfig get].reviewedVersion )
         } );
     }
-}
-
-#pragma mark - UbiquityStoreManager
-
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager willLoadStoreIsCloud:(BOOL)isCloudStore {
-
-    dispatch_async( dispatch_get_main_queue(), ^{
-        [self signOutAnimated:YES];
-        [self.handleCloudContentAlert cancelAlertAnimated:YES];
-        if (!self.storeLoadingOverlay)
-            self.storeLoadingOverlay = [PearlOverlay showProgressOverlayWithTitle:@"Loading Sites"];
-    } );
-
-    [super ubiquityStoreManager:manager willLoadStoreIsCloud:isCloudStore];
-}
-
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didLoadStoreForCoordinator:(NSPersistentStoreCoordinator *)coordinator
-                     isCloud:(BOOL)isCloudStore {
-
-    [MPiOSConfig get].iCloudEnabled = @(isCloudStore);
-    [super ubiquityStoreManager:manager didLoadStoreForCoordinator:coordinator isCloud:isCloudStore];
-
-    [self.handleCloudContentAlert cancelAlertAnimated:YES];
-    [self.fixCloudContentAlert cancelAlertAnimated:YES];
-    [self.storeLoadingOverlay cancelOverlayAnimated:YES];
-    [self.handleCloudDisabledAlert cancelAlertAnimated:YES];
-
-    if (isCloudStore)
-        [PearlAlert showAlertWithTitle:@"iCloud Support Deprecated" message:
-                        @"Master Password is moving away from iCloud due to limited platform support and reliability issues.  "
-                                @"\n\nMaster Password's generated passwords do not require syncing.  "
-                                @"Your sites will always have the same passwords on all your devices, even without iCloud.  "
-                                @"\n\niCloud continues to work for now but will be deactivated in a future update.  "
-                                @"Disable iCloud now to copy your iCloud sites to your device and avoid having to recreate them "
-                                @"when iCloud becomes discontinued."
-                             viewStyle:UIAlertViewStyleDefault initAlert:nil
-                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                         if (buttonIndex == [alert cancelButtonIndex])
-                             return;
-
-                         if (buttonIndex == [alert firstOtherButtonIndex])
-                             [UIApp openURL:[NSURL URLWithString:
-                                     @"http://support.lyndir.com/topic/486731-why-doesnt-the-mac-version-have-icloud-support/#comment-755394"]];
-
-                         if (buttonIndex == [alert firstOtherButtonIndex] + 1)
-                             [MPiOSConfig get].iCloudEnabled = @NO;
-                     }
-                           cancelTitle:@"Ignore For Now" otherTitles:@"Why?", @"Disable iCloud", nil];
-}
-
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager failedLoadingStoreWithCause:(UbiquityStoreErrorCause)cause context:(id)context
-                    wasCloud:(BOOL)wasCloudStore {
-
-    [self.storeLoadingOverlay cancelOverlayAnimated:YES];
-    [self.handleCloudDisabledAlert cancelAlertAnimated:YES];
-}
-
-- (BOOL)ubiquityStoreManager:(UbiquityStoreManager *)manager handleCloudContentCorruptionWithHealthyStore:(BOOL)storeHealthy {
-
-    if (manager.cloudEnabled && !storeHealthy && !(self.handleCloudContentAlert || self.fixCloudContentAlert)) {
-        [self.storeLoadingOverlay cancelOverlayAnimated:YES];
-        [self.handleCloudDisabledAlert cancelAlertAnimated:YES];
-        [self showCloudContentAlert];
-    };
-
-    return NO;
-}
-
-- (BOOL)ubiquityStoreManagerHandleCloudDisabled:(UbiquityStoreManager *)manager {
-
-    if (!self.handleCloudDisabledAlert)
-        self.handleCloudDisabledAlert = [PearlAlert showAlertWithTitle:@"iCloud Login" message:
-                        @"You haven't added an iCloud account to your device yet.\n"
-                                @"To add one, go into Apple's Settings -> iCloud."
-                                                             viewStyle:UIAlertViewStyleDefault initAlert:nil
-                                                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                                                         if (buttonIndex == alert.firstOtherButtonIndex) {
-                                                             [MPiOSConfig get].iCloudEnabled = @NO;
-                                                             return;
-                                                         }
-
-                                                         [self.storeManager reloadStore];
-                                                     } cancelTitle:@"Try Again" otherTitles:@"Disable iCloud", nil];
-
-    return YES;
-}
-
-- (void)showCloudContentAlert {
-
-    __weak MPiOSAppDelegate *wSelf = self;
-    [self.handleCloudContentAlert cancelAlertAnimated:NO];
-    // TODO: Add the activity indicator back.
-    self.handleCloudContentAlert = [PearlAlert showAlertWithTitle:@"iCloud Sync Problem"
-                                                          message:@"Waiting for your other device to auto‑correct the problem..."
-                                                        viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:
-                    ^(UIAlertView *alert, NSInteger buttonIndex) {
-                        if (buttonIndex == [alert firstOtherButtonIndex])
-                            wSelf.fixCloudContentAlert = [PearlAlert showAlertWithTitle:@"Fix iCloud Now" message:
-                                            @"This problem can be auto‑corrected by opening the app on another device where you recently made changes.\n"
-                                                    @"You can fix the problem from this device anyway, but recent changes from another device might get lost.\n\n"
-                                                    @"You can also turn iCloud off for now."
-                                                                              viewStyle:UIAlertViewStyleDefault
-                                                                              initAlert:nil tappedButtonBlock:
-                                            ^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                                                if (buttonIndex_ == alert_.cancelButtonIndex)
-                                                    [wSelf showCloudContentAlert];
-                                                if (buttonIndex_ == [alert_ firstOtherButtonIndex])
-                                                    [wSelf.storeManager rebuildCloudContentFromCloudStoreOrLocalStore:YES];
-                                                if (buttonIndex_ == [alert_ firstOtherButtonIndex] + 1)
-                                                    [MPiOSConfig get].iCloudEnabled = @NO;
-                                            }
-                                                                            cancelTitle:[PearlStrings get].commonButtonBack
-                                                                            otherTitles:@"Fix Anyway",
-                                                                                        @"Turn Off", nil];
-                        if (buttonIndex == [alert firstOtherButtonIndex] + 1)
-                            [MPiOSConfig get].iCloudEnabled = @NO;
-                    }                                 cancelTitle:nil otherTitles:@"Fix Now", @"Turn Off", nil];
 }
 
 #pragma mark - Crashlytics

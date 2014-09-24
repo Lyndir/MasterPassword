@@ -1,12 +1,12 @@
 /**
- * Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
- *
- * See the enclosed file LICENSE for license information (LGPLv3). If you did
- * not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
- *
- * @author   Maarten Billemont <lhunath@lyndir.com>
- * @license  http://www.gnu.org/licenses/lgpl-3.0.txt
- */
+* Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
+*
+* See the enclosed file LICENSE for license information (LGPLv3). If you did
+* not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
+*
+* @author   Maarten Billemont <lhunath@lyndir.com>
+* @license  http://www.gnu.org/licenses/lgpl-3.0.txt
+*/
 
 //
 //  MPCombinedViewController.h
@@ -24,8 +24,9 @@
 #import "MPAppDelegate_Key.h"
 #import "PearlSizedTextView.h"
 #import "MPWebViewController.h"
+#import "UIView+FontScale.h"
 
-typedef NS_ENUM(NSUInteger, MPActiveUserState) {
+typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
     /** The users are all inactive */
             MPActiveUserStateNone,
     /** The selected user is activated and being logged in with */
@@ -72,7 +73,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
     self.view.backgroundColor = [UIColor clearColor];
     self.avatarCollectionView.allowsMultipleSelection = YES;
-    [self.entryField addTarget:self action:@selector(textFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
+    [self.entryField addTarget:self action:@selector( textFieldEditingChanged: ) forControlEvents:UIControlEventEditingChanged];
 
     [self setActive:YES animated:NO];
 }
@@ -82,15 +83,6 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     [super viewWillAppear:animated];
 
     self.userSelectionContainer.alpha = 0;
-
-    [self observeStore];
-    [self registerObservers];
-    [self reloadUsers];
-
-    [self.marqueeTipTimer invalidate];
-    self.marqueeTipTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(firedMarqueeTimer:)
-                                                          userInfo:nil repeats:YES];
-    [self firedMarqueeTimer:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -103,9 +95,29 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     [self.marqueeTipTimer invalidate];
 }
 
-- (void)viewDidLayoutSubviews {
+- (void)viewDidAppear:(BOOL)animated {
 
-    [super viewDidLayoutSubviews];
+    [super viewDidAppear:animated];
+
+    [self observeStore];
+    [self registerObservers];
+    [self reloadUsers];
+
+    [self.marqueeTipTimer invalidate];
+    self.marqueeTipTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector( firedMarqueeTimer: )
+                                                          userInfo:nil repeats:YES];
+    [self firedMarqueeTimer:nil];
+}
+
+- (void)viewWillLayoutSubviews {
+
+    [self.avatarCollectionView.collectionViewLayout invalidateLayout];
+    [super viewWillLayoutSubviews];
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+
+    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 
     [self.avatarCollectionView.collectionViewLayout invalidateLayout];
 }
@@ -257,15 +269,25 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 
+- (CGSize)       collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
+referenceSizeForHeaderInSection:(NSInteger)section {
+
+    CGSize parentSize = self.avatarCollectionView.bounds.size;
+    return CGSizeMake( parentSize.width / 4, parentSize.height );
+}
+
+- (CGSize)       collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
+referenceSizeForFooterInSection:(NSInteger)section {
+
+    CGSize parentSize = self.avatarCollectionView.bounds.size;
+    return CGSizeMake( parentSize.width / 4, parentSize.height );
+}
+
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    if (collectionView == self.avatarCollectionView) {
-        CGSize parentSize = self.avatarCollectionView.bounds.size;
-        return CGSizeMake( parentSize.width / 2, parentSize.height );
-    }
-
-    Throw(@"unexpected collection view: %@", collectionView);
+    CGSize parentSize = self.avatarCollectionView.bounds.size;
+    return CGSizeMake( parentSize.width / 2, parentSize.height );
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -275,14 +297,15 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     if (collectionView == self.avatarCollectionView)
         return [self.userIDs count] + 1;
 
-    Throw(@"unexpected collection view: %@", collectionView);
+    Throw( @"unexpected collection view: %@", collectionView );
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
     if (collectionView == self.avatarCollectionView) {
         MPAvatarCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[MPAvatarCell reuseIdentifier] forIndexPath:indexPath];
-        [cell addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPress:)]];
+        cell.contentView.frame = cell.bounds;
+        [cell addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector( didLongPress: )]];
         [self updateModeForAvatar:cell atIndexPath:indexPath animated:NO];
         [self updateVisibilityForAvatar:cell atIndexPath:indexPath animated:NO];
 
@@ -290,7 +313,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
         MPUserEntity *user = [self userForIndexPath:indexPath inContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]
                                               isNew:&isNew];
         if (isNew)
-                // New User
+            // New User
             cell.avatar = MPAvatarAdd;
         else {
             // Existing User
@@ -301,7 +324,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
         return cell;
     }
 
-    Throw(@"unexpected collection view: %@", collectionView);
+    Throw( @"unexpected collection view: %@", collectionView );
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -356,7 +379,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
     if ([recognizer.view isKindOfClass:[MPAvatarCell class]]) {
         if (recognizer.state != UIGestureRecognizerStateBegan)
-                // Don't show the action menu unless the state is Began.
+            // Don't show the action menu unless the state is Began.
             return;
 
         MPAvatarCell *avatarCell = (MPAvatarCell *)recognizer.view;
@@ -371,40 +394,40 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
         [PearlSheet showSheetWithTitle:user.name
                              viewStyle:UIActionSheetStyleBlackTranslucent
                              initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
-            if (buttonIndex == [sheet cancelButtonIndex])
-                return;
-
-            if (buttonIndex == [sheet destructiveButtonIndex]) {
-                // Delete User
-                [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPUserEntity *user_ = [MPUserEntity existingObjectWithID:userID inContext:context];
-                    if (!user_)
+                    if (buttonIndex == [sheet cancelButtonIndex])
                         return;
 
-                    [context deleteObject:user_];
-                    [context saveToStore];
-                    [self reloadUsers]; // I do NOT understand why our ObjectsDidChangeNotification isn't firing on saveToStore.
-                }];
-                return;
-            }
+                    if (buttonIndex == [sheet destructiveButtonIndex]) {
+                        // Delete User
+                        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                            MPUserEntity *user_ = [MPUserEntity existingObjectWithID:userID inContext:context];
+                            if (!user_)
+                                return;
 
-            if (buttonIndex == [sheet firstOtherButtonIndex])
-                // Reset Password
-                [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPUserEntity *user_ = [MPUserEntity existingObjectWithID:userID inContext:context];
-                    if (!user_)
+                            [context deleteObject:user_];
+                            [context saveToStore];
+                            [self reloadUsers]; // I do NOT understand why our ObjectsDidChangeNotification isn't firing on saveToStore.
+                        }];
                         return;
+                    }
 
-                    [[MPiOSAppDelegate get] changeMasterPasswordFor:user_ saveInContext:context didResetBlock:^{
-                        PearlMainQueue( ^{
-                            NSIndexPath *avatarIndexPath = [self.avatarCollectionView indexPathForCell:avatarCell];
-                            [self.avatarCollectionView selectItemAtIndexPath:avatarIndexPath animated:NO
-                                                              scrollPosition:UICollectionViewScrollPositionNone];
-                            [self collectionView:self.avatarCollectionView didSelectItemAtIndexPath:avatarIndexPath];
-                        } );
-                    }];
-                }];
-        }                  cancelTitle:[PearlStrings get].commonButtonCancel
+                    if (buttonIndex == [sheet firstOtherButtonIndex])
+                        // Reset Password
+                        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                            MPUserEntity *user_ = [MPUserEntity existingObjectWithID:userID inContext:context];
+                            if (!user_)
+                                return;
+
+                            [[MPiOSAppDelegate get] changeMasterPasswordFor:user_ saveInContext:context didResetBlock:^{
+                                PearlMainQueue( ^{
+                                    NSIndexPath *avatarIndexPath = [self.avatarCollectionView indexPathForCell:avatarCell];
+                                    [self.avatarCollectionView selectItemAtIndexPath:avatarIndexPath animated:NO
+                                                                      scrollPosition:UICollectionViewScrollPositionNone];
+                                    [self collectionView:self.avatarCollectionView didSelectItemAtIndexPath:avatarIndexPath];
+                                } );
+                            }];
+                        }];
+                }          cancelTitle:[PearlStrings get].commonButtonCancel
                       destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];
     }
 }
@@ -420,7 +443,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 CGPointPlusCGPoint( *targetContentOffset, offsetToCenter )];
         CGPoint targetCenter = [self.avatarCollectionView layoutAttributesForItemAtIndexPath:avatarIndexPath].center;
         *targetContentOffset = CGPointMinusCGPoint( targetCenter, offsetToCenter );
-        NSAssert([self.avatarCollectionView indexPathForItemAtPoint:targetCenter].item == avatarIndexPath.item, @"should be same item");
+        NSAssert( [self.avatarCollectionView indexPathForItemAtPoint:targetCenter].item == avatarIndexPath.item, @"should be same item" );
     }
 }
 
@@ -501,19 +524,14 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     return [MPUserEntity existingObjectWithID:self.userIDs[indexPath.item] inContext:context];
 }
 
-- (void)updateAvatars {
+- (void)updateAvatarVisibility {
 
     self.previousAvatarButton.alpha = 0;
     self.nextAvatarButton.alpha = 0;
-    for (NSIndexPath *indexPath in self.avatarCollectionView.indexPathsForVisibleItems)
-        [self updateAvatarAtIndexPath:indexPath];
-}
-
-- (void)updateAvatarAtIndexPath:(NSIndexPath *)indexPath {
-
-    MPAvatarCell *cell = (MPAvatarCell *)[self.avatarCollectionView cellForItemAtIndexPath:indexPath];
-    [self updateModeForAvatar:cell atIndexPath:indexPath animated:NO];
-    [self updateVisibilityForAvatar:cell atIndexPath:indexPath animated:NO];
+    for (NSIndexPath *indexPath in self.avatarCollectionView.indexPathsForVisibleItems) {
+        MPAvatarCell *cell = (MPAvatarCell *)[self.avatarCollectionView cellForItemAtIndexPath:indexPath];
+        [self updateVisibilityForAvatar:cell atIndexPath:indexPath animated:NO];
+    }
 }
 
 - (void)updateModeForAvatar:(MPAvatarCell *)avatarCell atIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated {
@@ -550,7 +568,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                       self.avatarCollectionView.contentOffset.x;
     CGFloat max = self.avatarCollectionView.bounds.size.width;
 
-    CGFloat visibility = MAX(0, MIN( 1, 1 - ABS( current / (max / 2) - 1 ) ));
+    CGFloat visibility = MAX( 0, MIN( 1, 1 - ABS( current / (max / 2) - 1 ) ) );
     [cell setVisibility:visibility animated:animated];
 
     if (cell.newUser) {
@@ -559,7 +577,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     }
 }
 
-- (void)afterUpdatesMainQueue:(void (^)(void))block {
+- (void)afterUpdatesMainQueue:(void ( ^ )(void))block {
 
     [_afterUpdates addOperationWithBlock:^{
         PearlMainQueue( block );
@@ -571,32 +589,32 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     if ([_notificationObservers count])
         return;
 
-    Weakify(self);
+    Weakify( self );
     _notificationObservers = @[
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:UIApplicationWillResignActiveNotification object:nil
                                  queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                Strongify(self);
+                        Strongify( self );
 
 //                [self emergencyCloseAnimated:NO];
-                self.userSelectionContainer.alpha = 0;
-            }],
+                        self.userSelectionContainer.alpha = 0;
+                    }],
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:UIApplicationDidBecomeActiveNotification object:nil
                                  queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                Strongify(self);
+                        Strongify( self );
 
-                [self reloadUsers];
+                        [self reloadUsers];
 
-                [UIView animateWithDuration:1 animations:^{
-                    self.userSelectionContainer.alpha = 1;
-                }];
-            }],
+                        [UIView animateWithDuration:1 animations:^{
+                            self.userSelectionContainer.alpha = 1;
+                        }];
+                    }],
     ];
 
     [self observeKeyPath:@"avatarCollectionView.contentOffset" withBlock:
             ^(id from, id to, NSKeyValueChange cause, MPUsersViewController *_self) {
-                [_self updateAvatars];
+                [_self updateAvatarVisibility];
             }];
 }
 
@@ -611,7 +629,7 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
 - (void)observeStore {
 
-    Weakify(self);
+    Weakify( self );
 
     NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
     [UIView animateWithDuration:0.3f animations:^{
@@ -626,10 +644,10 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
         _mocObserver = [[NSNotificationCenter defaultCenter]
                 addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:mainContext
                              queue:nil usingBlock:^(NSNotification *note) {
-                    Strongify(self);
+                    Strongify( self );
                     NSSet *insertedObjects = note.userInfo[NSInsertedObjectsKey];
                     NSSet *deletedObjects = note.userInfo[NSDeletedObjectsKey];
-                    if ([[NSSetUnion(insertedObjects, deletedObjects)
+                    if ([[NSSetUnion( insertedObjects, deletedObjects )
                             filteredSetUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
                                 return [evaluatedObject isKindOfClass:[MPUserEntity class]];
                             }]] count])
@@ -637,17 +655,18 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 }];
     if (!_storeChangingObserver)
         _storeChangingObserver = [[NSNotificationCenter defaultCenter]
-                addObserverForName:USMStoreWillChangeNotification object:nil
+                addObserverForName:NSPersistentStoreCoordinatorStoresWillChangeNotification object:nil
                              queue:nil usingBlock:^(NSNotification *note) {
-                    Strongify(self);
+                    Strongify( self );
                     if (self->_mocObserver)
                         [[NSNotificationCenter defaultCenter] removeObserver:self->_mocObserver];
+                    self.userIDs = nil;
                 }];
     if (!_storeChangedObserver)
         _storeChangedObserver = [[NSNotificationCenter defaultCenter]
-                addObserverForName:USMStoreDidChangeNotification object:nil
+                addObserverForName:NSPersistentStoreCoordinatorStoresDidChangeNotification object:nil
                              queue:nil usingBlock:^(NSNotification *note) {
-                    Strongify(self);
+                    Strongify( self );
                     [self reloadUsers];
                 }];
 }
@@ -666,15 +685,15 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
 
     [self afterUpdatesMainQueue:^{
         [self observeStore];
-        [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
+        if (![MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
             NSError *error = nil;
             NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
             fetchRequest.sortDescriptors = @[
-                    [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector( @selector(lastUsed) ) ascending:NO]
+                    [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector( @selector( lastUsed ) ) ascending:NO]
             ];
             NSArray *users = [mainContext executeFetchRequest:fetchRequest error:&error];
             if (!users) {
-                err(@"Failed to load users: %@", error);
+                err( @"Failed to load users: %@", [error fullDescription] );
                 self.userIDs = nil;
             }
 
@@ -682,7 +701,8 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
             for (MPUserEntity *user in users)
                 [userIDs addObject:user.objectID];
             self.userIDs = userIDs;
-        }];
+        }])
+            self.userIDs = nil;
     }];
 }
 
@@ -741,24 +761,11 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
         return;
     }
 
+    // Set the entry container's contents.
     [_afterUpdates setSuspended:YES];
     __block BOOL requestFirstResponder = NO;
+    [self.view layoutIfNeeded];
     [UIView animateWithDuration:animated? 0.4f: 0 animations:^{
-        MPAvatarCell *selectedAvatar = [self selectedAvatar];
-
-        // Set avatar modes.
-        for (NSUInteger item = 0; item < [self.avatarCollectionView numberOfItemsInSection:0]; ++item) {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:0];
-            MPAvatarCell *avatarCell = (MPAvatarCell *)[self.avatarCollectionView cellForItemAtIndexPath:indexPath];
-            [self updateModeForAvatar:avatarCell atIndexPath:indexPath animated:animated];
-            [self updateVisibilityForAvatar:avatarCell atIndexPath:indexPath animated:animated];
-
-            if (selectedAvatar && avatarCell == selectedAvatar)
-                [self.avatarCollectionView scrollToItemAtIndexPath:indexPath
-                                                  atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
-        }
-
-        // Set the entry container's contents.
         switch (activeUserState) {
             case MPActiveUserStateNone:
                 break;
@@ -798,7 +805,6 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
         // Manage the entry container depending on whether a user is activate or not.
         switch (activeUserState) {
             case MPActiveUserStateNone: {
-                [self.navigationBarToTopConstraint updatePriority:UILayoutPriorityDefaultHigh];
                 self.avatarCollectionView.scrollEnabled = YES;
                 self.entryContainer.alpha = 0;
                 self.footerContainer.alpha = 1;
@@ -808,7 +814,6 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
             case MPActiveUserStateUserName:
             case MPActiveUserStateMasterPasswordChoice:
             case MPActiveUserStateMasterPasswordConfirmation: {
-                [self.navigationBarToTopConstraint updatePriority:UILayoutPriorityDefaultHigh];
                 self.avatarCollectionView.scrollEnabled = NO;
                 self.entryContainer.alpha = 1;
                 self.footerContainer.alpha = 1;
@@ -816,7 +821,6 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
                 break;
             }
             case MPActiveUserStateMinimized: {
-                [self.navigationBarToTopConstraint updatePriority:1];
                 self.avatarCollectionView.scrollEnabled = NO;
                 self.entryContainer.alpha = 0;
                 self.footerContainer.alpha = 0;
@@ -832,6 +836,18 @@ typedef NS_ENUM(NSUInteger, MPActiveUserState) {
     [self.entryField resignFirstResponder];
     if (requestFirstResponder)
         [self.entryField becomeFirstResponder];
+
+    // Set avatar modes.
+    MPAvatarCell *selectedAvatar = [self selectedAvatar];
+    for (NSIndexPath *indexPath in [self.avatarCollectionView indexPathsForVisibleItems]) {
+        MPAvatarCell *avatarCell = (MPAvatarCell *)[self.avatarCollectionView cellForItemAtIndexPath:indexPath];
+        [self updateModeForAvatar:avatarCell atIndexPath:indexPath animated:animated];
+        [self updateVisibilityForAvatar:avatarCell atIndexPath:indexPath animated:animated];
+
+        if (selectedAvatar && avatarCell == selectedAvatar)
+            [self.avatarCollectionView scrollToItemAtIndexPath:indexPath
+                                              atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+    }
 }
 
 #pragma mark - Actions
