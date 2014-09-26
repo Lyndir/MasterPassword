@@ -5,7 +5,7 @@ shopt -s extglob
 
 
 ## Submodules that need to be checked out.
-dependencies=( External/{InAppSettingsKit,Pearl{,:External/jrswizzle,:External/uicolor-utilities},UbiquityStoreManager,RHStatusItemView,LoveLyndir} )
+dependencies=( External/{InAppSettingsKit,Pearl{,:External/jrswizzle,:External/uicolor-utilities},RHStatusItemView} )
 
 ## Custom migration.
 # None yet.
