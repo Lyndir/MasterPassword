@@ -466,7 +466,7 @@
 
         // UI
         self.upgradeButton.gone = !mainSite.requiresExplicitMigration;
-        self.answersButton.gone = ![[MPiOSAppDelegate get] isPurchased:MPProductGenerateAnswers];
+        self.answersButton.gone = ![[MPiOSAppDelegate get] isFeatureUnlocked:MPProductGenerateAnswers];
         BOOL settingsMode = self.mode == MPPasswordCellModeSettings;
         self.loginNameContainer.alpha = settingsMode || mainSite.loginGenerated || [mainSite.loginName length]? 0.7f: 0;
         self.loginNameField.textColor = [UIColor colorWithHexString:mainSite.loginGenerated? @"5E636D": @"6D5E63"];
@@ -480,7 +480,7 @@
             [self.loginNameField resignFirstResponder];
             [self.passwordField resignFirstResponder];
         }
-        if ([[MPiOSAppDelegate get] isPurchased:MPProductGenerateLogins])
+        if ([[MPiOSAppDelegate get] isFeatureUnlocked:MPProductGenerateLogins])
             [self.loginNameButton setTitle:@"Tap to generate username or use pencil to save one" forState:UIControlStateNormal];
         else
             [self.loginNameButton setTitle:@"Tap the pencil to save a username" forState:UIControlStateNormal];

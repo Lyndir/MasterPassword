@@ -16,6 +16,10 @@
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
+#import "MPUsersViewController.h"
+#import "MPPasswordsViewController.h"
+#import "MPEmergencyViewController.h"
+
 typedef NS_ENUM(NSUInteger, MPCombinedMode) {
     MPCombinedModeUserSelection,
     MPCombinedModePasswordSelection,
@@ -23,7 +27,9 @@ typedef NS_ENUM(NSUInteger, MPCombinedMode) {
 
 @interface MPCombinedViewController : UIViewController
 
-@property(assign, nonatomic) MPCombinedMode mode;
-@property(strong, nonatomic) IBOutlet UIView *usersView;
+@property(nonatomic) MPCombinedMode mode;
+@property(nonatomic, weak) MPUsersViewController *usersVC;
+@property(nonatomic, weak) MPPasswordsViewController *passwordsVC;
+@property(nonatomic, weak) MPEmergencyViewController *emergencyVC;
 
 @end

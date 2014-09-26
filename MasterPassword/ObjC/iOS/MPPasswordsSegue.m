@@ -42,11 +42,9 @@
         passwordsVC.active = NO;
 
         UIView *passwordsView = passwordsVC.view;
-        passwordsView.translatesAutoresizingMaskIntoConstraints = NO;
-        [combinedVC.view insertSubview:passwordsView belowSubview:combinedVC.usersView];
-        [combinedVC.view addConstraintsWithVisualFormats:@[ @"H:|[passwordsView]|", @"V:|[passwordsView]|" ]
-                                                 options:0 metrics:nil
-                                                   views:NSDictionaryOfVariableBindings( passwordsView )];
+        passwordsView.frame = combinedVC.view.bounds;
+        passwordsView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [combinedVC.view insertSubview:passwordsView belowSubview:combinedVC.usersVC.view];
 
         [passwordsVC setActive:YES animated:self.animated completion:^(BOOL finished) {
             if (!finished)

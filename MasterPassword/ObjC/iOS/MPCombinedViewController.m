@@ -22,15 +22,8 @@
 #import "MPEmergencyViewController.h"
 #import "MPPasswordsSegue.h"
 
-@interface MPCombinedViewController()
-
-@property(nonatomic, weak) MPUsersViewController *usersVC;
-@property(nonatomic, weak) MPEmergencyViewController *emergencyVC;
-@end
-
 @implementation MPCombinedViewController {
     NSArray *_notificationObservers;
-    MPPasswordsViewController *_passwordsVC;
 }
 
 #pragma mark - Life
@@ -40,6 +33,7 @@
     [super viewDidLoad];
 
     _mode = MPCombinedModeUserSelection;
+    [self performSegueWithIdentifier:@"users" sender:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -128,7 +122,7 @@
 
     switch (self.mode) {
         case MPCombinedModeUserSelection: {
-            self.usersView.userInteractionEnabled = YES;
+            self.usersVC.view.userInteractionEnabled = YES;
             [self.usersVC setActive:YES animated:animated];
             if (_passwordsVC) {
                 MPPasswordsSegue *segue = [[MPPasswordsSegue alloc] initWithIdentifier:@"passwords" source:_passwordsVC destination:self];
@@ -138,7 +132,7 @@
             break;
         }
         case MPCombinedModePasswordSelection: {
-            self.usersView.userInteractionEnabled = NO;
+            self.usersVC.view.userInteractionEnabled = NO;
             [self.usersVC setActive:NO animated:animated];
             [self performSegueWithIdentifier:@"passwords" sender:@{ @"animated" : @(animated) }];
             break;

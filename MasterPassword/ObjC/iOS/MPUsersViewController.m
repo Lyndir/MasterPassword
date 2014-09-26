@@ -592,21 +592,25 @@ referenceSizeForFooterInSection:(NSInteger)section {
     Weakify( self );
     _notificationObservers = @[
             [[NSNotificationCenter defaultCenter]
-                    addObserverForName:UIApplicationWillResignActiveNotification object:nil
+                    addObserverForName:UIApplicationDidEnterBackgroundNotification object:nil
                                  queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
                         Strongify( self );
 
-//                [self emergencyCloseAnimated:NO];
                         self.userSelectionContainer.alpha = 0;
+                    }],
+            [[NSNotificationCenter defaultCenter]
+                    addObserverForName:UIApplicationWillEnterForegroundNotification object:nil
+                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+                        Strongify( self );
+
+                        [self reloadUsers];
                     }],
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:UIApplicationDidBecomeActiveNotification object:nil
                                  queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
                         Strongify( self );
 
-                        [self reloadUsers];
-
-                        [UIView animateWithDuration:1 animations:^{
+                        [UIView animateWithDuration:0.7f animations:^{
                             self.userSelectionContainer.alpha = 1;
                         }];
                     }],

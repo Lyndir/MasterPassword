@@ -197,7 +197,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
                         ^(NSNotification *note) {
                             [self.mainManagedObjectContext saveToStore];
                         }];
-        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:UIApp
+        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification object:UIApp
                                                            queue:[NSOperationQueue mainQueue] usingBlock:
                         ^(NSNotification *note) {
                             [self.mainManagedObjectContext saveToStore];

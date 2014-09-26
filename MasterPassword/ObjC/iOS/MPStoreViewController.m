@@ -10,11 +10,14 @@
 #import "MPiOSAppDelegate.h"
 #import "UIColor+Expanded.h"
 #import "MPAppDelegate_InApp.h"
-#import <StoreKit/StoreKit.h>
 
-@interface MPStoreViewController()
+PearlEnum( MPDevelopmentFuelConsumption,
+        MPDevelopmentFuelConsumptionQuarterly, MPDevelopmentFuelConsumptionMonthly, MPDevelopmentFuelWeekly );
+
+@interface MPStoreViewController()<MPInAppDelegate>
 
 @property(nonatomic, strong) NSNumberFormatter *currencyFormatter;
+@property(nonatomic, strong) NSArray *products;
 
 @end
 
@@ -47,24 +50,13 @@
         }
     }];
 
-    [[MPiOSAppDelegate get] observeKeyPath:@"products" withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
-        if (NSNullToNil( to ))
-            PearlMainQueue( ^{
-                [self updateWithProducts:to];
-            } );
-    }];
-    [[MPiOSAppDelegate get] observeKeyPath:@"paymentTransactions" withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
-        if (NSNullToNil( to ))
-            PearlMainQueue( ^{
-                [self updateWithTransactions:to];
-            } );
-    }];
     [[NSNotificationCenter defaultCenter] addObserverForName:NSUserDefaultsDidChangeNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                [self updateWithProducts:[MPiOSAppDelegate get].products];
+                [self updateProducts];
+                [self updateFuel];
             }];
-
-    [[MPiOSAppDelegate get] updateProducts];
+    [[MPiOSAppDelegate get] registerProductsObserver:self];
+    [self updateFuel];
 }
 
 #pragma mark - UITableViewDelegate
@@ -80,7 +72,7 @@
     }
 
     if (indexPath.section == 0)
-        cell.selectionStyle = [[MPiOSAppDelegate get] isPurchased:[self productForCell:cell].productIdentifier]?
+        cell.selectionStyle = [[MPiOSAppDelegate get] isFeatureUnlocked:[self productForCell:cell].productIdentifier]?
                               UITableViewCellSelectionStyleDefault: UITableViewCellSelectionStyleNone;
 
     if (cell.selectionStyle != UITableViewCellSelectionStyleNone) {
@@ -113,12 +105,20 @@
     SKProduct *product = [self productForCell:cell];
 
     if (product)
-        [[MPAppDelegate_Shared get] purchaseProductWithIdentifier:product.productIdentifier];
+        [[MPAppDelegate_Shared get] purchaseProductWithIdentifier:product.productIdentifier
+                                                         quantity:[self quantityForProductIdentifier:product.productIdentifier]];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - Actions
+
+- (IBAction)toggleFuelConsumption:(id)sender {
+
+    NSUInteger fuelConsumption = [[MPiOSConfig get].developmentFuelConsumption unsignedIntegerValue];
+    [MPiOSConfig get].developmentFuelConsumption = @((fuelConsumption + 1) % MPDevelopmentFuelConsumptionCount);
+    [self updateProducts];
+}
 
 - (IBAction)restorePurchases:(id)sender {
 
@@ -133,11 +133,45 @@
                  } cancelTitle:@"Cancel" otherTitles:@"Find Purchases", nil];
 }
 
+#pragma mark - MPInAppDelegate
+
+- (void)updateWithProducts:(NSArray *)products {
+
+    self.products = products;
+
+    [self updateProducts];
+}
+
+- (void)updateWithTransaction:(SKPaymentTransaction *)transaction {
+
+    MPStoreProductCell *cell = [self cellForProductIdentifier:transaction.payment.productIdentifier];
+    if (!cell)
+        return;
+
+    switch (transaction.transactionState) {
+        case SKPaymentTransactionStatePurchasing:
+            [cell.activityIndicator startAnimating];
+            break;
+        case SKPaymentTransactionStatePurchased:
+            [cell.activityIndicator stopAnimating];
+            break;
+        case SKPaymentTransactionStateFailed:
+            [cell.activityIndicator stopAnimating];
+            break;
+        case SKPaymentTransactionStateRestored:
+            [cell.activityIndicator stopAnimating];
+            break;
+        case SKPaymentTransactionStateDeferred:
+            [cell.activityIndicator startAnimating];
+            break;
+    }
+}
+
 #pragma mark - Private
 
 - (SKProduct *)productForCell:(MPStoreProductCell *)cell {
 
-    for (SKProduct *product in [MPiOSAppDelegate get].products)
+    for (SKProduct *product in self.products)
         if ([self cellForProductIdentifier:product.productIdentifier] == cell)
             return product;
 
@@ -150,19 +184,22 @@
         return self.generateLoginCell;
     if ([productIdentifier isEqualToString:MPProductGenerateAnswers])
         return self.generateAnswersCell;
+    if ([productIdentifier isEqualToString:MPProductFuel])
+        return self.fuelCell;
 
     return nil;
 }
 
-- (void)updateWithProducts:(NSArray *)products {
+- (void)updateProducts {
 
     NSMutableArray *showCells = [NSMutableArray array];
     NSMutableArray *hideCells = [NSMutableArray array];
     [hideCells addObjectsFromArray:self.allCellsBySection[0]];
 
-    for (SKProduct *product in products) {
+    for (SKProduct *product in self.products) {
         [self showCellForProductWithIdentifier:MPProductGenerateLogins ifProduct:product showingCells:showCells];
         [self showCellForProductWithIdentifier:MPProductGenerateAnswers ifProduct:product showingCells:showCells];
+        [self showCellForProductWithIdentifier:MPProductFuel ifProduct:product showingCells:showCells];
     }
 
     [hideCells removeObjectsInArray:showCells];
@@ -170,6 +207,38 @@
         [self updateCellsHiding:hideCells showing:showCells animation:UITableViewRowAnimationAutomatic];
     else
         [self updateCellsHiding:hideCells showing:showCells animation:UITableViewRowAnimationNone];
+}
+
+- (void)updateFuel {
+
+    CGFloat weeklyFuelConsumption = [self weeklyFuelConsumption]; /* consume x fuel / week */
+    CGFloat fuel = [[MPiOSConfig get].developmentFuel floatValue]; /* x fuel left */
+    NSTimeInterval fuelSecondsElapsed = [[MPiOSConfig get].developmentFuelChecked timeIntervalSinceNow];
+    if (fuelSecondsElapsed > 3600) {
+        NSTimeInterval weeksElapsed = fuelSecondsElapsed / (3600 * 24 * 7 /* 1 week */); /* x weeks elapsed */
+        fuel -= weeklyFuelConsumption * weeksElapsed;
+        [MPiOSConfig get].developmentFuel = @(fuel);
+    }
+
+    CGFloat fuelRatio = weeklyFuelConsumption == 0? 0: fuel / weeklyFuelConsumption; /* x weeks worth of fuel left */
+    [self.fuelMeterConstraint updateConstant:MIN(0.5f, fuelRatio - 0.5f) * 160]; /* -80pt = 0 weeks left, 80pt = >=1 week left */
+}
+
+- (CGFloat)weeklyFuelConsumption {
+
+    switch ((MPDevelopmentFuelConsumption)[[MPiOSConfig get].developmentFuelConsumption unsignedIntegerValue]) {
+        case MPDevelopmentFuelConsumptionQuarterly:
+            [self.fuelSpeedButton setTitle:@"1h / quarter" forState:UIControlStateNormal];
+            return 1.f / 12 /* 12 weeks */;
+        case MPDevelopmentFuelConsumptionMonthly:
+            [self.fuelSpeedButton setTitle:@"1h / month" forState:UIControlStateNormal];
+            return 1.f / 4 /* 4 weeks */;
+        case MPDevelopmentFuelWeekly:
+            [self.fuelSpeedButton setTitle:@"1h / week" forState:UIControlStateNormal];
+            return 1.f;
+    }
+
+    return 0;
 }
 
 - (void)showCellForProductWithIdentifier:(NSString *)productIdentifier ifProduct:(SKProduct *)product
@@ -182,36 +251,18 @@
     [showCells addObject:cell];
 
     self.currencyFormatter.locale = product.priceLocale;
-    BOOL purchased = [[MPiOSAppDelegate get] isPurchased:productIdentifier];
-    cell.priceLabel.text = purchased? @"": [self.currencyFormatter stringFromNumber:product.price];
+    BOOL purchased = [[MPiOSAppDelegate get] isFeatureUnlocked:productIdentifier];
+    NSInteger quantity = [self quantityForProductIdentifier:productIdentifier];
+    cell.priceLabel.text = purchased? @"": [self.currencyFormatter stringFromNumber:@([product.price floatValue] * quantity)];
     cell.purchasedIndicator.alpha = purchased? 1: 0;
 }
 
-- (void)updateWithTransactions:(NSArray *)transactions {
+- (NSInteger)quantityForProductIdentifier:(NSString *)productIdentifier {
 
-    for (SKPaymentTransaction *transaction in transactions) {
-        MPStoreProductCell *cell = [self cellForProductIdentifier:transaction.payment.productIdentifier];
-        if (!cell)
-            continue;
+    if ([productIdentifier isEqualToString:MPProductFuel])
+        return (NSInteger)(MP_FUEL_HOURLY_RATE * [self weeklyFuelConsumption]);
 
-        switch (transaction.transactionState) {
-            case SKPaymentTransactionStatePurchasing:
-                [cell.activityIndicator startAnimating];
-                break;
-            case SKPaymentTransactionStatePurchased:
-                [cell.activityIndicator stopAnimating];
-                break;
-            case SKPaymentTransactionStateFailed:
-                [cell.activityIndicator stopAnimating];
-                break;
-            case SKPaymentTransactionStateRestored:
-                [cell.activityIndicator stopAnimating];
-                break;
-            case SKPaymentTransactionStateDeferred:
-                [cell.activityIndicator startAnimating];
-                break;
-        }
-    }
+    return 1;
 }
 
 @end

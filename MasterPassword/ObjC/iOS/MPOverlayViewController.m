@@ -29,12 +29,11 @@
     _dismissSegueByButton = [NSMutableDictionary dictionary];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewDidLoad {
 
-    [super viewWillAppear:animated];
+    [super viewDidLoad];
 
-    if (![self.childViewControllers count])
-        [self performSegueWithIdentifier:@"root" sender:self];
+    [self performSegueWithIdentifier:@"root" sender:self];
 }
 
 - (UIViewController *)childViewControllerForStatusBarStyle {
@@ -110,26 +109,25 @@
     if (!destinationViewController.parentViewController) {
         // Winding
         [containerViewController addChildViewController:destinationViewController];
-        [containerViewController setNeedsStatusBarAppearanceUpdate];
 
-        [containerViewController addDismissButtonForSegue:self];
         destinationViewController.view.frame = containerViewController.view.bounds;
         destinationViewController.view.translatesAutoresizingMaskIntoConstraints = YES;
         destinationViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [containerViewController.view addSubview:destinationViewController.view];
+        [containerViewController setNeedsStatusBarAppearanceUpdate];
 
         CGRectSetY( destinationViewController.view.frame, 100 );
         destinationViewController.view.transform = CGAffineTransformMakeScale( 1.2f, 1.2f );
         destinationViewController.view.alpha = 0;
 
-        [UIView transitionWithView:containerViewController.view duration:[self.identifier isEqualToString:@"root"]? 0: 0.3f
+        [UIView transitionWithView:containerViewController.view duration:0.3f
                            options:UIViewAnimationOptionAllowAnimatedContent animations:^{
                     destinationViewController.view.transform = CGAffineTransformIdentity;
                     CGRectSetY( destinationViewController.view.frame, 0 );
                     destinationViewController.view.alpha = 1;
                 }       completion:^(BOOL finished) {
-                    if (finished)
-                        [destinationViewController didMoveToParentViewController:containerViewController];
+                    [destinationViewController didMoveToParentViewController:containerViewController];
+                    [containerViewController setNeedsStatusBarAppearanceUpdate];
                 }];
     }
     else {

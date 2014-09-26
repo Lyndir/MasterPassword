@@ -140,7 +140,7 @@
                 @"jailbroken" : PearlStringB( [PearlDeviceUtils isJailbroken] ),
                 @"platform"   : [PearlDeviceUtils platform],
 #ifdef APPSTORE
-                @"legal" : PearlStringB([PearlDeviceUtils isAppEncrypted]),
+                @"legal"      : PearlStringB([PearlDeviceUtils isAppEncrypted]),
 #else
                 @"legal"      : @"YES",
 #endif
@@ -256,13 +256,13 @@
     [super applicationDidReceiveMemoryWarning:application];
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application {
+- (void)applicationDidEnterBackground:(UIApplication *)application {
 
-    inf( @"Will deactivate" );
+    inf( @"Will background" );
     if (![[MPiOSConfig get].rememberLogin boolValue])
         [self signOutAnimated:NO];
 
-    [super applicationWillResignActive:application];
+    [super applicationDidEnterBackground:application];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {

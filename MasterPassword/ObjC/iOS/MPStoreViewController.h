@@ -16,6 +16,9 @@
 @property(weak, nonatomic) IBOutlet MPStoreProductCell *generateAnswersCell;
 @property(weak, nonatomic) IBOutlet MPStoreProductCell *iOSIntegrationCell;
 @property(weak, nonatomic) IBOutlet MPStoreProductCell *touchIDCell;
+@property(weak, nonatomic) IBOutlet MPStoreProductCell *fuelCell;
+@property(weak, nonatomic) IBOutlet NSLayoutConstraint *fuelMeterConstraint;
+@property(weak, nonatomic) IBOutlet UIButton *fuelSpeedButton;
 
 @end
 

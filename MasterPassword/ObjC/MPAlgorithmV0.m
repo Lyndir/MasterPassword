@@ -553,7 +553,7 @@
 
     NSAssert( [siteKey.keyID isEqualToData:site.user.keyID], @"Site does not belong to current user." );
     NSString *name = site.name;
-    BOOL loginGenerated = site.loginGenerated && [[MPAppDelegate_Shared get] isPurchased:MPProductGenerateLogins];
+    BOOL loginGenerated = site.loginGenerated && [[MPAppDelegate_Shared get] isFeatureUnlocked:MPProductGenerateLogins];
     NSString *loginName = loginGenerated? nil: site.loginName;
     id<MPAlgorithm> algorithm = nil;
     if (!name.length)

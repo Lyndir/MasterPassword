@@ -286,11 +286,27 @@ referenceSizeForHeaderInSection:(NSInteger)section {
     Weakify( self );
     _notificationObservers = @[
             [[NSNotificationCenter defaultCenter]
-                    addObserverForName:UIApplicationWillResignActiveNotification object:nil
+                    addObserverForName:UIApplicationDidEnterBackgroundNotification object:nil
                                  queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
                         Strongify( self );
 
                         self.passwordSelectionContainer.alpha = 0;
+                    }],
+            [[NSNotificationCenter defaultCenter]
+                    addObserverForName:UIApplicationWillEnterForegroundNotification object:nil
+                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+                        Strongify( self );
+
+                        [self updatePasswords];
+                    }],
+            [[NSNotificationCenter defaultCenter]
+                    addObserverForName:UIApplicationDidBecomeActiveNotification object:nil
+                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+                        Strongify( self );
+
+                        [UIView animateWithDuration:0.7f animations:^{
+                            self.passwordSelectionContainer.alpha = 1;
+                        }];
                     }],
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:MPSignedOutNotification object:nil
@@ -300,16 +316,6 @@ referenceSizeForHeaderInSection:(NSInteger)section {
                         _fetchedResultsController = nil;
                         self.passwordsSearchBar.text = nil;
                         [self.passwordCollectionView reloadData];
-                    }],
-            [[NSNotificationCenter defaultCenter]
-                    addObserverForName:UIApplicationDidBecomeActiveNotification object:nil
-                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                        Strongify( self );
-
-                        [self updatePasswords];
-                        [UIView animateWithDuration:1 animations:^{
-                            self.passwordSelectionContainer.alpha = 1;
-                        }];
                     }],
             [[NSNotificationCenter defaultCenter]
                     addObserverForName:MPCheckConfigNotification object:nil

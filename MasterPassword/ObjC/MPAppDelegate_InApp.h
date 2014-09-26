@@ -6,21 +6,32 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
+#import <StoreKit/StoreKit.h>
 #import "MPAppDelegate_Shared.h"
 
-#define MPProductGenerateLogins               @"com.lyndir.masterpassword.products.generatelogins"
-#define MPProductGenerateAnswers              @"com.lyndir.masterpassword.products.generateanswers"
+#define MPProductGenerateLogins                 @"com.lyndir.masterpassword.products.generatelogins"
+#define MPProductGenerateAnswers                @"com.lyndir.masterpassword.products.generateanswers"
+#define MPProductFuel                           @"com.lyndir.masterpassword.products.fuel"
+
+#define MP_FUEL_HOURLY_RATE                     30.f /* Tier 1 purchases/h ~> USD/h */
+
+@protocol MPInAppDelegate
+
+- (void)updateWithProducts:(NSArray /* SKProduct */ *)products;
+- (void)updateWithTransaction:(SKPaymentTransaction *)transaction;
+
+@end
 
 @interface MPAppDelegate_Shared(InApp)
 
-@property(nonatomic, strong) NSArray /* SKProduct */ *products;
-@property(nonatomic, strong) NSArray /* SKPaymentTransaction */ *paymentTransactions;
+- (void)registerProductsObserver:(id<MPInAppDelegate>)delegate;
+- (void)removeProductsObserver:(id<MPInAppDelegate>)delegate;
 
-- (void)updateProducts;
+- (void)reloadProducts;
 - (BOOL)canMakePayments;
-- (BOOL)isPurchased:(NSString *)productIdentifier;
+- (BOOL)isFeatureUnlocked:(NSString *)productIdentifier;
 
 - (void)restoreCompletedTransactions;
-- (void)purchaseProductWithIdentifier:(NSString *)productIdentifier;
+- (void)purchaseProductWithIdentifier:(NSString *)productIdentifier quantity:(NSInteger)quantity;
 
 @end
