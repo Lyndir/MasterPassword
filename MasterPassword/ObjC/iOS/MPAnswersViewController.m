@@ -40,12 +40,13 @@
 
     [super viewWillAppear:animated];
 
-    PearlAddNotificationObserver( MPSignedOutNotification, nil, [NSOperationQueue mainQueue], ^(NSNotification *note) {
-        if (![note.userInfo[@"animated"] boolValue])
-            [UIView setAnimationsEnabled:NO];
-        [[MPOverlaySegue dismissViewController:self] perform];
-        [UIView setAnimationsEnabled:YES];
-    } );
+    PearlAddNotificationObserver( MPSignedOutNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPAnswersViewController *self, NSNotification *note) {
+                if (![note.userInfo[@"animated"] boolValue])
+                    [UIView setAnimationsEnabled:NO];
+                [[MPOverlaySegue dismissViewController:self] perform];
+                [UIView setAnimationsEnabled:YES];
+            } );
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

@@ -45,15 +45,14 @@
 
     [super viewDidAppear:animated];
 
-    Weakify( self );
-    PearlAddNotificationObserver( MPSignedInNotification, nil, [NSOperationQueue mainQueue], ^(NSNotification *note) {
-        Strongify( self );
-        [self setMode:MPCombinedModePasswordSelection];
-    } );
-    PearlAddNotificationObserver( MPSignedOutNotification, nil, [NSOperationQueue mainQueue], ^(NSNotification *note) {
-        Strongify( self );
-        [self setMode:MPCombinedModeUserSelection animated:[note.userInfo[@"animated"] boolValue]];
-    } );
+    PearlAddNotificationObserver( MPSignedInNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPCombinedViewController *self, NSNotification *note) {
+                [self setMode:MPCombinedModePasswordSelection];
+            } );
+    PearlAddNotificationObserver( MPSignedOutNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPCombinedViewController *self, NSNotification *note) {
+                [self setMode:MPCombinedModeUserSelection animated:[note.userInfo[@"animated"] boolValue]];
+            } );
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

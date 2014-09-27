@@ -124,7 +124,7 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions {
 
     for (SKPaymentTransaction *transaction in transactions) {
-        dbg( @"transaction updated: %@ -> %d", transaction.payment.productIdentifier, transaction.transactionState );
+        dbg( @"transaction updated: %@ -> %d", transaction.payment.productIdentifier, (int)(transaction.transactionState) );
         switch (transaction.transactionState) {
             case SKPaymentTransactionStatePurchased: {
                 inf( @"purchased: %@", transaction.payment.productIdentifier );
