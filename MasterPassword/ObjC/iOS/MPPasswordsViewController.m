@@ -105,12 +105,6 @@
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 
-- (CGSize)       collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
-referenceSizeForHeaderInSection:(NSInteger)section {
-
-    return CGSizeMake( collectionView.bounds.size.width, CGRectGetBottom( self.passwordsSearchBar.frame ).y );
-}
-
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 
@@ -145,12 +139,6 @@ referenceSizeForHeaderInSection:(NSInteger)section {
         [cell setTransientSite:self.query animated:NO];
 
     return cell;
-}
-
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind
-                                 atIndexPath:(NSIndexPath *)indexPath {
-
-    return [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"MPPasswordHeader" forIndexPath:indexPath];
 }
 
 #pragma mark - UIScrollDelegate
