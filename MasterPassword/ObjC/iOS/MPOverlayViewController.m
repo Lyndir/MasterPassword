@@ -52,17 +52,20 @@
     return [[MPOverlaySegue alloc] initWithIdentifier:identifier source:fromViewController destination:toViewController];
 }
 
-- (void)addDismissButtonForSegue:(MPOverlaySegue *)segue {
+- (UIView *)addDismissButtonForSegue:(MPOverlaySegue *)segue {
 
     UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [dismissButton addTarget:self action:@selector( dismissOverlay: ) forControlEvents:UIControlEventTouchUpInside];
-    dismissButton.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3f];
+    dismissButton.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5f];
+    dismissButton.alpha = 0;
     dismissButton.frame = self.view.bounds;
     dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _dismissSegueByButton[[NSValue valueWithNonretainedObject:dismissButton]] =
             [[MPOverlaySegue alloc] initWithIdentifier:@"dismiss-overlay"
                                                 source:segue.destinationViewController destination:segue.sourceViewController];
+
     [self.view addSubview:dismissButton];
+    return dismissButton;
 }
 
 - (void)dismissOverlay:(UIButton *)dismissButton {
@@ -96,6 +99,11 @@
 
 @implementation MPOverlaySegue
 
++ (instancetype)dismissViewController:(UIViewController *)viewController {
+
+    return [[self alloc] initWithIdentifier:nil source:viewController destination:viewController];
+}
+
 - (void)perform {
 
     UIViewController *sourceViewController = self.sourceViewController;
@@ -109,6 +117,7 @@
     if (!destinationViewController.parentViewController) {
         // Winding
         [containerViewController addChildViewController:destinationViewController];
+        UIView *dismissButton = [containerViewController addDismissButtonForSegue:self];
 
         destinationViewController.view.frame = containerViewController.view.bounds;
         destinationViewController.view.translatesAutoresizingMaskIntoConstraints = YES;
@@ -125,6 +134,7 @@
                     destinationViewController.view.transform = CGAffineTransformIdentity;
                     CGRectSetY( destinationViewController.view.frame, 0 );
                     destinationViewController.view.alpha = 1;
+                    dismissButton.alpha = 1;
                 }       completion:^(BOOL finished) {
                     [destinationViewController didMoveToParentViewController:containerViewController];
                     [containerViewController setNeedsStatusBarAppearanceUpdate];

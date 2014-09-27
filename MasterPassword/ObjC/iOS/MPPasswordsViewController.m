@@ -22,7 +22,6 @@
 #import "MPPopdownSegue.h"
 #import "MPAppDelegate_Key.h"
 #import "MPPasswordCell.h"
-#import "UICollectionView+PearlReloadFromArray.h"
 #import "MPAnswersViewController.h"
 
 @interface MPPasswordsViewController()<NSFetchedResultsControllerDelegate>
@@ -33,10 +32,6 @@
 @end
 
 @implementation MPPasswordsViewController {
-    __weak id _storeChangingObserver;
-    __weak id _storeChangedObserver;
-    __weak id _mocObserver;
-    NSArray *_notificationObservers;
     __weak UITapGestureRecognizer *_passwordsDismissRecognizer;
     NSFetchedResultsController *_fetchedResultsController;
     UIColor *_backgroundColor;
@@ -69,7 +64,6 @@
     [super viewWillAppear:animated];
 
     [self registerObservers];
-    [self observeStore];
     [self updateConfigKey:nil];
     [self updatePasswords];
 }
@@ -90,8 +84,7 @@
 
     [super viewWillDisappear:animated];
 
-    [self removeObservers];
-    [self stopObservingStore];
+    PearlRemoveNotificationObservers();
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -280,97 +273,49 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 
 - (void)registerObservers {
 
-    if ([_notificationObservers count])
-        return;
-
-    Weakify( self );
-    _notificationObservers = @[
-            [[NSNotificationCenter defaultCenter]
-                    addObserverForName:UIApplicationDidEnterBackgroundNotification object:nil
-                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                        Strongify( self );
-
-                        self.passwordSelectionContainer.alpha = 0;
-                    }],
-            [[NSNotificationCenter defaultCenter]
-                    addObserverForName:UIApplicationWillEnterForegroundNotification object:nil
-                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                        Strongify( self );
-
-                        [self updatePasswords];
-                    }],
-            [[NSNotificationCenter defaultCenter]
-                    addObserverForName:UIApplicationDidBecomeActiveNotification object:nil
-                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                        Strongify( self );
-
-                        [UIView animateWithDuration:0.7f animations:^{
-                            self.passwordSelectionContainer.alpha = 1;
-                        }];
-                    }],
-            [[NSNotificationCenter defaultCenter]
-                    addObserverForName:MPSignedOutNotification object:nil
-                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                        Strongify( self );
-
-                        _fetchedResultsController = nil;
-                        self.passwordsSearchBar.text = nil;
-                        [self.passwordCollectionView reloadData];
-                    }],
-            [[NSNotificationCenter defaultCenter]
-                    addObserverForName:MPCheckConfigNotification object:nil
-                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                        [self updateConfigKey:note.object];
-                    }],
-    ];
-}
-
-- (void)removeObservers {
-
-    for (id observer in _notificationObservers)
-        [[NSNotificationCenter defaultCenter] removeObserver:observer];
-    _notificationObservers = nil;
-}
-
-- (void)observeStore {
-
-    Weakify( self );
+    PearlRemoveNotificationObservers();
+    PearlAddNotificationObserver( UIApplicationDidEnterBackgroundNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPPasswordsViewController *self, NSNotification *note) {
+                self.passwordSelectionContainer.alpha = 0;
+            } );
+    PearlAddNotificationObserver( UIApplicationWillEnterForegroundNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPPasswordsViewController *self, NSNotification *note) {
+                [self updatePasswords];
+            } );
+    PearlAddNotificationObserver( UIApplicationDidBecomeActiveNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPPasswordsViewController *self, NSNotification *note) {
+                [UIView animateWithDuration:0.7f animations:^{
+                    self.passwordSelectionContainer.alpha = 1;
+                }];
+            } );
+    PearlAddNotificationObserver( MPSignedOutNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPPasswordsViewController *self, NSNotification *note) {
+                _fetchedResultsController = nil;
+                self.passwordsSearchBar.text = nil;
+                [self.passwordCollectionView reloadData];
+            } );
+    PearlAddNotificationObserver( MPCheckConfigNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPPasswordsViewController *self, NSNotification *note) {
+                [self updateConfigKey:note.object];
+            } );
+    PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresWillChangeNotification, nil, nil,
+            ^(MPPasswordsViewController *self, NSNotification *note) {
+                self->_fetchedResultsController = nil;
+                [self.passwordCollectionView reloadData];
+            } );
+    PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresDidChangeNotification, nil, nil,
+            ^(MPPasswordsViewController *self, NSNotification *note) {
+                [self updatePasswords];
+                [self registerObservers];
+            } );
 
     NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
-    if (!_mocObserver && mainContext)
-        _mocObserver = [[NSNotificationCenter defaultCenter]
-                addObserverForName:NSManagedObjectContextDidSaveNotification object:mainContext
-                             queue:nil usingBlock:^(NSNotification *note) {
-                    if (![[MPiOSAppDelegate get] activeUserInContext:mainContext])
+    if (mainContext)
+        PearlAddNotificationObserver( NSManagedObjectContextDidSaveNotification, mainContext, nil,
+                ^(MPPasswordsViewController *self, NSNotification *note) {
+                    if (![[MPiOSAppDelegate get] activeUserInContext:note.object])
                         [[MPiOSAppDelegate get] signOutAnimated:YES];
-                }];
-    if (!_storeChangingObserver)
-        _storeChangingObserver = [[NSNotificationCenter defaultCenter]
-                addObserverForName:NSPersistentStoreCoordinatorStoresWillChangeNotification object:nil
-                             queue:nil usingBlock:^(NSNotification *note) {
-                    Strongify( self );
-                    self->_fetchedResultsController = nil;
-                    if (self->_mocObserver)
-                        [[NSNotificationCenter defaultCenter] removeObserver:self->_mocObserver];
-                    [self.passwordCollectionView reloadData];
-                }];
-    if (!_storeChangedObserver)
-        _storeChangedObserver = [[NSNotificationCenter defaultCenter]
-                addObserverForName:NSPersistentStoreCoordinatorStoresDidChangeNotification object:nil
-                             queue:nil usingBlock:^(NSNotification *note) {
-                    Strongify( self );
-                    [self updatePasswords];
-                }];
-}
-
-- (void)stopObservingStore {
-
-    if (_mocObserver)
-        [[NSNotificationCenter defaultCenter] removeObserver:_mocObserver];
-    if (_storeChangingObserver)
-        [[NSNotificationCenter defaultCenter] removeObserver:_storeChangingObserver];
-    if (_storeChangedObserver)
-        [[NSNotificationCenter defaultCenter] removeObserver:_storeChangedObserver];
+                } );
 }
 
 - (void)updateConfigKey:(NSString *)key {
@@ -454,7 +399,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
                     initWithFetchRequest:fetchRequest managedObjectContext:mainContext sectionNameKeyPath:nil cacheName:nil];
             _fetchedResultsController.delegate = self;
         }];
-        [self observeStore];
+        [self registerObservers];
     }
 
     return _fetchedResultsController;

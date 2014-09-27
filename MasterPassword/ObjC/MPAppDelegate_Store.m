@@ -192,22 +192,19 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
                         }];
 
 #if TARGET_OS_IPHONE
-        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification object:UIApp
-                                                           queue:[NSOperationQueue mainQueue] usingBlock:
-                        ^(NSNotification *note) {
-                            [self.mainManagedObjectContext saveToStore];
-                        }];
-        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification object:UIApp
-                                                           queue:[NSOperationQueue mainQueue] usingBlock:
-                        ^(NSNotification *note) {
-                            [self.mainManagedObjectContext saveToStore];
-                        }];
+        PearlAddNotificationObserver( UIApplicationWillTerminateNotification, UIApp, [NSOperationQueue mainQueue],
+                ^(MPAppDelegate_Shared *self, NSNotification *note) {
+                    [self.mainManagedObjectContext saveToStore];
+                } );
+        PearlAddNotificationObserver( UIApplicationDidEnterBackgroundNotification, UIApp, [NSOperationQueue mainQueue],
+                ^(MPAppDelegate_Shared *self, NSNotification *note) {
+                    [self.mainManagedObjectContext saveToStore];
+                } );
 #else
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillTerminateNotification object:NSApp
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:
-                    ^(NSNotification *note) {
-                        [self.mainManagedObjectContext saveToStore];
-                    }];
+        PearlAddNotificationObserver( NSApplicationWillTerminateNotification, NSApp, [NSOperationQueue mainQueue],
+                ^(MPAppDelegate_Shared *self, NSNotification *note) {
+                    [self.mainManagedObjectContext saveToStore];
+                } );
 #endif
 
         // Perform a data sanity check on the newly loaded store to find and fix any issues.
@@ -528,7 +525,7 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
                 return MPImportResultMalformedInput;
             }
             NSTextCheckingResult *headerSites = [[headerPattern matchesInString:importedSiteLine options:(NSMatchingOptions)0
-                                                                             range:NSMakeRange( 0, [importedSiteLine length] )] lastObject];
+                                                                          range:NSMakeRange( 0, [importedSiteLine length] )] lastObject];
             NSString *headerName = [importedSiteLine substringWithRange:[headerSites rangeAtIndex:1]];
             NSString *headerValue = [importedSiteLine substringWithRange:[headerSites rangeAtIndex:2]];
             if ([headerName isEqualToString:@"User Name"]) {

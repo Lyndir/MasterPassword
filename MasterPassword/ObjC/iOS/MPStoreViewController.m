@@ -50,13 +50,20 @@ PearlEnum( MPDevelopmentFuelConsumption,
         }
     }];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSUserDefaultsDidChangeNotification object:nil
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+    PearlAddNotificationObserver( NSUserDefaultsDidChangeNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPStoreViewController *self, NSNotification *note) {
                 [self updateProducts];
                 [self updateFuel];
-            }];
+            } );
     [[MPiOSAppDelegate get] registerProductsObserver:self];
     [self updateFuel];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+
+    [super viewWillDisappear:animated];
+
+    PearlRemoveNotificationObservers();
 }
 
 #pragma mark - UITableViewDelegate
@@ -221,7 +228,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
     }
 
     CGFloat fuelRatio = weeklyFuelConsumption == 0? 0: fuel / weeklyFuelConsumption; /* x weeks worth of fuel left */
-    [self.fuelMeterConstraint updateConstant:MIN(0.5f, fuelRatio - 0.5f) * 160]; /* -80pt = 0 weeks left, 80pt = >=1 week left */
+    [self.fuelMeterConstraint updateConstant:MIN( 0.5f, fuelRatio - 0.5f ) * 160]; /* -80pt = 0 weeks left, 80pt = >=1 week left */
 }
 
 - (CGFloat)weeklyFuelConsumption {

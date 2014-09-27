@@ -14,6 +14,7 @@
 #import "MPPasswordsViewController.h"
 #import "MPCoachmarkViewController.h"
 #import "MPSiteQuestionEntity.h"
+#import "MPOverlayViewController.h"
 
 @interface MPAnswersViewController()
 
@@ -33,6 +34,25 @@
     self.tableView.tableHeaderView = [UIView new];
     self.tableView.tableFooterView = [UIView new];
     self.view.backgroundColor = [UIColor clearColor];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+
+    [super viewWillAppear:animated];
+
+    PearlAddNotificationObserver( MPSignedOutNotification, nil, [NSOperationQueue mainQueue], ^(NSNotification *note) {
+        if (![note.userInfo[@"animated"] boolValue])
+            [UIView setAnimationsEnabled:NO];
+        [[MPOverlaySegue dismissViewController:self] perform];
+        [UIView setAnimationsEnabled:YES];
+    } );
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+
+    [super viewWillDisappear:animated];
+
+    PearlRemoveNotificationObservers();
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -147,7 +167,10 @@
 
                                  [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                                      MPSiteEntity *site_ = [self siteInContext:context];
-                                     [site_ removeQuestions:site_.questions];
+                                     NSOrderedSet *questions = [site_.questions copy];
+                                     for (MPSiteQuestionEntity *question in questions)
+                                         [context deleteObject:question];
+                                     [site_ removeQuestions:questions];
                                      [context saveToStore];
                                      [self setMultiple:NO animated:YES];
                                  }];

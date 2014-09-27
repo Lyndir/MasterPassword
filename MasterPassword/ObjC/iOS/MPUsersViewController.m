@@ -22,9 +22,7 @@
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Store.h"
 #import "MPAppDelegate_Key.h"
-#import "PearlSizedTextView.h"
 #import "MPWebViewController.h"
-#import "UIView+FontScale.h"
 
 typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
     /** The users are all inactive */
@@ -51,10 +49,6 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
 @end
 
 @implementation MPUsersViewController {
-    __weak id _storeChangingObserver;
-    __weak id _storeChangedObserver;
-    __weak id _mocObserver;
-    NSArray *_notificationObservers;
     NSString *_masterPasswordChoice;
     NSOperationQueue *_afterUpdates;
 }
@@ -89,8 +83,7 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
 
     [super viewWillDisappear:animated];
 
-    [self removeObservers];
-    [self stopObservingStore];
+    PearlRemoveNotificationObservers();
 
     [self.marqueeTipTimer invalidate];
 }
@@ -99,7 +92,6 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
 
     [super viewDidAppear:animated];
 
-    [self observeStore];
     [self registerObservers];
     [self reloadUsers];
 
@@ -475,15 +467,15 @@ referenceSizeForFooterInSection:(NSInteger)section {
     if ([nextMarqueeString isEqualToString:[self.marqueeButton titleForState:UIControlStateNormal]])
         return;
 
-    [UIView animateWithDuration:timer? 0.5: 0 animations:^{
+    [UIView animateWithDuration:timer? 0.5f: 0 animations:^{
         self.marqueeButton.alpha = 0;
     }                completion:^(BOOL finished) {
         if (!finished)
             return;
 
         [self.marqueeButton setTitle:nextMarqueeString forState:UIControlStateNormal];
-        [UIView animateWithDuration:timer? 0.5: 0 animations:^{
-            self.marqueeButton.alpha = 0.5;
+        [UIView animateWithDuration:timer? 0.5f: 0 animations:^{
+            self.marqueeButton.alpha = 0.5f;
         }];
     }];
 }
@@ -586,54 +578,27 @@ referenceSizeForFooterInSection:(NSInteger)section {
 
 - (void)registerObservers {
 
-    if ([_notificationObservers count])
-        return;
-
-    Weakify( self );
-    _notificationObservers = @[
-            [[NSNotificationCenter defaultCenter]
-                    addObserverForName:UIApplicationDidEnterBackgroundNotification object:nil
-                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                        Strongify( self );
-
-                        self.userSelectionContainer.alpha = 0;
-                    }],
-            [[NSNotificationCenter defaultCenter]
-                    addObserverForName:UIApplicationWillEnterForegroundNotification object:nil
-                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                        Strongify( self );
-
-                        [self reloadUsers];
-                    }],
-            [[NSNotificationCenter defaultCenter]
-                    addObserverForName:UIApplicationDidBecomeActiveNotification object:nil
-                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                        Strongify( self );
-
-                        [UIView animateWithDuration:0.7f animations:^{
-                            self.userSelectionContainer.alpha = 1;
-                        }];
-                    }],
-    ];
-
+    [self removeKeyPathObservers];
     [self observeKeyPath:@"avatarCollectionView.contentOffset" withBlock:
             ^(id from, id to, NSKeyValueChange cause, MPUsersViewController *_self) {
                 [_self updateAvatarVisibility];
             }];
-}
 
-- (void)removeObservers {
-
-    for (id observer in _notificationObservers)
-        [[NSNotificationCenter defaultCenter] removeObserver:observer];
-    _notificationObservers = nil;
-
-    [self removeKeyPathObservers];
-}
-
-- (void)observeStore {
-
-    Weakify( self );
+    PearlRemoveNotificationObservers();
+    PearlAddNotificationObserver( UIApplicationDidEnterBackgroundNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPUsersViewController *self, NSNotification *note) {
+                self.userSelectionContainer.alpha = 0;
+            } );
+    PearlAddNotificationObserver( UIApplicationWillEnterForegroundNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPUsersViewController *self, NSNotification *note) {
+                [self reloadUsers];
+            } );
+    PearlAddNotificationObserver( UIApplicationDidBecomeActiveNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPUsersViewController *self, NSNotification *note) {
+                [UIView animateWithDuration:0.5f animations:^{
+                    self.userSelectionContainer.alpha = 1;
+                }];
+            } );
 
     NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
     [UIView animateWithDuration:0.3f animations:^{
@@ -644,51 +609,31 @@ referenceSizeForFooterInSection:(NSInteger)section {
     if (!mainContext && !self.storeLoadingActivity.isAnimating)
         [self.storeLoadingActivity startAnimating];
 
-    if (!_mocObserver && mainContext)
-        _mocObserver = [[NSNotificationCenter defaultCenter]
-                addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:mainContext
-                             queue:nil usingBlock:^(NSNotification *note) {
-                    Strongify( self );
-                    NSSet *insertedObjects = note.userInfo[NSInsertedObjectsKey];
-                    NSSet *deletedObjects = note.userInfo[NSDeletedObjectsKey];
-                    if ([[NSSetUnion( insertedObjects, deletedObjects )
-                            filteredSetUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-                                return [evaluatedObject isKindOfClass:[MPUserEntity class]];
-                            }]] count])
-                        [self reloadUsers];
-                }];
-    if (!_storeChangingObserver)
-        _storeChangingObserver = [[NSNotificationCenter defaultCenter]
-                addObserverForName:NSPersistentStoreCoordinatorStoresWillChangeNotification object:nil
-                             queue:nil usingBlock:^(NSNotification *note) {
-                    Strongify( self );
-                    if (self->_mocObserver)
-                        [[NSNotificationCenter defaultCenter] removeObserver:self->_mocObserver];
-                    self.userIDs = nil;
-                }];
-    if (!_storeChangedObserver)
-        _storeChangedObserver = [[NSNotificationCenter defaultCenter]
-                addObserverForName:NSPersistentStoreCoordinatorStoresDidChangeNotification object:nil
-                             queue:nil usingBlock:^(NSNotification *note) {
-                    Strongify( self );
+    if (mainContext)
+    PearlAddNotificationObserver( NSManagedObjectContextObjectsDidChangeNotification, mainContext, [NSOperationQueue mainQueue],
+            ^(MPUsersViewController *self, NSNotification *note) {
+                NSSet *insertedObjects = note.userInfo[NSInsertedObjectsKey];
+                NSSet *deletedObjects = note.userInfo[NSDeletedObjectsKey];
+                if ([[NSSetUnion( insertedObjects, deletedObjects )
+                        filteredSetUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+                            return [evaluatedObject isKindOfClass:[MPUserEntity class]];
+                        }]] count])
                     [self reloadUsers];
-                }];
-}
-
-- (void)stopObservingStore {
-
-    if (_mocObserver)
-        [[NSNotificationCenter defaultCenter] removeObserver:_mocObserver];
-    if (_storeChangingObserver)
-        [[NSNotificationCenter defaultCenter] removeObserver:_storeChangingObserver];
-    if (_storeChangedObserver)
-        [[NSNotificationCenter defaultCenter] removeObserver:_storeChangedObserver];
+            } );
+    PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresWillChangeNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPUsersViewController *self, NSNotification *note) {
+                self.userIDs = nil;
+            } );
+    PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresDidChangeNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPUsersViewController *self, NSNotification *note) {
+                [self registerObservers];
+                [self reloadUsers];
+            } );
 }
 
 - (void)reloadUsers {
 
     [self afterUpdatesMainQueue:^{
-        [self observeStore];
         if (![MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
             NSError *error = nil;
             NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];

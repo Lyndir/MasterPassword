@@ -1,12 +1,12 @@
 /**
- * Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
- *
- * See the enclosed file LICENSE for license information (LGPLv3). If you did
- * not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
- *
- * @author   Maarten Billemont <lhunath@lyndir.com>
- * @license  http://www.gnu.org/licenses/lgpl-3.0.txt
- */
+* Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
+*
+* See the enclosed file LICENSE for license information (LGPLv3). If you did
+* not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
+*
+* @author   Maarten Billemont <lhunath@lyndir.com>
+* @license  http://www.gnu.org/licenses/lgpl-3.0.txt
+*/
 
 //
 //  MPCombinedViewController.h
@@ -23,7 +23,6 @@
     MPKey *_key;
     NSOperationQueue *_emergencyKeyQueue;
     NSOperationQueue *_emergencyPasswordQueue;
-    NSArray *_notificationObservers;
 }
 
 - (void)viewDidLoad {
@@ -42,14 +41,17 @@
     [super viewWillAppear:animated];
 
     [self reset];
-    [self registerObservers];
+    PearlAddNotificationObserver( UIApplicationWillResignActiveNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPEmergencyViewController *self, NSNotification *note) {
+                [self performSegueWithIdentifier:@"unwind-popover" sender:self];
+            } );
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
 
     [super viewDidDisappear:animated];
 
-    [self removeObservers];
+    PearlRemoveNotificationObservers();
     [self reset];
 }
 
@@ -154,7 +156,7 @@
         case 5:
             return MPSiteTypeGeneratedPIN;
         default:
-            Throw(@"Unsupported type index: %ld", (long)self.typeControl.selectedSegmentIndex);
+            Throw( @"Unsupported type index: %ld", (long)self.typeControl.selectedSegmentIndex );
     }
 }
 
@@ -166,30 +168,6 @@
     self.counterStepper.value = 1;
     self.typeControl.selectedSegmentIndex = 1;
     [self updateKey];
-}
-
-- (void)registerObservers {
-
-    if ([_notificationObservers count])
-        return;
-
-    Weakify(self);
-    _notificationObservers = @[
-            [[NSNotificationCenter defaultCenter]
-                    addObserverForName:UIApplicationWillResignActiveNotification object:nil
-                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                Strongify(self);
-
-                [self performSegueWithIdentifier:@"unwind-popover" sender:self];
-            }],
-    ];
-}
-
-- (void)removeObservers {
-
-    for (id observer in _notificationObservers)
-        [[NSNotificationCenter defaultCenter] removeObserver:observer];
-    _notificationObservers = nil;
 }
 
 @end

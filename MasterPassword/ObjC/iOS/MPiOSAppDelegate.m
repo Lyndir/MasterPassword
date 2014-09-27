@@ -69,18 +69,15 @@
         err( @"During Analytics Setup: %@", exception );
     }
     @try {
-        [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil queue:[NSOperationQueue mainQueue]
-                                                      usingBlock:^(NSNotification *note) {
-                                                          [self updateConfigKey:note.object];
-                                                      }];
-        [[NSNotificationCenter defaultCenter] addObserverForName:kIASKAppSettingChanged object:nil queue:nil usingBlock:
-                ^(NSNotification *note) {
-                    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note.object];
-                }];
-        [[NSNotificationCenter defaultCenter] addObserverForName:NSUserDefaultsDidChangeNotification object:nil queue:nil usingBlock:
-                ^(NSNotification *note) {
-                    [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:nil];
-                }];
+        PearlAddNotificationObserver( MPCheckConfigNotification, nil, [NSOperationQueue mainQueue], ^(id self, NSNotification *note) {
+            [self updateConfigKey:note.object];
+        } );
+        PearlAddNotificationObserver( kIASKAppSettingChanged, nil, nil, ^(id self, NSNotification *note) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note.object];
+        } );
+        PearlAddNotificationObserver( NSUserDefaultsDidChangeNotification, nil, nil, ^(id self, NSNotification *note) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:nil];
+        } );
 
 #ifdef ADHOC
         [PearlAlert showAlertWithTitle:@"Welcome, tester!" message:
@@ -106,28 +103,27 @@
     @try {
         inf( @"Started up with device identifier: %@", [PearlKeyChain deviceIdentifier] );
 
-        [[NSNotificationCenter defaultCenter] addObserverForName:MPFoundInconsistenciesNotification object:nil queue:nil usingBlock:
-                ^(NSNotification *note) {
-                    switch ((MPFixableResult)[note.userInfo[MPInconsistenciesFixResultUserKey] unsignedIntegerValue]) {
+        PearlAddNotificationObserver( MPFoundInconsistenciesNotification, nil, nil, ^(id self, NSNotification *note) {
+            switch ((MPFixableResult)[note.userInfo[MPInconsistenciesFixResultUserKey] unsignedIntegerValue]) {
 
-                        case MPFixableResultNoProblems:
-                            break;
-                        case MPFixableResultProblemsFixed:
-                            [PearlAlert showAlertWithTitle:@"Inconsistencies Fixed" message:
-                                            @"Some inconsistencies were detected in your sites.\n"
-                                                    @"All issues were fixed."
-                                                 viewStyle:UIAlertViewStyleDefault initAlert:nil
-                                         tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
-                            break;
-                        case MPFixableResultProblemsNotFixed:
-                            [PearlAlert showAlertWithTitle:@"Inconsistencies Found" message:
-                                            @"Some inconsistencies were detected in your sites.\n"
-                                                    @"Not all issues could be fixed.  Try signing in to each user or checking the logs."
-                                                 viewStyle:UIAlertViewStyleDefault initAlert:nil
-                                         tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
-                            break;
-                    }
-                }];
+                case MPFixableResultNoProblems:
+                    break;
+                case MPFixableResultProblemsFixed:
+                    [PearlAlert showAlertWithTitle:@"Inconsistencies Fixed" message:
+                                    @"Some inconsistencies were detected in your sites.\n"
+                                            @"All issues were fixed."
+                                         viewStyle:UIAlertViewStyleDefault initAlert:nil
+                                 tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
+                    break;
+                case MPFixableResultProblemsNotFixed:
+                    [PearlAlert showAlertWithTitle:@"Inconsistencies Found" message:
+                                    @"Some inconsistencies were detected in your sites.\n"
+                                            @"Not all issues could be fixed.  Try signing in to each user or checking the logs."
+                                         viewStyle:UIAlertViewStyleDefault initAlert:nil
+                                 tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
+                    break;
+            }
+        } );
 
         PearlMainQueue( ^{
             if ([[MPiOSConfig get].showSetup boolValue])

@@ -22,9 +22,7 @@
 #import "MPEmergencyViewController.h"
 #import "MPPasswordsSegue.h"
 
-@implementation MPCombinedViewController {
-    NSArray *_notificationObservers;
-}
+@implementation MPCombinedViewController
 
 #pragma mark - Life
 
@@ -47,14 +45,22 @@
 
     [super viewDidAppear:animated];
 
-    [self registerObservers];
+    Weakify( self );
+    PearlAddNotificationObserver( MPSignedInNotification, nil, [NSOperationQueue mainQueue], ^(NSNotification *note) {
+        Strongify( self );
+        [self setMode:MPCombinedModePasswordSelection];
+    } );
+    PearlAddNotificationObserver( MPSignedOutNotification, nil, [NSOperationQueue mainQueue], ^(NSNotification *note) {
+        Strongify( self );
+        [self setMode:MPCombinedModeUserSelection animated:[note.userInfo[@"animated"] boolValue]];
+    } );
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 
     [super viewWillDisappear:animated];
 
-    [self removeObservers];
+    PearlRemoveNotificationObservers();
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -141,36 +147,5 @@
 }
 
 #pragma mark - Private
-
-- (void)registerObservers {
-
-    if ([_notificationObservers count])
-        return;
-
-    Weakify( self );
-    _notificationObservers = @[
-            [[NSNotificationCenter defaultCenter]
-                    addObserverForName:MPSignedInNotification object:nil
-                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                        Strongify( self );
-
-                        [self setMode:MPCombinedModePasswordSelection];
-                    }],
-            [[NSNotificationCenter defaultCenter]
-                    addObserverForName:MPSignedOutNotification object:nil
-                                 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                        Strongify( self );
-
-                        [self setMode:MPCombinedModeUserSelection animated:[note.userInfo[@"animated"] boolValue]];
-                    }],
-    ];
-}
-
-- (void)removeObservers {
-
-    for (id observer in _notificationObservers)
-        [[NSNotificationCenter defaultCenter] removeObserver:observer];
-    _notificationObservers = nil;
-}
 
 @end

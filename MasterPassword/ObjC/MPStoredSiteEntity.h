@@ -13,6 +13,6 @@
 
 @interface MPStoredSiteEntity : MPSiteEntity
 
-@property (nonatomic, retain) id contentObject;
+@property (nonatomic, retain) NSData *contentObject;
 
 @end

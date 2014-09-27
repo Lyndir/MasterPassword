@@ -23,4 +23,7 @@
 @end
 
 @interface MPOverlaySegue : UIStoryboardSegue
+
++ (instancetype)dismissViewController:(UIViewController *)viewController;
+
 @end
