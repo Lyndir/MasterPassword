@@ -18,6 +18,7 @@
 #import "MPKey.h"
 #import "MPStoredSiteEntity.h"
 #import "MPGeneratedSiteEntity.h"
+#import "MPSiteQuestionEntity.h"
 
 #define MPAlgorithmDefaultVersion 2
 #define MPAlgorithmDefault MPAlgorithmForVersion(MPAlgorithmDefaultVersion)
@@ -75,7 +76,7 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 - (NSString *)resolveLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
 - (NSString *)resolvePasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
 - (NSString *)resolveAnswerForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
-- (NSString *)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question ofSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;
+- (NSString *)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question usingKey:(MPKey *)siteKey;
 
 - (void)resolveLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey
                      result:(void ( ^ )(NSString *result))resultBlock;
@@ -83,8 +84,8 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
                         result:(void ( ^ )(NSString *result))resultBlock;
 - (void)resolveAnswerForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey
                         result:(void ( ^ )(NSString *result))resultBlock;
-- (void)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question ofSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey
-                        result:(void ( ^ )(NSString *result))resultBlock;
+- (void)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question usingKey:(MPKey *)siteKey
+                          result:(void ( ^ )(NSString *result))resultBlock;
 
 - (void)importProtectedPassword:(NSString *)protectedPassword protectedByKey:(MPKey *)importKey
                        intoSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey;

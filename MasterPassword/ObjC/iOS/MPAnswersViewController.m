@@ -8,12 +8,7 @@
 
 #import "MPAnswersViewController.h"
 #import "MPiOSAppDelegate.h"
-#import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-#import "UIColor+Expanded.h"
-#import "MPPasswordsViewController.h"
-#import "MPCoachmarkViewController.h"
-#import "MPSiteQuestionEntity.h"
 #import "MPOverlayViewController.h"
 
 @interface MPAnswersViewController()
@@ -171,7 +166,6 @@
                                      NSOrderedSet *questions = [site_.questions copy];
                                      for (MPSiteQuestionEntity *question in questions)
                                          [context deleteObject:question];
-                                     [site_ removeQuestions:questions];
                                      [context saveToStore];
                                      [self setMultiple:NO animated:YES];
                                  }];
@@ -191,7 +185,7 @@
             NSMutableString *bodyBuilder = [NSMutableString string];
             [bodyBuilder appendFormat:@"Master Password generated the following security answers for your site: %@\n\n", site.name];
             for (MPSiteQuestionEntity *question in site.questions) {
-                NSObject *answer = [site.algorithm resolveAnswerForQuestion:question ofSite:site usingKey:[MPiOSAppDelegate get].key];
+                NSObject *answer = [site.algorithm resolveAnswerForQuestion:question usingKey:[MPiOSAppDelegate get].key];
                 [bodyBuilder appendFormat:@"For question: '%@', use answer: %@\n", question.keyword, answer];
             }
             [bodyBuilder appendFormat:@"\n\nUse the answer for the matching security question.\n"
@@ -280,8 +274,10 @@
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         MPSiteEntity *site = [MPSiteEntity existingObjectWithID:_siteOID inContext:context];
         MPSiteQuestionEntity *question = [MPSiteQuestionEntity existingObjectWithID:_questionOID inContext:context];
-        if (!question)
+        if (!question) {
             [site addQuestionsObject:question = [MPSiteQuestionEntity insertNewObjectInContext:context]];
+            question.site = site;
+        }
 
         question.keyword = keyword;
 
@@ -313,7 +309,7 @@
         PearlMainQueue( ^{
             self.answerField.text = @"...";
         } );
-        [site.algorithm resolveAnswerForQuestion:question ofSite:site usingKey:[MPiOSAppDelegate get].key result:^(NSString *result) {
+        [site.algorithm resolveAnswerForQuestion:question usingKey:[MPiOSAppDelegate get].key result:^(NSString *result) {
             PearlMainQueue( ^{
                 self.questionField.text = keyword;
                 self.answerField.text = result;

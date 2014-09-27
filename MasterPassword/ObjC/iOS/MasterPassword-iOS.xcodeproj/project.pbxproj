@@ -115,7 +115,6 @@
 		DA30E9D815723E6900A68B4C /* PearlLazy.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D615723E6900A68B4C /* PearlLazy.m */; };
 		DA32CFF019CF1C8F004F3F0E /* MPUserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFE619CF1C8F004F3F0E /* MPUserEntity.m */; };
 		DA32CFF119CF1C8F004F3F0E /* MPStoredSiteEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFE819CF1C8F004F3F0E /* MPStoredSiteEntity.m */; };
-		DA32CFF219CF1C8F004F3F0E /* MPSiteQuestionEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFEA19CF1C8F004F3F0E /* MPSiteQuestionEntity.m */; };
 		DA32CFF319CF1C8F004F3F0E /* MPSiteEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFEC19CF1C8F004F3F0E /* MPSiteEntity.m */; };
 		DA32CFF419CF1C8F004F3F0E /* MPGeneratedSiteEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFEE19CF1C8F004F3F0E /* MPGeneratedSiteEntity.m */; };
 		DA32D00819CF4735004F3F0E /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA32D00119CF4735004F3F0E /* MasterPassword.xcdatamodeld */; };
@@ -136,6 +135,7 @@
 		DA32D05019D2F59B004F3F0E /* meter_fuel.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32D04D19D2F59B004F3F0E /* meter_fuel.png */; };
 		DA32D05119D3D107004F3F0E /* icon_meter.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37BA1711E29600CF925C /* icon_meter.png */; };
 		DA32D05219D3D107004F3F0E /* icon_meter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37BB1711E29600CF925C /* icon_meter@2x.png */; };
+		DA32D05519D741DC004F3F0E /* MPSiteQuestionEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32D05419D741DC004F3F0E /* MPSiteQuestionEntity.m */; };
 		DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3509FC15F101A500C14A8E /* PearlQueue.h */; };
 		DA3509FF15F101A500C14A8E /* PearlQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3509FD15F101A500C14A8E /* PearlQueue.m */; };
 		DA38D6A318CCB5BF009AEB3E /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */; };
@@ -544,8 +544,6 @@
 		DA32CFE719CF1C8F004F3F0E /* MPUserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUserEntity.h; sourceTree = "<group>"; };
 		DA32CFE819CF1C8F004F3F0E /* MPStoredSiteEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPStoredSiteEntity.m; sourceTree = "<group>"; };
 		DA32CFE919CF1C8F004F3F0E /* MPStoredSiteEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPStoredSiteEntity.h; sourceTree = "<group>"; };
-		DA32CFEA19CF1C8F004F3F0E /* MPSiteQuestionEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteQuestionEntity.m; sourceTree = "<group>"; };
-		DA32CFEB19CF1C8F004F3F0E /* MPSiteQuestionEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteQuestionEntity.h; sourceTree = "<group>"; };
 		DA32CFEC19CF1C8F004F3F0E /* MPSiteEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteEntity.m; sourceTree = "<group>"; };
 		DA32CFED19CF1C8F004F3F0E /* MPSiteEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteEntity.h; sourceTree = "<group>"; };
 		DA32CFEE19CF1C8F004F3F0E /* MPGeneratedSiteEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPGeneratedSiteEntity.m; sourceTree = "<group>"; };
@@ -570,6 +568,8 @@
 		DA32D04B19D2F59B004F3F0E /* meter_fuel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "meter_fuel@3x.png"; sourceTree = "<group>"; };
 		DA32D04C19D2F59B004F3F0E /* meter_fuel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "meter_fuel@2x.png"; sourceTree = "<group>"; };
 		DA32D04D19D2F59B004F3F0E /* meter_fuel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = meter_fuel.png; sourceTree = "<group>"; };
+		DA32D05319D741DC004F3F0E /* MPSiteQuestionEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteQuestionEntity.h; sourceTree = "<group>"; };
+		DA32D05419D741DC004F3F0E /* MPSiteQuestionEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSiteQuestionEntity.m; sourceTree = "<group>"; };
 		DA3509FC15F101A500C14A8E /* PearlQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlQueue.h; sourceTree = "<group>"; };
 		DA3509FD15F101A500C14A8E /* PearlQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlQueue.m; sourceTree = "<group>"; };
 		DA38D6A218CCB5BF009AEB3E /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
@@ -2337,12 +2337,12 @@
 		DABD3B9F1711E2DB00CF925C /* ObjC */ = {
 			isa = PBXGroup;
 			children = (
+				DA32D05319D741DC004F3F0E /* MPSiteQuestionEntity.h */,
+				DA32D05419D741DC004F3F0E /* MPSiteQuestionEntity.m */,
 				DA32CFE619CF1C8F004F3F0E /* MPUserEntity.m */,
 				DA32CFE719CF1C8F004F3F0E /* MPUserEntity.h */,
 				DA32CFE819CF1C8F004F3F0E /* MPStoredSiteEntity.m */,
 				DA32CFE919CF1C8F004F3F0E /* MPStoredSiteEntity.h */,
-				DA32CFEA19CF1C8F004F3F0E /* MPSiteQuestionEntity.m */,
-				DA32CFEB19CF1C8F004F3F0E /* MPSiteQuestionEntity.h */,
 				DA32CFEC19CF1C8F004F3F0E /* MPSiteEntity.m */,
 				DA32CFED19CF1C8F004F3F0E /* MPSiteEntity.h */,
 				DA32CFEE19CF1C8F004F3F0E /* MPGeneratedSiteEntity.m */,
@@ -3341,12 +3341,12 @@
 				DABD3C211711E2DC00CF925C /* MPiOSConfig.m in Sources */,
 				DABD3C271711E2DC00CF925C /* main.m in Sources */,
 				93D39F8A9254177891F38705 /* MPSetupViewController.m in Sources */,
-				DA32CFF219CF1C8F004F3F0E /* MPSiteQuestionEntity.m in Sources */,
 				DA095E75172F4CD8001C948B /* MPLogsViewController.m in Sources */,
 				93D39D596A2E376D6F6F5DA1 /* MPCombinedViewController.m in Sources */,
 				DA32CFF419CF1C8F004F3F0E /* MPGeneratedSiteEntity.m in Sources */,
 				93D3957237D303DE2D38C267 /* MPAvatarCell.m in Sources */,
 				93D39B8F90F58A5D158DDBA3 /* MPPasswordsViewController.m in Sources */,
+				DA32D05519D741DC004F3F0E /* MPSiteQuestionEntity.m in Sources */,
 				93D3954FCE045A3CC7E804B7 /* MPUsersViewController.m in Sources */,
 				93D39392DEDA376F93C6C718 /* MPCell.m in Sources */,
 				93D39A5FF670957C0AF8298D /* MPPasswordCell.m in Sources */,

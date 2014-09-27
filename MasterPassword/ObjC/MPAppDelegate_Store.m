@@ -35,6 +35,8 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, PrivateManagedObjectCont
 
 PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext, mainManagedObjectContext );
 
+PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
+
 #pragma mark - Core Data setup
 
 + (NSManagedObjectContext *)managedObjectContextForMainThreadIfReady {
@@ -144,6 +146,10 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
             self.privateManagedObjectContext = nil;
         }];
 
+        // Don't load when the store is corrupted.
+        if ([self.storeCorrupted boolValue])
+            return;
+
         // Check if migration is necessary.
         [self migrateStore];
 
@@ -168,9 +174,11 @@ PearlAssociatedObjectProperty( NSManagedObjectContext*, MainManagedObjectContext
                                                                          STORE_OPTIONS
                                                                  } error:&error]) {
             err( @"Failed to open store: %@", [error fullDescription] );
+            self.storeCorrupted = @YES;
             [self handleCoordinatorError:error];
             return;
         }
+        self.storeCorrupted = @NO;
 
         // Create our contexts and observer.
         self.privateManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];

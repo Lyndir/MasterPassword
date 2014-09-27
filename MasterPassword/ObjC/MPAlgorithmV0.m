@@ -535,12 +535,12 @@
     return result;
 }
 
-- (NSString *)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question ofSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey {
+- (NSString *)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question usingKey:(MPKey *)siteKey {
 
     dispatch_group_t group = dispatch_group_create();
     dispatch_group_enter( group );
     __block NSString *result = nil;
-    [self resolveAnswerForQuestion:question ofSite:site usingKey:siteKey result:^(NSString *result_) {
+    [self resolveAnswerForQuestion:question usingKey:siteKey result:^(NSString *result_) {
         result = result_;
         dispatch_group_leave( group );
     }];
@@ -657,19 +657,19 @@
     } );
 }
 
-- (void)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question ofSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey
+- (void)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question usingKey:(MPKey *)siteKey
                           result:(void ( ^ )(NSString *result))resultBlock {
 
-    NSAssert( [siteKey.keyID isEqualToData:site.user.keyID], @"Site does not belong to current user." );
-    NSString *name = site.name;
+    NSAssert( [siteKey.keyID isEqualToData:question.site.user.keyID], @"Site does not belong to current user." );
+    NSString *name = question.site.name;
     NSString *keyword = question.keyword;
     id<MPAlgorithm> algorithm = nil;
-    if (!site.name.length)
+    if (!name.length)
         err( @"Missing name." );
     else if (!siteKey.keyData.length)
         err( @"Missing key." );
     else
-        algorithm = site.algorithm;
+        algorithm = question.site.algorithm;
 
     dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
         NSString *result = [algorithm generateAnswerForSiteNamed:name onQuestion:keyword usingKey:siteKey];
