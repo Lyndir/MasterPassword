@@ -132,6 +132,8 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
                     float currentFuel = [[MPiOSConfig get].developmentFuel floatValue];
                     float purchasedFuel = transaction.payment.quantity / MP_FUEL_HOURLY_RATE;
                     [MPiOSConfig get].developmentFuel = @(currentFuel + purchasedFuel);
+                    if (![MPiOSConfig get].developmentFuelChecked || !currentFuel)
+                        [MPiOSConfig get].developmentFuelChecked = [NSDate date];
                 }
                 [[NSUserDefaults standardUserDefaults] setObject:transaction.transactionIdentifier
                                                           forKey:transaction.payment.productIdentifier];

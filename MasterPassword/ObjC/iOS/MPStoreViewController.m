@@ -220,10 +220,12 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
     CGFloat weeklyFuelConsumption = [self weeklyFuelConsumption]; /* consume x fuel / week */
     CGFloat fuel = [[MPiOSConfig get].developmentFuel floatValue]; /* x fuel left */
-    NSTimeInterval fuelSecondsElapsed = [[MPiOSConfig get].developmentFuelChecked timeIntervalSinceNow];
-    if (fuelSecondsElapsed > 3600) {
+    NSDate *now = [NSDate date];
+    NSTimeInterval fuelSecondsElapsed = [[MPiOSConfig get].developmentFuelChecked timeIntervalSinceDate:now];
+    if (fuelSecondsElapsed > 3600 || ![MPiOSConfig get].developmentFuelChecked) {
         NSTimeInterval weeksElapsed = fuelSecondsElapsed / (3600 * 24 * 7 /* 1 week */); /* x weeks elapsed */
         fuel -= weeklyFuelConsumption * weeksElapsed;
+        [MPiOSConfig get].developmentFuelChecked = now;
         [MPiOSConfig get].developmentFuel = @(fuel);
     }
 

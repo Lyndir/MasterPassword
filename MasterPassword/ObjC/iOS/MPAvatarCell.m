@@ -214,18 +214,20 @@ const long MPAvatarAdd = 10000;
 
                          switch (self.mode) {
                              case MPAvatarModeLowered: {
-                                 [self.avatarSizeConstraint updateConstant:self.avatarImageView.image.size.height];
+                                 [self.avatarSizeConstraint updateConstant:
+                                         self.avatarImageView.image.size.height * (self.visibility * 0.3f + 0.7f)];
                                  [self.avatarRaisedConstraint updatePriority:UILayoutPriorityDefaultLow];
                                  [self.avatarToTopConstraint updatePriority:UILayoutPriorityDefaultLow];
                                  [self.nameToCenterConstraint updatePriority:UILayoutPriorityDefaultLow];
                                  self.nameContainer.alpha = self.visibility;
                                  self.nameContainer.backgroundColor = [UIColor clearColor];
-                                 self.avatarImageView.alpha = self.visibility / 0.7f + 0.3f;
+                                 self.avatarImageView.alpha = self.visibility * 0.7f + 0.3f;
                                  self.avatarImageView.layer.shadowRadius = 15 * self.visibility * self.visibility;
                                  break;
                              }
                              case MPAvatarModeRaisedButInactive: {
-                                 [self.avatarSizeConstraint updateConstant:self.avatarImageView.image.size.height];
+                                 [self.avatarSizeConstraint updateConstant:
+                                         self.avatarImageView.image.size.height * (self.visibility * 0.7f + 0.3f)];
                                  [self.avatarRaisedConstraint updatePriority:UILayoutPriorityDefaultHigh];
                                  [self.avatarToTopConstraint updatePriority:UILayoutPriorityDefaultLow];
                                  [self.nameToCenterConstraint updatePriority:UILayoutPriorityDefaultLow];
@@ -236,7 +238,8 @@ const long MPAvatarAdd = 10000;
                                  break;
                              }
                              case MPAvatarModeRaisedAndActive: {
-                                 [self.avatarSizeConstraint updateConstant:self.avatarImageView.image.size.height];
+                                 [self.avatarSizeConstraint updateConstant:
+                                         self.avatarImageView.image.size.height * (self.visibility * 0.7f + 0.3f)];
                                  [self.avatarRaisedConstraint updatePriority:UILayoutPriorityDefaultHigh];
                                  [self.avatarToTopConstraint updatePriority:UILayoutPriorityDefaultLow];
                                  [self.nameToCenterConstraint updatePriority:UILayoutPriorityDefaultHigh];
@@ -247,7 +250,8 @@ const long MPAvatarAdd = 10000;
                                  break;
                              }
                              case MPAvatarModeRaisedAndHidden: {
-                                 [self.avatarSizeConstraint updateConstant:self.avatarImageView.image.size.height];
+                                 [self.avatarSizeConstraint updateConstant:
+                                         self.avatarImageView.image.size.height * (self.visibility * 0.7f + 0.3f)];
                                  [self.avatarRaisedConstraint updatePriority:UILayoutPriorityDefaultHigh];
                                  [self.avatarToTopConstraint updatePriority:UILayoutPriorityDefaultLow];
                                  [self.nameToCenterConstraint updatePriority:UILayoutPriorityDefaultHigh];

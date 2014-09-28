@@ -1,12 +1,12 @@
 /**
- * Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
- *
- * See the enclosed file LICENSE for license information (LGPLv3). If you did
- * not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
- *
- * @author   Maarten Billemont <lhunath@lyndir.com>
- * @license  http://www.gnu.org/licenses/lgpl-3.0.txt
- */
+* Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
+*
+* See the enclosed file LICENSE for license information (LGPLv3). If you did
+* not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
+*
+* @author   Maarten Billemont <lhunath@lyndir.com>
+* @license  http://www.gnu.org/licenses/lgpl-3.0.txt
+*/
 
 //
 //  MPPopdownSegue.h
@@ -22,6 +22,8 @@
 @implementation MPPopdownSegue {
 }
 
+static char UnwindingObserverKey;
+
 - (void)perform {
 
     MPPasswordsViewController *passwordsVC;
@@ -35,17 +37,30 @@
         [passwordsVC addChildViewController:popdownVC];
         [passwordsVC.popdownContainer addSubview:popdownView];
         [passwordsVC.popdownContainer addConstraintsWithVisualFormats:@[ @"H:|[popdownView]|", @"V:|[popdownView]|" ] options:0
-                                                              metrics:nil views:NSDictionaryOfVariableBindings(popdownView)];
+                                                              metrics:nil views:NSDictionaryOfVariableBindings( popdownView )];
 
         [UIView animateWithDuration:0.3f animations:^{
             [[passwordsVC.popdownToTopConstraint updatePriority:1] layoutIfNeeded];
-        } completion:^(BOOL finished) {
+        }                completion:^(BOOL finished) {
             [popdownVC didMoveToParentViewController:passwordsVC];
+
+            id<NSObject> observer = [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil
+                                                                                       queue:[NSOperationQueue mainQueue] usingBlock:
+                            ^(NSNotification *note) {
+                                [[[MPPopdownSegue alloc] initWithIdentifier:@"unwind-popdown" source:popdownVC
+                                                                destination:passwordsVC] perform];
+                            }];
+            objc_setAssociatedObject( popdownVC, &UnwindingObserverKey, observer, OBJC_ASSOCIATION_RETAIN );
         }];
     }
-    else if ([self.destinationViewController isKindOfClass:[MPPasswordsViewController class]]) {
+    else {
         popdownVC = self.sourceViewController;
-        passwordsVC = self.destinationViewController;
+        for (passwordsVC = self.sourceViewController; passwordsVC && ![(id)passwordsVC isKindOfClass:[MPPasswordsViewController class]];
+             passwordsVC = (id)passwordsVC.parentViewController);
+        NSAssert( passwordsVC, @"Couldn't find passwords VC to pop back to." );
+
+        [[NSNotificationCenter defaultCenter] removeObserver:objc_getAssociatedObject( popdownVC, &UnwindingObserverKey )];
+        objc_setAssociatedObject( popdownVC, &UnwindingObserverKey, nil, OBJC_ASSOCIATION_RETAIN );
 
         [popdownVC willMoveToParentViewController:nil];
         [UIView animateWithDuration:0.3f delay:0 options:UIViewAnimationOptionOverrideInheritedDuration animations:^{
