@@ -286,7 +286,8 @@
 
     NSString *importHeader = @"# Master Password site export";
     NSString *importedSitesString = [UIPasteboard generalPasteboard].string;
-    if ([[importedSitesString substringToIndex:[importHeader length]] isEqualToString:importHeader])
+    if ([importedSitesString length] > [importHeader length] &&
+        [[importedSitesString substringToIndex:[importHeader length]] isEqualToString:importHeader])
         [PearlAlert showAlertWithTitle:@"Import Sites?" message:
                         @"We've detected Master Password import sites on your pasteboard, would you like to import them?"
                              viewStyle:UIAlertViewStyleDefault initAlert:nil

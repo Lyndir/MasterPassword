@@ -89,8 +89,6 @@
 		DACA22BC1705DE7D002C6C22 /* NSError+UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA22B81705DE7D002C6C22 /* NSError+UbiquityStoreManager.h */; };
 		DACA22BD1705DE7D002C6C22 /* NSError+UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA22B91705DE7D002C6C22 /* NSError+UbiquityStoreManager.m */; };
 		DACA22BE1705DE7D002C6C22 /* UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA22BA1705DE7D002C6C22 /* UbiquityStoreManager.h */; };
-		DACA26F91705DF81002C6C22 /* background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA24171705DF7D002C6C22 /* background@2x.png */; };
-		DACA26FA1705DF81002C6C22 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA24181705DF7D002C6C22 /* background.png */; };
 		DACA26FE1705DF81002C6C22 /* logo-bare.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA241C1705DF7D002C6C22 /* logo-bare.png */; };
 		DACA27121705DF81002C6C22 /* avatar-13@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA24321705DF7D002C6C22 /* avatar-13@2x.png */; };
 		DACA27131705DF81002C6C22 /* avatar-3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA24331705DF7D002C6C22 /* avatar-3@2x.png */; };
@@ -751,8 +749,6 @@
 		DACA22B81705DE7D002C6C22 /* NSError+UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+UbiquityStoreManager.h"; sourceTree = "<group>"; };
 		DACA22B91705DE7D002C6C22 /* NSError+UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+UbiquityStoreManager.m"; sourceTree = "<group>"; };
 		DACA22BA1705DE7D002C6C22 /* UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UbiquityStoreManager.h; sourceTree = "<group>"; };
-		DACA24171705DF7D002C6C22 /* background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@2x.png"; sourceTree = "<group>"; };
-		DACA24181705DF7D002C6C22 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		DACA241C1705DF7D002C6C22 /* logo-bare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-bare.png"; sourceTree = "<group>"; };
 		DACA24321705DF7D002C6C22 /* avatar-13@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-13@2x.png"; sourceTree = "<group>"; };
 		DACA24331705DF7D002C6C22 /* avatar-3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-3@2x.png"; sourceTree = "<group>"; };
@@ -1550,22 +1546,12 @@
 				DA2509271951B86C00AC23F1 /* screen.png */,
 				DA0933CF1747B91B00DE1CEF /* appstore.png */,
 				DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */,
-				DACA24161705DF7D002C6C22 /* Background */,
 				DACA24311705DF7D002C6C22 /* Avatars */,
 				DACA241C1705DF7D002C6C22 /* logo-bare.png */,
 				DACA24581705DF7D002C6C22 /* menu-icon.png */,
 				DACA268A1705DF81002C6C22 /* Fonts */,
 			);
 			path = Media;
-			sourceTree = "<group>";
-		};
-		DACA24161705DF7D002C6C22 /* Background */ = {
-			isa = PBXGroup;
-			children = (
-				DACA24171705DF7D002C6C22 /* background@2x.png */,
-				DACA24181705DF7D002C6C22 /* background.png */,
-			);
-			path = Background;
 			sourceTree = "<group>";
 		};
 		DACA24311705DF7D002C6C22 /* Avatars */ = {
@@ -2006,8 +1992,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAFE4A5A1503982E003ABA7C /* Pearl.strings in Resources */,
-				DACA26F91705DF81002C6C22 /* background@2x.png in Resources */,
-				DACA26FA1705DF81002C6C22 /* background.png in Resources */,
 				DACA26FE1705DF81002C6C22 /* logo-bare.png in Resources */,
 				DACA27121705DF81002C6C22 /* avatar-13@2x.png in Resources */,
 				DACA27131705DF81002C6C22 /* avatar-3@2x.png in Resources */,

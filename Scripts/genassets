@@ -1,0 +1,151 @@
+#!/usr/bin/env bash
+# See https://developer.apple.com/library/ios/qa/qa1686/_index.html
+source bashlib
+
+# icons format: [pixel size]@[scale]@[idiom]@[os]:[filename] -- if os is "anything lower", omit it
+icons=(
+    180@3@iphone@8.0:Icon-60@3x.png
+    120@3@iphone@8.0:Icon-Small-40@3x.png
+    120@2@iphone@7.0:Icon-60@2x.png
+    80@2@iphone@7.0:Icon-Small-40@2x.png
+#    114@2@iphone@:Icon@2x.png
+    87@3@iphone@:Icon-Small@3x.png
+    58@2@iphone@:Icon-Small@2x.png
+#    57@1@iphone@:Icon.png
+#    29@1@iphone@:Icon-Small.png
+#
+    76@1@ipad@7.0:Icon-76.png
+    152@2@ipad@7.0:Icon-76@2x.png
+    40@1@ipad@7.0:Icon-Small-40.png
+    80@2@ipad@7.0:Icon-Small-40@2x.png
+    29@1@ipad@:Icon-Small.png
+    58@2@ipad@:Icon-Small@2x.png
+#    72@1@ipad@:Icon-72.png
+#    144@2@ipad@:Icon-72@2x.png
+#    50@1@ipad@:Icon-Small-50.png
+#    100@2@ipad@:Icon-Small-50@2x.png
+)
+# splashes format: [size name]@[scale]@[idiom]@[os] -- if scale is 1, omit it.  if os is "anything lower", omit it
+splashes=(
+    414-736@3@iphone@8.0
+    375-667@2@iphone@8.0
+    320-568@2@iphone@7.0
+    320-568@2@iphone@
+    320-480@2@iphone@7.0
+    320-480@2@iphone@
+    320-480@@iphone@
+)
+
+copyImage() {
+    local src=$1 dst=$2
+
+    if [[ $src = *.9.png || $src = *.9@*.png ]]; then
+        pinf '%s -> %s (ninepatch)' "${src##*/}" "${dst##*/}"
+            niftyNinePatch=$(java -Dapple.awt.UIElement=true -jar Scripts/NiftyNinePatchHelper.jar "$src" "$dst") || return
+            while IFS='=' read var value; do
+                [[ $var = imageMode ]] && value=${value#'"resize:'} value=${value%'"'} && IFS=, read capLeft capWidth capRight capTop _ _ _ capHeight _ _ _ capBottom <<< "$value"
+                [[ $var = padding ]] && IFS=, read paddingTop paddingRight paddingBottom paddingLeft <<< "${value//[px\"]}"
+                uinf 'caps: [%d, %d, %d, %d], padding: [%d, %d, %d, %d]' "$capTop" "$capRight" "$capBottom" "$capLeft" "$paddingTop" "$paddingRight" "$paddingBottom" "$paddingLeft"
+                printf ',"resizing":{"capInsets":{"bottom":%d,"left":%d,"right":%d,"top":%d},"center":{"height":%d,"mode":"fill","width":%d},"mode":"9-part"}' \
+                    "$capBottom" "$capLeft" "$capRight" "$capTop" "$capHeight" "$capWidth"
+            done <<< "$niftyNinePatch"
+        fnip
+    else
+        pinf '%s -> %s' "${src##*/}" "${dst##*/}"
+            cp "$src" "$dst"
+        fnip
+    fi
+}
+
+xcassets=MasterPassword/Resources/Media/Images.xcassets
+appiconset="$xcassets/AppIcon.appiconset"
+launchimage="$xcassets/LaunchImage.launchimage"
+ios_icon=MasterPassword/Resources/Media/ios/icon
+ios_launch=MasterPassword/Resources/Media/ios/launch
+
+[[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]] && {
+    rm -rf "$appiconset"; mkdir -p "$appiconset"
+    {
+        comma=
+        printf '{"images":['
+        for icon in "${icons[@]}"; do
+            IFS=: read icon filename <<< "$icon"
+            IFS=@ read px scale idiom os <<< "$icon"
+            pt=$(( px / scale ))
+
+            if imageProps=$(copyImage "$ios_icon/$filename" "$appiconset/$filename"); then
+                printf '%s{"size":"%dx%d","filename":"%s","scale":"%sx"' \
+                    "$comma" "$pt" "$pt" "$filename" "$scale"
+                [[ $idiom ]] && printf ',"idiom":"%s"' "$idiom"
+                [[ $os ]] && printf ',"minimum-system-version":"%s"' "$os"
+                [[ $imageProps ]] && printf '%s' "$imageProps"
+                printf '}'
+
+                comma=,
+            fi
+
+        done
+        printf '],"info":{"version":1,"author":"genassets"},"properties":{"pre-rendered":true}}\n'
+    } > "$appiconset/Contents.json"
+}
+
+[[ "$(latest "$ios_launch"/*)" -nt "$launchimage/Contents.json" ]] && {
+    rm -rf "$launchimage"; mkdir -p "$launchimage"
+    {
+        comma=
+        printf '{"images":['
+        for splash in "${splashes[@]}"; do
+            IFS=@ read name scale idiom os <<< "$splash"
+            case "$name" in
+                *-568) subtype=retina4 ;;
+                *-667) subtype=667h ;;
+                *-736) subtype=736h ;;
+                *) subtype= ;;
+            esac
+            filename="Default${os:+-$os}${subtype:+-$subtype}${scale:+@${scale}x}${idiom:+~$idiom}.png"
+
+            if imageProps=$(copyImage "$ios_launch/$name${scale:+@${scale}x}.png" "$launchimage/$filename"); then
+                printf '%s{"extent":"full-screen","filename":"%s","orientation":"portrait","scale":"%sx"' \
+                    "$comma" "$filename" "${scale:-1}"
+                [[ $idiom ]] && printf ',"idiom":"%s"' "$idiom"
+                [[ $os ]] && printf ',"minimum-system-version":"%s"' "$os"
+                [[ $subtype ]] && printf ',"subtype":"%s"' "$subtype"
+                [[ $imageProps ]] && printf '%s' "$imageProps"
+                printf '}'
+
+                comma=,
+            fi
+        done
+        printf '],"info":{"version":1,"author":"genassets"}}\n'
+    } > "$launchimage/Contents.json"
+}
+
+#for file in resources/images/mdpi/*.png; do
+#    name=${file##*/} name=${name%.*} name=${name/.9/}
+#    mdpiFile=$file
+#    xhdpiFile=${file%/*/*.*}/xhdpi/${file##*/}
+#    mdpiFilename=$name.png
+#    xhdpiFilename=$name@2x.png
+#
+#    [[ -e "$xcassets/$name.imageset/$mdpiFilename" && $mdpiFile -ot "$xcassets/$name.imageset/$mdpiFilename" &&
+#        -e "$xcassets/$name.imageset/$xhdpiFilename" && $xhdpiFile -ot "$xcassets/$name.imageset/$xhdpiFilename" ]] && continue
+#    rm -rf "$xcassets/$name.imageset"; mkdir -p "$xcassets/$name.imageset"
+#
+#    {
+#        comma=
+#        printf '{"images":['
+#        if imageProps=$(copyImage "$mdpiFile" "$xcassets/$name.imageset/$mdpiFilename"); then
+#            printf '%s{"idiom":"universal","scale":"1x","filename":"%s"' "$comma" "$mdpiFilename"
+#            [[ $imageProps ]] && printf '%s' "$imageProps"
+#            printf '}'
+#            comma=,
+#        fi
+#        if imageProps=$(copyImage "$xhdpiFile" "$xcassets/$name.imageset/$xhdpiFilename"); then
+#            printf '%s{"idiom":"universal","scale":"2x","filename":"%s"' "$comma" "$xhdpiFilename"
+#            [[ $imageProps ]] && printf '%s' "$imageProps"
+#            printf '}'
+#            comma=,
+#        fi
+#        printf '],"info":{"version":1,"author":"genassets"}}\n'
+#    } > "$xcassets/$name.imageset/Contents.json"
+#done
