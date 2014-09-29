@@ -45,6 +45,8 @@
             ^(MPEmergencyViewController *self, NSNotification *note) {
                 [self performSegueWithIdentifier:@"unwind-popover" sender:self];
             } );
+
+    [self.scrollView automaticallyAdjustInsetsForKeyboard];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -52,6 +54,7 @@
     [super viewDidDisappear:animated];
 
     PearlRemoveNotificationObservers();
+    PearlRemoveNotificationObserversFrom( self.scrollView );
     [self reset];
 }
 

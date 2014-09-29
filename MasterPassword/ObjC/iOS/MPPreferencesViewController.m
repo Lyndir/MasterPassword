@@ -31,6 +31,7 @@
 
     inf( @"Preferences will appear" );
     [super viewWillAppear:animated];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"tipped.passwordsPreferences"];
 
     MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForMainThread];
     self.generatedTypeControl.selectedSegmentIndex = [self generatedSegmentIndexForType:activeUser.defaultType];

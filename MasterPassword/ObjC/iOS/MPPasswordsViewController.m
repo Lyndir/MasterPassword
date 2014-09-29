@@ -24,6 +24,10 @@
 #import "MPPasswordCell.h"
 #import "MPAnswersViewController.h"
 
+typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
+    MPPasswordsBadNameTip = 1 << 0,
+};
+
 @interface MPPasswordsViewController()<NSFetchedResultsControllerDelegate>
 
 @property(nonatomic, strong) IBOutlet UINavigationBar *navigationBar;
@@ -39,6 +43,7 @@
     __weak UIViewController *_popdownVC;
     BOOL _showTransientItem;
     NSUInteger _transientItem;
+    NSCharacterSet *_siteNameAcceptableCharactersSet;
 }
 
 #pragma mark - Life
@@ -46,6 +51,11 @@
 - (void)viewDidLoad {
 
     [super viewDidLoad];
+
+    NSMutableCharacterSet *siteNameAcceptableCharactersSet = [[NSCharacterSet alphanumericCharacterSet] mutableCopy];
+    [siteNameAcceptableCharactersSet formIntersectionWithCharacterSet:[[NSCharacterSet uppercaseLetterCharacterSet] invertedSet]];
+    [siteNameAcceptableCharactersSet addCharactersInString:@"@.-+~&_;:/"];
+    _siteNameAcceptableCharactersSet = siteNameAcceptableCharactersSet;
 
     _backgroundColor = self.passwordCollectionView.backgroundColor;
     _darkenedBackgroundColor = [_backgroundColor colorWithAlphaComponent:0.6f];
@@ -232,11 +242,31 @@
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
 
-    if (searchBar == self.passwordsSearchBar)
+    if (searchBar == self.passwordsSearchBar) {
+        if ([self.query length] && [[self.query stringByTrimmingCharactersInSet:_siteNameAcceptableCharactersSet] length])
+            [self showTips:MPPasswordsBadNameTip];
+        
         [self updatePasswords];
+    }
 }
 
 #pragma mark - Private
+
+- (void)showTips:(MPPasswordsTips)showTips {
+
+    [UIView animateWithDuration:0.3f animations:^{
+        if (showTips & MPPasswordsBadNameTip)
+            self.badNameTipContainer.alpha = 1;
+    } completion:^(BOOL finished) {
+        if (finished)
+            PearlMainQueueAfter( 5, ^{
+                [UIView animateWithDuration:0.3f animations:^{
+                    if (showTips & MPPasswordsBadNameTip)
+                        self.badNameTipContainer.alpha = 0;
+                }];
+            } );
+    }];
+}
 
 - (void)fetchedItemsDidUpdate {
 

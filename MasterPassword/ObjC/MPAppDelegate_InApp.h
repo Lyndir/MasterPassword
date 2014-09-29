@@ -11,6 +11,8 @@
 
 #define MPProductGenerateLogins                 @"com.lyndir.masterpassword.products.generatelogins"
 #define MPProductGenerateAnswers                @"com.lyndir.masterpassword.products.generateanswers"
+#define MPProductOSIntegration                  @"com.lyndir.masterpassword.products.osintegration"
+#define MPProductTouchID                        @"com.lyndir.masterpassword.products.touchid"
 #define MPProductFuel                           @"com.lyndir.masterpassword.products.fuel"
 
 #define MP_FUEL_HOURLY_RATE                     30.f /* Tier 1 purchases/h ~> USD/h */

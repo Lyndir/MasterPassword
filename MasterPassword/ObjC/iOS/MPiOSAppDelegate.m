@@ -10,6 +10,7 @@
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 #import "IASKSettingsReader.h"
+#import "MPStoreViewController.h"
 
 @interface MPiOSAppDelegate()<UIDocumentInteractionControllerDelegate>
 
@@ -129,6 +130,14 @@
             if ([[MPiOSConfig get].showSetup boolValue])
                 [self.navigationController performSegueWithIdentifier:@"setup" sender:self];
         } );
+
+        NSString *latestFeatures = [MPStoreViewController latestStoreFeatures];
+        if (latestFeatures)
+            [PearlAlert showAlertWithTitle:@"New Features" message:
+                            strf( @"The following features are now available in the store:\n\n%@•••\n\n"
+                                    @"Find the store from the user pull‑down after logging in.", latestFeatures )
+                                 viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:nil
+                               cancelTitle:@"Thanks" otherTitles:nil];
 
         MPCheckpoint( MPCheckpointStarted, @{
                 @"simulator"  : PearlStringB( [PearlDeviceUtils isSimulator] ),

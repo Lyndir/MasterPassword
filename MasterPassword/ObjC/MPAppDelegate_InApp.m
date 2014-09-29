@@ -81,6 +81,16 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
 
 - (void)purchaseProductWithIdentifier:(NSString *)productIdentifier quantity:(NSInteger)quantity {
 
+#if TARGET_OS_IPHONE
+    if (![[MPAppDelegate_Shared get] canMakePayments]) {
+        [PearlAlert showAlertWithTitle:@"Store Not Set Up" message:
+                        @"Try logging using the App Store or from Settings."
+                             viewStyle:UIAlertViewStyleDefault initAlert:nil
+                     tappedButtonBlock:nil cancelTitle:@"Thanks" otherTitles:nil];
+        return;
+    }
+#endif
+
     for (SKProduct *product in self.products)
         if ([product.productIdentifier isEqualToString:productIdentifier]) {
             SKMutablePayment *payment = [SKMutablePayment paymentWithProduct:product];

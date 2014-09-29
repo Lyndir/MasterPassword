@@ -10,3 +10,6 @@
 [submodule "External/KCOrderedAccessorFix"]
 	path = External/KCOrderedAccessorFix
 	url = https://github.com/CFKevinRef/KCOrderedAccessorFix.git
+[submodule "External/AttributedMarkdown"]
+	path = External/AttributedMarkdown
+	url = https://github.com/dreamwieber/AttributedMarkdown.git

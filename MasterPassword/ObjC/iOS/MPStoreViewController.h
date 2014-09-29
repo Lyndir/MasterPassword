@@ -17,8 +17,11 @@
 @property(weak, nonatomic) IBOutlet MPStoreProductCell *iOSIntegrationCell;
 @property(weak, nonatomic) IBOutlet MPStoreProductCell *touchIDCell;
 @property(weak, nonatomic) IBOutlet MPStoreProductCell *fuelCell;
+@property(weak, nonatomic) IBOutlet UITableViewCell *loadingCell;
 @property(weak, nonatomic) IBOutlet NSLayoutConstraint *fuelMeterConstraint;
 @property(weak, nonatomic) IBOutlet UIButton *fuelSpeedButton;
+
++ (NSString *)latestStoreFeatures;
 
 @end
 

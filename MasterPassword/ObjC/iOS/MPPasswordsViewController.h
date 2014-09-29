@@ -27,6 +27,7 @@
 @property(strong, nonatomic) IBOutlet NSLayoutConstraint *passwordsToBottomConstraint;
 @property(strong, nonatomic) IBOutlet NSLayoutConstraint *navigationBarToTopConstraint;
 @property(strong, nonatomic) IBOutlet NSLayoutConstraint *popdownToTopConstraint;
+@property(strong, nonatomic) IBOutlet UIView *badNameTipContainer;
 @property(strong, nonatomic) IBOutlet UIView *popdownView;
 @property(strong, nonatomic) IBOutlet UIView *popdownContainer;
 

@@ -24,6 +24,13 @@
 #import "MPAppDelegate_Key.h"
 #import "MPWebViewController.h"
 
+typedef NS_OPTIONS( NSUInteger, MPUsersTips ) {
+    MPUsersThanksTip = 1 << 0,
+    MPUsersAvatarTip = 1 << 1,
+    MPUsersMasterPasswordTip = 1 << 2,
+    MPUsersPreferencesTip = 1 << 3,
+};
+
 typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
     /** The users are all inactive */
             MPActiveUserStateNone,
@@ -69,7 +76,10 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
     self.avatarCollectionView.allowsMultipleSelection = YES;
     [self.entryField addTarget:self action:@selector( textFieldEditingChanged: ) forControlEvents:UIControlEventEditingChanged];
 
+    self.preferencesTipContainer.alpha = 0;
+
     [self setActive:YES animated:NO];
+    [self showTips:MPUsersThanksTip];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -391,34 +401,23 @@ referenceSizeForFooterInSection:(NSInteger)section {
 
                     if (buttonIndex == [sheet destructiveButtonIndex]) {
                         // Delete User
-                        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                            MPUserEntity *user_ = [MPUserEntity existingObjectWithID:userID inContext:context];
-                            if (!user_)
-                                return;
-
-                            [context deleteObject:user_];
-                            [context saveToStore];
-                            [self reloadUsers]; // I do NOT understand why our ObjectsDidChangeNotification isn't firing on saveToStore.
-                        }];
+                        [PearlAlert showParentalGateWithTitle:@"Deleting User" message:
+                                        @"The user and its sites will be deleted.\nPlease confirm by solving:"
+                                                   completion:^(BOOL continuing) {
+                                                       if (continuing)
+                                                           [self deleteUser:userID];
+                                                   }];
                         return;
                     }
 
                     if (buttonIndex == [sheet firstOtherButtonIndex])
                         // Reset Password
-                        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                            MPUserEntity *user_ = [MPUserEntity existingObjectWithID:userID inContext:context];
-                            if (!user_)
-                                return;
-
-                            [[MPiOSAppDelegate get] changeMasterPasswordFor:user_ saveInContext:context didResetBlock:^{
-                                PearlMainQueue( ^{
-                                    NSIndexPath *avatarIndexPath = [self.avatarCollectionView indexPathForCell:avatarCell];
-                                    [self.avatarCollectionView selectItemAtIndexPath:avatarIndexPath animated:NO
-                                                                      scrollPosition:UICollectionViewScrollPositionNone];
-                                    [self collectionView:self.avatarCollectionView didSelectItemAtIndexPath:avatarIndexPath];
-                                } );
-                            }];
-                        }];
+                        [PearlAlert showParentalGateWithTitle:@"Resetting User" message:
+                                        @"The user's master password will be reset.\nPlease confirm by solving:"
+                                                   completion:^(BOOL continuing) {
+                                                       if (continuing)
+                                                           [self resetUser:userID avatar:avatarCell];
+                                                   }];
                 }          cancelTitle:[PearlStrings get].commonButtonCancel
                       destructiveTitle:@"Delete User" otherTitles:@"Reset Password", nil];
     }
@@ -441,6 +440,66 @@ referenceSizeForFooterInSection:(NSInteger)section {
 
 #pragma mark - Private
 
+- (void)deleteUser:(NSManagedObjectID *)userID {
+
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        MPUserEntity
+                *user_ = [MPUserEntity existingObjectWithID:userID inContext:context];
+        if (!user_)
+            return;
+
+        [context deleteObject:user_];
+        [context saveToStore];
+        [self reloadUsers]; // I do NOT understand why our ObjectsDidChangeNotification isn't firing on saveToStore.
+    }];
+}
+
+- (void)resetUser:(NSManagedObjectID *)userID avatar:(MPAvatarCell *)avatarCell {
+
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        MPUserEntity *user_ = [MPUserEntity existingObjectWithID:userID inContext:context];
+        if (!user_)
+            return;
+
+        [[MPiOSAppDelegate get] changeMasterPasswordFor:user_ saveInContext:context didResetBlock:^{
+            PearlMainQueue( ^{
+                NSIndexPath *avatarIndexPath = [self.avatarCollectionView indexPathForCell:avatarCell];
+                [self.avatarCollectionView selectItemAtIndexPath:avatarIndexPath animated:NO
+                                                  scrollPosition:UICollectionViewScrollPositionNone];
+                [self collectionView:self.avatarCollectionView didSelectItemAtIndexPath:avatarIndexPath];
+            } );
+        }];
+    }];
+}
+
+- (void)showTips:(MPUsersTips)showTips {
+
+    [UIView animateWithDuration:0.3f animations:^{
+        if (showTips & MPUsersThanksTip)
+            self.thanksTipContainer.alpha = 1;
+        if (showTips & MPUsersAvatarTip)
+            self.avatarTipContainer.alpha = 1;
+        if (showTips & MPUsersMasterPasswordTip)
+            self.entryTipContainer.alpha = 1;
+        if (showTips & MPUsersPreferencesTip)
+            self.preferencesTipContainer.alpha = 1;
+    }                completion:^(BOOL finished) {
+        if (finished)
+            PearlMainQueueAfter( 5, ^{
+                [UIView animateWithDuration:0.3f animations:^{
+                    if (showTips & MPUsersThanksTip)
+                        self.thanksTipContainer.alpha = 0;
+                    if (showTips & MPUsersAvatarTip)
+                        self.avatarTipContainer.alpha = 0;
+                    if (showTips & MPUsersMasterPasswordTip)
+                        self.entryTipContainer.alpha = 0;
+                    if (showTips & MPUsersPreferencesTip)
+                        self.preferencesTipContainer.alpha = 0;
+                }];
+            } );
+    }];
+}
+
 - (void)showEntryTip:(NSString *)message {
 
     NSUInteger newlineIndex = [message rangeOfString:@"\n"].location;
@@ -448,17 +507,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
     NSString *messageSubtitle = newlineIndex == NSNotFound? nil: [message substringFromIndex:newlineIndex];
     self.entryTipTitleLabel.text = messageTitle;
     self.entryTipSubtitleLabel.text = messageSubtitle;
-
-    [UIView animateWithDuration:0.3f animations:^{
-        self.entryTipContainer.alpha = 1;
-    }                completion:^(BOOL finished) {
-        if (finished)
-            PearlMainQueueAfter( 4, ^{
-                [UIView animateWithDuration:0.3f animations:^{
-                    self.entryTipContainer.alpha = 0;
-                }];
-            } );
-    }];
+    [self showTips:MPUsersMasterPasswordTip];
 }
 
 - (void)firedMarqueeTimer:(NSTimer *)timer {
@@ -610,16 +659,16 @@ referenceSizeForFooterInSection:(NSInteger)section {
         [self.storeLoadingActivity startAnimating];
 
     if (mainContext)
-    PearlAddNotificationObserver( NSManagedObjectContextObjectsDidChangeNotification, mainContext, [NSOperationQueue mainQueue],
-            ^(MPUsersViewController *self, NSNotification *note) {
-                NSSet *insertedObjects = note.userInfo[NSInsertedObjectsKey];
-                NSSet *deletedObjects = note.userInfo[NSDeletedObjectsKey];
-                if ([[NSSetUnion( insertedObjects, deletedObjects )
-                        filteredSetUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-                            return [evaluatedObject isKindOfClass:[MPUserEntity class]];
-                        }]] count])
-                    [self reloadUsers];
-            } );
+        PearlAddNotificationObserver( NSManagedObjectContextObjectsDidChangeNotification, mainContext, [NSOperationQueue mainQueue],
+                ^(MPUsersViewController *self, NSNotification *note) {
+                    NSSet *insertedObjects = note.userInfo[NSInsertedObjectsKey];
+                    NSSet *deletedObjects = note.userInfo[NSDeletedObjectsKey];
+                    if ([[NSSetUnion( insertedObjects, deletedObjects )
+                            filteredSetUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+                                return [evaluatedObject isKindOfClass:[MPUserEntity class]];
+                            }]] count])
+                        [self reloadUsers];
+                } );
     PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresWillChangeNotification, nil, [NSOperationQueue mainQueue],
             ^(MPUsersViewController *self, NSNotification *note) {
                 self.userIDs = nil;
@@ -656,11 +705,6 @@ referenceSizeForFooterInSection:(NSInteger)section {
 }
 
 #pragma mark - Properties
-
-- (void)setActive:(BOOL)active {
-
-    [self setActive:active animated:NO];
-}
 
 - (void)setActive:(BOOL)active animated:(BOOL)animated {
 
@@ -773,6 +817,29 @@ referenceSizeForFooterInSection:(NSInteger)section {
                 self.avatarCollectionView.scrollEnabled = NO;
                 self.entryContainer.alpha = 0;
                 self.footerContainer.alpha = 0;
+                break;
+            }
+        }
+
+        // Manage tip visibility.
+        switch (activeUserState) {
+            case MPActiveUserStateNone:
+            case MPActiveUserStateMasterPasswordConfirmation:
+            case MPActiveUserStateLogin: {
+                break;
+            }
+            case MPActiveUserStateUserName: {
+                [self showTips:MPUsersAvatarTip];
+                break;
+            }
+            case MPActiveUserStateMasterPasswordChoice: {
+                [self showEntryTip:strl( @"A short phrase makes a strong, memorable password." )];
+                break;
+            }
+            case MPActiveUserStateMinimized: {
+                if (YES || ![[NSUserDefaults standardUserDefaults] boolForKey:@"tipped.passwordsPreferences"])
+                    [self showTips:MPUsersPreferencesTip];
+
                 break;
             }
         }

@@ -7,6 +7,8 @@
 //
 
 #import "MPGuideViewController.h"
+#import "markdown_lib.h"
+#import "NSString+MPMarkDown.h"
 
 @interface MPGuideStep : NSObject
 
@@ -37,28 +39,50 @@
     [super viewDidLoad];
 
     self.steps = @[
-            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-0"] caption:
-                    @"To begin, tap the \"New User\" icon and add yourself as a user to the application."],
-            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-1"] caption:
-                    @"Enter your full name.  Double-check that you have spelled your name correctly and capitalized it appropriately.  Your passwords will depend on it."],
-            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-2"] caption:
-                    @"Choose a master password: Use something new and long.  A short sentence is ideal.\nDO NOT FORGET THIS ONE PASSWORD."],
-            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-3"] caption:
-                    @"After logging in, you'll see an empty screen with a search box.\nTap the search box to begin adding sites."],
-            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-4"] caption:
-                    @"To add a site, just enter its name fully and tap the result.  Names can be anything, but we recommend using a site's bare domain name."],
-            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-5"] caption:
-                    @"Your sites are easy to find and sorted by recency.\nTap any site to copy its password.\nYou can now switch and paste it in another app."],
-            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-6"] caption:
-                    @"The user icon lets you save your site's login.\nThis is useful if you find it hard to remember the user name for this site."],
-            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-7"] caption:
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"initial"] caption:
+                    @"To begin, tap the *New User* icon and add yourself as a user to the application."],
+
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"name_new"] caption:
+                    @"Enter your full name.  \n"
+                            @"**Double-check** that you have spelled your name correctly and capitalized it appropriately.  \n"
+                            @"Your passwords will depend on it."],
+
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"mpw_new"] caption:
+                    @"Choose a master password: Make it *new* and *long*.  \n"
+                            @"A short phrase makes a great password.  \n"
+                            @"**DO NOT FORGET THIS ONE PASSWORD**."],
+
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"login_new"] caption:
+                    @"After logging in, you'll see an empty screen with a search box.  \n"
+                            @"Tap the search box to begin adding sites."],
+
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"site_new"] caption:
+                    @"To add a site, just enter its name and tap the result.  \n"
+                            @"*We recommend* always using a site's **bare** domain name: eg. *apple.com*.  \n"
+                            @"(NOT *www.*apple.com or *store.*apple.com)"],
+
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"copy_pw"] caption:
+                    @"Tap any site to copy its password.  \n"
+                            @"The first time, change your site's old password into this new one."],
+
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"settings"] caption:
                     @"To make changes to the site password, tap the settings icon or swipe left to reveal extra buttons."],
-            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-8"] caption:
-                    @"If you ever need a new password for the site, just tap the plus icon to increment its counter.\nYou can hold down to reset it back to 1."],
-            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-9"] caption:
-                    @"Use the list icon to upgrade or downgrade your password's complexity.\nSome sites won't let you use complex passwords."],
-            [MPGuideStep stepWithImage:[UIImage imageNamed:@"image-10"] caption:
-                    @"If you have a password that you cannot change, you can save it as a Personal password.  Device Private means the site will not be backed up."],
+
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"login_name"] caption:
+                    @"You can save the login name for the site.  \n"
+                            @"This is useful if you find it hard to remember your user name for this site."],
+
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"counter"] caption:
+                    @"If you ever need a new password for the site, just tap the plus icon to increment its counter.  \n"
+                            @"You can hold down to reset it back to 1."],
+
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"choose_type"] caption:
+                    @"Use the list icon to upgrade or downgrade your password's complexity.  \n"
+                            @"Some sites won't let you use complex passwords."],
+
+            [MPGuideStep stepWithImage:[UIImage imageNamed:@"personal_pw"] caption:
+                    @"If you have a password that you cannot change, you can save it as a *personal* password.  "
+                            @"*Device private* means the site will not be backed up."],
     ];
 }
 
@@ -68,9 +92,10 @@
 
     [self.pageControl observeKeyPath:@"currentPage"
                            withBlock:^(id from, id to, NSKeyValueChange cause, UIPageControl *pageControl) {
-        MPGuideStep *activeStep = self.steps[pageControl.currentPage];
-        self.captionLabel.text = activeStep.caption;
-    }];
+                               MPGuideStep *activeStep = self.steps[pageControl.currentPage];
+                               self.captionLabel.attributedText =
+                                       [activeStep.caption attributedMarkdownStringWithFontSize:self.captionLabel.font.pointSize];
+                           }];
 
     [self.collectionView setContentOffset:CGPointZero];
     self.pageControl.currentPage = 0;
@@ -117,6 +142,7 @@
 
     MPGuideStepCell *cell = [MPGuideStepCell dequeueCellFromCollectionView:collectionView indexPath:indexPath];
     cell.imageView.image = ((MPGuideStep *)self.steps[indexPath.item]).image;
+    cell.contentView.frame = cell.bounds;
 
     return cell;
 }

@@ -10,6 +10,7 @@
 #import "MPiOSAppDelegate.h"
 #import "UIColor+Expanded.h"
 #import "MPAppDelegate_InApp.h"
+#import "MPPasswordsViewController.h"
 
 PearlEnum( MPDevelopmentFuelConsumption,
         MPDevelopmentFuelConsumptionQuarterly, MPDevelopmentFuelConsumptionMonthly, MPDevelopmentFuelWeekly );
@@ -23,6 +24,22 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
 @implementation MPStoreViewController
 
++ (NSString *)latestStoreFeatures {
+
+    NSMutableString *features = [NSMutableString string];
+    NSArray *storeVersions = @[
+            @"Generated Usernames\nSecurity Question Answers"
+    ];
+    NSInteger storeVersion = [[NSUserDefaults standardUserDefaults] integerForKey:@"storeVersion"];
+    for (; storeVersion < [storeVersions count]; ++storeVersion)
+        [features appendFormat:@"%@\n", storeVersions[storeVersion]];
+    if (![features length])
+        return nil;
+
+    [[NSUserDefaults standardUserDefaults] setInteger:storeVersion forKey:@"storeVersion"];
+    return features;
+}
+
 - (void)viewDidLoad {
 
     [super viewDidLoad];
@@ -32,7 +49,6 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
     self.tableView.tableHeaderView = [UIView new];
     self.tableView.tableFooterView = [UIView new];
-    self.tableView.estimatedRowHeight = 400;
     self.view.backgroundColor = [UIColor clearColor];
 }
 
@@ -42,7 +58,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
     self.tableView.contentInset = UIEdgeInsetsMake( 64, 0, 49, 0 );
 
-    [self reloadCellsHiding:self.allCellsBySection[0] showing:nil];
+    [self reloadCellsHiding:self.allCellsBySection[0] showing:@[ self.loadingCell ]];
     [self.allCellsBySection[0] enumerateObjectsUsingBlock:^(MPStoreProductCell *cell, NSUInteger idx, BOOL *stop) {
         if ([cell isKindOfClass:[MPStoreProductCell class]]) {
             cell.purchasedIndicator.alpha = 0;
@@ -80,7 +96,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
     if (indexPath.section == 0)
         cell.selectionStyle = [[MPiOSAppDelegate get] isFeatureUnlocked:[self productForCell:cell].productIdentifier]?
-                              UITableViewCellSelectionStyleDefault: UITableViewCellSelectionStyleNone;
+                              UITableViewCellSelectionStyleNone: UITableViewCellSelectionStyleDefault;
 
     if (cell.selectionStyle != UITableViewCellSelectionStyleNone) {
         cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.bounds];
@@ -94,24 +110,19 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
     [cell layoutIfNeeded];
+    [cell layoutIfNeeded];
 
-    return cell.contentView.bounds.size.height;
+    dbg_return_tr( cell.contentView.bounds.size.height, @ );
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    if (![[MPAppDelegate_Shared get] canMakePayments]) {
-        [PearlAlert showAlertWithTitle:@"Store Not Set Up" message:
-                        @"Try logging using the App Store or from Settings."
-                             viewStyle:UIAlertViewStyleDefault initAlert:nil
-                     tappedButtonBlock:nil cancelTitle:@"Thanks" otherTitles:nil];
-        return;
-    }
-
     MPStoreProductCell *cell = (MPStoreProductCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
-    SKProduct *product = [self productForCell:cell];
+    if (cell.selectionStyle == UITableViewCellSelectionStyleNone)
+        return;
 
-    if (product)
+    SKProduct *product = [self productForCell:cell];
+    if (product && ![[MPAppDelegate_Shared get] isFeatureUnlocked:product.productIdentifier])
         [[MPAppDelegate_Shared get] purchaseProductWithIdentifier:product.productIdentifier
                                                          quantity:[self quantityForProductIdentifier:product.productIdentifier]];
 
@@ -138,6 +149,12 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
                      [[MPAppDelegate_Shared get] restoreCompletedTransactions];
                  } cancelTitle:@"Cancel" otherTitles:@"Find Purchases", nil];
+}
+
+- (IBAction)sendThanks:(id)sender {
+
+    [[self dismissPopup].navigationController performSegueWithIdentifier:@"web" sender:
+            [NSURL URLWithString:@"http://thanks.lhunath.com"]];
 }
 
 #pragma mark - MPInAppDelegate
@@ -176,6 +193,18 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
 #pragma mark - Private
 
+- (MPPasswordsViewController *)dismissPopup {
+
+    for (UIViewController *vc = self; (vc = vc.parentViewController);)
+        if ([vc isKindOfClass:[MPPasswordsViewController class]]) {
+            MPPasswordsViewController *passwordsVC = (MPPasswordsViewController *)vc;
+            [passwordsVC dismissPopdown:self];
+            return passwordsVC;
+        }
+
+    return nil;
+}
+
 - (SKProduct *)productForCell:(MPStoreProductCell *)cell {
 
     for (SKProduct *product in self.products)
@@ -191,6 +220,10 @@ PearlEnum( MPDevelopmentFuelConsumption,
         return self.generateLoginCell;
     if ([productIdentifier isEqualToString:MPProductGenerateAnswers])
         return self.generateAnswersCell;
+    if ([productIdentifier isEqualToString:MPProductOSIntegration])
+        return self.iOSIntegrationCell;
+    if ([productIdentifier isEqualToString:MPProductTouchID])
+        return self.touchIDCell;
     if ([productIdentifier isEqualToString:MPProductFuel])
         return self.fuelCell;
 
@@ -202,18 +235,18 @@ PearlEnum( MPDevelopmentFuelConsumption,
     NSMutableArray *showCells = [NSMutableArray array];
     NSMutableArray *hideCells = [NSMutableArray array];
     [hideCells addObjectsFromArray:self.allCellsBySection[0]];
+    [hideCells addObject:self.loadingCell];
 
     for (SKProduct *product in self.products) {
         [self showCellForProductWithIdentifier:MPProductGenerateLogins ifProduct:product showingCells:showCells];
         [self showCellForProductWithIdentifier:MPProductGenerateAnswers ifProduct:product showingCells:showCells];
+        [self showCellForProductWithIdentifier:MPProductOSIntegration ifProduct:product showingCells:showCells];
+        [self showCellForProductWithIdentifier:MPProductTouchID ifProduct:product showingCells:showCells];
         [self showCellForProductWithIdentifier:MPProductFuel ifProduct:product showingCells:showCells];
     }
 
     [hideCells removeObjectsInArray:showCells];
-    if ([self.tableView numberOfRowsInSection:0])
-        [self updateCellsHiding:hideCells showing:showCells animation:UITableViewRowAnimationAutomatic];
-    else
-        [self updateCellsHiding:hideCells showing:showCells animation:UITableViewRowAnimationNone];
+    [self reloadCellsHiding:hideCells showing:showCells];
 }
 
 - (void)updateFuel {
@@ -221,7 +254,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
     CGFloat weeklyFuelConsumption = [self weeklyFuelConsumption]; /* consume x fuel / week */
     CGFloat fuel = [[MPiOSConfig get].developmentFuel floatValue]; /* x fuel left */
     NSDate *now = [NSDate date];
-    NSTimeInterval fuelSecondsElapsed = [[MPiOSConfig get].developmentFuelChecked timeIntervalSinceDate:now];
+    NSTimeInterval fuelSecondsElapsed = -[[MPiOSConfig get].developmentFuelChecked timeIntervalSinceDate:now];
     if (fuelSecondsElapsed > 3600 || ![MPiOSConfig get].developmentFuelChecked) {
         NSTimeInterval weeksElapsed = fuelSecondsElapsed / (3600 * 24 * 7 /* 1 week */); /* x weeks elapsed */
         fuel -= weeklyFuelConsumption * weeksElapsed;

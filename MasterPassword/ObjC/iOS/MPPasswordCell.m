@@ -226,12 +226,15 @@
             else if (textField == self.loginNameField &&
                      ((site.loginGenerated && ![text length]) ||
                       (!site.loginGenerated && ![text isEqualToString:site.loginName]))) {
-                site.loginName = text;
-                site.loginGenerated = NO;
-                if ([text length])
-                    [PearlOverlay showTemporaryOverlayWithTitle:@"Login Name Saved" dismissAfter:2];
-                else
-                    [PearlOverlay showTemporaryOverlayWithTitle:@"Login Name Cleared" dismissAfter:2];
+                if (site.loginGenerated || !([site.loginName isEqualToString:text] || (!text && !site.loginName))) {
+                    site.loginGenerated = NO;
+                    site.loginName = text;
+
+                    if ([text length])
+                        [PearlOverlay showTemporaryOverlayWithTitle:@"Login Name Saved" dismissAfter:2];
+                    else
+                        [PearlOverlay showTemporaryOverlayWithTitle:@"Login Name Cleared" dismissAfter:2];
+                }
             }
 
             [context saveToStore];
@@ -310,8 +313,6 @@
             [self setMode:MPPasswordCellModePassword animated:YES];
             break;
     }
-
-    [self updateAnimated:YES];
 }
 
 - (IBAction)doUpgrade:(UIButton *)sender {
@@ -499,6 +500,9 @@
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             MPSiteEntity *site = [self siteInContext:context];
             MPKey *key = [MPiOSAppDelegate get].key;
+            if (!key)
+                return;
+
             NSString *password, *loginName = [site resolveLoginUsingKey:key];
             if (self.transientSite)
                 password = [MPAlgorithmDefault generatePasswordForSiteNamed:self.transientSite ofType:

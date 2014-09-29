@@ -16,25 +16,26 @@
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
-
 @interface MPUsersViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextFieldDelegate>
 
 @property(weak, nonatomic) IBOutlet UIView *userSelectionContainer;
 @property(weak, nonatomic) IBOutlet UIButton *marqueeButton;
-@property(weak, nonatomic) IBOutlet UIView *gitTipTip;
 @property(weak, nonatomic) IBOutlet UITextField *entryField;
 @property(weak, nonatomic) IBOutlet UILabel *entryLabel;
 @property(weak, nonatomic) IBOutlet UILabel *entryTipTitleLabel;
 @property(weak, nonatomic) IBOutlet UILabel *entryTipSubtitleLabel;
-@property(weak, nonatomic) IBOutlet UIView *entryTipContainer;
 @property(weak, nonatomic) IBOutlet UIView *entryContainer;
 @property(weak, nonatomic) IBOutlet UIView *footerContainer;
 @property(weak, nonatomic) IBOutlet UIActivityIndicatorView *storeLoadingActivity;
 @property(weak, nonatomic) IBOutlet UICollectionView *avatarCollectionView;
-@property (strong, nonatomic) IBOutlet UIButton *nextAvatarButton;
-@property (strong, nonatomic) IBOutlet UIButton *previousAvatarButton;
+@property(weak, nonatomic) IBOutlet UIView *avatarTipContainer;
+@property(weak, nonatomic) IBOutlet UIView *entryTipContainer;
+@property(weak, nonatomic) IBOutlet UIView *preferencesTipContainer;
+@property(weak, nonatomic) IBOutlet UIView *thanksTipContainer;
+@property(weak, nonatomic) IBOutlet UIButton *nextAvatarButton;
+@property(weak, nonatomic) IBOutlet UIButton *previousAvatarButton;
 
-@property(assign, nonatomic) BOOL active;
+@property(assign, nonatomic, readonly) BOOL active;
 
 - (void)setActive:(BOOL)active animated:(BOOL)animated;
 - (IBAction)changeAvatar:(UIButton *)sender;
