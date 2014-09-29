@@ -79,7 +79,8 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
     self.preferencesTipContainer.alpha = 0;
 
     [self setActive:YES animated:NO];
-    [self showTips:MPUsersThanksTip];
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"tipped.thanks"])
+        [self showTips:MPUsersThanksTip];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -837,7 +838,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
                 break;
             }
             case MPActiveUserStateMinimized: {
-                if (YES || ![[NSUserDefaults standardUserDefaults] boolForKey:@"tipped.passwordsPreferences"])
+                if (![[NSUserDefaults standardUserDefaults] boolForKey:@"tipped.passwordsPreferences"])
                     [self showTips:MPUsersPreferencesTip];
 
                 break;

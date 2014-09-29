@@ -50,6 +50,9 @@
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request
  navigationType:(UIWebViewNavigationType)navigationType {
 
+    if ([[request.URL absoluteString] rangeOfString:@"thanks.lhunath.com"].location != NSNotFound)
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"tipped.thanks"];
+
     if ([request.URL isEqual:request.mainDocumentURL]) {
         self.webNavigationItem.title = request.URL.host;
         self.webNavigationItem.prompt = strl( @"Loading" );
