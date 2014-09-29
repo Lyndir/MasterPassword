@@ -21,6 +21,7 @@
 @interface MPSetupViewController : UIViewController
 
 @property(weak, nonatomic) IBOutlet UISwitch *rememberLoginSwitch;
+@property(weak, nonatomic) IBOutlet UISwitch *showPasswordsSwitch;
 
 - (IBAction)close:(UIBarButtonItem *)sender;
 

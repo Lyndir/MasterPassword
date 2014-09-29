@@ -31,11 +31,13 @@
             <string>Exo2.0-Bold</string>
             <string>Exo2.0-Bold</string>
             <string>Exo2.0-Bold</string>
+            <string>Exo2.0-Bold</string>
         </mutableArray>
         <mutableArray key="Exo2.0-ExtraBold.otf">
             <string>Exo2.0-ExtraBold</string>
         </mutableArray>
         <mutableArray key="Exo2.0-Regular.otf">
+            <string>Exo2.0-Regular</string>
             <string>Exo2.0-Regular</string>
             <string>Exo2.0-Regular</string>
             <string>Exo2.0-Regular</string>
@@ -2092,7 +2094,7 @@ eg. apple.com, rmitchell@twitter.com</string>
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="458"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image-0.png" translatesAutoresizingMaskIntoConstraints="NO" id="6sF-iJ-8GW">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="initial.png" translatesAutoresizingMaskIntoConstraints="NO" id="6sF-iJ-8GW">
                                                     <rect key="frame" x="40" y="8" width="240" height="442"/>
                                                 </imageView>
                                             </subviews>
@@ -2346,7 +2348,7 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                     <navigationItem key="navigationItem" title="Security" id="aPg-8r-c9W">
                         <barButtonItem key="rightBarButtonItem" title="Next" id="e6v-s5-FVH">
                             <connections>
-                                <segue destination="ZJ6-pe-kyr" kind="push" id="vcN-A9-Eqz"/>
+                                <segue destination="nYl-Ow-cCq" kind="push" id="hDh-Zt-HRV"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -3186,6 +3188,100 @@ UPCOMING:
             </objects>
             <point key="canvasLocation" x="1408.5" y="2175.5"/>
         </scene>
+        <!--Security-->
+        <scene sceneID="xUp-eA-B0J">
+            <objects>
+                <viewController id="nYl-Ow-cCq" customClass="MPSetupViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="0jG-Z4-Dxm"/>
+                        <viewControllerLayoutGuide type="bottom" id="221-mD-5i9"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="x5S-dT-CXQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="center" image="background.png" translatesAutoresizingMaskIntoConstraints="NO" id="rvb-7K-MHe">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7A7-Yn-F6L">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="••••••" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wbM-06-ZzQ">
+                                        <rect key="frame" x="20" y="20" width="335" height="80"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="80" id="aua-jw-p61"/>
+                                        </constraints>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="48"/>
+                                        <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                    </textField>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Show Passwords?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J5V-1h-NhW">
+                                        <rect key="frame" x="20" y="108" width="335" height="20.5"/>
+                                        <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="myD-aq-Hoc">
+                                        <rect key="frame" x="163" y="532" width="51" height="31"/>
+                                        <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    </switch>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yx2-Eh-hM0">
+                                        <rect key="frame" x="20" y="137" width="335" height="202"/>
+                                        <string key="text">To make it easy for you to recognize and copy passwords manually using a keyboard or other means, Master Password makes your site passwords visible on your screen by default.
+
+If you are worried about "shoulder surfing" or people taking pictures of you while using Master Password, turn this setting off and your passwords will be hidden on-screen.
+
+You can temporarily reveal a password by holding your finger down on the site's block for a second.</string>
+                                        <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="J5V-1h-NhW" firstAttribute="leading" secondItem="7A7-Yn-F6L" secondAttribute="leading" constant="20" symbolic="YES" id="3qQ-4u-KfA"/>
+                                    <constraint firstAttribute="centerX" secondItem="myD-aq-Hoc" secondAttribute="centerX" id="DZJ-4x-1kz"/>
+                                    <constraint firstItem="wbM-06-ZzQ" firstAttribute="top" secondItem="7A7-Yn-F6L" secondAttribute="top" constant="20" symbolic="YES" id="LIv-9p-FXz"/>
+                                    <constraint firstItem="J5V-1h-NhW" firstAttribute="top" secondItem="wbM-06-ZzQ" secondAttribute="bottom" constant="8" symbolic="YES" id="QbT-qA-oki"/>
+                                    <constraint firstAttribute="centerX" secondItem="wbM-06-ZzQ" secondAttribute="centerX" id="Qkb-xe-BeJ"/>
+                                    <constraint firstAttribute="trailing" secondItem="yx2-Eh-hM0" secondAttribute="trailing" constant="20" symbolic="YES" id="b1D-wd-qRV"/>
+                                    <constraint firstItem="yx2-Eh-hM0" firstAttribute="top" secondItem="J5V-1h-NhW" secondAttribute="bottom" constant="8" symbolic="YES" id="fay-XM-cZE"/>
+                                    <constraint firstAttribute="trailing" secondItem="J5V-1h-NhW" secondAttribute="trailing" constant="20" symbolic="YES" id="grr-yl-SpV"/>
+                                    <constraint firstAttribute="bottom" secondItem="myD-aq-Hoc" secondAttribute="bottom" constant="20" symbolic="YES" id="hEW-xn-cws"/>
+                                    <constraint firstAttribute="trailing" secondItem="wbM-06-ZzQ" secondAttribute="trailing" constant="20" symbolic="YES" id="ldD-iX-BbD"/>
+                                    <constraint firstItem="wbM-06-ZzQ" firstAttribute="leading" secondItem="7A7-Yn-F6L" secondAttribute="leading" constant="20" symbolic="YES" id="pwV-ly-lLa"/>
+                                    <constraint firstItem="myD-aq-Hoc" firstAttribute="top" relation="greaterThanOrEqual" secondItem="yx2-Eh-hM0" secondAttribute="bottom" constant="8" symbolic="YES" id="qcd-pU-oMu"/>
+                                    <constraint firstItem="yx2-Eh-hM0" firstAttribute="leading" secondItem="7A7-Yn-F6L" secondAttribute="leading" constant="20" symbolic="YES" id="sey-AH-44n"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="rvb-7K-MHe" firstAttribute="top" secondItem="x5S-dT-CXQ" secondAttribute="top" id="5m5-pe-anw"/>
+                            <constraint firstItem="221-mD-5i9" firstAttribute="top" secondItem="7A7-Yn-F6L" secondAttribute="bottom" id="6T0-sf-HIt"/>
+                            <constraint firstItem="rvb-7K-MHe" firstAttribute="leading" secondItem="x5S-dT-CXQ" secondAttribute="leading" id="RAo-ks-VGI"/>
+                            <constraint firstAttribute="bottom" secondItem="rvb-7K-MHe" secondAttribute="bottom" id="aqC-3l-1iE"/>
+                            <constraint firstItem="7A7-Yn-F6L" firstAttribute="leading" secondItem="x5S-dT-CXQ" secondAttribute="leading" id="hGJ-DD-cbk"/>
+                            <constraint firstItem="221-mD-5i9" firstAttribute="top" secondItem="myD-aq-Hoc" secondAttribute="bottom" priority="250" constant="40" id="kJQ-pG-tPH"/>
+                            <constraint firstItem="7A7-Yn-F6L" firstAttribute="top" secondItem="0jG-Z4-Dxm" secondAttribute="bottom" id="kkS-4N-H3C"/>
+                            <constraint firstAttribute="trailing" secondItem="7A7-Yn-F6L" secondAttribute="trailing" id="thM-TF-0U3"/>
+                            <constraint firstAttribute="trailing" secondItem="rvb-7K-MHe" secondAttribute="trailing" id="wfZ-gw-DY0"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Security" id="L76-56-knU">
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="1MF-Nc-8XW">
+                            <connections>
+                                <segue destination="ZJ6-pe-kyr" kind="push" id="7DT-8x-33P"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="showPasswordsSwitch" destination="myD-aq-Hoc" id="PDM-Cb-Qg9"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jIW-fd-lsa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-152.5" y="2175.5"/>
+        </scene>
     </scenes>
     <resources>
         <image name="avatar-0.png" width="110" height="110"/>
@@ -3205,7 +3301,7 @@ UPCOMING:
         <image name="icon_trash.png" width="32" height="32"/>
         <image name="icon_up.png" width="32" height="32"/>
         <image name="identity.png" width="82" height="80"/>
-        <image name="image-0.png" width="320" height="568"/>
+        <image name="initial.png" width="320" height="568"/>
         <image name="meter_fuel.png" width="12" height="10"/>
         <image name="thumb_fuel.png" width="198" height="198"/>
         <image name="thumb_generated_answers.png" width="198" height="198"/>

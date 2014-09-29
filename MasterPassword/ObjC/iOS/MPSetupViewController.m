@@ -28,6 +28,8 @@
 
     if (self.rememberLoginSwitch)
         self.rememberLoginSwitch.on = [[MPiOSConfig get].rememberLogin boolValue];
+    if (self.showPasswordsSwitch)
+        self.showPasswordsSwitch.on = ![[MPiOSConfig get].hidePasswords boolValue];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -36,6 +38,8 @@
 
     if (self.rememberLoginSwitch)
         [MPiOSConfig get].rememberLogin = @(self.rememberLoginSwitch.on);
+    if (self.showPasswordsSwitch)
+        [MPiOSConfig get].hidePasswords = @(!self.showPasswordsSwitch.on);
 }
 
 - (IBAction)close:(UIBarButtonItem *)sender {
