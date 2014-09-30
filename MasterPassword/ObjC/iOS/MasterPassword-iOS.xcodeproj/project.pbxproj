@@ -172,8 +172,6 @@
 		DAA175F519D86C620044227B /* markdown_lib.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA175B719D86C620044227B /* markdown_lib.m */; };
 		DAA175F619D86C620044227B /* markdown_output.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA175B819D86C620044227B /* markdown_output.m */; };
 		DAA175F719D86C620044227B /* markdown_parser.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA175BA19D86C620044227B /* markdown_parser.m */; };
-		DAA1760F19D86C620044227B /* README.markdown in Sources */ = {isa = PBXBuildFile; fileRef = DAA175ED19D86C620044227B /* README.markdown */; };
-		DAA1761019D86C620044227B /* README_PEG-MARKDWON.markdown in Sources */ = {isa = PBXBuildFile; fileRef = DAA175EE19D86C620044227B /* README_PEG-MARKDWON.markdown */; };
 		DAA1761B19D86D0D0044227B /* libAttributedMarkdown.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAA1757D19D86BE70044227B /* libAttributedMarkdown.a */; };
 		DAA1762319D89B600044227B /* thumb_touch_id@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA1761D19D89B600044227B /* thumb_touch_id@3x.png */; };
 		DAA1762419D89B610044227B /* thumb_touch_id@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA1761E19D89B600044227B /* thumb_touch_id@2x.png */; };
@@ -3497,8 +3495,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAA175F519D86C620044227B /* markdown_lib.m in Sources */,
-				DAA1761019D86C620044227B /* README_PEG-MARKDWON.markdown in Sources */,
-				DAA1760F19D86C620044227B /* README.markdown in Sources */,
 				DAA175F719D86C620044227B /* markdown_parser.m in Sources */,
 				DAA175F619D86C620044227B /* markdown_output.m in Sources */,
 			);
