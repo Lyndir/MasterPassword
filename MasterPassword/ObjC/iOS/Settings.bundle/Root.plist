@@ -56,7 +56,7 @@
 			<key>FooterText</key>
 			<string>When enabled, you will not be logged out when switching out of the application. This will help you get to your passwords faster, but when someone finds your device unlocked, they can too.</string>
 			<key>Title</key>
-			<string>Master Password</string>
+			<string>Security</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>
@@ -67,24 +67,6 @@
 			<string>rememberLogin</string>
 			<key>Title</key>
 			<string>Stay logged in</string>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-		</dict>
-		<dict>
-			<key>FooterText</key>
-			<string>Enabling support for dictation in the site search box will enable the dictation button next to the space bar at the bottom of the keyboard.  Press this button and speak the name of your site to look it up.  Enabling dictation will change your keyboard which might make it slightly more difficult to enter a site name manually.</string>
-			<key>Title</key>
-			<string></string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>DefaultValue</key>
-			<false/>
-			<key>Key</key>
-			<string>dictationSearch</string>
-			<key>Title</key>
-			<string>Dictation Search</string>
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
@@ -110,7 +92,7 @@ To see a site&apos;s password anyway, tap and hold your finger down for a while 
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>The password strength indicator estimates the time necessary to break the password from a stolen database of SHA-1 hashes.  Use this setting to choose the budget the attacker is willing to devote to breaking your site password.</string>
+			<string>The password strength indicator estimates the time necessary to break the password from a stolen database of SHA-1 hashes.  Use this setting to choose the budget the attacker is willing to devote exclusively to breaking your site password.</string>
 			<key>Title</key>
 			<string></string>
 			<key>Type</key>
@@ -144,7 +126,26 @@ To see a site&apos;s password anyway, tap and hold your finger down for a while 
 				<integer>0</integer>
 				<integer>1</integer>
 				<integer>2</integer>
+				<string>3</string>
 			</array>
+		</dict>
+		<dict>
+			<key>FooterText</key>
+			<string>Enabling support for dictation in the site search box will enable the dictation button next to the space bar at the bottom of the keyboard.  Press this button and speak the name of your site to look it up.  Enabling dictation will change your keyboard which might make it slightly more difficult to enter a site name manually.</string>
+			<key>Title</key>
+			<string>Miscellaneous</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<false/>
+			<key>Key</key>
+			<string>dictationSearch</string>
+			<key>Title</key>
+			<string>Dictation Search</string>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
 		</dict>
 		<dict>
 			<key>Type</key>
@@ -152,7 +153,7 @@ To see a site&apos;s password anyway, tap and hold your finger down for a while 
 			<key>Title</key>
 			<string></string>
 			<key>FooterText</key>
-			<string>If the app tends to crash on login, enable this to check if there are any inconsistencies in your site data.  It may slow down login a bit, so keep it off when no issues are reported on login.</string>
+			<string>Enable this if the app crashes when you log in.  Master Password will scan for and repair any inconsistencies in your sites history.</string>
 		</dict>
 		<dict>
 			<key>Type</key>
