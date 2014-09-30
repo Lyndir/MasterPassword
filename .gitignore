@@ -16,6 +16,9 @@
 xcuserdata/
 /DerivedData/
 
+# Generated
+MasterPassword/Resources/Media/Images.xcassets/
+
 # Media
 Press/Background.png
 Press/Front-Page.png
