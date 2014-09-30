@@ -139,9 +139,9 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
             case SKPaymentTransactionStatePurchased: {
                 inf( @"purchased: %@", transaction.payment.productIdentifier );
                 if ([transaction.payment.productIdentifier isEqualToString:MPProductFuel]) {
-                    float currentFuel = [[MPiOSConfig get].developmentFuel floatValue];
+                    float currentFuel = [[MPiOSConfig get].developmentFuelRemaining floatValue];
                     float purchasedFuel = transaction.payment.quantity / MP_FUEL_HOURLY_RATE;
-                    [MPiOSConfig get].developmentFuel = @(currentFuel + purchasedFuel);
+                    [MPiOSConfig get].developmentFuelRemaining = @(currentFuel + purchasedFuel);
                     if (![MPiOSConfig get].developmentFuelChecked || !currentFuel)
                         [MPiOSConfig get].developmentFuelChecked = [NSDate date];
                 }

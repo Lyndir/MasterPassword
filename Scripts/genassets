@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # See https://developer.apple.com/library/ios/qa/qa1686/_index.html
+cd "${BASH_SOURCE%/*}"
 source bashlib
+cd ..
 
 # icons format: [pixel size]@[scale]@[idiom]@[os]:[filename] -- if os is "anything lower", omit it
 icons=(
@@ -63,7 +65,7 @@ launchimage="$xcassets/LaunchImage.launchimage"
 ios_icon=MasterPassword/Resources/Media/ios/icon
 ios_launch=MasterPassword/Resources/Media/ios/launch
 
-[[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]] && {
+if [[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]]; then
     rm -rf "$appiconset"; mkdir -p "$appiconset"
     {
         comma=
@@ -82,14 +84,17 @@ ios_launch=MasterPassword/Resources/Media/ios/launch
                 printf '}'
 
                 comma=,
+            else
+                rm "$appiconset/Contents.json"
+                exit
             fi
 
         done
         printf '],"info":{"version":1,"author":"genassets"},"properties":{"pre-rendered":true}}\n'
     } > "$appiconset/Contents.json"
-}
+fi
 
-[[ "$(latest "$ios_launch"/*)" -nt "$launchimage/Contents.json" ]] && {
+if [[ "$(latest "$ios_launch"/*)" -nt "$launchimage/Contents.json" ]]; then
     rm -rf "$launchimage"; mkdir -p "$launchimage"
     {
         comma=
@@ -114,11 +119,14 @@ ios_launch=MasterPassword/Resources/Media/ios/launch
                 printf '}'
 
                 comma=,
+            else
+                rm "$launchimage/Contents.json"
+                exit
             fi
         done
         printf '],"info":{"version":1,"author":"genassets"}}\n'
     } > "$launchimage/Contents.json"
-}
+fi
 
 #for file in resources/images/mdpi/*.png; do
 #    name=${file##*/} name=${name%.*} name=${name/.9/}

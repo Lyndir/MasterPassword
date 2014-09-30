@@ -252,18 +252,24 @@ PearlEnum( MPDevelopmentFuelConsumption,
 - (void)updateFuel {
 
     CGFloat weeklyFuelConsumption = [self weeklyFuelConsumption]; /* consume x fuel / week */
-    CGFloat fuel = [[MPiOSConfig get].developmentFuel floatValue]; /* x fuel left */
+    CGFloat fuelRemaining = [[MPiOSConfig get].developmentFuelRemaining floatValue]; /* x fuel left */
+    CGFloat fuelInvested = [[MPiOSConfig get].developmentFuelInvested floatValue]; /* x fuel left */
     NSDate *now = [NSDate date];
     NSTimeInterval fuelSecondsElapsed = -[[MPiOSConfig get].developmentFuelChecked timeIntervalSinceDate:now];
     if (fuelSecondsElapsed > 3600 || ![MPiOSConfig get].developmentFuelChecked) {
         NSTimeInterval weeksElapsed = fuelSecondsElapsed / (3600 * 24 * 7 /* 1 week */); /* x weeks elapsed */
-        fuel -= weeklyFuelConsumption * weeksElapsed;
+        NSTimeInterval fuelConsumed = weeklyFuelConsumption * weeksElapsed;
+        fuelRemaining -= fuelConsumed;
+        fuelInvested += fuelConsumed;
         [MPiOSConfig get].developmentFuelChecked = now;
-        [MPiOSConfig get].developmentFuel = @(fuel);
+        [MPiOSConfig get].developmentFuelRemaining = @(fuelRemaining);
+        [MPiOSConfig get].developmentFuelInvested = @(fuelInvested);
     }
 
-    CGFloat fuelRatio = weeklyFuelConsumption == 0? 0: fuel / weeklyFuelConsumption; /* x weeks worth of fuel left */
+    CGFloat fuelRatio = weeklyFuelConsumption == 0? 0: fuelRemaining / weeklyFuelConsumption; /* x weeks worth of fuel left */
     [self.fuelMeterConstraint updateConstant:MIN( 0.5f, fuelRatio - 0.5f ) * 160]; /* -80pt = 0 weeks left, 80pt = >=1 week left */
+    self.fuelStatusLabel.text = strf( @"fuel left: %0.1f work hours\ninvested: %0.1f work hours", fuelRemaining, fuelInvested );
+    self.fuelStatusLabel.hidden = (fuelRemaining + fuelInvested) == 0;
 }
 
 - (CGFloat)weeklyFuelConsumption {
@@ -302,7 +308,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
 - (NSInteger)quantityForProductIdentifier:(NSString *)productIdentifier {
 
     if ([productIdentifier isEqualToString:MPProductFuel])
-        return (NSInteger)(MP_FUEL_HOURLY_RATE * [self weeklyFuelConsumption]);
+        return (NSInteger)(MP_FUEL_HOURLY_RATE * [self weeklyFuelConsumption] + .5f);
 
     return 1;
 }

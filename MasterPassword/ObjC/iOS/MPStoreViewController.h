@@ -20,6 +20,7 @@
 @property(weak, nonatomic) IBOutlet UITableViewCell *loadingCell;
 @property(weak, nonatomic) IBOutlet NSLayoutConstraint *fuelMeterConstraint;
 @property(weak, nonatomic) IBOutlet UIButton *fuelSpeedButton;
+@property(weak, nonatomic) IBOutlet UILabel *fuelStatusLabel;
 
 + (NSString *)latestStoreFeatures;
 

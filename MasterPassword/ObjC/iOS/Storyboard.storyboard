@@ -97,6 +97,7 @@
             <string>Exo2.0-Thin</string>
             <string>Exo2.0-Thin</string>
             <string>Exo2.0-Thin</string>
+            <string>Exo2.0-Thin</string>
         </mutableArray>
         <mutableArray key="SourceCodePro-Black.otf">
             <string>SourceCodePro-Black</string>
@@ -2824,7 +2825,7 @@ See </string>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fz2-AO-aGW">
                                                     <rect key="frame" x="20" y="254" width="335" height="119.5"/>
-                                                    <string key="text">You really love Master Password and how it's solving your password problems.  You're eager to encourage the maintenance, technical support and development of new features.  I am a one-man shop, more fuel means I can allocate more hours to Master Password.
+                                                    <string key="text">You really love Master Password and how it's solving your password problems.  You're eager to encourage the maintenance, technical support and development of new features.  I am a one-man shop, fuel enables me to allocate more work hours to Master Password.
 
 UPCOMING:
  – Safari integration
@@ -2862,6 +2863,14 @@ UPCOMING:
                                                         <action selector="toggleFuelConsumption:" destination="pdl-xv-zjX" eventType="touchUpInside" id="NkB-Dy-IeY"/>
                                                     </connections>
                                                 </button>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" misplaced="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kYb-j4-32C">
+                                                    <rect key="frame" x="20" y="64" width="121" height="26.5"/>
+                                                    <string key="text">fuel left: 0.3 work hours
+invested: 3.7 work hours</string>
+                                                    <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="aGb-QC-A92" firstAttribute="bottom" secondItem="PnG-hP-syh" secondAttribute="bottom" id="0Jx-M5-xlh"/>
@@ -2875,7 +2884,9 @@ UPCOMING:
                                                 <constraint firstItem="dsR-fr-dY4" firstAttribute="top" secondItem="SzQ-Y5-XIF" secondAttribute="top" constant="20" id="VH2-O8-CGj"/>
                                                 <constraint firstAttribute="bottom" secondItem="fz2-AO-aGW" secondAttribute="bottom" constant="20" symbolic="YES" id="Wqo-Le-AcG"/>
                                                 <constraint firstItem="eS4-59-Xny" firstAttribute="centerX" secondItem="PnG-hP-syh" secondAttribute="centerX" id="ZbQ-LX-kmS"/>
+                                                <constraint firstItem="kYb-j4-32C" firstAttribute="leading" secondItem="dsR-fr-dY4" secondAttribute="leading" id="bih-Ha-Tz7"/>
                                                 <constraint firstItem="EbU-DV-fKF" firstAttribute="leading" secondItem="Jnv-uN-xeg" secondAttribute="trailing" constant="8" symbolic="YES" id="cku-JX-4bK"/>
+                                                <constraint firstItem="kYb-j4-32C" firstAttribute="top" secondItem="dsR-fr-dY4" secondAttribute="bottom" id="eJU-g8-KuU"/>
                                                 <constraint firstItem="aGb-QC-A92" firstAttribute="centerX" secondItem="PnG-hP-syh" secondAttribute="centerX" constant="80" id="eMa-Gj-BUc"/>
                                                 <constraint firstItem="dsR-fr-dY4" firstAttribute="leading" secondItem="SzQ-Y5-XIF" secondAttribute="leading" constant="20" id="eX0-7y-eHi"/>
                                                 <constraint firstAttribute="centerX" secondItem="PnG-hP-syh" secondAttribute="centerX" id="gO5-ME-YVO"/>
@@ -2985,6 +2996,7 @@ UPCOMING:
                         <outlet property="fuelCell" destination="le3-Q5-MSO" id="oAk-6g-cFj"/>
                         <outlet property="fuelMeterConstraint" destination="eMa-Gj-BUc" id="9iF-EO-UU6"/>
                         <outlet property="fuelSpeedButton" destination="dsR-fr-dY4" id="XGI-PE-9mh"/>
+                        <outlet property="fuelStatusLabel" destination="kYb-j4-32C" id="o5R-0u-kGL"/>
                         <outlet property="generateAnswersCell" destination="l1g-Ul-Vg8" id="GlG-iZ-7FP"/>
                         <outlet property="generateLoginCell" destination="JVW-tG-xxe" id="PXM-WX-8Qe"/>
                         <outlet property="iOSIntegrationCell" destination="9Na-CL-jBq" id="LSO-OV-9KA"/>

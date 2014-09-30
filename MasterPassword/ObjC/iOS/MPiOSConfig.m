@@ -9,7 +9,7 @@
 @implementation MPiOSConfig
 
 @dynamic helpHidden, siteInfoHidden, showSetup, actionsTipShown, typeTipShown, loginNameTipShown, traceMode, dictationSearch;
-@dynamic developmentFuel, developmentFuelConsumption, developmentFuelChecked;
+@dynamic developmentFuelRemaining, developmentFuelInvested, developmentFuelConsumption, developmentFuelChecked;
 
 - (id)init {
 

@@ -715,15 +715,15 @@ log() {
         && printf >> "$_logFile" '%s' "$logMsg"
 
     # Start the spinner.
-    if [[ $type = startProgress && ! $_logSpinner ]]; then
+    if [[ $type = startProgress && ! $_logSpinner && $TERM != dumb ]]; then
         {
             set +m
-            trap 'printf %s "$show"' EXIT
-            printf %s "$hide"
-            while printf "$eel$blue$bold[$reset%s$reset$blue$bold]$reset\b\b\b" "${spinner[s++ % ${#spinner[@]}]}" && sleep .1
+            trap 'printf >&2 %s "$show"' EXIT
+            printf >&2 %s "$hide"
+            while printf >&2 "$eel$blue$bold[$reset%s$reset$blue$bold]$reset\b\b\b" "${spinner[s++ % ${#spinner[@]}]}" && sleep .1
             do :; done
         } & _logSpinner=$!
-    fi 2>/dev/null
+    fi
 
     return $exitcode
 }

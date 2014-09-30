@@ -18,7 +18,8 @@
 @property(nonatomic, retain) NSNumber *loginNameTipShown;
 @property(nonatomic, retain) NSNumber *traceMode;
 @property(nonatomic, retain) NSNumber *dictationSearch;
-@property(nonatomic, retain) NSNumber *developmentFuel;
+@property(nonatomic, retain) NSNumber *developmentFuelRemaining;
+@property(nonatomic, retain) NSNumber *developmentFuelInvested;
 @property(nonatomic, retain) NSNumber *developmentFuelConsumption;
 @property(nonatomic, retain) NSDate *developmentFuelChecked;
 
