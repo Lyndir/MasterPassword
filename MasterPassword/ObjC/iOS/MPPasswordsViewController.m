@@ -63,10 +63,14 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
     self.view.backgroundColor = [UIColor clearColor];
     [self.passwordCollectionView automaticallyAdjustInsetsForKeyboard];
-    [self.passwordsSearchBar enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
-        if ([subview isKindOfClass:[UITextField class]])
-            ((UITextField *)subview).keyboardAppearance = UIKeyboardAppearanceDark;
-    }                               recurse:YES];
+    self.passwordsSearchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    if ([self.passwordsSearchBar respondsToSelector:@selector(keyboardAppearance)])
+        self.passwordsSearchBar.keyboardAppearance = UIKeyboardAppearanceDark;
+    else
+        [self.passwordsSearchBar enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
+            if ([subview isKindOfClass:[UITextField class]])
+                ((UITextField *)subview).keyboardAppearance = UIKeyboardAppearanceDark;
+        }                               recurse:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
