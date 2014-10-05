@@ -267,15 +267,19 @@ header .box .maximized {
     height: 80%;
 }
 #app header .background {
-    background: url('../img/shot-laptop-leaning-iphone.png') center center;
+    background: url('../img/shot-laptop-leaning-iphone.jpg') center center;
     background-size: cover;
 }
+#what header,
+#security header,
 #algorithm header,
 #support header {
     height: 40%;
     
     background: #272727;
 }
+#what header .background,
+#security header .background,
 #algorithm header .background,
 #support header .background {
     width: 940px;
@@ -284,6 +288,8 @@ header .box .maximized {
     top: -10%;
     margin-left: -470px;
 }
+#what header .container,
+#security header .container,
 #algorithm header .container,
 #support header .container {
     background: radial-gradient(center, ellipse cover,  rgba(0,0,0,0.3) 50%,rgba(0,0,0,0.8) 100%);

@@ -14,7 +14,7 @@
         <link rel="shortcut icon" href="img/favicon.png" type="image/x-png" />
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
-        <link rel="stylesheet" href="css/main.css?1">
+        <link rel="stylesheet" href="css/main.css?7">
 
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
         <script src="js/vendor/prefixfree.min.js"></script>
@@ -35,18 +35,16 @@
                     <a class="brand" href="./">●●●|</a>
                     <div class="nav-collapse collapse">
                         <ul class="nav">
-                            <li><a href="./">App</a></li>
-                            <li><a href="security.html">Security</a></li>
-                            <li><a href="faq.html">FAQ</a></li>
-                            <li class="active"><a href="algorithm.html">Algorithm</a></li>
-                            <li><a href="support.html">Support</a></li>
-                            <li><a href="http://github.com/Lyndir/MasterPassword/" onclick="_gaq.push(['_trackPageview', '/outbound/github']);">Source (GPL)</a></li>
+                            <li><a href="what.html">What is it?  How do I use it?</a></li>
+                            <li><a href="security.html">Is it safe?</a></li>
+                            <li class="active"><a href="algorithm.html">How does it work?</a></li>
                         </ul>
                         <ul class="nav pull-right">
-                            <li><a href="irc://irc.freenode.net/#masterpassword" onclick="_gaq.push(['_trackPageview', '/outbound/irc']);">#masterpassword (freenode)</a></li>
+                            <li><a href="irc://irc.freenode.net/#masterpassword" onclick="_gaq.push(['_trackPageview', '/outbound/irc']);">#masterpassword</a></li>
                             <li class="divider-vertical"></li>
-                            <li><a href="MasterPassword_PressKit.zip" onclick="_gaq.push(['_trackPageview', '/outbound/presskit']);">⬇ Press Kit</a></li>
-                            <li><a href="http://itunes.apple.com/app/id510296984" onclick="goog_report_conversion('index-fixed-header');_gaq.push(['_trackPageview', '/outbound/itunes']);" class="img"><img src="img/appstore.svg" /></a></li>
+                            <li><a href="faq.html">FAQ</a></li>
+                            <li><a href="support.html">Support</a></li>
+                            <li><a href="http://github.com/Lyndir/MasterPassword/" onclick="_gaq.push(['_trackPageview', '/outbound/github']);">Source</a></li>
                         </ul>
                     </div><!--/.nav-collapse -->
                 </div>
@@ -77,42 +75,6 @@
                 <p><b>Master Password is <em>an algorithm used to generate unique passwords</em></b> for websites, email accounts, or anything else <em>based only on easily reproducible input</em>.<br />
                     The goal is a process that avoids all the problems involved with other password solutions.</p>
                     <p>The Master Password algorithm is <i>open</i>: this page describes its inner workings in detail.  We believe the following is an important lesson we should all learn: Regardless of how much encryption a solution claims, <a href="http://www.geekzone.co.nz/foobar/5823" onclick="_gaq.push(['_trackPageview', '/outbound/skype']);">if you don't know how it works, you <strong>cannot</strong> assume it is secure</a> (at least, not the kind of secure you care about).</p>
-
-                <h1>The Password Problem</h1>
-                <img class="pull-right" src="img/thumb-authenticate.png" />
-                <p>Passwords are used to authenticate you to someone else.  That means, convince someone that you really are who you say you are.  The theory is that when you two are the only ones that know a certain secret word, then the other party can be certain of your identity when you prove to them you know the secret word.</p>
-                <p>Authentication using passwords is pretty good in theory but <strong>fails when</strong> the password is either:
-                    <ul>
-                        <li>Easily guessed by an impersonator.</li>
-                        <li>Known by others.</li>
-                    </ul>
-                </p>
-                <p>So the only way to do passwords right is by inventing a secure (ie. hard to guess) and unique (ie. different for each site) password each time.</p>
-                <p>Unfortunately, secure passwords are hard to come up with and even harder to remember.</p>
-                <p>People generally give up and begin reusing passwords between sites.  The password is now no longer secret.  This can lead to your identity getting stolen when sites get hacked, you get conned by a hoax site, or you sign up with an untrustworthy website.</p>
-
-                <h1>Password Solutions</h1>
-                <p>To help with these problems, there are a bunch of apps available that remember your passwords for you.  They accomplish this by saving your passwords in an encrypted vault or by sending them off to a cloud server.</p>
-                <p>These approaches are very helpful, but they come with a few very <em>important</em> <strong>downsides</strong>:
-                    <ul>
-                        <li>Vaults need to be backed-up to avoid the risk of complete identity loss.</li>
-                        <li>Vaults need to be kept nearby and in-sync across the your devices or you won't always be able to access the password you need.</li>
-                        <li>Sending passwords to the cloud means handing your keys to a company.</li>
-                        <li>When your passwords are in the cloud they may not be available when you have no Internet access.</li>
-                    </ul>
-                </p>
-
-                <h1>Solving Availability</h1>
-                <p>Losing all your passwords or other password availability issues are frustrating and sometimes even disastrous.</p>
-                <p>Master Password solves this problem by being a <em>stateless</em> solution.  That means that no information needs to be saved in order for the program to be able to give you your password again in the future.</p>
-                <p>Since Master Password doesn't save your passwords and doesn't send them anywhere, it <strong>avoids the following risks</strong>:
-                    <ul>
-                        <li>Your passwords cannot be found in a file or even a backup.</li>
-                        <li>Your passwords cannot be intercepted during sync.</li>
-                        <li>You don't need to trust a third party with your secrets.</li>
-                        <li>You can't lose your passwords.</li>
-                    </ul>
-                </p>
             </div>
 
             <div class="thumb clearfix">

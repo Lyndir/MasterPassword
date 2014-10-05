@@ -92,7 +92,7 @@
     if (!_multiple)
         return 0;
 
-    return MAX( 2, [[self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]].questions count] );
+    return [[self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]].questions count] + 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
