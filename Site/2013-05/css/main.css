@@ -331,17 +331,31 @@ header h2 {
 }
 header .movie {
     display: none;
-    background: black;
+    background: url('../img/about.png') no-repeat scroll 50% 40px/cover black;
     position: relative;
     width: 100%;
     height: 100%;
     padding-top: 40px;
+}
+header .movie::after {
+    display: block;
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('../img/loading-spin.svg') no-repeat scroll center center transparent;
 }
 header.play {
     height: 94% !important;
 }
 header.play .movie {
     display: block;
+}
+header.play .movie video {
+    position: relative;
+    z-index: 3;
 }
 header.play h1, header.play h2, header.play .box {
     display: none;
@@ -373,10 +387,11 @@ header.play .moviecontrol {
 header.play .moviecontrol::before {
     content: "❙❙";
 }
-header .movie:before {
+header .movie::before {
     display: block;
     content: " ";
     position: absolute;
+    z-index: 4;
     top: 0;
     left: 0;
     right: 0;
@@ -389,6 +404,15 @@ header .movie video {
     height: 100%;
     height: calc(100% - 40px);
     height: auto;
+}
+header .movie .fallback {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 60px;
+    text-align: center;
+    z-index: 5;
+    color: #BBB;
 }
 footer {
     overflow: hidden;
