@@ -348,7 +348,8 @@ header .movie::after {
     background: url('../img/loading-spin.svg') no-repeat scroll center center transparent;
 }
 header.play {
-    height: 94% !important;
+    height: auto !important;
+    max-height: 94%;
 }
 header.play .movie {
     display: block;
@@ -484,4 +485,27 @@ table .box.orange {
 table .box.green {
     background: #6A6;
     border: 1px solid #3C3;
+}
+
+@media (max-width: 979px) {
+    .content {
+        width: auto;
+    }
+    header .content {
+        left: 0;
+        right: 0;
+        margin: 0;
+        padding: 20px;
+    }
+    .pull-right, .pull-left {
+        float: none;
+    }
+}
+@media (max-width: 767px) {
+    header h1 {
+        font-size: 4em;
+    }
+    header h2 {
+        font-size: 2em;
+    }
 }
