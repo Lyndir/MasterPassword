@@ -189,6 +189,8 @@ header {
     background: black;
     text-shadow: black 0 1px 50px;
     box-shadow: 0 1px 5px #000;
+
+    transition: height 0.3s;
 }
 header .container {
     position: relative;
@@ -326,6 +328,67 @@ header h1 {
 header h2 {
     font-size: 2em;
     font-style: oblique;
+}
+header .movie {
+    display: none;
+    background: black;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding-top: 40px;
+}
+header.play {
+    height: 94% !important;
+}
+header.play .movie {
+    display: block;
+}
+header.play h1, header.play h2, header.play .box {
+    display: none;
+}
+header .moviecontrol {
+    display: block;
+    position: absolute;
+    z-index: 9;
+    top: 50%;
+    left: 50%;
+    margin-top: -.5em;
+    margin-left: -.5em;
+
+    font-size: 400%;
+    vertical-align: middle;
+}
+header .moviecontrol::before {
+    content: "▶";
+}
+header .moviecontrol:hover {
+    text-decoration: none;
+}
+header.play .moviecontrol {
+    right: 1em;
+    bottom: 1em;
+    left: auto;
+    top: auto;
+}
+header.play .moviecontrol::before {
+    content: "❙❙";
+}
+header .movie:before {
+    display: block;
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('../img/video-pattern.png') repeat;
+    background: url('../img/video-bg.png') no-repeat scroll 50% 100%/cover transparent;
+}
+header .movie video {
+    width: 100%;
+    height: 100%;
+    height: calc(100% - 40px);
+    height: auto;
 }
 footer {
     overflow: hidden;

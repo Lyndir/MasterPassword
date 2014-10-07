@@ -6,3 +6,13 @@ $(function(){
     };
 });
 
+function toggleMovie() {
+    if ($("header").hasClass("play")) {
+        $("header").removeClass("play");
+        $("header video")[0].pause();
+    } else {
+        $("header").addClass("play");
+        $("header video")[0].play();
+    }
+}
+
