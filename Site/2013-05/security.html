@@ -296,7 +296,7 @@
                             <h3 id="masterkey" class="inline">The Master Key</h3>
                             <p>The first part of the process it to obtain a very strong "token" of your personal identity.  We call this token your <em>master key</em>, because it is very much like the one and only <strong>main key that opens all your doors</strong>.  It is a personal key, it represents your identity.</p>
                             <p>The master key is derived from your name and your master password, and thrown away as soon as it's no longer needed to minimize the risk of loss.</p>
-                            <p>Since it's vital that nobody else can gain access to your master key, it's important that the process of deriving the key is unsurmountably difficult.  An attacker could try a brute-force attack against your master key or password by convincing you to make an account on his website, and then guessing at your master password or your master key until he finds one that gives him your password for his fake site.</p>
+                            <p>Since it's vital that nobody else can gain access to your master key, it's important that the process of deriving the key is insurmountably difficult.  An attacker could try a brute-force attack against your master key or password by convincing you to make an account on his website, and then guessing at your master password or your master key until he finds one that gives him your password for his fake site.</p>
                             <p>These are two different types of brute-force attacks and we need to make sure to defeat both of them.</p>
                             <p>To defeat a brute-force attack against your master key, we make sure the master key is sufficiently high in entropy.  Since the master key is a 256-bit key, an attacker would now have to make up to <code>2<sup>256</sup></code> guesses, or try <code>115792089237316195423570985008687907853269984665640564039457584007913129639936</code> master keys before finding the right one.  Even at an ambitious rate of 2 billion tries per second, it would take several times the age of the universe to try all of them.
                             <p>A brute-force attack against your master password is more feasible, since your master password will be tiny compared to such a huge master key.</p>
@@ -348,9 +348,9 @@
 
                     <div class="hlvl">
                         <p><h2 class="inline">Custom passwords</h2>
-                        are sometimes still a necessity.  You may want to store a password you've been using for a long time in your manager, or your boss may have set an unchangable password on your computer for you to use.  Since Master Password's passwords are a mathematical result of your unchanging master password, it is impossible for it to be used with passwords that are created via another way.</p>
+                        are sometimes still a necessity.  You may want to store a password you've been using for a long time in your manager, or your boss may have set an unchangeable password on your computer for you to use.  Since Master Password's passwords are a mathematical result of your unchanging master password, it is impossible for it to be used with passwords that are created via another way.</p>
                         <p>The Master Password application however <em>functions as a hybrid password manager, implementing both the Master Password algorithm and a vault-like password solution</em>.  In the second mode, Master Password uses your master key to encrypt custom passwords and store the encrypted result in a vault.  Since we use the master key for this process, the result is a vault that is much harder to break into than that used by many other vault-based password solutions (specifically
-                        because the encryption key is a large key derived from your master pasword using scrypt key derivation).  As a result, <strong>this trade-off has been mitigated</strong>.</p>
+                        because the encryption key is a large key derived from your master password using scrypt key derivation).  As a result, <strong>this trade-off has been mitigated</strong>.</p>
                     </div>
 
                     <div class="hlvl">
@@ -367,7 +367,7 @@
                         the "something you know", they'll still need to obtain the "something you have" before they can break in.  The most popular example of a two-factor solution is a bank card:  Your PIN number is the secret you know, but with the PIN alone a thief can't get to your money.  They'll need to first steal your card as well.</p>
                         <p>A vault-based password manager is often considered two-factor, since it relies on your vault password as well as access to your vault file.  <em>Most security experts disagree, however</em>.  To be truly multi-factor, the security factors should come from separate categories:</p>
                         <ul>
-                            <li><strong>Knowledge factors</strong>: passwords, keyfiles, other secret data or information</li>
+                            <li><strong>Knowledge factors</strong>: passwords, key files, other secret data or information</li>
                             <li><strong>Possession factors</strong>: physical tokens, smart cards</li>
                             <li><strong>Inherence factors</strong>: biometrics</li>
                         </ul>

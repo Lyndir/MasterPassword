@@ -508,4 +508,7 @@ table .box.green {
     header h2 {
         font-size: 2em;
     }
+    header .moviecontrol {
+        top: 1em;
+    }
 }
