@@ -89,9 +89,14 @@ PearlEnum( MPDevelopmentFuelConsumption,
     MPStoreProductCell *cell = (MPStoreProductCell *)[super tableView:tableView cellForRowAtIndexPath:indexPath];
     if (cell.contentView.translatesAutoresizingMaskIntoConstraints) {
         cell.contentView.translatesAutoresizingMaskIntoConstraints = NO;
-        [cell addConstraint:
-                [NSLayoutConstraint constraintWithItem:cell attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual
-                                                toItem:cell.contentView attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
+        [cell addConstraints:@[
+                [NSLayoutConstraint constraintWithItem:cell attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual
+                                                toItem:cell.contentView attribute:NSLayoutAttributeTop multiplier:1 constant:0],
+                [NSLayoutConstraint constraintWithItem:cell attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual
+                                                toItem:cell.contentView attribute:NSLayoutAttributeRight multiplier:1 constant:0],
+                [NSLayoutConstraint constraintWithItem:cell attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual
+                                                toItem:cell.contentView attribute:NSLayoutAttributeLeft multiplier:1 constant:0],
+        ]];
     }
 
     if (indexPath.section == 0)
@@ -119,7 +124,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
     [cell layoutIfNeeded];
     [cell layoutIfNeeded];
 
-    dbg_return_tr( cell.contentView.bounds.size.height, @ );
+    dbg_return_tr( cell.contentView.bounds.size.height, @, indexPath );
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

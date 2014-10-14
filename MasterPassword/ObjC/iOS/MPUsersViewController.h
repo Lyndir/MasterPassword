@@ -34,6 +34,7 @@
 @property(weak, nonatomic) IBOutlet UIView *thanksTipContainer;
 @property(weak, nonatomic) IBOutlet UIButton *nextAvatarButton;
 @property(weak, nonatomic) IBOutlet UIButton *previousAvatarButton;
+@property(weak, nonatomic) IBOutlet NSLayoutConstraint *keyboardHeightConstraint;
 
 @property(assign, nonatomic, readonly) BOOL active;
 

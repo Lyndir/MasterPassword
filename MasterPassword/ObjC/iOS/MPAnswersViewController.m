@@ -118,7 +118,7 @@
     MPSiteQuestionEntity *question = nil;
     if ([site.questions count] > indexPath.item)
         question = site.questions[indexPath.item];
-    [cell setQuestion:question forSite:site];
+    [cell setQuestion:question forSite:site inVC:self];
 
     return cell;
 }
@@ -217,6 +217,17 @@
     } );
 }
 
+- (void)didAddQuestion:(MPSiteQuestionEntity *)question toSite:(MPSiteEntity *)site {
+
+    NSUInteger newQuestionRow = [site.questions count];
+    PearlMainQueue( ^{
+        [self.tableView beginUpdates];
+        [self.tableView insertRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:newQuestionRow inSection:1] ]
+                              withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView endUpdates];
+    } );
+}
+
 @end
 
 @implementation MPGlobalAnswersCell
@@ -247,14 +258,16 @@
 @implementation MPAnswersQuestionCell {
     NSManagedObjectID *_siteOID;
     NSManagedObjectID *_questionOID;
+    __weak MPAnswersViewController *_answersVC;
 }
 
 #pragma mark - State
 
-- (void)setQuestion:(MPSiteQuestionEntity *)question forSite:(MPSiteEntity *)site {
+- (void)setQuestion:(MPSiteQuestionEntity *)question forSite:(MPSiteEntity *)site inVC:(MPAnswersViewController *)answersVC {
 
     _siteOID = site.objectID;
     _questionOID = question.objectID;
+    _answersVC = answersVC;
 
     [self updateAnswerForQuestion:question ofSite:site];
 }
@@ -272,9 +285,11 @@
 
     NSString *keyword = textField.text;
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        BOOL didAddQuestionObject = NO;
         MPSiteEntity *site = [MPSiteEntity existingObjectWithID:_siteOID inContext:context];
         MPSiteQuestionEntity *question = [MPSiteQuestionEntity existingObjectWithID:_questionOID inContext:context];
         if (!question) {
+            didAddQuestionObject = YES;
             [site addQuestionsObject:question = [MPSiteQuestionEntity insertNewObjectInContext:context]];
             question.site = site;
         }
@@ -291,6 +306,9 @@
 
             _questionOID = question.objectID;
             [self updateAnswerForQuestion:question ofSite:site];
+
+            if (didAddQuestionObject)
+                [_answersVC didAddQuestion:question toSite:site];
         }
     }];
 }

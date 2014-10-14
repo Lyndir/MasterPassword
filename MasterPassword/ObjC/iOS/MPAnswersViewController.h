@@ -41,6 +41,6 @@
 @property(nonatomic) IBOutlet UITextField *questionField;
 @property(nonatomic) IBOutlet UITextField *answerField;
 
-- (void)setQuestion:(MPSiteQuestionEntity *)question forSite:(MPSiteEntity *)site;
+- (void)setQuestion:(MPSiteQuestionEntity *)question forSite:(MPSiteEntity *)site inVC:(MPAnswersViewController *)VC;
 
 @end

@@ -13,3 +13,9 @@
 [submodule "External/AttributedMarkdown"]
 	path = External/AttributedMarkdown
 	url = https://github.com/dreamwieber/AttributedMarkdown.git
+[submodule "External/uicolor-utilities"]
+	path = External/uicolor-utilities
+	url = git://github.com/lhunath/uicolor-utilities.git
+[submodule "External/jrswizzle"]
+	path = External/jrswizzle
+	url = git://github.com/jonmarimba/jrswizzle.git

@@ -2599,8 +2599,6 @@
 				DAFE45FC15039823003ABA7C /* Pearl-Crypto */,
 				DAFE460715039823003ABA7C /* Pearl-UIKit */,
 				DAC77CB1148291A600BCF976 /* Pearl-Prefix.pch */,
-				DACA29751705E2BD002C6C22 /* jrswizzle */,
-				DACA29B41705E2DE002C6C22 /* uicolor-utilities */,
 			);
 			path = Pearl;
 			sourceTree = "<group>";
@@ -2612,6 +2610,8 @@
 				DA32D03719D111EB004F3F0E /* KCOrderedAccessorFix */,
 				DAA141181922FED80032B392 /* iOS */,
 				DAFC5662172C57EC00CB5CC5 /* InAppSettingsKit */,
+				DACA29751705E2BD002C6C22 /* jrswizzle */,
+				DACA29B41705E2DE002C6C22 /* uicolor-utilities */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
 			);
 			name = External;
@@ -2653,8 +2653,7 @@
 				DACA29771705E2BD002C6C22 /* JRSwizzle.h */,
 				DACA298C1705E2BD002C6C22 /* JRSwizzle.m */,
 			);
-			name = jrswizzle;
-			path = External/jrswizzle;
+			path = jrswizzle;
 			sourceTree = "<group>";
 		};
 		DACA29B41705E2DE002C6C22 /* uicolor-utilities */ = {
@@ -2665,8 +2664,7 @@
 				DACA29BA1705E2DE002C6C22 /* UIColor+Expanded.m */,
 				DACA29BB1705E2DE002C6C22 /* UIColor+HSV.m */,
 			);
-			name = "uicolor-utilities";
-			path = "External/uicolor-utilities";
+			path = "uicolor-utilities";
 			sourceTree = "<group>";
 		};
 		DAFC5662172C57EC00CB5CC5 /* InAppSettingsKit */ = {

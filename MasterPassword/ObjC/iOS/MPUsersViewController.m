@@ -649,6 +649,12 @@ referenceSizeForFooterInSection:(NSInteger)section {
                     self.userSelectionContainer.alpha = 1;
                 }];
             } );
+    PearlAddNotificationObserver( UIKeyboardWillShowNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPUsersViewController *self, NSNotification *note) {
+                CGRect keyboardRect = [note.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+                CGFloat keyboardHeight = CGRectGetHeight( self.view.window.screen.bounds ) - CGRectGetMinY( keyboardRect );
+                [self.keyboardHeightConstraint updateConstant:keyboardHeight];
+            } );
 
     NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
     [UIView animateWithDuration:0.3f animations:^{

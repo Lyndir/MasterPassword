@@ -30,6 +30,7 @@ const long MPAvatarAdd = 10000;
 @property(strong, nonatomic) IBOutlet NSLayoutConstraint *avatarSizeConstraint;
 @property(strong, nonatomic) IBOutlet NSLayoutConstraint *avatarToTopConstraint;
 @property(strong, nonatomic) IBOutlet NSLayoutConstraint *avatarRaisedConstraint;
+@property(strong, nonatomic) IBOutlet NSLayoutConstraint *keyboardHeightConstraint;
 
 @end
 
@@ -66,6 +67,12 @@ const long MPAvatarAdd = 10000;
     [self observeKeyPath:@"highlighted" withBlock:^(id from, id to, NSKeyValueChange cause, MPAvatarCell *_self) {
         [_self updateAnimated:_self.superview != nil];
     }];
+    PearlAddNotificationObserver( UIKeyboardWillShowNotification, nil, [NSOperationQueue mainQueue],
+            ^(MPAvatarCell *self, NSNotification *note) {
+                CGRect keyboardRect = [note.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+                CGFloat keyboardHeight = CGRectGetHeight( self.window.screen.bounds ) - CGRectGetMinY( keyboardRect );
+                [self.keyboardHeightConstraint updateConstant:keyboardHeight];
+            } );
 
     CABasicAnimation *toShadowOpacityAnimation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
     toShadowOpacityAnimation.toValue = @0.2f;
@@ -99,6 +106,7 @@ const long MPAvatarAdd = 10000;
 - (void)dealloc {
 
     [self removeKeyPathObservers];
+    PearlRemoveNotificationObservers();
 }
 
 #pragma mark - Properties
@@ -264,7 +272,7 @@ const long MPAvatarAdd = 10000;
                              case MPAvatarModeRaisedAndMinimized: {
                                  [self.avatarSizeConstraint updateConstant:36];
                                  [self.avatarRaisedConstraint updatePriority:UILayoutPriorityDefaultLow];
-                                 [self.avatarToTopConstraint updatePriority:UILayoutPriorityDefaultHigh];
+                                 [self.avatarToTopConstraint updatePriority:UILayoutPriorityDefaultHigh + 2];
                                  [self.nameToCenterConstraint updatePriority:UILayoutPriorityDefaultHigh];
                                  self.nameContainer.alpha = 0;
                                  self.nameContainer.backgroundColor = [UIColor blackColor];
