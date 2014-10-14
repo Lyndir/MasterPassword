@@ -516,7 +516,7 @@
             TimeToCrack timeToCrack;
             NSString *timeToCrackString = nil;
             id<MPAlgorithm> algorithm = site.algorithm?: MPAlgorithmDefault;
-            MPAttacker attackHardware = [[MPConfig get].siteAttacker unsignedIntegerValue];
+            MPAttacker attackHardware = [[MPConfig get].siteAttacker integerValue];
             if ([algorithm timeToCrack:&timeToCrack passwordOfType:site.type byAttacker:attackHardware] ||
                 [algorithm timeToCrack:&timeToCrack passwordString:password byAttacker:attackHardware])
                 timeToCrackString = NSStringFromTimeToCrack( timeToCrack );

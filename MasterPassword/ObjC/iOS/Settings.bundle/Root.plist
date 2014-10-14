@@ -126,7 +126,7 @@ To see a site&apos;s password anyway, tap and hold your finger down for a while 
 				<integer>0</integer>
 				<integer>1</integer>
 				<integer>2</integer>
-				<string>3</string>
+				<integer>3</integer>
 			</array>
 		</dict>
 		<dict>
