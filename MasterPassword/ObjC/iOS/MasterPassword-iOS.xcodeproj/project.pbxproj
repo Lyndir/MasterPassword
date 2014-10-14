@@ -3930,7 +3930,7 @@
 					Reveal,
 				);
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "78fbee53-abe7-4a47-b917-c223df3a6952";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3251b7d3-04df-4c8e-a410-d020ffc92d10";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -3956,7 +3956,7 @@
 					"$(inherited)",
 				);
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "d02e889e-2701-47eb-b843-4f16c431b284";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "59b587d0-3ef3-4691-9f12-c48f7f283002";
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -4063,7 +4063,7 @@
 					"$(inherited)",
 				);
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "48f9bae8-b80e-41c7-8792-663102bed54f";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a1d8cfc8-b8db-4544-af34-28cc75e46c40";
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
 				TARGETED_DEVICE_FAMILY = 1;
