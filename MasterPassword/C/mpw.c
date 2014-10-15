@@ -1,4 +1,6 @@
-#define _WITH_GETLINE
+#define _ISOC11_SOURCE 1
+#define __STDC_VERSION__ 201112L
+
 #include <stdio.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>

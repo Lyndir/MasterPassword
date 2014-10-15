@@ -31,12 +31,12 @@ if ! [[ -e lib/scrypt/scrypt-scryptenc.o ]]; then
         if [[ ! -e configure.ac ]]; then
             # libscrypt needs sources.
             source .source
-            if hash git-svn; then
+            if hash git-svn 2>/dev/null; then
                 echo
                 echo "Fetching libscrypt using git-svn..."
                 git-svn clone --prefix=origin/ --stdlayout "$svn" .
                 printf '%s' "$(git describe --always)" > scrypt-version
-            elif hash svn; then
+            elif hash svn 2>/dev/null; then
                 echo
                 echo "Fetching libscrypt using svn..."
                 svn checkout http://scrypt.googlecode.com/svn/trunk/ .
@@ -73,19 +73,21 @@ echo
 echo "Building mpw..."
 
 cc() {
-    if hash llvm-gcc; then
-        llvm-gcc -Qunused-arguments "$@"
+    if hash llvm-gcc 2>/dev/null; then
+        llvm-gcc -std=c11 "$@"
     else
-        gcc "$@"
+        gcc -std=gnu99 "$@"
     fi
 }
 
 
 ### MPW
 
-options+=(
+CFLAGS=(
     # include paths.
     -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva"
+)
+LDFLAGS=(
     # library paths.
     -L"." -L"lib/scrypt"
     # link libraries.
@@ -98,6 +100,6 @@ options+=(
     -l"crypto"
 )
 
-cc "${options[@]}" -std=c99 -c types.c -o types.o "$@"
-cc "${options[@]}" -std=c99 -l"types.o" mpw.c -o mpw "$@"
+cc "${CFLAGS[@]}"                 "${options[@]}" -c types.c -o types.o "$@"
+cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "${options[@]}" "types.o" mpw.c -o mpw "$@"
 echo "done!  Now run ./install or use ./mpw"
