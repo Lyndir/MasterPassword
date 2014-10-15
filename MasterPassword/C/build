@@ -13,9 +13,14 @@
 cd "${BASH_SOURCE%/*}"
 set -e
 
+# optional features.
 options=(
-    # optional features.
     -DDEBUG                     # Turn on debugging verbosity.
+)
+# available targets.
+targets=(
+    mpw                         # C CLI version of Master Password.
+    mpw-bench                   # C CLI Master Password benchmark utility.
 )
 
 
@@ -67,8 +72,67 @@ if ! [[ -e lib/scrypt/scrypt-scryptenc.o ]]; then
     popd
 fi
 
-echo
-echo "Building mpw..."
+
+### MPW
+mpw() {
+    CFLAGS=(
+        # include paths
+        -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva"
+    )
+    LDFLAGS=(
+        # library paths
+        -L"." -L"lib/scrypt"
+        # link libraries
+        -l"crypto"
+        # scrypt
+        "lib/scrypt/scrypt-crypto_aesctr.o"
+        "lib/scrypt/scrypt-sha256.o"
+        "lib/scrypt/scrypt-crypto_scrypt-nosse.o"
+        "lib/scrypt/scrypt-memlimit.o"
+        "lib/scrypt/scrypt-scryptenc_cpuperf.o"
+        "lib/scrypt/scrypt-scryptenc.o"
+    )
+
+    cc "${CFLAGS[@]}"                 "${options[@]}" -c types.c -o types.o "$@"
+    cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "${options[@]}" "types.o" mpw.c -o mpw "$@"
+    echo "done!  Now run ./install or use ./mpw"
+}
+
+
+### MPW-BENCH
+mpw-bench() {
+    CFLAGS=(
+        # include paths
+        -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva"
+        -I"lib/bcrypt" 
+    )
+    LDFLAGS=(
+        # library paths
+        -L"." -L"lib/scrypt"
+        -L"lib/bcrypt"
+        # libraries
+        -l"crypto"
+        # scrypt
+        "lib/scrypt/scrypt-crypto_aesctr.o"
+        "lib/scrypt/scrypt-sha256.o"
+        "lib/scrypt/scrypt-crypto_scrypt-nosse.o"
+        "lib/scrypt/scrypt-memlimit.o"
+        "lib/scrypt/scrypt-scryptenc_cpuperf.o"
+        "lib/scrypt/scrypt-scryptenc.o"
+        # bcrypt
+        "lib/bcrypt/crypt_blowfish.o"
+        "lib/bcrypt/crypt_gensalt.o"
+        "lib/bcrypt/wrapper.o"
+        "lib/bcrypt/x86.o"
+    )
+
+    cc "${CFLAGS[@]}"                 "${options[@]}" -c types.c -o types.o "$@"
+    cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "${options[@]}" "types.o" mpw-bench.c -o mpw-bench "$@"
+    echo "done!  Now use ./mpw-bench"
+}
+
+
+### TARGETS
 
 cc() {
     if hash llvm-gcc 2>/dev/null; then
@@ -78,26 +142,8 @@ cc() {
     fi
 }
 
-
-### MPW
-
-CFLAGS=(
-    # include paths.
-    -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva"
-)
-LDFLAGS=(
-    # library paths.
-    -L"." -L"lib/scrypt"
-    # link libraries.
-    "lib/scrypt/scrypt-crypto_aesctr.o"
-    "lib/scrypt/scrypt-sha256.o"
-    "lib/scrypt/scrypt-crypto_scrypt-nosse.o"
-    "lib/scrypt/scrypt-memlimit.o"
-    "lib/scrypt/scrypt-scryptenc_cpuperf.o"
-    "lib/scrypt/scrypt-scryptenc.o"
-    -l"crypto"
-)
-
-cc "${CFLAGS[@]}"                 "${options[@]}" -c types.c -o types.o "$@"
-cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "${options[@]}" "types.o" mpw.c -o mpw "$@"
-echo "done!  Now run ./install or use ./mpw"
+for target in "${targets[@]}"; do
+    echo
+    echo "Building target: $target..."
+    "$target" "$@"
+done
