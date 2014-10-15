@@ -197,7 +197,7 @@ int main(int argc, char *const argv[]) {
         EditLine *e = el_init("mpw", stdin, stdout, stderr);
         int count = 0;
         char *line = el_gets(e, &count);
-        masterPassword = strsep(&line, "\n");
+        masterPassword = strdup(strsep(&line, "\n"));
         el_end(e);
 
         if (count < 0) {
