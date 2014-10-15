@@ -23,6 +23,12 @@
 #include <crypto/crypto_scrypt.h>
 #include "types.h"
 
+#if defined(READLINE)
+#include <readline/readline.h>
+#elif defined(EDITLINE)
+#include <histedit.h>
+#endif
+
 #define MP_N                32768
 #define MP_r                8
 #define MP_p                2
@@ -98,8 +104,7 @@ int main(int argc, char *const argv[]) {
     const char *siteCounterString = getenv( MP_env_sitecounter );
 
     // Read the options.
-    char opt;
-    while ((opt = getopt(argc, argv, "u:t:c:v:h")) != -1)
+    for (int opt; (opt = getopt(argc, argv, "u:t:c:v:h")) != -1;)
       switch (opt) {
           case 'h':
               usage();
@@ -172,22 +177,35 @@ int main(int argc, char *const argv[]) {
     }
     trc("mpwConfigPath: %s\n", mpwConfigPath);
     FILE *mpwConfig = fopen(mpwConfigPath, "r");
-    if (!mpwConfig) {
-        fprintf(stderr, "Couldn't open configuration file: %s: %d\n", mpwConfigPath, errno);
-        return 1;
-    }
     free(mpwConfigPath);
-    char *line = NULL;
-    size_t linecap = 0;
-    ssize_t linelen;
-    while ((linelen = getline(&line, &linecap, mpwConfig)) > 0)
-        if (strcmp(strsep(&line, ":"), userName) == 0) {
-            masterPassword = strsep(&line, "\n");
-            break;
+    if (mpwConfig) {
+        char *line = NULL;
+        size_t linecap = 0;
+        ssize_t linelen;
+        while ((linelen = getline(&line, &linecap, mpwConfig)) > 0)
+            if (strcmp(strsep(&line, ":"), userName) == 0) {
+                masterPassword = strsep(&line, "\n");
+                break;
+            }
+    }
+    while (!masterPassword) {
+#if defined(READLINE)
+        masterPassword = readline( "Your master password: " );
+#elif defined(EDITLINE)
+        EditLine *e = el_init("mpw", stdin, stdout, stderr);
+        int count = 0;
+        char *line = el_gets(e, &count);
+        masterPassword = strsep(&line, "\n");
+        el_end(e);
+
+        if (count < 0) {
+            fprintf(stderr, "Could not read master password: %d\n", errno);
+            continue;
         }
-    if (!masterPassword) {
+#else
         fprintf(stderr, "Missing master password for user: %s\n", userName);
         return 1;
+#endif
     }
     trc("masterPassword: %s\n", masterPassword);
 

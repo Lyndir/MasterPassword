@@ -1,7 +1,27 @@
 #!/usr/bin/env bash
-# Run with -DDEBUG to enable trace-level output.
+#
+# TROUBLESHOOTING
+#   - See the 'options' array.  Comment/uncomment lines as you see fit.
+#   - If you see 'undefined reference to `clock_gettime'', try ./build -lrt instead.
+#
+# BUGS
+#   masterpassword@lyndir.com
+#
+# AUTHOR
+#   Maarten Billemont
+#
 cd "${BASH_SOURCE%/*}"
 set -e
+
+options=(
+    # optional features.
+    -DDEBUG                     # Turn on debugging verbosity.
+   #-DEDITLINE -ledit -ltermcap # Use editline for reading the master password.
+    -DREADLINE -lreadline       # Use readline for reading the master password.
+)
+
+
+### DEPENDENCIES
 
 if ! [[ -e lib/scrypt/scrypt-scryptenc.o ]]; then
     # libscrypt not built.
@@ -52,23 +72,32 @@ fi
 echo
 echo "Building mpw..."
 
-# libscrypt built.
-deps=(
+cc() {
+    if hash llvm-gcc; then
+        llvm-gcc -Qunused-arguments "$@"
+    else
+        gcc "$@"
+    fi
+}
+
+
+### MPW
+
+options+=(
     # include paths.
     -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva"
     # library paths.
     -L"." -L"lib/scrypt"
     # link libraries.
-    -l "scrypt-crypto_aesctr.o"
-    -l "scrypt-sha256.o"
-    -l "scrypt-crypto_scrypt-nosse.o"
-    -l "scrypt-memlimit.o"
-    -l "scrypt-scryptenc_cpuperf.o"
-    -l "scrypt-scryptenc.o"
-    -l "crypto"
+    "lib/scrypt/scrypt-crypto_aesctr.o"
+    "lib/scrypt/scrypt-sha256.o"
+    "lib/scrypt/scrypt-crypto_scrypt-nosse.o"
+    "lib/scrypt/scrypt-memlimit.o"
+    "lib/scrypt/scrypt-scryptenc_cpuperf.o"
+    "lib/scrypt/scrypt-scryptenc.o"
+    -l"crypto"
 )
 
-# build mpw.
-gcc "${deps[@]}" -Qunused-arguments -c types.c -o types.o "$@"
-gcc "${deps[@]}" -Qunused-arguments -l"types.o" mpw.c -o mpw "$@"
+cc "${options[@]}" -std=c99 -c types.c -o types.o "$@"
+cc "${options[@]}" -std=c99 -l"types.o" mpw.c -o mpw "$@"
 echo "done!  Now run ./install or use ./mpw"
