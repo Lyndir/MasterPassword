@@ -15,7 +15,7 @@ set -e
 
 # optional features.
 options=(
-    -DDEBUG                     # Turn on debugging verbosity.
+   #-DDEBUG                     # Turn on debugging verbosity.
 )
 # available targets.
 targets=(
