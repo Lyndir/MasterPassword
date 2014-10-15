@@ -16,8 +16,6 @@ set -e
 options=(
     # optional features.
     -DDEBUG                     # Turn on debugging verbosity.
-   #-DEDITLINE -ledit -ltermcap # Use editline for reading the master password.
-    -DREADLINE -lreadline       # Use readline for reading the master password.
 )
 
 
@@ -74,7 +72,7 @@ echo "Building mpw..."
 
 cc() {
     if hash llvm-gcc 2>/dev/null; then
-        llvm-gcc -std=c11 "$@"
+        llvm-gcc "$@"
     else
         gcc -std=gnu99 "$@"
     fi

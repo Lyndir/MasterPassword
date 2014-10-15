@@ -1,5 +1,4 @@
-#define _ISOC11_SOURCE 1
-#define __STDC_VERSION__ 201112L
+#define _GNU_SOURCE
 
 #include <stdio.h>
 #include <sys/ioctl.h>
@@ -190,32 +189,15 @@ int main(int argc, char *const argv[]) {
                 break;
             }
     }
-    while (!masterPassword) {
-#if defined(READLINE)
-        masterPassword = readline( "Your master password: " );
-#elif defined(EDITLINE)
-        EditLine *e = el_init("mpw", stdin, stdout, stderr);
-        int count = 0;
-        char *line = el_gets(e, &count);
-        masterPassword = strdup(strsep(&line, "\n"));
-        el_end(e);
-
-        if (count < 0) {
-            fprintf(stderr, "Could not read master password: %d\n", errno);
-            continue;
-        }
-#else
-        fprintf(stderr, "Missing master password for user: %s\n", userName);
-        return 1;
-#endif
-    }
+    while (!masterPassword)
+        masterPassword = getpass( "Your master password: " );
     trc("masterPassword: %s\n", masterPassword);
 
     // Calculate the master key salt.
     const char *mpKeyScope = ScopeForVariant(MPElementVariantPassword);
     trc("key scope: %s\n", mpKeyScope);
     const uint32_t n_userNameLength = htonl(strlen(userName));
-    size_t masterKeySaltLength = strlen(mpKeyScope) + sizeof(n_userNameLength) + strlen(userName);
+    const size_t masterKeySaltLength = strlen(mpKeyScope) + sizeof(n_userNameLength) + strlen(userName);
     char *masterKeySalt = malloc( masterKeySaltLength );
     if (!masterKeySalt) {
         fprintf(stderr, "Could not allocate master key salt: %d\n", errno);
@@ -251,7 +233,7 @@ int main(int argc, char *const argv[]) {
     trc("site scope: %s\n", mpSiteScope);
     const uint32_t n_siteNameLength = htonl(strlen(siteName));
     const uint32_t n_siteCounter = htonl(siteCounter);
-    size_t sitePasswordInfoLength = strlen(mpSiteScope) + sizeof(n_siteNameLength) + strlen(siteName) + sizeof(n_siteCounter);
+    const size_t sitePasswordInfoLength = strlen(mpSiteScope) + sizeof(n_siteNameLength) + strlen(siteName) + sizeof(n_siteCounter);
     char *sitePasswordInfo = malloc( sitePasswordInfoLength );
     if (!sitePasswordInfo) {
         fprintf(stderr, "Could not allocate site seed: %d\n", errno);
