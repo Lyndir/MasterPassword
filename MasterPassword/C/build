@@ -1,9 +1,74 @@
 #!/usr/bin/env bash
 # Run with -DDEBUG to enable trace-level output.
+cd "${BASH_SOURCE%/*}"
+set -e
 
-[[ -e lib/scrypt/scryptenc.o ]] || { echo >&2 "Missing scrypt.  First get and build the scrypt source in lib/scrypt from <$(<lib/scrypt/.source)>.\n"; exit 1; }
+if ! [[ -e lib/scrypt/scrypt-scryptenc.o ]]; then
+    # libscrypt not built.
+    pushd lib/scrypt
+    if [[ ! -e configure ]]; then
+        # libscrypt needs configure.
+        if [[ ! -e configure.ac ]]; then
+            # libscrypt needs sources.
+            source .source
+            if hash git-svn; then
+                echo
+                echo "Fetching libscrypt using git-svn..."
+                git-svn clone --prefix=origin/ --stdlayout "$svn" .
+                printf '%s' "$(git describe --always)" > scrypt-version
+            elif hash svn; then
+                echo
+                echo "Fetching libscrypt using svn..."
+                svn checkout http://scrypt.googlecode.com/svn/trunk/ .
+                printf 'r%s' "$(svn info | awk '/^Revision:/{ print $2 }')" > scrypt-version
+            else
+                echo >&2 "error: Missing git-svn or svn."
+                echo >&2 "error: Please install either or manually check out the sources"
+                echo >&2 "error: from: $home"
+                echo >&2 "error: into: $PWD"
+                exit 1
+            fi
+        fi
 
-deps=( -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva" -l "crypto_aesctr.o" -l "sha256.o" -l "crypto_scrypt-nosse.o" -l "memlimit.o" -l "scryptenc_cpuperf.o" -l"scryptenc.o" -l"crypto" -L"." -L"lib/scrypt" )
+        # Sources available.
+        echo
+        echo "Generating libscrypt's build scripts..."
+        aclocal
+        autoheader
+        autoconf
+        mkdir -p config.aux
+        automake --add-missing
+    fi
+    
+    # configure available.
+    echo
+    echo "Building libscrypt..."
+    ./configure
+    make
 
+    popd
+fi
+
+echo
+echo "Building mpw..."
+
+# libscrypt built.
+deps=(
+    # include paths.
+    -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva"
+    # library paths.
+    -L"." -L"lib/scrypt"
+    # link libraries.
+    -l "scrypt-crypto_aesctr.o"
+    -l "scrypt-sha256.o"
+    -l "scrypt-crypto_scrypt-nosse.o"
+    -l "scrypt-memlimit.o"
+    -l "scrypt-scryptenc_cpuperf.o"
+    -l "scrypt-scryptenc.o"
+    -l "crypto"
+)
+
+# build mpw.
 gcc "${deps[@]}" -Qunused-arguments -c types.c -o types.o "$@"
 gcc "${deps[@]}" -Qunused-arguments -l"types.o" mpw.c -o mpw "$@"
+echo "done!  Now run ./install or use ./mpw"
