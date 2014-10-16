@@ -21,7 +21,7 @@ options=(
 # available targets.
 targets=(
     mpw                         # C CLI version of Master Password.
-    mpw-bench                   # C CLI Master Password benchmark utility.
+   #mpw-bench                   # C CLI Master Password benchmark utility.
 )
 
 
