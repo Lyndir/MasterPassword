@@ -34,5 +34,6 @@ MasterPassword/Java/**/target
 # C
 MasterPassword/C/*.o
 MasterPassword/C/mpw
+MasterPassword/C/mpw-bench
 MasterPassword/C/lib/*/*
 !MasterPassword/C/lib/*/.source

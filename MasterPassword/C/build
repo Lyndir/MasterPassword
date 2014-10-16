@@ -11,6 +11,7 @@
 #   Maarten Billemont
 #
 cd "${BASH_SOURCE%/*}"
+shopt -s extglob
 set -e
 
 # optional features.
@@ -26,55 +27,105 @@ targets=(
 
 ### DEPENDENCIES
 
-if ! [[ -e lib/scrypt/scrypt-scryptenc.o ]]; then
-    # libscrypt not built.
-    pushd lib/scrypt
-    if [[ ! -e configure ]]; then
-        # libscrypt needs configure.
-        if [[ ! -e configure.ac ]]; then
-            # libscrypt needs sources.
-            source .source
-            if hash git-svn 2>/dev/null; then
-                echo
-                echo "Fetching libscrypt using git-svn..."
-                git-svn clone --prefix=origin/ --stdlayout "$svn" .
-                printf '%s' "$(git describe --always)" > scrypt-version
-            elif hash svn 2>/dev/null; then
-                echo
-                echo "Fetching libscrypt using svn..."
-                svn checkout http://scrypt.googlecode.com/svn/trunk/ .
-                printf 'r%s' "$(svn info | awk '/^Revision:/{ print $2 }')" > scrypt-version
-            else
-                echo >&2 "error: Missing git-svn or svn."
-                echo >&2 "error: Please install either or manually check out the sources"
-                echo >&2 "error: from: $home"
-                echo >&2 "error: into: $PWD"
-                exit 1
+fetch() {
+    if hash wget 2>/dev/null; then
+        wget -O "${1##*/}" "$1"
+    elif hash curl 2>/dev/null; then
+        curl "$1" > "${1##*/}"
+    fi
+}
+fetchSource() (
+    echo
+    echo "Fetching dependency ${PWD##*/}..."
+    source .source
+
+    if [[ $git ]] && hash git 2>/dev/null; then
+        echo
+        echo "Fetching ${PWD##*/} using git..."
+        git-svn clone --prefix=origin/ --stdlayout "$svn" .
+        printf '%s' "$(git describe --always)" > "${PWD##*/}-version"
+        return
+
+    elif [[ $svn ]] && hash git-svn 2>/dev/null; then
+        echo
+        echo "Fetching ${PWD##*/} using git-svn..."
+        git-svn clone --prefix=origin/ --stdlayout "$svn" .
+        printf '%s' "$(git describe --always)" > "${PWD##*/}-version"
+        return
+
+    elif [[ $svn ]] && hash svn 2>/dev/null; then
+        echo
+        echo "Fetching ${PWD##*/} using svn..."
+        svn checkout "$svn/trunk" .
+        printf 'r%s' "$(svn info | awk '/^Revision:/{ print $2 }')" > "${PWD##*/}-version"
+        return
+
+    elif [[ $pkg ]]; then
+        set -x
+        fetch "$pkg"
+        if [[ $pkg = *.tar.gz || $pkg = *.tgz ]]; then
+            tar -xvzf "${pkg##*/}"
+            files=(!("${pkg##*/}"))
+            if [[ -d $files ]] && (( ${#files[@]} == 1 )); then
+                mv "$files"/* .
+                rmdir "$files"
             fi
         fi
+        return
 
-        # Sources available.
-        echo
-        echo "Generating libscrypt's build scripts..."
-        aclocal
-        autoheader
-        autoconf
-        mkdir -p config.aux
-        automake --add-missing
     fi
-    
-    # configure available.
-    echo
-    echo "Building libscrypt..."
-    ./configure
-    make
 
+    echo >&2 "error: Missing git-svn or svn."
+    echo >&2 "error: Please install either or manually check out the sources"
+    echo >&2 "error: from: $home"
+    echo >&2 "error: into: $PWD"
+    exit 1
+)
+depend() {
+
+    echo
+    echo "Checking dependency $1..."
+    objects=( "lib/$1"/*.o )
+    [[ -e $objects ]] && return
+
+    pushd "lib/$1"
+    files=( * )
+    [[ -e $files ]] || fetchSource
+
+    echo
+    echo "Configuring dependency $1..."
+    if [[ -e configure.ac ]]; then
+        if [[ ! -e configure ]]; then
+            # create configure using autotools.
+            aclocal
+            autoheader
+            autoconf
+            mkdir -p config.aux
+            automake --add-missing
+        fi
+    fi
+
+    if [[ -e configure ]]; then
+        ./configure
+    fi
+
+    echo
+    echo "Building dependency $1..."
+    if [[ -e Makefile ]]; then
+        make
+    else
+        echo >&2 "error: Don't know how to build: $1"
+        exit 1
+    fi
     popd
-fi
+}
 
 
 ### MPW
 mpw() {
+    depend scrypt
+
+    echo "Building target: $target..."
     CFLAGS=(
         # include paths
         -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva"
@@ -101,6 +152,10 @@ mpw() {
 
 ### MPW-BENCH
 mpw-bench() {
+    depend scrypt
+    depend bcrypt
+
+    echo "Building target: $target..."
     CFLAGS=(
         # include paths
         -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva"
@@ -144,6 +199,5 @@ cc() {
 
 for target in "${targets[@]}"; do
     echo
-    echo "Building target: $target..."
     "$target" "$@"
 done
