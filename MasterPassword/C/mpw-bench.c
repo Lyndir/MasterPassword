@@ -110,7 +110,8 @@ int main(int argc, char *const argv[]) {
         }
         memset(sitePasswordSeed, 0, sizeof(sitePasswordSeed));
 
-        fprintf( stderr, "\riteration %d / %d..", i, iterations );
+        if (i % 1 == 0)
+            fprintf( stderr, "\rmpw: iteration %d / %d..", i, iterations );
     }
 
     // Output timing results.
@@ -122,7 +123,8 @@ int main(int argc, char *const argv[]) {
     long long secs = (endTime.tv_sec - startTime.tv_sec);
     long long usecs = (endTime.tv_usec - startTime.tv_usec);
     double elapsed = secs + usecs / 1000000.0;
-    fprintf( stdout, "Master Password: %d iterations in %llds %lldµs -> %.2f/s\n", iterations, secs, usecs, iterations / elapsed );
+    double mpwSpeed = iterations / elapsed;
+    fprintf( stdout, " done.  %d iterations in %llds %lldµs -> %.2f/s\n", iterations, secs, usecs, mpwSpeed );
 
     // Start SHA-256
     if (gettimeofday(&startTime, NULL) != 0) {
@@ -134,7 +136,9 @@ int main(int argc, char *const argv[]) {
     uint8_t hash[32];
     for (int i = 0; i < iterations; ++i) {
         SHA256_Buf(masterPassword, strlen(masterPassword), hash);
-        fprintf( stderr, "\riteration %d / %d..", i, iterations );
+
+        if (i % 1000 == 0)
+            fprintf( stderr, "\rsha256: iteration %d / %d..", i, iterations );
     }
 
     // Output timing results.
@@ -145,7 +149,8 @@ int main(int argc, char *const argv[]) {
     secs = (endTime.tv_sec - startTime.tv_sec);
     usecs = (endTime.tv_usec - startTime.tv_usec);
     elapsed = secs + usecs / 1000000.0;
-    fprintf( stdout, "SHA-256: %d iterations in %llds %lldµs -> %.2f/s\n", iterations, secs, usecs, iterations / elapsed );
+    double sha256Speed = iterations / elapsed;
+    fprintf( stdout, " done.  %d iterations in %llds %lldµs -> %.2f/s\n", iterations, secs, usecs, sha256Speed );
 
     // Start BCrypt
     if (gettimeofday(&startTime, NULL) != 0) {
@@ -157,7 +162,9 @@ int main(int argc, char *const argv[]) {
     iterations = 600;
     for (int i = 0; i < iterations; ++i) {
         crypt(masterPassword, crypt_gensalt("$2b$", bcrypt_cost, userName, strlen(userName)));
-        fprintf( stderr, "\riteration %d / %d..", i, iterations );
+
+        if (i % 10 == 0)
+            fprintf( stderr, "\rbcrypt (cost %d): iteration %d / %d..", bcrypt_cost, i, iterations );
     }
 
     // Output timing results.
@@ -168,7 +175,13 @@ int main(int argc, char *const argv[]) {
     secs = (endTime.tv_sec - startTime.tv_sec);
     usecs = (endTime.tv_usec - startTime.tv_usec);
     elapsed = secs + usecs / 1000000.0;
-    fprintf( stdout, "BCrypt (cost %d): %d iterations in %llds %lldµs -> %.2f/s\n", bcrypt_cost, iterations, secs, usecs, iterations / elapsed );
+    double bcrypt9Speed = iterations / elapsed;
+    fprintf( stdout, " done.  %d iterations in %llds %lldµs -> %.2f/s\n", iterations, secs, usecs, bcrypt9Speed );
+
+    // Summarize.
+    fprintf( stdout, "\n== SUMMARY ==\nOn this machine,\n" );
+    fprintf( stdout, "mpw is %f times slower than sha256\n", sha256Speed / mpwSpeed );
+    fprintf( stdout, "mpw is %f times slower than bcrypt (cost 9)\n", bcrypt9Speed / mpwSpeed );
 
     return 0;
 }
