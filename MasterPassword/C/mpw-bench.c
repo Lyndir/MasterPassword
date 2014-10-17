@@ -132,8 +132,10 @@ int main(int argc, char *const argv[]) {
 
     iterations = 50000000;
     uint8_t hash[32];
-    for (int i = 0; i < iterations; ++i)
+    for (int i = 0; i < iterations; ++i) {
         SHA256_Buf(masterPassword, strlen(masterPassword), hash);
+        fprintf( stderr, "\riteration %d / %d..", i, iterations );
+    }
 
     // Output timing results.
     if (gettimeofday(&endTime, NULL) != 0) {
@@ -153,8 +155,10 @@ int main(int argc, char *const argv[]) {
 
     int bcrypt_cost = 9;
     iterations = 600;
-    for (int i = 0; i < iterations; ++i)
+    for (int i = 0; i < iterations; ++i) {
         crypt(masterPassword, crypt_gensalt("$2b$", bcrypt_cost, userName, strlen(userName)));
+        fprintf( stderr, "\riteration %d / %d..", i, iterations );
+    }
 
     // Output timing results.
     if (gettimeofday(&endTime, NULL) != 0) {
