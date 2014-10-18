@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -e
+
+cd "${BASH_SOURCE%/*}"
+mpwArchive=mpw-$(git describe --tags --long --dirty).tar.gz
+[[ -e $mpwArchive ]] && echo "WARNING: $mpwArchive already exists.  Will overwrite."
+read -n1 -p "Will prepare and release $mpwArchive.  Press a key to continue or ^C to abort."
+
+git ls-files -z . | xargs -0 tar -cvzf "$mpwArchive"
+echo "$mpwArchive ready, SHA256: $(openssl sha -sha256 < "$mpwArchive")"
+
+cd ../../Site/current
+ln -sf "../../MasterPassword/C/$mpwArchive"
+[[ -e $_ ]]
+echo "Linked from site, please update your hyperlinks to point to http://masterpasswordapp.com/$mpwArchive"

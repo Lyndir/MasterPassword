@@ -33,6 +33,7 @@ MasterPassword/Java/**/target
 
 # C
 MasterPassword/C/*.o
+MasterPassword/C/mpw-*.tar.gz
 MasterPassword/C/mpw
 MasterPassword/C/mpw-bench
 MasterPassword/C/lib/*/*
