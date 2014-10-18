@@ -36,32 +36,33 @@ fetch() {
 }
 fetchSource() (
     echo
-    echo "Fetching dependency ${PWD##*/}..."
+    echo "Fetching dependency: ${PWD##*/}..."
     source .source
 
     if [[ $git ]] && hash git 2>/dev/null; then
         echo
-        echo "Fetching ${PWD##*/} using git..."
+        echo "Fetching: ${PWD##*/}, using git..."
         git-svn clone --prefix=origin/ --stdlayout "$svn" .
         printf '%s' "$(git describe --always)" > "${PWD##*/}-version"
         return
 
     elif [[ $svn ]] && hash git-svn 2>/dev/null; then
         echo
-        echo "Fetching ${PWD##*/} using git-svn..."
+        echo "Fetching: ${PWD##*/}, using git-svn..."
         git-svn clone --prefix=origin/ --stdlayout "$svn" .
         printf '%s' "$(git describe --always)" > "${PWD##*/}-version"
         return
 
     elif [[ $svn ]] && hash svn 2>/dev/null; then
         echo
-        echo "Fetching ${PWD##*/} using svn..."
+        echo "Fetching: ${PWD##*/}, using svn..."
         svn checkout "$svn/trunk" .
         printf 'r%s' "$(svn info | awk '/^Revision:/{ print $2 }')" > "${PWD##*/}-version"
         return
 
     elif [[ $pkg ]]; then
-        set -x
+        echo
+        echo "Fetching: ${PWD##*/}, using package..."
         fetch "$pkg"
         if [[ $pkg = *.tar.gz || $pkg = *.tgz ]]; then
             tar -xvzf "${pkg##*/}"
@@ -72,7 +73,6 @@ fetchSource() (
             fi
         fi
         return
-
     fi
 
     echo >&2 "error: Missing git-svn or svn."
@@ -84,7 +84,7 @@ fetchSource() (
 depend() {
 
     echo
-    echo "Checking dependency $1..."
+    echo "Checking dependency: $1..."
     [[ -e "lib/$1/.built" ]] && return
 
     pushd "lib/$1"
@@ -92,10 +92,15 @@ depend() {
     [[ -e $files ]] || fetchSource
 
     echo
-    echo "Configuring dependency $1..."
+    echo "Configuring dependency: $1..."
     if [[ -e configure.ac ]]; then
         if [[ ! -e configure ]]; then
             # create configure using autotools.
+            if ! hash aclocal || ! hash automake; then
+                echo >&2 "Need autotools to build $1.  Please install automake and autoconf."
+                exit 1
+            fi
+
             aclocal
             autoheader
             autoconf
@@ -109,8 +114,13 @@ depend() {
     fi
 
     echo
-    echo "Building dependency $1..."
+    echo "Building dependency: $1..."
     if [[ -e Makefile ]]; then
+        if ! hash make; then
+            echo >&2 "Need make to build $1.  Please install GNU make."
+            exit 1
+        fi
+
         make
         date > .built
     else
@@ -194,11 +204,15 @@ mpw-bench() {
 cc() {
     if hash llvm-gcc 2>/dev/null; then
         llvm-gcc "$@"
-    else
+    elif hash gcc 2>/dev/null; then
         gcc -std=gnu99 "$@"
+    else
+        echo >&2 "Need a compiler.  Please install GCC or LLVM."
+        exit 1
     fi
 }
 
+echo "Will build targets: ${targets[*]}${options:+, using options: ${options[*]}}..."
 for target in "${targets[@]}"; do
     "$target" "$@"
 done
