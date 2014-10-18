@@ -2,7 +2,12 @@
 set -e
 
 cd "${BASH_SOURCE%/*}"
-mpwArchive=mpw-$(git describe --tags --long --dirty).tar.gz
+tag=$(git describe)
+commit=$(git describe --long --dirty)
+[[ $tag && $commit = $tag-* ]] || exit 1
+git show --show-signature --pretty=format:%H --quiet "$tag" > VERSION
+
+mpwArchive=mpw-$commit.tar.gz
 [[ -e $mpwArchive ]] && echo "WARNING: $mpwArchive already exists.  Will overwrite."
 read -n1 -p "Will prepare and release $mpwArchive.  Press a key to continue or ^C to abort."
 
