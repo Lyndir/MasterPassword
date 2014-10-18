@@ -85,8 +85,7 @@ depend() {
 
     echo
     echo "Checking dependency $1..."
-    objects=( "lib/$1"/*.o )
-    [[ -e $objects ]] && return
+    [[ -e "lib/$1/.built" ]] && return
 
     pushd "lib/$1"
     files=( * )
@@ -113,6 +112,7 @@ depend() {
     echo "Building dependency $1..."
     if [[ -e Makefile ]]; then
         make
+        date > .built
     else
         echo >&2 "error: Don't know how to build: $1"
         exit 1
@@ -125,6 +125,7 @@ depend() {
 mpw() {
     depend scrypt
 
+    echo
     echo "Building target: $target..."
     CFLAGS=(
         # include paths
@@ -155,6 +156,7 @@ mpw-bench() {
     depend scrypt
     depend bcrypt
 
+    echo
     echo "Building target: $target..."
     CFLAGS=(
         # include paths
@@ -198,6 +200,5 @@ cc() {
 }
 
 for target in "${targets[@]}"; do
-    echo
     "$target" "$@"
 done
