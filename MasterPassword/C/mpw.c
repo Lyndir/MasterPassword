@@ -198,7 +198,7 @@ int main(int argc, char *const argv[]) {
     trc("key scope: %s\n", mpKeyScope);
     const uint32_t n_userNameLength = htonl(strlen(userName));
     const size_t masterKeySaltLength = strlen(mpKeyScope) + sizeof(n_userNameLength) + strlen(userName);
-    char *masterKeySalt = malloc( masterKeySaltLength );
+    char *masterKeySalt = (char *)malloc( masterKeySaltLength );
     if (!masterKeySalt) {
         fprintf(stderr, "Could not allocate master key salt: %d\n", errno);
         return 1;
@@ -213,7 +213,7 @@ int main(int argc, char *const argv[]) {
     trc("masterKeySalt ID: %s\n", IDForBuf(masterKeySalt, masterKeySaltLength));
 
     // Calculate the master key.
-    uint8_t *masterKey = malloc( MP_dkLen );
+    uint8_t *masterKey = (uint8_t *)malloc( MP_dkLen );
     if (!masterKey) {
         fprintf(stderr, "Could not allocate master key: %d\n", errno);
         return 1;
@@ -234,7 +234,7 @@ int main(int argc, char *const argv[]) {
     const uint32_t n_siteNameLength = htonl(strlen(siteName));
     const uint32_t n_siteCounter = htonl(siteCounter);
     const size_t sitePasswordInfoLength = strlen(mpSiteScope) + sizeof(n_siteNameLength) + strlen(siteName) + sizeof(n_siteCounter);
-    char *sitePasswordInfo = malloc( sitePasswordInfoLength );
+    char *sitePasswordInfo = (char *)malloc( sitePasswordInfoLength );
     if (!sitePasswordInfo) {
         fprintf(stderr, "Could not allocate site seed: %d\n", errno);
         return 1;
@@ -265,7 +265,7 @@ int main(int argc, char *const argv[]) {
         abort();
 
     // Encode the password from the seed using the cipher.
-    char *sitePassword = calloc(strlen(cipher) + 1, sizeof(char));
+    char *sitePassword = (char *)calloc(strlen(cipher) + 1, sizeof(char));
     for (int c = 0; c < strlen(cipher); ++c) {
         sitePassword[c] = CharacterFromClass(cipher[c], sitePasswordSeed[c + 1]);
         trc("class %c, character: %c\n", cipher[c], sitePassword[c]);

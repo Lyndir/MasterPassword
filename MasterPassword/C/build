@@ -46,7 +46,7 @@ fetchSource() (
         printf '%s' "$(git describe --always)" > "${PWD##*/}-version"
         return
 
-    elif [[ $svn ]] && hash git 2>/dev/null && hash "$(git --exec-path)/git-svn" 2>/dev/null; then
+    elif [[ $svn ]] && hash git 2>/dev/null && [[ -x "$(git --exec-path)/git-svn" ]]; then
         echo
         echo "Fetching: ${PWD##*/}, using git-svn..."
         git svn clone --prefix=origin/ --stdlayout "$svn" .
@@ -206,6 +206,8 @@ cc() {
         llvm-gcc "$@"
     elif hash gcc 2>/dev/null; then
         gcc -std=gnu99 "$@"
+    elif hash clang 2>/dev/null; then
+        clang "$@"
     else
         echo >&2 "Need a compiler.  Please install GCC or LLVM."
         exit 1

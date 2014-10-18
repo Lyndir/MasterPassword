@@ -50,19 +50,19 @@ const char *CipherForType(MPElementType type, uint8_t seedByte) {
 
     switch (type) {
         case MPElementTypeGeneratedMaximum: {
-            char *ciphers[] = { "anoxxxxxxxxxxxxxxxxx", "axxxxxxxxxxxxxxxxxno" };
+            const char *ciphers[] = { "anoxxxxxxxxxxxxxxxxx", "axxxxxxxxxxxxxxxxxno" };
             return ciphers[seedByte % 2];
         }
         case MPElementTypeGeneratedLong: {
-            char *ciphers[] = { "CvcvnoCvcvCvcv", "CvcvCvcvnoCvcv", "CvcvCvcvCvcvno", "CvccnoCvcvCvcv", "CvccCvcvnoCvcv", "CvccCvcvCvcvno", "CvcvnoCvccCvcv", "CvcvCvccnoCvcv", "CvcvCvccCvcvno", "CvcvnoCvcvCvcc", "CvcvCvcvnoCvcc", "CvcvCvcvCvccno", "CvccnoCvccCvcv", "CvccCvccnoCvcv", "CvccCvccCvcvno", "CvcvnoCvccCvcc", "CvcvCvccnoCvcc", "CvcvCvccCvccno", "CvccnoCvcvCvcc", "CvccCvcvnoCvcc", "CvccCvcvCvccno" };
+            const char *ciphers[] = { "CvcvnoCvcvCvcv", "CvcvCvcvnoCvcv", "CvcvCvcvCvcvno", "CvccnoCvcvCvcv", "CvccCvcvnoCvcv", "CvccCvcvCvcvno", "CvcvnoCvccCvcv", "CvcvCvccnoCvcv", "CvcvCvccCvcvno", "CvcvnoCvcvCvcc", "CvcvCvcvnoCvcc", "CvcvCvcvCvccno", "CvccnoCvccCvcv", "CvccCvccnoCvcv", "CvccCvccCvcvno", "CvcvnoCvccCvcc", "CvcvCvccnoCvcc", "CvcvCvccCvccno", "CvccnoCvcvCvcc", "CvccCvcvnoCvcc", "CvccCvcvCvccno" };
             return ciphers[seedByte % 21];
         }
         case MPElementTypeGeneratedMedium: {
-            char *ciphers[] = { "CvcnoCvc", "CvcCvcno" };
+            const char *ciphers[] = { "CvcnoCvc", "CvcCvcno" };
             return ciphers[seedByte % 2];
         }
         case MPElementTypeGeneratedBasic: {
-            char *ciphers[] = { "aaanaaan", "aannaaan", "aaannaaa" };
+            const char *ciphers[] = { "aaanaaan", "aannaaan", "aaannaaa" };
             return ciphers[seedByte % 3];
         }
         case MPElementTypeGeneratedShort: {
@@ -75,7 +75,7 @@ const char *CipherForType(MPElementType type, uint8_t seedByte) {
             return "cvccvcvcv";
         }
         case MPElementTypeGeneratedPhrase: {
-            char *ciphers[] = { "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" };
+            const char *ciphers[] = { "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" };
             return ciphers[seedByte % 3];
         }
         default: {
@@ -170,7 +170,7 @@ const char *IDForBuf(const void *buf, size_t length) {
     uint8_t hash[32];
     SHA256_Buf(buf, length, hash);
 
-    char *id = calloc(65, sizeof(char));
+    char *id = (char *)calloc(65, sizeof(char));
     for (int kH = 0; kH < 32; kH++)
         sprintf(&(id[kH * 2]), "%02X", hash[kH]);
 
@@ -178,7 +178,7 @@ const char *IDForBuf(const void *buf, size_t length) {
 }
 
 const char *Hex(const void *buf, size_t length) {
-    char *id = calloc(length*2+1, sizeof(char));
+    char *id = (char *)calloc(length*2+1, sizeof(char));
     for (int kH = 0; kH < length; kH++)
         sprintf(&(id[kH * 2]), "%02X", ((const uint8_t*)buf)[kH]);
     return id;
