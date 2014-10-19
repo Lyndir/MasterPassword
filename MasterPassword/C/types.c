@@ -95,6 +95,8 @@ const MPElementVariant VariantWithName(const char *variantName) {
         return MPElementVariantPassword;
     if (0 == strcmp(lowerVariantName, "l") || 0 == strcmp(lowerVariantName, "login"))
         return MPElementVariantLogin;
+    if (0 == strcmp(lowerVariantName, "a") || 0 == strcmp(lowerVariantName, "answer"))
+        return MPElementVariantAnswer;
 
     fprintf(stderr, "Not a variant name: %s", lowerVariantName);
     abort();
@@ -107,6 +109,9 @@ const char *ScopeForVariant(MPElementVariant variant) {
         }
         case MPElementVariantLogin: {
             return "com.lyndir.masterpassword.login";
+        }
+        case MPElementVariantAnswer: {
+            return "com.lyndir.masterpassword.answer";
         }
         default: {
             fprintf(stderr, "Unknown variant: %d", variant);
