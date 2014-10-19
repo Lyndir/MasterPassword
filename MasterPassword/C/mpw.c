@@ -63,9 +63,9 @@ void usage() {
                       "                     a, answer   | The answer to a security question.\n\n");
       fprintf(stderr, "    -C context   A variant-specific context.\n"
                       "                 Defaults to empty.\n"
-                      "                     p, password | Doesn't currently use a context.\n"
-                      "                     l, login    | Doesn't currently use a context.\n"
-                      "                     a, answer   | Empty for a universal site answer or\n"
+                      "                  -v p, password | Doesn't currently use a context.\n"
+                      "                  -v l, login    | Doesn't currently use a context.\n"
+                      "                  -v a, answer   | Empty for a universal site answer or\n"
                       "                                 | the most significant word(s) of the question.\n\n");
       exit(0);
 }
