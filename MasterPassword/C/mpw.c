@@ -20,6 +20,8 @@
 #include <string.h>
 #include <errno.h>
 
+#include <libconfig.h>
+
 #include <alg/sha256.h>
 #include <crypto/crypto_scrypt.h>
 #include "types.h"
@@ -90,8 +92,65 @@ char *homedir(const char *filename) {
 
 int main(int argc, char *const argv[]) {
 
+    config_t cfg;
+    config_setting_t *setting;
+    const char *totalUsers;
+
+    config_init(&cfg);
+
+    /* Read the file. If there is an error, report it and exit. */
+    if(! config_read_file(&cfg, homedir(".mpw"))) {
+      fprintf(stderr, "%s:%d - %s\n", config_error_file(&cfg),
+            config_error_line(&cfg), config_error_text(&cfg));
+      config_destroy(&cfg);
+      printf("Config file %s does not exist\n", homedir(".mpw"));
+      return 1;
+    }
+
+
     if (argc < 2)
         usage();
+
+    // Read the environment.
+    const char *userName = getenv( MP_env_username );
+    const char *masterPassword = NULL;
+    const char *siteName = NULL;
+    MPElementType siteType = MPElementTypeGeneratedLong;
+    const char *siteTypeString = getenv( MP_env_sitetype );
+    MPElementVariant siteVariant = MPElementVariantPassword;
+    const char *siteVariantString = NULL;
+    uint32_t siteCounter = 1;
+    const char *siteCounterString = getenv( MP_env_sitecounter );
+
+    if(config_lookup_string(&cfg, "totalUsers", &totalUsers))
+       printf("Total Users: %s\n\n", totalUsers);
+
+    setting = config_lookup(&cfg, "users.user1");
+     if(setting != NULL) {
+       unsigned int count = config_setting_length(setting);
+       unsigned int i;
+
+       for(i = 0; i < count; ++i) {
+         config_setting_t *user = config_setting_get_elem(setting, i);
+
+         /* Only output the record if all of the expected fields are present. */
+         const char *title, *media;
+         double price;
+         int qty;
+
+         if(!(config_setting_lookup_string(user, "username", &userName)
+              && config_setting_lookup_string(user, "password", &masterPassword)
+              && config_setting_lookup_string(user, "type", &siteTypeString)
+              && config_setting_lookup_string(user, "counter", &siteCounterString)
+              && config_setting_lookup_string(user, "variant", &siteVariantString)))
+           printf("Users: %s\n\n", userName);
+           printf("Pass: %s\n\n", masterPassword);
+           printf("types: %s\n\n", siteTypeString);
+           printf("counter: %s\n\n", siteCounterString);
+           printf("variant: %s\n\n", siteVariantString);
+
+       }
+     }
 
     // Read the environment.
     const char *userName = getenv( MP_env_username );
@@ -171,6 +230,7 @@ int main(int argc, char *const argv[]) {
     trc("siteType: %d (%s)\n", siteType, siteTypeString);
 
     // Read the master password.
+/*
     char *mpwConfigPath = homedir(".mpw");
     if (!mpwConfigPath) {
         fprintf(stderr, "Couldn't resolve path for configuration file: %d\n", errno);
@@ -189,6 +249,8 @@ int main(int argc, char *const argv[]) {
                 break;
             }
     }
+*/
+
     while (!masterPassword)
         masterPassword = getpass( "Your master password: " );
     trc("masterPassword: %s\n", masterPassword);

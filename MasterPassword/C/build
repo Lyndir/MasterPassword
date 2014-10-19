@@ -243,7 +243,7 @@ cc() {
     if hash llvm-gcc 2>/dev/null; then
         llvm-gcc "$@"
     elif hash gcc 2>/dev/null; then
-        gcc -std=gnu99 "$@"
+        gcc -std=gnu99 -lconfig "$@"
     elif hash clang 2>/dev/null; then
         clang "$@"
     else
