@@ -35,12 +35,15 @@ Configuration bits:
                  Defaults to 'password'.
                      p, password | The password to log in with.
                      l, login    | The username to log in as.
+                     a, answer   | The answer to a security question.
+
+    context   A variant-specific context.
+                 Defaults to empty.
+                  -v p, password | Doesn't currently use a context.
+                  -v l, login    | Doesn't currently use a context.
+                  -v a, answer   | Empty for a universal site answer or
+                                 | the most significant word(s) of the question.
 */
-
-
-// Total number of users in this config file.
-totalUsers = 1;
-
 
 
 // User config file
