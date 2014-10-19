@@ -11,6 +11,8 @@ typedef enum {
     MPElementVariantPassword,
     /** Generate the login name to log in as. */
     MPElementVariantLogin,
+    /** Generate the answer to a security question. */
+    MPElementVariantAnswer,
 } MPElementVariant;
 
 typedef enum {

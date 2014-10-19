@@ -59,7 +59,14 @@ void usage() {
       fprintf(stderr, "    -v variant   The kind of content to generate.\n"
                       "                 Defaults to 'password'.\n"
                       "                     p, password | The password to log in with.\n"
-                      "                     l, login    | The username to log in as.\n\n");
+                      "                     l, login    | The username to log in as.\n"
+                      "                     a, answer   | The answer to a security question.\n\n");
+      fprintf(stderr, "    -C context   A variant-specific context.\n"
+                      "                 Defaults to empty.\n"
+                      "                     p, password | Doesn't currently use a context.\n"
+                      "                     l, login    | Doesn't currently use a context.\n"
+                      "                     a, answer   | Empty for a universal site answer or\n"
+                      "                                 | the most significant word(s) of the question.\n\n");
       exit(0);
 }
 
@@ -101,26 +108,30 @@ int main(int argc, char *const argv[]) {
     const char *siteTypeString = getenv( MP_env_sitetype );
     MPElementVariant siteVariant = MPElementVariantPassword;
     const char *siteVariantString = NULL;
+    const char *siteContextString = NULL;
     uint32_t siteCounter = 1;
     const char *siteCounterString = getenv( MP_env_sitecounter );
 
     // Read the options.
-    for (int opt; (opt = getopt(argc, argv, "u:t:c:v:h")) != -1;)
+    for (int opt; (opt = getopt(argc, argv, "u:t:c:v:C:h")) != -1;)
       switch (opt) {
-          case 'h':
-              usage();
-              break;
           case 'u':
               userName = optarg;
               break;
           case 't':
               siteTypeString = optarg;
               break;
+          case 'c':
+              siteCounterString = optarg;
+              break;
           case 'v':
               siteVariantString = optarg;
               break;
-          case 'c':
-              siteCounterString = optarg;
+          case 'C':
+              siteContextString = optarg;
+              break;
+          case 'h':
+              usage();
               break;
           case '?':
               switch (optopt) {
@@ -166,6 +177,8 @@ int main(int argc, char *const argv[]) {
     trc("siteVariant: %d (%s)\n", siteVariant, siteVariantString);
     if (siteVariant == MPElementVariantLogin)
         siteType = MPElementTypeGeneratedName;
+    if (siteVariant == MPElementVariantAnswer)
+        siteType = MPElementTypeGeneratedPhrase;
     if (siteTypeString)
         siteType = TypeWithName( siteTypeString );
     trc("siteType: %d (%s)\n", siteType, siteTypeString);
@@ -230,10 +243,13 @@ int main(int argc, char *const argv[]) {
 
     // Calculate the site seed.
     const char *mpSiteScope = ScopeForVariant(siteVariant);
-    trc("site scope: %s\n", mpSiteScope);
+    trc("site scope: %s, context: %s\n", mpSiteScope, siteContextString == NULL? "<empty>": siteContextString);
     const uint32_t n_siteNameLength = htonl(strlen(siteName));
     const uint32_t n_siteCounter = htonl(siteCounter);
-    const size_t sitePasswordInfoLength = strlen(mpSiteScope) + sizeof(n_siteNameLength) + strlen(siteName) + sizeof(n_siteCounter);
+    const uint32_t n_siteContextLength = siteContextString == NULL? 0: htonl(strlen(siteContextString));
+    size_t sitePasswordInfoLength = strlen(mpSiteScope) + sizeof(n_siteNameLength) + strlen(siteName) + sizeof(n_siteCounter);
+    if (siteContextString)
+        sitePasswordInfoLength += sizeof(n_siteContextLength) + strlen(siteContextString);
     char *sitePasswordInfo = (char *)malloc( sitePasswordInfoLength );
     if (!sitePasswordInfo) {
         fprintf(stderr, "Could not allocate site seed: %d\n", errno);
@@ -245,9 +261,13 @@ int main(int argc, char *const argv[]) {
     memcpy(sPI, &n_siteNameLength, sizeof(n_siteNameLength)); sPI += sizeof(n_siteNameLength);
     memcpy(sPI, siteName, strlen(siteName)); sPI += strlen(siteName);
     memcpy(sPI, &n_siteCounter, sizeof(n_siteCounter)); sPI += sizeof(n_siteCounter);
+    if (siteContextString) {
+        memcpy(sPI, &n_siteContextLength, sizeof(n_siteContextLength)); sPI += sizeof(n_siteContextLength);
+        memcpy(sPI, siteContextString, strlen(siteContextString)); sPI += strlen(siteContextString);
+    }
     if (sPI - sitePasswordInfo != sitePasswordInfoLength)
         abort();
-    trc("seed from: hmac-sha256(masterKey, %s | %s | %s | %s)\n", mpSiteScope, Hex(&n_siteNameLength, sizeof(n_siteNameLength)), siteName, Hex(&n_siteCounter, sizeof(n_siteCounter)));
+    trc("seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)\n", mpSiteScope, Hex(&n_siteNameLength, sizeof(n_siteNameLength)), siteName, Hex(&n_siteCounter, sizeof(n_siteCounter)), Hex(&n_siteContextLength, sizeof(n_siteContextLength)), siteContextString);
     trc("sitePasswordInfo ID: %s\n", IDForBuf(sitePasswordInfo, sitePasswordInfoLength));
 
     uint8_t sitePasswordSeed[32];
