@@ -101,11 +101,10 @@ int main(int argc, char *const argv[]) {
 
     config_t cfg;
     config_setting_t *setting;
-    const char *totalUsers;
-
     config_init(&cfg);
 
-    /* Read the file. If there is an error, report it and exit. */
+    // Read the file. If there is an error, report it and exit.
+    // TODO :: Make config file optional again.
     if(! config_read_file(&cfg, homedir(".mpw"))) {
       fprintf(stderr, "%s:%d - %s\n", config_error_file(&cfg),
             config_error_line(&cfg), config_error_text(&cfg));
@@ -130,46 +129,36 @@ int main(int argc, char *const argv[]) {
     uint32_t siteCounter = 1;
     const char *siteCounterString = getenv( MP_env_sitecounter );
 
-    if(config_lookup_string(&cfg, "totalUsers", &totalUsers))
-       printf("Total Users: %s\n\n", totalUsers);
-
+    // Load userinfo from config file.
+    // TODO :: Hardcoded for user1. Need to select user somehow.
+    //      :: Add error checking.
     setting = config_lookup(&cfg, "users.user1");
      if(setting != NULL) {
        unsigned int count = config_setting_length(setting);
        unsigned int i;
+       trc("Total config users: %i\n", count);
 
        for(i = 0; i < count; ++i) {
          config_setting_t *user = config_setting_get_elem(setting, i);
 
-         /* Only output the record if all of the expected fields are present. */
          const char *title, *media;
          double price;
          int qty;
 
-         if(!(config_setting_lookup_string(user, "username", &userName)
+         // Populate variables from config file.
+         if((config_setting_lookup_string(user, "username", &userName)
               && config_setting_lookup_string(user, "password", &masterPassword)
               && config_setting_lookup_string(user, "type", &siteTypeString)
               && config_setting_lookup_string(user, "counter", &siteCounterString)
-              && config_setting_lookup_string(user, "variant", &siteVariantString)))
-           printf("Users: %s\n\n", userName);
-           printf("Pass: %s\n\n", masterPassword);
-           printf("types: %s\n\n", siteTypeString);
-           printf("counter: %s\n\n", siteCounterString);
-           printf("variant: %s\n\n", siteVariantString);
-
+              && config_setting_lookup_string(user, "variant", &siteVariantString))) {
+           trc("configUsername: %s\n", userName);
+           trc("configPassword: %s\n", masterPassword);
+           trc("configType: %s\n", siteTypeString);
+           trc("configCounter: %s\n", siteCounterString);
+           trc("configVariant: %s\n\n", siteVariantString);
+         }
        }
      }
-
-    // Read the environment.
-    const char *userName = getenv( MP_env_username );
-    const char *masterPassword = NULL;
-    const char *siteName = NULL;
-    MPElementType siteType = MPElementTypeGeneratedLong;
-    const char *siteTypeString = getenv( MP_env_sitetype );
-    MPElementVariant siteVariant = MPElementVariantPassword;
-    const char *siteVariantString = NULL;
-    uint32_t siteCounter = 1;
-    const char *siteCounterString = getenv( MP_env_sitecounter );
 
     // Read the options.
     for (int opt; (opt = getopt(argc, argv, "u:t:c:v:C:h")) != -1;)
@@ -241,28 +230,6 @@ int main(int argc, char *const argv[]) {
     if (siteTypeString)
         siteType = TypeWithName( siteTypeString );
     trc("siteType: %d (%s)\n", siteType, siteTypeString);
-
-    // Read the master password.
-/*
-    char *mpwConfigPath = homedir(".mpw");
-    if (!mpwConfigPath) {
-        fprintf(stderr, "Couldn't resolve path for configuration file: %d\n", errno);
-        return 1;
-    }
-    trc("mpwConfigPath: %s\n", mpwConfigPath);
-    FILE *mpwConfig = fopen(mpwConfigPath, "r");
-    free(mpwConfigPath);
-    if (mpwConfig) {
-        char *line = NULL;
-        size_t linecap = 0;
-        ssize_t linelen;
-        while ((linelen = getline(&line, &linecap, mpwConfig)) > 0)
-            if (strcmp(strsep(&line, ":"), userName) == 0) {
-                masterPassword = strsep(&line, "\n");
-                break;
-            }
-    }
-*/
 
     while (!masterPassword)
         masterPassword = getpass( "Your master password: " );
