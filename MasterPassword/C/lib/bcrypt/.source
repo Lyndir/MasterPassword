@@ -1,2 +1,3 @@
 home=http://www.openwall.com/crypt/
 pkg=http://www.openwall.com/crypt/crypt_blowfish-1.3.tar.gz
+pkg_sha=7253c86c8fe890e67ec782749f95ce3f1517b065

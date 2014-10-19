@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
 # TROUBLESHOOTING
-#   - See the 'options' array.  Comment/uncomment lines as you see fit.
-#   - If you see 'undefined reference to `clock_gettime'', try ./build -lrt instead.
+#   - To enable verbose algorithm/implementation debugging, use ./build -DDEBUG
+#   - If you see 'undefined reference to `clock_gettime'', try ./build -lrt instead
 #
 # BUGS
 #   masterpassword@lyndir.com
@@ -14,15 +14,20 @@ cd "${BASH_SOURCE%/*}"
 shopt -s extglob
 set -e
 
-# optional features.
-options=(
-   #-DDEBUG                     # Turn on debugging verbosity.
-)
-# available targets.
-targets=(
-    mpw                         # C CLI version of Master Password.
-   #mpw-bench                   # C CLI Master Password benchmark utility.
-)
+
+### CONFIGURATION
+
+# Targets to build.
+if [[ $targets ]]; then
+    read -ra targets <<< "$targets"
+else
+    # Default targets.
+    # Modify here or override using targets='mpw mpw-bench' ./build
+    targets=(
+        mpw                         # C CLI version of Master Password.
+       #mpw-bench                   # C CLI Master Password benchmark utility.
+    )
+fi
 
 
 ### DEPENDENCIES
@@ -34,52 +39,86 @@ fetch() {
         curl "$1" > "${1##*/}"
     fi
 }
-fetchSource() (
-    echo
-    echo "Fetching dependency: ${PWD##*/}..."
-    source .source
+unpack() {
+    if [[ $1 = *.tar.gz || $1 = *.tgz ]]; then
+        tar -xvzf "$1"
 
-    if [[ $git ]] && hash git 2>/dev/null; then
-        echo
-        echo "Fetching: ${PWD##*/}, using git..."
-        git clone "$svn" .
-        printf '%s' "$(git describe --always)" > "${PWD##*/}-version"
-        return
+    elif [[ $1 = *.tar.bz2 || $1 = *.tbz2 ]]; then
+        tar -xvjf "$1"
 
-    elif [[ $svn ]] && hash git 2>/dev/null && [[ -x "$(git --exec-path)/git-svn" ]]; then
-        echo
-        echo "Fetching: ${PWD##*/}, using git-svn..."
-        git svn clone --prefix=origin/ --stdlayout "$svn" .
-        printf '%s' "$(git describe --always)" > "${PWD##*/}-version"
-        return
+    elif [[ $1 = *.tar ]]; then
+        tar -xvf "$1"
 
-    elif [[ $svn ]] && hash svn 2>/dev/null; then
-        echo
-        echo "Fetching: ${PWD##*/}, using svn..."
-        svn checkout "$svn/trunk" .
-        printf 'r%s' "$(svn info | awk '/^Revision:/{ print $2 }')" > "${PWD##*/}-version"
-        return
-
-    elif [[ $pkg ]]; then
-        echo
-        echo "Fetching: ${PWD##*/}, using package..."
-        fetch "$pkg"
-        if [[ $pkg = *.tar.gz || $pkg = *.tgz ]]; then
-            tar -xvzf "${pkg##*/}"
-            files=(!("${pkg##*/}"))
-            if [[ -d $files ]] && (( ${#files[@]} == 1 )); then
-                mv "$files"/* .
-                rmdir "$files"
-            fi
-        fi
-        return
+    else
+        echo 2>&1 "Don't know how to unpack: $1"
     fi
 
-    echo >&2 "error: Missing git-svn or svn."
-    echo >&2 "error: Please install either or manually check out the sources"
-    echo >&2 "error: from: $home"
-    echo >&2 "error: into: $PWD"
-    exit 1
+    printf 'Verifying package: %s, against digest: %s...' "$1" "$2"
+    [[ $(openssl sha < "$1") = $2 ]] || {
+        printf ' mismatch!\n'
+        echo 2>&1 "Downloaded package doesn't match digest."
+        exit 1
+    }
+    printf ' OK!\n'
+
+    files=( !("$1") )
+    if [[ -d $files ]] && (( ${#files[@]} == 1 )); then
+        mv "$files"/* .
+        rmdir "$files"
+    fi
+}
+fetchSource() (
+    source .source
+
+    if [[ $pkg && -e "${pkg##*/}" ]]; then
+        files=( !("${pkg##*/}") )
+        [[ -e $files ]] || {
+            echo
+            echo "Unpacking: ${PWD##*/}, using package..."
+            unpack "${pkg##*/}" "$pkg_sha"
+        }
+
+    elif [[ $git ]] && hash git 2>/dev/null; then
+        [[ -e .git ]] || {
+            echo
+            echo "Fetching: ${PWD##*/}, using git..."
+            git clone "$svn" .
+            printf '%s' "$(git describe --always)" > "${PWD##*/}-version"
+        }
+
+    elif [[ $svn ]] && hash git 2>/dev/null && [[ -x "$(git --exec-path)/git-svn" ]]; then
+        [[ -e .git ]] || {
+            echo
+            echo "Fetching: ${PWD##*/}, using git-svn..."
+            git svn clone --prefix=origin/ --stdlayout "$svn" .
+            printf '%s' "$(git describe --always)" > "${PWD##*/}-version"
+        }
+
+    elif [[ $svn ]] && hash svn 2>/dev/null; then
+        [[ -e .svn ]] || {
+            echo
+            echo "Fetching: ${PWD##*/}, using svn..."
+            svn checkout "$svn/trunk" .
+            printf 'r%s' "$(svn info | awk '/^Revision:/{ print $2 }')" > "${PWD##*/}-version"
+        }
+
+    elif [[ $pkg ]]; then
+        files=( !("${pkg##*/}") )
+        [[ -e $files ]] || {
+            echo
+            echo "Fetching: ${PWD##*/}, using package..."
+            fetch "$pkg"
+            unpack "${pkg##*/}" "$pkg_sha"
+        }
+
+    else
+
+        echo >&2 "error: Missing git-svn or svn."
+        echo >&2 "error: Please install either or manually check out the sources"
+        echo >&2 "error: from: $home"
+        echo >&2 "error: into: $PWD"
+        exit 1
+    fi
 )
 depend() {
 
@@ -88,8 +127,7 @@ depend() {
     [[ -e "lib/$1/.built" ]] && return
 
     pushd "lib/$1"
-    files=( * )
-    [[ -e $files ]] || fetchSource
+    fetchSource
 
     echo
     echo "Configuring dependency: $1..."
@@ -155,8 +193,8 @@ mpw() {
         "lib/scrypt/scrypt-scryptenc.o"
     )
 
-    cc "${CFLAGS[@]}"                 "${options[@]}" -c types.c -o types.o "$@"
-    cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "${options[@]}" "types.o" mpw.c -o mpw "$@"
+    cc "${CFLAGS[@]}"                 -c types.c -o types.o "$@"
+    cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "types.o" mpw.c -o mpw "$@"
     echo "done!  Now run ./install or use ./mpw"
 }
 
@@ -193,8 +231,8 @@ mpw-bench() {
         "lib/bcrypt/x86.o"
     )
 
-    cc "${CFLAGS[@]}"                 "${options[@]}" -c types.c -o types.o "$@"
-    cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "${options[@]}" "types.o" mpw-bench.c -o mpw-bench "$@"
+    cc "${CFLAGS[@]}"                 -c types.c -o types.o "$@"
+    cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "types.o" mpw-bench.c -o mpw-bench "$@"
     echo "done!  Now use ./mpw-bench"
 }
 
@@ -214,7 +252,7 @@ cc() {
     fi
 }
 
-echo "Will build targets: ${targets[*]}${options:+, using options: ${options[*]}}..."
+echo "Will build targets: ${targets[*]}..."
 for target in "${targets[@]}"; do
     "$target" "$@"
 done
