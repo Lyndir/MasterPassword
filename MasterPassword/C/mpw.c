@@ -101,17 +101,6 @@ int main(int argc, char *const argv[]) {
     if (argc < 2)
         usage();
 
-    config_t cfg;
-    config_setting_t *setting;
-    config_init(&cfg);
-
-    // Read the file. If there is an error, report it and exit.
-    if(! config_read_file(&cfg, homedir(".mpw"))) {
-      config_destroy(&cfg);
-      trc("Config file %s does not exist.\n", homedir(".mpw"));
-    }
-
-
     // Read the environment.
     const char *userName = getenv( MP_env_username );
     const char *masterPassword = NULL;
@@ -124,41 +113,54 @@ int main(int argc, char *const argv[]) {
     uint32_t siteCounter = 1;
     const char *siteCounterString = getenv( MP_env_sitecounter );
 
+    config_t cfg;
+    config_setting_t *setting;
+    config_init(&cfg);
+
+    // Read the config file.
+    if(! config_read_file(&cfg, homedir(".mpw"))) {
+      config_destroy(&cfg);
+      trc("Config file %s does not exist.\n", homedir(".mpw"));
+    }
+
     // Load userinfo from config file.
     // TODO :: Hardcoded for user1. Need to select user somehow.
     //      :: Add error checking?
-  if (config_read_file(&cfg, homedir(".mpw"))) {
-    setting = config_lookup(&cfg, "users.user1");
-    if(setting != NULL) {
-      unsigned int count = config_setting_length(setting);
-      unsigned int i;
-      trc("Total config users: %i\n", count);
+    //      :: Remove duplicate config_read_file() below.
+    if (config_read_file(&cfg, homedir(".mpw"))) {
+      setting = config_lookup(&cfg, "users.user1");
+      if(setting != NULL) {
+        unsigned int count = config_setting_length(setting);
+        unsigned int i;
+        trc("Total config users: %i\n", count);
 
-      for(i = 0; i < count; ++i) {
-        config_setting_t *user = config_setting_get_elem(setting, i);
+        for(i = 0; i < count; ++i) {
+          config_setting_t *user = config_setting_get_elem(setting, i);
 
-        const char *title, *media;
-        double price;
-        int qty;
+          const char *title, *media;
+          double price;
+          int qty;
 
-        // Populate variables from config file.
-        if((config_setting_lookup_string(user, "username", &userName)
-             && config_setting_lookup_string(user, "password", &masterPassword)
-             && config_setting_lookup_string(user, "type", &siteTypeString)
-             && config_setting_lookup_string(user, "counter", &siteCounterString)
-             && config_setting_lookup_string(user, "variant", &siteVariantString))) {
+          // Populate variables from config file.
+          if((config_setting_lookup_string(user, "username", &userName)
+               && config_setting_lookup_string(user, "password", &masterPassword)
+               && config_setting_lookup_string(user, "type", &siteTypeString)
+               && config_setting_lookup_string(user, "counter", &siteCounterString)
+               && config_setting_lookup_string(user, "variant", &siteVariantString))) {
+            trc("Config file loaded!\n");
+          }
+          else {
+            trc("Config file not loaded!\n");
+          }
           trc("configUsername: %s\n", userName);
           trc("configPassword: %s\n", masterPassword);
           trc("configType: %s\n", siteTypeString);
           trc("configCounter: %s\n", siteCounterString);
           trc("configVariant: %s\n\n", siteVariantString);
         }
-        else {
-          // Something went wrong.
-        }
       }
     }
-  }
+
     // Read the options.
     for (int opt; (opt = getopt(argc, argv, "u:t:c:v:C:h")) != -1;)
       switch (opt) {
