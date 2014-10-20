@@ -106,20 +106,9 @@ int main(int argc, char *const argv[]) {
     config_init(&cfg);
 
     // Read the file. If there is an error, report it and exit.
-/*
-TODO :: Make config file optional again.
-
-Missing config file:
-
-Config file /home/pi/.mpw does not exist
-Segmentation fault
-
-Must return 1 if file missing.
-*/
     if(! config_read_file(&cfg, homedir(".mpw"))) {
       config_destroy(&cfg);
-      printf("Config file %s does not exist\nExiting.\n", homedir(".mpw"));
-      return 1;
+      trc("Config file %s does not exist.\n", homedir(".mpw"));
     }
 
 
@@ -138,6 +127,7 @@ Must return 1 if file missing.
     // Load userinfo from config file.
     // TODO :: Hardcoded for user1. Need to select user somehow.
     //      :: Add error checking?
+  if (config_read_file(&cfg, homedir(".mpw"))) {
     setting = config_lookup(&cfg, "users.user1");
     if(setting != NULL) {
       unsigned int count = config_setting_length(setting);
@@ -168,7 +158,7 @@ Must return 1 if file missing.
         }
       }
     }
-
+  }
     // Read the options.
     for (int opt; (opt = getopt(argc, argv, "u:t:c:v:C:h")) != -1;)
       switch (opt) {
