@@ -114,6 +114,7 @@ int main(int argc, char *const argv[]) {
     uint32_t siteCounter = 1;
     const char *siteCounterString = getenv( MP_env_sitecounter );
 
+    const char *configFile = homedir(".mpw");
     config_t cfg;
     config_setting_t *setting;
     config_init(&cfg);
@@ -129,20 +130,32 @@ int main(int argc, char *const argv[]) {
         }
 
     // Read the config file.
-    if(! config_read_file(&cfg, homedir(".mpw"))) {
-        config_destroy(&cfg);
-        trc("Config file %s does not exist.\n", homedir(".mpw"));
-    }
+    if ( access(configFile , F_OK|R_OK|W_OK ) != -1 ) {
+        // For the sake of security, REFUSE to use the config file
+        // if the file permission is not 600.
+        struct stat buf;
+        stat(configFile, &buf);
+        int statchmod = buf.st_mode & (S_IRWXU | S_IRWXG | S_IRWXO);
+        int chmod = 384;
 
-    // Load userinfo from config file.
-    /* TODO
-     [ ] Add error checking?
-     [ ] Remove duplicate config_read_file() below.
-     [ ] Fix Lyndir/MasterPassword Issue #92.
-          Config file shows rough draft implementing this,
-          nonfucntional at this point.
-    */
-    if (config_read_file(&cfg, homedir(".mpw"))) {
+        if (statchmod == chmod) {
+            if (! config_read_file(&cfg, configFile)) {
+                fprintf(stderr, "%s:%d - %s\n", config_error_file(&cfg),
+                    config_error_line(&cfg), config_error_text(&cfg));
+                config_destroy(&cfg);
+            }
+        }
+        else {
+            printf("File permissions for file %s are %o but are required to be 600 to continue.\n", configFile,  statchmod);
+            config_destroy(&cfg);
+            return 1;
+        }
+
+
+        // Load userinfo from config file.
+        /* TODO
+         [ ] Add config file error checking?
+        */
         setting = config_lookup(&cfg, "users");
         if(setting != NULL) {
             unsigned int count = config_setting_length(setting);

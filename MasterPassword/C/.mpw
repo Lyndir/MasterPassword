@@ -3,15 +3,21 @@ Master Password User Config File
 
 Allows for each user to have seperate default values.
 
+If this file is in your homedir, this file MUST have file permissions equal to 600.
+Verify with the following command:
+
+chmod 600 ~/.mpw
+
+
 mpw usage before configuring:
 
-mpw -u 'Example Q. User' -t x -c 15876 -v p socify.com
+mpw -u 'Example Q. User' -t x -c 15876 -v p google.com
 Your master password:
 CQ2o2zqRDTaxB6lfwo1-
 
 mpw usage after configuring:
 
-mpw -u 'Example Q. User' socify.com
+mpw -u 'Example Q. User' google.com
 CQ2o2zqRDTaxB6lfwo1-
 
 
@@ -47,26 +53,8 @@ Configuration bits:
 */
 
 users = (
-
-/* NOTE:
-This config layout is not operational and should only be treated as
-a coding reference. This is my work in progress to solve
-Lyndir/MasterPassword Issue #92
-
-{ username	= "Example Q. User";
-  password	= "Myverysupersecretpassword";
-  sites = (
-    { site	= "example.com":
-      type	= "maximum";
-      counter	= "15876";
-      variant	= "p"; }
-  );
-}
-*/
-
-// This is the correct format for current configuration.
 // Please note the comma at the end of the 'variant' line.
-// if there is another user the comma must be present.
+// If there is another user the comma must be present.
 // If there is not another user, the comma must be removed.
 { username	= "Example Q. User";
   password	= "Myverysupersecretpassword";
