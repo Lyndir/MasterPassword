@@ -124,9 +124,14 @@ int main(int argc, char *const argv[]) {
     }
 
     // Load userinfo from config file.
-    // TODO :: Hardcoded for only one user. Need to select user somehow.
-    //      :: Add error checking?
-    //      :: Remove duplicate config_read_file() below.
+    /* TODO
+     [ ] (PRIORITY) Hardcoded for only one user. Need to select user somehow.
+     [ ] Add error checking?
+     [ ] Remove duplicate config_read_file() below.
+     [ ] Fix Lyndir/MasterPassword Issue #92.
+          Config file shows rough draft implementing this,
+          nonfucntional at this point.
+    */
     if (config_read_file(&cfg, homedir(".mpw"))) {
         setting = config_lookup(&cfg, "users");
         if(setting != NULL) {
