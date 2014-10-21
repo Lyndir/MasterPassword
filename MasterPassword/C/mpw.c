@@ -103,6 +103,7 @@ int main(int argc, char *const argv[]) {
 
     // Read the environment.
     const char *userName = getenv( MP_env_username );
+    const char *tmpuserName = NULL;
     const char *masterPassword = NULL;
     const char *siteName = NULL;
     MPElementType siteType = MPElementTypeGeneratedLong;
@@ -116,6 +117,17 @@ int main(int argc, char *const argv[]) {
     config_t cfg;
     config_setting_t *setting;
     config_init(&cfg);
+
+    // Read the options.
+    for (int opt; (opt = getopt(argc, argv, "u")) != -1;)
+        switch (opt) {
+            case 'u':
+                userName = optarg;
+                trc("uname: %s\n", userName); // Returning null, set above.
+                break;
+            default:
+                abort();
+        }
 
     // Read the config file.
     if(! config_read_file(&cfg, homedir(".mpw"))) {
@@ -142,32 +154,36 @@ int main(int argc, char *const argv[]) {
             for(i = 0; i < count; ++i) {
                 config_setting_t *user = config_setting_get_elem(setting, i);
 
-                // Populate variables from config file.
-                if((config_setting_lookup_string(user, "username", &userName)
-                    && config_setting_lookup_string(user, "password", &masterPassword)
-                    && config_setting_lookup_string(user, "type", &siteTypeString)
-                    && config_setting_lookup_string(user, "counter", &siteCounterString)
-                    && config_setting_lookup_string(user, "variant", &siteVariantString))) {
-                    trc("Config file loaded!\n");
-                }
-                else {
-                    trc("Config file not loaded!\n");
-                }
-                trc("configUsername: %s\n", userName);
-                trc("configPassword: %s\n", masterPassword);
-                trc("configType: %s\n", siteTypeString);
-                trc("configCounter: %s\n", siteCounterString);
-                trc("configVariant: %s\n\n", siteVariantString);
+                config_setting_lookup_string(user, "username", &tmpuserName);
+                trc("tmpuname: %s\n", tmpuserName); // Returns username from config.
+
+                // if (userName == tmpuserName) {
+                    // Populate variables from config file.
+                    if((config_setting_lookup_string(user, "username", &userName)
+                        && config_setting_lookup_string(user, "password", &masterPassword)
+                        && config_setting_lookup_string(user, "type", &siteTypeString)
+                        && config_setting_lookup_string(user, "counter", &siteCounterString)
+                        && config_setting_lookup_string(user, "variant", &siteVariantString))) {
+                        trc("Config file loaded!\n");
+                    }
+                    else {
+                        fprintf(stderr, "Config file error!\nConfig file not loaded!\n");
+                        return 1;
+                    }
+                    trc("configUsername: %s\n", userName);
+                    trc("configPassword: %s\n", masterPassword);
+                    trc("configType: %s\n", siteTypeString);
+                    trc("configCounter: %s\n", siteCounterString);
+                    trc("configVariant: %s\n\n", siteVariantString);
+                    break;
+                // }
             }
         }
     }
 
     // Read the options.
-    for (int opt; (opt = getopt(argc, argv, "u:t:c:v:C:h")) != -1;)
+    for (int opt; (opt = getopt(argc, argv, "t:c:v:C:h")) != -1;)
         switch (opt) {
-            case 'u':
-                userName = optarg;
-                break;
             case 't':
                 siteTypeString = optarg;
                 break;
