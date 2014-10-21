@@ -136,7 +136,6 @@ int main(int argc, char *const argv[]) {
 
     // Load userinfo from config file.
     /* TODO
-     [ ] (PRIORITY) Hardcoded for only one user. Need to select user somehow.
      [ ] Add error checking?
      [ ] Remove duplicate config_read_file() below.
      [ ] Fix Lyndir/MasterPassword Issue #92.
@@ -155,8 +154,7 @@ int main(int argc, char *const argv[]) {
 
                 config_setting_lookup_string(user, "username", &tmpuserName);
 
-                trc("\ntmpuname: %s\nuname: %s\n\n", tmpuserName, userName);
-                if (userName == tmpuserName) { // Doesn't trigger, results appear to match above.
+                if (strcmp(tmpuserName, userName) == 0) {
 
                     // Populate variables from config file.
                     if((config_setting_lookup_string(user, "username", &userName)
@@ -170,11 +168,6 @@ int main(int argc, char *const argv[]) {
                         fprintf(stderr, "Config file error!\nConfig file not loaded!\n");
                         return 1;
                     }
-                    trc("configUsername: %s\n", userName);
-                    trc("configPassword: %s\n", masterPassword);
-                    trc("configType: %s\n", siteTypeString);
-                    trc("configCounter: %s\n", siteCounterString);
-                    trc("configVariant: %s\n\n", siteVariantString);
                     break;
                 }
             }

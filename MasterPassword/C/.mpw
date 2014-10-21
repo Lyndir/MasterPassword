@@ -65,12 +65,19 @@ Lyndir/MasterPassword Issue #92
 */
 
 // This is the correct format for current configuration.
-// This format only supports one user at this time.
-
+// Please note the comma at the end of the 'variant' line.
+// if there is another user the comma must be present.
+// If there is not another user, the comma must be removed.
 { username	= "Example Q. User";
   password	= "Myverysupersecretpassword";
-    type	= "maximum";
-    counter	= "15876";
-    variant	= "p"; }
+  type		= "maximum";
+  counter	= "15876";
+  variant	= "p"; },
+
+{ username	= "Jack Sparrow";
+  password	= "WhyIsTheRumGone?";
+  type		= "maximum";
+  counter	= "666";
+  variant	= "p"; }
 
 );
