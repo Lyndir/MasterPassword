@@ -94,7 +94,7 @@ char *homedir(const char *filename) {
 
     char *homefile = NULL;
     asprintf(&homefile, "%s/%s", homedir, filename);
-    return homefile;    
+    return homefile;
 }
 
 int main(int argc, char *const argv[]) {
@@ -124,11 +124,11 @@ int main(int argc, char *const argv[]) {
     }
 
     // Load userinfo from config file.
-    // TODO :: Hardcoded for user1. Need to select user somehow.
+    // TODO :: Hardcoded for only one user. Need to select user somehow.
     //      :: Add error checking?
     //      :: Remove duplicate config_read_file() below.
     if (config_read_file(&cfg, homedir(".mpw"))) {
-        setting = config_lookup(&cfg, "users.user1");
+        setting = config_lookup(&cfg, "users");
         if(setting != NULL) {
             unsigned int count = config_setting_length(setting);
             unsigned int i;

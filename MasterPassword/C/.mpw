@@ -45,15 +45,10 @@ Configuration bits:
                                  | the most significant word(s) of the question.
 */
 
-
-// User config file
-users =
-{
-  user1 = ({
-    username	= "Example Q. User";
-    password	= "Myverysupersecretpassword";
-    type	= "maximum";
-    counter	= 15876;
-    variant	= "p";
-  });
-};
+users = (
+{ username	= "Example Q. User";
+  password	= "Myverysupersecretpassword";
+  type	= "maximum";
+  counter	= 15876;
+  variant	= "p"; }
+);
