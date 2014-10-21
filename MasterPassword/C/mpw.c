@@ -119,11 +119,10 @@ int main(int argc, char *const argv[]) {
     config_init(&cfg);
 
     // Read the options.
-    for (int opt; (opt = getopt(argc, argv, "u")) != -1;)
+    for (int opt; (opt = getopt(argc, argv, "u:")) != -1;)
         switch (opt) {
             case 'u':
                 userName = optarg;
-                trc("uname: %s\n", userName); // Returning null, set above.
                 break;
             default:
                 abort();
@@ -155,9 +154,10 @@ int main(int argc, char *const argv[]) {
                 config_setting_t *user = config_setting_get_elem(setting, i);
 
                 config_setting_lookup_string(user, "username", &tmpuserName);
-                trc("tmpuname: %s\n", tmpuserName); // Returns username from config.
 
-                // if (userName == tmpuserName) {
+                trc("\ntmpuname: %s\nuname: %s\n\n", tmpuserName, userName);
+                if (userName == tmpuserName) { // Doesn't trigger, results appear to match above.
+
                     // Populate variables from config file.
                     if((config_setting_lookup_string(user, "username", &userName)
                         && config_setting_lookup_string(user, "password", &masterPassword)
@@ -176,7 +176,7 @@ int main(int argc, char *const argv[]) {
                     trc("configCounter: %s\n", siteCounterString);
                     trc("configVariant: %s\n\n", siteVariantString);
                     break;
-                // }
+                }
             }
         }
     }
