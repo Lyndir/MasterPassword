@@ -43,7 +43,7 @@
 #define MP_env_sitecounter  "MP_SITECOUNTER"
 
 void usage() {
-      fprintf(stderr, "Usage: mpw [-u name] [-t type] [-c counter] site\n\n");
+      fprintf(stderr, "Usage: mpw [-u name] [-t type] [-c counter] [-C context] site\n\n");
       fprintf(stderr, "    -u name      Specify the full name of the user.\n"
                       "                 Defaults to %s in env.\n\n", MP_env_username);
       fprintf(stderr, "    -t type      Specify the password's template.\n"
