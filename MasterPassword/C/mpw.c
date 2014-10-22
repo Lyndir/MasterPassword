@@ -129,6 +129,12 @@ int main(int argc, char *const argv[]) {
                 abort();
         }
 
+    // Convert and validate input.
+    if (!userName) {
+        fprintf(stderr, "Missing user name.\n");
+        return 1;
+    }
+
     // Read the config file.
     if ( access(configFile , F_OK|R_OK|W_OK ) != -1 ) {
         // For the sake of security, REFUSE to use the config file
@@ -227,11 +233,6 @@ int main(int argc, char *const argv[]) {
     if (optind < argc)
         siteName = argv[optind];
 
-    // Convert and validate input.
-    if (!userName) {
-        fprintf(stderr, "Missing user name.\n");
-        return 1;
-    }
     trc("userName: %s\n", userName);
     if (!siteName) {
         fprintf(stderr, "Missing site name.\n");
