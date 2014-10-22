@@ -123,7 +123,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                                                                            inDomains:NSUserDomainMask] lastObject];
     return [[[applicationSupportURL
             URLByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier isDirectory:YES]
-            URLByAppendingPathComponent:@"UbiquityStore" isDirectory:NO]
+            URLByAppendingPathComponent:@"MasterPassword" isDirectory:NO]
             URLByAppendingPathExtension:@"sqlite"];
 }
 
@@ -320,13 +320,10 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     inf( @"Migrating V1 local store" );
     NSURL *newLocalStoreURL = [self localStoreURL];
     NSError *error = nil;
-    if (![[NSFileManager defaultManager] createDirectoryAtURL:[newLocalStoreURL URLByDeletingLastPathComponent]
-                                  withIntermediateDirectories:YES attributes:nil error:&error]) {
-        err( @"Couldn't create our application support directory: %@", [error fullDescription] );
-        return NO;
-    }
-    if (![[NSFileManager defaultManager] moveItemAtURL:oldLocalStoreURL toURL:newLocalStoreURL error:&error]) {
-        err( @"Couldn't move the old store to the new location: %@", [error fullDescription] );
+    if (![NSPersistentStore migrateStore:oldLocalStoreURL withOptions:@{ STORE_OPTIONS }
+                                 toStore:newLocalStoreURL withOptions:@{ STORE_OPTIONS }
+                                   model:nil error:&error]) {
+        err( @"Couldn't migrate the old store to the new location: %@", [error fullDescription] );
         return NO;
     }
 
@@ -359,13 +356,16 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     inf( @"Migrating V2 local store" );
     NSURL *newLocalStoreURL = [self localStoreURL];
     NSError *error = nil;
-    if (![[NSFileManager defaultManager] createDirectoryAtURL:[newLocalStoreURL URLByDeletingLastPathComponent]
-                                  withIntermediateDirectories:YES attributes:nil error:&error]) {
-        err( @"Couldn't create our application support directory: %@", [error fullDescription] );
-        return NO;
-    }
-    if (![[NSFileManager defaultManager] moveItemAtURL:oldLocalStoreURL toURL:newLocalStoreURL error:&error]) {
-        err( @"Couldn't move the old store to the new location: %@", [error fullDescription] );
+    if (![NSPersistentStore migrateStore:oldLocalStoreURL withOptions:@{
+            NSMigratePersistentStoresAutomaticallyOption : @YES,
+            NSInferMappingModelAutomaticallyOption       : @YES,
+            STORE_OPTIONS
+    }                            toStore:newLocalStoreURL withOptions:@{
+            NSMigratePersistentStoresAutomaticallyOption : @YES,
+            NSInferMappingModelAutomaticallyOption       : @YES,
+            STORE_OPTIONS
+    }                              model:nil error:&error]) {
+        err( @"Couldn't migrate the old store to the new location: %@", [error fullDescription] );
         return NO;
     }
 
