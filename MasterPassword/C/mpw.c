@@ -120,11 +120,41 @@ int main(int argc, char *const argv[]) {
     config_init(&cfg);
 
     // Read the options.
-    for (int opt; (opt = getopt(argc, argv, "u:")) != -1;)
+    for (int opt; (opt = getopt(argc, argv, "u:t:c:v:C:h")) != -1;)
         switch (opt) {
             case 'u':
                 userName = optarg;
                 break;
+            case 't':
+                siteTypeString = optarg;
+                break;
+            case 'c':
+                siteCounterString = optarg;
+                break;
+            case 'v':
+                siteVariantString = optarg;
+                break;
+            case 'C':
+                siteContextString = optarg;
+                break;
+            case 'h':
+                usage();
+                break;
+            case '?':
+                switch (optopt) {
+                    case 'u':
+                        fprintf(stderr, "Missing user name to option: -%c\n", optopt);
+                        break;
+                    case 't':
+                        fprintf(stderr, "Missing type name to option: -%c\n", optopt);
+                        break;
+                    case 'c':
+                        fprintf(stderr, "Missing counter value to option: -%c\n", optopt);
+                        break;
+                    default:
+                        fprintf(stderr, "Unknown option: -%c\n", optopt);
+                }
+                return 1;
             default:
                 abort();
         }
@@ -233,6 +263,7 @@ int main(int argc, char *const argv[]) {
     if (optind < argc)
         siteName = argv[optind];
 
+    // Convert and validate input.
     trc("userName: %s\n", userName);
     if (!siteName) {
         fprintf(stderr, "Missing site name.\n");
