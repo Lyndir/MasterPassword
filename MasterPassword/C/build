@@ -25,7 +25,7 @@ else
     # Modify here or override using targets='mpw mpw-bench' ./build
     targets=(
         mpw                         # C CLI version of Master Password.
-       #mpw-bench                   # C CLI Master Password benchmark utility.
+        mpw-bench                   # C CLI Master Password benchmark utility.
     )
 fi
 
@@ -178,14 +178,13 @@ mpw() {
     echo "Building target: $target..."
     CFLAGS=(
         # include paths
-        -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva" -I"lib/libconfig/libconfig-1.49/lib"
+        -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva"
     )
     LDFLAGS=(
         # library paths
         -L"." -L"lib/scrypt"
         # link libraries
         -l"crypto"
-        -l"config"
         # scrypt
         "lib/scrypt/scrypt-crypto_aesctr.o"
         "lib/scrypt/scrypt-sha256.o"
@@ -194,10 +193,7 @@ mpw() {
         "lib/scrypt/scrypt-scryptenc_cpuperf.o"
         "lib/scrypt/scrypt-scryptenc.o"
         # libconfig
-#        "lib/libconfig/libconfig-1.4.9/lib/libconfig_la-scanctx.o"
-#        "lib/libconfig/libconfig-1.4.9/lib/libconfig_la-strbuf.o"
-##        "lib/libconfig/libconfig-1.4.9/lib/libconfig_la-grammar.o"
-#        "lib/libconfig/libconfig-1.4.9/lib/libconfig_la-scanner.o"
+        "lib/libconfig/libconfig-1.4.9/lib/.libs/libconfig.so"
     )
 
     cc "${CFLAGS[@]}"                 -c types.c -o types.o "$@"
@@ -209,6 +205,7 @@ mpw() {
 ### MPW-BENCH
 mpw-bench() {
     depend scrypt
+    depend libconfig
     depend bcrypt
 
     echo
@@ -231,6 +228,8 @@ mpw-bench() {
         "lib/scrypt/scrypt-memlimit.o"
         "lib/scrypt/scrypt-scryptenc_cpuperf.o"
         "lib/scrypt/scrypt-scryptenc.o"
+        # libconfig
+        "lib/libconfig/libconfig-1.4.9/lib/.libs/libconfig.so"
         # bcrypt
         "lib/bcrypt/crypt_blowfish.o"
         "lib/bcrypt/crypt_gensalt.o"
