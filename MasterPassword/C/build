@@ -172,18 +172,20 @@ depend() {
 ### MPW
 mpw() {
     depend scrypt
+    depend libconfig
 
     echo
     echo "Building target: $target..."
     CFLAGS=(
         # include paths
-        -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva"
+        -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva" -I"lib/libconfig/libconfig-1.49/lib"
     )
     LDFLAGS=(
         # library paths
         -L"." -L"lib/scrypt"
         # link libraries
         -l"crypto"
+        -l"config"
         # scrypt
         "lib/scrypt/scrypt-crypto_aesctr.o"
         "lib/scrypt/scrypt-sha256.o"
@@ -191,6 +193,11 @@ mpw() {
         "lib/scrypt/scrypt-memlimit.o"
         "lib/scrypt/scrypt-scryptenc_cpuperf.o"
         "lib/scrypt/scrypt-scryptenc.o"
+        # libconfig
+#        "lib/libconfig/libconfig-1.4.9/lib/libconfig_la-scanctx.o"
+#        "lib/libconfig/libconfig-1.4.9/lib/libconfig_la-strbuf.o"
+##        "lib/libconfig/libconfig-1.4.9/lib/libconfig_la-grammar.o"
+#        "lib/libconfig/libconfig-1.4.9/lib/libconfig_la-scanner.o"
     )
 
     cc "${CFLAGS[@]}"                 -c types.c -o types.o "$@"
@@ -243,7 +250,7 @@ cc() {
     if hash llvm-gcc 2>/dev/null; then
         llvm-gcc "$@"
     elif hash gcc 2>/dev/null; then
-        gcc -std=gnu99 -lconfig "$@"
+        gcc -std=gnu99 "$@"
     elif hash clang 2>/dev/null; then
         clang "$@"
     else
