@@ -36,7 +36,7 @@ fi
 ### DEPENDENCIES
 
 digest() {
-    openssl sha1 -binary < "$1" | od -t x1 -An -v | tr -d '[:space:]'
+    openssl sha -sha256 -binary < "$1" | od -t x1 -An -v | tr -d '[:space:]'
 }
 fetch() {
     if hash wget 2>/dev/null; then
@@ -81,7 +81,7 @@ fetchSource() (
         [[ -e $files ]] || {
             echo
             echo "Unpacking: ${PWD##*/}, using package..."
-            unpack "${pkg##*/}" "$pkg_sha"
+            unpack "${pkg##*/}" "$pkg_sha256"
         }
 
     elif [[ $git ]] && hash git 2>/dev/null; then
@@ -114,7 +114,7 @@ fetchSource() (
             echo
             echo "Fetching: ${PWD##*/}, using package..."
             fetch "$pkg"
-            unpack "${pkg##*/}" "$pkg_sha"
+            unpack "${pkg##*/}" "$pkg_sha256"
         }
 
     else
