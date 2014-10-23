@@ -64,7 +64,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     self.view.backgroundColor = [UIColor clearColor];
     [self.passwordCollectionView automaticallyAdjustInsetsForKeyboard];
     self.passwordsSearchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    if ([self.passwordsSearchBar respondsToSelector:@selector(keyboardAppearance)])
+    if ([self.passwordsSearchBar respondsToSelector:@selector( keyboardAppearance )])
         self.passwordsSearchBar.keyboardAppearance = UIKeyboardAppearanceDark;
     else
         [self.passwordsSearchBar enumerateViews:^(UIView *subview, BOOL *stop, BOOL *recurse) {
@@ -170,23 +170,29 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
      forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
 
     if (controller == _fetchedResultsController) {
-        [self.passwordCollectionView performBatchUpdates:^{
-            [self fetchedItemsDidUpdate];
-            switch (type) {
-                case NSFetchedResultsChangeInsert:
-                    [self.passwordCollectionView insertItemsAtIndexPaths:@[ newIndexPath ]];
-                    break;
-                case NSFetchedResultsChangeDelete:
-                    [self.passwordCollectionView deleteItemsAtIndexPaths:@[ indexPath ]];
-                    break;
-                case NSFetchedResultsChangeMove:
-                    [self.passwordCollectionView moveItemAtIndexPath:indexPath toIndexPath:newIndexPath];
-                    break;
-                case NSFetchedResultsChangeUpdate:
-                    [self.passwordCollectionView reloadItemsAtIndexPaths:@[ indexPath ]];
-                    break;
-            }
-        }                                     completion:nil];
+        @try {
+            [self.passwordCollectionView performBatchUpdates:^{
+                [self fetchedItemsDidUpdate];
+                switch (type) {
+                    case NSFetchedResultsChangeInsert:
+                        [self.passwordCollectionView insertItemsAtIndexPaths:@[ newIndexPath ]];
+                        break;
+                    case NSFetchedResultsChangeDelete:
+                        [self.passwordCollectionView deleteItemsAtIndexPaths:@[ indexPath ]];
+                        break;
+                    case NSFetchedResultsChangeMove:
+                        [self.passwordCollectionView moveItemAtIndexPath:indexPath toIndexPath:newIndexPath];
+                        break;
+                    case NSFetchedResultsChangeUpdate:
+                        [self.passwordCollectionView reloadItemsAtIndexPaths:@[ indexPath ]];
+                        break;
+                }
+            }                                     completion:nil];
+        }
+        @catch (NSException *exception) {
+            wrn( @"While updating password cells: %@", [exception fullDescription] );
+            [self.passwordCollectionView reloadData];
+        }
     }
 }
 
@@ -249,7 +255,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     if (searchBar == self.passwordsSearchBar) {
         if ([self.query length] && [[self.query stringByTrimmingCharactersInSet:_siteNameAcceptableCharactersSet] length])
             [self showTips:MPPasswordsBadNameTip];
-        
+
         [self updatePasswords];
     }
 }
@@ -261,7 +267,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     [UIView animateWithDuration:0.3f animations:^{
         if (showTips & MPPasswordsBadNameTip)
             self.badNameTipContainer.alpha = 1;
-    } completion:^(BOOL finished) {
+    }                completion:^(BOOL finished) {
         if (finished)
             PearlMainQueueAfter( 5, ^{
                 [UIView animateWithDuration:0.3f animations:^{
@@ -375,28 +381,34 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         if (![self.fetchedResultsController performFetch:&error])
             err( @"Couldn't fetch sites: %@", [error fullDescription] );
 
-        [self.passwordCollectionView performBatchUpdates:^{
-            [self fetchedItemsDidUpdate];
+        @try {
+            [self.passwordCollectionView performBatchUpdates:^{
+                [self fetchedItemsDidUpdate];
 
-            NSInteger fromSections = self.passwordCollectionView.numberOfSections;
-            NSInteger toSections = [self numberOfSectionsInCollectionView:self.passwordCollectionView];
-            for (NSInteger section = 0; section < MAX( toSections, fromSections ); ++section) {
-                if (section >= fromSections)
-                    [self.passwordCollectionView insertSections:[NSIndexSet indexSetWithIndex:section]];
-                else if (section >= toSections)
-                    [self.passwordCollectionView deleteSections:[NSIndexSet indexSetWithIndex:section]];
-                else if (section < [oldSections count])
-                    [self.passwordCollectionView reloadItemsFromArray:oldSections[section]
-                                                              toArray:[[self.fetchedResultsController sections][section] objects]
-                                                            inSection:section];
-                else
-                    [self.passwordCollectionView reloadSections:[NSIndexSet indexSetWithIndex:section]];
-            }
-        }                                     completion:^(BOOL finished) {
-            if (finished)
-                [self.passwordCollectionView setContentOffset:CGPointMake( 0, -self.passwordCollectionView.contentInset.top )
-                                                     animated:YES];
-        }];
+                NSInteger fromSections = self.passwordCollectionView.numberOfSections;
+                NSInteger toSections = [self numberOfSectionsInCollectionView:self.passwordCollectionView];
+                for (NSInteger section = 0; section < MAX( toSections, fromSections ); ++section) {
+                    if (section >= fromSections)
+                        [self.passwordCollectionView insertSections:[NSIndexSet indexSetWithIndex:section]];
+                    else if (section >= toSections)
+                        [self.passwordCollectionView deleteSections:[NSIndexSet indexSetWithIndex:section]];
+                    else if (section < [oldSections count])
+                        [self.passwordCollectionView reloadItemsFromArray:oldSections[section]
+                                                                  toArray:[[self.fetchedResultsController sections][section] objects]
+                                                                inSection:section];
+                    else
+                        [self.passwordCollectionView reloadSections:[NSIndexSet indexSetWithIndex:section]];
+                }
+            }                                     completion:^(BOOL finished) {
+                if (finished)
+                    [self.passwordCollectionView setContentOffset:CGPointMake( 0, -self.passwordCollectionView.contentInset.top )
+                                                         animated:YES];
+            }];
+        }
+        @catch (NSException *exception) {
+            wrn( @"While updating password cells: %@", [exception fullDescription] );
+            [self.passwordCollectionView reloadData];
+        }
     }];
 }
 

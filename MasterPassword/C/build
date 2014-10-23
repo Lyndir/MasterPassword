@@ -32,6 +32,13 @@ fi
 
 ### DEPENDENCIES
 
+digest() {
+    if hash xxd 2>/dev/null; then
+        openssl sha1 -binary < "$1" | xxd -p
+    else
+        openssl sha1 < "$1" | sed 's/.* //'
+    fi
+}
 fetch() {
     if hash wget 2>/dev/null; then
         wget -O "${1##*/}" "$1"
@@ -54,7 +61,7 @@ unpack() {
     fi
 
     printf 'Verifying package: %s, against digest: %s...' "$1" "$2"
-    [[ $(openssl sha < "$1") = $2 ]] || {
+    [[ $(digest "$1") = $2 ]] || {
         printf ' mismatch!\n'
         echo 2>&1 "Downloaded package doesn't match digest."
         exit 1

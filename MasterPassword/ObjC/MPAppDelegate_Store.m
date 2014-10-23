@@ -56,7 +56,11 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         return NO;
 
     [mainManagedObjectContext performBlock:^{
-        mocBlock( mainManagedObjectContext );
+        @try {
+            mocBlock( mainManagedObjectContext );
+        } @catch (NSException *exception) {
+            err( @"While performing managed block:\n%@", [exception fullDescription] );
+        }
     }];
 
     return YES;
@@ -69,7 +73,12 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         return NO;
 
     [mainManagedObjectContext performBlockAndWait:^{
-        mocBlock( mainManagedObjectContext );
+        @try {
+            mocBlock( mainManagedObjectContext );
+        }
+        @catch (NSException *exception) {
+            err( @"While performing managed block:\n%@", [exception fullDescription] );
+        }
     }];
 
     return YES;
@@ -84,7 +93,12 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     moc.parentContext = privateManagedObjectContextIfReady;
     [moc performBlock:^{
-        mocBlock( moc );
+        @try {
+            mocBlock( moc );
+        }
+        @catch (NSException *exception) {
+            err( @"While performing managed block:\n%@", [exception fullDescription] );
+        }
     }];
 
     return YES;
@@ -99,7 +113,12 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     moc.parentContext = privateManagedObjectContextIfReady;
     [moc performBlockAndWait:^{
-        mocBlock( moc );
+        @try {
+            mocBlock( moc );
+        }
+        @catch (NSException *exception) {
+            err( @"While performing managed block:\n%@", [exception fullDescription] );
+        }
     }];
 
     return YES;
@@ -195,7 +214,12 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                         ^(NSNotification *note) {
                             // When privateManagedObjectContext is saved, import the changes into mainManagedObjectContext.
                             [self.mainManagedObjectContext performBlock:^{
-                                [self.mainManagedObjectContext mergeChangesFromContextDidSaveNotification:note];
+                                @try {
+                                    [self.mainManagedObjectContext mergeChangesFromContextDidSaveNotification:note];
+                                }
+                                @catch (NSException *exception) {
+                                    err( @"While merging changes:\n%@", [exception fullDescription] );
+                                }
                             }];
                         }];
 
