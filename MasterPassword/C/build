@@ -2,7 +2,10 @@
 #
 # TROUBLESHOOTING
 #   - To enable verbose algorithm/implementation debugging, use ./build -DDEBUG
-#   - If you see 'undefined reference to `clock_gettime'', try ./build -lrt instead
+#   - If you see 'undefined reference to `clock_gettime'',
+#       try ./build -lrt instead.
+#   - If you see 'x86.S:202: Error: junk at end of line, first unrecognized character is `,'',
+#       try commenting the line in lib/bcrypt/x86.S.
 #
 # BUGS
 #   masterpassword@lyndir.com
@@ -32,6 +35,9 @@ fi
 
 ### DEPENDENCIES
 
+digest() {
+    openssl sha1 -binary < "$1" | od -t x1 -An -v | tr -d '[:space:]'
+}
 fetch() {
     if hash wget 2>/dev/null; then
         wget -O "${1##*/}" "$1"
@@ -54,7 +60,7 @@ unpack() {
     fi
 
     printf 'Verifying package: %s, against digest: %s...' "$1" "$2"
-    [[ $(openssl sha < "$1") = $2 ]] || {
+    [[ $(digest "$1") = $2 ]] || {
         printf ' mismatch!\n'
         echo 2>&1 "Downloaded package doesn't match digest."
         exit 1
