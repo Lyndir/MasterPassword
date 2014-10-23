@@ -33,11 +33,7 @@ fi
 ### DEPENDENCIES
 
 digest() {
-    if hash xxd 2>/dev/null; then
-        openssl sha1 -binary < "$1" | xxd -p
-    else
-        openssl sha1 < "$1" | sed 's/.* //'
-    fi
+    openssl sha1 -binary < "$1" | od -t x1 -An -v | tr -d '[:space:]'
 }
 fetch() {
     if hash wget 2>/dev/null; then
