@@ -122,10 +122,8 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     // No more methods left, fail if key still not known.
     if (!tryKey) {
-        if (password) {
+        if (password)
             inf( @"Login failed for: %@", user.userID );
-            MPCheckpoint( MPCheckpointSignInFailed, nil );
-        }
 
         return NO;
     }
@@ -159,7 +157,6 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
         }];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedInNotification object:self];
-    MPCheckpoint( MPCheckpointSignedIn, nil );
 
     return YES;
 }

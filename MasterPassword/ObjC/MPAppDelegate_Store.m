@@ -745,7 +745,6 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         return MPImportResultInternalError;
 
     inf( @"Import completed successfully." );
-    MPCheckpoint( MPCheckpointSitesImported, nil );
 
     [[NSNotificationCenter defaultCenter] postNotificationName:MPSitesImportedNotification object:nil userInfo:@{
             MPSitesImportedNotificationUserKey : user
@@ -812,10 +811,6 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                              [strf( @"%lu:%lu:%lu", (long)type, (long)version, (long)counter ) UTF8String],
                              [(loginName?: @"") UTF8String], [siteName UTF8String], content?: @""];
     }
-
-    MPCheckpoint( MPCheckpointSitesExported, @{
-            @"showPasswords" : @(revealPasswords)
-    } );
 
     return export;
 }

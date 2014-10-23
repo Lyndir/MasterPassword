@@ -47,35 +47,6 @@ typedef NS_ENUM(NSUInteger, MPSiteType) {
 
 #define MPErrorDomain                         @"MPErrorDomain"
 
-#define MPCheckpointHelpChapter               @"MPCheckpointHelpChapter"
-#define MPCheckpointCopyToPasteboard          @"MPCheckpointCopyToPasteboard"
-#define MPCheckpointCopyLoginNameToPasteboard @"MPCheckpointCopyLoginNameToPasteboard"
-#define MPCheckpointResetPasswordCounter      @"MPCheckpointResetPasswordCounter"
-#define MPCheckpointIncrementPasswordCounter  @"MPCheckpointIncrementPasswordCounter"
-#define MPCheckpointEditPassword              @"MPCheckpointEditPassword"
-#define MPCheckpointEditLoginName             @"MPCheckpointEditLoginName"
-#define MPCheckpointUseType                   @"MPCheckpointUseType"
-#define MPCheckpointDeleteSite                @"MPCheckpointDeleteSite"
-#define MPCheckpointShowGuide                 @"MPCheckpointShowGuide"
-#define MPCheckpointShowSetup                 @"MPCheckpointShowSetup"
-#define MPCheckpointChangeMP                  @"MPCheckpointChangeMP"
-#define MPCheckpointMPErrorUbiquity           @"MPCheckpointMPErrorUbiquity"
-#define MPCheckpointLocalStoreReset           @"MPCheckpointLocalStoreReset"
-#define MPCheckpointCloudStoreReset           @"MPCheckpointCloudStoreReset"
-#define MPCheckpointSignInFailed              @"MPCheckpointSignInFailed"
-#define MPCheckpointSignedIn                  @"MPCheckpointSignedIn"
-#define MPCheckpointConfig                    @"MPCheckpointConfig"
-#define MPCheckpointCloud                     @"MPCheckpointCloud"
-#define MPCheckpointSitesImported             @"MPCheckpointSitesImported"
-#define MPCheckpointSitesExported             @"MPCheckpointSitesExported"
-#define MPCheckpointExplicitMigration         @"MPCheckpointExplicitMigration"
-#define MPCheckpointReview                    @"MPCheckpointReview"
-#define MPCheckpointApps                      @"MPCheckpointApps"
-#define MPCheckpointApp                       @"MPCheckpointApp"
-#define MPCheckpointEmergencyGenerator        @"MPCheckpointEmergencyGenerator"
-#define MPCheckpointLogs                      @"MPCheckpointLogs"
-#define MPCheckpointStarted                   @"MPCheckpointStarted"
-
 #define MPSignedInNotification                @"MPSignedInNotification"
 #define MPSignedOutNotification               @"MPSignedOutNotification"
 #define MPKeyForgottenNotification            @"MPKeyForgottenNotification"
@@ -86,8 +57,3 @@ typedef NS_ENUM(NSUInteger, MPSiteType) {
 
 #define MPSitesImportedNotificationUserKey    @"MPSitesImportedNotificationUserKey"
 #define MPInconsistenciesFixResultUserKey     @"MPInconsistenciesFixResultUserKey"
-
-static void MPCheckpoint(NSString *checkpoint, NSDictionary *attributes) {
-
-    inf(@"%@: %@", checkpoint, attributes);
-}

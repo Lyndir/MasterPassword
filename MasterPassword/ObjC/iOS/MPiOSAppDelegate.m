@@ -138,18 +138,6 @@
                                     @"Find the store from the user pull‑down after logging in.", latestFeatures )
                                  viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:nil
                                cancelTitle:@"Thanks" otherTitles:nil];
-
-        MPCheckpoint( MPCheckpointStarted, @{
-                @"simulator"  : PearlStringB( [PearlDeviceUtils isSimulator] ),
-                @"encrypted"  : PearlStringB( [PearlDeviceUtils isAppEncrypted] ),
-                @"jailbroken" : PearlStringB( [PearlDeviceUtils isJailbroken] ),
-                @"platform"   : [PearlDeviceUtils platform],
-#ifdef APPSTORE
-                @"legal"      : PearlStringB([PearlDeviceUtils isAppEncrypted]),
-#else
-                @"legal"      : @"YES",
-#endif
-        } );
     }
     @catch (id exception) {
         err( @"During Post-Startup: %@", exception );
@@ -293,32 +281,27 @@
     inf( @"Re-activated" );
     [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:nil];
 
-    NSString *importHeader = @"# Master Password site export";
-    NSString *importedSitesString = [UIPasteboard generalPasteboard].string;
-    if ([importedSitesString length] > [importHeader length] &&
-        [[importedSitesString substringToIndex:[importHeader length]] isEqualToString:importHeader])
-        [PearlAlert showAlertWithTitle:@"Import Sites?" message:
-                        @"We've detected Master Password import sites on your pasteboard, would you like to import them?"
-                             viewStyle:UIAlertViewStyleDefault initAlert:nil
-                     tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
-                         if (buttonIndex == [alert cancelButtonIndex])
-                             return;
+    PearlNotMainQueue( ^{
+        NSString *importHeader = @"# Master Password site export";
+        NSString *importedSitesString = [UIPasteboard generalPasteboard].string;
+        if ([importedSitesString length] > [importHeader length] &&
+            [[importedSitesString substringToIndex:[importHeader length]] isEqualToString:importHeader])
+            [PearlAlert showAlertWithTitle:@"Import Sites?" message:
+                            @"We've detected Master Password import sites on your pasteboard, would you like to import them?"
+                                 viewStyle:UIAlertViewStyleDefault initAlert:nil
+                         tappedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex) {
+                             if (buttonIndex == [alert cancelButtonIndex])
+                                 return;
 
-                         [self importSites:importedSitesString];
-                         [UIPasteboard generalPasteboard].string = nil;
-                     } cancelTitle:@"No" otherTitles:@"Import Sites", nil];
+                             [self importSites:importedSitesString];
+                             [UIPasteboard generalPasteboard].string = nil;
+                         } cancelTitle:@"No" otherTitles:@"Import Sites", nil];
+    } );
 
     [super applicationDidBecomeActive:application];
 }
 
 #pragma mark - Behavior
-
-- (void)showReview {
-
-    [super showReview];
-
-    MPCheckpoint( MPCheckpointReview, nil );
-}
 
 - (void)showFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController {
 
@@ -522,8 +505,6 @@
                 [self signOutAnimated:YES];
                 if (didReset)
                     didReset();
-
-                MPCheckpoint( MPCheckpointChangeMP, nil );
             }
                        cancelTitle:[PearlStrings get].commonButtonAbort
                        otherTitles:[PearlStrings get].commonButtonContinue, nil];
@@ -554,28 +535,25 @@
             [PearlLogger get].printLevel = PearlLogLevelInfo;
 
 #ifdef CRASHLYTICS
-                        [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].rememberLogin boolValue] forKey:@"rememberLogin"];
-                        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].sendInfo boolValue] forKey:@"sendInfo"];
-                        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].helpHidden boolValue] forKey:@"helpHidden"];
-                        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].showSetup boolValue] forKey:@"showQuickStart"];
-                        [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].firstRun boolValue] forKey:@"firstRun"];
-                        [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].launchCount intValue] forKey:@"launchCount"];
-                        [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].askForReviews boolValue] forKey:@"askForReviews"];
-                        [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].reviewAfterLaunches intValue] forKey:@"reviewAfterLaunches"];
-                        [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
+        [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].rememberLogin boolValue] forKey:@"rememberLogin"];
+        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].sendInfo boolValue] forKey:@"sendInfo"];
+        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].helpHidden boolValue] forKey:@"helpHidden"];
+        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].showSetup boolValue] forKey:@"showQuickStart"];
+        [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].firstRun boolValue] forKey:@"firstRun"];
+        [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].launchCount intValue] forKey:@"launchCount"];
+        [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].askForReviews boolValue] forKey:@"askForReviews"];
+        [[Crashlytics sharedInstance] setIntValue:[[PearlConfig get].reviewAfterLaunches intValue] forKey:@"reviewAfterLaunches"];
+        [[Crashlytics sharedInstance] setObjectValue:[PearlConfig get].reviewedVersion forKey:@"reviewedVersion"];
+        [[Crashlytics sharedInstance] setBoolValue:[PearlDeviceUtils isSimulator] forKey:@"simulator"];
+        [[Crashlytics sharedInstance] setBoolValue:[PearlDeviceUtils isAppEncrypted] forKey:@"encrypted"];
+        [[Crashlytics sharedInstance] setBoolValue:[PearlDeviceUtils isJailbroken] forKey:@"jailbroken"];
+        [[Crashlytics sharedInstance] setObjectValue:[PearlDeviceUtils platform] forKey:@"platform"];
+#ifdef APPSTORE
+        [[Crashlytics sharedInstance] setBoolValue:[PearlDeviceUtils isAppEncrypted] forKey:@"reviewedVersion"];
+#else
+        [[Crashlytics sharedInstance] setBoolValue:YES forKey:@"reviewedVersion"];
 #endif
-
-        MPCheckpoint( MPCheckpointConfig, @{
-                @"rememberLogin"       : @([[MPConfig get].rememberLogin boolValue]),
-                @"sendInfo"            : @([[MPiOSConfig get].sendInfo boolValue]),
-                @"helpHidden"          : @([[MPiOSConfig get].helpHidden boolValue]),
-                @"showQuickStart"      : @([[MPiOSConfig get].showSetup boolValue]),
-                @"firstRun"            : @([[PearlConfig get].firstRun boolValue]),
-                @"launchCount"         : NilToNSNull( [PearlConfig get].launchCount ),
-                @"askForReviews"       : @([[PearlConfig get].askForReviews boolValue]),
-                @"reviewAfterLaunches" : NilToNSNull( [PearlConfig get].reviewAfterLaunches ),
-                @"reviewedVersion"     : NilToNSNull( [PearlConfig get].reviewedVersion )
-        } );
+#endif
     }
 }
 
