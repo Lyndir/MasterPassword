@@ -20,7 +20,7 @@
 #include <string.h>
 #include <errno.h>
 
-#include "lib/libconfig/libconfig-1.4.9/lib/libconfig.h"
+#include "lib/libconfig/lib/libconfig.h"
 
 #include <alg/sha256.h>
 #include <crypto/crypto_scrypt.h>
