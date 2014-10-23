@@ -2,7 +2,10 @@
 #
 # TROUBLESHOOTING
 #   - To enable verbose algorithm/implementation debugging, use ./build -DDEBUG
-#   - If you see 'undefined reference to `clock_gettime'', try ./build -lrt instead
+#   - If you see 'undefined reference to `clock_gettime'',
+#       try ./build -lrt instead.
+#   - If you see 'x86.S:202: Error: junk at end of line, first unrecognized character is `,'',
+#       try commenting the line in lib/bcrypt/x86.S.
 #
 # BUGS
 #   masterpassword@lyndir.com
