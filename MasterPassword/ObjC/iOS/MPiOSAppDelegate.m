@@ -294,7 +294,7 @@
                                  return;
 
                              [self importSites:importedSitesString];
-                             [UIPasteboard generalPasteboard].string = nil;
+                             [UIPasteboard generalPasteboard].string = @"";
                          } cancelTitle:@"No" otherTitles:@"Import Sites", nil];
     } );
 
