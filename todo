@@ -1,4 +1,1 @@
-sometimes after login, when searching there are no results. (verify - is this still the case?)
 try yaSSL vs OpenSSL
-sometimes after deleting the app and installing it again, the cloud store opens but is empty (import doesn't happen on open).  On next open, cloud store is populated before opened (and open operation blocks on importing of logs).
-icloud popup appears an addition to setup screen.
