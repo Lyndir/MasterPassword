@@ -23,7 +23,7 @@
             }
             @catch (NSException *exception) {
                 success = NO;
-                err( @"While saving: %@", exception );
+                err( @"While saving: %@", [exception fullDescription] );
             }
         }];
     }
@@ -128,10 +128,15 @@
 
 - (NSString *)debugDescription {
 
-    return strf( @"{%@: name=%@, user=%@, type=%lu, uses=%ld, lastUsed=%@, version=%ld, loginName=%@, requiresExplicitMigration=%d}",
-            NSStringFromClass( [self class] ), self.name, self.user.name, (long)self.type, (long)self.uses, self.lastUsed,
-            (long)self.version,
-            self.loginName, self.requiresExplicitMigration );
+    @try {
+        return strf( @"{%@: name=%@, user=%@, type=%lu, uses=%ld, lastUsed=%@, version=%ld, loginName=%@, requiresExplicitMigration=%d}",
+                NSStringFromClass( [self class] ), self.name, self.user.name, (long)self.type, (long)self.uses, self.lastUsed,
+                (long)self.version,
+                self.loginName, self.requiresExplicitMigration );
+    } @catch (NSException *exception) {
+        return strf( @"{%@: inaccessible: %@}",
+                NSStringFromClass( [self class] ), [exception fullDescription] );
+    }
 }
 
 - (BOOL)tryMigrateExplicitly:(BOOL)explicit {
