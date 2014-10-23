@@ -257,8 +257,11 @@
                     return;
 
                 [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    [context deleteObject:[self siteInContext:context]];
-                    [context saveToStore];
+                    MPSiteEntity *site_ = [self siteInContext:context];
+                    if (site_) {
+                        [context deleteObject:site_];
+                        [context saveToStore];
+                    }
                 }];
             }          cancelTitle:@"Cancel" destructiveTitle:@"Delete Site" otherTitles:nil];
 }
