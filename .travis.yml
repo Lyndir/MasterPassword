@@ -2,3 +2,5 @@ language: objective-c
 xcode_workspace: MasterPassword.xcworkspace
 xcode_scheme: MasterPassword iOS (Development)
 xcode_sdk: iphonesimulator
+git:
+  submodules: true
