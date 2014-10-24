@@ -1,54 +1,10 @@
 /*
 Master Password User Config File
 
-Allows for each user to have seperate default values.
-
 If this file is in your homedir, this file MUST have file permissions equal to 600.
 Verify with the following command:
 
 chmod 600 ~/.mpw
-
-
-mpw usage before configuring:
-
-mpw -u 'Example Q. User' -t x -c 15876 -v p google.com
-Your master password:
-CQ2o2zqRDTaxB6lfwo1-
-
-mpw usage after configuring:
-
-mpw -u 'Example Q. User' google.com
-CQ2o2zqRDTaxB6lfwo1-
-
-
-Configuration bits:
-
-    type      Specify the password's template.
-                 Defaults to MP_SITETYPE in env or 'long' for password, 'name' for login.
-                     x, max, maximum | 20 characters, contains symbols.
-                     l, long         | Copy-friendly, 14 characters, contains symbols.
-                     m, med, medium  | Copy-friendly, 8 characters, contains symbols.
-                     b, basic        | 8 characters, no symbols.
-                     s, short        | Copy-friendly, 4 characters, no symbols.
-                     i, pin          | 4 numbers.
-                     n, name         | 9 letter name.
-                     p, phrase       | 20 character sentence.
-
-    counter   The value of the counter.
-                 Defaults to MP_SITECOUNTER in env or '1'.
-
-    variant   The kind of content to generate.
-                 Defaults to 'password'.
-                     p, password | The password to log in with.
-                     l, login    | The username to log in as.
-                     a, answer   | The answer to a security question.
-
-    context   A variant-specific context.
-                 Defaults to empty.
-                  -v p, password | Doesn't currently use a context.
-                  -v l, login    | Doesn't currently use a context.
-                  -v a, answer   | Empty for a universal site answer or
-                                 | the most significant word(s) of the question.
 
 */
 
@@ -56,16 +12,11 @@ users = (
 // Please note the comma at the end of the 'variant' line.
 // If there is another user the comma must be present.
 // If there is not another user, the comma must be removed.
+
 { username	= "Example Q. User";
-  password	= "Myverysupersecretpassword";
-  type		= "maximum";
-  counter	= "15876";
-  variant	= "p"; },
+  password	= "Myverysupersecretpassword"; },
 
 { username	= "Jack Sparrow";
-  password	= "WhyIsTheRumGone?";
-  type		= "maximum";
-  counter	= "666";
-  variant	= "p"; }
+  password	= "WhyIsTheRumGone?"; }
 
 );

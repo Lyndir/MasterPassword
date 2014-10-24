@@ -207,10 +207,7 @@ int main(int argc, char *const argv[]) {
 
                     // Populate variables from config file.
                     if((config_setting_lookup_string(user, "username", &userName)
-                        && config_setting_lookup_string(user, "password", &masterPassword)
-                        && config_setting_lookup_string(user, "type", &siteTypeString)
-                        && config_setting_lookup_string(user, "counter", &siteCounterString)
-                        && config_setting_lookup_string(user, "variant", &siteVariantString))) {
+                        && config_setting_lookup_string(user, "password", &masterPassword))) {
                         trc("Config file loaded!\n");
                     }
                     else {
