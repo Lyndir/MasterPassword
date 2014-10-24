@@ -47,13 +47,13 @@ fetch() {
 }
 unpack() {
     if [[ $1 = *.tar.gz || $1 = *.tgz ]]; then
-        tar -xvzf "$1"
+        tar -xvzf "$1" --strip-components=1
 
     elif [[ $1 = *.tar.bz2 || $1 = *.tbz2 ]]; then
-        tar -xvjf "$1"
+        tar -xvjf "$1" --strip-components=1
 
     elif [[ $1 = *.tar ]]; then
-        tar -xvf "$1"
+        tar -xvf "$1" --strip-components=1
 
     else
         echo 2>&1 "Don't know how to unpack: $1"
