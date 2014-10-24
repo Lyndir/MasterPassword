@@ -1,0 +1,22 @@
+/*
+Master Password User Config File
+
+If this file is in your homedir, this file MUST have file permissions equal to 600.
+Verify with the following command:
+
+chmod 600 ~/.mpw
+
+*/
+
+users = (
+// Please note the comma at the end of the 'variant' line.
+// If there is another user the comma must be present.
+// If there is not another user, the comma must be removed.
+
+{ username	= "Example Q. User";
+  password	= "Myverysupersecretpassword"; },
+
+{ username	= "Jack Sparrow";
+  password	= "WhyIsTheRumGone?"; }
+
+);

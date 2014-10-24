@@ -28,7 +28,7 @@ else
     # Modify here or override using targets='mpw mpw-bench' ./build
     targets=(
         mpw                         # C CLI version of Master Password.
-       #mpw-bench                   # C CLI Master Password benchmark utility.
+        mpw-bench                   # C CLI Master Password benchmark utility.
     )
 fi
 
@@ -47,7 +47,7 @@ fetch() {
 }
 unpack() {
     if [[ $1 = *.tar.gz || $1 = *.tgz ]]; then
-        tar -xvzf "$1"
+        tar -xvzf "$1" --strip-components=1
 
     elif [[ $1 = *.tar.bz2 || $1 = *.tbz2 ]]; then
         tar -xvjf "$1"
@@ -178,6 +178,7 @@ depend() {
 ### MPW
 mpw() {
     depend scrypt
+    depend libconfig
 
     echo
     echo "Building target: $target..."
@@ -197,6 +198,8 @@ mpw() {
         "lib/scrypt/scrypt-memlimit.o"
         "lib/scrypt/scrypt-scryptenc_cpuperf.o"
         "lib/scrypt/scrypt-scryptenc.o"
+        # libconfig
+        "lib/libconfig/lib/.libs/libconfig.so"
     )
 
     cc "${CFLAGS[@]}"                 -c types.c -o types.o "$@"
@@ -208,6 +211,7 @@ mpw() {
 ### MPW-BENCH
 mpw-bench() {
     depend scrypt
+    depend libconfig
     depend bcrypt
 
     echo
@@ -230,6 +234,8 @@ mpw-bench() {
         "lib/scrypt/scrypt-memlimit.o"
         "lib/scrypt/scrypt-scryptenc_cpuperf.o"
         "lib/scrypt/scrypt-scryptenc.o"
+        # libconfig
+        "lib/libconfig/lib/.libs/libconfig.so"
         # bcrypt
         "lib/bcrypt/crypt_blowfish.o"
         "lib/bcrypt/crypt_gensalt.o"

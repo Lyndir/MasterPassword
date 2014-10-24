@@ -20,6 +20,8 @@
 #include <string.h>
 #include <errno.h>
 
+#include "lib/libconfig/lib/libconfig.h"
+
 #include <alg/sha256.h>
 #include <crypto/crypto_scrypt.h>
 #include "types.h"
@@ -41,7 +43,7 @@
 #define MP_env_sitecounter  "MP_SITECOUNTER"
 
 void usage() {
-      fprintf(stderr, "Usage: mpw [-u name] [-t type] [-c counter] site\n\n");
+      fprintf(stderr, "Usage: mpw [-u name] [-t type] [-c counter] [-C context] site\n\n");
       fprintf(stderr, "    -u name      Specify the full name of the user.\n"
                       "                 Defaults to %s in env.\n\n", MP_env_username);
       fprintf(stderr, "    -t type      Specify the password's template.\n"
@@ -96,12 +98,12 @@ char *homedir(const char *filename) {
 }
 
 int main(int argc, char *const argv[]) {
-
     if (argc < 2)
         usage();
 
     // Read the environment.
     const char *userName = getenv( MP_env_username );
+    const char *tmpuserName = NULL;
     const char *masterPassword = NULL;
     const char *siteName = NULL;
     MPElementType siteType = MPElementTypeGeneratedLong;
@@ -112,53 +114,153 @@ int main(int argc, char *const argv[]) {
     uint32_t siteCounter = 1;
     const char *siteCounterString = getenv( MP_env_sitecounter );
 
+    const char *configFile = homedir(".mpw");
+    config_t cfg;
+    config_setting_t *setting;
+    config_init(&cfg);
+
     // Read the options.
     for (int opt; (opt = getopt(argc, argv, "u:t:c:v:C:h")) != -1;)
-      switch (opt) {
-          case 'u':
-              userName = optarg;
-              break;
-          case 't':
-              siteTypeString = optarg;
-              break;
-          case 'c':
-              siteCounterString = optarg;
-              break;
-          case 'v':
-              siteVariantString = optarg;
-              break;
-          case 'C':
-              siteContextString = optarg;
-              break;
-          case 'h':
-              usage();
-              break;
-          case '?':
-              switch (optopt) {
-                case 'u':
-                  fprintf(stderr, "Missing user name to option: -%c\n", optopt);
-                  break;
-                case 't':
-                  fprintf(stderr, "Missing type name to option: -%c\n", optopt);
-                  break;
-                case 'c':
-                  fprintf(stderr, "Missing counter value to option: -%c\n", optopt);
-                  break;
-                default:
-                  fprintf(stderr, "Unknown option: -%c\n", optopt);
-              }
-              return 1;
-          default:
-              abort();
-      }
-    if (optind < argc)
-        siteName = argv[optind];
+        switch (opt) {
+            case 'u':
+                userName = optarg;
+                break;
+            case 't':
+                siteTypeString = optarg;
+                break;
+            case 'c':
+                siteCounterString = optarg;
+                break;
+            case 'v':
+                siteVariantString = optarg;
+                break;
+            case 'C':
+                siteContextString = optarg;
+                break;
+            case 'h':
+                usage();
+                break;
+            case '?':
+                switch (optopt) {
+                    case 'u':
+                        fprintf(stderr, "Missing user name to option: -%c\n", optopt);
+                        break;
+                    case 't':
+                        fprintf(stderr, "Missing type name to option: -%c\n", optopt);
+                        break;
+                    case 'c':
+                        fprintf(stderr, "Missing counter value to option: -%c\n", optopt);
+                        break;
+                    default:
+                        fprintf(stderr, "Unknown option: -%c\n", optopt);
+                }
+                return 1;
+            default:
+                abort();
+        }
 
     // Convert and validate input.
     if (!userName) {
         fprintf(stderr, "Missing user name.\n");
         return 1;
     }
+
+    // Read the config file.
+    if ( access(configFile , F_OK|R_OK|W_OK ) != -1 ) {
+        // For the sake of security, REFUSE to use the config file
+        // if the file permission is not 600.
+        struct stat buf;
+        stat(configFile, &buf);
+        int statchmod = buf.st_mode & (S_IRWXU | S_IRWXG | S_IRWXO);
+        int chmod = 384;
+
+        if (statchmod == chmod) {
+            if (! config_read_file(&cfg, configFile)) {
+                fprintf(stderr, "%s:%d - %s\n", config_error_file(&cfg),
+                    config_error_line(&cfg), config_error_text(&cfg));
+                config_destroy(&cfg);
+            }
+        }
+        else {
+            printf("File permissions for file %s are %o but are required to be 600 to continue.\n", configFile,  statchmod);
+            config_destroy(&cfg);
+            return 1;
+        }
+
+
+        // Load userinfo from config file.
+        /* TODO
+         [ ] Add config file error checking?
+        */
+        setting = config_lookup(&cfg, "users");
+        if(setting != NULL) {
+            unsigned int count = config_setting_length(setting);
+            unsigned int i;
+            trc("Total config users: %i\n", count);
+
+            for(i = 0; i < count; ++i) {
+                config_setting_t *user = config_setting_get_elem(setting, i);
+
+                config_setting_lookup_string(user, "username", &tmpuserName);
+
+                if (strcmp(tmpuserName, userName) == 0) {
+
+                    // Populate variables from config file.
+                    if((config_setting_lookup_string(user, "username", &userName)
+                        && config_setting_lookup_string(user, "password", &masterPassword))) {
+                        trc("Config file loaded!\n");
+                    }
+                    else {
+                        fprintf(stderr, "Config file error!\nConfig file not loaded!\n");
+                        return 1;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    // Read the options.
+    for (int opt; (opt = getopt(argc, argv, "t:c:v:C:h")) != -1;)
+        switch (opt) {
+            case 't':
+                siteTypeString = optarg;
+                break;
+            case 'c':
+                siteCounterString = optarg;
+                break;
+            case 'v':
+                siteVariantString = optarg;
+                break;
+            case 'C':
+                siteContextString = optarg;
+                break;
+            case 'h':
+                usage();
+                break;
+            case '?':
+                switch (optopt) {
+                    case 'u':
+                        fprintf(stderr, "Missing user name to option: -%c\n", optopt);
+                        break;
+                    case 't':
+                        fprintf(stderr, "Missing type name to option: -%c\n", optopt);
+                        break;
+                    case 'c':
+                        fprintf(stderr, "Missing counter value to option: -%c\n", optopt);
+                        break;
+                    default:
+                        fprintf(stderr, "Unknown option: -%c\n", optopt);
+                }
+                return 1;
+            default:
+                abort();
+        }
+
+    if (optind < argc)
+        siteName = argv[optind];
+
+    // Convert and validate input.
     trc("userName: %s\n", userName);
     if (!siteName) {
         fprintf(stderr, "Missing site name.\n");
@@ -183,25 +285,6 @@ int main(int argc, char *const argv[]) {
         siteType = TypeWithName( siteTypeString );
     trc("siteType: %d (%s)\n", siteType, siteTypeString);
 
-    // Read the master password.
-    char *mpwConfigPath = homedir(".mpw");
-    if (!mpwConfigPath) {
-        fprintf(stderr, "Couldn't resolve path for configuration file: %d\n", errno);
-        return 1;
-    }
-    trc("mpwConfigPath: %s\n", mpwConfigPath);
-    FILE *mpwConfig = fopen(mpwConfigPath, "r");
-    free(mpwConfigPath);
-    if (mpwConfig) {
-        char *line = NULL;
-        size_t linecap = 0;
-        ssize_t linelen;
-        while ((linelen = getline(&line, &linecap, mpwConfig)) > 0)
-            if (strcmp(strsep(&line, ":"), userName) == 0) {
-                masterPassword = strsep(&line, "\n");
-                break;
-            }
-    }
     while (!masterPassword)
         masterPassword = getpass( "Your master password: " );
     trc("masterPassword: %s\n", masterPassword);
