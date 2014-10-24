@@ -1,0 +1,110 @@
+@import url(http://fonts.googleapis.com/css?family=Flamenco:300|Exo+2:400,100,900);
+
+/**** BASE STYLE ****/
+html {
+    background:         radial-gradient(black 15%, transparent 16%) 0 0,
+                        radial-gradient(black 15%, transparent 16%) 8px 8px,
+                        radial-gradient(rgba(255,255,255,.05) 15%, transparent 20%) 0 1px,
+                        radial-gradient(rgba(255,255,255,.05) 15%, transparent 20%) 8px 9px;
+    background-color:   #161616;
+    background-size:    16px 16px;
+
+    width:              100%;
+    height:             100%;
+    padding:            0;
+    margin:             0;
+}
+body {
+    background:         radial-gradient(transparent 16%, black);
+
+    width:              100%;
+    height:             100%;
+    padding:            0;
+    margin:             0;
+    overflow:           hidden;
+    clear:              both;
+
+    font-family:        'Exo 2',
+                        "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica,
+                        Arial, "Lucida Grande", sans-serif; 
+    font-weight:        300;
+    color:              #DDD;
+    text-align:         center;
+}
+h1, h2, h3, h4 {
+    margin:             0;
+}
+h1 {
+    font-size:          5em;
+}
+a {
+    font: inherit;
+    color: inherit;
+}
+input, select {
+    background:         rgba(0, 0, 0, .3);
+    border:             1px solid #000;
+    border-radius:      4px;
+
+    width:              67%;
+    height:             2em;
+    margin:             1ex 0;
+
+    font:               inherit;
+    color:              inherit;
+    text-align:         center;
+}
+input:focus, select:focus {
+    outline:            none;
+    box-shadow:         0 0 50px #333;
+}
+input.half, select.half {
+    width:              33%;
+}
+input[type="submit"], input[type="image"] {
+    background:         transparent;
+    border:             none;
+
+    width:              auto;
+    
+    font-size:          2em;
+}
+input[type="submit"] {
+    display:            inline;
+}
+#identity.working input[type="submit"] {
+    display:            none;
+}
+input[type="image"] {
+    display:            none;
+}
+#identity.working input[type="image"] {
+    display:            inline;
+}
+#error {
+    color:              red;
+}
+header, section {
+    overflow:           hidden;
+    clear:              both;
+}
+header {
+    font-size:          0.8em;
+}
+section {
+    font-size:          2.5em;
+}
+
+
+/**** LAYOUT ****/
+section {
+    display:            none;
+
+    
+}
+section.active {
+    display:            block;
+}
+.small {
+    font-size:          0.5em;
+}
