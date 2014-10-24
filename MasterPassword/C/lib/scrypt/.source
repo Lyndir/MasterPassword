@@ -1,4 +1,4 @@
 home=https://code.google.com/p/scrypt/
 svn=http://scrypt.googlecode.com/svn
 pkg=http://masterpasswordapp.com/libscrypt-b12b554.tar.gz
-pkg_sha=a86445c3e031392d20652f4163adfd3fb0b1994e
+pkg_sha256=c726daec68a345e420896f005394a948dc5a6924713ed94b684c856d4c247f0b

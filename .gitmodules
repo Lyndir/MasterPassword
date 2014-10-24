@@ -19,3 +19,6 @@
 [submodule "External/jrswizzle"]
 	path = External/jrswizzle
 	url = git://github.com/jonmarimba/jrswizzle.git
+[submodule "Site/2013-05/mpw-js/js/mpw-js"]
+	path = Site/2013-05/mpw-js/js/mpw-js
+	url = https://github.com/Lyndir/mpw-js.git
