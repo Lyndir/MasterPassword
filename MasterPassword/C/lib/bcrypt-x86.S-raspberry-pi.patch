@@ -1,0 +1,9 @@
+--- bcrypt/x86.S.old	2014-10-24 12:23:00.606751631 -0400
++++ bcrypt/x86.S	2014-10-24 12:23:09.436322010 -0400
+@@ -199,5 +199,5 @@
+ #endif
+ 
+ #if defined(__ELF__) && defined(__linux__)
+-.section .note.GNU-stack,"",@progbits
++#.section .note.GNU-stack,"",@progbits
+ #endif
