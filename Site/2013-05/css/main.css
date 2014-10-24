@@ -35,6 +35,9 @@ a .popup {
     margin-right: -100px;
     padding: 8px;
 }
+a .popup.border {
+    margin-bottom: 1em;
+}
 a:hover .popup {
     display: block;
 }
@@ -107,6 +110,11 @@ img.block {
     padding:                    4px;
     margin:                     auto 1em;
     width:                      640px;
+}
+img.border {
+    background:                 #AAA;
+    border:                     1px solid #333;
+    padding:                    1px;
 }
 
 .thumb {
