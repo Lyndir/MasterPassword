@@ -328,6 +328,8 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
     [[NSUserDefaults standardUserDefaults] setInteger:MPStoreMigrationLevelCurrent forKey:MPStoreMigrationLevelKey];
     inf( @"Successfully migrated old to new local store." );
+    if (![[NSUserDefaults standardUserDefaults] synchronize])
+        wrn( @"Couldn't synchronize after store migration." );
 }
 
 - (BOOL)migrateV1LocalStore {

@@ -32,6 +32,8 @@
     inf( @"Preferences will appear" );
     [super viewWillAppear:animated];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"tipped.passwordsPreferences"];
+    if (![[NSUserDefaults standardUserDefaults] synchronize])
+        wrn( @"Couldn't synchronize after preferences appearance." );
 
     MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForMainThread];
     self.generatedTypeControl.selectedSegmentIndex = [self generatedSegmentIndexForType:activeUser.defaultType];

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # See https://developer.apple.com/library/ios/qa/qa1686/_index.html
 cd "${BASH_SOURCE%/*}"
-set -x
 source bashlib
 cd ..
 

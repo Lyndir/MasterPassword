@@ -99,6 +99,8 @@
 - (void)setCoached:(BOOL)coached {
 
     [[NSUserDefaults standardUserDefaults] setBool:coached forKey:strf( @"%@.%ld.coached", self.coachedClass, (long)self.coachedVersion )];
+    if (![[NSUserDefaults standardUserDefaults] synchronize])
+        wrn( @"Couldn't synchronize after coachmark updates." );
 }
 
 @end

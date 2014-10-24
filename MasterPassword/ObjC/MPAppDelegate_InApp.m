@@ -169,6 +169,8 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
         for (id<MPInAppDelegate> productObserver in self.productObservers)
             [productObserver updateWithTransaction:transaction];
     }
+    if (![[NSUserDefaults standardUserDefaults] synchronize])
+        wrn( @"Couldn't synchronize after transaction updates." );
 }
 
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {
