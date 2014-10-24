@@ -5,7 +5,10 @@
 #   - If you see 'undefined reference to `clock_gettime'',
 #       try ./build -lrt instead.
 #   - If you see 'x86.S:202: Error: junk at end of line, first unrecognized character is `,'',
-#       try commenting the line in lib/bcrypt/x86.S.
+#       try commenting the line in lib/bcrypt/x86.S or applying a patch.
+#       To apply a patch type the following command from the MasterPassword/C directory:
+#       patch lib/bcrypt/x86.S < lib/bcrypt-x86.S-raspberry-pi.patch
+#
 #
 # BUGS
 #   masterpassword@lyndir.com
