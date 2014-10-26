@@ -806,6 +806,17 @@
 		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
 		DACA29771705E2BD002C6C22 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
 		DACA298C1705E2BD002C6C22 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
+		DAD0C5F619FD6034009CB08D /* icon_128x128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_128x128.png; sourceTree = "<group>"; };
+		DAD0C5F719FD6034009CB08D /* icon_128x128@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_128x128@2x.png"; sourceTree = "<group>"; };
+		DAD0C5F819FD6034009CB08D /* icon_16x16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_16x16.png; sourceTree = "<group>"; };
+		DAD0C5F919FD6034009CB08D /* icon_16x16@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_16x16@2x.png"; sourceTree = "<group>"; };
+		DAD0C5FA19FD6034009CB08D /* icon_256x256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_256x256.png; sourceTree = "<group>"; };
+		DAD0C5FB19FD6034009CB08D /* icon_256x256@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_256x256@2x.png"; sourceTree = "<group>"; };
+		DAD0C5FC19FD6034009CB08D /* icon_32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_32x32.png; sourceTree = "<group>"; };
+		DAD0C5FD19FD6034009CB08D /* icon_32x32@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_32x32@2x.png"; sourceTree = "<group>"; };
+		DAD0C5FE19FD6034009CB08D /* icon_512x512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_512x512.png; sourceTree = "<group>"; };
+		DAD0C5FF19FD6034009CB08D /* icon_512x512@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_512x512@2x.png"; sourceTree = "<group>"; };
+		DAD0C60019FD6034009CB08D /* icon.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; path = icon.sketch; sourceTree = "<group>"; };
 		DAD312C01552A20800A3F9ED /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		DAD9B5E1176299B9001835F9 /* MasterPassword-Mac-LoginHelper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "MasterPassword-Mac-LoginHelper.xcodeproj"; path = "MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper.xcodeproj"; sourceTree = "<group>"; };
 		DAD9B5EF1762CAA4001835F9 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
@@ -1546,6 +1557,7 @@
 		DACA23B51705DF7D002C6C22 /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				DAD0C5F419FD6034009CB08D /* mac */,
 				DA6558A319A99609009A0BEB /* Images.xcassets */,
 				DA606FE9195D03E200CA98B5 /* Insignia */,
 				DAAA81AF195A8D1300FA30D9 /* gradient.png */,
@@ -1644,6 +1656,32 @@
 				DACA298C1705E2BD002C6C22 /* JRSwizzle.m */,
 			);
 			path = jrswizzle;
+			sourceTree = "<group>";
+		};
+		DAD0C5F419FD6034009CB08D /* mac */ = {
+			isa = PBXGroup;
+			children = (
+				DAD0C5F519FD6034009CB08D /* icon */,
+				DAD0C60019FD6034009CB08D /* icon.sketch */,
+			);
+			path = mac;
+			sourceTree = "<group>";
+		};
+		DAD0C5F519FD6034009CB08D /* icon */ = {
+			isa = PBXGroup;
+			children = (
+				DAD0C5F619FD6034009CB08D /* icon_128x128.png */,
+				DAD0C5F719FD6034009CB08D /* icon_128x128@2x.png */,
+				DAD0C5F819FD6034009CB08D /* icon_16x16.png */,
+				DAD0C5F919FD6034009CB08D /* icon_16x16@2x.png */,
+				DAD0C5FA19FD6034009CB08D /* icon_256x256.png */,
+				DAD0C5FB19FD6034009CB08D /* icon_256x256@2x.png */,
+				DAD0C5FC19FD6034009CB08D /* icon_32x32.png */,
+				DAD0C5FD19FD6034009CB08D /* icon_32x32@2x.png */,
+				DAD0C5FE19FD6034009CB08D /* icon_512x512.png */,
+				DAD0C5FF19FD6034009CB08D /* icon_512x512@2x.png */,
+			);
+			path = icon;
 			sourceTree = "<group>";
 		};
 		DAD9B5E2176299B9001835F9 /* Products */ = {
@@ -2450,7 +2488,7 @@
 		DA5BFA6E147E415C00F98B1E /* Debug-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
@@ -2474,7 +2512,7 @@
 		DA5BFA6F147E415C00F98B1E /* AdHoc-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
@@ -2574,7 +2612,7 @@
 		DA95D60A14DF3F3B008D1B94 /* AppStore-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";

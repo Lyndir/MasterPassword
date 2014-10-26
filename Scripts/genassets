@@ -8,6 +8,18 @@ export PATH+=/usr/local/bin
 
 # icons format: [pixel size]@[scale]@[idiom]@[os]:[filename] -- if os is "anything lower", omit it
 icons=(
+# Mac
+    16@1@mac@:
+    32@2@mac@:
+    32@1@mac@:
+    64@2@mac@:
+    128@1@mac@:
+    256@2@mac@:
+    256@1@mac@:
+    512@2@mac@:
+    512@1@mac@:
+    1024@2@mac@:
+# iPhone
     180@3@iphone@8.0:Icon-60@3x.png
     120@3@iphone@8.0:Icon-Small-40@3x.png
     120@2@iphone@7.0:Icon-60@2x.png
@@ -17,7 +29,7 @@ icons=(
     58@2@iphone@:Icon-Small@2x.png
 #    57@1@iphone@:Icon.png
 #    29@1@iphone@:Icon-Small.png
-#
+# iPad
     76@1@ipad@7.0:Icon-76.png
     152@2@ipad@7.0:Icon-76@2x.png
     40@1@ipad@7.0:Icon-Small-40.png
@@ -66,8 +78,10 @@ appiconset="$xcassets/AppIcon.appiconset"
 launchimage="$xcassets/LaunchImage.launchimage"
 ios_icon=MasterPassword/Resources/Media/ios/icon
 ios_launch=MasterPassword/Resources/Media/ios/launch
+mac_icon=MasterPassword/Resources/Media/mac/icon
 
-if [[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]]; then
+if [[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]] ||
+   [[ "$(latest "$mac_icon"/*)" -nt "$appiconset/Contents.json" ]]; then
     rm -rf "$appiconset"; mkdir -p "$appiconset"
     {
         comma=
@@ -77,7 +91,19 @@ if [[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]]; then
             IFS=@ read px scale idiom os <<< "$icon"
             pt=$(( px / scale ))
 
-            if imageProps=$(copyImage "$ios_icon/$filename" "$appiconset/$filename"); then
+            suffix=
+            [[ $scale != 1 ]] && suffix=@${scale}x
+            [[ $filename ]] || filename="icon_${pt}x${pt}${suffix}.png"
+            source=$ios_icon/$filename
+            if [[ ! -e $source ]]; then
+                source=$mac_icon/$filename
+                if [[ ! -e $source ]]; then
+                    err 'No icon for: %s' "$filename"
+                    exit 1
+                fi
+            fi
+
+            if imageProps=$(copyImage "$source" "$appiconset/$filename"); then
                 printf '%s{"size":"%dx%d","filename":"%s","scale":"%sx"' \
                     "$comma" "$pt" "$pt" "$filename" "$scale"
                 [[ $idiom ]] && printf ',"idiom":"%s"' "$idiom"
