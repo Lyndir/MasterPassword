@@ -723,6 +723,10 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
         // Create new site.
         NSString *typeEntityName = [MPAlgorithmForVersion( version ) classNameOfType:type];
+        if (!typeEntityName) {
+            err( @"Invalid site type in import file: %@ has type %lu", siteName, (long)type );
+            return MPImportResultInternalError;
+        }
         MPSiteEntity *site = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
         site.name = siteName;
         site.loginName = loginName;
