@@ -80,18 +80,30 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     self.statusView.target = self;
     self.statusView.action = @selector( showMenu );
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSPersistentStoreCoordinatorStoresDidChangeNotification object:nil
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-        [self updateUsers];
-    }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-        NSString *key = note.object;
-        if (!key || [key isEqualToString:NSStringFromSelector( @selector( hidePasswords ) )])
-            self.hidePasswordsItem.state = [[MPConfig get].hidePasswords boolValue]? NSOnState: NSOffState;
-        if (!key || [key isEqualToString:NSStringFromSelector( @selector( rememberLogin ) )])
-            self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
-    }];
+    PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresWillChangeNotification, self.storeCoordinator, nil,
+            ^(id self, NSNotification *note) {
+                PearlMainQueue( ^{
+                    [self updateUsers];
+                } );
+            } );
+    PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresDidChangeNotification, self.storeCoordinator, nil,
+            ^(id self, NSNotification *note) {
+                PearlMainQueue( ^{
+                    [self updateUsers];
+                } );
+            } );
+    PearlAddNotificationObserver( MPCheckConfigNotification, nil, nil,
+            ^(MPMacAppDelegate *self, NSNotification *note) {
+                PearlMainQueue( ^{
+                    NSString *key = note.object;
+                    if (!key || [key isEqualToString:NSStringFromSelector( @
+                        selector( hidePasswords ) )])
+                    self.hidePasswordsItem.state = [[MPConfig get].hidePasswords boolValue]? NSOnState: NSOffState;
+                    if (!key || [key isEqualToString:NSStringFromSelector( @
+                        selector( rememberLogin ) )])
+                    self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
+                } );
+            } );
     [self updateUsers];
 
     // Global hotkey.
@@ -172,12 +184,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     NSArray *jobs = (__bridge_transfer NSArray *)SMCopyAllJobDictionaries( kSMDomainUserLaunchd );
 
     for (NSDictionary *job in jobs)
-        if ([LOGIN_HELPER_BUNDLE_ID isEqualToString:job[@"Label"]]) {
-            dbg( @"loginItemEnabled: %@", @([job[@"OnDemand"] boolValue]) );
+        if ([LOGIN_HELPER_BUNDLE_ID isEqualToString:job[@"Label"]])
             return [job[@"OnDemand"] boolValue];
-        }
 
-    dbg( @"loginItemEnabled: not found" );
     return NO;
 }
 
@@ -454,12 +463,14 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     NSString *exportedSites = [self exportSitesRevealPasswords:revealPasswords];
     [[[NSFileCoordinator alloc] initWithFilePresenter:nil] coordinateWritingItemAtURL:savePanel.URL options:0 error:&coordinateError
                                                                            byAccessor:^(NSURL *newURL) {
-        NSError *writeError = nil;
-        if (![exportedSites writeToURL:newURL atomically:NO encoding:NSUTF8StringEncoding error:&writeError])
-            PearlMainQueue( ^{
-                [[NSAlert alertWithError:writeError] runModal];
-            } );
-    }];
+                                                                               NSError *writeError = nil;
+                                                                               if (![exportedSites writeToURL:newURL atomically:NO
+                                                                                                     encoding:NSUTF8StringEncoding
+                                                                                                        error:&writeError])
+                                                                                   PearlMainQueue( ^{
+                                                                                       [[NSAlert alertWithError:writeError] runModal];
+                                                                                   } );
+                                                                           }];
     if (coordinateError)
         PearlMainQueue( ^{
             [[NSAlert alertWithError:coordinateError] runModal];

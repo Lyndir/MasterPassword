@@ -6,15 +6,16 @@
 //  Copyright (c) 2011 Lyndir. All rights reserved.
 //
 
-#import <StoreKit/StoreKit.h>
 #import "MPAppDelegate_Shared.h"
 #import "MPAppDelegate_Store.h"
 #import "MPAppDelegate_Key.h"
+#import "NSManagedObjectModel+KCOrderedAccessorFix.h"
 
 @interface MPAppDelegate_Shared ()
 
 @property(strong, nonatomic) MPKey *key;
 @property(strong, nonatomic) NSManagedObjectID *activeUserOID;
+@property(strong, nonatomic) NSPersistentStoreCoordinator *storeCoordinator;
 
 @end
 
@@ -29,6 +30,18 @@
 #else
 #error Unsupported OS.
 #endif
+}
+
+- (instancetype)init {
+
+    if (!(self = [super init]))
+        return nil;
+
+    NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
+    [model kc_generateOrderedSetAccessors];
+    self.storeCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+
+    return self;
 }
 
 - (MPUserEntity *)activeUserForMainThread {

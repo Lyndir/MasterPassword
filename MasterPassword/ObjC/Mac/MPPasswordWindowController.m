@@ -116,7 +116,6 @@
 
 - (void)doCommandBySelector:(SEL)commandSelector {
 
-    dbg( @"doCommandBySelector: %@", NSStringFromSelector( commandSelector ) );
     [self handleCommand:commandSelector];
 }
 
@@ -124,19 +123,18 @@
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector {
 
-    dbg( @"@control:%@ textView:%@ doCommandBySelector:%@", control, fieldEditor, NSStringFromSelector( commandSelector ) );
     if (control == self.siteField) {
         if ([NSStringFromSelector( commandSelector ) rangeOfString:@"delete"].location == 0) {
             _skipTextChange = YES;
-            return NO;
+            dbg_return_tr( NO, @, control, NSStringFromSelector( commandSelector ) );
         }
     }
     if (control == self.securePasswordField || control == self.revealPasswordField) {
         if (commandSelector == @selector( insertNewline: ))
-            return NO;
+            dbg_return_tr( NO, @, control, NSStringFromSelector( commandSelector ) );
     }
 
-    return [self handleCommand:commandSelector];
+    dbg_return_tr( [self handleCommand:commandSelector], @, control, NSStringFromSelector( commandSelector ) );
 }
 
 - (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor {
@@ -310,6 +308,14 @@
 - (NSString *)query {
 
     return [self.siteField.stringValue stringByReplacingCharactersInRange:self.siteField.currentEditor.selectedRange withString:@""]?: @"";
+}
+
+- (BOOL)alwaysYes {
+
+    return YES;
+}
+
+- (void)setAlwaysYes:(BOOL)alwaysYes {
 }
 
 - (void)insertObject:(MPSiteModel *)model inSitesAtIndex:(NSUInteger)index {

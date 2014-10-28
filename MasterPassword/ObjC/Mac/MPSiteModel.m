@@ -48,7 +48,6 @@
     self.algorithm = entity.algorithm;
     self.siteName = entity.name;
     self.lastUsed = entity.lastUsed;
-    self.loginName = entity.loginName;
     self.type = entity.type;
     self.typeName = entity.typeName;
     self.uses = entity.uses_;
@@ -125,6 +124,11 @@
         PearlMainQueue( ^{
             self.content = result;
             self.contentDisplay = displayResult;
+        } );
+    }];
+    [entity resolveLoginUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
+        PearlMainQueue( ^{
+            self.loginName = result;
         } );
     }];
 }

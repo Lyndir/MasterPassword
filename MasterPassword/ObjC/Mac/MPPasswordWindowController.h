@@ -29,6 +29,7 @@
 @property(nonatomic) BOOL alternatePressed;
 @property(nonatomic) BOOL locked;
 @property(nonatomic) BOOL newUser;
+@property(nonatomic) BOOL alwaysYes;
 
 @property(nonatomic, weak) IBOutlet NSArrayController *sitesController;
 @property(nonatomic, weak) IBOutlet NSImageView *blurView;

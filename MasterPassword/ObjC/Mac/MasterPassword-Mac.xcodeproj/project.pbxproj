@@ -10,6 +10,7 @@
 		93D390C676DF52DA7E459F19 /* MPPasswordWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D9D0061FF1159998F06 /* MPPasswordWindow.m */; };
 		93D392EC39DA43C46C692C12 /* NSDictionary+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */; };
 		93D394C4254EEB45FB335AFB /* MPSitesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39423D7BF4FD31FE6D27C /* MPSitesTableView.m */; };
+		93D395E4830290EBB6E71F34 /* MPNoStateButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39538C4CEFF46DF379254 /* MPNoStateButton.m */; };
 		93D395F08A087F8A24689347 /* NSArray+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */; };
 		93D3970BCF85F7902E611168 /* PearlProfiler.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39DB3A8ADED08C39A6228 /* PearlProfiler.m */; };
 		93D39784E725A34D1EE3FB3B /* MPInitialWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D3CB30874147D9A9E1B /* MPInitialWindowController.m */; };
@@ -55,13 +56,14 @@
 		DA3B8456190FC89700246EEA /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3B8454190FC89700246EEA /* MPFixable.m */; };
 		DA3BCFCD19BD09E0006B2681 /* SourceCodePro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */; };
 		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
+		DA5180CA19FF2F9200A587E9 /* MPAlgorithmV2.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5180C719FF2F9200A587E9 /* MPAlgorithmV2.m */; };
+		DA5180CE19FF307E00A587E9 /* MPAppDelegate_Store.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5180CD19FF307E00A587E9 /* MPAppDelegate_Store.m */; };
 		DA5E5C9417248AA1003798D8 /* libscryptenc-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5E5C8717248AA1003798D8 /* libscryptenc-osx.a */; };
 		DA5E5CF61724A667003798D8 /* MPAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5C981724A667003798D8 /* MPAlgorithm.m */; };
 		DA5E5CF71724A667003798D8 /* MPAlgorithmV0.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5C9A1724A667003798D8 /* MPAlgorithmV0.m */; };
 		DA5E5CF81724A667003798D8 /* MPAlgorithmV1.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5C9C1724A667003798D8 /* MPAlgorithmV1.m */; };
 		DA5E5CF91724A667003798D8 /* MPAppDelegate_Key.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5C9E1724A667003798D8 /* MPAppDelegate_Key.m */; };
 		DA5E5CFA1724A667003798D8 /* MPAppDelegate_Shared.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CA01724A667003798D8 /* MPAppDelegate_Shared.m */; };
-		DA5E5CFB1724A667003798D8 /* MPAppDelegate_Store.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CA21724A667003798D8 /* MPAppDelegate_Store.m */; };
 		DA5E5CFC1724A667003798D8 /* MPConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CA41724A667003798D8 /* MPConfig.m */; };
 		DA5E5D001724A667003798D8 /* MPEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CAC1724A667003798D8 /* MPEntities.m */; };
 		DA5E5D011724A667003798D8 /* MPKey.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CAE1724A667003798D8 /* MPKey.m */; };
@@ -238,11 +240,13 @@
 /* Begin PBXFileReference section */
 		93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Indexing.m"; sourceTree = "<group>"; };
 		93D39240B5143E01F0B75E96 /* MPSiteModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteModel.h; sourceTree = "<group>"; };
+		93D392A4F3DE0BD758B9B056 /* MPNoStateButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNoStateButton.h; sourceTree = "<group>"; };
 		93D392C3918763B3B72CF366 /* MPPasswordWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindowController.h; sourceTree = "<group>"; };
 		93D39368EF3CBFEF2AFCA15A /* MPInitialWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPInitialWindowController.h; sourceTree = "<group>"; };
 		93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Indexing.h"; sourceTree = "<group>"; };
 		93D39423D7BF4FD31FE6D27C /* MPSitesTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSitesTableView.m; sourceTree = "<group>"; };
 		93D394EEFF5BF555A55AF361 /* PearlProfiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PearlProfiler.h; path = ../../../External/Pearl/Pearl/PearlProfiler.h; sourceTree = "<group>"; };
+		93D39538C4CEFF46DF379254 /* MPNoStateButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNoStateButton.m; sourceTree = "<group>"; };
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
 		93D3977484534E99F9BA579D /* MPPasswordWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindow.h; sourceTree = "<group>"; };
 		93D39A57A7823DE98A0FF83C /* MPPasswordWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordWindowController.m; sourceTree = "<group>"; };
@@ -301,6 +305,10 @@
 		DA3B8454190FC89700246EEA /* MPFixable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPFixable.m; sourceTree = "<group>"; };
 		DA3B8455190FC89700246EEA /* MPFixable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPFixable.h; sourceTree = "<group>"; };
 		DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Regular.otf"; sourceTree = "<group>"; };
+		DA5180C619FF2F9200A587E9 /* MPAlgorithmV2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAlgorithmV2.h; sourceTree = "<group>"; };
+		DA5180C719FF2F9200A587E9 /* MPAlgorithmV2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAlgorithmV2.m; sourceTree = "<group>"; };
+		DA5180CC19FF307E00A587E9 /* MPAppDelegate_Store.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_Store.h; sourceTree = "<group>"; };
+		DA5180CD19FF307E00A587E9 /* MPAppDelegate_Store.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_Store.m; sourceTree = "<group>"; };
 		DA5BFA44147E415C00F98B1E /* Master Password.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Master Password.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5BFA4A147E415C00F98B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -316,8 +324,6 @@
 		DA5E5C9E1724A667003798D8 /* MPAppDelegate_Key.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_Key.m; sourceTree = "<group>"; };
 		DA5E5C9F1724A667003798D8 /* MPAppDelegate_Shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_Shared.h; sourceTree = "<group>"; };
 		DA5E5CA01724A667003798D8 /* MPAppDelegate_Shared.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_Shared.m; sourceTree = "<group>"; };
-		DA5E5CA11724A667003798D8 /* MPAppDelegate_Store.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_Store.h; sourceTree = "<group>"; };
-		DA5E5CA21724A667003798D8 /* MPAppDelegate_Store.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_Store.m; sourceTree = "<group>"; };
 		DA5E5CA31724A667003798D8 /* MPConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPConfig.h; sourceTree = "<group>"; };
 		DA5E5CA41724A667003798D8 /* MPConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPConfig.m; sourceTree = "<group>"; };
 		DA5E5CAB1724A667003798D8 /* MPEntities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEntities.h; sourceTree = "<group>"; };
@@ -1016,39 +1022,41 @@
 		DA5E5C961724A667003798D8 /* ObjC */ = {
 			isa = PBXGroup;
 			children = (
-				DA32CFE319CF1C71004F3F0E /* MPUserEntity.h */,
-				DA32CFE419CF1C71004F3F0E /* MPUserEntity.m */,
-				DA32CFE019CF1C71004F3F0E /* MPSiteQuestionEntity.h */,
-				DA32CFE119CF1C71004F3F0E /* MPSiteQuestionEntity.m */,
-				DA32CFDD19CF1C70004F3F0E /* MPSiteEntity.h */,
-				DA32CFDE19CF1C70004F3F0E /* MPSiteEntity.m */,
-				DA32CFDA19CF1C70004F3F0E /* MPStoredSiteEntity.h */,
-				DA32CFDB19CF1C70004F3F0E /* MPStoredSiteEntity.m */,
-				DA32CFD719CF1C70004F3F0E /* MPGeneratedSiteEntity.h */,
-				DA32CFD819CF1C70004F3F0E /* MPGeneratedSiteEntity.m */,
-				DA3B8454190FC89700246EEA /* MPFixable.m */,
-				DA3B8455190FC89700246EEA /* MPFixable.h */,
 				DA5E5CB21724A667003798D8 /* Mac */,
+				DA29992619C6A89900AF7DF1 /* MasterPassword.xcdatamodeld */,
 				DA5E5C971724A667003798D8 /* MPAlgorithm.h */,
 				DA5E5C981724A667003798D8 /* MPAlgorithm.m */,
 				DA5E5C991724A667003798D8 /* MPAlgorithmV0.h */,
 				DA5E5C9A1724A667003798D8 /* MPAlgorithmV0.m */,
 				DA5E5C9B1724A667003798D8 /* MPAlgorithmV1.h */,
 				DA5E5C9C1724A667003798D8 /* MPAlgorithmV1.m */,
+				DA5180C619FF2F9200A587E9 /* MPAlgorithmV2.h */,
+				DA5180C719FF2F9200A587E9 /* MPAlgorithmV2.m */,
 				DA5E5C9D1724A667003798D8 /* MPAppDelegate_Key.h */,
 				DA5E5C9E1724A667003798D8 /* MPAppDelegate_Key.m */,
 				DA5E5C9F1724A667003798D8 /* MPAppDelegate_Shared.h */,
 				DA5E5CA01724A667003798D8 /* MPAppDelegate_Shared.m */,
-				DA5E5CA11724A667003798D8 /* MPAppDelegate_Store.h */,
-				DA5E5CA21724A667003798D8 /* MPAppDelegate_Store.m */,
+				DA5180CC19FF307E00A587E9 /* MPAppDelegate_Store.h */,
+				DA5180CD19FF307E00A587E9 /* MPAppDelegate_Store.m */,
 				DA5E5CA31724A667003798D8 /* MPConfig.h */,
 				DA5E5CA41724A667003798D8 /* MPConfig.m */,
 				DA5E5CAB1724A667003798D8 /* MPEntities.h */,
 				DA5E5CAC1724A667003798D8 /* MPEntities.m */,
+				DA3B8455190FC89700246EEA /* MPFixable.h */,
+				DA3B8454190FC89700246EEA /* MPFixable.m */,
+				DA32CFD719CF1C70004F3F0E /* MPGeneratedSiteEntity.h */,
+				DA32CFD819CF1C70004F3F0E /* MPGeneratedSiteEntity.m */,
 				DA5E5CAD1724A667003798D8 /* MPKey.h */,
 				DA5E5CAE1724A667003798D8 /* MPKey.m */,
+				DA32CFDD19CF1C70004F3F0E /* MPSiteEntity.h */,
+				DA32CFDE19CF1C70004F3F0E /* MPSiteEntity.m */,
+				DA32CFE019CF1C71004F3F0E /* MPSiteQuestionEntity.h */,
+				DA32CFE119CF1C71004F3F0E /* MPSiteQuestionEntity.m */,
+				DA32CFDA19CF1C70004F3F0E /* MPStoredSiteEntity.h */,
+				DA32CFDB19CF1C70004F3F0E /* MPStoredSiteEntity.m */,
 				DA5E5CAF1724A667003798D8 /* MPTypes.h */,
-				DA29992619C6A89900AF7DF1 /* MasterPassword.xcdatamodeld */,
+				DA32CFE319CF1C71004F3F0E /* MPUserEntity.h */,
+				DA32CFE419CF1C71004F3F0E /* MPUserEntity.m */,
 			);
 			name = ObjC;
 			path = ..;
@@ -1080,6 +1088,8 @@
 				93D39368EF3CBFEF2AFCA15A /* MPInitialWindowController.h */,
 				93D39423D7BF4FD31FE6D27C /* MPSitesTableView.m */,
 				93D39AC6360DDC16AEAA4119 /* MPSitesTableView.h */,
+				93D39538C4CEFF46DF379254 /* MPNoStateButton.m */,
+				93D392A4F3DE0BD758B9B056 /* MPNoStateButton.h */,
 			);
 			path = Mac;
 			sourceTree = "<group>";
@@ -2182,8 +2192,8 @@
 				DA5E5CF71724A667003798D8 /* MPAlgorithmV0.m in Sources */,
 				DA5E5CF81724A667003798D8 /* MPAlgorithmV1.m in Sources */,
 				DA5E5CF91724A667003798D8 /* MPAppDelegate_Key.m in Sources */,
+				DA5180CE19FF307E00A587E9 /* MPAppDelegate_Store.m in Sources */,
 				DA5E5CFA1724A667003798D8 /* MPAppDelegate_Shared.m in Sources */,
-				DA5E5CFB1724A667003798D8 /* MPAppDelegate_Store.m in Sources */,
 				DA5E5CFC1724A667003798D8 /* MPConfig.m in Sources */,
 				DA29992C19C6A89900AF7DF1 /* MasterPassword.xcdatamodeld in Sources */,
 				DA3B8456190FC89700246EEA /* MPFixable.m in Sources */,
@@ -2194,12 +2204,14 @@
 				DA5E5D041724A667003798D8 /* MPMacConfig.m in Sources */,
 				DA5E5D0C1724A667003798D8 /* main.m in Sources */,
 				93D39C5789EFA607CF788082 /* MPSiteModel.m in Sources */,
+				DA5180CA19FF2F9200A587E9 /* MPAlgorithmV2.m in Sources */,
 				93D39F833DEC1C89B2F795AC /* MPPasswordWindowController.m in Sources */,
 				DA32CFD919CF1C70004F3F0E /* MPGeneratedSiteEntity.m in Sources */,
 				93D390C676DF52DA7E459F19 /* MPPasswordWindow.m in Sources */,
 				93D39784E725A34D1EE3FB3B /* MPInitialWindowController.m in Sources */,
 				DA32CFDF19CF1C70004F3F0E /* MPSiteEntity.m in Sources */,
 				93D394C4254EEB45FB335AFB /* MPSitesTableView.m in Sources */,
+				93D395E4830290EBB6E71F34 /* MPNoStateButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2488,7 +2500,7 @@
 		DA5BFA6E147E415C00F98B1E /* Debug-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
@@ -2512,7 +2524,7 @@
 		DA5BFA6F147E415C00F98B1E /* AdHoc-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
@@ -2612,7 +2624,7 @@
 		DA95D60A14DF3F3B008D1B94 /* AppStore-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";

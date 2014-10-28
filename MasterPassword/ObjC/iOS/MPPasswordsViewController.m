@@ -316,25 +316,33 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
                     self.passwordSelectionContainer.alpha = 1;
                 }];
             } );
-    PearlAddNotificationObserver( MPSignedOutNotification, nil, [NSOperationQueue mainQueue],
+    PearlAddNotificationObserver( MPSignedOutNotification, nil, nil,
             ^(MPPasswordsViewController *self, NSNotification *note) {
-                _fetchedResultsController = nil;
-                self.passwordsSearchBar.text = nil;
-                [self.passwordCollectionView reloadData];
+                PearlMainQueue( ^{
+                    _fetchedResultsController = nil;
+                    self.passwordsSearchBar.text = nil;
+                    [self.passwordCollectionView reloadData];
+                } );
             } );
-    PearlAddNotificationObserver( MPCheckConfigNotification, nil, [NSOperationQueue mainQueue],
+    PearlAddNotificationObserver( MPCheckConfigNotification, nil, nil,
             ^(MPPasswordsViewController *self, NSNotification *note) {
-                [self updateConfigKey:note.object];
+                PearlMainQueue( ^{
+                    [self updateConfigKey:note.object];
+                } );
             } );
     PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresWillChangeNotification, nil, nil,
             ^(MPPasswordsViewController *self, NSNotification *note) {
                 self->_fetchedResultsController = nil;
-                [self.passwordCollectionView reloadData];
+                PearlMainQueue( ^{
+                    [self.passwordCollectionView reloadData];
+                } );
             } );
     PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresDidChangeNotification, nil, nil,
             ^(MPPasswordsViewController *self, NSNotification *note) {
-                [self updatePasswords];
-                [self registerObservers];
+                PearlMainQueue( ^{
+                    [self updatePasswords];
+                    [self registerObservers];
+                } );
             } );
 
     NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
