@@ -37,6 +37,8 @@ PearlEnum( MPDevelopmentFuelConsumption,
         return nil;
 
     [[NSUserDefaults standardUserDefaults] setInteger:storeVersion forKey:@"storeVersion"];
+    if (![[NSUserDefaults standardUserDefaults] synchronize])
+        wrn( @"Couldn't synchronize store version update." );
     return features;
 }
 

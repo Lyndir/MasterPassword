@@ -16,6 +16,7 @@
 
 @property(strong, nonatomic, readonly) MPKey *key;
 @property(strong, nonatomic, readonly) NSManagedObjectID *activeUserOID;
+@property(strong, nonatomic, readonly) NSPersistentStoreCoordinator *storeCoordinator;
 
 + (instancetype)get;
 

@@ -666,7 +666,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
         [self.storeLoadingActivity startAnimating];
 
     if (mainContext)
-        PearlAddNotificationObserver( NSManagedObjectContextObjectsDidChangeNotification, mainContext, [NSOperationQueue mainQueue],
+        PearlAddNotificationObserver( NSManagedObjectContextObjectsDidChangeNotification, mainContext, nil,
                 ^(MPUsersViewController *self, NSNotification *note) {
                     NSSet *insertedObjects = note.userInfo[NSInsertedObjectsKey];
                     NSSet *deletedObjects = note.userInfo[NSDeletedObjectsKey];
@@ -676,11 +676,11 @@ referenceSizeForFooterInSection:(NSInteger)section {
                             }]] count])
                         [self reloadUsers];
                 } );
-    PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresWillChangeNotification, nil, [NSOperationQueue mainQueue],
+    PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresWillChangeNotification, [MPiOSAppDelegate get].storeCoordinator, nil,
             ^(MPUsersViewController *self, NSNotification *note) {
                 self.userIDs = nil;
             } );
-    PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresDidChangeNotification, nil, [NSOperationQueue mainQueue],
+    PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresDidChangeNotification, [MPiOSAppDelegate get].storeCoordinator, nil,
             ^(MPUsersViewController *self, NSNotification *note) {
                 [self registerObservers];
                 [self reloadUsers];

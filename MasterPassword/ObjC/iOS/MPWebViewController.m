@@ -50,8 +50,11 @@
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request
  navigationType:(UIWebViewNavigationType)navigationType {
 
-    if ([[request.URL absoluteString] rangeOfString:@"thanks.lhunath.com"].location != NSNotFound)
+    if ([[request.URL absoluteString] rangeOfString:@"thanks.lhunath.com"].location != NSNotFound) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"tipped.thanks"];
+        if (![[NSUserDefaults standardUserDefaults] synchronize])
+            wrn( @"Couldn't synchronize thanks tip." );
+    }
 
     if ([request.URL isEqual:request.mainDocumentURL]) {
         self.webNavigationItem.title = request.URL.host;

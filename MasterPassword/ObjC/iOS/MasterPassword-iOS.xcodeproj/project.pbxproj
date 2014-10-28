@@ -3490,8 +3490,8 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = "/bin/bash -e";
-			shellScript = "PATH+=:/usr/libexec\n\naddPlistWithKey() {\n    local key=$1 type=$2 value=$3 plist=${4:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Delete :'$key'\" \"$plist\" 2>/dev/null || true\n    PlistBuddy -c \"Add :'$key' '$type' '$value'\" \"$plist\"\n}\nsetPlistWithKey() {\n    local key=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Set :'$key' '$value'\" \"$plist\"\n}\ngetPlistWithKey() {\n    local key=$1 plist=${2:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Print :'$key'\" \"$plist\"\n}\nsetSettingWithTitle() {\n    local i title=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Settings.bundle/Root.plist\"}\n    \n    for (( i=0; 1; ++i )); do\n        PlistBuddy -c \"Print :PreferenceSpecifiers:$i\" \"$plist\" &>/dev/null || break\n        echo \"Checking preference specifier $i\"\n    \n        [[ $(PlistBuddy -c \"Print :PreferenceSpecifiers:$i:Title\" \"$plist\" 2>/dev/null) = $title ]] || continue\n    \n        echo \"Correct title, setting value.\"\n        PlistBuddy -c \"Set :PreferenceSpecifiers:$i:DefaultValue $value\" \"$plist\"\n        break\n    done\n}\n\ndescription=$(git describe --always --dirty --long --match '*-release')\nversion=${description%-g*}\nmajor=${version%%-*} minor=${version##*-}\nprintf -v version '%s.%02d' \"$major\" \"$minor\"\nprintf -v commit '%09d' \"$((16#${description##*-g}))\"\n\naddPlistWithKey GITDescription string \"$description\"\nsetPlistWithKey CFBundleVersion \"${version//.}$commit\" # No separator between version and commit because I had already submitted a CFBundleVersion with a really high major.  Cry.\nsetPlistWithKey CFBundleShortVersionString \"$version\"\n\nsetSettingWithTitle \"Build\" \"$commit\"\nsetSettingWithTitle \"Version\" \"$version\"\nsetSettingWithTitle \"Copyright\" \"$(getPlistWithKey NSHumanReadableCopyright)\"\n\nif [[ $DEPLOYMENT_LOCATION = YES ]]; then\n    # This build is a release.  Do some release checks.\n    passed=1\n    [[ $description != *-dirty ]] || \\\n        { passed=0; echo >&2 \"ERROR: Cannot release a dirty version, first commit any changes.\"; }\n    [[ $(PlistBuddy -c \"Print :'API Key'\" \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Crashlytics.plist\") ]] || \\\n        { passed=0; echo >&2 \"ERROR: Cannot release: Crashlytics API key is missing.\"; }\n    (( passed )) || \\\n        { echo >&2 \"Failed to pass release checks.  Fix the above errors and re-try.  Aborting.\"; exit 1; }\nfi";
+			shellPath = "/bin/sh -e";
+			shellScript = "exec ../../../Scripts/updatePlist";
 		};
 		DA8D88E019DA412A00B189D0 /* Run Script: genassets */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3505,7 +3505,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
-			shellScript = "exec env PATH=\"/usr/local/bin:$PATH\" ../../../Scripts/genassets";
+			shellScript = "exec ../../../Scripts/genassets";
 			showEnvVarsInLog = 0;
 		};
 		DAD3125D155288AA00A3F9ED /* Run Script: Crashlytics */ = {

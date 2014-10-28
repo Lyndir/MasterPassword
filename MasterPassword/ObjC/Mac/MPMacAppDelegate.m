@@ -9,8 +9,6 @@
 #import "MPMacAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-#import "MPPasswordWindowController.h"
-#import "PearlProfiler.h"
 #import <Carbon/Carbon.h>
 #import <ServiceManagement/ServiceManagement.h>
 
@@ -82,22 +80,30 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     self.statusView.target = self;
     self.statusView.action = @selector( showMenu );
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidChangeNotification object:nil
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-        [self updateUsers];
-    }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:USMStoreDidImportChangesNotification object:nil
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-        [self updateUsers];
-    }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:MPCheckConfigNotification object:nil
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-        NSString *key = note.object;
-        if (!key || [key isEqualToString:NSStringFromSelector( @selector( hidePasswords ) )])
-            self.hidePasswordsItem.state = [[MPConfig get].hidePasswords boolValue]? NSOnState: NSOffState;
-        if (!key || [key isEqualToString:NSStringFromSelector( @selector( rememberLogin ) )])
-            self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
-    }];
+    PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresWillChangeNotification, self.storeCoordinator, nil,
+            ^(id self, NSNotification *note) {
+                PearlMainQueue( ^{
+                    [self updateUsers];
+                } );
+            } );
+    PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresDidChangeNotification, self.storeCoordinator, nil,
+            ^(id self, NSNotification *note) {
+                PearlMainQueue( ^{
+                    [self updateUsers];
+                } );
+            } );
+    PearlAddNotificationObserver( MPCheckConfigNotification, nil, nil,
+            ^(MPMacAppDelegate *self, NSNotification *note) {
+                PearlMainQueue( ^{
+                    NSString *key = note.object;
+                    if (!key || [key isEqualToString:NSStringFromSelector( @
+                        selector( hidePasswords ) )])
+                    self.hidePasswordsItem.state = [[MPConfig get].hidePasswords boolValue]? NSOnState: NSOffState;
+                    if (!key || [key isEqualToString:NSStringFromSelector( @
+                        selector( rememberLogin ) )])
+                    self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
+                } );
+            } );
     [self updateUsers];
 
     // Global hotkey.
@@ -178,12 +184,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     NSArray *jobs = (__bridge_transfer NSArray *)SMCopyAllJobDictionaries( kSMDomainUserLaunchd );
 
     for (NSDictionary *job in jobs)
-        if ([LOGIN_HELPER_BUNDLE_ID isEqualToString:[job objectForKey:@"Label"]]) {
-            dbg( @"loginItemEnabled: %@", @([[job objectForKey:@"OnDemand"] boolValue]) );
-            return [[job objectForKey:@"OnDemand"] boolValue];
-        }
+        if ([LOGIN_HELPER_BUNDLE_ID isEqualToString:job[@"Label"]])
+            return [job[@"OnDemand"] boolValue];
 
-    dbg( @"loginItemEnabled: not found" );
     return NO;
 }
 
@@ -305,9 +308,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (IBAction)togglePreference:(id)sender {
 
     if (sender == self.hidePasswordsItem)
-        [MPConfig get].hidePasswords = [NSNumber numberWithBool:![[MPConfig get].hidePasswords boolValue]];
+        [MPConfig get].hidePasswords = @(![[MPConfig get].hidePasswords boolValue]);
     if (sender == self.rememberPasswordItem)
-        [MPConfig get].rememberLogin = [NSNumber numberWithBool:![[MPConfig get].rememberLogin boolValue]];
+        [MPConfig get].rememberLogin = @(![[MPConfig get].rememberLogin boolValue]);
     if (sender == self.openAtLoginItem)
         [self setLoginItemEnabled:self.openAtLoginItem.state != NSOnState];
     if (sender == self.savePasswordItem) {
@@ -409,13 +412,10 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }
 
     // Don't show window if we weren't already running (ie. if we haven't been activated before).
-    PearlProfiler *profiler = [PearlProfiler profilerForTask:@"passwordWindowController"];
     if (!self.passwordWindowController)
         self.passwordWindowController = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
-    [profiler finishJob:@"init"];
 
     [self.passwordWindowController showWindow:self];
-    [profiler finishJob:@"show"];
 }
 
 #pragma mark - Private
@@ -463,12 +463,14 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     NSString *exportedSites = [self exportSitesRevealPasswords:revealPasswords];
     [[[NSFileCoordinator alloc] initWithFilePresenter:nil] coordinateWritingItemAtURL:savePanel.URL options:0 error:&coordinateError
                                                                            byAccessor:^(NSURL *newURL) {
-        NSError *writeError = nil;
-        if (![exportedSites writeToURL:newURL atomically:NO encoding:NSUTF8StringEncoding error:&writeError])
-            PearlMainQueue( ^{
-                [[NSAlert alertWithError:writeError] runModal];
-            } );
-    }];
+                                                                               NSError *writeError = nil;
+                                                                               if (![exportedSites writeToURL:newURL atomically:NO
+                                                                                                     encoding:NSUTF8StringEncoding
+                                                                                                        error:&writeError])
+                                                                                   PearlMainQueue( ^{
+                                                                                       [[NSAlert alertWithError:writeError] runModal];
+                                                                                   } );
+                                                                           }];
     if (coordinateError)
         PearlMainQueue( ^{
             [[NSAlert alertWithError:coordinateError] runModal];
@@ -593,30 +595,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         self.savePasswordItem.title = @"Save Password";
         self.savePasswordItem.enabled = YES;
         self.savePasswordItem.toolTip = nil;
-    }
-}
-
-#pragma mark - UbiquityStoreManagerDelegate
-
-- (void)ubiquityStoreManager:(UbiquityStoreManager *)manager didLoadStoreForCoordinator:(NSPersistentStoreCoordinator *)coordinator
-                     isCloud:(BOOL)isCloudStore {
-
-    [super ubiquityStoreManager:manager didLoadStoreForCoordinator:coordinator isCloud:isCloudStore];
-
-    if (isCloudStore) {
-        NSAlert *alert = [NSAlert new];
-        alert.messageText = @"iCloud Support Deprecated";
-        alert.informativeText = @"Master Password is moving away from iCloud due to limited platform support and reliability issues.  "
-                @"\n\nMaster Password's generated passwords do not require syncing.  "
-                @"Your sites will always have the same passwords on all your devices.  "
-                @"\n\niCloud continues to work for now but will be deactivated in a future update.  "
-                @"Disable iCloud now to copy your iCloud sites to your device and avoid losing them when iCloud becomes discontinued.";
-        [alert addButtonWithTitle:@"Disable iCloud"];
-        [alert addButtonWithTitle:@"Ignore For Now"];
-
-        NSInteger response = [alert runModal];
-        if (response == NSAlertFirstButtonReturn)
-            [[self storeManager] migrateCloudToLocal];
     }
 }
 

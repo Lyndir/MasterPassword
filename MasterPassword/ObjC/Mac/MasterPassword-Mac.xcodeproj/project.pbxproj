@@ -10,6 +10,7 @@
 		93D390C676DF52DA7E459F19 /* MPPasswordWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D9D0061FF1159998F06 /* MPPasswordWindow.m */; };
 		93D392EC39DA43C46C692C12 /* NSDictionary+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */; };
 		93D394C4254EEB45FB335AFB /* MPSitesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39423D7BF4FD31FE6D27C /* MPSitesTableView.m */; };
+		93D395E4830290EBB6E71F34 /* MPNoStateButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39538C4CEFF46DF379254 /* MPNoStateButton.m */; };
 		93D395F08A087F8A24689347 /* NSArray+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */; };
 		93D3970BCF85F7902E611168 /* PearlProfiler.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39DB3A8ADED08C39A6228 /* PearlProfiler.m */; };
 		93D39784E725A34D1EE3FB3B /* MPInitialWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D3CB30874147D9A9E1B /* MPInitialWindowController.m */; };
@@ -22,7 +23,6 @@
 		DA0933D01747B91B00DE1CEF /* appstore.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CF1747B91B00DE1CEF /* appstore.png */; };
 		DA10007F1998A4C6002B873F /* scrypt in Headers */ = {isa = PBXBuildFile; fileRef = DAE8E65619867AF500416A0F /* scrypt */; settings = {ATTRIBUTES = (Public, ); }; };
 		DA1000801998A4C6002B873F /* openssl in Headers */ = {isa = PBXBuildFile; fileRef = DAE8E65719867AF500416A0F /* openssl */; settings = {ATTRIBUTES = (Public, ); }; };
-		DA16B33F170661D4000A0EAB /* libUbiquityStoreManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */; };
 		DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B340170661DB000A0EAB /* Carbon.framework */; };
 		DA16B342170661E0000A0EAB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC632871486D95D0075AEA5 /* Security.framework */; };
 		DA16B344170661EE000A0EAB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B343170661EE000A0EAB /* Cocoa.framework */; };
@@ -55,15 +55,15 @@
 		DA3B8453190FC86F00246EEA /* NSManagedObject+Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */; };
 		DA3B8456190FC89700246EEA /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3B8454190FC89700246EEA /* MPFixable.m */; };
 		DA3BCFCD19BD09E0006B2681 /* SourceCodePro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */; };
-		DA4425CC1557BED40052177D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
+		DA5180CA19FF2F9200A587E9 /* MPAlgorithmV2.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5180C719FF2F9200A587E9 /* MPAlgorithmV2.m */; };
+		DA5180CE19FF307E00A587E9 /* MPAppDelegate_Store.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5180CD19FF307E00A587E9 /* MPAppDelegate_Store.m */; };
 		DA5E5C9417248AA1003798D8 /* libscryptenc-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5E5C8717248AA1003798D8 /* libscryptenc-osx.a */; };
 		DA5E5CF61724A667003798D8 /* MPAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5C981724A667003798D8 /* MPAlgorithm.m */; };
 		DA5E5CF71724A667003798D8 /* MPAlgorithmV0.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5C9A1724A667003798D8 /* MPAlgorithmV0.m */; };
 		DA5E5CF81724A667003798D8 /* MPAlgorithmV1.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5C9C1724A667003798D8 /* MPAlgorithmV1.m */; };
 		DA5E5CF91724A667003798D8 /* MPAppDelegate_Key.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5C9E1724A667003798D8 /* MPAppDelegate_Key.m */; };
 		DA5E5CFA1724A667003798D8 /* MPAppDelegate_Shared.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CA01724A667003798D8 /* MPAppDelegate_Shared.m */; };
-		DA5E5CFB1724A667003798D8 /* MPAppDelegate_Store.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CA21724A667003798D8 /* MPAppDelegate_Store.m */; };
 		DA5E5CFC1724A667003798D8 /* MPConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CA41724A667003798D8 /* MPConfig.m */; };
 		DA5E5D001724A667003798D8 /* MPEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CAC1724A667003798D8 /* MPEntities.m */; };
 		DA5E5D011724A667003798D8 /* MPKey.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5E5CAE1724A667003798D8 /* MPKey.m */; };
@@ -80,15 +80,17 @@
 		DA8ED896192906920099B726 /* PearlTween.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED892192906920099B726 /* PearlTween.h */; };
 		DA8ED897192906920099B726 /* map-macro.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED894192906920099B726 /* map-macro.h */; };
 		DAAA81B0195A8D1300FA30D9 /* gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAA81AF195A8D1300FA30D9 /* gradient.png */; };
+		DAADCC4719FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h in Headers */ = {isa = PBXBuildFile; fileRef = DAADCC3E19FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h */; };
+		DAADCC4819FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h in Headers */ = {isa = PBXBuildFile; fileRef = DAADCC3F19FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h */; };
+		DAADCC4919FAFFAD00987B1D /* NSPersistentStore+PearlMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = DAADCC4019FAFFAD00987B1D /* NSPersistentStore+PearlMigration.m */; };
+		DAADCC4B19FB000C00987B1D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
+		DAADCC6919FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m in Sources */ = {isa = PBXBuildFile; fileRef = DAADCC6719FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m */; };
+		DAADCC6A19FB00B500987B1D /* libKCOrderedAccessorFix.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */; };
 		DABC6C02175D8C85000C15D4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DABC6C15175D8CE1000C15D4 /* RHStatusItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = DABC6C14175D8CE1000C15D4 /* RHStatusItemView.m */; };
 		DABC6C16175D8E3A000C15D4 /* libRHStatusItemView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DABC6C01175D8C85000C15D4 /* libRHStatusItemView.a */; };
 		DAC6326D148680650075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
-		DACA22BB1705DE7D002C6C22 /* UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA22B71705DE7D002C6C22 /* UbiquityStoreManager.m */; };
-		DACA22BC1705DE7D002C6C22 /* NSError+UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA22B81705DE7D002C6C22 /* NSError+UbiquityStoreManager.h */; };
-		DACA22BD1705DE7D002C6C22 /* NSError+UbiquityStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA22B91705DE7D002C6C22 /* NSError+UbiquityStoreManager.m */; };
-		DACA22BE1705DE7D002C6C22 /* UbiquityStoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA22BA1705DE7D002C6C22 /* UbiquityStoreManager.h */; };
 		DACA26FE1705DF81002C6C22 /* logo-bare.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA241C1705DF7D002C6C22 /* logo-bare.png */; };
 		DACA27121705DF81002C6C22 /* avatar-13@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA24321705DF7D002C6C22 /* avatar-13@2x.png */; };
 		DACA27131705DF81002C6C22 /* avatar-3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA24331705DF7D002C6C22 /* avatar-3@2x.png */; };
@@ -213,6 +215,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		DAADCC4E19FB006500987B1D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DAD9B5EE1762CA3A001835F9 /* Copy LoginHelper */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -229,11 +240,13 @@
 /* Begin PBXFileReference section */
 		93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Indexing.m"; sourceTree = "<group>"; };
 		93D39240B5143E01F0B75E96 /* MPSiteModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteModel.h; sourceTree = "<group>"; };
+		93D392A4F3DE0BD758B9B056 /* MPNoStateButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNoStateButton.h; sourceTree = "<group>"; };
 		93D392C3918763B3B72CF366 /* MPPasswordWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindowController.h; sourceTree = "<group>"; };
 		93D39368EF3CBFEF2AFCA15A /* MPInitialWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPInitialWindowController.h; sourceTree = "<group>"; };
 		93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Indexing.h"; sourceTree = "<group>"; };
 		93D39423D7BF4FD31FE6D27C /* MPSitesTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSitesTableView.m; sourceTree = "<group>"; };
 		93D394EEFF5BF555A55AF361 /* PearlProfiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PearlProfiler.h; path = ../../../External/Pearl/Pearl/PearlProfiler.h; sourceTree = "<group>"; };
+		93D39538C4CEFF46DF379254 /* MPNoStateButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNoStateButton.m; sourceTree = "<group>"; };
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
 		93D3977484534E99F9BA579D /* MPPasswordWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindow.h; sourceTree = "<group>"; };
 		93D39A57A7823DE98A0FF83C /* MPPasswordWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordWindowController.m; sourceTree = "<group>"; };
@@ -292,7 +305,10 @@
 		DA3B8454190FC89700246EEA /* MPFixable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPFixable.m; sourceTree = "<group>"; };
 		DA3B8455190FC89700246EEA /* MPFixable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPFixable.h; sourceTree = "<group>"; };
 		DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Regular.otf"; sourceTree = "<group>"; };
-		DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUbiquityStoreManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA5180C619FF2F9200A587E9 /* MPAlgorithmV2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAlgorithmV2.h; sourceTree = "<group>"; };
+		DA5180C719FF2F9200A587E9 /* MPAlgorithmV2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAlgorithmV2.m; sourceTree = "<group>"; };
+		DA5180CC19FF307E00A587E9 /* MPAppDelegate_Store.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_Store.h; sourceTree = "<group>"; };
+		DA5180CD19FF307E00A587E9 /* MPAppDelegate_Store.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_Store.m; sourceTree = "<group>"; };
 		DA5BFA44147E415C00F98B1E /* Master Password.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Master Password.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA5BFA4A147E415C00F98B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -308,8 +324,6 @@
 		DA5E5C9E1724A667003798D8 /* MPAppDelegate_Key.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_Key.m; sourceTree = "<group>"; };
 		DA5E5C9F1724A667003798D8 /* MPAppDelegate_Shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_Shared.h; sourceTree = "<group>"; };
 		DA5E5CA01724A667003798D8 /* MPAppDelegate_Shared.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_Shared.m; sourceTree = "<group>"; };
-		DA5E5CA11724A667003798D8 /* MPAppDelegate_Store.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_Store.h; sourceTree = "<group>"; };
-		DA5E5CA21724A667003798D8 /* MPAppDelegate_Store.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_Store.m; sourceTree = "<group>"; };
 		DA5E5CA31724A667003798D8 /* MPConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPConfig.h; sourceTree = "<group>"; };
 		DA5E5CA41724A667003798D8 /* MPConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPConfig.m; sourceTree = "<group>"; };
 		DA5E5CAB1724A667003798D8 /* MPEntities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEntities.h; sourceTree = "<group>"; };
@@ -737,6 +751,12 @@
 		DA8ED892192906920099B726 /* PearlTween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlTween.h; sourceTree = "<group>"; };
 		DA8ED894192906920099B726 /* map-macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "map-macro.h"; sourceTree = "<group>"; };
 		DAAA81AF195A8D1300FA30D9 /* gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient.png; sourceTree = "<group>"; };
+		DAADCC3E19FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+PearlEasyCleanup.h"; sourceTree = "<group>"; };
+		DAADCC3F19FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPersistentStore+PearlMigration.h"; sourceTree = "<group>"; };
+		DAADCC4019FAFFAD00987B1D /* NSPersistentStore+PearlMigration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPersistentStore+PearlMigration.m"; sourceTree = "<group>"; };
+		DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libKCOrderedAccessorFix.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAADCC6619FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectModel+KCOrderedAccessorFix.h"; sourceTree = "<group>"; };
+		DAADCC6719FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectModel+KCOrderedAccessorFix.m"; sourceTree = "<group>"; };
 		DABB981515100B4000B05417 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DABC6C01175D8C85000C15D4 /* libRHStatusItemView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRHStatusItemView.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DABC6C13175D8CE1000C15D4 /* RHStatusItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHStatusItemView.h; sourceTree = "<group>"; };
@@ -745,10 +765,6 @@
 		DAC632871486D95D0075AEA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		DAC77CAD148291A600BCF976 /* libPearl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPearl.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC77CB1148291A600BCF976 /* Pearl-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Pearl-Prefix.pch"; path = "../../MasterPassword/ObjC/Pearl/Pearl-Prefix.pch"; sourceTree = "<group>"; };
-		DACA22B71705DE7D002C6C22 /* UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UbiquityStoreManager.m; sourceTree = "<group>"; };
-		DACA22B81705DE7D002C6C22 /* NSError+UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+UbiquityStoreManager.h"; sourceTree = "<group>"; };
-		DACA22B91705DE7D002C6C22 /* NSError+UbiquityStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+UbiquityStoreManager.m"; sourceTree = "<group>"; };
-		DACA22BA1705DE7D002C6C22 /* UbiquityStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UbiquityStoreManager.h; sourceTree = "<group>"; };
 		DACA241C1705DF7D002C6C22 /* logo-bare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-bare.png"; sourceTree = "<group>"; };
 		DACA24321705DF7D002C6C22 /* avatar-13@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-13@2x.png"; sourceTree = "<group>"; };
 		DACA24331705DF7D002C6C22 /* avatar-3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-3@2x.png"; sourceTree = "<group>"; };
@@ -796,6 +812,17 @@
 		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
 		DACA29771705E2BD002C6C22 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
 		DACA298C1705E2BD002C6C22 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
+		DAD0C5F619FD6034009CB08D /* icon_128x128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_128x128.png; sourceTree = "<group>"; };
+		DAD0C5F719FD6034009CB08D /* icon_128x128@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_128x128@2x.png"; sourceTree = "<group>"; };
+		DAD0C5F819FD6034009CB08D /* icon_16x16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_16x16.png; sourceTree = "<group>"; };
+		DAD0C5F919FD6034009CB08D /* icon_16x16@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_16x16@2x.png"; sourceTree = "<group>"; };
+		DAD0C5FA19FD6034009CB08D /* icon_256x256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_256x256.png; sourceTree = "<group>"; };
+		DAD0C5FB19FD6034009CB08D /* icon_256x256@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_256x256@2x.png"; sourceTree = "<group>"; };
+		DAD0C5FC19FD6034009CB08D /* icon_32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_32x32.png; sourceTree = "<group>"; };
+		DAD0C5FD19FD6034009CB08D /* icon_32x32@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_32x32@2x.png"; sourceTree = "<group>"; };
+		DAD0C5FE19FD6034009CB08D /* icon_512x512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_512x512.png; sourceTree = "<group>"; };
+		DAD0C5FF19FD6034009CB08D /* icon_512x512@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_512x512@2x.png"; sourceTree = "<group>"; };
+		DAD0C60019FD6034009CB08D /* icon.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; path = icon.sketch; sourceTree = "<group>"; };
 		DAD312C01552A20800A3F9ED /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		DAD9B5E1176299B9001835F9 /* MasterPassword-Mac-LoginHelper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "MasterPassword-Mac-LoginHelper.xcodeproj"; path = "MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper.xcodeproj"; sourceTree = "<group>"; };
 		DAD9B5EF1762CAA4001835F9 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
@@ -862,27 +889,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DA4425C81557BED40052177D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DA4425CC1557BED40052177D /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DA5BFA41147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAADCC6A19FB00B500987B1D /* libKCOrderedAccessorFix.a in Frameworks */,
 				DA250925195148E200AC23F1 /* QuartzCore.framework in Frameworks */,
 				DAD9B5F01762CAA4001835F9 /* ServiceManagement.framework in Frameworks */,
 				DABC6C16175D8E3A000C15D4 /* libRHStatusItemView.a in Frameworks */,
-				DA16B33F170661D4000A0EAB /* libUbiquityStoreManager.a in Frameworks */,
 				DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */,
 				DA16B342170661E0000A0EAB /* Security.framework in Frameworks */,
 				DA16B345170661F2000A0EAB /* libPearl.a in Frameworks */,
 				DA3B844F190FC60900246EEA /* Crashlytics.framework in Frameworks */,
 				DA16B344170661EE000A0EAB /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DAADCC4D19FB006500987B1D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -906,6 +932,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAADCC4B19FB000C00987B1D /* QuartzCore.framework in Frameworks */,
 				DAE8E65519867AE200416A0F /* libopensslcrypto-osx.a in Frameworks */,
 				DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */,
 				DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */,
@@ -953,9 +980,9 @@
 				DA5BFA44147E415C00F98B1E /* Master Password.app */,
 				DAC77CAD148291A600BCF976 /* libPearl.a */,
 				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
-				DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */,
 				DABC6C01175D8C85000C15D4 /* libRHStatusItemView.a */,
 				DA2508F619513C1400AC23F1 /* libRMBlurredView.a */,
+				DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -995,39 +1022,41 @@
 		DA5E5C961724A667003798D8 /* ObjC */ = {
 			isa = PBXGroup;
 			children = (
-				DA32CFE319CF1C71004F3F0E /* MPUserEntity.h */,
-				DA32CFE419CF1C71004F3F0E /* MPUserEntity.m */,
-				DA32CFE019CF1C71004F3F0E /* MPSiteQuestionEntity.h */,
-				DA32CFE119CF1C71004F3F0E /* MPSiteQuestionEntity.m */,
-				DA32CFDD19CF1C70004F3F0E /* MPSiteEntity.h */,
-				DA32CFDE19CF1C70004F3F0E /* MPSiteEntity.m */,
-				DA32CFDA19CF1C70004F3F0E /* MPStoredSiteEntity.h */,
-				DA32CFDB19CF1C70004F3F0E /* MPStoredSiteEntity.m */,
-				DA32CFD719CF1C70004F3F0E /* MPGeneratedSiteEntity.h */,
-				DA32CFD819CF1C70004F3F0E /* MPGeneratedSiteEntity.m */,
-				DA3B8454190FC89700246EEA /* MPFixable.m */,
-				DA3B8455190FC89700246EEA /* MPFixable.h */,
 				DA5E5CB21724A667003798D8 /* Mac */,
+				DA29992619C6A89900AF7DF1 /* MasterPassword.xcdatamodeld */,
 				DA5E5C971724A667003798D8 /* MPAlgorithm.h */,
 				DA5E5C981724A667003798D8 /* MPAlgorithm.m */,
 				DA5E5C991724A667003798D8 /* MPAlgorithmV0.h */,
 				DA5E5C9A1724A667003798D8 /* MPAlgorithmV0.m */,
 				DA5E5C9B1724A667003798D8 /* MPAlgorithmV1.h */,
 				DA5E5C9C1724A667003798D8 /* MPAlgorithmV1.m */,
+				DA5180C619FF2F9200A587E9 /* MPAlgorithmV2.h */,
+				DA5180C719FF2F9200A587E9 /* MPAlgorithmV2.m */,
 				DA5E5C9D1724A667003798D8 /* MPAppDelegate_Key.h */,
 				DA5E5C9E1724A667003798D8 /* MPAppDelegate_Key.m */,
 				DA5E5C9F1724A667003798D8 /* MPAppDelegate_Shared.h */,
 				DA5E5CA01724A667003798D8 /* MPAppDelegate_Shared.m */,
-				DA5E5CA11724A667003798D8 /* MPAppDelegate_Store.h */,
-				DA5E5CA21724A667003798D8 /* MPAppDelegate_Store.m */,
+				DA5180CC19FF307E00A587E9 /* MPAppDelegate_Store.h */,
+				DA5180CD19FF307E00A587E9 /* MPAppDelegate_Store.m */,
 				DA5E5CA31724A667003798D8 /* MPConfig.h */,
 				DA5E5CA41724A667003798D8 /* MPConfig.m */,
 				DA5E5CAB1724A667003798D8 /* MPEntities.h */,
 				DA5E5CAC1724A667003798D8 /* MPEntities.m */,
+				DA3B8455190FC89700246EEA /* MPFixable.h */,
+				DA3B8454190FC89700246EEA /* MPFixable.m */,
+				DA32CFD719CF1C70004F3F0E /* MPGeneratedSiteEntity.h */,
+				DA32CFD819CF1C70004F3F0E /* MPGeneratedSiteEntity.m */,
 				DA5E5CAD1724A667003798D8 /* MPKey.h */,
 				DA5E5CAE1724A667003798D8 /* MPKey.m */,
+				DA32CFDD19CF1C70004F3F0E /* MPSiteEntity.h */,
+				DA32CFDE19CF1C70004F3F0E /* MPSiteEntity.m */,
+				DA32CFE019CF1C71004F3F0E /* MPSiteQuestionEntity.h */,
+				DA32CFE119CF1C71004F3F0E /* MPSiteQuestionEntity.m */,
+				DA32CFDA19CF1C70004F3F0E /* MPStoredSiteEntity.h */,
+				DA32CFDB19CF1C70004F3F0E /* MPStoredSiteEntity.m */,
 				DA5E5CAF1724A667003798D8 /* MPTypes.h */,
-				DA29992619C6A89900AF7DF1 /* MasterPassword.xcdatamodeld */,
+				DA32CFE319CF1C71004F3F0E /* MPUserEntity.h */,
+				DA32CFE419CF1C71004F3F0E /* MPUserEntity.m */,
 			);
 			name = ObjC;
 			path = ..;
@@ -1059,6 +1088,8 @@
 				93D39368EF3CBFEF2AFCA15A /* MPInitialWindowController.h */,
 				93D39423D7BF4FD31FE6D27C /* MPSitesTableView.m */,
 				93D39AC6360DDC16AEAA4119 /* MPSitesTableView.h */,
+				93D39538C4CEFF46DF379254 /* MPNoStateButton.m */,
+				93D392A4F3DE0BD758B9B056 /* MPNoStateButton.h */,
 			);
 			path = Mac;
 			sourceTree = "<group>";
@@ -1480,6 +1511,15 @@
 			path = include;
 			sourceTree = "<group>";
 		};
+		DAADCC6819FB007F00987B1D /* KCOrderedAccessorFix */ = {
+			isa = PBXGroup;
+			children = (
+				DAADCC6619FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.h */,
+				DAADCC6719FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m */,
+			);
+			path = KCOrderedAccessorFix;
+			sourceTree = "<group>";
+		};
 		DABC6C0E175D8CE1000C15D4 /* RHStatusItemView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1503,26 +1543,14 @@
 		DACA22121705DDC5002C6C22 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				DAADCC6819FB007F00987B1D /* KCOrderedAccessorFix */,
 				DA3B8449190FC5A900246EEA /* Mac */,
 				DABC6C0E175D8CE1000C15D4 /* RHStatusItemView */,
 				DACA29751705E2BD002C6C22 /* jrswizzle */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
-				DACA22B61705DE7D002C6C22 /* UbiquityStoreManager */,
 			);
 			name = External;
 			path = ../../../External;
-			sourceTree = "<group>";
-		};
-		DACA22B61705DE7D002C6C22 /* UbiquityStoreManager */ = {
-			isa = PBXGroup;
-			children = (
-				DACA22BA1705DE7D002C6C22 /* UbiquityStoreManager.h */,
-				DACA22B71705DE7D002C6C22 /* UbiquityStoreManager.m */,
-				DACA22B81705DE7D002C6C22 /* NSError+UbiquityStoreManager.h */,
-				DACA22B91705DE7D002C6C22 /* NSError+UbiquityStoreManager.m */,
-			);
-			name = UbiquityStoreManager;
-			path = UbiquityStoreManager/UbiquityStoreManager;
 			sourceTree = "<group>";
 		};
 		DACA23B41705DF7D002C6C22 /* Resources */ = {
@@ -1539,6 +1567,7 @@
 		DACA23B51705DF7D002C6C22 /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				DAD0C5F419FD6034009CB08D /* mac */,
 				DA6558A319A99609009A0BEB /* Images.xcassets */,
 				DA606FE9195D03E200CA98B5 /* Insignia */,
 				DAAA81AF195A8D1300FA30D9 /* gradient.png */,
@@ -1636,8 +1665,33 @@
 				DACA29771705E2BD002C6C22 /* JRSwizzle.h */,
 				DACA298C1705E2BD002C6C22 /* JRSwizzle.m */,
 			);
-			name = jrswizzle;
-			path = Pearl/External/jrswizzle;
+			path = jrswizzle;
+			sourceTree = "<group>";
+		};
+		DAD0C5F419FD6034009CB08D /* mac */ = {
+			isa = PBXGroup;
+			children = (
+				DAD0C5F519FD6034009CB08D /* icon */,
+				DAD0C60019FD6034009CB08D /* icon.sketch */,
+			);
+			path = mac;
+			sourceTree = "<group>";
+		};
+		DAD0C5F519FD6034009CB08D /* icon */ = {
+			isa = PBXGroup;
+			children = (
+				DAD0C5F619FD6034009CB08D /* icon_128x128.png */,
+				DAD0C5F719FD6034009CB08D /* icon_128x128@2x.png */,
+				DAD0C5F819FD6034009CB08D /* icon_16x16.png */,
+				DAD0C5F919FD6034009CB08D /* icon_16x16@2x.png */,
+				DAD0C5FA19FD6034009CB08D /* icon_256x256.png */,
+				DAD0C5FB19FD6034009CB08D /* icon_256x256@2x.png */,
+				DAD0C5FC19FD6034009CB08D /* icon_32x32.png */,
+				DAD0C5FD19FD6034009CB08D /* icon_32x32@2x.png */,
+				DAD0C5FE19FD6034009CB08D /* icon_512x512.png */,
+				DAD0C5FF19FD6034009CB08D /* icon_512x512@2x.png */,
+			);
+			path = icon;
 			sourceTree = "<group>";
 		};
 		DAD9B5E2176299B9001835F9 /* Products */ = {
@@ -1660,6 +1714,9 @@
 		DAFE45D715039823003ABA7C /* Pearl */ = {
 			isa = PBXGroup;
 			children = (
+				DAADCC3E19FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h */,
+				DAADCC3F19FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h */,
+				DAADCC4019FAFFAD00987B1D /* NSPersistentStore+PearlMigration.m */,
 				DA8ED891192906920099B726 /* PearlTween.m */,
 				DA8ED892192906920099B726 /* PearlTween.h */,
 				DA8ED893192906920099B726 /* include */,
@@ -1757,15 +1814,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DA4425C91557BED40052177D /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DACA22BC1705DE7D002C6C22 /* NSError+UbiquityStoreManager.h in Headers */,
-				DACA22BE1705DE7D002C6C22 /* UbiquityStoreManager.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DAC6326A148680650075AEA5 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1807,12 +1855,14 @@
 				DAFE4A3A15039824003ABA7C /* PearlSCrypt.h in Headers */,
 				DA30E9CE15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h in Headers */,
 				DA30E9D715723E6900A68B4C /* PearlLazy.h in Headers */,
+				DAADCC4719FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h in Headers */,
 				DAFE4A63150399FF003ABA88 /* NSObject+PearlKVO.h in Headers */,
 				DAFE4A63150399FF003ABA94 /* NSDateFormatter+RFC3339.h in Headers */,
 				93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */,
 				93D392EC39DA43C46C692C12 /* NSDictionary+Indexing.h in Headers */,
 				DA3509FE15F101A500C14A8E /* PearlQueue.h in Headers */,
 				DA2CA4EE18D323D3007798F8 /* NSError+PearlFullDescription.h in Headers */,
+				DAADCC4819FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h in Headers */,
 				93D39D304F73B3BBA031522A /* PearlProfiler.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1837,27 +1887,11 @@
 			productReference = DA2508F619513C1400AC23F1 /* libRMBlurredView.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		DA4425CA1557BED40052177D /* UbiquityStoreManager */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DA4425D31557BED40052177D /* Build configuration list for PBXNativeTarget "UbiquityStoreManager" */;
-			buildPhases = (
-				DA4425C71557BED40052177D /* Sources */,
-				DA4425C81557BED40052177D /* Frameworks */,
-				DA4425C91557BED40052177D /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = UbiquityStoreManager;
-			productName = iCloudStoreManager;
-			productReference = DA4425CB1557BED40052177D /* libUbiquityStoreManager.a */;
-			productType = "com.apple.product-type.library.static";
-		};
 		DA5BFA43147E415C00F98B1E /* MasterPassword */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */;
 			buildPhases = (
+				DA4EF9CB19FD4B600032ECB5 /* Run Script: genassets */,
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
 				DA5BFA42147E415C00F98B1E /* Resources */,
@@ -1874,6 +1908,23 @@
 			productName = MasterPassword;
 			productReference = DA5BFA44147E415C00F98B1E /* Master Password.app */;
 			productType = "com.apple.product-type.application";
+		};
+		DAADCC4F19FB006500987B1D /* KCOrderedAccessorFix */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DAADCC5E19FB006500987B1D /* Build configuration list for PBXNativeTarget "KCOrderedAccessorFix" */;
+			buildPhases = (
+				DAADCC4C19FB006500987B1D /* Sources */,
+				DAADCC4D19FB006500987B1D /* Frameworks */,
+				DAADCC4E19FB006500987B1D /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KCOrderedAccessorFix;
+			productName = KCOrderedAccessorFix;
+			productReference = DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */;
+			productType = "com.apple.product-type.library.static";
 		};
 		DABC6C00175D8C85000C15D4 /* RHStatusItemView */ = {
 			isa = PBXNativeTarget;
@@ -1946,6 +1997,9 @@
 							};
 						};
 					};
+					DAADCC4F19FB006500987B1D = {
+						CreatedOnToolsVersion = 6.0.1;
+					};
 				};
 			};
 			buildConfigurationList = DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-Mac" */;
@@ -1954,6 +2008,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				nl,
 			);
 			mainGroup = DA5BFA39147E415C00F98B1E;
 			productRefGroup = DA5BFA45147E415C00F98B1E /* Products */;
@@ -1969,9 +2024,9 @@
 				DA5BFA43147E415C00F98B1E /* MasterPassword */,
 				DAC77CAC148291A600BCF976 /* Pearl */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
-				DA4425CA1557BED40052177D /* UbiquityStoreManager */,
 				DABC6C00175D8C85000C15D4 /* RHStatusItemView */,
 				DA2508F519513C1400AC23F1 /* RMBlurredView */,
+				DAADCC4F19FB006500987B1D /* KCOrderedAccessorFix */,
 			);
 		};
 /* End PBXProject section */
@@ -2072,6 +2127,21 @@
 			shellPath = /bin/sh;
 			shellScript = "";
 		};
+		DA4EF9CB19FD4B600032ECB5 /* Run Script: genassets */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script: genassets";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = "/bin/sh -e";
+			shellScript = "exec ../../../Scripts/genassets";
+			showEnvVarsInLog = 0;
+		};
 		DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2083,8 +2153,8 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = "/bin/bash -e";
-			shellScript = "PATH+=:/usr/libexec\n\naddPlistWithKey() {\n    local key=$1 type=$2 value=$3 plist=${4:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Delete :'$key'\" \"$plist\" 2>/dev/null || true\n    PlistBuddy -c \"Add :'$key' '$type' '$value'\" \"$plist\"\n}\nsetPlistWithKey() {\n    local key=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Set :'$key' '$value'\" \"$plist\"\n}\ngetPlistWithKey() {\n    local key=$1 plist=${2:-\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"}\n    \n    PlistBuddy -c \"Print :'$key'\" \"$plist\"\n}\nsetSettingWithTitle() {\n    local i title=$1 value=$2 plist=${3:-\"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Settings.bundle/Root.plist\"}\n    \n    for (( i=0; 1; ++i )); do\n        PlistBuddy -c \"Print :PreferenceSpecifiers:$i\" \"$plist\" &>/dev/null || break\n        echo \"Checking preference specifier $i\"\n    \n        [[ $(PlistBuddy -c \"Print :PreferenceSpecifiers:$i:Title\" \"$plist\" 2>/dev/null) = $title ]] || continue\n    \n        echo \"Correct title, setting value.\"\n        PlistBuddy -c \"Set :PreferenceSpecifiers:$i:DefaultValue $value\" \"$plist\"\n        break\n    done\n}\n\ndescription=$(git describe --always --dirty --long)\nversion=${description%-g*}\nIFS=- read major minor <<< \"$version\"\nprintf -v version '%s.%02d' \"$major\" \"$minor\"\nprintf -v commit '%09d' \"$((16#${description##*-g}))\"\n\naddPlistWithKey GITDescription string \"$description\"\nsetPlistWithKey CFBundleVersion \"${version//.}$commit\" # No separator between version and commit because I had already submitted a CFBundleVersion with a really high major.  Cry.\nsetPlistWithKey CFBundleShortVersionString \"$version\"\n\nsetSettingWithTitle \"Build\" \"$commit\"\nsetSettingWithTitle \"Version\" \"$version\"\nsetSettingWithTitle \"Copyright\" \"$(getPlistWithKey NSHumanReadableCopyright)\"\n\nif [[ $DEPLOYMENT_LOCATION = YES ]]; then\n    # This build is a release.  Do some release checks.\n    passed=1\n    [[ $description != *-dirty ]] || \\\n        { passed=0; echo >&2 \"ERROR: Cannot release a dirty version, first commit any changes.\"; }\n    [[ $(PlistBuddy -c \"Print :'API Key'\" \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Crashlytics.plist\") ]] || \\\n        { passed=0; echo >&2 \"ERROR: Cannot release: Crashlytics API key is missing.\"; }\n    (( passed )) || \\\n        { echo >&2 \"Failed to pass release checks.  Fix the above errors and re-try.  Aborting.\"; exit 1; }\nfi";
+			shellPath = "/bin/sh -e";
+			shellScript = "exec ../../../Scripts/updatePlist";
 			showEnvVarsInLog = 0;
 		};
 		DAD3125D155288AA00A3F9ED /* Run Script: Crashlytics */ = {
@@ -2112,15 +2182,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DA4425C71557BED40052177D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DACA22BB1705DE7D002C6C22 /* UbiquityStoreManager.m in Sources */,
-				DACA22BD1705DE7D002C6C22 /* NSError+UbiquityStoreManager.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DA5BFA40147E415C00F98B1E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2131,8 +2192,8 @@
 				DA5E5CF71724A667003798D8 /* MPAlgorithmV0.m in Sources */,
 				DA5E5CF81724A667003798D8 /* MPAlgorithmV1.m in Sources */,
 				DA5E5CF91724A667003798D8 /* MPAppDelegate_Key.m in Sources */,
+				DA5180CE19FF307E00A587E9 /* MPAppDelegate_Store.m in Sources */,
 				DA5E5CFA1724A667003798D8 /* MPAppDelegate_Shared.m in Sources */,
-				DA5E5CFB1724A667003798D8 /* MPAppDelegate_Store.m in Sources */,
 				DA5E5CFC1724A667003798D8 /* MPConfig.m in Sources */,
 				DA29992C19C6A89900AF7DF1 /* MasterPassword.xcdatamodeld in Sources */,
 				DA3B8456190FC89700246EEA /* MPFixable.m in Sources */,
@@ -2143,12 +2204,22 @@
 				DA5E5D041724A667003798D8 /* MPMacConfig.m in Sources */,
 				DA5E5D0C1724A667003798D8 /* main.m in Sources */,
 				93D39C5789EFA607CF788082 /* MPSiteModel.m in Sources */,
+				DA5180CA19FF2F9200A587E9 /* MPAlgorithmV2.m in Sources */,
 				93D39F833DEC1C89B2F795AC /* MPPasswordWindowController.m in Sources */,
 				DA32CFD919CF1C70004F3F0E /* MPGeneratedSiteEntity.m in Sources */,
 				93D390C676DF52DA7E459F19 /* MPPasswordWindow.m in Sources */,
 				93D39784E725A34D1EE3FB3B /* MPInitialWindowController.m in Sources */,
 				DA32CFDF19CF1C70004F3F0E /* MPSiteEntity.m in Sources */,
 				93D394C4254EEB45FB335AFB /* MPSitesTableView.m in Sources */,
+				93D395E4830290EBB6E71F34 /* MPNoStateButton.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DAADCC4C19FB006500987B1D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAADCC6919FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2173,6 +2244,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAFE4A1415039824003ABA7C /* NSObject+PearlExport.m in Sources */,
+				DAADCC4919FAFFAD00987B1D /* NSPersistentStore+PearlMigration.m in Sources */,
 				DAFE4A1615039824003ABA7C /* NSString+PearlNSArrayFormat.m in Sources */,
 				DAFE4A1815039824003ABA7C /* NSString+PearlSEL.m in Sources */,
 				DA2CA4ED18D323D3007798F8 /* NSError+PearlFullDescription.m in Sources */,
@@ -2267,30 +2339,6 @@
 			name = "AdHoc-Mac";
 		};
 		DA25091819513C1500AC23F1 /* AppStore-Mac */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-			};
-			name = "AppStore-Mac";
-		};
-		DA4425D41557BED40052177D /* Debug-Mac */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-			};
-			name = "Debug-Mac";
-		};
-		DA4425D51557BED40052177D /* AdHoc-Mac */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-			};
-			name = "AdHoc-Mac";
-		};
-		DA4425D61557BED40052177D /* AppStore-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -2630,9 +2678,31 @@
 			};
 			name = "AppStore-Mac";
 		};
+		DAADCC5F19FB006500987B1D /* Debug-Mac */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+			};
+			name = "Debug-Mac";
+		};
+		DAADCC6019FB006500987B1D /* AdHoc-Mac */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+			};
+			name = "AdHoc-Mac";
+		};
+		DAADCC6119FB006500987B1D /* AppStore-Mac */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+			};
+			name = "AppStore-Mac";
+		};
 		DABC6C0B175D8C85000C15D4 /* Debug-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 			};
 			name = "Debug-Mac";
@@ -2640,6 +2710,7 @@
 		DABC6C0C175D8C85000C15D4 /* AdHoc-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 			};
 			name = "AdHoc-Mac";
@@ -2647,6 +2718,7 @@
 		DABC6C0D175D8C85000C15D4 /* AppStore-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 			};
 			name = "AppStore-Mac";
@@ -2730,16 +2802,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "AdHoc-Mac";
 		};
-		DA4425D31557BED40052177D /* Build configuration list for PBXNativeTarget "UbiquityStoreManager" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DA4425D41557BED40052177D /* Debug-Mac */,
-				DA4425D51557BED40052177D /* AdHoc-Mac */,
-				DA4425D61557BED40052177D /* AppStore-Mac */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-Mac";
-		};
 		DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-Mac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2756,6 +2818,16 @@
 				DA5BFA6E147E415C00F98B1E /* Debug-Mac */,
 				DA5BFA6F147E415C00F98B1E /* AdHoc-Mac */,
 				DA95D60A14DF3F3B008D1B94 /* AppStore-Mac */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "AdHoc-Mac";
+		};
+		DAADCC5E19FB006500987B1D /* Build configuration list for PBXNativeTarget "KCOrderedAccessorFix" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAADCC5F19FB006500987B1D /* Debug-Mac */,
+				DAADCC6019FB006500987B1D /* AdHoc-Mac */,
+				DAADCC6119FB006500987B1D /* AppStore-Mac */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "AdHoc-Mac";

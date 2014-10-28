@@ -20,9 +20,7 @@
 #import "MPPasswordWindowController.h"
 #import "MPMacAppDelegate.h"
 #import "MPAppDelegate_Store.h"
-#import "MPSiteModel.h"
 #import "MPAppDelegate_Key.h"
-#import "PearlProfiler.h"
 
 #define MPAlertIncorrectMP      @"MPAlertIncorrectMP"
 #define MPAlertChangeMP         @"MPAlertChangeMP"
@@ -34,8 +32,8 @@
 
 @interface MPPasswordWindowController()
 
-@property(nonatomic, copy) NSString *currentSiteText;
 @property(nonatomic, strong) CAGradientLayer *siteGradient;
+
 @end
 
 @implementation MPPasswordWindowController { BOOL _skipTextChange; }
@@ -118,7 +116,6 @@
 
 - (void)doCommandBySelector:(SEL)commandSelector {
 
-    dbg( @"doCommandBySelector: %@", NSStringFromSelector( commandSelector ) );
     [self handleCommand:commandSelector];
 }
 
@@ -126,19 +123,18 @@
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector {
 
-    dbg( @"@control:%@ textView:%@ doCommandBySelector:%@", control, fieldEditor, NSStringFromSelector( commandSelector ) );
     if (control == self.siteField) {
         if ([NSStringFromSelector( commandSelector ) rangeOfString:@"delete"].location == 0) {
             _skipTextChange = YES;
-            return NO;
+            dbg_return_tr( NO, @, control, NSStringFromSelector( commandSelector ) );
         }
     }
     if (control == self.securePasswordField || control == self.revealPasswordField) {
         if (commandSelector == @selector( insertNewline: ))
-            return NO;
+            dbg_return_tr( NO, @, control, NSStringFromSelector( commandSelector ) );
     }
 
-    return [self handleCommand:commandSelector];
+    dbg_return_tr( [self handleCommand:commandSelector], @, control, NSStringFromSelector( commandSelector ) );
 }
 
 - (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor {
@@ -312,6 +308,14 @@
 - (NSString *)query {
 
     return [self.siteField.stringValue stringByReplacingCharactersInRange:self.siteField.currentEditor.selectedRange withString:@""]?: @"";
+}
+
+- (BOOL)alwaysYes {
+
+    return YES;
+}
+
+- (void)setAlwaysYes:(BOOL)alwaysYes {
 }
 
 - (void)insertObject:(MPSiteModel *)model inSitesAtIndex:(NSUInteger)index {
@@ -511,15 +515,12 @@
         return;
     }
 
-    PearlProfiler *profiler = [PearlProfiler profilerForTask:@"updateSites"];
     NSString *query = [self query];
-    [profiler finishJob:@"query"];
     [MPMacAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
-        fetchRequest.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"lastUsed" ascending:NO]];
+        fetchRequest.sortDescriptors = @[ [[NSSortDescriptor alloc] initWithKey:@"lastUsed" ascending:NO] ];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@",
                                                                   query, query, [[MPMacAppDelegate get] activeUserInContext:context]];
-        [profiler finishJob:@"setup fetch"];
 
         NSError *error = nil;
         NSArray *siteResults = [context executeFetchRequest:fetchRequest error:&error];
@@ -527,16 +528,12 @@
             err( @"While fetching sites for completion: %@", [error fullDescription] );
             return;
         }
-        [profiler finishJob:@"do fetch"];
 
         NSMutableArray *newSites = [NSMutableArray arrayWithCapacity:[siteResults count]];
         for (MPSiteEntity *site in siteResults)
             [newSites addObject:[[MPSiteModel alloc] initWithEntity:site]];
-        [profiler finishJob:@"make models"];
         self.sites = newSites;
-        [profiler finishJob:@"update sites"];
     }];
-    [profiler finishJob:@"done"];
 }
 
 - (void)updateSelection {
@@ -590,7 +587,7 @@
 
 - (void)copyContent:(NSString *)content {
 
-    [[NSPasteboard generalPasteboard] declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
+    [[NSPasteboard generalPasteboard] declareTypes:@[ NSStringPboardType ] owner:nil];
     if (![[NSPasteboard generalPasteboard] setString:content forType:NSPasteboardTypeString]) {
         wrn( @"Couldn't copy password to pasteboard." );
         return;
@@ -607,7 +604,6 @@
     if ([self.window isOnActiveSpace] && self.window.alphaValue)
         return;
 
-    PearlProfiler *profiler = [PearlProfiler profilerForTask:@"fadeIn"];
     CGDirectDisplayID displayID = [self.window.screen.deviceDescription[@"NSScreenNumber"] unsignedIntValue];
     CGImageRef capturedImage = CGDisplayCreateImage( displayID );
     if (!capturedImage || CGImageGetWidth( capturedImage ) <= 1) {
@@ -615,11 +611,9 @@
         return;
     }
 
-    [profiler finishJob:@"captured window: %d, on screen: %@", displayID, self.window.screen.deviceDescription];
     NSImage *screenImage = [[NSImage alloc] initWithCGImage:capturedImage size:NSMakeSize(
             CGImageGetWidth( capturedImage ) / self.window.backingScaleFactor,
             CGImageGetHeight( capturedImage ) / self.window.backingScaleFactor )];
-    [profiler finishJob:@"image size: %@, bytes: %ld", NSStringFromSize( screenImage.size ), screenImage.TIFFRepresentation.length];
 
     NSImage *smallImage = [[NSImage alloc] initWithSize:NSMakeSize(
             CGImageGetWidth( capturedImage ) / 20,
@@ -631,16 +625,12 @@
                   operation:NSCompositeSourceOver
                    fraction:1.0];
     [smallImage unlockFocus];
-    [profiler finishJob:@"small image size: %@, bytes: %ld", NSStringFromSize( screenImage.size ), screenImage.TIFFRepresentation.length];
 
     self.blurView.image = smallImage;
-    [profiler finishJob:@"assigned image"];
 
     [self.window setFrame:self.window.screen.frame display:YES];
-    [profiler finishJob:@"assigned frame"];
     [NSAnimationContext currentContext].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
     self.window.animator.alphaValue = 1.0;
-    [profiler finishJob:@"animating window"];
 }
 
 - (void)fadeOut {
