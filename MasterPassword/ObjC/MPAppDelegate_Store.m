@@ -14,7 +14,7 @@
 #define STORE_OPTIONS
 #endif
 
-#define MPStoreMigrationLevelKey @"MPMigrationLevelLocalStoreKey"
+#define MPMigrationLevelLocalStoreKey @"MPMigrationLevelLocalStoreKey"
 
 typedef NS_ENUM( NSInteger, MPStoreMigrationLevel ) {
     MPStoreMigrationLevelV1,
@@ -308,7 +308,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
 - (void)migrateStore {
 
-    MPStoreMigrationLevel migrationLevel = (signed)[[NSUserDefaults standardUserDefaults] integerForKey:MPStoreMigrationLevelKey];
+    MPStoreMigrationLevel migrationLevel = (signed)[[NSUserDefaults standardUserDefaults] integerForKey:MPMigrationLevelLocalStoreKey];
     if (migrationLevel >= MPStoreMigrationLevelCurrent)
         // Local store up-to-date.
         return;
@@ -323,7 +323,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         return;
     }
 
-    [[NSUserDefaults standardUserDefaults] setInteger:MPStoreMigrationLevelCurrent forKey:MPStoreMigrationLevelKey];
+    [[NSUserDefaults standardUserDefaults] setInteger:MPStoreMigrationLevelCurrent forKey:MPMigrationLevelLocalStoreKey];
     inf( @"Successfully migrated old to new local store." );
     if (![[NSUserDefaults standardUserDefaults] synchronize])
         wrn( @"Couldn't synchronize after store migration." );
