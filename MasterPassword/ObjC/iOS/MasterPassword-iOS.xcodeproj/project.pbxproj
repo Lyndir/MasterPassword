@@ -3154,7 +3154,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = MP;
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = Lyndir;
 				TargetAttributes = {
 					DA32D01F19D111C6004F3F0E = {

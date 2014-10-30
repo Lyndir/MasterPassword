@@ -1986,7 +1986,7 @@
 			attributes = {
 				CLASSPREFIX = MP;
 				LastTestingUpgradeCheck = 0510;
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = Lyndir;
 				TargetAttributes = {
 					DA5BFA43147E415C00F98B1E = {
@@ -2682,6 +2682,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 			};
 			name = "Debug-Mac";
 		};
@@ -2689,6 +2690,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 			};
 			name = "AdHoc-Mac";
 		};
@@ -2696,6 +2698,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 			};
 			name = "AppStore-Mac";
 		};
