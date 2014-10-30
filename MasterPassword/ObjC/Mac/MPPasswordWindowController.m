@@ -36,7 +36,7 @@
 
 @end
 
-@implementation MPPasswordWindowController { BOOL _skipTextChange; }
+@implementation MPPasswordWindowController
 
 #pragma mark - Life
 
@@ -54,31 +54,33 @@
 //    }];
     [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:self.window
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-        [self fadeIn];
-        [self updateUser];
-    }];
+                [self fadeIn];
+                [self updateUser];
+            }];
     [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillCloseNotification object:self.window
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-        NSWindow *sheet = [self.window attachedSheet];
-        if (sheet)
-            [NSApp endSheet:sheet];
-    }];
+                NSWindow *sheet = [self.window attachedSheet];
+                if (sheet)
+                    [NSApp endSheet:sheet];
+            }];
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillResignActiveNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+#ifndef DEBUG
         [self fadeOut];
-    }];
+#endif
+            }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedInNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-        [self updateUser];
-    }];
+                [self updateUser];
+            }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-        [self updateUser];
-    }];
+                [self updateUser];
+            }];
     [self observeKeyPath:@"sitesController.selection"
                withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
-        [_self updateSelection];
-    }];
+                   [_self updateSelection];
+               }];
 
     NSSearchFieldCell *siteFieldCell = self.siteField.cell;
     siteFieldCell.searchButtonCell = nil;
@@ -124,17 +126,15 @@
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector {
 
     if (control == self.siteField) {
-        if ([NSStringFromSelector( commandSelector ) rangeOfString:@"delete"].location == 0) {
-            _skipTextChange = YES;
-            dbg_return_tr( NO, @, control, NSStringFromSelector( commandSelector ) );
-        }
+        if ([NSStringFromSelector( commandSelector ) rangeOfString:@"delete"].location == 0)
+            return NO;
     }
     if (control == self.securePasswordField || control == self.revealPasswordField) {
         if (commandSelector == @selector( insertNewline: ))
-            dbg_return_tr( NO, @, control, NSStringFromSelector( commandSelector ) );
+            return NO;
     }
 
-    dbg_return_tr( [self handleCommand:commandSelector], @, control, NSStringFromSelector( commandSelector ) );
+    return [self handleCommand:commandSelector];
 }
 
 - (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor {
@@ -174,7 +174,6 @@
 
 - (BOOL)textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
 
-    dbg( @"textView:%@doCommandBySelector:%@", textView, NSStringFromSelector( commandSelector ) );
     return [self handleCommand:commandSelector];
 }
 
@@ -227,9 +226,9 @@
                 // "Create" button.
                 [[MPMacAppDelegate get] addSiteNamed:[self.siteField stringValue] completion:
                         ^(MPSiteEntity *site, NSManagedObjectContext *context) {
-                    if (site)
-                        PearlMainQueue( ^{ [self updateSites]; } );
-                }];
+                            if (site)
+                                PearlMainQueue( ^{ [self updateSites]; } );
+                        }];
                 break;
             }
             default:
@@ -305,19 +304,6 @@
 
 #pragma mark - State
 
-- (NSString *)query {
-
-    return [self.siteField.stringValue stringByReplacingCharactersInRange:self.siteField.currentEditor.selectedRange withString:@""]?: @"";
-}
-
-- (BOOL)alwaysYes {
-
-    return YES;
-}
-
-- (void)setAlwaysYes:(BOOL)alwaysYes {
-}
-
 - (void)insertObject:(MPSiteModel *)model inSitesAtIndex:(NSUInteger)index {
 
     [self.sites insertObject:model atIndex:index];
@@ -347,7 +333,7 @@
     [alert addButtonWithTitle:@"Delete"];
     [alert addButtonWithTitle:@"Cancel"];
     [alert setMessageText:@"Delete Site?"];
-    [alert setInformativeText:strf( @"Do you want to delete the site named:\n\n%@", self.selectedSite.siteName )];
+    [alert setInformativeText:strf( @"Do you want to delete the site named:\n\n%@", self.selectedSite.name )];
     [alert beginSheetModalForWindow:self.window modalDelegate:self
                      didEndSelector:@selector( alertDidEnd:returnCode:contextInfo: ) contextInfo:MPAlertDeleteSite];
 }
@@ -358,7 +344,7 @@
     [alert addButtonWithTitle:@"Save"];
     [alert addButtonWithTitle:@"Cancel"];
     [alert setMessageText:@"Change Login Name"];
-    [alert setInformativeText:strf( @"Enter the login name for: %@", self.selectedSite.siteName )];
+    [alert setInformativeText:strf( @"Enter the login name for: %@", self.selectedSite.name )];
     NSTextField *loginField = [[NSTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
     loginField.stringValue = self.selectedSite.loginName?: @"";
     [loginField selectText:self];
@@ -392,7 +378,7 @@
     [alert addButtonWithTitle:@"Save"];
     [alert addButtonWithTitle:@"Cancel"];
     [alert setMessageText:@"Change Password"];
-    [alert setInformativeText:strf( @"Enter the new password for: %@", self.selectedSite.siteName )];
+    [alert setInformativeText:strf( @"Enter the new password for: %@", self.selectedSite.name )];
     [alert setAccessoryView:[[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )]];
     [alert layout];
     [alert beginSheetModalForWindow:self.window modalDelegate:self
@@ -408,8 +394,9 @@
         MPSiteType type = [types[t] unsignedIntegerValue];
         NSString *title = [site.algorithm nameOfType:type];
         if (type & MPSiteTypeClassGenerated)
-            title = [site.algorithm generatePasswordForSiteNamed:site.siteName ofType:type
-                                                        withCounter:site.counter usingKey:[MPMacAppDelegate get].key];
+            title = [site.algorithm generatePasswordForSiteNamed:site.name ofType:type
+                                                     withCounter:site.counter
+                                                        usingKey:[MPMacAppDelegate get].key];
 
         NSButtonCell *cell = [self.passwordTypesMatrix cellAtRow:(NSInteger)t column:0];
         cell.tag = type;
@@ -421,7 +408,7 @@
     [alert addButtonWithTitle:@"Save"];
     [alert addButtonWithTitle:@"Cancel"];
     [alert setMessageText:@"Change Password Type"];
-    [alert setInformativeText:strf( @"Choose a new password type for: %@", site.siteName )];
+    [alert setInformativeText:strf( @"Choose a new password type for: %@", site.name )];
     [alert setAccessoryView:self.passwordTypesBox];
     [alert layout];
     [alert beginSheetModalForWindow:self.window modalDelegate:self
@@ -464,9 +451,9 @@
         NSUserNotification *notification = [NSUserNotification new];
         notification.title = @"Password Copied";
         if (selectedSite.loginName.length)
-            notification.subtitle = strf( @"%@ at %@", selectedSite.loginName, selectedSite.siteName );
+            notification.subtitle = strf( @"%@ at %@", selectedSite.loginName, selectedSite.name );
         else
-            notification.subtitle = selectedSite.siteName;
+            notification.subtitle = selectedSite.name;
         [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
     }
     else {
@@ -515,12 +502,24 @@
         return;
     }
 
-    NSString *query = [self query];
+    static NSRegularExpression *fuzzyRE;
+    static dispatch_once_t once = 0;
+    dispatch_once( &once, ^{
+        fuzzyRE = [NSRegularExpression regularExpressionWithPattern:@"(.)" options:0 error:nil];
+    } );
+
+    NSString *queryString = self.siteField.stringValue;
+    NSString *queryPattern = [queryString stringByReplacingMatchesOfExpression:fuzzyRE withTemplate:@"*$1*"];
+    NSMutableArray *fuzzyGroups = [NSMutableArray new];
+    [fuzzyRE enumerateMatchesInString:queryString options:0 range:NSMakeRange( 0, queryString.length )
+                           usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+                               [fuzzyGroups addObject:[queryString substringWithRange:result.range] ];
+                           }];
     [MPMacAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
         fetchRequest.sortDescriptors = @[ [[NSSortDescriptor alloc] initWithKey:@"lastUsed" ascending:NO] ];
-        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name BEGINSWITH[cd] %@) AND user == %@",
-                                                                  query, query, [[MPMacAppDelegate get] activeUserInContext:context]];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name LIKE[cd] %@) AND user == %@",
+                        queryPattern, queryPattern, [[MPMacAppDelegate get] activeUserInContext:context]];
 
         NSError *error = nil;
         NSArray *siteResults = [context executeFetchRequest:fetchRequest error:&error];
@@ -531,36 +530,14 @@
 
         NSMutableArray *newSites = [NSMutableArray arrayWithCapacity:[siteResults count]];
         for (MPSiteEntity *site in siteResults)
-            [newSites addObject:[[MPSiteModel alloc] initWithEntity:site]];
+            [newSites addObject:[[MPSiteModel alloc] initWithEntity:site fuzzyGroups:fuzzyGroups]];
         self.sites = newSites;
     }];
 }
 
 - (void)updateSelection {
 
-    if (_skipTextChange) {
-        _skipTextChange = NO;
-        return;
-    }
-
-    NSString *siteName = self.selectedSite.siteName;
-    if (!siteName)
-        return;
-
-    if ([self.window isKeyWindow] && [self.siteField isEqual:[self.window firstResponder]]) {
-        NSRange siteNameQueryRange = [siteName rangeOfString:[self query]];
-        self.siteField.stringValue = siteName;
-
-        if (siteNameQueryRange.location == 0)
-            self.siteField.currentEditor.selectedRange =
-                    NSMakeRange( siteNameQueryRange.length, siteName.length - siteNameQueryRange.length );
-    }
-
     [self.siteTable scrollRowToVisible:(NSInteger)self.sitesController.selectionIndex];
-    [self updateGradient];
-}
-
-- (void)updateGradient {
 
     NSView *siteScrollView = self.siteTable.superview.superview;
     NSRect selectedCellFrame = [self.siteTable frameOfCellAtColumn:0 row:((NSInteger)self.sitesController.selectionIndex)];

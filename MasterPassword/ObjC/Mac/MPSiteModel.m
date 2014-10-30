@@ -28,25 +28,41 @@
     BOOL _initialized;
 }
 
-- (id)initWithEntity:(MPSiteEntity *)entity {
+- (id)initWithEntity:(MPSiteEntity *)entity fuzzyGroups:(NSArray *)fuzzyGroups {
 
     if (!(self = [super init]))
         return nil;
 
-    [self setEntity:entity];
+    [self setEntity:entity fuzzyGroups:fuzzyGroups];
     _initialized = YES;
 
     return self;
 }
 
-- (void)setEntity:(MPSiteEntity *)entity {
+- (void)setEntity:(MPSiteEntity *)entity fuzzyGroups:(NSArray *)fuzzyGroups {
 
     if ([_entityOID isEqual:entity.objectID])
         return;
     _entityOID = entity.objectID;
 
+    NSString *siteName = entity.name;
+    NSMutableAttributedString *attributedSiteName = [[NSMutableAttributedString alloc] initWithString:siteName];
+    for (NSUInteger f = 0, s = (NSUInteger)-1; f < [fuzzyGroups count]; ++f) {
+        s = [siteName rangeOfString:fuzzyGroups[f] options:NSDiacriticInsensitiveSearch | NSCaseInsensitiveSearch
+                              range:NSMakeRange( s + 1, [siteName length] - (s + 1) )].location;
+        if (s == NSNotFound)
+            break;
+
+        [attributedSiteName addAttribute:NSBackgroundColorAttributeName value:[NSColor alternateSelectedControlColor]
+                                   range:NSMakeRange( s, [fuzzyGroups[f] length] )];
+    }
+    NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
+    paragraphStyle.alignment = NSCenterTextAlignment;
+    [attributedSiteName addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange( 0, [siteName length] )];
+    
+    self.displayedName = attributedSiteName;
+    self.name = siteName;
     self.algorithm = entity.algorithm;
-    self.siteName = entity.name;
     self.lastUsed = entity.lastUsed;
     self.type = entity.type;
     self.typeName = entity.typeName;
@@ -123,7 +139,7 @@
 
         PearlMainQueue( ^{
             self.content = result;
-            self.contentDisplay = displayResult;
+            self.displayedContent = displayResult;
         } );
     }];
     [entity resolveLoginUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {

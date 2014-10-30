@@ -17,15 +17,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MPSiteEntity.h"
 @class MPSiteEntity;
 
 @interface MPSiteModel : NSObject
 
-@property (nonatomic) NSString *siteName;
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSAttributedString *displayedName;
 @property (nonatomic) MPSiteType type;
 @property (nonatomic) NSString *typeName;
 @property (nonatomic) NSString *content;
-@property (nonatomic) NSString *contentDisplay;
+@property (nonatomic) NSString *displayedContent;
 @property (nonatomic) NSString *loginName;
 @property (nonatomic) NSNumber *uses;
 @property (nonatomic) NSUInteger counter;
@@ -34,7 +36,7 @@
 @property (nonatomic) BOOL generated;
 @property (nonatomic) BOOL stored;
 
-- (id)initWithEntity:(MPSiteEntity *)entity;
+- (instancetype)initWithEntity:(MPSiteEntity *)entity fuzzyGroups:(NSArray *)fuzzyGroups;
 - (MPSiteEntity *)entityInContext:(NSManagedObjectContext *)moc;
 
 - (void)updateContent;
