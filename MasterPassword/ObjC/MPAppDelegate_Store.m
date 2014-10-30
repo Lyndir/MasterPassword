@@ -314,11 +314,11 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         return;
 
     inf( @"Local store migration level: %d (current %d)", (signed)migrationLevel, (signed)MPStoreMigrationLevelCurrent );
-    if (migrationLevel == MPStoreMigrationLevelV1 && ![self migrateV1LocalStore]) {
+    if (migrationLevel <= MPStoreMigrationLevelV1 && ![self migrateV1LocalStore]) {
         inf( @"Failed to migrate old V1 to new local store." );
         return;
     }
-    if (migrationLevel == MPStoreMigrationLevelV2 && ![self migrateV2LocalStore]) {
+    if (migrationLevel <= MPStoreMigrationLevelV2 && ![self migrateV2LocalStore]) {
         inf( @"Failed to migrate old V2 to new local store." );
         return;
     }
@@ -342,6 +342,11 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
     inf( @"Migrating V1 local store" );
     NSURL *newLocalStoreURL = [self localStoreURL];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:newLocalStoreURL.path isDirectory:NULL]) {
+        inf( @"New local store already exists." );
+        return YES;
+    }
+
     NSError *error = nil;
     if (![NSPersistentStore migrateStore:oldLocalStoreURL withOptions:@{ STORE_OPTIONS }
                                  toStore:newLocalStoreURL withOptions:@{ STORE_OPTIONS }
@@ -378,6 +383,11 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
     inf( @"Migrating V2 local store" );
     NSURL *newLocalStoreURL = [self localStoreURL];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:newLocalStoreURL.path isDirectory:NULL]) {
+        inf( @"New local store already exists." );
+        return YES;
+    }
+
     NSError *error = nil;
     if (![NSPersistentStore migrateStore:oldLocalStoreURL withOptions:@{
             NSMigratePersistentStoresAutomaticallyOption : @YES,
