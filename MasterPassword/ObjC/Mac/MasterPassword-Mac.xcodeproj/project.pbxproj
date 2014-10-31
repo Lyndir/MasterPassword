@@ -28,7 +28,6 @@
 		DA16B344170661EE000A0EAB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B343170661EE000A0EAB /* Cocoa.framework */; };
 		DA16B345170661F2000A0EAB /* libPearl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC77CAD148291A600BCF976 /* libPearl.a */; };
 		DA2508F119511D3600AC23F1 /* MPPasswordWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */; };
-		DA2508F719513C1400AC23F1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B343170661EE000A0EAB /* Cocoa.framework */; };
 		DA250925195148E200AC23F1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
 		DA29992C19C6A89900AF7DF1 /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA29992619C6A89900AF7DF1 /* MasterPassword.xcdatamodeld */; };
 		DA2CA4ED18D323D3007798F8 /* NSError+PearlFullDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4E718D323D3007798F8 /* NSError+PearlFullDescription.m */; };
@@ -86,9 +85,6 @@
 		DAADCC4B19FB000C00987B1D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBC45214F6364500987BF6 /* QuartzCore.framework */; };
 		DAADCC6919FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m in Sources */ = {isa = PBXBuildFile; fileRef = DAADCC6719FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m */; };
 		DAADCC6A19FB00B500987B1D /* libKCOrderedAccessorFix.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */; };
-		DABC6C02175D8C85000C15D4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
-		DABC6C15175D8CE1000C15D4 /* RHStatusItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = DABC6C14175D8CE1000C15D4 /* RHStatusItemView.m */; };
-		DABC6C16175D8E3A000C15D4 /* libRHStatusItemView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DABC6C01175D8C85000C15D4 /* libRHStatusItemView.a */; };
 		DAC6326D148680650075AEA5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5BFA4A147E415C00F98B1E /* Foundation.framework */; };
 		DACA26FE1705DF81002C6C22 /* logo-bare.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA241C1705DF7D002C6C22 /* logo-bare.png */; };
@@ -262,7 +258,6 @@
 		DA16B340170661DB000A0EAB /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		DA16B343170661EE000A0EAB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPPasswordWindowController.xib; sourceTree = "<group>"; };
-		DA2508F619513C1400AC23F1 /* libRMBlurredView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRMBlurredView.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA2508F919513C1400AC23F1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DA2508FA19513C1400AC23F1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		DA2508FB19513C1400AC23F1 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -758,9 +753,6 @@
 		DAADCC6619FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectModel+KCOrderedAccessorFix.h"; sourceTree = "<group>"; };
 		DAADCC6719FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectModel+KCOrderedAccessorFix.m"; sourceTree = "<group>"; };
 		DABB981515100B4000B05417 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		DABC6C01175D8C85000C15D4 /* libRHStatusItemView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRHStatusItemView.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		DABC6C13175D8CE1000C15D4 /* RHStatusItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHStatusItemView.h; sourceTree = "<group>"; };
-		DABC6C14175D8CE1000C15D4 /* RHStatusItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHStatusItemView.m; sourceTree = "<group>"; };
 		DAC6326C148680650075AEA5 /* libjrswizzle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjrswizzle.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC632871486D95D0075AEA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		DAC77CAD148291A600BCF976 /* libPearl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPearl.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -881,14 +873,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		DA2508F319513C1400AC23F1 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DA2508F719513C1400AC23F1 /* Cocoa.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DA5BFA41147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -896,7 +880,6 @@
 				DAADCC6A19FB00B500987B1D /* libKCOrderedAccessorFix.a in Frameworks */,
 				DA250925195148E200AC23F1 /* QuartzCore.framework in Frameworks */,
 				DAD9B5F01762CAA4001835F9 /* ServiceManagement.framework in Frameworks */,
-				DABC6C16175D8E3A000C15D4 /* libRHStatusItemView.a in Frameworks */,
 				DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */,
 				DA16B342170661E0000A0EAB /* Security.framework in Frameworks */,
 				DA16B345170661F2000A0EAB /* libPearl.a in Frameworks */,
@@ -909,14 +892,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DABC6BFE175D8C85000C15D4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DABC6C02175D8C85000C15D4 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -980,8 +955,6 @@
 				DA5BFA44147E415C00F98B1E /* Master Password.app */,
 				DAC77CAD148291A600BCF976 /* libPearl.a */,
 				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
-				DABC6C01175D8C85000C15D4 /* libRHStatusItemView.a */,
-				DA2508F619513C1400AC23F1 /* libRMBlurredView.a */,
 				DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */,
 			);
 			name = Products;
@@ -1520,16 +1493,6 @@
 			path = KCOrderedAccessorFix;
 			sourceTree = "<group>";
 		};
-		DABC6C0E175D8CE1000C15D4 /* RHStatusItemView */ = {
-			isa = PBXGroup;
-			children = (
-				DABC6C13175D8CE1000C15D4 /* RHStatusItemView.h */,
-				DABC6C14175D8CE1000C15D4 /* RHStatusItemView.m */,
-			);
-			name = RHStatusItemView;
-			path = RHStatusItemView/RHStatusItemView;
-			sourceTree = "<group>";
-		};
 		DAC77CAF148291A600BCF976 /* Pearl */ = {
 			isa = PBXGroup;
 			children = (
@@ -1545,7 +1508,6 @@
 			children = (
 				DAADCC6819FB007F00987B1D /* KCOrderedAccessorFix */,
 				DA3B8449190FC5A900246EEA /* Mac */,
-				DABC6C0E175D8CE1000C15D4 /* RHStatusItemView */,
 				DACA29751705E2BD002C6C22 /* jrswizzle */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
 			);
@@ -1807,13 +1769,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		DA2508F419513C1400AC23F1 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DAC6326A148680650075AEA5 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1870,23 +1825,6 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		DA2508F519513C1400AC23F1 /* RMBlurredView */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DA25091519513C1500AC23F1 /* Build configuration list for PBXNativeTarget "RMBlurredView" */;
-			buildPhases = (
-				DA2508F219513C1400AC23F1 /* Sources */,
-				DA2508F319513C1400AC23F1 /* Frameworks */,
-				DA2508F419513C1400AC23F1 /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = RMBlurredView;
-			productName = RMBlurredView;
-			productReference = DA2508F619513C1400AC23F1 /* libRMBlurredView.a */;
-			productType = "com.apple.product-type.library.static";
-		};
 		DA5BFA43147E415C00F98B1E /* MasterPassword */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */;
@@ -1924,22 +1862,6 @@
 			name = KCOrderedAccessorFix;
 			productName = KCOrderedAccessorFix;
 			productReference = DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-		DABC6C00175D8C85000C15D4 /* RHStatusItemView */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DABC6C0A175D8C85000C15D4 /* Build configuration list for PBXNativeTarget "RHStatusItemView" */;
-			buildPhases = (
-				DABC6BFD175D8C85000C15D4 /* Sources */,
-				DABC6BFE175D8C85000C15D4 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = RHStatusItemView;
-			productName = RHStatusItemView;
-			productReference = DABC6C01175D8C85000C15D4 /* libRHStatusItemView.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		DAC6326B148680650075AEA5 /* jrswizzle */ = {
@@ -2024,8 +1946,6 @@
 				DA5BFA43147E415C00F98B1E /* MasterPassword */,
 				DAC77CAC148291A600BCF976 /* Pearl */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
-				DABC6C00175D8C85000C15D4 /* RHStatusItemView */,
-				DA2508F519513C1400AC23F1 /* RMBlurredView */,
 				DAADCC4F19FB006500987B1D /* KCOrderedAccessorFix */,
 			);
 		};
@@ -2175,13 +2095,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		DA2508F219513C1400AC23F1 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DA5BFA40147E415C00F98B1E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2220,14 +2133,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAADCC6919FB007F00987B1D /* NSManagedObjectModel+KCOrderedAccessorFix.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DABC6BFD175D8C85000C15D4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DABC6C15175D8CE1000C15D4 /* RHStatusItemView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2322,30 +2227,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		DA25091619513C1500AC23F1 /* Debug-Mac */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-			};
-			name = "Debug-Mac";
-		};
-		DA25091719513C1500AC23F1 /* AdHoc-Mac */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-			};
-			name = "AdHoc-Mac";
-		};
-		DA25091819513C1500AC23F1 /* AppStore-Mac */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-			};
-			name = "AppStore-Mac";
-		};
 		DA5BFA6B147E415C00F98B1E /* Debug-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2702,30 +2583,6 @@
 			};
 			name = "AppStore-Mac";
 		};
-		DABC6C0B175D8C85000C15D4 /* Debug-Mac */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-			};
-			name = "Debug-Mac";
-		};
-		DABC6C0C175D8C85000C15D4 /* AdHoc-Mac */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-			};
-			name = "AdHoc-Mac";
-		};
-		DABC6C0D175D8C85000C15D4 /* AppStore-Mac */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-			};
-			name = "AppStore-Mac";
-		};
 		DAC63275148680650075AEA5 /* Debug-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2795,16 +2652,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DA25091519513C1500AC23F1 /* Build configuration list for PBXNativeTarget "RMBlurredView" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DA25091619513C1500AC23F1 /* Debug-Mac */,
-				DA25091719513C1500AC23F1 /* AdHoc-Mac */,
-				DA25091819513C1500AC23F1 /* AppStore-Mac */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-Mac";
-		};
 		DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-Mac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2831,16 +2678,6 @@
 				DAADCC5F19FB006500987B1D /* Debug-Mac */,
 				DAADCC6019FB006500987B1D /* AdHoc-Mac */,
 				DAADCC6119FB006500987B1D /* AppStore-Mac */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-Mac";
-		};
-		DABC6C0A175D8C85000C15D4 /* Build configuration list for PBXNativeTarget "RHStatusItemView" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DABC6C0B175D8C85000C15D4 /* Debug-Mac */,
-				DABC6C0C175D8C85000C15D4 /* AdHoc-Mac */,
-				DABC6C0D175D8C85000C15D4 /* AppStore-Mac */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "AdHoc-Mac";

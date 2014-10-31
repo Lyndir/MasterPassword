@@ -73,9 +73,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }           forKeyPath:@"activeUser" options:0 context:nil];
 
     // Status item.
-    self.statusView = [[RHStatusItemView alloc] initWithStatusBarItem:
-            [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength]];
+    self.statusView = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
     self.statusView.image = [NSImage imageNamed:@"menu-icon"];
+    self.statusView.image.template = YES;
     self.statusView.menu = self.statusMenu;
     self.statusView.target = self;
     self.statusView.action = @selector( showMenu );
@@ -394,7 +394,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)showPopup:(id)sender {
 
-    [self.statusView popUpMenu];
+    [self.statusView popUpStatusItemMenu:self.statusView.menu];
 }
 
 - (IBAction)showPasswordWindow:(id)sender {
@@ -545,7 +545,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     [self updateMenuItems];
 
-    [self.statusView popUpMenu];
+    [self.statusView popUpStatusItemMenu:self.statusView.menu];
 }
 
 - (void)updateMenuItems {
