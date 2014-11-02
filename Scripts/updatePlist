@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+cd "${BASH_SOURCE%/*}"
+source bashlib
+set -e
+cd ..
+export PATH+=:/usr/libexec
+
+addPlistWithKey() {
+    local key=$1 type=$2 value=$3 plist=${4:-"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH"}
+    
+    PlistBuddy -c "Delete :'$key'" "$plist" 2>/dev/null || true
+    PlistBuddy -c "Add :'$key' '$type' '$value'" "$plist"
+}
+setPlistWithKey() {
+    local key=$1 value=$2 plist=${3:-"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH"}
+    
+    PlistBuddy -c "Set :'$key' '$value'" "$plist"
+}
+getPlistWithKey() {
+    local key=$1 plist=${2:-"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH"}
+    
+    PlistBuddy -c "Print :'$key'" "$plist"
+}
+setSettingWithTitle() {
+    local i title=$1 value=$2 plist=${3:-"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Settings.bundle/Root.plist"}
+    
+    for (( i=0; 1; ++i )); do
+        PlistBuddy -c "Print :PreferenceSpecifiers:$i" "$plist" &>/dev/null || break
+        inf "Checking preference specifier $i"
+    
+        [[ $(PlistBuddy -c "Print :PreferenceSpecifiers:$i:Title" "$plist" 2>/dev/null) = $title ]] || continue
+    
+        inf "Correct title, setting value."
+        PlistBuddy -c "Set :PreferenceSpecifiers:$i:DefaultValue $value" "$plist"
+        break
+    done
+}
+
+description=$(git describe --always --dirty --long --match '*-release')
+version=${description%-g*}
+major=${version%%-*} minor=${version##*-}
+printf -v version '%s.%02d' "$major" "$minor"
+printf -v commit '%09d' "$((16#${description##*-g}))"
+
+addPlistWithKey GITDescription string "$description"
+setPlistWithKey CFBundleVersion "${version//.}$commit" # No separator between version and commit because I had already submitted a CFBundleVersion with a really high major.  Cry.
+setPlistWithKey CFBundleShortVersionString "$version"
+
+setSettingWithTitle "Build" "$commit"
+setSettingWithTitle "Version" "$version"
+setSettingWithTitle "Copyright" "$(getPlistWithKey NSHumanReadableCopyright)"
+
+if [[ $DEPLOYMENT_LOCATION = YES ]]; then
+    # This build is a release.  Do some release checks.
+    passed=1
+    [[ $description != *-dirty ]] || \
+        { passed=0; err 'ERROR: Cannot release a dirty version, first commit any changes.'; }
+    [[ $(PlistBuddy -c "Print :'API Key'" "$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Crashlytics.plist") ]] || \
+        { passed=0; err 'ERROR: Cannot release: Crashlytics API key is missing.'; }
+    (( passed )) || \
+        { ftl "Failed to pass release checks.  Fix the above errors and re-try.  Aborting."; exit 1; }
+fi
