@@ -133,6 +133,7 @@
     [super prepareForReuse];
 
     _siteOID = nil;
+    _fuzzyGroups = nil;
     self.transientSite = nil;
     self.mode = MPPasswordCellModePassword;
     [self updateAnimated:NO];
@@ -146,6 +147,15 @@
 }
 
 #pragma mark - State
+
+- (void)setFuzzyGroups:(NSArray *)fuzzyGroups {
+
+    if (_fuzzyGroups == fuzzyGroups)
+        return;
+    _fuzzyGroups = fuzzyGroups;
+
+    [self updateSiteName:[self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]]];
+}
 
 - (void)setMode:(MPPasswordCellMode)mode animated:(BOOL)animated {
 
@@ -490,8 +500,7 @@
             [self.loginNameButton setTitle:@"Tap the pencil to save a username" forState:UIControlStateNormal];
 
         // Site Name
-        self.siteNameLabel.text = strl( @"%@ - %@", self.transientSite?: mainSite.name,
-                self.transientSite? @"Tap to create": [mainSite.algorithm shortNameOfType:mainSite.type] );
+        [self updateSiteName:mainSite];
 
         // Site Password
         self.passwordField.secureTextEntry = [[MPiOSConfig get].hidePasswords boolValue];
@@ -555,6 +564,26 @@
 
         [self.contentView layoutIfNeeded];
     }];
+}
+
+- (void)updateSiteName:(MPSiteEntity *)site {
+
+    NSString *siteName = self.transientSite?: site.name;
+    NSMutableAttributedString *attributedSiteName = [[NSMutableAttributedString alloc] initWithString:siteName?: @""];
+    if ([attributedSiteName length])
+        for (NSUInteger f = 0, s = (NSUInteger)-1; f < [self.fuzzyGroups count]; ++f) {
+            s = [siteName rangeOfString:self.fuzzyGroups[f] options:NSDiacriticInsensitiveSearch | NSCaseInsensitiveSearch
+                                  range:NSMakeRange( s + 1, [siteName length] - (s + 1) )].location;
+            if (s == NSNotFound)
+                break;
+
+            [attributedSiteName addAttribute:NSBackgroundColorAttributeName value:[UIColor redColor]
+                                       range:NSMakeRange( s, [self.fuzzyGroups[f] length] )];
+        }
+
+    [attributedSiteName appendAttributedString:stra(
+            strf( @" - %@", self.transientSite? @"Tap to create": [site.algorithm shortNameOfType:site.type] ), @{ } )];
+    self.siteNameLabel.attributedText = attributedSiteName;
 }
 
 - (BOOL)copyContentOfSite:(MPSiteEntity *)site saveInContext:(NSManagedObjectContext *)context {

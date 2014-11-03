@@ -44,6 +44,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     BOOL _showTransientItem;
     NSUInteger _transientItem;
     NSCharacterSet *_siteNameAcceptableCharactersSet;
+    NSArray *_fuzzyGroups;
 }
 
 #pragma mark - Life
@@ -147,6 +148,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
     MPPasswordCell *cell = [MPPasswordCell dequeueCellFromCollectionView:collectionView indexPath:indexPath];
+    [cell setFuzzyGroups:_fuzzyGroups];
     if (indexPath.item < ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[indexPath.section]).numberOfObjects)
         [cell setSite:[self.fetchedResultsController objectAtIndexPath:indexPath] animated:NO];
     else
@@ -253,7 +255,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
 
     if (searchBar == self.passwordsSearchBar) {
-        if ([self.query length] && [[self.query stringByTrimmingCharactersInSet:_siteNameAcceptableCharactersSet] length])
+        if ([[self.query stringByTrimmingCharactersInSet:_siteNameAcceptableCharactersSet] length])
             [self showTips:MPPasswordsBadNameTip];
 
         [self updatePasswords];
@@ -364,7 +366,6 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 - (void)updatePasswords {
 
-    NSString *query = self.query;
     NSManagedObjectID *activeUserOID = [MPiOSAppDelegate get].activeUserOID;
     if (!activeUserOID) {
         PearlMainQueue( ^{
@@ -375,6 +376,20 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         return;
     }
 
+    static NSRegularExpression *fuzzyRE;
+    static dispatch_once_t once = 0;
+    dispatch_once( &once, ^{
+        fuzzyRE = [NSRegularExpression regularExpressionWithPattern:@"(.)" options:0 error:nil];
+    } );
+
+    NSString *queryString = self.query;
+    NSString *queryPattern = [queryString stringByReplacingMatchesOfExpression:fuzzyRE withTemplate:@"*$1*"];
+    NSMutableArray *fuzzyGroups = [NSMutableArray arrayWithCapacity:[queryString length]];
+    [fuzzyRE enumerateMatchesInString:queryString options:0 range:NSMakeRange( 0, queryString.length )
+                           usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+                               [fuzzyGroups addObject:[queryString substringWithRange:result.range]];
+                           }];
+    _fuzzyGroups = fuzzyGroups;
     [self.fetchedResultsController.managedObjectContext performBlock:^{
         NSArray *oldSectionInfos = [self.fetchedResultsController sections];
         NSMutableArray *oldSections = [[NSMutableArray alloc] initWithCapacity:[oldSectionInfos count]];
@@ -383,9 +398,8 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
         NSError *error = nil;
         self.fetchedResultsController.fetchRequest.predicate =
-                [query length]?
-                [NSPredicate predicateWithFormat:@"user == %@ AND name BEGINSWITH[cd] %@", activeUserOID, query]:
-                [NSPredicate predicateWithFormat:@"user == %@", activeUserOID];
+                [NSPredicate predicateWithFormat:@"(%@ == '' OR name LIKE[cd] %@) AND user == %@",
+                                                 queryPattern, queryPattern, activeUserOID];
         if (![self.fetchedResultsController performFetch:&error])
             err( @"Couldn't fetch sites: %@", [error fullDescription] );
 
@@ -411,6 +425,8 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
                 if (finished)
                     [self.passwordCollectionView setContentOffset:CGPointMake( 0, -self.passwordCollectionView.contentInset.top )
                                                          animated:YES];
+                for (MPPasswordCell *cell in self.passwordCollectionView.visibleCells)
+                    [cell setFuzzyGroups:_fuzzyGroups];
             }];
         }
         @catch (NSException *exception) {

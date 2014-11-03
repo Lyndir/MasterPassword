@@ -519,7 +519,7 @@
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
         fetchRequest.sortDescriptors = @[ [[NSSortDescriptor alloc] initWithKey:@"lastUsed" ascending:NO] ];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name LIKE[cd] %@) AND user == %@",
-                        queryPattern, queryPattern, [[MPMacAppDelegate get] activeUserInContext:context]];
+                        queryPattern, queryPattern, [MPMacAppDelegate get].activeUserOID];
 
         NSError *error = nil;
         NSArray *siteResults = [context executeFetchRequest:fetchRequest error:&error];
