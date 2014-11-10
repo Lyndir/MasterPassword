@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ MASTERPASSWORD FOR WINDOWS
+ ==========================
+ Created by Michel Verhagen
+ Copyright (C)2014 GuruCE Limited
+
+ Released under the GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+
+ Contains software provided by Maarten Billemont and used under the GPL v3 License.
+
+ Copyright (c) 2012 Lyndir. All rights reserved.
+
+ Contains software provided by Replicon Inc. and used under this license:
+
+ Replicon.Cryptography.SCrypt
+ Copyright (c) 2012, Replicon Inc.
+ All rights reserved.
+-->
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="$(var.MasterPassword.ProjectName)" Language="1033" Version="!(bind.FileVersion.ProjectOutput)" Manufacturer="GuruCE" UpgradeCode="40c052f9-f8e1-422c-b78c-83f980f3355b">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perUser" />
+
+    <MajorUpgrade Schedule="afterInstallValidate" DowngradeErrorMessage="A newer version of [ProductName] is already installed."/>
+
+    <Media Id="1" Cabinet="mpsetup.cab" EmbedCab="yes"></Media>
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLLOCATION" Name="$(var.MasterPassword.ProjectName)">
+          <Component Id='Application' Guid='8E7510B9-592B-43E5-AFD2-F697A9957AFB'>
+            <File Id='ProjectOutput' Name='$(var.MasterPassword.TargetFileName)' DiskId='1' Source='$(var.MasterPassword.TargetPath)' KeyPath='yes'>
+              <Shortcut Id='startmenuAppShortcut' Directory='ProgramMenuDir' Name='$(var.MasterPassword.ProjectName)'
+                        WorkingDirectory='INSTALLDIR' Icon='masterpassword.ico' IconIndex='0' Advertise='yes' />
+            </File>
+            <File Id='Config' Name='$(var.MasterPassword.TargetFileName).config' DiskId='1' Source='$(var.MasterPassword.TargetDir)\$(var.MasterPassword.TargetFileName).config' KeyPath='no'/>
+            <File Id='Newtonsoft.Json' Name='Newtonsoft.Json.dll' DiskId='1' Source='$(var.MasterPassword.TargetDir)\Newtonsoft.Json.dll' KeyPath='no'/>
+            <File Id='Replicon.Cryptography.SCrypt' Name='Replicon.Cryptography.SCrypt.dll' DiskId='1' Source='$(var.MasterPassword.TargetDir)\Replicon.Cryptography.SCrypt.dll' KeyPath='no'/>
+          </Component>
+          <Component Id='UninstallShortcut' Guid='D6499F04-1FC0-45CA-949B-074DC1F9AEEB'>
+            <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
+            <Shortcut Id='startmenuUninstallShortcut' Name='Uninstall $(var.MasterPassword.ProjectName)' Icon='masterpassword.ico' IconIndex='0'
+                      Target='[System64Folder]msiexec.exe' Arguments='/x [ProductCode]' Directory='ProgramMenuDir' Description='Uninstall $(var.MasterPassword.ProjectName)' />
+          </Component>
+          <Component Id='DesktopShortcut' Guid='87EB347B-6141-485A-9F15-4A2FFC1689B2'>
+            <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
+            <Shortcut Id='desktopShortcut' Name='$(var.MasterPassword.ProjectName)' Icon='masterpassword.ico' IconIndex='0' Directory='DesktopFolder'
+                      Target='[!ProjectOutput]' WorkingDirectory='INSTALLDIR' Description='Start $(var.MasterPassword.ProjectName)' />
+          </Component>
+
+          <!-- This empty component is to work around a bug in Windows Installer that will still show 
+                 "Install to run from the network" even if AllowAdvertise is set to 'no' -->
+          <Component Id='Empty' Guid='C948CC83-B207-4E9B-B5C4-DA8D68296F1B'>
+            <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
+          </Component>
+
+        </Directory>
+      </Directory>
+      <Directory Id='ProgramMenuFolder' Name='Programs'>
+        <Directory Id='ProgramMenuDir' Name='$(var.MasterPassword.ProjectName)'>
+          <Component Id='ProgramMenuDir'>
+            <RemoveFolder Id='ProgramMenuDir' On='uninstall' />
+            <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id='DesktopFolder' Name='Desktop' />
+    </Directory>
+
+    <Feature Id='Complete' Title='$(var.MasterPassword.ProjectName)' Description='Installation of all components' Display='expand' ConfigurableDirectory='INSTALLLOCATION' Level='1' AllowAdvertise='no' Absent='disallow'>
+      <!-- This empty component is to work around a bug in Windows Installer that will still show 
+                 "Install to run from the network" even if AllowAdvertise is set to 'no' -->
+      <ComponentRef Id='Empty' />
+      <Feature Id='MainProgram' Title='MasterPassword' Description='The $(var.MasterPassword.ProjectName)' Level='1' AllowAdvertise='no' Absent='disallow'>
+        <ComponentRef Id='Application' />
+        <ComponentRef Id='UninstallShortcut' />
+        <ComponentRef Id='ProgramMenuDir' />
+      </Feature>
+      <Feature Id='DesktopShortcut' Title='Desktop Shortcut' Description='A shortcut to the $(var.MasterPassword.ProjectName) on the desktop' Level='1' AllowAdvertise='no'>
+        <ComponentRef Id='DesktopShortcut' />
+      </Feature>
+    </Feature>
+
+    <Property Id='WIXUI_INSTALLDIR' Value='INSTALLDIR' />
+
+    <UIRef Id='WixUI_FeatureTree' />
+    <UIRef Id='WixUI_ErrorProgressText' />
+
+    <WixVariable Id='WixUILicenseRtf' Value='License agreement.rtf' />
+    <WixVariable Id='WixUIBannerBmp' Value='SetupBanner.bmp' />
+    <WixVariable Id='WixUIDialogBmp' Value='SplashScreen.bmp' />
+
+    <Icon Id='masterpassword.ico' SourceFile='$(var.MasterPassword.ProjectDir)\masterpassword.ico' />
+  </Product>
+</Wix>
