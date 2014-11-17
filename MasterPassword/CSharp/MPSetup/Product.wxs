@@ -19,7 +19,7 @@
 -->
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*" Name="$(var.MasterPassword.ProjectName)" Language="1033" Version="!(bind.FileVersion.ProjectOutput)" Manufacturer="GuruCE" UpgradeCode="40c052f9-f8e1-422c-b78c-83f980f3355b">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perUser" />
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" />
 
     <MajorUpgrade Schedule="afterInstallValidate" DowngradeErrorMessage="A newer version of [ProductName] is already installed."/>
 
