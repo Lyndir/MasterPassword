@@ -121,6 +121,7 @@ if [[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]] ||
         printf '],"info":{"version":1,"author":"genassets"},"properties":{"pre-rendered":true}}\n'
     } > "$appiconset/Contents.json"
 fi
+exit
 
 if [[ "$(latest "$ios_launch"/*)" -nt "$launchimage/Contents.json" ]]; then
     rm -rf "$launchimage"; mkdir -p "$launchimage"
