@@ -4,6 +4,7 @@
 #   - To enable verbose algorithm/implementation debugging, use ./build -DDEBUG
 #   - If you see 'undefined reference to `AES_encrypt'',
 #       make sure you have openssl installed.
+#       If libcrypto.a is in a non-standard directory, try ./build -L[your-lib-dir]
 #   - If you see 'undefined reference to `clock_gettime'',
 #       try ./build -lrt instead.
 #   - If you see 'x86.S:202: Error: junk at end of line, first unrecognized character is `,'',
