@@ -68,8 +68,8 @@ exit
             done <<< "$niftyNinePatch"
         fnip
     else
-        pinf '%s -> %s' "${src##*/}" "${dst##*/}"
 exit
+        pinf '%s -> %s' "${src##*/}" "${dst##*/}"
             cp "$src" "$dst"
         fnip
     fi
