@@ -2,6 +2,8 @@
 #
 # TROUBLESHOOTING
 #   - To enable verbose algorithm/implementation debugging, use ./build -DDEBUG
+#   - If you see 'undefined reference to `AES_encrypt'',
+#       make sure you have openssl installed.
 #   - If you see 'undefined reference to `clock_gettime'',
 #       try ./build -lrt instead.
 #   - If you see 'x86.S:202: Error: junk at end of line, first unrecognized character is `,'',
@@ -245,6 +247,9 @@ mpw-bench() {
 
 ### TARGETS
 
+haslib() {
+    LC_ALL=C cc -l"$1" 2>&1 | ! grep -q 'library not found'
+}
 cc() {
     if hash llvm-gcc 2>/dev/null; then
         llvm-gcc "$@"

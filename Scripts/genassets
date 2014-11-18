@@ -56,7 +56,6 @@ copyImage() {
     local src=$1 dst=$2
 
     if [[ $src = *.9.png || $src = *.9@*.png ]]; then
-exit
         pinf '%s -> %s (ninepatch)' "${src##*/}" "${dst##*/}"
             niftyNinePatch=$(java -Dapple.awt.UIElement=true -jar Scripts/NiftyNinePatchHelper.jar "$src" "$dst") || return
             while IFS='=' read var value; do
@@ -68,7 +67,6 @@ exit
             done <<< "$niftyNinePatch"
         fnip
     else
-exit
         pinf '%s -> %s' "${src##*/}" "${dst##*/}"
             cp "$src" "$dst"
         fnip

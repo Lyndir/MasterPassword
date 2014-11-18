@@ -109,8 +109,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     // Global hotkey.
     EventHotKeyRef hotKeyRef;
     EventTypeSpec hotKeyEvents[1] = { { .eventClass = kEventClassKeyboard, .eventKind = kEventHotKeyPressed } };
-    OSStatus status = InstallApplicationEventHandler( NewEventHandlerUPP( MPHotKeyHander ), GetEventTypeCount( hotKeyEvents ),
-            hotKeyEvents, (__bridge void *)self, NULL );
+    OSStatus status = InstallApplicationEventHandler( NewEventHandlerUPP( MPHotKeyHander ), GetEventTypeCount( hotKeyEvents ), hotKeyEvents, (__bridge void *)self, NULL );
     if (status != noErr)
         err( @"Error installing application event handler: %i", (int)status );
     status = RegisterEventHotKey( 35 /* p */, controlKey + cmdKey, MPShowHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
