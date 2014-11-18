@@ -79,7 +79,6 @@ launchimage="$xcassets/LaunchImage.launchimage"
 ios_icon=MasterPassword/Resources/Media/ios/icon
 ios_launch=MasterPassword/Resources/Media/ios/launch
 mac_icon=MasterPassword/Resources/Media/mac/icon
-exit
 
 if [[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]] ||
    [[ "$(latest "$mac_icon"/*)" -nt "$appiconset/Contents.json" ]]; then
@@ -91,6 +90,7 @@ if [[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]] ||
             IFS=: read icon filename <<< "$icon"
             IFS=@ read px scale idiom os <<< "$icon"
             pt=$(( px / scale ))
+exit
 
             suffix=
             [[ $scale != 1 ]] && suffix=@${scale}x
