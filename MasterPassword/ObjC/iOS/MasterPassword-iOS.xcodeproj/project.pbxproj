@@ -3504,9 +3504,8 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = "/bin/sh -e";
+			shellPath = "/bin/sh -xe";
 			shellScript = "exec ../../../Scripts/genassets";
-			showEnvVarsInLog = 0;
 		};
 		DAD3125D155288AA00A3F9ED /* Run Script: Crashlytics */ = {
 			isa = PBXShellScriptBuildPhase;

@@ -95,13 +95,24 @@ char *homedir(const char *filename) {
     return homefile;
 }
 
+char *getlinep(const char *prompt) {
+    char *buf = NULL;
+    size_t bufSize = 0;
+    ssize_t lineSize;
+    fprintf(stderr, "%s", prompt);
+    fprintf(stderr, " ");
+    if ((lineSize = getline(&buf, &bufSize, stdin)) < 0) {
+        free(buf);
+        return NULL;
+    }
+    buf[lineSize - 1]=0;
+    return buf;
+}
+
 int main(int argc, char *const argv[]) {
 
-    if (argc < 2)
-        usage();
-
     // Read the environment.
-    const char *userName = getenv( MP_env_username );
+    char *userName = getenv( MP_env_username );
     const char *masterPassword = NULL;
     const char *siteName = NULL;
     MPElementType siteType = MPElementTypeGeneratedLong;
@@ -156,13 +167,17 @@ int main(int argc, char *const argv[]) {
 
     // Convert and validate input.
     if (!userName) {
-        fprintf(stderr, "Missing user name.\n");
-        return 1;
+        if (!(userName = getlinep("Your user name:"))) {
+            fprintf(stderr, "Missing user name.\n");
+            return 1;
+        }
     }
     trc("userName: %s\n", userName);
     if (!siteName) {
-        fprintf(stderr, "Missing site name.\n");
-        return 1;
+        if (!(siteName = getlinep("Site name:"))) {
+            fprintf(stderr, "Missing site name.\n");
+            return 1;
+        }
     }
     trc("siteName: %s\n", siteName);
     if (siteCounterString)
