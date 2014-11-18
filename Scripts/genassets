@@ -57,6 +57,7 @@ copyImage() {
 
     if [[ $src = *.9.png || $src = *.9@*.png ]]; then
         pinf '%s -> %s (ninepatch)' "${src##*/}" "${dst##*/}"
+exit
             niftyNinePatch=$(java -Dapple.awt.UIElement=true -jar Scripts/NiftyNinePatchHelper.jar "$src" "$dst") || return
             while IFS='=' read var value; do
                 [[ $var = imageMode ]] && value=${value#'"resize:'} value=${value%'"'} && IFS=, read capLeft capWidth capRight capTop _ _ _ capHeight _ _ _ capBottom <<< "$value"
@@ -116,7 +117,6 @@ if [[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]] ||
                 rm "$appiconset/Contents.json"
                 exit
             fi
-exit
 
         done
         printf '],"info":{"version":1,"author":"genassets"},"properties":{"pre-rendered":true}}\n'
