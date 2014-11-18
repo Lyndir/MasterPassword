@@ -79,6 +79,7 @@ launchimage="$xcassets/LaunchImage.launchimage"
 ios_icon=MasterPassword/Resources/Media/ios/icon
 ios_launch=MasterPassword/Resources/Media/ios/launch
 mac_icon=MasterPassword/Resources/Media/mac/icon
+exit
 
 if [[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]] ||
    [[ "$(latest "$mac_icon"/*)" -nt "$appiconset/Contents.json" ]]; then
@@ -121,7 +122,6 @@ if [[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]] ||
         printf '],"info":{"version":1,"author":"genassets"},"properties":{"pre-rendered":true}}\n'
     } > "$appiconset/Contents.json"
 fi
-exit
 
 if [[ "$(latest "$ios_launch"/*)" -nt "$launchimage/Contents.json" ]]; then
     rm -rf "$launchimage"; mkdir -p "$launchimage"
