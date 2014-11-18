@@ -102,7 +102,6 @@ if [[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]] ||
                     exit 1
                 fi
             fi
-exit
 
             if imageProps=$(copyImage "$source" "$appiconset/$filename"); then
                 printf '%s{"size":"%dx%d","filename":"%s","scale":"%sx"' \
@@ -117,6 +116,7 @@ exit
                 rm "$appiconset/Contents.json"
                 exit
             fi
+exit
 
         done
         printf '],"info":{"version":1,"author":"genassets"},"properties":{"pre-rendered":true}}\n'
