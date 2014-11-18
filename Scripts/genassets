@@ -90,7 +90,6 @@ if [[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]] ||
             IFS=: read icon filename <<< "$icon"
             IFS=@ read px scale idiom os <<< "$icon"
             pt=$(( px / scale ))
-exit
 
             suffix=
             [[ $scale != 1 ]] && suffix=@${scale}x
@@ -103,6 +102,7 @@ exit
                     exit 1
                 fi
             fi
+exit
 
             if imageProps=$(copyImage "$source" "$appiconset/$filename"); then
                 printf '%s{"size":"%dx%d","filename":"%s","scale":"%sx"' \
