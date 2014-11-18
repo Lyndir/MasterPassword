@@ -249,7 +249,7 @@ mpw-bench() {
 ### TARGETS
 
 haslib() {
-    LC_ALL=C cc -l"$1" 2>&1 | ! grep -q 'library not found'
+    ! LC_ALL=C cc -l"$1" 2>&1 | grep -q 'library not found'
 }
 cc() {
     if hash llvm-gcc 2>/dev/null; then
