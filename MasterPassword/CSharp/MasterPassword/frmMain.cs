@@ -99,6 +99,7 @@ namespace MasterPassword
             string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Application.ProductName, fileName);
             if (File.Exists(appDataPath))
             {
+                mruData.Clear();
                 string json = "";
                 using (BinaryReader br = new BinaryReader(File.Open(appDataPath, FileMode.Open)))
                 {
@@ -204,8 +205,10 @@ namespace MasterPassword
                 {
                     txtUsername.Text = "";
                     txtPassword.Text = "";
+                    cmbSite.Text = "";
                     cmbType.SelectedIndex = -1;
                     cmbSite.Items.Clear();
+                    mruData.Clear();
                     nudCounter.Value = 1;
                 }
             }

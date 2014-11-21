@@ -244,6 +244,7 @@ namespace MasterPassword
             // 
             // chkC2C
             // 
+            this.chkC2C.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkC2C.AutoSize = true;
             this.chkC2C.Location = new System.Drawing.Point(156, 122);
             this.chkC2C.Name = "chkC2C";
@@ -256,7 +257,7 @@ namespace MasterPassword
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(324, 181);
+            this.ClientSize = new System.Drawing.Size(324, 182);
             this.Controls.Add(this.btnGetPassword);
             this.Controls.Add(this.chkC2C);
             this.Controls.Add(this.btnDelete);
@@ -275,7 +276,7 @@ namespace MasterPassword
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(800, 220);
-            this.MinimumSize = new System.Drawing.Size(260, 220);
+            this.MinimumSize = new System.Drawing.Size(320, 220);
             this.Name = "frmMain";
             this.Text = "MasterPassword";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);

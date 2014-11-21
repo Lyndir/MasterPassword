@@ -91,5 +91,7 @@
     <WixVariable Id='WixUIDialogBmp' Value='SplashScreen.bmp' />
 
     <Icon Id='masterpassword.ico' SourceFile='$(var.MasterPassword.ProjectDir)\masterpassword.ico' />
+    
+    <Property Id="ARPPRODUCTICON" Value="masterpassword.ico" />
   </Product>
 </Wix>
