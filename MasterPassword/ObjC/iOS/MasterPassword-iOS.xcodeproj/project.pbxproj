@@ -3492,6 +3492,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
 			shellScript = "exec ../../../Scripts/updatePlist";
+			showEnvVarsInLog = 0;
 		};
 		DA8D88E019DA412A00B189D0 /* Run Script: genassets */ = {
 			isa = PBXShellScriptBuildPhase;

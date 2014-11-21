@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 cd "${BASH_SOURCE%/*}"
-source bashlib
-set -e
+source ./bashlib
 cd ..
 export PATH+=:/usr/libexec
 

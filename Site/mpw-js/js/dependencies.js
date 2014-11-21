@@ -37,7 +37,7 @@ try {
 ES6 || document.write("<script src=js/mpw-js/traceur-runtime.js><\/script>");
 
 // If setImmediate is not implemented we include the polyfill
-window.setImmediate || document.write("<script src=js/" + esdir + "setImmediate-polyfill.js><\/script>");
+window.setImmediate || document.write("<script src=js/mpw-js/" + esdir + "setImmediate-polyfill.js><\/script>");
 
 // Include the scrypt implementation
 var SCRYPTASM_PATH = (window.location + '').replace(/[^/]*(#[^#]*)?$/, 'js/mpw-js/scrypt-asm.js');
