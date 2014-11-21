@@ -217,7 +217,7 @@ const char *Identicon(const char *userName, const char *masterPassword) {
     uint8_t identiconSeed[32];
     HMAC_SHA256_Buf(masterPassword, strlen(masterPassword), userName, strlen(userName), identiconSeed);
 
-    char *identicon = (char *)calloc(20, sizeof(char));
+#ifdef COLOR
     setupterm(NULL, 2, NULL);
     initputvar();
     tputs(tparm(tgetstr("AF", NULL), identiconSeed[4] % 7 + 1), 1, putvar);
@@ -226,6 +226,11 @@ const char *Identicon(const char *userName, const char *masterPassword) {
     tputs(tgetstr("me", NULL), 1, putvar);
     char reset[strlen(putvarc)];
     strcpy(reset, putvarc);
+#else
+    const char *red = "", *reset = "";
+#endif
+
+    char *identicon = (char *)calloc(20, sizeof(char));
     sprintf(identicon, "%s%s%s%s%s%s",
             red,
             left[identiconSeed[0] % (sizeof(left) / sizeof(left[0]))],

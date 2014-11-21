@@ -9,6 +9,8 @@
 #       try ./build -lrt instead.
 #   - If you see 'x86.S:202: Error: junk at end of line, first unrecognized character is `,'',
 #       try commenting the line in lib/bcrypt/x86.S.
+#   - Take a look at the "Optional features" section.  Some features have dependencies,
+#       either make sure you have them or disable those features.
 #
 # BUGS
 #   masterpassword@lyndir.com
@@ -34,6 +36,9 @@ else
        #mpw-bench                   # C CLI Master Password benchmark utility.
     )
 fi
+
+# Optional features.
+mpw_color=1 # Colorized Identicon, requires libncurses-dev
 
 
 ### DEPENDENCIES
@@ -192,7 +197,7 @@ mpw() {
         # library paths
         -L"." -L"lib/scrypt"
         # link libraries
-        -l"crypto" -l"curses"
+        -l"crypto"
         # scrypt
         "lib/scrypt/scrypt-crypto_aesctr.o"
         "lib/scrypt/scrypt-sha256.o"
@@ -201,6 +206,8 @@ mpw() {
         "lib/scrypt/scrypt-scryptenc_cpuperf.o"
         "lib/scrypt/scrypt-scryptenc.o"
     )
+    # optional features
+    (( mpw_color )) && CFLAGS+=( -DCOLOR ) LDFLAGS+=( -l"curses" )
 
     cc "${CFLAGS[@]}"                 -c types.c -o types.o "$@"
     cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "types.o" mpw.c -o mpw "$@"
