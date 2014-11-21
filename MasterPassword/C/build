@@ -191,7 +191,7 @@ mpw() {
         # library paths
         -L"." -L"lib/scrypt"
         # link libraries
-        -l"crypto"
+        -l"crypto" -l"curses"
         # scrypt
         "lib/scrypt/scrypt-crypto_aesctr.o"
         "lib/scrypt/scrypt-sha256.o"
@@ -248,7 +248,7 @@ mpw-bench() {
 ### TARGETS
 
 haslib() {
-    LC_ALL=C cc -l"$1" 2>&1 | ! grep -q 'library not found'
+    ! LC_ALL=C cc -l"$1" 2>&1 | grep -q 'library not found'
 }
 cc() {
     if hash llvm-gcc 2>/dev/null; then

@@ -10,8 +10,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <errno.h>
 
 #include <alg/sha256.h>
+
+#include <curses.h>
+#include <term.h>
 
 #include "types.h"
 
@@ -171,6 +175,7 @@ const char CharacterFromClass(char characterClass, uint8_t seedByte) {
 
     return classCharacters[seedByte % strlen(classCharacters)];
 }
+
 const char *IDForBuf(const void *buf, size_t length) {
     uint8_t hash[32];
     SHA256_Buf(buf, length, hash);
@@ -186,5 +191,48 @@ const char *Hex(const void *buf, size_t length) {
     char *id = (char *)calloc(length*2+1, sizeof(char));
     for (int kH = 0; kH < length; kH++)
         sprintf(&(id[kH * 2]), "%02X", ((const uint8_t*)buf)[kH]);
+
     return id;
+}
+
+int putvari;
+char *putvarc = NULL;
+static void initputvar() {
+    if (putvarc)
+        free(putvarc);
+    putvari=0;
+    putvarc=(char *)calloc(256, sizeof(char));
+}
+static int putvar(int c) {
+    putvarc[putvari++]=c;
+    return 0;
+}
+
+const char *Identicon(const char *userName, const char *masterPassword) {
+    const char *left[]      = { "╔", "╚", "╰", "═" };
+    const char *right[]     = { "╗", "╝", "╯", "═" };
+    const char *body[]      = { "█", "░", "▒", "▓", "☺", "☻" };
+    const char *accessory[] = { "◈", "◎", "◐", "◑", "◒", "◓", "☀", "☁", "☂", "☃", "☄", "★", "☆", "☎", "☏", "⎈", "⌂", "☘", "☢", "☣", "☕", "⌚", "⌛", "⏰", "⚡", "⛄", "⛅", "☔", "♔", "♕", "♖", "♗", "♘", "♙", "♚", "♛", "♜", "♝", "♞", "♟", "♨", "♩", "♪", "♫", "⚐", "⚑", "⚔", "⚖", "⚙", "⚠", "⌘", "⏎", "✄", "✆", "✈", "✉", "✌" };
+
+    uint8_t identiconSeed[32];
+    HMAC_SHA256_Buf(masterPassword, strlen(masterPassword), userName, strlen(userName), identiconSeed);
+
+    char *identicon = (char *)calloc(20, sizeof(char));
+    setupterm(NULL, 2, NULL);
+    initputvar();
+    tputs(tparm(tgetstr("AF", NULL), identiconSeed[4] % 7 + 1), 1, putvar);
+    char red[strlen(putvarc)];
+    strcpy(red, putvarc);
+    tputs(tgetstr("me", NULL), 1, putvar);
+    char reset[strlen(putvarc)];
+    strcpy(reset, putvarc);
+    sprintf(identicon, "%s%s%s%s%s%s",
+            red,
+            left[identiconSeed[0] % (sizeof(left) / sizeof(left[0]))],
+            body[identiconSeed[1] % (sizeof(body) / sizeof(body[0]))],
+            right[identiconSeed[2] % (sizeof(right) / sizeof(right[0]))],
+            accessory[identiconSeed[3] % (sizeof(accessory) / sizeof(accessory[0]))],
+            reset);
+
+    return identicon;
 }

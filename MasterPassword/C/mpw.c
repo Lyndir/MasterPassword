@@ -221,6 +221,9 @@ int main(int argc, char *const argv[]) {
         masterPassword = getpass( "Your master password: " );
     trc("masterPassword: %s\n", masterPassword);
 
+    // Summarize operation.
+    fprintf(stderr, "%s's password for %s:\n[ %s ]: ", userName, siteName, Identicon( userName, masterPassword ));
+
     // Calculate the master key salt.
     const char *mpKeyScope = ScopeForVariant(MPElementVariantPassword);
     trc("key scope: %s\n", mpKeyScope);
