@@ -27,7 +27,7 @@
 
 #  ______________________________________________________________________ 
 # |                                                                      |
-# |                                            .:: TABLE OF CONTENTS ::. |
+# |                                            .:  TABLE OF CONTENTS  :. |
 # |______________________________________________________________________|
 # 
 #     chr decimal
@@ -132,7 +132,7 @@ _tocHash=71e13f42e1ea82c1c7019b27a3bc71f3
 
 #  ______________________________________________________________________ 
 # |                                                                      |
-# |                                         .:: GLOBAL CONFIGURATION ::. |
+# |                                         .:  GLOBAL CONFIGURATION  :. |
 # |______________________________________________________________________|
 
 # Unset all exported functions.  Exported functions are evil.
@@ -177,7 +177,7 @@ genToc() {
 
 #  ______________________________________________________________________ 
 # |                                                                      |
-# |                                          .:: GLOBAL DECLARATIONS ::. |
+# |                                          .:  GLOBAL DECLARATIONS  :. |
 # |______________________________________________________________________|
 
 # Variables for convenience sequences.
@@ -190,8 +190,8 @@ runner=(     '> >'           \
 
 # Variables for terminal requests.
 [[ -t 2 && $TERM != dumb ]] && {
-    COLUMNS=$(  tput cols   || tput co      ) # Columns in a line
-    LINES=$(    tput lines  || tput li      ) # Lines on screen
+    COLUMNS=$({ tput cols   || tput co;} 2>&3) # Columns in a line
+    LINES=$({   tput lines  || tput li;} 2>&3) # Lines on screen
     alt=$(      tput smcup  || tput ti      ) # Start alt display
     ealt=$(     tput rmcup  || tput te      ) # End   alt display
     hide=$(     tput civis  || tput vi      ) # Hide cursor
@@ -230,7 +230,7 @@ runner=(     '> >'           \
                 tput eA; tput as;
                 tput ac; tput ae;         } )   # Drawing characters
     back=$'\b'
-} 2>/dev/null ||:
+} 3>&2 2>/dev/null ||:
 
 
 
@@ -238,7 +238,7 @@ runner=(     '> >'           \
 
 #  ______________________________________________________________________ 
 # |                                                                      |
-# |                                        .:: FUNCTION DECLARATIONS ::. |
+# |                                        .:  FUNCTION DECLARATIONS  :. |
 # |______________________________________________________________________|
 
 
@@ -461,23 +461,6 @@ readwhile() {
     printf %s "$in"
 
     return $result
-} # _____________________________________________________________________
-
-
-
-#  __________________________________________________________________________
-# |__ popqueue ______________________________________________________________|
-#
-#       popqueue
-#
-# Pops one element off the queue.
-# If no elements are available on the queue, this command fails with exit code 1.
-#
-popqueue() {
-    local REPLY
-    [[ $_queue ]] && read -t0 <&"${_queue[0]}" || return
-    IFS= read -r -d '' <&"${_queue[0]}"
-    printf %s "$REPLY"
 } # _____________________________________________________________________
 
 
@@ -1566,7 +1549,7 @@ stackTrace() {
 
 #  ______________________________________________________________________ 
 # |                                                                      |
-# |                                                  .:: ENTRY POINT ::. |
+# |                                                  .:  ENTRY POINT  :. |
 # |______________________________________________________________________|
 
 # Make sure this file is sourced and not executed.
@@ -1586,6 +1569,6 @@ stackTrace() {
 }
 
 :
-:                                                   .:: END SOURCING ::.  
+:                                                   .:  END SOURCING  :.
 :  ______________________________________________________________________ 
 :
