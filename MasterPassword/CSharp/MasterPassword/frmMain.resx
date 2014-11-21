@@ -120,10 +120,10 @@
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="btnDelete.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsAAAA7AAWrWiQkAAACFSURBVDhPhZABCsAwCAN9en++1dFI1NgdBKZN0jJTLLOn
-        6hzdgXm7m36LpmCVLElhh2exbyVRwGAn9u5fa+1PDkOMmo/iFa3ApSieeIUscDHi/F6gKJ65gFHzURSk
-        /8BgJ/YI9wKYeRb7dDtIJRe125nvkMwsnI1h8Bk4UILXMMOBOWj2ArMw0u96HiIGAAAAAElFTkSuQmCC
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vwAADr8BOAVTJAAAAIVJREFUOE+FkAEKwDAIA316f77V0UjU2B0Epk3SMlMss6fqHN2BebubfoumYJUs
+        SWGHZ7FvJVHAYCf27l9r7U8OQ4yaj+IVrcClKJ54hSxwMeL8XqAonrmAUfNRFKT/wGAn9gj3Aph5Fvt0
+        O0glF7Xbme+QzCycjWHwGThQgtcww4E5aPYCszDS73oeIgYAAAAASUVORK5CYII=
 </value>
   </data>
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">

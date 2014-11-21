@@ -62,6 +62,7 @@ namespace MasterPassword
             this.cmbSite = new System.Windows.Forms.ComboBox();
             this.btnDelete = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.chkC2C = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudCounter)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,15 +71,14 @@ namespace MasterPassword
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 73);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(58, 13);
+            this.label1.Size = new System.Drawing.Size(55, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Username:";
+            this.label1.Text = "Full name:";
             // 
             // txtUsername
             // 
             this.txtUsername.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUsername.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
             this.txtUsername.Location = new System.Drawing.Point(77, 65);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(235, 20);
@@ -150,7 +150,7 @@ namespace MasterPassword
             0,
             0});
             this.nudCounter.Name = "nudCounter";
-            this.nudCounter.Size = new System.Drawing.Size(125, 20);
+            this.nudCounter.Size = new System.Drawing.Size(73, 20);
             this.nudCounter.TabIndex = 5;
             this.nudCounter.Value = new decimal(new int[] {
             1,
@@ -169,7 +169,7 @@ namespace MasterPassword
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.ReadOnly = true;
             this.txtPassword.Size = new System.Drawing.Size(235, 31);
-            this.txtPassword.TabIndex = 7;
+            this.txtPassword.TabIndex = 8;
             this.txtPassword.TabStop = false;
             // 
             // label5
@@ -205,10 +205,10 @@ namespace MasterPassword
             // 
             this.btnGetPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGetPassword.Enabled = false;
-            this.btnGetPassword.Location = new System.Drawing.Point(209, 119);
+            this.btnGetPassword.Location = new System.Drawing.Point(224, 119);
             this.btnGetPassword.Name = "btnGetPassword";
-            this.btnGetPassword.Size = new System.Drawing.Size(103, 23);
-            this.btnGetPassword.TabIndex = 6;
+            this.btnGetPassword.Size = new System.Drawing.Size(88, 23);
+            this.btnGetPassword.TabIndex = 7;
             this.btnGetPassword.Text = "Get &Password";
             this.btnGetPassword.UseVisualStyleBackColor = true;
             this.btnGetPassword.Click += new System.EventHandler(this.btnGetPassword_Click);
@@ -223,7 +223,7 @@ namespace MasterPassword
             this.cmbSite.Location = new System.Drawing.Point(77, 38);
             this.cmbSite.Name = "cmbSite";
             this.cmbSite.Size = new System.Drawing.Size(235, 21);
-            this.cmbSite.TabIndex = 1;
+            this.cmbSite.TabIndex = 2;
             this.cmbSite.SelectedIndexChanged += new System.EventHandler(this.cmbSite_Check);
             this.cmbSite.Enter += new System.EventHandler(this.cmbSite_Enter);
             this.cmbSite.Leave += new System.EventHandler(this.cmbSite_Check);
@@ -237,19 +237,31 @@ namespace MasterPassword
             this.btnDelete.Location = new System.Drawing.Point(51, 40);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(19, 19);
-            this.btnDelete.TabIndex = 2;
+            this.btnDelete.TabIndex = 1;
             this.btnDelete.TabStop = false;
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
+            // chkC2C
+            // 
+            this.chkC2C.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkC2C.AutoSize = true;
+            this.chkC2C.Location = new System.Drawing.Point(156, 122);
+            this.chkC2C.Name = "chkC2C";
+            this.chkC2C.Size = new System.Drawing.Size(70, 17);
+            this.chkC2C.TabIndex = 6;
+            this.chkC2C.Text = "Clipboard";
+            this.chkC2C.UseVisualStyleBackColor = true;
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(324, 182);
+            this.Controls.Add(this.btnGetPassword);
+            this.Controls.Add(this.chkC2C);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.cmbSite);
-            this.Controls.Add(this.btnGetPassword);
             this.Controls.Add(this.txtMasterPassword);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -264,7 +276,7 @@ namespace MasterPassword
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(800, 220);
-            this.MinimumSize = new System.Drawing.Size(260, 220);
+            this.MinimumSize = new System.Drawing.Size(320, 220);
             this.Name = "frmMain";
             this.Text = "MasterPassword";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
@@ -291,6 +303,7 @@ namespace MasterPassword
         private System.Windows.Forms.ComboBox cmbSite;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.CheckBox chkC2C;
     }
 }
 

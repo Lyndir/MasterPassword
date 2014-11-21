@@ -39,6 +39,8 @@ namespace MasterPassword
             timerVisibitlity.Interval = PASSWORD_VISIBILITY_MS;
             timerVisibitlity.Tick += timerVisibitlity_Tick;
 
+            chkC2C.Checked = Properties.Settings.Default.c2c;
+
             #region Test Case
             // Test case, should produce:
             //  masterKeySalt ID: 8C-45-CA-48-46-73-5F-C7-29-ED-8B-52-E8-74-88-15-5E-18-56-B9-CD-CA-6D-FF-88-10-A6-E8-46-BE-ED-20
@@ -97,6 +99,7 @@ namespace MasterPassword
             string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Application.ProductName, fileName);
             if (File.Exists(appDataPath))
             {
+                mruData.Clear();
                 string json = "";
                 using (BinaryReader br = new BinaryReader(File.Open(appDataPath, FileMode.Open)))
                 {
@@ -139,6 +142,9 @@ namespace MasterPassword
             if (cmbType.SelectedIndex == -1)
                 cmbType.SelectedIndex = 0;
             txtPassword.Text = MasterPassword.Calculate(txtMasterPassword.Text, txtUsername.Text, cmbSite.Text, (int)nudCounter.Value, (MasterPassword.MPType)cmbType.SelectedIndex);
+            if (chkC2C.Checked)
+                Clipboard.SetText(txtPassword.Text);
+            timerVisibitlity.Stop();
             timerVisibitlity.Start();
             if (mruData.ContainsKey(cmbSite.Text))
             {   // Update mruData
@@ -163,6 +169,8 @@ namespace MasterPassword
                 fileTitle = fileTitle.Replace("-", string.Empty);
                 SaveMRU(fileTitle + ".dat");
             }
+            Properties.Settings.Default.c2c = chkC2C.Checked;
+            Properties.Settings.Default.Save();
         }
 
         private void cmbSite_Check(object sender, EventArgs e)
@@ -197,8 +205,10 @@ namespace MasterPassword
                 {
                     txtUsername.Text = "";
                     txtPassword.Text = "";
+                    cmbSite.Text = "";
                     cmbType.SelectedIndex = -1;
                     cmbSite.Items.Clear();
+                    mruData.Clear();
                     nudCounter.Value = 1;
                 }
             }
