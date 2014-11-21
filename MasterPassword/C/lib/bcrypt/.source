@@ -1,3 +1,4 @@
 home=http://www.openwall.com/crypt/
 pkg=http://www.openwall.com/crypt/crypt_blowfish-1.3.tar.gz
 pkg_sha256=83fa01fca6996fe8d882b7f8e9ba0305a5664936100b01481ea3c6a8ce8d72fd
+patches=(arm)

@@ -133,6 +133,12 @@ fetchSource() (
         echo >&2 "error: into: $PWD"
         exit 1
     fi
+
+    for patch in "${patches[@]}"; do
+        echo
+        echo "Patching: ${PWD##*/}, for $patch..."
+        patch -p0 < ../"${PWD##*/}-$patch.patch"
+    done
 )
 depend() {
 

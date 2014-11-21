@@ -66,12 +66,6 @@
 #     readwhile command [args]
 # Outputs the characters typed by the user into the terminal's input buffer while running the given command.
 #
-#     pushqueue element ...
-# Pushes the given arguments as elements onto the queue.
-#
-#     popqueue
-# Pops one element off the queue.
-#
 #     log [format] [arguments...]
 # Log an event at a certain importance level.
 # The event is expressed as a printf(1) format argument.
