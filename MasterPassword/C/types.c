@@ -198,11 +198,15 @@ const char *Hex(const void *buf, size_t length) {
 
 int putvari;
 char *putvarc = NULL;
+bool istermsetup = false;
 static void initputvar() {
     if (putvarc)
         free(putvarc);
-    putvari=0;
     putvarc=(char *)calloc(256, sizeof(char));
+    putvari=0;
+
+    if (!istermsetup)
+        istermsetup = (OK == setupterm(NULL, STDERR_FILENO, NULL));
 }
 static int putvar(int c) {
     putvarc[putvari++]=c;
@@ -227,7 +231,6 @@ const char *Identicon(const char *userName, const char *masterPassword) {
     uint8_t colorIdentifier = identiconSeed[4] % 7 + 1;
     char *colorString, *resetString;
     if (useColor) {
-        setupterm(NULL, STDERR_FILENO, NULL);
         initputvar();
         tputs(tparm(tgetstr("AF", NULL), colorIdentifier), 1, putvar);
         colorString = calloc(strlen(putvarc) + 1, sizeof(char));
@@ -240,14 +243,14 @@ const char *Identicon(const char *userName, const char *masterPassword) {
         resetString = calloc(1, sizeof(char));
     }
 
-    char *identicon = (char *)calloc(20, sizeof(char));
-    sprintf(identicon, "%s%s%s%s%s%s",
-            colorString,
-            leftArm[identiconSeed[0] % (sizeof(leftArm) / sizeof(leftArm[0]))],
-            body[identiconSeed[1] % (sizeof(body) / sizeof(body[0]))],
-            rightArm[identiconSeed[2] % (sizeof(rightArm) / sizeof(rightArm[0]))],
-            accessory[identiconSeed[3] % (sizeof(accessory) / sizeof(accessory[0]))],
-            resetString);
+    char *identicon = (char *)calloc(256, sizeof(char));
+    snprintf(identicon, 256, "%s%s%s%s%s%s",
+             colorString,
+             leftArm[identiconSeed[0] % (sizeof(leftArm) / sizeof(leftArm[0]))],
+             body[identiconSeed[1] % (sizeof(body) / sizeof(body[0]))],
+             rightArm[identiconSeed[2] % (sizeof(rightArm) / sizeof(rightArm[0]))],
+             accessory[identiconSeed[3] % (sizeof(accessory) / sizeof(accessory[0]))],
+             resetString);
 
     free(colorString);
     free(resetString);

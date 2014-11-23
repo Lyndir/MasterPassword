@@ -6,8 +6,6 @@
 #include <sys/stat.h>
 #if defined(__linux__)
 #include <linux/fs.h>
-#elif defined(__CYGWIN__)
-#include <cygwin/fs.h>
 #else
 #include <sys/disk.h>
 #endif
@@ -72,21 +70,11 @@ void usage() {
 
 char *homedir(const char *filename) {
     char *homedir = NULL;
-#if defined(__CYGWIN__)
-    homedir = getenv("USERPROFILE");
-    if (!homedir) {
-        const char *homeDrive = getenv("HOMEDRIVE");
-        const char *homePath = getenv("HOMEPATH");
-        homedir = char[strlen(homeDrive) + strlen(homePath) + 1];
-        sprintf(homedir, "%s/%s", homeDrive, homePath);
-    }
-#else
     struct passwd* passwd = getpwuid(getuid());
     if (passwd)
         homedir = passwd->pw_dir;
     if (!homedir)
         homedir = getenv("HOME");
-#endif
     if (!homedir)
         homedir = getcwd(NULL, 0);
 
