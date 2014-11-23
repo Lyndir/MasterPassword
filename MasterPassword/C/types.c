@@ -230,10 +230,10 @@ const char *Identicon(const char *userName, const char *masterPassword) {
         setupterm(NULL, STDERR_FILENO, NULL);
         initputvar();
         tputs(tparm(tgetstr("AF", NULL), colorIdentifier), 1, putvar);
-        colorString = calloc(strlen(putvarc), sizeof(char));
+        colorString = calloc(strlen(putvarc) + 1, sizeof(char));
         strcpy(colorString, putvarc);
         tputs(tgetstr("me", NULL), 1, putvar);
-        resetString = calloc(strlen(putvarc), sizeof(char));
+        resetString = calloc(strlen(putvarc) + 1, sizeof(char));
         strcpy(resetString, putvarc);
     } else {
         colorString = calloc(1, sizeof(char));
