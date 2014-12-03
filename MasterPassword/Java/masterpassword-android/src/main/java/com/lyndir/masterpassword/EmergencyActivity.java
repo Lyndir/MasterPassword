@@ -184,7 +184,7 @@ public class EmergencyActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    final String sitePassword = masterKeyFuture.get().encode( siteName, type, counter );
+                    final String sitePassword = masterKeyFuture.get().encode( siteName, type, counter, variant, context );
 
                     runOnUiThread( new Runnable() {
                         @Override

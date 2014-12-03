@@ -1,6 +1,7 @@
 package com.lyndir.masterpassword;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.lyndir.lhunath.opal.system.util.MetaObject;
 import java.util.List;
 import java.util.Map;
@@ -15,18 +16,13 @@ public class MPTemplate extends MetaObject {
 
     private final List<MPTemplateCharacterClass> template;
 
-    public MPTemplate(final String template, final Map<Character, MPTemplateCharacterClass> characterClasses) {
+    MPTemplate(final String template) {
 
-        ImmutableList.Builder<MPTemplateCharacterClass> builder = ImmutableList.<MPTemplateCharacterClass>builder();
+        ImmutableList.Builder<MPTemplateCharacterClass> builder = ImmutableList.builder();
         for (int i = 0; i < template.length(); ++i)
-            builder.add( characterClasses.get( template.charAt( i ) ) );
+            builder.add( MPTemplateCharacterClass.forIdentifier( template.charAt( i ) ) );
 
         this.template = builder.build();
-    }
-
-    public MPTemplate(final List<MPTemplateCharacterClass> template) {
-
-        this.template = template;
     }
 
     public MPTemplateCharacterClass getCharacterClassAtIndex(final int index) {

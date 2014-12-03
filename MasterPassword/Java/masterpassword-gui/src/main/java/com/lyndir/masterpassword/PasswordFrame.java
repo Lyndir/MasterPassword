@@ -159,7 +159,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         Res.execute( new Runnable() {
             @Override
             public void run() {
-                final String sitePassword = user.getKey().encode( siteName, siteType, siteCounter );
+                final String sitePassword = user.getKey().encode( siteName, siteType, siteCounter, MPElementVariant.Password, null );
                 if (callback != null)
                     callback.passwordGenerated( siteName, sitePassword );
 

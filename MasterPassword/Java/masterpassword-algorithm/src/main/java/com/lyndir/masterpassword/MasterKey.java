@@ -2,8 +2,6 @@ package com.lyndir.masterpassword;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
-import com.google.common.io.CharSource;
-import com.google.common.io.CharStreams;
 import com.google.common.primitives.Bytes;
 import com.lambdaworks.crypto.SCrypt;
 import com.lyndir.lhunath.opal.crypto.CryptUtils;
@@ -14,7 +12,6 @@ import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
-import javax.xml.stream.events.Characters;
 
 
 /**
@@ -28,11 +25,11 @@ public class MasterKey {
     private static final int                          MP_r         = 8;
     private static final int                          MP_p         = 2;
     private static final int                          MP_dkLen     = 64;
+    private static final int                          MP_intLen    = 32;
     private static final Charset                      MP_charset   = Charsets.UTF_8;
     private static final ByteOrder                    MP_byteOrder = ByteOrder.BIG_ENDIAN;
     private static final MessageDigests               MP_hash      = MessageDigests.SHA256;
     private static final MessageAuthenticationDigests MP_mac       = MessageAuthenticationDigests.HmacSHA256;
-    private static final MPTemplates                  templates    = MPTemplates.load();
 
     private final String userName;
     private final byte[] key;
@@ -44,12 +41,13 @@ public class MasterKey {
         this.userName = userName;
 
         long start = System.currentTimeMillis();
-        byte[] userNameLengthBytes = ByteBuffer.allocate( Integer.SIZE / Byte.SIZE )
+        byte[] userNameBytes = userName.getBytes( MP_charset );
+        byte[] userNameLengthBytes = ByteBuffer.allocate( MP_intLen / Byte.SIZE )
                                                .order( MP_byteOrder )
-                                               .putInt( userName.length() )
+                                               .putInt( userNameBytes.length )
                                                .array();
-        byte[] salt = Bytes.concat( "com.lyndir.masterpassword".getBytes( MP_charset ), //
-                                    userNameLengthBytes, userName.getBytes( MP_charset ) );
+        byte[] salt = Bytes.concat( MPElementVariant.Password.getScope().getBytes( MP_charset ), //
+                                    userNameLengthBytes, userNameBytes );
 
         try {
             key = SCrypt.scrypt( masterPassword.getBytes( MP_charset ), salt, MP_N, MP_r, MP_p, MP_dkLen );
@@ -83,7 +81,7 @@ public class MasterKey {
         return subkey;
     }
 
-    public String encode(final String name, final MPElementType type, int counter) {
+    public String encode(final String name, final MPElementType type, int counter, final MPElementVariant variant, final String context) {
 
         Preconditions.checkState( valid );
         Preconditions.checkArgument( type.getTypeClass() == MPElementTypeClass.Generated );
@@ -92,19 +90,20 @@ public class MasterKey {
         if (counter == 0)
             counter = (int) (System.currentTimeMillis() / (300 * 1000)) * 300;
 
-        byte[] nameLengthBytes = ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( MP_byteOrder ).putInt( name.length() ).array();
-        byte[] counterBytes = ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( MP_byteOrder ).putInt( counter ).array();
-        logger.trc( "seed from: hmac-sha256(%s, 'com.lyndir.masterpassword' | %s | %s | %s)", CryptUtils.encodeBase64( key ),
+        byte[] nameBytes = name.getBytes( MP_charset );
+        byte[] nameLengthBytes = ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( MP_byteOrder ).putInt( nameBytes.length ).array();
+        byte[] counterBytes = ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( MP_byteOrder ).putInt( counter ).array();
+        logger.trc( "seed from: hmac-sha256(%s, %s | %s | %s | %s)", variant.getScope(), CryptUtils.encodeBase64( key ),
                     CodeUtils.encodeHex( nameLengthBytes ), name, CodeUtils.encodeHex( counterBytes ) );
-        byte[] seed = MP_mac.of( key, Bytes.concat( "com.lyndir.masterpassword".getBytes( MP_charset ), //
+        byte[] seed = MP_mac.of( key, Bytes.concat( variant.getScope().getBytes( MP_charset ), //
                                                     nameLengthBytes, //
-                                                    name.getBytes( MP_charset ), //
+                                                    nameBytes, //
                                                     counterBytes ) );
         logger.trc( "seed is: %s", CryptUtils.encodeBase64( seed ) );
 
         Preconditions.checkState( seed.length > 0 );
         int templateIndex = seed[0] & 0xFF; // Mask the integer's sign.
-        MPTemplate template = templates.getTemplateForTypeAtRollingIndex( type, templateIndex );
+        MPTemplate template = type.getTemplateAtRollingIndex( templateIndex );
         logger.trc( "type: %s, template: %s", type, template );
 
         StringBuilder password = new StringBuilder( template.length() );

@@ -3,7 +3,9 @@ package com.lyndir.masterpassword;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import java.util.List;
 import java.util.Set;
+import javax.annotation.Generated;
 
 
 /**
@@ -13,39 +15,87 @@ import java.util.Set;
  */
 public enum MPElementType {
 
-    GeneratedMaximum( "Maximum Security Password", "Maximum", "20 characters, contains symbols.", MPElementTypeClass.Generated ),
-    GeneratedLong( "Long Password", "Long", "Copy-friendly, 14 characters, contains symbols.", MPElementTypeClass.Generated ),
-    GeneratedMedium( "Medium Password", "Medium", "Copy-friendly, 8 characters, contains symbols.", MPElementTypeClass.Generated ),
-    GeneratedBasic( "Basic Password", "Basic", "8 characters, no symbols.", MPElementTypeClass.Generated ),
-    GeneratedShort( "Short Password", "Short", "Copy-friendly, 4 characters, no symbols.", MPElementTypeClass.Generated ),
-    GeneratedPIN( "PIN", "PIN", "4 numbers.", MPElementTypeClass.Generated ),
+    GeneratedMaximum( "20 characters, contains symbols.", //
+                      ImmutableList.of( "x", "max", "maximum" ), MPElementTypeClass.Generated, //
+                      ImmutableList.of( new MPTemplate( "anoxxxxxxxxxxxxxxxxx" ), new MPTemplate( "axxxxxxxxxxxxxxxxxno" ) ) ),
 
-    StoredPersonal( "Personal Password", "Personal", "AES-encrypted, exportable.", MPElementTypeClass.Stored,
-                    MPElementFeature.ExportContent ),
-    StoredDevicePrivate( "Device Private Password", "Private", "AES-encrypted, not exported.", MPElementTypeClass.Stored,
-                         MPElementFeature.DevicePrivate );
+    GeneratedLong( "Copy-friendly, 14 characters, contains symbols.", //
+                   ImmutableList.of( "l", "long" ), MPElementTypeClass.Generated, //
+                   ImmutableList.of( new MPTemplate( "CvcvnoCvcvCvcv" ), new MPTemplate( "CvcvCvcvnoCvcv" ),
+                                     new MPTemplate( "CvcvCvcvCvcvno" ), new MPTemplate( "CvccnoCvcvCvcv" ),
+                                     new MPTemplate( "CvccCvcvnoCvcv" ), new MPTemplate( "CvccCvcvCvcvno" ),
+                                     new MPTemplate( "CvcvnoCvccCvcv" ), new MPTemplate( "CvcvCvccnoCvcv" ),
+                                     new MPTemplate( "CvcvCvccCvcvno" ), new MPTemplate( "CvcvnoCvcvCvcc" ),
+                                     new MPTemplate( "CvcvCvcvnoCvcc" ), new MPTemplate( "CvcvCvcvCvccno" ),
+                                     new MPTemplate( "CvccnoCvccCvcv" ), new MPTemplate( "CvccCvccnoCvcv" ),
+                                     new MPTemplate( "CvccCvccCvcvno" ), new MPTemplate( "CvcvnoCvccCvcc" ),
+                                     new MPTemplate( "CvcvCvccnoCvcc" ), new MPTemplate( "CvcvCvccCvccno" ),
+                                     new MPTemplate( "CvccnoCvcvCvcc" ), new MPTemplate( "CvccCvcvnoCvcc" ),
+                                     new MPTemplate( "CvccCvcvCvccno" ) ) ),
+
+    GeneratedMedium( "Copy-friendly, 8 characters, contains symbols.", //
+                     ImmutableList.of( "m", "med", "medium" ), MPElementTypeClass.Generated, //
+                     ImmutableList.of( new MPTemplate( "CvcnoCvc" ), new MPTemplate( "CvcCvcno" ) ) ),
+
+    GeneratedBasic( "8 characters, no symbols.", //
+                    ImmutableList.of( "b", "basic" ), MPElementTypeClass.Generated, //
+                    ImmutableList.of( new MPTemplate( "aaanaaan" ), new MPTemplate( "aannaaan" ), new MPTemplate( "aaannaaa" ) ) ),
+
+    GeneratedShort( "Copy-friendly, 4 characters, no symbols.", //
+                    ImmutableList.of( "s", "short" ), MPElementTypeClass.Generated, //
+                    ImmutableList.of( new MPTemplate( "Cvcn" ) ) ),
+
+    GeneratedPIN( "4 numbers.", //
+                  ImmutableList.of( "i", "pin" ), MPElementTypeClass.Generated, //
+                  ImmutableList.of( new MPTemplate( "nnnn" ) ) ),
+
+    GeneratedName( "9 letter name.", //
+                   ImmutableList.of( "n", "name" ), MPElementTypeClass.Generated, //
+                   ImmutableList.of( new MPTemplate( "cvccvcvcv" ) ) ),
+
+    GeneratedPhrase( "20 character sentence.", //
+                     ImmutableList.of( "p", "phrase" ), MPElementTypeClass.Generated, //
+                     ImmutableList.of( new MPTemplate( "cvcc cvc cvccvcv cvc" ), new MPTemplate( "cvc cvccvcvcv cvcv" ),
+                                       new MPTemplate( "cv cvccv cvc cvcvccv" ) ) ),
+
+    StoredPersonal( "AES-encrypted, exportable.", //
+                    ImmutableList.of( "personal" ), MPElementTypeClass.Stored, //
+                    ImmutableList.<MPTemplate>of(), MPElementFeature.ExportContent ),
+
+    StoredDevicePrivate( "AES-encrypted, not exported.", //
+                         ImmutableList.of( "device" ), MPElementTypeClass.Stored, //
+                         ImmutableList.<MPTemplate>of(), MPElementFeature.DevicePrivate );
 
     static final Logger logger = Logger.get( MPElementType.class );
 
-    private final MPElementTypeClass    typeClass;
-    private final Set<MPElementFeature> typeFeatures;
-    private final String                name;
-    private final String                shortName;
     private final String                description;
+    private final List<String>          options;
+    private final MPElementTypeClass    typeClass;
+    private final List<MPTemplate>      templates;
+    private final Set<MPElementFeature> typeFeatures;
 
-    MPElementType(final String name, final String shortName, final String description, final MPElementTypeClass typeClass,
-                  final MPElementFeature... typeFeatures) {
+    MPElementType(final String description, final List<String> options, final MPElementTypeClass typeClass,
+                  final List<MPTemplate> templates, final MPElementFeature... typeFeatures) {
 
-        this.name = name;
-        this.shortName = shortName;
-        this.typeClass = typeClass;
         this.description = description;
+        this.options = options;
+        this.typeClass = typeClass;
+        this.templates = templates;
 
         ImmutableSet.Builder<MPElementFeature> typeFeaturesBuilder = ImmutableSet.builder();
         for (final MPElementFeature typeFeature : typeFeatures) {
             typeFeaturesBuilder.add( typeFeature );
         }
         this.typeFeatures = typeFeaturesBuilder.build();
+    }
+
+    public String getDescription() {
+
+        return description;
+    }
+
+    public List<String> getOptions() {
+        return options;
     }
 
     public MPElementTypeClass getTypeClass() {
@@ -58,33 +108,18 @@ public enum MPElementType {
         return typeFeatures;
     }
 
-    public String getName() {
-
-        return name;
-    }
-
-    public String getShortName() {
-
-        return shortName;
-    }
-
-    public String getDescription() {
-
-        return description;
-    }
-
     /**
-     * @param name The full or short name of the type we want to look up.  It is matched case insensitively.
+     * @param option The option to select a type with.  It is matched case insensitively.
      *
-     * @return The type with the given name.
+     * @return The type registered for the given option.
      */
-    public static MPElementType forName(final String name) {
+    public static MPElementType forOption(final String option) {
 
         for (final MPElementType type : values())
-            if (type.getName().equalsIgnoreCase( name ) || type.getShortName().equalsIgnoreCase( name ))
+            if (type.getOptions().contains( option.toLowerCase() ))
                 return type;
 
-        throw logger.bug( "Element type not known: %s", name );
+        throw logger.bug( "No type for option: %s", option );
     }
 
     /**
@@ -102,4 +137,7 @@ public enum MPElementType {
         return types.build();
     }
 
+    public MPTemplate getTemplateAtRollingIndex(final int templateIndex) {
+        return templates.get( templateIndex % templates.size() );
+    }
 }
