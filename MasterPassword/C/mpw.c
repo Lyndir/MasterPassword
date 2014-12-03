@@ -65,6 +65,10 @@ void usage() {
                       "                  -v l, login    | Doesn't currently use a context.\n"
                       "                  -v a, answer   | Empty for a universal site answer or\n"
                       "                                 | the most significant word(s) of the question.\n\n");
+      fprintf(stderr, "    ENVIRONMENT\n\n"
+                      "        MP_USERNAME    | The full name of the user.\n"
+                      "        MP_SITETYPE    | The default password template.\n"
+                      "        MP_SITECOUNTER | The default counter value.\n\n");
       exit(0);
 }
 
