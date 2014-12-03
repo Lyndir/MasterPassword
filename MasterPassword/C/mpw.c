@@ -199,11 +199,14 @@ int main(int argc, char *const argv[]) {
         char *line = NULL;
         size_t linecap = 0;
         ssize_t linelen;
-        while ((linelen = getline(&line, &linecap, mpwConfig)) > 0)
-            if (strcmp(strsep(&line, ":"), userName) == 0) {
-                masterPassword = strsep(&line, "\n");
+        while ((linelen = getline(&line, &linecap, mpwConfig)) > 0) {
+            char *lineData = line;
+            if (strcmp(strsep(&lineData, ":"), userName) == 0) {
+                masterPassword = strsep(&lineData, "\n");
                 break;
             }
+        }
+        free(line);
     }
     while (!masterPassword)
         masterPassword = getpass( "Your master password: " );

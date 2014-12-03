@@ -15,8 +15,10 @@
 
 #include <alg/sha256.h>
 
+#ifdef COLOR
 #include <curses.h>
 #include <term.h>
+#endif
 
 #include "types.h"
 
@@ -222,15 +224,10 @@ const char *Identicon(const char *userName, const char *masterPassword) {
     uint8_t identiconSeed[32];
     HMAC_SHA256_Buf(masterPassword, strlen(masterPassword), userName, strlen(userName), identiconSeed);
 
-    bool useColor = 0;
-#ifdef COLOR
-    if (isatty(STDERR_FILENO))
-        useColor = 1;
-#endif
-
     uint8_t colorIdentifier = identiconSeed[4] % 7 + 1;
     char *colorString, *resetString;
-    if (useColor) {
+#ifdef COLOR
+    if (isatty( STDERR_FILENO )) {
         initputvar();
         tputs(tparm(tgetstr("AF", NULL), colorIdentifier), 1, putvar);
         colorString = calloc(strlen(putvarc) + 1, sizeof(char));
@@ -238,7 +235,9 @@ const char *Identicon(const char *userName, const char *masterPassword) {
         tputs(tgetstr("me", NULL), 1, putvar);
         resetString = calloc(strlen(putvarc) + 1, sizeof(char));
         strcpy(resetString, putvarc);
-    } else {
+    } else
+#endif
+    {
         colorString = calloc(1, sizeof(char));
         resetString = calloc(1, sizeof(char));
     }
