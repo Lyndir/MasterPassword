@@ -27,25 +27,25 @@ public class MasterKeyTest {
                       "LiheCuwhSerz6)" );
 
         assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedMedium, 1, MPElementVariant.Password, null ), //
-                      "Xep8'Cav" );
+                      "LihPih8+" );
 
         assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedBasic, 1, MPElementVariant.Password, null ), //
                       "bpW62jmW" );
 
         assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedShort, 1, MPElementVariant.Password, null ), //
-                      "Puw2" );
+                      "Lih6" );
 
         assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedPIN, 1, MPElementVariant.Password, null ), //
-                      "3258" );
+                      "9216" );
 
         assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedName, 1, MPElementVariant.Password, null ), //
-                      "cujtebona" );
+                      "lihpihohi" );
 
         assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedPhrase, 1, MPElementVariant.Password, null ), //
-                      "ri durzu jid kalebho" );
+                      "li pihwe puz bemozno" );
 
-        assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedMaximum, (int) (1L << 32 - 1), MPElementVariant.Password, null ),
-                      "y4=s&D6)ao(xcBS)AgBT" );
+        assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedMaximum, (int) 4294967295L, MPElementVariant.Password, null ),
+                      "r*)Ekr(FiduISCj*pg5-" );
     }
 
     @Test
