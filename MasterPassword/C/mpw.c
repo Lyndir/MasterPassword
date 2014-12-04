@@ -203,7 +203,7 @@ int main(int argc, char *const argv[]) {
         while ((linelen = getline(&line, &linecap, mpwConfig)) > 0) {
             char *lineData = line;
             if (strcmp(strsep(&lineData, ":"), userName) == 0) {
-                masterPassword = strsep(&lineData, "\n");
+                masterPassword = strcpy(malloc(strlen(lineData)), strsep(&lineData, "\n"));
                 break;
             }
         }
