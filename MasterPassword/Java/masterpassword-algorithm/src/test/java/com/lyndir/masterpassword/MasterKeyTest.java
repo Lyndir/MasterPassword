@@ -21,7 +21,7 @@ public class MasterKeyTest {
                       "Jejr5[RepuSosp" );
 
         assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedMaximum, 1, MPElementVariant.Password, null ), //
-                      "b9]1#2g*suJ^E@OJXZTQ" );
+                      "bp7rJKc7kaXc4sxOwG0*" );
 
         assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedLong, 1, MPElementVariant.Password, null ), //
                       "LiheCuwhSerz6)" );

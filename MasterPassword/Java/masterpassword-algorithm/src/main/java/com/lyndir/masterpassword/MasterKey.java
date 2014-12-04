@@ -12,6 +12,7 @@ import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
+import javax.annotation.Nullable;
 
 
 /**
@@ -32,29 +33,30 @@ public class MasterKey {
     private static final MessageAuthenticationDigests MP_mac       = MessageAuthenticationDigests.HmacSHA256;
 
     private final String userName;
-    private final byte[] key;
+    private final byte[] masterKey;
 
     private boolean valid;
 
     public MasterKey(final String userName, final String masterPassword) {
 
         this.userName = userName;
+        logger.trc( "userName: %s", userName );
+        logger.trc( "masterPassword: %s", masterPassword );
 
         long start = System.currentTimeMillis();
         byte[] userNameBytes = userName.getBytes( MP_charset );
-        byte[] userNameLengthBytes = ByteBuffer.allocate( MP_intLen / Byte.SIZE )
-                                               .order( MP_byteOrder )
-                                               .putInt( userNameBytes.length )
-                                               .array();
-        byte[] salt = Bytes.concat( MPElementVariant.Password.getScope().getBytes( MP_charset ), //
-                                    userNameLengthBytes, userNameBytes );
+        byte[] userNameLengthBytes = bytesForInt( userNameBytes.length );
+
+        String mpKeyScope = MPElementVariant.Password.getScope();
+        byte[] masterKeySalt = Bytes.concat( mpKeyScope.getBytes( MP_charset ), userNameLengthBytes, userNameBytes );
+        logger.trc( "key scope: %s", mpKeyScope );
+        logger.trc( "masterKeySalt ID: %s", idForBytes( masterKeySalt ) );
 
         try {
-            key = SCrypt.scrypt( masterPassword.getBytes( MP_charset ), salt, MP_N, MP_r, MP_p, MP_dkLen );
+            masterKey = SCrypt.scrypt( masterPassword.getBytes( MP_charset ), masterKeySalt, MP_N, MP_r, MP_p, MP_dkLen );
             valid = true;
 
-            logger.trc( "User: %s, master password derives to key ID: %s (took %.2fs)", //
-                        userName, getKeyID(), (double) (System.currentTimeMillis() - start) / 1000 );
+            logger.trc( "masterKey ID: %s (derived in %.2fs)", idForBytes( masterKey ), (System.currentTimeMillis() - start) / 1000D );
         }
         catch (GeneralSecurityException e) {
             throw logger.bug( e );
@@ -69,50 +71,61 @@ public class MasterKey {
     public String getKeyID() {
 
         Preconditions.checkState( valid );
-        return CodeUtils.encodeHex( MP_hash.of( key ) );
+        return idForBytes( masterKey );
     }
 
     private byte[] getSubkey(final int subkeyLength) {
 
         Preconditions.checkState( valid );
-        byte[] subkey = new byte[Math.min( subkeyLength, key.length )];
-        System.arraycopy( key, 0, subkey, 0, subkey.length );
+        byte[] subkey = new byte[Math.min( subkeyLength, masterKey.length )];
+        System.arraycopy( masterKey, 0, subkey, 0, subkey.length );
 
         return subkey;
     }
 
-    public String encode(final String name, final MPElementType type, int counter, final MPElementVariant variant, final String context) {
-
+    public String encode(final String siteName, final MPElementType siteType, int siteCounter, final MPElementVariant siteVariant,
+                         @Nullable final String siteContext) {
         Preconditions.checkState( valid );
-        Preconditions.checkArgument( type.getTypeClass() == MPElementTypeClass.Generated );
-        Preconditions.checkArgument( !name.isEmpty() );
+        Preconditions.checkArgument( siteType.getTypeClass() == MPElementTypeClass.Generated );
+        Preconditions.checkArgument( !siteName.isEmpty() );
 
-        if (counter == 0)
-            counter = (int) (System.currentTimeMillis() / (300 * 1000)) * 300;
+        logger.trc( "siteName: %s", siteName );
+        logger.trc( "siteCounter: %d", siteCounter );
+        logger.trc( "siteVariant: %d (%s)", siteVariant.ordinal(), siteVariant );
+        logger.trc( "siteType: %d (%s)", siteType.ordinal(), siteType );
 
-        byte[] nameBytes = name.getBytes( MP_charset );
-        byte[] nameLengthBytes = ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( MP_byteOrder ).putInt( nameBytes.length ).array();
-        byte[] counterBytes = ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( MP_byteOrder ).putInt( counter ).array();
-        logger.trc( "seed from: hmac-sha256(%s, %s | %s | %s | %s)", variant.getScope(), CryptUtils.encodeBase64( key ),
-                    CodeUtils.encodeHex( nameLengthBytes ), name, CodeUtils.encodeHex( counterBytes ) );
-        byte[] seed = MP_mac.of( key, Bytes.concat( variant.getScope().getBytes( MP_charset ), //
-                                                    nameLengthBytes, //
-                                                    nameBytes, //
-                                                    counterBytes ) );
-        logger.trc( "seed is: %s", CryptUtils.encodeBase64( seed ) );
+        if (siteCounter == 0)
+            siteCounter = (int) (System.currentTimeMillis() / (300 * 1000)) * 300;
 
-        Preconditions.checkState( seed.length > 0 );
-        int templateIndex = seed[0] & 0xFF; // Mask the integer's sign.
-        MPTemplate template = type.getTemplateAtRollingIndex( templateIndex );
-        logger.trc( "type: %s, template: %s", type, template );
+        String siteScope = siteVariant.getScope();
+        byte[] siteNameBytes = siteName.getBytes( MP_charset );
+        byte[] siteNameLengthBytes = bytesForInt( siteNameBytes.length );
+        byte[] siteCounterBytes = bytesForInt( siteCounter );
+        byte[] siteContextBytes = siteContext == null? null: siteContext.getBytes( MP_charset );
+        byte[] siteContextLengthBytes = bytesForInt( siteContextBytes == null? 0: siteContextBytes.length );
+        logger.trc( "site scope: %s, context: %s", siteScope, siteContext == null? "<empty>": siteContext );
+        logger.trc( "seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)", siteScope,
+                    CodeUtils.encodeHex( siteNameLengthBytes ), siteName, CodeUtils.encodeHex( siteCounterBytes ),
+                    CodeUtils.encodeHex( siteContextLengthBytes ), siteContext == null? "(null)": siteContext );
+
+        byte[] sitePasswordInfo = Bytes.concat( siteScope.getBytes( MP_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
+        logger.trc( "sitePasswordInfo ID: %s", idForBytes( sitePasswordInfo ) );
+
+        byte[] sitePasswordSeed = MP_mac.of( masterKey, sitePasswordInfo );
+        logger.trc( "sitePasswordSeed ID: %s", idForBytes( sitePasswordSeed ) );
+
+        Preconditions.checkState( sitePasswordSeed.length > 0 );
+        int templateIndex = sitePasswordSeed[0] & 0xFF; // Mask the integer's sign.
+        MPTemplate template = siteType.getTemplateAtRollingIndex( templateIndex );
+        logger.trc( "type %s, template: %s", siteType, template.getTemplateString() );
 
         StringBuilder password = new StringBuilder( template.length() );
         for (int i = 0; i < template.length(); ++i) {
-            int characterIndex = seed[i + 1] & 0xFF; // Mask the integer's sign.
+            int characterIndex = sitePasswordSeed[i + 1] & 0xFF; // Mask the integer's sign.
             MPTemplateCharacterClass characterClass = template.getCharacterClassAtIndex( i );
             char passwordCharacter = characterClass.getCharacterAtRollingIndex( characterIndex );
-            logger.trc( "class: %s, index: %d, byte: 0x%02X, chosen password character: %s", characterClass, characterIndex, seed[i + 1],
-                        passwordCharacter );
+            logger.trc( "class %c, index %d (0x%02X) -> character: %c", characterClass.getIdentifier(), characterIndex,
+                        sitePasswordSeed[i + 1], passwordCharacter );
 
             password.append( passwordCharacter );
         }
@@ -123,6 +136,14 @@ public class MasterKey {
     public void invalidate() {
 
         valid = false;
-        Arrays.fill( key, (byte) 0 );
+        Arrays.fill( masterKey, (byte) 0 );
+    }
+
+    private static byte[] bytesForInt(final int integer) {
+        return ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( MP_byteOrder ).putInt( integer ).array();
+    }
+
+    private static String idForBytes(final byte[] bytes) {
+        return CodeUtils.encodeHex( MP_hash.of( bytes ) );
     }
 }

@@ -49,7 +49,7 @@ const MPElementType TypeWithName(const char *typeName) {
     abort();
 }
 
-const char *CipherForType(MPElementType type, uint8_t seedByte) {
+const char *TemplateForType(MPElementType type, uint8_t seedByte) {
     if (!(type & MPElementTypeClassGenerated)) {
         fprintf(stderr, "Not a generated type: %d", type);
         abort();
@@ -57,20 +57,20 @@ const char *CipherForType(MPElementType type, uint8_t seedByte) {
 
     switch (type) {
         case MPElementTypeGeneratedMaximum: {
-            const char *ciphers[] = { "anoxxxxxxxxxxxxxxxxx", "axxxxxxxxxxxxxxxxxno" };
-            return ciphers[seedByte % 2];
+            const char *templates[] = { "anoxxxxxxxxxxxxxxxxx", "axxxxxxxxxxxxxxxxxno" };
+            return templates[seedByte % 2];
         }
         case MPElementTypeGeneratedLong: {
-            const char *ciphers[] = { "CvcvnoCvcvCvcv", "CvcvCvcvnoCvcv", "CvcvCvcvCvcvno", "CvccnoCvcvCvcv", "CvccCvcvnoCvcv", "CvccCvcvCvcvno", "CvcvnoCvccCvcv", "CvcvCvccnoCvcv", "CvcvCvccCvcvno", "CvcvnoCvcvCvcc", "CvcvCvcvnoCvcc", "CvcvCvcvCvccno", "CvccnoCvccCvcv", "CvccCvccnoCvcv", "CvccCvccCvcvno", "CvcvnoCvccCvcc", "CvcvCvccnoCvcc", "CvcvCvccCvccno", "CvccnoCvcvCvcc", "CvccCvcvnoCvcc", "CvccCvcvCvccno" };
-            return ciphers[seedByte % 21];
+            const char *templates[] = { "CvcvnoCvcvCvcv", "CvcvCvcvnoCvcv", "CvcvCvcvCvcvno", "CvccnoCvcvCvcv", "CvccCvcvnoCvcv", "CvccCvcvCvcvno", "CvcvnoCvccCvcv", "CvcvCvccnoCvcv", "CvcvCvccCvcvno", "CvcvnoCvcvCvcc", "CvcvCvcvnoCvcc", "CvcvCvcvCvccno", "CvccnoCvccCvcv", "CvccCvccnoCvcv", "CvccCvccCvcvno", "CvcvnoCvccCvcc", "CvcvCvccnoCvcc", "CvcvCvccCvccno", "CvccnoCvcvCvcc", "CvccCvcvnoCvcc", "CvccCvcvCvccno" };
+            return templates[seedByte % 21];
         }
         case MPElementTypeGeneratedMedium: {
-            const char *ciphers[] = { "CvcnoCvc", "CvcCvcno" };
-            return ciphers[seedByte % 2];
+            const char *templates[] = { "CvcnoCvc", "CvcCvcno" };
+            return templates[seedByte % 2];
         }
         case MPElementTypeGeneratedBasic: {
-            const char *ciphers[] = { "aaanaaan", "aannaaan", "aaannaaa" };
-            return ciphers[seedByte % 3];
+            const char *templates[] = { "aaanaaan", "aannaaan", "aaannaaa" };
+            return templates[seedByte % 3];
         }
         case MPElementTypeGeneratedShort: {
             return "Cvcn";
@@ -82,8 +82,8 @@ const char *CipherForType(MPElementType type, uint8_t seedByte) {
             return "cvccvcvcv";
         }
         case MPElementTypeGeneratedPhrase: {
-            const char *ciphers[] = { "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" };
-            return ciphers[seedByte % 3];
+            const char *templates[] = { "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" };
+            return templates[seedByte % 3];
         }
         default: {
             fprintf(stderr, "Unknown generated type: %d", type);

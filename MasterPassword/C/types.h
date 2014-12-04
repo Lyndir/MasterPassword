@@ -52,7 +52,7 @@ typedef enum {
 const MPElementVariant VariantWithName(const char *variantName);
 const char *ScopeForVariant(MPElementVariant variant);
 const MPElementType TypeWithName(const char *typeName);
-const char *CipherForType(MPElementType type, uint8_t seedByte);
+const char *TemplateForType(MPElementType type, uint8_t seedByte);
 const char CharacterFromClass(char characterClass, uint8_t seedByte);
 const char *IDForBuf(const void *buf, size_t length);
 const char *Hex(const void *buf, size_t length);

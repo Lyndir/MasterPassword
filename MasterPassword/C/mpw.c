@@ -1,6 +1,7 @@
 #define _GNU_SOURCE
 
 #include <stdio.h>
+#include <sys/time.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -171,24 +172,20 @@ int main(int argc, char *const argv[]) {
             return 1;
         }
     }
-    trc("siteName: %s\n", siteName);
     if (siteCounterString)
         siteCounter = atoi( siteCounterString );
     if (siteCounter < 1) {
         fprintf(stderr, "Invalid site counter: %d\n", siteCounter);
         return 1;
     }
-    trc("siteCounter: %d\n", siteCounter);
     if (siteVariantString)
         siteVariant = VariantWithName( siteVariantString );
-    trc("siteVariant: %d (%s)\n", siteVariant, siteVariantString);
     if (siteVariant == MPElementVariantLogin)
         siteType = MPElementTypeGeneratedName;
     if (siteVariant == MPElementVariantAnswer)
         siteType = MPElementTypeGeneratedPhrase;
     if (siteTypeString)
         siteType = TypeWithName( siteTypeString );
-    trc("siteType: %d (%s)\n", siteType, siteTypeString);
 
     // Read the master password.
     char *mpwConfigPath = homedir(".mpw");
@@ -218,6 +215,11 @@ int main(int argc, char *const argv[]) {
 
     // Summarize operation.
     fprintf(stderr, "%s's password for %s:\n[ %s ]: ", userName, siteName, Identicon( userName, masterPassword ));
+    struct timeval startTime;
+    if (gettimeofday(&startTime, NULL) != 0) {
+        fprintf(stderr, "Could not get time: %d\n", errno);
+        return 1;
+    }
 
     // Calculate the master key salt.
     const char *mpKeyScope = ScopeForVariant(MPElementVariantPassword);
@@ -250,17 +252,27 @@ int main(int argc, char *const argv[]) {
     }
     memset(masterKeySalt, 0, masterKeySaltLength);
     free(masterKeySalt);
-    trc("masterPassword Hex: %s\n", Hex(masterPassword, strlen(masterPassword)));
-    trc("masterPassword ID: %s\n", IDForBuf(masterPassword, strlen(masterPassword)));
-    trc("masterKey ID: %s\n", IDForBuf(masterKey, MP_dkLen));
+    struct timeval endTime;
+    if (gettimeofday(&endTime, NULL) != 0) {
+        fprintf(stderr, "Could not get time: %d\n", errno);
+        return 1;
+    }
+    long long secs = (endTime.tv_sec - startTime.tv_sec);
+    long long usecs = (endTime.tv_usec - startTime.tv_usec);
+    double elapsed = secs + usecs / 1000000.0;
+    trc("masterKey ID: %s (derived in %.2fs)\n", IDForBuf(masterKey, MP_dkLen), elapsed);
 
     // Calculate the site seed.
-    const char *mpSiteScope = ScopeForVariant(siteVariant);
-    trc("site scope: %s, context: %s\n", mpSiteScope, siteContextString == NULL? "<empty>": siteContextString);
+    trc("siteName: %s\n", siteName);
+    trc("siteCounter: %d\n", siteCounter);
+    trc("siteVariant: %d (%s)\n", siteVariant, siteVariantString);
+    trc("siteType: %d (%s)\n", siteType, siteTypeString);
+    const char *siteScope = ScopeForVariant(siteVariant);
+    trc("site scope: %s, context: %s\n", siteScope, siteContextString == NULL? "<empty>": siteContextString);
     const uint32_t n_siteNameLength = htonl(strlen(siteName));
     const uint32_t n_siteCounter = htonl(siteCounter);
     const uint32_t n_siteContextLength = siteContextString == NULL? 0: htonl(strlen(siteContextString));
-    size_t sitePasswordInfoLength = strlen(mpSiteScope) + sizeof(n_siteNameLength) + strlen(siteName) + sizeof(n_siteCounter);
+    size_t sitePasswordInfoLength = strlen(siteScope) + sizeof(n_siteNameLength) + strlen(siteName) + sizeof(n_siteCounter);
     if (siteContextString)
         sitePasswordInfoLength += sizeof(n_siteContextLength) + strlen(siteContextString);
     char *sitePasswordInfo = (char *)malloc( sitePasswordInfoLength );
@@ -270,7 +282,7 @@ int main(int argc, char *const argv[]) {
     }
 
     char *sPI = sitePasswordInfo;
-    memcpy(sPI, mpSiteScope, strlen(mpSiteScope)); sPI += strlen(mpSiteScope);
+    memcpy(sPI, siteScope, strlen(siteScope)); sPI += strlen(siteScope);
     memcpy(sPI, &n_siteNameLength, sizeof(n_siteNameLength)); sPI += sizeof(n_siteNameLength);
     memcpy(sPI, siteName, strlen(siteName)); sPI += strlen(siteName);
     memcpy(sPI, &n_siteCounter, sizeof(n_siteCounter)); sPI += sizeof(n_siteCounter);
@@ -280,7 +292,7 @@ int main(int argc, char *const argv[]) {
     }
     if (sPI - sitePasswordInfo != sitePasswordInfoLength)
         abort();
-    trc("seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)\n", mpSiteScope, Hex(&n_siteNameLength, sizeof(n_siteNameLength)), siteName, Hex(&n_siteCounter, sizeof(n_siteCounter)), Hex(&n_siteContextLength, sizeof(n_siteContextLength)), siteContextString);
+    trc("seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)\n", siteScope, Hex(&n_siteNameLength, sizeof(n_siteNameLength)), siteName, Hex(&n_siteCounter, sizeof(n_siteCounter)), Hex(&n_siteContextLength, sizeof(n_siteContextLength)), siteContextString);
     trc("sitePasswordInfo ID: %s\n", IDForBuf(sitePasswordInfo, sitePasswordInfoLength));
 
     uint8_t sitePasswordSeed[32];
@@ -291,17 +303,17 @@ int main(int argc, char *const argv[]) {
     free(sitePasswordInfo);
     trc("sitePasswordSeed ID: %s\n", IDForBuf(sitePasswordSeed, 32));
 
-    // Determine the cipher.
-    const char *cipher = CipherForType(siteType, sitePasswordSeed[0]);
-    trc("type %s, cipher: %s\n", siteTypeString, cipher);
-    if (strlen(cipher) > 32)
+    // Determine the template.
+    const char *template = TemplateForType(siteType, sitePasswordSeed[0]);
+    trc("type %s, template: %s\n", siteTypeString, template);
+    if (strlen(template) > 32)
         abort();
 
-    // Encode the password from the seed using the cipher.
-    char *sitePassword = (char *)calloc(strlen(cipher) + 1, sizeof(char));
-    for (int c = 0; c < strlen(cipher); ++c) {
-        sitePassword[c] = CharacterFromClass(cipher[c], sitePasswordSeed[c + 1]);
-        trc("class %c, character: %c\n", cipher[c], sitePassword[c]);
+    // Encode the password from the seed using the template.
+    char *sitePassword = (char *)calloc(strlen(template) + 1, sizeof(char));
+    for (int c = 0; c < strlen(template); ++c) {
+        sitePassword[c] = CharacterFromClass(template[c], sitePasswordSeed[c + 1]);
+        trc("class %c, index %u (0x%02X) -> character: %c\n", template[c], sitePasswordSeed[c + 1], sitePasswordSeed[c + 1], sitePassword[c]);
     }
     memset(sitePasswordSeed, 0, sizeof(sitePasswordSeed));
 
