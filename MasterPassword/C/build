@@ -38,7 +38,7 @@ else
 fi
 
 # Optional features.
-mpw_color=1 # Colorized Identicon, requires libncurses-dev
+mpw_color=0 # Colorized Identicon, requires libncurses-dev
 
 
 ### DEPENDENCIES
@@ -200,10 +200,6 @@ mpw() {
         -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva"
     )
     LDFLAGS=(
-        # library paths
-        -L"." -L"lib/scrypt"
-        # link libraries
-        -l"crypto"
         # scrypt
         "lib/scrypt/scrypt-crypto_aesctr.o"
         "lib/scrypt/scrypt-sha256.o"
@@ -211,6 +207,10 @@ mpw() {
         "lib/scrypt/scrypt-memlimit.o"
         "lib/scrypt/scrypt-scryptenc_cpuperf.o"
         "lib/scrypt/scrypt-scryptenc.o"
+        # library paths
+        -L"." -L"lib/scrypt"
+        # link libraries
+        -l"crypto"
     )
     # optional features
     (( mpw_color )) && CFLAGS+=( -DCOLOR ) LDFLAGS+=( -l"curses" )
@@ -234,11 +234,6 @@ mpw-bench() {
         -I"lib/bcrypt" 
     )
     LDFLAGS=(
-        # library paths
-        -L"." -L"lib/scrypt"
-        -L"lib/bcrypt"
-        # libraries
-        -l"crypto"
         # scrypt
         "lib/scrypt/scrypt-crypto_aesctr.o"
         "lib/scrypt/scrypt-sha256.o"
@@ -251,6 +246,11 @@ mpw-bench() {
         "lib/bcrypt/crypt_gensalt.o"
         "lib/bcrypt/wrapper.o"
         "lib/bcrypt/x86.o"
+        # library paths
+        -L"." -L"lib/scrypt"
+        -L"lib/bcrypt"
+        # libraries
+        -l"crypto"
     )
 
     cc "${CFLAGS[@]}"                 -c types.c -o types.o "$@"

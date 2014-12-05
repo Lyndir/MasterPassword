@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -198,6 +199,7 @@ const char *Hex(const void *buf, size_t length) {
     return id;
 }
 
+#ifdef COLOR
 int putvari;
 char *putvarc = NULL;
 bool istermsetup = false;
@@ -214,6 +216,7 @@ static int putvar(int c) {
     putvarc[putvari++]=c;
     return 0;
 }
+#endif
 
 const char *Identicon(const char *userName, const char *masterPassword) {
     const char *leftArm[]   = { "╔", "╚", "╰", "═" };
