@@ -6,7 +6,6 @@ import com.google.common.io.Resources;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.net.URL;
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -46,7 +45,7 @@ public class MasterKeyTest {
     public void testGetUserName()
             throws Exception {
 
-        assertEquals( new MasterKey( defaultCase.getFullName(), defaultCase.getMasterPassword() ).getUserName(),
+        assertEquals( new MasterKey( defaultCase.getFullName(), defaultCase.getMasterPassword() ).getFullName(),
                       defaultCase.getFullName() );
     }
 

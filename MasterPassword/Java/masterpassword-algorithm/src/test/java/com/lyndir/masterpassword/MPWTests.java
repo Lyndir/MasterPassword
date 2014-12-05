@@ -2,9 +2,7 @@ package com.lyndir.masterpassword;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
-import com.google.common.base.Verify;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.lhunath.opal.system.util.NFunctionNN;
 import com.lyndir.lhunath.opal.system.util.NNSupplier;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -165,12 +163,12 @@ public class MPWTests {
             return siteCounter;
         }
 
-        public MPElementType getSiteType() {
-            return MPElementType.forName( siteType );
+        public MPSiteType getSiteType() {
+            return MPSiteType.forName( siteType );
         }
 
-        public MPElementVariant getSiteVariant() {
-            return MPElementVariant.forName( siteVariant );
+        public MPSiteVariant getSiteVariant() {
+            return MPSiteVariant.forName( siteVariant );
         }
 
         public String getSiteContext() {

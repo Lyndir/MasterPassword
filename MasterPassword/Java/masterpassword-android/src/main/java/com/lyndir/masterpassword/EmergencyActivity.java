@@ -87,8 +87,8 @@ public class EmergencyActivity extends Activity {
         sitePasswordField.setPaintFlags( userNameField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
 
         typeField.setAdapter(
-                new ArrayAdapter<MPElementType>( this, R.layout.type_item, MPElementType.forClass( MPElementTypeClass.Generated ) ) );
-        typeField.setSelection( MPElementType.GeneratedLong.ordinal() );
+                new ArrayAdapter<MPSiteType>( this, R.layout.type_item, MPSiteType.forClass( MPSiteTypeClass.Generated ) ) );
+        typeField.setSelection( MPSiteType.GeneratedLong.ordinal() );
 
         counterField.setMinValue( 1 );
         counterField.setMaxValue( Integer.MAX_VALUE );
@@ -170,7 +170,7 @@ public class EmergencyActivity extends Activity {
 
     private void updateSitePassword() {
         final String siteName = siteNameField.getText().toString();
-        final MPElementType type = (MPElementType) typeField.getSelectedItem();
+        final MPSiteType type = (MPSiteType) typeField.getSelectedItem();
         final int counter = counterField.getValue();
 
         if (masterKeyFuture == null || siteName.isEmpty() || type == null) {

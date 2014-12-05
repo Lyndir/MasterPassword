@@ -25,11 +25,11 @@
 
 int main(int argc, char *const argv[]) {
 
-    char *userName = "Robert Lee Mitchel";
+    char *fullName = "Robert Lee Mitchel";
     char *masterPassword = "banana colored duckling";
     char *siteName = "masterpasswordapp.com";
     uint32_t siteCounter = 1;
-    MPElementType siteType = MPElementTypeGeneratedLong;
+    MPSiteType siteType = MPSiteTypeGeneratedLong;
 
     // Start MP
     struct timeval startTime;
@@ -42,8 +42,8 @@ int main(int argc, char *const argv[]) {
     for (int i = 0; i < iterations; ++i) {
         // Calculate the master key salt.
         char *mpNameSpace = "com.lyndir.masterpassword";
-        const uint32_t n_userNameLength = htonl(strlen(userName));
-        const size_t masterKeySaltLength = strlen(mpNameSpace) + sizeof(n_userNameLength) + strlen(userName);
+        const uint32_t n_fullNameLength = htonl(strlen(fullName));
+        const size_t masterKeySaltLength = strlen(mpNameSpace) + sizeof(n_fullNameLength) + strlen(fullName);
         char *masterKeySalt = malloc( masterKeySaltLength );
         if (!masterKeySalt) {
             fprintf(stderr, "Could not allocate master key salt: %d\n", errno);
@@ -52,8 +52,8 @@ int main(int argc, char *const argv[]) {
 
         char *mKS = masterKeySalt;
         memcpy(mKS, mpNameSpace, strlen(mpNameSpace)); mKS += strlen(mpNameSpace);
-        memcpy(mKS, &n_userNameLength, sizeof(n_userNameLength)); mKS += sizeof(n_userNameLength);
-        memcpy(mKS, userName, strlen(userName)); mKS += strlen(userName);
+        memcpy(mKS, &n_fullNameLength, sizeof(n_fullNameLength)); mKS += sizeof(n_fullNameLength);
+        memcpy(mKS, fullName, strlen(fullName)); mKS += strlen(fullName);
         if (mKS - masterKeySalt != masterKeySaltLength)
             abort();
         trc("masterKeySalt ID: %s\n", IDForBuf(masterKeySalt, masterKeySaltLength));
@@ -96,17 +96,17 @@ int main(int argc, char *const argv[]) {
         free(masterKey);
         free(sitePasswordInfo);
 
-        // Determine the cipher.
-        const char *cipher = CipherForType(siteType, sitePasswordSeed[0]);
-        trc("type %d, cipher: %s\n", siteType, cipher);
-        if (strlen(cipher) > 32)
+        // Determine the template.
+        const char *template = TemplateForType(siteType, sitePasswordSeed[0]);
+        trc("type %d, template: %s\n", siteType, template);
+        if (strlen(template) > 32)
             abort();
 
-        // Encode the password from the seed using the cipher.
-        char *sitePassword = calloc(strlen(cipher) + 1, sizeof(char));
-        for (int c = 0; c < strlen(cipher); ++c) {
-            sitePassword[c] = CharacterFromClass(cipher[c], sitePasswordSeed[c + 1]);
-            trc("class %c, character: %c\n", cipher[c], sitePassword[c]);
+        // Encode the password from the seed using the template.
+        char *sitePassword = calloc(strlen(template) + 1, sizeof(char));
+        for (int c = 0; c < strlen(template); ++c) {
+            sitePassword[c] = CharacterFromClass(template[c], sitePasswordSeed[c + 1]);
+            trc("class %c, character: %c\n", template[c], sitePassword[c]);
         }
         memset(sitePasswordSeed, 0, sizeof(sitePasswordSeed));
 
@@ -161,7 +161,7 @@ int main(int argc, char *const argv[]) {
     int bcrypt_cost = 9;
     iterations = 600;
     for (int i = 0; i < iterations; ++i) {
-        crypt(masterPassword, crypt_gensalt("$2b$", bcrypt_cost, userName, strlen(userName)));
+        crypt(masterPassword, crypt_gensalt("$2b$", bcrypt_cost, fullName, strlen(fullName)));
 
         if (i % 10 == 0)
             fprintf( stderr, "\rbcrypt (cost %d): iteration %d / %d..", bcrypt_cost, i, iterations );

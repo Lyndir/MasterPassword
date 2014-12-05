@@ -4,7 +4,6 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Bytes;
 import com.lambdaworks.crypto.SCrypt;
-import com.lyndir.lhunath.opal.crypto.CryptUtils;
 import com.lyndir.lhunath.opal.system.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.nio.ByteBuffer;
@@ -32,22 +31,22 @@ public class MasterKey {
     private static final MessageDigests               MP_hash      = MessageDigests.SHA256;
     private static final MessageAuthenticationDigests MP_mac       = MessageAuthenticationDigests.HmacSHA256;
 
-    private final String userName;
+    private final String fullName;
     private final byte[] masterKey;
 
     private boolean valid;
 
-    public MasterKey(final String userName, final String masterPassword) {
+    public MasterKey(final String fullName, final String masterPassword) {
 
-        this.userName = userName;
-        logger.trc( "userName: %s", userName );
+        this.fullName = fullName;
+        logger.trc( "fullName: %s", fullName );
         logger.trc( "masterPassword: %s", masterPassword );
 
         long start = System.currentTimeMillis();
-        byte[] userNameBytes = userName.getBytes( MP_charset );
+        byte[] userNameBytes = fullName.getBytes( MP_charset );
         byte[] userNameLengthBytes = bytesForInt( userNameBytes.length );
 
-        String mpKeyScope = MPElementVariant.Password.getScope();
+        String mpKeyScope = MPSiteVariant.Password.getScope();
         byte[] masterKeySalt = Bytes.concat( mpKeyScope.getBytes( MP_charset ), userNameLengthBytes, userNameBytes );
         logger.trc( "key scope: %s", mpKeyScope );
         logger.trc( "masterKeySalt ID: %s", idForBytes( masterKeySalt ) );
@@ -63,9 +62,9 @@ public class MasterKey {
         }
     }
 
-    public String getUserName() {
+    public String getFullName() {
 
-        return userName;
+        return fullName;
     }
 
     public String getKeyID() {
@@ -74,7 +73,7 @@ public class MasterKey {
         return idForBytes( masterKey );
     }
 
-    private byte[] getSubkey(final int subkeyLength) {
+    private byte[] getSubKey(final int subkeyLength) {
 
         Preconditions.checkState( valid );
         byte[] subkey = new byte[Math.min( subkeyLength, masterKey.length )];
@@ -83,10 +82,10 @@ public class MasterKey {
         return subkey;
     }
 
-    public String encode(final String siteName, final MPElementType siteType, int siteCounter, final MPElementVariant siteVariant,
+    public String encode(final String siteName, final MPSiteType siteType, int siteCounter, final MPSiteVariant siteVariant,
                          @Nullable final String siteContext) {
         Preconditions.checkState( valid );
-        Preconditions.checkArgument( siteType.getTypeClass() == MPElementTypeClass.Generated );
+        Preconditions.checkArgument( siteType.getTypeClass() == MPSiteTypeClass.Generated );
         Preconditions.checkArgument( !siteName.isEmpty() );
 
         logger.trc( "siteName: %s", siteName );

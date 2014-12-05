@@ -5,7 +5,7 @@ package com.lyndir.masterpassword;
  *
  * @author lhunath
  */
-public enum MPElementFeature {
+public enum MPSiteFeature {
 
     /** Export the key-protected content data. */
     ExportContent,

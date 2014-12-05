@@ -33,7 +33,7 @@ else
     # Modify here or override using targets='mpw mpw-bench' ./build
     targets=(
         mpw                         # C CLI version of Master Password.
-       #mpw-bench                   # C CLI Master Password benchmark utility.
+        mpw-bench                   # C CLI Master Password benchmark utility.
     )
 fi
 

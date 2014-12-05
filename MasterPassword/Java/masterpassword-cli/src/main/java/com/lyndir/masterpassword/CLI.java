@@ -48,8 +48,8 @@ public class CLI {
         String siteName = null, masterPassword, context = null;
         String userName = System.getenv( ENV_USERNAME );
         String siteTypeName = ifNotNullElse( System.getenv( ENV_SITETYPE ), "" );
-        MPElementType siteType = siteTypeName.isEmpty()? MPElementType.GeneratedLong: MPElementType.forOption( siteTypeName );
-        MPElementVariant variant = MPElementVariant.Password;
+        MPSiteType siteType = siteTypeName.isEmpty()? MPSiteType.GeneratedLong: MPSiteType.forOption( siteTypeName );
+        MPSiteVariant variant = MPSiteVariant.Password;
         String siteCounterName = ifNotNullElse( System.getenv( ENV_SITECOUNTER ), "" );
         int siteCounter = siteCounterName.isEmpty()? 1: Integer.parseInt( siteCounterName );
 
@@ -68,7 +68,7 @@ public class CLI {
             else if ("-t".equals( arg ) || "--type".equals( arg ))
                 typeArg = true;
             else if (typeArg) {
-                siteType = MPElementType.forOption( arg );
+                siteType = MPSiteType.forOption( arg );
                 typeArg = false;
             }
 
@@ -84,7 +84,7 @@ public class CLI {
             else if ("-v".equals( arg ) || "--variant".equals( arg ))
                 variantArg = true;
             else if (variantArg) {
-                variant = MPElementVariant.forOption( arg );
+                variant = MPSiteVariant.forOption( arg );
                 variantArg = false;
             }
 
@@ -106,13 +106,13 @@ public class CLI {
                 System.out.format( "                 Defaults to %s in env or 'long' for password, 'name' for login.\n", ENV_SITETYPE );
 
                 int optionsLength = 0;
-                Map<String, MPElementType> typeMap = Maps.newLinkedHashMap();
-                for (MPElementType elementType : MPElementType.values()) {
+                Map<String, MPSiteType> typeMap = Maps.newLinkedHashMap();
+                for (MPSiteType elementType : MPSiteType.values()) {
                     String options = Joiner.on( ", " ).join( elementType.getOptions() );
                     typeMap.put( options, elementType );
                     optionsLength = Math.max( optionsLength, options.length() );
                 }
-                for (Map.Entry<String, MPElementType> entry : typeMap.entrySet()) {
+                for (Map.Entry<String, MPSiteType> entry : typeMap.entrySet()) {
                     String infoString = strf( "                  -v %" + optionsLength + "s | ", entry.getKey() );
                     String infoNewline = "\n" + StringUtils.repeat( " ", infoString.length() - 3 ) + " | ";
                     infoString += entry.getValue().getDescription().replaceAll( "\n", infoNewline );
@@ -126,13 +126,13 @@ public class CLI {
                 System.out.format( "                 Defaults to 'password'.\n" );
 
                 optionsLength = 0;
-                Map<String, MPElementVariant> variantMap = Maps.newLinkedHashMap();
-                for (MPElementVariant elementVariant : MPElementVariant.values()) {
+                Map<String, MPSiteVariant> variantMap = Maps.newLinkedHashMap();
+                for (MPSiteVariant elementVariant : MPSiteVariant.values()) {
                     String options = Joiner.on( ", " ).join( elementVariant.getOptions() );
                     variantMap.put( options, elementVariant );
                     optionsLength = Math.max( optionsLength, options.length() );
                 }
-                for (Map.Entry<String, MPElementVariant> entry : variantMap.entrySet()) {
+                for (Map.Entry<String, MPSiteVariant> entry : variantMap.entrySet()) {
                     String infoString = strf( "                  -v %" + optionsLength + "s | ", entry.getKey() );
                     String infoNewline = "\n" + StringUtils.repeat( " ", infoString.length() - 3 ) + " | ";
                     infoString += entry.getValue().getDescription().replaceAll( "\n", infoNewline );
@@ -142,7 +142,7 @@ public class CLI {
 
                 System.out.format( "    -C context   A variant-specific context.\n" );
                 System.out.format( "                 Defaults to empty.\n" );
-                for (Map.Entry<String, MPElementVariant> entry : variantMap.entrySet()) {
+                for (Map.Entry<String, MPSiteVariant> entry : variantMap.entrySet()) {
                     String infoString = strf( "                  -v %" + optionsLength + "s | ", entry.getKey() );
                     String infoNewline = "\n" + StringUtils.repeat( " ", infoString.length() - 3 ) + " | ";
                     infoString += entry.getValue().getContextDescription().replaceAll( "\n", infoNewline );

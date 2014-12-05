@@ -17,12 +17,12 @@ import javax.swing.event.*;
  */
 public class PasswordFrame extends JFrame implements DocumentListener {
 
-    private final User                     user;
-    private final JTextField               siteNameField;
-    private final JComboBox<MPElementType> siteTypeField;
-    private final JSpinner                 siteCounterField;
-    private final JTextField               passwordField;
-    private final JLabel                   tipLabel;
+    private final User                  user;
+    private final JTextField            siteNameField;
+    private final JComboBox<MPSiteType> siteTypeField;
+    private final JSpinner              siteCounterField;
+    private final JTextField            passwordField;
+    private final JLabel                tipLabel;
 
     public PasswordFrame(User user)
             throws HeadlessException {
@@ -89,7 +89,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         } );
 
         // Site Type & Counter
-        MPElementType[] types = Iterables.toArray( MPElementType.forClass( MPElementTypeClass.Generated ), MPElementType.class );
+        MPSiteType[] types = Iterables.toArray( MPSiteType.forClass( MPSiteTypeClass.Generated ), MPSiteType.class );
         JComponent siteSettings = Components.boxLayout( BoxLayout.LINE_AXIS, //
                                                         siteTypeField = new JComboBox<>( types ), //
                                                         siteCounterField = new JSpinner(
@@ -104,7 +104,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         siteTypeField.setFont( Res.exoRegular().deriveFont( 12f ) );
         siteTypeField.setAlignmentX( LEFT_ALIGNMENT );
         siteTypeField.setAlignmentY( CENTER_ALIGNMENT );
-        siteTypeField.setSelectedItem( MPElementType.GeneratedLong );
+        siteTypeField.setSelectedItem( MPSiteType.GeneratedLong );
         siteTypeField.addItemListener( new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
@@ -146,11 +146,11 @@ public class PasswordFrame extends JFrame implements DocumentListener {
     }
 
     private void updatePassword(final PasswordCallback callback) {
-        final MPElementType siteType = (MPElementType) siteTypeField.getSelectedItem();
+        final MPSiteType siteType = (MPSiteType) siteTypeField.getSelectedItem();
         final String siteName = siteNameField.getText();
         final int siteCounter = (Integer) siteCounterField.getValue();
 
-        if (siteType.getTypeClass() != MPElementTypeClass.Generated || siteName == null || siteName.isEmpty() || !user.hasKey()) {
+        if (siteType.getTypeClass() != MPSiteTypeClass.Generated || siteName == null || siteName.isEmpty() || !user.hasKey()) {
             passwordField.setText( null );
             tipLabel.setText( null );
             return;
@@ -159,7 +159,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         Res.execute( new Runnable() {
             @Override
             public void run() {
-                final String sitePassword = user.getKey().encode( siteName, siteType, siteCounter, MPElementVariant.Password, null );
+                final String sitePassword = user.getKey().encode( siteName, siteType, siteCounter, MPSiteVariant.Password, null );
                 if (callback != null)
                     callback.passwordGenerated( siteName, sitePassword );
 

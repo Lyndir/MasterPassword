@@ -35,14 +35,14 @@
 #define MP_dkLen            64
 #define MP_hash             PearlHashSHA256
 
-#define MP_env_username     "MP_USERNAME"
+#define MP_env_fullname     "MP_FULLNAME"
 #define MP_env_sitetype     "MP_SITETYPE"
 #define MP_env_sitecounter  "MP_SITECOUNTER"
 
 void usage() {
       fprintf(stderr, "Usage: mpw [-u name] [-t type] [-c counter] site\n\n");
       fprintf(stderr, "    -u name      Specify the full name of the user.\n"
-                      "                 Defaults to %s in env.\n\n", MP_env_username);
+                      "                 Defaults to %s in env.\n\n", MP_env_fullname);
       fprintf(stderr, "    -t type      Specify the password's template.\n"
                       "                 Defaults to %s in env or 'long' for password, 'name' for login.\n"
                       "                     x, max, maximum | 20 characters, contains symbols.\n"
@@ -67,7 +67,7 @@ void usage() {
                       "                  -v a, answer   | Empty for a universal site answer or\n"
                       "                                 | the most significant word(s) of the question.\n\n");
       fprintf(stderr, "    ENVIRONMENT\n\n"
-                      "        MP_USERNAME    | The full name of the user.\n"
+                      "        MP_FULLNAME    | The full name of the user.\n"
                       "        MP_SITETYPE    | The default password template.\n"
                       "        MP_SITECOUNTER | The default counter value.\n\n");
       exit(0);
@@ -105,12 +105,12 @@ char *getlinep(const char *prompt) {
 int main(int argc, char *const argv[]) {
 
     // Read the environment.
-    char *userName = getenv( MP_env_username );
+    char *fullName = getenv( MP_env_fullname );
     const char *masterPassword = NULL;
     const char *siteName = NULL;
-    MPElementType siteType = MPElementTypeGeneratedLong;
+    MPSiteType siteType = MPSiteTypeGeneratedLong;
     const char *siteTypeString = getenv( MP_env_sitetype );
-    MPElementVariant siteVariant = MPElementVariantPassword;
+    MPSiteVariant siteVariant = MPSiteVariantPassword;
     const char *siteVariantString = NULL;
     const char *siteContextString = NULL;
     uint32_t siteCounter = 1;
@@ -120,7 +120,7 @@ int main(int argc, char *const argv[]) {
     for (int opt; (opt = getopt(argc, argv, "u:t:c:v:C:h")) != -1;)
       switch (opt) {
           case 'u':
-              userName = optarg;
+              fullName = optarg;
               break;
           case 't':
               siteTypeString = optarg;
@@ -140,7 +140,7 @@ int main(int argc, char *const argv[]) {
           case '?':
               switch (optopt) {
                 case 'u':
-                  fprintf(stderr, "Missing user name to option: -%c\n", optopt);
+                  fprintf(stderr, "Missing full name to option: -%c\n", optopt);
                   break;
                 case 't':
                   fprintf(stderr, "Missing type name to option: -%c\n", optopt);
@@ -159,13 +159,13 @@ int main(int argc, char *const argv[]) {
         siteName = argv[optind];
 
     // Convert and validate input.
-    if (!userName) {
-        if (!(userName = getlinep("Your user name:"))) {
-            fprintf(stderr, "Missing user name.\n");
+    if (!fullName) {
+        if (!(fullName = getlinep("Your full name:"))) {
+            fprintf(stderr, "Missing full name.\n");
             return 1;
         }
     }
-    trc("userName: %s\n", userName);
+    trc("fullName: %s\n", fullName);
     if (!siteName) {
         if (!(siteName = getlinep("Site name:"))) {
             fprintf(stderr, "Missing site name.\n");
@@ -180,10 +180,10 @@ int main(int argc, char *const argv[]) {
     }
     if (siteVariantString)
         siteVariant = VariantWithName( siteVariantString );
-    if (siteVariant == MPElementVariantLogin)
-        siteType = MPElementTypeGeneratedName;
-    if (siteVariant == MPElementVariantAnswer)
-        siteType = MPElementTypeGeneratedPhrase;
+    if (siteVariant == MPSiteVariantLogin)
+        siteType = MPSiteTypeGeneratedName;
+    if (siteVariant == MPSiteVariantAnswer)
+        siteType = MPSiteTypeGeneratedPhrase;
     if (siteTypeString)
         siteType = TypeWithName( siteTypeString );
 
@@ -202,7 +202,7 @@ int main(int argc, char *const argv[]) {
         ssize_t linelen;
         while ((linelen = getline(&line, &linecap, mpwConfig)) > 0) {
             char *lineData = line;
-            if (strcmp(strsep(&lineData, ":"), userName) == 0) {
+            if (strcmp(strsep(&lineData, ":"), fullName) == 0) {
                 masterPassword = strcpy(malloc(strlen(lineData)), strsep(&lineData, "\n"));
                 break;
             }
@@ -214,7 +214,7 @@ int main(int argc, char *const argv[]) {
     trc("masterPassword: %s\n", masterPassword);
 
     // Summarize operation.
-    fprintf(stderr, "%s's password for %s:\n[ %s ]: ", userName, siteName, Identicon( userName, masterPassword ));
+    fprintf(stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, Identicon( fullName, masterPassword ));
     struct timeval startTime;
     if (gettimeofday(&startTime, NULL) != 0) {
         fprintf(stderr, "Could not get time: %d\n", errno);
@@ -222,10 +222,10 @@ int main(int argc, char *const argv[]) {
     }
 
     // Calculate the master key salt.
-    const char *mpKeyScope = ScopeForVariant(MPElementVariantPassword);
+    const char *mpKeyScope = ScopeForVariant(MPSiteVariantPassword);
     trc("key scope: %s\n", mpKeyScope);
-    const uint32_t n_userNameLength = htonl(strlen(userName));
-    const size_t masterKeySaltLength = strlen(mpKeyScope) + sizeof(n_userNameLength) + strlen(userName);
+    const uint32_t n_fullNameLength = htonl(strlen(fullName));
+    const size_t masterKeySaltLength = strlen(mpKeyScope) + sizeof(n_fullNameLength) + strlen(fullName);
     char *masterKeySalt = (char *)malloc( masterKeySaltLength );
     if (!masterKeySalt) {
         fprintf(stderr, "Could not allocate master key salt: %d\n", errno);
@@ -234,8 +234,8 @@ int main(int argc, char *const argv[]) {
 
     char *mKS = masterKeySalt;
     memcpy(mKS, mpKeyScope, strlen(mpKeyScope)); mKS += strlen(mpKeyScope);
-    memcpy(mKS, &n_userNameLength, sizeof(n_userNameLength)); mKS += sizeof(n_userNameLength);
-    memcpy(mKS, userName, strlen(userName)); mKS += strlen(userName);
+    memcpy(mKS, &n_fullNameLength, sizeof(n_fullNameLength)); mKS += sizeof(n_fullNameLength);
+    memcpy(mKS, fullName, strlen(fullName)); mKS += strlen(fullName);
     if (mKS - masterKeySalt != masterKeySaltLength)
         abort();
     trc("masterKeySalt ID: %s\n", IDForBuf(masterKeySalt, masterKeySaltLength));

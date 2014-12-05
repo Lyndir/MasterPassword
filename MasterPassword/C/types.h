@@ -8,40 +8,40 @@
 
 typedef enum {
     /** Generate the password to log in with. */
-    MPElementVariantPassword,
+    MPSiteVariantPassword,
     /** Generate the login name to log in as. */
-    MPElementVariantLogin,
+    MPSiteVariantLogin,
     /** Generate the answer to a security question. */
-    MPElementVariantAnswer,
-} MPElementVariant;
+    MPSiteVariantAnswer,
+} MPSiteVariant;
 
 typedef enum {
     /** Generate the password. */
-    MPElementTypeClassGenerated = 1 << 4,
+    MPSiteTypeClassGenerated = 1 << 4,
     /** Store the password. */
-    MPElementTypeClassStored = 1 << 5,
-} MPElementTypeClass;
+    MPSiteTypeClassStored = 1 << 5,
+} MPSiteTypeClass;
 
 typedef enum {
     /** Export the key-protected content data. */
-    MPElementFeatureExportContent = 1 << 10,
+    MPSiteFeatureExportContent = 1 << 10,
     /** Never export content. */
-    MPElementFeatureDevicePrivate = 1 << 11,
-} MPElementFeature;
+    MPSiteFeatureDevicePrivate = 1 << 11,
+} MPSiteFeature;
 
 typedef enum {
-    MPElementTypeGeneratedMaximum = 0x0 | MPElementTypeClassGenerated | 0x0,
-    MPElementTypeGeneratedLong = 0x1 | MPElementTypeClassGenerated | 0x0,
-    MPElementTypeGeneratedMedium = 0x2 | MPElementTypeClassGenerated | 0x0,
-    MPElementTypeGeneratedBasic = 0x4 | MPElementTypeClassGenerated | 0x0,
-    MPElementTypeGeneratedShort = 0x3 | MPElementTypeClassGenerated | 0x0,
-    MPElementTypeGeneratedPIN = 0x5 | MPElementTypeClassGenerated | 0x0,
-    MPElementTypeGeneratedName = 0xE | MPElementTypeClassGenerated | 0x0,
-    MPElementTypeGeneratedPhrase = 0xF | MPElementTypeClassGenerated | 0x0,
+    MPSiteTypeGeneratedMaximum = 0x0 | MPSiteTypeClassGenerated | 0x0,
+    MPSiteTypeGeneratedLong = 0x1 | MPSiteTypeClassGenerated | 0x0,
+    MPSiteTypeGeneratedMedium = 0x2 | MPSiteTypeClassGenerated | 0x0,
+    MPSiteTypeGeneratedBasic = 0x4 | MPSiteTypeClassGenerated | 0x0,
+    MPSiteTypeGeneratedShort = 0x3 | MPSiteTypeClassGenerated | 0x0,
+    MPSiteTypeGeneratedPIN = 0x5 | MPSiteTypeClassGenerated | 0x0,
+    MPSiteTypeGeneratedName = 0xE | MPSiteTypeClassGenerated | 0x0,
+    MPSiteTypeGeneratedPhrase = 0xF | MPSiteTypeClassGenerated | 0x0,
 
-    MPElementTypeStoredPersonal = 0x0 | MPElementTypeClassStored | MPElementFeatureExportContent,
-    MPElementTypeStoredDevicePrivate = 0x1 | MPElementTypeClassStored | MPElementFeatureDevicePrivate,
-} MPElementType;
+    MPSiteTypeStoredPersonal = 0x0 | MPSiteTypeClassStored | MPSiteFeatureExportContent,
+    MPSiteTypeStoredDevicePrivate = 0x1 | MPSiteTypeClassStored | MPSiteFeatureDevicePrivate,
+} MPSiteType;
 
 #ifdef DEBUG
 #define trc(...) fprintf(stderr, __VA_ARGS__)
@@ -49,12 +49,12 @@ typedef enum {
 #define trc(...) do {} while (0)
 #endif
 
-const MPElementVariant VariantWithName(const char *variantName);
-const char *ScopeForVariant(MPElementVariant variant);
-const MPElementType TypeWithName(const char *typeName);
-const char *TemplateForType(MPElementType type, uint8_t seedByte);
+const MPSiteVariant VariantWithName(const char *variantName);
+const char *ScopeForVariant(MPSiteVariant variant);
+const MPSiteType TypeWithName(const char *typeName);
+const char *TemplateForType(MPSiteType type, uint8_t seedByte);
 const char CharacterFromClass(char characterClass, uint8_t seedByte);
 const char *IDForBuf(const void *buf, size_t length);
 const char *Hex(const void *buf, size_t length);
-const char *Identicon(const char *userName, const char *masterPassword);
+const char *Identicon(const char *fullName, const char *masterPassword);
 
