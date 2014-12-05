@@ -2,65 +2,62 @@ package com.lyndir.masterpassword;
 
 import static org.testng.Assert.*;
 
+import com.google.common.io.Resources;
+import com.lyndir.lhunath.opal.system.logging.Logger;
+import java.net.URL;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 
 public class MasterKeyTest {
 
-    private static final String FULL_NAME       = "Robert Lee Mitchell";
-    private static final String MASTER_PASSWORD = "banana colored duckling";
-    private static final String SITE_NAME       = "masterpasswordapp.com";
+    @SuppressWarnings("UnusedDeclaration")
+    private static final Logger logger = Logger.get( MasterKeyTest.class );
+
+    private MPWTests      tests;
+    private MPWTests.Case defaultCase;
+
+    @BeforeMethod
+    public void setUp()
+            throws Exception {
+
+        URL testCasesResource = Resources.getResource( "mpw_tests.xml" );
+        tests = (MPWTests) JAXBContext.newInstance( MPWTests.class ).createUnmarshaller().unmarshal( testCasesResource );
+        for (MPWTests.Case testCase : tests.getCases())
+            testCase.setTests( tests );
+        defaultCase = tests.getCase( MPWTests.ID_DEFAULT );
+    }
 
     @Test
     public void testEncode()
             throws Exception {
 
-        MasterKey masterKey = new MasterKey( FULL_NAME, MASTER_PASSWORD );
-
-        assertEquals( masterKey.encode( SITE_NAME, MPElementType.GeneratedLong, 1, MPElementVariant.Password, null ), //
-                      "Jejr5[RepuSosp" );
-
-        assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedMaximum, 1, MPElementVariant.Password, null ), //
-                      "bp7rJKc7kaXc4sxOwG0*" );
-
-        assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedLong, 1, MPElementVariant.Password, null ), //
-                      "LiheCuwhSerz6)" );
-
-        assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedMedium, 1, MPElementVariant.Password, null ), //
-                      "LihPih8+" );
-
-        assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedBasic, 1, MPElementVariant.Password, null ), //
-                      "bpW62jmW" );
-
-        assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedShort, 1, MPElementVariant.Password, null ), //
-                      "Lih6" );
-
-        assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedPIN, 1, MPElementVariant.Password, null ), //
-                      "9216" );
-
-        assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedName, 1, MPElementVariant.Password, null ), //
-                      "lihpihohi" );
-
-        assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedPhrase, 1, MPElementVariant.Password, null ), //
-                      "li pihwe puz bemozno" );
-
-        assertEquals( masterKey.encode( "\u26C4", MPElementType.GeneratedMaximum, (int) 4294967295L, MPElementVariant.Password, null ),
-                      "r*)Ekr(FiduISCj*pg5-" );
+        for (MPWTests.Case testCase : tests.getCases()) {
+            MasterKey masterKey = new MasterKey( testCase.getFullName(), testCase.getMasterPassword() );
+            assertEquals( masterKey.encode( testCase.getSiteName(), testCase.getSiteType(), testCase.getSiteCounter(),
+                                            testCase.getSiteVariant(), testCase.getSiteContext() ), testCase.getResult(),
+                          "Failed test case: " + testCase );
+        }
     }
 
     @Test
     public void testGetUserName()
             throws Exception {
 
-        assertEquals( new MasterKey( FULL_NAME, "banana colored duckling" ).getUserName(), FULL_NAME );
+        assertEquals( new MasterKey( defaultCase.getFullName(), defaultCase.getMasterPassword() ).getUserName(),
+                      defaultCase.getFullName() );
     }
 
     @Test
     public void testGetKeyID()
             throws Exception {
 
-        assertEquals( new MasterKey( FULL_NAME, "banana colored duckling" ).getKeyID(),
-                      "98EEF4D1DF46D849574A82A03C3177056B15DFFCA29BB3899DE4628453675302" );
+        for (MPWTests.Case testCase : tests.getCases()) {
+            MasterKey masterKey = new MasterKey( testCase.getFullName(), testCase.getMasterPassword() );
+            assertEquals( masterKey.getKeyID(), testCase.getKeyID(), "Failed test case: " + testCase );
+        }
     }
 
     @Test
@@ -68,10 +65,11 @@ public class MasterKeyTest {
             throws Exception {
 
         try {
-            MasterKey masterKey = new MasterKey( FULL_NAME, MASTER_PASSWORD );
+            MasterKey masterKey = new MasterKey( defaultCase.getFullName(), defaultCase.getMasterPassword() );
             masterKey.invalidate();
-            masterKey.encode( SITE_NAME, MPElementType.GeneratedLong, 1, MPElementVariant.Password, null );
-            assertFalse( true, "Master key was not invalidated." );
+            masterKey.encode( defaultCase.getSiteName(), defaultCase.getSiteType(), defaultCase.getSiteCounter(),
+                              defaultCase.getSiteVariant(), defaultCase.getSiteContext() );
+            assertTrue( false, "Master key should have been invalidated, but was still usable." );
         }
         catch (IllegalStateException ignored) {
         }

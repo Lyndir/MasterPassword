@@ -60,4 +60,21 @@ public enum MPElementVariant {
 
         throw logger.bug( "No variant for option: %s", option );
     }
+    /**
+     * @param name The name of the variant to look up.  It is matched case insensitively.
+     *
+     * @return The variant registered with the given name.
+     */
+    public static MPElementVariant forName(final String name) {
+
+        if (name == null)
+            return null;
+
+        for (final MPElementVariant type : values())
+            if (type.name().equalsIgnoreCase( name ))
+                return type;
+
+        throw logger.bug( "No variant for name: %s", name );
+    }
+
 }

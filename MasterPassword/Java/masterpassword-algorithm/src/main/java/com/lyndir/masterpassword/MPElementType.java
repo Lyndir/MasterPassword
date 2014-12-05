@@ -123,6 +123,23 @@ public enum MPElementType {
     }
 
     /**
+     * @param name The name of the type to look up.  It is matched case insensitively.
+     *
+     * @return The type registered with the given name.
+     */
+    public static MPElementType forName(final String name) {
+
+        if (name == null)
+            return null;
+
+        for (final MPElementType type : values())
+            if (type.name().equalsIgnoreCase( name ))
+                return type;
+
+        throw logger.bug( "No type for name: %s", name );
+    }
+
+    /**
      * @param typeClass The class for which we look up types.
      *
      * @return All types that support the given class.

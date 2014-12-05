@@ -1,0 +1,72 @@
+<tests>
+    <case id="default">
+        <fullName>Robert Lee Mitchell</fullName>
+        <masterPassword>banana colored duckling</masterPassword>
+        <keyID>98EEF4D1DF46D849574A82A03C3177056B15DFFCA29BB3899DE4628453675302</keyID>
+        <siteName>masterpasswordapp.com</siteName>
+        <siteCounter>1</siteCounter>
+        <siteType>GeneratedLong</siteType>
+        <siteVariant>Password</siteVariant>
+        <siteContext />
+        <result>Jejr5[RepuSosp</result>
+    </case>
+    <case id="mb_fullName" parent="default">
+        <fullName>⛄</fullName>
+        <keyID>1717AA1F9BF5BA56CD0965CDA3D78E6D2E6A1EA8C067A8EA621F3DDAD4A87EB8</keyID>
+        <result>NopaDajh8=Fene</result>
+    </case>
+    <case id="mb_masterPassword" parent="default">
+        <masterPassword>⛄</masterPassword>
+        <keyID>351432B8528A5ABECAB768CA95015097DE76FE14C41E10AF36C67DCFB8917E08</keyID>
+        <result>QesuHirv5-Xepl</result>
+    </case>
+    <case id="mb_siteName" parent="default">
+        <siteName>⛄</siteName>
+        <result>LiheCuwhSerz6)</result>
+    </case>
+    <case id="loginName" parent="default">
+        <siteVariant>Login</siteVariant>
+        <result>WohzKifuDilo5,</result>
+    </case>
+    <case id="securityAnswer" parent="default">
+        <siteVariant>Answer</siteVariant>
+        <result>XineDiyj2)Tozz</result>
+    </case>
+    <case id="securityAnswer_context" parent="securityAnswer">
+        <siteContext>question</siteContext>
+        <result>XineDiyj2)Tozz</result>
+    </case>
+    <case id="type_maximum" parent="default">
+        <siteType>GeneratedMaximum</siteType>
+        <result>W6@692^B1#&amp;@gVdSdLZ@</result>
+    </case>
+    <case id="type_medium" parent="default">
+        <siteType>GeneratedMedium</siteType>
+        <result>Jej2$Quv</result>
+    </case>
+    <case id="type_basic" parent="default">
+        <siteType>GeneratedBasic</siteType>
+        <result>WAo2xIg6</result>
+    </case>
+    <case id="type_short" parent="default">
+        <siteType>GeneratedShort</siteType>
+        <result>Jej2</result>
+    </case>
+    <case id="type_pin" parent="default">
+        <siteType>GeneratedPIN</siteType>
+        <result>7662</result>
+    </case>
+    <case id="type_name" parent="default">
+        <siteType>GeneratedName</siteType>
+        <result>jejraquvo</result>
+    </case>
+    <case id="type_phrase" parent="default">
+        <siteType>GeneratedPhrase</siteType>
+        <result>jejr quv cabsibu tam</result>
+    </case>
+    <case id="counter_ceiling" parent="default">
+        <siteCounter>4294967295</siteCounter>
+        <result>XambHoqo6[Peni</result>
+    </case>
+</tests>
+
