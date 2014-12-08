@@ -73,10 +73,11 @@
         <!-- PROJECT REFERENCES -->
         <dependency>
             <groupId>com.lyndir.masterpassword</groupId>
-            <artifactId>masterpassword-algorithm</artifactId>
+            <artifactId>masterpassword-model</artifactId>
             <version>GIT-SNAPSHOT</version>
         </dependency>
 
+        <!-- EXTERNAL DEPENDENCIES -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>

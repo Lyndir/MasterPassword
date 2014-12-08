@@ -19,6 +19,9 @@ import javax.annotation.Nullable;
  */
 public class MasterKey {
 
+    public static final int    ALGORITHM = 1;
+    public static final String VERSION   = "2.1";
+
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger                       logger       = Logger.get( MasterKey.class );
     private static final int                          MP_N         = 32768;
@@ -103,9 +106,9 @@ public class MasterKey {
         byte[] siteContextBytes = siteContext == null? null: siteContext.getBytes( MP_charset );
         byte[] siteContextLengthBytes = bytesForInt( siteContextBytes == null? 0: siteContextBytes.length );
         logger.trc( "site scope: %s, context: %s", siteScope, siteContext == null? "<empty>": siteContext );
-        logger.trc( "seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)", siteScope,
-                    CodeUtils.encodeHex( siteNameLengthBytes ), siteName, CodeUtils.encodeHex( siteCounterBytes ),
-                    CodeUtils.encodeHex( siteContextLengthBytes ), siteContext == null? "(null)": siteContext );
+        logger.trc( "seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)", siteScope, CodeUtils.encodeHex( siteNameLengthBytes ),
+                    siteName, CodeUtils.encodeHex( siteCounterBytes ), CodeUtils.encodeHex( siteContextLengthBytes ),
+                    siteContext == null? "(null)": siteContext );
 
         byte[] sitePasswordInfo = Bytes.concat( siteScope.getBytes( MP_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
         logger.trc( "sitePasswordInfo ID: %s", idForBytes( sitePasswordInfo ) );

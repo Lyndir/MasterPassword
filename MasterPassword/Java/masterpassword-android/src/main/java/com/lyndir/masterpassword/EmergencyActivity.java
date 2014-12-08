@@ -86,8 +86,7 @@ public class EmergencyActivity extends Activity {
         sitePasswordField.setTypeface( Res.sourceCodePro_Black );
         sitePasswordField.setPaintFlags( userNameField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
 
-        typeField.setAdapter(
-                new ArrayAdapter<MPSiteType>( this, R.layout.type_item, MPSiteType.forClass( MPSiteTypeClass.Generated ) ) );
+        typeField.setAdapter( new ArrayAdapter<>( this, R.layout.type_item, MPSiteType.forClass( MPSiteTypeClass.Generated ) ) );
         typeField.setSelection( MPSiteType.GeneratedLong.ordinal() );
 
         counterField.setMinValue( 1 );
@@ -129,7 +128,7 @@ public class EmergencyActivity extends Activity {
 
         SharedPreferences.Editor pref = getPreferences( MODE_PRIVATE ).edit();
         pref.putString( "userName", userName );
-        pref.commit();
+        pref.apply();
 
         if (masterKeyFuture != null)
             masterKeyFuture.cancel( true );
@@ -184,7 +183,7 @@ public class EmergencyActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    final String sitePassword = masterKeyFuture.get().encode( siteName, type, counter, variant, context );
+                    final String sitePassword = masterKeyFuture.get().encode( siteName, type, counter, MPSiteVariant.Password, null );
 
                     runOnUiThread( new Runnable() {
                         @Override

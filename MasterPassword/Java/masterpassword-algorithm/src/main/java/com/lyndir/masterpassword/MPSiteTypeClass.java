@@ -6,6 +6,16 @@ package com.lyndir.masterpassword;
  * @author lhunath
  */
 public enum MPSiteTypeClass {
-    Generated,
-    Stored
+    Generated( 1 << 4 ),
+    Stored( 1 << 5 );
+
+    private final int mask;
+
+    MPSiteTypeClass(final int mask) {
+        this.mask = mask;
+    }
+
+    public int getMask() {
+        return mask;
+    }
 }
