@@ -26,15 +26,17 @@
     </case>
     <case id="loginName" parent="default">
         <siteVariant>Login</siteVariant>
-        <result>WohzKifuDilo5,</result>
+        <siteType>GeneratedName</siteType>
+        <result>wohzaqage</result>
     </case>
     <case id="securityAnswer" parent="default">
         <siteVariant>Answer</siteVariant>
-        <result>XineDiyj2)Tozz</result>
+        <siteType>GeneratedPhrase</siteType>
+        <result>xin diyjiqoja hubu</result>
     </case>
     <case id="securityAnswer_context" parent="securityAnswer">
         <siteContext>question</siteContext>
-        <result>XineDiyj2)Tozz</result>
+        <result>xogx tem cegyiva jab</result>
     </case>
     <case id="type_maximum" parent="default">
         <siteType>GeneratedMaximum</siteType>
