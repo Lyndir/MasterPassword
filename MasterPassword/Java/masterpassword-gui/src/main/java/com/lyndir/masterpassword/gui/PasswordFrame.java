@@ -1,8 +1,9 @@
-package com.lyndir.masterpassword;
+package com.lyndir.masterpassword.gui;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.collect.Iterables;
+import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.util.Components;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
@@ -38,7 +39,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         } );
 
         // User
-        add( label = new JLabel( strf( "Generating passwords for: %s", user.getUserName() ) ), BorderLayout.NORTH );
+        add( label = new JLabel( strf( "Generating passwords for: %s", user.getFullName() ) ), BorderLayout.NORTH );
         label.setFont( Res.exoRegular().deriveFont( 12f ) );
         label.setAlignmentX( LEFT_ALIGNMENT );
 

@@ -1,4 +1,4 @@
-package com.lyndir.masterpassword;
+package com.lyndir.masterpassword.gui;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
@@ -18,7 +18,7 @@ public class UnlockFrame extends JFrame {
     private final JPanel         root;
     private final JButton        signInButton;
     private final JPanel         authenticationContainer;
-    private       boolean        useConfig;
+    private       boolean        incognito;
     public        User           user;
 
     public UnlockFrame(final SignInCallback signInCallback)
@@ -46,7 +46,6 @@ public class UnlockFrame extends JFrame {
             }
         } );
 
-        useConfig = ConfigAuthenticationPanel.hasConfigUsers();
         createAuthenticationPanel();
 
         setLocationByPlatform( true );
@@ -65,21 +64,21 @@ public class UnlockFrame extends JFrame {
         authenticationContainer.removeAll();
 
         final AuthenticationPanel authenticationPanel;
-        if (useConfig) {
-            authenticationPanel = new ConfigAuthenticationPanel( this );
+        if (incognito) {
+            authenticationPanel = new IncognitoAuthenticationPanel( this );
         } else {
-            authenticationPanel = new TextAuthenticationPanel( this );
+            authenticationPanel = new ModelAuthenticationPanel( this );
         }
         authenticationPanel.updateUser( false );
         authenticationContainer.add( authenticationPanel, BorderLayout.CENTER );
 
-        final JCheckBox typeCheckBox = new JCheckBox( "Use Config File" );
-        typeCheckBox.setAlignmentX( LEFT_ALIGNMENT );
-        typeCheckBox.setSelected( useConfig );
-        typeCheckBox.addItemListener( new ItemListener() {
+        final JCheckBox incognitoCheckBox = new JCheckBox( "Incognito" );
+        incognitoCheckBox.setAlignmentX( LEFT_ALIGNMENT );
+        incognitoCheckBox.setSelected( incognito );
+        incognitoCheckBox.addItemListener( new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
-                useConfig = typeCheckBox.isSelected();
+                incognito = incognitoCheckBox.isSelected();
                 SwingUtilities.invokeLater( new Runnable() {
                     @Override
                     public void run() {
@@ -89,24 +88,15 @@ public class UnlockFrame extends JFrame {
             }
         } );
 
-        JButton typeHelp = new JButton( Res.iconQuestion() );
-        typeHelp.setMargin( new Insets( 0, 0, 0, 0 ) );
-        typeHelp.setBackground( Color.red );
-        typeHelp.setAlignmentX( RIGHT_ALIGNMENT );
-        typeHelp.setBorder( null );
-        typeHelp.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                JOptionPane.showMessageDialog( UnlockFrame.this, authenticationPanel.getHelpText(), "Help",
-                                               JOptionPane.INFORMATION_MESSAGE );
-            }
-        } );
-        if (authenticationPanel.getHelpText() == null) {
-            typeHelp.setVisible( false );
+        JComponent toolsPanel = Components.boxLayout( BoxLayout.LINE_AXIS, incognitoCheckBox, Box.createGlue() );
+        toolsPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
+        authenticationContainer.add( toolsPanel );
+        for (JButton button : authenticationPanel.getButtons()) {
+            button.setMargin( new Insets( 0, 0, 0, 0 ) );
+            button.setAlignmentX( RIGHT_ALIGNMENT );
+            button.setBorder( null );
+            toolsPanel.add( button );
         }
-        JComponent typePanel = Components.boxLayout( BoxLayout.LINE_AXIS, typeCheckBox, Box.createGlue(), typeHelp );
-        typePanel.setAlignmentX( Component.LEFT_ALIGNMENT );
-        authenticationContainer.add( typePanel );
 
         checkSignIn();
         validate();
@@ -126,7 +116,7 @@ public class UnlockFrame extends JFrame {
     }
 
     boolean checkSignIn() {
-        boolean enabled = user != null && !user.getUserName().isEmpty() && user.hasKey();
+        boolean enabled = user != null && !user.getFullName().isEmpty() && user.hasKey();
         signInButton.setEnabled( enabled );
 
         return enabled;

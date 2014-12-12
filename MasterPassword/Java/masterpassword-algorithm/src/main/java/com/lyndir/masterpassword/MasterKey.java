@@ -52,13 +52,14 @@ public class MasterKey {
         String mpKeyScope = MPSiteVariant.Password.getScope();
         byte[] masterKeySalt = Bytes.concat( mpKeyScope.getBytes( MP_charset ), userNameLengthBytes, userNameBytes );
         logger.trc( "key scope: %s", mpKeyScope );
-        logger.trc( "masterKeySalt ID: %s", idForBytes( masterKeySalt ) );
+        logger.trc( "masterKeySalt ID: %s", CodeUtils.encodeHex( idForBytes( masterKeySalt ) ) );
 
         try {
             masterKey = SCrypt.scrypt( masterPassword.getBytes( MP_charset ), masterKeySalt, MP_N, MP_r, MP_p, MP_dkLen );
             valid = true;
 
-            logger.trc( "masterKey ID: %s (derived in %.2fs)", idForBytes( masterKey ), (System.currentTimeMillis() - start) / 1000D );
+            logger.trc( "masterKey ID: %s (derived in %.2fs)", CodeUtils.encodeHex( idForBytes( masterKey ) ),
+                        (System.currentTimeMillis() - start) / 1000D );
         }
         catch (GeneralSecurityException e) {
             throw logger.bug( e );
@@ -70,7 +71,7 @@ public class MasterKey {
         return fullName;
     }
 
-    public String getKeyID() {
+    public byte[] getKeyID() {
 
         Preconditions.checkState( valid );
         return idForBytes( masterKey );
@@ -111,10 +112,10 @@ public class MasterKey {
                     siteContext == null? "(null)": siteContext );
 
         byte[] sitePasswordInfo = Bytes.concat( siteScope.getBytes( MP_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
-        logger.trc( "sitePasswordInfo ID: %s", idForBytes( sitePasswordInfo ) );
+        logger.trc( "sitePasswordInfo ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
 
         byte[] sitePasswordSeed = MP_mac.of( masterKey, sitePasswordInfo );
-        logger.trc( "sitePasswordSeed ID: %s", idForBytes( sitePasswordSeed ) );
+        logger.trc( "sitePasswordSeed ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordSeed ) ) );
 
         Preconditions.checkState( sitePasswordSeed.length > 0 );
         int templateIndex = sitePasswordSeed[0] & 0xFF; // Mask the integer's sign.
@@ -145,7 +146,7 @@ public class MasterKey {
         return ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( MP_byteOrder ).putInt( integer ).array();
     }
 
-    private static String idForBytes(final byte[] bytes) {
-        return CodeUtils.encodeHex( MP_hash.of( bytes ) );
+    private static byte[] idForBytes(final byte[] bytes) {
+        return MP_hash.of( bytes );
     }
 }

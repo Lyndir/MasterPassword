@@ -31,9 +31,9 @@ public class MPSiteUnmarshaller {
     private static final Logger            logger            = Logger.get( MPSite.class );
     private static final DateTimeFormatter rfc3339           = ISODateTimeFormat.dateTime();
     private static final Pattern[]         unmarshallFormats = new Pattern[]{
-            Pattern.compile( "^([^ ]+) +([[:digit:]]+) +([[:digit:]]+)(:[[:digit:]]+)? +([^\t]+)\t(.*)" ),
-            Pattern.compile( "^([^ ]+) +([[:digit:]]+) +([[:digit:]]+)(:[[:digit:]]+)?(:[[:digit:]]+)? +([^\t]*)\t *([^\t]+)\t(.*)" ) };
-    private static final Pattern           headerFormat      = Pattern.compile( "^#[[:space:]]*([^:]+): (.*)" );
+            Pattern.compile( "^([^ ]+) +(\\d+) +(\\d+)(:\\d+)? +([^\t]+)\t(.*)" ),
+            Pattern.compile( "^([^ ]+) +(\\d+) +(\\d+)(:\\d+)?(:\\d+)? +([^\t]*)\t *([^\t]+)\t(.*)" ) };
+    private static final Pattern           headerFormat      = Pattern.compile( "^#\\s*([^:]+): (.*)" );
 
     private final int     importFormat;
     private final int     mpVersion;

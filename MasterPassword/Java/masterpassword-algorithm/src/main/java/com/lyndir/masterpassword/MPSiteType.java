@@ -181,10 +181,14 @@ public enum MPSiteType {
      */
     public static ImmutableList<MPSiteType> forMask(final int mask) {
 
+        int typeIndex = mask & 0xF, typeMask = mask & ~0xF;
+
         ImmutableList.Builder<MPSiteType> types = ImmutableList.builder();
-        for (MPSiteType siteType : values())
-            if ((siteType.getMask() & mask) != 0)
+        for (MPSiteType siteType : values()) {
+            int siteMask = siteType.getMask(), siteTypeIndex = siteMask & 0xF, siteTypeMask = siteMask & ~0xF;
+            if ((siteTypeMask & typeMask) != 0 && (typeIndex == 0 || siteTypeIndex == typeIndex))
                 types.add( siteType );
+        }
 
         return types.build();
     }

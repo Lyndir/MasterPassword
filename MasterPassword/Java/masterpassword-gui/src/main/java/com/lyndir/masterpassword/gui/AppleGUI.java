@@ -1,4 +1,4 @@
-package com.lyndir.masterpassword;
+package com.lyndir.masterpassword.gui;
 
 import com.apple.eawt.*;
 import javax.swing.*;

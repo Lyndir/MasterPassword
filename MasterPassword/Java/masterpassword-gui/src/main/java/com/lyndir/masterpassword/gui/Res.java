@@ -1,4 +1,4 @@
-package com.lyndir.masterpassword;
+package com.lyndir.masterpassword.gui;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
@@ -43,6 +43,10 @@ public abstract class Res {
                 }
             }
         } );
+    }
+
+    public static Icon iconAdd() {
+        return new RetinaIcon( Resources.getResource( "media/icon_add@2x.png" ) );
     }
 
     public static Icon iconQuestion() {

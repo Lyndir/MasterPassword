@@ -1,4 +1,4 @@
-package com.lyndir.masterpassword;
+package com.lyndir.masterpassword.gui;
 
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
 

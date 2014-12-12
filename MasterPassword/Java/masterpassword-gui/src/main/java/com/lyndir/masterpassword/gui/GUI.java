@@ -15,19 +15,16 @@
  */
 
 
-package com.lyndir.masterpassword;
+package com.lyndir.masterpassword.gui;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.*;
-import com.lyndir.lhunath.opal.system.CodeUtils;
-import com.lyndir.lhunath.opal.system.MessageDigests;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.TypeUtils;
 import java.io.*;
 import java.net.URI;
 import java.net.URL;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.jar.*;
 import javax.swing.*;
 
@@ -94,20 +91,18 @@ public class GUI implements UnlockFrame.SignInCallback {
         SwingUtilities.invokeLater( new Runnable() {
             @Override
             public void run() {
-                if (passwordFrame == null) {
+                if (passwordFrame == null)
                     unlockFrame.setVisible( true );
-                } else {
+                else
                     passwordFrame.setVisible( true );
-                }
             }
         } );
     }
 
     @Override
     public boolean signedIn(final User user) {
-        if (!user.hasKey()) {
+        if (!user.hasKey())
             return false;
-        }
         user.getKey();
 
         passwordFrame = newPasswordFrame( user );

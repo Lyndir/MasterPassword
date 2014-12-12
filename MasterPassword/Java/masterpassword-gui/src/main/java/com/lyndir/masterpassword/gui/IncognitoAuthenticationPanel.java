@@ -1,4 +1,4 @@
-package com.lyndir.masterpassword;
+package com.lyndir.masterpassword.gui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,35 +11,35 @@ import javax.swing.event.DocumentListener;
 /**
  * @author lhunath, 2014-06-11
  */
-public class TextAuthenticationPanel extends AuthenticationPanel implements DocumentListener, ActionListener {
+public class IncognitoAuthenticationPanel extends AuthenticationPanel implements DocumentListener, ActionListener {
 
-    private final JTextField     userNameField;
+    private final JTextField     fullNameField;
     private final JPasswordField masterPasswordField;
 
-    public TextAuthenticationPanel(final UnlockFrame unlockFrame) {
+    public IncognitoAuthenticationPanel(final UnlockFrame unlockFrame) {
 
-        // User Name
+        // Full Name
         super( unlockFrame );
-        JLabel userNameLabel = new JLabel( "User Name:" );
-        userNameLabel.setAlignmentX( Component.LEFT_ALIGNMENT );
-        userNameLabel.setHorizontalAlignment( SwingConstants.CENTER );
-        userNameLabel.setVerticalAlignment( SwingConstants.BOTTOM );
-        add( userNameLabel );
+        JLabel fullNameLabel = new JLabel( "Full Name:" );
+        fullNameLabel.setAlignmentX( LEFT_ALIGNMENT );
+        fullNameLabel.setHorizontalAlignment( SwingConstants.CENTER );
+        fullNameLabel.setVerticalAlignment( SwingConstants.BOTTOM );
+        add( fullNameLabel );
 
-        userNameField = new JTextField() {
+        fullNameField = new JTextField() {
             @Override
             public Dimension getMaximumSize() {
                 return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
             }
         };
-        userNameField.setAlignmentX( Component.LEFT_ALIGNMENT );
-        userNameField.getDocument().addDocumentListener( this );
-        userNameField.addActionListener( this );
-        add( userNameField );
+        fullNameField.setAlignmentX( LEFT_ALIGNMENT );
+        fullNameField.getDocument().addDocumentListener( this );
+        fullNameField.addActionListener( this );
+        add( fullNameField );
 
         // Master Password
         JLabel masterPasswordLabel = new JLabel( "Master Password:" );
-        masterPasswordLabel.setAlignmentX( Component.LEFT_ALIGNMENT );
+        masterPasswordLabel.setAlignmentX( LEFT_ALIGNMENT );
         masterPasswordLabel.setHorizontalAlignment( SwingConstants.CENTER );
         masterPasswordLabel.setVerticalAlignment( SwingConstants.BOTTOM );
         add( masterPasswordLabel );
@@ -50,7 +50,7 @@ public class TextAuthenticationPanel extends AuthenticationPanel implements Docu
                 return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
             }
         };
-        masterPasswordField.setAlignmentX( Component.LEFT_ALIGNMENT );
+        masterPasswordField.setAlignmentX( LEFT_ALIGNMENT );
         masterPasswordField.addActionListener( this );
         masterPasswordField.getDocument().addDocumentListener( this );
         add( masterPasswordField );
@@ -58,12 +58,12 @@ public class TextAuthenticationPanel extends AuthenticationPanel implements Docu
 
     @Override
     public Component getFocusComponent() {
-        return userNameField;
+        return fullNameField;
     }
 
     @Override
     protected User getUser() {
-        return new User( userNameField.getText(), new String( masterPasswordField.getPassword() ) );
+        return new IncognitoUser( fullNameField.getText(), new String( masterPasswordField.getPassword() ) );
     }
 
     @Override
@@ -84,6 +84,6 @@ public class TextAuthenticationPanel extends AuthenticationPanel implements Docu
     @Override
     public void actionPerformed(final ActionEvent e) {
         updateUser( false );
-        unlockFrame.trySignIn( userNameField, masterPasswordField );
+        unlockFrame.trySignIn( fullNameField, masterPasswordField );
     }
 }

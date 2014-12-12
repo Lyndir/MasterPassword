@@ -1,5 +1,6 @@
-package com.lyndir.masterpassword;
+package com.lyndir.masterpassword.gui;
 
+import com.google.common.collect.ImmutableList;
 import java.awt.*;
 import javax.swing.*;
 
@@ -41,7 +42,7 @@ public abstract class AuthenticationPanel extends JPanel {
         return null;
     }
 
-    public String getHelpText() {
-        return null;
+    public Iterable<? extends JButton> getButtons() {
+        return ImmutableList.of();
     }
 }
