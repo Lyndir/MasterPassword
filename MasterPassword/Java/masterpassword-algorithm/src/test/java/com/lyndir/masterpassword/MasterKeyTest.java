@@ -3,6 +3,7 @@ package com.lyndir.masterpassword;
 import static org.testng.Assert.*;
 
 import com.google.common.io.Resources;
+import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.net.URL;
 import javax.xml.bind.JAXBContext;
@@ -35,9 +36,9 @@ public class MasterKeyTest {
 
         for (MPWTests.Case testCase : tests.getCases()) {
             MasterKey masterKey = new MasterKey( testCase.getFullName(), testCase.getMasterPassword() );
-            assertEquals( masterKey.encode( testCase.getSiteName(), testCase.getSiteType(), testCase.getSiteCounter(),
-                                            testCase.getSiteVariant(), testCase.getSiteContext() ), testCase.getResult(),
-                          "Failed test case: " + testCase );
+            assertEquals(
+                    masterKey.encode( testCase.getSiteName(), testCase.getSiteType(), testCase.getSiteCounter(), testCase.getSiteVariant(),
+                                      testCase.getSiteContext() ), testCase.getResult(), "Failed test case: " + testCase );
         }
     }
 
@@ -55,7 +56,7 @@ public class MasterKeyTest {
 
         for (MPWTests.Case testCase : tests.getCases()) {
             MasterKey masterKey = new MasterKey( testCase.getFullName(), testCase.getMasterPassword() );
-            assertEquals( masterKey.getKeyID(), testCase.getKeyID(), "Failed test case: " + testCase );
+            assertEquals( CodeUtils.encodeHex( masterKey.getKeyID() ), testCase.getKeyID(), "Failed test case: " + testCase );
         }
     }
 

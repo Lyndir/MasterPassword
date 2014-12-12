@@ -4,6 +4,7 @@ import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.NNSupplier;
+import com.lyndir.lhunath.opal.system.util.NSupplier;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -117,7 +118,7 @@ public class MPWTests {
                         return parentCase.getSiteVariant().name();
                     }
                 } );
-                siteContext = ifNotNullElse( siteContext, new NNSupplier<String>() {
+                siteContext = ifNotNullElseNullable( siteContext, new NSupplier<String>() {
                     @Nonnull
                     @Override
                     public String get() {

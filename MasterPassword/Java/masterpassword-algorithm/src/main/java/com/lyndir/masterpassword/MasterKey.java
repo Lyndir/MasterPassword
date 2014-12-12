@@ -112,6 +112,8 @@ public class MasterKey {
                     siteContext == null? "(null)": siteContext );
 
         byte[] sitePasswordInfo = Bytes.concat( siteScope.getBytes( MP_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
+        if (siteContextBytes != null)
+            sitePasswordInfo = Bytes.concat( sitePasswordInfo, siteContextLengthBytes, siteContextBytes );
         logger.trc( "sitePasswordInfo ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
 
         byte[] sitePasswordSeed = MP_mac.of( masterKey, sitePasswordInfo );
