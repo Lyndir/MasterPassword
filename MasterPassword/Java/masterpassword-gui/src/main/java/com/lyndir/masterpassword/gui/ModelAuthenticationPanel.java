@@ -22,9 +22,21 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
     private final JPasswordField       masterPasswordField;
 
     public ModelAuthenticationPanel(final UnlockFrame unlockFrame) {
+        super( unlockFrame );
+
+        // Avatar
+        avatarLabel.addMouseListener( new MouseAdapter() {
+            @Override
+            public void mouseClicked(final MouseEvent e) {
+                ModelUser selectedUser = getSelectedUser();
+                if (selectedUser != null) {
+                    selectedUser.setAvatar( selectedUser.getAvatar() + 1 );
+                    updateUser( false );
+                }
+            }
+        } );
 
         // User
-        super( unlockFrame );
         JLabel userLabel = new JLabel( "User:" );
         userLabel.setAlignmentX( LEFT_ALIGNMENT );
         userLabel.setHorizontalAlignment( SwingConstants.CENTER );
@@ -68,9 +80,9 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
 
     @Override
     protected void updateUser(boolean repack) {
-        int selectedIndex = userField.getSelectedIndex();
-        if (selectedIndex >= 0) {
-            ModelUser selectedUser = userField.getModel().getElementAt( selectedIndex );
+        ModelUser selectedUser = getSelectedUser();
+        if (selectedUser != null) {
+            avatarLabel.setIcon( Res.avatar( selectedUser.getAvatar() ) );
             boolean showPasswordField = !selectedUser.keySaved();
             if (masterPasswordField.isVisible() != showPasswordField) {
                 masterPasswordLabel.setVisible( showPasswordField );
@@ -83,7 +95,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
     }
 
     @Override
-    protected User getUser() {
+    protected ModelUser getSelectedUser() {
         int selectedIndex = userField.getSelectedIndex();
         if (selectedIndex < 0)
             return null;

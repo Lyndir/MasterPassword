@@ -11,6 +11,7 @@ import javax.swing.*;
 public abstract class AuthenticationPanel extends JPanel {
 
     protected final UnlockFrame unlockFrame;
+    protected final JLabel      avatarLabel;
 
     public AuthenticationPanel(final UnlockFrame unlockFrame) {
         this.unlockFrame = unlockFrame;
@@ -19,7 +20,7 @@ public abstract class AuthenticationPanel extends JPanel {
 
         // Avatar
         add( Box.createVerticalGlue() );
-        add( new JLabel( Res.avatar(0) ) {
+        add( avatarLabel = new JLabel( Res.avatar( 0 ) ) {
             @Override
             public Dimension getMaximumSize() {
                 return new Dimension( Integer.MAX_VALUE, Integer.MAX_VALUE );
@@ -29,14 +30,14 @@ public abstract class AuthenticationPanel extends JPanel {
     }
 
     protected void updateUser(boolean repack) {
-        unlockFrame.setUser( getUser() );
+        unlockFrame.setUser( getSelectedUser() );
         validate();
 
         if (repack)
             unlockFrame.repack();
     }
 
-    protected abstract User getUser();
+    protected abstract User getSelectedUser();
 
     public Component getFocusComponent() {
         return null;

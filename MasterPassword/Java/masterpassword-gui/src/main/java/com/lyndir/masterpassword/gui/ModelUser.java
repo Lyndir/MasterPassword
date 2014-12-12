@@ -29,6 +29,16 @@ public class ModelUser extends User {
         return masterPassword;
     }
 
+    @Override
+    public int getAvatar() {
+        return user.getAvatar();
+    }
+
+    public void setAvatar(final int avatar) {
+        user.setAvatar( avatar % Res.avatars() );
+        MPUserFileManager.get().save();
+    }
+
     public void setMasterPassword(final String masterPassword) {
         this.masterPassword = masterPassword;
     }
@@ -39,8 +49,7 @@ public class ModelUser extends User {
         if (!user.hasKeyID()) {
             user.setKeyID( key.getKeyID() );
             MPUserFileManager.get().save();
-        }
-        else if (!user.hasKeyID( key.getKeyID() ))
+        } else if (!user.hasKeyID( key.getKeyID() ))
             throw new IllegalStateException( strf( "Incorrect master password for user: %s", getFullName() ) );
 
         return key;

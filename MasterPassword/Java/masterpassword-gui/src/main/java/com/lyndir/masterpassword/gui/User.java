@@ -17,6 +17,10 @@ public abstract class User {
 
     protected abstract String getMasterPassword();
 
+    public int getAvatar() {
+        return 0;
+    }
+
     public boolean hasKey() {
         String masterPassword = getMasterPassword();
         return key != null || (masterPassword != null && !masterPassword.isEmpty());

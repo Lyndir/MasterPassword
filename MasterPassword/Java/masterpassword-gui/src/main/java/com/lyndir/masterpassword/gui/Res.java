@@ -54,7 +54,11 @@ public abstract class Res {
     }
 
     public static Icon avatar(final int index) {
-        return new RetinaIcon( Resources.getResource( strf( "media/avatar-%d@2x.png", index ) ) );
+        return new RetinaIcon( Resources.getResource( strf( "media/avatar-%d@2x.png", index % avatars() ) ) );
+    }
+
+    public static int avatars() {
+        return 19;
     }
 
     public static Font sourceCodeProBlack() {
@@ -119,7 +123,7 @@ public abstract class Res {
 
     private static final class RetinaIcon extends ImageIcon {
 
-        private static final Pattern scalePattern = Pattern.compile(".*@(\\d+)x.[^.]+$");
+        private static final Pattern scalePattern = Pattern.compile( ".*@(\\d+)x.[^.]+$" );
 
         private final float scale;
 
