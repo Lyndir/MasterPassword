@@ -45,8 +45,8 @@ fi
 echo
 
 inf "You can also save your user name in ~/.bashrc.  Leave blank to skip this step."
-if MP_USERNAME=$(ask "Your full name:") && [[ $MP_USERNAME ]] ; then
-    printf 'export MP_USERNAME=%q\n' "$MP_USERNAME" >> ~/.bashrc
+if MP_FULLNAME=$(ask "Your full name:") && [[ $MP_FULLNAME ]] ; then
+    printf 'export MP_FULLNAME=%q\n' "$MP_FULLNAME" >> ~/.bashrc
 fi
 echo
 
