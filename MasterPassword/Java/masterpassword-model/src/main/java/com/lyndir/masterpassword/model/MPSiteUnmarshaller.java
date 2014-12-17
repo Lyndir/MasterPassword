@@ -88,7 +88,7 @@ public class MPSiteUnmarshaller {
                         else if ("Passwords".equalsIgnoreCase( name ))
                             clearContent = value.equalsIgnoreCase( "visible" );
                         else if ("Default Type".equalsIgnoreCase( name ))
-                            defaultType = Iterables.getOnlyElement( MPSiteType.forMask( ConversionUtils.toIntegerNN( value ) ) );
+                            defaultType = MPSiteType.forType( ConversionUtils.toIntegerNN( value ) );
                     }
                 }
             }
@@ -126,7 +126,7 @@ public class MPSiteUnmarshaller {
                 site = new MPSite( ConversionUtils.toIntegerNN( siteMatcher.group( 4 ).replace( ":", "" ) ), //
                                    rfc3339.parseDateTime( siteMatcher.group( 1 ) ).toInstant(), //
                                    siteMatcher.group( 5 ), //
-                                   Iterables.getOnlyElement( MPSiteType.forMask( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ) ),
+                                   MPSiteType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
                                    MPSite.DEFAULT_COUNTER, //
                                    ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ), //
                                    null, //
@@ -137,7 +137,7 @@ public class MPSiteUnmarshaller {
                 site = new MPSite( ConversionUtils.toIntegerNN( siteMatcher.group( 4 ).replace( ":", "" ) ), //
                                    rfc3339.parseDateTime( siteMatcher.group( 1 ) ).toInstant(), //
                                    siteMatcher.group( 7 ), //
-                                   Iterables.getOnlyElement( MPSiteType.forMask( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ) ),
+                                   MPSiteType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
                                    ConversionUtils.toIntegerNN( siteMatcher.group( 5 ).replace( ":", "" ) ), //
                                    ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ), //
                                    siteMatcher.group( 6 ), //

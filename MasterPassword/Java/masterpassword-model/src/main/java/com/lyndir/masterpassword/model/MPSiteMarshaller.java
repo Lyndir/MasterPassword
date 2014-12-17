@@ -65,7 +65,7 @@ public class MPSiteMarshaller {
         header.append( "# Key ID: " ).append( user.exportKeyID() ).append( '\n' );
         header.append( "# Version: " ).append( MasterKey.VERSION ).append( '\n' );
         header.append( "# Algorithm: " ).append( MasterKey.ALGORITHM ).append( '\n' );
-        header.append( "# Default Type: " ).append( user.getDefaultType().getMask() ).append( '\n' );
+        header.append( "# Default Type: " ).append( user.getDefaultType().getType() ).append( '\n' );
         header.append( "# Passwords: " ).append( contentMode.name() ).append( '\n' );
         header.append( "##\n" );
         header.append( "#\n" );
@@ -81,7 +81,7 @@ public class MPSiteMarshaller {
                                   rfc3339.print( site.getLastUsed() ), // lastUsed
                                   site.getUses(), // uses
                                   strf( "%d:%d:%d", //
-                                        site.getSiteType().getMask(), // type
+                                        site.getSiteType().getType(), // type
                                         site.getMPVersion(), // algorithm
                                         site.getSiteCounter() ), // counter
                                   ifNotNullElse( site.getLoginName(), "" ), // loginName

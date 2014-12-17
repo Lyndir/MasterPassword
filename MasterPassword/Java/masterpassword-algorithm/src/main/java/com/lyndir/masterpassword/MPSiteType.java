@@ -120,7 +120,7 @@ public enum MPSiteType {
         return typeFeatures;
     }
 
-    public int getMask() {
+    public int getType() {
         int mask = typeIndex | typeClass.getMask();
         for (MPSiteFeature typeFeature : typeFeatures)
             mask |= typeFeature.getMask();
@@ -175,20 +175,31 @@ public enum MPSiteType {
     }
 
     /**
+     * @param type The type for which we look up types.
+     *
+     * @return The type registered with the given type.
+     */
+    public static MPSiteType forType(final int type) {
+
+        for (MPSiteType siteType : values())
+            if (siteType.getType() == type)
+                return siteType;
+
+        throw logger.bug( "No type: %s", type );
+    }
+
+    /**
      * @param mask The mask for which we look up types.
      *
      * @return All types that support the given mask.
      */
     public static ImmutableList<MPSiteType> forMask(final int mask) {
 
-        int typeIndex = mask & 0xF, typeMask = mask & ~0xF;
-
+        int typeMask = mask & ~0xF;
         ImmutableList.Builder<MPSiteType> types = ImmutableList.builder();
-        for (MPSiteType siteType : values()) {
-            int siteMask = siteType.getMask(), siteTypeIndex = siteMask & 0xF, siteTypeMask = siteMask & ~0xF;
-            if ((siteTypeMask & typeMask) != 0 && (typeIndex == 0 || siteTypeIndex == typeIndex))
+        for (MPSiteType siteType : values())
+            if (((siteType.getType() & ~0xF) & typeMask) != 0)
                 types.add( siteType );
-        }
 
         return types.build();
     }
