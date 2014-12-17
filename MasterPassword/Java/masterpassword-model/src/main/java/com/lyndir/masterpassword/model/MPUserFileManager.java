@@ -15,7 +15,7 @@ public class MPUserFileManager extends MPUserManager {
 
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MPUserFileManager.class );
-    private static final MPUserFileManager instance = create( new File( System.getProperty( "user.home" ), ".mpw" ) );
+    private static final MPUserFileManager instance = create( new File( System.getProperty( "user.home" ), ".mpwrc" ) );
 
     private final File userFilesDirectory;
 
