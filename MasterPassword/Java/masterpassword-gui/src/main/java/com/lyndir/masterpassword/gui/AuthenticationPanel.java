@@ -46,4 +46,6 @@ public abstract class AuthenticationPanel extends JPanel {
     public Iterable<? extends JButton> getButtons() {
         return ImmutableList.of();
     }
+
+    public abstract void reset();
 }

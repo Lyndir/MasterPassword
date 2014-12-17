@@ -144,6 +144,11 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
         } );
     }
 
+    @Override
+    public void reset() {
+        masterPasswordField.setText( "" );
+    }
+
     private ModelUser[] readConfigUsers() {
         return FluentIterable.from( MPUserFileManager.get().getUsers() ).transform( new Function<MPUser, ModelUser>() {
             @Nullable

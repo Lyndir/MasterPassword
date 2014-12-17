@@ -14,12 +14,13 @@ import javax.swing.border.*;
  */
 public class UnlockFrame extends JFrame {
 
-    private final SignInCallback signInCallback;
-    private final JPanel         root;
-    private final JButton        signInButton;
-    private final JPanel         authenticationContainer;
-    private       boolean        incognito;
-    public        User           user;
+    private final SignInCallback               signInCallback;
+    private final JPanel                       root;
+    private final JButton                      signInButton;
+    private final JPanel                       authenticationContainer;
+    private       AuthenticationPanel authenticationPanel;
+    private       boolean                      incognito;
+    public        User                         user;
 
     public UnlockFrame(final SignInCallback signInCallback)
             throws HeadlessException {
@@ -64,7 +65,6 @@ public class UnlockFrame extends JFrame {
     private void createAuthenticationPanel() {
         authenticationContainer.removeAll();
 
-        final AuthenticationPanel authenticationPanel;
         if (incognito) {
             authenticationPanel = new IncognitoAuthenticationPanel( this );
         } else {
@@ -125,13 +125,11 @@ public class UnlockFrame extends JFrame {
     }
 
     void trySignIn(final JComponent... signInComponents) {
-        if (!checkSignIn()) {
+        if (!checkSignIn())
             return;
-        }
 
-        for (JComponent signInComponent : signInComponents) {
+        for (JComponent signInComponent : signInComponents)
             signInComponent.setEnabled( false );
-        }
 
         signInButton.setEnabled( false );
         signInButton.setText( "Signing In..." );
@@ -149,10 +147,10 @@ public class UnlockFrame extends JFrame {
                             return;
                         }
 
+                        authenticationPanel.reset();
                         signInButton.setText( "Sign In" );
-                        for (JComponent signInComponent : signInComponents) {
+                        for (JComponent signInComponent : signInComponents)
                             signInComponent.setEnabled( true );
-                        }
                         checkSignIn();
                     }
                 } );

@@ -52,13 +52,13 @@ public class ModelUser extends User {
 
     @NotNull
     @Override
-    public MasterKey getKey() {
+    public MasterKey getKey() throws MasterKeyException {
         MasterKey key = super.getKey();
         if (!model.hasKeyID()) {
             model.setKeyID( key.getKeyID() );
             MPUserFileManager.get().save();
         } else if (!model.hasKeyID( key.getKeyID() ))
-            throw new IllegalStateException( strf( "Incorrect master password for user: %s", getFullName() ) );
+            throw new MasterKeyException( strf( "Incorrect master password for user: %s", getFullName() ) );
 
         return key;
     }

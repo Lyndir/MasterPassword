@@ -3,8 +3,8 @@ package com.lyndir.masterpassword.gui;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.lyndir.masterpassword.MasterKey;
+import java.security.KeyException;
 import javax.annotation.Nonnull;
-import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -27,12 +27,11 @@ public abstract class User {
         return key != null || (masterPassword != null && !masterPassword.isEmpty());
     }
 
-    @NotNull
     @Nonnull
-    public MasterKey getKey() {
+    public MasterKey getKey() throws MasterKeyException {
         if (key == null) {
             if (!hasKey())
-                throw new IllegalStateException( strf( "Master password unknown for user: %s", getFullName() ) );
+                throw new MasterKeyException( strf( "Master password unknown for user: %s", getFullName() ) );
             key = new MasterKey( getFullName(), getMasterPassword() );
         }
 

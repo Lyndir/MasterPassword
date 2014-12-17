@@ -65,6 +65,11 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel implements
     }
 
     @Override
+    public void reset() {
+        masterPasswordField.setText( "" );
+    }
+
+    @Override
     protected User getSelectedUser() {
         return new IncognitoUser( fullNameField.getText(), new String( masterPasswordField.getPassword() ) );
     }

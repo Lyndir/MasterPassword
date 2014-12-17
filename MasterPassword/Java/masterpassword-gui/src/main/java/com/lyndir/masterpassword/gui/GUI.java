@@ -21,6 +21,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.TypeUtils;
+import com.lyndir.masterpassword.MasterKey;
 import java.io.*;
 import java.net.URI;
 import java.net.URL;
@@ -103,12 +104,16 @@ public class GUI implements UnlockFrame.SignInCallback {
     public boolean signedIn(final User user) {
         if (!user.hasKey())
             return false;
-        user.getKey();
+        try {
+            user.getKey();
+            passwordFrame = newPasswordFrame( user );
 
-        passwordFrame = newPasswordFrame( user );
-
-        open();
-        return true;
+            open();
+            return true;
+        } catch (MasterKeyException e) {
+            JOptionPane.showMessageDialog( null, e.getLocalizedMessage(), "Sign In Failed", JOptionPane.ERROR_MESSAGE );
+            return false;
+        }
     }
 
     protected PasswordFrame newPasswordFrame(final User user) {
