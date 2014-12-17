@@ -38,6 +38,7 @@ public class UnlockFrame extends JFrame {
         // Sign In
         root.add( Components.boxLayout( BoxLayout.LINE_AXIS, Box.createGlue(), signInButton = new JButton( "Sign In" ), Box.createGlue() ),
                   BorderLayout.SOUTH );
+        signInButton.setFont( Res.exoRegular().deriveFont( 12f ) );
         signInButton.setAlignmentX( LEFT_ALIGNMENT );
         signInButton.addActionListener( new AbstractAction() {
             @Override
@@ -73,6 +74,7 @@ public class UnlockFrame extends JFrame {
         authenticationContainer.add( authenticationPanel, BorderLayout.CENTER );
 
         final JCheckBox incognitoCheckBox = new JCheckBox( "Incognito" );
+        incognitoCheckBox.setFont( Res.exoRegular().deriveFont( 12f ) );
         incognitoCheckBox.setAlignmentX( LEFT_ALIGNMENT );
         incognitoCheckBox.setSelected( incognito );
         incognitoCheckBox.addItemListener( new ItemListener() {

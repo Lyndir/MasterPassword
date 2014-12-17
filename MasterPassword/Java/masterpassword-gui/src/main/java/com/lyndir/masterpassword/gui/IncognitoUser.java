@@ -1,5 +1,8 @@
 package com.lyndir.masterpassword.gui;
 
+import com.google.common.collect.ImmutableList;
+
+
 /**
  * @author lhunath, 2014-06-08
  */
@@ -20,5 +23,14 @@ public class IncognitoUser extends User {
     @Override
     protected String getMasterPassword() {
         return masterPassword;
+    }
+
+    @Override
+    public Iterable<Site> findSitesByName(final String siteName) {
+        return ImmutableList.of();
+    }
+
+    @Override
+    public void addSite(final Site site) {
     }
 }

@@ -2,9 +2,12 @@ package com.lyndir.masterpassword.gui;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import com.lyndir.masterpassword.MasterKey;
-import com.lyndir.masterpassword.model.MPUser;
-import com.lyndir.masterpassword.model.MPUserFileManager;
+import com.lyndir.masterpassword.model.*;
+import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -12,16 +15,20 @@ import com.lyndir.masterpassword.model.MPUserFileManager;
  */
 public class ModelUser extends User {
 
-    private final MPUser user;
+    private final MPUser model;
     private       String masterPassword;
 
-    public ModelUser(MPUser user) {
-        this.user = user;
+    public ModelUser(MPUser model) {
+        this.model = model;
+    }
+
+    public MPUser getModel() {
+        return model;
     }
 
     @Override
     public String getFullName() {
-        return user.getFullName();
+        return model.getFullName();
     }
 
     @Override
@@ -31,11 +38,11 @@ public class ModelUser extends User {
 
     @Override
     public int getAvatar() {
-        return user.getAvatar();
+        return model.getAvatar();
     }
 
     public void setAvatar(final int avatar) {
-        user.setAvatar( avatar % Res.avatars() );
+        model.setAvatar( avatar % Res.avatars() );
         MPUserFileManager.get().save();
     }
 
@@ -43,16 +50,34 @@ public class ModelUser extends User {
         this.masterPassword = masterPassword;
     }
 
+    @NotNull
     @Override
     public MasterKey getKey() {
         MasterKey key = super.getKey();
-        if (!user.hasKeyID()) {
-            user.setKeyID( key.getKeyID() );
+        if (!model.hasKeyID()) {
+            model.setKeyID( key.getKeyID() );
             MPUserFileManager.get().save();
-        } else if (!user.hasKeyID( key.getKeyID() ))
+        } else if (!model.hasKeyID( key.getKeyID() ))
             throw new IllegalStateException( strf( "Incorrect master password for user: %s", getFullName() ) );
 
         return key;
+    }
+
+    @Override
+    public Iterable<Site> findSitesByName(final String query) {
+        return FluentIterable.from( model.findSitesByName( query ) ).transform( new Function<MPSiteResult, Site>() {
+            @Nullable
+            @Override
+            public Site apply(final MPSiteResult result) {
+                return new ModelSite( result );
+            }
+        } );
+    }
+
+    @Override
+    public void addSite(final Site site) {
+        model.addSite( new MPSite( site.getSiteName(), site.getSiteType(), site.getSiteCounter() ) );
+        MPUserFileManager.get().save();
     }
 
     public boolean keySaved() {

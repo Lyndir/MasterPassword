@@ -21,6 +21,7 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel implements
         // Full Name
         super( unlockFrame );
         JLabel fullNameLabel = new JLabel( "Full Name:" );
+        fullNameLabel.setFont( Res.exoRegular().deriveFont( 12f ) );
         fullNameLabel.setAlignmentX( LEFT_ALIGNMENT );
         fullNameLabel.setHorizontalAlignment( SwingConstants.CENTER );
         fullNameLabel.setVerticalAlignment( SwingConstants.BOTTOM );
@@ -32,6 +33,7 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel implements
                 return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
             }
         };
+        fullNameField.setFont( Res.sourceCodeProRegular().deriveFont( 12f ) );
         fullNameField.setAlignmentX( LEFT_ALIGNMENT );
         fullNameField.getDocument().addDocumentListener( this );
         fullNameField.addActionListener( this );
@@ -39,6 +41,7 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel implements
 
         // Master Password
         JLabel masterPasswordLabel = new JLabel( "Master Password:" );
+        masterPasswordLabel.setFont( Res.exoRegular().deriveFont( 12f ) );
         masterPasswordLabel.setAlignmentX( LEFT_ALIGNMENT );
         masterPasswordLabel.setHorizontalAlignment( SwingConstants.CENTER );
         masterPasswordLabel.setVerticalAlignment( SwingConstants.BOTTOM );

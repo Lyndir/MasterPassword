@@ -4,6 +4,7 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.lyndir.masterpassword.MasterKey;
 import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -26,6 +27,7 @@ public abstract class User {
         return key != null || (masterPassword != null && !masterPassword.isEmpty());
     }
 
+    @NotNull
     @Nonnull
     public MasterKey getKey() {
         if (key == null) {
@@ -46,4 +48,8 @@ public abstract class User {
     public String toString() {
         return getFullName();
     }
+
+    public abstract Iterable<Site> findSitesByName(final String siteName);
+
+    public abstract void addSite(final Site site);
 }

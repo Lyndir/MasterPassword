@@ -2,6 +2,7 @@ package com.lyndir.masterpassword.gui;
 
 import com.google.common.base.Function;
 import com.google.common.collect.*;
+import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.model.MPUser;
 import com.lyndir.masterpassword.model.MPUserFileManager;
 import java.awt.*;
@@ -16,6 +17,9 @@ import javax.swing.event.DocumentListener;
  * @author lhunath, 2014-06-11
  */
 public class ModelAuthenticationPanel extends AuthenticationPanel implements ItemListener, ActionListener, DocumentListener {
+
+    @SuppressWarnings("UnusedDeclaration")
+    private static final Logger logger = Logger.get( ModelAuthenticationPanel.class );
 
     private final JComboBox<ModelUser> userField;
     private final JLabel               masterPasswordLabel;
@@ -38,6 +42,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
 
         // User
         JLabel userLabel = new JLabel( "User:" );
+        userLabel.setFont( Res.exoRegular().deriveFont( 12f ) );
         userLabel.setAlignmentX( LEFT_ALIGNMENT );
         userLabel.setHorizontalAlignment( SwingConstants.CENTER );
         userLabel.setVerticalAlignment( SwingConstants.BOTTOM );
@@ -49,6 +54,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
                 return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
             }
         };
+        userField.setFont( Res.sourceCodeProRegular().deriveFont( 12f ) );
         userField.setAlignmentX( LEFT_ALIGNMENT );
         userField.addItemListener( this );
         userField.addActionListener( this );
@@ -56,6 +62,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
 
         // Master Password
         masterPasswordLabel = new JLabel( "Master Password:" );
+        masterPasswordLabel.setFont( Res.exoRegular().deriveFont( 12f ) );
         masterPasswordLabel.setAlignmentX( LEFT_ALIGNMENT );
         masterPasswordLabel.setHorizontalAlignment( SwingConstants.CENTER );
         masterPasswordLabel.setVerticalAlignment( SwingConstants.BOTTOM );

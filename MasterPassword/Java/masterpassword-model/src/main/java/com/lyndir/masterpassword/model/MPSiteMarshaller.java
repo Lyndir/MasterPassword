@@ -17,7 +17,7 @@ import org.joda.time.format.ISODateTimeFormat;
  */
 public class MPSiteMarshaller {
 
-    private static final DateTimeFormatter rfc3339 = ISODateTimeFormat.dateTime();
+    private static final DateTimeFormatter rfc3339 = ISODateTimeFormat.dateTimeNoMillis();
 
     private final StringBuilder export      = new StringBuilder();
     private       ContentMode   contentMode = ContentMode.PROTECTED;
@@ -77,10 +77,10 @@ public class MPSiteMarshaller {
     }
 
     public String marshallSite(MPSite site) {
-        String exportLine = strf( "%s  %8ld  %8s  %25s\t%25s\t%s", //
+        String exportLine = strf( "%s  %8d  %8s  %25s\t%25s\t%s", //
                                   rfc3339.print( site.getLastUsed() ), // lastUsed
                                   site.getUses(), // uses
-                                  strf( "%lu:%lu:%lu", //
+                                  strf( "%d:%d:%d", //
                                         site.getSiteType().getMask(), // type
                                         site.getMPVersion(), // algorithm
                                         site.getSiteCounter() ), // counter

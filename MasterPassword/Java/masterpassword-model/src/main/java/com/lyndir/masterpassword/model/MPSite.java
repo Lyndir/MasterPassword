@@ -6,17 +6,19 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 import com.lyndir.masterpassword.*;
 import javax.annotation.Nullable;
 import org.joda.time.DateTime;
+import org.joda.time.Instant;
 
 
 /**
  * @author lhunath, 14-12-05
  */
 public class MPSite {
-    public static final  MPSiteType        DEFAULT_TYPE      = MPSiteType.GeneratedLong;
-    public static final  int               DEFAULT_COUNTER   = 1;
+
+    public static final MPSiteType DEFAULT_TYPE    = MPSiteType.GeneratedLong;
+    public static final int        DEFAULT_COUNTER = 1;
 
     private int        mpVersion;
-    private DateTime   lastUsed;
+    private Instant    lastUsed;
     private String     siteName;
     private MPSiteType siteType;
     private int        siteCounter;
@@ -28,12 +30,14 @@ public class MPSite {
     }
 
     public MPSite(final String siteName, final MPSiteType siteType, final int siteCounter) {
+        this.mpVersion = MasterKey.ALGORITHM;
+        this.lastUsed = new Instant();
         this.siteName = siteName;
         this.siteType = siteType;
         this.siteCounter = siteCounter;
     }
 
-    protected MPSite(final int mpVersion, final DateTime lastUsed, final String siteName, final MPSiteType siteType, final int siteCounter,
+    protected MPSite(final int mpVersion, final Instant lastUsed, final String siteName, final MPSiteType siteType, final int siteCounter,
                   final int uses, final String loginName, final String importContent) {
         this.mpVersion = mpVersion;
         this.lastUsed = lastUsed;
@@ -65,11 +69,11 @@ public class MPSite {
         this.mpVersion = mpVersion;
     }
 
-    public DateTime getLastUsed() {
+    public Instant getLastUsed() {
         return lastUsed;
     }
 
-    public void setLastUsed(final DateTime lastUsed) {
+    public void setLastUsed(final Instant lastUsed) {
         this.lastUsed = lastUsed;
     }
 

@@ -29,7 +29,7 @@ public class MPSiteUnmarshaller {
 
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger            logger            = Logger.get( MPSite.class );
-    private static final DateTimeFormatter rfc3339           = ISODateTimeFormat.dateTime();
+    private static final DateTimeFormatter rfc3339           = ISODateTimeFormat.dateTimeNoMillis();
     private static final Pattern[]         unmarshallFormats = new Pattern[]{
             Pattern.compile( "^([^ ]+) +(\\d+) +(\\d+)(:\\d+)? +([^\t]+)\t(.*)" ),
             Pattern.compile( "^([^ ]+) +(\\d+) +(\\d+)(:\\d+)?(:\\d+)? +([^\t]*)\t *([^\t]+)\t(.*)" ) };
@@ -124,7 +124,7 @@ public class MPSiteUnmarshaller {
         switch (importFormat) {
             case 0:
                 site = new MPSite( ConversionUtils.toIntegerNN( siteMatcher.group( 4 ).replace( ":", "" ) ), //
-                                   rfc3339.parseDateTime( siteMatcher.group( 1 ) ), //
+                                   rfc3339.parseDateTime( siteMatcher.group( 1 ) ).toInstant(), //
                                    siteMatcher.group( 5 ), //
                                    Iterables.getOnlyElement( MPSiteType.forMask( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ) ),
                                    MPSite.DEFAULT_COUNTER, //
@@ -135,7 +135,7 @@ public class MPSiteUnmarshaller {
 
             case 1:
                 site = new MPSite( ConversionUtils.toIntegerNN( siteMatcher.group( 4 ).replace( ":", "" ) ), //
-                                   rfc3339.parseDateTime( siteMatcher.group( 1 ) ), //
+                                   rfc3339.parseDateTime( siteMatcher.group( 1 ) ).toInstant(), //
                                    siteMatcher.group( 7 ), //
                                    Iterables.getOnlyElement( MPSiteType.forMask( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ) ),
                                    ConversionUtils.toIntegerNN( siteMatcher.group( 5 ).replace( ":", "" ) ), //

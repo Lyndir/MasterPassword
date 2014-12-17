@@ -5,13 +5,13 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.base.Throwables;
 import com.google.common.io.Resources;
+import com.google.common.util.concurrent.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.awt.*;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.net.URL;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.*;
@@ -25,14 +25,15 @@ public abstract class Res {
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
     private static final Logger          logger   = Logger.get( Res.class );
 
+    private static Font sourceCodeProRegular;
     private static Font sourceCodeProBlack;
     private static Font exoBold;
     private static Font exoExtraBold;
     private static Font exoRegular;
     private static Font exoThin;
 
-    public static void execute(final Runnable job) {
-        executor.submit( new Runnable() {
+    public static Future<?> execute(final Runnable job) {
+        return executor.submit( new Runnable() {
             @Override
             public void run() {
                 try {
@@ -43,6 +44,22 @@ public abstract class Res {
                 }
             }
         } );
+    }
+
+    public static <V> ListenableFuture<V> execute(final Callable<V> job) {
+        return JdkFutureAdapters.listenInPoolThread( executor.submit( new Callable<V>() {
+            @Override
+            public V call()
+                    throws Exception {
+                try {
+                    return job.call();
+                }
+                catch (Throwable t) {
+                    logger.err( t, "Unexpected: %s", t.getLocalizedMessage() );
+                    throw t;
+                }
+            }
+        } ), executor );
     }
 
     public static Icon iconAdd() {
@@ -61,12 +78,20 @@ public abstract class Res {
         return 19;
     }
 
+    public static Font sourceCodeProRegular() {
+        try {
+            return sourceCodeProRegular != null? sourceCodeProRegular: (sourceCodeProRegular =
+                    Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( "fonts/SourceCodePro-Regular.otf" ).openStream() ));
+        }
+        catch (FontFormatException | IOException e) {
+            throw Throwables.propagate( e );
+        }
+    }
+
     public static Font sourceCodeProBlack() {
         try {
-            URL resource = Resources.getResource( "fonts/SourceCodePro-Bold.otf" );
-            Font font = Font.createFont( Font.TRUETYPE_FONT, resource.openStream() );
-            return sourceCodeProBlack != null? sourceCodeProBlack: //
-                    (sourceCodeProBlack = font);
+            return sourceCodeProBlack != null? sourceCodeProBlack: (sourceCodeProBlack =
+                    Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( "fonts/SourceCodePro-Bold.otf" ).openStream() ));
         }
         catch (FontFormatException | IOException e) {
             throw Throwables.propagate( e );
@@ -75,10 +100,8 @@ public abstract class Res {
 
     public static Font exoBold() {
         try {
-            URL resource = Resources.getResource( "fonts/Exo2.0-Bold.otf" );
-            Font font = Font.createFont( Font.TRUETYPE_FONT, resource.openStream() );
-            return exoBold != null? exoBold: //
-                    (exoBold = font);
+            return exoBold != null? exoBold: (exoBold =
+                    Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( "fonts/Exo2.0-Bold.otf" ).openStream() ));
         }
         catch (FontFormatException | IOException e) {
             throw Throwables.propagate( e );
@@ -87,10 +110,8 @@ public abstract class Res {
 
     public static Font exoExtraBold() {
         try {
-            URL resource = Resources.getResource( "fonts/Exo2.0-ExtraBold.otf" );
-            Font font = Font.createFont( Font.TRUETYPE_FONT, resource.openStream() );
-            return exoExtraBold != null? exoExtraBold: //
-                    (exoExtraBold = font);
+            return exoExtraBold != null? exoExtraBold: (exoExtraBold
+                    = Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( "fonts/Exo2.0-ExtraBold.otf" ).openStream() ));
         }
         catch (FontFormatException | IOException e) {
             throw Throwables.propagate( e );
@@ -99,10 +120,8 @@ public abstract class Res {
 
     public static Font exoRegular() {
         try {
-            URL resource = Resources.getResource( "fonts/Exo2.0-Regular.otf" );
-            Font font = Font.createFont( Font.TRUETYPE_FONT, resource.openStream() );
-            return exoRegular != null? exoRegular: //
-                    (exoRegular = font);
+            return exoRegular != null? exoRegular: (exoRegular =
+                    Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( "fonts/Exo2.0-Regular.otf" ).openStream() ));
         }
         catch (FontFormatException | IOException e) {
             throw Throwables.propagate( e );
@@ -111,10 +130,8 @@ public abstract class Res {
 
     public static Font exoThin() {
         try {
-            URL resource = Resources.getResource( "fonts/Exo2.0-Thin.otf" );
-            Font font = Font.createFont( Font.TRUETYPE_FONT, resource.openStream() );
-            return exoThin != null? exoThin: //
-                    (exoThin = font);
+            return exoThin != null? exoThin: (exoThin =
+                    Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( "fonts/Exo2.0-Thin.otf" ).openStream() ));
         }
         catch (FontFormatException | IOException e) {
             throw Throwables.propagate( e );

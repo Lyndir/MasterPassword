@@ -11,6 +11,11 @@ import java.util.*;
 public abstract class MPUserManager {
 
     private final Map<String, MPUser> usersByName = Maps.newHashMap();
+    static MPUserManager instance;
+
+    public static MPUserManager get() {
+        return instance;
+    }
 
     public MPUserManager(final Iterable<MPUser> users) {
         for (MPUser user : users)

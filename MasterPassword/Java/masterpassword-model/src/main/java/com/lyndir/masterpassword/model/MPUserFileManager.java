@@ -20,6 +20,7 @@ public class MPUserFileManager extends MPUserManager {
     private final File userFilesDirectory;
 
     public static MPUserFileManager get() {
+        MPUserManager.instance = instance;
         return instance;
     }
 

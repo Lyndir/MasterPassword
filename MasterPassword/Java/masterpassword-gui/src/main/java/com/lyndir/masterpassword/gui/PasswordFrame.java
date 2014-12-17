@@ -3,11 +3,15 @@ package com.lyndir.masterpassword.gui;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.collect.Iterables;
+import com.google.common.util.concurrent.*;
+import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.util.Components;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
+import java.util.concurrent.Callable;
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -20,10 +24,13 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
     private final User                  user;
     private final JTextField            siteNameField;
+    private final JButton               siteAddButton;
     private final JComboBox<MPSiteType> siteTypeField;
     private final JSpinner              siteCounterField;
     private final JTextField            passwordField;
     private final JLabel                tipLabel;
+    private       boolean               updatingUI;
+    private       Site                  currentSite;
 
     public PasswordFrame(User user)
             throws HeadlessException {
@@ -54,21 +61,40 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         label.setFont( Res.exoRegular().deriveFont( 12f ) );
         label.setAlignmentX( LEFT_ALIGNMENT );
 
-        sitePanel.add( siteNameField = new JTextField() {
+        JComponent siteControls = Components.boxLayout( BoxLayout.LINE_AXIS, //
+                                                        siteNameField = new JTextField() {
+                                                            @Override
+                                                            public Dimension getMaximumSize() {
+                                                                return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
+                                                            }
+                                                        }, siteAddButton = new JButton( "Add Site" ) {
+                    @Override
+                    public Dimension getMaximumSize() {
+                        return new Dimension( 20, getPreferredSize().height );
+                    }
+                } );
+        siteAddButton.setVisible( false );
+        siteAddButton.setFont( Res.exoRegular().deriveFont( 12f ) );
+        siteAddButton.setAlignmentX( RIGHT_ALIGNMENT );
+        siteAddButton.setAlignmentY( CENTER_ALIGNMENT );
+        siteAddButton.addActionListener( new ActionListener() {
             @Override
-            public Dimension getMaximumSize() {
-                return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
+            public void actionPerformed(final ActionEvent e) {
+                PasswordFrame.this.user.addSite( currentSite );
+                siteAddButton.setVisible( false );
             }
         } );
-        siteNameField.setFont( Res.exoRegular().deriveFont( 12f ) );
+        siteControls.setAlignmentX( LEFT_ALIGNMENT );
+        sitePanel.add( siteControls );
+        siteNameField.setFont( Res.sourceCodeProRegular().deriveFont( 12f ) );
         siteNameField.setAlignmentX( LEFT_ALIGNMENT );
         siteNameField.getDocument().addDocumentListener( this );
         siteNameField.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                updatePassword( new PasswordCallback() {
+                Futures.addCallback( updatePassword(), new FutureCallback<String>() {
                     @Override
-                    public void passwordGenerated(final String siteName, final String sitePassword) {
+                    public void onSuccess(final String sitePassword) {
                         StringSelection clipboardContents = new StringSelection( sitePassword );
                         Toolkit.getDefaultToolkit().getSystemClipboard().setContents( clipboardContents, null );
 
@@ -84,6 +110,10 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                                     dispose();
                             }
                         } );
+                    }
+
+                    @Override
+                    public void onFailure(final Throwable t) {
                     }
                 } );
             }
@@ -102,24 +132,24 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                                                         } );
         siteSettings.setAlignmentX( LEFT_ALIGNMENT );
         sitePanel.add( siteSettings );
-        siteTypeField.setFont( Res.exoRegular().deriveFont( 12f ) );
+        siteTypeField.setFont( Res.sourceCodeProRegular().deriveFont( 12f ) );
         siteTypeField.setAlignmentX( LEFT_ALIGNMENT );
         siteTypeField.setAlignmentY( CENTER_ALIGNMENT );
         siteTypeField.setSelectedItem( MPSiteType.GeneratedLong );
         siteTypeField.addItemListener( new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
-                updatePassword( null );
+                updatePassword();
             }
         } );
 
-        siteCounterField.setFont( Res.exoRegular().deriveFont( 12f ) );
+        siteCounterField.setFont( Res.sourceCodeProRegular().deriveFont( 12f ) );
         siteCounterField.setAlignmentX( RIGHT_ALIGNMENT );
         siteCounterField.setAlignmentY( CENTER_ALIGNMENT );
         siteCounterField.addChangeListener( new ChangeListener() {
             @Override
             public void stateChanged(final ChangeEvent e) {
-                updatePassword( null );
+                updatePassword();
             }
         } );
 
@@ -132,7 +162,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
         // Tip
         tipLabel = new JLabel( " ", JLabel.CENTER );
-        tipLabel.setFont( Res.exoThin().deriveFont( 9f ) );
+        tipLabel.setFont( Res.exoRegular().deriveFont( 9f ) );
         tipLabel.setAlignmentX( Component.CENTER_ALIGNMENT );
 
         add( Components.boxLayout( BoxLayout.PAGE_AXIS, passwordField, tipLabel ), BorderLayout.SOUTH );
@@ -146,55 +176,76 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         setLocationRelativeTo( null );
     }
 
-    private void updatePassword(final PasswordCallback callback) {
-        final MPSiteType siteType = (MPSiteType) siteTypeField.getSelectedItem();
-        final String siteName = siteNameField.getText();
-        final int siteCounter = (Integer) siteCounterField.getValue();
+    @Nonnull
+    private ListenableFuture<String> updatePassword() {
 
-        if (siteType.getTypeClass() != MPSiteTypeClass.Generated || siteName == null || siteName.isEmpty() || !user.hasKey()) {
+        final String siteNameQuery = siteNameField.getText();
+        if (updatingUI)
+            return Futures.immediateCancelledFuture();
+        if (siteNameQuery == null || siteNameQuery.isEmpty() || !user.hasKey()) {
             passwordField.setText( null );
             tipLabel.setText( null );
-            return;
+            return Futures.immediateCancelledFuture();
         }
 
-        Res.execute( new Runnable() {
-            @Override
-            public void run() {
-                final String sitePassword = user.getKey().encode( siteName, siteType, siteCounter, MPSiteVariant.Password, null );
-                if (callback != null)
-                    callback.passwordGenerated( siteName, sitePassword );
+        MPSiteType siteType = siteTypeField.getModel().getElementAt( siteTypeField.getSelectedIndex() );
+        final int siteCounter = (Integer) siteCounterField.getValue();
+        final Site site = currentSite != null && currentSite.getSiteName().equals( siteNameQuery )? currentSite
+                : Iterables.getFirst( user.findSitesByName( siteNameQuery ), new IncognitoSite( siteNameQuery, siteType, siteCounter ) );
+        assert site != null;
+        if (site == currentSite) {
+            site.setSiteType( siteType );
+            site.setSiteCounter( siteCounter );
+        }
 
+        ListenableFuture<String> passwordFuture = Res.execute( new Callable<String>() {
+            @Override
+            public String call()
+                    throws Exception {
+                return user.getKey().encode( site.getSiteName(), site.getSiteType(), site.getSiteCounter(), MPSiteVariant.Password, null );
+            }
+        } );
+        Futures.addCallback( passwordFuture, new FutureCallback<String>() {
+            @Override
+            public void onSuccess(final String sitePassword) {
                 SwingUtilities.invokeLater( new Runnable() {
                     @Override
                     public void run() {
-                        if (!siteName.equals( siteNameField.getText() ))
-                            return;
+                        updatingUI = true;
+                        currentSite = site;
+                        siteAddButton.setVisible( user instanceof ModelUser && !(currentSite instanceof ModelSite) );
+                        siteTypeField.setSelectedItem( currentSite.getSiteType() );
+                        siteCounterField.setValue( currentSite.getSiteCounter() );
+                        siteNameField.setText( currentSite.getSiteName() );
+                        if (siteNameField.getText().startsWith( siteNameQuery ))
+                            siteNameField.select( siteNameQuery.length(), siteNameField.getText().length() );
 
                         passwordField.setText( sitePassword );
-                        tipLabel.setText( "Press [Enter] to copy the password." );
+                        tipLabel.setText( "Press [Enter] to copy the password.  Then paste it into the password field." );
+                        updatingUI = false;
                     }
                 } );
             }
+
+            @Override
+            public void onFailure(final Throwable t) {
+            }
         } );
+
+        return passwordFuture;
     }
 
     @Override
     public void insertUpdate(final DocumentEvent e) {
-        updatePassword( null );
+        updatePassword();
     }
 
     @Override
     public void removeUpdate(final DocumentEvent e) {
-        updatePassword( null );
     }
 
     @Override
     public void changedUpdate(final DocumentEvent e) {
-        updatePassword( null );
-    }
-
-    interface PasswordCallback {
-
-        void passwordGenerated(String siteName, String sitePassword);
+        updatePassword();
     }
 }
