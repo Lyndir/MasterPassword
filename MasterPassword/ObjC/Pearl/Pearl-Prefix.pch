@@ -4,7 +4,6 @@
 
 #ifdef __OBJC__
 #import <Foundation/Foundation.h>
-#endif
 
 #define PEARL_WITH_SCRYPT
 #define PEARL_WITH_MESSAGEUI
@@ -19,4 +18,5 @@
 #import "Pearl-Crypto.h"
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import "Pearl-UIKit.h"
+#endif
 #endif
