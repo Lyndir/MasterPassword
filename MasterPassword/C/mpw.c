@@ -2,25 +2,15 @@
 
 #include <stdio.h>
 #include <sys/time.h>
-#include <sys/ioctl.h>
 #include <sys/types.h>
-#include <sys/stat.h>
-#if defined(__linux__)
-#include <linux/fs.h>
-#else
-#include <sys/disk.h>
-#endif
-#include <fcntl.h>
 #include <unistd.h>
-#include <math.h>
 #include <pwd.h>
-#include <netinet/in.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 
-#include <alg/sha256.h>
-#include <crypto/crypto_scrypt.h>
+#include <scrypt/sha256.h>
+#include <scrypt/crypto_scrypt.h>
 #include "types.h"
 
 #if defined(READLINE)
@@ -39,7 +29,7 @@
 #define MP_env_sitetype     "MP_SITETYPE"
 #define MP_env_sitecounter  "MP_SITECOUNTER"
 
-void usage() {
+static void usage() {
       fprintf(stderr, "Usage: mpw [-u name] [-t type] [-c counter] site\n\n");
       fprintf(stderr, "    -u name      Specify the full name of the user.\n"
                       "                 Defaults to %s in env.\n\n", MP_env_fullname);
@@ -73,7 +63,7 @@ void usage() {
       exit(0);
 }
 
-char *homedir(const char *filename) {
+static char *homedir(const char *filename) {
     char *homedir = NULL;
     struct passwd* passwd = getpwuid(getuid());
     if (passwd)
@@ -88,7 +78,7 @@ char *homedir(const char *filename) {
     return homefile;
 }
 
-char *getlinep(const char *prompt) {
+static char *getlinep(const char *prompt) {
     char *buf = NULL;
     size_t bufSize = 0;
     ssize_t lineSize;
@@ -199,8 +189,7 @@ int main(int argc, char *const argv[]) {
     if (mpwConfig) {
         char *line = NULL;
         size_t linecap = 0;
-        ssize_t linelen;
-        while ((linelen = getline(&line, &linecap, mpwConfig)) > 0) {
+        while (getline(&line, &linecap, mpwConfig) > 0) {
             char *lineData = line;
             if (strcmp(strsep(&lineData, ":"), fullName) == 0) {
                 masterPassword = strcpy(malloc(strlen(lineData)), strsep(&lineData, "\n"));

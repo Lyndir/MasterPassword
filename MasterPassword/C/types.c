@@ -14,7 +14,7 @@
 #include <errno.h>
 #include <unistd.h>
 
-#include <alg/sha256.h>
+#include <scrypt/sha256.h>
 
 #ifdef COLOR
 #include <curses.h>
@@ -27,7 +27,7 @@ const MPSiteType TypeWithName(const char *typeName) {
     char lowerTypeName[strlen(typeName)];
     strcpy(lowerTypeName, typeName);
     for (char *tN = lowerTypeName; *tN; ++tN)
-        *tN = tolower(*tN);
+        *tN = (char)tolower(*tN);
 
     if (0 == strcmp(lowerTypeName, "x") || 0 == strcmp(lowerTypeName, "max") || 0 == strcmp(lowerTypeName, "maximum"))
         return MPSiteTypeGeneratedMaximum;
@@ -97,7 +97,7 @@ const MPSiteVariant VariantWithName(const char *variantName) {
     char lowerVariantName[strlen(variantName)];
     strcpy(lowerVariantName, variantName);
     for (char *vN = lowerVariantName; *vN; ++vN)
-        *vN = tolower(*vN);
+        *vN = (char)tolower(*vN);
 
     if (0 == strcmp(lowerVariantName, "p") || 0 == strcmp(lowerVariantName, "password"))
         return MPSiteVariantPassword;
@@ -227,10 +227,10 @@ const char *Identicon(const char *fullName, const char *masterPassword) {
     uint8_t identiconSeed[32];
     HMAC_SHA256_Buf(masterPassword, strlen(masterPassword), fullName, strlen(fullName), identiconSeed);
 
-    uint8_t colorIdentifier = identiconSeed[4] % 7 + 1;
     char *colorString, *resetString;
 #ifdef COLOR
     if (isatty( STDERR_FILENO )) {
+        uint8_t colorIdentifier = (uint8_t)(identiconSeed[4] % 7 + 1);
         initputvar();
         tputs(tparm(tgetstr("AF", NULL), colorIdentifier), 1, putvar);
         colorString = calloc(strlen(putvarc) + 1, sizeof(char));

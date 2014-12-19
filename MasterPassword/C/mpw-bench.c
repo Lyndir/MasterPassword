@@ -11,9 +11,9 @@
 #include <string.h>
 #include <errno.h>
 
-#include <alg/sha256.h>
-#include <crypto/crypto_scrypt.h>
-#include <ow-crypt.h>
+#include <scrypt/sha256.h>
+#include <scrypt/crypto_scrypt.h>
+#include <bcrypt/ow-crypt.h>
 #include "types.h"
 
 #define MP_N                32768
