@@ -144,7 +144,7 @@ depend() {
 
     echo
     echo "Checking dependency: $1..."
-    [[ -e "lib/$1/.built" ]] && return
+    [[ -e "lib/include/$1" ]] && return
 
     pushd "lib/$1"
     fetchSource
@@ -180,7 +180,8 @@ depend() {
         fi
 
         make
-        date > .built
+        install -d "../include/$1/"
+        find . -name '*.h' -exec install -m 444 {} "../include/$1/" \;
     else
         echo >&2 "error: Don't know how to build: $1"
         exit 1
@@ -197,7 +198,7 @@ mpw() {
     echo "Building target: $target..."
     CFLAGS=(
         # include paths
-        -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva"
+        -I"lib/include"
     )
     LDFLAGS=(
         # scrypt
@@ -230,8 +231,7 @@ mpw-bench() {
     echo "Building target: $target..."
     CFLAGS=(
         # include paths
-        -I"lib/scrypt/lib" -I"lib/scrypt/libcperciva"
-        -I"lib/bcrypt" 
+        -I"lib/include"
     )
     LDFLAGS=(
         # scrypt
