@@ -1,21 +1,23 @@
 #define _GNU_SOURCE
 
 #include <stdio.h>
-#include <sys/types.h>
 #include <unistd.h>
 #include <pwd.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 
-#include "types.h"
-#include "mpw.h"
-
 #if defined(READLINE)
 #include <readline/readline.h>
 #elif defined(EDITLINE)
 #include <histedit.h>
 #endif
+
+#define ftl(...) do { fprintf( stderr, __VA_ARGS__ ); exit(2); } while (0)
+
+#include "mpw-types.h"
+#include "mpw-algorithm.h"
+#include "mpw-util.h"
 
 #define MP_env_fullname     "MP_FULLNAME"
 #define MP_env_sitetype     "MP_SITETYPE"
@@ -125,18 +127,17 @@ int main(int argc, char *const argv[]) {
             case '?':
                 switch (optopt) {
                     case 'u':
-                        fprintf( stderr, "Missing full name to option: -%c\n", optopt );
+                        ftl( "Missing full name to option: -%c\n", optopt );
                         break;
                     case 't':
-                        fprintf( stderr, "Missing type name to option: -%c\n", optopt );
+                        ftl( "Missing type name to option: -%c\n", optopt );
                         break;
                     case 'c':
-                        fprintf( stderr, "Missing counter value to option: -%c\n", optopt );
+                        ftl( "Missing counter value to option: -%c\n", optopt );
                         break;
                     default:
-                        fprintf( stderr, "Unknown option: -%c\n", optopt );
+                        ftl( "Unknown option: -%c\n", optopt );
                 }
-                return 1;
             default:
                 ftl("Unexpected option: %c", opt);
         }
@@ -144,39 +145,27 @@ int main(int argc, char *const argv[]) {
         siteName = argv[optind];
 
     // Convert and validate input.
-    if (!fullName) {
-        if (!(fullName = getlinep( "Your full name:" ))) {
-            fprintf( stderr, "Missing full name.\n" );
-            return 1;
-        }
-    }
-    if (!siteName) {
-        if (!(siteName = getlinep( "Site name:" ))) {
-            fprintf( stderr, "Missing site name.\n" );
-            return 1;
-        }
-    }
+    if (!fullName && !(fullName = getlinep( "Your full name:" )))
+        ftl( "Missing full name.\n" );
+    if (!siteName && !(siteName = getlinep( "Site name:" )))
+        ftl( "Missing site name.\n" );
     if (siteCounterString)
         siteCounter = atoi( siteCounterString );
-    if (siteCounter < 1) {
-        fprintf( stderr, "Invalid site counter: %d\n", siteCounter );
-        return 1;
-    }
+    if (siteCounter < 1)
+        ftl( "Invalid site counter: %d\n", siteCounter );
     if (siteVariantString)
-        siteVariant = VariantWithName( siteVariantString );
+        siteVariant = mpw_variantWithName( siteVariantString );
     if (siteVariant == MPSiteVariantLogin)
         siteType = MPSiteTypeGeneratedName;
     if (siteVariant == MPSiteVariantAnswer)
         siteType = MPSiteTypeGeneratedPhrase;
     if (siteTypeString)
-        siteType = TypeWithName( siteTypeString );
+        siteType = mpw_typeWithName( siteTypeString );
 
     // Read the master password.
     char *mpwConfigPath = homedir( ".mpw" );
-    if (!mpwConfigPath) {
-        fprintf( stderr, "Couldn't resolve path for configuration file: %d\n", errno );
-        return 1;
-    }
+    if (!mpwConfigPath)
+        ftl( "Couldn't resolve path for configuration file: %d\n", errno );
     trc( "mpwConfigPath: %s\n", mpwConfigPath );
     FILE *mpwConfig = fopen( mpwConfigPath, "r" );
     free( mpwConfigPath );
@@ -190,16 +179,18 @@ int main(int argc, char *const argv[]) {
                 break;
             }
         }
-        free( line );
+        mpw_free( line, linecap );
     }
-    while (!masterPassword)
+    while (!masterPassword || !strlen(masterPassword))
         masterPassword = getpass( "Your master password: " );
 
     // Summarize operation.
-    fprintf( stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, Identicon( fullName, masterPassword ) );
+    fprintf( stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, mpw_identicon( fullName, masterPassword ) );
 
     // Output the password.
     const uint8_t *masterKey = mpw_masterKeyForUser( fullName, masterPassword );
+    mpw_free( masterPassword, strlen( masterPassword ) );
+
     const char *sitePassword = mpw_passwordForSite( masterKey, siteName, siteType, siteCounter, siteVariant, siteContextString );
     fprintf( stdout, "%s\n", sitePassword );
 

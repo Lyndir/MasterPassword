@@ -1,32 +1,45 @@
 //
-//  MPTypes.h
+//  mpw-types.h
 //  MasterPassword
 //
-//  Created by Maarten Billemont on 02/01/12.
-//  Copyright (c) 2012 Lyndir. All rights reserved.
+//  Created by Maarten Billemont on 2012-02-01.
+//  Copyright (c) 2014 Lyndir. All rights reserved.
 //
+
+//// Logging.
+
+#ifdef DEBUG
+#define trc(...) fprintf( stderr, __VA_ARGS__ )
+#else
+#define trc(...) do {} while (0)
+#endif
+#ifndef ftl
+#define ftl(...) do { fprintf( stderr, __VA_ARGS__ ); abort(); } while (0)
+#endif
+
+//// Types.
 
 typedef enum {
     /** Generate the password to log in with. */
-    MPSiteVariantPassword,
+            MPSiteVariantPassword,
     /** Generate the login name to log in as. */
-    MPSiteVariantLogin,
+            MPSiteVariantLogin,
     /** Generate the answer to a security question. */
-    MPSiteVariantAnswer,
+            MPSiteVariantAnswer,
 } MPSiteVariant;
 
 typedef enum {
     /** Generate the password. */
-    MPSiteTypeClassGenerated = 1 << 4,
+            MPSiteTypeClassGenerated = 1 << 4,
     /** Store the password. */
-    MPSiteTypeClassStored = 1 << 5,
+            MPSiteTypeClassStored = 1 << 5,
 } MPSiteTypeClass;
 
 typedef enum {
     /** Export the key-protected content data. */
-    MPSiteFeatureExportContent = 1 << 10,
+            MPSiteFeatureExportContent = 1 << 10,
     /** Never export content. */
-    MPSiteFeatureDevicePrivate = 1 << 11,
+            MPSiteFeatureDevicePrivate = 1 << 11,
 } MPSiteFeature;
 
 typedef enum {
@@ -43,19 +56,11 @@ typedef enum {
     MPSiteTypeStoredDevicePrivate = 0x1 | MPSiteTypeClassStored | MPSiteFeatureDevicePrivate,
 } MPSiteType;
 
-#ifdef DEBUG
-#define trc(...) fprintf(stderr, __VA_ARGS__)
-#else
-#define trc(...) do {} while (0)
-#endif
-#define ftl(...) do { fprintf( stderr, "Could not allocate master key salt: %d\n", errno ); abort(); } while (0)
+//// Type utilities.
 
-const MPSiteVariant VariantWithName(const char *variantName);
-const char *ScopeForVariant(MPSiteVariant variant);
-const MPSiteType TypeWithName(const char *typeName);
-const char *TemplateForType(MPSiteType type, uint8_t seedByte);
-const char CharacterFromClass(char characterClass, uint8_t seedByte);
-const char *IDForBuf(const void *buf, size_t length);
-const char *Hex(const void *buf, size_t length);
-const char *Identicon(const char *fullName, const char *masterPassword);
+const MPSiteVariant mpw_variantWithName(const char *variantName);
+const char *mpw_scopeForVariant(MPSiteVariant variant);
+const MPSiteType mpw_typeWithName(const char *typeName);
+const char *mpw_templateForType(MPSiteType type, uint8_t seedByte);
+const char mpw_characterFromClass(char characterClass, uint8_t seedByte);
 

@@ -2,6 +2,7 @@
   <profile version="1.0" is_locked="false">
     <option name="myName" value="Project Default" />
     <option name="myLocal" value="false" />
+    <inspection_tool class="Convert to string" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="FunctionImplicitDeclarationInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ImplicitIntegerAndEnumConversion" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="LossyEncoding" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -9,6 +10,7 @@
     <inspection_tool class="OCNotLocalizedStringInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="OCUnusedMacroInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="OCUnusedMethodInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="Replace with subshell" enabled="true" level="INFO" enabled_by_default="true" />
     <inspection_tool class="SignednessMismatch" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UnavailableInDeploymentTarget" enabled="true" level="INFO" enabled_by_default="true" />
     <inspection_tool class="UnusedLocalVariable" enabled="false" level="WARNING" enabled_by_default="false" />

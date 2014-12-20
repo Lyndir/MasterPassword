@@ -1,29 +1,24 @@
 //
-//  MPTypes.h
+//  mpw-types.c
 //  MasterPassword
 //
-//  Created by Maarten Billemont on 02/01/12.
-//  Copyright (c) 2012 Lyndir. All rights reserved.
+//  Created by Maarten Billemont on 2012-02-01.
+//  Copyright (c) 2014 Lyndir. All rights reserved.
 //
 
-#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include <errno.h>
-#include <unistd.h>
-
-#include <scrypt/sha256.h>
 
 #ifdef COLOR
 #include <curses.h>
 #include <term.h>
 #endif
 
-#include "types.h"
+#include "mpw-types.h"
 
-const MPSiteType TypeWithName(const char *typeName) {
+const MPSiteType mpw_typeWithName(const char *typeName) {
     char lowerTypeName[strlen(typeName)];
     strcpy(lowerTypeName, typeName);
     for (char *tN = lowerTypeName; *tN; ++tN)
@@ -50,7 +45,7 @@ const MPSiteType TypeWithName(const char *typeName) {
     abort();
 }
 
-const char *TemplateForType(MPSiteType type, uint8_t seedByte) {
+const char *mpw_templateForType(MPSiteType type, uint8_t seedByte) {
     if (!(type & MPSiteTypeClassGenerated)) {
         fprintf(stderr, "Not a generated type: %d", type);
         abort();
@@ -93,7 +88,7 @@ const char *TemplateForType(MPSiteType type, uint8_t seedByte) {
     }
 }
 
-const MPSiteVariant VariantWithName(const char *variantName) {
+const MPSiteVariant mpw_variantWithName(const char *variantName) {
     char lowerVariantName[strlen(variantName)];
     strcpy(lowerVariantName, variantName);
     for (char *vN = lowerVariantName; *vN; ++vN)
@@ -110,7 +105,7 @@ const MPSiteVariant VariantWithName(const char *variantName) {
     abort();
 }
 
-const char *ScopeForVariant(MPSiteVariant variant) {
+const char *mpw_scopeForVariant(MPSiteVariant variant) {
     switch (variant) {
         case MPSiteVariantPassword: {
             return "com.lyndir.masterpassword";
@@ -128,7 +123,7 @@ const char *ScopeForVariant(MPSiteVariant variant) {
     }
 }
 
-const char CharacterFromClass(char characterClass, uint8_t seedByte) {
+const char mpw_characterFromClass(char characterClass, uint8_t seedByte) {
     const char *classCharacters;
     switch (characterClass) {
         case 'V': {
@@ -178,83 +173,4 @@ const char CharacterFromClass(char characterClass, uint8_t seedByte) {
     }
 
     return classCharacters[seedByte % strlen(classCharacters)];
-}
-
-const char *IDForBuf(const void *buf, size_t length) {
-    uint8_t hash[32];
-    SHA256_Buf(buf, length, hash);
-
-    char *id = (char *)calloc(65, sizeof(char));
-    for (int kH = 0; kH < 32; kH++)
-        sprintf(&(id[kH * 2]), "%02X", hash[kH]);
-
-    return id;
-}
-
-const char *Hex(const void *buf, size_t length) {
-    char *id = (char *)calloc(length*2+1, sizeof(char));
-    for (int kH = 0; kH < length; kH++)
-        sprintf(&(id[kH * 2]), "%02X", ((const uint8_t*)buf)[kH]);
-
-    return id;
-}
-
-#ifdef COLOR
-int putvari;
-char *putvarc = NULL;
-bool istermsetup = false;
-static void initputvar() {
-    if (putvarc)
-        free(putvarc);
-    putvarc=(char *)calloc(256, sizeof(char));
-    putvari=0;
-
-    if (!istermsetup)
-        istermsetup = (OK == setupterm(NULL, STDERR_FILENO, NULL));
-}
-static int putvar(int c) {
-    putvarc[putvari++]=c;
-    return 0;
-}
-#endif
-
-const char *Identicon(const char *fullName, const char *masterPassword) {
-    const char *leftArm[]   = { "╔", "╚", "╰", "═" };
-    const char *rightArm[]  = { "╗", "╝", "╯", "═" };
-    const char *body[]      = { "█", "░", "▒", "▓", "☺", "☻" };
-    const char *accessory[] = { "◈", "◎", "◐", "◑", "◒", "◓", "☀", "☁", "☂", "☃", "☄", "★", "☆", "☎", "☏", "⎈", "⌂", "☘", "☢", "☣", "☕", "⌚", "⌛", "⏰", "⚡", "⛄", "⛅", "☔", "♔", "♕", "♖", "♗", "♘", "♙", "♚", "♛", "♜", "♝", "♞", "♟", "♨", "♩", "♪", "♫", "⚐", "⚑", "⚔", "⚖", "⚙", "⚠", "⌘", "⏎", "✄", "✆", "✈", "✉", "✌" };
-
-    uint8_t identiconSeed[32];
-    HMAC_SHA256_Buf(masterPassword, strlen(masterPassword), fullName, strlen(fullName), identiconSeed);
-
-    char *colorString, *resetString;
-#ifdef COLOR
-    if (isatty( STDERR_FILENO )) {
-        uint8_t colorIdentifier = (uint8_t)(identiconSeed[4] % 7 + 1);
-        initputvar();
-        tputs(tparm(tgetstr("AF", NULL), colorIdentifier), 1, putvar);
-        colorString = calloc(strlen(putvarc) + 1, sizeof(char));
-        strcpy(colorString, putvarc);
-        tputs(tgetstr("me", NULL), 1, putvar);
-        resetString = calloc(strlen(putvarc) + 1, sizeof(char));
-        strcpy(resetString, putvarc);
-    } else
-#endif
-    {
-        colorString = calloc(1, sizeof(char));
-        resetString = calloc(1, sizeof(char));
-    }
-
-    char *identicon = (char *)calloc(256, sizeof(char));
-    snprintf(identicon, 256, "%s%s%s%s%s%s",
-             colorString,
-             leftArm[identiconSeed[0] % (sizeof(leftArm) / sizeof(leftArm[0]))],
-             body[identiconSeed[1] % (sizeof(body) / sizeof(body[0]))],
-             rightArm[identiconSeed[2] % (sizeof(rightArm) / sizeof(rightArm[0]))],
-             accessory[identiconSeed[3] % (sizeof(accessory) / sizeof(accessory[0]))],
-             resetString);
-
-    free(colorString);
-    free(resetString);
-    return identicon;
 }

@@ -1,20 +1,22 @@
-#include <sys/time.h>
+//
+//  mpw-bench.c
+//  MasterPassword
+//
+//  Created by Maarten Billemont on 2014-12-20.
+//  Copyright (c) 2014 Lyndir. All rights reserved.
+//
+
 #include <stdio.h>
-#include <sys/ioctl.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <math.h>
-#include <pwd.h>
-#include <netinet/in.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <sys/time.h>
 
 #include <scrypt/sha256.h>
-#include <scrypt/crypto_scrypt.h>
 #include <bcrypt/ow-crypt.h>
-#include "types.h"
+
+#include "mpw-types.h"
+#include "mpw-algorithm.h"
 
 #define MP_N                32768
 #define MP_r                8
@@ -22,166 +24,82 @@
 #define MP_dkLen            64
 #define MP_hash             PearlHashSHA256
 
+static void mpw_getTime(struct timeval *time) {
+
+    if (gettimeofday( time, NULL ) != 0)
+        ftl( "Could not get time: %d\n", errno );
+}
+
+static const double mpw_showSpeed(struct timeval startTime, const unsigned int iterations, const char *operation) {
+
+    struct timeval endTime;
+    mpw_getTime( &endTime );
+
+    const time_t dsec = (endTime.tv_sec - startTime.tv_sec);
+    const suseconds_t dusec = (endTime.tv_usec - startTime.tv_usec);
+    const double elapsed = dsec + dusec / 1000000.;
+    const double speed = iterations / elapsed;
+
+    fprintf( stderr, " done.  " );
+    fprintf( stdout, "%d %s iterations in %llds %lldµs -> %.2f/s\n", iterations, operation, (long long)dsec, (long long)dusec, speed );
+
+    return speed;
+}
 
 int main(int argc, char *const argv[]) {
 
-    char *fullName = "Robert Lee Mitchel";
-    char *masterPassword = "banana colored duckling";
-    char *siteName = "masterpasswordapp.com";
-    uint32_t siteCounter = 1;
-    MPSiteType siteType = MPSiteTypeGeneratedLong;
-
-    // Start MP
+    const char *fullName = "Robert Lee Mitchel";
+    const char *masterPassword = "banana colored duckling";
+    const char *siteName = "masterpasswordapp.com";
+    const uint32_t siteCounter = 1;
+    const MPSiteType siteType = MPSiteTypeGeneratedLong;
+    const MPSiteVariant siteVariant = MPSiteVariantPassword;
+    const char *siteContext = NULL;
     struct timeval startTime;
-    if (gettimeofday(&startTime, NULL) != 0) {
-        fprintf(stderr, "Could not get time: %d\n", errno);
-        return 1;
-    }
 
-    int iterations = 100;
+    // Start MPW
+    unsigned int iterations = 100;
+    mpw_getTime( &startTime );
     for (int i = 0; i < iterations; ++i) {
-        // Calculate the master key salt.
-        char *mpNameSpace = "com.lyndir.masterpassword";
-        const uint32_t n_fullNameLength = htonl(strlen(fullName));
-        const size_t masterKeySaltLength = strlen(mpNameSpace) + sizeof(n_fullNameLength) + strlen(fullName);
-        char *masterKeySalt = malloc( masterKeySaltLength );
-        if (!masterKeySalt) {
-            fprintf(stderr, "Could not allocate master key salt: %d\n", errno);
-            return 1;
-        }
-
-        char *mKS = masterKeySalt;
-        memcpy(mKS, mpNameSpace, strlen(mpNameSpace)); mKS += strlen(mpNameSpace);
-        memcpy(mKS, &n_fullNameLength, sizeof(n_fullNameLength)); mKS += sizeof(n_fullNameLength);
-        memcpy(mKS, fullName, strlen(fullName)); mKS += strlen(fullName);
-        if (mKS - masterKeySalt != masterKeySaltLength)
-            abort();
-        trc("masterKeySalt ID: %s\n", IDForBuf(masterKeySalt, masterKeySaltLength));
-
-        // Calculate the master key.
-        uint8_t *masterKey = malloc( MP_dkLen );
-        if (!masterKey) {
-            fprintf(stderr, "Could not allocate master key: %d\n", errno);
-            return 1;
-        }
-        if (crypto_scrypt( (const uint8_t *)masterPassword, strlen(masterPassword), (const uint8_t *)masterKeySalt, masterKeySaltLength, MP_N, MP_r, MP_p, masterKey, MP_dkLen ) < 0) {
-            fprintf(stderr, "Could not generate master key: %d\n", errno);
-            return 1;
-        }
-        memset(masterKeySalt, 0, masterKeySaltLength);
-        free(masterKeySalt);
-
-        // Calculate the site seed.
-        const uint32_t n_siteNameLength = htonl(strlen(siteName));
-        const uint32_t n_siteCounter = htonl(siteCounter);
-        const size_t sitePasswordInfoLength = strlen(mpNameSpace) + sizeof(n_siteNameLength) + strlen(siteName) + sizeof(n_siteCounter);
-        char *sitePasswordInfo = malloc( sitePasswordInfoLength );
-        if (!sitePasswordInfo) {
-            fprintf(stderr, "Could not allocate site seed: %d\n", errno);
-            return 1;
-        }
-
-        char *sPI = sitePasswordInfo;
-        memcpy(sPI, mpNameSpace, strlen(mpNameSpace)); sPI += strlen(mpNameSpace);
-        memcpy(sPI, &n_siteNameLength, sizeof(n_siteNameLength)); sPI += sizeof(n_siteNameLength);
-        memcpy(sPI, siteName, strlen(siteName)); sPI += strlen(siteName);
-        memcpy(sPI, &n_siteCounter, sizeof(n_siteCounter)); sPI += sizeof(n_siteCounter);
-        if (sPI - sitePasswordInfo != sitePasswordInfoLength)
-            abort();
-
-        uint8_t sitePasswordSeed[32];
-        HMAC_SHA256_Buf(masterKey, MP_dkLen, sitePasswordInfo, sitePasswordInfoLength, sitePasswordSeed);
-        memset(masterKey, 0, MP_dkLen);
-        memset(sitePasswordInfo, 0, sitePasswordInfoLength);
-        free(masterKey);
-        free(sitePasswordInfo);
-
-        // Determine the template.
-        const char *template = TemplateForType(siteType, sitePasswordSeed[0]);
-        trc("type %d, template: %s\n", siteType, template);
-        if (strlen(template) > 32)
-            abort();
-
-        // Encode the password from the seed using the template.
-        char *sitePassword = calloc(strlen(template) + 1, sizeof(char));
-        for (int c = 0; c < strlen(template); ++c) {
-            sitePassword[c] = CharacterFromClass(template[c], sitePasswordSeed[c + 1]);
-            trc("class %c, character: %c\n", template[c], sitePassword[c]);
-        }
-        memset(sitePasswordSeed, 0, sizeof(sitePasswordSeed));
+        const uint8_t *masterKey = mpw_masterKeyForUser( fullName, masterPassword );
+        if (!masterKey)
+            ftl( "Could not allocate master key: %d\n", errno );
+        free( (void *)mpw_passwordForSite( masterKey, siteName, siteType, siteCounter, siteVariant, siteContext ) );
+        free( (void *)masterKey );
 
         if (i % 1 == 0)
             fprintf( stderr, "\rmpw: iteration %d / %d..", i, iterations );
     }
-
-    // Output timing results.
-    struct timeval endTime;
-    if (gettimeofday(&endTime, NULL) != 0) {
-        fprintf(stderr, "Could not get time: %d\n", errno);
-        return 1;
-    }
-    long long secs = (endTime.tv_sec - startTime.tv_sec);
-    long long usecs = (endTime.tv_usec - startTime.tv_usec);
-    double elapsed = secs + usecs / 1000000.0;
-    double mpwSpeed = iterations / elapsed;
-    fprintf( stdout, " done.  %d iterations in %llds %lldµs -> %.2f/s\n", iterations, secs, usecs, mpwSpeed );
+    const double mpwSpeed = mpw_showSpeed( startTime, iterations, "mpw" );
 
     // Start SHA-256
-    if (gettimeofday(&startTime, NULL) != 0) {
-        fprintf(stderr, "Could not get time: %d\n", errno);
-        return 1;
-    }
-
     iterations = 50000000;
     uint8_t hash[32];
+    mpw_getTime( &startTime );
     for (int i = 0; i < iterations; ++i) {
-        SHA256_Buf(masterPassword, strlen(masterPassword), hash);
+        SHA256_Buf( masterPassword, strlen( masterPassword ), hash );
 
         if (i % 1000 == 0)
             fprintf( stderr, "\rsha256: iteration %d / %d..", i, iterations );
     }
-
-    // Output timing results.
-    if (gettimeofday(&endTime, NULL) != 0) {
-        fprintf(stderr, "Could not get time: %d\n", errno);
-        return 1;
-    }
-    secs = (endTime.tv_sec - startTime.tv_sec);
-    usecs = (endTime.tv_usec - startTime.tv_usec);
-    elapsed = secs + usecs / 1000000.0;
-    double sha256Speed = iterations / elapsed;
-    fprintf( stdout, " done.  %d iterations in %llds %lldµs -> %.2f/s\n", iterations, secs, usecs, sha256Speed );
+    const double sha256Speed = mpw_showSpeed( startTime, iterations, "sha256" );
 
     // Start BCrypt
-    if (gettimeofday(&startTime, NULL) != 0) {
-        fprintf(stderr, "Could not get time: %d\n", errno);
-        return 1;
-    }
-
     int bcrypt_cost = 9;
     iterations = 600;
+    mpw_getTime( &startTime );
     for (int i = 0; i < iterations; ++i) {
-        crypt(masterPassword, crypt_gensalt("$2b$", bcrypt_cost, fullName, strlen(fullName)));
+        crypt( masterPassword, crypt_gensalt( "$2b$", bcrypt_cost, fullName, strlen( fullName ) ) );
 
         if (i % 10 == 0)
             fprintf( stderr, "\rbcrypt (cost %d): iteration %d / %d..", bcrypt_cost, i, iterations );
     }
-
-    // Output timing results.
-    if (gettimeofday(&endTime, NULL) != 0) {
-        fprintf(stderr, "Could not get time: %d\n", errno);
-        return 1;
-    }
-    secs = (endTime.tv_sec - startTime.tv_sec);
-    usecs = (endTime.tv_usec - startTime.tv_usec);
-    elapsed = secs + usecs / 1000000.0;
-    double bcrypt9Speed = iterations / elapsed;
-    fprintf( stdout, " done.  %d iterations in %llds %lldµs -> %.2f/s\n", iterations, secs, usecs, bcrypt9Speed );
+    const double bcrypt9Speed = mpw_showSpeed( startTime, iterations, "bcrypt9" );
 
     // Summarize.
     fprintf( stdout, "\n== SUMMARY ==\nOn this machine,\n" );
-    fprintf( stdout, "mpw is %f times slower than sha256\n", sha256Speed / mpwSpeed );
-    fprintf( stdout, "mpw is %f times slower than bcrypt (cost 9)\n", bcrypt9Speed / mpwSpeed );
+    fprintf( stdout, " - mpw is %f times slower than sha256.\n", sha256Speed / mpwSpeed );
+    fprintf( stdout, " - mpw is %f times slower than bcrypt (cost 9).\n", bcrypt9Speed / mpwSpeed );
 
     return 0;
 }

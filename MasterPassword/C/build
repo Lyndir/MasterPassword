@@ -216,9 +216,11 @@ mpw() {
     # optional features
     (( mpw_color )) && CFLAGS+=( -DCOLOR ) LDFLAGS+=( -l"curses" )
 
-    cc "${CFLAGS[@]}"                 -c types.c -o types.o "$@"
-    cc "${CFLAGS[@]}"                 -c mpw.c -o mpw.o "$@"
-    cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "types.o" "mpw.o" mpw-cli.c -o mpw "$@"
+    cc "${CFLAGS[@]}" "$@"                  -c mpw-algorithm.c    -o mpw-algorithm.o
+    cc "${CFLAGS[@]}" "$@"                  -c mpw-types.c        -o mpw-types.o
+    cc "${CFLAGS[@]}" "$@"                  -c mpw-util.c         -o mpw-util.o
+    cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "$@" "mpw-algorithm.o" "mpw-types.o" "mpw-util.o" \
+                                               mpw-cli.c          -o mpw
     echo "done!  Now run ./install or use ./mpw"
 }
 
@@ -254,8 +256,11 @@ mpw-bench() {
         -l"crypto"
     )
 
-    cc "${CFLAGS[@]}"                 -c types.c -o types.o "$@"
-    cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "types.o" mpw-bench.c -o mpw-bench "$@"
+    cc "${CFLAGS[@]}" "$@"                  -c mpw-algorithm.c    -o mpw-algorithm.o
+    cc "${CFLAGS[@]}" "$@"                  -c mpw-types.c        -o mpw-types.o
+    cc "${CFLAGS[@]}" "$@"                  -c mpw-util.c         -o mpw-util.o
+    cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "$@" "mpw-algorithm.o" "mpw-types.o" "mpw-util.o" \
+                                               mpw-bench.c        -o mpw-bench
     echo "done!  Now use ./mpw-bench"
 }
 

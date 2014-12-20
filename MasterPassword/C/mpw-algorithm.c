@@ -1,14 +1,18 @@
-#define _GNU_SOURCE
+//
+//  mpw-algorithm.c
+//  MasterPassword
+//
+//  Created by Maarten Billemont on 2014-12-20.
+//  Copyright (c) 2014 Lyndir. All rights reserved.
+//
 
 #include <stdio.h>
-#include <sys/types.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 
-#include <scrypt/sha256.h>
-#include <scrypt/crypto_scrypt.h>
-#include "types.h"
+#include "mpw-types.h"
+#include "mpw-util.h"
 
 #define MP_N                32768
 #define MP_r                8
@@ -16,33 +20,9 @@
 #define MP_dkLen            64
 #define MP_hash             PearlHashSHA256
 
-static void mpw_pushBuf(uint8_t **const buffer, size_t *const bufferSize, const void *pushBuffer, const size_t pushSize) {
-
-    *bufferSize += pushSize;
-    *buffer = realloc( *buffer, *bufferSize );
-    uint8_t *pushDst = *buffer + *bufferSize - pushSize;
-    memcpy( pushDst, pushBuffer, pushSize );
-}
-
-static void mpw_pushString(uint8_t **buffer, size_t *const bufferSize, const char *pushString) {
-
-    mpw_pushBuf( buffer, bufferSize, pushString, strlen( pushString ) );
-}
-
-static void mpw_pushInt(uint8_t **const buffer, size_t *const bufferSize, const uint32_t pushInt) {
-
-    mpw_pushBuf( buffer, bufferSize, &pushInt, sizeof( pushInt ) );
-}
-
-static void mpw_free(void *const buffer, const size_t bufferSize) {
-
-    memset( buffer, 0, bufferSize );
-    free( buffer );
-}
-
 const uint8_t *mpw_masterKeyForUser(const char *fullName, const char *masterPassword) {
 
-    const char *mpKeyScope = ScopeForVariant( MPSiteVariantPassword );
+    const char *mpKeyScope = mpw_scopeForVariant( MPSiteVariantPassword );
     trc( "fullName: %s\n", fullName );
     trc( "masterPassword: %s\n", masterPassword );
     trc( "key scope: %s\n", mpKeyScope );
@@ -56,18 +36,15 @@ const uint8_t *mpw_masterKeyForUser(const char *fullName, const char *masterPass
     mpw_pushString( &masterKeySalt, &masterKeySaltSize, fullName );
     if (!masterKeySalt)
         ftl( "Could not allocate master key salt: %d\n", errno );
-    trc( "masterKeySalt ID: %s\n", IDForBuf( masterKeySalt, masterKeySaltSize ) );
+    trc( "masterKeySalt ID: %s\n", mpw_idForBuf( masterKeySalt, masterKeySaltSize ) );
 
     // Calculate the master key.
     // masterKey = scrypt( masterPassword, masterKeySalt )
-    uint8_t *masterKey = (uint8_t *)malloc( MP_dkLen );
+    const uint8_t *masterKey = mpw_scrypt( MP_dkLen, masterPassword, masterKeySalt, masterKeySaltSize, MP_N, MP_r, MP_p );
+    mpw_free( masterKeySalt, masterKeySaltSize );
     if (!masterKey)
         ftl( "Could not allocate master key: %d\n", errno );
-    if (crypto_scrypt( (const uint8_t *)masterPassword, strlen( masterPassword ),
-            masterKeySalt, masterKeySaltSize, MP_N, MP_r, MP_p, masterKey, MP_dkLen ) < 0)
-        ftl( "Could not generate master key: %d\n", errno );
-    mpw_free( masterKeySalt, masterKeySaltSize );
-    trc( "masterKey ID: %s\n", IDForBuf( masterKey, MP_dkLen ) );
+    trc( "masterKey ID: %s\n", mpw_idForBuf( masterKey, MP_dkLen ) );
 
     return masterKey;
 }
@@ -75,7 +52,7 @@ const uint8_t *mpw_masterKeyForUser(const char *fullName, const char *masterPass
 const char *mpw_passwordForSite(const uint8_t *masterKey, const char *siteName, const MPSiteType siteType, const uint32_t siteCounter,
         const MPSiteVariant siteVariant, const char *siteContext) {
 
-    const char *siteScope = ScopeForVariant( siteVariant );
+    const char *siteScope = mpw_scopeForVariant( siteVariant );
     trc( "siteName: %s\n", siteName );
     trc( "siteCounter: %d\n", siteCounter );
     trc( "siteVariant: %d\n", siteVariant );
@@ -95,28 +72,28 @@ const char *mpw_passwordForSite(const uint8_t *masterKey, const char *siteName, 
         mpw_pushString( &sitePasswordInfo, &sitePasswordInfoSize, siteContext );
     }
     if (!sitePasswordInfo)
-        ftl( "Could not allocate site seed: %d\n", errno );
-    trc( "sitePasswordInfo ID: %s\n", IDForBuf( sitePasswordInfo, sitePasswordInfoSize ) );
+        ftl( "Could not allocate site seed info: %d\n", errno );
+    trc( "sitePasswordInfo ID: %s\n", mpw_idForBuf( sitePasswordInfo, sitePasswordInfoSize ) );
 
-    uint8_t sitePasswordSeed[32];
-    HMAC_SHA256_Buf( masterKey, MP_dkLen, sitePasswordInfo, sitePasswordInfoSize, sitePasswordSeed );
-    mpw_free( sitePasswordInfo, sitePasswordInfoSize );
-    trc( "sitePasswordSeed ID: %s\n", IDForBuf( sitePasswordSeed, 32 ) );
+    const uint8_t *sitePasswordSeed = mpw_hmac_sha256( masterKey, MP_dkLen, sitePasswordInfo, sitePasswordInfoSize );
+    if (!sitePasswordSeed)
+        ftl( "Could not allocate site seed: %d\n", errno );
+    trc( "sitePasswordSeed ID: %s\n", mpw_idForBuf( sitePasswordSeed, 32 ) );
 
     // Determine the template.
-    const char *template = TemplateForType( siteType, sitePasswordSeed[0] );
+    const char *template = mpw_templateForType( siteType, sitePasswordSeed[0] );
     trc( "type %d, template: %s\n", siteType, template );
     if (strlen( template ) > 32)
-        ftl( "Template too long for password seed: %d", strlen( template ) );
+        ftl( "Template too long for password seed: %lu", strlen( template ) );
 
     // Encode the password from the seed using the template.
     char *const sitePassword = calloc( strlen( template ) + 1, sizeof( char ) );
     for (int c = 0; c < strlen( template ); ++c) {
-        sitePassword[c] = CharacterFromClass( template[c], sitePasswordSeed[c + 1] );
+        sitePassword[c] = mpw_characterFromClass( template[c], sitePasswordSeed[c + 1] );
         trc( "class %c, index %u (0x%02X) -> character: %c\n", template[c], sitePasswordSeed[c + 1], sitePasswordSeed[c + 1],
                 sitePassword[c] );
     }
-    memset( sitePasswordSeed, 0, sizeof( sitePasswordSeed ) );
+    mpw_free( sitePasswordSeed, sizeof( sitePasswordSeed ) );
 
     return sitePassword;
 }
