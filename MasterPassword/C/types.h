@@ -48,6 +48,7 @@ typedef enum {
 #else
 #define trc(...) do {} while (0)
 #endif
+#define ftl(...) do { fprintf( stderr, "Could not allocate master key salt: %d\n", errno ); abort(); } while (0)
 
 const MPSiteVariant VariantWithName(const char *variantName);
 const char *ScopeForVariant(MPSiteVariant variant);

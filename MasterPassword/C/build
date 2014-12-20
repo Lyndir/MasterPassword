@@ -217,7 +217,8 @@ mpw() {
     (( mpw_color )) && CFLAGS+=( -DCOLOR ) LDFLAGS+=( -l"curses" )
 
     cc "${CFLAGS[@]}"                 -c types.c -o types.o "$@"
-    cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "types.o" mpw.c -o mpw "$@"
+    cc "${CFLAGS[@]}"                 -c mpw.c -o mpw.o "$@"
+    cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "types.o" "mpw.o" mpw-cli.c -o mpw "$@"
     echo "done!  Now run ./install or use ./mpw"
 }
 
