@@ -138,7 +138,7 @@ int main(int argc, char *const argv[]) {
                 }
                 return 1;
             default:
-                abort();
+                ftl("Unexpected option: %c", opt);
         }
     if (optind < argc)
         siteName = argv[optind];
@@ -199,8 +199,8 @@ int main(int argc, char *const argv[]) {
     fprintf( stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, Identicon( fullName, masterPassword ) );
 
     // Output the password.
-    uint8_t *masterKey = mpw_masterKeyForUser( fullName, masterPassword );
-    char *sitePassword = mpw_passwordForSite( masterKey, siteName, siteType, siteCounter, siteVariant, siteContextString );
+    const uint8_t *masterKey = mpw_masterKeyForUser( fullName, masterPassword );
+    const char *sitePassword = mpw_passwordForSite( masterKey, siteName, siteType, siteCounter, siteVariant, siteContextString );
     fprintf( stdout, "%s\n", sitePassword );
 
     return 0;
