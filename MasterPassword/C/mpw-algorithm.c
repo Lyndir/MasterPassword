@@ -13,11 +13,11 @@
 
 #include "mpw-types.h"
 #include "mpw-util.h"
+#include "mpw-algorithm.h"
 
 #define MP_N                32768
 #define MP_r                8
 #define MP_p                2
-#define MP_dkLen            64
 #define MP_hash             PearlHashSHA256
 
 const uint8_t *mpw_masterKeyForUser(const char *fullName, const char *masterPassword) {
@@ -34,16 +34,20 @@ const uint8_t *mpw_masterKeyForUser(const char *fullName, const char *masterPass
     mpw_pushString( &masterKeySalt, &masterKeySaltSize, mpKeyScope );
     mpw_pushInt( &masterKeySalt, &masterKeySaltSize, htonl( strlen( fullName ) ) );
     mpw_pushString( &masterKeySalt, &masterKeySaltSize, fullName );
-    if (!masterKeySalt)
+    if (!masterKeySalt) {
         ftl( "Could not allocate master key salt: %d\n", errno );
+        return NULL;
+    }
     trc( "masterKeySalt ID: %s\n", mpw_idForBuf( masterKeySalt, masterKeySaltSize ) );
 
     // Calculate the master key.
     // masterKey = scrypt( masterPassword, masterKeySalt )
     const uint8_t *masterKey = mpw_scrypt( MP_dkLen, masterPassword, masterKeySalt, masterKeySaltSize, MP_N, MP_r, MP_p );
     mpw_free( masterKeySalt, masterKeySaltSize );
-    if (!masterKey)
+    if (!masterKey) {
         ftl( "Could not allocate master key: %d\n", errno );
+        return NULL;
+    }
     trc( "masterKey ID: %s\n", mpw_idForBuf( masterKey, MP_dkLen ) );
 
     return masterKey;
@@ -71,20 +75,28 @@ const char *mpw_passwordForSite(const uint8_t *masterKey, const char *siteName, 
         mpw_pushInt( &sitePasswordInfo, &sitePasswordInfoSize, htonl( strlen( siteContext ) ) );
         mpw_pushString( &sitePasswordInfo, &sitePasswordInfoSize, siteContext );
     }
-    if (!sitePasswordInfo)
+    if (!sitePasswordInfo) {
         ftl( "Could not allocate site seed info: %d\n", errno );
+        return NULL;
+    }
     trc( "sitePasswordInfo ID: %s\n", mpw_idForBuf( sitePasswordInfo, sitePasswordInfoSize ) );
 
     const uint8_t *sitePasswordSeed = mpw_hmac_sha256( masterKey, MP_dkLen, sitePasswordInfo, sitePasswordInfoSize );
-    if (!sitePasswordSeed)
+    mpw_free( sitePasswordInfo, sitePasswordInfoSize );
+    if (!sitePasswordSeed) {
         ftl( "Could not allocate site seed: %d\n", errno );
+        return NULL;
+    }
     trc( "sitePasswordSeed ID: %s\n", mpw_idForBuf( sitePasswordSeed, 32 ) );
 
     // Determine the template.
     const char *template = mpw_templateForType( siteType, sitePasswordSeed[0] );
     trc( "type %d, template: %s\n", siteType, template );
-    if (strlen( template ) > 32)
+    if (strlen( template ) > 32) {
         ftl( "Template too long for password seed: %lu", strlen( template ) );
+        mpw_free( sitePasswordSeed, sizeof( sitePasswordSeed ) );
+        return NULL;
+    }
 
     // Encode the password from the seed using the template.
     char *const sitePassword = calloc( strlen( template ) + 1, sizeof( char ) );

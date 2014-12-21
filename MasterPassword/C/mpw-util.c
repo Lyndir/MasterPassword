@@ -18,12 +18,16 @@
 void mpw_pushBuf(uint8_t **const buffer, size_t *const bufferSize, const void *pushBuffer, const size_t pushSize) {
 
     if (*bufferSize == (size_t)-1)
+        // The buffer was marked as broken, it is missing a previous push.  Abort to avoid corrupt content.
         return;
 
     *bufferSize += pushSize;
-    *buffer = realloc( *buffer, *bufferSize );
-    if (!*buffer) {
+    uint8_t **const resizedBuffer = realloc( *buffer, *bufferSize );
+    if (!resizedBuffer) {
+        // realloc failed, we can't push.  Mark the buffer as broken.
+        mpw_free( *buffer, *bufferSize - pushSize );
         *bufferSize = -1;
+        *buffer = NULL;
         return;
     }
 
