@@ -47,7 +47,6 @@
 		93D39A5FF670957C0AF8298D /* MPPasswordCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39DEA995041A13DC9CAF7 /* MPPasswordCell.m */; };
 		93D39A8EA1C49CE43B63F47B /* PearlUICollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D8A953779B35403AF6E /* PearlUICollectionView.m */; };
 		93D39AA4A0BE66A872CCC02E /* NSPersistentStore+PearlMigration.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D397F4BAFFF7CF3F1B21A4 /* NSPersistentStore+PearlMigration.h */; };
-		93D39B35D4B8E87ADEC05246 /* mpw-cli.c in Sources */ = {isa = PBXBuildFile; fileRef = 93D398121C8F063A3637144E /* mpw-cli.c */; };
 		93D39B429C67A62E29DC02DA /* MPRootSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D399493FEDDE74DD1A0C15 /* MPRootSegue.m */; };
 		93D39B76DD5AB108BA8928E8 /* UIScrollView+PearlAdjustInsets.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39DE2CB351D4E3789462B /* UIScrollView+PearlAdjustInsets.h */; };
 		93D39B842AB9A5D072810D76 /* NSError+PearlFullDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D398C95847261903D781D3 /* NSError+PearlFullDescription.h */; };
@@ -496,6 +495,7 @@
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
 		93D3970502644794E8A027BE /* MPNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNavigationController.h; sourceTree = "<group>"; };
 		93D3971FE104BB4052484151 /* MPUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUsersViewController.h; sourceTree = "<group>"; };
+		93D397288D0655822A73A539 /* mpw-tests-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests-util.c"; sourceTree = "<group>"; };
 		93D39730673227EFF6DEFF19 /* MPSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSetupViewController.h; sourceTree = "<group>"; };
 		93D3977321EB249981821AB0 /* UITextView+PearlAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+PearlAttributes.m"; sourceTree = "<group>"; };
 		93D3979016BF0C5B29D1340D /* distribute */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = distribute; sourceTree = "<group>"; };
@@ -528,6 +528,7 @@
 		93D39B1D8177A86C5B9EDDE3 /* PearlUICollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlUICollectionView.h; sourceTree = "<group>"; };
 		93D39B381350802A194BF332 /* MPAvatarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAvatarCell.m; sourceTree = "<group>"; };
 		93D39B455A71EC98C749E623 /* MPOverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPOverlayViewController.h; sourceTree = "<group>"; };
+		93D39B48CAB328B3E0C0C67D /* mpw-tests-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-tests-util.h"; sourceTree = "<group>"; };
 		93D39B573E4DE98BAE518215 /* build */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = build; sourceTree = "<group>"; };
 		93D39B70138D0E28F7D5E86B /* mpw-bench.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-bench.c"; sourceTree = "<group>"; };
 		93D39BAA71DE51B4D8A1286C /* MPCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCell.m; sourceTree = "<group>"; };
@@ -657,6 +658,7 @@
 		DA67460A18DE7F0C00DFE240 /* Exo2.0-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Regular.otf"; sourceTree = "<group>"; };
 		DA67460B18DE7F0C00DFE240 /* Exo2.0-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-ExtraBold.otf"; sourceTree = "<group>"; };
 		DA67460C18DE7F0C00DFE240 /* Exo2.0-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Bold.otf"; sourceTree = "<group>"; };
+		DA6774351A4749CC004F356A /* mpw-tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests.c"; sourceTree = "<group>"; };
 		DA70EC7F1811B13C00F65DB2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		DA72BD7419C133BF00E6ACFE /* libscryptenc-ios-sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libscryptenc-ios-sim.a"; sourceTree = "<group>"; };
 		DA72BD7719C137D500E6ACFE /* libopensslcrypto-ios-dev.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopensslcrypto-ios-dev.a"; sourceTree = "<group>"; };
@@ -1608,20 +1610,23 @@
 		93D39A2239FFFE6BEC83E191 /* C */ = {
 			isa = PBXGroup;
 			children = (
-				93D39B573E4DE98BAE518215 /* build */,
-				93D3969393A3A46BD27D7078 /* mpw-algorithm.c */,
 				93D39E71D6BAECEC4CD886F4 /* bashlib */,
-				93D39ACD33E79386E6F33601 /* install */,
-				93D392C5A6572DB0EB5B82C8 /* mpw-types.c */,
-				93D39AFD17CBE324D745DAB0 /* mpw-types.h */,
-				93D3944F4D55D2A37EF6021B /* VERSION */,
+				93D39B573E4DE98BAE518215 /* build */,
 				93D3979016BF0C5B29D1340D /* distribute */,
-				93D39245A478883C672818F3 /* mpw.bashrc */,
+				93D39ACD33E79386E6F33601 /* install */,
+				93D3969393A3A46BD27D7078 /* mpw-algorithm.c */,
+				93D3990D850D76A94C6B7A4D /* mpw-algorithm.h */,
 				93D39B70138D0E28F7D5E86B /* mpw-bench.c */,
 				93D398121C8F063A3637144E /* mpw-cli.c */,
-				93D3990D850D76A94C6B7A4D /* mpw-algorithm.h */,
-				93D39CF7DB942C69D1C5D6BE /* mpw-util.h */,
+				93D397288D0655822A73A539 /* mpw-tests-util.c */,
+				93D39B48CAB328B3E0C0C67D /* mpw-tests-util.h */,
+				DA6774351A4749CC004F356A /* mpw-tests.c */,
+				93D392C5A6572DB0EB5B82C8 /* mpw-types.c */,
+				93D39AFD17CBE324D745DAB0 /* mpw-types.h */,
 				93D396C311C3725870343EE0 /* mpw-util.c */,
+				93D39CF7DB942C69D1C5D6BE /* mpw-util.h */,
+				93D39245A478883C672818F3 /* mpw.bashrc */,
+				93D3944F4D55D2A37EF6021B /* VERSION */,
 			);
 			name = C;
 			path = ../../C;
@@ -3636,7 +3641,6 @@
 				93D39B429C67A62E29DC02DA /* MPRootSegue.m in Sources */,
 				93D392FD5E2052F7D7DB3774 /* NSString+MPMarkDown.m in Sources */,
 				93D395B715D15F2B56F2A2EE /* mpw-types.c in Sources */,
-				93D39B35D4B8E87ADEC05246 /* mpw-cli.c in Sources */,
 				93D39943D01E70DAC3B0DF76 /* mpw-util.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

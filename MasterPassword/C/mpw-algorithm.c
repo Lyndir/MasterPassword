@@ -100,7 +100,7 @@ const char *mpw_passwordForSite(const uint8_t *masterKey, const char *siteName, 
 
     // Encode the password from the seed using the template.
     char *const sitePassword = calloc( strlen( template ) + 1, sizeof( char ) );
-    for (int c = 0; c < strlen( template ); ++c) {
+    for (size_t c = 0; c < strlen( template ); ++c) {
         sitePassword[c] = mpw_characterFromClass( template[c], sitePasswordSeed[c + 1] );
         trc( "class %c, index %u (0x%02X) -> character: %c\n", template[c], sitePasswordSeed[c + 1], sitePasswordSeed[c + 1],
                 sitePassword[c] );

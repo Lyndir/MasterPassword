@@ -150,7 +150,7 @@ int main(int argc, char *const argv[]) {
     if (!siteName && !(siteName = getlinep( "Site name:" )))
         ftl( "Missing site name.\n" );
     if (siteCounterString)
-        siteCounter = atoi( siteCounterString );
+        siteCounter = (uint32_t)atol( siteCounterString );
     if (siteCounter < 1)
         ftl( "Invalid site counter: %d\n", siteCounter );
     if (siteVariantString)
@@ -189,7 +189,7 @@ int main(int argc, char *const argv[]) {
 
     // Output the password.
     const uint8_t *masterKey = mpw_masterKeyForUser( fullName, masterPassword );
-    mpw_free( masterPassword, strlen( masterPassword ) );
+    mpw_freeString( masterPassword );
     if (!masterKey)
         ftl( "Couldn't derive master key." );
 

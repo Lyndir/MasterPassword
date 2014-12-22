@@ -17,37 +17,44 @@
 #endif
 
 #include "mpw-types.h"
+#include "mpw-util.h"
 
 const MPSiteType mpw_typeWithName(const char *typeName) {
-    char lowerTypeName[strlen(typeName)];
-    strcpy(lowerTypeName, typeName);
-    for (char *tN = lowerTypeName; *tN; ++tN)
-        *tN = (char)tolower(*tN);
 
-    if (0 == strcmp(lowerTypeName, "x") || 0 == strcmp(lowerTypeName, "max") || 0 == strcmp(lowerTypeName, "maximum"))
+    size_t stdTypeNameSize = strlen( typeName );
+    char stdTypeName[strlen( typeName )];
+    if (stdTypeNameSize > strlen( "generated" ))
+        strcpy( stdTypeName, typeName + strlen( "generated" ) );
+    else
+        strcpy( stdTypeName, typeName );
+    for (char *tN = stdTypeName; *tN; ++tN)
+        *tN = (char)tolower( *tN );
+
+    if (0 == strcmp( stdTypeName, "x" ) || 0 == strcmp( stdTypeName, "max" ) || 0 == strcmp( stdTypeName, "maximum" ))
         return MPSiteTypeGeneratedMaximum;
-    if (0 == strcmp(lowerTypeName, "l") || 0 == strcmp(lowerTypeName, "long"))
+    if (0 == strcmp( stdTypeName, "l" ) || 0 == strcmp( stdTypeName, "long" ))
         return MPSiteTypeGeneratedLong;
-    if (0 == strcmp(lowerTypeName, "m") || 0 == strcmp(lowerTypeName, "med") || 0 == strcmp(lowerTypeName, "medium"))
+    if (0 == strcmp( stdTypeName, "m" ) || 0 == strcmp( stdTypeName, "med" ) || 0 == strcmp( stdTypeName, "medium" ))
         return MPSiteTypeGeneratedMedium;
-    if (0 == strcmp(lowerTypeName, "b") || 0 == strcmp(lowerTypeName, "basic"))
+    if (0 == strcmp( stdTypeName, "b" ) || 0 == strcmp( stdTypeName, "basic" ))
         return MPSiteTypeGeneratedBasic;
-    if (0 == strcmp(lowerTypeName, "s") || 0 == strcmp(lowerTypeName, "short"))
+    if (0 == strcmp( stdTypeName, "s" ) || 0 == strcmp( stdTypeName, "short" ))
         return MPSiteTypeGeneratedShort;
-    if (0 == strcmp(lowerTypeName, "i") || 0 == strcmp(lowerTypeName, "pin"))
+    if (0 == strcmp( stdTypeName, "i" ) || 0 == strcmp( stdTypeName, "pin" ))
         return MPSiteTypeGeneratedPIN;
-    if (0 == strcmp(lowerTypeName, "n") || 0 == strcmp(lowerTypeName, "name"))
+    if (0 == strcmp( stdTypeName, "n" ) || 0 == strcmp( stdTypeName, "name" ))
         return MPSiteTypeGeneratedName;
-    if (0 == strcmp(lowerTypeName, "p") || 0 == strcmp(lowerTypeName, "phrase"))
+    if (0 == strcmp( stdTypeName, "p" ) || 0 == strcmp( stdTypeName, "phrase" ))
         return MPSiteTypeGeneratedPhrase;
 
-    fprintf(stderr, "Not a generated type name: %s", lowerTypeName);
+    fprintf( stderr, "Not a generated type name: %s", stdTypeName );
     abort();
 }
 
 const char *mpw_templateForType(MPSiteType type, uint8_t seedByte) {
+
     if (!(type & MPSiteTypeClassGenerated)) {
-        fprintf(stderr, "Not a generated type: %d", type);
+        fprintf( stderr, "Not a generated type: %d", type );
         abort();
     }
 
@@ -57,7 +64,13 @@ const char *mpw_templateForType(MPSiteType type, uint8_t seedByte) {
             return templates[seedByte % 2];
         }
         case MPSiteTypeGeneratedLong: {
-            const char *templates[] = { "CvcvnoCvcvCvcv", "CvcvCvcvnoCvcv", "CvcvCvcvCvcvno", "CvccnoCvcvCvcv", "CvccCvcvnoCvcv", "CvccCvcvCvcvno", "CvcvnoCvccCvcv", "CvcvCvccnoCvcv", "CvcvCvccCvcvno", "CvcvnoCvcvCvcc", "CvcvCvcvnoCvcc", "CvcvCvcvCvccno", "CvccnoCvccCvcv", "CvccCvccnoCvcv", "CvccCvccCvcvno", "CvcvnoCvccCvcc", "CvcvCvccnoCvcc", "CvcvCvccCvccno", "CvccnoCvcvCvcc", "CvccCvcvnoCvcc", "CvccCvcvCvccno" };
+            const char *templates[] = { "CvcvnoCvcvCvcv", "CvcvCvcvnoCvcv", "CvcvCvcvCvcvno",
+                                        "CvccnoCvcvCvcv", "CvccCvcvnoCvcv", "CvccCvcvCvcvno",
+                                        "CvcvnoCvccCvcv", "CvcvCvccnoCvcv", "CvcvCvccCvcvno",
+                                        "CvcvnoCvcvCvcc", "CvcvCvcvnoCvcc", "CvcvCvcvCvccno",
+                                        "CvccnoCvccCvcv", "CvccCvccnoCvcv", "CvccCvccCvcvno",
+                                        "CvcvnoCvccCvcc", "CvcvCvccnoCvcc", "CvcvCvccCvccno",
+                                        "CvccnoCvcvCvcc", "CvccCvcvnoCvcc", "CvccCvcvCvccno" };
             return templates[seedByte % 21];
         }
         case MPSiteTypeGeneratedMedium: {
@@ -82,30 +95,32 @@ const char *mpw_templateForType(MPSiteType type, uint8_t seedByte) {
             return templates[seedByte % 3];
         }
         default: {
-            fprintf(stderr, "Unknown generated type: %d", type);
+            fprintf( stderr, "Unknown generated type: %d", type );
             abort();
         }
     }
 }
 
 const MPSiteVariant mpw_variantWithName(const char *variantName) {
-    char lowerVariantName[strlen(variantName)];
-    strcpy(lowerVariantName, variantName);
-    for (char *vN = lowerVariantName; *vN; ++vN)
-        *vN = (char)tolower(*vN);
 
-    if (0 == strcmp(lowerVariantName, "p") || 0 == strcmp(lowerVariantName, "password"))
+    char stdVariantName[strlen( variantName )];
+    strcpy( stdVariantName, variantName );
+    for (char *vN = stdVariantName; *vN; ++vN)
+        *vN = (char)tolower( *vN );
+
+    if (0 == strcmp( stdVariantName, "p" ) || 0 == strcmp( stdVariantName, "password" ))
         return MPSiteVariantPassword;
-    if (0 == strcmp(lowerVariantName, "l") || 0 == strcmp(lowerVariantName, "login"))
+    if (0 == strcmp( stdVariantName, "l" ) || 0 == strcmp( stdVariantName, "login" ))
         return MPSiteVariantLogin;
-    if (0 == strcmp(lowerVariantName, "a") || 0 == strcmp(lowerVariantName, "answer"))
+    if (0 == strcmp( stdVariantName, "a" ) || 0 == strcmp( stdVariantName, "answer" ))
         return MPSiteVariantAnswer;
 
-    fprintf(stderr, "Not a variant name: %s", lowerVariantName);
+    fprintf( stderr, "Not a variant name: %s", stdVariantName );
     abort();
 }
 
 const char *mpw_scopeForVariant(MPSiteVariant variant) {
+
     switch (variant) {
         case MPSiteVariantPassword: {
             return "com.lyndir.masterpassword";
@@ -117,13 +132,14 @@ const char *mpw_scopeForVariant(MPSiteVariant variant) {
             return "com.lyndir.masterpassword.answer";
         }
         default: {
-            fprintf(stderr, "Unknown variant: %d", variant);
+            fprintf( stderr, "Unknown variant: %d", variant );
             abort();
         }
     }
 }
 
 const char mpw_characterFromClass(char characterClass, uint8_t seedByte) {
+
     const char *classCharacters;
     switch (characterClass) {
         case 'V': {
@@ -167,10 +183,10 @@ const char mpw_characterFromClass(char characterClass, uint8_t seedByte) {
             break;
         }
         default: {
-            fprintf(stderr, "Unknown character class: %c", characterClass);
+            fprintf( stderr, "Unknown character class: %c", characterClass );
             abort();
-         }
+        }
     }
 
-    return classCharacters[seedByte % strlen(classCharacters)];
+    return classCharacters[seedByte % strlen( classCharacters )];
 }

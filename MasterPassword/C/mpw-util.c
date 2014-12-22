@@ -22,15 +22,16 @@ void mpw_pushBuf(uint8_t **const buffer, size_t *const bufferSize, const void *p
         return;
 
     *bufferSize += pushSize;
-    uint8_t **const resizedBuffer = realloc( *buffer, *bufferSize );
+    uint8_t *resizedBuffer = realloc( *buffer, *bufferSize );
     if (!resizedBuffer) {
         // realloc failed, we can't push.  Mark the buffer as broken.
         mpw_free( *buffer, *bufferSize - pushSize );
-        *bufferSize = -1;
+        *bufferSize = (size_t)-1;
         *buffer = NULL;
         return;
     }
 
+    *buffer = resizedBuffer;
     uint8_t *pushDst = *buffer + *bufferSize - pushSize;
     memcpy( pushDst, pushBuffer, pushSize );
 }
@@ -49,6 +50,11 @@ void mpw_free(const void *buffer, const size_t bufferSize) {
 
     memset( (void *)buffer, 0, bufferSize );
     free( (void *)buffer );
+}
+
+void mpw_freeString(const char *string) {
+
+    mpw_free( string, strlen( string ) );
 }
 
 uint8_t const *mpw_scrypt(const size_t keySize, const char *secret, const uint8_t *salt, const size_t saltSize,
@@ -88,7 +94,7 @@ static char *mpw_hex_buf = NULL;
 const char *mpw_hex(const void *buf, size_t length) {
 
     mpw_hex_buf = realloc( mpw_hex_buf, length * 2 + 1 );
-    for (int kH = 0; kH < length; kH++)
+    for (size_t kH = 0; kH < length; kH++)
         sprintf( &(mpw_hex_buf[kH * 2]), "%02X", ((const uint8_t *)buf)[kH] );
 
     return mpw_hex_buf;

@@ -75,6 +75,20 @@
 		DA60717C195D040500CA98B5 /* icon_gear.png in Resources */ = {isa = PBXBuildFile; fileRef = DA607092195D03E200CA98B5 /* icon_gear.png */; };
 		DA60717D195D040500CA98B5 /* icon_gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA607093195D03E200CA98B5 /* icon_gear@2x.png */; };
 		DA6558A419A99609009A0BEB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA6558A319A99609009A0BEB /* Images.xcassets */; };
+		DA6773CA1A4746AF004F356A /* bashlib in Resources */ = {isa = PBXBuildFile; fileRef = DA67732A1A4746AF004F356A /* bashlib */; };
+		DA6773CB1A4746AF004F356A /* build in Resources */ = {isa = PBXBuildFile; fileRef = DA67732B1A4746AF004F356A /* build */; };
+		DA6773CC1A4746AF004F356A /* distribute in Resources */ = {isa = PBXBuildFile; fileRef = DA67732C1A4746AF004F356A /* distribute */; };
+		DA6773CD1A4746AF004F356A /* install in Resources */ = {isa = PBXBuildFile; fileRef = DA67732D1A4746AF004F356A /* install */; };
+		DA6774291A4746AF004F356A /* mpw-algorithm.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773BB1A4746AF004F356A /* mpw-algorithm.c */; };
+		DA67742F1A4746AF004F356A /* mpw-types.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C21A4746AF004F356A /* mpw-types.c */; };
+		DA6774311A4746AF004F356A /* mpw-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C51A4746AF004F356A /* mpw-util.c */; };
+		DA6774331A4746AF004F356A /* mpw.bashrc in Resources */ = {isa = PBXBuildFile; fileRef = DA6773C81A4746AF004F356A /* mpw.bashrc */; };
+		DA6774341A4746AF004F356A /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = DA6773C91A4746AF004F356A /* VERSION */; };
+		DA6774431A474A3B004F356A /* mpw-algorithm.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773BB1A4746AF004F356A /* mpw-algorithm.c */; };
+		DA6774441A474A3B004F356A /* mpw-tests.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C11A4746AF004F356A /* mpw-tests.c */; };
+		DA6774451A474A3B004F356A /* mpw-types.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C21A4746AF004F356A /* mpw-types.c */; };
+		DA6774461A474A3B004F356A /* mpw-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C51A4746AF004F356A /* mpw-util.c */; };
+		DA67744A1A47C8F7004F356A /* mpw-tests-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6774481A47C8F7004F356A /* mpw-tests-util.c */; };
 		DA8ED895192906920099B726 /* PearlTween.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8ED891192906920099B726 /* PearlTween.m */; };
 		DA8ED896192906920099B726 /* PearlTween.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED892192906920099B726 /* PearlTween.h */; };
 		DA8ED897192906920099B726 /* map-macro.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED894192906920099B726 /* map-macro.h */; };
@@ -211,6 +225,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		DA6774391A474A03004F356A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		DAADCC4E19FB006500987B1D /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -742,6 +765,24 @@
 		DA6701B716406A4100B61001 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		DA6701DD16406B7300B61001 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		DA672D2E14F92C6B004A189C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		DA67732A1A4746AF004F356A /* bashlib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bashlib; sourceTree = "<group>"; };
+		DA67732B1A4746AF004F356A /* build */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = build; sourceTree = "<group>"; };
+		DA67732C1A4746AF004F356A /* distribute */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = distribute; sourceTree = "<group>"; };
+		DA67732D1A4746AF004F356A /* install */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = install; sourceTree = "<group>"; };
+		DA6773BB1A4746AF004F356A /* mpw-algorithm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm.c"; sourceTree = "<group>"; };
+		DA6773BC1A4746AF004F356A /* mpw-algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm.h"; sourceTree = "<group>"; };
+		DA6773BF1A4746AF004F356A /* mpw-bench.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-bench.c"; sourceTree = "<group>"; };
+		DA6773C01A4746AF004F356A /* mpw-cli.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-cli.c"; sourceTree = "<group>"; };
+		DA6773C11A4746AF004F356A /* mpw-tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests.c"; sourceTree = "<group>"; };
+		DA6773C21A4746AF004F356A /* mpw-types.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-types.c"; sourceTree = "<group>"; };
+		DA6773C31A4746AF004F356A /* mpw-types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-types.h"; sourceTree = "<group>"; };
+		DA6773C51A4746AF004F356A /* mpw-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-util.c"; sourceTree = "<group>"; };
+		DA6773C61A4746AF004F356A /* mpw-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-util.h"; sourceTree = "<group>"; };
+		DA6773C81A4746AF004F356A /* mpw.bashrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mpw.bashrc; sourceTree = "<group>"; };
+		DA6773C91A4746AF004F356A /* VERSION */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
+		DA67743B1A474A03004F356A /* mpw-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mpw-test"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA6774481A47C8F7004F356A /* mpw-tests-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests-util.c"; sourceTree = "<group>"; };
+		DA6774491A47C8F7004F356A /* mpw-tests-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-tests-util.h"; sourceTree = "<group>"; };
 		DA8ED891192906920099B726 /* PearlTween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlTween.m; sourceTree = "<group>"; };
 		DA8ED892192906920099B726 /* PearlTween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlTween.h; sourceTree = "<group>"; };
 		DA8ED894192906920099B726 /* map-macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "map-macro.h"; sourceTree = "<group>"; };
@@ -888,6 +929,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DA6774381A474A03004F356A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DAADCC4D19FB006500987B1D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -939,6 +987,7 @@
 		DA5BFA39147E415C00F98B1E = {
 			isa = PBXGroup;
 			children = (
+				DA6773291A4746AF004F356A /* C */,
 				DA5E5C961724A667003798D8 /* ObjC */,
 				DACA23B41705DF7D002C6C22 /* Resources */,
 				DACA22121705DDC5002C6C22 /* External */,
@@ -956,6 +1005,7 @@
 				DAC77CAD148291A600BCF976 /* libPearl.a */,
 				DAC6326C148680650075AEA5 /* libjrswizzle.a */,
 				DAADCC5019FB006500987B1D /* libKCOrderedAccessorFix.a */,
+				DA67743B1A474A03004F356A /* mpw-test */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1476,6 +1526,31 @@
 			path = Insignia;
 			sourceTree = "<group>";
 		};
+		DA6773291A4746AF004F356A /* C */ = {
+			isa = PBXGroup;
+			children = (
+				DA67732A1A4746AF004F356A /* bashlib */,
+				DA67732B1A4746AF004F356A /* build */,
+				DA67732C1A4746AF004F356A /* distribute */,
+				DA67732D1A4746AF004F356A /* install */,
+				DA6773BB1A4746AF004F356A /* mpw-algorithm.c */,
+				DA6773BC1A4746AF004F356A /* mpw-algorithm.h */,
+				DA6773BF1A4746AF004F356A /* mpw-bench.c */,
+				DA6773C01A4746AF004F356A /* mpw-cli.c */,
+				DA6774481A47C8F7004F356A /* mpw-tests-util.c */,
+				DA6774491A47C8F7004F356A /* mpw-tests-util.h */,
+				DA6773C11A4746AF004F356A /* mpw-tests.c */,
+				DA6773C21A4746AF004F356A /* mpw-types.c */,
+				DA6773C31A4746AF004F356A /* mpw-types.h */,
+				DA6773C51A4746AF004F356A /* mpw-util.c */,
+				DA6773C61A4746AF004F356A /* mpw-util.h */,
+				DA6773C81A4746AF004F356A /* mpw.bashrc */,
+				DA6773C91A4746AF004F356A /* VERSION */,
+			);
+			name = C;
+			path = ../../C;
+			sourceTree = "<group>";
+		};
 		DA8ED893192906920099B726 /* include */ = {
 			isa = PBXGroup;
 			children = (
@@ -1847,6 +1922,23 @@
 			productReference = DA5BFA44147E415C00F98B1E /* Master Password.app */;
 			productType = "com.apple.product-type.application";
 		};
+		DA67743A1A474A03004F356A /* mpw-test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA67743F1A474A03004F356A /* Build configuration list for PBXNativeTarget "mpw-test" */;
+			buildPhases = (
+				DA6774371A474A03004F356A /* Sources */,
+				DA6774381A474A03004F356A /* Frameworks */,
+				DA6774391A474A03004F356A /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "mpw-test";
+			productName = "mpw-test";
+			productReference = DA67743B1A474A03004F356A /* mpw-test */;
+			productType = "com.apple.product-type.tool";
+		};
 		DAADCC4F19FB006500987B1D /* KCOrderedAccessorFix */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAADCC5E19FB006500987B1D /* Build configuration list for PBXNativeTarget "KCOrderedAccessorFix" */;
@@ -1919,6 +2011,9 @@
 							};
 						};
 					};
+					DA67743A1A474A03004F356A = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
 					DAADCC4F19FB006500987B1D = {
 						CreatedOnToolsVersion = 6.0.1;
 					};
@@ -1947,6 +2042,7 @@
 				DAC77CAC148291A600BCF976 /* Pearl */,
 				DAC6326B148680650075AEA5 /* jrswizzle */,
 				DAADCC4F19FB006500987B1D /* KCOrderedAccessorFix */,
+				DA67743A1A474A03004F356A /* mpw-test */,
 			);
 		};
 /* End PBXProject section */
@@ -1972,6 +2068,7 @@
 				DACA27131705DF81002C6C22 /* avatar-3@2x.png in Resources */,
 				DACA27141705DF81002C6C22 /* avatar-7.png in Resources */,
 				DAF4EF57190A828100023C90 /* Exo2.0-Regular.otf in Resources */,
+				DA6773CA1A4746AF004F356A /* bashlib in Resources */,
 				DACA27151705DF81002C6C22 /* avatar-0.png in Resources */,
 				DA6558A419A99609009A0BEB /* Images.xcassets in Resources */,
 				DACA27161705DF81002C6C22 /* avatar-12.png in Resources */,
@@ -1979,6 +2076,7 @@
 				DAF4EF59190A828100023C90 /* Exo2.0-Bold.otf in Resources */,
 				DACA27181705DF81002C6C22 /* avatar-9.png in Resources */,
 				DAAA81B0195A8D1300FA30D9 /* gradient.png in Resources */,
+				DA6774331A4746AF004F356A /* mpw.bashrc in Resources */,
 				DACA27191705DF81002C6C22 /* avatar-1@2x.png in Resources */,
 				DA2508F119511D3600AC23F1 /* MPPasswordWindowController.xib in Resources */,
 				DA60717C195D040500CA98B5 /* icon_gear.png in Resources */,
@@ -2001,9 +2099,11 @@
 				DACA27291705DF81002C6C22 /* avatar-17.png in Resources */,
 				DACA272A1705DF81002C6C22 /* avatar-5.png in Resources */,
 				DACA272B1705DF81002C6C22 /* avatar-2.png in Resources */,
+				DA6773CD1A4746AF004F356A /* install in Resources */,
 				DACA272C1705DF81002C6C22 /* avatar-14@2x.png in Resources */,
 				DACA272D1705DF81002C6C22 /* avatar-4@2x.png in Resources */,
 				DACA272E1705DF81002C6C22 /* avatar-9@2x.png in Resources */,
+				DA6774341A4746AF004F356A /* VERSION in Resources */,
 				DACA272F1705DF81002C6C22 /* avatar-3.png in Resources */,
 				DACA27301705DF81002C6C22 /* avatar-18.png in Resources */,
 				DACA27311705DF81002C6C22 /* avatar-4.png in Resources */,
@@ -2017,7 +2117,9 @@
 				DACA27351705DF81002C6C22 /* avatar-11.png in Resources */,
 				DACA27361705DF81002C6C22 /* avatar-0@2x.png in Resources */,
 				DACA27371705DF81002C6C22 /* avatar-10@2x.png in Resources */,
+				DA6773CC1A4746AF004F356A /* distribute in Resources */,
 				DACA27381705DF81002C6C22 /* menu-icon.png in Resources */,
+				DA6773CB1A4746AF004F356A /* build in Resources */,
 				DACA29671705DF81002C6C22 /* SourceCodePro-ExtraLight.otf in Resources */,
 				DACA29681705DF81002C6C22 /* SourceCodePro-Black.otf in Resources */,
 				DACA296F1705DF81002C6C22 /* Crashlytics.plist in Resources */,
@@ -2104,6 +2206,7 @@
 				DA32CFE519CF1C71004F3F0E /* MPUserEntity.m in Sources */,
 				DA5E5CF71724A667003798D8 /* MPAlgorithmV0.m in Sources */,
 				DA5E5CF81724A667003798D8 /* MPAlgorithmV1.m in Sources */,
+				DA6774311A4746AF004F356A /* mpw-util.c in Sources */,
 				DA5E5CF91724A667003798D8 /* MPAppDelegate_Key.m in Sources */,
 				DA5180CE19FF307E00A587E9 /* MPAppDelegate_Store.m in Sources */,
 				DA5E5CFA1724A667003798D8 /* MPAppDelegate_Shared.m in Sources */,
@@ -2119,12 +2222,26 @@
 				93D39C5789EFA607CF788082 /* MPSiteModel.m in Sources */,
 				DA5180CA19FF2F9200A587E9 /* MPAlgorithmV2.m in Sources */,
 				93D39F833DEC1C89B2F795AC /* MPPasswordWindowController.m in Sources */,
+				DA67742F1A4746AF004F356A /* mpw-types.c in Sources */,
 				DA32CFD919CF1C70004F3F0E /* MPGeneratedSiteEntity.m in Sources */,
 				93D390C676DF52DA7E459F19 /* MPPasswordWindow.m in Sources */,
 				93D39784E725A34D1EE3FB3B /* MPInitialWindowController.m in Sources */,
 				DA32CFDF19CF1C70004F3F0E /* MPSiteEntity.m in Sources */,
 				93D394C4254EEB45FB335AFB /* MPSitesTableView.m in Sources */,
+				DA6774291A4746AF004F356A /* mpw-algorithm.c in Sources */,
 				93D395E4830290EBB6E71F34 /* MPNoStateButton.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA6774371A474A03004F356A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA6774441A474A3B004F356A /* mpw-tests.c in Sources */,
+				DA67744A1A47C8F7004F356A /* mpw-tests-util.c in Sources */,
+				DA6774451A474A3B004F356A /* mpw-types.c in Sources */,
+				DA6774461A474A3B004F356A /* mpw-util.c in Sources */,
+				DA6774431A474A3B004F356A /* mpw-algorithm.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2236,6 +2353,7 @@
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
 				CLANG_WARN_CXX0X_EXTENSIONS = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -2287,6 +2405,10 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -2294,6 +2416,7 @@
 					"\"$(SRCROOT)/../../../External\"/**",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
@@ -2311,6 +2434,7 @@
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
 				CLANG_WARN_CXX0X_EXTENSIONS = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -2362,6 +2486,10 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -2369,6 +2497,7 @@
 					"\"$(SRCROOT)/../../../External\"/**",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -2426,6 +2555,42 @@
 			};
 			name = "AdHoc-Mac";
 		};
+		DA6774401A474A03004F356A /* Debug-Mac */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/include/libxml2,
+				);
+			};
+			name = "Debug-Mac";
+		};
+		DA6774411A474A03004F356A /* AdHoc-Mac */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/include/libxml2,
+				);
+			};
+			name = "AdHoc-Mac";
+		};
+		DA6774421A474A03004F356A /* AppStore-Mac */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/include/libxml2,
+				);
+			};
+			name = "AppStore-Mac";
+		};
 		DA95D60914DF3F3B008D1B94 /* AppStore-Mac */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2435,6 +2600,7 @@
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
 				CLANG_WARN_CXX0X_EXTENSIONS = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -2486,6 +2652,10 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -2493,6 +2663,7 @@
 					"\"$(SRCROOT)/../../../External\"/**",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -2668,6 +2839,16 @@
 				DA5BFA6E147E415C00F98B1E /* Debug-Mac */,
 				DA5BFA6F147E415C00F98B1E /* AdHoc-Mac */,
 				DA95D60A14DF3F3B008D1B94 /* AppStore-Mac */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "AdHoc-Mac";
+		};
+		DA67743F1A474A03004F356A /* Build configuration list for PBXNativeTarget "mpw-test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA6774401A474A03004F356A /* Debug-Mac */,
+				DA6774411A474A03004F356A /* AdHoc-Mac */,
+				DA6774421A474A03004F356A /* AppStore-Mac */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "AdHoc-Mac";

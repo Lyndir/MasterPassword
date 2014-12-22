@@ -6,6 +6,17 @@
 //  Copyright (c) 2014 Lyndir. All rights reserved.
 //
 
+//// Logging.
+
+#ifdef DEBUG
+#define trc(...) fprintf( stderr, __VA_ARGS__ )
+#else
+#define trc(...) do {} while (0)
+#endif
+#ifndef ftl
+#define ftl(...) do { fprintf( stderr, __VA_ARGS__ ); abort(); } while (0)
+#endif
+
 //// Buffers and memory.
 
 /** Push a buffer onto a buffer.  reallocs the given buffer and appends the given buffer. */
@@ -20,6 +31,9 @@ void mpw_pushInt(
 /** Free a buffer after zero'ing its contents. */
 void mpw_free(
         const void *buffer, const size_t bufferSize);
+/** Free a string after zero'ing its contents. */
+void mpw_freeString(
+        const char *string);
 
 //// Cryptographic functions.
 

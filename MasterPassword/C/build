@@ -34,6 +34,7 @@ else
     targets=(
         mpw                         # C CLI version of Master Password.
         mpw-bench                   # C CLI Master Password benchmark utility.
+        mpw-tests                   # C Master Password algorithm tester.
     )
 fi
 
@@ -252,16 +253,45 @@ mpw-bench() {
         # library paths
         -L"." -L"lib/scrypt"
         -L"lib/bcrypt"
-        # libraries
+        # link libraries
         -l"crypto"
     )
 
-    cc "${CFLAGS[@]}" "$@"                  -c mpw-algorithm.c    -o mpw-algorithm.o
-    cc "${CFLAGS[@]}" "$@"                  -c mpw-types.c        -o mpw-types.o
-    cc "${CFLAGS[@]}" "$@"                  -c mpw-util.c         -o mpw-util.o
     cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "$@" "mpw-algorithm.o" "mpw-types.o" "mpw-util.o" \
                                                mpw-bench.c        -o mpw-bench
     echo "done!  Now use ./mpw-bench"
+}
+
+
+### MPW-TESTS
+mpw-tests() {
+    depend scrypt
+
+    echo
+    echo "Building target: $target..."
+    CFLAGS=(
+        # include paths
+        -I"lib/include"
+        -I"/usr/include/libxml2"
+    )
+    LDFLAGS=(
+        # scrypt
+        "lib/scrypt/scrypt-crypto_aesctr.o"
+        "lib/scrypt/scrypt-sha256.o"
+        "lib/scrypt/scrypt-crypto_scrypt-nosse.o"
+        "lib/scrypt/scrypt-memlimit.o"
+        "lib/scrypt/scrypt-scryptenc_cpuperf.o"
+        "lib/scrypt/scrypt-scryptenc.o"
+        # library paths
+        -L"." -L"lib/scrypt"
+        # link libraries
+        -l"crypto" -l"xml2"
+    )
+
+    cc "${CFLAGS[@]}" "$@"                  -c mpw-tests-util.c         -o mpw-tests-util.o
+    cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "$@" "mpw-algorithm.o" "mpw-types.o" "mpw-util.o" "mpw-tests-util.o" \
+                                               mpw-tests.c        -o mpw-tests
+    echo "done!  Now use ./mpw-tests"
 }
 
 

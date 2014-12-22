@@ -6,17 +6,6 @@
 //  Copyright (c) 2014 Lyndir. All rights reserved.
 //
 
-//// Logging.
-
-#ifdef DEBUG
-#define trc(...) fprintf( stderr, __VA_ARGS__ )
-#else
-#define trc(...) do {} while (0)
-#endif
-#ifndef ftl
-#define ftl(...) do { fprintf( stderr, __VA_ARGS__ ); abort(); } while (0)
-#endif
-
 //// Types.
 
 typedef enum {
