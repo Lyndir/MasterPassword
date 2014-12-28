@@ -3,7 +3,9 @@ package com.lyndir.masterpassword.gui;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.lyndir.masterpassword.MasterKey;
+import com.lyndir.masterpassword.model.MPUser;
 import java.security.KeyException;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 
 
@@ -38,17 +40,22 @@ public abstract class User {
         return key;
     }
 
+    public abstract Iterable<Site> findSitesByName(final String siteName);
+
+    public abstract void addSite(final Site site);
+
+    @Override
+    public boolean equals(final Object obj) {
+        return this == obj || obj instanceof User && Objects.equals( getFullName(), ((User) obj).getFullName() );
+    }
+
     @Override
     public int hashCode() {
-        return getFullName().hashCode();
+        return Objects.hashCode( getFullName() );
     }
 
     @Override
     public String toString() {
         return getFullName();
     }
-
-    public abstract Iterable<Site> findSitesByName(final String siteName);
-
-    public abstract void addSite(final Site site);
 }

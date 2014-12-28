@@ -15,7 +15,17 @@ public class MPUserFileManager extends MPUserManager {
 
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MPUserFileManager.class );
-    private static final MPUserFileManager instance = create( new File( System.getProperty( "user.home" ), ".mpwrc" ) );
+    private static final File mpwd = new File( System.getProperty( "user.home" ), ".mpw.d" );
+    private static final MPUserFileManager instance;
+
+    static {
+        File mpwrc = new File( System.getProperty( "user.home" ), ".mpwrc" );
+        if (mpwrc.exists() && !mpwd.exists())
+            if (!mpwrc.renameTo( mpwd ))
+                logger.err( "Couldn't migrate: %s -> %s", mpwrc, mpwd );
+
+        instance = create( mpwd );
+    }
 
     private final File userFilesDirectory;
 

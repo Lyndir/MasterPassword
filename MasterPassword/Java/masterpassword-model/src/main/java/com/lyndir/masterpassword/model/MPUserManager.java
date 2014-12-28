@@ -1,7 +1,6 @@
 package com.lyndir.masterpassword.model;
 
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Maps;
+import com.google.common.collect.*;
 import java.util.*;
 
 
@@ -23,12 +22,7 @@ public abstract class MPUserManager {
     }
 
     public SortedSet<MPUser> getUsers() {
-        return FluentIterable.from( usersByName.values() ).toSortedSet( new Comparator<MPUser>() {
-            @Override
-            public int compare(final MPUser user1, final MPUser user2) {
-                return user1.getLastUsed().compareTo( user2.getLastUsed() );
-            }
-        } );
+        return FluentIterable.from( usersByName.values() ).toSortedSet( Ordering.natural() );
     }
 
     public void addUser(final MPUser user) {

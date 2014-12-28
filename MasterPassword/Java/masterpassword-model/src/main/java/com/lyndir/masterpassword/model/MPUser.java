@@ -1,5 +1,7 @@
 package com.lyndir.masterpassword.model;
 
+import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.lyndir.lhunath.opal.system.CodeUtils;
@@ -11,7 +13,7 @@ import org.joda.time.*;
 /**
  * @author lhunath, 14-12-07
  */
-public class MPUser {
+public class MPUser implements Comparable<MPUser> {
 
     private final String fullName;
     private final Collection<MPSite> sites = Sets.newHashSet();
@@ -97,5 +99,29 @@ public class MPUser {
 
     public Iterable<MPSite> getSites() {
         return sites;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        return this == obj || obj instanceof MPUser && Objects.equals( fullName, ((MPUser) obj).fullName );
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode( fullName );
+    }
+
+    @Override
+    public String toString() {
+        return strf( "{MPUser: %s}", fullName );
+    }
+
+    @Override
+    public int compareTo(final MPUser o) {
+        int comparison = lastUsed.compareTo( o.lastUsed );
+        if (comparison == 0)
+            comparison = fullName.compareTo( o.fullName );
+
+        return comparison;
     }
 }

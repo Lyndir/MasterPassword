@@ -4,6 +4,7 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
+import com.lyndir.lhunath.opal.system.util.ObjectUtils;
 import com.lyndir.masterpassword.MasterKey;
 import com.lyndir.masterpassword.model.*;
 import javax.annotation.Nullable;
@@ -76,7 +77,8 @@ public class ModelUser extends User {
 
     @Override
     public void addSite(final Site site) {
-        model.addSite( new MPSite( site.getSiteName(), site.getSiteType(), site.getSiteCounter() ) );
+        model.addSite( new MPSite( model, site.getSiteName(), site.getSiteType(), site.getSiteCounter() ) );
+        model.updateLastUsed();
         MPUserFileManager.get().save();
     }
 

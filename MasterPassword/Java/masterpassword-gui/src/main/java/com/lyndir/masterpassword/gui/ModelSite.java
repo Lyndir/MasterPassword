@@ -48,4 +48,9 @@ public class ModelSite extends Site {
             MPUserFileManager.get().save();
         }
     }
+
+    public void use() {
+        model.updateLastUsed();
+        MPUserFileManager.get().save();
+    }
 }

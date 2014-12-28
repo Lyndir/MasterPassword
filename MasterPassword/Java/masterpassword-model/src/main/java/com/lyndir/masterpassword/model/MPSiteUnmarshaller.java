@@ -4,7 +4,6 @@ import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.io.CharStreams;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
@@ -123,7 +122,8 @@ public class MPSiteUnmarshaller {
         MPSite site;
         switch (importFormat) {
             case 0:
-                site = new MPSite( ConversionUtils.toIntegerNN( siteMatcher.group( 4 ).replace( ":", "" ) ), //
+                site = new MPSite( user, //
+                                   ConversionUtils.toIntegerNN( siteMatcher.group( 4 ).replace( ":", "" ) ), //
                                    rfc3339.parseDateTime( siteMatcher.group( 1 ) ).toInstant(), //
                                    siteMatcher.group( 5 ), //
                                    MPSiteType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
@@ -134,7 +134,8 @@ public class MPSiteUnmarshaller {
                 break;
 
             case 1:
-                site = new MPSite( ConversionUtils.toIntegerNN( siteMatcher.group( 4 ).replace( ":", "" ) ), //
+                site = new MPSite( user, //
+                                   ConversionUtils.toIntegerNN( siteMatcher.group( 4 ).replace( ":", "" ) ), //
                                    rfc3339.parseDateTime( siteMatcher.group( 1 ) ).toInstant(), //
                                    siteMatcher.group( 7 ), //
                                    MPSiteType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
