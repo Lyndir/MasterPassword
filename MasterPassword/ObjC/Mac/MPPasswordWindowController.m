@@ -44,6 +44,8 @@
 
     [super windowDidLoad];
 
+    [self replaceFonts:self.window.contentView];
+
 //    [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillBecomeActiveNotification object:nil
 //                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
 //        [self fadeIn];
@@ -93,6 +95,20 @@
     self.siteTable.superview.superview.layer.mask = self.siteGradient;
 
     self.siteTable.controller = self;
+}
+
+- (void)replaceFonts:(NSView *)view {
+
+    if (view.window.backingScaleFactor == 1)
+        [view enumerateViews:^(NSView *subview, BOOL *stop, BOOL *recurse) {
+            if ([subview respondsToSelector:@selector( setFont: )]) {
+                NSFont *font = [(id)subview font];
+                if ([font.fontName isEqualToString:@"HelveticaNeue-Thin"])
+                    [(id)subview setFont:[NSFont fontWithName:@"HelveticaNeue" matrix:font.matrix]];
+                if ([font.fontName isEqualToString:@"HelveticaNeue-Light"])
+                    [(id)subview setFont:[NSFont fontWithName:@"HelveticaNeue" matrix:font.matrix]];
+            }
+        }            recurse:YES];
 }
 
 - (void)flagsChanged:(NSEvent *)theEvent {
@@ -185,6 +201,11 @@
 }
 
 #pragma mark - NSTableViewDelegate
+
+- (void)tableView:(NSTableView *)tableView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
+
+    [self replaceFonts:rowView];
+}
 
 #pragma mark - NSAlert
 
@@ -513,13 +534,13 @@
     NSMutableArray *fuzzyGroups = [NSMutableArray new];
     [fuzzyRE enumerateMatchesInString:queryString options:0 range:NSMakeRange( 0, queryString.length )
                            usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-                               [fuzzyGroups addObject:[queryString substringWithRange:result.range] ];
+                               [fuzzyGroups addObject:[queryString substringWithRange:result.range]];
                            }];
     [MPMacAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
         fetchRequest.sortDescriptors = @[ [[NSSortDescriptor alloc] initWithKey:@"lastUsed" ascending:NO] ];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name LIKE[cd] %@) AND user == %@",
-                        queryPattern, queryPattern, [MPMacAppDelegate get].activeUserOID];
+                                                                  queryPattern, queryPattern, [MPMacAppDelegate get].activeUserOID];
 
         NSError *error = nil;
         NSArray *siteResults = [context executeFetchRequest:fetchRequest error:&error];

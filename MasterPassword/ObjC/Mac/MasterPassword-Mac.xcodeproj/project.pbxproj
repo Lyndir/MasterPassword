@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		93D390C676DF52DA7E459F19 /* MPPasswordWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D9D0061FF1159998F06 /* MPPasswordWindow.m */; };
+		93D391E61DC23E128DA4446C /* NSView+Traversing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D393EE88DE554BCCBC1C2D /* NSView+Traversing.h */; };
 		93D392EC39DA43C46C692C12 /* NSDictionary+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */; };
 		93D394C4254EEB45FB335AFB /* MPSitesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39423D7BF4FD31FE6D27C /* MPSitesTableView.m */; };
 		93D395E4830290EBB6E71F34 /* MPNoStateButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39538C4CEFF46DF379254 /* MPNoStateButton.m */; };
 		93D395F08A087F8A24689347 /* NSArray+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */; };
 		93D3970BCF85F7902E611168 /* PearlProfiler.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39DB3A8ADED08C39A6228 /* PearlProfiler.m */; };
 		93D39784E725A34D1EE3FB3B /* MPInitialWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D3CB30874147D9A9E1B /* MPInitialWindowController.m */; };
+		93D3987F6D9046DBEE4D8364 /* NSView+Traversing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D392870DF659AFC1870521 /* NSView+Traversing.m */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
 		93D39C5789EFA607CF788082 /* MPSiteModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39E73BF5CBF8E5B005CD3 /* MPSiteModel.m */; };
 		93D39D304F73B3BBA031522A /* PearlProfiler.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D394EEFF5BF555A55AF361 /* PearlProfiler.h */; };
@@ -89,6 +91,8 @@
 		DA6774451A474A3B004F356A /* mpw-types.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C21A4746AF004F356A /* mpw-types.c */; };
 		DA6774461A474A3B004F356A /* mpw-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C51A4746AF004F356A /* mpw-util.c */; };
 		DA67744A1A47C8F7004F356A /* mpw-tests-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6774481A47C8F7004F356A /* mpw-tests-util.c */; };
+		DA89D4EC1A51EABD00AC64D7 /* Pearl-Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = DA89D4EA1A51EABD00AC64D7 /* Pearl-Cocoa.h */; };
+		DA89D4ED1A51EABD00AC64D7 /* Pearl-Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = DA89D4EB1A51EABD00AC64D7 /* Pearl-Cocoa.m */; };
 		DA8ED895192906920099B726 /* PearlTween.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8ED891192906920099B726 /* PearlTween.m */; };
 		DA8ED896192906920099B726 /* PearlTween.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED892192906920099B726 /* PearlTween.h */; };
 		DA8ED897192906920099B726 /* map-macro.h in Headers */ = {isa = PBXBuildFile; fileRef = DA8ED894192906920099B726 /* map-macro.h */; };
@@ -259,10 +263,12 @@
 /* Begin PBXFileReference section */
 		93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Indexing.m"; sourceTree = "<group>"; };
 		93D39240B5143E01F0B75E96 /* MPSiteModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteModel.h; sourceTree = "<group>"; };
+		93D392870DF659AFC1870521 /* NSView+Traversing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+Traversing.m"; sourceTree = "<group>"; };
 		93D392A4F3DE0BD758B9B056 /* MPNoStateButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNoStateButton.h; sourceTree = "<group>"; };
 		93D392C3918763B3B72CF366 /* MPPasswordWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindowController.h; sourceTree = "<group>"; };
 		93D39368EF3CBFEF2AFCA15A /* MPInitialWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPInitialWindowController.h; sourceTree = "<group>"; };
 		93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Indexing.h"; sourceTree = "<group>"; };
+		93D393EE88DE554BCCBC1C2D /* NSView+Traversing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+Traversing.h"; sourceTree = "<group>"; };
 		93D39423D7BF4FD31FE6D27C /* MPSitesTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSitesTableView.m; sourceTree = "<group>"; };
 		93D394EEFF5BF555A55AF361 /* PearlProfiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PearlProfiler.h; path = ../../../External/Pearl/Pearl/PearlProfiler.h; sourceTree = "<group>"; };
 		93D39538C4CEFF46DF379254 /* MPNoStateButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNoStateButton.m; sourceTree = "<group>"; };
@@ -783,6 +789,8 @@
 		DA67743B1A474A03004F356A /* mpw-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mpw-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA6774481A47C8F7004F356A /* mpw-tests-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests-util.c"; sourceTree = "<group>"; };
 		DA6774491A47C8F7004F356A /* mpw-tests-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-tests-util.h"; sourceTree = "<group>"; };
+		DA89D4EA1A51EABD00AC64D7 /* Pearl-Cocoa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Pearl-Cocoa.h"; sourceTree = "<group>"; };
+		DA89D4EB1A51EABD00AC64D7 /* Pearl-Cocoa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Pearl-Cocoa.m"; sourceTree = "<group>"; };
 		DA8ED891192906920099B726 /* PearlTween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlTween.m; sourceTree = "<group>"; };
 		DA8ED892192906920099B726 /* PearlTween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlTween.h; sourceTree = "<group>"; };
 		DA8ED894192906920099B726 /* map-macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "map-macro.h"; sourceTree = "<group>"; };
@@ -1551,6 +1559,17 @@
 			path = ../../C;
 			sourceTree = "<group>";
 		};
+		DA89D4E51A51E53100AC64D7 /* Pearl-Cocoa */ = {
+			isa = PBXGroup;
+			children = (
+				DA89D4EA1A51EABD00AC64D7 /* Pearl-Cocoa.h */,
+				DA89D4EB1A51EABD00AC64D7 /* Pearl-Cocoa.m */,
+				93D392870DF659AFC1870521 /* NSView+Traversing.m */,
+				93D393EE88DE554BCCBC1C2D /* NSView+Traversing.h */,
+			);
+			path = "Pearl-Cocoa";
+			sourceTree = "<group>";
+		};
 		DA8ED893192906920099B726 /* include */ = {
 			isa = PBXGroup;
 			children = (
@@ -1572,6 +1591,7 @@
 			isa = PBXGroup;
 			children = (
 				DAFE45D715039823003ABA7C /* Pearl */,
+				DA89D4E51A51E53100AC64D7 /* Pearl-Cocoa */,
 				DAFE45FC15039823003ABA7C /* Pearl-Crypto */,
 				DAC77CB1148291A600BCF976 /* Pearl-Prefix.pch */,
 			);
@@ -1857,6 +1877,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA10007F1998A4C6002B873F /* scrypt in Headers */,
+				DA89D4EC1A51EABD00AC64D7 /* Pearl-Cocoa.h in Headers */,
 				DA1000801998A4C6002B873F /* openssl in Headers */,
 				DA2CA4F218D323D3007798F8 /* NSTimer+PearlBlock.h in Headers */,
 				DAFE4A1315039824003ABA7C /* NSObject+PearlExport.h in Headers */,
@@ -1894,6 +1915,7 @@
 				DA2CA4EE18D323D3007798F8 /* NSError+PearlFullDescription.h in Headers */,
 				DAADCC4819FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h in Headers */,
 				93D39D304F73B3BBA031522A /* PearlProfiler.h in Headers */,
+				93D391E61DC23E128DA4446C /* NSView+Traversing.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2281,6 +2303,7 @@
 				DAFE4A2E15039824003ABA7C /* PearlStrings.m in Sources */,
 				DAFE4A3015039824003ABA7C /* PearlStringUtils.m in Sources */,
 				DAFE4A3515039824003ABA7C /* PearlCryptUtils.m in Sources */,
+				DA89D4ED1A51EABD00AC64D7 /* Pearl-Cocoa.m in Sources */,
 				DAFE4A3715039824003ABA7C /* PearlKeyChain.m in Sources */,
 				DAFE4A3915039824003ABA7C /* PearlRSAKey.m in Sources */,
 				DAFE4A3B15039824003ABA7C /* PearlSCrypt.m in Sources */,
@@ -2298,6 +2321,7 @@
 				93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */,
 				DA3509FF15F101A500C14A8E /* PearlQueue.m in Sources */,
 				93D3970BCF85F7902E611168 /* PearlProfiler.m in Sources */,
+				93D3987F6D9046DBEE4D8364 /* NSView+Traversing.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

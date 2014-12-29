@@ -611,7 +611,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         }
         if (!headerEnded)
             continue;
-        if (!importKeyID || ![importUserName length])
+        if (![importUserName length])
             return MPImportResultMalformedInput;
         if (![importedSiteLine length])
             continue;
@@ -689,11 +689,10 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     if (user && ![userKey.keyID isEqualToData:user.keyID])
         return MPImportResultInvalidPassword;
     __block MPKey *importKey = userKey;
-    if (![importKey.keyID isEqualToData:importKeyID])
+    if (importKeyID && ![importKey.keyID isEqualToData:importKeyID])
         importKey = [importAlgorithm keyForPassword:askImportPassword( importUserName ) ofUserNamed:importUserName];
-    if (![importKey.keyID isEqualToData:importKeyID])
+    if (importKeyID && ![importKey.keyID isEqualToData:importKeyID])
         return MPImportResultInvalidPassword;
-
 
     // Delete existing sites.
     if (sitesToDelete.count)
@@ -711,7 +710,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     else {
         user = [MPUserEntity insertNewObjectInContext:context];
         user.name = importUserName;
-        user.keyID = importKeyID;
+        user.keyID = [userKey keyID];
         if (importAvatar != NSNotFound)
             user.avatar = importAvatar;
         dbg( @"Created User: %@", [user debugDescription] );

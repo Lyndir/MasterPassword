@@ -224,6 +224,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         return;
 
     NSURL *url = openPanel.URL;
+    [openPanel close];
 
     PearlNotMainQueue( ^{
         NSError *error;
@@ -285,19 +286,19 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                 case MPImportResultCancelled:
                     break;
                 case MPImportResultInternalError:
-                    [NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
+                    [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
                             NSLocalizedDescriptionKey : @"Import failed because of an internal error."
-                    }]];
+                    }]] runModal];
                     break;
                 case MPImportResultMalformedInput:
-                    [NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
+                    [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
                             NSLocalizedDescriptionKey : @"The import doesn't look like a Master Password export."
-                    }]];
+                    }]] runModal];
                     break;
                 case MPImportResultInvalidPassword:
-                    [NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
+                    [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
                             NSLocalizedDescriptionKey : @"Incorrect master password for the import sites."
-                    }]];
+                    }]] runModal];
                     break;
             }
         } );

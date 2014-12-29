@@ -13,10 +13,16 @@
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #define PEARL_UIKIT
 #endif
+#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+#define PEARL_COCOA
+#endif
 
 #import "Pearl.h"
 #import "Pearl-Crypto.h"
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import "Pearl-UIKit.h"
+#endif
+#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+#import "Pearl-Cocoa.h"
 #endif
 #endif

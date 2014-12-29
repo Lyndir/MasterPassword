@@ -793,6 +793,8 @@
 
 - (NSString *)decryptContent:(NSData *)encryptedContent usingKey:(MPKey *)key {
 
+    if (!key)
+        return nil;
     NSData *decryptedContent = nil;
     if ([encryptedContent length])
         decryptedContent = [encryptedContent decryptWithSymmetricKey:[key subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
