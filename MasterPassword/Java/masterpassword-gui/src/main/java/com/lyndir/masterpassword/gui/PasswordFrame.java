@@ -29,6 +29,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
     private final JSpinner              siteCounterField;
     private final JTextField            passwordField;
     private final JLabel                tipLabel;
+    private final JCheckBox             maskPasswordBox;
     private       boolean               updatingUI;
     private       Site                  currentSite;
 
@@ -165,6 +166,23 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                 updatePassword();
             }
         } );
+        
+        JPanel passwordPanel = new JPanel();
+        passwordPanel.setLayout( new BoxLayout( passwordPanel, BoxLayout.PAGE_AXIS ) );
+        passwordPanel.setBorder( new CompoundBorder( new EtchedBorder( EtchedBorder.RAISED ), new EmptyBorder( 8, 8, 8, 8 ) ) );
+        add( passwordPanel, BorderLayout.SOUTH );
+        
+        // MaskPasswor Checkbox
+        maskPasswordBox = new JCheckBox();
+        maskPasswordBox.setAlignmentX( Component.CENTER_ALIGNMENT );
+        maskPasswordBox.setText("Mask generated password");
+        maskPasswordBox.setSelected(true);
+        maskPasswordBox.addItemListener( new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                updatePassword();
+            }
+        } );
 
         // Password
         passwordField = new JTextField( " " );
@@ -178,7 +196,8 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         tipLabel.setFont( Res.exoRegular().deriveFont( 9f ) );
         tipLabel.setAlignmentX( Component.CENTER_ALIGNMENT );
 
-        add( Components.boxLayout( BoxLayout.PAGE_AXIS, passwordField, tipLabel ), BorderLayout.SOUTH );
+        passwordPanel.add( maskPasswordBox, BorderLayout.NORTH  );
+        passwordPanel.add( Components.boxLayout( BoxLayout.PAGE_AXIS, passwordField, tipLabel ), BorderLayout.CENTER  );
 
         pack();
         setMinimumSize( getSize() );
@@ -233,7 +252,11 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                         if (siteNameField.getText().startsWith( siteNameQuery ))
                             siteNameField.select( siteNameQuery.length(), siteNameField.getText().length() );
 
-                        passwordField.setText( sitePassword );
+                        if(maskPasswordBox.isSelected()) 
+                            passwordField.setText( maskPassword( sitePassword, '*', 1 ) );
+                        else 
+                            passwordField.setText( sitePassword );
+
                         tipLabel.setText( "Press [Enter] to copy the password.  Then paste it into the password field." );
                         updatingUI = false;
                     }
@@ -260,5 +283,20 @@ public class PasswordFrame extends JFrame implements DocumentListener {
     @Override
     public void changedUpdate(final DocumentEvent e) {
         updatePassword();
+    }
+    
+    private String maskPassword(String password, char mask, int chars) {
+        StringBuilder builder = new StringBuilder();
+        int i = 0;
+        for(; i < chars && i < password.length(); i++) {
+            builder.append(password.charAt(i));
+        }
+        for(; i < password.length() - chars && i < password.length(); i++) {
+            builder.append(mask);
+        }
+        for(; i < password.length(); i++) {
+            builder.append(password.charAt(i));
+        }
+        return builder.toString();
     }
 }
