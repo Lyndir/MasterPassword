@@ -105,7 +105,7 @@ public class GUI implements UnlockFrame.SignInCallback {
         if (!user.hasKey())
             return false;
         try {
-            user.getKey();
+            user.getKey(true);
             passwordFrame = newPasswordFrame( user );
 
             open();
