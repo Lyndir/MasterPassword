@@ -104,10 +104,23 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                                 passwordField.setText( null );
                                 siteNameField.setText( null );
 
-                                if (getDefaultCloseOperation() == WindowConstants.EXIT_ON_CLOSE)
-                                    System.exit( 0 );
-                                else
-                                    dispose();
+                                setVisible( false );
+                                
+                                if (getDefaultCloseOperation() == WindowConstants.EXIT_ON_CLOSE) {
+                                    Thread stopThread = new Thread( new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                Thread.sleep( 1000 );
+                                            } catch (InterruptedException e) {
+                                            }
+                                            System.exit( 0 );   
+                                        }
+                                    } );
+                                    stopThread.start();
+                                } else {
+                                     dispose();
+                                }
                             }
                         } );
                     }
