@@ -53,7 +53,7 @@
             [Crashlytics startWithAPIKey:crashlyticsAPIKey];
             [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
                 PearlLogLevel level = PearlLogLevelInfo;
-                if ([[MPiOSConfig get].sendInfo boolValue])
+                if ([[MPConfig get].sendInfo boolValue])
                     level = PearlLogLevelDebug;
 
                 if (message.level >= level)
@@ -333,7 +333,7 @@
 
     NSString *userName = [[MPiOSAppDelegate get] activeUserForMainThread].name;
     PearlLogLevel logLevel = PearlLogLevelInfo;
-    if (logs && ([[MPiOSConfig get].sendInfo boolValue] || [[MPiOSConfig get].traceMode boolValue]))
+    if (logs && ([[MPConfig get].sendInfo boolValue] || [[MPiOSConfig get].traceMode boolValue]))
         logLevel = PearlLogLevelDebug;
 
     [[[PearlEMail alloc] initForEMailTo:@"Master Password Development <masterpassword@lyndir.com>"
@@ -530,13 +530,13 @@
     [PearlLogger get].historyLevel = [[MPiOSConfig get].traceMode boolValue]? PearlLogLevelTrace: PearlLogLevelInfo;
 
     // Send info
-    if ([[MPiOSConfig get].sendInfo boolValue]) {
+    if ([[MPConfig get].sendInfo boolValue]) {
         if ([PearlLogger get].printLevel > PearlLogLevelInfo)
             [PearlLogger get].printLevel = PearlLogLevelInfo;
 
 #ifdef CRASHLYTICS
         [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].rememberLogin boolValue] forKey:@"rememberLogin"];
-        [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].sendInfo boolValue] forKey:@"sendInfo"];
+        [[Crashlytics sharedInstance] setBoolValue:[[MPConfig get].sendInfo boolValue] forKey:@"sendInfo"];
         [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].helpHidden boolValue] forKey:@"helpHidden"];
         [[Crashlytics sharedInstance] setBoolValue:[[MPiOSConfig get].showSetup boolValue] forKey:@"showQuickStart"];
         [[Crashlytics sharedInstance] setBoolValue:[[PearlConfig get].firstRun boolValue] forKey:@"firstRun"];

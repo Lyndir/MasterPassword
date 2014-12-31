@@ -2213,7 +2213,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/bash -e";
-			shellScript = "../../../External/Mac/Crashlytics.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" ../../Resources/Crashlytics/Crashlytics.plist)\"";
+			shellScript = "../../../External/Mac/Crashlytics.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" ../../Resources/Crashlytics/Crashlytics.plist)\" 410fb41450e3a2e50fa8357682d812ecd3e1846f2141a99bdb9d3a6a981ad69c";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2481,6 +2481,7 @@
 					"$(inherited)",
 					"NDEBUG=1",
 					"NS_BLOCK_ASSERTIONS=1",
+					"CRASHLYTICS=1",
 				);
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
@@ -2647,6 +2648,7 @@
 					"$(inherited)",
 					"NDEBUG=1",
 					"NS_BLOCK_ASSERTIONS=1",
+					"CRASHLYTICS=1",
 				);
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
