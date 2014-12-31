@@ -31,7 +31,12 @@ public abstract class User {
 
     @Nonnull
     public MasterKey getKey() throws MasterKeyException {
-        if (key == null) {
+        return getKey(false);
+    }
+    
+    @Nonnull
+    public MasterKey getKey(boolean force) throws MasterKeyException {
+        if (key == null || force) {
             if (!hasKey())
                 throw new MasterKeyException( strf( "Master password unknown for user: %s", getFullName() ) );
             key = new MasterKey( getFullName(), getMasterPassword() );

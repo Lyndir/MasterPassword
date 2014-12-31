@@ -54,7 +54,13 @@ public class ModelUser extends User {
     @NotNull
     @Override
     public MasterKey getKey() throws MasterKeyException {
-        MasterKey key = super.getKey();
+        return getKey(false);
+    }
+    
+    @NotNull
+    @Override
+    public MasterKey getKey(boolean force) throws MasterKeyException {
+        MasterKey key = super.getKey(force);
         if (!model.hasKeyID()) {
             model.setKeyID( key.getKeyID() );
             MPUserFileManager.get().save();
