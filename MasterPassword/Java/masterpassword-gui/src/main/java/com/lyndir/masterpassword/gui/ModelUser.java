@@ -58,10 +58,17 @@ public class ModelUser extends User {
         if (!model.hasKeyID()) {
             model.setKeyID( key.getKeyID() );
             MPUserFileManager.get().save();
-        } else if (!model.hasKeyID( key.getKeyID() ))
+        } else if (!model.hasKeyID( key.getKeyID() )) {
+            reset();
             throw new MasterKeyException( strf( "Incorrect master password for user: %s", getFullName() ) );
+        }
 
         return key;
+    }
+
+    @Override
+    public void reset() {
+        masterPassword = null;
     }
 
     @Override

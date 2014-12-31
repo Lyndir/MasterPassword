@@ -32,12 +32,20 @@ public abstract class User {
     @Nonnull
     public MasterKey getKey() throws MasterKeyException {
         if (key == null) {
-            if (!hasKey())
+            String masterPassword = getMasterPassword();
+            if (masterPassword == null || masterPassword.isEmpty()) {
+                reset();
                 throw new MasterKeyException( strf( "Master password unknown for user: %s", getFullName() ) );
-            key = new MasterKey( getFullName(), getMasterPassword() );
+            }
+
+            key = new MasterKey( getFullName(), masterPassword );
         }
 
         return key;
+    }
+
+    public void reset() {
+        key = null;
     }
 
     public abstract Iterable<Site> findSitesByName(final String siteName);
