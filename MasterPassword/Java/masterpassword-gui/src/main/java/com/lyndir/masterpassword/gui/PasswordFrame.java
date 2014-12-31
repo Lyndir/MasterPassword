@@ -4,7 +4,6 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.collect.Iterables;
 import com.google.common.util.concurrent.*;
-import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.util.Components;
 import java.awt.*;
@@ -27,8 +26,11 @@ public class PasswordFrame extends JFrame implements DocumentListener {
     private final JButton               siteAddButton;
     private final JComboBox<MPSiteType> siteTypeField;
     private final JSpinner              siteCounterField;
-    private final JTextField            passwordField;
+    private final JPasswordField        passwordField;
     private final JLabel                tipLabel;
+    private final JCheckBox             maskPasswordField;
+    private final char                  passwordEchoChar;
+    private final Font                  passwordEchoFont;
     private       boolean               updatingUI;
     private       Site                  currentSite;
 
@@ -150,19 +152,34 @@ public class PasswordFrame extends JFrame implements DocumentListener {
             }
         } );
 
+        // Mask
+        maskPasswordField = new JCheckBox();
+        maskPasswordField.setFont( Res.exoRegular().deriveFont( 12f ) );
+        maskPasswordField.setAlignmentX( Component.CENTER_ALIGNMENT );
+        maskPasswordField.setText( "Hide Password" );
+        maskPasswordField.setSelected( true );
+        maskPasswordField.addItemListener( new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                updateMask();
+            }
+        } );
+
         // Password
-        passwordField = new JTextField( " " );
-        passwordField.setFont( Res.sourceCodeProBlack().deriveFont( 40f ) );
+        passwordField = new JPasswordField();
         passwordField.setHorizontalAlignment( JTextField.CENTER );
         passwordField.setAlignmentX( Component.CENTER_ALIGNMENT );
         passwordField.setEditable( false );
+        passwordEchoChar = passwordField.getEchoChar();
+        passwordEchoFont = passwordField.getFont().deriveFont( 40f );
+        updateMask();
 
         // Tip
         tipLabel = new JLabel( " ", JLabel.CENTER );
         tipLabel.setFont( Res.exoRegular().deriveFont( 9f ) );
         tipLabel.setAlignmentX( Component.CENTER_ALIGNMENT );
 
-        add( Components.boxLayout( BoxLayout.PAGE_AXIS, passwordField, tipLabel ), BorderLayout.SOUTH );
+        add( Components.boxLayout( BoxLayout.PAGE_AXIS, maskPasswordField, passwordField, tipLabel ), BorderLayout.SOUTH );
 
         pack();
         setMinimumSize( getSize() );
@@ -173,6 +190,11 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         setLocationRelativeTo( null );
     }
 
+    private void updateMask() {
+        passwordField.setEchoChar( maskPasswordField.isSelected()? passwordEchoChar: (char) 0 );
+        passwordField.setFont( maskPasswordField.isSelected()? passwordEchoFont: Res.sourceCodeProBlack().deriveFont( 40f ) );
+    }
+
     @Nonnull
     private ListenableFuture<String> updatePassword() {
 
@@ -180,8 +202,8 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         if (updatingUI)
             return Futures.immediateCancelledFuture();
         if (siteNameQuery == null || siteNameQuery.isEmpty() || !user.hasKey()) {
-            passwordField.setText( null );
             tipLabel.setText( null );
+            passwordField.setText( null );
             return Futures.immediateCancelledFuture();
         }
 
