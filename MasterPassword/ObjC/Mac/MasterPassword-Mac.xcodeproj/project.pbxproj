@@ -85,7 +85,6 @@
 		DA67742F1A4746AF004F356A /* mpw-types.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C21A4746AF004F356A /* mpw-types.c */; };
 		DA6774311A4746AF004F356A /* mpw-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C51A4746AF004F356A /* mpw-util.c */; };
 		DA6774331A4746AF004F356A /* mpw.bashrc in Resources */ = {isa = PBXBuildFile; fileRef = DA6773C81A4746AF004F356A /* mpw.bashrc */; };
-		DA6774341A4746AF004F356A /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = DA6773C91A4746AF004F356A /* VERSION */; };
 		DA6774431A474A3B004F356A /* mpw-algorithm.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773BB1A4746AF004F356A /* mpw-algorithm.c */; };
 		DA6774441A474A3B004F356A /* mpw-tests.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C11A4746AF004F356A /* mpw-tests.c */; };
 		DA6774451A474A3B004F356A /* mpw-types.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C21A4746AF004F356A /* mpw-types.c */; };
@@ -785,7 +784,6 @@
 		DA6773C51A4746AF004F356A /* mpw-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-util.c"; sourceTree = "<group>"; };
 		DA6773C61A4746AF004F356A /* mpw-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-util.h"; sourceTree = "<group>"; };
 		DA6773C81A4746AF004F356A /* mpw.bashrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mpw.bashrc; sourceTree = "<group>"; };
-		DA6773C91A4746AF004F356A /* VERSION */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
 		DA67743B1A474A03004F356A /* mpw-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mpw-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA6774481A47C8F7004F356A /* mpw-tests-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests-util.c"; sourceTree = "<group>"; };
 		DA6774491A47C8F7004F356A /* mpw-tests-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-tests-util.h"; sourceTree = "<group>"; };
@@ -1553,7 +1551,6 @@
 				DA6773C51A4746AF004F356A /* mpw-util.c */,
 				DA6773C61A4746AF004F356A /* mpw-util.h */,
 				DA6773C81A4746AF004F356A /* mpw.bashrc */,
-				DA6773C91A4746AF004F356A /* VERSION */,
 			);
 			name = C;
 			path = ../../C;
@@ -2125,7 +2122,6 @@
 				DACA272C1705DF81002C6C22 /* avatar-14@2x.png in Resources */,
 				DACA272D1705DF81002C6C22 /* avatar-4@2x.png in Resources */,
 				DACA272E1705DF81002C6C22 /* avatar-9@2x.png in Resources */,
-				DA6774341A4746AF004F356A /* VERSION in Resources */,
 				DACA272F1705DF81002C6C22 /* avatar-3.png in Resources */,
 				DACA27301705DF81002C6C22 /* avatar-18.png in Resources */,
 				DACA27311705DF81002C6C22 /* avatar-4.png in Resources */,
