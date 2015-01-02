@@ -34,7 +34,7 @@ public class AppleGUI extends GUI {
     @Override
     protected PasswordFrame newPasswordFrame(final User user) {
         PasswordFrame frame = super.newPasswordFrame( user );
-        frame.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
+        frame.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
 
         return frame;
     }

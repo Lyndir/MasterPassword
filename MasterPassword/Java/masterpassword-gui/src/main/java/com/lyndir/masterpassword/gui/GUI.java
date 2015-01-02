@@ -21,7 +21,6 @@ import com.google.common.base.Charsets;
 import com.google.common.io.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.TypeUtils;
-import com.lyndir.masterpassword.MasterKey;
 import java.io.*;
 import java.net.URI;
 import java.net.URL;

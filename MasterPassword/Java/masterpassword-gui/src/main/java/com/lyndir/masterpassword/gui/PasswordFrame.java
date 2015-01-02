@@ -106,7 +106,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                                 passwordField.setText( null );
                                 siteNameField.setText( null );
 
-                                dispose();
+                                dispatchEvent( new WindowEvent( PasswordFrame.this, WindowEvent.WINDOW_CLOSING ) );
                             }
                         } );
                     }
