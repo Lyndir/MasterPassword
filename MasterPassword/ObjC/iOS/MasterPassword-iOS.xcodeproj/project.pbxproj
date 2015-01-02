@@ -167,7 +167,6 @@
 		DA67460E18DE7F0C00DFE240 /* Exo2.0-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA67460A18DE7F0C00DFE240 /* Exo2.0-Regular.otf */; };
 		DA67460F18DE7F0C00DFE240 /* Exo2.0-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA67460B18DE7F0C00DFE240 /* Exo2.0-ExtraBold.otf */; };
 		DA67461018DE7F0C00DFE240 /* Exo2.0-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA67460C18DE7F0C00DFE240 /* Exo2.0-Bold.otf */; };
-		DA6773251A43B660004F356A /* libscryptenc-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAFFC63E17EDDA7C007BB020 /* libscryptenc-ios.a */; };
 		DA69540617D975D900BF294E /* icon_gears.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37841711E29500CF925C /* icon_gears.png */; };
 		DA69540717D975D900BF294E /* icon_gears@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37851711E29500CF925C /* icon_gears@2x.png */; };
 		DA72BD7919C137DE00E6ACFE /* libopensslcrypto-ios-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA72BD7719C137D500E6ACFE /* libopensslcrypto-ios-dev.a */; };
@@ -1592,7 +1591,6 @@
 				DA4DA1DA1564471F00F6F596 /* libuicolor-utilities.a in Frameworks */,
 				DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */,
 				DAC77CAE148291A600BCF976 /* Foundation.framework in Frameworks */,
-				DA6773251A43B660004F356A /* libscryptenc-ios.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3994,6 +3992,13 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-lscryptenc-ios",
+					"-framework",
+					Reveal,
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"-lscryptenc-ios-sim",
 					"-framework",
 					Reveal,
 				);
@@ -4022,6 +4027,14 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lscryptenc-ios",
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"-lscryptenc-ios-sim",
 				);
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "59b587d0-3ef3-4691-9f12-c48f7f283002";
@@ -4129,6 +4142,14 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lscryptenc-ios",
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"-lscryptenc-ios-sim",
 				);
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a1d8cfc8-b8db-4544-af34-28cc75e46c40";
