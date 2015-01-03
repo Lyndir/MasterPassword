@@ -134,7 +134,7 @@ public class UnlockFrame extends JFrame {
         signInButton.setEnabled( false );
         signInButton.setText( "Signing In..." );
 
-        Res.execute( new Runnable() {
+        Res.execute( this, new Runnable() {
             @Override
             public void run() {
                 final boolean success = signInCallback.signedIn( user );

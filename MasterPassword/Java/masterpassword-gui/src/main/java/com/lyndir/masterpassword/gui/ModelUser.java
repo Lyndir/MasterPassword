@@ -68,6 +68,8 @@ public class ModelUser extends User {
 
     @Override
     public void reset() {
+        super.reset();
+
         masterPassword = null;
     }
 

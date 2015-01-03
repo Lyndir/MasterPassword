@@ -116,9 +116,6 @@ public class GUI implements UnlockFrame.SignInCallback {
     }
 
     protected PasswordFrame newPasswordFrame(final User user) {
-        PasswordFrame frame = new PasswordFrame( user );
-        frame.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
-
-        return frame;
+        return new PasswordFrame( user );
     }
 }

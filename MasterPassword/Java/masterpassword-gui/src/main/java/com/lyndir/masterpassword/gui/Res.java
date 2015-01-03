@@ -8,9 +8,11 @@ import com.google.common.io.Resources;
 import com.google.common.util.concurrent.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.net.URL;
+import java.util.WeakHashMap;
 import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,8 +24,8 @@ import javax.swing.*;
  */
 public abstract class Res {
 
-    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private static final Logger          logger   = Logger.get( Res.class );
+    private static final WeakHashMap<Window, ExecutorService> executorByWindow = new WeakHashMap<>();
+    private static final Logger                               logger           = Logger.get( Res.class );
 
     private static Font sourceCodeProRegular;
     private static Font sourceCodeProBlack;
@@ -32,8 +34,8 @@ public abstract class Res {
     private static Font exoRegular;
     private static Font exoThin;
 
-    public static Future<?> execute(final Runnable job) {
-        return executor.submit( new Runnable() {
+    public static Future<?> execute(final Window host, final Runnable job) {
+        return getExecutor( host ).submit( new Runnable() {
             @Override
             public void run() {
                 try {
@@ -46,7 +48,8 @@ public abstract class Res {
         } );
     }
 
-    public static <V> ListenableFuture<V> execute(final Callable<V> job) {
+    public static <V> ListenableFuture<V> execute(final Window host, final Callable<V> job) {
+        ExecutorService executor = getExecutor( host );
         return JdkFutureAdapters.listenInPoolThread( executor.submit( new Callable<V>() {
             @Override
             public V call()
@@ -60,6 +63,25 @@ public abstract class Res {
                 }
             }
         } ), executor );
+    }
+
+    private static ExecutorService getExecutor(final Window host) {
+        ExecutorService executor = executorByWindow.get( host );
+
+        if (executor == null) {
+            executorByWindow.put( host, executor = Executors.newSingleThreadExecutor() );
+
+            host.addWindowListener( new WindowAdapter() {
+                @Override
+                public void windowClosing(final WindowEvent e) {
+                    ExecutorService executor = executorByWindow.remove( host );
+                    if (executor != null)
+                        executor.shutdownNow();
+                }
+            } );
+        }
+
+        return executor;
     }
 
     public static Icon iconAdd() {

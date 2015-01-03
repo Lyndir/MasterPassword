@@ -217,7 +217,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
             site.setSiteCounter( siteCounter );
         }
 
-        ListenableFuture<String> passwordFuture = Res.execute( new Callable<String>() {
+        ListenableFuture<String> passwordFuture = Res.execute( this, new Callable<String>() {
             @Override
             public String call()
                     throws Exception {
