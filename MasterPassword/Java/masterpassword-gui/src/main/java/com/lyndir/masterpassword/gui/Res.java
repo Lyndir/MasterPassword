@@ -73,7 +73,7 @@ public abstract class Res {
 
             host.addWindowListener( new WindowAdapter() {
                 @Override
-                public void windowClosing(final WindowEvent e) {
+                public void windowClosed(final WindowEvent e) {
                     ExecutorService executor = executorByWindow.remove( host );
                     if (executor != null)
                         executor.shutdownNow();

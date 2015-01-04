@@ -41,6 +41,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
         JLabel label;
 
+        setDefaultCloseOperation( DISPOSE_ON_CLOSE );
         setContentPane( new JPanel( new BorderLayout( 20, 20 ) ) {
             {
                 setBorder( new EmptyBorder( 20, 20, 20, 20 ) );
