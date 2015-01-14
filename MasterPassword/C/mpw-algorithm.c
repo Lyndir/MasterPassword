@@ -16,6 +16,10 @@
 #include "mpw-util.h"
 #include "mpw-algorithm.h"
 
+#ifdef __linux__
+#include <arpa/inet.h>
+#endif
+
 #define MP_N                32768
 #define MP_r                8
 #define MP_p                2
