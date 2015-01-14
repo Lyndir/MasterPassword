@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 #define ftl(...) do { fprintf( stderr, __VA_ARGS__ ); exit(2); } while (0)
 

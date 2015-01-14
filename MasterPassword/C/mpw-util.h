@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Lyndir. All rights reserved.
 //
 
+#include <stdint.h>
+
 //// Logging.
 
 #ifdef DEBUG
