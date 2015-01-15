@@ -284,7 +284,7 @@
                          initSheet:^(UIActionSheet *sheet) {
                              MPSiteEntity *mainSite = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
                              for (NSNumber *typeNumber in [MPAlgorithmDefault allTypes]) {
-                                 MPSiteType type = [typeNumber unsignedIntegerValue];
+                                 MPSiteType type = (MPSiteType)[typeNumber unsignedIntegerValue];
                                  NSString *typeName = [MPAlgorithmDefault nameOfType:type];
                                  if (type == mainSite.type)
                                      [sheet addButtonWithTitle:strf( @"● %@", typeName )];
@@ -295,7 +295,7 @@
                 if (buttonIndex == [sheet cancelButtonIndex])
                     return;
 
-                MPSiteType type = [[MPAlgorithmDefault allTypes][buttonIndex] unsignedIntegerValue]?: MPSiteTypeGeneratedLong;
+                MPSiteType type = (MPSiteType)[[MPAlgorithmDefault allTypes][buttonIndex] unsignedIntegerValue]?: MPSiteTypeGeneratedLong;
 
                 [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                     MPSiteEntity *site = [self siteInContext:context];

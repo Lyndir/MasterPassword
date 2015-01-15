@@ -51,54 +51,69 @@ const MPSiteType mpw_typeWithName(const char *typeName) {
     abort();
 }
 
-const char *mpw_templateForType(MPSiteType type, uint8_t seedByte) {
+inline const char **mpw_templatesForType(MPSiteType type, size_t *count) {
 
     if (!(type & MPSiteTypeClassGenerated)) {
-        fprintf( stderr, "Not a generated type: %d", type );
-        abort();
+        ftl( "Not a generated type: %d", type );
+        *count = 0;
+        return NULL;
     }
 
     switch (type) {
         case MPSiteTypeGeneratedMaximum: {
-            const char *templates[] = { "anoxxxxxxxxxxxxxxxxx", "axxxxxxxxxxxxxxxxxno" };
-            return templates[seedByte % 2];
+            *count = 2;
+            return (const char *[]){ "anoxxxxxxxxxxxxxxxxx", "axxxxxxxxxxxxxxxxxno" };
         }
         case MPSiteTypeGeneratedLong: {
-            const char *templates[] = { "CvcvnoCvcvCvcv", "CvcvCvcvnoCvcv", "CvcvCvcvCvcvno",
+            *count = 21;
+            return (const char *[]){ "CvcvnoCvcvCvcv", "CvcvCvcvnoCvcv", "CvcvCvcvCvcvno",
                                         "CvccnoCvcvCvcv", "CvccCvcvnoCvcv", "CvccCvcvCvcvno",
                                         "CvcvnoCvccCvcv", "CvcvCvccnoCvcv", "CvcvCvccCvcvno",
                                         "CvcvnoCvcvCvcc", "CvcvCvcvnoCvcc", "CvcvCvcvCvccno",
                                         "CvccnoCvccCvcv", "CvccCvccnoCvcv", "CvccCvccCvcvno",
                                         "CvcvnoCvccCvcc", "CvcvCvccnoCvcc", "CvcvCvccCvccno",
                                         "CvccnoCvcvCvcc", "CvccCvcvnoCvcc", "CvccCvcvCvccno" };
-            return templates[seedByte % 21];
         }
         case MPSiteTypeGeneratedMedium: {
-            const char *templates[] = { "CvcnoCvc", "CvcCvcno" };
-            return templates[seedByte % 2];
+            *count = 2;
+            return (const char *[]){ "CvcnoCvc", "CvcCvcno" };
         }
         case MPSiteTypeGeneratedBasic: {
-            const char *templates[] = { "aaanaaan", "aannaaan", "aaannaaa" };
-            return templates[seedByte % 3];
+            *count = 3;
+            return (const char *[]){ "aaanaaan", "aannaaan", "aaannaaa" };
         }
         case MPSiteTypeGeneratedShort: {
-            return "Cvcn";
+            *count = 1;
+            return (const char *[]){"Cvcn"};
         }
         case MPSiteTypeGeneratedPIN: {
-            return "nnnn";
+            *count = 1;
+            return (const char *[]){ "nnnn" };
         }
         case MPSiteTypeGeneratedName: {
-            return "cvccvcvcv";
+            *count = 1;
+            return (const char *[]) {"cvccvcvcv"};
         }
         case MPSiteTypeGeneratedPhrase: {
-            const char *templates[] = { "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" };
-            return templates[seedByte % 3];
+            *count = 3;
+            return (const char *[]){ "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" };
         }
         default: {
-            fprintf( stderr, "Unknown generated type: %d", type );
-            abort();
+            ftl( "Unknown generated type: %d", type );
+            *count = 0;
+            return NULL;
         }
     }
+}
+
+const char *mpw_templateForType(MPSiteType type, uint8_t seedByte) {
+
+    size_t count = 0;
+    const char **templates = mpw_templatesForType( type, &count );
+    if (!count)
+        return NULL;
+
+    return templates[seedByte % count];
 }
 
 const MPSiteVariant mpw_variantWithName(const char *variantName) {
@@ -138,55 +153,38 @@ const char *mpw_scopeForVariant(MPSiteVariant variant) {
     }
 }
 
-const char mpw_characterFromClass(char characterClass, uint8_t seedByte) {
+const char *mpw_charactersInClass(char characterClass) {
 
-    const char *classCharacters;
     switch (characterClass) {
-        case 'V': {
-            classCharacters = "AEIOU";
-            break;
-        }
-        case 'C': {
-            classCharacters = "BCDFGHJKLMNPQRSTVWXYZ";
-            break;
-        }
-        case 'v': {
-            classCharacters = "aeiou";
-            break;
-        }
-        case 'c': {
-            classCharacters = "bcdfghjklmnpqrstvwxyz";
-            break;
-        }
-        case 'A': {
-            classCharacters = "AEIOUBCDFGHJKLMNPQRSTVWXYZ";
-            break;
-        }
-        case 'a': {
-            classCharacters = "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz";
-            break;
-        }
-        case 'n': {
-            classCharacters = "0123456789";
-            break;
-        }
-        case 'o': {
-            classCharacters = "@&%?,=[]_:-+*$#!'^~;()/.";
-            break;
-        }
-        case 'x': {
-            classCharacters = "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789!@#$%^&*()";
-            break;
-        }
-        case ' ': {
-            classCharacters = " ";
-            break;
-        }
+        case 'V':
+            return "AEIOU";
+        case 'C':
+            return "BCDFGHJKLMNPQRSTVWXYZ";
+        case 'v':
+            return "aeiou";
+        case 'c':
+            return "bcdfghjklmnpqrstvwxyz";
+        case 'A':
+            return "AEIOUBCDFGHJKLMNPQRSTVWXYZ";
+        case 'a':
+            return "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz";
+        case 'n':
+            return "0123456789";
+        case 'o':
+            return "@&%?,=[]_:-+*$#!'^~;()/.";
+        case 'x':
+            return "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789!@#$%^&*()";
+        case ' ':
+            return " ";
         default: {
             fprintf( stderr, "Unknown character class: %c", characterClass );
             abort();
         }
     }
+}
 
+const char mpw_characterFromClass(char characterClass, uint8_t seedByte) {
+
+    const char *classCharacters = mpw_charactersInClass( characterClass );
     return classCharacters[seedByte % strlen( classCharacters )];
 }

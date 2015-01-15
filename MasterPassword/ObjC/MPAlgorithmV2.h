@@ -9,7 +9,7 @@
  */
 
 //
-//  MPAlgorithmV1
+//  MPAlgorithmV2
 //
 //  Created by Maarten Billemont on 17/07/12.
 //  Copyright 2012 lhunath (Maarten Billemont). All rights reserved.

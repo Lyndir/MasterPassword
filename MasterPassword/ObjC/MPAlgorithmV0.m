@@ -19,15 +19,10 @@
 #import "MPEntities.h"
 #import "MPAppDelegate_Shared.h"
 #import "MPAppDelegate_InApp.h"
-#import "MPSiteQuestionEntity.h"
+#import "mpw-util.h"
+#import "mpw-types.h"
 #include <openssl/bn.h>
 #include <openssl/err.h>
-
-#define MP_N        32768
-#define MP_r        8
-#define MP_p        2
-#define MP_dkLen    64
-#define MP_hash     PearlHashSHA256
 
 /* An AMD HD 7970 calculates 2495M SHA-1 hashes per second at a cost of ~350$ per GPU */
 #define CRACKING_PER_SECOND 2495000000UL
@@ -53,9 +48,9 @@
     ctx = NULL;
 }
 
-- (NSUInteger)version {
+- (MPAlgorithmVersion)version {
 
-    return 0;
+    return MPAlgorithmVersion0;
 }
 
 - (NSString *)description {
@@ -112,21 +107,13 @@
 
 - (MPKey *)keyForPassword:(NSString *)password ofUserNamed:(NSString *)userName {
 
-    uint32_t nuserNameLength = htonl( userName.length );
     NSDate *start = [NSDate date];
-    NSData *keyData = [PearlSCrypt deriveKeyWithLength:MP_dkLen fromPassword:[password dataUsingEncoding:NSUTF8StringEncoding]
-                                             usingSalt:[NSData dataByConcatenatingDatas:
-                                                     [@"com.lyndir.masterpassword" dataUsingEncoding:NSUTF8StringEncoding],
-                                                     [NSData dataWithBytes:&nuserNameLength
-                                                                    length:sizeof( nuserNameLength )],
-                                                     [userName dataUsingEncoding:NSUTF8StringEncoding],
-                                                             nil] N:MP_N r:MP_r p:MP_p];
-
-    MPKey *key = [self keyFromKeyData:keyData];
-    trc( @"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", userName, password, [key.keyID encodeHex],
+    uint8_t const *masterKeyBytes = mpw_masterKeyForUser( userName.UTF8String, password.UTF8String, [self version] );
+    MPKey *masterKey = [self keyFromKeyData:[NSData dataWithBytes:masterKeyBytes length:MP_dkLen]];
+    mpw_free( masterKeyBytes, MP_dkLen );
+    trc( @"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", userName, password, [masterKey.keyID encodeHex],
             -[start timeIntervalSinceNow] );
-
-    return key;
+    return masterKey;
 }
 
 - (MPKey *)keyFromKeyData:(NSData *)keyData {
@@ -136,21 +123,7 @@
 
 - (NSData *)keyIDForKeyData:(NSData *)keyData {
 
-    return [keyData hashWith:MP_hash];
-}
-
-- (NSString *)scopeForVariant:(MPSiteVariant)variant {
-
-    switch (variant) {
-        case MPSiteVariantPassword:
-            return @"com.lyndir.masterpassword";
-        case MPSiteVariantLogin:
-            return @"com.lyndir.masterpassword.login";
-        case MPSiteVariantAnswer:
-            return @"com.lyndir.masterpassword.answer";
-    }
-
-    Throw( @"Unsupported variant: %ld", (long)variant );
+    return [keyData hashWith:PearlHashSHA256];
 }
 
 - (NSString *)nameOfType:(MPSiteType)type {
@@ -327,40 +300,6 @@
     return previousType;
 }
 
-- (NSDictionary *)allCiphers {
-
-    static NSDictionary *ciphers = nil;
-    static dispatch_once_t once = 0;
-    dispatch_once( &once, ^{
-        ciphers = [NSDictionary dictionaryWithContentsOfURL:
-                [[NSBundle mainBundle] URLForResource:@"ciphers" withExtension:@"plist"]];
-    } );
-
-    return ciphers;
-}
-
-- (NSArray *)ciphersForType:(MPSiteType)type {
-
-    NSString *typeClass = [self classNameOfType:type];
-    NSString *typeName = [self nameOfType:type];
-    return [[[self allCiphers] valueForKey:typeClass] valueForKey:typeName];
-}
-
-- (NSArray *)cipherClasses {
-
-    return [[[self allCiphers] valueForKey:@"MPCharacterClasses"] allKeys];
-}
-
-- (NSArray *)cipherClassCharacters {
-
-    return [[[self allCiphers] valueForKey:@"MPCharacterClasses"] allValues];
-}
-
-- (NSString *)charactersForCipherClass:(NSString *)cipherClass {
-
-    return [NSNullToNil( [NSNullToNil( [[self allCiphers] valueForKey:@"MPCharacterClasses"] ) valueForKey:cipherClass] ) copy];
-}
-
 - (NSString *)generateLoginForSiteNamed:(NSString *)name usingKey:(MPKey *)key {
 
     return [self generateContentForSiteNamed:name ofType:MPSiteTypeGeneratedName withCounter:1
@@ -383,44 +322,10 @@
 - (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
                                   variant:(MPSiteVariant)variant context:(NSString *)context usingKey:(MPKey *)key {
 
-    // Determine the seed whose bytes will be used for calculating a password
-    uint32_t ncounter = htonl( counter ), nnameLength = htonl( name.length ), ncontextLength = htonl( context.length );
-    NSData *counterBytes = [NSData dataWithBytes:&ncounter length:sizeof( ncounter )];
-    NSData *nameLengthBytes = [NSData dataWithBytes:&nnameLength length:sizeof( nnameLength )];
-    NSData *contextLengthBytes = [NSData dataWithBytes:&ncontextLength length:sizeof( ncontextLength )];
-    NSString *scope = [self scopeForVariant:variant];
-    trc( @"seed from: hmac-sha256(%@, %@ | %@ | %@ | %@ | %@)",
-            [[key keyID] encodeHex], scope, [nameLengthBytes encodeHex], name, [counterBytes encodeHex], context );
-    NSData *seed = [[NSData dataByConcatenatingDatas:
-            [scope dataUsingEncoding:NSUTF8StringEncoding],
-            nameLengthBytes,
-            [name dataUsingEncoding:NSUTF8StringEncoding],
-            counterBytes,
-                    context? contextLengthBytes: nil,
-            [context dataUsingEncoding:NSUTF8StringEncoding],
-                    nil]
-            hmacWith:PearlHashSHA256 key:key.keyData];
-    trc( @"seed is: %@", [seed encodeHex] );
-    const char *seedBytes = seed.bytes;
-
-    // Determine the cipher from the first seed byte.
-    NSAssert( [seed length], @"Missing seed." );
-    NSArray *typeCiphers = [self ciphersForType:type];
-    NSString *cipher = typeCiphers[htons( seedBytes[0] ) % [typeCiphers count]];
-    trc( @"type %@ (%lu), ciphers: %@, selected: %@", [self nameOfType:type], (unsigned long)type, typeCiphers, cipher );
-
-    // Encode the content, character by character, using subsequent seed bytes and the cipher.
-    NSAssert( [seed length] >= [cipher length] + 1, @"Insufficient seed bytes to encode cipher." );
-    NSMutableString *content = [NSMutableString stringWithCapacity:[cipher length]];
-    for (NSUInteger c = 0; c < [cipher length]; ++c) {
-        uint16_t keyByte = htons( seedBytes[c + 1] );
-        NSString *cipherClass = [cipher substringWithRange:NSMakeRange( c, 1 )];
-        NSString *cipherClassCharacters = [self charactersForCipherClass:cipherClass];
-        NSString *character = [cipherClassCharacters substringWithRange:NSMakeRange( keyByte % [cipherClassCharacters length], 1 )];
-
-        trc( @"class %@ has characters: %@, index: %u, selected: %@", cipherClass, cipherClassCharacters, keyByte, character );
-        [content appendString:character];
-    }
+    char const *contentBytes = mpw_passwordForSite( key.keyData.bytes, name.UTF8String, type, (uint32_t)counter,
+            variant, context.UTF8String, [self version] );
+    NSString *content = [NSString stringWithCString:contentBytes encoding:NSUTF8StringEncoding];
+    mpw_freeString( contentBytes );
 
     return content;
 }
@@ -808,21 +713,23 @@
 
     if (!type)
         return NO;
-    NSArray *ciphers = [self ciphersForType:type];
-    if (!ciphers)
+    size_t count = 0;
+    const char **templates = mpw_templatesForType( type, &count );
+    if (!templates)
         return NO;
 
-    BIGNUM *permutations = BN_new(), *cipherPermutations = BN_new();
-    for (NSString *cipher in ciphers) {
-        BN_one( cipherPermutations );
+    BIGNUM *permutations = BN_new(), *templatePermutations = BN_new();
+    for (int t = 0; t < count; ++t) {
+        const char *template = templates[t];
+        BN_one( templatePermutations );
 
-        for (NSUInteger c = 0; c < [cipher length]; ++c)
-            BN_mul_word( cipherPermutations,
-                    (BN_ULONG)[[self charactersForCipherClass:[cipher substringWithRange:NSMakeRange( c, 1 )]] length] );
+        for (NSUInteger c = 0; c < strlen( template ); ++c)
+            BN_mul_word( templatePermutations,
+                    (BN_ULONG)strlen( mpw_charactersInClass( template[c] ) ) );
 
-        BN_add( permutations, permutations, cipherPermutations );
+        BN_add( permutations, permutations, templatePermutations );
     }
-    BN_free( cipherPermutations );
+    BN_free( templatePermutations );
 
     return [self timeToCrack:timeToCrack permutations:permutations forAttacker:attacker];
 }
@@ -832,25 +739,21 @@
     BIGNUM *permutations = BN_new();
     BN_one( permutations );
 
-    NSMutableString *cipher = [NSMutableString new];
     for (NSUInteger c = 0; c < [password length]; ++c) {
-        NSString *passwordCharacter = [password substringWithRange:NSMakeRange( c, 1 )];
+        const char passwordCharacter = [password substringWithRange:NSMakeRange( c, 1 )].UTF8String[0];
 
         unsigned int characterEntropy = 0;
-        for (NSString *cipherClass in @[ @"v", @"c", @"a", @"x" ]) {
-            NSString *charactersForClass = [self charactersForCipherClass:cipherClass];
+        for (NSString *characterClass in @[ @"v", @"c", @"a", @"x" ]) {
+            char const *charactersForClass = mpw_charactersInClass( characterClass.UTF8String[0] );
 
-            if ([charactersForClass rangeOfString:passwordCharacter].location != NSNotFound) {
+            if (strchr( charactersForClass, passwordCharacter )) {
                 // Found class for password character.
-                characterEntropy = (BN_ULONG)[charactersForClass length];
-                [cipher appendString:cipherClass];
+                characterEntropy = (BN_ULONG)strlen(charactersForClass);
                 break;
             }
         }
-        if (!characterEntropy) {
-            [cipher appendString:@"b"];
+        if (!characterEntropy)
             characterEntropy = 256 /* a byte */;
-        }
 
         BN_mul_word( permutations, characterEntropy );
     }

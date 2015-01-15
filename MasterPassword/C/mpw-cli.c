@@ -188,12 +188,14 @@ int main(int argc, char *const argv[]) {
     fprintf( stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, mpw_identicon( fullName, masterPassword ) );
 
     // Output the password.
-    const uint8_t *masterKey = mpw_masterKeyForUser( fullName, masterPassword );
+    const uint8_t *masterKey = mpw_masterKeyForUser(
+            fullName, masterPassword, MPAlgorithmVersionCurrent );
     mpw_freeString( masterPassword );
     if (!masterKey)
         ftl( "Couldn't derive master key." );
 
-    const char *sitePassword = mpw_passwordForSite( masterKey, siteName, siteType, siteCounter, siteVariant, siteContextString );
+    const char *sitePassword = mpw_passwordForSite(
+            masterKey, siteName, siteType, siteCounter, siteVariant, siteContextString, MPAlgorithmVersionCurrent );
     mpw_free( masterKey, MP_dkLen );
     if (!sitePassword)
         ftl( "Couldn't derive site password." );

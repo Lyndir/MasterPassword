@@ -62,10 +62,12 @@ int main(int argc, char *const argv[]) {
     unsigned int iterations = 100;
     mpw_getTime( &startTime );
     for (int i = 0; i < iterations; ++i) {
-        const uint8_t *masterKey = mpw_masterKeyForUser( fullName, masterPassword );
+        const uint8_t *masterKey = mpw_masterKeyForUser(
+                fullName, masterPassword, MPAlgorithmVersionCurrent );
         if (!masterKey)
             ftl( "Could not allocate master key: %d\n", errno );
-        free( (void *)mpw_passwordForSite( masterKey, siteName, siteType, siteCounter, siteVariant, siteContext ) );
+        free( (void *)mpw_passwordForSite(
+                masterKey, siteName, siteType, siteCounter, siteVariant, siteContext, MPAlgorithmVersionCurrent ) );
         free( (void *)masterKey );
 
         if (i % 1 == 0)

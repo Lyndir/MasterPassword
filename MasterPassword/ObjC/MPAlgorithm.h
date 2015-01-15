@@ -19,8 +19,9 @@
 #import "MPStoredSiteEntity.h"
 #import "MPGeneratedSiteEntity.h"
 #import "MPSiteQuestionEntity.h"
+#import "mpw-algorithm.h"
 
-#define MPAlgorithmDefaultVersion 2
+#define MPAlgorithmDefaultVersion MPAlgorithmVersionCurrent
 #define MPAlgorithmDefault MPAlgorithmForVersion(MPAlgorithmDefaultVersion)
 
 id<MPAlgorithm> MPAlgorithmForVersion(NSUInteger version);
@@ -43,7 +44,7 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 @protocol MPAlgorithm<NSObject>
 
 @required
-- (NSUInteger)version;
+- (MPAlgorithmVersion)version;
 - (BOOL)tryMigrateUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc;
 - (BOOL)tryMigrateSite:(MPSiteEntity *)site explicit:(BOOL)explicit;
 
@@ -51,7 +52,6 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 - (MPKey *)keyFromKeyData:(NSData *)keyData;
 - (NSData *)keyIDForKeyData:(NSData *)keyData;
 
-- (NSString *)scopeForVariant:(MPSiteVariant)variant;
 - (NSString *)nameOfType:(MPSiteType)type;
 - (NSString *)shortNameOfType:(MPSiteType)type;
 - (NSString *)classNameOfType:(MPSiteType)type;

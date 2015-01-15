@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 #include <scrypt/sha256.h>
 #include <scrypt/crypto_scrypt.h>
@@ -162,4 +163,10 @@ const char *mpw_identicon(const char *fullName, const char *masterPassword) {
     free( colorString );
     free( resetString );
     return identicon;
+}
+
+const size_t mpw_charlen(const char *string) {
+
+    setlocale( LC_ALL, "en_US.UTF-8" );
+    return mbstowcs( NULL, string, strlen( string ) );
 }

@@ -40,13 +40,13 @@ int main(int argc, char *const argv[]) {
 
         // 1. calculate the master key.
         const uint8_t *masterKey = mpw_masterKeyForUser(
-                (char *)fullName, (char *)masterPassword );
+                (char *)fullName, (char *)masterPassword, MPAlgorithmVersionCurrent );
         if (!masterKey)
             ftl( "Couldn't derive master key." );
 
         // 2. calculate the site password.
         const char *sitePassword = mpw_passwordForSite(
-                masterKey, (char *)siteName, siteType, siteCounter, siteVariant, (char *)siteContext );
+                masterKey, (char *)siteName, siteType, siteCounter, siteVariant, (char *)siteContext, MPAlgorithmVersionCurrent );
         mpw_free( masterKey, MP_dkLen );
         if (!sitePassword)
             ftl( "Couldn't derive site password." );

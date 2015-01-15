@@ -9,13 +9,13 @@
  */
 
 //
-//  MPAlgorithmV0
+//  MPAlgorithmV3
 //
-//  Created by Maarten Billemont on 16/07/12.
-//  Copyright 2012 lhunath (Maarten Billemont). All rights reserved.
+//  Created by Maarten Billemont on 13/01/15.
+//  Copyright 2015 lhunath (Maarten Billemont). All rights reserved.
 //
 
-#import "MPAlgorithm.h"
+#import "MPAlgorithmV2.h"
 
-@interface MPAlgorithmV0 : NSObject<MPAlgorithm>
+@interface MPAlgorithmV3 : MPAlgorithmV2
 @end

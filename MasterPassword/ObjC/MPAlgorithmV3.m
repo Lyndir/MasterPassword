@@ -9,20 +9,20 @@
 */
 
 //
-//  MPAlgorithmV1
+//  MPAlgorithmV3
 //
-//  Created by Maarten Billemont on 17/07/12.
-//  Copyright 2012 lhunath (Maarten Billemont). All rights reserved.
+//  Created by Maarten Billemont on 13/01/15.
+//  Copyright 2015 lhunath (Maarten Billemont). All rights reserved.
 //
 
-#import "MPAlgorithmV1.h"
+#import "MPAlgorithmV3.h"
 #import "MPEntities.h"
 
-@implementation MPAlgorithmV1
+@implementation MPAlgorithmV3
 
 - (MPAlgorithmVersion)version {
 
-    return MPAlgorithmVersion1;
+    return MPAlgorithmVersion3;
 }
 
 - (BOOL)tryMigrateSite:(MPSiteEntity *)site explicit:(BOOL)explicit {
@@ -32,7 +32,7 @@
         return NO;
 
     if (!explicit) {
-        if (site.type & MPSiteTypeClassGenerated) {
+        if (site.type & MPSiteTypeClassGenerated && site.name.length != [site.name dataUsingEncoding:NSUTF8StringEncoding].length) {
             // This migration requires explicit permission for types of the generated class.
             site.requiresExplicitMigration = YES;
             return NO;

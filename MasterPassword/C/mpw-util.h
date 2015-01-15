@@ -9,7 +9,9 @@
 //// Logging.
 
 #ifdef DEBUG
+#ifndef trc
 #define trc(...) fprintf( stderr, __VA_ARGS__ )
+#endif
 #else
 #define trc(...) do {} while (0)
 #endif
@@ -50,11 +52,15 @@ uint8_t const *mpw_hmac_sha256(
 //// Visualizers.
 
 /** Encode a buffer as a string of hexadecimal characters.
-  * @return A reused buffer, do not free or store it. */
+  * @return A C-string in a reused buffer, do not free or store it. */
 const char *mpw_hex(const void *buf, size_t length);
 /** Encode a fingerprint for a buffer.
-  * @return A reused buffer, do not free or store it. */
+  * @return A C-string in a reused buffer, do not free or store it. */
 const char *mpw_idForBuf(const void *buf, size_t length);
 /** Encode a visual fingerprint for a user.
   * @return A newly allocated string. */
 const char *mpw_identicon(const char *fullName, const char *masterPassword);
+
+//// String utilities.
+
+const size_t mpw_charlen(const char *string);

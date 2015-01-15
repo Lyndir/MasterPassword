@@ -182,7 +182,7 @@
     return nil;
 }
 
-- (enum MPSiteType)typeForSelectedSegment {
+- (MPSiteType)typeForSelectedSegment {
 
     NSInteger selectedGeneratedIndex = self.generatedTypeControl.selectedSegmentIndex;
     NSInteger selectedStoredIndex = self.storedTypeControl.selectedSegmentIndex;
