@@ -40,6 +40,8 @@ static void usage() {
             "                     p, phrase       | 20 character sentence.\n\n", MP_env_sitetype );
     fprintf( stderr, "    -c counter   The value of the counter.\n"
             "                 Defaults to %s in env or '1'.\n\n", MP_env_sitecounter );
+    fprintf( stderr, "    -V version   The algorithm version to use.\n"
+            "                 Defaults to %d.\n\n", MPAlgorithmVersionCurrent );
     fprintf( stderr, "    -v variant   The kind of content to generate.\n"
             "                 Defaults to 'password'.\n"
             "                     p, password | The password to log in with.\n"
@@ -102,9 +104,10 @@ int main(int argc, char *const argv[]) {
     const char *siteContextString = NULL;
     uint32_t siteCounter = 1;
     const char *siteCounterString = getenv( MP_env_sitecounter );
+    MPAlgorithmVersion algorithmVersion = MPAlgorithmVersionCurrent;
 
     // Read the options.
-    for (int opt; (opt = getopt( argc, argv, "u:t:c:v:C:h" )) != -1;)
+    for (int opt; (opt = getopt( argc, argv, "u:t:c:v:V:C:h" )) != -1;)
         switch (opt) {
             case 'u':
                 fullName = optarg;
@@ -117,6 +120,10 @@ int main(int argc, char *const argv[]) {
                 break;
             case 'v':
                 siteVariantString = optarg;
+                break;
+            case 'V':
+                if (sscanf( optarg, "%u", &algorithmVersion ) != 1)
+                    ftl( "Not a version: %s\n", optarg );
                 break;
             case 'C':
                 siteContextString = optarg;
@@ -189,13 +196,13 @@ int main(int argc, char *const argv[]) {
 
     // Output the password.
     const uint8_t *masterKey = mpw_masterKeyForUser(
-            fullName, masterPassword, MPAlgorithmVersionCurrent );
+            fullName, masterPassword, algorithmVersion );
     mpw_freeString( masterPassword );
     if (!masterKey)
         ftl( "Couldn't derive master key." );
 
     const char *sitePassword = mpw_passwordForSite(
-            masterKey, siteName, siteType, siteCounter, siteVariant, siteContextString, MPAlgorithmVersionCurrent );
+            masterKey, siteName, siteType, siteCounter, siteVariant, siteContextString, algorithmVersion );
     mpw_free( masterKey, MP_dkLen );
     if (!sitePassword)
         ftl( "Couldn't derive site password." );
