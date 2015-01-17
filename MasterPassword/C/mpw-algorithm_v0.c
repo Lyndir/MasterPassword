@@ -18,6 +18,22 @@
 #define MP_p                2
 #define MP_hash             PearlHashSHA256
 
+static const char *mpw_templateForType_v0(MPSiteType type, uint16_t seedByte) {
+
+    size_t count = 0;
+    const char **templates = mpw_templatesForType( type, &count );
+    if (!count)
+        return NULL;
+
+    return templates[seedByte % count];
+}
+
+static const char mpw_characterFromClass_v0(char characterClass, uint16_t seedByte) {
+
+    const char *classCharacters = mpw_charactersInClass( characterClass );
+    return classCharacters[seedByte % strlen( classCharacters )];
+}
+
 static const uint8_t *mpw_masterKeyForUser_v0(const char *fullName, const char *masterPassword) {
 
     const char *mpKeyScope = mpw_scopeForVariant( MPSiteVariantPassword );
@@ -88,7 +104,7 @@ static const char *mpw_passwordForSite_v0(const uint8_t *masterKey, const char *
     trc( "sitePasswordSeed ID: %s\n", mpw_idForBuf( sitePasswordSeed, 32 ) );
 
     // Determine the template.
-    const char *template = mpw_templateForType( siteType, sitePasswordSeed[0] );
+    const char *template = mpw_templateForType_v0( siteType, htons( sitePasswordSeed[0] ) );
     trc( "type %d, template: %s\n", siteType, template );
     if (strlen( template ) > 32) {
         ftl( "Template too long for password seed: %lu", strlen( template ) );
@@ -99,9 +115,9 @@ static const char *mpw_passwordForSite_v0(const uint8_t *masterKey, const char *
     // Encode the password from the seed using the template.
     char *const sitePassword = calloc( strlen( template ) + 1, sizeof( char ) );
     for (size_t c = 0; c < strlen( template ); ++c) {
-        sitePassword[c] = mpw_characterFromClass( template[c], sitePasswordSeed[c + 1] );
-        trc( "class %c, index %u (0x%02X) -> character: %c\n", template[c], sitePasswordSeed[c + 1], sitePasswordSeed[c + 1],
-                sitePassword[c] );
+        sitePassword[c] = mpw_characterFromClass_v0( template[c], htons( sitePasswordSeed[c + 1] ) );
+        trc( "class %c, index %u (0x%02X) -> character: %c\n",
+                template[c], htons( sitePasswordSeed[c + 1] ), htons( sitePasswordSeed[c + 1] ), sitePassword[c] );
     }
     mpw_free( sitePasswordSeed, sizeof( sitePasswordSeed ) );
 

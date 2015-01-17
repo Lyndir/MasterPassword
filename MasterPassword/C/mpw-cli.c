@@ -22,6 +22,7 @@
 #define MP_env_fullname     "MP_FULLNAME"
 #define MP_env_sitetype     "MP_SITETYPE"
 #define MP_env_sitecounter  "MP_SITECOUNTER"
+#define MP_env_algorithm    "MP_ALGORITHM"
 
 static void usage() {
 
@@ -39,9 +40,9 @@ static void usage() {
             "                     n, name         | 9 letter name.\n"
             "                     p, phrase       | 20 character sentence.\n\n", MP_env_sitetype );
     fprintf( stderr, "    -c counter   The value of the counter.\n"
-            "                 Defaults to %s in env or '1'.\n\n", MP_env_sitecounter );
+            "                 Defaults to %s in env or 1.\n\n", MP_env_sitecounter );
     fprintf( stderr, "    -V version   The algorithm version to use.\n"
-            "                 Defaults to %d.\n\n", MPAlgorithmVersionCurrent );
+            "                 Defaults to %s in env or %d.\n\n", MP_env_algorithm, MPAlgorithmVersionCurrent );
     fprintf( stderr, "    -v variant   The kind of content to generate.\n"
             "                 Defaults to 'password'.\n"
             "                     p, password | The password to log in with.\n"
@@ -105,6 +106,10 @@ int main(int argc, char *const argv[]) {
     uint32_t siteCounter = 1;
     const char *siteCounterString = getenv( MP_env_sitecounter );
     MPAlgorithmVersion algorithmVersion = MPAlgorithmVersionCurrent;
+    const char *algorithmVersionString = getenv( MP_env_algorithm );
+    if (algorithmVersionString && strlen( algorithmVersionString ))
+        if (sscanf( algorithmVersionString, "%u", &algorithmVersion ) != 1)
+            ftl( "Invalid %s: %s\n", MP_env_algorithm, algorithmVersionString );
 
     // Read the options.
     for (int opt; (opt = getopt( argc, argv, "u:t:c:v:V:C:h" )) != -1;)
@@ -168,6 +173,7 @@ int main(int argc, char *const argv[]) {
         siteType = MPSiteTypeGeneratedPhrase;
     if (siteTypeString)
         siteType = mpw_typeWithName( siteTypeString );
+    trc( "algorithmVersion: %u\n", algorithmVersion );
 
     // Read the master password.
     char *mpwConfigPath = homedir( ".mpw" );
