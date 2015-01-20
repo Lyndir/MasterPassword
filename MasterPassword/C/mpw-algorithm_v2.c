@@ -9,8 +9,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <arpa/inet.h>
 
-#include "mpw-types.h"
 #include "mpw-util.h"
 
 #define MP_N                32768

@@ -15,7 +15,6 @@
 #include <scrypt/sha256.h>
 #include <bcrypt/ow-crypt.h>
 
-#include "mpw-types.h"
 #include "mpw-algorithm.h"
 #include "mpw-util.h"
 

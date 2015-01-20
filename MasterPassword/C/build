@@ -280,6 +280,7 @@ mpw-tests() {
         # include paths
         -I"lib/include"
         -I"/usr/include/libxml2"
+        -I"/usr/local/include/libxml2"
     )
     LDFLAGS=(
         # scrypt

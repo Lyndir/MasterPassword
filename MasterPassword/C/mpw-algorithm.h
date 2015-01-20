@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Lyndir. All rights reserved.
 //
 
-#import "mpw-types.h"
+#include "mpw-types.h"
 
 typedef enum(unsigned int, MPAlgorithmVersion) {
     /** V0 did math with chars whose signedness was platform-dependent. */

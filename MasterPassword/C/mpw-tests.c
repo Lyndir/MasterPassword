@@ -5,7 +5,6 @@
 
 #define ftl(...) do { fprintf( stderr, __VA_ARGS__ ); exit(2); } while (0)
 
-#include "mpw-types.h"
 #include "mpw-algorithm.h"
 #include "mpw-util.h"
 

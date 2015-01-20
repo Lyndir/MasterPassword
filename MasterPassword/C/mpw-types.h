@@ -7,6 +7,7 @@
 //
 
 #include <stdlib.h>
+#include <stdint.h>
 
 #ifdef NS_ENUM
 #define enum(_type, _name) NS_ENUM(_type, _name)
