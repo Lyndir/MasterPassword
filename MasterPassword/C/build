@@ -81,11 +81,15 @@ unpack() {
         mv "$files"/* .
         rmdir "$files"
     fi
+    touch .unpacked
 }
 fetchSource() (
     source .source
 
-    if [[ $pkg && -e "${pkg##*/}" ]]; then
+    if [[ -e .unpacked ]]; then
+        true
+
+    elif [[ $pkg && -e "${pkg##*/}" ]]; then
         files=( !("${pkg##*/}") )
         [[ -e $files ]] || {
             echo
@@ -135,11 +139,14 @@ fetchSource() (
         exit 1
     fi
 
-    for patch in "${patches[@]}"; do
-        echo
-        echo "Patching: ${PWD##*/}, for $patch..."
-        patch -p0 < ../"${PWD##*/}-$patch.patch"
-    done
+    if [[ ! -e .patched ]] && (( ${#patches[@]} )); then
+        for patch in "${patches[@]}"; do
+            echo
+            echo "Patching: ${PWD##*/}, for $patch..."
+            patch -p0 < ../"${PWD##*/}-$patch.patch"
+        done
+        touch .patched
+    fi
 )
 depend() {
 
