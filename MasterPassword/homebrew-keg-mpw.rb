@@ -7,6 +7,7 @@ class Mpw < Formula
 
   depends_on "automake" => :build
   depends_on "autoconf" => :build
+  depends_on "openssl"
 
   resource "libscrypt" do
     url "http://masterpasswordapp.com/libscrypt-b12b554.tar.gz"
@@ -15,7 +16,7 @@ class Mpw < Formula
 
   def install
     resource("libscrypt").stage buildpath/"lib/scrypt"
-    system "touch", "lib/scrypt/.unpacked"
+    touch "lib/scrypt/.unpacked"
 
     ENV["targets"]="mpw mpw-tests"
     system "./build"
