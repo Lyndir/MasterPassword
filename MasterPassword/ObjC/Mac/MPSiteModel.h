@@ -18,6 +18,8 @@
 
 #import <Foundation/Foundation.h>
 #import "MPSiteEntity.h"
+#import "MPAlgorithm.h"
+
 @class MPSiteEntity;
 
 @interface MPSiteModel : NSObject

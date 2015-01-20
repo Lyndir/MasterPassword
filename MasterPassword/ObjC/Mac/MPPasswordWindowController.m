@@ -412,7 +412,7 @@
     NSArray *types = [site.algorithm allTypesStartingWith:MPSiteTypeGeneratedPIN];
     [self.passwordTypesMatrix renewRows:(NSInteger)[types count] columns:1];
     for (NSUInteger t = 0; t < [types count]; ++t) {
-        MPSiteType type = [types[t] unsignedIntegerValue];
+        MPSiteType type = (MPSiteType)[types[t] unsignedIntegerValue];
         NSString *title = [site.algorithm nameOfType:type];
         if (type & MPSiteTypeClassGenerated)
             title = [site.algorithm generatePasswordForSiteNamed:site.name ofType:type

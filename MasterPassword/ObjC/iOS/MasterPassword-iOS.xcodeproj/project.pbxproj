@@ -8,9 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		93D390228D0B8ED51C0AFDB4 /* bashlib in Resources */ = {isa = PBXBuildFile; fileRef = 93D39E71D6BAECEC4CD886F4 /* bashlib */; };
-		93D3906F9ED6493C81A59FC5 /* mpw-algorithm_v2.c in Sources */ = {isa = PBXBuildFile; fileRef = 93D390A3B351FEF1B9EDAB56 /* mpw-algorithm_v2.c */; };
 		93D390C1B93F9D3AE37DD0A5 /* MPAnswersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39C426E03358384018E85 /* MPAnswersViewController.m */; };
-		93D390CE9E30180167317730 /* mpw-algorithm_v1.c in Sources */ = {isa = PBXBuildFile; fileRef = 93D396F918E6470DB846C17F /* mpw-algorithm_v1.c */; };
 		93D391ECBD9BD2C64115B5DD /* PearlSizedTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39156E806BB78E04F78B9 /* PearlSizedTextView.m */; };
 		93D3922A53E41A54832E90D9 /* PearlOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D390FADEB325D8D54A957D /* PearlOverlay.m */; };
 		93D39262A8A97DB748213309 /* PearlEMail.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D393BB973253D4BAAC84AA /* PearlEMail.m */; };
@@ -22,7 +20,6 @@
 		93D39392DEDA376F93C6C718 /* MPCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39BAA71DE51B4D8A1286C /* MPCell.m */; };
 		93D3939661CE37180AF7CD6A /* MPStoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3957D76F71A652716EECC /* MPStoreViewController.m */; };
 		93D393DB5325820241BA90A7 /* PearlSizedTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39A4759186F6D2D34AA6B /* PearlSizedTextView.h */; };
-		93D393E4A18BF21ABC229C1E /* mpw-algorithm_v3.c in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D4E713564B7654341B0 /* mpw-algorithm_v3.c */; };
 		93D394982CBD25D46692DD7C /* MPWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3990E0CD1B5CF9FBB2C07 /* MPWebViewController.m */; };
 		93D394B5036C882B33C71872 /* MPPasswordsSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39E7A12CC352B2825AA66 /* MPPasswordsSegue.m */; };
 		93D39536EB550E811CCD04BC /* UIResponder+PearlFirstResponder.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D394482BB07F90E8FD1314 /* UIResponder+PearlFirstResponder.h */; };
@@ -56,7 +53,6 @@
 		93D39B8F90F58A5D158DDBA3 /* MPPasswordsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3924EE15017F8A12CB436 /* MPPasswordsViewController.m */; };
 		93D39BA1EA3CAAC8A220B4A6 /* MPAppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3916C1D8F1427DFBDEBCA /* MPAppSettingsViewController.m */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
-		93D39C7B89BEA08A829C66F4 /* mpw-algorithm_v0.c in Sources */ = {isa = PBXBuildFile; fileRef = 93D390A99850139D0FF0211E /* mpw-algorithm_v0.c */; };
 		93D39CEA71BD460ED4876920 /* build in Resources */ = {isa = PBXBuildFile; fileRef = 93D39B573E4DE98BAE518215 /* build */; };
 		93D39D38356F59DBEF934D70 /* MPAppDelegate_InApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D394C78C7B879C9AD9152C /* MPAppDelegate_InApp.m */; };
 		93D39D47FC623E91FC39D20C /* UICollectionView+PearlReloadFromArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3908DF8EABBD952065DC0 /* UICollectionView+PearlReloadFromArray.m */; };
@@ -1622,6 +1618,10 @@
 				93D39B573E4DE98BAE518215 /* build */,
 				93D3979016BF0C5B29D1340D /* distribute */,
 				93D39ACD33E79386E6F33601 /* install */,
+				93D390A99850139D0FF0211E /* mpw-algorithm_v0.c */,
+				93D396F918E6470DB846C17F /* mpw-algorithm_v1.c */,
+				93D390A3B351FEF1B9EDAB56 /* mpw-algorithm_v2.c */,
+				93D39D4E713564B7654341B0 /* mpw-algorithm_v3.c */,
 				93D3969393A3A46BD27D7078 /* mpw-algorithm.c */,
 				93D3990D850D76A94C6B7A4D /* mpw-algorithm.h */,
 				93D39B70138D0E28F7D5E86B /* mpw-bench.c */,
@@ -1634,10 +1634,6 @@
 				93D396C311C3725870343EE0 /* mpw-util.c */,
 				93D39CF7DB942C69D1C5D6BE /* mpw-util.h */,
 				93D39245A478883C672818F3 /* mpw.bashrc */,
-				93D396F918E6470DB846C17F /* mpw-algorithm_v1.c */,
-				93D390A99850139D0FF0211E /* mpw-algorithm_v0.c */,
-				93D390A3B351FEF1B9EDAB56 /* mpw-algorithm_v2.c */,
-				93D39D4E713564B7654341B0 /* mpw-algorithm_v3.c */,
 			);
 			name = C;
 			path = ../../C;
@@ -3655,10 +3651,6 @@
 				93D392FD5E2052F7D7DB3774 /* NSString+MPMarkDown.m in Sources */,
 				93D395B715D15F2B56F2A2EE /* mpw-types.c in Sources */,
 				93D39943D01E70DAC3B0DF76 /* mpw-util.c in Sources */,
-				93D390CE9E30180167317730 /* mpw-algorithm_v1.c in Sources */,
-				93D39C7B89BEA08A829C66F4 /* mpw-algorithm_v0.c in Sources */,
-				93D3906F9ED6493C81A59FC5 /* mpw-algorithm_v2.c in Sources */,
-				93D393E4A18BF21ABC229C1E /* mpw-algorithm_v3.c in Sources */,
 				93D39577FD8BB0945DB2F0A3 /* MPAlgorithmV3.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

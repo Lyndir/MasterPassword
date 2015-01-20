@@ -719,7 +719,7 @@
         return NO;
 
     BIGNUM *permutations = BN_new(), *templatePermutations = BN_new();
-    for (int t = 0; t < count; ++t) {
+    for (size_t t = 0; t < count; ++t) {
         const char *template = templates[t];
         BN_one( templatePermutations );
 

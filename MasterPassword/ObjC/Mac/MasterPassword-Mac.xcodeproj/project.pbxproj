@@ -787,6 +787,10 @@
 		DA67743B1A474A03004F356A /* mpw-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mpw-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA6774481A47C8F7004F356A /* mpw-tests-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests-util.c"; sourceTree = "<group>"; };
 		DA6774491A47C8F7004F356A /* mpw-tests-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-tests-util.h"; sourceTree = "<group>"; };
+		DA831A271A6E1146000AC234 /* mpw-algorithm_v0.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v0.c"; sourceTree = "<group>"; };
+		DA831A281A6E1146000AC234 /* mpw-algorithm_v1.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v1.c"; sourceTree = "<group>"; };
+		DA831A291A6E1146000AC234 /* mpw-algorithm_v2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v2.c"; sourceTree = "<group>"; };
+		DA831A2A1A6E1146000AC234 /* mpw-algorithm_v3.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v3.c"; sourceTree = "<group>"; };
 		DA89D4EA1A51EABD00AC64D7 /* Pearl-Cocoa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Pearl-Cocoa.h"; sourceTree = "<group>"; };
 		DA89D4EB1A51EABD00AC64D7 /* Pearl-Cocoa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Pearl-Cocoa.m"; sourceTree = "<group>"; };
 		DA8ED891192906920099B726 /* PearlTween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlTween.m; sourceTree = "<group>"; };
@@ -1539,6 +1543,10 @@
 				DA67732B1A4746AF004F356A /* build */,
 				DA67732C1A4746AF004F356A /* distribute */,
 				DA67732D1A4746AF004F356A /* install */,
+				DA831A271A6E1146000AC234 /* mpw-algorithm_v0.c */,
+				DA831A281A6E1146000AC234 /* mpw-algorithm_v1.c */,
+				DA831A291A6E1146000AC234 /* mpw-algorithm_v2.c */,
+				DA831A2A1A6E1146000AC234 /* mpw-algorithm_v3.c */,
 				DA6773BB1A4746AF004F356A /* mpw-algorithm.c */,
 				DA6773BC1A4746AF004F356A /* mpw-algorithm.h */,
 				DA6773BF1A4746AF004F356A /* mpw-bench.c */,
