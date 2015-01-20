@@ -112,10 +112,15 @@ int main(int argc, char *const argv[]) {
             ftl( "Invalid %s: %s\n", MP_env_algorithm, algorithmVersionString );
 
     // Read the options.
-    for (int opt; (opt = getopt( argc, argv, "u:t:c:v:V:C:h" )) != -1;)
+    for (int opt; (opt = getopt( argc, argv, "u:P:t:c:v:V:C:h" )) != -1;)
         switch (opt) {
             case 'u':
                 fullName = optarg;
+                break;
+            case 'P':
+                // Do not use this.  Passing your master password via the command-line
+                // is insecure.  This is here for non-interactive testing purposes only.
+                masterPassword = strcpy( malloc( strlen( optarg ) + 1 ), optarg );
                 break;
             case 't':
                 siteTypeString = optarg;
