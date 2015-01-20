@@ -390,7 +390,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     NSAlert *alert = [NSAlert alertWithMessageText:@"Delete User"
                                      defaultButton:@"Delete" alternateButton:nil otherButton:@"Cancel"
-                         informativeTextWithFormat:@"This will delete %@ and all his sites.", self.activeUserForMainThread.name];
+                         informativeTextWithFormat:@"This will delete %@ and all their sites.", self.activeUserForMainThread.name];
     if ([alert runModal] != NSAlertDefaultReturn)
         return;
 
