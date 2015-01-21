@@ -171,6 +171,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         passwordField.setHorizontalAlignment( JTextField.CENTER );
         passwordField.setAlignmentX( Component.CENTER_ALIGNMENT );
         passwordField.setEditable( false );
+        passwordField.putClientProperty( "JPasswordField.cutCopyAllowed", true );
         passwordEchoChar = passwordField.getEchoChar();
         passwordEchoFont = passwordField.getFont().deriveFont( 40f );
         updateMask();
