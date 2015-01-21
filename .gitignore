@@ -28,9 +28,6 @@ Press/MasterPassword_PressKit/MasterPassword_pressrelease_*.pdf
 /sendipa/*
 !/sendipa/sendipa.conf
 
-# Java
-MasterPassword/Java/**/target
-
 # C
 MasterPassword/C/VERSION
 MasterPassword/C/*.o
