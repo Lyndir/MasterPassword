@@ -41,7 +41,7 @@ window.setImmediate || document.write("<script src=js/mpw-js/" + esdir + "setImm
 
 // Include the scrypt implementation
 var SCRYPTASM_PATH = (window.location + '').replace(/[^/]*(#[^#]*)?$/, 'js/mpw-js/scrypt-asm.js');
-document.write("<script src=js/mpw-js/" + esdir + "scrypt.js><\/script>");
+document.write("<script src=js/mpw-js/" + esdir + "scrypt.js?1><\/script>");
 
 // Include the MPW class
-document.write("<script src=js/mpw-js/" + esdir + "mpw.js><\/script>");
+document.write("<script src=js/mpw-js/" + esdir + "mpw.js?1><\/script>");
