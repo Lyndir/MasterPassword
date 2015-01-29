@@ -227,8 +227,8 @@ mpw() {
     cc "${CFLAGS[@]}" "$@"                  -c mpw-algorithm.c    -o mpw-algorithm.o
     cc "${CFLAGS[@]}" "$@"                  -c mpw-types.c        -o mpw-types.o
     cc "${CFLAGS[@]}" "$@"                  -c mpw-util.c         -o mpw-util.o
-    cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "$@" "mpw-algorithm.o" "mpw-types.o" "mpw-util.o" \
-                                               mpw-cli.c          -o mpw
+    cc "${CFLAGS[@]}" "$@" "mpw-algorithm.o" "mpw-types.o" "mpw-util.o" \
+       "${LDFLAGS[@]}"     "mpw-cli.c" -o "mpw"
     echo "done!  Now run ./install or use ./mpw"
 }
 
@@ -264,8 +264,8 @@ mpw-bench() {
         -l"crypto"
     )
 
-    cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "$@" "mpw-algorithm.o" "mpw-types.o" "mpw-util.o" \
-                                               mpw-bench.c        -o mpw-bench
+    cc "${CFLAGS[@]}" "$@" "mpw-algorithm.o" "mpw-types.o" "mpw-util.o" \
+       "${LDFLAGS[@]}"     "mpw-bench.c" -o "mpw-bench"
     echo "done!  Now use ./mpw-bench"
 }
 
@@ -296,9 +296,9 @@ mpw-tests() {
         -l"crypto" -l"xml2"
     )
 
-    cc "${CFLAGS[@]}" "$@"                  -c mpw-tests-util.c         -o mpw-tests-util.o
-    cc "${CFLAGS[@]}" "${LDFLAGS[@]}" "$@" "mpw-algorithm.o" "mpw-types.o" "mpw-util.o" "mpw-tests-util.o" \
-                                               mpw-tests.c        -o mpw-tests
+    cc "${CFLAGS[@]}" "$@" -c mpw-tests-util.c -o mpw-tests-util.o
+    cc "${CFLAGS[@]}" "$@" "mpw-algorithm.o" "mpw-types.o" "mpw-util.o" "mpw-tests-util.o" \
+       "${LDFLAGS[@]}"     "mpw-tests.c" -o "mpw-tests"
     echo "done!  Now use ./mpw-tests"
 }
 
