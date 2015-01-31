@@ -77,15 +77,6 @@ public class MasterKey {
         return idForBytes( masterKey );
     }
 
-    private byte[] getSubKey(final int subkeyLength) {
-
-        Preconditions.checkState( valid );
-        byte[] subkey = new byte[Math.min( subkeyLength, masterKey.length )];
-        System.arraycopy( masterKey, 0, subkey, 0, subkey.length );
-
-        return subkey;
-    }
-
     public String encode(final String siteName, final MPSiteType siteType, int siteCounter, final MPSiteVariant siteVariant,
                          @Nullable final String siteContext) {
         Preconditions.checkState( valid );

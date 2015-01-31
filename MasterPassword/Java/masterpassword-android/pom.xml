@@ -114,11 +114,10 @@
 
         <dependency>
             <groupId>com.lambdaworks</groupId>
-            <artifactId>libscrypt</artifactId>
-            <version>1.4.0</version>
-            <type>so</type>
-            <classifier>android</classifier>
-            <scope>runtime</scope>
+            <artifactId>scrypt</artifactId>
+            <version>1.4.0-android</version>
+            <type>jar</type>
+            <classifier>native</classifier>
         </dependency>
 
     </dependencies>

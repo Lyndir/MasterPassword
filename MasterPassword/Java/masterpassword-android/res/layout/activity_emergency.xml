@@ -12,64 +12,61 @@
             android:gravity="center">
 
         <View
-                android:layout_width="0dp"
+                android:layout_width="1dp"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
         <ProgressBar
                 android:id="@+id/progressView"
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="20dp"
                 android:indeterminate="true" />
-
-        <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
 
         <EditText
                 android:id="@+id/userNameField"
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:inputType="text|textCapWords|textPersonName"
-                android:hint="@string/userName.hint"
+                android:hint="@string/userName_hint"
                 android:gravity="center"
                 android:textColor="#FFFFFF"
                 android:textSize="26sp" />
 
         <EditText
                 android:id="@+id/masterPasswordField"
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:inputType="text|textPassword"
-                android:hint="@string/masterPassword.hint"
-                android:password="true"
+                android:hint="@string/masterPassword_hint"
                 android:gravity="center"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />
 
-        <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/double_"
-                android:contentDescription="@string/empty" />
-
         <EditText
                 android:id="@+id/siteNameField"
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:inputType="text|textNoSuggestions|textUri"
-                android:hint="@string/siteName.hint"
+                android:hint="@string/siteName_hint"
                 android:gravity="center"
                 android:textColor="#FFFFFF"
                 android:textSize="26sp" />
 
-        <Button
+        <ImageView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
+                android:src="@drawable/double_"
+                android:contentDescription="@string/empty" />
+
+        <TextView
                 android:id="@+id/sitePasswordField"
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:background="@null"
+                android:background="@android:color/transparent"
                 android:textColor="#FFFFFF"
                 android:textSize="32sp"
                 android:text="LuxdZozvDuma4["
@@ -77,13 +74,30 @@
 
         <Spinner
                 android:id="@+id/typeField"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
 
-        <NumberPicker
+        <EditText
                 android:id="@+id/counterField"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:inputType="text|textNoSuggestions"
+                android:textColor="#FFFFFF"
+                android:textSize="26sp"
+                android:text="1" />
+
+        <View
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+        <CheckBox
+                android:id="@+id/rememberPasswordField"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="@string/remember" />
 
     </LinearLayout>
 

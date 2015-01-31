@@ -2,8 +2,9 @@
 <resources>
     <string name="app_name">Master Password</string>
     <string name="avatar">User Avatar</string>
-    <string name="siteName.hint">Site Name</string>
-    <string name="userName.hint">Your Name</string>
-    <string name="masterPassword.hint">Your Master Password</string>
+    <string name="remember">Remember Password</string>
+    <string name="siteName_hint">Site Name</string>
+    <string name="userName_hint">Your Name</string>
+    <string name="masterPassword_hint">Your Master Password</string>
     <string name="empty" />
 </resources>

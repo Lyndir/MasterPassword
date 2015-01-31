@@ -9,12 +9,14 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import com.lyndir.lhunath.opal.system.util.ConversionUtils;
 import java.util.concurrent.*;
 
 
@@ -55,10 +57,13 @@ public class EmergencyActivity extends Activity {
     Spinner typeField;
 
     @InjectView(R.id.counterField)
-    NumberPicker counterField;
+    EditText counterField;
 
     @InjectView(R.id.sitePasswordField)
     TextView sitePasswordField;
+
+    @InjectView(R.id.rememberPasswordField)
+    CheckBox rememberPasswordField;
 
     private int hc_userName;
     private int hc_masterPassword;
@@ -68,6 +73,7 @@ public class EmergencyActivity extends Activity {
         super.onCreate( savedInstanceState );
         Res.init( getResources() );
 
+        getWindow().setFlags( WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE );
         setContentView( R.layout.activity_emergency );
         ButterKnife.inject( this );
 
@@ -75,23 +81,26 @@ public class EmergencyActivity extends Activity {
         masterPasswordField.setOnFocusChangeListener( updateMasterKey );
         siteNameField.addTextChangedListener( updateSitePassword );
         typeField.setOnItemSelectedListener( updateSitePassword );
-        counterField.setOnValueChangedListener( updateSitePassword );
+        counterField.addTextChangedListener( updateSitePassword );
 
         userNameField.setTypeface( Res.exo_Thin );
         userNameField.setPaintFlags( userNameField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
         masterPasswordField.setTypeface( Res.sourceCodePro_ExtraLight );
-        masterPasswordField.setPaintFlags( userNameField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
+        masterPasswordField.setPaintFlags( masterPasswordField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
         siteNameField.setTypeface( Res.exo_Regular );
-        siteNameField.setPaintFlags( userNameField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
+        siteNameField.setPaintFlags( siteNameField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
         sitePasswordField.setTypeface( Res.sourceCodePro_Black );
-        sitePasswordField.setPaintFlags( userNameField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
+        sitePasswordField.setPaintFlags( sitePasswordField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
 
         typeField.setAdapter( new ArrayAdapter<>( this, R.layout.type_item, MPSiteType.forClass( MPSiteTypeClass.Generated ) ) );
         typeField.setSelection( MPSiteType.GeneratedLong.ordinal() );
 
-        counterField.setMinValue( 1 );
-        counterField.setMaxValue( Integer.MAX_VALUE );
-        counterField.setWrapSelectorWheel( false );
+        rememberPasswordField.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
+                getPreferences( MODE_PRIVATE ).edit().putBoolean( "rememberPassword", isChecked ).apply();
+            }
+        } );
     }
 
     @Override
@@ -99,23 +108,30 @@ public class EmergencyActivity extends Activity {
         super.onResume();
 
         userNameField.setText( getPreferences( MODE_PRIVATE ).getString( "userName", "" ) );
+        rememberPasswordField.setSelected( isRememberPasswordEnabled() );
         masterPasswordField.requestFocus();
     }
 
     @Override
     protected void onPause() {
-        synchronized (this) {
-            hc_userName = hc_masterPassword = 0;
-            if (masterKeyFuture != null) {
-                masterKeyFuture.cancel( true );
-                masterKeyFuture = null;
+        if (!isRememberPasswordEnabled()) {
+            synchronized (this) {
+                hc_userName = hc_masterPassword = 0;
+                if (masterKeyFuture != null) {
+                    masterKeyFuture.cancel( true );
+                    masterKeyFuture = null;
+                }
+
+                sitePasswordField.setText( "" );
+                progressView.setVisibility( View.INVISIBLE );
             }
         }
 
-        sitePasswordField.setText( "" );
-        progressView.setVisibility( View.INVISIBLE );
-
         super.onPause();
+    }
+
+    private boolean isRememberPasswordEnabled() {
+        return getPreferences( MODE_PRIVATE ).getBoolean( "rememberPassword", false );
     }
 
     private synchronized void updateMasterKey() {
@@ -126,9 +142,7 @@ public class EmergencyActivity extends Activity {
         hc_userName = userName.hashCode();
         hc_masterPassword = masterPassword.hashCode();
 
-        SharedPreferences.Editor pref = getPreferences( MODE_PRIVATE ).edit();
-        pref.putString( "userName", userName );
-        pref.apply();
+        getPreferences( MODE_PRIVATE ).edit().putString( "userName", userName ).apply();
 
         if (masterKeyFuture != null)
             masterKeyFuture.cancel( true );
@@ -170,7 +184,7 @@ public class EmergencyActivity extends Activity {
     private void updateSitePassword() {
         final String siteName = siteNameField.getText().toString();
         final MPSiteType type = (MPSiteType) typeField.getSelectedItem();
-        final int counter = counterField.getValue();
+        final int counter = ConversionUtils.toIntegerNN( counterField.getText() );
 
         if (masterKeyFuture == null || siteName.isEmpty() || type == null) {
             sitePasswordField.setText( "" );
@@ -220,13 +234,13 @@ public class EmergencyActivity extends Activity {
 
         ClipDescription description = new ClipDescription( strf( "Password for %s", siteNameField.getText() ),
                                                            new String[]{ ClipDescription.MIMETYPE_TEXT_PLAIN } );
-        ((ClipboardManager) getSystemService( CLIPBOARD_SERVICE )).setPrimaryClip(
-                new ClipData( description, new ClipData.Item( sitePassword ) ) );
+        ClipData clipData = new ClipData( description, new ClipData.Item( sitePassword ) );
+        ((ClipboardManager) getSystemService( CLIPBOARD_SERVICE )).setPrimaryClip( clipData );
 
-        Intent startMain = new Intent(Intent.ACTION_MAIN);
-        startMain.addCategory(Intent.CATEGORY_HOME);
-        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(startMain);
+        Intent startMain = new Intent( Intent.ACTION_MAIN );
+        startMain.addCategory( Intent.CATEGORY_HOME );
+        startMain.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK );
+        startActivity( startMain );
     }
 
     private abstract class ValueChangedListener
