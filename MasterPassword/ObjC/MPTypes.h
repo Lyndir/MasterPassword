@@ -6,15 +6,15 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-#define MPErrorDomain                         @"MPErrorDomain"
+NSString *const MPErrorDomain;
 
-#define MPSignedInNotification                @"MPSignedInNotification"
-#define MPSignedOutNotification               @"MPSignedOutNotification"
-#define MPKeyForgottenNotification            @"MPKeyForgottenNotification"
-#define MPSiteUpdatedNotification             @"MPSiteUpdatedNotification"
-#define MPCheckConfigNotification             @"MPCheckConfigNotification"
-#define MPSitesImportedNotification           @"MPSitesImportedNotification"
-#define MPFoundInconsistenciesNotification    @"MPFoundInconsistenciesNotification"
+NSString *const MPSignedInNotification;
+NSString *const MPSignedOutNotification;
+NSString *const MPKeyForgottenNotification;
+NSString *const MPSiteUpdatedNotification;
+NSString *const MPCheckConfigNotification;
+NSString *const MPSitesImportedNotification;
+NSString *const MPFoundInconsistenciesNotification;
 
-#define MPSitesImportedNotificationUserKey    @"MPSitesImportedNotificationUserKey"
-#define MPInconsistenciesFixResultUserKey     @"MPInconsistenciesFixResultUserKey"
+NSString *const MPSitesImportedNotificationUserKey;
+NSString *const MPInconsistenciesFixResultUserKey;

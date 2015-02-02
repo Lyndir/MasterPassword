@@ -1,9 +1,8 @@
-require "formula"
-
 class Mpw < Formula
   homepage "http://masterpasswordapp.com"
-  url "https://ssl.masterpasswordapp.com/mpw-2.1-cli3-3-gd5ff215.tar.gz"
-  sha1 "c9fca230cd0c2b22082bc54fe85053219888212a"
+  url "https://ssl.masterpasswordapp.com/mpw-2.1-cli4-0-gf6b2287.tar.gz"
+  sha1 "036b3d8f4bd6f0676ae16e7e9c3de65f6030874f"
+  version "2.1-cli4"
 
   depends_on "automake" => :build
   depends_on "autoconf" => :build
@@ -18,7 +17,7 @@ class Mpw < Formula
     resource("libscrypt").stage buildpath/"lib/scrypt"
     touch "lib/scrypt/.unpacked"
 
-    ENV["targets"]="mpw mpw-tests"
+    ENV["targets"] = "mpw mpw-tests"
     system "./build"
     system "./mpw-tests"
 

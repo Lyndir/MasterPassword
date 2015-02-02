@@ -57,6 +57,8 @@
 		DA3B8456190FC89700246EEA /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3B8454190FC89700246EEA /* MPFixable.m */; };
 		DA3BCFCD19BD09E0006B2681 /* SourceCodePro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */; };
 		DA4DA1D91564471A00F6F596 /* libjrswizzle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC6326C148680650075AEA5 /* libjrswizzle.a */; };
+		DA4DAE941A7D8117003E5423 /* MPAlgorithmV3.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4DAE921A7D8117003E5423 /* MPAlgorithmV3.m */; };
+		DA4DAE951A7D8117003E5423 /* MPTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4DAE931A7D8117003E5423 /* MPTypes.m */; };
 		DA5180CA19FF2F9200A587E9 /* MPAlgorithmV2.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5180C719FF2F9200A587E9 /* MPAlgorithmV2.m */; };
 		DA5180CE19FF307E00A587E9 /* MPAppDelegate_Store.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5180CD19FF307E00A587E9 /* MPAppDelegate_Store.m */; };
 		DA5E5C9417248AA1003798D8 /* libscryptenc-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5E5C8717248AA1003798D8 /* libscryptenc-osx.a */; };
@@ -328,6 +330,9 @@
 		DA3B8454190FC89700246EEA /* MPFixable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPFixable.m; sourceTree = "<group>"; };
 		DA3B8455190FC89700246EEA /* MPFixable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPFixable.h; sourceTree = "<group>"; };
 		DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Regular.otf"; sourceTree = "<group>"; };
+		DA4DAE911A7D8117003E5423 /* MPAlgorithmV3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAlgorithmV3.h; sourceTree = "<group>"; };
+		DA4DAE921A7D8117003E5423 /* MPAlgorithmV3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAlgorithmV3.m; sourceTree = "<group>"; };
+		DA4DAE931A7D8117003E5423 /* MPTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTypes.m; sourceTree = "<group>"; };
 		DA5180C619FF2F9200A587E9 /* MPAlgorithmV2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAlgorithmV2.h; sourceTree = "<group>"; };
 		DA5180C719FF2F9200A587E9 /* MPAlgorithmV2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAlgorithmV2.m; sourceTree = "<group>"; };
 		DA5180CC19FF307E00A587E9 /* MPAppDelegate_Store.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_Store.h; sourceTree = "<group>"; };
@@ -1065,6 +1070,8 @@
 				DA5E5C9C1724A667003798D8 /* MPAlgorithmV1.m */,
 				DA5180C619FF2F9200A587E9 /* MPAlgorithmV2.h */,
 				DA5180C719FF2F9200A587E9 /* MPAlgorithmV2.m */,
+				DA4DAE911A7D8117003E5423 /* MPAlgorithmV3.h */,
+				DA4DAE921A7D8117003E5423 /* MPAlgorithmV3.m */,
 				DA5E5C9D1724A667003798D8 /* MPAppDelegate_Key.h */,
 				DA5E5C9E1724A667003798D8 /* MPAppDelegate_Key.m */,
 				DA5E5C9F1724A667003798D8 /* MPAppDelegate_Shared.h */,
@@ -1088,6 +1095,7 @@
 				DA32CFDA19CF1C70004F3F0E /* MPStoredSiteEntity.h */,
 				DA32CFDB19CF1C70004F3F0E /* MPStoredSiteEntity.m */,
 				DA5E5CAF1724A667003798D8 /* MPTypes.h */,
+				DA4DAE931A7D8117003E5423 /* MPTypes.m */,
 				DA32CFE319CF1C71004F3F0E /* MPUserEntity.h */,
 				DA32CFE419CF1C71004F3F0E /* MPUserEntity.m */,
 			);
@@ -2256,6 +2264,8 @@
 				93D394C4254EEB45FB335AFB /* MPSitesTableView.m in Sources */,
 				DA6774291A4746AF004F356A /* mpw-algorithm.c in Sources */,
 				93D395E4830290EBB6E71F34 /* MPNoStateButton.m in Sources */,
+				DA4DAE941A7D8117003E5423 /* MPAlgorithmV3.m in Sources */,
+				DA4DAE951A7D8117003E5423 /* MPTypes.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

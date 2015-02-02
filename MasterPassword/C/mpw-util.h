@@ -15,7 +15,9 @@
 #define trc(...) fprintf( stderr, __VA_ARGS__ )
 #endif
 #else
+#ifndef trc
 #define trc(...) do {} while (0)
+#endif
 #endif
 #ifndef ftl
 #define ftl(...) do { fprintf( stderr, __VA_ARGS__ ); abort(); } while (0)
