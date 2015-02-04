@@ -18,14 +18,14 @@ public class MPSite {
     public static final MPSiteType DEFAULT_TYPE    = MPSiteType.GeneratedLong;
     public static final int        DEFAULT_COUNTER = 1;
 
-    private final MPUser user;
-    private int mpVersion;
-    private Instant    lastUsed;
-    private String     siteName;
-    private MPSiteType siteType;
-    private int        siteCounter;
-    private int        uses;
-    private String     loginName;
+    private final MPUser            user;
+    private       MasterKey.Version mpVersion;
+    private       Instant           lastUsed;
+    private       String            siteName;
+    private       MPSiteType        siteType;
+    private       int               siteCounter;
+    private       int               uses;
+    private       String            loginName;
 
     public MPSite(final MPUser user, final String siteName) {
         this( user, siteName, DEFAULT_TYPE, DEFAULT_COUNTER );
@@ -33,14 +33,14 @@ public class MPSite {
 
     public MPSite(final MPUser user, final String siteName, final MPSiteType siteType, final int siteCounter) {
         this.user = user;
-        this.mpVersion = MasterKey.ALGORITHM;
+        this.mpVersion = MasterKey.Version.CURRENT;
         this.lastUsed = new Instant();
         this.siteName = siteName;
         this.siteType = siteType;
         this.siteCounter = siteCounter;
     }
 
-    protected MPSite(final MPUser user, final int mpVersion, final Instant lastUsed, final String siteName, final MPSiteType siteType, final int siteCounter,
+    protected MPSite(final MPUser user, final MasterKey.Version mpVersion, final Instant lastUsed, final String siteName, final MPSiteType siteType, final int siteCounter,
                      final int uses, final String loginName, final String importContent) {
         this.user = user;
         this.mpVersion = mpVersion;
@@ -69,11 +69,11 @@ public class MPSite {
         return null;
     }
 
-    public int getMPVersion() {
+    public MasterKey.Version getMPVersion() {
         return mpVersion;
     }
 
-    public void setMPVersion(final int mpVersion) {
+    public void setMPVersion(final MasterKey.Version mpVersion) {
         this.mpVersion = mpVersion;
     }
 

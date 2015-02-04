@@ -10,6 +10,7 @@ import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
 import com.lyndir.lhunath.opal.system.util.NNOperation;
 import com.lyndir.masterpassword.MPSiteType;
+import com.lyndir.masterpassword.MasterKey;
 import java.io.*;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -110,7 +111,7 @@ public class MPSiteUnmarshaller {
         this.mpVersion = mpVersion;
         this.clearContent = clearContent;
 
-        user = new MPUser( fullName, keyID, avatar, defaultType, new DateTime( 0 ) );
+        user = new MPUser( fullName, keyID, MasterKey.Version.fromInt( mpVersion ), avatar, defaultType, new DateTime( 0 ) );
     }
 
     @Nullable
@@ -123,11 +124,10 @@ public class MPSiteUnmarshaller {
         switch (importFormat) {
             case 0:
                 site = new MPSite( user, //
-                                   ConversionUtils.toIntegerNN( siteMatcher.group( 4 ).replace( ":", "" ) ), //
+                                   MasterKey.Version.fromInt( ConversionUtils.toIntegerNN( siteMatcher.group( 4 ).replace( ":", "" ) ) ), //
                                    rfc3339.parseDateTime( siteMatcher.group( 1 ) ).toInstant(), //
                                    siteMatcher.group( 5 ), //
-                                   MPSiteType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
-                                   MPSite.DEFAULT_COUNTER, //
+                                   MPSiteType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ), MPSite.DEFAULT_COUNTER, //
                                    ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ), //
                                    null, //
                                    siteMatcher.group( 6 ) );
@@ -135,7 +135,7 @@ public class MPSiteUnmarshaller {
 
             case 1:
                 site = new MPSite( user, //
-                                   ConversionUtils.toIntegerNN( siteMatcher.group( 4 ).replace( ":", "" ) ), //
+                                   MasterKey.Version.fromInt( ConversionUtils.toIntegerNN( siteMatcher.group( 4 ).replace( ":", "" ) ) ), //
                                    rfc3339.parseDateTime( siteMatcher.group( 1 ) ).toInstant(), //
                                    siteMatcher.group( 7 ), //
                                    MPSiteType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),

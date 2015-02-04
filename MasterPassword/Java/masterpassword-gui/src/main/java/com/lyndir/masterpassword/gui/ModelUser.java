@@ -38,6 +38,11 @@ public class ModelUser extends User {
     }
 
     @Override
+    public MasterKey.Version getAlgorithmVersion() {
+        return model.getAlgorithmVersion();
+    }
+
+    @Override
     public int getAvatar() {
         return model.getAvatar();
     }

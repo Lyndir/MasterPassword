@@ -24,12 +24,12 @@
         <dependency>
             <groupId>com.lyndir.lhunath.opal</groupId>
             <artifactId>opal-system</artifactId>
-            <version>1.6-p7</version>
+            <version>1.6-p8</version>
         </dependency>
         <dependency>
             <groupId>com.lyndir.lhunath.opal</groupId>
             <artifactId>opal-crypto</artifactId>
-            <version>1.6-p7</version>
+            <version>1.6-p8</version>
         </dependency>
 
         <!-- EXTERNAL DEPENDENCIES -->

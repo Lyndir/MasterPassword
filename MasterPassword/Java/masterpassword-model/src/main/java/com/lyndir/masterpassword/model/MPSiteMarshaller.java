@@ -63,8 +63,8 @@ public class MPSiteMarshaller {
         header.append( "# Full Name: " ).append( user.getFullName() ).append( '\n' );
         header.append( "# Avatar: " ).append( user.getAvatar() ).append( '\n' );
         header.append( "# Key ID: " ).append( user.exportKeyID() ).append( '\n' );
-        header.append( "# Version: " ).append( MasterKey.VERSION ).append( '\n' );
-        header.append( "# Algorithm: " ).append( MasterKey.ALGORITHM ).append( '\n' );
+        header.append( "# Version: " ).append( user.getAlgorithmVersion().toBundleVersion() ).append( '\n' );
+        header.append( "# Algorithm: " ).append( user.getAlgorithmVersion().toInt() ).append( '\n' );
         header.append( "# Default Type: " ).append( user.getDefaultType().getType() ).append( '\n' );
         header.append( "# Passwords: " ).append( contentMode.name() ).append( '\n' );
         header.append( "##\n" );

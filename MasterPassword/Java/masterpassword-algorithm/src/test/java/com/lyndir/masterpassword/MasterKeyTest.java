@@ -35,7 +35,7 @@ public class MasterKeyTest {
             throws Exception {
 
         for (MPWTests.Case testCase : tests.getCases()) {
-            MasterKey masterKey = new MasterKey( testCase.getFullName(), testCase.getMasterPassword() );
+            MasterKey masterKey = MasterKey.create( testCase.getFullName(), testCase.getMasterPassword() );
             assertEquals(
                     masterKey.encode( testCase.getSiteName(), testCase.getSiteType(), testCase.getSiteCounter(), testCase.getSiteVariant(),
                                       testCase.getSiteContext() ), testCase.getResult(), "Failed test case: " + testCase );
@@ -46,7 +46,7 @@ public class MasterKeyTest {
     public void testGetUserName()
             throws Exception {
 
-        assertEquals( new MasterKey( defaultCase.getFullName(), defaultCase.getMasterPassword() ).getFullName(),
+        assertEquals( MasterKey.create( defaultCase.getFullName(), defaultCase.getMasterPassword() ).getFullName(),
                       defaultCase.getFullName() );
     }
 
@@ -55,7 +55,7 @@ public class MasterKeyTest {
             throws Exception {
 
         for (MPWTests.Case testCase : tests.getCases()) {
-            MasterKey masterKey = new MasterKey( testCase.getFullName(), testCase.getMasterPassword() );
+            MasterKey masterKey = MasterKey.create( testCase.getFullName(), testCase.getMasterPassword() );
             assertEquals( CodeUtils.encodeHex( masterKey.getKeyID() ), testCase.getKeyID(), "Failed test case: " + testCase );
         }
     }
@@ -65,7 +65,7 @@ public class MasterKeyTest {
             throws Exception {
 
         try {
-            MasterKey masterKey = new MasterKey( defaultCase.getFullName(), defaultCase.getMasterPassword() );
+            MasterKey masterKey = MasterKey.create( defaultCase.getFullName(), defaultCase.getMasterPassword() );
             masterKey.invalidate();
             masterKey.encode( defaultCase.getSiteName(), defaultCase.getSiteType(), defaultCase.getSiteCounter(),
                               defaultCase.getSiteVariant(), defaultCase.getSiteContext() );

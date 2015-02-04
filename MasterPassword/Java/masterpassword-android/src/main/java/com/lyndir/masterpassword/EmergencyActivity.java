@@ -159,7 +159,7 @@ public class EmergencyActivity extends Activity {
             public MasterKey call()
                     throws Exception {
                 try {
-                    return new MasterKey( userName, masterPassword );
+                    return MasterKey.create( userName, masterPassword );
                 }
                 catch (RuntimeException e) {
                     sitePasswordField.setText( "" );

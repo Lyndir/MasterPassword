@@ -4,6 +4,7 @@ import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.base.Throwables;
+import com.google.common.collect.Maps;
 import com.google.common.io.Resources;
 import com.google.common.util.concurrent.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
@@ -11,7 +12,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
+import java.lang.ref.SoftReference;
 import java.net.URL;
+import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.*;
 import java.util.regex.Matcher;
@@ -26,13 +29,7 @@ public abstract class Res {
 
     private static final WeakHashMap<Window, ExecutorService> executorByWindow = new WeakHashMap<>();
     private static final Logger                               logger           = Logger.get( Res.class );
-
-    private static Font sourceCodeProRegular;
-    private static Font sourceCodeProBlack;
-    private static Font exoBold;
-    private static Font exoExtraBold;
-    private static Font exoRegular;
-    private static Font exoThin;
+    private static final Colors                               colors           = new Colors();
 
     public static Future<?> execute(final Window host, final Runnable job) {
         return getExecutor( host ).submit( new Runnable() {
@@ -100,64 +97,84 @@ public abstract class Res {
         return 19;
     }
 
+    public static Font controlFont() {
+        return arimoRegular();
+    }
+
+    public static Font valueFont() {
+        return sourceSansProRegular();
+    }
+
+    public static Font bigValueFont() {
+        return sourceSansProBlack();
+    }
+
     public static Font sourceCodeProRegular() {
-        try {
-            return sourceCodeProRegular != null? sourceCodeProRegular: (sourceCodeProRegular =
-                    Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( "fonts/SourceCodePro-Regular.otf" ).openStream() ));
-        }
-        catch (FontFormatException | IOException e) {
-            throw Throwables.propagate( e );
-        }
+        return font( "fonts/SourceCodePro-Regular.otf" );
     }
 
     public static Font sourceCodeProBlack() {
-        try {
-            return sourceCodeProBlack != null? sourceCodeProBlack: (sourceCodeProBlack =
-                    Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( "fonts/SourceCodePro-Bold.otf" ).openStream() ));
-        }
-        catch (FontFormatException | IOException e) {
-            throw Throwables.propagate( e );
-        }
+        return font( "fonts/SourceCodePro-Bold.otf" );
+    }
+
+    public static Font sourceSansProRegular() {
+        return font( "fonts/SourceSansPro-Regular.otf" );
+    }
+
+    public static Font sourceSansProBlack() {
+        return font( "fonts/SourceSansPro-Bold.otf" );
     }
 
     public static Font exoBold() {
-        try {
-            return exoBold != null? exoBold: (exoBold =
-                    Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( "fonts/Exo2.0-Bold.otf" ).openStream() ));
-        }
-        catch (FontFormatException | IOException e) {
-            throw Throwables.propagate( e );
-        }
+        return font( "fonts/Exo2.0-Bold.otf" );
     }
 
     public static Font exoExtraBold() {
-        try {
-            return exoExtraBold != null? exoExtraBold: (exoExtraBold
-                    = Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( "fonts/Exo2.0-ExtraBold.otf" ).openStream() ));
-        }
-        catch (FontFormatException | IOException e) {
-            throw Throwables.propagate( e );
-        }
+        return font( "fonts/Exo2.0-ExtraBold.otf" );
     }
 
     public static Font exoRegular() {
-        try {
-            return exoRegular != null? exoRegular: (exoRegular =
-                    Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( "fonts/Exo2.0-Regular.otf" ).openStream() ));
-        }
-        catch (FontFormatException | IOException e) {
-            throw Throwables.propagate( e );
-        }
+        return font( "fonts/Exo2.0-Regular.otf" );
     }
 
     public static Font exoThin() {
-        try {
-            return exoThin != null? exoThin: (exoThin =
-                    Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( "fonts/Exo2.0-Thin.otf" ).openStream() ));
-        }
-        catch (FontFormatException | IOException e) {
-            throw Throwables.propagate( e );
-        }
+        return font( "fonts/Exo2.0-Thin.otf" );
+    }
+
+    public static Font arimoBold() {
+        return font( "fonts/Arimo-Bold.ttf" );
+    }
+
+    public static Font arimoBoldItalic() {
+        return font( "fonts/Arimo-BoldItalic.ttf" );
+    }
+
+    public static Font arimoItalic() {
+        return font( "fonts/Arimo-Italic.ttf" );
+    }
+
+    public static Font arimoRegular() {
+        return font( "fonts/Arimo-Regular.ttf" );
+    }
+
+    private static Font font(String fontResourceName) {
+        Map<String, SoftReference<Font>> fontsByResourceName = Maps.newHashMap();
+        SoftReference<Font> fontRef = fontsByResourceName.get( fontResourceName );
+        Font font = fontRef == null? null: fontRef.get();
+        if (font == null)
+            try {
+                fontsByResourceName.put( fontResourceName, new SoftReference<>(
+                        font = Font.createFont( Font.TRUETYPE_FONT, Resources.getResource( fontResourceName ).openStream() ) ) );
+            }
+            catch (FontFormatException | IOException e) {
+                throw Throwables.propagate( e );
+            }
+
+        return font;
+    }
+
+    public static Colors colors() {
+        return colors;
     }
 
     private static final class RetinaIcon extends ImageIcon {
@@ -214,6 +231,26 @@ public abstract class Res {
             g2d.drawImage( image, 0, 0, observer );
             g2d.scale( 1, 1 );
             g2d.dispose();
+        }
+    }
+
+
+    public static class Colors {
+
+        private final Color frameBg   = Color.decode( "#5A5D6B" );
+        private final Color controlBg = Color.decode( "#ECECEC" );
+        private final Color controlBorder = Color.decode( "#BFBFBF" );
+
+        public Color frameBg() {
+            return frameBg;
+        }
+
+        public Color controlBg() {
+            return controlBg;
+        }
+
+        public Color controlBorder() {
+            return controlBorder;
         }
     }
 }

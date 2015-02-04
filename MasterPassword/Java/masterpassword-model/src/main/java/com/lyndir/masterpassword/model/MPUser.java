@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.masterpassword.MPSiteType;
+import com.lyndir.masterpassword.MasterKey;
 import java.util.*;
 import org.joda.time.*;
 
@@ -18,23 +19,25 @@ public class MPUser implements Comparable<MPUser> {
     private final String fullName;
     private final Collection<MPSite> sites = Sets.newHashSet();
 
-    private byte[]          keyID;
-    private int             avatar;
-    private MPSiteType      defaultType;
-    private ReadableInstant lastUsed;
+    private byte[]            keyID;
+    private MasterKey.Version algorithmVersion;
+    private int               avatar;
+    private MPSiteType        defaultType;
+    private ReadableInstant   lastUsed;
 
     public MPUser(final String fullName) {
         this( fullName, null );
     }
 
     public MPUser(final String fullName, final byte[] keyID) {
-        this( fullName, keyID, 0, MPSiteType.GeneratedLong, new DateTime() );
+        this( fullName, keyID, MasterKey.Version.CURRENT, 0, MPSiteType.GeneratedLong, new DateTime() );
     }
 
-    public MPUser(final String fullName, final byte[] keyID, final int avatar, final MPSiteType defaultType,
+    public MPUser(final String fullName, final byte[] keyID, final MasterKey.Version algorithmVersion, final int avatar, final MPSiteType defaultType,
                   final ReadableInstant lastUsed) {
         this.fullName = fullName;
         this.keyID = keyID;
+        this.algorithmVersion = algorithmVersion;
         this.avatar = avatar;
         this.defaultType = defaultType;
         this.lastUsed = lastUsed;
@@ -71,6 +74,14 @@ public class MPUser implements Comparable<MPUser> {
 
     public void setKeyID(final byte[] keyID) {
         this.keyID = keyID;
+    }
+
+    public MasterKey.Version getAlgorithmVersion() {
+        return algorithmVersion;
+    }
+
+    public void setAlgorithmVersion(final MasterKey.Version algorithmVersion) {
+        this.algorithmVersion = algorithmVersion;
     }
 
     public int getAvatar() {

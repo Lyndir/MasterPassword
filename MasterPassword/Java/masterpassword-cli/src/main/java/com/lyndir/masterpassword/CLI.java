@@ -183,6 +183,6 @@ public class CLI {
         }
 
         // Encode and write out the site password.
-        System.out.println( new MasterKey( userName, masterPassword ).encode( siteName, siteType, siteCounter, variant, context ) );
+        System.out.println( MasterKey.create( userName, masterPassword ).encode( siteName, siteType, siteCounter, variant, context ) );
     }
 }

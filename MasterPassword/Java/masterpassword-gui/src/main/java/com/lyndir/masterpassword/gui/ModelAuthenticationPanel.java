@@ -5,6 +5,7 @@ import com.google.common.collect.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.model.MPUser;
 import com.lyndir.masterpassword.model.MPUserFileManager;
+import com.lyndir.masterpassword.util.Components;
 import java.awt.*;
 import java.awt.event.*;
 import javax.annotation.Nullable;
@@ -27,6 +28,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
 
     public ModelAuthenticationPanel(final UnlockFrame unlockFrame) {
         super( unlockFrame );
+        add( Components.stud() );
 
         // Avatar
         avatarLabel.addMouseListener( new MouseAdapter() {
@@ -41,8 +43,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
         } );
 
         // User
-        JLabel userLabel = new JLabel( "User:" );
-        userLabel.setFont( Res.exoRegular().deriveFont( 12f ) );
+        JLabel userLabel = Components.label( "User:" );
         userLabel.setAlignmentX( LEFT_ALIGNMENT );
         userLabel.setHorizontalAlignment( SwingConstants.CENTER );
         userLabel.setVerticalAlignment( SwingConstants.BOTTOM );
@@ -54,26 +55,21 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
                 return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
             }
         };
-        userField.setFont( Res.sourceCodeProRegular().deriveFont( 12f ) );
+        userField.setFont( Res.valueFont().deriveFont( 12f ) );
         userField.setAlignmentX( LEFT_ALIGNMENT );
         userField.addItemListener( this );
         userField.addActionListener( this );
         add( userField );
+        add( Components.stud() );
 
         // Master Password
-        masterPasswordLabel = new JLabel( "Master Password:" );
-        masterPasswordLabel.setFont( Res.exoRegular().deriveFont( 12f ) );
+        masterPasswordLabel = Components.label( "Master Password:" );
         masterPasswordLabel.setAlignmentX( LEFT_ALIGNMENT );
         masterPasswordLabel.setHorizontalAlignment( SwingConstants.CENTER );
         masterPasswordLabel.setVerticalAlignment( SwingConstants.BOTTOM );
         add( masterPasswordLabel );
 
-        masterPasswordField = new JPasswordField() {
-            @Override
-            public Dimension getMaximumSize() {
-                return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
-            }
-        };
+        masterPasswordField = Components.passwordField();
         masterPasswordField.setAlignmentX( LEFT_ALIGNMENT );
         masterPasswordField.addActionListener( this );
         masterPasswordField.getDocument().addDocumentListener( this );

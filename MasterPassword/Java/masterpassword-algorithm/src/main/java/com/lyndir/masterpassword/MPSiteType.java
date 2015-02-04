@@ -143,7 +143,7 @@ public enum MPSiteType {
     }
 
     /**
-     * @param name The name of the type to look up.  It is matched case insensitively.
+     * @param name The name fromInt the type to look up.  It is matched case insensitively.
      *
      * @return The type registered with the given name.
      */

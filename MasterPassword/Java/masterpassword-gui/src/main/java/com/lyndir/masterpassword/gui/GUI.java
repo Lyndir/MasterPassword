@@ -48,14 +48,7 @@ public class GUI implements UnlockFrame.SignInCallback {
         if (Config.get().checkForUpdates())
             checkUpdate();
 
-        GUI gui;
-        try {
-            gui = TypeUtils.newInstance( AppleGUI.class );
-        }
-        catch (NoClassDefFoundError e) {
-            gui = new GUI();
-        }
-        gui.open();
+        TypeUtils.<GUI>newInstance( AppleGUI.class ).or( new GUI() ).open();
     }
 
     private static void checkUpdate() {

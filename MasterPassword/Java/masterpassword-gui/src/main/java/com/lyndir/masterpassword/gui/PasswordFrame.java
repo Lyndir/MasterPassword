@@ -12,7 +12,6 @@ import java.awt.event.*;
 import java.util.concurrent.Callable;
 import javax.annotation.Nonnull;
 import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.event.*;
 
 
@@ -44,52 +43,28 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         setDefaultCloseOperation( DISPOSE_ON_CLOSE );
         setContentPane( new JPanel( new BorderLayout( 20, 20 ) ) {
             {
-                setBorder( new EmptyBorder( 20, 20, 20, 20 ) );
+                setBackground( Res.colors().frameBg() );
+                setBorder( BorderFactory.createEmptyBorder( 20, 20, 20, 20 ) );
             }
         } );
 
         // User
-        add( label = new JLabel( strf( "Generating passwords for: %s", user.getFullName() ) ), BorderLayout.NORTH );
-        label.setFont( Res.exoRegular().deriveFont( 12f ) );
+        add( label = Components.label( strf( "Generating passwords for: %s", user.getFullName() ) ), BorderLayout.NORTH );
         label.setAlignmentX( LEFT_ALIGNMENT );
 
         // Site
-        JPanel sitePanel = new JPanel();
-        sitePanel.setLayout( new BoxLayout( sitePanel, BoxLayout.PAGE_AXIS ) );
-        sitePanel.setBorder( new CompoundBorder( new EtchedBorder( EtchedBorder.RAISED ), new EmptyBorder( 8, 8, 8, 8 ) ) );
-        add( sitePanel, BorderLayout.CENTER );
+        JPanel sitePanel = Components.boxLayout( BoxLayout.PAGE_AXIS );
+        sitePanel.setBackground( Res.colors().controlBg() );
+        sitePanel.setBorder( BorderFactory.createEmptyBorder( 20, 20, 20, 20 ) );
+        add( Components.bordered( sitePanel, BorderFactory.createRaisedBevelBorder(), Res.colors().frameBg() ), BorderLayout.CENTER );
 
         // Site Name
-        sitePanel.add( label = new JLabel( "Site Name:", JLabel.LEADING ) );
-        label.setFont( Res.exoRegular().deriveFont( 12f ) );
+        sitePanel.add( label = Components.label( "Site Name:" ) );
         label.setAlignmentX( LEFT_ALIGNMENT );
 
         JComponent siteControls = Components.boxLayout( BoxLayout.LINE_AXIS, //
-                                                        siteNameField = new JTextField() {
-                                                            @Override
-                                                            public Dimension getMaximumSize() {
-                                                                return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
-                                                            }
-                                                        }, siteAddButton = new JButton( "Add Site" ) {
-                    @Override
-                    public Dimension getMaximumSize() {
-                        return new Dimension( 20, getPreferredSize().height );
-                    }
-                } );
-        siteAddButton.setVisible( false );
-        siteAddButton.setFont( Res.exoRegular().deriveFont( 12f ) );
-        siteAddButton.setAlignmentX( RIGHT_ALIGNMENT );
-        siteAddButton.setAlignmentY( CENTER_ALIGNMENT );
-        siteAddButton.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                PasswordFrame.this.user.addSite( currentSite );
-                siteAddButton.setVisible( false );
-            }
-        } );
-        siteControls.setAlignmentX( LEFT_ALIGNMENT );
-        sitePanel.add( siteControls );
-        siteNameField.setFont( Res.sourceCodeProRegular().deriveFont( 12f ) );
+                                                        siteNameField = Components.textField(), Components.stud(),
+                                                        siteAddButton = Components.button( "Add Site" ) );
         siteNameField.setAlignmentX( LEFT_ALIGNMENT );
         siteNameField.getDocument().addDocumentListener( this );
         siteNameField.addActionListener( new ActionListener() {
@@ -118,21 +93,31 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                 } );
             }
         } );
+        siteAddButton.setVisible( false );
+        siteAddButton.setAlignmentX( RIGHT_ALIGNMENT );
+        siteAddButton.setAlignmentY( CENTER_ALIGNMENT );
+        siteAddButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                PasswordFrame.this.user.addSite( currentSite );
+                siteAddButton.setVisible( false );
+            }
+        } );
+        siteControls.setBackground( null );
+        siteControls.setAlignmentX( LEFT_ALIGNMENT );
+        sitePanel.add( siteControls );
 
         // Site Type & Counter
         MPSiteType[] types = Iterables.toArray( MPSiteType.forClass( MPSiteTypeClass.Generated ), MPSiteType.class );
         JComponent siteSettings = Components.boxLayout( BoxLayout.LINE_AXIS, //
                                                         siteTypeField = new JComboBox<>( types ), //
-                                                        siteCounterField = new JSpinner(
-                                                                new SpinnerNumberModel( 1, 1, Integer.MAX_VALUE, 1 ) ) {
-                                                            @Override
-                                                            public Dimension getMaximumSize() {
-                                                                return new Dimension( 20, getPreferredSize().height );
-                                                            }
-                                                        } );
+                                                        Components.stud(), //
+                                                        siteCounterField = Components.spinner(
+                                                                new SpinnerNumberModel( 1, 1, Integer.MAX_VALUE, 1 ) ) );
+        siteSettings.setBackground( null );
         siteSettings.setAlignmentX( LEFT_ALIGNMENT );
         sitePanel.add( siteSettings );
-        siteTypeField.setFont( Res.sourceCodeProRegular().deriveFont( 12f ) );
+        siteTypeField.setFont( Res.valueFont().deriveFont( 12f ) );
         siteTypeField.setAlignmentX( LEFT_ALIGNMENT );
         siteTypeField.setAlignmentY( CENTER_ALIGNMENT );
         siteTypeField.setSelectedItem( MPSiteType.GeneratedLong );
@@ -143,7 +128,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
             }
         } );
 
-        siteCounterField.setFont( Res.sourceCodeProRegular().deriveFont( 12f ) );
+        siteCounterField.setFont( Res.valueFont().deriveFont( 12f ) );
         siteCounterField.setAlignmentX( RIGHT_ALIGNMENT );
         siteCounterField.setAlignmentY( CENTER_ALIGNMENT );
         siteCounterField.addChangeListener( new ChangeListener() {
@@ -154,10 +139,8 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         } );
 
         // Mask
-        maskPasswordField = new JCheckBox();
-        maskPasswordField.setFont( Res.exoRegular().deriveFont( 12f ) );
+        maskPasswordField = Components.checkBox( "Hide Password" );
         maskPasswordField.setAlignmentX( Component.CENTER_ALIGNMENT );
-        maskPasswordField.setText( "Hide Password" );
         maskPasswordField.setSelected( true );
         maskPasswordField.addItemListener( new ItemListener() {
             @Override
@@ -168,20 +151,22 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
         // Password
         passwordField = new JPasswordField();
-        passwordField.setHorizontalAlignment( JTextField.CENTER );
-        passwordField.setAlignmentX( Component.CENTER_ALIGNMENT );
         passwordField.setEditable( false );
+        passwordField.setHorizontalAlignment( JTextField.CENTER );
         passwordField.putClientProperty( "JPasswordField.cutCopyAllowed", true );
         passwordEchoChar = passwordField.getEchoChar();
         passwordEchoFont = passwordField.getFont().deriveFont( 40f );
         updateMask();
 
         // Tip
-        tipLabel = new JLabel( " ", JLabel.CENTER );
-        tipLabel.setFont( Res.exoRegular().deriveFont( 9f ) );
+        tipLabel = Components.label( " ", JLabel.CENTER );
         tipLabel.setAlignmentX( Component.CENTER_ALIGNMENT );
 
-        add( Components.boxLayout( BoxLayout.PAGE_AXIS, maskPasswordField, passwordField, tipLabel ), BorderLayout.SOUTH );
+        JPanel passwordContainer = Components.boxLayout( BoxLayout.PAGE_AXIS, maskPasswordField,
+                                                         Components.bordered( passwordField, BorderFactory.createLoweredSoftBevelBorder(),
+                                                                              Res.colors().frameBg() ), tipLabel );
+        passwordContainer.setBackground( null );
+        add( passwordContainer, BorderLayout.SOUTH );
 
         pack();
         setMinimumSize( getSize() );
@@ -194,7 +179,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
     private void updateMask() {
         passwordField.setEchoChar( maskPasswordField.isSelected()? passwordEchoChar: (char) 0 );
-        passwordField.setFont( maskPasswordField.isSelected()? passwordEchoFont: Res.sourceCodeProBlack().deriveFont( 40f ) );
+        passwordField.setFont( maskPasswordField.isSelected()? passwordEchoFont: Res.bigValueFont().deriveFont( 40f ) );
     }
 
     @Nonnull

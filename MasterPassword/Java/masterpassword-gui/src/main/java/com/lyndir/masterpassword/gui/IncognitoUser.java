@@ -1,6 +1,7 @@
 package com.lyndir.masterpassword.gui;
 
 import com.google.common.collect.ImmutableList;
+import com.lyndir.masterpassword.MasterKey;
 
 
 /**
@@ -23,6 +24,11 @@ public class IncognitoUser extends User {
     @Override
     protected String getMasterPassword() {
         return masterPassword;
+    }
+
+    @Override
+    public MasterKey.Version getAlgorithmVersion() {
+        return MasterKey.Version.CURRENT;
     }
 
     @Override

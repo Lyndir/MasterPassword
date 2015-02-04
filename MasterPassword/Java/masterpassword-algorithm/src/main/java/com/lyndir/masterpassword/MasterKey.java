@@ -1,145 +1,155 @@
 package com.lyndir.masterpassword;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
-import com.google.common.primitives.Bytes;
-import com.lambdaworks.crypto.SCrypt;
 import com.lyndir.lhunath.opal.system.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.charset.Charset;
-import java.security.GeneralSecurityException;
 import java.util.Arrays;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
  * @author lhunath, 2014-08-30
  */
-public class MasterKey {
-
-    public static final int    ALGORITHM = 1;
-    public static final String VERSION   = "2.1";
+public abstract class MasterKey {
 
     @SuppressWarnings("UnusedDeclaration")
-    private static final Logger                       logger       = Logger.get( MasterKey.class );
-    private static final int                          MP_N         = 32768;
-    private static final int                          MP_r         = 8;
-    private static final int                          MP_p         = 2;
-    private static final int                          MP_dkLen     = 64;
-    private static final int                          MP_intLen    = 32;
-    private static final Charset                      MP_charset   = Charsets.UTF_8;
-    private static final ByteOrder                    MP_byteOrder = ByteOrder.BIG_ENDIAN;
-    private static final MessageDigests               MP_hash      = MessageDigests.SHA256;
-    private static final MessageAuthenticationDigests MP_mac       = MessageAuthenticationDigests.HmacSHA256;
+    private static final Logger logger = Logger.get( MasterKey.class );
 
+    @Nonnull
     private final String fullName;
-    private final byte[] masterKey;
 
-    private boolean valid;
+    @Nullable
+    private byte[] masterKey;
 
-    public MasterKey(final String fullName, final String masterPassword) {
+    public static MasterKey create(final String fullName, final String masterPassword) {
+
+        return create( Version.CURRENT, fullName, masterPassword );
+    }
+
+    public static MasterKey create(Version version, final String fullName, final String masterPassword) {
+
+        switch (version) {
+            case V0:
+                return new MasterKeyV0( fullName ).revalidate( masterPassword );
+            case V1:
+                return new MasterKeyV1( fullName ).revalidate( masterPassword );
+            case V2:
+                return new MasterKeyV2( fullName ).revalidate( masterPassword );
+            case V3:
+                return new MasterKeyV3( fullName ).revalidate( masterPassword );
+        }
+
+        throw new UnsupportedOperationException( "Unsupported version: " + version );
+    }
+
+    protected MasterKey(@NotNull final String fullName) {
 
         this.fullName = fullName;
         logger.trc( "fullName: %s", fullName );
-        logger.trc( "masterPassword: %s", masterPassword );
-
-        long start = System.currentTimeMillis();
-        byte[] userNameBytes = fullName.getBytes( MP_charset );
-        byte[] userNameLengthBytes = bytesForInt( userNameBytes.length );
-
-        String mpKeyScope = MPSiteVariant.Password.getScope();
-        byte[] masterKeySalt = Bytes.concat( mpKeyScope.getBytes( MP_charset ), userNameLengthBytes, userNameBytes );
-        logger.trc( "key scope: %s", mpKeyScope );
-        logger.trc( "masterKeySalt ID: %s", CodeUtils.encodeHex( idForBytes( masterKeySalt ) ) );
-
-        try {
-            masterKey = SCrypt.scrypt( masterPassword.getBytes( MP_charset ), masterKeySalt, MP_N, MP_r, MP_p, MP_dkLen );
-            valid = true;
-
-            logger.trc( "masterKey ID: %s (derived in %.2fs)", CodeUtils.encodeHex( idForBytes( masterKey ) ),
-                        (System.currentTimeMillis() - start) / 1000D );
-        }
-        catch (GeneralSecurityException e) {
-            throw logger.bug( e );
-        }
     }
 
+    @Nullable
+    protected abstract byte[] deriveKey(final String masterPassword);
+
+    protected abstract Version getAlgorithm();
+
+    @NotNull
     public String getFullName() {
 
         return fullName;
     }
 
+    @Nonnull
+    protected byte[] getMasterKey() {
+
+        return Preconditions.checkNotNull( masterKey );
+    }
+
     public byte[] getKeyID() {
 
-        Preconditions.checkState( valid );
-        return idForBytes( masterKey );
+        return idForBytes( getMasterKey() );
     }
 
-    public String encode(final String siteName, final MPSiteType siteType, int siteCounter, final MPSiteVariant siteVariant,
-                         @Nullable final String siteContext) {
-        Preconditions.checkState( valid );
-        Preconditions.checkArgument( siteType.getTypeClass() == MPSiteTypeClass.Generated );
-        Preconditions.checkArgument( !siteName.isEmpty() );
-
-        logger.trc( "siteName: %s", siteName );
-        logger.trc( "siteCounter: %d", siteCounter );
-        logger.trc( "siteVariant: %d (%s)", siteVariant.ordinal(), siteVariant );
-        logger.trc( "siteType: %d (%s)", siteType.ordinal(), siteType );
-
-        if (siteCounter == 0)
-            siteCounter = (int) (System.currentTimeMillis() / (300 * 1000)) * 300;
-
-        String siteScope = siteVariant.getScope();
-        byte[] siteNameBytes = siteName.getBytes( MP_charset );
-        byte[] siteNameLengthBytes = bytesForInt( siteNameBytes.length );
-        byte[] siteCounterBytes = bytesForInt( siteCounter );
-        byte[] siteContextBytes = siteContext == null? null: siteContext.getBytes( MP_charset );
-        byte[] siteContextLengthBytes = bytesForInt( siteContextBytes == null? 0: siteContextBytes.length );
-        logger.trc( "site scope: %s, context: %s", siteScope, siteContext == null? "<empty>": siteContext );
-        logger.trc( "seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)", siteScope, CodeUtils.encodeHex( siteNameLengthBytes ),
-                    siteName, CodeUtils.encodeHex( siteCounterBytes ), CodeUtils.encodeHex( siteContextLengthBytes ),
-                    siteContext == null? "(null)": siteContext );
-
-        byte[] sitePasswordInfo = Bytes.concat( siteScope.getBytes( MP_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
-        if (siteContextBytes != null)
-            sitePasswordInfo = Bytes.concat( sitePasswordInfo, siteContextLengthBytes, siteContextBytes );
-        logger.trc( "sitePasswordInfo ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
-
-        byte[] sitePasswordSeed = MP_mac.of( masterKey, sitePasswordInfo );
-        logger.trc( "sitePasswordSeed ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordSeed ) ) );
-
-        Preconditions.checkState( sitePasswordSeed.length > 0 );
-        int templateIndex = sitePasswordSeed[0] & 0xFF; // Mask the integer's sign.
-        MPTemplate template = siteType.getTemplateAtRollingIndex( templateIndex );
-        logger.trc( "type %s, template: %s", siteType, template.getTemplateString() );
-
-        StringBuilder password = new StringBuilder( template.length() );
-        for (int i = 0; i < template.length(); ++i) {
-            int characterIndex = sitePasswordSeed[i + 1] & 0xFF; // Mask the integer's sign.
-            MPTemplateCharacterClass characterClass = template.getCharacterClassAtIndex( i );
-            char passwordCharacter = characterClass.getCharacterAtRollingIndex( characterIndex );
-            logger.trc( "class %c, index %d (0x%02X) -> character: %c", characterClass.getIdentifier(), characterIndex,
-                        sitePasswordSeed[i + 1], passwordCharacter );
-
-            password.append( passwordCharacter );
-        }
-
-        return password.toString();
-    }
+    public abstract String encode(final String siteName, final MPSiteType siteType, int siteCounter, final MPSiteVariant siteVariant,
+                                  @Nullable final String siteContext);
 
     public void invalidate() {
 
-        valid = false;
-        Arrays.fill( masterKey, (byte) 0 );
+        if (masterKey != null) {
+            Arrays.fill( masterKey, (byte) 0 );
+            masterKey = null;
+        }
     }
 
-    private static byte[] bytesForInt(final int integer) {
-        return ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( MP_byteOrder ).putInt( integer ).array();
+    public MasterKey revalidate(final String masterPassword) {
+        invalidate();
+
+        logger.trc( "masterPassword: %s", masterPassword );
+
+        long start = System.currentTimeMillis();
+        masterKey = deriveKey( masterPassword );
+        logger.trc( "masterKey ID: %s (derived in %.2fs)", CodeUtils.encodeHex( idForBytes( masterKey ) ),
+                    (System.currentTimeMillis() - start) / 1000D );
+
+        return this;
     }
 
-    private static byte[] idForBytes(final byte[] bytes) {
-        return MP_hash.of( bytes );
+    protected abstract byte[] bytesForInt(final int integer);
+
+    protected abstract byte[] idForBytes(final byte[] bytes);
+
+    public enum Version {
+        /**
+         * bugs:
+         * - does math with chars whose signedness was platform-dependent.
+         * - miscounted the byte-length fromInt multi-byte site names.
+         * - miscounted the byte-length fromInt multi-byte full names.
+         */
+        V0,
+        /**
+         * bugs:
+         * - miscounted the byte-length fromInt multi-byte site names.
+         * - miscounted the byte-length fromInt multi-byte full names.
+         */
+        V1,
+        /**
+         * bugs:
+         * - miscounted the byte-length fromInt multi-byte full names.
+         */
+        V2,
+        /**
+         * bugs:
+         * - no known issues.
+         */
+        V3;
+
+        public static final Version CURRENT = V3;
+
+        public static Version fromInt(final int algorithmVersion) {
+
+            return values()[algorithmVersion];
+        }
+
+        public int toInt() {
+
+            return ordinal();
+        }
+
+        public String toBundleVersion() {
+            switch (this) {
+                case V0:
+                    return "1.0";
+                case V1:
+                    return "2.0";
+                case V2:
+                    return "2.1";
+                case V3:
+                    return "2.2";
+            }
+
+            throw new UnsupportedOperationException( "Unsupported version: " + this );
+        }
     }
 }

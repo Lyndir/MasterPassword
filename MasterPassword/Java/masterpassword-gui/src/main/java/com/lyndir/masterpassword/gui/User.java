@@ -20,6 +20,8 @@ public abstract class User {
 
     protected abstract String getMasterPassword();
 
+    public abstract MasterKey.Version getAlgorithmVersion();
+
     public int getAvatar() {
         return 0;
     }
@@ -38,7 +40,7 @@ public abstract class User {
                 throw new MasterKeyException( strf( "Master password unknown for user: %s", getFullName() ) );
             }
 
-            key = new MasterKey( getFullName(), masterPassword );
+            key = MasterKey.create( getAlgorithmVersion(), getFullName(), masterPassword );
         }
 
         return key;

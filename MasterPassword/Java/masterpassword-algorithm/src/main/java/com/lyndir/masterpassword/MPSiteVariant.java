@@ -61,7 +61,7 @@ public enum MPSiteVariant {
         throw logger.bug( "No variant for option: %s", option );
     }
     /**
-     * @param name The name of the variant to look up.  It is matched case insensitively.
+     * @param name The name fromInt the variant to look up.  It is matched case insensitively.
      *
      * @return The variant registered with the given name.
      */
