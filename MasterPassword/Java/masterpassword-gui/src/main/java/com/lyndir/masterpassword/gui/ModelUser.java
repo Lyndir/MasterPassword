@@ -43,6 +43,12 @@ public class ModelUser extends User {
     }
 
     @Override
+    public void setAlgorithmVersion(final MasterKey.Version algorithmVersion) {
+        model.setAlgorithmVersion( algorithmVersion );
+        MPUserFileManager.get().save();
+    }
+
+    @Override
     public int getAvatar() {
         return model.getAvatar();
     }

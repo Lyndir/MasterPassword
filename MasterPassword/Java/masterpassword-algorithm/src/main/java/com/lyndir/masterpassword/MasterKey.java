@@ -28,6 +28,7 @@ public abstract class MasterKey {
         return create( Version.CURRENT, fullName, masterPassword );
     }
 
+    @Nonnull
     public static MasterKey create(Version version, final String fullName, final String masterPassword) {
 
         switch (version) {
@@ -74,6 +75,10 @@ public abstract class MasterKey {
 
     public abstract String encode(final String siteName, final MPSiteType siteType, int siteCounter, final MPSiteVariant siteVariant,
                                   @Nullable final String siteContext);
+
+    public boolean isValid() {
+        return masterKey != null;
+    }
 
     public void invalidate() {
 

@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
  * 
  * @author lhunath, 2014-08-30
  */
-public class MasterKeyV3 extends MasterKeyV0 {
+public class MasterKeyV3 extends MasterKeyV2 {
 
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MasterKeyV3.class );

@@ -3,6 +3,7 @@ package com.lyndir.masterpassword.gui;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
 import com.lyndir.masterpassword.MPSiteType;
+import com.lyndir.masterpassword.MasterKey;
 
 
 /**
@@ -17,6 +18,10 @@ public abstract class Site {
     public abstract MPSiteType getSiteType();
 
     public abstract void setSiteType(final MPSiteType siteType);
+
+    public abstract MasterKey.Version getAlgorithmVersion();
+
+    public abstract void setAlgorithmVersion(final MasterKey.Version algorithmVersion);
 
     public abstract int getSiteCounter();
 

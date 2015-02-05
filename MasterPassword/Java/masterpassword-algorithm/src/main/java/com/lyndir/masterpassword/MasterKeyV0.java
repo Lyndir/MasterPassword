@@ -100,13 +100,13 @@ public class MasterKeyV0 extends MasterKey {
         logger.trc( "sitePasswordSeed ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordSeed ) ) );
 
         Preconditions.checkState( sitePasswordSeed.length > 0 );
-        int templateIndex = sitePasswordSeed[0];
+        int templateIndex = sitePasswordSeed[0] & 0xFFFF;
         MPTemplate template = siteType.getTemplateAtRollingIndex( templateIndex );
         logger.trc( "type %s, template: %s", siteType, template.getTemplateString() );
 
         StringBuilder password = new StringBuilder( template.length() );
         for (int i = 0; i < template.length(); ++i) {
-            int characterIndex = sitePasswordSeed[i + 1];
+            int characterIndex = sitePasswordSeed[i + 1] & 0xFFFF;
             MPTemplateCharacterClass characterClass = template.getCharacterClassAtIndex( i );
             char passwordCharacter = characterClass.getCharacterAtRollingIndex( characterIndex );
             logger.trc( "class %c, index %d (0x%02X) -> character: %c", characterClass.getIdentifier(), characterIndex,

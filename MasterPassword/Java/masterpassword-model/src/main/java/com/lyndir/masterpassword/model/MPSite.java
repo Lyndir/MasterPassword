@@ -6,7 +6,6 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 import com.lyndir.masterpassword.*;
 import java.util.Objects;
 import javax.annotation.Nullable;
-import org.joda.time.DateTime;
 import org.joda.time.Instant;
 
 
@@ -19,7 +18,7 @@ public class MPSite {
     public static final int        DEFAULT_COUNTER = 1;
 
     private final MPUser            user;
-    private       MasterKey.Version mpVersion;
+    private       MasterKey.Version algorithmVersion;
     private       Instant           lastUsed;
     private       String            siteName;
     private       MPSiteType        siteType;
@@ -33,17 +32,17 @@ public class MPSite {
 
     public MPSite(final MPUser user, final String siteName, final MPSiteType siteType, final int siteCounter) {
         this.user = user;
-        this.mpVersion = MasterKey.Version.CURRENT;
+        this.algorithmVersion = MasterKey.Version.CURRENT;
         this.lastUsed = new Instant();
         this.siteName = siteName;
         this.siteType = siteType;
         this.siteCounter = siteCounter;
     }
 
-    protected MPSite(final MPUser user, final MasterKey.Version mpVersion, final Instant lastUsed, final String siteName, final MPSiteType siteType, final int siteCounter,
+    protected MPSite(final MPUser user, final MasterKey.Version algorithmVersion, final Instant lastUsed, final String siteName, final MPSiteType siteType, final int siteCounter,
                      final int uses, final String loginName, final String importContent) {
         this.user = user;
-        this.mpVersion = mpVersion;
+        this.algorithmVersion = algorithmVersion;
         this.lastUsed = lastUsed;
         this.siteName = siteName;
         this.siteType = siteType;
@@ -69,12 +68,12 @@ public class MPSite {
         return null;
     }
 
-    public MasterKey.Version getMPVersion() {
-        return mpVersion;
+    public MasterKey.Version getAlgorithmVersion() {
+        return algorithmVersion;
     }
 
-    public void setMPVersion(final MasterKey.Version mpVersion) {
-        this.mpVersion = mpVersion;
+    public void setAlgorithmVersion(final MasterKey.Version mpVersion) {
+        this.algorithmVersion = mpVersion;
     }
 
     public Instant getLastUsed() {

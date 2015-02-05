@@ -1,6 +1,7 @@
 package com.lyndir.masterpassword.gui;
 
 import com.google.common.collect.ImmutableList;
+import com.lyndir.masterpassword.util.Components;
 import java.awt.*;
 import javax.swing.*;
 
@@ -8,12 +9,13 @@ import javax.swing.*;
 /**
  * @author lhunath, 2014-06-11
  */
-public abstract class AuthenticationPanel extends JPanel {
+public abstract class AuthenticationPanel extends Components.GradientPanel {
 
     protected final UnlockFrame unlockFrame;
     protected final JLabel      avatarLabel;
 
     public AuthenticationPanel(final UnlockFrame unlockFrame) {
+        super( null, null );
         this.unlockFrame = unlockFrame;
 
         setLayout( new BoxLayout( this, BoxLayout.PAGE_AXIS ) );

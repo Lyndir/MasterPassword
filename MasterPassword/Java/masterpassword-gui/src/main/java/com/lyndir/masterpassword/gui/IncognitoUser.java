@@ -9,8 +9,9 @@ import com.lyndir.masterpassword.MasterKey;
  */
 public class IncognitoUser extends User {
 
-    private final String fullName;
-    private final String masterPassword;
+    private final String            fullName;
+    private final String            masterPassword;
+    private       MasterKey.Version algorithmVersion;
 
     public IncognitoUser(final String fullName, final String masterPassword) {
         this.fullName = fullName;
@@ -28,7 +29,12 @@ public class IncognitoUser extends User {
 
     @Override
     public MasterKey.Version getAlgorithmVersion() {
-        return MasterKey.Version.CURRENT;
+        return algorithmVersion;
+    }
+
+    @Override
+    public void setAlgorithmVersion(final MasterKey.Version algorithmVersion) {
+        this.algorithmVersion = algorithmVersion;
     }
 
     @Override

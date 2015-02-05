@@ -44,19 +44,10 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
 
         // User
         JLabel userLabel = Components.label( "User:" );
-        userLabel.setAlignmentX( LEFT_ALIGNMENT );
-        userLabel.setHorizontalAlignment( SwingConstants.CENTER );
-        userLabel.setVerticalAlignment( SwingConstants.BOTTOM );
         add( userLabel );
 
-        userField = new JComboBox<ModelUser>( new DefaultComboBoxModel<>( readConfigUsers() ) ) {
-            @Override
-            public Dimension getMaximumSize() {
-                return new Dimension( Integer.MAX_VALUE, getPreferredSize().height );
-            }
-        };
+        userField = Components.comboBox( readConfigUsers() );
         userField.setFont( Res.valueFont().deriveFont( 12f ) );
-        userField.setAlignmentX( LEFT_ALIGNMENT );
         userField.addItemListener( this );
         userField.addActionListener( this );
         add( userField );
@@ -64,13 +55,9 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
 
         // Master Password
         masterPasswordLabel = Components.label( "Master Password:" );
-        masterPasswordLabel.setAlignmentX( LEFT_ALIGNMENT );
-        masterPasswordLabel.setHorizontalAlignment( SwingConstants.CENTER );
-        masterPasswordLabel.setVerticalAlignment( SwingConstants.BOTTOM );
         add( masterPasswordLabel );
 
         masterPasswordField = Components.passwordField();
-        masterPasswordField.setAlignmentX( LEFT_ALIGNMENT );
         masterPasswordField.addActionListener( this );
         masterPasswordField.getDocument().addDocumentListener( this );
         add( masterPasswordField );

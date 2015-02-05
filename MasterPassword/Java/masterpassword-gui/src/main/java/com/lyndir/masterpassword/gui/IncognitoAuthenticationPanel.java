@@ -24,14 +24,10 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel implements
         add( Components.stud() );
 
         JLabel fullNameLabel = Components.label( "Full Name:" );
-        fullNameLabel.setAlignmentX( LEFT_ALIGNMENT );
-        fullNameLabel.setHorizontalAlignment( SwingConstants.CENTER );
-        fullNameLabel.setVerticalAlignment( SwingConstants.BOTTOM );
         add( fullNameLabel );
 
         fullNameField = Components.textField();
         fullNameField.setFont( Res.valueFont().deriveFont( 12f ) );
-        fullNameField.setAlignmentX( LEFT_ALIGNMENT );
         fullNameField.getDocument().addDocumentListener( this );
         fullNameField.addActionListener( this );
         add( fullNameField );
@@ -39,13 +35,9 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel implements
 
         // Master Password
         JLabel masterPasswordLabel = Components.label( "Master Password:" );
-        masterPasswordLabel.setAlignmentX( LEFT_ALIGNMENT );
-        masterPasswordLabel.setHorizontalAlignment( SwingConstants.CENTER );
-        masterPasswordLabel.setVerticalAlignment( SwingConstants.BOTTOM );
         add( masterPasswordLabel );
 
         masterPasswordField = Components.passwordField();
-        masterPasswordField.setAlignmentX( LEFT_ALIGNMENT );
         masterPasswordField.addActionListener( this );
         masterPasswordField.getDocument().addDocumentListener( this );
         add( masterPasswordField );

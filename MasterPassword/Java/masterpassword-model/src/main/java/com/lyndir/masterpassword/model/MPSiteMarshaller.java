@@ -82,7 +82,7 @@ public class MPSiteMarshaller {
                                   site.getUses(), // uses
                                   strf( "%d:%d:%d", //
                                         site.getSiteType().getType(), // type
-                                        site.getMPVersion(), // algorithm
+                                        site.getAlgorithmVersion(), // algorithm
                                         site.getSiteCounter() ), // counter
                                   ifNotNullElse( site.getLoginName(), "" ), // loginName
                                   site.getSiteName(), // siteName

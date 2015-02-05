@@ -1,6 +1,7 @@
 package com.lyndir.masterpassword.gui;
 
 import com.lyndir.masterpassword.MPSiteType;
+import com.lyndir.masterpassword.MasterKey;
 
 
 /**
@@ -8,14 +9,17 @@ import com.lyndir.masterpassword.MPSiteType;
  */
 public class IncognitoSite extends Site {
 
-    private String     siteName;
-    private MPSiteType siteType;
-    private int        siteCounter;
+    private String            siteName;
+    private MPSiteType        siteType;
+    private int               siteCounter;
+    private MasterKey.Version algorithmVersion;
 
-    public IncognitoSite(final String siteName, final MPSiteType siteType, final int siteCounter) {
+    public IncognitoSite(final String siteName, final MPSiteType siteType, final int siteCounter,
+                         final MasterKey.Version algorithmVersion) {
         this.siteName = siteName;
         this.siteType = siteType;
         this.siteCounter = siteCounter;
+        this.algorithmVersion = algorithmVersion;
     }
 
     public String getSiteName() {
@@ -32,6 +36,16 @@ public class IncognitoSite extends Site {
 
     public void setSiteType(final MPSiteType siteType) {
         this.siteType = siteType;
+    }
+
+    @Override
+    public MasterKey.Version getAlgorithmVersion() {
+        return algorithmVersion;
+    }
+
+    @Override
+    public void setAlgorithmVersion(final MasterKey.Version algorithmVersion) {
+        this.algorithmVersion = algorithmVersion;
     }
 
     public int getSiteCounter() {

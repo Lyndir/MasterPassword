@@ -1,6 +1,7 @@
 package com.lyndir.masterpassword.gui;
 
 import com.lyndir.masterpassword.MPSiteType;
+import com.lyndir.masterpassword.MasterKey;
 import com.lyndir.masterpassword.model.*;
 
 
@@ -33,6 +34,19 @@ public class ModelSite extends Site {
     public void setSiteType(final MPSiteType siteType) {
         if (siteType != getSiteType()) {
             model.setSiteType( siteType );
+            MPUserFileManager.get().save();
+        }
+    }
+
+    @Override
+    public MasterKey.Version getAlgorithmVersion() {
+        return model.getAlgorithmVersion();
+    }
+
+    @Override
+    public void setAlgorithmVersion(final MasterKey.Version algorithmVersion) {
+        if (algorithmVersion != getAlgorithmVersion()) {
+            model.setAlgorithmVersion( algorithmVersion );
             MPUserFileManager.get().save();
         }
     }

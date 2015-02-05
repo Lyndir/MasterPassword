@@ -2,9 +2,9 @@ package com.lyndir.masterpassword.gui;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
+import com.google.common.collect.Maps;
 import com.lyndir.masterpassword.MasterKey;
-import com.lyndir.masterpassword.model.MPUser;
-import java.security.KeyException;
+import java.util.EnumMap;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 
@@ -14,7 +14,8 @@ import javax.annotation.Nonnull;
  */
 public abstract class User {
 
-    private MasterKey key;
+    @Nonnull
+    private static final EnumMap<MasterKey.Version, MasterKey> keyByVersion = Maps.newEnumMap( MasterKey.Version.class  );
 
     public abstract String getFullName();
 
@@ -22,32 +23,42 @@ public abstract class User {
 
     public abstract MasterKey.Version getAlgorithmVersion();
 
+    public abstract void setAlgorithmVersion(final MasterKey.Version algorithmVersion);
+
     public int getAvatar() {
         return 0;
     }
 
-    public boolean hasKey() {
+    public boolean isKeyAvailable() {
         String masterPassword = getMasterPassword();
-        return key != null || (masterPassword != null && !masterPassword.isEmpty());
+        return masterPassword != null && !masterPassword.isEmpty();
     }
 
     @Nonnull
     public MasterKey getKey() throws MasterKeyException {
-        if (key == null) {
-            String masterPassword = getMasterPassword();
-            if (masterPassword == null || masterPassword.isEmpty()) {
-                reset();
-                throw new MasterKeyException( strf( "Master password unknown for user: %s", getFullName() ) );
-            }
+        return getKey( getAlgorithmVersion() );
+    }
 
-            key = MasterKey.create( getAlgorithmVersion(), getFullName(), masterPassword );
+    @Nonnull
+    public MasterKey getKey(MasterKey.Version algorithmVersion) throws MasterKeyException {
+        String masterPassword = getMasterPassword();
+        if (masterPassword == null || masterPassword.isEmpty()) {
+            reset();
+            throw new MasterKeyException( strf( "Master password unknown for user: %s", getFullName() ) );
         }
+
+        MasterKey key = keyByVersion.get( algorithmVersion );
+        if (key == null)
+            keyByVersion.put( algorithmVersion, key = MasterKey.create( algorithmVersion, getFullName(), masterPassword ) );
+        if (!key.isValid())
+            key.revalidate( masterPassword );
 
         return key;
     }
 
     public void reset() {
-        key = null;
+        for (MasterKey key : keyByVersion.values())
+            key.invalidate();
     }
 
     public abstract Iterable<Site> findSitesByName(final String siteName);

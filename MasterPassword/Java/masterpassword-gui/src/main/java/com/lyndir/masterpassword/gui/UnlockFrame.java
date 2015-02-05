@@ -6,7 +6,6 @@ import com.lyndir.masterpassword.util.Components;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.*;
 
 
 /**
@@ -14,13 +13,13 @@ import javax.swing.border.*;
  */
 public class UnlockFrame extends JFrame {
 
-    private final SignInCallback      signInCallback;
-    private final JPanel              root;
-    private final JButton             signInButton;
-    private final JPanel              authenticationContainer;
-    private       AuthenticationPanel authenticationPanel;
-    private       boolean             incognito;
-    public        User                user;
+    private final SignInCallback           signInCallback;
+    private final Components.GradientPanel root;
+    private final JButton                  signInButton;
+    private final JPanel                   authenticationContainer;
+    private       AuthenticationPanel      authenticationPanel;
+    private       boolean                  incognito;
+    public        User                     user;
 
     public UnlockFrame(final SignInCallback signInCallback)
             throws HeadlessException {
@@ -28,11 +27,11 @@ public class UnlockFrame extends JFrame {
         this.signInCallback = signInCallback;
 
         setDefaultCloseOperation( DISPOSE_ON_CLOSE );
-        setContentPane( root = new JPanel( new BorderLayout( 20, 20 ) ) );
-        root.setBackground( Res.colors().frameBg() );
-        root.setBorder( new EmptyBorder( 20, 20, 20, 20 ) );
+        setContentPane( root = Components.gradientPanel( new BorderLayout( 20, 20 ), Res.colors().frameBg() ) );
+        root.setBorder( BorderFactory.createEmptyBorder( 20, 20, 20, 20 ) );
 
         authenticationContainer = Components.boxLayout( BoxLayout.PAGE_AXIS );
+        authenticationContainer.setOpaque( true );
         authenticationContainer.setBackground( Res.colors().controlBg() );
         authenticationContainer.setBorder( BorderFactory.createEmptyBorder( 20, 20, 20, 20 ) );
         add( Components.bordered( authenticationContainer, BorderFactory.createRaisedBevelBorder(), Res.colors().frameBg() ) );
@@ -42,7 +41,6 @@ public class UnlockFrame extends JFrame {
                                                  Box.createGlue() );
         signInBox.setBackground( null );
         root.add( signInBox, BorderLayout.SOUTH );
-        signInButton.setAlignmentX( LEFT_ALIGNMENT );
         signInButton.addActionListener( new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -75,7 +73,6 @@ public class UnlockFrame extends JFrame {
         authenticationContainer.add( Components.stud() );
 
         final JCheckBox incognitoCheckBox = Components.checkBox( "Incognito" );
-        incognitoCheckBox.setAlignmentX( LEFT_ALIGNMENT );
         incognitoCheckBox.setSelected( incognito );
         incognitoCheckBox.addItemListener( new ItemListener() {
             @Override
@@ -91,7 +88,6 @@ public class UnlockFrame extends JFrame {
         } );
 
         JComponent toolsPanel = Components.boxLayout( BoxLayout.LINE_AXIS, incognitoCheckBox, Box.createGlue() );
-        toolsPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
         authenticationContainer.add( toolsPanel );
         for (JButton button : authenticationPanel.getButtons()) {
             button.setMargin( new Insets( 0, 0, 0, 0 ) );
@@ -118,7 +114,7 @@ public class UnlockFrame extends JFrame {
     }
 
     boolean checkSignIn() {
-        boolean enabled = user != null && !user.getFullName().isEmpty() && user.hasKey();
+        boolean enabled = user != null && !user.getFullName().isEmpty() && user.isKeyAvailable();
         signInButton.setEnabled( enabled );
 
         return enabled;

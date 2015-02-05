@@ -94,7 +94,7 @@ public class GUI implements UnlockFrame.SignInCallback {
 
     @Override
     public boolean signedIn(final User user) {
-        if (!user.hasKey())
+        if (!user.isKeyAvailable())
             return false;
         try {
             user.getKey();
