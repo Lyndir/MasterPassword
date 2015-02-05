@@ -58,9 +58,9 @@ public class MPUserFileManager extends MPUserManager {
         } ) ) ).transform( new Function<File, MPUser>() {
             @Nullable
             @Override
-            public MPUser apply(final File file) {
+            public MPUser apply(@Nullable final File file) {
                 try {
-                    return MPSiteUnmarshaller.unmarshall( file ).getUser();
+                    return MPSiteUnmarshaller.unmarshall( Preconditions.checkNotNull( file ) ).getUser();
                 }
                 catch (IOException e) {
                     logger.err( e, "Couldn't read user from: %s", file );

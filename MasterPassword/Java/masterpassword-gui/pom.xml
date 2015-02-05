@@ -13,7 +13,6 @@
     <name>Master Password GUI</name>
     <description>A GUI interface to the Master Password algorithm</description>
 
-    <groupId>com.lyndir.masterpassword</groupId>
     <artifactId>masterpassword-gui</artifactId>
     <packaging>jar</packaging>
 

@@ -147,7 +147,7 @@ public enum MPSiteType {
      *
      * @return The type registered with the given name.
      */
-    public static MPSiteType forName(final String name) {
+    public static MPSiteType forName(@Nullable final String name) {
 
         if (name == null)
             return null;

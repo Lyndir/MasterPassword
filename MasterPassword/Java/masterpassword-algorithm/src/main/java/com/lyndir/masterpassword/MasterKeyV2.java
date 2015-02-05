@@ -23,7 +23,7 @@ public class MasterKeyV2 extends MasterKeyV1 {
     }
 
     @Override
-    protected Version getAlgorithm() {
+    public Version getAlgorithmVersion() {
 
         return Version.V2;
     }
@@ -57,7 +57,7 @@ public class MasterKeyV2 extends MasterKeyV1 {
             sitePasswordInfo = Bytes.concat( sitePasswordInfo, siteContextLengthBytes, siteContextBytes );
         logger.trc( "sitePasswordInfo ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
 
-        byte[] sitePasswordSeed = MP_mac.of( getMasterKey(), sitePasswordInfo );
+        byte[] sitePasswordSeed = MP_mac.of( getKey(), sitePasswordInfo );
         logger.trc( "sitePasswordSeed ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordSeed ) ) );
 
         Preconditions.checkState( sitePasswordSeed.length > 0 );

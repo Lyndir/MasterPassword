@@ -1,15 +1,9 @@
 package com.lyndir.masterpassword;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Bytes;
-import com.lambdaworks.crypto.SCrypt;
 import com.lyndir.lhunath.opal.system.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.charset.Charset;
-import java.security.GeneralSecurityException;
 import javax.annotation.Nullable;
 
 
@@ -30,7 +24,7 @@ public class MasterKeyV1 extends MasterKeyV0 {
     }
 
     @Override
-    protected Version getAlgorithm() {
+    public Version getAlgorithmVersion() {
 
         return Version.V1;
     }
@@ -64,7 +58,7 @@ public class MasterKeyV1 extends MasterKeyV0 {
             sitePasswordInfo = Bytes.concat( sitePasswordInfo, siteContextLengthBytes, siteContextBytes );
         logger.trc( "sitePasswordInfo ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
 
-        byte[] sitePasswordSeed = MP_mac.of( getMasterKey(), sitePasswordInfo );
+        byte[] sitePasswordSeed = MP_mac.of( getKey(), sitePasswordInfo );
         logger.trc( "sitePasswordSeed ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordSeed ) ) );
 
         Preconditions.checkState( sitePasswordSeed.length > 0 );

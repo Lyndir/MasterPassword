@@ -26,7 +26,7 @@ public class MasterKeyV3 extends MasterKeyV2 {
     }
 
     @Override
-    protected Version getAlgorithm() {
+    public Version getAlgorithmVersion() {
 
         return Version.V3;
     }

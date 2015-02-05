@@ -13,13 +13,19 @@
     <name>Master Password Android</name>
     <description>An Android application to the Master Password algorithm</description>
 
-    <groupId>com.lyndir.masterpassword</groupId>
     <artifactId>masterpassword-android</artifactId>
     <packaging>apk</packaging>
 
     <!-- BUILD CONFIGURATION -->
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <configuration>
+                    <timestampFormat>YYYYMMddHHmm</timestampFormat>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
@@ -30,9 +36,23 @@
                         <skip>false</skip>
                     </zipalign>
                     <sdk>
-                        <platform>19</platform>
+                        <platform>21</platform>
                     </sdk>
                 </configuration>
+
+                <executions>
+                    <execution>
+                        <id>manifest-merger</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>manifest-update</goal>
+                        </goals>
+                        <configuration>
+                            <manifestVersionCode>${timestamp}</manifestVersionCode>
+                            <manifestVersionName>${project.version}</manifestVersionName>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

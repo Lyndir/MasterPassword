@@ -4,7 +4,6 @@ import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
 import com.google.common.base.Preconditions;
-import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.masterpassword.MasterKey;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -51,11 +50,12 @@ public class MPSiteMarshaller {
     }
 
     private String marshallHeader(final ContentMode contentMode, final MPUser user, @Nullable final MasterKey masterKey) {
+        this.contentMode = contentMode;
         this.masterKey = masterKey;
 
         StringBuilder header = new StringBuilder();
         header.append( "# Master Password site export\n" );
-        header.append( "#     " ).append( contentMode.description() ).append( '\n' );
+        header.append( "#     " ).append( this.contentMode.description() ).append( '\n' );
         header.append( "# \n" );
         header.append( "##\n" );
         header.append( "# Format: 1\n" );
@@ -67,7 +67,7 @@ public class MPSiteMarshaller {
         header.append( "# Version: " ).append( MasterKey.Version.CURRENT.toBundleVersion() ).append( '\n' );
         header.append( "# Algorithm: " ).append( MasterKey.Version.CURRENT.toInt() ).append( '\n' );
         header.append( "# Default Type: " ).append( user.getDefaultType().getType() ).append( '\n' );
-        header.append( "# Passwords: " ).append( contentMode.name() ).append( '\n' );
+        header.append( "# Passwords: " ).append( this.contentMode.name() ).append( '\n' );
         header.append( "##\n" );
         header.append( "#\n" );
         header.append( "#               Last     Times  Password                      Login\t                     Site\tSite\n" );

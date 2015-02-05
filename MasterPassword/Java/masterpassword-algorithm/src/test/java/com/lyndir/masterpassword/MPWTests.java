@@ -149,7 +149,7 @@ public class MPWTests {
         }
 
         public char[] getMasterPassword() {
-            return masterPassword.toCharArray();
+            return masterPassword == null? null: masterPassword.toCharArray();
         }
 
         public String getKeyID() {
@@ -161,7 +161,7 @@ public class MPWTests {
         }
 
         public int getSiteCounter() {
-            return siteCounter;
+            return ifNotNullElse( siteCounter, 1 );
         }
 
         public MPSiteType getSiteType() {

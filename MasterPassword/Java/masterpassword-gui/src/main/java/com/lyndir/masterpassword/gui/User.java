@@ -1,7 +1,6 @@
 package com.lyndir.masterpassword.gui;
 
-import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
-
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.lyndir.masterpassword.MasterKey;
 import com.lyndir.masterpassword.model.IncorrectMasterPasswordException;
@@ -17,7 +16,7 @@ import javax.annotation.Nullable;
 public abstract class User {
 
     @Nonnull
-    private static final EnumMap<MasterKey.Version, MasterKey> keyByVersion = Maps.newEnumMap( MasterKey.Version.class  );
+    private final EnumMap<MasterKey.Version, MasterKey> keyByVersion = Maps.newEnumMap( MasterKey.Version.class  );
 
     public abstract String getFullName();
 
@@ -37,15 +36,21 @@ public abstract class User {
 
     @Nonnull
     public MasterKey getKey(MasterKey.Version algorithmVersion) {
-        char[] masterPassword = getMasterPassword();
+        char[] masterPassword = Preconditions.checkNotNull( getMasterPassword(), "User is not authenticated: " + getFullName() );
 
         MasterKey key = keyByVersion.get( algorithmVersion );
         if (key == null)
-            keyByVersion.put( algorithmVersion, key = MasterKey.create( algorithmVersion, getFullName(), masterPassword ) );
+            putKey( key = MasterKey.create( algorithmVersion, getFullName(), masterPassword ) );
         if (!key.isValid())
             key.revalidate( masterPassword );
 
         return key;
+    }
+
+    protected void putKey(MasterKey masterKey) {
+        MasterKey oldKey = keyByVersion.put( masterKey.getAlgorithmVersion(), masterKey );
+        if (oldKey != null)
+            oldKey.invalidate();
     }
 
     public void reset() {

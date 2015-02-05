@@ -2,16 +2,14 @@ package com.lyndir.masterpassword.model;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
-import java.util.Objects;
-
 
 /**
  * @author lhunath, 2014-08-20
  */
 public class User {
 
-    private String name;
-    private Avatar avatar;
+    private final String name;
+    private final Avatar avatar;
 
     public User(final String name, final Avatar avatar) {
         this.name = name;

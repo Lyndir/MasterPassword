@@ -16,7 +16,7 @@ public abstract class MPUserManager {
         return instance;
     }
 
-    public MPUserManager(final Iterable<MPUser> users) {
+    protected MPUserManager(final Iterable<MPUser> users) {
         for (MPUser user : users)
             addUser( user );
     }

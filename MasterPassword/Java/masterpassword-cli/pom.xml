@@ -13,7 +13,6 @@
     <name>Master Password CLI</name>
     <description>A CLI interface to the Master Password algorithm</description>
 
-    <groupId>com.lyndir.masterpassword</groupId>
     <artifactId>masterpassword-cli</artifactId>
     <packaging>jar</packaging>
 

@@ -45,7 +45,7 @@ public class CLI {
             throws IOException {
 
         // Read information from the environment.
-        char[] masterPassword = null;
+        char[] masterPassword;
         String siteName = null, context = null;
         String userName = System.getenv( ENV_USERNAME );
         String siteTypeName = ifNotNullElse( System.getenv( ENV_SITETYPE ), "" );
