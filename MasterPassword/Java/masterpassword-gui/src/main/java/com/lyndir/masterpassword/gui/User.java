@@ -4,9 +4,11 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.collect.Maps;
 import com.lyndir.masterpassword.MasterKey;
+import com.lyndir.masterpassword.model.IncorrectMasterPasswordException;
 import java.util.EnumMap;
 import java.util.Objects;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 
 /**
@@ -19,33 +21,23 @@ public abstract class User {
 
     public abstract String getFullName();
 
-    protected abstract String getMasterPassword();
+    @Nullable
+    protected abstract char[] getMasterPassword();
 
-    public abstract MasterKey.Version getAlgorithmVersion();
-
-    public abstract void setAlgorithmVersion(final MasterKey.Version algorithmVersion);
+    public abstract void authenticate(final char[] masterPassword)
+            throws IncorrectMasterPasswordException;
 
     public int getAvatar() {
         return 0;
     }
 
     public boolean isKeyAvailable() {
-        String masterPassword = getMasterPassword();
-        return masterPassword != null && !masterPassword.isEmpty();
+        return getMasterPassword() != null;
     }
 
     @Nonnull
-    public MasterKey getKey() throws MasterKeyException {
-        return getKey( getAlgorithmVersion() );
-    }
-
-    @Nonnull
-    public MasterKey getKey(MasterKey.Version algorithmVersion) throws MasterKeyException {
-        String masterPassword = getMasterPassword();
-        if (masterPassword == null || masterPassword.isEmpty()) {
-            reset();
-            throw new MasterKeyException( strf( "Master password unknown for user: %s", getFullName() ) );
-        }
+    public MasterKey getKey(MasterKey.Version algorithmVersion) {
+        char[] masterPassword = getMasterPassword();
 
         MasterKey key = keyByVersion.get( algorithmVersion );
         if (key == null)

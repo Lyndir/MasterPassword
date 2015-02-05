@@ -4,7 +4,9 @@ import com.google.common.primitives.Bytes;
 import com.lambdaworks.crypto.SCrypt;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import java.nio.CharBuffer;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 import javax.annotation.Nullable;
 
 
@@ -31,7 +33,7 @@ public class MasterKeyV3 extends MasterKeyV2 {
 
     @Nullable
     @Override
-    protected byte[] deriveKey(final String masterPassword) {
+    protected byte[] deriveKey(final char[] masterPassword) {
         byte[] fullNameBytes = getFullName().getBytes( MP_charset );
         byte[] fullNameLengthBytes = bytesForInt( fullNameBytes.length );
 
@@ -40,12 +42,17 @@ public class MasterKeyV3 extends MasterKeyV2 {
         logger.trc( "key scope: %s", mpKeyScope );
         logger.trc( "masterKeySalt ID: %s", CodeUtils.encodeHex( idForBytes( masterKeySalt ) ) );
 
+        CharBuffer mpChars = CharBuffer.wrap( masterPassword );
+        byte[] mpBytes = MP_charset.encode( mpChars ).array();
         try {
-            return SCrypt.scrypt( masterPassword.getBytes( MP_charset ), masterKeySalt, MP_N, MP_r, MP_p, MP_dkLen );
+            return SCrypt.scrypt( mpBytes, masterKeySalt, MP_N, MP_r, MP_p, MP_dkLen );
         }
         catch (GeneralSecurityException e) {
             logger.bug( e );
             return null;
+        }
+        finally {
+            Arrays.fill( mpBytes, (byte) 0 );
         }
     }
 }

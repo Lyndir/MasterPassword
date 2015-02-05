@@ -2,7 +2,8 @@ package com.lyndir.masterpassword.gui;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
-import com.lyndir.masterpassword.util.Components;
+import com.lyndir.masterpassword.gui.util.Components;
+import com.lyndir.masterpassword.model.IncorrectMasterPasswordException;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -34,7 +35,7 @@ public class UnlockFrame extends JFrame {
         authenticationContainer.setOpaque( true );
         authenticationContainer.setBackground( Res.colors().controlBg() );
         authenticationContainer.setBorder( BorderFactory.createEmptyBorder( 20, 20, 20, 20 ) );
-        add( Components.bordered( authenticationContainer, BorderFactory.createRaisedBevelBorder(), Res.colors().frameBg() ) );
+        add( Components.borderPanel( authenticationContainer, BorderFactory.createRaisedBevelBorder(), Res.colors().frameBg() ) );
 
         // Sign In
         JPanel signInBox = Components.boxLayout( BoxLayout.LINE_AXIS, Box.createGlue(), signInButton = Components.button( "Sign In" ),
@@ -108,13 +109,13 @@ public class UnlockFrame extends JFrame {
         } );
     }
 
-    void setUser(User user) {
+    void updateUser(User user) {
         this.user = user;
         checkSignIn();
     }
 
     boolean checkSignIn() {
-        boolean enabled = user != null && !user.getFullName().isEmpty() && user.isKeyAvailable();
+        boolean enabled = user != null && !user.getFullName().isEmpty() && authenticationPanel.getMasterPassword().length > 0;
         signInButton.setEnabled( enabled );
 
         return enabled;
@@ -133,29 +134,37 @@ public class UnlockFrame extends JFrame {
         Res.execute( this, new Runnable() {
             @Override
             public void run() {
-                final boolean success = signInCallback.signedIn( user );
+                try {
+                    user.authenticate( authenticationPanel.getMasterPassword() );
 
-                SwingUtilities.invokeLater( new Runnable() {
-                    @Override
-                    public void run() {
-                        if (success) {
+                    SwingUtilities.invokeLater( new Runnable() {
+                        @Override
+                        public void run() {
+                            signInCallback.signedIn( user );
                             dispose();
-                            return;
                         }
+                    } );
+                }
+                catch (final IncorrectMasterPasswordException e) {
+                    SwingUtilities.invokeLater( new Runnable() {
+                        @Override
+                        public void run() {
+                            JOptionPane.showMessageDialog( null, e.getLocalizedMessage(), "Sign In Failed", JOptionPane.ERROR_MESSAGE );
+                            authenticationPanel.reset();
+                            signInButton.setText( "Sign In" );
+                            for (JComponent signInComponent : signInComponents)
+                                signInComponent.setEnabled( true );
+                            checkSignIn();
+                        }
+                    } );
+                }
 
-                        authenticationPanel.reset();
-                        signInButton.setText( "Sign In" );
-                        for (JComponent signInComponent : signInComponents)
-                            signInComponent.setEnabled( true );
-                        checkSignIn();
-                    }
-                } );
             }
         } );
     }
 
     interface SignInCallback {
 
-        boolean signedIn(User user);
+        void signedIn(User user);
     }
 }

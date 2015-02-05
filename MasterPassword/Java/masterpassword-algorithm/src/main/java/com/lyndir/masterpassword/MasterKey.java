@@ -23,13 +23,13 @@ public abstract class MasterKey {
     @Nullable
     private byte[] masterKey;
 
-    public static MasterKey create(final String fullName, final String masterPassword) {
+    public static MasterKey create(final String fullName, final char[] masterPassword) {
 
         return create( Version.CURRENT, fullName, masterPassword );
     }
 
     @Nonnull
-    public static MasterKey create(Version version, final String fullName, final String masterPassword) {
+    public static MasterKey create(Version version, final String fullName, final char[] masterPassword) {
 
         switch (version) {
             case V0:
@@ -52,7 +52,7 @@ public abstract class MasterKey {
     }
 
     @Nullable
-    protected abstract byte[] deriveKey(final String masterPassword);
+    protected abstract byte[] deriveKey(final char[] masterPassword);
 
     protected abstract Version getAlgorithm();
 
@@ -73,7 +73,7 @@ public abstract class MasterKey {
         return idForBytes( getMasterKey() );
     }
 
-    public abstract String encode(final String siteName, final MPSiteType siteType, int siteCounter, final MPSiteVariant siteVariant,
+    public abstract String encode(@Nonnull final String siteName, final MPSiteType siteType, int siteCounter, final MPSiteVariant siteVariant,
                                   @Nullable final String siteContext);
 
     public boolean isValid() {
@@ -88,10 +88,10 @@ public abstract class MasterKey {
         }
     }
 
-    public MasterKey revalidate(final String masterPassword) {
+    public MasterKey revalidate(final char[] masterPassword) {
         invalidate();
 
-        logger.trc( "masterPassword: %s", masterPassword );
+        logger.trc( "masterPassword: %s", new String( masterPassword ) );
 
         long start = System.currentTimeMillis();
         masterKey = deriveKey( masterPassword );

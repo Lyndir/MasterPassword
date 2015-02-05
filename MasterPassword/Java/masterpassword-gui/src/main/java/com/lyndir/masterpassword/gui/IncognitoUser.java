@@ -1,7 +1,8 @@
 package com.lyndir.masterpassword.gui;
 
 import com.google.common.collect.ImmutableList;
-import com.lyndir.masterpassword.MasterKey;
+import com.lyndir.masterpassword.model.IncorrectMasterPasswordException;
+import javax.annotation.Nullable;
 
 
 /**
@@ -9,32 +10,27 @@ import com.lyndir.masterpassword.MasterKey;
  */
 public class IncognitoUser extends User {
 
-    private final String            fullName;
-    private final String            masterPassword;
-    private       MasterKey.Version algorithmVersion;
+    private final String fullName;
+    private       char[] masterPassword;
 
-    public IncognitoUser(final String fullName, final String masterPassword) {
+    public IncognitoUser(final String fullName) {
         this.fullName = fullName;
-        this.masterPassword = masterPassword;
     }
 
     public String getFullName() {
         return fullName;
     }
 
+    @Nullable
     @Override
-    protected String getMasterPassword() {
+    protected char[] getMasterPassword() {
         return masterPassword;
     }
 
     @Override
-    public MasterKey.Version getAlgorithmVersion() {
-        return algorithmVersion;
-    }
-
-    @Override
-    public void setAlgorithmVersion(final MasterKey.Version algorithmVersion) {
-        this.algorithmVersion = algorithmVersion;
+    public void authenticate(final char[] masterPassword)
+            throws IncorrectMasterPasswordException {
+        this.masterPassword = masterPassword;
     }
 
     @Override

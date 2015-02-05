@@ -4,6 +4,7 @@ import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
 import com.google.common.base.Preconditions;
+import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.masterpassword.MasterKey;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -63,8 +64,8 @@ public class MPSiteMarshaller {
         header.append( "# Full Name: " ).append( user.getFullName() ).append( '\n' );
         header.append( "# Avatar: " ).append( user.getAvatar() ).append( '\n' );
         header.append( "# Key ID: " ).append( user.exportKeyID() ).append( '\n' );
-        header.append( "# Version: " ).append( user.getAlgorithmVersion().toBundleVersion() ).append( '\n' );
-        header.append( "# Algorithm: " ).append( user.getAlgorithmVersion().toInt() ).append( '\n' );
+        header.append( "# Version: " ).append( MasterKey.Version.CURRENT.toBundleVersion() ).append( '\n' );
+        header.append( "# Algorithm: " ).append( MasterKey.Version.CURRENT.toInt() ).append( '\n' );
         header.append( "# Default Type: " ).append( user.getDefaultType().getType() ).append( '\n' );
         header.append( "# Passwords: " ).append( contentMode.name() ).append( '\n' );
         header.append( "##\n" );
@@ -82,7 +83,7 @@ public class MPSiteMarshaller {
                                   site.getUses(), // uses
                                   strf( "%d:%d:%d", //
                                         site.getSiteType().getType(), // type
-                                        site.getAlgorithmVersion(), // algorithm
+                                        site.getAlgorithmVersion().toInt(), // algorithm
                                         site.getSiteCounter() ), // counter
                                   ifNotNullElse( site.getLoginName(), "" ), // loginName
                                   site.getSiteName(), // siteName

@@ -2,9 +2,14 @@
 <resources>
     <string name="app_name">Master Password</string>
     <string name="avatar">User Avatar</string>
-    <string name="remember">Remember Password</string>
-    <string name="siteName_hint">Site Name</string>
-    <string name="userName_hint">Your Name</string>
-    <string name="masterPassword_hint">Your Master Password</string>
+    <string name="remember">Remember</string>
+    <string name="forgetOnClose">Forget on close</string>
+    <string name="maskPassword">Hide password</string>
+    <string name="fullName_hint">Your full name</string>
+    <string name="masterPassword_hint">Your master password</string>
+    <string name="siteName_hint">eg. google.com</string>
+    <string name="sitePassword_hint">Tap to copy</string>
+    <string name="siteCounter_hint">Password #</string>
+    <string name="siteVersion_hint">Algorithm</string>
     <string name="empty" />
 </resources>

@@ -1,14 +1,10 @@
 package com.lyndir.masterpassword.gui;
 
-import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
-
-import com.google.common.base.Function;
+import com.google.common.base.*;
 import com.google.common.collect.FluentIterable;
-import com.lyndir.lhunath.opal.system.util.ObjectUtils;
-import com.lyndir.masterpassword.MasterKey;
 import com.lyndir.masterpassword.model.*;
-import javax.annotation.Nullable;
-import org.jetbrains.annotations.NotNull;
+import java.util.Arrays;
+import javax.annotation.*;
 
 
 /**
@@ -17,7 +13,9 @@ import org.jetbrains.annotations.NotNull;
 public class ModelUser extends User {
 
     private final MPUser model;
-    private       String masterPassword;
+
+    @Nullable
+    private char[] masterPassword;
 
     public ModelUser(MPUser model) {
         this.model = model;
@@ -32,20 +30,10 @@ public class ModelUser extends User {
         return model.getFullName();
     }
 
+    @Nullable
     @Override
-    protected String getMasterPassword() {
+    protected char[] getMasterPassword() {
         return masterPassword;
-    }
-
-    @Override
-    public MasterKey.Version getAlgorithmVersion() {
-        return model.getAlgorithmVersion();
-    }
-
-    @Override
-    public void setAlgorithmVersion(final MasterKey.Version algorithmVersion) {
-        model.setAlgorithmVersion( algorithmVersion );
-        MPUserFileManager.get().save();
     }
 
     @Override
@@ -58,30 +46,20 @@ public class ModelUser extends User {
         MPUserFileManager.get().save();
     }
 
-    public void setMasterPassword(final String masterPassword) {
+    public void authenticate(final char[] masterPassword)
+            throws IncorrectMasterPasswordException {
+        model.authenticate( masterPassword );
         this.masterPassword = masterPassword;
-    }
-
-    @NotNull
-    @Override
-    public MasterKey getKey() throws MasterKeyException {
-        MasterKey key = super.getKey();
-        if (!model.hasKeyID()) {
-            model.setKeyID( key.getKeyID() );
-            MPUserFileManager.get().save();
-        } else if (!model.hasKeyID( key.getKeyID() )) {
-            reset();
-            throw new MasterKeyException( strf( "Incorrect master password for user: %s", getFullName() ) );
-        }
-
-        return key;
     }
 
     @Override
     public void reset() {
         super.reset();
 
-        masterPassword = null;
+        if (masterPassword != null) {
+            Arrays.fill( masterPassword, (char) 0 );
+            masterPassword = null;
+        }
     }
 
     @Override
@@ -89,8 +67,8 @@ public class ModelUser extends User {
         return FluentIterable.from( model.findSitesByName( query ) ).transform( new Function<MPSiteResult, Site>() {
             @Nullable
             @Override
-            public Site apply(final MPSiteResult result) {
-                return new ModelSite( result );
+            public Site apply(@Nullable final MPSiteResult result) {
+                return new ModelSite( Preconditions.checkNotNull( result ) );
             }
         } );
     }

@@ -6,4 +6,4 @@
           android:layout_height="wrap_content"
           android:drawableTop="@drawable/avatar0"
           android:drawablePadding="8dp"
-          android:text="Maarten Billemont" />
+          android:text="Robert Lee Mitchell" />

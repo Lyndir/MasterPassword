@@ -80,7 +80,7 @@ public class MPWTests {
                     @Nonnull
                     @Override
                     public String get() {
-                        return parentCase.getMasterPassword();
+                        return new String( parentCase.getMasterPassword() );
                     }
                 } );
                 keyID = ifNotNullElse( keyID, new NNSupplier<String>() {
@@ -148,8 +148,8 @@ public class MPWTests {
             return fullName;
         }
 
-        public String getMasterPassword() {
-            return masterPassword;
+        public char[] getMasterPassword() {
+            return masterPassword.toCharArray();
         }
 
         public String getKeyID() {

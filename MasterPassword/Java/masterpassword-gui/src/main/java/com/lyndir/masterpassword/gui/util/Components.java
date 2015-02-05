@@ -1,8 +1,8 @@
-package com.lyndir.masterpassword.util;
+package com.lyndir.masterpassword.gui.util;
 
-import com.lyndir.masterpassword.gui.ModelUser;
 import com.lyndir.masterpassword.gui.Res;
 import java.awt.*;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -23,11 +23,11 @@ public abstract class Components {
         return container;
     }
 
-    public static GradientPanel bordered(final JComponent component, final Border border) {
-        return bordered( component, border, null );
+    public static GradientPanel borderPanel(final JComponent component, @Nullable final Border border) {
+        return borderPanel( component, border, null );
     }
 
-    public static GradientPanel bordered(final JComponent component, final Border border, Color background) {
+    public static GradientPanel borderPanel(final JComponent component, @Nullable final Border border, @Nullable Color background) {
         GradientPanel box = boxLayout( BoxLayout.LINE_AXIS, component );
 
         if (border != null)
@@ -39,7 +39,7 @@ public abstract class Components {
         return box;
     }
 
-    public static GradientPanel gradientPanel(final LayoutManager layout, final Color color) {
+    public static GradientPanel gradientPanel(@Nullable final LayoutManager layout, @Nullable final Color color) {
         return new GradientPanel( layout, color ) {
             {
                 setOpaque( color != null );
@@ -176,20 +176,24 @@ public abstract class Components {
 
     public static class GradientPanel extends JPanel {
 
-        private Color         gradientColor;
+        @Nullable
+        private Color gradientColor;
+
+        @Nullable
         private GradientPaint paint;
 
-        protected GradientPanel(final LayoutManager layout, final Color gradientColor) {
+        protected GradientPanel(@Nullable final LayoutManager layout, @Nullable final Color gradientColor) {
             super( layout );
             this.gradientColor = gradientColor;
             setBackground( null );
         }
 
+        @Nullable
         public Color getGradientColor() {
             return gradientColor;
         }
 
-        public void setGradientColor(final Color gradientColor) {
+        public void setGradientColor(@Nullable final Color gradientColor) {
             this.gradientColor = gradientColor;
         }
 

@@ -39,8 +39,9 @@ public class MPSite {
         this.siteCounter = siteCounter;
     }
 
-    protected MPSite(final MPUser user, final MasterKey.Version algorithmVersion, final Instant lastUsed, final String siteName, final MPSiteType siteType, final int siteCounter,
-                     final int uses, final String loginName, final String importContent) {
+    protected MPSite(final MPUser user, final MasterKey.Version algorithmVersion, final Instant lastUsed, final String siteName,
+                     final MPSiteType siteType, final int siteCounter, final int uses, @Nullable final String loginName,
+                     @Nullable final String importContent) {
         this.user = user;
         this.algorithmVersion = algorithmVersion;
         this.lastUsed = lastUsed;

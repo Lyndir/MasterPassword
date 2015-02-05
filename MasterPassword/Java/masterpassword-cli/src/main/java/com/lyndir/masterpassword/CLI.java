@@ -45,7 +45,8 @@ public class CLI {
             throws IOException {
 
         // Read information from the environment.
-        String siteName = null, masterPassword, context = null;
+        char[] masterPassword = null;
+        String siteName = null, context = null;
         String userName = System.getenv( ENV_USERNAME );
         String siteTypeName = ifNotNullElse( System.getenv( ENV_SITETYPE ), "" );
         MPSiteType siteType = siteTypeName.isEmpty()? MPSiteType.GeneratedLong: MPSiteType.forOption( siteTypeName );
@@ -174,11 +175,11 @@ public class CLI {
             }
 
             if (console != null)
-                masterPassword = new String( console.readPassword( "%s's master password: ", userName ) );
+                masterPassword = console.readPassword( "%s's master password: ", userName );
 
             else {
                 System.err.format( "%s's master password: ", userName );
-                masterPassword = lineReader.readLine();
+                masterPassword = lineReader.readLine().toCharArray();
             }
         }
 

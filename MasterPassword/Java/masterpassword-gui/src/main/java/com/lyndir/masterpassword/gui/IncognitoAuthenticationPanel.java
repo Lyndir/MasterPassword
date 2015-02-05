@@ -1,6 +1,6 @@
 package com.lyndir.masterpassword.gui;
 
-import com.lyndir.masterpassword.util.Components;
+import com.lyndir.masterpassword.gui.util.Components;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -55,7 +55,12 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel implements
 
     @Override
     protected User getSelectedUser() {
-        return new IncognitoUser( fullNameField.getText(), new String( masterPasswordField.getPassword() ) );
+        return new IncognitoUser( fullNameField.getText() );
+    }
+
+    @Override
+    public char[] getMasterPassword() {
+        return masterPasswordField.getPassword();
     }
 
     @Override

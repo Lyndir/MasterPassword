@@ -5,7 +5,7 @@ import com.google.common.collect.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.model.MPUser;
 import com.lyndir.masterpassword.model.MPUserFileManager;
-import com.lyndir.masterpassword.util.Components;
+import com.lyndir.masterpassword.gui.util.Components;
 import java.awt.*;
 import java.awt.event.*;
 import javax.annotation.Nullable;
@@ -90,11 +90,12 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
         if (selectedIndex < 0)
             return null;
 
-        ModelUser selectedUser = userField.getModel().getElementAt( selectedIndex );
-        if (selectedUser != null)
-            selectedUser.setMasterPassword( new String( masterPasswordField.getPassword() ) );
+        return userField.getModel().getElementAt( selectedIndex );
+    }
 
-        return selectedUser;
+    @Override
+    public char[] getMasterPassword() {
+        return masterPasswordField.getPassword();
     }
 
     @Override

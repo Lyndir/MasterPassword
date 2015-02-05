@@ -1,7 +1,7 @@
 package com.lyndir.masterpassword.gui;
 
 import com.google.common.collect.ImmutableList;
-import com.lyndir.masterpassword.util.Components;
+import com.lyndir.masterpassword.gui.util.Components;
 import java.awt.*;
 import javax.swing.*;
 
@@ -32,7 +32,7 @@ public abstract class AuthenticationPanel extends Components.GradientPanel {
     }
 
     protected void updateUser(boolean repack) {
-        unlockFrame.setUser( getSelectedUser() );
+        unlockFrame.updateUser( getSelectedUser() );
         validate();
 
         if (repack)
@@ -40,6 +40,8 @@ public abstract class AuthenticationPanel extends Components.GradientPanel {
     }
 
     protected abstract User getSelectedUser();
+
+    public abstract char[] getMasterPassword();
 
     public Component getFocusComponent() {
         return null;

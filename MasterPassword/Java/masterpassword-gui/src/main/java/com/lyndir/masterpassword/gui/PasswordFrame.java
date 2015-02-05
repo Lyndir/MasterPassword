@@ -5,12 +5,13 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 import com.google.common.collect.Iterables;
 import com.google.common.util.concurrent.*;
 import com.lyndir.masterpassword.*;
-import com.lyndir.masterpassword.util.Components;
+import com.lyndir.masterpassword.gui.util.Components;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.util.concurrent.Callable;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -49,7 +50,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         sitePanel.setOpaque( true );
         sitePanel.setBackground( Res.colors().controlBg() );
         sitePanel.setBorder( BorderFactory.createEmptyBorder( 20, 20, 20, 20 ) );
-        add( Components.bordered( sitePanel, BorderFactory.createRaisedBevelBorder(), Res.colors().frameBg() ), BorderLayout.CENTER );
+        add( Components.borderPanel( sitePanel, BorderFactory.createRaisedBevelBorder(), Res.colors().frameBg() ), BorderLayout.CENTER );
 
         // User
         sitePanel.add( Components.label( strf( "Generating passwords for: %s", user.getFullName() ), JLabel.CENTER ) );
@@ -66,7 +67,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
             public void actionPerformed(final ActionEvent e) {
                 Futures.addCallback( updatePassword(), new FutureCallback<String>() {
                     @Override
-                    public void onSuccess(final String sitePassword) {
+                    public void onSuccess(@Nullable final String sitePassword) {
                         StringSelection clipboardContents = new StringSelection( sitePassword );
                         Toolkit.getDefaultToolkit().getSystemClipboard().setContents( clipboardContents, null );
 
@@ -119,7 +120,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
         siteVersionField.setFont( Res.valueFont().deriveFont( 12f ) );
         siteVersionField.setAlignmentX( RIGHT_ALIGNMENT );
-        siteVersionField.setSelectedItem( user.getAlgorithmVersion() );
+        siteVersionField.setSelectedItem( MasterKey.Version.CURRENT );
         siteVersionField.addItemListener( new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
@@ -165,7 +166,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         passwordContainer.setOpaque( true );
         passwordContainer.setBackground( Color.white );
         passwordContainer.setBorder( BorderFactory.createEmptyBorder( 8, 8, 8, 8 ) );
-        add( Components.bordered( passwordContainer, BorderFactory.createLoweredSoftBevelBorder(), Res.colors().frameBg() ),
+        add( Components.borderPanel( passwordContainer, BorderFactory.createLoweredSoftBevelBorder(), Res.colors().frameBg() ),
              BorderLayout.SOUTH );
 
         pack();
@@ -197,7 +198,8 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         final MasterKey.Version siteVersion = siteVersionField.getItemAt( siteVersionField.getSelectedIndex() );
         final int siteCounter = (Integer) siteCounterField.getValue();
         final Site site = currentSite != null && currentSite.getSiteName().equals( siteNameQuery )? currentSite
-                : Iterables.getFirst( user.findSitesByName( siteNameQuery ), new IncognitoSite( siteNameQuery, siteType, siteCounter, user.getAlgorithmVersion() ) );
+                : Iterables.getFirst( user.findSitesByName( siteNameQuery ),
+                                      new IncognitoSite( siteNameQuery, siteType, siteCounter, siteVersion ) );
         assert site != null;
         if (site == currentSite) {
             site.setSiteType( siteType );
@@ -215,7 +217,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         } );
         Futures.addCallback( passwordFuture, new FutureCallback<String>() {
             @Override
-            public void onSuccess(final String sitePassword) {
+            public void onSuccess(@Nullable final String sitePassword) {
                 SwingUtilities.invokeLater( new Runnable() {
                     @Override
                     public void run() {
