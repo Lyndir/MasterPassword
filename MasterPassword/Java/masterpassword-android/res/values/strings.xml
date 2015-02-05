@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Master Password</string>
-    <string name="avatar">User Avatar</string>
     <string name="remember">Remember</string>
     <string name="forgetOnClose">Forget on close</string>
     <string name="maskPassword">Hide password</string>
