@@ -25,6 +25,14 @@
 
 //// Buffers and memory.
 
+#define alloc_array(_count, _type, ...) ({ \
+    _type stackElements[] = (_type[]){ __VA_ARGS__ }; \
+    _count = sizeof( stackElements ) / sizeof( _type ); \
+    _type *allocElements = malloc( sizeof( stackElements ) ); \
+    memcpy( allocElements, stackElements, sizeof( stackElements ) ); \
+    allocElements; \
+ })
+
 /** Push a buffer onto a buffer.  reallocs the given buffer and appends the given buffer. */
 void mpw_pushBuf(
         uint8_t **const buffer, size_t *const bufferSize, const void *pushBuffer, const size_t pushSize);

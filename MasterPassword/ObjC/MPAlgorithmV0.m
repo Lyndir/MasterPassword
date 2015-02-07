@@ -730,6 +730,7 @@
         BN_add( permutations, permutations, templatePermutations );
     }
     BN_free( templatePermutations );
+    free( templates );
 
     return [self timeToCrack:timeToCrack permutations:permutations forAttacker:attacker];
 }

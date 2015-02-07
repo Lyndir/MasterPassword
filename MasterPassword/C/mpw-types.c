@@ -52,7 +52,7 @@ const MPSiteType mpw_typeWithName(const char *typeName) {
     ftl( "Not a generated type name: %s", stdTypeName );
 }
 
-inline const char **mpw_templatesForType(MPSiteType type, size_t *count) {
+const char **mpw_templatesForType(MPSiteType type, size_t *count) {
 
     if (!(type & MPSiteTypeClassGenerated)) {
         ftl( "Not a generated type: %d", type );
@@ -62,42 +62,42 @@ inline const char **mpw_templatesForType(MPSiteType type, size_t *count) {
 
     switch (type) {
         case MPSiteTypeGeneratedMaximum: {
-            *count = 2;
-            return (const char *[]){ "anoxxxxxxxxxxxxxxxxx", "axxxxxxxxxxxxxxxxxno" };
+            return alloc_array( *count, const char *,
+                    "anoxxxxxxxxxxxxxxxxx", "axxxxxxxxxxxxxxxxxno" );
         }
         case MPSiteTypeGeneratedLong: {
-            *count = 21;
-            return (const char *[]){ "CvcvnoCvcvCvcv", "CvcvCvcvnoCvcv", "CvcvCvcvCvcvno",
-                                        "CvccnoCvcvCvcv", "CvccCvcvnoCvcv", "CvccCvcvCvcvno",
-                                        "CvcvnoCvccCvcv", "CvcvCvccnoCvcv", "CvcvCvccCvcvno",
-                                        "CvcvnoCvcvCvcc", "CvcvCvcvnoCvcc", "CvcvCvcvCvccno",
-                                        "CvccnoCvccCvcv", "CvccCvccnoCvcv", "CvccCvccCvcvno",
-                                        "CvcvnoCvccCvcc", "CvcvCvccnoCvcc", "CvcvCvccCvccno",
-                                        "CvccnoCvcvCvcc", "CvccCvcvnoCvcc", "CvccCvcvCvccno" };
+            return alloc_array( *count, const char *,
+                    "CvcvnoCvcvCvcv", "CvcvCvcvnoCvcv", "CvcvCvcvCvcvno",
+                    "CvccnoCvcvCvcv", "CvccCvcvnoCvcv", "CvccCvcvCvcvno",
+                    "CvcvnoCvccCvcv", "CvcvCvccnoCvcv", "CvcvCvccCvcvno",
+                    "CvcvnoCvcvCvcc", "CvcvCvcvnoCvcc", "CvcvCvcvCvccno",
+                    "CvccnoCvccCvcv", "CvccCvccnoCvcv", "CvccCvccCvcvno",
+                    "CvcvnoCvccCvcc", "CvcvCvccnoCvcc", "CvcvCvccCvccno",
+                    "CvccnoCvcvCvcc", "CvccCvcvnoCvcc", "CvccCvcvCvccno" );
         }
         case MPSiteTypeGeneratedMedium: {
-            *count = 2;
-            return (const char *[]){ "CvcnoCvc", "CvcCvcno" };
+            return alloc_array( *count, const char *,
+                    "CvcnoCvc", "CvcCvcno" );
         }
         case MPSiteTypeGeneratedBasic: {
-            *count = 3;
-            return (const char *[]){ "aaanaaan", "aannaaan", "aaannaaa" };
+            return alloc_array( *count, const char *,
+                    "aaanaaan", "aannaaan", "aaannaaa" );
         }
         case MPSiteTypeGeneratedShort: {
-            *count = 1;
-            return (const char *[]){"Cvcn"};
+            return alloc_array( *count, const char *,
+                    "Cvcn" );
         }
         case MPSiteTypeGeneratedPIN: {
-            *count = 1;
-            return (const char *[]){ "nnnn" };
+            return alloc_array( *count, const char *,
+                    "nnnn" );
         }
         case MPSiteTypeGeneratedName: {
-            *count = 1;
-            return (const char *[]) {"cvccvcvcv"};
+            return alloc_array( *count, const char *,
+                    "cvccvcvcv" );
         }
         case MPSiteTypeGeneratedPhrase: {
-            *count = 3;
-            return (const char *[]){ "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" };
+            return alloc_array( *count, const char *,
+                    "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" );
         }
         default: {
             ftl( "Unknown generated type: %d", type );
@@ -114,15 +114,19 @@ const char *mpw_templateForType(MPSiteType type, uint8_t seedByte) {
     if (!count)
         return NULL;
 
-    return templates[seedByte % count];
+    char const *template = templates[seedByte % count];
+    free( templates );
+    return template;
 }
 
 const MPSiteVariant mpw_variantWithName(const char *variantName) {
 
-    char stdVariantName[strlen( variantName )];
-    strcpy( stdVariantName, variantName );
-    for (char *vN = stdVariantName; *vN; ++vN)
-        *vN = (char)tolower( *vN );
+    // Lower-case and trim optionally leading "generated" string from typeName to standardize it.
+    size_t stdVariantNameSize = strlen( variantName );
+    char stdVariantName[stdVariantNameSize + 1];
+    for (size_t c = 0; c < stdVariantNameSize; ++c)
+        stdVariantName[c] = (char)tolower( variantName[c] );
+    stdVariantName[stdVariantNameSize] = '\0';
 
     if (0 == strcmp( stdVariantName, "p" ) || 0 == strcmp( stdVariantName, "password" ))
         return MPSiteVariantPassword;
