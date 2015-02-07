@@ -21,15 +21,17 @@
 
 const MPSiteType mpw_typeWithName(const char *typeName) {
 
+    // Lower-case and trim optionally leading "generated" string from typeName to standardize it.
+    size_t stdTypeNameOffset = 0;
     size_t stdTypeNameSize = strlen( typeName );
-    char stdTypeName[strlen( typeName )];
-    if (stdTypeNameSize > strlen( "generated" ))
-        strcpy( stdTypeName, typeName + strlen( "generated" ) );
-    else
-        strcpy( stdTypeName, typeName );
-    for (char *tN = stdTypeName; *tN; ++tN)
-        *tN = (char)tolower( *tN );
+    if (strcasestr(typeName, "generated" ) == typeName)
+        stdTypeNameSize -= (stdTypeNameOffset = strlen("generated"));
+    char stdTypeName[stdTypeNameSize + 1];
+    for (size_t c = 0; c < stdTypeNameSize; ++c)
+        stdTypeName[c] = (char)tolower( typeName[c + stdTypeNameOffset] );
+    stdTypeName[stdTypeNameSize] = '\0';
 
+    // Find what site type is represented by the type name.
     if (0 == strcmp( stdTypeName, "x" ) || 0 == strcmp( stdTypeName, "max" ) || 0 == strcmp( stdTypeName, "maximum" ))
         return MPSiteTypeGeneratedMaximum;
     if (0 == strcmp( stdTypeName, "l" ) || 0 == strcmp( stdTypeName, "long" ))
@@ -47,8 +49,7 @@ const MPSiteType mpw_typeWithName(const char *typeName) {
     if (0 == strcmp( stdTypeName, "p" ) || 0 == strcmp( stdTypeName, "phrase" ))
         return MPSiteTypeGeneratedPhrase;
 
-    fprintf( stderr, "Not a generated type name: %s", stdTypeName );
-    abort();
+    ftl( "Not a generated type name: %s", stdTypeName );
 }
 
 inline const char **mpw_templatesForType(MPSiteType type, size_t *count) {
