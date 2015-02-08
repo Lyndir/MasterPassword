@@ -25,10 +25,20 @@ body {
 
     font-family:        'Exo 2',
                         "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica,
-                        Arial, "Lucida Grande", sans-serif; 
+                        Arial, "Lucida Grande", sans-serif;
     font-weight:        300;
     color:              #DDD;
     text-align:         center;
+}
+@media (ya-title-fade: true) {
+    header {
+        padding-top: 20px;
+    }
+}
+@media (ya-dock-fade: true) {
+    footer {
+        padding-bottom: 25px;
+    }
 }
 h1, h2, h3, h4 {
     margin:             0;
@@ -65,7 +75,7 @@ input[type="submit"], input[type="image"] {
     border:             none;
 
     width:              auto;
-    
+
     font-size:          2em;
 }
 input[type="submit"] {
@@ -99,7 +109,7 @@ section {
 section {
     display:            none;
 
-    
+
 }
 section.active {
     display:            block;
