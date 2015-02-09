@@ -204,11 +204,11 @@ mpw() {
 
     echo
     echo "Building target: $target..."
-    CFLAGS=(
+    local CFLAGS=(
         # include paths
         -I"lib/include"
     )
-    LDFLAGS=(
+    local LDFLAGS=(
         # scrypt
         "lib/scrypt/scrypt-crypto_aesctr.o"
         "lib/scrypt/scrypt-sha256.o"
@@ -240,11 +240,11 @@ mpw-bench() {
 
     echo
     echo "Building target: $target..."
-    CFLAGS=(
+    local CFLAGS=(
         # include paths
         -I"lib/include"
     )
-    LDFLAGS=(
+    local LDFLAGS=(
         # scrypt
         "lib/scrypt/scrypt-crypto_aesctr.o"
         "lib/scrypt/scrypt-sha256.o"
@@ -264,6 +264,9 @@ mpw-bench() {
         -l"crypto"
     )
 
+    cc "${CFLAGS[@]}" "$@"                  -c mpw-algorithm.c    -o mpw-algorithm.o
+    cc "${CFLAGS[@]}" "$@"                  -c mpw-types.c        -o mpw-types.o
+    cc "${CFLAGS[@]}" "$@"                  -c mpw-util.c         -o mpw-util.o
     cc "${CFLAGS[@]}" "$@" "mpw-algorithm.o" "mpw-types.o" "mpw-util.o" \
        "${LDFLAGS[@]}"     "mpw-bench.c" -o "mpw-bench"
     echo "done!  Now use ./mpw-bench"
@@ -276,13 +279,13 @@ mpw-tests() {
 
     echo
     echo "Building target: $target..."
-    CFLAGS=(
+    local CFLAGS=(
         # include paths
         -I"lib/include"
         -I"/usr/include/libxml2"
         -I"/usr/local/include/libxml2"
     )
-    LDFLAGS=(
+    local LDFLAGS=(
         # scrypt
         "lib/scrypt/scrypt-crypto_aesctr.o"
         "lib/scrypt/scrypt-sha256.o"
@@ -296,7 +299,10 @@ mpw-tests() {
         -l"crypto" -l"xml2"
     )
 
-    cc "${CFLAGS[@]}" "$@" -c mpw-tests-util.c -o mpw-tests-util.o
+    cc "${CFLAGS[@]}" "$@"                  -c mpw-algorithm.c    -o mpw-algorithm.o
+    cc "${CFLAGS[@]}" "$@"                  -c mpw-types.c        -o mpw-types.o
+    cc "${CFLAGS[@]}" "$@"                  -c mpw-util.c         -o mpw-util.o
+    cc "${CFLAGS[@]}" "$@"                  -c mpw-tests-util.c   -o mpw-tests-util.o
     cc "${CFLAGS[@]}" "$@" "mpw-algorithm.o" "mpw-types.o" "mpw-util.o" "mpw-tests-util.o" \
        "${LDFLAGS[@]}"     "mpw-tests.c" -o "mpw-tests"
     echo "done!  Now use ./mpw-tests"

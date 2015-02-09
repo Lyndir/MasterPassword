@@ -8,8 +8,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <locale.h>
+
+#ifdef COLOR
+#include <unistd.h>
+#include <curses.h>
+#include <term.h>
+#endif
 
 #include <scrypt/sha256.h>
 #include <scrypt/crypto_scrypt.h>
