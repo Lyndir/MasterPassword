@@ -26,7 +26,7 @@
 //// Buffers and memory.
 
 #define alloc_array(_count, _type, ...) ({ \
-    _type stackElements[] = (_type[]){ __VA_ARGS__ }; \
+    _type stackElements[] = { __VA_ARGS__ }; \
     _count = sizeof( stackElements ) / sizeof( _type ); \
     _type *allocElements = malloc( sizeof( stackElements ) ); \
     memcpy( allocElements, stackElements, sizeof( stackElements ) ); \

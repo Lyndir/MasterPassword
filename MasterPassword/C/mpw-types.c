@@ -21,11 +21,11 @@
 
 const MPSiteType mpw_typeWithName(const char *typeName) {
 
-    // Lower-case and trim optionally leading "generated" string from typeName to standardize it.
+    // Lower-case and trim optionally leading "Generated" string from typeName to standardize it.
     size_t stdTypeNameOffset = 0;
     size_t stdTypeNameSize = strlen( typeName );
-    if (strcasestr(typeName, "generated" ) == typeName)
-        stdTypeNameSize -= (stdTypeNameOffset = strlen("generated"));
+    if (strstr(typeName, "Generated" ) == typeName)
+        stdTypeNameSize -= (stdTypeNameOffset = strlen( "Generated" ));
     char stdTypeName[stdTypeNameSize + 1];
     for (size_t c = 0; c < stdTypeNameSize; ++c)
         stdTypeName[c] = (char)tolower( typeName[c + stdTypeNameOffset] );
