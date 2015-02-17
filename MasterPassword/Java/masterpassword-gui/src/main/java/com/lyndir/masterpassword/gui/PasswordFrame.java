@@ -149,11 +149,12 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         } );
 
         // Password
-        passwordField = new JPasswordField();
-        passwordField.setAlignmentX( Component.CENTER_ALIGNMENT );
-        passwordField.setEditable( false );
-        passwordField.setHorizontalAlignment( JTextField.CENTER );
-        passwordField.putClientProperty( "JPasswordField.cutCopyAllowed", true );
+        passwordField = Components.passwordField();
+        passwordField.setAlignmentX(Component.CENTER_ALIGNMENT);
+        passwordField.setHorizontalAlignment(JTextField.CENTER);
+        passwordField.putClientProperty("JPasswordField.cutCopyAllowed", true);
+        passwordField.setEditable(false);
+        passwordField.setBackground(null);
         passwordField.setBorder( null );
         passwordEchoChar = passwordField.getEchoChar();
         passwordEchoFont = passwordField.getFont().deriveFont( 40f );

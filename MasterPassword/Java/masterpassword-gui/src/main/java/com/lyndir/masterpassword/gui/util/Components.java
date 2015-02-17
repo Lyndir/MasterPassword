@@ -70,10 +70,10 @@ public abstract class Components {
     public static JPasswordField passwordField() {
         return new JPasswordField() {
             {
-                setBorder( BorderFactory.createCompoundBorder( BorderFactory.createLineBorder( Res.colors().controlBorder(), 1, true ),
-                                                               BorderFactory.createEmptyBorder( 4, 4, 4, 4 ) ) );
-                setAlignmentX( LEFT_ALIGNMENT );
-                setAlignmentY( BOTTOM_ALIGNMENT );
+                setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Res.colors().controlBorder(), 1, true),
+                        BorderFactory.createEmptyBorder(4, 4, 4, 4)));
+                setAlignmentX(LEFT_ALIGNMENT);
+                setAlignmentY(BOTTOM_ALIGNMENT);
             }
 
             @Override
@@ -116,6 +116,7 @@ public abstract class Components {
                 ((DefaultEditor) getEditor()).getTextField().setBorder( editorBorder );
                 setAlignmentX( LEFT_ALIGNMENT );
                 setAlignmentY( BOTTOM_ALIGNMENT );
+                setBorder(null);
             }
 
             @Override
@@ -147,7 +148,8 @@ public abstract class Components {
     public static JCheckBox checkBox(final String label) {
         return new JCheckBox( label ) {
             {
-                setFont( Res.controlFont().deriveFont( 12f ) );
+                setFont(Res.controlFont().deriveFont(12f));
+                setBackground(null);
                 setAlignmentX( LEFT_ALIGNMENT );
                 setAlignmentY( BOTTOM_ALIGNMENT );
             }
@@ -162,9 +164,14 @@ public abstract class Components {
     public static <M> JComboBox<M> comboBox(final ComboBoxModel<M> model) {
         return new JComboBox<M>( model ) {
             {
+//                CompoundBorder editorBorder = BorderFactory.createCompoundBorder(
+//                        BorderFactory.createLineBorder( Res.colors().controlBorder(), 1, true ),
+//                        BorderFactory.createEmptyBorder( 4, 4, 4, 4 ) );
+//                ((JComponent) ((BasicComboBoxEditor) getEditor()).getEditorComponent()).setBorder(editorBorder);
                 setFont( Res.controlFont().deriveFont( 12f ) );
                 setAlignmentX( LEFT_ALIGNMENT );
                 setAlignmentY( BOTTOM_ALIGNMENT );
+//                setBorder(null);
             }
 
             @Override
@@ -195,14 +202,17 @@ public abstract class Components {
 
         public void setGradientColor(@Nullable final Color gradientColor) {
             this.gradientColor = gradientColor;
+            revalidate();
         }
 
         @Override
         public void doLayout() {
             super.doLayout();
 
-            if (gradientColor != null)
+            if (gradientColor != null) {
                 paint = new GradientPaint( new Point( 0, 0 ), gradientColor, new Point( getWidth(), getHeight() ), gradientColor.darker() );
+                repaint();
+            }
         }
 
         @Override

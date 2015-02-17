@@ -27,9 +27,21 @@ public class UnlockFrame extends JFrame {
         super( "Unlock Master Password" );
         this.signInCallback = signInCallback;
 
-        setDefaultCloseOperation( DISPOSE_ON_CLOSE );
-        setContentPane( root = Components.gradientPanel( new BorderLayout( 20, 20 ), Res.colors().frameBg() ) );
-        root.setBorder( BorderFactory.createEmptyBorder( 20, 20, 20, 20 ) );
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setContentPane(root = Components.gradientPanel(new BorderLayout(20, 20), Res.colors().frameBg()));
+        root.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        addWindowFocusListener(new WindowAdapter() {
+            @Override
+            public void windowGainedFocus(WindowEvent e) {
+                root.setGradientColor(Res.colors().frameBg());
+            }
+
+            @Override
+            public void windowLostFocus(WindowEvent e) {
+                root.setGradientColor(Color.RED);
+            }
+        });
 
         authenticationContainer = Components.boxLayout( BoxLayout.PAGE_AXIS );
         authenticationContainer.setOpaque( true );
@@ -91,10 +103,10 @@ public class UnlockFrame extends JFrame {
         JComponent toolsPanel = Components.boxLayout( BoxLayout.LINE_AXIS, incognitoCheckBox, Box.createGlue() );
         authenticationContainer.add( toolsPanel );
         for (JButton button : authenticationPanel.getButtons()) {
-            button.setMargin( new Insets( 0, 0, 0, 0 ) );
-            button.setAlignmentX( RIGHT_ALIGNMENT );
-            button.setBorder( null );
             toolsPanel.add( button );
+            button.setMargin( new Insets( 0, 0, 0, 0 ) );
+            button.setAlignmentX(RIGHT_ALIGNMENT);
+            button.setContentAreaFilled(false);
         }
 
         checkSignIn();

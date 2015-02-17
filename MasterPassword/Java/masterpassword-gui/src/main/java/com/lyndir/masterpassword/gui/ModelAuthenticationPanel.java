@@ -13,6 +13,7 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.metal.MetalComboBoxEditor;
 
 
 /**
@@ -51,6 +52,15 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
         userField.setFont( Res.valueFont().deriveFont( 12f ) );
         userField.addItemListener( this );
         userField.addActionListener( this );
+        userField.setEditor(new MetalComboBoxEditor() {
+            @Override
+            protected JTextField createEditorComponent() {
+                JTextField editorComponents = Components.textField();
+                editorComponents.setForeground(Color.red);
+                return editorComponents;
+            }
+        });
+
         add( userField );
         add( Components.stud() );
 
