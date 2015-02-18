@@ -8,9 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
-#include <locale.h>
 
 #ifdef COLOR
 #include <unistd.h>
@@ -111,7 +109,7 @@ const char *mpw_hex(const void *buf, size_t length) {
 #ifdef COLOR
 static int putvari;
 static char *putvarc = NULL;
-static bool istermsetup = false;
+static int istermsetup = 0;
 static void initputvar() {
     if (putvarc)
         free(putvarc);
@@ -172,8 +170,33 @@ const char *mpw_identicon(const char *fullName, const char *masterPassword) {
     return identicon;
 }
 
-const size_t mpw_charlen(const char *string) {
+/**
+* @return the amount of bytes used by UTF-8 to encode a single character that starts with the given byte.
+*/
+static int mpw_charByteSize(unsigned char utf8Byte) {
 
-    setlocale( LC_ALL, "en_US.UTF-8" );
-    return mbstowcs( NULL, string, strlen( string ) );
+    if (!utf8Byte)
+        return 0;
+    if ((utf8Byte & 0x80) == 0)
+        return 1;
+    if ((utf8Byte & 0xC0) != 0xC0)
+        return 0;
+    if ((utf8Byte & 0xE0) == 0xC0)
+        return 2;
+    if ((utf8Byte & 0xF0) == 0xE0)
+        return 3;
+    if ((utf8Byte & 0xF8) == 0xF0)
+        return 4;
+
+    return 0;
+}
+
+const size_t mpw_charlen(const char *utf8String) {
+
+    size_t charlen = 0;
+    char *remainingString = (char *)utf8String;
+    for (int charByteSize; (charByteSize = mpw_charByteSize( *remainingString )); remainingString += charByteSize)
+        ++charlen;
+
+  return charlen;
 }

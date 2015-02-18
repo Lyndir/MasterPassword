@@ -22,7 +22,8 @@
 static const uint8_t *mpw_masterKeyForUser_v3(const char *fullName, const char *masterPassword) {
 
     const char *mpKeyScope = mpw_scopeForVariant( MPSiteVariantPassword );
-    trc( "fullName: %s\n", fullName );
+    trc( "algorithm: v%d\n", 3 );
+    trc( "fullName: %s (%zu)\n", fullName, strlen( fullName ) );
     trc( "masterPassword: %s\n", masterPassword );
     trc( "key scope: %s\n", mpKeyScope );
 
@@ -56,6 +57,7 @@ static const char *mpw_passwordForSite_v3(const uint8_t *masterKey, const char *
         const MPSiteVariant siteVariant, const char *siteContext) {
 
     const char *siteScope = mpw_scopeForVariant( siteVariant );
+    trc( "algorithm: v%d\n", 3 );
     trc( "siteName: %s\n", siteName );
     trc( "siteCounter: %d\n", siteCounter );
     trc( "siteVariant: %d\n", siteVariant );

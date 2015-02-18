@@ -21,6 +21,7 @@ int main(int argc, char *const argv[]) {
 
         // Read in the test case.
         xmlChar *id = mpw_xmlTestCaseString( testCase, "id" );
+        uint32_t algorithm = mpw_xmlTestCaseInteger( testCase, "algorithm" );
         xmlChar *fullName = mpw_xmlTestCaseString( testCase, "fullName" );
         xmlChar *masterPassword = mpw_xmlTestCaseString( testCase, "masterPassword" );
         xmlChar *keyID = mpw_xmlTestCaseString( testCase, "keyID" );
@@ -36,16 +37,20 @@ int main(int argc, char *const argv[]) {
 
         // Run the test case.
         fprintf( stdout, "test case %s... ", id );
+        if (!xmlStrlen( result )) {
+            fprintf( stdout, "abstract.\n" );
+            continue;
+        }
 
         // 1. calculate the master key.
         const uint8_t *masterKey = mpw_masterKeyForUser(
-                (char *)fullName, (char *)masterPassword, MPAlgorithmVersionCurrent );
+                (char *)fullName, (char *)masterPassword, algorithm );
         if (!masterKey)
             ftl( "Couldn't derive master key." );
 
         // 2. calculate the site password.
         const char *sitePassword = mpw_passwordForSite(
-                masterKey, (char *)siteName, siteType, siteCounter, siteVariant, (char *)siteContext, MPAlgorithmVersionCurrent );
+                masterKey, (char *)siteName, siteType, siteCounter, siteVariant, (char *)siteContext, algorithm );
         mpw_free( masterKey, MP_dkLen );
         if (!sitePassword)
             ftl( "Couldn't derive site password." );
@@ -56,7 +61,7 @@ int main(int argc, char *const argv[]) {
 
         else {
             ++failedTests;
-            fprintf( stdout, "FAILED!  (result %s != expected %s)\n", result, sitePassword );
+            fprintf( stdout, "FAILED!  (got %s != expected %s)\n", sitePassword, result );
         }
 
         // Free test case.

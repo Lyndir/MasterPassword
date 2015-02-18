@@ -39,7 +39,7 @@ else
 fi
 
 # Optional features.
-mpw_color=0 # Colorized Identicon, requires libncurses-dev
+mpw_color=1 # Colorized Identicon, requires libncurses-dev
 
 
 ### DEPENDENCIES
