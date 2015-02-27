@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.util.List;
 import javax.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
 
 
 /**
@@ -66,6 +67,7 @@ public enum MPSiteVariant {
      *
      * @return The variant registered with the given name.
      */
+    @Contract("!null -> !null, null -> null")
     public static MPSiteVariant forName(@Nullable final String name) {
 
         if (name == null)

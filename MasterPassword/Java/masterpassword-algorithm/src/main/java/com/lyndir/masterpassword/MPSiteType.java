@@ -6,6 +6,7 @@ import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
+import org.jetbrains.annotations.Contract;
 
 
 /**
@@ -147,6 +148,7 @@ public enum MPSiteType {
      *
      * @return The type registered with the given name.
      */
+    @Contract("!null -> !null, null -> null")
     public static MPSiteType forName(@Nullable final String name) {
 
         if (name == null)

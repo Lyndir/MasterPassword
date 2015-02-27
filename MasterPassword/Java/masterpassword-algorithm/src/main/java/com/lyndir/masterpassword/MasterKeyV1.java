@@ -46,12 +46,12 @@ public class MasterKeyV1 extends MasterKeyV0 {
         byte[] siteNameBytes = siteName.getBytes( MP_charset );
         byte[] siteNameLengthBytes = bytesForInt( siteName.length() );
         byte[] siteCounterBytes = bytesForInt( siteCounter );
-        byte[] siteContextBytes = siteContext == null? null: siteContext.getBytes( MP_charset );
+        byte[] siteContextBytes = siteContext == null || siteContext.isEmpty()? null: siteContext.getBytes( MP_charset );
         byte[] siteContextLengthBytes = bytesForInt( siteContextBytes == null? 0: siteContextBytes.length );
-        logger.trc( "site scope: %s, context: %s", siteScope, siteContext == null? "<empty>": siteContext );
+        logger.trc( "site scope: %s, context: %s", siteScope, siteContextBytes == null? "<empty>": siteContext );
         logger.trc( "seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)", siteScope, CodeUtils.encodeHex( siteNameLengthBytes ),
                     siteName, CodeUtils.encodeHex( siteCounterBytes ), CodeUtils.encodeHex( siteContextLengthBytes ),
-                    siteContext == null? "(null)": siteContext );
+                    siteContextBytes == null? "(null)": siteContext );
 
         byte[] sitePasswordInfo = Bytes.concat( siteScope.getBytes( MP_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
         if (siteContextBytes != null)
