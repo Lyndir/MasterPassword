@@ -66,6 +66,7 @@ uint8_t const *mpw_hmac_sha256(
 /** Encode a buffer as a string of hexadecimal characters.
   * @return A C-string in a reused buffer, do not free or store it. */
 const char *mpw_hex(const void *buf, size_t length);
+const char *mpw_hex_l(uint32_t number);
 /** Encode a fingerprint for a buffer.
   * @return A C-string in a reused buffer, do not free or store it. */
 const char *mpw_idForBuf(const void *buf, size_t length);

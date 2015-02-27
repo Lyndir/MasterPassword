@@ -78,7 +78,11 @@ static const char *mpw_passwordForSite_v0(const uint8_t *masterKey, const char *
     trc( "siteCounter: %d\n", siteCounter );
     trc( "siteVariant: %d\n", siteVariant );
     trc( "siteType: %d\n", siteType );
-    trc( "site scope: %s, context: %s\n", siteScope, siteContext == NULL? "<empty>": siteContext );
+    trc( "site scope: %s, context: %s\n", siteScope, siteContext? "<empty>": siteContext );
+    trc( "seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)\n",
+            siteScope, mpw_hex_l( htonl( strlen( siteName ) ) ), siteName,
+            mpw_hex_l( htonl( siteCounter ) ),
+            mpw_hex_l( htonl( siteContext? strlen( siteContext ): 0 ) ), siteContext? "(null)": siteContext );
 
     // Calculate the site seed.
     // sitePasswordSeed = hmac-sha256( masterKey, siteScope . #siteName . siteName . siteCounter . #siteContext . siteContext )
