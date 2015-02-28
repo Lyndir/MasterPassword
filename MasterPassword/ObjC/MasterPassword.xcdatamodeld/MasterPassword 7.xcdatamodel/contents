@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14C109" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="MPGeneratedSiteEntity" representedClassName="MPGeneratedSiteEntity" parentEntity="MPSiteEntity" elementID="789304EA-070D-4982-8C20-54EECFC20CB6" syncable="YES">
+        <attribute name="counter_" optional="YES" attributeType="Integer 32" defaultValueString="1" syncable="YES"/>
+    </entity>
+    <entity name="MPSiteEntity" representedClassName="MPSiteEntity" isAbstract="YES" elementID="58EE245C-6827-4C11-BB7E-5722F2426EC2" syncable="YES">
+        <attribute name="content" optional="YES" transient="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="lastUsed" attributeType="Date" indexed="YES" syncable="YES"/>
+        <attribute name="loginGenerated_" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="loginName" optional="YES" attributeType="String" elementID="A1B9F981-D33C-4BFE-9F94-C9D3E1F78E51" syncable="YES"/>
+        <attribute name="name" attributeType="String" minValueString="1" indexed="YES" syncable="YES"/>
+        <attribute name="requiresExplicitMigration_" attributeType="Boolean" defaultValueString="NO">
+            <userInfo/>
+        </attribute>
+        <attribute name="type_" attributeType="Integer 16" defaultValueString="17" syncable="YES"/>
+        <attribute name="uses_" attributeType="Integer 16" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="version_" attributeType="Integer 16" minValueString="0" defaultValueString="0" syncable="YES"/>
+        <relationship name="questions" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="MPSiteQuestionEntity" inverseName="site" inverseEntity="MPSiteQuestionEntity" syncable="YES"/>
+        <relationship name="user" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MPUserEntity" inverseName="sites" inverseEntity="MPUserEntity" elementID="FC8AE32E-7BE3-4FA6-8611-B7DC0DB063EF" syncable="YES"/>
+    </entity>
+    <entity name="MPSiteQuestionEntity" representedClassName="MPSiteQuestionEntity" syncable="YES">
+        <attribute name="keyword" attributeType="String" syncable="YES"/>
+        <relationship name="site" maxCount="1" deletionRule="Nullify" destinationEntity="MPSiteEntity" inverseName="questions" inverseEntity="MPSiteEntity" syncable="YES"/>
+    </entity>
+    <entity name="MPStoredSiteEntity" representedClassName="MPStoredSiteEntity" parentEntity="MPSiteEntity" elementID="BEEF1688-0CCD-4699-A86A-4D860FE2CEB8" syncable="YES">
+        <attribute name="contentObject" optional="YES" attributeType="Transformable" storedInTruthFile="YES" syncable="YES"/>
+    </entity>
+    <entity name="MPUserEntity" representedClassName="MPUserEntity" syncable="YES">
+        <attribute name="avatar_" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="defaultType_" attributeType="Integer 16" defaultValueString="17" syncable="YES"/>
+        <attribute name="keyID" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="lastUsed" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="saveKey_" attributeType="Boolean" defaultValueString="NO">
+            <userInfo/>
+        </attribute>
+        <attribute name="version_" attributeType="Integer 16" minValueString="0" defaultValueString="2" syncable="YES"/>
+        <relationship name="sites" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MPSiteEntity" inverseName="user" inverseEntity="MPSiteEntity" elementID="D18D6772-040E-4CFE-8F32-A34B08E9E9BC" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="MPGeneratedSiteEntity" positionX="216" positionY="-288" width="128" height="58"/>
+        <element name="MPSiteEntity" positionX="-0" positionY="-286" width="128" height="208"/>
+        <element name="MPSiteQuestionEntity" positionX="-2" positionY="-9" width="128" height="73"/>
+        <element name="MPStoredSiteEntity" positionX="214" positionY="-171" width="128" height="58"/>
+        <element name="MPUserEntity" positionX="-218" positionY="-288" width="128" height="165"/>
+    </elements>
+</model>

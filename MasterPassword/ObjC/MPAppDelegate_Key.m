@@ -31,12 +31,12 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     NSData *keyData = [PearlKeyChain dataOfItemForQuery:keyQuery( user )];
     if (!keyData) {
-        inf( @"No key found in keychain for: %@", user.userID );
+        inf( @"No key found in keychain for user: %@", user.userID );
         return nil;
     }
 
-    inf( @"Found key in keychain for: %@", user.userID );
-    return [MPAlgorithmDefault keyFromKeyData:keyData];
+    inf( @"Found key in keychain for user: %@", user.userID );
+    return [[MPKey alloc] initForFullName:user.name withKeyData:keyData forAlgorithm:user.algorithm];
 }
 
 - (void)storeSavedKeyFor:(MPUserEntity *)user {
@@ -44,12 +44,12 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     if (user.saveKey) {
         NSData *existingKeyData = [PearlKeyChain dataOfItemForQuery:keyQuery( user )];
 
-        if (![existingKeyData isEqualToData:self.key.keyData]) {
-            inf( @"Saving key in keychain for: %@", user.userID );
+        if (![existingKeyData isEqualToData:[self.key keyDataForAlgorithm:user.algorithm]]) {
+            inf( @"Saving key in keychain for user: %@", user.userID );
 
             [PearlKeyChain addOrUpdateItemForQuery:keyQuery( user )
                                     withAttributes:@{
-                                            (__bridge id)kSecValueData      : self.key.keyData,
+                                            (__bridge id)kSecValueData      : [self.key keyDataForAlgorithm:user.algorithm],
 #if TARGET_OS_IPHONE
                                             (__bridge id)kSecAttrAccessible : (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
 #endif
@@ -62,7 +62,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     OSStatus result = [PearlKeyChain deleteItemForQuery:keyQuery( user )];
     if (result == noErr) {
-        inf( @"Removed key from keychain for: %@", user.userID );
+        inf( @"Removed key from keychain for user: %@", user.userID );
 
         [[NSNotificationCenter defaultCenter] postNotificationName:MPKeyForgottenNotification object:self];
     }
@@ -88,8 +88,8 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     // Method 1: When the user has no keyID set, set a new key from the given master password.
     if (!user.keyID) {
-        if ([password length] && (tryKey = [MPAlgorithmDefault keyForPassword:password ofUserNamed:user.name])) {
-            user.keyID = tryKey.keyID;
+        if ([password length] && (tryKey = [[MPKey alloc] initForFullName:user.name withMasterPassword:password])) {
+            user.keyID = [tryKey keyIDForAlgorithm:MPAlgorithmDefault];
 
             // Migrate existing sites.
             [self migrateSitesForUser:user saveInContext:moc toKey:tryKey];
@@ -103,9 +103,11 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 
     else if (!tryKey) {
         // Key should be saved in keychain.  Load it.
-        if ((tryKey = [self loadSavedKeyFor:user]) && ![user.keyID isEqual:tryKey.keyID]) {
+        if ((tryKey = [self loadSavedKeyFor:user]) && ![user.keyID isEqual:[tryKey keyIDForAlgorithm:user.algorithm]]) {
             // Loaded password doesn't match user's keyID.  Forget saved password: it is incorrect.
-            inf( @"Saved password doesn't match keyID for: %@", user.userID );
+            inf( @"Saved password doesn't match keyID for user: %@", user.userID );
+            trc( @"user keyID: %@ (version: %d) != authentication keyID: %@",
+                    user.keyID, user.algorithm.version, [tryKey keyIDForAlgorithm:user.algorithm] );
 
             tryKey = nil;
             [self forgetSavedKeyFor:user];
@@ -113,9 +115,11 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     }
 
     // Method 3: Check the given master password string.
-    if (!tryKey && [password length] && (tryKey = [MPAlgorithmDefault keyForPassword:password ofUserNamed:user.name]) &&
-        ![user.keyID isEqual:tryKey.keyID]) {
-        inf( @"Key derived from password doesn't match keyID for: %@", user.userID );
+    if (!tryKey && [password length] && (tryKey = [[MPKey alloc] initForFullName:user.name withMasterPassword:password]) &&
+        ![user.keyID isEqual:[tryKey keyIDForAlgorithm:user.algorithm]]) {
+        inf( @"Key derived from password doesn't match keyID for user: %@", user.userID );
+        trc( @"user keyID: %@ (version: %u) != authentication keyID: %@",
+                user.keyID, user.algorithm.version, [tryKey keyIDForAlgorithm:user.algorithm] );
 
         tryKey = nil;
     }
@@ -123,13 +127,22 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     // No more methods left, fail if key still not known.
     if (!tryKey) {
         if (password)
-            inf( @"Login failed for: %@", user.userID );
+            inf( @"Password login failed for user: %@", user.userID );
+        else
+            dbg( @"Automatic login failed for user: %@", user.userID );
 
         return NO;
     }
-    inf( @"Logged in: %@", user.userID );
+    inf( @"Logged in user: %@", user.userID );
 
     if (![self.key isEqualToKey:tryKey]) {
+        // Upgrade the user's keyID if not at the default version yet.
+        if (user.algorithm.version != MPAlgorithmDefaultVersion) {
+            user.algorithm = MPAlgorithmDefault;
+            user.keyID = [tryKey keyIDForAlgorithm:user.algorithm];
+            inf( @"Upgraded keyID to version %u for user: %@", user.algorithm.version, user.userID );
+        }
+
         self.key = tryKey;
         [self storeSavedKeyFor:user];
     }
@@ -205,7 +218,7 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                     // Don't Migrate
                     break;
 
-                recoverKey = [site.algorithm keyForPassword:masterPassword ofUserNamed:user.name];
+                recoverKey = [[MPKey alloc] initForFullName:user.name withMasterPassword:masterPassword];
             }
 
             if (!content)

@@ -8,6 +8,7 @@
 
 #import "MPEntities.h"
 #import "MPAppDelegate_Shared.h"
+#import "MPAppDelegate_Key.h"
 
 @implementation NSManagedObjectContext(MP)
 
@@ -90,14 +91,14 @@
     self.uses_ = @(anUses);
 }
 
-- (NSUInteger)version {
+- (id<MPAlgorithm>)algorithm {
 
-    return [self.version_ unsignedIntegerValue];
+    return MPAlgorithmForVersion( MIN( MPAlgorithmVersionCurrent, MAX( MPAlgorithmVersion0, [self.version_ unsignedIntegerValue] ) ) );
 }
 
-- (void)setVersion:(NSUInteger)version {
+- (void)setAlgorithm:(id<MPAlgorithm>)algorithm {
 
-    self.version_ = @(version);
+    self.version_ = @([algorithm version]);
 }
 
 - (BOOL)requiresExplicitMigration {
@@ -108,11 +109,6 @@
 - (void)setRequiresExplicitMigration:(BOOL)requiresExplicitMigration {
 
     self.requiresExplicitMigration_ = @(requiresExplicitMigration);
-}
-
-- (id<MPAlgorithm>)algorithm {
-
-    return MPAlgorithmForVersion( self.version );
 }
 
 - (NSUInteger)use {
@@ -128,21 +124,31 @@
 
 - (NSString *)debugDescription {
 
-    @try {
-        return strf( @"{%@: name=%@, user=%@, type=%lu, uses=%ld, lastUsed=%@, version=%ld, loginName=%@, requiresExplicitMigration=%d}",
-                NSStringFromClass( [self class] ), self.name, self.user.name, (long)self.type, (long)self.uses, self.lastUsed,
-                (long)self.version,
-                self.loginName, self.requiresExplicitMigration );
-    } @catch (NSException *exception) {
-        return strf( @"{%@: inaccessible: %@}",
-                NSStringFromClass( [self class] ), [exception fullDescription] );
-    }
+    __block NSString *debugDescription = strf( @"{%@: [recursing]}", [self class] );
+
+    static BOOL recursing = NO;
+    PearlIfNotRecursing( &recursing, ^{
+        @try {
+            debugDescription = strf(
+                    @"{%@: name=%@, user=%@, type=%lu, uses=%ld, lastUsed=%@, version=%ld, loginName=%@, requiresExplicitMigration=%d}",
+                    NSStringFromClass( [self class] ), self.name, self.user.name, (long)self.type, (long)self.uses, self.lastUsed,
+                    (long)[self.algorithm version],
+                    self.loginName, self.requiresExplicitMigration );
+        }
+        @catch (NSException *exception) {
+            debugDescription = strf( @"{%@: inaccessible: %@}",
+                    NSStringFromClass( [self class] ), [exception fullDescription] );
+        }
+    } );
+
+    return debugDescription;
 }
 
 - (BOOL)tryMigrateExplicitly:(BOOL)explicit {
 
-    while (self.version < MPAlgorithmDefaultVersion) {
-        NSUInteger toVersion = self.version + 1;
+    MPAlgorithmVersion algorithmVersion;
+    while ((algorithmVersion = [self.algorithm version]) < MPAlgorithmDefaultVersion) {
+        NSUInteger toVersion = algorithmVersion + 1;
         if (![MPAlgorithmForVersion( toVersion ) tryMigrateSite:self explicit:explicit]) {
             wrn( @"%@ migration to version: %ld failed for site: %@",
                     explicit? @"Explicit": @"Automatic", (long)toVersion, self );
@@ -285,6 +291,17 @@
 - (void)setDefaultType:(MPSiteType)aDefaultType {
 
     self.defaultType_ = @(aDefaultType);
+}
+
+- (id<MPAlgorithm>)algorithm {
+
+    return MPAlgorithmForVersion( MIN( MPAlgorithmVersionCurrent, MAX( MPAlgorithmVersion0, [self.version_ unsignedIntegerValue] ) ) );
+}
+
+- (void)setAlgorithm:(id<MPAlgorithm>)version {
+
+    self.version_ = @([version version]);
+    [[MPAppDelegate_Shared get] forgetSavedKeyFor:self];
 }
 
 - (NSString *)userID {

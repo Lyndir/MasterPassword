@@ -16,17 +16,21 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MPAlgorithm.h"
 
 @protocol MPAlgorithm;
 
 @interface MPKey : NSObject
 
-@property(nonatomic, readonly, strong) id<MPAlgorithm> algorithm;
-@property(nonatomic, readonly, strong) NSData *keyData;
-@property(nonatomic, readonly, strong) NSData *keyID;
+@property(nonatomic, readonly) NSString *fullName;
 
-- (id)initWithKeyData:(NSData *)keyData algorithm:(id<MPAlgorithm>)algorithm;
-- (MPKey *)subKeyOfLength:(NSUInteger)subKeyLength;
+- (instancetype)initForFullName:(NSString *)fullName withMasterPassword:(NSString *)masterPassword;
+- (instancetype)initForFullName:(NSString *)fullName withKeyData:(NSData *)keyData forAlgorithm:(id<MPAlgorithm>)algorithm;
+
+- (NSData *)keyIDForAlgorithm:(id<MPAlgorithm>)algorithm;
+- (NSData *)keyDataForAlgorithm:(id<MPAlgorithm>)algorithm;
+- (NSData *)keyDataForAlgorithm:(id<MPAlgorithm>)algorithm trimmedLength:(NSUInteger)subKeyLength;
+
 - (BOOL)isEqualToKey:(MPKey *)key;
 
 @end

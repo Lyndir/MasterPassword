@@ -8,7 +8,7 @@
 
 @implementation MPiOSConfig
 
-@dynamic helpHidden, siteInfoHidden, showSetup, actionsTipShown, typeTipShown, loginNameTipShown, traceMode, dictationSearch;
+@dynamic helpHidden, siteInfoHidden, showSetup, actionsTipShown, typeTipShown, loginNameTipShown, traceMode, dictationSearch, allowDowngrade;
 @dynamic developmentFuelRemaining, developmentFuelInvested, developmentFuelConsumption, developmentFuelChecked;
 
 - (id)init {
@@ -26,6 +26,7 @@
             NSStringFromSelector( @selector( loginNameTipShown ) )      : @NO,
             NSStringFromSelector( @selector( traceMode ) )              : @NO,
             NSStringFromSelector( @selector( dictationSearch ) )        : @NO,
+            NSStringFromSelector( @selector( allowDowngrade ) )         : @NO,
     }];
 
     return self;

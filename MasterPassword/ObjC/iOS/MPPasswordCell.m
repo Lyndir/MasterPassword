@@ -59,6 +59,8 @@
             [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector( doRevealPassword: )]];
     [self.counterButton addGestureRecognizer:
             [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector( doResetCounter: )]];
+    [self.upgradeButton addGestureRecognizer:
+            [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector( doDowngrade: )]];
 
     [self setupLayer];
 
@@ -331,13 +333,36 @@
 - (IBAction)doUpgrade:(UIButton *)sender {
 
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        if (![[self siteInContext:context] tryMigrateExplicitly:YES]) {
+        MPSiteEntity *siteEntity = [self siteInContext:context];
+        if (![siteEntity tryMigrateExplicitly:YES]) {
             [PearlOverlay showTemporaryOverlayWithTitle:@"Couldn't Upgrade Site" dismissAfter:2];
             return;
         }
 
         [context saveToStore];
-        [PearlOverlay showTemporaryOverlayWithTitle:@"Site Upgraded" dismissAfter:2];
+        [PearlOverlay showTemporaryOverlayWithTitle:strf( @"Site Upgraded to V%d", siteEntity.algorithm.version )
+                                       dismissAfter:2];
+        [self updateAnimated:YES];
+    }];
+}
+
+- (IBAction)doDowngrade:(UILongPressGestureRecognizer *)recognizer {
+
+    if (recognizer.state != UIGestureRecognizerStateBegan)
+        return;
+
+    if (![[MPiOSConfig get].allowDowngrade boolValue])
+        return;
+
+    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        MPSiteEntity *siteEntity = [self siteInContext:context];
+        if (siteEntity.algorithm.version <= 0)
+            return;
+
+        siteEntity.algorithm = MPAlgorithmForVersion( siteEntity.algorithm.version - 1 );
+        [context saveToStore];
+        [PearlOverlay showTemporaryOverlayWithTitle:strf( @"Site Downgraded to V%d", siteEntity.algorithm.version )
+                                       dismissAfter:2];
         [self updateAnimated:YES];
     }];
 }
@@ -479,7 +504,7 @@
         MPSiteEntity *mainSite = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
 
         // UI
-        self.upgradeButton.gone = !mainSite.requiresExplicitMigration;
+        self.upgradeButton.gone = !mainSite.requiresExplicitMigration && ![[MPiOSConfig get].allowDowngrade boolValue];
         self.answersButton.gone = ![[MPiOSAppDelegate get] isFeatureUnlocked:MPProductGenerateAnswers];
         BOOL settingsMode = self.mode == MPPasswordCellModeSettings;
         self.loginNameContainer.alpha = settingsMode || mainSite.loginGenerated || [mainSite.loginName length]? 0.7f: 0;
@@ -533,15 +558,15 @@
                 [algorithm timeToCrack:&timeToCrack passwordString:password byAttacker:attackHardware])
                 timeToCrackString = NSStringFromTimeToCrack( timeToCrack );
 
+            BOOL requiresExplicitMigration = site.requiresExplicitMigration;
+
             PearlMainQueue( ^{
                 self.loginNameField.text = loginName;
                 self.passwordField.text = password;
                 self.strengthLabel.text = timeToCrackString;
                 self.loginNameButton.titleLabel.alpha = [loginName length] || self.loginNameField.enabled? 0: 1;
 
-                if ([password length])
-                    self.indicatorView.alpha = 0;
-                else {
+                if (![password length]) {
                     self.indicatorView.alpha = 1;
                     [self.indicatorView removeFromSuperview];
                     [self.modeScrollView addSubview:self.indicatorView];
@@ -551,6 +576,18 @@
                                     @"target"    : settingsMode? self.editButton: self.modeButton
                             }];
                 }
+                else if (requiresExplicitMigration) {
+                    self.indicatorView.alpha = 1;
+                    [self.indicatorView removeFromSuperview];
+                    [self.modeScrollView addSubview:self.indicatorView];
+                    [self.contentView addConstraintsWithVisualFormat:@"V:[indicator][target]" options:NSLayoutFormatAlignAllCenterX
+                                                             metrics:nil views:@{
+                                    @"indicator" : self.indicatorView,
+                                    @"target"    : settingsMode? self.upgradeButton: self.modeButton
+                            }];
+                }
+                else
+                    self.indicatorView.alpha = 0;
             } );
         }];
 

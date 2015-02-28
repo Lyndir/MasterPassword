@@ -423,14 +423,15 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         }
 
         MPSiteType type = activeUser.defaultType;
-        NSString *typeEntityName = [MPAlgorithmDefault classNameOfType:type];
+        id<MPAlgorithm> algorithm = MPAlgorithmDefault;
+        Class entityType = [algorithm classOfType:type];
 
-        MPSiteEntity *site = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
+        MPSiteEntity *site = (MPSiteEntity *)[entityType insertNewObjectInContext:context];
         site.name = siteName;
         site.user = activeUser;
         site.type = type;
         site.lastUsed = [NSDate date];
-        site.version = MPAlgorithmDefaultVersion;
+        site.algorithm = algorithm;
 
         NSError *error = nil;
         if (site.objectID.isTemporaryID && ![context obtainPermanentIDsForObjects:@[ site ] error:&error])
@@ -454,14 +455,14 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
     else {
         // Type requires a different class of site.  Recreate the site.
-        NSString *typeEntityName = [site.algorithm classNameOfType:type];
-        MPSiteEntity *newSite = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
+        Class entityType = [site.algorithm classOfType:type];
+        MPSiteEntity *newSite = (MPSiteEntity *)[entityType insertNewObjectInContext:context];
         newSite.type = type;
         newSite.name = site.name;
         newSite.user = site.user;
         newSite.uses = site.uses;
         newSite.lastUsed = site.lastUsed;
-        newSite.version = site.version;
+        newSite.algorithm = site.algorithm;
         newSite.loginName = site.loginName;
 
         NSError *error = nil;
@@ -685,13 +686,13 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         inf( @"Import cancelled." );
         return MPImportResultCancelled;
     }
-    MPKey *userKey = [MPAlgorithmDefault keyForPassword:userMasterPassword ofUserNamed:user? user.name: importUserName];
-    if (user && ![userKey.keyID isEqualToData:user.keyID])
+    MPKey *userKey = [[MPKey alloc] initForFullName:user? user.name: importUserName withMasterPassword:userMasterPassword];
+    if (user && ![[userKey keyIDForAlgorithm:user.algorithm] isEqualToData:user.keyID])
         return MPImportResultInvalidPassword;
     __block MPKey *importKey = userKey;
-    if (importKeyID && ![importKey.keyID isEqualToData:importKeyID])
-        importKey = [importAlgorithm keyForPassword:askImportPassword( importUserName ) ofUserNamed:importUserName];
-    if (importKeyID && ![importKey.keyID isEqualToData:importKeyID])
+    if (importKeyID && ![[importKey keyIDForAlgorithm:importAlgorithm] isEqualToData:importKeyID])
+        importKey = [[MPKey alloc] initForFullName:importUserName withMasterPassword:askImportPassword( importUserName )];
+    if (importKeyID && ![[importKey keyIDForAlgorithm:importAlgorithm] isEqualToData:importKeyID])
         return MPImportResultInvalidPassword;
 
     // Delete existing sites.
@@ -710,7 +711,8 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     else {
         user = [MPUserEntity insertNewObjectInContext:context];
         user.name = importUserName;
-        user.keyID = [userKey keyID];
+        user.algorithm = MPAlgorithmDefault;
+        user.keyID = [userKey keyIDForAlgorithm:user.algorithm];
         if (importAvatar != NSNotFound)
             user.avatar = importAvatar;
         dbg( @"Created User: %@", [user debugDescription] );
@@ -728,19 +730,20 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         NSString *exportContent = siteElements[7];
 
         // Create new site.
-        NSString *typeEntityName = [MPAlgorithmForVersion( version ) classNameOfType:type];
-        if (!typeEntityName) {
+        id<MPAlgorithm> algorithm = MPAlgorithmForVersion( version );
+        Class entityType = [algorithm classOfType:type];
+        if (!entityType) {
             err( @"Invalid site type in import file: %@ has type %lu", siteName, (long)type );
             return MPImportResultInternalError;
         }
-        MPSiteEntity *site = [NSEntityDescription insertNewObjectForEntityForName:typeEntityName inManagedObjectContext:context];
+        MPSiteEntity *site = (MPSiteEntity *)[entityType insertNewObjectInContext:context];
         site.name = siteName;
         site.loginName = loginName;
         site.user = user;
         site.type = type;
         site.uses = uses;
         site.lastUsed = lastUsed;
-        site.version = version;
+        site.algorithm = algorithm;
         if ([exportContent length]) {
             if (clearText)
                 [site.algorithm importClearTextPassword:exportContent intoSite:site usingKey:userKey];
@@ -768,7 +771,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 - (NSString *)exportSitesRevealPasswords:(BOOL)revealPasswords {
 
     MPUserEntity *activeUser = [self activeUserForMainThread];
-    inf( @"Exporting sites, %@, for: %@", revealPasswords? @"revealing passwords": @"omitting passwords", activeUser.userID );
+    inf( @"Exporting sites, %@, for user: %@", revealPasswords? @"revealing passwords": @"omitting passwords", activeUser.userID );
 
     // Header.
     NSMutableString *export = [NSMutableString new];
@@ -799,7 +802,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         NSDate *lastUsed = site.lastUsed;
         NSUInteger uses = site.uses;
         MPSiteType type = site.type;
-        NSUInteger version = site.version;
+        id<MPAlgorithm> algorithm = site.algorithm;
         NSUInteger counter = 0;
         NSString *loginName = site.loginName;
         NSString *siteName = site.name;
@@ -820,7 +823,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
         [export appendFormat:@"%@  %8ld  %8s  %25s\t%25s\t%@\n",
                              [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed], (long)uses,
-                             [strf( @"%lu:%lu:%lu", (long)type, (long)version, (long)counter ) UTF8String],
+                             [strf( @"%lu:%lu:%lu", (long)type, (long)[algorithm version], (long)counter ) UTF8String],
                              [(loginName?: @"") UTF8String], [siteName UTF8String], content?: @""];
     }
 

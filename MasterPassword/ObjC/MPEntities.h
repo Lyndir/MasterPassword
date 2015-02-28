@@ -31,9 +31,8 @@
 @property(readonly) NSString *typeClassName;
 @property(readonly) Class typeClass;
 @property(assign) NSUInteger uses;
-@property(assign) NSUInteger version;
 @property(assign) BOOL requiresExplicitMigration;
-@property(readonly) id<MPAlgorithm> algorithm;
+@property(strong) id<MPAlgorithm> algorithm;
 
 - (NSUInteger)use;
 - (BOOL)tryMigrateExplicitly:(BOOL)explicit;
@@ -56,6 +55,7 @@
 @property(assign) BOOL saveKey;
 @property(assign) MPSiteType defaultType;
 @property(readonly) NSString *userID;
+@property(strong) id<MPAlgorithm> algorithm;
 
 + (NSString *)idFor:(NSString *)userName;
 
