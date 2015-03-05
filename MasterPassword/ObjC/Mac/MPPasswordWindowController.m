@@ -463,26 +463,26 @@
 - (void)useSite {
 
     MPSiteModel *selectedSite = [self selectedSite];
-    if (selectedSite) {
-        // Performing action while content is available.  Copy it.
-        [self copyContent:selectedSite.content];
+    if (!selectedSite)
+        return;
 
-        [self fadeOut];
+    if (selectedSite.transient) {
+        [self createNewSite:selectedSite.name];
+        return;
+    }
 
-        NSUserNotification *notification = [NSUserNotification new];
-        notification.title = @"Password Copied";
-        if (selectedSite.loginName.length)
-            notification.subtitle = strf( @"%@ at %@", selectedSite.loginName, selectedSite.name );
-        else
-            notification.subtitle = selectedSite.name;
-        [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
-    }
-    else {
-        NSString *siteName = [self.siteField stringValue];
-        if ([siteName length])
-            // Performing action without content but a site name is written.
-            [self createNewSite:siteName];
-    }
+    // Performing action while content is available.  Copy it.
+    [self copyContent:selectedSite.content];
+
+    [self fadeOut];
+
+    NSUserNotification *notification = [NSUserNotification new];
+    notification.title = @"Password Copied";
+    if (selectedSite.loginName.length)
+        notification.subtitle = strf( @"%@ at %@", selectedSite.loginName, selectedSite.name );
+    else
+        notification.subtitle = selectedSite.name;
+    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 }
 
 - (void)updateUser {
@@ -549,9 +549,15 @@
             return;
         }
 
+        BOOL exact = NO;
         NSMutableArray *newSites = [NSMutableArray arrayWithCapacity:[siteResults count]];
-        for (MPSiteEntity *site in siteResults)
+        for (MPSiteEntity *site in siteResults) {
             [newSites addObject:[[MPSiteModel alloc] initWithEntity:site fuzzyGroups:fuzzyGroups]];
+            exact |= [site.name isEqualToString:queryString];
+        }
+        if (!exact && [queryString length])
+            [newSites addObject:[[MPSiteModel alloc] initWithName:queryString]];
+        dbg( @"newSites: %@", newSites );
         self.sites = newSites;
     }];
 }
