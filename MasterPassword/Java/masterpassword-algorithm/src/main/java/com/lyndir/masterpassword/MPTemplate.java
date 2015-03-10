@@ -3,10 +3,8 @@ package com.lyndir.masterpassword;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.lyndir.lhunath.opal.system.util.MetaObject;
 import java.util.List;
-import java.util.Map;
 
 
 /**

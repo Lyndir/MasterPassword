@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+    <file url="file://$PROJECT_DIR$/MasterPassword/Java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/MasterPassword/Java/masterpassword-algorithm" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/MasterPassword/Java/masterpassword-cli" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/MasterPassword/Java/masterpassword-gui" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/MasterPassword/Java/masterpassword-model" charset="UTF-8" />
+  </component>
 </project>
-

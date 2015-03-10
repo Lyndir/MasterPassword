@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Lyndir. All rights reserved.
 //
 
+#ifndef _MPW_TYPES_H
+#define _MPW_TYPES_H
 #include <stdlib.h>
 #include <stdint.h>
 
@@ -73,9 +75,10 @@ const char *mpw_scopeForVariant(MPSiteVariant variant);
 const MPSiteType mpw_typeWithName(const char *typeName);
 
 /**
- * @return An array of internal strings that express the templates to use for the given type.
+ * @return A newly allocated array of internal strings that express the templates to use for the given type.
  *         The amount of elements in the array is stored in count.
  *         If an unsupported type is given, count will be 0 and will return NULL.
+*          The array needs to be free'ed, the strings themselves must not be free'ed or modified.
  */
 const char **mpw_templatesForType(MPSiteType type, size_t *count);
 /**
@@ -93,3 +96,4 @@ const char *mpw_charactersInClass(char characterClass);
  */
 const char mpw_characterFromClass(char characterClass, uint8_t seedByte);
 
+#endif // _MPW_TYPES_H

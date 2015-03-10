@@ -23,7 +23,7 @@ public class MasterKeyV2 extends MasterKeyV1 {
     }
 
     @Override
-    protected Version getAlgorithm() {
+    public Version getAlgorithmVersion() {
 
         return Version.V2;
     }
@@ -45,19 +45,19 @@ public class MasterKeyV2 extends MasterKeyV1 {
         byte[] siteNameBytes = siteName.getBytes( MP_charset );
         byte[] siteNameLengthBytes = bytesForInt( siteNameBytes.length );
         byte[] siteCounterBytes = bytesForInt( siteCounter );
-        byte[] siteContextBytes = siteContext == null? null: siteContext.getBytes( MP_charset );
+        byte[] siteContextBytes = siteContext == null || siteContext.isEmpty()? null: siteContext.getBytes( MP_charset );
         byte[] siteContextLengthBytes = bytesForInt( siteContextBytes == null? 0: siteContextBytes.length );
-        logger.trc( "site scope: %s, context: %s", siteScope, siteContext == null? "<empty>": siteContext );
+        logger.trc( "site scope: %s, context: %s", siteScope, siteContextBytes == null? "<empty>": siteContext );
         logger.trc( "seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)", siteScope, CodeUtils.encodeHex( siteNameLengthBytes ),
                     siteName, CodeUtils.encodeHex( siteCounterBytes ), CodeUtils.encodeHex( siteContextLengthBytes ),
-                    siteContext == null? "(null)": siteContext );
+                    siteContextBytes == null? "(null)": siteContext );
 
         byte[] sitePasswordInfo = Bytes.concat( siteScope.getBytes( MP_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
         if (siteContextBytes != null)
             sitePasswordInfo = Bytes.concat( sitePasswordInfo, siteContextLengthBytes, siteContextBytes );
         logger.trc( "sitePasswordInfo ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
 
-        byte[] sitePasswordSeed = MP_mac.of( getMasterKey(), sitePasswordInfo );
+        byte[] sitePasswordSeed = MP_mac.of( getKey(), sitePasswordInfo );
         logger.trc( "sitePasswordSeed ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordSeed ) ) );
 
         Preconditions.checkState( sitePasswordSeed.length > 0 );

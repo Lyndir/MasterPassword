@@ -25,7 +25,7 @@
 
 static void usage() {
 
-    fprintf( stderr, "Usage: mpw [-u name] [-t type] [-c counter] site\n\n" );
+    fprintf( stderr, "Usage: mpw [-u name] [-t type] [-c counter] [-V version] [-v variant] [-C context] [-h] site\n\n" );
     fprintf( stderr, "    -u name      Specify the full name of the user.\n"
             "                 Defaults to %s in env.\n\n", MP_env_fullname );
     fprintf( stderr, "    -t type      Specify the password's template.\n"

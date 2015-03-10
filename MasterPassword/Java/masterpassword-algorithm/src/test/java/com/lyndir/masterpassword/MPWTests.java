@@ -1,10 +1,10 @@
 package com.lyndir.masterpassword;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.lhunath.opal.system.util.NNSupplier;
-import com.lyndir.lhunath.opal.system.util.NSupplier;
+import com.lyndir.lhunath.opal.system.util.*;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,8 +25,9 @@ public class MPWTests {
     @XmlElement(name = "case")
     private List<Case> cases;
 
+    @Nonnull
     public List<Case> getCases() {
-        return cases;
+        return checkNotNull( cases );
     }
 
     public Case getCase(String identifier) {
@@ -44,6 +45,8 @@ public class MPWTests {
         private String  identifier;
         @XmlAttribute
         private String  parent;
+        @XmlElement
+        private String  algorithm;
         @XmlElement
         private String  fullName;
         @XmlElement
@@ -65,76 +68,86 @@ public class MPWTests {
 
         private transient Case parentCase;
 
-        public void setTests(MPWTests tests) {
+        public void initializeParentHierarchy(MPWTests tests) {
 
             if (parent != null) {
                 parentCase = tests.getCase( parent );
-                fullName = ifNotNullElse( fullName, new NNSupplier<String>() {
-                    @Nonnull
-                    @Override
-                    public String get() {
-                        return parentCase.getFullName();
-                    }
-                } );
-                masterPassword = ifNotNullElse( masterPassword, new NNSupplier<String>() {
-                    @Nonnull
-                    @Override
-                    public String get() {
-                        return new String( parentCase.getMasterPassword() );
-                    }
-                } );
-                keyID = ifNotNullElse( keyID, new NNSupplier<String>() {
-                    @Nonnull
-                    @Override
-                    public String get() {
-                        return parentCase.getKeyID();
-                    }
-                } );
-                siteName = ifNotNullElse( siteName, new NNSupplier<String>() {
-                    @Nonnull
-                    @Override
-                    public String get() {
-                        return parentCase.getSiteName();
-                    }
-                } );
-                siteCounter = ifNotNullElse( siteCounter, new NNSupplier<Integer>() {
-                    @Nonnull
-                    @Override
-                    public Integer get() {
-                        return parentCase.getSiteCounter();
-                    }
-                } );
-                siteType = ifNotNullElse( siteType, new NNSupplier<String>() {
-                    @Nonnull
-                    @Override
-                    public String get() {
-                        return parentCase.getSiteType().name();
-                    }
-                } );
-                siteVariant = ifNotNullElse( siteVariant, new NNSupplier<String>() {
-                    @Nonnull
-                    @Override
-                    public String get() {
-                        return parentCase.getSiteVariant().name();
-                    }
-                } );
-                siteContext = ifNotNullElseNullable( siteContext, new NSupplier<String>() {
-                    @Nonnull
-                    @Override
-                    public String get() {
-                        return parentCase.getSiteContext();
-                    }
-                } );
-                result = ifNotNullElse( result, new NNSupplier<String>() {
-                    @Nonnull
-                    @Override
-                    public String get() {
-                        return parentCase.getResult();
-                    }
-                } );
+                parentCase.initializeParentHierarchy( tests );
             }
+
+            algorithm = ifNotNullElse( algorithm, new NNSupplier<String>() {
+                @Nonnull
+                @Override
+                public String get() {
+                    return checkNotNull( parentCase.algorithm );
+                }
+            } );
+            fullName = ifNotNullElse( fullName, new NNSupplier<String>() {
+                @Nonnull
+                @Override
+                public String get() {
+                    return checkNotNull( parentCase.fullName );
+                }
+            } );
+            masterPassword = ifNotNullElse( masterPassword, new NNSupplier<String>() {
+                @Nonnull
+                @Override
+                public String get() {
+                    return checkNotNull( parentCase.masterPassword );
+                }
+            } );
+            keyID = ifNotNullElse( keyID, new NNSupplier<String>() {
+                @Nonnull
+                @Override
+                public String get() {
+                    return checkNotNull( parentCase.keyID );
+                }
+            } );
+            siteName = ifNotNullElse( siteName, new NNSupplier<String>() {
+                @Nonnull
+                @Override
+                public String get() {
+                    return checkNotNull( parentCase.siteName );
+                }
+            } );
+            siteCounter = ifNotNullElse( siteCounter, new NNSupplier<Integer>() {
+                @Nonnull
+                @Override
+                public Integer get() {
+                    return checkNotNull( parentCase.siteCounter );
+                }
+            } );
+            siteType = ifNotNullElse( siteType, new NNSupplier<String>() {
+                @Nonnull
+                @Override
+                public String get() {
+                    return checkNotNull( parentCase.siteType );
+                }
+            } );
+            siteVariant = ifNotNullElse( siteVariant, new NNSupplier<String>() {
+                @Nonnull
+                @Override
+                public String get() {
+                    return checkNotNull( parentCase.siteVariant );
+                }
+            } );
+            siteContext = ifNotNullElse( siteContext, new NNSupplier<String>() {
+                @Nonnull
+                @Override
+                public String get() {
+                    return parentCase == null? "": checkNotNull( parentCase.siteContext );
+                }
+            } );
+            result = ifNotNullElse( result, new NNSupplier<String>() {
+                @Nonnull
+                @Override
+                public String get() {
+                    return parentCase == null? "": checkNotNull( parentCase.result );
+                }
+            } );
         }
 
+        @Nonnull
         public String getIdentifier() {
             return identifier;
         }
@@ -144,40 +157,53 @@ public class MPWTests {
             return parentCase;
         }
 
+        @Nonnull
+        public MasterKey.Version getAlgorithm() {
+            return MasterKey.Version.fromInt( ConversionUtils.toIntegerNN( algorithm ) );
+        }
+
+        @Nonnull
         public String getFullName() {
-            return fullName;
+            return checkNotNull( fullName );
         }
 
+        @Nonnull
         public char[] getMasterPassword() {
-            return masterPassword.toCharArray();
+            return checkNotNull( masterPassword ).toCharArray();
         }
 
+        @Nonnull
         public String getKeyID() {
-            return keyID;
+            return checkNotNull( keyID );
         }
 
+        @Nonnull
         public String getSiteName() {
-            return siteName;
+            return checkNotNull( siteName );
         }
 
         public int getSiteCounter() {
-            return siteCounter;
+            return ifNotNullElse( siteCounter, 1 );
         }
 
+        @Nonnull
         public MPSiteType getSiteType() {
-            return MPSiteType.forName( siteType );
+            return MPSiteType.forName( checkNotNull( siteType ) );
         }
 
+        @Nonnull
         public MPSiteVariant getSiteVariant() {
-            return MPSiteVariant.forName( siteVariant );
+            return MPSiteVariant.forName( checkNotNull( siteVariant ) );
         }
 
+        @Nonnull
         public String getSiteContext() {
-            return siteContext;
+            return checkNotNull( siteContext );
         }
 
+        @Nonnull
         public String getResult() {
-            return result;
+            return checkNotNull( result );
         }
 
         @Override

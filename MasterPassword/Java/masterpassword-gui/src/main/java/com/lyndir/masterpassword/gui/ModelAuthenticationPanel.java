@@ -1,6 +1,7 @@
 package com.lyndir.masterpassword.gui;
 
 import com.google.common.base.Function;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.masterpassword.model.MPUser;
@@ -12,6 +13,7 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.metal.MetalComboBoxEditor;
 
 
 /**
@@ -50,6 +52,15 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
         userField.setFont( Res.valueFont().deriveFont( 12f ) );
         userField.addItemListener( this );
         userField.addActionListener( this );
+        userField.setEditor(new MetalComboBoxEditor() {
+            @Override
+            protected JTextField createEditorComponent() {
+                JTextField editorComponents = Components.textField();
+                editorComponents.setForeground(Color.red);
+                return editorComponents;
+            }
+        });
+
         add( userField );
         add( Components.stud() );
 
@@ -137,8 +148,8 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
         return FluentIterable.from( MPUserFileManager.get().getUsers() ).transform( new Function<MPUser, ModelUser>() {
             @Nullable
             @Override
-            public ModelUser apply(final MPUser model) {
-                return new ModelUser( model );
+            public ModelUser apply(@Nullable final MPUser model) {
+                return new ModelUser( Preconditions.checkNotNull( model ) );
             }
         } ).toArray( ModelUser.class );
     }

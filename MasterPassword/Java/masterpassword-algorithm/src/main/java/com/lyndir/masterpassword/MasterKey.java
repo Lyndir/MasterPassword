@@ -54,7 +54,7 @@ public abstract class MasterKey {
     @Nullable
     protected abstract byte[] deriveKey(final char[] masterPassword);
 
-    protected abstract Version getAlgorithm();
+    public abstract Version getAlgorithmVersion();
 
     @NotNull
     public String getFullName() {
@@ -63,18 +63,18 @@ public abstract class MasterKey {
     }
 
     @Nonnull
-    protected byte[] getMasterKey() {
+    protected byte[] getKey() {
 
         return Preconditions.checkNotNull( masterKey );
     }
 
     public byte[] getKeyID() {
 
-        return idForBytes( getMasterKey() );
+        return idForBytes( getKey() );
     }
 
-    public abstract String encode(@Nonnull final String siteName, final MPSiteType siteType, int siteCounter, final MPSiteVariant siteVariant,
-                                  @Nullable final String siteContext);
+    public abstract String encode(@Nonnull final String siteName, final MPSiteType siteType, int siteCounter,
+                                  final MPSiteVariant siteVariant, @Nullable final String siteContext);
 
     public boolean isValid() {
         return masterKey != null;
@@ -95,8 +95,12 @@ public abstract class MasterKey {
 
         long start = System.currentTimeMillis();
         masterKey = deriveKey( masterPassword );
-        logger.trc( "masterKey ID: %s (derived in %.2fs)", CodeUtils.encodeHex( idForBytes( masterKey ) ),
-                    (System.currentTimeMillis() - start) / 1000D );
+
+        if (masterKey == null)
+            logger.dbg( "masterKey calculation failed after %.2fs.", (System.currentTimeMillis() - start) / 1000D );
+        else
+            logger.trc( "masterKey ID: %s (derived in %.2fs)", CodeUtils.encodeHex( idForBytes( masterKey ) ),
+                        (System.currentTimeMillis() - start) / 1000D );
 
         return this;
     }

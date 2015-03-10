@@ -205,7 +205,7 @@ public class EmergencyActivity extends Activity {
         final MasterKey.Version version = (MasterKey.Version) siteVersionField.getSelectedItem();
         try {
             if (fullName.hashCode() == hc_userName && Arrays.hashCode( masterPassword ) == hc_masterPassword &&
-                masterKeyFuture != null && masterKeyFuture.get().getAlgorithm() == version)
+                masterKeyFuture != null && masterKeyFuture.get().getAlgorithmVersion() == version)
                 return;
         }
         catch (InterruptedException | ExecutionException e) {

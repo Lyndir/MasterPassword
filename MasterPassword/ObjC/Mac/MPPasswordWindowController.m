@@ -605,6 +605,8 @@
     CGDirectDisplayID displayID = [self.window.screen.deviceDescription[@"NSScreenNumber"] unsignedIntValue];
     CGImageRef capturedImage = CGDisplayCreateImage( displayID );
     if (!capturedImage || CGImageGetWidth( capturedImage ) <= 1) {
+        if (capturedImage)
+            CFRelease( capturedImage );
         wrn( @"Failed to capture screen image for display: %d", displayID );
         return;
     }

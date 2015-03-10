@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.lyndir.masterpassword"
           android:versionCode="1"
-          android:versionName="GIT-SNAPSHOT">
+          android:versionName="2.2">
 
     <uses-sdk
             android:minSdkVersion="19"

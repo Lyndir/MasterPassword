@@ -75,7 +75,7 @@
 
 - (IBAction)controlChanged:(UIControl *)control {
 
-    if (control == self.userNameField || control == self.masterPasswordField)
+    if (control == self.fullNameField || control == self.masterPasswordField)
         [self updateKey];
     else
         [self updatePassword];
@@ -103,15 +103,15 @@
 
 - (void)updateKey {
 
-    NSString *userName = self.userNameField.text;
+    NSString *fullName = self.fullNameField.text;
     NSString *masterPassword = self.masterPasswordField.text;
 
     self.passwordLabel.text = nil;
     [self.activity startAnimating];
     [_emergencyKeyQueue cancelAllOperations];
     [_emergencyKeyQueue addOperationWithBlock:^{
-        if ([masterPassword length] && [userName length])
-            _key = [MPAlgorithmDefault keyForPassword:masterPassword ofUserNamed:userName];
+        if ([masterPassword length] && [fullName length])
+            _key = [[MPKey alloc] initForFullName:fullName withMasterPassword:masterPassword];
         else
             _key = nil;
 
@@ -165,7 +165,7 @@
 
 - (void)reset {
 
-    self.userNameField.text = nil;
+    self.fullNameField.text = nil;
     self.masterPasswordField.text = nil;
     self.siteField.text = nil;
     self.counterStepper.value = 1;

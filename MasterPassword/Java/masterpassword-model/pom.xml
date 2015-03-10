@@ -13,7 +13,6 @@
     <name>Master Password Site Model</name>
     <description>A persistence model for Master Password sites.</description>
 
-    <groupId>com.lyndir.masterpassword</groupId>
     <artifactId>masterpassword-model</artifactId>
     <packaging>jar</packaging>
 

@@ -19,6 +19,7 @@
 @property (nonatomic, retain) NSDate * lastUsed;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * saveKey_;
+@property (nonatomic, retain) NSNumber * version_;
 @property (nonatomic, retain) NSSet *sites;
 @end
 

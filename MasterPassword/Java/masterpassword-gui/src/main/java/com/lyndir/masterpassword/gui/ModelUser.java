@@ -48,7 +48,7 @@ public class ModelUser extends User {
 
     public void authenticate(final char[] masterPassword)
             throws IncorrectMasterPasswordException {
-        model.authenticate( masterPassword );
+        putKey( model.authenticate( masterPassword ) );
         this.masterPassword = masterPassword;
     }
 
@@ -81,6 +81,7 @@ public class ModelUser extends User {
     }
 
     public boolean keySaved() {
+        // TODO
         return false;
     }
 }

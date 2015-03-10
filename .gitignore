@@ -1,5 +1,6 @@
 # OS-Specific junk.
 .DS_Store
+Thumbs.db
 
 # IntelliJ
 /MasterPassword/Java/.idea

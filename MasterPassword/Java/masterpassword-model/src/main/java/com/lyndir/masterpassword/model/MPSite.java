@@ -1,6 +1,5 @@
 package com.lyndir.masterpassword.model;
 
-import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
 import com.lyndir.masterpassword.*;
@@ -56,7 +55,7 @@ public class MPSite {
         return resultFor( masterKey, MPSiteVariant.Password, null );
     }
 
-    public String resultFor(final MasterKey masterKey, final MPSiteVariant variant, final String context) {
+    public String resultFor(final MasterKey masterKey, final MPSiteVariant variant, @Nullable final String context) {
         return masterKey.encode( siteName, siteType, siteCounter, variant, context );
     }
 

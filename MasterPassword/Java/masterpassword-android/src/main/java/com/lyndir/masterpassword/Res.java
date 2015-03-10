@@ -1,7 +1,6 @@
 package com.lyndir.masterpassword;
 
 import android.content.res.Resources;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 
 

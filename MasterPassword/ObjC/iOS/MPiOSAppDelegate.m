@@ -73,9 +73,9 @@
         PearlAddNotificationObserver( MPCheckConfigNotification, nil, [NSOperationQueue mainQueue], ^(id self, NSNotification *note) {
             [self updateConfigKey:note.object];
         } );
-        PearlAddNotificationObserver( kIASKAppSettingChanged, nil, nil, ^(id self, NSNotification *note) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note.object];
-        } );
+//      PearlAddNotificationObserver( kIASKAppSettingChanged, nil, nil, ^(id self, NSNotification *note) {
+//          [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note.object];
+//      } );
         PearlAddNotificationObserver( NSUserDefaultsDidChangeNotification, nil, nil, ^(id self, NSNotification *note) {
             [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:nil];
         } );
@@ -496,7 +496,7 @@
                     return;
 
                 [moc performBlockAndWait:^{
-                    inf( @"Unsetting master password for: %@.", user.userID );
+                    inf( @"Clearing keyID for user: %@.", user.userID );
                     user.keyID = nil;
                     [self forgetSavedKeyFor:user];
                     [moc saveToStore];

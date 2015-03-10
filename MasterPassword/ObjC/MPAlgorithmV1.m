@@ -27,7 +27,7 @@
 
 - (BOOL)tryMigrateSite:(MPSiteEntity *)site explicit:(BOOL)explicit {
 
-    if (site.version != [self version] - 1)
+    if ([site.algorithm version] != [self version] - 1)
         // Only migrate from previous version.
         return NO;
 
@@ -41,7 +41,7 @@
 
     // Apply migration.
     site.requiresExplicitMigration = NO;
-    site.version = [self version];
+    site.algorithm = self;
     return YES;
 }
 

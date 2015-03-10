@@ -13,7 +13,6 @@
     <name>Master Password Algorithm Implementation</name>
     <description>The implementation of the Master Password algorithm</description>
 
-    <groupId>com.lyndir.masterpassword</groupId>
     <artifactId>masterpassword-algorithm</artifactId>
     <packaging>jar</packaging>
 

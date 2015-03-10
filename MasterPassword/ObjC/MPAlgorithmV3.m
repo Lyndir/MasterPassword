@@ -27,12 +27,13 @@
 
 - (BOOL)tryMigrateSite:(MPSiteEntity *)site explicit:(BOOL)explicit {
 
-    if (site.version != [self version] - 1)
+    if ([site.algorithm version] != [self version] - 1)
         // Only migrate from previous version.
         return NO;
 
     if (!explicit) {
-        if (site.type & MPSiteTypeClassGenerated && site.name.length != [site.name dataUsingEncoding:NSUTF8StringEncoding].length) {
+        if (site.type & MPSiteTypeClassGenerated &&
+                site.user.name.length != [site.user.name dataUsingEncoding:NSUTF8StringEncoding].length) {
             // This migration requires explicit permission for types of the generated class.
             site.requiresExplicitMigration = YES;
             return NO;
@@ -41,7 +42,7 @@
 
     // Apply migration.
     site.requiresExplicitMigration = NO;
-    site.version = [self version];
+    site.algorithm = self;
     return YES;
 }
 

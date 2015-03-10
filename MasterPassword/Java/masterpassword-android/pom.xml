@@ -13,7 +13,6 @@
     <name>Master Password Android</name>
     <description>An Android application to the Master Password algorithm</description>
 
-    <groupId>com.lyndir.masterpassword</groupId>
     <artifactId>masterpassword-android</artifactId>
     <packaging>apk</packaging>
 
@@ -30,7 +29,7 @@
                         <skip>false</skip>
                     </zipalign>
                     <sdk>
-                        <platform>19</platform>
+                        <platform>21</platform>
                     </sdk>
                 </configuration>
             </plugin>
@@ -39,9 +38,32 @@
 
     <profiles>
         <profile>
-            <id>sign</id>
+            <id>release</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                        <artifactId>android-maven-plugin</artifactId>
+
+                        <configuration>
+                            <sign>
+                                <debug>false</debug>
+                            </sign>
+                        </configuration>
+
+                        <executions>
+                            <execution>
+                                <id>manifest-update</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>manifest-update</goal>
+                                </goals>
+                                <configuration>
+                                    <manifestVersionCodeUpdateFromVersion>true</manifestVersionCodeUpdateFromVersion>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jarsigner-plugin</artifactId>
@@ -54,14 +76,14 @@
                                 <phase>package</phase>
                                 <inherited>true</inherited>
                                 <configuration>
-                                    <archiveDirectory></archiveDirectory>
+                                    <archiveDirectory />
                                     <includes>
                                         <include>target/*.apk</include>
                                     </includes>
                                     <keystore>release.jks</keystore>
                                     <storepass>${env.PASSWORD}</storepass>
                                     <keypass>${env.PASSWORD}</keypass>
-                                    <alias>android</alias>
+                                    <alias>masterpassword-android</alias>
                                     <arguments>
                                       <argument>-sigalg</argument><argument>MD5withRSA</argument>
                                       <argument>-digestalg</argument><argument>SHA1</argument>
@@ -69,16 +91,6 @@
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-                        <artifactId>android-maven-plugin</artifactId>
-                        <inherited>true</inherited>
-                        <configuration>
-                            <sign>
-                                <debug>false</debug>
-                            </sign>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>

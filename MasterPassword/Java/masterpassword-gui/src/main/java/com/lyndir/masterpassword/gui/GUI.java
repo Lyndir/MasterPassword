@@ -21,8 +21,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.TypeUtils;
-import com.lyndir.masterpassword.MasterKey;
-import com.lyndir.masterpassword.model.IncorrectMasterPasswordException;
+
 import java.io.*;
 import java.net.URI;
 import java.net.URL;
@@ -41,7 +40,7 @@ public class GUI implements UnlockFrame.SignInCallback {
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( GUI.class );
 
-    private UnlockFrame unlockFrame = new UnlockFrame( this );
+    private final UnlockFrame unlockFrame = new UnlockFrame( this );
     private PasswordFrame passwordFrame;
 
     public static void main(final String[] args)
@@ -50,7 +49,13 @@ public class GUI implements UnlockFrame.SignInCallback {
         if (Config.get().checkForUpdates())
             checkUpdate();
 
-        TypeUtils.<GUI>newInstance( AppleGUI.class ).or( new GUI() ).open();
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {
+        }
+
+        TypeUtils.<GUI>newInstance( "com.lyndir.masterpassword.gui.platform.mac.AppleGUI" ).or( new GUI() ).open();
     }
 
     private static void checkUpdate() {
@@ -82,7 +87,7 @@ public class GUI implements UnlockFrame.SignInCallback {
         }
     }
 
-    void open() {
+    protected void open() {
         SwingUtilities.invokeLater( new Runnable() {
             @Override
             public void run() {

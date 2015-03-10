@@ -148,6 +148,24 @@ To see a site&apos;s password anyway, tap and hold your finger down for a while 
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
 		<dict>
+			<key>FooterText</key>
+			<string>When site downgrades are enabled, a long tap on the upgrade button will downgrade the site instead.  This is useful if you accidentally upgraded a site and need to downgrade it again temporarily to see your old password.</string>
+			<key>Title</key>
+			<string></string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<false/>
+			<key>Key</key>
+			<string>allowDowngrade</string>
+			<key>Title</key>
+			<string>Allow Downgrade</string>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+		</dict>
+		<dict>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>

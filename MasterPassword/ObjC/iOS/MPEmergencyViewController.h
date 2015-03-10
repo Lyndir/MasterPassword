@@ -22,7 +22,7 @@
 @property(weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property(weak, nonatomic) IBOutlet UIView *dialogView;
 @property(weak, nonatomic) IBOutlet UIView *containerView;
-@property(weak, nonatomic) IBOutlet UITextField *userNameField;
+@property(weak, nonatomic) IBOutlet UITextField *fullNameField;
 @property(weak, nonatomic) IBOutlet UITextField *masterPasswordField;
 @property(weak, nonatomic) IBOutlet UITextField *siteField;
 @property(weak, nonatomic) IBOutlet UIStepper *counterStepper;

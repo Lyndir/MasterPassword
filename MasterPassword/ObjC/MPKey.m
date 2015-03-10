@@ -1,12 +1,12 @@
 /**
- * Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
- *
- * See the enclosed file LICENSE for license information (LGPLv3). If you did
- * not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
- *
- * @author   Maarten Billemont <lhunath@lyndir.com>
- * @license  http://www.gnu.org/licenses/lgpl-3.0.txt
- */
+* Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
+*
+* See the enclosed file LICENSE for license information (LGPLv3). If you did
+* not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
+*
+* @author   Maarten Billemont <lhunath@lyndir.com>
+* @license  http://www.gnu.org/licenses/lgpl-3.0.txt
+*/
 
 //
 //  MPKey
@@ -19,38 +19,61 @@
 
 @interface MPKey()
 
-@property(nonatomic, readwrite, strong) id<MPAlgorithm> algorithm;
-@property(nonatomic, readwrite, strong) NSData *keyData;
-@property(nonatomic, readwrite, strong) NSData *keyID;
+@property(nonatomic) NSString *fullName;
+@property(nonatomic) NSString *masterPassword;
 
 @end
 
-@implementation MPKey
+@implementation MPKey {
+    NSCache *_keyCache;
+};
 
-@synthesize algorithm = _algorithm, keyData = _keyData, keyID = _keyID;
-
-- (id)initWithKeyData:(NSData *)keyData algorithm:(id<MPAlgorithm>)algorithm {
+- (instancetype)initForFullName:(NSString *)fullName withMasterPassword:(NSString *)masterPassword {
 
     if (!(self = [super init]))
         return nil;
 
-    self.keyData = keyData;
-    self.algorithm = algorithm;
-    self.keyID = [self.algorithm keyIDForKeyData:keyData];
+    _keyCache = [NSCache new];
+    self.fullName = fullName;
+    self.masterPassword = masterPassword;
 
     return self;
 }
 
-- (MPKey *)subKeyOfLength:(NSUInteger)subKeyLength {
+- (instancetype)initForFullName:(NSString *)fullName withKeyData:(NSData *)keyData forAlgorithm:(id<MPAlgorithm>)algorithm {
 
-    NSData *subKeyData = [self.keyData subdataWithRange:NSMakeRange( 0, MIN(subKeyLength, self.keyData.length) )];
+    if (!(self = [self initForFullName:fullName withMasterPassword:nil]))
+        return nil;
 
-    return [self.algorithm keyFromKeyData:subKeyData];
+    [_keyCache setObject:keyData forKey:algorithm];
+
+    return self;
+}
+
+- (NSData *)keyIDForAlgorithm:(id<MPAlgorithm>)algorithm {
+
+    return [algorithm keyIDForKeyData:[self keyDataForAlgorithm:algorithm]];
+}
+
+- (NSData *)keyDataForAlgorithm:(id<MPAlgorithm>)algorithm {
+
+    NSData *keyData = [_keyCache objectForKey:algorithm];
+    if (!keyData)
+        [_keyCache setObject:keyData = [algorithm keyDataForFullName:self.fullName withMasterPassword:self.masterPassword]
+                      forKey:algorithm];
+
+    return keyData;
+}
+
+- (NSData *)keyDataForAlgorithm:(id<MPAlgorithm>)algorithm trimmedLength:(NSUInteger)subKeyLength {
+
+    NSData *keyData = [self keyDataForAlgorithm:algorithm];
+    return [keyData subdataWithRange:NSMakeRange( 0, MIN( subKeyLength, keyData.length ) )];
 }
 
 - (BOOL)isEqualToKey:(MPKey *)key {
 
-    return [self.keyID isEqualToData:key.keyID];
+    return [self.fullName isEqualToString:key.fullName] && [self.masterPassword isEqualToString:self.masterPassword];
 }
 
 - (BOOL)isEqual:(id)object {

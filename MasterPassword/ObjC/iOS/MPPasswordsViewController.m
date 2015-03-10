@@ -23,6 +23,7 @@
 #import "MPAppDelegate_Key.h"
 #import "MPPasswordCell.h"
 #import "MPAnswersViewController.h"
+#import "MPMessageViewController.h"
 
 typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     MPPasswordsBadNameTip = 1 << 0,
@@ -90,7 +91,13 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:context];
         if (![MPAlgorithmDefault tryMigrateUser:activeUser inContext:context])
-            [PearlOverlay showTemporaryOverlayWithTitle:@"Some Sites Need Upgrade" dismissAfter:2];
+            [self performSegueWithIdentifier:@"message" sender:
+                    [MPMessage messageWithTitle:@"You have sites that can be upgraded." text:
+                                    @"Upgrading a site allows it to take advantage of the latest improvements in the Master Password algorithm.\n\n"
+                                            "When you upgrade a site, a new and stronger password will be generated for it.  To upgrade a site, first log into the site, navigate to your account preferences where you can change the site's password.  Make sure you fill in any \"current password\" fields on the website first, then press the upgrade button here to get your new site password.\n\n"
+                                            "You can then update your site's account with the new and stronger password.\n\n"
+                                            "The upgrade button can be found in the site's settings and looks like this:"
+                                           info:YES]];
         [context saveToStore];
     }];
 }
@@ -109,6 +116,8 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     if ([segue.identifier isEqualToString:@"answers"])
         ((MPAnswersViewController *)segue.destinationViewController).site =
                 [[MPPasswordCell findAsSuperviewOf:sender] siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
+    if ([segue.identifier isEqualToString:@"message"])
+        ((MPMessageViewController *)segue.destinationViewController).message = sender;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {

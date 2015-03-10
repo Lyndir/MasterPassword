@@ -89,7 +89,7 @@
 
 - (BOOL)tryMigrateSite:(MPSiteEntity *)site explicit:(BOOL)explicit {
 
-    if (site.version != [self version] - 1)
+    if ([site.algorithm version] != [self version] - 1)
         // Only migrate from previous version.
         return NO;
 
@@ -101,24 +101,19 @@
 
     // Apply migration.
     site.requiresExplicitMigration = NO;
-    site.version = [self version];
+    site.algorithm = self;
     return YES;
 }
 
-- (MPKey *)keyForPassword:(NSString *)password ofUserNamed:(NSString *)userName {
+- (NSData *)keyDataForFullName:(NSString *)fullName withMasterPassword:(NSString *)masterPassword {
 
     NSDate *start = [NSDate date];
-    uint8_t const *masterKeyBytes = mpw_masterKeyForUser( userName.UTF8String, password.UTF8String, [self version] );
-    MPKey *masterKey = [self keyFromKeyData:[NSData dataWithBytes:masterKeyBytes length:MP_dkLen]];
+    uint8_t const *masterKeyBytes = mpw_masterKeyForUser( fullName.UTF8String, masterPassword.UTF8String, [self version] );
+    NSData *keyData = [NSData dataWithBytes:masterKeyBytes length:MP_dkLen];
+    trc( @"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", //
+            fullName, masterPassword, [self keyIDForKeyData:keyData], -[start timeIntervalSinceNow] );
     mpw_free( masterKeyBytes, MP_dkLen );
-    trc( @"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", userName, password, [masterKey.keyID encodeHex],
-            -[start timeIntervalSinceNow] );
-    return masterKey;
-}
-
-- (MPKey *)keyFromKeyData:(NSData *)keyData {
-
-    return [[MPKey alloc] initWithKeyData:keyData algorithm:self];
+    return keyData;
 }
 
 - (NSData *)keyIDForKeyData:(NSData *)keyData {
@@ -322,8 +317,8 @@
 - (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
                                   variant:(MPSiteVariant)variant context:(NSString *)context usingKey:(MPKey *)key {
 
-    char const *contentBytes = mpw_passwordForSite( key.keyData.bytes, name.UTF8String, type, (uint32_t)counter,
-            variant, context.UTF8String, [self version] );
+    char const *contentBytes = mpw_passwordForSite( [key keyDataForAlgorithm:self].bytes,
+            name.UTF8String, type, (uint32_t)counter, variant, context.UTF8String, [self version] );
     NSString *content = [NSString stringWithCString:contentBytes encoding:NSUTF8StringEncoding];
     mpw_freeString( contentBytes );
 
@@ -342,7 +337,7 @@
 
 - (BOOL)savePassword:(NSString *)clearContent toSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey {
 
-    NSAssert( [siteKey.keyID isEqualToData:site.user.keyID], @"Site does not belong to current user." );
+    NSAssert( [[siteKey keyIDForAlgorithm:site.user.algorithm] isEqualToData:site.user.keyID], @"Site does not belong to current user." );
     switch (site.type) {
         case MPSiteTypeGeneratedMaximum:
         case MPSiteTypeGeneratedLong:
@@ -363,8 +358,9 @@
                 return NO;
             }
 
+            NSData *encryptionKey = [siteKey keyDataForAlgorithm:self trimmedLength:PearlCryptKeySize];
             NSData *encryptedContent = [[clearContent dataUsingEncoding:NSUTF8StringEncoding]
-                    encryptWithSymmetricKey:[siteKey subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
+                    encryptWithSymmetricKey:encryptionKey padding:YES];
             if ([((MPStoredSiteEntity *)site).contentObject isEqualToData:encryptedContent])
                 return NO;
 
@@ -378,8 +374,9 @@
                 return NO;
             }
 
+            NSData *encryptionKey = [siteKey keyDataForAlgorithm:self trimmedLength:PearlCryptKeySize];
             NSData *encryptedContent = [[clearContent dataUsingEncoding:NSUTF8StringEncoding]
-                    encryptWithSymmetricKey:[siteKey subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
+                    encryptWithSymmetricKey:encryptionKey padding:YES];
             NSDictionary *siteQuery = [self queryForDevicePrivateSiteNamed:site.name];
             if (!encryptedContent)
                 [PearlKeyChain deleteItemForQuery:siteQuery];
@@ -456,14 +453,14 @@
 
 - (void)resolveLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey result:(void ( ^ )(NSString *result))resultBlock {
 
-    NSAssert( [siteKey.keyID isEqualToData:site.user.keyID], @"Site does not belong to current user." );
+    NSAssert( [[siteKey keyIDForAlgorithm:site.user.algorithm] isEqualToData:site.user.keyID], @"Site does not belong to current user." );
     NSString *name = site.name;
     BOOL loginGenerated = site.loginGenerated && [[MPAppDelegate_Shared get] isFeatureUnlocked:MPProductGenerateLogins];
     NSString *loginName = loginGenerated? nil: site.loginName;
     id<MPAlgorithm> algorithm = nil;
     if (!name.length)
         err( @"Missing name." );
-    else if (!siteKey.keyData.length)
+    else if (!siteKey)
         err( @"Missing key." );
     else
         algorithm = site.algorithm;
@@ -478,7 +475,7 @@
 
 - (void)resolvePasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey result:(void ( ^ )(NSString *result))resultBlock {
 
-    NSAssert( [siteKey.keyID isEqualToData:site.user.keyID], @"Site does not belong to current user." );
+    NSAssert( [[siteKey keyIDForAlgorithm:site.user.algorithm] isEqualToData:site.user.keyID], @"Site does not belong to current user." );
     switch (site.type) {
         case MPSiteTypeGeneratedMaximum:
         case MPSiteTypeGeneratedLong:
@@ -500,7 +497,7 @@
             id<MPAlgorithm> algorithm = nil;
             if (!site.name.length)
                 err( @"Missing name." );
-            else if (!siteKey.keyData.length)
+            else if (!siteKey)
                 err( @"Missing key." );
             else
                 algorithm = site.algorithm;
@@ -546,12 +543,12 @@
 
 - (void)resolveAnswerForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey result:(void ( ^ )(NSString *result))resultBlock {
 
-    NSAssert( [siteKey.keyID isEqualToData:site.user.keyID], @"Site does not belong to current user." );
+    NSAssert( [[siteKey keyIDForAlgorithm:site.user.algorithm] isEqualToData:site.user.keyID], @"Site does not belong to current user." );
     NSString *name = site.name;
     id<MPAlgorithm> algorithm = nil;
     if (!site.name.length)
         err( @"Missing name." );
-    else if (!siteKey.keyData.length)
+    else if (!siteKey)
         err( @"Missing key." );
     else
         algorithm = site.algorithm;
@@ -565,13 +562,13 @@
 - (void)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question usingKey:(MPKey *)siteKey
                           result:(void ( ^ )(NSString *result))resultBlock {
 
-    NSAssert( [siteKey.keyID isEqualToData:question.site.user.keyID], @"Site does not belong to current user." );
+    NSAssert( [[siteKey keyIDForAlgorithm:question.site.user.algorithm] isEqualToData:question.site.user.keyID], @"Site does not belong to current user." );
     NSString *name = question.site.name;
     NSString *keyword = question.keyword;
     id<MPAlgorithm> algorithm = nil;
     if (!name.length)
         err( @"Missing name." );
-    else if (!siteKey.keyData.length)
+    else if (!siteKey)
         err( @"Missing key." );
     else
         algorithm = question.site.algorithm;
@@ -585,7 +582,7 @@
 - (void)importProtectedPassword:(NSString *)protectedContent protectedByKey:(MPKey *)importKey
                        intoSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey {
 
-    NSAssert( [siteKey.keyID isEqualToData:site.user.keyID], @"Site does not belong to current user." );
+    NSAssert( [[siteKey keyIDForAlgorithm:site.user.algorithm] isEqualToData:site.user.keyID], @"Site does not belong to current user." );
     switch (site.type) {
         case MPSiteTypeGeneratedMaximum:
         case MPSiteTypeGeneratedLong:
@@ -603,7 +600,7 @@
                         (long)site.type, [site class] );
                 break;
             }
-            if ([importKey.keyID isEqualToData:siteKey.keyID])
+            if ([[importKey keyIDForAlgorithm:self] isEqualToData:[siteKey keyIDForAlgorithm:self]])
                 ((MPStoredSiteEntity *)site).contentObject = [protectedContent decodeBase64];
 
             else {
@@ -620,7 +617,7 @@
 
 - (void)importClearTextPassword:(NSString *)clearContent intoSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey {
 
-    NSAssert( [siteKey.keyID isEqualToData:site.user.keyID], @"Site does not belong to current user." );
+    NSAssert( [[siteKey keyIDForAlgorithm:site.user.algorithm] isEqualToData:site.user.keyID], @"Site does not belong to current user." );
     switch (site.type) {
         case MPSiteTypeGeneratedMaximum:
         case MPSiteTypeGeneratedLong:
@@ -644,7 +641,7 @@
 
 - (NSString *)exportPasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey {
 
-    NSAssert( [siteKey.keyID isEqualToData:site.user.keyID], @"Site does not belong to current user." );
+    NSAssert( [[siteKey keyIDForAlgorithm:site.user.algorithm] isEqualToData:site.user.keyID], @"Site does not belong to current user." );
     if (!(site.type & MPSiteFeatureExportContent))
         return nil;
 
@@ -701,8 +698,10 @@
     if (!key)
         return nil;
     NSData *decryptedContent = nil;
-    if ([encryptedContent length])
-        decryptedContent = [encryptedContent decryptWithSymmetricKey:[key subKeyOfLength:PearlCryptKeySize].keyData padding:YES];
+    if ([encryptedContent length]) {
+        NSData *encryptionKey = [key keyDataForAlgorithm:self trimmedLength:PearlCryptKeySize];
+        decryptedContent = [encryptedContent decryptWithSymmetricKey:encryptionKey padding:YES];
+    }
     if (!decryptedContent)
         return nil;
 
@@ -711,7 +710,7 @@
 
 - (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordOfType:(MPSiteType)type byAttacker:(MPAttacker)attacker {
 
-    if (!type)
+    if (!(type & MPSiteTypeClassGenerated))
         return NO;
     size_t count = 0;
     const char **templates = mpw_templatesForType( type, &count );
@@ -730,6 +729,7 @@
         BN_add( permutations, permutations, templatePermutations );
     }
     BN_free( templatePermutations );
+    free( templates );
 
     return [self timeToCrack:timeToCrack permutations:permutations forAttacker:attacker];
 }

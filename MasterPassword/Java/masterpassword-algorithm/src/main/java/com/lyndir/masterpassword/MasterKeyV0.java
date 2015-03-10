@@ -41,7 +41,7 @@ public class MasterKeyV0 extends MasterKey {
     }
 
     @Override
-    protected Version getAlgorithm() {
+    public Version getAlgorithmVersion() {
 
         return Version.V0;
     }
@@ -89,29 +89,37 @@ public class MasterKeyV0 extends MasterKey {
         byte[] siteNameBytes = siteName.getBytes( MP_charset );
         byte[] siteNameLengthBytes = bytesForInt( siteName.length() );
         byte[] siteCounterBytes = bytesForInt( siteCounter );
-        byte[] siteContextBytes = siteContext == null? null: siteContext.getBytes( MP_charset );
+        byte[] siteContextBytes = siteContext == null || siteContext.isEmpty()? null: siteContext.getBytes( MP_charset );
         byte[] siteContextLengthBytes = bytesForInt( siteContextBytes == null? 0: siteContextBytes.length );
-        logger.trc( "site scope: %s, context: %s", siteScope, siteContext == null? "<empty>": siteContext );
+        logger.trc( "site scope: %s, context: %s", siteScope, siteContextBytes == null? "<empty>": siteContext );
         logger.trc( "seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)", siteScope, CodeUtils.encodeHex( siteNameLengthBytes ),
                     siteName, CodeUtils.encodeHex( siteCounterBytes ), CodeUtils.encodeHex( siteContextLengthBytes ),
-                    siteContext == null? "(null)": siteContext );
+                    siteContextBytes == null? "(null)": siteContext );
 
         byte[] sitePasswordInfo = Bytes.concat( siteScope.getBytes( MP_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
         if (siteContextBytes != null)
             sitePasswordInfo = Bytes.concat( sitePasswordInfo, siteContextLengthBytes, siteContextBytes );
         logger.trc( "sitePasswordInfo ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
 
-        byte[] sitePasswordSeed = MP_mac.of( getMasterKey(), sitePasswordInfo );
-        logger.trc( "sitePasswordSeed ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordSeed ) ) );
+        byte[] sitePasswordSeedBytes = MP_mac.of( getKey(), sitePasswordInfo );
+        int[] sitePasswordSeed = new int[sitePasswordSeedBytes.length];
+        for (int i = 0; i < sitePasswordSeedBytes.length; ++i) {
+            ByteBuffer buf = ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( ByteOrder.BIG_ENDIAN );
+            Arrays.fill( buf.array(), sitePasswordSeedBytes[i] > 0? (byte)0x00: (byte) 0xFF );
+            buf.position( 2 );
+            buf.put( sitePasswordSeedBytes[i] ).rewind();
+            sitePasswordSeed[i] = buf.getInt() & 0xFFFF;
+        }
+        logger.trc( "sitePasswordSeed ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordSeedBytes ) ) );
 
         Preconditions.checkState( sitePasswordSeed.length > 0 );
-        int templateIndex = sitePasswordSeed[0] & 0xFFFF;
+        int templateIndex = sitePasswordSeed[0];
         MPTemplate template = siteType.getTemplateAtRollingIndex( templateIndex );
         logger.trc( "type %s, template: %s", siteType, template.getTemplateString() );
 
         StringBuilder password = new StringBuilder( template.length() );
         for (int i = 0; i < template.length(); ++i) {
-            int characterIndex = sitePasswordSeed[i + 1] & 0xFFFF;
+            int characterIndex = sitePasswordSeed[i + 1];
             MPTemplateCharacterClass characterClass = template.getCharacterClassAtIndex( i );
             char passwordCharacter = characterClass.getCharacterAtRollingIndex( characterIndex );
             logger.trc( "class %c, index %d (0x%02X) -> character: %c", characterClass.getIdentifier(), characterIndex,

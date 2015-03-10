@@ -13,7 +13,6 @@
     <name>Master Password CLI</name>
     <description>A CLI interface to the Master Password algorithm</description>
 
-    <groupId>com.lyndir.masterpassword</groupId>
     <artifactId>masterpassword-cli</artifactId>
     <packaging>jar</packaging>
 
@@ -37,7 +36,7 @@
                         <phase>prepare-package</phase>
                         <configuration>
                             <target>
-                                <chmod file="${project.build.directory}/install" perm="755"/>
+                                <chmod file="${project.build.directory}/install" perm="755" />
                             </target>
                         </configuration>
                         <goals>

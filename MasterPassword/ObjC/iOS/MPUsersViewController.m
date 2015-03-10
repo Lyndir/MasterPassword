@@ -214,6 +214,7 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
                     MPUserEntity *user = [self userForAvatar:avatarCell inContext:context isNew:&isNew];
                     if (isNew) {
                         user = [MPUserEntity insertNewObjectInContext:context];
+                        user.algorithm = MPAlgorithmDefault;
                         user.avatar = avatarCell.avatar;
                         user.name = avatarCell.name;
                     }

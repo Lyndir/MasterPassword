@@ -18,6 +18,7 @@
 @dynamic lastUsed;
 @dynamic name;
 @dynamic saveKey_;
+@dynamic version_;
 @dynamic sites;
 
 @end

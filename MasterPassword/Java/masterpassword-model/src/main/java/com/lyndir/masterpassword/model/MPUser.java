@@ -22,11 +22,11 @@ public class MPUser implements Comparable<MPUser> {
     private final Collection<MPSite> sites = Sets.newHashSet();
 
     @Nullable
-    private byte[]            keyID;
-    private MasterKey.Version algorithmVersion;
-    private int               avatar;
-    private MPSiteType        defaultType;
-    private ReadableInstant   lastUsed;
+    private       byte[]            keyID;
+    private final MasterKey.Version algorithmVersion;
+    private       int               avatar;
+    private       MPSiteType        defaultType;
+    private       ReadableInstant   lastUsed;
 
     public MPUser(final String fullName) {
         this( fullName, null );

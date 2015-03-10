@@ -11,6 +11,7 @@
 #include <errno.h>
 #include <arpa/inet.h>
 
+#include "mpw-types.h"
 #include "mpw-util.h"
 
 #define MP_N                32768
@@ -21,7 +22,8 @@
 static const uint8_t *mpw_masterKeyForUser_v2(const char *fullName, const char *masterPassword) {
 
     const char *mpKeyScope = mpw_scopeForVariant( MPSiteVariantPassword );
-    trc( "fullName: %s\n", fullName );
+    trc( "algorithm: v%d\n", 2 );
+    trc( "fullName: %s (%zu)\n", fullName, mpw_charlen( fullName ) );
     trc( "masterPassword: %s\n", masterPassword );
     trc( "key scope: %s\n", mpKeyScope );
 
@@ -55,11 +57,16 @@ static const char *mpw_passwordForSite_v2(const uint8_t *masterKey, const char *
         const MPSiteVariant siteVariant, const char *siteContext) {
 
     const char *siteScope = mpw_scopeForVariant( siteVariant );
+    trc( "algorithm: v%d\n", 2 );
     trc( "siteName: %s\n", siteName );
     trc( "siteCounter: %d\n", siteCounter );
     trc( "siteVariant: %d\n", siteVariant );
     trc( "siteType: %d\n", siteType );
-    trc( "site scope: %s, context: %s\n", siteScope, siteContext == NULL? "<empty>": siteContext );
+    trc( "site scope: %s, context: %s\n", siteScope, siteContext? "<empty>": siteContext );
+    trc( "seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)\n",
+            siteScope, mpw_hex_l( htonl( strlen( siteName ) ) ), siteName,
+            mpw_hex_l( htonl( siteCounter ) ),
+            mpw_hex_l( htonl( siteContext? strlen( siteContext ): 0 ) ), siteContext? "(null)": siteContext );
 
     // Calculate the site seed.
     // sitePasswordSeed = hmac-sha256( masterKey, siteScope . #siteName . siteName . siteCounter . #siteContext . siteContext )

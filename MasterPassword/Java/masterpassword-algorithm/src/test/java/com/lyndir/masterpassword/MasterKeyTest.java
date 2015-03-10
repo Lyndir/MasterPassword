@@ -5,6 +5,7 @@ import static org.testng.Assert.*;
 import com.google.common.io.Resources;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import com.lyndir.lhunath.opal.system.util.StringUtils;
 import java.net.URL;
 import javax.xml.bind.JAXBContext;
 import org.testng.annotations.BeforeMethod;
@@ -26,7 +27,7 @@ public class MasterKeyTest {
         URL testCasesResource = Resources.getResource( "mpw_tests.xml" );
         tests = (MPWTests) JAXBContext.newInstance( MPWTests.class ).createUnmarshaller().unmarshal( testCasesResource );
         for (MPWTests.Case testCase : tests.getCases())
-            testCase.setTests( tests );
+            testCase.initializeParentHierarchy( tests );
         defaultCase = tests.getCase( MPWTests.ID_DEFAULT );
     }
 
@@ -35,10 +36,15 @@ public class MasterKeyTest {
             throws Exception {
 
         for (MPWTests.Case testCase : tests.getCases()) {
-            MasterKey masterKey = MasterKey.create( testCase.getFullName(), testCase.getMasterPassword() );
+            if (testCase.getResult().isEmpty())
+                continue;
+
+            logger.inf( "Running test case: %s [testEncode]", testCase.getIdentifier() );
+            MasterKey masterKey = MasterKey.create( testCase.getAlgorithm(), testCase.getFullName(), testCase.getMasterPassword() );
             assertEquals(
                     masterKey.encode( testCase.getSiteName(), testCase.getSiteType(), testCase.getSiteCounter(), testCase.getSiteVariant(),
                                       testCase.getSiteContext() ), testCase.getResult(), "Failed test case: " + testCase );
+            logger.inf( "passed!" );
         }
     }
 
@@ -55,8 +61,13 @@ public class MasterKeyTest {
             throws Exception {
 
         for (MPWTests.Case testCase : tests.getCases()) {
+            if (testCase.getResult().isEmpty())
+                continue;
+
+            logger.inf( "Running test case: %s [testGetKeyID]", testCase.getIdentifier() );
             MasterKey masterKey = MasterKey.create( testCase.getFullName(), testCase.getMasterPassword() );
             assertEquals( CodeUtils.encodeHex( masterKey.getKeyID() ), testCase.getKeyID(), "Failed test case: " + testCase );
+            logger.inf( "passed!" );
         }
     }
 
