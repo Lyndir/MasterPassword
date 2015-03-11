@@ -190,14 +190,14 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         // When privateManagedObjectContext is saved, import the changes into mainManagedObjectContext.
         PearlAddNotificationObserverTo( self.mainManagedObjectContext, NSManagedObjectContextDidSaveNotification,
                 self.privateManagedObjectContext, nil, ^(NSManagedObjectContext *mainManagedObjectContext, NSNotification *note) {
-                [mainManagedObjectContext performBlock:^{
-                    @try {
-                        [mainManagedObjectContext mergeChangesFromContextDidSaveNotification:note];
-                    }
-                    @catch (NSException *exception) {
-                        err( @"While merging changes:\n%@",[exception fullDescription] );
-                    }
-                }];
+            [mainManagedObjectContext performBlock:^{
+                @try {
+                    [mainManagedObjectContext mergeChangesFromContextDidSaveNotification:note];
+                }
+                @catch (NSException *exception) {
+                    err( @"While merging changes:\n%@", [exception fullDescription] );
+                }
+            }];
         } );
 
 
@@ -821,10 +821,17 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                 content = [site.algorithm exportPasswordForSite:site usingKey:self.key];
         }
 
-        [export appendFormat:@"%@  %8ld  %8s  %25s\t%25s\t%@\n",
-                             [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed], (long)uses,
-                             [strf( @"%lu:%lu:%lu", (long)type, (long)[algorithm version], (long)counter ) UTF8String],
-                             [(loginName?: @"") UTF8String], [siteName UTF8String], content?: @""];
+        NSString *lastUsedExport = [[NSDateFormatter rfc3339DateFormatter] stringFromDate:lastUsed];
+        long usesExport = (long)uses;
+        NSString *typeExport = strf( @"%lu:%lu:%lu", (long)type, (long)[algorithm version], (long)counter );
+        NSString *loginNameExport = loginName?: @"";
+        NSString *contentExport = content?: @"";
+        [export appendFormat:@"%@  %8ld  %8S  %25S\t%25S\t%@\n",
+                             lastUsedExport, usesExport,
+                             (const unichar *)[typeExport cStringUsingEncoding:NSUTF16StringEncoding],
+                             (const unichar *)[loginNameExport cStringUsingEncoding:NSUTF16StringEncoding],
+                             (const unichar *)[siteName cStringUsingEncoding:NSUTF16StringEncoding],
+                             contentExport];
     }
 
     return export;

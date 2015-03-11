@@ -19,6 +19,7 @@
 #import <Foundation/Foundation.h>
 #import "MPSiteEntity.h"
 #import "MPAlgorithm.h"
+#import "MPUserEntity.h"
 
 @class MPSiteEntity;
 
@@ -40,7 +41,7 @@
 @property (nonatomic, readonly) BOOL transient;
 
 - (instancetype)initWithEntity:(MPSiteEntity *)entity fuzzyGroups:(NSArray *)fuzzyGroups;
-- (instancetype)initWithName:(NSString *)siteName;
+- (instancetype)initWithName:(NSString *)siteName forUser:(MPUserEntity *)user;
 - (MPSiteEntity *)entityInContext:(NSManagedObjectContext *)moc;
 
 - (void)updateContent;

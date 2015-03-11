@@ -39,12 +39,12 @@
     return self;
 }
 
-- (instancetype)initWithName:(NSString *)siteName {
+- (instancetype)initWithName:(NSString *)siteName forUser:(MPUserEntity *)user {
 
     if (!(self = [super init]))
         return nil;
 
-    [self setTransientSiteName:siteName];
+    [self setTransientSiteName:siteName forUser:user];
     _initialized = YES;
 
     return self;
@@ -84,7 +84,7 @@
     [self updateContent:entity];
 }
 
-- (void)setTransientSiteName:(NSString *)siteName {
+- (void)setTransientSiteName:(NSString *)siteName forUser:(MPUserEntity *)user {
 
     _entityOID = nil;
 
@@ -97,7 +97,7 @@
     self.name = siteName;
     self.algorithm = MPAlgorithmDefault;
     self.lastUsed = nil;
-    self.type = [MPAppDelegate_Shared get].activeUserForMainThread.defaultType;
+    self.type = user.defaultType;
     self.typeName = [self.algorithm nameOfType:self.type];
     self.uses = @0;
     self.counter = 1;

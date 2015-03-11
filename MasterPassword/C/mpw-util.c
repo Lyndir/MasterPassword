@@ -96,25 +96,24 @@ const char *mpw_idForBuf(const void *buf, size_t length) {
     return mpw_hex( hash, 32 );
 }
 
-//static char **mpw_hex_buf = NULL;
-//static unsigned int mpw_hex_buf_i = 0;
+static char **mpw_hex_buf = NULL;
+static unsigned int mpw_hex_buf_i = 0;
 
 const char *mpw_hex(const void *buf, size_t length) {
 
     // FIXME
-//    if (!mpw_hex_buf) {
-//        mpw_hex_buf = malloc( 10 * sizeof( char * ) );
-//        for (uint8_t i = 0; i < 10; ++i)
-//            mpw_hex_buf[i] = NULL;
-//    }
-//    mpw_hex_buf_i = (mpw_hex_buf_i + 1) % 10;
-//
-//    mpw_hex_buf[mpw_hex_buf_i] = realloc( mpw_hex_buf[mpw_hex_buf_i], length * 2 + 1 );
-//    for (size_t kH = 0; kH < length; kH++)
-//        sprintf( &(mpw_hex_buf[mpw_hex_buf_i][kH * 2]), "%02X", ((const uint8_t *)buf)[kH] );
+    if (!mpw_hex_buf) {
+        mpw_hex_buf = malloc( 10 * sizeof( char * ) );
+        for (uint8_t i = 0; i < 10; ++i)
+            mpw_hex_buf[i] = NULL;
+    }
+    mpw_hex_buf_i = (mpw_hex_buf_i + 1) % 10;
 
-//    return mpw_hex_buf[mpw_hex_buf_i];
-    return NULL;
+    mpw_hex_buf[mpw_hex_buf_i] = realloc( mpw_hex_buf[mpw_hex_buf_i], length * 2 + 1 );
+    for (size_t kH = 0; kH < length; kH++)
+        sprintf( &(mpw_hex_buf[mpw_hex_buf_i][kH * 2]), "%02X", ((const uint8_t *)buf)[kH] );
+
+    return mpw_hex_buf[mpw_hex_buf_i];
 }
 
 const char *mpw_hex_l(uint32_t number) {

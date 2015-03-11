@@ -28,8 +28,10 @@
 #define CRACKING_PER_SECOND 2495000000UL
 #define CRACKING_PRICE      350
 
+NSOperationQueue *_mpwQueue = nil;
+
 @implementation MPAlgorithmV0 {
-    BN_CTX *ctx;
+    BN_CTX *_ctx;
 }
 
 - (id)init {
@@ -37,15 +39,22 @@
     if (!(self = [super init]))
         return nil;
 
-    ctx = BN_CTX_new();
+    _ctx = BN_CTX_new();
+
+    static dispatch_once_t once = 0;
+    dispatch_once( &once, ^{
+        _mpwQueue = [NSOperationQueue new];
+        _mpwQueue.maxConcurrentOperationCount = 1;
+        _mpwQueue.name = @"mpw queue";
+    } );
 
     return self;
 }
 
 - (void)dealloc {
 
-    BN_CTX_free( ctx );
-    ctx = NULL;
+    BN_CTX_free( _ctx );
+    _ctx = NULL;
 }
 
 - (MPAlgorithmVersion)version {
@@ -66,6 +75,19 @@
         return NO;
 
     return [(id<MPAlgorithm>)other version] == [self version];
+}
+
+- (void)mpw_perform:(void ( ^ )(void))operationBlock {
+
+    if ([NSOperationQueue currentQueue] == _mpwQueue) {
+        operationBlock();
+        return;
+    }
+
+    NSOperation *operation = [NSBlockOperation blockOperationWithBlock:operationBlock];
+    if ([operation respondsToSelector:@selector( qualityOfService )])
+        operation.qualityOfService = NSQualityOfServiceUserInitiated;
+    [_mpwQueue addOperations:@[ operation ] waitUntilFinished:YES];
 }
 
 - (BOOL)tryMigrateUser:(MPUserEntity *)user inContext:(NSManagedObjectContext *)moc {
@@ -107,12 +129,16 @@
 
 - (NSData *)keyDataForFullName:(NSString *)fullName withMasterPassword:(NSString *)masterPassword {
 
-    NSDate *start = [NSDate date];
-    uint8_t const *masterKeyBytes = mpw_masterKeyForUser( fullName.UTF8String, masterPassword.UTF8String, [self version] );
-    NSData *keyData = [NSData dataWithBytes:masterKeyBytes length:MP_dkLen];
-    trc( @"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", //
-            fullName, masterPassword, [self keyIDForKeyData:keyData], -[start timeIntervalSinceNow] );
-    mpw_free( masterKeyBytes, MP_dkLen );
+    __block NSData *keyData;
+    [self mpw_perform:^{
+        NSDate *start = [NSDate date];
+        uint8_t const *masterKeyBytes = mpw_masterKeyForUser( fullName.UTF8String, masterPassword.UTF8String, [self version] );
+        keyData = [NSData dataWithBytes:masterKeyBytes length:MP_dkLen];
+        trc( @"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", //
+                fullName, masterPassword, [self keyIDForKeyData:keyData], -[start timeIntervalSinceNow] );
+        mpw_free( masterKeyBytes, MP_dkLen );
+    }];
+
     return keyData;
 }
 
@@ -317,10 +343,13 @@
 - (NSString *)generateContentForSiteNamed:(NSString *)name ofType:(MPSiteType)type withCounter:(NSUInteger)counter
                                   variant:(MPSiteVariant)variant context:(NSString *)context usingKey:(MPKey *)key {
 
-    char const *contentBytes = mpw_passwordForSite( [key keyDataForAlgorithm:self].bytes,
-            name.UTF8String, type, (uint32_t)counter, variant, context.UTF8String, [self version] );
-    NSString *content = [NSString stringWithCString:contentBytes encoding:NSUTF8StringEncoding];
-    mpw_freeString( contentBytes );
+    __block NSString *content;
+    [self mpw_perform:^{
+        char const *contentBytes = mpw_passwordForSite( [key keyDataForAlgorithm:self].bytes,
+                name.UTF8String, type, (uint32_t)counter, variant, context.UTF8String, [self version] );
+        content = [NSString stringWithCString:contentBytes encoding:NSUTF8StringEncoding];
+        mpw_freeString( contentBytes );
+    }];
 
     return content;
 }
@@ -382,7 +411,7 @@
                 [PearlKeyChain deleteItemForQuery:siteQuery];
             else
                 [PearlKeyChain addOrUpdateItemForQuery:siteQuery withAttributes:@{
-                        (__bridge id)kSecValueData      : encryptedContent,
+                        (__bridge id)kSecValueData : encryptedContent,
 #if TARGET_OS_IPHONE
                         (__bridge id)kSecAttrAccessible : (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
 #endif
@@ -562,7 +591,8 @@
 - (void)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question usingKey:(MPKey *)siteKey
                           result:(void ( ^ )(NSString *result))resultBlock {
 
-    NSAssert( [[siteKey keyIDForAlgorithm:question.site.user.algorithm] isEqualToData:question.site.user.keyID], @"Site does not belong to current user." );
+    NSAssert( [[siteKey keyIDForAlgorithm:question.site.user.algorithm] isEqualToData:question.site.user.keyID],
+            @"Site does not belong to current user." );
     NSString *name = question.site.name;
     NSString *keyword = question.keyword;
     id<MPAlgorithm> algorithm = nil;
@@ -748,7 +778,7 @@
 
             if (strchr( charactersForClass, passwordCharacter )) {
                 // Found class for password character.
-                characterEntropy = (BN_ULONG)strlen(charactersForClass);
+                characterEntropy = (BN_ULONG)strlen( charactersForClass );
                 break;
             }
         }
