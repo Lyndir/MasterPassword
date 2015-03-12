@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+# FIXME
+#   partials are currently readline words, but these can't be reliably compared against literal data.  We need to make them literal first.. in a safe way.  Currently using xargs' quote parser as a hack.
+
+# Process literal completion options in COMPREPLY
+#
+# 1. Filter COMPREPLY by excluding the options that do not match the word that is being completed.
+# 2. Shell-escape the COMPREPLY words so they remain syntactical words when injected into the completed command.
+# 3. Add a space after the words so successful completions advance to the next word
+#    (we disabled this default behavior with -o nospace so we can do completions that don't want this, eg. directory names)
+_comp_finish_completions() {
+    local partial=$(xargs <<< "${COMP_WORDS[COMP_CWORD]}") # FIXME
+    local word words=( "${COMPREPLY[@]}" )
+
+    COMPREPLY=()
+    for word in "${words[@]}"; do
+        ( shopt -s nocasematch; [[ $word = $partial* ]] ) && COMPREPLY+=( "$(printf '%q ' "$word")" )
+    done
+
+    if (( ${#COMPREPLY[@]} > 1 )) && [[ $_comp_title ]]; then
+        printf '\n%s:' "$_comp_title"
+        unset _comp_title
+    fi
+}
+
+# Perform pathname completion.
+#
+# 1. Populate COMPREPLY with pathnames.
+# 2. Shell-escape the COMPREPLY words so they remain syntactical words when injected into the completed command.
+# 3. Add a space after file names so successful completions advance to the next word.
+#    Directory names are suffixed with a / instead so we can keep completing the files inside.
+_comp_complete_path() {
+    local partial=$(xargs <<< "${COMP_WORDS[COMP_CWORD]}")
+    local path
+
+    COMPREPLY=()
+    for path in "$partial"*; do
+        if [[ -d $path ]]; then
+            COMPREPLY+=( "$(printf '%q/' "$path")" )
+
+        elif [[ -e $path ]]; then
+            COMPREPLY+=( "$(printf '%q ' "$path")" )
+
+        fi
+    done
+}
+
+_show_args() {
+    echo
+    local i=0
+    for arg; do
+        printf "arg %d: %s\n" "$((i++))" "$arg"
+    done
+
+    i=0
+    for word in "${COMP_WORDS[@]}"; do
+        printf "word %d: %s -> %s %s\n" "$i" "$word" "$(xargs <<< "$word")" "$( ((i == $COMP_CWORD)) && echo '<CWORD>' )"
+        let i++
+    done
+}
