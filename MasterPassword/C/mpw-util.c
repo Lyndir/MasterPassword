@@ -80,7 +80,7 @@ uint8_t const *mpw_scrypt(const size_t keySize, const char *secret, const uint8_
 
 uint8_t const *mpw_hmac_sha256(const uint8_t *key, const size_t keySize, const uint8_t *salt, const size_t saltSize) {
 
-    uint8_t *const buffer = malloc(32);
+    uint8_t *const buffer = malloc( 32 );
     if (!buffer)
         return NULL;
 
@@ -98,10 +98,12 @@ const char *mpw_idForBuf(const void *buf, size_t length) {
 
 static char **mpw_hex_buf = NULL;
 static unsigned int mpw_hex_buf_i = 0;
+
 const char *mpw_hex(const void *buf, size_t length) {
 
+    // FIXME
     if (!mpw_hex_buf) {
-        mpw_hex_buf = malloc( 10 * sizeof( char* ) );
+        mpw_hex_buf = malloc( 10 * sizeof( char * ) );
         for (uint8_t i = 0; i < 10; ++i)
             mpw_hex_buf[i] = NULL;
     }
@@ -113,7 +115,9 @@ const char *mpw_hex(const void *buf, size_t length) {
 
     return mpw_hex_buf[mpw_hex_buf_i];
 }
+
 const char *mpw_hex_l(uint32_t number) {
+
     return mpw_hex( &number, sizeof( number ) );
 }
 
@@ -144,7 +148,8 @@ const char *mpw_identicon(const char *fullName, const char *masterPassword) {
     const char *accessory[] = {
             "◈", "◎", "◐", "◑", "◒", "◓", "☀", "☁", "☂", "☃", "☄", "★", "☆", "☎", "☏", "⎈", "⌂", "☘", "☢", "☣",
             "☕", "⌚", "⌛", "⏰", "⚡", "⛄", "⛅", "☔", "♔", "♕", "♖", "♗", "♘", "♙", "♚", "♛", "♜", "♝", "♞", "♟",
-            "♨", "♩", "♪", "♫", "⚐", "⚑", "⚔", "⚖", "⚙", "⚠", "⌘", "⏎", "✄", "✆", "✈", "✉", "✌" };
+            "♨", "♩", "♪", "♫", "⚐", "⚑", "⚔", "⚖", "⚙", "⚠", "⌘", "⏎", "✄", "✆", "✈", "✉", "✌"
+    };
 
     uint8_t identiconSeed[32];
     HMAC_SHA256_Buf( masterPassword, strlen( masterPassword ), fullName, strlen( fullName ), identiconSeed );
@@ -206,8 +211,8 @@ const size_t mpw_charlen(const char *utf8String) {
 
     size_t charlen = 0;
     char *remainingString = (char *)utf8String;
-    for (int charByteSize; (charByteSize = mpw_charByteSize( *remainingString )); remainingString += charByteSize)
+    for (int charByteSize; (charByteSize = mpw_charByteSize( (unsigned char)*remainingString )); remainingString += charByteSize)
         ++charlen;
 
-  return charlen;
+    return charlen;
 }

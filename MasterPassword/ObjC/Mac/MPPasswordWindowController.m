@@ -17,6 +17,7 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
+#import <Foundation/Foundation.h>
 #import "MPPasswordWindowController.h"
 #import "MPMacAppDelegate.h"
 #import "MPAppDelegate_Store.h"
@@ -463,26 +464,26 @@
 - (void)useSite {
 
     MPSiteModel *selectedSite = [self selectedSite];
-    if (selectedSite) {
-        // Performing action while content is available.  Copy it.
-        [self copyContent:selectedSite.content];
+    if (!selectedSite)
+        return;
 
-        [self fadeOut];
+    if (selectedSite.transient) {
+        [self createNewSite:selectedSite.name];
+        return;
+    }
 
-        NSUserNotification *notification = [NSUserNotification new];
-        notification.title = @"Password Copied";
-        if (selectedSite.loginName.length)
-            notification.subtitle = strf( @"%@ at %@", selectedSite.loginName, selectedSite.name );
-        else
-            notification.subtitle = selectedSite.name;
-        [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
-    }
-    else {
-        NSString *siteName = [self.siteField stringValue];
-        if ([siteName length])
-            // Performing action without content but a site name is written.
-            [self createNewSite:siteName];
-    }
+    // Performing action while content is available.  Copy it.
+    [self copyContent:selectedSite.content];
+
+    [self fadeOut];
+
+    NSUserNotification *notification = [NSUserNotification new];
+    notification.title = @"Password Copied";
+    if (selectedSite.loginName.length)
+        notification.subtitle = strf( @"%@ at %@", selectedSite.loginName, selectedSite.name );
+    else
+        notification.subtitle = selectedSite.name;
+    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 }
 
 - (void)updateUser {
@@ -518,6 +519,7 @@
 
 - (void)updateSites {
 
+    NSAssert( [NSOperationQueue currentQueue] == [NSOperationQueue mainQueue], @"updateSites should be called on the main queue." );
     if (![MPMacAppDelegate get].key) {
         self.sites = nil;
         return;
@@ -530,13 +532,18 @@
     } );
 
     NSString *queryString = self.siteField.stringValue;
-    NSString *queryPattern = [queryString stringByReplacingMatchesOfExpression:fuzzyRE withTemplate:@"*$1*"];
+    NSString *queryPattern;
+    if ([queryString length] < 13)
+        queryPattern = [queryString stringByReplacingMatchesOfExpression:fuzzyRE withTemplate:@"*$1*"];
+    else
+        // If query is too long, a wildcard per character makes the CoreData fetch take excessively long.
+        queryPattern = strf( @"*%@*", queryString );
     NSMutableArray *fuzzyGroups = [NSMutableArray new];
     [fuzzyRE enumerateMatchesInString:queryString options:0 range:NSMakeRange( 0, queryString.length )
                            usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
                                [fuzzyGroups addObject:[queryString substringWithRange:result.range]];
                            }];
-    [MPMacAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
+    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
         fetchRequest.sortDescriptors = @[ [[NSSortDescriptor alloc] initWithKey:@"lastUsed" ascending:NO] ];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name LIKE[cd] %@) AND user == %@",
@@ -549,10 +556,22 @@
             return;
         }
 
+        BOOL exact = NO;
         NSMutableArray *newSites = [NSMutableArray arrayWithCapacity:[siteResults count]];
-        for (MPSiteEntity *site in siteResults)
+        for (MPSiteEntity *site in siteResults) {
             [newSites addObject:[[MPSiteModel alloc] initWithEntity:site fuzzyGroups:fuzzyGroups]];
-        self.sites = newSites;
+            exact |= [site.name isEqualToString:queryString];
+        }
+        if (!exact && [queryString length]) {
+            MPUserEntity *activeUser = [[MPAppDelegate_Shared get] activeUserInContext:context];
+            [newSites addObject:[[MPSiteModel alloc] initWithName:queryString forUser:activeUser]];
+        }
+
+        dbg( @"newSites: %@", newSites );
+        if (![newSites isEqualToArray:self.sites])
+            PearlMainQueue( ^{
+                self.sites = newSites;
+            } );
     }];
 }
 

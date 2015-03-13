@@ -28,12 +28,23 @@
     BOOL _initialized;
 }
 
-- (id)initWithEntity:(MPSiteEntity *)entity fuzzyGroups:(NSArray *)fuzzyGroups {
+- (instancetype)initWithEntity:(MPSiteEntity *)entity fuzzyGroups:(NSArray *)fuzzyGroups {
 
     if (!(self = [super init]))
         return nil;
 
     [self setEntity:entity fuzzyGroups:fuzzyGroups];
+    _initialized = YES;
+
+    return self;
+}
+
+- (instancetype)initWithName:(NSString *)siteName forUser:(MPUserEntity *)user {
+
+    if (!(self = [super init]))
+        return nil;
+
+    [self setTransientSiteName:siteName forUser:user];
     _initialized = YES;
 
     return self;
@@ -59,7 +70,7 @@
     NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
     paragraphStyle.alignment = NSCenterTextAlignment;
     [attributedSiteName addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange( 0, [siteName length] )];
-    
+
     self.displayedName = attributedSiteName;
     self.name = siteName;
     self.algorithm = entity.algorithm;
@@ -71,6 +82,28 @@
 
     // Find all password types and the index of the current type amongst them.
     [self updateContent:entity];
+}
+
+- (void)setTransientSiteName:(NSString *)siteName forUser:(MPUserEntity *)user {
+
+    _entityOID = nil;
+
+    NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
+    paragraphStyle.alignment = NSCenterTextAlignment;
+    self.displayedName = stra( siteName, @{
+            NSBackgroundColorAttributeName : [NSColor alternateSelectedControlColor],
+            NSParagraphStyleAttributeName  : paragraphStyle,
+    } );
+    self.name = siteName;
+    self.algorithm = MPAlgorithmDefault;
+    self.lastUsed = nil;
+    self.type = user.defaultType;
+    self.typeName = [self.algorithm nameOfType:self.type];
+    self.uses = @0;
+    self.counter = 1;
+
+    // Find all password types and the index of the current type amongst them.
+    [self updateContent];
 }
 
 - (MPSiteEntity *)entityInContext:(NSManagedObjectContext *)moc {
@@ -96,15 +129,18 @@
         // This wasn't a change to the entity.
         return;
 
-    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        MPSiteEntity *entity = [self entityInContext:context];
-        if ([entity isKindOfClass:[MPGeneratedSiteEntity class]]) {
-            ((MPGeneratedSiteEntity *)entity).counter = counter;
-            [context saveToStore];
+    if (_entityOID)
+        [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+            MPSiteEntity *entity = [self entityInContext:context];
+            if ([entity isKindOfClass:[MPGeneratedSiteEntity class]]) {
+                ((MPGeneratedSiteEntity *)entity).counter = counter;
+                [context saveToStore];
 
-            [self updateContent:entity];
-        }
-    }];
+                [self updateContent:entity];
+            }
+        }];
+    else
+        [self updateContent];
 }
 
 - (BOOL)generated {
@@ -117,14 +153,38 @@
     return self.type & MPSiteTypeClassStored;
 }
 
+- (BOOL)transient {
+
+    return _entityOID == nil;
+}
+
 - (void)updateContent {
 
-    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-        [self updateContent:[MPSiteEntity existingObjectWithID:_entityOID inContext:context]];
-    }];
+    if (_entityOID)
+        [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+            [self updateContent:[MPSiteEntity existingObjectWithID:_entityOID inContext:context]];
+        }];
+    else
+        PearlNotMainQueue( ^{
+            NSString *password = [self.algorithm generatePasswordForSiteNamed:self.name ofType:self.type withCounter:self.counter
+                                                                     usingKey:[MPAppDelegate_Shared get].key];
+            NSString *loginName = [self.algorithm generateLoginForSiteNamed:self.name usingKey:[MPAppDelegate_Shared get].key];
+            [self updatePasswordWithResult:password];
+            [self updateLoginNameWithResult:loginName];
+        } );
 }
 
 - (void)updateContent:(MPSiteEntity *)entity {
+
+    [entity resolvePasswordUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
+        [self updatePasswordWithResult:result];
+    }];
+    [entity resolveLoginUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
+        [self updateLoginNameWithResult:result];
+    }];
+}
+
+- (void)updatePasswordWithResult:(NSString *)result {
 
     static NSRegularExpression *re_anyChar;
     static dispatch_once_t once = 0;
@@ -132,21 +192,21 @@
         re_anyChar = [NSRegularExpression regularExpressionWithPattern:@"." options:0 error:nil];
     } );
 
-    [entity resolvePasswordUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
-        NSString *displayResult = result;
-        if ([[MPConfig get].hidePasswords boolValue] && !([NSEvent modifierFlags] & NSAlternateKeyMask))
-            displayResult = [displayResult stringByReplacingMatchesOfExpression:re_anyChar withTemplate:@"●"];
+    NSString *displayResult = result;
+    if ([[MPConfig get].hidePasswords boolValue] && !([NSEvent modifierFlags] & NSAlternateKeyMask))
+        displayResult = [displayResult stringByReplacingMatchesOfExpression:re_anyChar withTemplate:@"●"];
 
-        PearlMainQueue( ^{
-            self.content = result;
-            self.displayedContent = displayResult;
-        } );
-    }];
-    [entity resolveLoginUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
-        PearlMainQueue( ^{
-            self.loginName = result;
-        } );
-    }];
+    PearlMainQueue( ^{
+        self.content = result;
+        self.displayedContent = displayResult;
+    } );
+}
+
+- (void)updateLoginNameWithResult:(NSString *)loginName {
+
+    PearlMainQueue( ^{
+        self.loginName = loginName;
+    } );
 }
 
 @end

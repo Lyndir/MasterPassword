@@ -392,7 +392,12 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     } );
 
     NSString *queryString = self.query;
-    NSString *queryPattern = [queryString stringByReplacingMatchesOfExpression:fuzzyRE withTemplate:@"*$1*"];
+    NSString *queryPattern;
+    if ([queryString length] < 13)
+        queryPattern = [queryString stringByReplacingMatchesOfExpression:fuzzyRE withTemplate:@"*$1*"];
+    else
+        // If query is too long, a wildcard per character makes the CoreData fetch take excessively long.
+        queryPattern = strf( @"*%@*", queryString );
     NSMutableArray *fuzzyGroups = [NSMutableArray arrayWithCapacity:[queryString length]];
     [fuzzyRE enumerateMatchesInString:queryString options:0 range:NSMakeRange( 0, queryString.length )
                            usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {

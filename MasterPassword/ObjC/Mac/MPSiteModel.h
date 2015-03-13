@@ -19,6 +19,7 @@
 #import <Foundation/Foundation.h>
 #import "MPSiteEntity.h"
 #import "MPAlgorithm.h"
+#import "MPUserEntity.h"
 
 @class MPSiteEntity;
 
@@ -35,10 +36,12 @@
 @property (nonatomic) NSUInteger counter;
 @property (nonatomic) NSDate *lastUsed;
 @property (nonatomic) id<MPAlgorithm> algorithm;
-@property (nonatomic) BOOL generated;
-@property (nonatomic) BOOL stored;
+@property (nonatomic, readonly) BOOL generated;
+@property (nonatomic, readonly) BOOL stored;
+@property (nonatomic, readonly) BOOL transient;
 
 - (instancetype)initWithEntity:(MPSiteEntity *)entity fuzzyGroups:(NSArray *)fuzzyGroups;
+- (instancetype)initWithName:(NSString *)siteName forUser:(MPUserEntity *)user;
 - (MPSiteEntity *)entityInContext:(NSManagedObjectContext *)moc;
 
 - (void)updateContent;
