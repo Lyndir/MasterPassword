@@ -340,21 +340,21 @@
                     </ol>
 
                     <div class="hlvl">
-                        <p><h2 class="inline">Changing your master password</h2>
+                        <p><h2 id="no-changing-mp" class="inline">Changing your master password</h2>
                         results in all your site passwords to change, since they are the mathematical result of your master key, which in turn is a mathematical result of your master password.  That means, if somebody learns your master password, you'll need to reset all your site passwords to new ones.  It also means the solution is incompatible with "password recovery".  It is your responsibility to think of a good and memorable master password, and more importantly,
                         <em>ensure that nobody learns your master password</em>.  If you chose to share it anyway (say, with your spouse), you should do so in full expectation that you'll need to change all your sites' passwords if your trust relationship with them degrades.</p>
                         <p>This trade-off is a direct result of the desire to create a stateless solution which is immune to data loss.  The solution relies entirely on the master password you can remember, which means that <strong>the only point of failure is now entirely under your control</strong>.</p>
                     </div>
 
                     <div class="hlvl">
-                        <p><h2 class="inline">Custom passwords</h2>
+                        <p><h2 id="no-custom-passwords" class="inline">Custom passwords</h2>
                         are sometimes still a necessity.  You may want to store a password you've been using for a long time in your manager, or your boss may have set an unchangeable password on your computer for you to use.  Since Master Password's passwords are a mathematical result of your unchanging master password, it is impossible for it to be used with passwords that are created via another way.</p>
                         <p>The Master Password application however <em>functions as a hybrid password manager, implementing both the Master Password algorithm and a vault-like password solution</em>.  In the second mode, Master Password uses your master key to encrypt custom passwords and store the encrypted result in a vault.  Since we use the master key for this process, the result is a vault that is much harder to break into than that used by many other vault-based password solutions (specifically
                         because the encryption key is a large key derived from your master password using scrypt key derivation).  As a result, <strong>this trade-off has been mitigated</strong>.</p>
                     </div>
 
                     <div class="hlvl">
-                        <p><h2 class="inline">Password templates</h2>
+                        <p><h2 id="no-custom-templates" class="inline">Password templates</h2>
                         are the presets that tell Master Password what your final password should look like.  They specify where to put the letters, numbers or other characters.  We've made the decision to only provide a set of template presets rather than allowing users to determine their own templates to use for a site.  As a result, you cannot chose to design your own custom template, such as, "a 6-digit password that starts with a lower-case letter".</p>
                         <p>This decision has been made in the interest of password recovery after a total loss scenario.  Recovering the correct password for sites that use such custom templates would be extra difficult, since now you're forced to recall the specific custom template you drafted for this site.  This problem becomes more difficult the more sites you've made custom templates for.</p>
                         <p>As a partial mitigation of this trade-off, <strong>we've created a set of password templates designed to cover nearly all use cases</strong>.  The default template should work on nearly all websites.  When this template fails, it's usually because the site imposes a low maximum-password-length restriction.  This type of restriction is a <em>serious red flag</em> which almost always indicates a sloppy security implementation on their end.  When you encounter it, you <em>should</em>
@@ -362,7 +362,7 @@
                     </div>
 
                     <div class="hlvl">
-                        <p><h2 class="inline">A one-factor solution</h2>
+                        <p><h2 id="no-2fa" class="inline">A one-factor solution</h2>
                         is an authentication solution that requires only one factor of security.  Master Password is a one-factor solution since its security relies solely on "something you know".  That means, if somebody steals your master password, that's all they need to gain access to your sites.  The alternative is usually a two-factor solution which relies on two distinct security factors, such as "something you know" and "something you have".  Now, when somebody's obtained
                         the "something you know", they'll still need to obtain the "something you have" before they can break in.  The most popular example of a two-factor solution is a bank card:  Your PIN number is the secret you know, but with the PIN alone a thief can't get to your money.  They'll need to first steal your card as well.</p>
                         <p>A vault-based password manager is often considered two-factor, since it relies on your vault password as well as access to your vault file.  <em>Most security experts disagree, however</em>.  To be truly multi-factor, the security factors should come from separate categories:</p>
