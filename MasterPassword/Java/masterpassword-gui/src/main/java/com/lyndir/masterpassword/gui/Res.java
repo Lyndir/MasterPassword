@@ -97,6 +97,10 @@ public abstract class Res {
         return 19;
     }
 
+    public static Font emoticonsFont() {
+        return emoticonsRegular();
+    }
+
     public static Font controlFont() {
         return arimoRegular();
     }
@@ -107,6 +111,10 @@ public abstract class Res {
 
     public static Font bigValueFont() {
         return sourceSansProBlack();
+    }
+
+    public static Font emoticonsRegular() {
+        return font( "fonts/Emoticons-Regular.otf" );
     }
 
     public static Font sourceCodeProRegular() {

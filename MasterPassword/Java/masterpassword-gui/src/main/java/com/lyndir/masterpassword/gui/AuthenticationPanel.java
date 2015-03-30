@@ -1,9 +1,13 @@
 package com.lyndir.masterpassword.gui;
 
 import com.google.common.collect.ImmutableList;
+import com.lyndir.masterpassword.MPIdenticon;
 import com.lyndir.masterpassword.gui.util.Components;
 import java.awt.*;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -29,6 +33,8 @@ public abstract class AuthenticationPanel extends Components.GradientPanel {
             }
         } );
         add( Box.createVerticalGlue() );
+
+        avatarLabel.setToolTipText( "The avatar for your user.  Click to change it." );
     }
 
     protected void updateUser(boolean repack) {
@@ -39,8 +45,11 @@ public abstract class AuthenticationPanel extends Components.GradientPanel {
             unlockFrame.repack();
     }
 
+    @Nullable
     protected abstract User getSelectedUser();
 
+    @NotNull
+    @Nonnull
     public abstract char[] getMasterPassword();
 
     public Component getFocusComponent() {

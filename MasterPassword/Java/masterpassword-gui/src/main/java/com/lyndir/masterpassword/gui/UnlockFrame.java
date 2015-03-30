@@ -2,10 +2,12 @@ package com.lyndir.masterpassword.gui;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
+import com.lyndir.masterpassword.MPIdenticon;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.model.IncorrectMasterPasswordException;
 import java.awt.*;
 import java.awt.event.*;
+import javax.annotation.Nullable;
 import javax.swing.*;
 
 
@@ -16,6 +18,7 @@ public class UnlockFrame extends JFrame {
 
     private final SignInCallback           signInCallback;
     private final Components.GradientPanel root;
+    private final JLabel                   identiconLabel;
     private final JButton                  signInButton;
     private final JPanel                   authenticationContainer;
     private       AuthenticationPanel      authenticationPanel;
@@ -27,33 +30,40 @@ public class UnlockFrame extends JFrame {
         super( "Unlock Master Password" );
         this.signInCallback = signInCallback;
 
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setContentPane(root = Components.gradientPanel(new BorderLayout(20, 20), Res.colors().frameBg()));
-        root.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
-        addWindowFocusListener(new WindowAdapter() {
+        setDefaultCloseOperation( DISPOSE_ON_CLOSE );
+        addWindowFocusListener( new WindowAdapter() {
             @Override
             public void windowGainedFocus(WindowEvent e) {
-                root.setGradientColor(Res.colors().frameBg());
+                root.setGradientColor( Res.colors().frameBg() );
             }
 
             @Override
             public void windowLostFocus(WindowEvent e) {
-                root.setGradientColor(Color.RED);
+                root.setGradientColor( Color.RED );
             }
-        });
-
-        authenticationContainer = Components.boxLayout( BoxLayout.PAGE_AXIS );
-        authenticationContainer.setOpaque( true );
-        authenticationContainer.setBackground( Res.colors().controlBg() );
-        authenticationContainer.setBorder( BorderFactory.createEmptyBorder( 20, 20, 20, 20 ) );
-        add( Components.borderPanel( authenticationContainer, BorderFactory.createRaisedBevelBorder(), Res.colors().frameBg() ) );
+        } );
 
         // Sign In
         JPanel signInBox = Components.boxLayout( BoxLayout.LINE_AXIS, Box.createGlue(), signInButton = Components.button( "Sign In" ),
                                                  Box.createGlue() );
         signInBox.setBackground( null );
-        root.add( signInBox, BorderLayout.SOUTH );
+
+        setContentPane( root = Components.gradientPanel( new FlowLayout(), Res.colors().frameBg() ) );
+        root.setLayout( new BoxLayout( root, BoxLayout.PAGE_AXIS ) );
+        root.setBorder( BorderFactory.createEmptyBorder( 20, 20, 20, 20 ) );
+        root.add( Components.borderPanel( authenticationContainer = Components.boxLayout( BoxLayout.PAGE_AXIS ),
+                                          BorderFactory.createRaisedBevelBorder(), Res.colors().frameBg() ) );
+        root.add( Box.createVerticalStrut( 8 ) );
+        root.add( identiconLabel = Components.label( " ", SwingConstants.CENTER ) );
+        root.add( Box.createVerticalStrut( 8 ) );
+        root.add( signInBox );
+
+        authenticationContainer.setOpaque( true );
+        authenticationContainer.setBackground( Res.colors().controlBg() );
+        authenticationContainer.setBorder( BorderFactory.createEmptyBorder( 20, 20, 20, 20 ) );
+        identiconLabel.setFont( Res.emoticonsFont().deriveFont( 14.f ) );
+        identiconLabel.setToolTipText(
+                "A representation of your identity across all Master Password apps.\nIt should always be the same." );
         signInButton.addActionListener( new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -86,6 +96,7 @@ public class UnlockFrame extends JFrame {
         authenticationContainer.add( Components.stud() );
 
         final JCheckBox incognitoCheckBox = Components.checkBox( "Incognito" );
+        incognitoCheckBox.setToolTipText( "Log in without saving any information." );
         incognitoCheckBox.setSelected( incognito );
         incognitoCheckBox.addItemListener( new ItemListener() {
             @Override
@@ -104,9 +115,10 @@ public class UnlockFrame extends JFrame {
         authenticationContainer.add( toolsPanel );
         for (JButton button : authenticationPanel.getButtons()) {
             toolsPanel.add( button );
+            button.setBorder( BorderFactory.createEmptyBorder() );
             button.setMargin( new Insets( 0, 0, 0, 0 ) );
-            button.setAlignmentX(RIGHT_ALIGNMENT);
-            button.setContentAreaFilled(false);
+            button.setAlignmentX( RIGHT_ALIGNMENT );
+            button.setContentAreaFilled( false );
         }
 
         checkSignIn();
@@ -121,13 +133,24 @@ public class UnlockFrame extends JFrame {
         } );
     }
 
-    void updateUser(User user) {
+    void updateUser(@Nullable User user) {
         this.user = user;
         checkSignIn();
     }
 
     boolean checkSignIn() {
-        boolean enabled = user != null && !user.getFullName().isEmpty() && authenticationPanel.getMasterPassword().length > 0;
+        String fullName = user == null? "": user.getFullName();
+        char[] masterPassword = authenticationPanel.getMasterPassword();
+        boolean enabled = !fullName.isEmpty() && masterPassword.length > 0;
+
+        if (fullName.isEmpty() || masterPassword.length == 0)
+            identiconLabel.setText( " " );
+        else {
+            MPIdenticon identicon = new MPIdenticon( fullName, masterPassword );
+            identiconLabel.setText( identicon.getText() );
+            identiconLabel.setForeground( identicon.getColor().getAWTColor( MPIdenticon.BackgroundMode.DARK ) );
+        }
+
         signInButton.setEnabled( enabled );
 
         return enabled;
@@ -170,7 +193,6 @@ public class UnlockFrame extends JFrame {
                         }
                     } );
                 }
-
             }
         } );
     }

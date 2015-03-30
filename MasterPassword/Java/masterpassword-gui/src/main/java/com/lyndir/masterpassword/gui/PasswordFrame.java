@@ -53,7 +53,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         add( Components.borderPanel( sitePanel, BorderFactory.createRaisedBevelBorder(), Res.colors().frameBg() ), BorderLayout.CENTER );
 
         // User
-        sitePanel.add( Components.label( strf( "Generating passwords for: %s", user.getFullName() ), JLabel.CENTER ) );
+        sitePanel.add( Components.label( strf( "Generating passwords for: %s", user.getFullName() ), SwingConstants.CENTER ) );
         sitePanel.add( Components.stud() );
 
         // Site Name
@@ -161,7 +161,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         updateMask();
 
         // Tip
-        tipLabel = Components.label( " ", JLabel.CENTER );
+        tipLabel = Components.label( " ", SwingConstants.CENTER );
         tipLabel.setAlignmentX( Component.CENTER_ALIGNMENT );
         JPanel passwordContainer = Components.boxLayout( BoxLayout.PAGE_AXIS, maskPasswordField, passwordField, tipLabel );
         passwordContainer.setOpaque( true );

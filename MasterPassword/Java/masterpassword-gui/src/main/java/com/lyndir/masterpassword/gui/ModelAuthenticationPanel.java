@@ -14,6 +14,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.metal.MetalComboBoxEditor;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -104,6 +105,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
         return userField.getModel().getElementAt( selectedIndex );
     }
 
+    @NotNull
     @Override
     public char[] getMasterPassword() {
         return masterPasswordField.getPassword();
@@ -124,6 +126,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
                         updateUser( true );
                     }
                 } );
+                setToolTipText( "Add a new user to the list." );
             }
         }, new JButton( Res.iconQuestion() ) {
             {
@@ -131,10 +134,11 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
                     @Override
                     public void actionPerformed(final ActionEvent e) {
                         JOptionPane.showMessageDialog( ModelAuthenticationPanel.this, //
-                                                       "Reads users and sites from the directory at ~/.mpw.", //
+                                                       "Reads users and sites from the directory at ~/.mpw.d.", //
                                                        "Help", JOptionPane.INFORMATION_MESSAGE );
                     }
                 } );
+                setToolTipText( "More information." );
             }
         } );
     }

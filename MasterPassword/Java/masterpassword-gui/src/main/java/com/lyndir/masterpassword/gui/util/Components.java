@@ -70,10 +70,10 @@ public abstract class Components {
     public static JPasswordField passwordField() {
         return new JPasswordField() {
             {
-                setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Res.colors().controlBorder(), 1, true),
-                        BorderFactory.createEmptyBorder(4, 4, 4, 4)));
-                setAlignmentX(LEFT_ALIGNMENT);
-                setAlignmentY(BOTTOM_ALIGNMENT);
+                setBorder( BorderFactory.createCompoundBorder( BorderFactory.createLineBorder( Res.colors().controlBorder(), 1, true ),
+                                                               BorderFactory.createEmptyBorder( 4, 4, 4, 4 ) ) );
+                setAlignmentX( LEFT_ALIGNMENT );
+                setAlignmentY( BOTTOM_ALIGNMENT );
             }
 
             @Override
@@ -116,7 +116,7 @@ public abstract class Components {
                 ((DefaultEditor) getEditor()).getTextField().setBorder( editorBorder );
                 setAlignmentX( LEFT_ALIGNMENT );
                 setAlignmentY( BOTTOM_ALIGNMENT );
-                setBorder(null);
+                setBorder( null );
             }
 
             @Override
@@ -126,12 +126,21 @@ public abstract class Components {
         };
     }
 
-    public static JLabel label(final String label) {
-        return label( label, JLabel.LEADING );
+    public static JLabel label(@Nullable String label) {
+        return label( label, SwingConstants.LEADING );
     }
 
-    public static JLabel label(final String label, final int alignment) {
-        return new JLabel( label, alignment ) {
+    /**
+     * @param horizontalAlignment One of the following constants
+     *                            defined in <code>SwingConstants</code>:
+     *                            <code>LEFT</code>,
+     *                            <code>CENTER</code>,
+     *                            <code>RIGHT</code>,
+     *                            <code>LEADING</code> or
+     *                            <code>TRAILING</code>.
+     */
+    public static JLabel label(@Nullable final String label, final int horizontalAlignment) {
+        return new JLabel( label, horizontalAlignment ) {
             {
                 setFont( Res.controlFont().deriveFont( 12f ) );
                 setAlignmentX( LEFT_ALIGNMENT );
@@ -148,8 +157,8 @@ public abstract class Components {
     public static JCheckBox checkBox(final String label) {
         return new JCheckBox( label ) {
             {
-                setFont(Res.controlFont().deriveFont(12f));
-                setBackground(null);
+                setFont( Res.controlFont().deriveFont( 12f ) );
+                setBackground( null );
                 setAlignmentX( LEFT_ALIGNMENT );
                 setAlignmentY( BOTTOM_ALIGNMENT );
             }
@@ -164,14 +173,14 @@ public abstract class Components {
     public static <M> JComboBox<M> comboBox(final ComboBoxModel<M> model) {
         return new JComboBox<M>( model ) {
             {
-//                CompoundBorder editorBorder = BorderFactory.createCompoundBorder(
-//                        BorderFactory.createLineBorder( Res.colors().controlBorder(), 1, true ),
-//                        BorderFactory.createEmptyBorder( 4, 4, 4, 4 ) );
-//                ((JComponent) ((BasicComboBoxEditor) getEditor()).getEditorComponent()).setBorder(editorBorder);
+                //                CompoundBorder editorBorder = BorderFactory.createCompoundBorder(
+                //                        BorderFactory.createLineBorder( Res.colors().controlBorder(), 1, true ),
+                //                        BorderFactory.createEmptyBorder( 4, 4, 4, 4 ) );
+                //                ((JComponent) ((BasicComboBoxEditor) getEditor()).getEditorComponent()).setBorder(editorBorder);
                 setFont( Res.controlFont().deriveFont( 12f ) );
                 setAlignmentX( LEFT_ALIGNMENT );
                 setAlignmentY( BOTTOM_ALIGNMENT );
-//                setBorder(null);
+                //                setBorder(null);
             }
 
             @Override

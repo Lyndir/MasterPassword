@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -58,6 +59,7 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel implements
         return new IncognitoUser( fullNameField.getText() );
     }
 
+    @NotNull
     @Override
     public char[] getMasterPassword() {
         return masterPasswordField.getPassword();

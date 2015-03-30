@@ -65,6 +65,7 @@ public abstract class MasterKey {
     @Nonnull
     protected byte[] getKey() {
 
+        Preconditions.checkState( isValid() );
         return Preconditions.checkNotNull( masterKey );
     }
 
