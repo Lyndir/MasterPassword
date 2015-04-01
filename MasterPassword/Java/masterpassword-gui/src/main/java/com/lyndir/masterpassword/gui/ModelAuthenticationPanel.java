@@ -1,5 +1,7 @@
 package com.lyndir.masterpassword.gui;
 
+import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.*;
@@ -53,14 +55,14 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
         userField.setFont( Res.valueFont().deriveFont( 12f ) );
         userField.addItemListener( this );
         userField.addActionListener( this );
-        userField.setEditor(new MetalComboBoxEditor() {
+        userField.setEditor( new MetalComboBoxEditor() {
             @Override
             protected JTextField createEditorComponent() {
                 JTextField editorComponents = Components.textField();
-                editorComponents.setForeground(Color.red);
+                editorComponents.setForeground( Color.red );
                 return editorComponents;
             }
-        });
+        } );
 
         add( userField );
         add( Components.stud() );
@@ -128,13 +130,36 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
                 } );
                 setToolTipText( "Add a new user to the list." );
             }
+        }, new JButton( Res.iconDelete() ) {
+            {
+                addActionListener( new ActionListener() {
+                    @Override
+                    public void actionPerformed(final ActionEvent e) {
+                        ModelUser deleteUser = getSelectedUser();
+                        if (deleteUser == null)
+                            return;
+
+                        if (JOptionPane.showConfirmDialog( ModelAuthenticationPanel.this, //
+                                                       strf( "Are you sure you want to delete the user and sites remembered for:\n%s.",
+                                                             deleteUser.getFullName() ), //
+                                                       "Delete User", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE ) == JOptionPane.CANCEL_OPTION)
+                            return;
+
+                        MPUserFileManager.get().deleteUser( deleteUser.getModel() );
+                        userField.setModel( new DefaultComboBoxModel<>( readConfigUsers() ) );
+                        updateUser( true );
+                    }
+                } );
+                setToolTipText( "Delete the selected user." );
+            }
         }, new JButton( Res.iconQuestion() ) {
             {
                 addActionListener( new ActionListener() {
                     @Override
                     public void actionPerformed(final ActionEvent e) {
                         JOptionPane.showMessageDialog( ModelAuthenticationPanel.this, //
-                                                       "Reads users and sites from the directory at ~/.mpw.d.", //
+                                                       strf( "Reads users and sites from the directory at:\n%s",
+                                                             MPUserFileManager.get().getPath().getAbsolutePath() ), //
                                                        "Help", JOptionPane.INFORMATION_MESSAGE );
                     }
                 } );

@@ -5,6 +5,7 @@ import com.google.common.collect.*;
 import com.google.common.io.CharSink;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.io.*;
+import java.util.SortedSet;
 import javax.annotation.Nullable;
 
 
@@ -15,7 +16,7 @@ public class MPUserFileManager extends MPUserManager {
 
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MPUserFileManager.class );
-    private static final File mpwd = new File( System.getProperty( "user.home" ), ".mpw.d" );
+    private static final File   mpwd   = new File( System.getProperty( "user.home" ), ".mpw.d" );
     private static final MPUserFileManager instance;
 
     static {
@@ -70,19 +71,53 @@ public class MPUserFileManager extends MPUserManager {
         } ).filter( Predicates.notNull() );
     }
 
+    @Override
+    public void addUser(final MPUser user) {
+        super.addUser( user );
+        save();
+    }
+
+    @Override
+    public void deleteUser(final MPUser user) {
+        super.deleteUser( user );
+        save();
+    }
+
+    /**
+     * Write the current user state to disk.
+     */
     public void save() {
+        // Save existing users.
         for (final MPUser user : getUsers())
             try {
                 new CharSink() {
                     @Override
                     public Writer openStream()
                             throws IOException {
-                        return new FileWriter( new File(userFilesDirectory, user.getFullName() + ".mpsites" ) );
+                        return new FileWriter( new File( userFilesDirectory, user.getFullName() + ".mpsites" ) );
                     }
                 }.write( MPSiteMarshaller.marshallSafe( user ).getExport() );
             }
             catch (IOException e) {
                 logger.err( e, "Unable to save sites for user: %s", user );
             }
+
+        // Remove deleted users.
+        for (File userFile : userFilesDirectory.listFiles( new FilenameFilter() {
+            @Override
+            public boolean accept(final File dir, final String name) {
+                return name.endsWith( ".mpsites" );
+            }
+        } ))
+            if (getUserNamed( userFile.getName().replaceFirst( "\\.mpsites$", "" ) ) == null)
+                if (!userFile.delete())
+                    logger.err( "Couldn't delete file: %s", userFile );
+    }
+
+    /**
+     * @return The location on the file system where the user models are stored.
+     */
+    public File getPath() {
+        return mpwd;
     }
 }

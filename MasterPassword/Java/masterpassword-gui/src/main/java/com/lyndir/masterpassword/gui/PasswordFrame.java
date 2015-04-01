@@ -42,7 +42,8 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         this.user = user;
 
         setDefaultCloseOperation( DISPOSE_ON_CLOSE );
-        setContentPane( root = Components.gradientPanel( new BorderLayout( 20, 20 ), Res.colors().frameBg() ) );
+        setContentPane( root = Components.gradientPanel( new FlowLayout(), Res.colors().frameBg() ) );
+        root.setLayout( new BoxLayout( root, BoxLayout.PAGE_AXIS ) );
         root.setBorder( BorderFactory.createEmptyBorder( 20, 20, 20, 20 ) );
 
         // Site
@@ -50,7 +51,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         sitePanel.setOpaque( true );
         sitePanel.setBackground( Res.colors().controlBg() );
         sitePanel.setBorder( BorderFactory.createEmptyBorder( 20, 20, 20, 20 ) );
-        add( Components.borderPanel( sitePanel, BorderFactory.createRaisedBevelBorder(), Res.colors().frameBg() ), BorderLayout.CENTER );
+        root.add( Components.borderPanel( sitePanel, BorderFactory.createRaisedBevelBorder(), Res.colors().frameBg() ) );
 
         // User
         sitePanel.add( Components.label( strf( "Generating passwords for: %s", user.getFullName() ), SwingConstants.CENTER ) );
@@ -163,12 +164,13 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         // Tip
         tipLabel = Components.label( " ", SwingConstants.CENTER );
         tipLabel.setAlignmentX( Component.CENTER_ALIGNMENT );
-        JPanel passwordContainer = Components.boxLayout( BoxLayout.PAGE_AXIS, maskPasswordField, passwordField, tipLabel );
+        JPanel passwordContainer = Components.boxLayout( BoxLayout.PAGE_AXIS, maskPasswordField, Box.createGlue(), passwordField, Box.createGlue(), tipLabel );
         passwordContainer.setOpaque( true );
         passwordContainer.setBackground( Color.white );
         passwordContainer.setBorder( BorderFactory.createEmptyBorder( 8, 8, 8, 8 ) );
-        add( Components.borderPanel( passwordContainer, BorderFactory.createLoweredSoftBevelBorder(), Res.colors().frameBg() ),
-             BorderLayout.SOUTH );
+        root.add( Box.createVerticalStrut( 8 ) );
+        root.add( Components.borderPanel( passwordContainer, BorderFactory.createLoweredSoftBevelBorder(), Res.colors().frameBg() ),
+                  BorderLayout.SOUTH );
 
         pack();
         setMinimumSize( new Dimension( Math.max( 600, getPreferredSize().width ), Math.max( 300, getPreferredSize().height ) ) );

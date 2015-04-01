@@ -85,6 +85,10 @@ public abstract class Res {
         return new RetinaIcon( Resources.getResource( "media/icon_add@2x.png" ) );
     }
 
+    public static Icon iconDelete() {
+        return new RetinaIcon( Resources.getResource( "media/icon_delete@2x.png" ) );
+    }
+
     public static Icon iconQuestion() {
         return new RetinaIcon( Resources.getResource( "media/icon_question@2x.png" ) );
     }
