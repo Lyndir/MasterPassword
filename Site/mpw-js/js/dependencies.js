@@ -23,6 +23,9 @@ window.TextEncoder || document.write("<script src=js/encoding-polyfill.js><\/scr
 // https://github.com/taylorhakes/promise-polyfill
 window.Promise || document.write("<script src=js/promise-polyfill.js><\/script>");
 
+// If setImmediate is not implemented we include the polyfill
+window.setImmediate || document.write("<script src=js/setImmediate-polyfill.js><\/script>");
+
 // Test for required ES6 features
 // Use an eval call to avoid a hard-fail on ES5 parsers.
 var ES6 = false;
@@ -35,9 +38,6 @@ try {
 
 // If ES6 is not supported we must include traceur-runtime.js
 ES6 || document.write("<script src=js/mpw-js/traceur-runtime.js><\/script>");
-
-// If setImmediate is not implemented we include the polyfill
-window.setImmediate || document.write("<script src=js/mpw-js/" + esdir + "setImmediate-polyfill.js><\/script>");
 
 // Include the scrypt implementation
 var SCRYPTASM_PATH = (window.location + '').replace(/[^/]*(#[^#]*)?$/, 'js/mpw-js/scrypt-asm.js');
