@@ -42,7 +42,7 @@ public class ModelUser extends User {
     }
 
     public void setAvatar(final int avatar) {
-        model.setAvatar( avatar % Res.avatars() );
+        model.setAvatar(avatar % Res.avatars());
         MPUserFileManager.get().save();
     }
 
@@ -67,8 +67,8 @@ public class ModelUser extends User {
         return FluentIterable.from( model.findSitesByName( query ) ).transform( new Function<MPSiteResult, Site>() {
             @Nullable
             @Override
-            public Site apply(@Nullable final MPSiteResult result) {
-                return new ModelSite( Preconditions.checkNotNull( result ) );
+            public Site apply(@Nullable final MPSiteResult site) {
+                return new ModelSite( Preconditions.checkNotNull( site ) );
             }
         } );
     }
@@ -78,6 +78,14 @@ public class ModelUser extends User {
         model.addSite( new MPSite( model, site.getSiteName(), site.getSiteType(), site.getSiteCounter() ) );
         model.updateLastUsed();
         MPUserFileManager.get().save();
+    }
+
+    @Override
+    public void deleteSite(Site site) {
+        if (site instanceof ModelSite) {
+            model.deleteSite(((ModelSite) site).getModel());
+            MPUserFileManager.get().save();
+        }
     }
 
     public boolean keySaved() {

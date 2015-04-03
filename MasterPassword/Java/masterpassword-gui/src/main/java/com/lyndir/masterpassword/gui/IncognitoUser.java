@@ -41,4 +41,8 @@ public class IncognitoUser extends User {
     @Override
     public void addSite(final Site site) {
     }
+
+    @Override
+    public void deleteSite(Site site) {
+    }
 }

@@ -16,6 +16,10 @@ public class ModelSite extends Site {
         this.model = result.getSite();
     }
 
+    public MPSite getModel() {
+        return model;
+    }
+
     public String getSiteName() {
         return model.getSiteName();
     }

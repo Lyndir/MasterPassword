@@ -59,6 +59,10 @@ public class MPUser implements Comparable<MPUser> {
         sites.add( site );
     }
 
+    public void deleteSite(final MPSite site) {
+        sites.remove( site );
+    }
+
     public String getFullName() {
         return fullName;
     }
