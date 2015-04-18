@@ -85,7 +85,7 @@
                     android:layout_gravity="center"
                     android:orientation="vertical">
 
-                <TextView
+                <Button
                         android:id="@id/sitePasswordField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -2,10 +2,11 @@ package com.lyndir.masterpassword;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
-import android.app.Activity;
+import android.app.*;
 import android.content.*;
 import android.content.ClipboardManager;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.*;
 import android.text.method.PasswordTransformationMethod;
@@ -18,7 +19,7 @@ import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
-import java.util.Arrays;
+import java.util.*;
 import java.util.concurrent.*;
 import javax.annotation.Nullable;
 
@@ -26,7 +27,9 @@ import javax.annotation.Nullable;
 public class EmergencyActivity extends Activity {
 
     @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger = Logger.get( EmergencyActivity.class );
+    private static final Logger   logger                = Logger.get( EmergencyActivity.class );
+    private static final ClipData EMPTY_CLIP            = new ClipData( new ClipDescription( "", new String[0] ), new ClipData.Item( "" ) );
+    private static final int      PASSWORD_NOTIFICATION = 0;
 
     private final ListeningExecutorService executor           = MoreExecutors.listeningDecorator( Executors.newSingleThreadExecutor() );
     private final ValueChangedListener     updateMasterKey    = new ValueChangedListener() {
@@ -66,7 +69,7 @@ public class EmergencyActivity extends Activity {
     Spinner siteVersionField;
 
     @InjectView(R.id.sitePasswordField)
-    TextView sitePasswordField;
+    Button sitePasswordField;
 
     @InjectView(R.id.sitePasswordTip)
     TextView sitePasswordTip;
@@ -306,13 +309,40 @@ public class EmergencyActivity extends Activity {
     }
 
     public void copySitePassword(View view) {
-        if (TextUtils.isEmpty( sitePassword ))
+        final String currentSitePassword = this.sitePassword;
+        if (TextUtils.isEmpty( currentSitePassword ))
             return;
 
-        ClipDescription description = new ClipDescription( strf( "Password for %s", siteNameField.getText() ),
-                                                           new String[]{ ClipDescription.MIMETYPE_TEXT_PLAIN } );
-        ClipData clipData = new ClipData( description, new ClipData.Item( sitePassword ) );
-        ((ClipboardManager) getSystemService( CLIPBOARD_SERVICE )).setPrimaryClip( clipData );
+        final ClipboardManager clipboardManager = (ClipboardManager) getSystemService( CLIPBOARD_SERVICE );
+        final NotificationManager notificationManager = (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE );
+
+        String title = strf( "Password for %s", siteNameField.getText() );
+        ClipDescription description = new ClipDescription( title, new String[]{ ClipDescription.MIMETYPE_TEXT_PLAIN } );
+        clipboardManager.setPrimaryClip( new ClipData( description, new ClipData.Item( currentSitePassword ) ) );
+
+        Notification.Builder notificationBuilder = new Notification.Builder( this ).setContentTitle( title )
+                                                                                   .setContentText( "Paste the password into your app." )
+                                                                                   .setSmallIcon( R.drawable.icon )
+                                                                                   .setAutoCancel( true );
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            notificationBuilder.setVisibility( Notification.VISIBILITY_SECRET )
+                               .setCategory( Notification.CATEGORY_RECOMMENDATION )
+                               .setLocalOnly( true );
+        notificationManager.notify( PASSWORD_NOTIFICATION, notificationBuilder.build() );
+        final Timer timer = new Timer();
+        timer.schedule( new TimerTask() {
+            @Override
+            public void run() {
+                ClipData clip = clipboardManager.getPrimaryClip();
+                for (int i = 0; i < clip.getItemCount(); ++i)
+                    if (currentSitePassword.equals( clip.getItemAt( i ).coerceToText( EmergencyActivity.this ) )) {
+                        clipboardManager.setPrimaryClip( EMPTY_CLIP );
+                        break;
+                    }
+                notificationManager.cancel( PASSWORD_NOTIFICATION );
+                timer.cancel();
+            }
+        }, 20000 );
 
         Intent startMain = new Intent( Intent.ACTION_MAIN );
         startMain.addCategory( Intent.CATEGORY_HOME );

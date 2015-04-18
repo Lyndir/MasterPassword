@@ -58,8 +58,11 @@ public class MasterKeyV0 extends MasterKey {
         logger.trc( "key scope: %s", mpKeyScope );
         logger.trc( "masterKeySalt ID: %s", CodeUtils.encodeHex( idForBytes( masterKeySalt ) ) );
 
-        CharBuffer mpChars = CharBuffer.wrap( masterPassword );
-        byte[] mpBytes = MP_charset.encode( mpChars ).array();
+        ByteBuffer mpBytesBuf = MP_charset.encode( CharBuffer.wrap( masterPassword ) );
+        byte[] mpBytes = new byte[mpBytesBuf.remaining()];
+        mpBytesBuf.get( mpBytes, 0, mpBytes.length );
+        Arrays.fill( mpBytesBuf.array(), (byte) 0 );
+
         try {
             return SCrypt.scrypt( mpBytes, masterKeySalt, MP_N, MP_r, MP_p, MP_dkLen );
         }
