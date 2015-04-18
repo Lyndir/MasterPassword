@@ -15,7 +15,7 @@
 
     <groupId>com.lyndir.masterpassword</groupId>
     <artifactId>masterpassword</artifactId>
-    <version>2.3</version>
+    <version>GIT-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -57,8 +57,4 @@
             </releases>
         </repository>
     </repositories>
-
-  <scm>
-    <tag>2.3</tag>
-  </scm>
 </project>
