@@ -62,6 +62,8 @@ public abstract class User {
 
     public abstract void addSite(final Site site);
 
+    public abstract void deleteSite(final Site site);
+
     @Override
     public boolean equals(final Object obj) {
         return this == obj || obj instanceof User && Objects.equals( getFullName(), ((User) obj).getFullName() );
