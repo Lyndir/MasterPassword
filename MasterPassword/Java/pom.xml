@@ -44,7 +44,7 @@
                         <allowTimestampedSnapshots>true</allowTimestampedSnapshots>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <developmentVersion>GIT-SNAPSHOT</developmentVersion>
-                        <localCheckout>true</localCheckout>
+                        <localCheckout>false</localCheckout>
                         <preparationGoals>clean install</preparationGoals>
                         <updateBranchVersions>true</updateBranchVersions>
                         <updateWorkingCopyVersions>false</updateWorkingCopyVersions>
