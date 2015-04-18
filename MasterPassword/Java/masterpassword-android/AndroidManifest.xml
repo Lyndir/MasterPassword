@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.lyndir.masterpassword"
-          android:versionCode="2002"
-          android:versionName="2.2">
+          android:versionCode="2003"
+          android:versionName="2.3">
 
     <uses-sdk
             android:minSdkVersion="19"
