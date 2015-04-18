@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.lyndir.lhunath</groupId>
         <artifactId>lyndir</artifactId>
-        <version>1.21</version>
+        <version>1.22</version>
     </parent>
 
     <name>Master Password</name>
