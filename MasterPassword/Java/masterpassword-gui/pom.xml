@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.lyndir.masterpassword</groupId>
         <artifactId>masterpassword</artifactId>
-        <version>GIT-SNAPSHOT</version>
+        <version>2.3-android</version>
     </parent>
 
     <name>Master Password GUI</name>
@@ -134,7 +134,7 @@
         <dependency>
             <groupId>com.lyndir.masterpassword</groupId>
             <artifactId>masterpassword-model</artifactId>
-            <version>GIT-SNAPSHOT</version>
+            <version>2.3-android</version>
         </dependency>
 
         <!-- EXTERNAL DEPENDENCIES -->
