@@ -118,11 +118,10 @@
             <version>1.7.13-underscore</version>
         </dependency>
 
-        <!-- clone https://github.com/mosabua/maven-android-sdk-deployer.git
-             run   mvn install -P 5.1 -->
         <dependency>
             <groupId>android</groupId>
             <artifactId>android</artifactId>
+            <version>5.0.1_r2</version>
         </dependency>
 
         <dependency>
