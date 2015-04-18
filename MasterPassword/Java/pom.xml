@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.lyndir.lhunath</groupId>
         <artifactId>lyndir</artifactId>
-        <version>1.20</version>
+        <version>1.21</version>
     </parent>
 
     <name>Master Password</name>
@@ -27,34 +27,18 @@
 
     <profiles>
         <profile>
+            <id>release</id>
+            <modules>
+                <module>masterpassword-android</module>
+            </modules>
+        </profile>
+        <profile>
             <id>mod:android</id>
             <modules>
                 <module>masterpassword-android</module>
             </modules>
         </profile>
     </profiles>
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <version>2.5.1</version>
-                    <configuration>
-                        <allowTimestampedSnapshots>true</allowTimestampedSnapshots>
-                        <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <developmentVersion>GIT-SNAPSHOT</developmentVersion>
-                        <localCheckout>false</localCheckout>
-                        <preparationGoals>clean install</preparationGoals>
-                        <updateBranchVersions>true</updateBranchVersions>
-                        <updateWorkingCopyVersions>false</updateWorkingCopyVersions>
-                        <branchName>${project.version}-maint</branchName>
-                        <mavenExecutorId>forked-path</mavenExecutorId>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 
     <!-- REMOTE ARTIFACT REPOSITORIES -->
     <repositories>
