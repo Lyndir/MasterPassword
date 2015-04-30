@@ -4,6 +4,7 @@ import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
 import com.lyndir.masterpassword.MPIdenticon;
 import com.lyndir.masterpassword.gui.util.Components;
+import com.lyndir.masterpassword.gui.util.MPIdenticonColorUtil;
 import com.lyndir.masterpassword.model.IncorrectMasterPasswordException;
 import java.awt.*;
 import java.awt.event.*;
@@ -147,8 +148,10 @@ public class UnlockFrame extends JFrame {
             identiconLabel.setText( " " );
         else {
             MPIdenticon identicon = new MPIdenticon( fullName, masterPassword );
-            identiconLabel.setText( identicon.getText() );
-            identiconLabel.setForeground( identicon.getColor().getAWTColor( MPIdenticon.BackgroundMode.DARK ) );
+            identiconLabel.setText(identicon.getText());
+            Color color = MPIdenticonColorUtil.fromMPIdenticonColor(
+                    identicon.getColor()).getAWTColor(MPIdenticonColorUtil.BackgroundMode.DARK);
+            identiconLabel.setForeground( color );
         }
 
         signInButton.setEnabled( enabled );

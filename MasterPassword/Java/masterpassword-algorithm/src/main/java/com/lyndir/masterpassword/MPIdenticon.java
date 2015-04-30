@@ -15,13 +15,14 @@ import java.util.Map;
 
 /**
  * @author lhunath, 15-03-29
+ * @author deekay, 15-04-30
  */
 public class MPIdenticon {
 
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MPIdenticon.class );
 
-    private static final Charset charset = StandardCharsets.UTF_8;
+    private static final Charset charset = Charset.forName("UTF-8");
     private static final Color[] colors  = new Color[]{
             Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, Color.CYAN, Color.MONO };
     private static final char[] leftArm   = new char[]{ '╔', '╚', '╰', '═' };
@@ -70,37 +71,14 @@ public class MPIdenticon {
         return color;
     }
 
-    public enum BackgroundMode {
-        DARK, LIGHT
-    }
-
 
     public enum Color {
-        RED( "#dc322f", "#dc322f" ),
-        GREEN( "#859900", "#859900" ),
-        YELLOW( "#b58900", "#b58900" ),
-        BLUE( "#268bd2", "#268bd2" ),
-        MAGENTA( "#d33682", "#d33682" ),
-        CYAN( "#2aa198", "#2aa198" ),
-        MONO( "#93a1a1", "#586e75" );
-
-        private final String rgbDark;
-        private final String rgbLight;
-
-        Color(final String rgbDark, final String rgbLight) {
-            this.rgbDark = rgbDark;
-            this.rgbLight = rgbLight;
-        }
-
-        public java.awt.Color getAWTColor(BackgroundMode backgroundMode) {
-            switch (backgroundMode) {
-                case DARK:
-                    return new java.awt.Color( Integer.decode( rgbDark ) );
-                case LIGHT:
-                    return new java.awt.Color( Integer.decode( rgbLight ) );
-            }
-
-            throw new UnsupportedOperationException( "Unsupported background mode: " + backgroundMode );
-        }
+        RED,
+        GREEN,
+        YELLOW,
+        BLUE,
+        MAGENTA,
+        CYAN,
+        MONO
     }
 }
