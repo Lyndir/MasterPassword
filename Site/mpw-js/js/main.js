@@ -62,7 +62,7 @@ function updateSite() {
     else
         mpw.generatePassword( $('#siteName')[0].value, $('#siteCounter')[0].valueAsNumber, $('#siteType')[0].value )
            .then( function (sitePassword) {
-               $('#sitePassword').val(sitePassword);
+               $('#sitePassword').text(sitePassword);
                update('site');
            }, function (reason) {
                update('site', null, reason);
