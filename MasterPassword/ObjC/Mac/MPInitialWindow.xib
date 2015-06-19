@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment defaultVersion="1080" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MPInitialWindowController">
@@ -12,34 +13,31 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Welcome to Master Password" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" animationBehavior="default" id="1">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" moveToActiveSpace="YES"/>
             <rect key="contentRect" x="196" y="240" width="1000" height="640"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="900"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="2" userLabel="Container">
                 <rect key="frame" x="0.0" y="0.0" width="1000" height="640"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <customView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="369">
                         <rect key="frame" x="0.0" y="40" width="1000" height="600"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
                             <imageView translatesAutoresizingMaskIntoConstraints="NO" id="3" userLabel="Image">
                                 <rect key="frame" x="0.0" y="0.0" width="1000" height="600"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="shot-laptop-leaning-iphone" id="4"/>
                             </imageView>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="268">
                                 <rect key="frame" x="18" y="502" width="964" height="78"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <shadow key="shadow" blurRadius="1">
                                     <size key="offset" width="0.0" height="1"/>
                                     <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </shadow>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="269">
-                                    <font key="font" size="32" name=".LucidaGrandeUI"/>
+                                    <font key="font" metaFont="system" size="32"/>
                                     <string key="title">Access your passwords
 from anywhere.</string>
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -47,31 +45,43 @@ from anywhere.</string>
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="283">
-                                <rect key="frame" x="328" y="72" width="344" height="29"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <rect key="frame" x="440" y="72" width="121" height="29"/>
                                 <shadow key="shadow" blurRadius="1">
                                     <size key="offset" width="0.0" height="1"/>
                                     <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </shadow>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Get Master Password for iPhone" id="284">
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Get Mobile" id="284">
                                     <font key="font" size="24" name="HelveticaNeue-Light"/>
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="173" userLabel="Store">
-                                <rect key="frame" x="425" y="20" width="150" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <rect key="frame" x="342" y="20" width="150" height="44"/>
                                 <shadow key="shadow" blurRadius="1">
                                     <size key="offset" width="0.0" height="1"/>
                                     <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </shadow>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="appstore" imagePosition="only" alignment="left" inset="2" id="174">
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="appstore" imagePosition="overlaps" alignment="left" inset="2" id="174">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="iphoneAppStore:" target="-2" id="206"/>
+                                </connections>
+                            </button>
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="C4d-ih-ARL" userLabel="Store">
+                                <rect key="frame" x="508" y="20" width="150" height="44"/>
+                                <shadow key="shadow" blurRadius="1">
+                                    <size key="offset" width="0.0" height="1"/>
+                                    <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </shadow>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="appstore" imagePosition="overlaps" alignment="left" inset="2" id="uzk-gu-gWP">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="androidPlayStore:" target="-2" id="EDO-LD-StH"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -84,18 +94,20 @@ from anywhere.</string>
                             <constraint firstAttribute="trailing" secondItem="268" secondAttribute="trailing" constant="20" symbolic="YES" id="387"/>
                             <constraint firstItem="268" firstAttribute="top" secondItem="369" secondAttribute="top" constant="20" symbolic="YES" id="393"/>
                             <constraint firstAttribute="bottom" secondItem="173" secondAttribute="bottom" constant="20" symbolic="YES" id="395"/>
-                            <constraint firstItem="283" firstAttribute="centerX" secondItem="173" secondAttribute="centerX" id="542"/>
+                            <constraint firstItem="173" firstAttribute="trailing" secondItem="283" secondAttribute="centerX" constant="-8" id="542"/>
                             <constraint firstItem="173" firstAttribute="top" secondItem="283" secondAttribute="bottom" constant="8" symbolic="YES" id="543"/>
                             <constraint firstItem="283" firstAttribute="centerX" secondItem="268" secondAttribute="centerX" id="544"/>
+                            <constraint firstItem="C4d-ih-ARL" firstAttribute="leading" secondItem="283" secondAttribute="centerX" constant="8" id="TZ0-Ud-fcb"/>
+                            <constraint firstAttribute="bottom" secondItem="C4d-ih-ARL" secondAttribute="bottom" constant="20" symbolic="YES" id="pIA-8D-d57"/>
+                            <constraint firstItem="C4d-ih-ARL" firstAttribute="top" secondItem="283" secondAttribute="bottom" constant="8" symbolic="YES" id="tqS-gV-jpd"/>
                         </constraints>
                     </customView>
-                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="508">
-                        <rect key="frame" x="858" y="8" width="122" height="25"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="508">
+                        <rect key="frame" x="766" y="8" width="214" height="25"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="122" id="509"/>
                         </constraints>
-                        <buttonCell key="cell" type="roundTextured" title="Open at Login" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="510">
+                        <buttonCell key="cell" type="roundTextured" title="Launch After Computer Restarts" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="510">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -103,10 +115,9 @@ from anywhere.</string>
                             <action selector="togglePreference:" target="-2" id="574"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="562">
-                        <rect key="frame" x="21" y="13" width="831" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="To begin, hold: command, control and P (⌘⌃P) or access the ●●●| menu icon." id="563">
+                    <textField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="562">
+                        <rect key="frame" x="21" y="13" width="739" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="To begin: hold command, control and P (⌘⌃P) or access the ●●●| menu icon next to your clock." id="563">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

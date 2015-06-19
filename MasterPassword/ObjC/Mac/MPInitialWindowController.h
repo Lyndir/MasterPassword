@@ -23,6 +23,7 @@
 @property(nonatomic, weak) IBOutlet NSButton *openAtLoginButton;
 
 - (IBAction)iphoneAppStore:(id)sender;
+- (IBAction)androidPlayStore:(id)sender;
 - (IBAction)togglePreference:(id)sender;
 
 @end

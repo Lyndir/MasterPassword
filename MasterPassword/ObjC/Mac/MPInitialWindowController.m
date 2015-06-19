@@ -42,6 +42,12 @@
     [self close];
 }
 
+- (IBAction)androidPlayStore:(id)sender {
+
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://masterpasswordapp.com"]];
+    [self close];
+}
+
 - (IBAction)togglePreference:(id)sender {
 
     if (sender == self.openAtLoginButton)
