@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Q1S-vU-GGO">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Q1S-vU-GGO">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -1297,8 +1297,8 @@
                                                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="ignoreTouches" value="YES"/>
                                                                                     </userDefinedRuntimeAttributes>
                                                                                 </view>
-                                                                                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LvK-28-fbm" userLabel="Settings Container">
-                                                                                    <rect key="frame" x="0.0" y="0.0" width="355" height="100"/>
+                                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LvK-28-fbm" userLabel="Settings Container">
+                                                                                    <rect key="frame" x="355" y="0.0" width="355" height="100"/>
                                                                                     <subviews>
                                                                                         <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IKd-Ot-0n4" userLabel="Upgrade">
                                                                                             <rect key="frame" x="40" y="56" width="44" height="44"/>
@@ -1969,8 +1969,6 @@ eg. apple.com, rmitchell@twitter.com</string>
                             <constraint firstItem="IV3-lc-Fnf" firstAttribute="top" secondItem="gRG-Ys-94p" secondAttribute="bottom" id="IMb-wl-Eeb"/>
                             <constraint firstAttribute="trailing" secondItem="gRG-Ys-94p" secondAttribute="trailing" id="Pb1-eY-0FG"/>
                             <constraint firstAttribute="trailing" secondItem="GiS-3g-cDj" secondAttribute="trailing" id="TjK-B6-KoI"/>
-                            <constraint firstAttribute="top" secondAttribute="top" id="Zzd-AD-1X5"/>
-                            <constraint firstAttribute="leading" secondAttribute="leading" id="bk6-yS-CW5"/>
                             <constraint firstItem="gRG-Ys-94p" firstAttribute="top" secondItem="GiS-3g-cDj" secondAttribute="top" id="oyk-Xr-zTZ"/>
                             <constraint firstItem="IV3-lc-Fnf" firstAttribute="top" secondItem="GiS-3g-cDj" secondAttribute="bottom" id="t22-RN-Hm0"/>
                             <constraint firstItem="gRG-Ys-94p" firstAttribute="leading" secondItem="GiS-3g-cDj" secondAttribute="leading" id="zhC-jf-5dY"/>
