@@ -1,10 +1,11 @@
 package com.lyndir.masterpassword.gui;
 
-import com.google.common.base.*;
+import com.google.common.base.Function;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.FluentIterable;
 import com.lyndir.masterpassword.model.*;
 import java.util.Arrays;
-import javax.annotation.*;
+import javax.annotation.Nullable;
 
 
 /**
@@ -50,6 +51,7 @@ public class ModelUser extends User {
             throws IncorrectMasterPasswordException {
         putKey( model.authenticate( masterPassword ) );
         this.masterPassword = masterPassword;
+        MPUserFileManager.get().save();
     }
 
     @Override

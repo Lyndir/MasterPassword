@@ -1,6 +1,6 @@
 package com.lyndir.masterpassword.model;
 
-import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
@@ -90,7 +90,7 @@ public class MPUser implements Comparable<MPUser> {
     public MasterKey authenticate(final char[] masterPassword)
             throws IncorrectMasterPasswordException {
         MasterKey masterKey = MasterKey.create( algorithmVersion, getFullName(), masterPassword );
-        if (keyID == null)
+        if (keyID == null || keyID.length == 0)
             keyID = masterKey.getKeyID();
         else if (!Arrays.equals( masterKey.getKeyID(), keyID ))
             throw new IncorrectMasterPasswordException( this );

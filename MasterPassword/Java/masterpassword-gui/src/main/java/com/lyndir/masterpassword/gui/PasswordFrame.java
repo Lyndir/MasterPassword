@@ -1,12 +1,10 @@
 package com.lyndir.masterpassword.gui;
 
-import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.util.concurrent.*;
-import com.lyndir.lhunath.opal.system.util.NNSupplier;
 import com.lyndir.lhunath.opal.system.util.PredicateNN;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.gui.util.Components;
@@ -98,12 +96,15 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         siteActionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                if (currentSite instanceof ModelSite)
+                if (currentSite == null)
+                    return;
+                else if (currentSite instanceof ModelSite)
                     PasswordFrame.this.user.deleteSite(currentSite);
                 else
                     PasswordFrame.this.user.addSite(currentSite);
+                siteNameField.requestFocus();
 
-                updatePassword(true);
+                updatePassword( true );
             }
         });
         sitePanel.add( siteControls );
