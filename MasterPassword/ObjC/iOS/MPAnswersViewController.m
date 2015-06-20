@@ -29,6 +29,8 @@
     self.tableView.tableHeaderView = [UIView new];
     self.tableView.tableFooterView = [UIView new];
     self.view.backgroundColor = [UIColor clearColor];
+
+    [self.tableView automaticallyAdjustInsetsForKeyboard];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -48,6 +50,7 @@
 
     [super viewWillDisappear:animated];
 
+    PearlRemoveNotificationObserversFrom( self.tableView );
     PearlRemoveNotificationObservers();
 }
 
