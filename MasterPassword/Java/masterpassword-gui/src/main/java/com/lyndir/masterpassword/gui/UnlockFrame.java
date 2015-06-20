@@ -148,7 +148,7 @@ public class UnlockFrame extends JFrame {
         else {
             MPIdenticon identicon = new MPIdenticon( fullName, masterPassword );
             identiconLabel.setText( identicon.getText() );
-            identiconLabel.setForeground( identicon.getColor().getAWTColor( MPIdenticon.BackgroundMode.DARK ) );
+            identiconLabel.setForeground( Res.colors().fromIdenticonColor( identicon.getColor(), Res.Colors.BackgroundMode.DARK ) );
         }
 
         signInButton.setEnabled( enabled );

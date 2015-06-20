@@ -1,16 +1,13 @@
 package com.lyndir.masterpassword;
 
-import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.base.Charsets;
 import com.lyndir.lhunath.opal.system.MessageAuthenticationDigests;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import java.awt.*;
 import java.nio.*;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Map;
 
 
 /**
@@ -21,20 +18,20 @@ public class MPIdenticon {
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MPIdenticon.class );
 
-    private static final Charset charset = StandardCharsets.UTF_8;
-    private static final Color[] colors  = new Color[]{
+    private static final Charset charset   = Charsets.UTF_8;
+    private static final Color[] colors    = new Color[]{
             Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, Color.CYAN, Color.MONO };
-    private static final char[] leftArm   = new char[]{ '╔', '╚', '╰', '═' };
-    private static final char[] rightArm  = new char[]{ '╗', '╝', '╯', '═' };
-    private static final char[] body      = new char[]{ '█', '░', '▒', '▓', '☺', '☻' };
-    private static final char[] accessory = new char[]{
+    private static final char[]  leftArm   = new char[]{ '╔', '╚', '╰', '═' };
+    private static final char[]  rightArm  = new char[]{ '╗', '╝', '╯', '═' };
+    private static final char[]  body      = new char[]{ '█', '░', '▒', '▓', '☺', '☻' };
+    private static final char[]  accessory = new char[]{
             '◈', '◎', '◐', '◑', '◒', '◓', '☀', '☁', '☂', '☃', '☄', '★', '☆', '☎', '☏', '⎈', '⌂', '☘', '☢', '☣', '☕', '⌚', '⌛', '⏰', '⚡',
             '⛄', '⛅', '☔', '♔', '♕', '♖', '♗', '♘', '♙', '♚', '♛', '♜', '♝', '♞', '♟', '♨', '♩', '♪', '♫', '⚐', '⚑', '⚔', '⚖', '⚙', '⚠',
             '⌘', '⏎', '✄', '✆', '✈', '✉', '✌' };
 
-    private final String         fullName;
-    private final Color          color;
-    private final String         text;
+    private final String fullName;
+    private final Color  color;
+    private final String text;
 
     public MPIdenticon(String fullName, String masterPassword) {
         this( fullName, masterPassword.toCharArray() );
@@ -70,37 +67,13 @@ public class MPIdenticon {
         return color;
     }
 
-    public enum BackgroundMode {
-        DARK, LIGHT
-    }
-
-
     public enum Color {
-        RED( "#dc322f", "#dc322f" ),
-        GREEN( "#859900", "#859900" ),
-        YELLOW( "#b58900", "#b58900" ),
-        BLUE( "#268bd2", "#268bd2" ),
-        MAGENTA( "#d33682", "#d33682" ),
-        CYAN( "#2aa198", "#2aa198" ),
-        MONO( "#93a1a1", "#586e75" );
-
-        private final String rgbDark;
-        private final String rgbLight;
-
-        Color(final String rgbDark, final String rgbLight) {
-            this.rgbDark = rgbDark;
-            this.rgbLight = rgbLight;
-        }
-
-        public java.awt.Color getAWTColor(BackgroundMode backgroundMode) {
-            switch (backgroundMode) {
-                case DARK:
-                    return new java.awt.Color( Integer.decode( rgbDark ) );
-                case LIGHT:
-                    return new java.awt.Color( Integer.decode( rgbLight ) );
-            }
-
-            throw new UnsupportedOperationException( "Unsupported background mode: " + backgroundMode );
-        }
+        RED,
+        GREEN,
+        YELLOW,
+        BLUE,
+        MAGENTA,
+        CYAN,
+        MONO
     }
 }

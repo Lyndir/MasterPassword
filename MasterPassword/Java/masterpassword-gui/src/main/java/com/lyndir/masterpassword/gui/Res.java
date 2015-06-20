@@ -1,15 +1,18 @@
 package com.lyndir.masterpassword.gui;
 
-import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import com.google.common.io.Resources;
-import com.google.common.util.concurrent.*;
+import com.google.common.util.concurrent.JdkFutureAdapters;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import com.lyndir.masterpassword.MPIdenticon;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.lang.ref.SoftReference;
@@ -263,6 +266,73 @@ public abstract class Res {
 
         public Color controlBorder() {
             return controlBorder;
+        }
+
+        public Color fromIdenticonColor(MPIdenticon.Color identiconColor, BackgroundMode backgroundMode) {
+            switch (identiconColor) {
+                case RED:
+                    switch (backgroundMode) {
+                        case DARK:
+                            return Color.decode( "#dc322f" );
+                        case LIGHT:
+                            return Color.decode( "#dc322f" );
+                    }
+                    break;
+                case GREEN:
+                    switch (backgroundMode) {
+                        case DARK:
+                            return Color.decode( "#859900" );
+                        case LIGHT:
+                            return Color.decode( "#859900" );
+                    }
+                    break;
+                case YELLOW:
+                    switch (backgroundMode) {
+                        case DARK:
+                            return Color.decode( "#b58900" );
+                        case LIGHT:
+                            return Color.decode( "#b58900" );
+                    }
+                    break;
+                case BLUE:
+                    switch (backgroundMode) {
+                        case DARK:
+                            return Color.decode( "#268bd2" );
+                        case LIGHT:
+                            return Color.decode( "#268bd2" );
+                    }
+                    break;
+                case MAGENTA:
+                    switch (backgroundMode) {
+                        case DARK:
+                            return Color.decode( "#d33682" );
+                        case LIGHT:
+                            return Color.decode( "#d33682" );
+                    }
+                    break;
+                case CYAN:
+                    switch (backgroundMode) {
+                        case DARK:
+                            return Color.decode( "#2aa198" );
+                        case LIGHT:
+                            return Color.decode( "#2aa198" );
+                    }
+                    break;
+                case MONO:
+                    switch (backgroundMode) {
+                        case DARK:
+                            return Color.decode( "#93a1a1" );
+                        case LIGHT:
+                            return Color.decode( "#586e75" );
+                    }
+                    break;
+            }
+
+            throw new IllegalArgumentException( strf( "Color: %s or mode: %s not supported: ", identiconColor, backgroundMode ) );
+        }
+
+        public enum BackgroundMode {
+            DARK, LIGHT
         }
     }
 }
