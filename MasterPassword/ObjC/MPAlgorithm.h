@@ -24,7 +24,7 @@
 #define MPAlgorithmDefaultVersion MPAlgorithmVersionCurrent
 #define MPAlgorithmDefault MPAlgorithmForVersion(MPAlgorithmDefaultVersion)
 
-id<MPAlgorithm> MPAlgorithmForVersion(NSUInteger version);
+id<MPAlgorithm> MPAlgorithmForVersion(MPAlgorithmVersion version);
 id<MPAlgorithm> MPAlgorithmDefaultForBundleVersion(NSString *bundleVersion);
 
 PearlEnum( MPAttacker,

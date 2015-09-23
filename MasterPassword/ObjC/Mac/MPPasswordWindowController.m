@@ -117,6 +117,7 @@
     BOOL alternatePressed = (theEvent.modifierFlags & NSAlternateKeyMask) != 0;
     if (alternatePressed != self.alternatePressed) {
         self.alternatePressed = alternatePressed;
+        self.showVersionContainer = self.alternatePressed || self.selectedSite.outdated;
         [self.selectedSite updateContent];
 
         if (self.locked) {
@@ -587,6 +588,8 @@
             (__bridge id)[NSColor whiteColor].CGColor,
             (__bridge id)[NSColor colorWithDeviceWhite:1 alpha:gradientOpacity].CGColor
     ];
+
+    self.showVersionContainer = self.alternatePressed || self.selectedSite.outdated;
 }
 
 - (void)createNewSite:(NSString *)siteName {

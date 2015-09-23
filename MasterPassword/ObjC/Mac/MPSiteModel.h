@@ -36,6 +36,8 @@
 @property (nonatomic) NSUInteger counter;
 @property (nonatomic) NSDate *lastUsed;
 @property (nonatomic) id<MPAlgorithm> algorithm;
+@property (nonatomic) MPAlgorithmVersion algorithmVersion;
+@property (nonatomic, readonly) BOOL outdated;
 @property (nonatomic, readonly) BOOL generated;
 @property (nonatomic, readonly) BOOL stored;
 @property (nonatomic, readonly) BOOL transient;

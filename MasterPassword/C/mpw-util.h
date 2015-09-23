@@ -11,16 +11,16 @@
 //// Logging.
 
 #ifdef DEBUG
-#ifndef trc
-#define trc(...) fprintf( stderr, __VA_ARGS__ )
-#endif
+    #ifndef trc
+        #define trc(...) fprintf( stderr, __VA_ARGS__ )
+    #endif
 #else
-#ifndef trc
-#define trc(...) do {} while (0)
-#endif
+    #ifndef trc
+        #define trc(...) do {} while (0)
+    #endif
 #endif
 #ifndef ftl
-#define ftl(...) do { fprintf( stderr, __VA_ARGS__ ); abort(); } while (0)
+    #define ftl(...) do { fprintf( stderr, __VA_ARGS__ ); abort(); } while (0)
 #endif
 
 //// Buffers and memory.

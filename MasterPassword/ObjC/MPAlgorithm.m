@@ -17,7 +17,7 @@
 
 #import "MPAlgorithm.h"
 
-id<MPAlgorithm> MPAlgorithmForVersion(NSUInteger version) {
+id<MPAlgorithm> MPAlgorithmForVersion(MPAlgorithmVersion version) {
 
     static NSMutableDictionary *versionToAlgorithm = nil;
     if (!versionToAlgorithm)

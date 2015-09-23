@@ -15,12 +15,14 @@
 //  Copyright 2012 lhunath (Maarten Billemont). All rights reserved.
 //
 
+#ifndef trc
+#error error
+#endif
 #import "MPAlgorithmV0.h"
 #import "MPEntities.h"
 #import "MPAppDelegate_Shared.h"
 #import "MPAppDelegate_InApp.h"
 #import "mpw-util.h"
-#import "mpw-types.h"
 #include <openssl/bn.h>
 #include <openssl/err.h>
 
@@ -63,6 +65,11 @@ NSOperationQueue *_mpwQueue = nil;
 }
 
 - (NSString *)description {
+
+    return strf( @"V%lu", (unsigned long)self.version );
+}
+
+- (NSString *)debugDescription {
 
     return strf( @"<%@: version=%lu>", NSStringFromClass( [self class] ), (unsigned long)self.version );
 }

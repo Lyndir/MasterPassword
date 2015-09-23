@@ -3225,7 +3225,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = MP;
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Lyndir;
 				TargetAttributes = {
 					DA32D01F19D111C6004F3F0E = {
@@ -3873,6 +3873,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = "/tmp/${PRODUCT_NAME}.dst";
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -4029,6 +4030,7 @@
 					"-framework",
 					Reveal,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3251b7d3-04df-4c8e-a410-d020ffc92d10";
 				SKIP_INSTALL = NO;
@@ -4063,6 +4065,7 @@
 					"$(inherited)",
 					"-lscryptenc-ios-sim",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "59b587d0-3ef3-4691-9f12-c48f7f283002";
 				SKIP_INSTALL = NO;
@@ -4178,6 +4181,7 @@
 					"$(inherited)",
 					"-lscryptenc-ios-sim",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a1d8cfc8-b8db-4544-af34-28cc75e46c40";
 				SKIP_INSTALL = NO;

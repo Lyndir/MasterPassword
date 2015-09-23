@@ -93,7 +93,9 @@
 
 - (id<MPAlgorithm>)algorithm {
 
-    return MPAlgorithmForVersion( MIN( MPAlgorithmVersionCurrent, MAX( MPAlgorithmVersion0, [self.version_ unsignedIntegerValue] ) ) );
+    return MPAlgorithmForVersion(
+            MIN( MPAlgorithmVersionCurrent,
+                    MAX( MPAlgorithmVersion0, (MPAlgorithmVersion)[self.version_ unsignedIntegerValue] ) ) );
 }
 
 - (void)setAlgorithm:(id<MPAlgorithm>)algorithm {
@@ -148,7 +150,7 @@
 
     MPAlgorithmVersion algorithmVersion;
     while ((algorithmVersion = [self.algorithm version]) < MPAlgorithmDefaultVersion) {
-        NSUInteger toVersion = algorithmVersion + 1;
+        MPAlgorithmVersion toVersion = algorithmVersion + 1;
         if (![MPAlgorithmForVersion( toVersion ) tryMigrateSite:self explicit:explicit]) {
             wrn( @"%@ migration to version: %ld failed for site: %@",
                     explicit? @"Explicit": @"Automatic", (long)toVersion, self );
@@ -295,7 +297,9 @@
 
 - (id<MPAlgorithm>)algorithm {
 
-    return MPAlgorithmForVersion( MIN( MPAlgorithmVersionCurrent, MAX( MPAlgorithmVersion0, [self.version_ unsignedIntegerValue] ) ) );
+    return MPAlgorithmForVersion(
+            MIN( MPAlgorithmVersionCurrent,
+                    MAX( MPAlgorithmVersion0, (MPAlgorithmVersion)[self.version_ unsignedIntegerValue] ) ) );
 }
 
 - (void)setAlgorithm:(id<MPAlgorithm>)version {

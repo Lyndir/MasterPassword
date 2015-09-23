@@ -143,6 +143,36 @@
         [self updateContent];
 }
 
+- (MPAlgorithmVersion)algorithmVersion {
+
+    return self.algorithm.version;
+}
+
+- (void)setAlgorithmVersion:(MPAlgorithmVersion)algorithmVersion {
+
+    if (algorithmVersion == self.algorithm.version)
+        return;
+    [self willChangeValueForKey:@"outdated"];
+    self.algorithm = MPAlgorithmForVersion( algorithmVersion )?: self.algorithm;
+    [self didChangeValueForKey:@"outdated"];
+
+    if (_entityOID)
+        [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+            MPSiteEntity *entity = [self entityInContext:context];
+            entity.algorithm = self.algorithm;
+            [context saveToStore];
+
+            [self updateContent:entity];
+        }];
+    else
+        [self updateContent];
+}
+
+- (BOOL)outdated {
+
+    return self.algorithmVersion < MPAlgorithmVersionCurrent;
+}
+
 - (BOOL)generated {
 
     return self.type & MPSiteTypeClassGenerated;
