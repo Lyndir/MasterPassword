@@ -150,8 +150,8 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
     @try {
         if ([[MPConfig get].sendInfo boolValue]) {
 #ifdef CRASHLYTICS
-            [Crashlytics setObjectValue:user.userID forKey:@"username"];
-            [Crashlytics setUserName:user.userID];
+            [[Crashlytics sharedInstance] setObjectValue:user.userID forKey:@"username"];
+            [[Crashlytics sharedInstance] setUserName:user.userID];
 #endif
         }
     }

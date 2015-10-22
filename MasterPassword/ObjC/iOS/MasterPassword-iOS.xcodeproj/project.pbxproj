@@ -98,6 +98,9 @@
 		DA29993219C9132F00AF7DF1 /* thumb_generated_login@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA29993119C9132F00AF7DF1 /* thumb_generated_login@3x.png */; };
 		DA29993319C9214600AF7DF1 /* icon_star-hollow.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD382A1711E29600CF925C /* icon_star-hollow.png */; };
 		DA29993419C9214600AF7DF1 /* icon_star-hollow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD382B1711E29600CF925C /* icon_star-hollow@2x.png */; };
+		DA2C3D611BD95EEE001137B3 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA2C3D601BD95EEE001137B3 /* Fabric.framework */; };
+		DA2C3D631BD96126001137B3 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA2C3D621BD96126001137B3 /* libc++.tbd */; };
+		DA2C3D651BD9612F001137B3 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA2C3D641BD9612F001137B3 /* libz.tbd */; };
 		DA2CA4DD18D28859007798F8 /* NSArray+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4D918D28859007798F8 /* NSArray+Pearl.m */; };
 		DA2CA4DE18D28859007798F8 /* NSArray+Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DA2CA4DA18D28859007798F8 /* NSArray+Pearl.h */; };
 		DA2CA4DF18D28859007798F8 /* NSTimer+PearlBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4DB18D28859007798F8 /* NSTimer+PearlBlock.m */; };
@@ -163,7 +166,6 @@
 		DA6701B816406A4100B61001 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA6701B716406A4100B61001 /* Accounts.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		DA6701DE16406B7300B61001 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA6701DD16406B7300B61001 /* Social.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		DA6701E016406BB400B61001 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA6701DF16406BB400B61001 /* AdSupport.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		DA672D2F14F92C6B004A189C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DA672D2E14F92C6B004A189C /* libz.dylib */; };
 		DA672D3014F9413D004A189C /* libPearl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC77CAD148291A600BCF976 /* libPearl.a */; };
 		DA67460D18DE7F0C00DFE240 /* Exo2.0-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA67460918DE7F0C00DFE240 /* Exo2.0-Thin.otf */; };
 		DA67460E18DE7F0C00DFE240 /* Exo2.0-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA67460A18DE7F0C00DFE240 /* Exo2.0-Regular.otf */; };
@@ -171,7 +173,6 @@
 		DA67461018DE7F0C00DFE240 /* Exo2.0-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA67460C18DE7F0C00DFE240 /* Exo2.0-Bold.otf */; };
 		DA69540617D975D900BF294E /* icon_gears.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37841711E29500CF925C /* icon_gears.png */; };
 		DA69540717D975D900BF294E /* icon_gears@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37851711E29500CF925C /* icon_gears@2x.png */; };
-		DA72BD7919C137DE00E6ACFE /* libopensslcrypto-ios-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA72BD7719C137D500E6ACFE /* libopensslcrypto-ios-dev.a */; };
 		DA72BD7B19C1510C00E6ACFE /* UIView+FontScale.m in Sources */ = {isa = PBXBuildFile; fileRef = DACE2F6719BA6A2A0010F92E /* UIView+FontScale.m */; };
 		DA73049D194E022700E72520 /* ui_spinner.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD36511711E29400CF925C /* ui_spinner.png */; };
 		DA73049E194E022700E72520 /* ui_spinner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD36521711E29400CF925C /* ui_spinner@2x.png */; };
@@ -331,7 +332,6 @@
 		DACE2F6C19BA6A2A0010F92E /* PearlMutableStaticTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DACE2F6819BA6A2A0010F92E /* PearlMutableStaticTableViewController.m */; };
 		DACE2F6D19BA6A2A0010F92E /* PearlMutableStaticTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = DACE2F6919BA6A2A0010F92E /* PearlMutableStaticTableViewController.h */; };
 		DACE2F6E19BA6A2A0010F92E /* UIView+FontScale.h in Headers */ = {isa = PBXBuildFile; fileRef = DACE2F6A19BA6A2A0010F92E /* UIView+FontScale.h */; };
-		DAD312C21552A22700A3F9ED /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD312C01552A20800A3F9ED /* libsqlite3.dylib */; };
 		DAE1EF2217E942DE00BC0086 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAE1EF2417E942DE00BC0086 /* Localizable.strings */; };
 		DAE2725919C93B80007C5262 /* libInAppSettingsKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAFC5655172C573B00CB5CC5 /* libInAppSettingsKit.a */; };
 		DAE2725A19C93B8E007C5262 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA70EC7F1811B13C00F65DB2 /* StoreKit.framework */; };
@@ -601,6 +601,10 @@
 		DA29992D19C86F5700AF7DF1 /* thumb_generated_login@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumb_generated_login@2x.png"; sourceTree = "<group>"; };
 		DA29992E19C86F5700AF7DF1 /* thumb_generated_login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumb_generated_login.png; sourceTree = "<group>"; };
 		DA29993119C9132F00AF7DF1 /* thumb_generated_login@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumb_generated_login@3x.png"; sourceTree = "<group>"; };
+		DA2C3D5E1BD95DEF001137B3 /* libscryptenc-ios-dev.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libscryptenc-ios-dev.a"; sourceTree = "<group>"; };
+		DA2C3D601BD95EEE001137B3 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = ../../../External/iOS/Fabric.framework; sourceTree = "<group>"; };
+		DA2C3D621BD96126001137B3 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		DA2C3D641BD9612F001137B3 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		DA2CA4D918D28859007798F8 /* NSArray+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Pearl.m"; sourceTree = "<group>"; };
 		DA2CA4DA18D28859007798F8 /* NSArray+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Pearl.h"; sourceTree = "<group>"; };
 		DA2CA4DB18D28859007798F8 /* NSTimer+PearlBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+PearlBlock.m"; sourceTree = "<group>"; };
@@ -665,14 +669,12 @@
 		DA6701B716406A4100B61001 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		DA6701DD16406B7300B61001 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		DA6701DF16406BB400B61001 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
-		DA672D2E14F92C6B004A189C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		DA67460918DE7F0C00DFE240 /* Exo2.0-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Thin.otf"; sourceTree = "<group>"; };
 		DA67460A18DE7F0C00DFE240 /* Exo2.0-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Regular.otf"; sourceTree = "<group>"; };
 		DA67460B18DE7F0C00DFE240 /* Exo2.0-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-ExtraBold.otf"; sourceTree = "<group>"; };
 		DA67460C18DE7F0C00DFE240 /* Exo2.0-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Bold.otf"; sourceTree = "<group>"; };
 		DA6774351A4749CC004F356A /* mpw-tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests.c"; sourceTree = "<group>"; };
 		DA70EC7F1811B13C00F65DB2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		DA72BD7419C133BF00E6ACFE /* libscryptenc-ios-sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libscryptenc-ios-sim.a"; sourceTree = "<group>"; };
 		DA72BD7719C137D500E6ACFE /* libopensslcrypto-ios-dev.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopensslcrypto-ios-dev.a"; sourceTree = "<group>"; };
 		DA8495271A9146E600B3053D /* MasterPassword 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 7.xcdatamodel"; sourceTree = "<group>"; };
 		DA854C8118D4CFBF00106317 /* avatar-add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-add@2x.png"; sourceTree = "<group>"; };
@@ -1407,7 +1409,6 @@
 		DACE2F6819BA6A2A0010F92E /* PearlMutableStaticTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlMutableStaticTableViewController.m; sourceTree = "<group>"; };
 		DACE2F6919BA6A2A0010F92E /* PearlMutableStaticTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlMutableStaticTableViewController.h; sourceTree = "<group>"; };
 		DACE2F6A19BA6A2A0010F92E /* UIView+FontScale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+FontScale.h"; sourceTree = "<group>"; };
-		DAD312C01552A20800A3F9ED /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		DADBB55918DB0CFC00D099FE /* keyboard-dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "keyboard-dark@2x.png"; sourceTree = "<group>"; };
 		DAE1EF2317E942DE00BC0086 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DAE2726119CE9CB3007C5262 /* UITableViewCell+PearlDeque.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+PearlDeque.m"; sourceTree = "<group>"; };
@@ -1550,6 +1551,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA2C3D651BD9612F001137B3 /* libz.tbd in Frameworks */,
+				DA2C3D631BD96126001137B3 /* libc++.tbd in Frameworks */,
 				DAA1761B19D86D0D0044227B /* libAttributedMarkdown.a in Frameworks */,
 				DA32D03E19D11293004F3F0E /* libKCOrderedAccessorFix.a in Frameworks */,
 				DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */,
@@ -1558,20 +1561,18 @@
 				DA6701E016406BB400B61001 /* AdSupport.framework in Frameworks */,
 				DA6701DE16406B7300B61001 /* Social.framework in Frameworks */,
 				DA6701B816406A4100B61001 /* Accounts.framework in Frameworks */,
-				DAD312C21552A22700A3F9ED /* libsqlite3.dylib in Frameworks */,
 				DABB981615100B4000B05417 /* SystemConfiguration.framework in Frameworks */,
 				DA672D3014F9413D004A189C /* libPearl.a in Frameworks */,
-				DA672D2F14F92C6B004A189C /* libz.dylib in Frameworks */,
 				DAEBC45314F6364500987BF6 /* QuartzCore.framework in Frameworks */,
 				DA95D5F214DF0B2C008D1B94 /* MessageUI.framework in Frameworks */,
 				DA48856019A5A82E000C2D79 /* Crashlytics.framework in Frameworks */,
 				DAC632891486D9690075AEA5 /* Security.framework in Frameworks */,
-				DA72BD7919C137DE00E6ACFE /* libopensslcrypto-ios-dev.a in Frameworks */,
 				DA5BFA49147E415C00F98B1E /* UIKit.framework in Frameworks */,
 				DA5BFA4B147E415C00F98B1E /* Foundation.framework in Frameworks */,
 				DA5BFA4D147E415C00F98B1E /* CoreGraphics.framework in Frameworks */,
 				DA5BFA4F147E415C00F98B1E /* CoreData.framework in Frameworks */,
 				93D399433EA75E50656040CB /* Twitter.framework in Frameworks */,
+				DA2C3D611BD95EEE001137B3 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1773,6 +1774,9 @@
 		DA5BFA47147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA2C3D641BD9612F001137B3 /* libz.tbd */,
+				DA2C3D621BD96126001137B3 /* libc++.tbd */,
+				DA2C3D601BD95EEE001137B3 /* Fabric.framework */,
 				DA3B844D190FC5DF00246EEA /* Crashlytics.framework */,
 				DA70EC7F1811B13C00F65DB2 /* StoreKit.framework */,
 				DA6701DF16406BB400B61001 /* AdSupport.framework */,
@@ -1780,10 +1784,8 @@
 				DA6701B716406A4100B61001 /* Accounts.framework */,
 				93D394077F8FAB8167647187 /* Twitter.framework */,
 				DAAC35DD156BD77D00C5FD93 /* CoreTelephony.framework */,
-				DAD312C01552A20800A3F9ED /* libsqlite3.dylib */,
 				DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */,
 				DABB981515100B4000B05417 /* SystemConfiguration.framework */,
-				DA672D2E14F92C6B004A189C /* libz.dylib */,
 				DAEBC45214F6364500987BF6 /* QuartzCore.framework */,
 				DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */,
 				DAC632871486D95D0075AEA5 /* Security.framework */,
@@ -1798,11 +1800,11 @@
 		DA5E5C6317248959003798D8 /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				DA72BD7719C137D500E6ACFE /* libopensslcrypto-ios-dev.a */,
-				DA72BD7419C133BF00E6ACFE /* libscryptenc-ios-sim.a */,
-				DAE8E65119867AB500416A0F /* libopensslcrypto-ios.a */,
-				DAFFC63E17EDDA7C007BB020 /* libscryptenc-ios.a */,
 				DA5E5C6417248959003798D8 /* include */,
+				DA72BD7719C137D500E6ACFE /* libopensslcrypto-ios-dev.a */,
+				DAE8E65119867AB500416A0F /* libopensslcrypto-ios.a */,
+				DA2C3D5E1BD95DEF001137B3 /* libscryptenc-ios-dev.a */,
+				DAFFC63E17EDDA7C007BB020 /* libscryptenc-ios.a */,
 			);
 			path = lib;
 			sourceTree = "<group>";
@@ -4020,15 +4022,18 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-lscryptenc-ios",
 					"-framework",
 					Reveal,
 				);
+				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
+					"$(inherited)",
+					"-lscryptenc-ios",
+					"-lopensslcrypto-ios",
+				);
 				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
 					"$(inherited)",
-					"-lscryptenc-ios-sim",
-					"-framework",
-					Reveal,
+					"-lscryptenc-ios-dev",
+					"-lopensslcrypto-ios-dev",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
 				PROVISIONING_PROFILE = "";
@@ -4057,13 +4062,16 @@
 					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
-				OTHER_LDFLAGS = (
+				OTHER_LDFLAGS = "$(inherited)";
+				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"$(inherited)",
 					"-lscryptenc-ios",
+					"-lopensslcrypto-ios",
 				);
 				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
 					"$(inherited)",
-					"-lscryptenc-ios-sim",
+					"-lscryptenc-ios-dev",
+					"-lopensslcrypto-ios-dev",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
 				PROVISIONING_PROFILE = "";
@@ -4173,13 +4181,16 @@
 					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
-				OTHER_LDFLAGS = (
+				OTHER_LDFLAGS = "$(inherited)";
+				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"$(inherited)",
 					"-lscryptenc-ios",
+					"-lopensslcrypto-ios",
 				);
 				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
 					"$(inherited)",
-					"-lscryptenc-ios-sim",
+					"-lscryptenc-ios-dev",
+					"-lopensslcrypto-ios-dev",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
 				PROVISIONING_PROFILE = "";

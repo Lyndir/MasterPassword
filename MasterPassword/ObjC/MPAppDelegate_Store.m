@@ -821,9 +821,9 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         NSString *contentExport = content?: @"";
         [export appendFormat:@"%@  %8ld  %8S  %25S\t%25S\t%@\n",
                              lastUsedExport, usesExport,
-                             (const unichar *)[typeExport cStringUsingEncoding:NSUTF16StringEncoding],
-                             (const unichar *)[loginNameExport cStringUsingEncoding:NSUTF16StringEncoding],
-                             (const unichar *)[siteName cStringUsingEncoding:NSUTF16StringEncoding],
+                             (const unsigned short *)[typeExport cStringUsingEncoding:NSUTF16StringEncoding],
+                             (const unsigned short *)[loginNameExport cStringUsingEncoding:NSUTF16StringEncoding],
+                             (const unsigned short *)[siteName cStringUsingEncoding:NSUTF16StringEncoding],
                              contentExport];
     }
 

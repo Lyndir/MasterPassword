@@ -69,39 +69,39 @@ int main(int argc, char *const argv[]) {
                 masterKey, siteName, siteType, siteCounter, siteVariant, siteContext, MPAlgorithmVersionCurrent ) );
         free( (void *)masterKey );
 
-        if (i % 1 == 0)
-            fprintf( stderr, "\rmpw: iteration %d / %d..", i, iterations );
+        if (i % ( iterations / 100 ) == 0)
+            fprintf( stderr, "\rmpw: iteration %d / %d (%d%%)..", i, iterations, i * 100 / iterations );
     }
     const double mpwSpeed = mpw_showSpeed( startTime, iterations, "mpw" );
 
     // Start SHA-256
-    iterations = 50000000;
+    iterations = 45000000;
     uint8_t hash[32];
     mpw_getTime( &startTime );
     for (int i = 0; i < iterations; ++i) {
         SHA256_Buf( masterPassword, strlen( masterPassword ), hash );
 
-        if (i % 1000 == 0)
-            fprintf( stderr, "\rsha256: iteration %d / %d..", i, iterations );
+        if (i % ( iterations / 100 ) == 0)
+            fprintf( stderr, "\rsha256: iteration %d / %d (%d%%)..", i, iterations, i * 100 / iterations );
     }
     const double sha256Speed = mpw_showSpeed( startTime, iterations, "sha256" );
 
     // Start BCrypt
     int bcrypt_cost = 9;
-    iterations = 600;
+    iterations = 500;
     mpw_getTime( &startTime );
     for (int i = 0; i < iterations; ++i) {
         crypt( masterPassword, crypt_gensalt( "$2b$", bcrypt_cost, fullName, strlen( fullName ) ) );
 
-        if (i % 10 == 0)
-            fprintf( stderr, "\rbcrypt (cost %d): iteration %d / %d..", bcrypt_cost, i, iterations );
+        if (i % ( iterations / 100 ) == 0)
+            fprintf( stderr, "\rbcrypt (cost %d): iteration %d / %d (%d%%)..", bcrypt_cost, i, iterations, i * 100 / iterations );
     }
     const double bcrypt9Speed = mpw_showSpeed( startTime, iterations, "bcrypt9" );
 
     // Summarize.
     fprintf( stdout, "\n== SUMMARY ==\nOn this machine,\n" );
-    fprintf( stdout, " - mpw is %f times slower than sha256.\n", sha256Speed / mpwSpeed );
-    fprintf( stdout, " - mpw is %f times slower than bcrypt (cost 9).\n", bcrypt9Speed / mpwSpeed );
+    fprintf( stdout, " - mpw is %f times slower than sha256 (reference: 414000 on an MBP Late 2013).\n", sha256Speed / mpwSpeed );
+    fprintf( stdout, " - mpw is %f times slower than bcrypt (cost 9) (reference: 4.86 on an MBP Late 2013).\n", bcrypt9Speed / mpwSpeed );
 
     return 0;
 }
