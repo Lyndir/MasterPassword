@@ -1,6 +1,6 @@
 language: objective-c
 osx_image: xcode7
-xcode_scheme: MasterPassword iOS (App Store)
+xcode_scheme: MasterPassword iOS (Development)
 xcode_workspace: MasterPassword.xcworkspace
 env: TERM=dumb
 git:
