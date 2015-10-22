@@ -1,7 +1,6 @@
 language: objective-c
 xcode_project: MasterPassword/ObjC/iOS/MasterPassword-iOS.xcodeproj
 xcode_scheme: MasterPassword iOS (Development)
-xcode_sdk: iphonesimulator
 env: TERM=dumb
 git:
   submodules: true
