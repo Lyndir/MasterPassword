@@ -103,7 +103,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = MP;
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Maarten Billemont";
 				TargetAttributes = {
 					DAD9B5C0176299B9001835F9 = {
@@ -209,6 +209,7 @@
 				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac.LoginHelper;
 				PROVISIONING_PROFILE = "8ea8f441-a2d3-4119-ad85-f18953e17648";
 			};
 			name = "AppStore-Mac";
@@ -234,6 +235,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -321,6 +323,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac.LoginHelper;
 			};
 			name = "Debug-Mac";
 		};
@@ -331,6 +334,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application: Maarten Billemont (HL3Q45LX9N)";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac.LoginHelper;
 			};
 			name = "AdHoc-Mac";
 		};

@@ -621,7 +621,7 @@
 
 - (void)fadeIn {
 
-    if ([self.window isOnActiveSpace] && self.window.alphaValue)
+    if ([self.window isOnActiveSpace] && self.window.alphaValue > FLT_EPSILON)
         return;
 
     CGDirectDisplayID displayID = [self.window.screen.deviceDescription[@"NSScreenNumber"] unsignedIntValue];
@@ -662,7 +662,7 @@
 
 - (void)fadeOut:(BOOL)hide {
 
-    if (![NSApp isActive] && !self.window.alphaValue)
+    if (![NSApp isActive] && self.window.alphaValue <= FLT_EPSILON)
         return;
 
     [[NSAnimationContext currentContext] setCompletionHandler:^{

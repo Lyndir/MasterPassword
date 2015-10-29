@@ -6,15 +6,17 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
-NSString *const MPErrorDomain;
+__BEGIN_DECLS
+extern NSString *const MPErrorDomain;
 
-NSString *const MPSignedInNotification;
-NSString *const MPSignedOutNotification;
-NSString *const MPKeyForgottenNotification;
-NSString *const MPSiteUpdatedNotification;
-NSString *const MPCheckConfigNotification;
-NSString *const MPSitesImportedNotification;
-NSString *const MPFoundInconsistenciesNotification;
+extern NSString *const MPSignedInNotification;
+extern NSString *const MPSignedOutNotification;
+extern NSString *const MPKeyForgottenNotification;
+extern NSString *const MPSiteUpdatedNotification;
+extern NSString *const MPCheckConfigNotification;
+extern NSString *const MPSitesImportedNotification;
+extern NSString *const MPFoundInconsistenciesNotification;
 
-NSString *const MPSitesImportedNotificationUserKey;
-NSString *const MPInconsistenciesFixResultUserKey;
+extern NSString *const MPSitesImportedNotificationUserKey;
+extern NSString *const MPInconsistenciesFixResultUserKey;
+__END_DECLS

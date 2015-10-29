@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
     NSError *error = nil;
     NSRunningApplication *application = [[NSWorkspace sharedWorkspace]
             launchApplicationAtURL:bundleURL options:NSWorkspaceLaunchWithoutActivation
-                     configuration:nil error:&error];
+                     configuration:@{} error:&error];
 
     if (!application || error) {
         NSLog( @"Error launching main app: %@", [error debugDescription] );

@@ -55,7 +55,6 @@
 		93D39BA1EA3CAAC8A220B4A6 /* MPAppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3916C1D8F1427DFBDEBCA /* MPAppSettingsViewController.m */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
 		93D39CEA71BD460ED4876920 /* build in Resources */ = {isa = PBXBuildFile; fileRef = 93D39B573E4DE98BAE518215 /* build */; };
-		93D39D38356F59DBEF934D70 /* MPAppDelegate_InApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D394C78C7B879C9AD9152C /* MPAppDelegate_InApp.m */; };
 		93D39D47FC623E91FC39D20C /* UICollectionView+PearlReloadFromArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3908DF8EABBD952065DC0 /* UICollectionView+PearlReloadFromArray.m */; };
 		93D39D596A2E376D6F6F5DA1 /* MPCombinedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D393310223DDB35218467A /* MPCombinedViewController.m */; };
 		93D39D8F78978196D6ABDEDE /* MPNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39CC01630D0421205C4C4 /* MPNavigationController.m */; };
@@ -185,6 +184,7 @@
 		DA8495321A93049300B3053D /* icon_down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD375D1711E29500CF925C /* icon_down@2x.png */; };
 		DA854C8318D4CFBF00106317 /* avatar-add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA854C8118D4CFBF00106317 /* avatar-add@2x.png */; };
 		DA854C8418D4CFBF00106317 /* avatar-add.png in Resources */ = {isa = PBXBuildFile; fileRef = DA854C8218D4CFBF00106317 /* avatar-add.png */; };
+		DA92614E1BE1A57500369DE5 /* MPAppDelegate_InApp.m in Sources */ = {isa = PBXBuildFile; fileRef = DA92614D1BE1A57500369DE5 /* MPAppDelegate_InApp.m */; };
 		DA945C8717E3F3FD0053236B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA945C8617E3F3FD0053236B /* Images.xcassets */; };
 		DA95D5F214DF0B2C008D1B94 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */; };
 		DAA141201922FF020032B392 /* PearlTween.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA1411C1922FF020032B392 /* PearlTween.m */; };
@@ -491,7 +491,6 @@
 		93D394077F8FAB8167647187 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		93D3942A356B639724157982 /* PearlOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlOverlay.h; sourceTree = "<group>"; };
 		93D394482BB07F90E8FD1314 /* UIResponder+PearlFirstResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+PearlFirstResponder.h"; sourceTree = "<group>"; };
-		93D394C78C7B879C9AD9152C /* MPAppDelegate_InApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_InApp.m; sourceTree = "<group>"; };
 		93D394D73F5BC92297CE8D7B /* MPAlgorithmV3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAlgorithmV3.h; sourceTree = "<group>"; };
 		93D395105935859D71679931 /* MPOverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPOverlayViewController.m; sourceTree = "<group>"; };
 		93D3956915634581E737B38C /* PearlNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlNavigationController.m; sourceTree = "<group>"; };
@@ -547,7 +546,6 @@
 		93D39CB0EABD2748740992D8 /* MPMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPMessageViewController.h; sourceTree = "<group>"; };
 		93D39CC01630D0421205C4C4 /* MPNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNavigationController.m; sourceTree = "<group>"; };
 		93D39CDD434AFD6E1B0DA359 /* MPEmergencyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEmergencyViewController.h; sourceTree = "<group>"; };
-		93D39CECA10BCCB0BA581BF1 /* MPAppDelegate_InApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_InApp.h; sourceTree = "<group>"; };
 		93D39CF7DB942C69D1C5D6BE /* mpw-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-util.h"; sourceTree = "<group>"; };
 		93D39CF8ADF4542CDC4CD385 /* MPCombinedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCombinedViewController.h; sourceTree = "<group>"; };
 		93D39D4E713564B7654341B0 /* mpw-algorithm_v3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v3.c"; sourceTree = "<group>"; };
@@ -679,6 +677,8 @@
 		DA8495271A9146E600B3053D /* MasterPassword 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 7.xcdatamodel"; sourceTree = "<group>"; };
 		DA854C8118D4CFBF00106317 /* avatar-add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-add@2x.png"; sourceTree = "<group>"; };
 		DA854C8218D4CFBF00106317 /* avatar-add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-add.png"; sourceTree = "<group>"; };
+		DA92614C1BE1A57500369DE5 /* MPAppDelegate_InApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_InApp.h; sourceTree = "<group>"; };
+		DA92614D1BE1A57500369DE5 /* MPAppDelegate_InApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_InApp.m; sourceTree = "<group>"; };
 		DA945C8617E3F3FD0053236B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		DAA141191922FED80032B392 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
@@ -2570,8 +2570,8 @@
 				93D399A8E3181B442D347CD7 /* MPAlgorithmV2.m */,
 				93D394D73F5BC92297CE8D7B /* MPAlgorithmV3.h */,
 				93D39FD9623E8D5571C0AEB3 /* MPAlgorithmV3.m */,
-				93D39CECA10BCCB0BA581BF1 /* MPAppDelegate_InApp.h */,
-				93D394C78C7B879C9AD9152C /* MPAppDelegate_InApp.m */,
+				DA92614C1BE1A57500369DE5 /* MPAppDelegate_InApp.h */,
+				DA92614D1BE1A57500369DE5 /* MPAppDelegate_InApp.m */,
 				DABD3BA61711E2DC00CF925C /* MPAppDelegate_Key.h */,
 				DABD3BA71711E2DC00CF925C /* MPAppDelegate_Key.m */,
 				DABD3BA81711E2DC00CF925C /* MPAppDelegate_Shared.h */,
@@ -3658,7 +3658,6 @@
 				93D39D8F78978196D6ABDEDE /* MPNavigationController.m in Sources */,
 				93D3939661CE37180AF7CD6A /* MPStoreViewController.m in Sources */,
 				DA32CFF019CF1C8F004F3F0E /* MPUserEntity.m in Sources */,
-				93D39D38356F59DBEF934D70 /* MPAppDelegate_InApp.m in Sources */,
 				93D390C1B93F9D3AE37DD0A5 /* MPAnswersViewController.m in Sources */,
 				93D399D7E08A142776A74CB8 /* MPOverlayViewController.m in Sources */,
 				93D39A27F2506C6FEEF9C588 /* MPAlgorithmV2.m in Sources */,
@@ -3668,6 +3667,7 @@
 				93D39943D01E70DAC3B0DF76 /* mpw-util.c in Sources */,
 				93D39577FD8BB0945DB2F0A3 /* MPAlgorithmV3.m in Sources */,
 				93D39E5F7F6D7F5C0FAD090F /* MPTypes.m in Sources */,
+				DA92614E1BE1A57500369DE5 /* MPAppDelegate_InApp.m in Sources */,
 				93D39508A6814612A5B3C226 /* MPMessageViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
