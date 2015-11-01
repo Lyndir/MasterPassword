@@ -426,7 +426,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)showPasswordWindow:(id)sender {
 
+    prof_new( @"showPasswordWindow" );
     [NSApp activateIgnoringOtherApps:YES];
+    prof_rewind(@"activateIgnoringOtherApps");
 
     // If no user, can't activate.
     if (![self activeUserForMainThread]) {
@@ -435,14 +437,18 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         alert.informativeText = @"Begin by selecting or creating your user from the status menu (●●●|) next to the clock.";
         [alert runModal];
         [self showPopup:nil];
+        prof_finish( @"activeUserForMainThread" );
         return;
     }
+    prof_rewind( @"activeUserForMainThread" );
 
     // Don't show window if we weren't already running (ie. if we haven't been activated before).
     if (!self.passwordWindowController)
         self.passwordWindowController = [[MPPasswordWindowController alloc] initWithWindowNibName:@"MPPasswordWindowController"];
+    prof_rewind( @"initWithWindow" );
 
     [self.passwordWindowController showWindow:self];
+    prof_finish( @"showWindow" );
 }
 
 #pragma mark - Private

@@ -55,7 +55,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         @try {
             mocBlock( mainManagedObjectContext );
         }
-        @catch (NSException *exception) {
+        @catch (id exception) {
             err( @"While performing managed block:\n%@", [exception fullDescription] );
         }
     }];

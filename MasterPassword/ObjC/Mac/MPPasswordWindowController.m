@@ -43,9 +43,12 @@
 
 - (void)windowDidLoad {
 
+    prof_new(@"windowDidLoad");
     [super windowDidLoad];
+    prof_rewind( @"super" );
 
     [self replaceFonts:self.window.contentView];
+    prof_rewind( @"replaceFonts" );
 
 //    [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillBecomeActiveNotification object:nil
 //                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
@@ -64,7 +67,7 @@
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
                 NSWindow *sheet = [self.window attachedSheet];
                 if (sheet)
-                    [NSApp endSheet:sheet];
+                    [self.window endSheet:sheet];
             }];
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillResignActiveNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
@@ -84,8 +87,9 @@
                withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
                    [_self updateSelection];
                }];
+    prof_rewind( @"observers" );
 
-    NSSearchFieldCell *siteFieldCell = self.siteField.cell;
+    NSSearchFieldCell *siteFieldCell = (NSSearchFieldCell *)self.siteField.cell;
     siteFieldCell.searchButtonCell = nil;
     siteFieldCell.cancelButtonCell = nil;
 
@@ -96,6 +100,7 @@
     self.siteTable.superview.superview.layer.mask = self.siteGradient;
 
     self.siteTable.controller = self;
+    prof_finish( @"ui" );
 }
 
 - (void)replaceFonts:(NSView *)view {
@@ -134,6 +139,7 @@
 
 #pragma mark - NSResponder
 
+// Handle any unhandled editor command.
 - (void)doCommandBySelector:(SEL)commandSelector {
 
     [self handleCommand:commandSelector];
@@ -141,6 +147,7 @@
 
 #pragma mark - NSTextFieldDelegate
 
+// Editor command in a text field.
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector {
 
     if (control == self.siteField) {
@@ -621,8 +628,11 @@
 
 - (void)fadeIn {
 
-    if ([self.window isOnActiveSpace] && self.window.alphaValue > FLT_EPSILON)
+    prof_new(@"fadeIn");
+    if ([self.window isOnActiveSpace] && self.window.alphaValue > FLT_EPSILON) {
+        prof_finish( @"showing" );
         return;
+    }
 
     CGDirectDisplayID displayID = [self.window.screen.deviceDescription[@"NSScreenNumber"] unsignedIntValue];
     CGImageRef capturedImage = CGDisplayCreateImage( displayID );
@@ -630,16 +640,20 @@
         if (capturedImage)
             CFRelease( capturedImage );
         wrn( @"Failed to capture screen image for display: %d", displayID );
+        prof_finish( @"capture failed" );
         return;
     }
+    prof_rewind( @"capture" );
 
     NSImage *screenImage = [[NSImage alloc] initWithCGImage:capturedImage size:NSMakeSize(
             CGImageGetWidth( capturedImage ) / self.window.backingScaleFactor,
             CGImageGetHeight( capturedImage ) / self.window.backingScaleFactor )];
+    prof_rewind( @"screenImage" );
 
     NSImage *smallImage = [[NSImage alloc] initWithSize:NSMakeSize(
             CGImageGetWidth( capturedImage ) / 20,
             CGImageGetHeight( capturedImage ) / 20 )];
+    prof_rewind( @"smallImage" );
     CFRelease( capturedImage );
     [smallImage lockFocus];
     [screenImage drawInRect:(NSRect){ .origin = CGPointZero, .size = smallImage.size, }
@@ -647,12 +661,15 @@
                   operation:NSCompositeSourceOver
                    fraction:1.0];
     [smallImage unlockFocus];
+    prof_rewind( @"scale" );
 
     self.blurView.image = smallImage;
+    prof_rewind( @"blurView" );
 
     [self.window setFrame:self.window.screen.frame display:YES];
     [NSAnimationContext currentContext].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
     self.window.animator.alphaValue = 1.0;
+    prof_finish( @"window setup" );
 }
 
 - (void)fadeOut {
