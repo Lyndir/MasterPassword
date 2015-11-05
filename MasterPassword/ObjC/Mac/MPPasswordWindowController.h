@@ -37,6 +37,7 @@
 @property(nonatomic, weak) IBOutlet NSTextField *inputLabel;
 @property(nonatomic, weak) IBOutlet NSTextField *securePasswordField;
 @property(nonatomic, weak) IBOutlet NSTextField *revealPasswordField;
+@property(nonatomic, weak) IBOutlet NSTextField *sitePasswordTipField;
 @property(nonatomic, weak) IBOutlet NSSearchField *siteField;
 @property(nonatomic, weak) IBOutlet MPSitesTableView *siteTable;
 @property(nonatomic, weak) IBOutlet NSProgressIndicator *progressView;

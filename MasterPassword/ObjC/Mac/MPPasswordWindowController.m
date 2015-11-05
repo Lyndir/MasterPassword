@@ -43,7 +43,7 @@
 
 - (void)windowDidLoad {
 
-    prof_new(@"windowDidLoad");
+    prof_new( @"windowDidLoad" );
     [super windowDidLoad];
     prof_rewind( @"super" );
 
@@ -60,8 +60,11 @@
 //    }];
     [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:self.window
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+                prof_new( @"didBecomeKey" );
                 [self fadeIn];
+                prof_rewind( @"fadeIn" );
                 [self updateUser];
+                prof_finish( @"updateUser" );
             }];
     [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillCloseNotification object:self.window
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
@@ -72,7 +75,7 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillResignActiveNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
 #ifndef DEBUG
-        [self fadeOut];
+                [self fadeOut];
 #endif
             }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedInNotification object:nil
@@ -85,7 +88,9 @@
             }];
     [self observeKeyPath:@"sitesController.selection"
                withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
+                   prof_new( @"sitesController.selection" );
                    [_self updateSelection];
+                   prof_finish( @"updateSelection" );
                }];
     prof_rewind( @"observers" );
 
@@ -597,6 +602,7 @@
     ];
 
     self.showVersionContainer = self.alternatePressed || self.selectedSite.outdated;
+    [self.sitePasswordTipField setAttributedStringValue:straf( @"Your password for %@:", self.selectedSite.displayedName )];
 }
 
 - (void)createNewSite:(NSString *)siteName {
@@ -628,7 +634,7 @@
 
 - (void)fadeIn {
 
-    prof_new(@"fadeIn");
+    prof_new( @"fadeIn" );
     if ([self.window isOnActiveSpace] && self.window.alphaValue > FLT_EPSILON) {
         prof_finish( @"showing" );
         return;
