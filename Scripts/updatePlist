@@ -51,7 +51,7 @@ setSettingWithTitle "Copyright" "$(getPlistWithKey NSHumanReadableCopyright)"
 
 if [[ $DEPLOYMENT_LOCATION = YES ]]; then
     # This build is a release.  Do some release checks.
-    crashlyticsPlist="$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Crashlytics.plist"
+    crashlyticsPlist="$BUILT_PRODUCTS_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/Crashlytics.plist"
     passed=1
     [[ $description != *-dirty ]] || \
         { passed=0; err 'ERROR: Cannot release a dirty version, first commit any changes.'; }

@@ -2023,7 +2023,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAC77CB7148291A600BCF976 /* Build configuration list for PBXNativeTarget "Pearl" */;
 			buildPhases = (
-				DA10008119994255002B873F /* ShellScript */,
 				DAC77CAB148291A600BCF976 /* Headers */,
 				DAC77CA9148291A600BCF976 /* Sources */,
 				DAC77CAA148291A600BCF976 /* Frameworks */,
@@ -2181,19 +2180,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		DA10008119994255002B873F /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "";
-		};
 		DA4EF9CB19FD4B600032ECB5 /* Run Script: genassets */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2222,7 +2208,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
 			shellScript = "exec ../../../Scripts/updatePlist";
-			showEnvVarsInLog = 0;
 		};
 		DAD3125D155288AA00A3F9ED /* Run Script: Crashlytics */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2235,7 +2220,7 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = "/bin/bash -e";
+			shellPath = "/bin/sh -e";
 			shellScript = "../../../External/Mac/Crashlytics.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" ../../Resources/Crashlytics/Crashlytics.plist)\" 410fb41450e3a2e50fa8357682d812ecd3e1846f2141a99bdb9d3a6a981ad69c";
 			showEnvVarsInLog = 0;
 		};
