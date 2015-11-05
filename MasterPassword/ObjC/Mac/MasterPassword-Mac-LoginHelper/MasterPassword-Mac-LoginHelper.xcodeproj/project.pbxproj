@@ -210,7 +210,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac.LoginHelper;
-				PROVISIONING_PROFILE = "8ea8f441-a2d3-4119-ad85-f18953e17648";
 			};
 			name = "AppStore-Mac";
 		};
