@@ -26,7 +26,6 @@
 
 @property(nonatomic) NSMutableArray *sites;
 @property(nonatomic) NSString *masterPassword;
-// TODO: For some reason, some builds, this will work; other builds, it will not.  Behavior changes without code change.
 @property(nonatomic) BOOL showVersionContainer;
 @property(nonatomic) BOOL alternatePressed;
 @property(nonatomic) BOOL locked;
