@@ -36,5 +36,7 @@ MasterPassword/C/mpw-*.tar.gz
 MasterPassword/C/mpw
 MasterPassword/C/mpw-bench
 MasterPassword/C/mpw-tests
-MasterPassword/C/lib/*/*
-!MasterPassword/C/lib/*/.source
+MasterPassword/C/lib/*/.unpacked
+MasterPassword/C/lib/*/.patched
+MasterPassword/C/lib/*/src
+MasterPassword/C/lib/include

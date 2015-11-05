@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#
+# Clean all generated build files.
+set -e
+cd "${BASH_SOURCE%/*}"
+
+rm -vfr lib/*/{.unpacked,.patched,src} lib/include

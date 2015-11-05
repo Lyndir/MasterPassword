@@ -88,7 +88,7 @@ int main(int argc, char *const argv[]) {
 
     // Start BCrypt
     int bcrypt_cost = 9;
-    iterations = 500;
+    iterations = 1000;
     mpw_getTime( &startTime );
     for (int i = 0; i < iterations; ++i) {
         crypt( masterPassword, crypt_gensalt( "$2b$", bcrypt_cost, fullName, strlen( fullName ) ) );
@@ -100,8 +100,8 @@ int main(int argc, char *const argv[]) {
 
     // Summarize.
     fprintf( stdout, "\n== SUMMARY ==\nOn this machine,\n" );
-    fprintf( stdout, " - mpw is %f times slower than sha256 (reference: 414000 on an MBP Late 2013).\n", sha256Speed / mpwSpeed );
-    fprintf( stdout, " - mpw is %f times slower than bcrypt (cost 9) (reference: 4.86 on an MBP Late 2013).\n", bcrypt9Speed / mpwSpeed );
+    fprintf( stdout, " - mpw is %f times slower than sha256 (reference: 320000 on an MBP Late 2013).\n", sha256Speed / mpwSpeed );
+    fprintf( stdout, " - mpw is %f times slower than bcrypt (cost 9) (reference: 22 on an MBP Late 2013).\n", bcrypt9Speed / mpwSpeed );
 
     return 0;
 }

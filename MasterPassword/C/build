@@ -62,6 +62,14 @@ fetch() {
     fi
 }
 unpack() {
+    printf 'Verifying package: %s, against digest: %s...' "$1" "$2"
+    [[ $(digest "$1") = $2 ]] || {
+        printf ' mismatch!\n'
+        echo 2>&1 "Downloaded package doesn't match digest."
+        exit 1
+    }
+    printf ' OK!\n'
+
     if [[ $1 = *.tar.gz || $1 = *.tgz ]]; then
         tar -xvzf "$1"
 
@@ -75,20 +83,11 @@ unpack() {
         echo 2>&1 "Don't know how to unpack: $1"
     fi
 
-    printf 'Verifying package: %s, against digest: %s...' "$1" "$2"
-    [[ $(digest "$1") = $2 ]] || {
-        printf ' mismatch!\n'
-        echo 2>&1 "Downloaded package doesn't match digest."
-        exit 1
-    }
-    printf ' OK!\n'
-
-    files=( !("$1") )
+    files=( * )
     if [[ -d $files ]] && (( ${#files[@]} == 1 )); then
         mv "$files"/* .
         rmdir "$files"
     fi
-    touch .unpacked
 }
 fetchSource() (
     local name=${PWD##*/}
@@ -98,11 +97,11 @@ fetchSource() (
         true
 
     elif [[ $pkg && -e "${pkg##*/}" ]]; then
-        files=( !("${pkg##*/}") )
-        [[ -e $files ]] || {
+        [[ -e src ]] || {
             echo
             echo "Unpacking: $name, using package..."
-            ( mkdir src && cd src && unpack "${pkg##*/}" "$pkg_sha256" )
+            ( mkdir src && cd src && unpack "../${pkg##*/}" "$pkg_sha256" )
+            touch .unpacked
         }
 
     elif [[ $git ]] && hash git 2>/dev/null; then
@@ -110,7 +109,7 @@ fetchSource() (
             echo
             echo "Fetching: $name, using git..."
             git clone "$git" src
-            printf '%s' "$(git describe --always)" > "$name-version"
+            touch .unpacked
         }
 
     elif [[ $svn ]] && hash git 2>/dev/null && [[ -x "$(git --exec-path)/git-svn" ]]; then
@@ -118,7 +117,7 @@ fetchSource() (
             echo
             echo "Fetching: $name, using git-svn..."
             git svn clone --prefix=origin/ --stdlayout "$svn" src
-            printf '%s' "$(git describe --always)" > "$name-version"
+            touch .unpacked
         }
 
     elif [[ $svn ]] && hash svn 2>/dev/null; then
@@ -126,16 +125,16 @@ fetchSource() (
             echo
             echo "Fetching: $name, using svn..."
             svn checkout "$svn/trunk" src
-            printf 'r%s' "$(svn info | awk '/^Revision:/{ print $2 }')" > "$name-version"
+            touch .unpacked
         }
 
     elif [[ $pkg ]]; then
-        files=( !("${pkg##*/}") )
-        [[ -e $files ]] || {
+        [[ -e src ]] || {
             echo
             echo "Fetching: $name, using package..."
             fetch "$pkg"
-            ( mkdir src && cd src && unpack "${pkg##*/}" "$pkg_sha256" )
+            ( mkdir src && cd src && unpack "../${pkg##*/}" "$pkg_sha256" )
+            touch .unpacked
         }
 
     else
@@ -152,7 +151,7 @@ fetchSource() (
         for patch in "${patches[@]}"; do
             echo
             echo "Patching: $name, for $patch..."
-            patch -p0 < "../../$name-$patch.patch"
+            patch -p0 < "../$patch.patch"
         done
         popd
         touch .patched
@@ -166,7 +165,7 @@ depend() {
     [[ -e "lib/include/$name" ]] && return
 
     pushd "lib/$name"
-    [[ -e "src" ]] || fetchSource
+    fetchSource
     pushd "src"
 
     echo
