@@ -1,4 +1,4 @@
-home=https://code.google.com/p/scrypt/
-svn=http://scrypt.googlecode.com/svn
-pkg=http://masterpasswordapp.com/libscrypt-b12b554.tar.gz
-pkg_sha256=c726daec68a345e420896f005394a948dc5a6924713ed94b684c856d4c247f0b
+home=http://www.tarsnap.com/scrypt.html
+git=https://github.com/Tarsnap/scrypt.git
+pkg=http://www.tarsnap.com/scrypt/scrypt-1.2.0.tgz
+pkg_sha256=1754bc89405277c8ac14220377a4c240ddc34b1ce70882aa92cd01bfdc8569d4

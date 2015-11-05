@@ -41,6 +41,13 @@ fi
 # Optional features.
 mpw_color=1 # Colorized Identicon, requires libncurses-dev
 
+# Distribution specific configuration.
+# Homebrew
+if hash brew 2>/dev/null; then
+    opensslPath=$(brew --prefix openssl)
+    export CFLAGS="$CFLAGS -I$opensslPath/include"
+    export LDFLAGS="$LDFLAGS -L$opensslPath/lib"
+fi
 
 ### DEPENDENCIES
 
@@ -84,6 +91,7 @@ unpack() {
     touch .unpacked
 }
 fetchSource() (
+    local name=${PWD##*/}
     source .source
 
     if [[ -e .unpacked ]]; then
@@ -93,41 +101,41 @@ fetchSource() (
         files=( !("${pkg##*/}") )
         [[ -e $files ]] || {
             echo
-            echo "Unpacking: ${PWD##*/}, using package..."
-            unpack "${pkg##*/}" "$pkg_sha256"
+            echo "Unpacking: $name, using package..."
+            ( mkdir src && cd src && unpack "${pkg##*/}" "$pkg_sha256" )
         }
 
     elif [[ $git ]] && hash git 2>/dev/null; then
         [[ -e .git ]] || {
             echo
-            echo "Fetching: ${PWD##*/}, using git..."
-            git clone "$svn" .
-            printf '%s' "$(git describe --always)" > "${PWD##*/}-version"
+            echo "Fetching: $name, using git..."
+            git clone "$git" src
+            printf '%s' "$(git describe --always)" > "$name-version"
         }
 
     elif [[ $svn ]] && hash git 2>/dev/null && [[ -x "$(git --exec-path)/git-svn" ]]; then
         [[ -e .git ]] || {
             echo
-            echo "Fetching: ${PWD##*/}, using git-svn..."
-            git svn clone --prefix=origin/ --stdlayout "$svn" .
-            printf '%s' "$(git describe --always)" > "${PWD##*/}-version"
+            echo "Fetching: $name, using git-svn..."
+            git svn clone --prefix=origin/ --stdlayout "$svn" src
+            printf '%s' "$(git describe --always)" > "$name-version"
         }
 
     elif [[ $svn ]] && hash svn 2>/dev/null; then
         [[ -e .svn ]] || {
             echo
-            echo "Fetching: ${PWD##*/}, using svn..."
-            svn checkout "$svn/trunk" .
-            printf 'r%s' "$(svn info | awk '/^Revision:/{ print $2 }')" > "${PWD##*/}-version"
+            echo "Fetching: $name, using svn..."
+            svn checkout "$svn/trunk" src
+            printf 'r%s' "$(svn info | awk '/^Revision:/{ print $2 }')" > "$name-version"
         }
 
     elif [[ $pkg ]]; then
         files=( !("${pkg##*/}") )
         [[ -e $files ]] || {
             echo
-            echo "Fetching: ${PWD##*/}, using package..."
+            echo "Fetching: $name, using package..."
             fetch "$pkg"
-            unpack "${pkg##*/}" "$pkg_sha256"
+            ( mkdir src && cd src && unpack "${pkg##*/}" "$pkg_sha256" )
         }
 
     else
@@ -135,35 +143,39 @@ fetchSource() (
         echo >&2 "error: Missing git-svn or svn."
         echo >&2 "error: Please install either or manually check out the sources"
         echo >&2 "error: from: $home"
-        echo >&2 "error: into: $PWD"
+        echo >&2 "error: into: $PWD/src"
         exit 1
     fi
 
     if [[ ! -e .patched ]] && (( ${#patches[@]} )); then
+        pushd src
         for patch in "${patches[@]}"; do
             echo
-            echo "Patching: ${PWD##*/}, for $patch..."
-            patch -p0 < ../"${PWD##*/}-$patch.patch"
+            echo "Patching: $name, for $patch..."
+            patch -p0 < "../../$name-$patch.patch"
         done
+        popd
         touch .patched
     fi
 )
 depend() {
+    local name=$1
 
     echo
-    echo "Checking dependency: $1..."
-    [[ -e "lib/include/$1" ]] && return
+    echo "Checking dependency: $name..."
+    [[ -e "lib/include/$name" ]] && return
 
-    pushd "lib/$1"
-    fetchSource
+    pushd "lib/$name"
+    [[ -e "src" ]] || fetchSource
+    pushd "src"
 
     echo
-    echo "Configuring dependency: $1..."
+    echo "Configuring dependency: $name..."
     if [[ -e configure.ac ]]; then
         if [[ ! -e configure ]]; then
             # create configure using autotools.
             if ! hash aclocal || ! hash automake; then
-                echo >&2 "Need autotools to build $1.  Please install automake and autoconf."
+                echo >&2 "Need autotools to build $name.  Please install automake and autoconf."
                 exit 1
             fi
 
@@ -180,20 +192,21 @@ depend() {
     fi
 
     echo
-    echo "Building dependency: $1..."
+    echo "Building dependency: $name..."
     if [[ -e Makefile ]]; then
         if ! hash make; then
-            echo >&2 "Need make to build $1.  Please install GNU make."
+            echo >&2 "Need make to build $name.  Please install GNU make."
             exit 1
         fi
 
         make
-        install -d "../include/$1/"
-        find . -name '*.h' -exec install -m 444 {} "../include/$1/" \;
+        install -d "../../include/$name/"
+        find . -name '*.h' -exec install -m 444 {} "../../include/$name/" \;
     else
-        echo >&2 "error: Don't know how to build: $1"
+        echo >&2 "error: Don't know how to build: $name"
         exit 1
     fi
+    popd
     popd
 }
 
@@ -210,14 +223,10 @@ mpw() {
     )
     local LDFLAGS=(
         # scrypt
-        "lib/scrypt/scrypt-crypto_aesctr.o"
-        "lib/scrypt/scrypt-sha256.o"
-        "lib/scrypt/scrypt-crypto_scrypt-nosse.o"
-        "lib/scrypt/scrypt-memlimit.o"
-        "lib/scrypt/scrypt-scryptenc_cpuperf.o"
-        "lib/scrypt/scrypt-scryptenc.o"
+        "lib/scrypt/src/libcperciva/"*/*.o
+        "lib/scrypt/src/lib/crypto/"*.o
         # library paths
-        -L"." -L"lib/scrypt"
+        -L"." -L"lib/scrypt/src"
         # link libraries
         -l"crypto"
     )
@@ -246,20 +255,16 @@ mpw-bench() {
     )
     local LDFLAGS=(
         # scrypt
-        "lib/scrypt/scrypt-crypto_aesctr.o"
-        "lib/scrypt/scrypt-sha256.o"
-        "lib/scrypt/scrypt-crypto_scrypt-nosse.o"
-        "lib/scrypt/scrypt-memlimit.o"
-        "lib/scrypt/scrypt-scryptenc_cpuperf.o"
-        "lib/scrypt/scrypt-scryptenc.o"
+        "lib/scrypt/src/libcperciva/"*/*.o
+        "lib/scrypt/src/lib/crypto/"*.o
         # bcrypt
-        "lib/bcrypt/crypt_blowfish.o"
-        "lib/bcrypt/crypt_gensalt.o"
-        "lib/bcrypt/wrapper.o"
-        "lib/bcrypt/x86.o"
+        "lib/bcrypt/src/crypt_blowfish.o"
+        "lib/bcrypt/src/crypt_gensalt.o"
+        "lib/bcrypt/src/wrapper.o"
+        "lib/bcrypt/src/x86.o"
         # library paths
-        -L"." -L"lib/scrypt"
-        -L"lib/bcrypt"
+        -L"." -L"lib/scrypt/src"
+        -L"lib/bcrypt/src"
         # link libraries
         -l"crypto"
     )
@@ -287,14 +292,10 @@ mpw-tests() {
     )
     local LDFLAGS=(
         # scrypt
-        "lib/scrypt/scrypt-crypto_aesctr.o"
-        "lib/scrypt/scrypt-sha256.o"
-        "lib/scrypt/scrypt-crypto_scrypt-nosse.o"
-        "lib/scrypt/scrypt-memlimit.o"
-        "lib/scrypt/scrypt-scryptenc_cpuperf.o"
-        "lib/scrypt/scrypt-scryptenc.o"
+        "lib/scrypt/src/libcperciva/"*/*.o
+        "lib/scrypt/src/lib/crypto/"*.o
         # library paths
-        -L"." -L"lib/scrypt"
+        -L"." -L"lib/scrypt/src"
         # link libraries
         -l"crypto" -l"xml2"
     )
