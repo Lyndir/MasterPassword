@@ -42,7 +42,7 @@ printf -v version '%s.%02d' "$major" "$minor"
 printf -v commit '%09d' "$((16#${description##*-g}))"
 
 addPlistWithKey GITDescription string "$description"
-setPlistWithKey CFBundleVersion "${version//.}$commit" # No separator between version and commit because I had already submitted a CFBundleVersion with a really high major.  Cry.
+setPlistWithKey CFBundleVersion "$version.$commit"
 setPlistWithKey CFBundleShortVersionString "$version"
 
 setSettingWithTitle "Build" "$commit"
