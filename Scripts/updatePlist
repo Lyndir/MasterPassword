@@ -37,13 +37,13 @@ setSettingWithTitle() {
 
 description=$(git describe --always --dirty --long --match '*-release')
 version=${description%-g*}
-major=${version%%-*} minor=${version##*-}
-printf -v version '%s.%02d' "$major" "$minor"
-printf -v commit '%09d' "$((16#${description##*-g}))"
+release=${version%%-*} build=${version##*-}
+printf -v version '%s.%d' "$release" "$build"
+printf -v commit '%s' "${description##*-g}"
 
 addPlistWithKey GITDescription string "$description"
-setPlistWithKey CFBundleVersion "$version.$commit"
-setPlistWithKey CFBundleShortVersionString "$version"
+setPlistWithKey CFBundleVersion "$version"
+setPlistWithKey CFBundleShortVersionString "$release"
 
 setSettingWithTitle "Build" "$commit"
 setSettingWithTitle "Version" "$version"
