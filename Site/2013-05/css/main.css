@@ -423,6 +423,22 @@ header .movie .fallback {
     z-index: 5;
     color: #BBB;
 }
+header .help {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    padding: 1em;
+    background: white;
+    border-radius: 8px 0 0 8px;
+    color: black;
+}
+header .help:hover .hidden {
+    display: block;
+    visibility: visible;
+}
+header .help a:link, header .help a:visited, header .help *[onclick] {
+    color: #08c;
+}
 footer {
     overflow: hidden;
     text-align: center;
