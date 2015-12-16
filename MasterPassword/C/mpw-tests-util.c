@@ -69,7 +69,7 @@ xmlChar *mpw_xmlTestCaseString(xmlNodePtr context, const char *nodeName) {
 uint32_t mpw_xmlTestCaseInteger(xmlNodePtr context, const char *nodeName) {
 
     xmlChar *string = mpw_xmlTestCaseString( context, nodeName );
-    uint32_t integer = atol( (char *)string );
+    uint32_t integer = (uint32_t)atol( (char *)string );
     xmlFree( string );
 
     return integer;
