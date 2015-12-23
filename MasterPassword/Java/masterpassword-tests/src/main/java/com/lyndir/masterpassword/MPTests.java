@@ -15,12 +15,12 @@ import javax.xml.bind.annotation.*;
  * @author lhunath, 14-12-05
  */
 @XmlRootElement(name = "tests")
-public class MPWTests {
+public class MPTests {
 
-    public static final String ID_DEFAULT = "default";
+    private static final String ID_DEFAULT = "default";
 
     @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger = Logger.get( MPWTests.class );
+    private static final Logger logger = Logger.get( MPTests.class );
 
     @XmlElement(name = "case")
     private List<Case> cases;
@@ -36,6 +36,15 @@ public class MPWTests {
                 return testCase;
 
         throw new IllegalArgumentException( "No case for identifier: " + identifier );
+    }
+
+    public Case getDefaultCase() {
+        try {
+            return getCase( ID_DEFAULT );
+        }
+        catch (IllegalArgumentException e) {
+            throw new IllegalStateException( "Missing default case in test suite.  Add a case with id: " + ID_DEFAULT, e );
+        }
     }
 
     @XmlRootElement(name = "case")
@@ -68,7 +77,7 @@ public class MPWTests {
 
         private transient Case parentCase;
 
-        public void initializeParentHierarchy(MPWTests tests) {
+        public void initializeParentHierarchy(MPTests tests) {
 
             if (parent != null) {
                 parentCase = tests.getCase( parent );

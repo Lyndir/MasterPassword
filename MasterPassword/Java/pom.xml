@@ -19,6 +19,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>masterpassword-tests</module>
         <module>masterpassword-algorithm</module>
         <module>masterpassword-model</module>
         <module>masterpassword-cli</module>

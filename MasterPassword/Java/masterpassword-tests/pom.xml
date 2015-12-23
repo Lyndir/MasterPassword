@@ -10,10 +10,10 @@
         <version>GIT-SNAPSHOT</version>
     </parent>
 
-    <name>Master Password Algorithm Implementation</name>
-    <description>The implementation of the Master Password algorithm</description>
+    <name>Master Password Test Suite</name>
+    <description>The standard test suite to ensure the Master Password algorithm is operating as it should</description>
 
-    <artifactId>masterpassword-algorithm</artifactId>
+    <artifactId>masterpassword-tests</artifactId>
     <packaging>jar</packaging>
 
     <!-- DEPENDENCY MANAGEMENT -->
@@ -21,22 +21,21 @@
 
         <!-- PROJECT REFERENCES -->
         <dependency>
-            <groupId>com.lyndir.lhunath.opal</groupId>
-            <artifactId>opal-system</artifactId>
-            <version>1.6-p8</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>joda-time</groupId>
-                    <artifactId>joda-time</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>com.lyndir.masterpassword</groupId>
+            <artifactId>masterpassword-algorithm</artifactId>
+            <version>GIT-SNAPSHOT</version>
         </dependency>
 
-        <!-- EXTERNAL DEPENDENCIES -->
+        <!-- TESTING -->
         <dependency>
-            <groupId>com.lambdaworks</groupId>
-            <artifactId>scrypt</artifactId>
-            <version>1.4.0</version>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
