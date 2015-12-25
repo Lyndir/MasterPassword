@@ -4,6 +4,7 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
+import com.google.common.primitives.UnsignedInteger;
 import com.google.common.util.concurrent.*;
 import com.lyndir.lhunath.opal.system.util.PredicateNN;
 import com.lyndir.masterpassword.*;
@@ -26,7 +27,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
     private final User                         user;
     private final Components.GradientPanel     root;
     private final JTextField                   siteNameField;
-    private final JButton siteActionButton;
+    private final JButton                      siteActionButton;
     private final JComboBox<MPSiteType>        siteTypeField;
     private final JComboBox<MasterKey.Version> siteVersionField;
     private final JSpinner                     siteCounterField;
@@ -37,8 +38,8 @@ public class PasswordFrame extends JFrame implements DocumentListener {
     private final Font                         passwordEchoFont;
 
     @Nullable
-    private       Site                         currentSite;
-    private       boolean                      updatingUI;
+    private Site    currentSite;
+    private boolean updatingUI;
 
     public PasswordFrame(User user)
             throws HeadlessException {
@@ -62,70 +63,70 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         sitePanel.add( Components.stud() );
 
         // Site Name
-        sitePanel.add(Components.label("Site Name:"));
+        sitePanel.add( Components.label( "Site Name:" ) );
         JComponent siteControls = Components.boxLayout( BoxLayout.LINE_AXIS, //
                                                         siteNameField = Components.textField(), Components.stud(),
                                                         siteActionButton = Components.button( "Add Site" ) );
-        siteNameField.getDocument().addDocumentListener(this);
-        siteNameField.addActionListener(new ActionListener() {
+        siteNameField.getDocument().addDocumentListener( this );
+        siteNameField.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                Futures.addCallback(updatePassword(true), new FutureCallback<String>() {
+                Futures.addCallback( updatePassword( true ), new FutureCallback<String>() {
                     @Override
                     public void onSuccess(@Nullable final String sitePassword) {
-                        StringSelection clipboardContents = new StringSelection(sitePassword);
-                        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(clipboardContents, null);
+                        StringSelection clipboardContents = new StringSelection( sitePassword );
+                        Toolkit.getDefaultToolkit().getSystemClipboard().setContents( clipboardContents, null );
 
-                        SwingUtilities.invokeLater(new Runnable() {
+                        SwingUtilities.invokeLater( new Runnable() {
                             @Override
                             public void run() {
-                                passwordField.setText(null);
-                                siteNameField.setText(null);
+                                passwordField.setText( null );
+                                siteNameField.setText( null );
 
-                                dispatchEvent(new WindowEvent(PasswordFrame.this, WindowEvent.WINDOW_CLOSING));
+                                dispatchEvent( new WindowEvent( PasswordFrame.this, WindowEvent.WINDOW_CLOSING ) );
                             }
-                        });
+                        } );
                     }
 
                     @Override
                     public void onFailure(final Throwable t) {
                     }
-                });
+                } );
             }
-        });
-        siteActionButton.addActionListener(new ActionListener() {
+        } );
+        siteActionButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (currentSite == null)
                     return;
                 else if (currentSite instanceof ModelSite)
-                    PasswordFrame.this.user.deleteSite(currentSite);
+                    PasswordFrame.this.user.deleteSite( currentSite );
                 else
-                    PasswordFrame.this.user.addSite(currentSite);
+                    PasswordFrame.this.user.addSite( currentSite );
                 siteNameField.requestFocus();
 
                 updatePassword( true );
             }
-        });
+        } );
         sitePanel.add( siteControls );
         sitePanel.add( Components.stud() );
 
         // Site Type & Counter
         MPSiteType[] types = Iterables.toArray( MPSiteType.forClass( MPSiteTypeClass.Generated ), MPSiteType.class );
-        JComponent siteSettings = Components.boxLayout( BoxLayout.LINE_AXIS, //
-                                                        siteTypeField = Components.comboBox( types ), //
-                                                        Components.stud(), //
+        JComponent siteSettings = Components.boxLayout(                                                                       BoxLayout.LINE_AXIS,                                                  //
+                                                        siteTypeField = Components.comboBox( types ),                         //
+                                                        Components.stud(),                                                    //
                                                         siteVersionField = Components.comboBox( MasterKey.Version.values() ), //
-                                                        Components.stud(), //
+                                                        Components.stud(),                                                    //
                                                         siteCounterField = Components.spinner(
-                                                                new SpinnerNumberModel( 1, 1, Integer.MAX_VALUE, 1 ) ) );
+                                                                new SpinnerNumberModel( 1L, 1L, UnsignedInteger.MAX_VALUE, 1L ) ) );
         sitePanel.add( siteSettings );
         siteTypeField.setFont( Res.valueFont().deriveFont( 12f ) );
         siteTypeField.setSelectedItem( MPSiteType.GeneratedLong );
         siteTypeField.addItemListener( new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
-                updatePassword(true);
+                updatePassword( true );
             }
         } );
 
@@ -135,7 +136,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         siteVersionField.addItemListener( new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
-                updatePassword(true);
+                updatePassword( true );
             }
         } );
 
@@ -144,7 +145,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         siteCounterField.addChangeListener( new ChangeListener() {
             @Override
             public void stateChanged(final ChangeEvent e) {
-                updatePassword(true);
+                updatePassword( true );
             }
         } );
 
@@ -161,11 +162,11 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
         // Password
         passwordField = Components.passwordField();
-        passwordField.setAlignmentX(Component.CENTER_ALIGNMENT);
-        passwordField.setHorizontalAlignment(JTextField.CENTER);
-        passwordField.putClientProperty("JPasswordField.cutCopyAllowed", true);
-        passwordField.setEditable(false);
-        passwordField.setBackground(null);
+        passwordField.setAlignmentX( Component.CENTER_ALIGNMENT );
+        passwordField.setHorizontalAlignment( JTextField.CENTER );
+        passwordField.putClientProperty( "JPasswordField.cutCopyAllowed", true );
+        passwordField.setEditable( false );
+        passwordField.setBackground( null );
         passwordField.setBorder( null );
         passwordEchoChar = passwordField.getEchoChar();
         passwordEchoFont = passwordField.getFont().deriveFont( 40f );
@@ -174,7 +175,8 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         // Tip
         tipLabel = Components.label( " ", SwingConstants.CENTER );
         tipLabel.setAlignmentX( Component.CENTER_ALIGNMENT );
-        JPanel passwordContainer = Components.boxLayout( BoxLayout.PAGE_AXIS, maskPasswordField, Box.createGlue(), passwordField, Box.createGlue(), tipLabel );
+        JPanel passwordContainer = Components.boxLayout( BoxLayout.PAGE_AXIS, maskPasswordField, Box.createGlue(), passwordField,
+                                                         Box.createGlue(), tipLabel );
         passwordContainer.setOpaque( true );
         passwordContainer.setBackground( Color.white );
         passwordContainer.setBorder( BorderFactory.createEmptyBorder( 8, 8, 8, 8 ) );
@@ -202,27 +204,27 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         if (updatingUI)
             return Futures.immediateCancelledFuture();
         if (siteNameQuery == null || siteNameQuery.isEmpty() || !user.isKeyAvailable()) {
-            siteActionButton.setVisible(false);
+            siteActionButton.setVisible( false );
             tipLabel.setText( null );
             passwordField.setText( null );
             return Futures.immediateCancelledFuture();
         }
 
-        final MPSiteType siteType = siteTypeField.getModel().getElementAt(siteTypeField.getSelectedIndex());
-        final MasterKey.Version siteVersion = siteVersionField.getItemAt(siteVersionField.getSelectedIndex());
-        final int siteCounter = (Integer) siteCounterField.getValue();
+        final MPSiteType siteType = siteTypeField.getModel().getElementAt( siteTypeField.getSelectedIndex() );
+        final MasterKey.Version siteVersion = siteVersionField.getItemAt( siteVersionField.getSelectedIndex() );
+        final UnsignedInteger siteCounter = UnsignedInteger.valueOf( ((Number) siteCounterField.getValue()).longValue() );
 
-        Iterable<Site> siteResults = user.findSitesByName(siteNameQuery);
+        Iterable<Site> siteResults = user.findSitesByName( siteNameQuery );
         if (!allowNameCompletion)
-            siteResults = FluentIterable.from(siteResults).filter(new PredicateNN<Site>() {
+            siteResults = FluentIterable.from( siteResults ).filter( new PredicateNN<Site>() {
                 @Override
                 public boolean apply(Site input) {
-                    return siteNameQuery.equals(input.getSiteName());
+                    return siteNameQuery.equals( input.getSiteName() );
                 }
-            });
-        final Site site = Iterables.getFirst(siteResults,
-                new IncognitoSite(siteNameQuery, siteType, siteCounter, siteVersion) );
-        if (currentSite != null && site.getSiteName().equals(currentSite.getSiteName())) {
+            } );
+        final Site site = Iterables.getFirst( siteResults,
+                                              new IncognitoSite( siteNameQuery, siteType, siteCounter, siteVersion ) );
+        if (currentSite != null && currentSite.getSiteName().equals( site.getSiteName() )) {
             site.setSiteType( siteType );
             site.setAlgorithmVersion( siteVersion );
             site.setSiteCounter( siteCounter );
@@ -244,12 +246,12 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                     public void run() {
                         updatingUI = true;
                         currentSite = site;
-                        siteActionButton.setVisible(user instanceof ModelUser);
+                        siteActionButton.setVisible( user instanceof ModelUser );
                         if (currentSite instanceof ModelSite)
-                            siteActionButton.setText("Delete Site");
+                            siteActionButton.setText( "Delete Site" );
                         else
-                            siteActionButton.setText("Add Site");
-                        siteTypeField.setSelectedItem(currentSite.getSiteType());
+                            siteActionButton.setText( "Add Site" );
+                        siteTypeField.setSelectedItem( currentSite.getSiteType() );
                         siteVersionField.setSelectedItem( currentSite.getAlgorithmVersion() );
                         siteCounterField.setValue( currentSite.getSiteCounter() );
                         siteNameField.setText( currentSite.getSiteName() );
@@ -273,16 +275,16 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
     @Override
     public void insertUpdate(final DocumentEvent e) {
-        updatePassword(true);
+        updatePassword( true );
     }
 
     @Override
     public void removeUpdate(final DocumentEvent e) {
-        updatePassword(false);
+        updatePassword( false );
     }
 
     @Override
     public void changedUpdate(final DocumentEvent e) {
-        updatePassword(true);
+        updatePassword( true );
     }
 }

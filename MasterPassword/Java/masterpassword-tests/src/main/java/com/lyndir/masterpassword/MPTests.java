@@ -3,18 +3,17 @@ package com.lyndir.masterpassword;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
+import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.*;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.xml.bind.annotation.*;
 
 
 /**
  * @author lhunath, 14-12-05
  */
-@XmlRootElement(name = "tests")
 public class MPTests {
 
     private static final String ID_DEFAULT = "default";
@@ -22,8 +21,7 @@ public class MPTests {
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MPTests.class );
 
-    @XmlElement(name = "case")
-    private List<Case> cases;
+    List<Case> cases;
 
     @Nonnull
     public List<Case> getCases() {
@@ -47,33 +45,20 @@ public class MPTests {
         }
     }
 
-    @XmlRootElement(name = "case")
     public static class Case {
 
-        @XmlAttribute(name = "id")
-        private String  identifier;
-        @XmlAttribute
-        private String  parent;
-        @XmlElement
-        private String  algorithm;
-        @XmlElement
-        private String  fullName;
-        @XmlElement
-        private String  masterPassword;
-        @XmlElement
-        private String  keyID;
-        @XmlElement
-        private String  siteName;
-        @XmlElement
-        private Integer siteCounter;
-        @XmlElement
-        private String  siteType;
-        @XmlElement
-        private String  siteVariant;
-        @XmlElement
-        private String  siteContext;
-        @XmlElement
-        private String  result;
+        String  identifier;
+        String  parent;
+        Integer algorithm;
+        String  fullName;
+        String  masterPassword;
+        String  keyID;
+        String  siteName;
+        UnsignedInteger siteCounter;
+        String  siteType;
+        String  siteVariant;
+        String  siteContext;
+        String  result;
 
         private transient Case parentCase;
 
@@ -84,10 +69,10 @@ public class MPTests {
                 parentCase.initializeParentHierarchy( tests );
             }
 
-            algorithm = ifNotNullElse( algorithm, new NNSupplier<String>() {
+            algorithm = ifNotNullElse( algorithm, new NNSupplier<Integer>() {
                 @Nonnull
                 @Override
-                public String get() {
+                public Integer get() {
                     return checkNotNull( parentCase.algorithm );
                 }
             } );
@@ -119,10 +104,10 @@ public class MPTests {
                     return checkNotNull( parentCase.siteName );
                 }
             } );
-            siteCounter = ifNotNullElse( siteCounter, new NNSupplier<Integer>() {
+            siteCounter = ifNotNullElse( siteCounter, new NNSupplier<UnsignedInteger>() {
                 @Nonnull
                 @Override
-                public Integer get() {
+                public UnsignedInteger get() {
                     return checkNotNull( parentCase.siteCounter );
                 }
             } );
@@ -168,7 +153,7 @@ public class MPTests {
 
         @Nonnull
         public MasterKey.Version getAlgorithm() {
-            return MasterKey.Version.fromInt( ConversionUtils.toIntegerNN( algorithm ) );
+            return MasterKey.Version.fromInt( checkNotNull( algorithm ) );
         }
 
         @Nonnull
@@ -191,8 +176,8 @@ public class MPTests {
             return checkNotNull( siteName );
         }
 
-        public int getSiteCounter() {
-            return ifNotNullElse( siteCounter, 1 );
+        public UnsignedInteger getSiteCounter() {
+            return ifNotNullElse( siteCounter, UnsignedInteger.valueOf( 1 ) );
         }
 
         @Nonnull

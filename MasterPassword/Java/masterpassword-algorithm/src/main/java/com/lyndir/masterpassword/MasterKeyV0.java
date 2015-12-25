@@ -3,6 +3,7 @@ package com.lyndir.masterpassword;
 import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Bytes;
+import com.google.common.primitives.UnsignedInteger;
 import com.lambdaworks.crypto.SCrypt;
 import com.lyndir.lhunath.opal.system.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
@@ -10,14 +11,15 @@ import java.nio.*;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
 /**
  * bugs:
- * - does math with chars whose signedness was platform-dependent.
- * - miscounted the byte-length fromInt multi-byte site names.
- * - miscounted the byte-length fromInt multi-byte full names.
+ * - V2: miscounted the byte-length fromInt multi-byte full names.
+ * - V1: miscounted the byte-length fromInt multi-byte site names.
+ * - V0: does math with chars whose signedness was platform-dependent.
  *
  * @author lhunath, 2014-08-30
  */
@@ -75,18 +77,19 @@ public class MasterKeyV0 extends MasterKey {
         }
     }
 
-    public String encode(final String siteName, final MPSiteType siteType, int siteCounter, final MPSiteVariant siteVariant,
-                         @Nullable final String siteContext) {
+    @Override
+    public String encode(@Nonnull final String siteName, final MPSiteType siteType, @Nonnull UnsignedInteger siteCounter,
+                         final MPSiteVariant siteVariant, @Nullable final String siteContext) {
         Preconditions.checkArgument( siteType.getTypeClass() == MPSiteTypeClass.Generated );
         Preconditions.checkArgument( !siteName.isEmpty() );
 
         logger.trc( "siteName: %s", siteName );
-        logger.trc( "siteCounter: %d", siteCounter );
+        logger.trc( "siteCounter: %d", siteCounter.longValue() );
         logger.trc( "siteVariant: %d (%s)", siteVariant.ordinal(), siteVariant );
         logger.trc( "siteType: %d (%s)", siteType.ordinal(), siteType );
 
-        if (siteCounter == 0)
-            siteCounter = (int) (System.currentTimeMillis() / (300 * 1000)) * 300;
+        if (siteCounter.longValue() == 0)
+            siteCounter = UnsignedInteger.valueOf( (System.currentTimeMillis() / (300 * 1000)) * 300 );
 
         String siteScope = siteVariant.getScope();
         byte[] siteNameBytes = siteName.getBytes( MP_charset );
@@ -108,7 +111,7 @@ public class MasterKeyV0 extends MasterKey {
         int[] sitePasswordSeed = new int[sitePasswordSeedBytes.length];
         for (int i = 0; i < sitePasswordSeedBytes.length; ++i) {
             ByteBuffer buf = ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( ByteOrder.BIG_ENDIAN );
-            Arrays.fill( buf.array(), sitePasswordSeedBytes[i] > 0? (byte)0x00: (byte) 0xFF );
+            Arrays.fill( buf.array(), sitePasswordSeedBytes[i] > 0? (byte) 0x00: (byte) 0xFF );
             buf.position( 2 );
             buf.put( sitePasswordSeedBytes[i] ).rewind();
             sitePasswordSeed[i] = buf.getInt() & 0xFFFF;
@@ -135,8 +138,13 @@ public class MasterKeyV0 extends MasterKey {
     }
 
     @Override
-    protected byte[] bytesForInt(final int integer) {
-        return ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( MP_byteOrder ).putInt( integer ).array();
+    protected byte[] bytesForInt(final int number) {
+        return ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( MP_byteOrder ).putInt( number ).array();
+    }
+
+    @Override
+    protected byte[] bytesForInt(@Nonnull final UnsignedInteger number) {
+        return ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( MP_byteOrder ).putInt( number.intValue() ).array();
     }
 
     @Override

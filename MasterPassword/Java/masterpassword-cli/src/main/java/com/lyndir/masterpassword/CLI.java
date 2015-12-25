@@ -14,7 +14,6 @@
  *   limitations under the License.
  */
 
-
 package com.lyndir.masterpassword;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
@@ -23,6 +22,7 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import com.google.common.io.LineReader;
+import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
 import com.lyndir.lhunath.opal.system.util.StringUtils;
 import java.io.*;
@@ -52,7 +52,7 @@ public class CLI {
         MPSiteType siteType = siteTypeName.isEmpty()? MPSiteType.GeneratedLong: MPSiteType.forOption( siteTypeName );
         MPSiteVariant variant = MPSiteVariant.Password;
         String siteCounterName = ifNotNullElse( System.getenv( ENV_SITECOUNTER ), "" );
-        int siteCounter = siteCounterName.isEmpty()? 1: Integer.parseInt( siteCounterName );
+        UnsignedInteger siteCounter = siteCounterName.isEmpty()? UnsignedInteger.valueOf( 1 ): UnsignedInteger.valueOf( siteCounterName );
 
         // Parse information from option arguments.
         boolean userNameArg = false, typeArg = false, counterArg = false, variantArg = false, contextArg = false;
@@ -77,7 +77,7 @@ public class CLI {
             else if ("-c".equals( arg ) || "--counter".equals( arg ))
                 counterArg = true;
             else if (counterArg) {
-                siteCounter = ConversionUtils.toIntegerNN( arg );
+                siteCounter = UnsignedInteger.valueOf( arg );
                 counterArg = false;
             }
 

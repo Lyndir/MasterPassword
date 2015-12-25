@@ -11,4 +11,12 @@
     <string name="siteCounter_hint">Password #</string>
     <string name="siteVersion_hint">Algorithm</string>
     <string name="empty" />
+    <string name="tests_unavailable">Test suite unavailable.</string>
+    <string name="tests_btn_unavailable">Exit</string>
+    <string name="tests_testing">Testing device\'s password generation integrity…</string>
+    <string name="tests_btn_testing">Please Stand By…</string>
+    <string name="tests_failed">Incompatible device or OS.</string>
+    <string name="tests_btn_failed">Exit</string>
+    <string name="tests_passed">Integrity checks passed!</string>
+    <string name="tests_btn_passed">Continue</string>
 </resources>

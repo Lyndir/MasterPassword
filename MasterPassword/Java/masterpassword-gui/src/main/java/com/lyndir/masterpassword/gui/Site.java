@@ -2,6 +2,7 @@ package com.lyndir.masterpassword.gui;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
+import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.MPSiteType;
 import com.lyndir.masterpassword.MasterKey;
 
@@ -23,9 +24,9 @@ public abstract class Site {
 
     public abstract void setAlgorithmVersion(final MasterKey.Version algorithmVersion);
 
-    public abstract int getSiteCounter();
+    public abstract UnsignedInteger getSiteCounter();
 
-    public abstract void setSiteCounter(final int siteCounter);
+    public abstract void setSiteCounter(final UnsignedInteger siteCounter);
 
     @Override
     public String toString() {

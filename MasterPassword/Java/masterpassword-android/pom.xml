@@ -108,6 +108,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.lyndir.masterpassword</groupId>
+            <artifactId>masterpassword-tests</artifactId>
+            <version>GIT-SNAPSHOT</version>
+        </dependency>
+
+        <!-- EXTERNAL DEPENDENCIES -->
+        <dependency>
             <groupId>com.jakewharton</groupId>
             <artifactId>butterknife</artifactId>
         </dependency>

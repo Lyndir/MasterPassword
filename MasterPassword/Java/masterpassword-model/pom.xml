@@ -26,6 +26,11 @@
             <version>GIT-SNAPSHOT</version>
         </dependency>
 
+        <!-- EXTERNAL DEPENDENCIES -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
         <dependency>
           <groupId>com.google.auto.value</groupId>
           <artifactId>auto-value</artifactId>

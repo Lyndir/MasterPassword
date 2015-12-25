@@ -1,5 +1,6 @@
 package com.lyndir.masterpassword.gui;
 
+import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.MPSiteType;
 import com.lyndir.masterpassword.MasterKey;
 import com.lyndir.masterpassword.model.*;
@@ -55,13 +56,13 @@ public class ModelSite extends Site {
         }
     }
 
-    public int getSiteCounter() {
+    public UnsignedInteger getSiteCounter() {
         return model.getSiteCounter();
     }
 
     @Override
-    public void setSiteCounter(final int siteCounter) {
-        if (siteCounter != getSiteCounter()) {
+    public void setSiteCounter(final UnsignedInteger siteCounter) {
+        if (siteCounter.equals( getSiteCounter() )) {
             model.setSiteCounter( siteCounter );
             MPUserFileManager.get().save();
         }

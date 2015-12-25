@@ -5,6 +5,7 @@ import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.CharStreams;
+import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.ConversionUtils;
@@ -139,7 +140,7 @@ public class MPSiteUnmarshaller {
                                    rfc3339.parseDateTime( siteMatcher.group( 1 ) ).toInstant(), //
                                    siteMatcher.group( 7 ), //
                                    MPSiteType.forType( ConversionUtils.toIntegerNN( siteMatcher.group( 3 ) ) ),
-                                   ConversionUtils.toIntegerNN( siteMatcher.group( 5 ).replace( ":", "" ) ), //
+                                   UnsignedInteger.valueOf( siteMatcher.group( 5 ).replace( ":", "" ) ), //
                                    ConversionUtils.toIntegerNN( siteMatcher.group( 2 ) ), //
                                    siteMatcher.group( 6 ), //
                                    siteMatcher.group( 8 ) );

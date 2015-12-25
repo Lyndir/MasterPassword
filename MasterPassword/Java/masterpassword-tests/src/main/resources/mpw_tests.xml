@@ -1,7 +1,7 @@
 <tests>
     <!-- Default values for all parameters. -->
     <case id="default">
-        <algorithm><!-- current --></algorithm>
+        <algorithm>-1</algorithm>
         <fullName>Robert Lee Mitchell</fullName>
         <masterPassword>banana colored duckling</masterPassword>
         <keyID>98EEF4D1DF46D849574A82A03C3177056B15DFFCA29BB3899DE4628453675302</keyID>

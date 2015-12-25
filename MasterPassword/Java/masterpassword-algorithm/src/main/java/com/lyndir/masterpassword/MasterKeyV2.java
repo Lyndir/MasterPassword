@@ -2,14 +2,16 @@ package com.lyndir.masterpassword;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Bytes;
+import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
 /**
  * bugs:
- * - miscounted the byte-length fromInt multi-byte full names.
+ * - V2: miscounted the byte-length fromInt multi-byte full names.
  * 
  * @author lhunath, 2014-08-30
  */
@@ -28,18 +30,19 @@ public class MasterKeyV2 extends MasterKeyV1 {
         return Version.V2;
     }
 
-    public String encode(final String siteName, final MPSiteType siteType, int siteCounter, final MPSiteVariant siteVariant,
-                         @Nullable final String siteContext) {
+    @Override
+    public String encode(@Nonnull final String siteName, final MPSiteType siteType, @Nonnull UnsignedInteger siteCounter,
+                         final MPSiteVariant siteVariant, @Nullable final String siteContext) {
         Preconditions.checkArgument( siteType.getTypeClass() == MPSiteTypeClass.Generated );
         Preconditions.checkArgument( !siteName.isEmpty() );
 
         logger.trc( "siteName: %s", siteName );
-        logger.trc( "siteCounter: %d", siteCounter );
+        logger.trc( "siteCounter: %d", siteCounter.longValue() );
         logger.trc( "siteVariant: %d (%s)", siteVariant.ordinal(), siteVariant );
         logger.trc( "siteType: %d (%s)", siteType.ordinal(), siteType );
 
-        if (siteCounter == 0)
-            siteCounter = (int) (System.currentTimeMillis() / (300 * 1000)) * 300;
+        if (siteCounter.longValue() == 0)
+            siteCounter = UnsignedInteger.valueOf( (System.currentTimeMillis() / (300 * 1000)) * 300 );
 
         String siteScope = siteVariant.getScope();
         byte[] siteNameBytes = siteName.getBytes( MP_charset );

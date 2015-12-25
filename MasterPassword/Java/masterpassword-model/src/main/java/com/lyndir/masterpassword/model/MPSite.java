@@ -2,6 +2,7 @@ package com.lyndir.masterpassword.model;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
+import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.*;
 import java.util.Objects;
 import javax.annotation.Nullable;
@@ -13,15 +14,15 @@ import org.joda.time.Instant;
  */
 public class MPSite {
 
-    public static final MPSiteType DEFAULT_TYPE    = MPSiteType.GeneratedLong;
-    public static final int        DEFAULT_COUNTER = 1;
+    public static final MPSiteType      DEFAULT_TYPE    = MPSiteType.GeneratedLong;
+    public static final UnsignedInteger DEFAULT_COUNTER = UnsignedInteger.valueOf( 1 );
 
     private final MPUser            user;
     private       MasterKey.Version algorithmVersion;
     private       Instant           lastUsed;
     private       String            siteName;
     private       MPSiteType        siteType;
-    private       int               siteCounter;
+    private       UnsignedInteger   siteCounter;
     private       int               uses;
     private       String            loginName;
 
@@ -29,7 +30,7 @@ public class MPSite {
         this( user, siteName, DEFAULT_TYPE, DEFAULT_COUNTER );
     }
 
-    public MPSite(final MPUser user, final String siteName, final MPSiteType siteType, final int siteCounter) {
+    public MPSite(final MPUser user, final String siteName, final MPSiteType siteType, final UnsignedInteger siteCounter) {
         this.user = user;
         this.algorithmVersion = MasterKey.Version.CURRENT;
         this.lastUsed = new Instant();
@@ -39,7 +40,7 @@ public class MPSite {
     }
 
     protected MPSite(final MPUser user, final MasterKey.Version algorithmVersion, final Instant lastUsed, final String siteName,
-                     final MPSiteType siteType, final int siteCounter, final int uses, @Nullable final String loginName,
+                     final MPSiteType siteType, final UnsignedInteger siteCounter, final int uses, @Nullable final String loginName,
                      @Nullable final String importContent) {
         this.user = user;
         this.algorithmVersion = algorithmVersion;
@@ -101,11 +102,11 @@ public class MPSite {
         this.siteType = siteType;
     }
 
-    public int getSiteCounter() {
+    public UnsignedInteger getSiteCounter() {
         return siteCounter;
     }
 
-    public void setSiteCounter(final int siteCounter) {
+    public void setSiteCounter(final UnsignedInteger siteCounter) {
         this.siteCounter = siteCounter;
     }
 

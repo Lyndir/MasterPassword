@@ -1,6 +1,7 @@
 package com.lyndir.masterpassword;
 
 import com.google.common.base.Preconditions;
+import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.util.Arrays;
@@ -74,7 +75,7 @@ public abstract class MasterKey {
         return idForBytes( getKey() );
     }
 
-    public abstract String encode(@Nonnull final String siteName, final MPSiteType siteType, int siteCounter,
+    public abstract String encode(@Nonnull final String siteName, final MPSiteType siteType, @Nonnull final UnsignedInteger siteCounter,
                                   final MPSiteVariant siteVariant, @Nullable final String siteContext);
 
     public boolean isValid() {
@@ -106,7 +107,9 @@ public abstract class MasterKey {
         return this;
     }
 
-    protected abstract byte[] bytesForInt(final int integer);
+    protected abstract byte[] bytesForInt(final int number);
+
+    protected abstract byte[] bytesForInt(@Nonnull final UnsignedInteger number);
 
     protected abstract byte[] idForBytes(final byte[] bytes);
 

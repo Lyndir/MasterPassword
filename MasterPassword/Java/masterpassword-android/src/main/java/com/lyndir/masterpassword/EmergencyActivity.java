@@ -1,5 +1,6 @@
 package com.lyndir.masterpassword;
 
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
 import android.app.*;
@@ -16,9 +17,9 @@ import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.google.common.base.Throwables;
+import com.google.common.primitives.UnsignedInteger;
 import com.google.common.util.concurrent.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.lhunath.opal.system.util.ConversionUtils;
 import java.util.*;
 import java.util.concurrent.*;
 import javax.annotation.Nullable;
@@ -86,6 +87,10 @@ public class EmergencyActivity extends Activity {
     private int    hc_userName;
     private int    hc_masterPassword;
     private String sitePassword;
+
+    public static void start(Context context) {
+        context.startActivity( new Intent( context, EmergencyActivity.class ) );
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -261,7 +266,7 @@ public class EmergencyActivity extends Activity {
     private void updateSitePassword() {
         final String siteName = siteNameField.getText().toString();
         final MPSiteType type = (MPSiteType) siteTypeField.getSelectedItem();
-        final int counter = ConversionUtils.toIntegerNN( counterField.getText() );
+        final UnsignedInteger counter = UnsignedInteger.valueOf( ifNotNullElse( counterField.getText(), "1" ).toString() );
 
         if (masterKeyFuture == null || siteName.isEmpty() || type == null) {
             sitePasswordField.setText( "" );
