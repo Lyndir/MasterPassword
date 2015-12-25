@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.lyndir.masterpassword</groupId>
         <artifactId>masterpassword</artifactId>
-        <version>2.3.1</version>
+        <version>GIT-SNAPSHOT</version>
     </parent>
 
     <name>Master Password CLI</name>
@@ -85,7 +85,7 @@
         <dependency>
             <groupId>com.lyndir.masterpassword</groupId>
             <artifactId>masterpassword-algorithm</artifactId>
-            <version>2.3.1</version>
+            <version>GIT-SNAPSHOT</version>
         </dependency>
 
         <dependency>
