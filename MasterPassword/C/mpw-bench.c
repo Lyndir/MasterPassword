@@ -16,6 +16,7 @@
 #include <bcrypt/ow-crypt.h>
 
 #include "mpw-algorithm.h"
+#include "mpw-util.h"
 
 #define MP_N                32768
 #define MP_r                8

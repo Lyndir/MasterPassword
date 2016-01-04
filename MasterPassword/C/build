@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 #
 # TROUBLESHOOTING
-#   - To enable verbose algorithm/implementation debugging, use ./build -DDEBUG
 #   - If you see 'undefined reference to `AES_encrypt'',
 #       make sure you have openssl installed.
 #       If libcrypto.a is in a non-standard directory, try ./build -L[your-lib-dir]

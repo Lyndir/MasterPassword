@@ -6,21 +6,50 @@
 //  Copyright (c) 2014 Lyndir. All rights reserved.
 //
 
+#include <stdio.h>
 #include <stdint.h>
 
 //// Logging.
 
-#ifdef DEBUG
-    #ifndef trc
-        #define trc(...) fprintf( stderr, __VA_ARGS__ )
-    #endif
-#else
-    #ifndef trc
-        #define trc(...) do {} while (0)
-    #endif
+int mpw_verbosity;
+#ifndef trc
+    #define trc_level 3
+    #define trc(...) \
+        if (mpw_verbosity >= 3) \
+            fprintf( stderr, __VA_ARGS__ )
+#endif
+#ifndef dbg
+    #define dbg_level 2
+    #define dbg(...) \
+        if (mpw_verbosity >= 2) \
+            fprintf( stderr, __VA_ARGS__ )
+#endif
+#ifndef inf
+    #define inf_level 1
+    #define inf(...) \
+        if (mpw_verbosity >= 1) \
+            fprintf( stderr, __VA_ARGS__ )
+#endif
+#ifndef wrn
+    #define wrn_level 0
+    #define wrn(...) \
+        if (mpw_verbosity >= 0) \
+            fprintf( stderr, __VA_ARGS__ )
+#endif
+#ifndef err
+    #define err_level -1
+    #define err(...) \
+        if (mpw_verbosity >= -1) \
+            fprintf( stderr, __VA_ARGS__ )
 #endif
 #ifndef ftl
-    #define ftl(...) do { fprintf( stderr, __VA_ARGS__ ); abort(); } while (0)
+    #define ftl_level -2
+    #define ftl(...) \
+        do { \
+            if (mpw_verbosity >= -2) \
+                fprintf( stderr, __VA_ARGS__ ); \
+            exit( 2 ); \
+        } while (0)
 #endif
 
 //// Buffers and memory.

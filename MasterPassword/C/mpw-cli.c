@@ -13,8 +13,6 @@
 #include <histedit.h>
 #endif
 
-#define ftl(...) do { fprintf( stderr, __VA_ARGS__ ); exit(2); } while (0)
-
 #include "mpw-algorithm.h"
 #include "mpw-util.h"
 
@@ -25,9 +23,9 @@
 
 static void usage() {
 
-    fprintf( stderr, "Usage: mpw [-u name] [-t type] [-c counter] [-V version] [-v variant] [-C context] [-h] site\n\n" );
+    fprintf( stderr, "Usage: mpw [-u name] [-t type] [-c counter] [-a algorithm] [-V variant] [-C context] [-v|-q] [-h] site\n\n" );
     fprintf( stderr, "    -u name      Specify the full name of the user.\n"
-            "                 Defaults to %s in env.\n\n", MP_env_fullname );
+            "                 Defaults to %s in env or prompts.\n\n", MP_env_fullname );
     fprintf( stderr, "    -t type      Specify the password's template.\n"
             "                 Defaults to %s in env or 'long' for password, 'name' for login.\n"
             "                     x, max, maximum | 20 characters, contains symbols.\n"
@@ -40,23 +38,27 @@ static void usage() {
             "                     p, phrase       | 20 character sentence.\n\n", MP_env_sitetype );
     fprintf( stderr, "    -c counter   The value of the counter.\n"
             "                 Defaults to %s in env or 1.\n\n", MP_env_sitecounter );
-    fprintf( stderr, "    -V version   The algorithm version to use.\n"
+    fprintf( stderr, "    -a version   The algorithm version to use.\n"
             "                 Defaults to %s in env or %d.\n\n", MP_env_algorithm, MPAlgorithmVersionCurrent );
-    fprintf( stderr, "    -v variant   The kind of content to generate.\n"
+    fprintf( stderr, "    -V variant   The kind of content to generate.\n"
             "                 Defaults to 'password'.\n"
             "                     p, password | The password to log in with.\n"
             "                     l, login    | The username to log in as.\n"
             "                     a, answer   | The answer to a security question.\n\n" );
     fprintf( stderr, "    -C context   A variant-specific context.\n"
             "                 Defaults to empty.\n"
-            "                  -v p, password | Doesn't currently use a context.\n"
-            "                  -v l, login    | Doesn't currently use a context.\n"
-            "                  -v a, answer   | Empty for a universal site answer or\n"
+            "                  -V p, password | Doesn't currently use a context.\n"
+            "                  -V l, login    | Doesn't currently use a context.\n"
+            "                  -V a, answer   | Empty for a universal site answer or\n"
             "                                 | the most significant word(s) of the question.\n\n" );
+    fprintf( stderr, "    -v           Increase output verbosity (can be repeated).\n\n" );
+    fprintf( stderr, "    -q           Decrease output verbosity (can be repeated).\n\n" );
     fprintf( stderr, "    ENVIRONMENT\n\n"
-            "        MP_FULLNAME    | The full name of the user.\n"
-            "        MP_SITETYPE    | The default password template.\n"
-            "        MP_SITECOUNTER | The default counter value.\n\n" );
+            "        %-14s | The full name of the user (see -u).\n"
+            "        %-14s | The default password template (see -t).\n"
+            "        %-14s | The default counter value (see -c).\n"
+            "        %-14s | The default algorithm version (see -a).\n\n",
+            MP_env_fullname, MP_env_sitetype, MP_env_sitecounter, MP_env_algorithm );
     exit( 0 );
 }
 
@@ -111,7 +113,7 @@ int main(int argc, char *const argv[]) {
             ftl( "Invalid %s: %s\n", MP_env_algorithm, algorithmVersionString );
 
     // Read the options.
-    for (int opt; (opt = getopt( argc, argv, "u:P:t:c:v:V:C:h" )) != -1;)
+    for (int opt; (opt = getopt( argc, argv, "u:P:t:c:V:a:C:vqh" )) != -1;)
         switch (opt) {
             case 'u':
                 fullName = optarg;
@@ -127,15 +129,21 @@ int main(int argc, char *const argv[]) {
             case 'c':
                 siteCounterString = optarg;
                 break;
-            case 'v':
+            case 'V':
                 siteVariantString = optarg;
                 break;
-            case 'V':
+            case 'a':
                 if (sscanf( optarg, "%u", &algorithmVersion ) != 1)
                     ftl( "Not a version: %s\n", optarg );
                 break;
             case 'C':
                 siteContextString = optarg;
+                break;
+            case 'v':
+                ++mpw_verbosity;
+                break;
+            case 'q':
+                --mpw_verbosity;
                 break;
             case 'h':
                 usage();
