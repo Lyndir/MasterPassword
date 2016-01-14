@@ -20,6 +20,7 @@
 @interface MPKey()
 
 @property(nonatomic) NSString *fullName;
+@property(nonatomic) MPKeyOrigin origin;
 @property(nonatomic) NSString *masterPassword;
 
 @end
@@ -35,16 +36,19 @@
 
     _keyCache = [NSCache new];
     self.fullName = fullName;
+    self.origin = MPKeyOriginMasterPassword;
     self.masterPassword = masterPassword;
 
     return self;
 }
 
-- (instancetype)initForFullName:(NSString *)fullName withKeyData:(NSData *)keyData forAlgorithm:(id<MPAlgorithm>)algorithm {
+- (instancetype)initForFullName:(NSString *)fullName withKeyData:(NSData *)keyData
+                   forAlgorithm:(id<MPAlgorithm>)algorithm keyOrigin:(MPKeyOrigin)origin {
 
     if (!(self = [self initForFullName:fullName withMasterPassword:nil]))
         return nil;
 
+    self.origin = origin;
     [_keyCache setObject:keyData forKey:algorithm];
 
     return self;

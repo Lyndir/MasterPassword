@@ -35,14 +35,20 @@
     if (![[NSUserDefaults standardUserDefaults] synchronize])
         wrn( @"Couldn't synchronize after preferences appearance." );
 
+    self.tableView.contentInset = UIEdgeInsetsMake( 64, 0, 49, 0 );
+
+    [self reload];
+}
+
+- (void)reload {
+
     MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForMainThread];
     self.generatedTypeControl.selectedSegmentIndex = [self generatedSegmentIndexForType:activeUser.defaultType];
     self.storedTypeControl.selectedSegmentIndex = [self storedSegmentIndexForType:activeUser.defaultType];
-    self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%ld", (long)activeUser.avatar )];
+    self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%lu", (unsigned long)activeUser.avatar )];
     self.savePasswordSwitch.on = activeUser.saveKey;
     self.touchIDSwitch.on = activeUser.touchID;
-
-    self.tableView.contentInset = UIEdgeInsetsMake( 64, 0, 49, 0 );
+    self.touchIDSwitch.enabled = self.savePasswordSwitch.on;
 }
 
 #pragma mark - UITableViewDelegate
@@ -97,6 +103,10 @@
             else
                 [[MPiOSAppDelegate get] forgetSavedKeyFor:activeUser];
             [context saveToStore];
+
+            PearlMainQueue(^{
+                [self reload];
+            });
         }];
 
     if (sender == self.touchIDSwitch)
@@ -107,6 +117,10 @@
             else
                 [[MPiOSAppDelegate get] forgetSavedKeyFor:activeUser];
             [context saveToStore];
+
+            PearlMainQueue( ^{
+                [self reload];
+            } );
         }];
 
     if (sender == self.generatedTypeControl || sender == self.storedTypeControl) {
@@ -115,13 +129,13 @@
         else if (sender == self.storedTypeControl)
             self.generatedTypeControl.selectedSegmentIndex = -1;
 
+        MPSiteType defaultType = [self typeForSelectedSegment];
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-            MPSiteType defaultType = [[MPiOSAppDelegate get] activeUserInContext:context].defaultType = [self typeForSelectedSegment];
+            [[MPiOSAppDelegate get] activeUserInContext:context].defaultType = defaultType;
             [context saveToStore];
 
             PearlMainQueue( ^{
-                self.generatedTypeControl.selectedSegmentIndex = [self generatedSegmentIndexForType:defaultType];
-                self.storedTypeControl.selectedSegmentIndex = [self storedSegmentIndexForType:defaultType];
+                [self reload];
             } );
         }];
     }
@@ -134,9 +148,9 @@
         activeUser.avatar = (activeUser.avatar - 1 + MPAvatarCount) % MPAvatarCount;
         [context saveToStore];
 
-        long avatar = activeUser.avatar;
+        NSUInteger avatar = activeUser.avatar;
         PearlMainQueue( ^{
-            self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%ld", avatar )];
+            self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%lu", (unsigned long)avatar )];
         } );
     }];
 }
@@ -148,9 +162,9 @@
         activeUser.avatar = (activeUser.avatar + 1 + MPAvatarCount) % MPAvatarCount;
         [context saveToStore];
 
-        long avatar = activeUser.avatar;
+        NSUInteger avatar = activeUser.avatar;
         PearlMainQueue( ^{
-            self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%ld", avatar )];
+            self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%lu", (unsigned long)avatar )];
         } );
     }];
 }

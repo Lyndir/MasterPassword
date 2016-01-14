@@ -18,64 +18,57 @@
 
 @implementation MPAppDelegate_Shared(Key)
 
-static NSDictionary *keyQuery(MPUserEntity *user, BOOL newItem) {
+static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigin *keyOrigin) {
 
-    if (user.touchID && &SecAccessControlCreateWithFlags) {
+    if (user.touchID && kSecUseOperationPrompt) {
+        if (keyOrigin)
+            *keyOrigin = MPKeyOriginKeyChainBiometric;
+
         CFErrorRef acError = NULL;
-        SecAccessControlRef accessControl = SecAccessControlCreateWithFlags( nil,
+        SecAccessControlRef accessControl = SecAccessControlCreateWithFlags( kCFAllocatorDefault,
                 kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, kSecAccessControlTouchIDCurrentSet, &acError );
         if (!accessControl || acError)
             err( @"Could not use TouchID on this device: %@", acError );
 
-        else {
-            LAContext *context = [LAContext new];
-            dispatch_group_t waitGroup = dispatch_group_create();
-            dispatch_group_enter( waitGroup );
-            __block BOOL contextSuccess = NO;
-            __block NSError *contextError = nil;
-            [context evaluateAccessControl:accessControl
-                                 operation:newItem? LAAccessControlOperationCreateItem: LAAccessControlOperationUseItem
-                           localizedReason:@"Moo"
-                                     reply:^(BOOL success, NSError *error) {
-                                         contextSuccess = success;
-                                         contextError = error;
-                                         dispatch_group_leave( waitGroup );
-                                     }];
-            dispatch_group_wait( waitGroup, DISPATCH_TIME_FOREVER );
-
-            if (!contextSuccess || contextError)
-                err( @"TouchID authentication failed: %@", contextError );
-
-            else
-                return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
-                                               attributes:@{
-                                                       (__bridge id)kSecAttrService         : @"Saved Master Password",
-                                                       (__bridge id)kSecAttrAccount         : user.name?: @"",
-                                                       (__bridge id)kSecUseAuthenticationUI : (__bridge id)kSecUseAuthenticationUIAllow,
-                                                       (__bridge id)kSecAttrAccessControl   : (__bridge id)accessControl,
-                                               }
-                                                  matches:nil];
-        }
+        else
+            return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
+                                           attributes:@{
+                                                   (__bridge id)kSecAttrService         : @"Saved Master Password",
+                                                   (__bridge id)kSecAttrAccount         : user.name?: @"",
+                                                   (__bridge id)kSecAttrAccessControl   : (__bridge id)accessControl,
+                                                   (__bridge id)kSecUseAuthenticationUI : (__bridge id)kSecUseAuthenticationUIAllow,
+                                                   (__bridge id)kSecUseOperationPrompt  :
+                                                   strf( @"Access %@'s master password.", user.name ),
+                                           }
+                                              matches:nil];
     }
+
+    if (keyOrigin)
+        *keyOrigin = MPKeyOriginKeyChain;
 
     return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
                                    attributes:@{
-                                           (__bridge id)kSecAttrService : @"Saved Master Password",
-                                           (__bridge id)kSecAttrAccount : user.name?: @"",
+                                           (__bridge id)kSecAttrService    : @"Saved Master Password",
+                                           (__bridge id)kSecAttrAccount    : user.name?: @"",
+#if TARGET_OS_IPHONE
+                                           (__bridge id)kSecAttrAccessible : (__bridge id)(kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly?: kSecAttrAccessibleWhenUnlockedThisDeviceOnly),
+#endif
                                    }
                                       matches:nil];
 }
 
 - (MPKey *)loadSavedKeyFor:(MPUserEntity *)user {
 
-    NSData *keyData = [PearlKeyChain dataOfItemForQuery:keyQuery( user, NO )];
+    MPKeyOrigin keyOrigin;
+    NSDictionary *keyQuery = createKeyQuery( user, NO, &keyOrigin );
+    NSData *keyData = [PearlKeyChain dataOfItemForQuery:keyQuery];
     if (!keyData) {
         inf( @"No key found in keychain for user: %@", user.userID );
         return nil;
     }
 
     inf( @"Found key in keychain for user: %@", user.userID );
-    return [[MPKey alloc] initForFullName:user.name withKeyData:keyData forAlgorithm:user.algorithm];
+    return [[MPKey alloc] initForFullName:user.name withKeyData:keyData forAlgorithm:user.algorithm keyOrigin:keyOrigin];
 }
 
 - (void)storeSavedKeyFor:(MPUserEntity *)user {
@@ -83,19 +76,16 @@ static NSDictionary *keyQuery(MPUserEntity *user, BOOL newItem) {
     if (user.saveKey) {
         inf( @"Saving key in keychain for user: %@", user.userID );
 
-        [PearlKeyChain addOrUpdateItemForQuery:keyQuery( user, YES )
+        [PearlKeyChain addOrUpdateItemForQuery:createKeyQuery( user, YES, nil )
                                 withAttributes:@{
-                                        (__bridge id)kSecValueData      : [self.key keyDataForAlgorithm:user.algorithm],
-#if TARGET_OS_IPHONE
-                                        (__bridge id)kSecAttrAccessible : (__bridge id)(kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly?: kSecAttrAccessibleWhenUnlockedThisDeviceOnly),
-#endif
+                                        (__bridge id)kSecValueData : [self.key keyDataForAlgorithm:user.algorithm],
                                 }];
     }
 }
 
 - (void)forgetSavedKeyFor:(MPUserEntity *)user {
 
-    OSStatus result = [PearlKeyChain deleteItemForQuery:keyQuery( user, NO )];
+    OSStatus result = [PearlKeyChain deleteItemForQuery:createKeyQuery( user, NO, nil )];
     if (result == noErr) {
         inf( @"Removed key from keychain for user: %@", user.userID );
 
@@ -114,8 +104,7 @@ static NSDictionary *keyQuery(MPUserEntity *user, BOOL newItem) {
 
 - (BOOL)signInAsUser:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc usingMasterPassword:(NSString *)password {
 
-    if (password)
-        NSAssert( ![NSThread isMainThread], @"Computing key must not happen from the main thread." );
+    NSAssert( ![NSThread isMainThread], @"Authentication should not happen on the main thread." );
     if (!user)
         return NO;
 
@@ -179,7 +168,17 @@ static NSDictionary *keyQuery(MPUserEntity *user, BOOL newItem) {
         }
 
         self.key = tryKey;
-        [self storeSavedKeyFor:user];
+
+        // Update the key chain if necessary.
+        switch (self.key.origin) {
+            case MPKeyOriginMasterPassword:
+                [self storeSavedKeyFor:user];
+                break;
+
+            case MPKeyOriginKeyChain:
+            case MPKeyOriginKeyChainBiometric:
+                break;
+        }
     }
 
     @try {

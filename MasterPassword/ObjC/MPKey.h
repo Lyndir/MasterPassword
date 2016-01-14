@@ -20,12 +20,20 @@
 
 @protocol MPAlgorithm;
 
+typedef NS_ENUM(NSUInteger, MPKeyOrigin) {
+    MPKeyOriginMasterPassword,
+    MPKeyOriginKeyChain,
+    MPKeyOriginKeyChainBiometric,
+};
+
 @interface MPKey : NSObject
 
 @property(nonatomic, readonly) NSString *fullName;
+@property(nonatomic, readonly) MPKeyOrigin origin;
 
 - (instancetype)initForFullName:(NSString *)fullName withMasterPassword:(NSString *)masterPassword;
-- (instancetype)initForFullName:(NSString *)fullName withKeyData:(NSData *)keyData forAlgorithm:(id<MPAlgorithm>)algorithm;
+- (instancetype)initForFullName:(NSString *)fullName withKeyData:(NSData *)keyData
+                   forAlgorithm:(id<MPAlgorithm>)algorithm keyOrigin:(MPKeyOrigin)origin;
 
 - (NSData *)keyIDForAlgorithm:(id<MPAlgorithm>)algorithm;
 - (NSData *)keyDataForAlgorithm:(id<MPAlgorithm>)algorithm;
