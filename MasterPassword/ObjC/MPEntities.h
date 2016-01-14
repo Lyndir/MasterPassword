@@ -53,6 +53,7 @@
 
 @property(assign) NSUInteger avatar;
 @property(assign) BOOL saveKey;
+@property(assign) BOOL touchID;
 @property(assign) MPSiteType defaultType;
 @property(readonly) NSString *userID;
 @property(strong) id<MPAlgorithm> algorithm;

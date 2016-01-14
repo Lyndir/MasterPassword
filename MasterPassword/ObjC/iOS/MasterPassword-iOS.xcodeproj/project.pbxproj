@@ -106,8 +106,6 @@
 		DA2CA4E018D28859007798F8 /* NSTimer+PearlBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = DA2CA4DC18D28859007798F8 /* NSTimer+PearlBlock.h */; };
 		DA2CA4E418D28866007798F8 /* NSLayoutConstraint+PearlUIKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DA2CA4E218D28866007798F8 /* NSLayoutConstraint+PearlUIKit.h */; };
 		DA2CA4E618D2AC10007798F8 /* NSLayoutConstraint+PearlUIKit.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4E518D2AC10007798F8 /* NSLayoutConstraint+PearlUIKit.m */; };
-		DA30E9CE15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */; };
-		DA30E9CF15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9CC15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m */; };
 		DA30E9D015722ECA00A68B4C /* Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9CD15722ECA00A68B4C /* Pearl.m */; };
 		DA30E9D215722EE500A68B4C /* Pearl-Crypto.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D115722EE500A68B4C /* Pearl-Crypto.m */; };
 		DA30E9D415722EF400A68B4C /* Pearl-UIKit.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D315722EF400A68B4C /* Pearl-UIKit.m */; };
@@ -117,7 +115,6 @@
 		DA32CFF119CF1C8F004F3F0E /* MPStoredSiteEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFE819CF1C8F004F3F0E /* MPStoredSiteEntity.m */; };
 		DA32CFF319CF1C8F004F3F0E /* MPSiteEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFEC19CF1C8F004F3F0E /* MPSiteEntity.m */; };
 		DA32CFF419CF1C8F004F3F0E /* MPGeneratedSiteEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32CFEE19CF1C8F004F3F0E /* MPGeneratedSiteEntity.m */; };
-		DA32D00819CF4735004F3F0E /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA32D00119CF4735004F3F0E /* MasterPassword.xcdatamodeld */; };
 		DA32D00919CF5C55004F3F0E /* icon_question.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37FE1711E29600CF925C /* icon_question.png */; };
 		DA32D00A19CF5C55004F3F0E /* icon_question@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABD37FF1711E29600CF925C /* icon_question@2x.png */; };
 		DA32D01A19D046E1004F3F0E /* PearlFixedTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32D01819D046E1004F3F0E /* PearlFixedTableView.m */; };
@@ -186,6 +183,9 @@
 		DA854C8418D4CFBF00106317 /* avatar-add.png in Resources */ = {isa = PBXBuildFile; fileRef = DA854C8218D4CFBF00106317 /* avatar-add.png */; };
 		DA92614E1BE1A57500369DE5 /* MPAppDelegate_InApp.m in Sources */ = {isa = PBXBuildFile; fileRef = DA92614D1BE1A57500369DE5 /* MPAppDelegate_InApp.m */; };
 		DA945C8717E3F3FD0053236B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA945C8617E3F3FD0053236B /* Images.xcassets */; };
+		DA95B50C1C476B6A0067F5EF /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95B50B1C476B6A0067F5EF /* LocalAuthentication.framework */; };
+		DA95B50F1C4776F00067F5EF /* NSMutableSet+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA95B50E1C4776F00067F5EF /* NSMutableSet+Pearl.m */; };
+		DA95B5191C477DB50067F5EF /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA95B5101C477DB50067F5EF /* MasterPassword.xcdatamodeld */; };
 		DA95D5F214DF0B2C008D1B94 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */; };
 		DAA141201922FF020032B392 /* PearlTween.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA1411C1922FF020032B392 /* PearlTween.m */; };
 		DAA141211922FF020032B392 /* PearlTween.h in Headers */ = {isa = PBXBuildFile; fileRef = DAA1411D1922FF020032B392 /* PearlTween.h */; };
@@ -609,8 +609,6 @@
 		DA2CA4DC18D28859007798F8 /* NSTimer+PearlBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+PearlBlock.h"; sourceTree = "<group>"; };
 		DA2CA4E218D28866007798F8 /* NSLayoutConstraint+PearlUIKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSLayoutConstraint+PearlUIKit.h"; sourceTree = "<group>"; };
 		DA2CA4E518D2AC10007798F8 /* NSLayoutConstraint+PearlUIKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSLayoutConstraint+PearlUIKit.m"; sourceTree = "<group>"; };
-		DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+PearlMutableInfo.h"; sourceTree = "<group>"; };
-		DA30E9CC15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+PearlMutableInfo.m"; sourceTree = "<group>"; };
 		DA30E9CD15722ECA00A68B4C /* Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pearl.m; sourceTree = "<group>"; };
 		DA30E9D115722EE500A68B4C /* Pearl-Crypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Pearl-Crypto.m"; sourceTree = "<group>"; };
 		DA30E9D315722EF400A68B4C /* Pearl-UIKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Pearl-UIKit.m"; sourceTree = "<group>"; };
@@ -624,12 +622,6 @@
 		DA32CFED19CF1C8F004F3F0E /* MPSiteEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSiteEntity.h; sourceTree = "<group>"; };
 		DA32CFEE19CF1C8F004F3F0E /* MPGeneratedSiteEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPGeneratedSiteEntity.m; sourceTree = "<group>"; };
 		DA32CFEF19CF1C8F004F3F0E /* MPGeneratedSiteEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPGeneratedSiteEntity.h; sourceTree = "<group>"; };
-		DA32D00219CF4735004F3F0E /* MasterPassword 1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 1.xcdatamodel"; sourceTree = "<group>"; };
-		DA32D00319CF4735004F3F0E /* MasterPassword 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 2.xcdatamodel"; sourceTree = "<group>"; };
-		DA32D00419CF4735004F3F0E /* MasterPassword 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 3.xcdatamodel"; sourceTree = "<group>"; };
-		DA32D00519CF4735004F3F0E /* MasterPassword 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 4.xcdatamodel"; sourceTree = "<group>"; };
-		DA32D00619CF4735004F3F0E /* MasterPassword 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 5.xcdatamodel"; sourceTree = "<group>"; };
-		DA32D00719CF4735004F3F0E /* MasterPassword 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 6.xcdatamodel"; sourceTree = "<group>"; };
 		DA32D01819D046E1004F3F0E /* PearlFixedTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlFixedTableView.m; sourceTree = "<group>"; };
 		DA32D01919D046E1004F3F0E /* PearlFixedTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlFixedTableView.h; sourceTree = "<group>"; };
 		DA32D02019D111C6004F3F0E /* libKCOrderedAccessorFix.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libKCOrderedAccessorFix.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -674,12 +666,22 @@
 		DA6774351A4749CC004F356A /* mpw-tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests.c"; sourceTree = "<group>"; };
 		DA70EC7F1811B13C00F65DB2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		DA72BD7719C137D500E6ACFE /* libopensslcrypto-ios-dev.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopensslcrypto-ios-dev.a"; sourceTree = "<group>"; };
-		DA8495271A9146E600B3053D /* MasterPassword 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 7.xcdatamodel"; sourceTree = "<group>"; };
 		DA854C8118D4CFBF00106317 /* avatar-add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-add@2x.png"; sourceTree = "<group>"; };
 		DA854C8218D4CFBF00106317 /* avatar-add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-add.png"; sourceTree = "<group>"; };
 		DA92614C1BE1A57500369DE5 /* MPAppDelegate_InApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_InApp.h; sourceTree = "<group>"; };
 		DA92614D1BE1A57500369DE5 /* MPAppDelegate_InApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppDelegate_InApp.m; sourceTree = "<group>"; };
 		DA945C8617E3F3FD0053236B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		DA95B50B1C476B6A0067F5EF /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = System/Library/Frameworks/LocalAuthentication.framework; sourceTree = SDKROOT; };
+		DA95B50D1C4776F00067F5EF /* NSMutableSet+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableSet+Pearl.h"; sourceTree = "<group>"; };
+		DA95B50E1C4776F00067F5EF /* NSMutableSet+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableSet+Pearl.m"; sourceTree = "<group>"; };
+		DA95B5111C477DB50067F5EF /* MasterPassword 1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 1.xcdatamodel"; sourceTree = "<group>"; };
+		DA95B5121C477DB50067F5EF /* MasterPassword 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 2.xcdatamodel"; sourceTree = "<group>"; };
+		DA95B5131C477DB50067F5EF /* MasterPassword 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 3.xcdatamodel"; sourceTree = "<group>"; };
+		DA95B5141C477DB50067F5EF /* MasterPassword 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 4.xcdatamodel"; sourceTree = "<group>"; };
+		DA95B5151C477DB50067F5EF /* MasterPassword 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 5.xcdatamodel"; sourceTree = "<group>"; };
+		DA95B5161C477DB50067F5EF /* MasterPassword 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 6.xcdatamodel"; sourceTree = "<group>"; };
+		DA95B5171C477DB50067F5EF /* MasterPassword 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 7.xcdatamodel"; sourceTree = "<group>"; };
+		DA95B5181C477DB50067F5EF /* MasterPassword 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 8.xcdatamodel"; sourceTree = "<group>"; };
 		DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		DAA141191922FED80032B392 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DAA1411C1922FF020032B392 /* PearlTween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlTween.m; sourceTree = "<group>"; };
@@ -1551,6 +1553,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA95B50C1C476B6A0067F5EF /* LocalAuthentication.framework in Frameworks */,
 				DA2C3D651BD9612F001137B3 /* libz.tbd in Frameworks */,
 				DA2C3D631BD96126001137B3 /* libc++.tbd in Frameworks */,
 				DAA1761B19D86D0D0044227B /* libAttributedMarkdown.a in Frameworks */,
@@ -1764,6 +1767,7 @@
 		DA5BFA47147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA95B50B1C476B6A0067F5EF /* LocalAuthentication.framework */,
 				DA2C3D641BD9612F001137B3 /* libz.tbd */,
 				DA2C3D621BD96126001137B3 /* libc++.tbd */,
 				DA2C3D601BD95EEE001137B3 /* Fabric.framework */,
@@ -2559,7 +2563,7 @@
 			isa = PBXGroup;
 			children = (
 				DABD3BD71711E2DC00CF925C /* iOS */,
-				DA32D00119CF4735004F3F0E /* MasterPassword.xcdatamodeld */,
+				DA95B5101C477DB50067F5EF /* MasterPassword.xcdatamodeld */,
 				DABD3BA01711E2DC00CF925C /* MPAlgorithm.h */,
 				DABD3BA11711E2DC00CF925C /* MPAlgorithm.m */,
 				DABD3BA21711E2DC00CF925C /* MPAlgorithmV0.h */,
@@ -2808,35 +2812,34 @@
 		DAFE45D715039823003ABA7C /* Pearl */ = {
 			isa = PBXGroup;
 			children = (
-				DACE2F6319BA6A0A0010F92E /* PearlProfiler.m */,
-				DACE2F6419BA6A0A0010F92E /* PearlProfiler.h */,
-				DAA1411C1922FF020032B392 /* PearlTween.m */,
-				DAA1411D1922FF020032B392 /* PearlTween.h */,
 				DAA1411E1922FF020032B392 /* include */,
-				DAF4EF4E190A81E400023C90 /* NSManagedObject+Pearl.m */,
-				DAF4EF4F190A81E400023C90 /* NSManagedObject+Pearl.h */,
-				DA2CA4D918D28859007798F8 /* NSArray+Pearl.m */,
-				DA2CA4DA18D28859007798F8 /* NSArray+Pearl.h */,
-				DA2CA4DB18D28859007798F8 /* NSTimer+PearlBlock.m */,
-				DA2CA4DC18D28859007798F8 /* NSTimer+PearlBlock.h */,
-				DA3509FC15F101A500C14A8E /* PearlQueue.h */,
-				DA3509FD15F101A500C14A8E /* PearlQueue.m */,
-				93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */,
-				93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */,
 				93D396D04E57792A54D437AC /* NSArray+Indexing.h */,
 				93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */,
+				DA2CA4DA18D28859007798F8 /* NSArray+Pearl.h */,
+				DA2CA4D918D28859007798F8 /* NSArray+Pearl.m */,
 				DAFE4A63150399FF003ABA93 /* NSDateFormatter+RFC3339.h */,
 				DAFE4A63150399FF003ABA91 /* NSDateFormatter+RFC3339.m */,
-				DAFE4A63150399FF003ABA87 /* NSObject+PearlKVO.h */,
-				DAFE4A63150399FF003ABA85 /* NSObject+PearlKVO.m */,
-				DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */,
-				DA30E9CC15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m */,
+				93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */,
+				93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */,
+				93D398C95847261903D781D3 /* NSError+PearlFullDescription.h */,
+				93D39F9106F2CCFB94283188 /* NSError+PearlFullDescription.m */,
+				DAF4EF4F190A81E400023C90 /* NSManagedObject+Pearl.h */,
+				DAF4EF4E190A81E400023C90 /* NSManagedObject+Pearl.m */,
+				DA95B50D1C4776F00067F5EF /* NSMutableSet+Pearl.h */,
+				DA95B50E1C4776F00067F5EF /* NSMutableSet+Pearl.m */,
+				93D391AA32F24290C424438E /* NSNotificationCenter+PearlEasyCleanup.h */,
 				DAFE45D815039823003ABA7C /* NSObject+PearlExport.h */,
 				DAFE45D915039823003ABA7C /* NSObject+PearlExport.m */,
+				DAFE4A63150399FF003ABA87 /* NSObject+PearlKVO.h */,
+				DAFE4A63150399FF003ABA85 /* NSObject+PearlKVO.m */,
+				93D397F4BAFFF7CF3F1B21A4 /* NSPersistentStore+PearlMigration.h */,
+				93D399C2F3D48E57C4803BDC /* NSPersistentStore+PearlMigration.m */,
 				DAFE45DA15039823003ABA7C /* NSString+PearlNSArrayFormat.h */,
 				DAFE45DB15039823003ABA7C /* NSString+PearlNSArrayFormat.m */,
 				DAFE45DC15039823003ABA7C /* NSString+PearlSEL.h */,
 				DAFE45DD15039823003ABA7C /* NSString+PearlSEL.m */,
+				DA2CA4DC18D28859007798F8 /* NSTimer+PearlBlock.h */,
+				DA2CA4DB18D28859007798F8 /* NSTimer+PearlBlock.m */,
 				DAFE45DE15039823003ABA7C /* Pearl.h */,
 				DA30E9CD15722ECA00A68B4C /* Pearl.m */,
 				DAFE45DF15039823003ABA7C /* PearlAbstractStrings.h */,
@@ -2857,18 +2860,19 @@
 				DAFE45EE15039823003ABA7C /* PearlMathUtils.m */,
 				DAFE45EF15039823003ABA7C /* PearlObjectUtils.h */,
 				DAFE45F015039823003ABA7C /* PearlObjectUtils.m */,
+				DACE2F6419BA6A0A0010F92E /* PearlProfiler.h */,
+				DACE2F6319BA6A0A0010F92E /* PearlProfiler.m */,
+				DA3509FC15F101A500C14A8E /* PearlQueue.h */,
+				DA3509FD15F101A500C14A8E /* PearlQueue.m */,
 				DAFE45F115039823003ABA7C /* PearlResettable.h */,
 				DAFE45F215039823003ABA7C /* PearlStrings.h */,
 				DAFE45F315039823003ABA7C /* PearlStrings.m */,
 				DAFE45F415039823003ABA7C /* PearlStringUtils.h */,
 				DAFE45F515039823003ABA7C /* PearlStringUtils.m */,
+				DAA1411D1922FF020032B392 /* PearlTween.h */,
+				DAA1411C1922FF020032B392 /* PearlTween.m */,
 				DAFE45F815039823003ABA7C /* README */,
 				DAFE45F915039823003ABA7C /* Resources */,
-				93D39F9106F2CCFB94283188 /* NSError+PearlFullDescription.m */,
-				93D398C95847261903D781D3 /* NSError+PearlFullDescription.h */,
-				93D391AA32F24290C424438E /* NSNotificationCenter+PearlEasyCleanup.h */,
-				93D399C2F3D48E57C4803BDC /* NSPersistentStore+PearlMigration.m */,
-				93D397F4BAFFF7CF3F1B21A4 /* NSPersistentStore+PearlMigration.h */,
 			);
 			path = Pearl;
 			sourceTree = "<group>";
@@ -2903,45 +2907,23 @@
 		DAFE460715039823003ABA7C /* Pearl-UIKit */ = {
 			isa = PBXGroup;
 			children = (
-				DA32D01819D046E1004F3F0E /* PearlFixedTableView.m */,
-				DA32D01919D046E1004F3F0E /* PearlFixedTableView.h */,
-				DAE2726119CE9CB3007C5262 /* UITableViewCell+PearlDeque.m */,
-				DAE2726219CE9CB3007C5262 /* UITableViewCell+PearlDeque.h */,
-				DAEFB01C19BCBD9E00525079 /* UIView+LayoutGone.m */,
-				DAEFB01D19BCBD9E00525079 /* UIView+LayoutGone.h */,
-				DACE2F6719BA6A2A0010F92E /* UIView+FontScale.m */,
-				DACE2F6819BA6A2A0010F92E /* PearlMutableStaticTableViewController.m */,
-				DACE2F6919BA6A2A0010F92E /* PearlMutableStaticTableViewController.h */,
-				DACE2F6A19BA6A2A0010F92E /* UIView+FontScale.h */,
-				DA250A13195665A100AC23F1 /* UITableView+PearlReloadFromArray.m */,
-				DA250A14195665A100AC23F1 /* UITableView+PearlReloadFromArray.h */,
-				DA250A15195665A100AC23F1 /* UICollectionReusableView+PearlDequeue.m */,
-				DA250A16195665A100AC23F1 /* UICollectionReusableView+PearlDequeue.h */,
-				DAEC85B118E3DD9A007FC0DF /* UIView+Touches.m */,
-				DAEC85B218E3DD9A007FC0DF /* PearlUINavigationBar.m */,
-				DAEC85B318E3DD9A007FC0DF /* PearlUINavigationBar.h */,
-				DAEC85B418E3DD9A007FC0DF /* UIView+Touches.h */,
-				DA2CA4E518D2AC10007798F8 /* NSLayoutConstraint+PearlUIKit.m */,
 				DA2CA4E218D28866007798F8 /* NSLayoutConstraint+PearlUIKit.h */,
-				93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */,
-				93D393BB973253D4BAAC84AA /* PearlEMail.m */,
-				DAFE4A63150399FF003ABA8F /* UIScrollView+PearlFlashingIndicators.h */,
-				DAFE4A63150399FF003ABA8D /* UIScrollView+PearlFlashingIndicators.m */,
-				DAFE4A63150399FF003ABA8B /* UIControl+PearlSelect.h */,
-				DAFE4A63150399FF003ABA89 /* UIControl+PearlSelect.m */,
-				DAFE4A63150399FF003ABA83 /* UIControl+PearlBlocks.h */,
-				DAFE4A63150399FF003ABA81 /* UIControl+PearlBlocks.m */,
+				DA2CA4E518D2AC10007798F8 /* NSLayoutConstraint+PearlUIKit.m */,
 				DAFE460815039823003ABA7C /* Pearl-UIKit-Dependencies.h */,
 				DAFE460915039823003ABA7C /* Pearl-UIKit.h */,
 				DA30E9D315722EF400A68B4C /* Pearl-UIKit.m */,
 				DAFE460A15039823003ABA7C /* PearlAlert.h */,
 				DAFE460B15039823003ABA7C /* PearlAlert.m */,
-				DAFE4A60150399FF003ABA7C /* PearlAppDelegate.m */,
 				DAFE4A61150399FF003ABA7C /* PearlAppDelegate.h */,
+				DAFE4A60150399FF003ABA7C /* PearlAppDelegate.m */,
 				DAFE460C15039823003ABA7C /* PearlArrayTVC.h */,
 				DAFE460D15039823003ABA7C /* PearlArrayTVC.m */,
 				DAFE460E15039823003ABA7C /* PearlBoxView.h */,
 				DAFE460F15039823003ABA7C /* PearlBoxView.m */,
+				93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */,
+				93D393BB973253D4BAAC84AA /* PearlEMail.m */,
+				DA32D01919D046E1004F3F0E /* PearlFixedTableView.h */,
+				DA32D01819D046E1004F3F0E /* PearlFixedTableView.m */,
 				DAFE461015039823003ABA7C /* PearlGradientView.h */,
 				DAFE461115039823003ABA7C /* PearlGradientView.m */,
 				DAFE461215039823003ABA7C /* PearlLayout.h */,
@@ -2950,12 +2932,24 @@
 				DAFE461515039823003ABA7C /* PearlLayoutView.m */,
 				DAFE461615039823003ABA7C /* PearlMessageView.h */,
 				DAFE461715039823003ABA7C /* PearlMessageView.m */,
+				DACE2F6919BA6A2A0010F92E /* PearlMutableStaticTableViewController.h */,
+				DACE2F6819BA6A2A0010F92E /* PearlMutableStaticTableViewController.m */,
+				93D398567FD02DB2647B8CF3 /* PearlNavigationController.h */,
+				93D3956915634581E737B38C /* PearlNavigationController.m */,
+				93D3942A356B639724157982 /* PearlOverlay.h */,
+				93D390FADEB325D8D54A957D /* PearlOverlay.m */,
 				DAFE461815039823003ABA7C /* PearlRootViewController.h */,
 				DAFE461915039823003ABA7C /* PearlRootViewController.m */,
 				DAFE461A15039823003ABA7C /* PearlSheet.h */,
 				DAFE461B15039823003ABA7C /* PearlSheet.m */,
+				93D39A4759186F6D2D34AA6B /* PearlSizedTextView.h */,
+				93D39156E806BB78E04F78B9 /* PearlSizedTextView.m */,
+				93D39B1D8177A86C5B9EDDE3 /* PearlUICollectionView.h */,
+				93D39D8A953779B35403AF6E /* PearlUICollectionView.m */,
 				DAFE461C15039823003ABA7C /* PearlUIDebug.h */,
 				DAFE461D15039823003ABA7C /* PearlUIDebug.m */,
+				DAEC85B318E3DD9A007FC0DF /* PearlUINavigationBar.h */,
+				DAEC85B218E3DD9A007FC0DF /* PearlUINavigationBar.m */,
 				DAFE461E15039823003ABA7C /* PearlUIUtils.h */,
 				DAFE461F15039823003ABA7C /* PearlUIUtils.m */,
 				DAFE462015039823003ABA7C /* PearlValidatingTextField.h */,
@@ -2964,24 +2958,34 @@
 				DAFE462315039823003ABA7C /* PearlWebViewController.m */,
 				DAFE462415039823003ABA7C /* README */,
 				DAFE462515039823003ABA7C /* Resources */,
+				DA250A16195665A100AC23F1 /* UICollectionReusableView+PearlDequeue.h */,
+				DA250A15195665A100AC23F1 /* UICollectionReusableView+PearlDequeue.m */,
+				93D39246FC21C6E63E35D615 /* UICollectionView+PearlReloadFromArray.h */,
+				93D3908DF8EABBD952065DC0 /* UICollectionView+PearlReloadFromArray.m */,
+				DAFE4A63150399FF003ABA83 /* UIControl+PearlBlocks.h */,
+				DAFE4A63150399FF003ABA81 /* UIControl+PearlBlocks.m */,
+				DAFE4A63150399FF003ABA8B /* UIControl+PearlSelect.h */,
+				DAFE4A63150399FF003ABA89 /* UIControl+PearlSelect.m */,
 				DAFE4A1115039824003ABA7C /* UIImage+PearlScaling.h */,
 				DAFE4A1215039824003ABA7C /* UIImage+PearlScaling.m */,
-				93D390FADEB325D8D54A957D /* PearlOverlay.m */,
-				93D3942A356B639724157982 /* PearlOverlay.h */,
-				93D3956915634581E737B38C /* PearlNavigationController.m */,
-				93D398567FD02DB2647B8CF3 /* PearlNavigationController.h */,
-				93D390FB3110DCCE68E600DC /* UIScrollView+PearlAdjustInsets.m */,
-				93D39DE2CB351D4E3789462B /* UIScrollView+PearlAdjustInsets.h */,
-				93D39D8A953779B35403AF6E /* PearlUICollectionView.m */,
-				93D39B1D8177A86C5B9EDDE3 /* PearlUICollectionView.h */,
-				93D39A1DDFA09AE2E14D26DC /* UIResponder+PearlFirstResponder.m */,
 				93D394482BB07F90E8FD1314 /* UIResponder+PearlFirstResponder.h */,
-				93D39156E806BB78E04F78B9 /* PearlSizedTextView.m */,
-				93D39A4759186F6D2D34AA6B /* PearlSizedTextView.h */,
-				93D3977321EB249981821AB0 /* UITextView+PearlAttributes.m */,
+				93D39A1DDFA09AE2E14D26DC /* UIResponder+PearlFirstResponder.m */,
+				93D39DE2CB351D4E3789462B /* UIScrollView+PearlAdjustInsets.h */,
+				93D390FB3110DCCE68E600DC /* UIScrollView+PearlAdjustInsets.m */,
+				DAFE4A63150399FF003ABA8F /* UIScrollView+PearlFlashingIndicators.h */,
+				DAFE4A63150399FF003ABA8D /* UIScrollView+PearlFlashingIndicators.m */,
+				DA250A14195665A100AC23F1 /* UITableView+PearlReloadFromArray.h */,
+				DA250A13195665A100AC23F1 /* UITableView+PearlReloadFromArray.m */,
+				DAE2726219CE9CB3007C5262 /* UITableViewCell+PearlDeque.h */,
+				DAE2726119CE9CB3007C5262 /* UITableViewCell+PearlDeque.m */,
 				93D39AA10CD00D05937671B1 /* UITextView+PearlAttributes.h */,
-				93D3908DF8EABBD952065DC0 /* UICollectionView+PearlReloadFromArray.m */,
-				93D39246FC21C6E63E35D615 /* UICollectionView+PearlReloadFromArray.h */,
+				93D3977321EB249981821AB0 /* UITextView+PearlAttributes.m */,
+				DACE2F6A19BA6A2A0010F92E /* UIView+FontScale.h */,
+				DACE2F6719BA6A2A0010F92E /* UIView+FontScale.m */,
+				DAEFB01D19BCBD9E00525079 /* UIView+LayoutGone.h */,
+				DAEFB01C19BCBD9E00525079 /* UIView+LayoutGone.m */,
+				DAEC85B418E3DD9A007FC0DF /* UIView+Touches.h */,
+				DAEC85B118E3DD9A007FC0DF /* UIView+Touches.m */,
 			);
 			path = "Pearl-UIKit";
 			sourceTree = "<group>";
@@ -3067,7 +3071,6 @@
 				DAFE4A5615039824003ABA7C /* PearlWebViewController.h in Headers */,
 				DAFE4A5815039824003ABA7C /* UIImage+PearlScaling.h in Headers */,
 				DAFE4A63150399FF003ABA7C /* PearlAppDelegate.h in Headers */,
-				DA30E9CE15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h in Headers */,
 				DA30E9D715723E6900A68B4C /* PearlLazy.h in Headers */,
 				DAA141211922FF020032B392 /* PearlTween.h in Headers */,
 				DAFE4A63150399FF003ABA84 /* UIControl+PearlBlocks.h in Headers */,
@@ -3646,12 +3649,13 @@
 				93D39392DEDA376F93C6C718 /* MPCell.m in Sources */,
 				93D39A5FF670957C0AF8298D /* MPPasswordCell.m in Sources */,
 				93D398ECD7D1A0DEDDADF516 /* MPEmergencyViewController.m in Sources */,
-				DA32D00819CF4735004F3F0E /* MasterPassword.xcdatamodeld in Sources */,
+				DA95B50F1C4776F00067F5EF /* NSMutableSet+Pearl.m in Sources */,
 				93D394B5036C882B33C71872 /* MPPasswordsSegue.m in Sources */,
 				93D39673DDC085BE72C34D7C /* MPPopdownSegue.m in Sources */,
 				93D39BA1EA3CAAC8A220B4A6 /* MPAppSettingsViewController.m in Sources */,
 				93D396D8B67DA6522CDBA142 /* MPCoachmarkViewController.m in Sources */,
 				DAADBFE01A68763B00F7A756 /* mpw-algorithm.c in Sources */,
+				DA95B5191C477DB50067F5EF /* MasterPassword.xcdatamodeld in Sources */,
 				93D39EAA4D064193074D3021 /* MPFixable.m in Sources */,
 				DA32CFF119CF1C8F004F3F0E /* MPStoredSiteEntity.m in Sources */,
 				93D394982CBD25D46692DD7C /* MPWebViewController.m in Sources */,
@@ -3743,7 +3747,6 @@
 				DACE2F6C19BA6A2A0010F92E /* PearlMutableStaticTableViewController.m in Sources */,
 				DAFE4A5915039824003ABA7C /* UIImage+PearlScaling.m in Sources */,
 				DAFE4A62150399FF003ABA7C /* PearlAppDelegate.m in Sources */,
-				DA30E9CF15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m in Sources */,
 				DA30E9D015722ECA00A68B4C /* Pearl.m in Sources */,
 				DA30E9D215722EE500A68B4C /* Pearl-Crypto.m in Sources */,
 				DA30E9D415722EF400A68B4C /* Pearl-UIKit.m in Sources */,
@@ -4019,6 +4022,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Maarten Billemont (DWGU95U4ZD)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../External/iOS\"",
@@ -4046,8 +4050,6 @@
 					"-lopensslcrypto-ios-dev",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3251b7d3-04df-4c8e-a410-d020ffc92d10";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -4059,6 +4061,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Maarten Billemont (HL3Q45LX9N)";
 				COPY_PHASE_STRIP = YES;
 				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4084,8 +4087,6 @@
 					"-lopensslcrypto-ios-dev",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "59b587d0-3ef3-4691-9f12-c48f7f283002";
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -4183,6 +4184,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Maarten Billemont (HL3Q45LX9N)";
 				COPY_PHASE_STRIP = YES;
 				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4208,8 +4210,6 @@
 					"-lopensslcrypto-ios-dev",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a1d8cfc8-b8db-4544-af34-28cc75e46c40";
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -4458,18 +4458,19 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		DA32D00119CF4735004F3F0E /* MasterPassword.xcdatamodeld */ = {
+		DA95B5101C477DB50067F5EF /* MasterPassword.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				DA8495271A9146E600B3053D /* MasterPassword 7.xcdatamodel */,
-				DA32D00219CF4735004F3F0E /* MasterPassword 1.xcdatamodel */,
-				DA32D00319CF4735004F3F0E /* MasterPassword 2.xcdatamodel */,
-				DA32D00419CF4735004F3F0E /* MasterPassword 3.xcdatamodel */,
-				DA32D00519CF4735004F3F0E /* MasterPassword 4.xcdatamodel */,
-				DA32D00619CF4735004F3F0E /* MasterPassword 5.xcdatamodel */,
-				DA32D00719CF4735004F3F0E /* MasterPassword 6.xcdatamodel */,
+				DA95B5111C477DB50067F5EF /* MasterPassword 1.xcdatamodel */,
+				DA95B5121C477DB50067F5EF /* MasterPassword 2.xcdatamodel */,
+				DA95B5131C477DB50067F5EF /* MasterPassword 3.xcdatamodel */,
+				DA95B5141C477DB50067F5EF /* MasterPassword 4.xcdatamodel */,
+				DA95B5151C477DB50067F5EF /* MasterPassword 5.xcdatamodel */,
+				DA95B5161C477DB50067F5EF /* MasterPassword 6.xcdatamodel */,
+				DA95B5171C477DB50067F5EF /* MasterPassword 7.xcdatamodel */,
+				DA95B5181C477DB50067F5EF /* MasterPassword 8.xcdatamodel */,
 			);
-			currentVersion = DA8495271A9146E600B3053D /* MasterPassword 7.xcdatamodel */;
+			currentVersion = DA95B5181C477DB50067F5EF /* MasterPassword 8.xcdatamodel */;
 			path = MasterPassword.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

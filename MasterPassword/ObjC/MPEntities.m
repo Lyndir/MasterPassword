@@ -285,6 +285,16 @@
     self.saveKey_ = @(aSaveKey);
 }
 
+- (BOOL)touchID {
+
+    return [self.touchID_ boolValue];
+}
+
+- (void)setTouchID:(BOOL)aTouchID {
+
+    self.touchID_ = @(aTouchID);
+}
+
 - (MPSiteType)defaultType {
 
     return (MPSiteType)[self.defaultType_ unsignedIntegerValue]?: MPSiteTypeGeneratedLong;

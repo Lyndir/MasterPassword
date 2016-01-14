@@ -40,6 +40,7 @@
     self.storedTypeControl.selectedSegmentIndex = [self storedSegmentIndexForType:activeUser.defaultType];
     self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%ld", (long)activeUser.avatar )];
     self.savePasswordSwitch.on = activeUser.saveKey;
+    self.touchIDSwitch.on = activeUser.touchID;
 
     self.tableView.contentInset = UIEdgeInsetsMake( 64, 0, 49, 0 );
 }
@@ -92,6 +93,16 @@
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:context];
             if ((activeUser.saveKey = self.savePasswordSwitch.on))
+                [[MPiOSAppDelegate get] storeSavedKeyFor:activeUser];
+            else
+                [[MPiOSAppDelegate get] forgetSavedKeyFor:activeUser];
+            [context saveToStore];
+        }];
+
+    if (sender == self.touchIDSwitch)
+        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+            MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:context];
+            if ((activeUser.touchID = self.touchIDSwitch.on))
                 [[MPiOSAppDelegate get] storeSavedKeyFor:activeUser];
             else
                 [[MPiOSAppDelegate get] forgetSavedKeyFor:activeUser];

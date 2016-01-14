@@ -8,6 +8,7 @@
 
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
+#import <LocalAuthentication/LocalAuthentication.h>
 
 @interface MPAppDelegate_Shared()
 
@@ -17,19 +18,57 @@
 
 @implementation MPAppDelegate_Shared(Key)
 
-static NSDictionary *keyQuery(MPUserEntity *user) {
+static NSDictionary *keyQuery(MPUserEntity *user, BOOL newItem) {
+
+    if (user.touchID && &SecAccessControlCreateWithFlags) {
+        CFErrorRef acError = NULL;
+        SecAccessControlRef accessControl = SecAccessControlCreateWithFlags( nil,
+                kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, kSecAccessControlTouchIDCurrentSet, &acError );
+        if (!accessControl || acError)
+            err( @"Could not use TouchID on this device: %@", acError );
+
+        else {
+            LAContext *context = [LAContext new];
+            dispatch_group_t waitGroup = dispatch_group_create();
+            dispatch_group_enter( waitGroup );
+            __block BOOL contextSuccess = NO;
+            __block NSError *contextError = nil;
+            [context evaluateAccessControl:accessControl
+                                 operation:newItem? LAAccessControlOperationCreateItem: LAAccessControlOperationUseItem
+                           localizedReason:@"Moo"
+                                     reply:^(BOOL success, NSError *error) {
+                                         contextSuccess = success;
+                                         contextError = error;
+                                         dispatch_group_leave( waitGroup );
+                                     }];
+            dispatch_group_wait( waitGroup, DISPATCH_TIME_FOREVER );
+
+            if (!contextSuccess || contextError)
+                err( @"TouchID authentication failed: %@", contextError );
+
+            else
+                return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
+                                               attributes:@{
+                                                       (__bridge id)kSecAttrService         : @"Saved Master Password",
+                                                       (__bridge id)kSecAttrAccount         : user.name?: @"",
+                                                       (__bridge id)kSecUseAuthenticationUI : (__bridge id)kSecUseAuthenticationUIAllow,
+                                                       (__bridge id)kSecAttrAccessControl   : (__bridge id)accessControl,
+                                               }
+                                                  matches:nil];
+        }
+    }
 
     return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
                                    attributes:@{
                                            (__bridge id)kSecAttrService : @"Saved Master Password",
-                                           (__bridge id)kSecAttrAccount : user.name?: @""
+                                           (__bridge id)kSecAttrAccount : user.name?: @"",
                                    }
                                       matches:nil];
 }
 
 - (MPKey *)loadSavedKeyFor:(MPUserEntity *)user {
 
-    NSData *keyData = [PearlKeyChain dataOfItemForQuery:keyQuery( user )];
+    NSData *keyData = [PearlKeyChain dataOfItemForQuery:keyQuery( user, NO )];
     if (!keyData) {
         inf( @"No key found in keychain for user: %@", user.userID );
         return nil;
@@ -42,25 +81,21 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
 - (void)storeSavedKeyFor:(MPUserEntity *)user {
 
     if (user.saveKey) {
-        NSData *existingKeyData = [PearlKeyChain dataOfItemForQuery:keyQuery( user )];
+        inf( @"Saving key in keychain for user: %@", user.userID );
 
-        if (![existingKeyData isEqualToData:[self.key keyDataForAlgorithm:user.algorithm]]) {
-            inf( @"Saving key in keychain for user: %@", user.userID );
-
-            [PearlKeyChain addOrUpdateItemForQuery:keyQuery( user )
-                                    withAttributes:@{
-                                            (__bridge id)kSecValueData      : [self.key keyDataForAlgorithm:user.algorithm],
+        [PearlKeyChain addOrUpdateItemForQuery:keyQuery( user, YES )
+                                withAttributes:@{
+                                        (__bridge id)kSecValueData      : [self.key keyDataForAlgorithm:user.algorithm],
 #if TARGET_OS_IPHONE
-                                            (__bridge id)kSecAttrAccessible : (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+                                        (__bridge id)kSecAttrAccessible : (__bridge id)(kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly?: kSecAttrAccessibleWhenUnlockedThisDeviceOnly),
 #endif
-                                    }];
-        }
+                                }];
     }
 }
 
 - (void)forgetSavedKeyFor:(MPUserEntity *)user {
 
-    OSStatus result = [PearlKeyChain deleteItemForQuery:keyQuery( user )];
+    OSStatus result = [PearlKeyChain deleteItemForQuery:keyQuery( user, NO )];
     if (result == noErr) {
         inf( @"Removed key from keychain for user: %@", user.userID );
 
@@ -201,17 +236,17 @@ static NSDictionary *keyQuery(MPUserEntity *user) {
                                                        site.name )
                                      viewStyle:UIAlertViewStyleSecureTextInput
                                      initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                    @try {
-                        if (buttonIndex_ == [alert_ cancelButtonIndex])
-                            // Don't Migrate
-                            return;
+                            @try {
+                                if (buttonIndex_ == [alert_ cancelButtonIndex])
+                                    // Don't Migrate
+                                    return;
 
-                        masterPassword = [alert_ textFieldAtIndex:0].text;
-                    }
-                    @finally {
-                        dispatch_group_leave( recoverPasswordGroup );
-                    }
-                }                  cancelTitle:@"Don't Migrate" otherTitles:@"Migrate", nil];
+                                masterPassword = [alert_ textFieldAtIndex:0].text;
+                            }
+                            @finally {
+                                dispatch_group_leave( recoverPasswordGroup );
+                            }
+                        }          cancelTitle:@"Don't Migrate" otherTitles:@"Migrate", nil];
                 dispatch_group_wait( recoverPasswordGroup, DISPATCH_TIME_FOREVER );
 #endif
                 if (!masterPassword)
