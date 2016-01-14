@@ -36,7 +36,7 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
 - (void)reloadProducts {
 
     SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:
-            [[NSSet alloc] initWithObjects:MPProductGenerateLogins, MPProductGenerateAnswers, MPProductFuel, nil]];
+            [[NSSet alloc] initWithObjects:MPProductGenerateLogins, MPProductGenerateAnswers, MPProductTouchID, MPProductFuel, nil]];
     productsRequest.delegate = self;
     [productsRequest start];
 }

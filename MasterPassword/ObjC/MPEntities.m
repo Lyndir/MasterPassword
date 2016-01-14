@@ -9,6 +9,7 @@
 #import "MPEntities.h"
 #import "MPAppDelegate_Shared.h"
 #import "MPAppDelegate_Key.h"
+#import "MPAppDelegate_InApp.h"
 
 @implementation NSManagedObjectContext(MP)
 
@@ -287,7 +288,7 @@
 
 - (BOOL)touchID {
 
-    return [self.touchID_ boolValue];
+    return [self.touchID_ boolValue] && ![[MPAppDelegate_Shared get] isFeatureUnlocked:MPProductTouchID];
 }
 
 - (void)setTouchID:(BOOL)aTouchID {

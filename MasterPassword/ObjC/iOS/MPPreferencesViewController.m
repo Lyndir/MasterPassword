@@ -12,7 +12,7 @@
 #import "MPAppDelegate_Store.h"
 #import "UIColor+Expanded.h"
 #import "MPPasswordsViewController.h"
-#import "MPCoachmarkViewController.h"
+#import "MPAppDelegate_InApp.h"
 
 @interface MPPreferencesViewController()
 
@@ -25,6 +25,10 @@
     [super viewDidLoad];
 
     self.view.backgroundColor = [UIColor clearColor];
+
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 100;
+    self.tableView.contentInset = UIEdgeInsetsMake( 64, 0, 49, 0 );
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -34,8 +38,6 @@
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"tipped.passwordsPreferences"];
     if (![[NSUserDefaults standardUserDefaults] synchronize])
         wrn( @"Couldn't synchronize after preferences appearance." );
-
-    self.tableView.contentInset = UIEdgeInsetsMake( 64, 0, 49, 0 );
 
     [self reload];
 }
@@ -48,7 +50,7 @@
     self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%lu", (unsigned long)activeUser.avatar )];
     self.savePasswordSwitch.on = activeUser.saveKey;
     self.touchIDSwitch.on = activeUser.touchID;
-    self.touchIDSwitch.enabled = self.savePasswordSwitch.on;
+    self.touchIDSwitch.enabled = self.savePasswordSwitch.on && ![[MPiOSAppDelegate get] isFeatureUnlocked:MPProductTouchID];
 }
 
 #pragma mark - UITableViewDelegate
@@ -62,6 +64,11 @@
     }
 
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    return UITableViewAutomaticDimension;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
