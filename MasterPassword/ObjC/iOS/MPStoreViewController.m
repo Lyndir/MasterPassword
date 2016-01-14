@@ -91,18 +91,6 @@ PearlEnum( MPDevelopmentFuelConsumption,
 - (MPStoreProductCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     MPStoreProductCell *cell = (MPStoreProductCell *)[super tableView:tableView cellForRowAtIndexPath:indexPath];
-//    if (cell.contentView.translatesAutoresizingMaskIntoConstraints) {
-//        cell.contentView.translatesAutoresizingMaskIntoConstraints = NO;
-//        [cell addConstraints:@[
-//                [NSLayoutConstraint constraintWithItem:cell attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual
-//                                                toItem:cell.contentView attribute:NSLayoutAttributeTop multiplier:1 constant:0],
-//                [NSLayoutConstraint constraintWithItem:cell attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual
-//                                                toItem:cell.contentView attribute:NSLayoutAttributeRight multiplier:1 constant:0],
-//                [NSLayoutConstraint constraintWithItem:cell attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual
-//                                                toItem:cell.contentView attribute:NSLayoutAttributeLeft multiplier:1 constant:0],
-//        ]];
-//    }
-
     if (indexPath.section == 0)
         cell.selectionStyle = [[MPiOSAppDelegate get] isFeatureUnlocked:[self productForCell:cell].productIdentifier]?
                               UITableViewCellSelectionStyleNone: UITableViewCellSelectionStyleDefault;

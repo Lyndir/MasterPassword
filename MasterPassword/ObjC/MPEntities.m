@@ -288,7 +288,7 @@
 
 - (BOOL)touchID {
 
-    return [self.touchID_ boolValue] && ![[MPAppDelegate_Shared get] isFeatureUnlocked:MPProductTouchID];
+    return [self.touchID_ boolValue] && [[MPAppDelegate_Shared get] isFeatureUnlocked:MPProductTouchID];
 }
 
 - (void)setTouchID:(BOOL)aTouchID {

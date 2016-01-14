@@ -50,7 +50,7 @@
     self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%lu", (unsigned long)activeUser.avatar )];
     self.savePasswordSwitch.on = activeUser.saveKey;
     self.touchIDSwitch.on = activeUser.touchID;
-    self.touchIDSwitch.enabled = self.savePasswordSwitch.on && ![[MPiOSAppDelegate get] isFeatureUnlocked:MPProductTouchID];
+    self.touchIDSwitch.enabled = self.savePasswordSwitch.on && [[MPiOSAppDelegate get] isFeatureUnlocked:MPProductTouchID];
 }
 
 #pragma mark - UITableViewDelegate
