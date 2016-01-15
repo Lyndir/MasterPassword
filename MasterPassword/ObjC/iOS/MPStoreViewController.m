@@ -28,7 +28,8 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
     NSMutableString *features = [NSMutableString string];
     NSArray *storeVersions = @[
-            @"Generated Usernames\nSecurity Question Answers"
+            @"Generated Usernames\nSecurity Question Answers",
+            @"TouchID Support"
     ];
     NSInteger storeVersion = [[NSUserDefaults standardUserDefaults] integerForKey:@"storeVersion"];
     for (; storeVersion < [storeVersions count]; ++storeVersion)

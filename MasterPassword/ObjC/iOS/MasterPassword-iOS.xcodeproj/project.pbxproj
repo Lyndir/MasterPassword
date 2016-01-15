@@ -599,7 +599,6 @@
 		DA29992D19C86F5700AF7DF1 /* thumb_generated_login@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumb_generated_login@2x.png"; sourceTree = "<group>"; };
 		DA29992E19C86F5700AF7DF1 /* thumb_generated_login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumb_generated_login.png; sourceTree = "<group>"; };
 		DA29993119C9132F00AF7DF1 /* thumb_generated_login@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumb_generated_login@3x.png"; sourceTree = "<group>"; };
-		DA2C3D5E1BD95DEF001137B3 /* libscryptenc-ios-dev.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libscryptenc-ios-dev.a"; sourceTree = "<group>"; };
 		DA2C3D601BD95EEE001137B3 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = ../../../External/iOS/Fabric.framework; sourceTree = "<group>"; };
 		DA2C3D621BD96126001137B3 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		DA2C3D641BD9612F001137B3 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -665,7 +664,8 @@
 		DA67460C18DE7F0C00DFE240 /* Exo2.0-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Bold.otf"; sourceTree = "<group>"; };
 		DA6774351A4749CC004F356A /* mpw-tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests.c"; sourceTree = "<group>"; };
 		DA70EC7F1811B13C00F65DB2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		DA72BD7719C137D500E6ACFE /* libopensslcrypto-ios-dev.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopensslcrypto-ios-dev.a"; sourceTree = "<group>"; };
+		DA7F2C5E1C48B70D00404A26 /* libopensslcrypto-ios-sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopensslcrypto-ios-sim.a"; sourceTree = "<group>"; };
+		DA7F2C5F1C48B70D00404A26 /* libscryptenc-ios-sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libscryptenc-ios-sim.a"; sourceTree = "<group>"; };
 		DA854C8118D4CFBF00106317 /* avatar-add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-add@2x.png"; sourceTree = "<group>"; };
 		DA854C8218D4CFBF00106317 /* avatar-add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-add.png"; sourceTree = "<group>"; };
 		DA92614C1BE1A57500369DE5 /* MPAppDelegate_InApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAppDelegate_InApp.h; sourceTree = "<group>"; };
@@ -1795,9 +1795,9 @@
 			isa = PBXGroup;
 			children = (
 				DA5E5C6417248959003798D8 /* include */,
-				DA72BD7719C137D500E6ACFE /* libopensslcrypto-ios-dev.a */,
+				DA7F2C5E1C48B70D00404A26 /* libopensslcrypto-ios-sim.a */,
 				DAE8E65119867AB500416A0F /* libopensslcrypto-ios.a */,
-				DA2C3D5E1BD95DEF001137B3 /* libscryptenc-ios-dev.a */,
+				DA7F2C5F1C48B70D00404A26 /* libscryptenc-ios-sim.a */,
 				DAFFC63E17EDDA7C007BB020 /* libscryptenc-ios.a */,
 			);
 			path = lib;
@@ -4046,8 +4046,8 @@
 				);
 				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
 					"$(inherited)",
-					"-lscryptenc-ios-dev",
-					"-lopensslcrypto-ios-dev",
+					"-lscryptenc-ios-sim",
+					"-lopensslcrypto-ios-sim",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
 				SKIP_INSTALL = NO;
@@ -4083,8 +4083,8 @@
 				);
 				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
 					"$(inherited)",
-					"-lscryptenc-ios-dev",
-					"-lopensslcrypto-ios-dev",
+					"-lscryptenc-ios-sim",
+					"-lopensslcrypto-ios-sim",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
 				SKIP_INSTALL = NO;
@@ -4206,8 +4206,8 @@
 				);
 				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
 					"$(inherited)",
-					"-lscryptenc-ios-dev",
-					"-lopensslcrypto-ios-dev",
+					"-lscryptenc-ios-sim",
+					"-lopensslcrypto-ios-sim",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
 				SKIP_INSTALL = NO;
