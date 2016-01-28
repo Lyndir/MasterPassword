@@ -11,8 +11,8 @@
 
 //// Logging.
 
-int mpw_verbosity;
 #ifndef trc
+int mpw_verbosity;
     #define trc_level 3
     #define trc(...) \
         if (mpw_verbosity >= 3) \

@@ -16,7 +16,7 @@
         return self;
 
     [self.defaults registerDefaults:@{
-            NSStringFromSelector( @selector(iTunesID) )       : @"510296984",
+            NSStringFromSelector( @selector(appleID) )       : @"510296984",
     }];
 
     return self;

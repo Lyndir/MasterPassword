@@ -20,6 +20,7 @@
 
 static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigin *keyOrigin) {
 
+#if TARGET_OS_IPHONE
     if (user.touchID && kSecUseOperationPrompt) {
         if (keyOrigin)
             *keyOrigin = MPKeyOriginKeyChainBiometric;
@@ -42,6 +43,7 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
                                            }
                                               matches:nil];
     }
+#endif
 
     if (keyOrigin)
         *keyOrigin = MPKeyOriginKeyChain;
