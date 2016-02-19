@@ -1,15 +1,15 @@
 <configuration scan="false">
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>%-8relative %22c{0} [%-5level] %msg%n</Pattern>
-        </layout>
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-8relative %22c{0} [%-5level] %msg%n</pattern>
+        </encoder>
     </appender>
 
     <logger name="com.lyndir" level="${mp.log.level:-INFO}" />
 
     <root level="INFO">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="stdout" />
     </root>
 
 </configuration>
