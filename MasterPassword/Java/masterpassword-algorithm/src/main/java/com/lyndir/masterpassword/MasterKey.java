@@ -16,10 +16,12 @@ import org.jetbrains.annotations.NotNull;
 public abstract class MasterKey {
 
     @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger = Logger.get( MasterKey.class );
+    private static final Logger  logger               = Logger.get( MasterKey.class );
+    private static       boolean allowNativeByDefault = true;
 
     @Nonnull
     private final String fullName;
+    private boolean allowNative = allowNativeByDefault;
 
     @Nullable
     private byte[] masterKey;
@@ -46,6 +48,23 @@ public abstract class MasterKey {
         throw new UnsupportedOperationException( "Unsupported version: " + version );
     }
 
+    public static boolean isAllowNativeByDefault() {
+        return allowNativeByDefault;
+    }
+
+    /**
+     * Native libraries are useful for speeding up the performance of cryptographical functions.
+     * Sometimes, however, we may prefer to use Java-only code.
+     * For instance, for auditability / trust or because the native code doesn't work on our CPU/platform.
+     * <p/>
+     * This setter affects the default setting for any newly created {@link MasterKey}s.
+     *
+     * @param allowNative false to disallow the use of native libraries.
+     */
+    public static void setAllowNativeByDefault(final boolean allowNative) {
+        allowNativeByDefault = allowNative;
+    }
+
     protected MasterKey(@NotNull final String fullName) {
 
         this.fullName = fullName;
@@ -61,6 +80,15 @@ public abstract class MasterKey {
     public String getFullName() {
 
         return fullName;
+    }
+
+    public boolean isAllowNative() {
+        return allowNative;
+    }
+
+    public MasterKey setAllowNative(final boolean allowNative) {
+        this.allowNative = allowNative;
+        return this;
     }
 
     @Nonnull

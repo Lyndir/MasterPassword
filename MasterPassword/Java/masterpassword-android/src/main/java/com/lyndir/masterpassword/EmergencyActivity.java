@@ -61,13 +61,13 @@ public class EmergencyActivity extends Activity {
     EditText siteNameField;
 
     @InjectView(R.id.siteTypeField)
-    Spinner siteTypeField;
+    Button siteTypeField;
 
     @InjectView(R.id.counterField)
-    EditText counterField;
+    Button counterField;
 
     @InjectView(R.id.siteVersionField)
-    Spinner siteVersionField;
+    Button siteVersionField;
 
     @InjectView(R.id.sitePasswordField)
     Button sitePasswordField;
@@ -104,9 +104,9 @@ public class EmergencyActivity extends Activity {
         fullNameField.setOnFocusChangeListener( updateMasterKey );
         masterPasswordField.setOnFocusChangeListener( updateMasterKey );
         siteNameField.addTextChangedListener( updateSitePassword );
-        siteTypeField.setOnItemSelectedListener( updateSitePassword );
+//        siteTypeField.setOnItemSelectedListener( updateSitePassword );
         counterField.addTextChangedListener( updateSitePassword );
-        siteVersionField.setOnItemSelectedListener( updateMasterKey );
+//        siteVersionField.setOnItemSelectedListener( updateMasterKey );
         sitePasswordField.addTextChangedListener( new ValueChangedListener() {
             @Override
             void update() {
@@ -127,11 +127,11 @@ public class EmergencyActivity extends Activity {
         sitePasswordField.setTypeface( Res.sourceCodePro_Black );
         sitePasswordField.setPaintFlags( sitePasswordField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
 
-        siteTypeField.setAdapter( new ArrayAdapter<>( this, R.layout.spinner_item, MPSiteType.forClass( MPSiteTypeClass.Generated ) ) );
-        siteTypeField.setSelection( MPSiteType.GeneratedLong.ordinal() );
+//        siteTypeField.setAdapter( new ArrayAdapter<>( this, R.layout.spinner_item, MPSiteType.forClass( MPSiteTypeClass.Generated ) ) );
+//        siteTypeField.setSelection( MPSiteType.GeneratedLong.ordinal() );
 
-        siteVersionField.setAdapter( new ArrayAdapter<>( this, R.layout.spinner_item, MasterKey.Version.values() ) );
-        siteVersionField.setSelection( MasterKey.Version.CURRENT.ordinal() );
+//        siteVersionField.setAdapter( new ArrayAdapter<>( this, R.layout.spinner_item, MasterKey.Version.values() ) );
+//        siteVersionField.setSelection( MasterKey.Version.CURRENT.ordinal() );
 
         rememberFullNameField.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -161,6 +161,8 @@ public class EmergencyActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        MasterKey.setAllowNativeByDefault( isNativeKDFEnabled() );
 
         fullNameField.setText( getPreferences( MODE_PRIVATE ).getString( "fullName", "" ) );
         rememberFullNameField.setChecked( isRememberFullNameEnabled() );
@@ -195,6 +197,10 @@ public class EmergencyActivity extends Activity {
         super.onPause();
     }
 
+    private boolean isNativeKDFEnabled() {
+        return getPreferences( MODE_PRIVATE ).getBoolean( "nativeKDF", MasterKey.isAllowNativeByDefault() );
+    }
+
     private boolean isRememberFullNameEnabled() {
         return getPreferences( MODE_PRIVATE ).getBoolean( "rememberFullName", false );
     }
@@ -210,7 +216,7 @@ public class EmergencyActivity extends Activity {
     private synchronized void updateMasterKey() {
         final String fullName = fullNameField.getText().toString();
         final char[] masterPassword = masterPasswordField.getText().toString().toCharArray();
-        final MasterKey.Version version = (MasterKey.Version) siteVersionField.getSelectedItem();
+        final MasterKey.Version version = MasterKey.Version.CURRENT;//( MasterKey.Version) siteVersionField.getSelectedItem();
         try {
             if (fullName.hashCode() == hc_userName && Arrays.hashCode( masterPassword ) == hc_masterPassword &&
                 masterKeyFuture != null && masterKeyFuture.get().getAlgorithmVersion() == version)
@@ -265,8 +271,10 @@ public class EmergencyActivity extends Activity {
 
     private void updateSitePassword() {
         final String siteName = siteNameField.getText().toString();
-        final MPSiteType type = (MPSiteType) siteTypeField.getSelectedItem();
-        final UnsignedInteger counter = UnsignedInteger.valueOf( ifNotNullElse( counterField.getText(), "1" ).toString() );
+        final MPSiteType type = MPSiteType.GeneratedLong;//(MPSiteType) siteTypeField.getSelectedItem();
+        CharSequence counterText = counterField.getText();
+        final UnsignedInteger counter =
+                TextUtils.isEmpty( counterText )? UnsignedInteger.valueOf( 1L ): UnsignedInteger.valueOf( counterText.toString() );
 
         if (masterKeyFuture == null || siteName.isEmpty() || type == null) {
             sitePasswordField.setText( "" );
@@ -311,6 +319,10 @@ public class EmergencyActivity extends Activity {
                 }
             }
         } );
+    }
+
+    public void integrityTests(View view) {
+        TestActivity.startNoSkip( this );
     }
 
     public void copySitePassword(View view) {

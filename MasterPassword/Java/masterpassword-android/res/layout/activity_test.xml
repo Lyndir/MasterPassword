@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
@@ -17,22 +18,31 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:src="@drawable/img_stats" />
+
         <ProgressBar
                 android:id="@+id/progressView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="8dp"
-                style="@android:style/Widget.ProgressBar.Horizontal" />
+                tools:max="100"
+                tools:progress="80"
+                style="?android:progressBarStyleHorizontal" />
 
         <TextView
                 android:id="@+id/statusView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:labelFor="@id/sitePasswordField"
                 android:gravity="center"
                 android:background="@android:color/transparent"
-                android:textSize="14sp"
-                android:textColor="@android:color/secondary_text_dark"
+                android:textSize="12sp"
+                android:textColor="@android:color/tertiary_text_dark"
                 android:text="@string/tests_testing" />
 
         <TextView
@@ -53,8 +63,15 @@
                 android:layout_marginTop="8dp"
                 android:enabled="false"
                 android:text="@string/tests_btn_testing"
-                android:onClick="onAction"/>
+                android:onClick="onAction" />
 
+        <CheckBox
+                android:id="@+id/nativeKDF"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@android:color/tertiary_text_dark"
+                android:text="@string/nativeKDF" />
     </LinearLayout>
 
 </ScrollView>

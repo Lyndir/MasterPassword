@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
@@ -17,6 +18,13 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/img_identity" />
+
         <EditText
                 android:id="@+id/fullNameField"
                 android:layout_width="match_parent"
@@ -26,14 +34,14 @@
                 android:hint="@string/fullName_hint"
                 android:gravity="center"
                 android:textColor="#FFFFFF"
-                android:textSize="26sp" />
+                android:textSize="16sp" />
 
         <CheckBox
                 android:id="@+id/rememberFullNameField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nextFocusForward="@+id/rememberPasswordField"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textColor="@android:color/tertiary_text_dark"
                 android:text="@string/remember" />
 
@@ -46,15 +54,23 @@
                 android:hint="@string/masterPassword_hint"
                 android:gravity="center"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
         <CheckBox
                 android:id="@id/rememberPasswordField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textColor="@android:color/tertiary_text_dark"
                 android:text="@string/forgetOnClose" />
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/img_key" />
 
         <EditText
                 android:id="@id/siteNameField"
@@ -65,7 +81,7 @@
                 android:hint="@string/siteName_hint"
                 android:gravity="center"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
         <FrameLayout
                 android:layout_width="match_parent"
@@ -76,7 +92,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="20dp"
                     android:indeterminate="true" />
 
             <LinearLayout
@@ -94,7 +109,7 @@
                         android:background="@android:color/transparent"
                         android:textColor="#FFFFFF"
                         android:textSize="32sp"
-                        android:text="LuxdZozvDuma4["
+                        tools:text="LuxdZozvDuma4["
                         android:onClick="copySitePassword" />
 
                 <TextView
@@ -104,7 +119,7 @@
                         android:labelFor="@id/sitePasswordField"
                         android:gravity="center"
                         android:background="@android:color/transparent"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         android:textColor="@android:color/tertiary_text_dark"
                         android:text="@string/sitePassword_hint" />
 
@@ -115,54 +130,136 @@
                 android:id="@+id/maskPasswordField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textColor="@android:color/tertiary_text_dark"
                 android:text="@string/maskPassword" />
 
-        <Spinner
-                android:id="@id/siteTypeField"
+        <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nextFocusForward="@+id/counterField"
-                android:gravity="center" />
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/divider" />
 
-        <EditText
-                android:id="@id/counterField"
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nextFocusForward="@+id/siteVersionField"
-                android:gravity="center"
-                android:inputType="text|textNoSuggestions"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:text="1" />
+                style="?android:buttonBarStyle"
+                android:orientation="horizontal"
+                android:gravity="center">
 
-        <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:labelFor="@id/counterField"
-                android:gravity="center"
-                android:background="@android:color/transparent"
-                android:textSize="14sp"
-                android:textColor="@android:color/tertiary_text_dark"
-                android:text="@string/siteCounter_hint" />
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
-        <Spinner
-                android:id="@id/siteVersionField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nextFocusForward="@id/rememberFullNameField"
-                android:gravity="center" />
+                <Button
+                        android:id="@id/siteTypeField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        style="?android:buttonBarButtonStyle"
+                        android:nextFocusForward="@+id/counterField"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:drawableStart="@drawable/icon_key"
+                        android:drawablePadding="8dp"
+                        android:background="@android:color/transparent"
+                        tools:text="Long" />
 
-        <TextView
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:labelFor="@id/siteTypeField"
+                        android:gravity="center"
+                        android:background="@android:color/transparent"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/tertiary_text_dark"
+                        android:text="@string/siteType_hint" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                <Button
+                        android:id="@id/counterField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        style="?android:buttonBarButtonStyle"
+                        android:nextFocusForward="@+id/siteVersionField"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:drawableStart="@drawable/icon_plus"
+                        android:drawablePadding="8dp"
+                        android:background="@android:color/transparent"
+                        tools:text="1" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:labelFor="@id/siteVersionField"
+                        android:gravity="center"
+                        android:background="@android:color/transparent"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/tertiary_text_dark"
+                        android:text="@string/siteCounter_hint" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                <Button
+                        android:id="@id/siteVersionField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        style="?android:buttonBarButtonStyle"
+                        android:nextFocusForward="@+id/rememberFullNameField"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:drawableStart="@drawable/icon_gears"
+                        android:drawablePadding="8dp"
+                        android:background="@android:color/transparent"
+                        tools:text="3" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:labelFor="@id/siteVersionField"
+                        android:gravity="center"
+                        android:background="@android:color/transparent"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/tertiary_text_dark"
+                        android:text="@string/siteVersion_hint" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:labelFor="@id/siteVersionField"
-                android:gravity="center"
-                android:background="@android:color/transparent"
-                android:textSize="14sp"
-                android:textColor="@android:color/tertiary_text_dark"
-                android:text="@string/siteVersion_hint" />
+                android:layout_marginTop="8dp"
+                android:textSize="16sp"
+                android:text="@string/btn_tests"
+                android:onClick="integrityTests"
+                android:background="@android:color/transparent" />
 
         <View
                 android:layout_width="1dp"

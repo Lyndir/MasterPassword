@@ -3,9 +3,10 @@ package com.lyndir.masterpassword;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
 import android.app.*;
+import android.content.Context;
+import android.content.Intent;
 import android.os.*;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -21,7 +22,8 @@ import javax.annotation.Nullable;
 public class TestActivity extends Activity implements MPTestSuite.Listener {
 
     @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger = Logger.get( TestActivity.class );
+    private static final Logger logger            = Logger.get( TestActivity.class );
+    private static final String PREF_TESTS_PASSED = "integrityTestsPassed";
 
     private final ListeningExecutorService backgroundExecutor = MoreExecutors.listeningDecorator( Executors.newSingleThreadExecutor() );
     private final ListeningExecutorService mainExecutor       = MoreExecutors.listeningDecorator( new MainThreadExecutor() );
@@ -38,19 +40,33 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
     @InjectView(R.id.actionButton)
     Button actionButton;
 
+    @InjectView(R.id.nativeKDF)
+    CheckBox nativeKDF;
+
     private MPTestSuite               testSuite;
     private ListenableFuture<Boolean> testFuture;
     private Runnable                  action;
     private ImmutableSet<String>      testNames;
+
+    public static void startNoSkip(Context context) {
+        context.startActivity( new Intent( context, TestActivity.class ) );
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         Res.init( getResources() );
 
-        getWindow().setFlags( WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE );
         setContentView( R.layout.activity_test );
         ButterKnife.inject( this );
+
+        nativeKDF.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
+                getPreferences( MODE_PRIVATE ).edit().putBoolean( "nativeKDF", isChecked ).apply();
+                MasterKey.setAllowNativeByDefault( isNativeKDFEnabled() );
+            }
+        } );
 
         try {
             setStatus( 0, 0, null );
@@ -77,62 +93,58 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        final Set<String> integrityTestsPassed = getPreferences( MODE_PRIVATE ).getStringSet( "integrityTestsPassed",
-                                                                                              ImmutableSet.<String>of() );
-        if (!FluentIterable.from( testNames ).anyMatch( new Predicate<String>() {
-            @Override
-            public boolean apply(@Nullable final String testName) {
-                return !integrityTestsPassed.contains( testName );
-            }
-        } )) {
-            // None of the tests we need to perform were missing from the tests that have already been passed on this device.
-            finish();
-            EmergencyActivity.start( TestActivity.this );
-        }
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
 
-        if (testFuture == null) {
-            setStatus( R.string.tests_testing, R.string.tests_btn_testing, null );
-            Futures.addCallback( testFuture = backgroundExecutor.submit( testSuite ), new FutureCallback<Boolean>() {
-                @Override
-                public void onSuccess(@Nullable final Boolean result) {
-                    if (result != null && result)
-                        setStatus( R.string.tests_passed, R.string.tests_btn_passed, new Runnable() {
-                            @Override
-                            public void run() {
-                                getPreferences( MODE_PRIVATE ).edit().putStringSet( "integrityTestsPassed", testNames ).apply();
-                                finish();
-                                EmergencyActivity.start( TestActivity.this );
-                            }
-                        } );
-                    else
-                        setStatus( R.string.tests_failed, R.string.tests_btn_failed, new Runnable() {
-                            @Override
-                            public void run() {
-                                finish();
-                            }
-                        } );
-                }
+        nativeKDF.setChecked( isNativeKDFEnabled() );
 
-                @Override
-                public void onFailure(final Throwable t) {
-                    logger.err( t, "While running test suite" );
+        if (testFuture == null)
+            startTestSuite();
+    }
+
+    private boolean isNativeKDFEnabled() {
+        return getPreferences( MODE_PRIVATE ).getBoolean( "nativeKDF", MasterKey.isAllowNativeByDefault() );
+    }
+
+    private void startTestSuite() {
+        if (testFuture != null)
+            testFuture.cancel( true );
+
+        MasterKey.setAllowNativeByDefault( isNativeKDFEnabled() );
+
+        setStatus( R.string.tests_testing, R.string.tests_btn_testing, null );
+        Futures.addCallback( testFuture = backgroundExecutor.submit( testSuite ), new FutureCallback<Boolean>() {
+            @Override
+            public void onSuccess(@Nullable final Boolean result) {
+                if (result != null && result)
+                    setStatus( R.string.tests_passed, R.string.tests_btn_passed, new Runnable() {
+                        @Override
+                        public void run() {
+                            getPreferences( MODE_PRIVATE ).edit().putStringSet( PREF_TESTS_PASSED, testNames ).apply();
+                            finish();
+                            EmergencyActivity.start( TestActivity.this );
+                        }
+                    } );
+                else
                     setStatus( R.string.tests_failed, R.string.tests_btn_failed, new Runnable() {
                         @Override
                         public void run() {
-                            finish();
+                            startTestSuite();
                         }
                     } );
-                }
-            }, mainExecutor );
-        }
+            }
+
+            @Override
+            public void onFailure(final Throwable t) {
+                logger.err( t, "While running test suite" );
+                setStatus( R.string.tests_failed, R.string.tests_btn_failed, new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                } );
+            }
+        }, mainExecutor );
     }
 
     public void onAction(View v) {

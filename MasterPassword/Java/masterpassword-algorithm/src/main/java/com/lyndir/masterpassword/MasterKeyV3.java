@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 /**
  * bugs:
  * - no known issues.
- * 
+ *
  * @author lhunath, 2014-08-30
  */
 public class MasterKeyV3 extends MasterKeyV2 {
@@ -46,17 +46,8 @@ public class MasterKeyV3 extends MasterKeyV2 {
         ByteBuffer mpBytesBuf = MP_charset.encode( CharBuffer.wrap( masterPassword ) );
         byte[] mpBytes = new byte[mpBytesBuf.remaining()];
         mpBytesBuf.get( mpBytes, 0, mpBytes.length );
-        Arrays.fill( mpBytesBuf.array(), (byte)0 );
+        Arrays.fill( mpBytesBuf.array(), (byte) 0 );
 
-        try {
-            return SCrypt.scrypt( mpBytes, masterKeySalt, MP_N, MP_r, MP_p, MP_dkLen );
-        }
-        catch (GeneralSecurityException e) {
-            logger.bug( e );
-            return null;
-        }
-        finally {
-            Arrays.fill( mpBytes, (byte) 0 );
-        }
+        return scrypt( masterKeySalt, mpBytes );
     }
 }
