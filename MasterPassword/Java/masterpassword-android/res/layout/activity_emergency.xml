@@ -92,7 +92,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:indeterminate="true" />
+                    android:visibility="invisible"
+                    android:indeterminate="true"
+                    tools:visibility="visible" />
 
             <LinearLayout
                     android:layout_width="match_parent"
@@ -104,7 +106,7 @@
                         android:id="@id/sitePasswordField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:nextFocusForward="@+id/siteTypeField"
+                        android:nextFocusForward="@+id/siteTypeButton"
                         android:gravity="center"
                         android:background="@android:color/transparent"
                         android:textColor="#FFFFFF"
@@ -156,7 +158,7 @@
                     android:gravity="center">
 
                 <Button
-                        android:id="@id/siteTypeField"
+                        android:id="@id/siteTypeButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -174,7 +176,7 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:labelFor="@id/siteTypeField"
+                        android:labelFor="@id/siteTypeButton"
                         android:gravity="center"
                         android:background="@android:color/transparent"
                         android:textSize="12sp"
@@ -196,7 +198,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         style="?android:buttonBarButtonStyle"
-                        android:nextFocusForward="@+id/siteVersionField"
+                        android:nextFocusForward="@+id/siteVersionButton"
                         android:gravity="center"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp"
@@ -208,7 +210,7 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:labelFor="@id/siteVersionField"
+                        android:labelFor="@id/siteVersionButton"
                         android:gravity="center"
                         android:background="@android:color/transparent"
                         android:textSize="12sp"
@@ -224,7 +226,7 @@
                     android:gravity="center">
 
                 <Button
-                        android:id="@id/siteVersionField"
+                        android:id="@id/siteVersionButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -242,7 +244,7 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:labelFor="@id/siteVersionField"
+                        android:labelFor="@id/siteVersionButton"
                         android:gravity="center"
                         android:background="@android:color/transparent"
                         android:textSize="12sp"

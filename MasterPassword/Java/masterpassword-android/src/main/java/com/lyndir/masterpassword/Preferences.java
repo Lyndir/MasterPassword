@@ -20,11 +20,12 @@ public class Preferences {
     private static final String PREF_FORGET_PASSWORD    = "forgetPassword";
     private static final String PREF_MASK_PASSWORD      = "maskPassword";
     private static final String PREF_FULL_NAME          = "fullName";
+    private static final String PREF_SITE_TYPE          = "siteType";
     private static Preferences instance;
 
-    private final Context           context;
+    private Context           context;
     @Nullable
-    private       SharedPreferences prefs;
+    private SharedPreferences prefs;
 
     public static synchronized Preferences get(final Context context) {
         if (instance == null)
@@ -34,13 +35,13 @@ public class Preferences {
     }
 
     private Preferences(Context context) {
-        this.context = context.getApplicationContext();
+        this.context = context;
     }
 
     @Nonnull
     private SharedPreferences prefs() {
         if (prefs == null)
-            prefs = context.getSharedPreferences( getClass().getCanonicalName(), Context.MODE_PRIVATE );
+            prefs = (context = context.getApplicationContext()).getSharedPreferences( getClass().getCanonicalName(), Context.MODE_PRIVATE );
 
         return prefs;
     }
@@ -57,11 +58,11 @@ public class Preferences {
         return prefs().getBoolean( PREF_NATIVE_KDF, MasterKey.isAllowNativeByDefault() );
     }
 
-    public boolean setTestsPassed(final Set<String> testsPassed) {
-        if (Sets.symmetricDifference( getTestsPassed(), testsPassed ).isEmpty())
+    public boolean setTestsPassed(final Set<String> value) {
+        if (Sets.symmetricDifference( getTestsPassed(), value ).isEmpty())
             return false;
 
-        prefs().edit().putStringSet( PREF_TESTS_PASSED, testsPassed ).apply();
+        prefs().edit().putStringSet( PREF_TESTS_PASSED, value ).apply();
         return true;
     }
 
@@ -105,16 +106,42 @@ public class Preferences {
         return prefs().getBoolean( PREF_MASK_PASSWORD, false );
     }
 
-    public boolean setFullName(@Nullable String fullName) {
-        if (getFullName().equals( fullName ))
+    public boolean setFullName(@Nullable String value) {
+        if (getFullName().equals( value ))
             return false;
 
-        prefs().edit().putString( PREF_FULL_NAME, fullName ).apply();
+        prefs().edit().putString( PREF_FULL_NAME, value ).apply();
         return true;
     }
 
     @Nonnull
     public String getFullName() {
         return prefs().getString( PREF_FULL_NAME, "" );
+    }
+
+    public boolean setDefaultSiteType(@Nonnull MPSiteType value) {
+        if (getDefaultSiteType().equals( value ))
+            return false;
+
+        prefs().edit().putInt( PREF_SITE_TYPE, value.ordinal() ).apply();
+        return true;
+    }
+
+    @Nonnull
+    public MPSiteType getDefaultSiteType() {
+        return MPSiteType.values()[prefs().getInt( PREF_SITE_TYPE, MPSiteType.GeneratedLong.ordinal() )];
+    }
+
+    public boolean setDefaultVersion(@Nonnull MasterKey.Version value) {
+        if (getDefaultVersion().equals( value ))
+            return false;
+
+        prefs().edit().putInt( PREF_SITE_TYPE, value.ordinal() ).apply();
+        return true;
+    }
+
+    @Nonnull
+    public MasterKey.Version getDefaultVersion() {
+        return MasterKey.Version.values()[prefs().getInt( PREF_SITE_TYPE, MasterKey.Version.CURRENT.ordinal() )];
     }
 }
