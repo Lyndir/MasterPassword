@@ -39,8 +39,8 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
     @InjectView(R.id.actionButton)
     Button actionButton;
 
-    @InjectView(R.id.nativeKDF)
-    CheckBox nativeKDF;
+    @InjectView(R.id.nativeKDFField)
+    CheckBox nativeKDFField;
 
     private MPTestSuite               testSuite;
     private ListenableFuture<Boolean> testFuture;
@@ -59,10 +59,11 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
         setContentView( R.layout.activity_test );
         ButterKnife.inject( this );
 
-        nativeKDF.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
+        nativeKDFField.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
-                MasterKey.setAllowNativeByDefault( preferences.isAllowNativeKDF() );
+                preferences.setNativeKDFEnabled( isChecked );
+                MasterKey.setAllowNativeByDefault( isChecked );
             }
         } );
 
@@ -94,7 +95,7 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
     protected void onResume() {
         super.onResume();
 
-        nativeKDF.setChecked( preferences.isAllowNativeKDF() );
+        nativeKDFField.setChecked( preferences.isAllowNativeKDF() );
 
         if (testFuture == null)
             startTestSuite();

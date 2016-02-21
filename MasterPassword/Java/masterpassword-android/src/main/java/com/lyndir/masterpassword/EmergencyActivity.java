@@ -76,8 +76,9 @@ public class EmergencyActivity extends Activity {
     @InjectView(R.id.maskPasswordField)
     CheckBox maskPasswordField;
 
-    private int    hc_userName;
-    private int    hc_masterPassword;
+    private int    id_userName;
+    private int    id_masterPassword;
+    private int    id_version;
     private String sitePassword;
 
     public static void start(Context context) {
@@ -221,7 +222,7 @@ public class EmergencyActivity extends Activity {
     protected void onPause() {
         if (preferences.isForgetPassword()) {
             synchronized (this) {
-                hc_userName = hc_masterPassword = 0;
+                id_userName = id_masterPassword = 0;
                 if (masterKeyFuture != null) {
                     masterKeyFuture.cancel( true );
                     masterKeyFuture = null;
@@ -242,16 +243,13 @@ public class EmergencyActivity extends Activity {
         final String fullName = fullNameField.getText().toString();
         final char[] masterPassword = masterPasswordField.getText().toString().toCharArray();
         final MasterKey.Version version = (MasterKey.Version) siteVersionButton.getTag();
-        try {
-            if (fullName.hashCode() == hc_userName && Arrays.hashCode( masterPassword ) == hc_masterPassword &&
-                masterKeyFuture != null && masterKeyFuture.get().getAlgorithmVersion() == version)
-                return;
-        }
-        catch (InterruptedException | ExecutionException e) {
+        if (fullName.hashCode() == id_userName && Arrays.hashCode( masterPassword ) == id_masterPassword &&
+            version.ordinal() == id_version && masterKeyFuture != null && !masterKeyFuture.isCancelled())
             return;
-        }
-        hc_userName = fullName.hashCode();
-        hc_masterPassword = Arrays.hashCode( masterPassword );
+
+        id_userName = fullName.hashCode();
+        id_masterPassword = Arrays.hashCode( masterPassword );
+        id_version = version.ordinal();
 
         if (preferences.isRememberFullName())
             preferences.setFullName( fullName );
@@ -345,6 +343,10 @@ public class EmergencyActivity extends Activity {
     }
 
     public void integrityTests(View view) {
+        if (masterKeyFuture != null) {
+            masterKeyFuture.cancel( true );
+            masterKeyFuture = null;
+        }
         TestActivity.startNoSkip( this );
     }
 
