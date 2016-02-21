@@ -272,7 +272,7 @@ public class EmergencyActivity extends Activity {
                 try {
                     return MasterKey.create( version, fullName, masterPassword );
                 }
-                catch (RuntimeException e) {
+                catch (Exception e) {
                     sitePasswordField.setText( "" );
                     progressView.setVisibility( View.INVISIBLE );
                     logger.err( e, "While generating master key." );

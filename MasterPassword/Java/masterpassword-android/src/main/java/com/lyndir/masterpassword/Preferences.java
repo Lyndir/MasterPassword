@@ -21,6 +21,7 @@ public class Preferences {
     private static final String PREF_MASK_PASSWORD      = "maskPassword";
     private static final String PREF_FULL_NAME          = "fullName";
     private static final String PREF_SITE_TYPE          = "siteType";
+    private static final String PREF_ALGORITHM_VERSION  = "algorithmVersion";
     private static Preferences instance;
 
     private Context           context;
@@ -136,12 +137,12 @@ public class Preferences {
         if (getDefaultVersion().equals( value ))
             return false;
 
-        prefs().edit().putInt( PREF_SITE_TYPE, value.ordinal() ).apply();
+        prefs().edit().putInt( PREF_ALGORITHM_VERSION, value.ordinal() ).apply();
         return true;
     }
 
     @Nonnull
     public MasterKey.Version getDefaultVersion() {
-        return MasterKey.Version.values()[prefs().getInt( PREF_SITE_TYPE, MasterKey.Version.CURRENT.ordinal() )];
+        return MasterKey.Version.values()[prefs().getInt( PREF_ALGORITHM_VERSION, MasterKey.Version.CURRENT.ordinal() )];
     }
 }
