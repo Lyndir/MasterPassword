@@ -178,7 +178,7 @@
     else if ([cell isKindOfClass:[MPSendAnswersCell class]]) {
         NSString *body;
         if (!_multiple) {
-            NSObject *answer = [site.algorithm resolveAnswerForSite:site usingKey:[MPiOSAppDelegate get].key];
+            NSObject *answer = [site resolveSiteAnswerUsingKey:[MPiOSAppDelegate get].key];
             body = strf( @"Master Password generated the following security answer for your site: %@\n\n"
                     @"%@\n"
                     @"\n\nYou should use this as the answer to each security question the site asks you.\n"
@@ -188,7 +188,7 @@
             NSMutableString *bodyBuilder = [NSMutableString string];
             [bodyBuilder appendFormat:@"Master Password generated the following security answers for your site: %@\n\n", site.name];
             for (MPSiteQuestionEntity *question in site.questions) {
-                NSObject *answer = [site.algorithm resolveAnswerForQuestion:question usingKey:[MPiOSAppDelegate get].key];
+                NSObject *answer = [question resolveQuestionAnswerUsingKey:[MPiOSAppDelegate get].key];
                 [bodyBuilder appendFormat:@"For question: '%@', use answer: %@\n", question.keyword, answer];
             }
             [bodyBuilder appendFormat:@"\n\nUse the answer for the matching security question.\n"
@@ -241,7 +241,7 @@
 
     self.titleLabel.text = strl( @"Answer for %@:", site.name );
     self.answerField.text = @"...";
-    [site.algorithm resolveAnswerForSite:site usingKey:[MPiOSAppDelegate get].key result:^(NSString *result) {
+    [site resolveSiteAnswerUsingKey:[MPiOSAppDelegate get].key result:^(NSString *result) {
         PearlMainQueue( ^{
             self.answerField.text = result;
         } );
@@ -330,7 +330,7 @@
         PearlMainQueue( ^{
             self.answerField.text = @"...";
         } );
-        [site.algorithm resolveAnswerForQuestion:question usingKey:[MPiOSAppDelegate get].key result:^(NSString *result) {
+        [question resolveQuestionAnswerUsingKey:[MPiOSAppDelegate get].key result:^(NSString *result) {
             PearlMainQueue( ^{
                 self.questionField.text = keyword;
                 self.answerField.text = result;

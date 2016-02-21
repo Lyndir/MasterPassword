@@ -22,6 +22,13 @@
 
 @end
 
+@interface MPSiteQuestionEntity(MP)
+
+- (NSString *)resolveQuestionAnswerUsingKey:(MPKey *)key;
+- (void)resolveQuestionAnswerUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result;
+
+@end
+
 @interface MPSiteEntity(MP)<MPFixable>
 
 @property(assign) BOOL loginGenerated;
@@ -38,8 +45,10 @@
 - (BOOL)tryMigrateExplicitly:(BOOL)explicit;
 - (NSString *)resolveLoginUsingKey:(MPKey *)key;
 - (NSString *)resolvePasswordUsingKey:(MPKey *)key;
+- (NSString *)resolveSiteAnswerUsingKey:(MPKey *)key;
 - (void)resolveLoginUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result;
 - (void)resolvePasswordUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result;
+- (void)resolveSiteAnswerUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result;
 
 @end
 

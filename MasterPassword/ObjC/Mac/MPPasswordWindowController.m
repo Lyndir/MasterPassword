@@ -124,6 +124,10 @@
 
 - (void)flagsChanged:(NSEvent *)theEvent {
 
+    BOOL shiftPressed = (theEvent.modifierFlags & NSShiftKeyMask) != 0;
+    if (shiftPressed != self.shiftPressed)
+        self.shiftPressed = shiftPressed;
+
     BOOL alternatePressed = (theEvent.modifierFlags & NSAlternateKeyMask) != 0;
     if (alternatePressed != self.alternatePressed) {
         self.alternatePressed = alternatePressed;
@@ -486,7 +490,7 @@
     }
 
     // Performing action while content is available.  Copy it.
-    [self copyContent:selectedSite.content];
+    [self copyContent:self.shiftPressed? selectedSite.answer: selectedSite.content];
 
     [self fadeOut];
 

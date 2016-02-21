@@ -35,6 +35,20 @@
 
 @end
 
+@implementation MPSiteQuestionEntity(MP)
+
+- (NSString *)resolveQuestionAnswerUsingKey:(MPKey *)key {
+
+    return [self.site.algorithm resolveAnswerForQuestion:self usingKey:key];
+}
+
+- (void)resolveQuestionAnswerUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result {
+
+    [self.site.algorithm resolveAnswerForQuestion:self usingKey:key result:result];
+}
+
+@end
+
 @implementation MPSiteEntity(MP)
 
 - (MPFixableResult)findAndFixInconsistenciesInContext:(NSManagedObjectContext *)context {
@@ -175,6 +189,11 @@
     return [self.algorithm resolvePasswordForSite:self usingKey:key];
 }
 
+- (NSString *)resolveSiteAnswerUsingKey:(MPKey *)key {
+
+    return [self.algorithm resolveAnswerForSite:self usingKey:key];
+}
+
 - (void)resolveLoginUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result {
 
     [self.algorithm resolveLoginForSite:self usingKey:key result:result];
@@ -183,6 +202,11 @@
 - (void)resolvePasswordUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result {
 
     [self.algorithm resolvePasswordForSite:self usingKey:key result:result];
+}
+
+- (void)resolveSiteAnswerUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result {
+
+    [self.algorithm resolveAnswerForSite:self usingKey:key result:result];
 }
 
 @end
