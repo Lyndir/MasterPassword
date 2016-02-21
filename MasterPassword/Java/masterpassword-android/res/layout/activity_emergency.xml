@@ -108,7 +108,7 @@
                         android:gravity="center"
                         android:background="@android:color/transparent"
                         android:textColor="#FFFFFF"
-                        android:textSize="32sp"
+                        android:textSize="28sp"
                         tools:text="LuxdZozvDuma4["
                         android:onClick="copySitePassword" />
 

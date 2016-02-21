@@ -14,7 +14,6 @@ import com.google.common.base.*;
 import com.google.common.collect.*;
 import com.google.common.util.concurrent.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
-import java.util.Set;
 import java.util.concurrent.*;
 import javax.annotation.Nullable;
 
@@ -22,9 +21,9 @@ import javax.annotation.Nullable;
 public class TestActivity extends Activity implements MPTestSuite.Listener {
 
     @SuppressWarnings("UnusedDeclaration")
-    private static final Logger logger            = Logger.get( TestActivity.class );
-    private static final String PREF_TESTS_PASSED = "integrityTestsPassed";
+    private static final Logger logger = Logger.get( TestActivity.class );
 
+    private final Preferences              preferences        = Preferences.get( this );
     private final ListeningExecutorService backgroundExecutor = MoreExecutors.listeningDecorator( Executors.newSingleThreadExecutor() );
     private final ListeningExecutorService mainExecutor       = MoreExecutors.listeningDecorator( new MainThreadExecutor() );
 
@@ -63,8 +62,7 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
         nativeKDF.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
-                getPreferences( MODE_PRIVATE ).edit().putBoolean( "nativeKDF", isChecked ).apply();
-                MasterKey.setAllowNativeByDefault( isNativeKDFEnabled() );
+                MasterKey.setAllowNativeByDefault( preferences.isAllowNativeKDF() );
             }
         } );
 
@@ -96,21 +94,17 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
     protected void onResume() {
         super.onResume();
 
-        nativeKDF.setChecked( isNativeKDFEnabled() );
+        nativeKDF.setChecked( preferences.isAllowNativeKDF() );
 
         if (testFuture == null)
             startTestSuite();
-    }
-
-    private boolean isNativeKDFEnabled() {
-        return getPreferences( MODE_PRIVATE ).getBoolean( "nativeKDF", MasterKey.isAllowNativeByDefault() );
     }
 
     private void startTestSuite() {
         if (testFuture != null)
             testFuture.cancel( true );
 
-        MasterKey.setAllowNativeByDefault( isNativeKDFEnabled() );
+        MasterKey.setAllowNativeByDefault( preferences.isAllowNativeKDF() );
 
         setStatus( R.string.tests_testing, R.string.tests_btn_testing, null );
         Futures.addCallback( testFuture = backgroundExecutor.submit( testSuite ), new FutureCallback<Boolean>() {
@@ -120,9 +114,8 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
                     setStatus( R.string.tests_passed, R.string.tests_btn_passed, new Runnable() {
                         @Override
                         public void run() {
-                            getPreferences( MODE_PRIVATE ).edit().putStringSet( PREF_TESTS_PASSED, testNames ).apply();
+                            preferences.setTestsPassed( testNames );
                             finish();
-                            EmergencyActivity.start( TestActivity.this );
                         }
                     } );
                 else

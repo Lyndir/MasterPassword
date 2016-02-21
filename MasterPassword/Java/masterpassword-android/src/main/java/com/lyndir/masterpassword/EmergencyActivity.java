@@ -32,6 +32,7 @@ public class EmergencyActivity extends Activity {
     private static final ClipData EMPTY_CLIP            = new ClipData( new ClipDescription( "", new String[0] ), new ClipData.Item( "" ) );
     private static final int      PASSWORD_NOTIFICATION = 0;
 
+    private final Preferences              preferences        = Preferences.get( this );
     private final ListeningExecutorService executor           = MoreExecutors.listeningDecorator( Executors.newSingleThreadExecutor() );
     private final ValueChangedListener     updateMasterKey    = new ValueChangedListener() {
         @Override
@@ -104,9 +105,9 @@ public class EmergencyActivity extends Activity {
         fullNameField.setOnFocusChangeListener( updateMasterKey );
         masterPasswordField.setOnFocusChangeListener( updateMasterKey );
         siteNameField.addTextChangedListener( updateSitePassword );
-//        siteTypeField.setOnItemSelectedListener( updateSitePassword );
+        //        siteTypeField.setOnItemSelectedListener( updateSitePassword );
         counterField.addTextChangedListener( updateSitePassword );
-//        siteVersionField.setOnItemSelectedListener( updateMasterKey );
+        //        siteVersionField.setOnItemSelectedListener( updateMasterKey );
         sitePasswordField.addTextChangedListener( new ValueChangedListener() {
             @Override
             void update() {
@@ -127,32 +128,32 @@ public class EmergencyActivity extends Activity {
         sitePasswordField.setTypeface( Res.sourceCodePro_Black );
         sitePasswordField.setPaintFlags( sitePasswordField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
 
-//        siteTypeField.setAdapter( new ArrayAdapter<>( this, R.layout.spinner_item, MPSiteType.forClass( MPSiteTypeClass.Generated ) ) );
-//        siteTypeField.setSelection( MPSiteType.GeneratedLong.ordinal() );
+        //        siteTypeField.setAdapter( new ArrayAdapter<>( this, R.layout.spinner_item, MPSiteType.forClass( MPSiteTypeClass.Generated ) ) );
+        //        siteTypeField.setSelection( MPSiteType.GeneratedLong.ordinal() );
 
-//        siteVersionField.setAdapter( new ArrayAdapter<>( this, R.layout.spinner_item, MasterKey.Version.values() ) );
-//        siteVersionField.setSelection( MasterKey.Version.CURRENT.ordinal() );
+        //        siteVersionField.setAdapter( new ArrayAdapter<>( this, R.layout.spinner_item, MasterKey.Version.values() ) );
+        //        siteVersionField.setSelection( MasterKey.Version.CURRENT.ordinal() );
 
         rememberFullNameField.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
-                getPreferences( MODE_PRIVATE ).edit().putBoolean( "rememberFullName", isChecked ).apply();
+                preferences.setRememberFullName( isChecked );
                 if (isChecked)
-                    getPreferences( MODE_PRIVATE ).edit().putString( "fullName", fullNameField.getText().toString() ).apply();
+                    preferences.setFullName( fullNameField.getText().toString() );
                 else
-                    getPreferences( MODE_PRIVATE ).edit().putString( "fullName", "" ).apply();
+                    preferences.setFullName( null );
             }
         } );
         forgetPasswordField.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
-                getPreferences( MODE_PRIVATE ).edit().putBoolean( "forgetPassword", isChecked ).apply();
+                preferences.setForgetPassword( isChecked );
             }
         } );
         maskPasswordField.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
-                getPreferences( MODE_PRIVATE ).edit().putBoolean( "maskPassword", isChecked ).apply();
+                preferences.setMaskPassword( isChecked );
                 sitePasswordField.setTransformationMethod( isChecked? new PasswordTransformationMethod(): null );
             }
         } );
@@ -162,13 +163,13 @@ public class EmergencyActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        MasterKey.setAllowNativeByDefault( isNativeKDFEnabled() );
+        MasterKey.setAllowNativeByDefault( preferences.isAllowNativeKDF() );
 
-        fullNameField.setText( getPreferences( MODE_PRIVATE ).getString( "fullName", "" ) );
-        rememberFullNameField.setChecked( isRememberFullNameEnabled() );
-        forgetPasswordField.setChecked( isForgetPasswordEnabled() );
-        maskPasswordField.setChecked( isMaskPasswordEnabled() );
-        sitePasswordField.setTransformationMethod( isMaskPasswordEnabled()? new PasswordTransformationMethod(): null );
+        fullNameField.setText( preferences.getFullName() );
+        rememberFullNameField.setChecked( preferences.isRememberFullName() );
+        forgetPasswordField.setChecked( preferences.isForgetPassword() );
+        maskPasswordField.setChecked( preferences.isMaskPassword() );
+        sitePasswordField.setTransformationMethod( preferences.isMaskPassword()? new PasswordTransformationMethod(): null );
 
         if (TextUtils.isEmpty( masterPasswordField.getText() ))
             masterPasswordField.requestFocus();
@@ -178,7 +179,7 @@ public class EmergencyActivity extends Activity {
 
     @Override
     protected void onPause() {
-        if (isForgetPasswordEnabled()) {
+        if (preferences.isForgetPassword()) {
             synchronized (this) {
                 hc_userName = hc_masterPassword = 0;
                 if (masterKeyFuture != null) {
@@ -197,22 +198,6 @@ public class EmergencyActivity extends Activity {
         super.onPause();
     }
 
-    private boolean isNativeKDFEnabled() {
-        return getPreferences( MODE_PRIVATE ).getBoolean( "nativeKDF", MasterKey.isAllowNativeByDefault() );
-    }
-
-    private boolean isRememberFullNameEnabled() {
-        return getPreferences( MODE_PRIVATE ).getBoolean( "rememberFullName", false );
-    }
-
-    private boolean isForgetPasswordEnabled() {
-        return getPreferences( MODE_PRIVATE ).getBoolean( "forgetPassword", false );
-    }
-
-    private boolean isMaskPasswordEnabled() {
-        return getPreferences( MODE_PRIVATE ).getBoolean( "maskPassword", false );
-    }
-
     private synchronized void updateMasterKey() {
         final String fullName = fullNameField.getText().toString();
         final char[] masterPassword = masterPasswordField.getText().toString().toCharArray();
@@ -228,8 +213,8 @@ public class EmergencyActivity extends Activity {
         hc_userName = fullName.hashCode();
         hc_masterPassword = Arrays.hashCode( masterPassword );
 
-        if (isRememberFullNameEnabled())
-            getPreferences( MODE_PRIVATE ).edit().putString( "fullName", fullName ).apply();
+        if (preferences.isRememberFullName())
+            preferences.setFullName( fullName );
 
         if (masterKeyFuture != null)
             masterKeyFuture.cancel( true );

@@ -1,0 +1,120 @@
+package com.lyndir.masterpassword;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
+import java.util.Set;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+
+/**
+ * @author lhunath, 2016-02-20
+ */
+public class Preferences {
+
+    private static final String PREF_TESTS_PASSED       = "integrityTestsPassed";
+    private static final String PREF_NATIVE_KDF         = "nativeKDF";
+    private static final String PREF_REMEMBER_FULL_NAME = "rememberFullName";
+    private static final String PREF_FORGET_PASSWORD    = "forgetPassword";
+    private static final String PREF_MASK_PASSWORD      = "maskPassword";
+    private static final String PREF_FULL_NAME          = "fullName";
+    private static Preferences instance;
+
+    private final Context           context;
+    @Nullable
+    private       SharedPreferences prefs;
+
+    public static synchronized Preferences get(final Context context) {
+        if (instance == null)
+            instance = new Preferences( context );
+
+        return instance;
+    }
+
+    private Preferences(Context context) {
+        this.context = context.getApplicationContext();
+    }
+
+    @Nonnull
+    private SharedPreferences prefs() {
+        if (prefs == null)
+            prefs = context.getSharedPreferences( getClass().getCanonicalName(), Context.MODE_PRIVATE );
+
+        return prefs;
+    }
+
+    public boolean setNativeKDFEnabled(boolean enabled) {
+        if (isAllowNativeKDF() == enabled)
+            return false;
+
+        prefs().edit().putBoolean( PREF_NATIVE_KDF, enabled ).apply();
+        return true;
+    }
+
+    public boolean isAllowNativeKDF() {
+        return prefs().getBoolean( PREF_NATIVE_KDF, MasterKey.isAllowNativeByDefault() );
+    }
+
+    public boolean setTestsPassed(final Set<String> testsPassed) {
+        if (Sets.symmetricDifference( getTestsPassed(), testsPassed ).isEmpty())
+            return false;
+
+        prefs().edit().putStringSet( PREF_TESTS_PASSED, testsPassed ).apply();
+        return true;
+    }
+
+    public Set<String> getTestsPassed() {
+        return prefs().getStringSet( PREF_TESTS_PASSED, ImmutableSet.<String>of() );
+    }
+
+    public boolean setRememberFullName(boolean enabled) {
+        if (isRememberFullName() == enabled)
+            return false;
+
+        prefs().edit().putBoolean( PREF_REMEMBER_FULL_NAME, enabled ).apply();
+        return true;
+    }
+
+    public boolean isRememberFullName() {
+        return prefs().getBoolean( PREF_REMEMBER_FULL_NAME, false );
+    }
+
+    public boolean setForgetPassword(boolean enabled) {
+        if (isForgetPassword() == enabled)
+            return false;
+
+        prefs().edit().putBoolean( PREF_FORGET_PASSWORD, enabled ).apply();
+        return true;
+    }
+
+    public boolean isForgetPassword() {
+        return prefs().getBoolean( PREF_FORGET_PASSWORD, false );
+    }
+
+    public boolean setMaskPassword(boolean enabled) {
+        if (isMaskPassword() == enabled)
+            return false;
+
+        prefs().edit().putBoolean( PREF_MASK_PASSWORD, enabled ).apply();
+        return true;
+    }
+
+    public boolean isMaskPassword() {
+        return prefs().getBoolean( PREF_MASK_PASSWORD, false );
+    }
+
+    public boolean setFullName(@Nullable String fullName) {
+        if (getFullName().equals( fullName ))
+            return false;
+
+        prefs().edit().putString( PREF_FULL_NAME, fullName ).apply();
+        return true;
+    }
+
+    @Nonnull
+    public String getFullName() {
+        return prefs().getString( PREF_FULL_NAME, "" );
+    }
+}

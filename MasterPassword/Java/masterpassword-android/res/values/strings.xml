@@ -12,7 +12,7 @@
     <string name="siteCounter_hint">Counter</string>
     <string name="siteVersion_hint">Algorithm</string>
     <string name="empty" />
-    <string name="btn_tests">Integrity Tests</string>
+    <string name="btn_tests">Integrity Tests ❯</string>
     <string name="tests_unavailable">Test suite unavailable.</string>
     <string name="tests_btn_unavailable">Retest</string>
     <string name="tests_testing">Testing device\'s password generation integrity…</string>
@@ -20,6 +20,6 @@
     <string name="tests_failed">Incompatible device or OS.</string>
     <string name="tests_btn_failed">Retest</string>
     <string name="tests_passed">Integrity checks passed!</string>
-    <string name="tests_btn_passed">Continue</string>
+    <string name="tests_btn_passed">Close</string>
     <string name="nativeKDF">Use native key derivation</string>
 </resources>
