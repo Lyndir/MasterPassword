@@ -9,6 +9,7 @@
 #import "MPEntities.h"
 #import "MPAppDelegate_Shared.h"
 #import "MPAppDelegate_Key.h"
+#import "MPAppDelegate_InApp.h"
 
 @implementation NSManagedObjectContext(MP)
 
@@ -30,6 +31,20 @@
     }
 
     return success && (!self.parentContext || [self.parentContext saveToStore]);
+}
+
+@end
+
+@implementation MPSiteQuestionEntity(MP)
+
+- (NSString *)resolveQuestionAnswerUsingKey:(MPKey *)key {
+
+    return [self.site.algorithm resolveAnswerForQuestion:self usingKey:key];
+}
+
+- (void)resolveQuestionAnswerUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result {
+
+    [self.site.algorithm resolveAnswerForQuestion:self usingKey:key result:result];
 }
 
 @end
@@ -174,6 +189,11 @@
     return [self.algorithm resolvePasswordForSite:self usingKey:key];
 }
 
+- (NSString *)resolveSiteAnswerUsingKey:(MPKey *)key {
+
+    return [self.algorithm resolveAnswerForSite:self usingKey:key];
+}
+
 - (void)resolveLoginUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result {
 
     [self.algorithm resolveLoginForSite:self usingKey:key result:result];
@@ -182,6 +202,11 @@
 - (void)resolvePasswordUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result {
 
     [self.algorithm resolvePasswordForSite:self usingKey:key result:result];
+}
+
+- (void)resolveSiteAnswerUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result {
+
+    [self.algorithm resolveAnswerForSite:self usingKey:key result:result];
 }
 
 @end
@@ -283,6 +308,16 @@
 - (void)setSaveKey:(BOOL)aSaveKey {
 
     self.saveKey_ = @(aSaveKey);
+}
+
+- (BOOL)touchID {
+
+    return [self.touchID_ boolValue] && [[MPAppDelegate_Shared get] isFeatureUnlocked:MPProductTouchID];
+}
+
+- (void)setTouchID:(BOOL)aTouchID {
+
+    self.touchID_ = @(aTouchID);
 }
 
 - (MPSiteType)defaultType {

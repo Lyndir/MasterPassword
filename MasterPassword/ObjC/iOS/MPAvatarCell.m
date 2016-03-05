@@ -111,7 +111,7 @@ const long MPAvatarAdd = 10000;
 
 #pragma mark - Properties
 
-- (void)setAvatar:(long)avatar {
+- (void)setAvatar:(NSUInteger)avatar {
 
     _avatar = avatar == MPAvatarAdd? MPAvatarAdd: (avatar + MPAvatarCount) % MPAvatarCount;
 
@@ -121,7 +121,7 @@ const long MPAvatarAdd = 10000;
         _newUser = YES;
     }
     else
-        self.avatarImageView.image = [UIImage imageNamed:strf( @"avatar-%ld", _avatar )];
+        self.avatarImageView.image = [UIImage imageNamed:strf( @"avatar-%lu", (unsigned long)_avatar )];
 }
 
 - (NSString *)name {

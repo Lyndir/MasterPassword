@@ -28,6 +28,7 @@
 @property(nonatomic) NSString *masterPassword;
 @property(nonatomic) BOOL showVersionContainer;
 @property(nonatomic) BOOL alternatePressed;
+@property(nonatomic) BOOL shiftPressed;
 @property(nonatomic) BOOL locked;
 @property(nonatomic) BOOL newUser;
 

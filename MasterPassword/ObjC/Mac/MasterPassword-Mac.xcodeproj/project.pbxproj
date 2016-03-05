@@ -37,8 +37,6 @@
 		DA2CA4F018D323D3007798F8 /* NSArray+Pearl.h in Headers */ = {isa = PBXBuildFile; fileRef = DA2CA4EA18D323D3007798F8 /* NSArray+Pearl.h */; };
 		DA2CA4F118D323D3007798F8 /* NSTimer+PearlBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2CA4EB18D323D3007798F8 /* NSTimer+PearlBlock.m */; };
 		DA2CA4F218D323D3007798F8 /* NSTimer+PearlBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = DA2CA4EC18D323D3007798F8 /* NSTimer+PearlBlock.h */; };
-		DA30E9CE15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */; };
-		DA30E9CF15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9CC15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m */; };
 		DA30E9D015722ECA00A68B4C /* Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9CD15722ECA00A68B4C /* Pearl.m */; };
 		DA30E9D215722EE500A68B4C /* Pearl-Crypto.m in Sources */ = {isa = PBXBuildFile; fileRef = DA30E9D115722EE500A68B4C /* Pearl-Crypto.m */; };
 		DA30E9D715723E6900A68B4C /* PearlLazy.h in Headers */ = {isa = PBXBuildFile; fileRef = DA30E9D515723E6900A68B4C /* PearlLazy.h */; };
@@ -91,7 +89,6 @@
 		DA6774451A474A3B004F356A /* mpw-types.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C21A4746AF004F356A /* mpw-types.c */; };
 		DA6774461A474A3B004F356A /* mpw-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C51A4746AF004F356A /* mpw-util.c */; };
 		DA67744A1A47C8F7004F356A /* mpw-tests-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6774481A47C8F7004F356A /* mpw-tests-util.c */; };
-		DA8495301A915EF400B3053D /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA8495281A915EF400B3053D /* MasterPassword.xcdatamodeld */; };
 		DA89D4EC1A51EABD00AC64D7 /* Pearl-Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = DA89D4EA1A51EABD00AC64D7 /* Pearl-Cocoa.h */; };
 		DA89D4ED1A51EABD00AC64D7 /* Pearl-Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = DA89D4EB1A51EABD00AC64D7 /* Pearl-Cocoa.m */; };
 		DA8ED895192906920099B726 /* PearlTween.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8ED891192906920099B726 /* PearlTween.m */; };
@@ -102,6 +99,7 @@
 		DA9261521BE1A86700369DE5 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9261501BE1A86700369DE5 /* Fabric.framework */; };
 		DA9261541BE1A88900369DE5 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9261531BE1A88900369DE5 /* libc++.tbd */; };
 		DA9261561BE1A89600369DE5 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9261551BE1A89600369DE5 /* libz.tbd */; };
+		DA95B5231C477DE10067F5EF /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA95B51A1C477DE10067F5EF /* MasterPassword.xcdatamodeld */; };
 		DAAA81B0195A8D1300FA30D9 /* gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAA81AF195A8D1300FA30D9 /* gradient.png */; };
 		DAADCC4719FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h in Headers */ = {isa = PBXBuildFile; fileRef = DAADCC3E19FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h */; };
 		DAADCC4819FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h in Headers */ = {isa = PBXBuildFile; fileRef = DAADCC3F19FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h */; };
@@ -158,6 +156,7 @@
 		DACA29741705E1A8002C6C22 /* dictionary.lst in Resources */ = {isa = PBXBuildFile; fileRef = DACA29721705E1A8002C6C22 /* dictionary.lst */; };
 		DACA298D1705E2BD002C6C22 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29771705E2BD002C6C22 /* JRSwizzle.h */; };
 		DACA299A1705E2BD002C6C22 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = DACA298C1705E2BD002C6C22 /* JRSwizzle.m */; };
+		DACBFCDF1C59B22E007EF90F /* NSMutableSet+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DACBFCDC1C59B22E007EF90F /* NSMutableSet+Pearl.m */; };
 		DAD9B5F01762CAA4001835F9 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD9B5EF1762CAA4001835F9 /* ServiceManagement.framework */; };
 		DAD9B5F11762CAB9001835F9 /* MasterPassword-Mac-LoginHelper.app in Copy LoginHelper */ = {isa = PBXBuildFile; fileRef = DAD9B5E6176299BA001835F9 /* MasterPassword-Mac-LoginHelper.app */; };
 		DAEB942E18B47FB3000490CC /* MPInitialWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA0933C91747A56A00DE1CEF /* MPInitialWindow.xib */; };
@@ -303,8 +302,6 @@
 		DA2CA4EA18D323D3007798F8 /* NSArray+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Pearl.h"; sourceTree = "<group>"; };
 		DA2CA4EB18D323D3007798F8 /* NSTimer+PearlBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+PearlBlock.m"; sourceTree = "<group>"; };
 		DA2CA4EC18D323D3007798F8 /* NSTimer+PearlBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+PearlBlock.h"; sourceTree = "<group>"; };
-		DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+PearlMutableInfo.h"; sourceTree = "<group>"; };
-		DA30E9CC15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+PearlMutableInfo.m"; sourceTree = "<group>"; };
 		DA30E9CD15722ECA00A68B4C /* Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pearl.m; sourceTree = "<group>"; };
 		DA30E9D115722EE500A68B4C /* Pearl-Crypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Pearl-Crypto.m"; sourceTree = "<group>"; };
 		DA30E9D515723E6900A68B4C /* PearlLazy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlLazy.h; sourceTree = "<group>"; };
@@ -792,13 +789,6 @@
 		DA831A281A6E1146000AC234 /* mpw-algorithm_v1.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v1.c"; sourceTree = "<group>"; };
 		DA831A291A6E1146000AC234 /* mpw-algorithm_v2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v2.c"; sourceTree = "<group>"; };
 		DA831A2A1A6E1146000AC234 /* mpw-algorithm_v3.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v3.c"; sourceTree = "<group>"; };
-		DA8495291A915EF400B3053D /* MasterPassword 1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 1.xcdatamodel"; sourceTree = "<group>"; };
-		DA84952A1A915EF400B3053D /* MasterPassword 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 2.xcdatamodel"; sourceTree = "<group>"; };
-		DA84952B1A915EF400B3053D /* MasterPassword 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 3.xcdatamodel"; sourceTree = "<group>"; };
-		DA84952C1A915EF400B3053D /* MasterPassword 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 4.xcdatamodel"; sourceTree = "<group>"; };
-		DA84952D1A915EF400B3053D /* MasterPassword 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 5.xcdatamodel"; sourceTree = "<group>"; };
-		DA84952E1A915EF400B3053D /* MasterPassword 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 6.xcdatamodel"; sourceTree = "<group>"; };
-		DA84952F1A915EF400B3053D /* MasterPassword 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 7.xcdatamodel"; sourceTree = "<group>"; };
 		DA89D4EA1A51EABD00AC64D7 /* Pearl-Cocoa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Pearl-Cocoa.h"; sourceTree = "<group>"; };
 		DA89D4EB1A51EABD00AC64D7 /* Pearl-Cocoa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Pearl-Cocoa.m"; sourceTree = "<group>"; };
 		DA8ED891192906920099B726 /* PearlTween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlTween.m; sourceTree = "<group>"; };
@@ -808,6 +798,14 @@
 		DA9261501BE1A86700369DE5 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		DA9261531BE1A88900369DE5 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		DA9261551BE1A89600369DE5 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		DA95B51B1C477DE10067F5EF /* MasterPassword 1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 1.xcdatamodel"; sourceTree = "<group>"; };
+		DA95B51C1C477DE10067F5EF /* MasterPassword 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 2.xcdatamodel"; sourceTree = "<group>"; };
+		DA95B51D1C477DE10067F5EF /* MasterPassword 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 3.xcdatamodel"; sourceTree = "<group>"; };
+		DA95B51E1C477DE10067F5EF /* MasterPassword 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 4.xcdatamodel"; sourceTree = "<group>"; };
+		DA95B51F1C477DE10067F5EF /* MasterPassword 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 5.xcdatamodel"; sourceTree = "<group>"; };
+		DA95B5201C477DE10067F5EF /* MasterPassword 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 6.xcdatamodel"; sourceTree = "<group>"; };
+		DA95B5211C477DE10067F5EF /* MasterPassword 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 7.xcdatamodel"; sourceTree = "<group>"; };
+		DA95B5221C477DE10067F5EF /* MasterPassword 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MasterPassword 8.xcdatamodel"; sourceTree = "<group>"; };
 		DAAA81AF195A8D1300FA30D9 /* gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient.png; sourceTree = "<group>"; };
 		DAADCC3E19FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+PearlEasyCleanup.h"; sourceTree = "<group>"; };
 		DAADCC3F19FAFFAD00987B1D /* NSPersistentStore+PearlMigration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPersistentStore+PearlMigration.h"; sourceTree = "<group>"; };
@@ -867,6 +865,8 @@
 		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
 		DACA29771705E2BD002C6C22 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
 		DACA298C1705E2BD002C6C22 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
+		DACBFCDB1C59B22E007EF90F /* NSMutableSet+Pearl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableSet+Pearl.h"; sourceTree = "<group>"; };
+		DACBFCDC1C59B22E007EF90F /* NSMutableSet+Pearl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableSet+Pearl.m"; sourceTree = "<group>"; };
 		DAD0C5F619FD6034009CB08D /* icon_128x128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_128x128.png; sourceTree = "<group>"; };
 		DAD0C5F719FD6034009CB08D /* icon_128x128@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_128x128@2x.png"; sourceTree = "<group>"; };
 		DAD0C5F819FD6034009CB08D /* icon_16x16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_16x16.png; sourceTree = "<group>"; };
@@ -1059,9 +1059,9 @@
 		DA5E5C7917248AA1003798D8 /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				DA5E5C8717248AA1003798D8 /* libscryptenc-osx.a */,
-				DAE8E65319867ADA00416A0F /* libopensslcrypto-osx.a */,
 				DAEB938518AB0FFD000490CC /* include */,
+				DAE8E65319867ADA00416A0F /* libopensslcrypto-osx.a */,
+				DA5E5C8717248AA1003798D8 /* libscryptenc-osx.a */,
 			);
 			path = lib;
 			sourceTree = "<group>";
@@ -1070,7 +1070,7 @@
 			isa = PBXGroup;
 			children = (
 				DA5E5CB21724A667003798D8 /* Mac */,
-				DA8495281A915EF400B3053D /* MasterPassword.xcdatamodeld */,
+				DA95B51A1C477DE10067F5EF /* MasterPassword.xcdatamodeld */,
 				DA5E5C971724A667003798D8 /* MPAlgorithm.h */,
 				DA5E5C981724A667003798D8 /* MPAlgorithm.m */,
 				DA5E5C991724A667003798D8 /* MPAlgorithmV0.h */,
@@ -1798,8 +1798,6 @@
 				93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */,
 				DA2CA4EA18D323D3007798F8 /* NSArray+Pearl.h */,
 				DA2CA4E918D323D3007798F8 /* NSArray+Pearl.m */,
-				DA30E9CB15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h */,
-				DA30E9CC15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m */,
 				DAFE4A63150399FF003ABA93 /* NSDateFormatter+RFC3339.h */,
 				DAFE4A63150399FF003ABA91 /* NSDateFormatter+RFC3339.m */,
 				93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */,
@@ -1808,6 +1806,8 @@
 				DA2CA4E718D323D3007798F8 /* NSError+PearlFullDescription.m */,
 				DA3B8451190FC86F00246EEA /* NSManagedObject+Pearl.h */,
 				DA3B8450190FC86F00246EEA /* NSManagedObject+Pearl.m */,
+				DACBFCDB1C59B22E007EF90F /* NSMutableSet+Pearl.h */,
+				DACBFCDC1C59B22E007EF90F /* NSMutableSet+Pearl.m */,
 				DAADCC3E19FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h */,
 				DAFE45D815039823003ABA7C /* NSObject+PearlExport.h */,
 				DAFE45D915039823003ABA7C /* NSObject+PearlExport.m */,
@@ -1928,7 +1928,6 @@
 				DAFE4A3615039824003ABA7C /* PearlKeyChain.h in Headers */,
 				DAFE4A3815039824003ABA7C /* PearlRSAKey.h in Headers */,
 				DAFE4A3A15039824003ABA7C /* PearlSCrypt.h in Headers */,
-				DA30E9CE15722ECA00A68B4C /* NSBundle+PearlMutableInfo.h in Headers */,
 				DA30E9D715723E6900A68B4C /* PearlLazy.h in Headers */,
 				DAADCC4719FAFFAD00987B1D /* NSNotificationCenter+PearlEasyCleanup.h in Headers */,
 				DAFE4A63150399FF003ABA88 /* NSObject+PearlKVO.h in Headers */,
@@ -2044,6 +2043,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = MP;
+				LastSwiftUpdateCheck = 0720;
 				LastTestingUpgradeCheck = 0510;
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = Lyndir;
@@ -2221,7 +2221,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
-			shellScript = "../../../External/Mac/Crashlytics.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" ../../Resources/Crashlytics/Crashlytics.plist)\" 410fb41450e3a2e50fa8357682d812ecd3e1846f2141a99bdb9d3a6a981ad69c";
+			shellScript = "../../../External/Mac/Fabric.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" ../../Resources/Crashlytics/Crashlytics.plist)\" 410fb41450e3a2e50fa8357682d812ecd3e1846f2141a99bdb9d3a6a981ad69c";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2236,6 +2236,7 @@
 				DA32CFE519CF1C71004F3F0E /* MPUserEntity.m in Sources */,
 				DA5E5CF71724A667003798D8 /* MPAlgorithmV0.m in Sources */,
 				DA5E5CF81724A667003798D8 /* MPAlgorithmV1.m in Sources */,
+				DACBFCDF1C59B22E007EF90F /* NSMutableSet+Pearl.m in Sources */,
 				DA6774311A4746AF004F356A /* mpw-util.c in Sources */,
 				DA5E5CF91724A667003798D8 /* MPAppDelegate_Key.m in Sources */,
 				DA5180CE19FF307E00A587E9 /* MPAppDelegate_Store.m in Sources */,
@@ -2257,7 +2258,7 @@
 				93D39784E725A34D1EE3FB3B /* MPInitialWindowController.m in Sources */,
 				DA32CFDF19CF1C70004F3F0E /* MPSiteEntity.m in Sources */,
 				93D394C4254EEB45FB335AFB /* MPSitesTableView.m in Sources */,
-				DA8495301A915EF400B3053D /* MasterPassword.xcdatamodeld in Sources */,
+				DA95B5231C477DE10067F5EF /* MasterPassword.xcdatamodeld in Sources */,
 				DA6774291A4746AF004F356A /* mpw-algorithm.c in Sources */,
 				93D395E4830290EBB6E71F34 /* MPNoStateButton.m in Sources */,
 				DA4DAE941A7D8117003E5423 /* MPAlgorithmV3.m in Sources */,
@@ -2319,7 +2320,6 @@
 				DAFE4A3915039824003ABA7C /* PearlRSAKey.m in Sources */,
 				DAFE4A3B15039824003ABA7C /* PearlSCrypt.m in Sources */,
 				DA8ED895192906920099B726 /* PearlTween.m in Sources */,
-				DA30E9CF15722ECA00A68B4C /* NSBundle+PearlMutableInfo.m in Sources */,
 				DA2CA4F118D323D3007798F8 /* NSTimer+PearlBlock.m in Sources */,
 				DA3B8452190FC86F00246EEA /* NSManagedObject+Pearl.m in Sources */,
 				DA30E9D015722ECA00A68B4C /* Pearl.m in Sources */,
@@ -2562,6 +2562,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
@@ -2572,6 +2573,7 @@
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
@@ -2579,6 +2581,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
 			name = "Debug-Mac";
@@ -2587,6 +2590,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
@@ -2597,6 +2601,7 @@
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
@@ -2739,6 +2744,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
 				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";
@@ -2749,6 +2755,7 @@
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
@@ -2946,18 +2953,19 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		DA8495281A915EF400B3053D /* MasterPassword.xcdatamodeld */ = {
+		DA95B51A1C477DE10067F5EF /* MasterPassword.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				DA8495291A915EF400B3053D /* MasterPassword 1.xcdatamodel */,
-				DA84952A1A915EF400B3053D /* MasterPassword 2.xcdatamodel */,
-				DA84952B1A915EF400B3053D /* MasterPassword 3.xcdatamodel */,
-				DA84952C1A915EF400B3053D /* MasterPassword 4.xcdatamodel */,
-				DA84952D1A915EF400B3053D /* MasterPassword 5.xcdatamodel */,
-				DA84952E1A915EF400B3053D /* MasterPassword 6.xcdatamodel */,
-				DA84952F1A915EF400B3053D /* MasterPassword 7.xcdatamodel */,
+				DA95B51B1C477DE10067F5EF /* MasterPassword 1.xcdatamodel */,
+				DA95B51C1C477DE10067F5EF /* MasterPassword 2.xcdatamodel */,
+				DA95B51D1C477DE10067F5EF /* MasterPassword 3.xcdatamodel */,
+				DA95B51E1C477DE10067F5EF /* MasterPassword 4.xcdatamodel */,
+				DA95B51F1C477DE10067F5EF /* MasterPassword 5.xcdatamodel */,
+				DA95B5201C477DE10067F5EF /* MasterPassword 6.xcdatamodel */,
+				DA95B5211C477DE10067F5EF /* MasterPassword 7.xcdatamodel */,
+				DA95B5221C477DE10067F5EF /* MasterPassword 8.xcdatamodel */,
 			);
-			currentVersion = DA84952F1A915EF400B3053D /* MasterPassword 7.xcdatamodel */;
+			currentVersion = DA95B5221C477DE10067F5EF /* MasterPassword 8.xcdatamodel */;
 			path = MasterPassword.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

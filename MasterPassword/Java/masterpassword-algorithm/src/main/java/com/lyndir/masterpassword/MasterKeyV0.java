@@ -65,8 +65,15 @@ public class MasterKeyV0 extends MasterKey {
         mpBytesBuf.get( mpBytes, 0, mpBytes.length );
         Arrays.fill( mpBytesBuf.array(), (byte) 0 );
 
+        return scrypt( masterKeySalt, mpBytes );
+    }
+
+    protected byte[] scrypt(final byte[] masterKeySalt, final byte[] mpBytes) {
         try {
-            return SCrypt.scrypt( mpBytes, masterKeySalt, MP_N, MP_r, MP_p, MP_dkLen );
+            if (isAllowNative())
+                return SCrypt.scrypt( mpBytes, masterKeySalt, MP_N, MP_r, MP_p, MP_dkLen );
+            else
+                return SCrypt.scryptJ( mpBytes, masterKeySalt, MP_N, MP_r, MP_p, MP_dkLen );
         }
         catch (GeneralSecurityException e) {
             logger.bug( e );

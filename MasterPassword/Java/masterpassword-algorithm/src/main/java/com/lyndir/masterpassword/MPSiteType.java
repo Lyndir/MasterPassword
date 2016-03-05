@@ -16,12 +16,12 @@ import org.jetbrains.annotations.Contract;
  */
 public enum MPSiteType {
 
-    GeneratedMaximum( "20 characters, contains symbols.", //
+    GeneratedMaximum( "Max", "20 characters, contains symbols.", //
                       ImmutableList.of( "x", "max", "maximum" ), //
                       ImmutableList.of( new MPTemplate( "anoxxxxxxxxxxxxxxxxx" ), new MPTemplate( "axxxxxxxxxxxxxxxxxno" ) ), //
                       MPSiteTypeClass.Generated, 0x0 ),
 
-    GeneratedLong( "Copy-friendly, 14 characters, contains symbols.", //
+    GeneratedLong( "Long", "Copy-friendly, 14 characters, contains symbols.", //
                    ImmutableList.of( "l", "long" ),  //
                    ImmutableList.of( new MPTemplate( "CvcvnoCvcvCvcv" ), new MPTemplate( "CvcvCvcvnoCvcv" ),
                                      new MPTemplate( "CvcvCvcvCvcvno" ), new MPTemplate( "CvccnoCvcvCvcv" ),
@@ -36,49 +36,50 @@ public enum MPSiteType {
                                      new MPTemplate( "CvccCvcvCvccno" ) ), //
                    MPSiteTypeClass.Generated, 0x1 ),
 
-    GeneratedMedium( "Copy-friendly, 8 characters, contains symbols.", //
+    GeneratedMedium( "Medium", "Copy-friendly, 8 characters, contains symbols.", //
                      ImmutableList.of( "m", "med", "medium" ), //
                      ImmutableList.of( new MPTemplate( "CvcnoCvc" ), new MPTemplate( "CvcCvcno" ) ), //
                      MPSiteTypeClass.Generated, 0x2 ),
 
-    GeneratedBasic( "8 characters, no symbols.", //
+    GeneratedBasic( "Basic", "8 characters, no symbols.", //
                     ImmutableList.of( "b", "basic" ), //
                     ImmutableList.of( new MPTemplate( "aaanaaan" ), new MPTemplate( "aannaaan" ), new MPTemplate( "aaannaaa" ) ), //
                     MPSiteTypeClass.Generated, 0x3 ),
 
-    GeneratedShort( "Copy-friendly, 4 characters, no symbols.", //
+    GeneratedShort( "Short", "Copy-friendly, 4 characters, no symbols.", //
                     ImmutableList.of( "s", "short" ), //
                     ImmutableList.of( new MPTemplate( "Cvcn" ) ), //
                     MPSiteTypeClass.Generated, 0x4 ),
 
-    GeneratedPIN( "4 numbers.", //
+    GeneratedPIN( "PIN", "4 numbers.", //
                   ImmutableList.of( "i", "pin" ), //
                   ImmutableList.of( new MPTemplate( "nnnn" ) ), //
                   MPSiteTypeClass.Generated, 0x5 ),
 
-    GeneratedName( "9 letter name.", //
+    GeneratedName( "Name", "9 letter name.", //
                    ImmutableList.of( "n", "name" ), //
                    ImmutableList.of( new MPTemplate( "cvccvcvcv" ) ), //
                    MPSiteTypeClass.Generated, 0xE ),
 
-    GeneratedPhrase( "20 character sentence.", //
+    GeneratedPhrase( "Phrase", "20 character sentence.", //
                      ImmutableList.of( "p", "phrase" ), //
                      ImmutableList.of( new MPTemplate( "cvcc cvc cvccvcv cvc" ), new MPTemplate( "cvc cvccvcvcv cvcv" ),
                                        new MPTemplate( "cv cvccv cvc cvcvccv" ) ), //
                      MPSiteTypeClass.Generated, 0xF ),
 
-    StoredPersonal( "AES-encrypted, exportable.", //
+    StoredPersonal( "Personal", "AES-encrypted, exportable.", //
                     ImmutableList.of( "personal" ), //
                     ImmutableList.<MPTemplate>of(), //
                     MPSiteTypeClass.Stored, 0x0, MPSiteFeature.ExportContent ),
 
-    StoredDevicePrivate( "AES-encrypted, not exported.", //
+    StoredDevicePrivate( "Device", "AES-encrypted, not exported.", //
                          ImmutableList.of( "device" ), //
                          ImmutableList.<MPTemplate>of(), //
                          MPSiteTypeClass.Stored, 0x1, MPSiteFeature.DevicePrivate );
 
     static final Logger logger = Logger.get( MPSiteType.class );
 
+    private final String             shortName;
     private final String             description;
     private final List<String>       options;
     private final List<MPTemplate>   templates;
@@ -86,9 +87,10 @@ public enum MPSiteType {
     private final int                typeIndex;
     private final Set<MPSiteFeature> typeFeatures;
 
-    MPSiteType(final String description, final List<String> options, final List<MPTemplate> templates, final MPSiteTypeClass typeClass,
-               final int typeIndex, final MPSiteFeature... typeFeatures) {
+    MPSiteType(final String shortName, final String description, final List<String> options, final List<MPTemplate> templates,
+               final MPSiteTypeClass typeClass, final int typeIndex, final MPSiteFeature... typeFeatures) {
 
+        this.shortName = shortName;
         this.description = description;
         this.options = options;
         this.templates = templates;
@@ -100,6 +102,10 @@ public enum MPSiteType {
             typeFeaturesBuilder.add( typeFeature );
         }
         this.typeFeatures = typeFeaturesBuilder.build();
+    }
+
+    public String getShortName() {
+        return shortName;
     }
 
     public String getDescription() {

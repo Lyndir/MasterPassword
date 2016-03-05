@@ -194,13 +194,18 @@
         [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             [self updateContent:[MPSiteEntity existingObjectWithID:_entityOID inContext:context]];
         }];
+
     else
         PearlNotMainQueue( ^{
-            NSString *password = [self.algorithm generatePasswordForSiteNamed:self.name ofType:self.type withCounter:self.counter
-                                                                     usingKey:[MPAppDelegate_Shared get].key];
-            NSString *loginName = [self.algorithm generateLoginForSiteNamed:self.name usingKey:[MPAppDelegate_Shared get].key];
-            [self updatePasswordWithResult:password];
-            [self updateLoginNameWithResult:loginName];
+            [self updatePasswordWithResult:
+                    [self.algorithm generatePasswordForSiteNamed:self.name ofType:self.type withCounter:self.counter
+                                                        usingKey:[MPAppDelegate_Shared get].key]];
+            [self updateLoginNameWithResult:
+                    [self.algorithm generateLoginForSiteNamed:self.name
+                                                     usingKey:[MPAppDelegate_Shared get].key]];
+            [self updateAnswerWithResult:
+                    [self.algorithm generateAnswerForSiteNamed:self.name onQuestion:self.question
+                                                      usingKey:[MPAppDelegate_Shared get].key]];
         } );
 }
 
@@ -211,6 +216,9 @@
     }];
     [entity resolveLoginUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
         [self updateLoginNameWithResult:result];
+    }];
+    [entity resolveSiteAnswerUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
+        [self updateAnswerWithResult:result];
     }];
 }
 
@@ -236,6 +244,13 @@
 
     PearlMainQueue( ^{
         self.loginName = loginName;
+    } );
+}
+
+- (void)updateAnswerWithResult:(NSString *)answer {
+
+    PearlMainQueue( ^{
+        self.answer = answer;
     } );
 }
 

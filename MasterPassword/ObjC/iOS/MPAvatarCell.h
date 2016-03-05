@@ -33,7 +33,7 @@ typedef NS_ENUM(NSUInteger, MPAvatarMode) {
 
 @interface MPAvatarCell : UICollectionViewCell 
 @property (copy, nonatomic) NSString *name;
-@property (assign, nonatomic) long avatar;
+@property (assign, nonatomic) NSUInteger avatar;
 @property (assign, nonatomic) MPAvatarMode mode;
 @property (assign, nonatomic) CGFloat visibility;
 @property (assign, nonatomic) BOOL spinnerActive;

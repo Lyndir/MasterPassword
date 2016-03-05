@@ -20,7 +20,7 @@
             NSStringFromSelector( @selector( helpHidden ) )             : @NO,
             NSStringFromSelector( @selector( siteInfoHidden ) )         : @YES,
             NSStringFromSelector( @selector( showSetup ) )              : @YES,
-            NSStringFromSelector( @selector( iTunesID ) )               : @"510296984",
+            NSStringFromSelector( @selector( appleID ) )                : @"510296984",
             NSStringFromSelector( @selector( actionsTipShown ) )        : @(!self.firstRun),
             NSStringFromSelector( @selector( typeTipShown ) )           : @(!self.firstRun),
             NSStringFromSelector( @selector( loginNameTipShown ) )      : @NO,

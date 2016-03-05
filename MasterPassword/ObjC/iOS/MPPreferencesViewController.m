@@ -12,7 +12,7 @@
 #import "MPAppDelegate_Store.h"
 #import "UIColor+Expanded.h"
 #import "MPPasswordsViewController.h"
-#import "MPCoachmarkViewController.h"
+#import "MPAppDelegate_InApp.h"
 
 @interface MPPreferencesViewController()
 
@@ -25,6 +25,10 @@
     [super viewDidLoad];
 
     self.view.backgroundColor = [UIColor clearColor];
+
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 100;
+    self.tableView.contentInset = UIEdgeInsetsMake( 64, 0, 49, 0 );
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -35,13 +39,18 @@
     if (![[NSUserDefaults standardUserDefaults] synchronize])
         wrn( @"Couldn't synchronize after preferences appearance." );
 
+    [self reload];
+}
+
+- (void)reload {
+
     MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForMainThread];
     self.generatedTypeControl.selectedSegmentIndex = [self generatedSegmentIndexForType:activeUser.defaultType];
     self.storedTypeControl.selectedSegmentIndex = [self storedSegmentIndexForType:activeUser.defaultType];
-    self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%ld", (long)activeUser.avatar )];
+    self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%lu", (unsigned long)activeUser.avatar )];
     self.savePasswordSwitch.on = activeUser.saveKey;
-
-    self.tableView.contentInset = UIEdgeInsetsMake( 64, 0, 49, 0 );
+    self.touchIDSwitch.on = activeUser.touchID;
+    self.touchIDSwitch.enabled = self.savePasswordSwitch.on && [[MPiOSAppDelegate get] isFeatureUnlocked:MPProductTouchID];
 }
 
 #pragma mark - UITableViewDelegate
@@ -55,6 +64,11 @@
     }
 
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    return UITableViewAutomaticDimension;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -96,6 +110,24 @@
             else
                 [[MPiOSAppDelegate get] forgetSavedKeyFor:activeUser];
             [context saveToStore];
+
+            PearlMainQueue(^{
+                [self reload];
+            });
+        }];
+
+    if (sender == self.touchIDSwitch)
+        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+            MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:context];
+            if ((activeUser.touchID = self.touchIDSwitch.on))
+                [[MPiOSAppDelegate get] storeSavedKeyFor:activeUser];
+            else
+                [[MPiOSAppDelegate get] forgetSavedKeyFor:activeUser];
+            [context saveToStore];
+
+            PearlMainQueue( ^{
+                [self reload];
+            } );
         }];
 
     if (sender == self.generatedTypeControl || sender == self.storedTypeControl) {
@@ -104,13 +136,13 @@
         else if (sender == self.storedTypeControl)
             self.generatedTypeControl.selectedSegmentIndex = -1;
 
+        MPSiteType defaultType = [self typeForSelectedSegment];
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-            MPSiteType defaultType = [[MPiOSAppDelegate get] activeUserInContext:context].defaultType = [self typeForSelectedSegment];
+            [[MPiOSAppDelegate get] activeUserInContext:context].defaultType = defaultType;
             [context saveToStore];
 
             PearlMainQueue( ^{
-                self.generatedTypeControl.selectedSegmentIndex = [self generatedSegmentIndexForType:defaultType];
-                self.storedTypeControl.selectedSegmentIndex = [self storedSegmentIndexForType:defaultType];
+                [self reload];
             } );
         }];
     }
@@ -123,9 +155,9 @@
         activeUser.avatar = (activeUser.avatar - 1 + MPAvatarCount) % MPAvatarCount;
         [context saveToStore];
 
-        long avatar = activeUser.avatar;
+        NSUInteger avatar = activeUser.avatar;
         PearlMainQueue( ^{
-            self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%ld", avatar )];
+            self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%lu", (unsigned long)avatar )];
         } );
     }];
 }
@@ -137,9 +169,9 @@
         activeUser.avatar = (activeUser.avatar + 1 + MPAvatarCount) % MPAvatarCount;
         [context saveToStore];
 
-        long avatar = activeUser.avatar;
+        NSUInteger avatar = activeUser.avatar;
         PearlMainQueue( ^{
-            self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%ld", avatar )];
+            self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%lu", (unsigned long)avatar )];
         } );
     }];
 }

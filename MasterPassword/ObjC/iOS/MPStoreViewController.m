@@ -28,7 +28,8 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
     NSMutableString *features = [NSMutableString string];
     NSArray *storeVersions = @[
-            @"Generated Usernames\nSecurity Question Answers"
+            @"Generated Usernames\nSecurity Question Answers",
+            @"TouchID Support"
     ];
     NSInteger storeVersion = [[NSUserDefaults standardUserDefaults] integerForKey:@"storeVersion"];
     for (; storeVersion < [storeVersions count]; ++storeVersion)
@@ -51,6 +52,8 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
     self.tableView.tableHeaderView = [UIView new];
     self.tableView.tableFooterView = [UIView new];
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 400;
     self.view.backgroundColor = [UIColor clearColor];
 }
 
@@ -89,18 +92,6 @@ PearlEnum( MPDevelopmentFuelConsumption,
 - (MPStoreProductCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     MPStoreProductCell *cell = (MPStoreProductCell *)[super tableView:tableView cellForRowAtIndexPath:indexPath];
-    if (cell.contentView.translatesAutoresizingMaskIntoConstraints) {
-        cell.contentView.translatesAutoresizingMaskIntoConstraints = NO;
-        [cell addConstraints:@[
-                [NSLayoutConstraint constraintWithItem:cell attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual
-                                                toItem:cell.contentView attribute:NSLayoutAttributeTop multiplier:1 constant:0],
-                [NSLayoutConstraint constraintWithItem:cell attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual
-                                                toItem:cell.contentView attribute:NSLayoutAttributeRight multiplier:1 constant:0],
-                [NSLayoutConstraint constraintWithItem:cell attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual
-                                                toItem:cell.contentView attribute:NSLayoutAttributeLeft multiplier:1 constant:0],
-        ]];
-    }
-
     if (indexPath.section == 0)
         cell.selectionStyle = [[MPiOSAppDelegate get] isFeatureUnlocked:[self productForCell:cell].productIdentifier]?
                               UITableViewCellSelectionStyleNone: UITableViewCellSelectionStyleDefault;
@@ -122,11 +113,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
-    [cell layoutIfNeeded];
-    [cell layoutIfNeeded];
-
-    dbg_return_tr( cell.contentView.bounds.size.height, @, indexPath );
+    return UITableViewAutomaticDimension;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
