@@ -195,9 +195,9 @@ window.setImmediate || !function (global) {
 		};
 	}
 	
-	// The worst fallback is setImmediate, although the delay is set to 0
-	// in reality this should have a ~20ms delay, this is an important part
-	// of the spec
+	// The worst fallback is setTimeout, although the delay is set to 0,
+	// in reality this should have a ~20ms delay as this is an important
+	// part of the spec
 	attachTo.setImmediate = (func, ...params) => global.setTimeout(func, 0, ...params);
 	attachTo.clearImmediate = global.clearTimeout;
 	
@@ -208,4 +208,4 @@ window.setImmediate || !function (global) {
 		// the arguments
 		arg || (attachTo.setImmediate = (func, ...params) => global.setTimeout(() => func(...params), 0));
 	}, 0, true);
-}(this);
+}(this || window);

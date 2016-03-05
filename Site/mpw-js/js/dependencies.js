@@ -8,7 +8,12 @@ if ((!window.crypto || !window.crypto.subtle) && window.SubtleCrypto)
 // https://code.google.com/p/crypto-js/
 if (!window.crypto || !window.crypto.subtle) {
     document.write("<script src=https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha256.js><\/script>");
+    document.write("<script src=https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/pbkdf2.js><\/script>");
     document.write("<script src=https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/lib-typedarrays-min.js><\/script>");
+}
+
+if (!Number.MAX_SAFE_INTEGER) {
+    Number.MAX_SAFE_INTEGER = Math.pow(2, 53) - 1;
 }
 
 // If Typed Arrays are not supported we include the polyfill
@@ -40,7 +45,7 @@ try {
 ES6 || document.write("<script src=js/mpw-js/traceur-runtime.js><\/script>");
 
 // Include the scrypt implementation
-var SCRYPTASM_PATH = (window.location + '').replace(/[^/]*(#[^#]*)?$/, 'js/mpw-js/scrypt-asm.js');
+document.write("<script src=lib/" + esdir + "pbkdf2.js><\/script>");
 document.write("<script src=js/mpw-js/" + esdir + "scrypt.js?1><\/script>");
 
 // Include the MPW class
