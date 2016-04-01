@@ -42,6 +42,8 @@ function update(active, working, error) {
             $('#userName').focus();
     }
     else {
+        $('#siteName').value = "";
+        $('#sitePassword').textContent = "";
         $('#identity').removeClass('active');
         $('#site').addClass('active');
         $('#siteName').focus();
