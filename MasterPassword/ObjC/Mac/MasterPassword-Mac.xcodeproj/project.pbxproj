@@ -2456,7 +2456,7 @@
 					"$(inherit)",
 					"\"$(SRCROOT)/../../../External\"/**",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
@@ -2546,7 +2546,7 @@
 					"$(inherit)",
 					"\"$(SRCROOT)/../../../External\"/**",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
@@ -2572,6 +2572,7 @@
 					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Mac,
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -2600,6 +2601,7 @@
 					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Mac,
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -2728,7 +2730,7 @@
 					"$(inherit)",
 					"\"$(SRCROOT)/../../../External\"/**",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
@@ -2754,6 +2756,7 @@
 					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Mac,
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				INFOPLIST_FILE = "MasterPassword-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (

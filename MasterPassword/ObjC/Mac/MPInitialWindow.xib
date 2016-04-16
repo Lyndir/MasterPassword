@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10116"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
@@ -102,8 +102,8 @@ from anywhere.</string>
                             <constraint firstItem="C4d-ih-ARL" firstAttribute="top" secondItem="283" secondAttribute="bottom" constant="8" symbolic="YES" id="tqS-gV-jpd"/>
                         </constraints>
                     </customView>
-                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="508">
-                        <rect key="frame" x="766" y="8" width="214" height="25"/>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="508">
+                        <rect key="frame" x="858" y="8" width="122" height="25"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="122" id="509"/>
                         </constraints>
@@ -115,8 +115,8 @@ from anywhere.</string>
                             <action selector="togglePreference:" target="-2" id="574"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="562">
-                        <rect key="frame" x="21" y="13" width="739" height="17"/>
+                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="562">
+                        <rect key="frame" x="21" y="13" width="831" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="To begin: hold command, control and P (⌘⌃P) or access the ●●●| menu icon next to your clock." id="563">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
