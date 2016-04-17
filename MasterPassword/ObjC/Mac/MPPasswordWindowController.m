@@ -61,7 +61,7 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:self.window
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
                 prof_new( @"didBecomeKey" );
-                [self fadeIn];
+                [self.window makeKeyAndOrderFront:nil];
                 prof_rewind( @"fadeIn" );
                 [self updateUser];
                 prof_finish( @"updateUser" );
@@ -75,7 +75,7 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillResignActiveNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
 #ifndef DEBUG
-                [self fadeOut];
+                [self.window fadeOut];
 #endif
             }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedInNotification object:nil
@@ -362,7 +362,7 @@
 
 - (IBAction)settings:(id)sender {
 
-    [self fadeOut:NO];
+    [self.window close];
     [[MPMacAppDelegate get] showPopup:sender];
 }
 
@@ -471,7 +471,7 @@
         return YES;
     }
     if (commandSelector == @selector( cancel: ) || commandSelector == @selector( cancelOperation: )) {
-        [self fadeOut];
+        [self.window close];
         return YES;
     }
 
@@ -492,7 +492,7 @@
     // Performing action while content is available.  Copy it.
     [self copyContent:self.shiftPressed? selectedSite.answer: selectedSite.content];
 
-    [self fadeOut];
+    [self.window close];
 
     NSUserNotification *notification = [NSUserNotification new];
     notification.title = @"Password Copied";
@@ -602,6 +602,7 @@
     CGFloat gradientOpacity = selectedOffset / siteScrollView.bounds.size.height;
     self.siteGradient.colors = @[
             (__bridge id)[NSColor whiteColor].CGColor,
+            (__bridge id)[NSColor colorWithDeviceWhite:1 alpha:1 - (1 - gradientOpacity) * 4 / 5].CGColor,
             (__bridge id)[NSColor colorWithDeviceWhite:1 alpha:gradientOpacity].CGColor
     ];
 
@@ -634,72 +635,6 @@
         [[self.selectedSite entityInContext:moc] use];
         [moc saveToStore];
     }];
-}
-
-- (void)fadeIn {
-
-    prof_new( @"fadeIn" );
-    if ([self.window isOnActiveSpace] && self.window.alphaValue > FLT_EPSILON) {
-        prof_finish( @"showing" );
-        return;
-    }
-
-    CGDirectDisplayID displayID = [self.window.screen.deviceDescription[@"NSScreenNumber"] unsignedIntValue];
-    CGImageRef capturedImage = CGDisplayCreateImage( displayID );
-    if (!capturedImage || CGImageGetWidth( capturedImage ) <= 1) {
-        if (capturedImage)
-            CFRelease( capturedImage );
-        wrn( @"Failed to capture screen image for display: %d", displayID );
-        prof_finish( @"capture failed" );
-        return;
-    }
-    prof_rewind( @"capture" );
-
-    NSImage *screenImage = [[NSImage alloc] initWithCGImage:capturedImage size:NSMakeSize(
-            CGImageGetWidth( capturedImage ) / self.window.backingScaleFactor,
-            CGImageGetHeight( capturedImage ) / self.window.backingScaleFactor )];
-    prof_rewind( @"screenImage" );
-
-    NSImage *smallImage = [[NSImage alloc] initWithSize:NSMakeSize(
-            CGImageGetWidth( capturedImage ) / 20,
-            CGImageGetHeight( capturedImage ) / 20 )];
-    prof_rewind( @"smallImage" );
-    CFRelease( capturedImage );
-    [smallImage lockFocus];
-    [screenImage drawInRect:(NSRect){ .origin = CGPointZero, .size = smallImage.size, }
-                   fromRect:NSZeroRect
-                  operation:NSCompositeSourceOver
-                   fraction:1.0];
-    [smallImage unlockFocus];
-    prof_rewind( @"scale" );
-
-    self.blurView.image = smallImage;
-    prof_rewind( @"blurView" );
-
-    [self.window setFrame:self.window.screen.frame display:YES];
-    [NSAnimationContext currentContext].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-    self.window.animator.alphaValue = 1.0;
-    prof_finish( @"window setup" );
-}
-
-- (void)fadeOut {
-
-    [self fadeOut:YES];
-}
-
-- (void)fadeOut:(BOOL)hide {
-
-    if (![NSApp isActive] && self.window.alphaValue <= FLT_EPSILON)
-        return;
-
-    [[NSAnimationContext currentContext] setCompletionHandler:^{
-        [self close];
-
-        if (hide)
-            [NSApp hide:self];
-    }];
-    [NSAnimationContext currentContext].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-    [self.window animator].alphaValue = 0.0;
 }
 
 @end

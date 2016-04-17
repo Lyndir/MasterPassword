@@ -335,11 +335,15 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (IBAction)togglePreference:(id)sender {
 
     if (sender == self.hidePasswordsItem)
-        [MPConfig get].hidePasswords = @(![[MPConfig get].hidePasswords boolValue]);
+        [MPConfig get].hidePasswords = @(self.hidePasswordsItem.state != NSOnState);
     if (sender == self.rememberPasswordItem)
-        [MPConfig get].rememberLogin = @(![[MPConfig get].rememberLogin boolValue]);
+        [MPConfig get].rememberLogin = @(self.rememberPasswordItem.state != NSOnState);
     if (sender == self.openAtLoginItem)
         [self setLoginItemEnabled:self.openAtLoginItem.state != NSOnState];
+    if (sender == self.showFullScreenItem) {
+        [MPMacConfig get].fullScreen = @(self.showFullScreenItem.state != NSOnState);
+        [NSApp updateWindows];
+    }
     if (sender == self.savePasswordItem) {
         [MPMacAppDelegate managedObjectContextPerformBlockAndWait:^(NSManagedObjectContext *context) {
             MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:context];
@@ -610,6 +614,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     BOOL loginItemEnabled = [self loginItemEnabled];
     self.openAtLoginItem.state = loginItemEnabled? NSOnState: NSOffState;
+    self.showFullScreenItem.state = [[MPMacConfig get].fullScreen boolValue]? NSOnState: NSOffState;
     self.initialWindowController.openAtLoginButton.state = loginItemEnabled? NSOnState: NSOffState;
     self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
 

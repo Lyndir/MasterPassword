@@ -9,6 +9,7 @@
 @implementation MPMacConfig
 
 @dynamic usedUserName;
+@dynamic fullScreen;
 
 - (id)init {
 
@@ -16,7 +17,8 @@
         return self;
 
     [self.defaults registerDefaults:@{
-            NSStringFromSelector( @selector(appleID) )       : @"510296984",
+            NSStringFromSelector( @selector( appleID ) )    : @"510296984",
+            NSStringFromSelector( @selector( fullScreen ) ) : @YES,
     }];
 
     return self;

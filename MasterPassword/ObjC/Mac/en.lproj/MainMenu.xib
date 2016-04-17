@@ -22,6 +22,7 @@
                 <outlet property="openAtLoginItem" destination="785" id="788"/>
                 <outlet property="rememberPasswordItem" destination="744" id="750"/>
                 <outlet property="savePasswordItem" destination="747" id="751"/>
+                <outlet property="showFullScreenItem" destination="Rvo-MK-GgF" id="NYi-85-Yuc"/>
                 <outlet property="showItem" destination="719" id="783"/>
                 <outlet property="statusMenu" destination="716" id="731"/>
                 <outlet property="usersItem" destination="755" id="762"/>
@@ -61,6 +62,23 @@
                                 </connections>
                             </menuItem>
                             <menuItem title="Always open Master Password at start-up." enabled="NO" id="786">
+                                <attributedString key="attributedTitle">
+                                    <fragment content="Always open Master Password at start-up.">
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                            <menuItem title="Show Full Screen" id="Rvo-MK-GgF">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="togglePreference:" target="494" id="wfI-yQ-Kla"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Claim the entire screen while looking up passwords." enabled="NO" id="3k1-4V-IZ7">
                                 <attributedString key="attributedTitle">
                                     <fragment content="Always open Master Password at start-up.">
                                         <attributes>

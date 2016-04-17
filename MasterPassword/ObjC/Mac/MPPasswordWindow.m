@@ -18,20 +18,9 @@
 
 #import "MPPasswordWindow.h"
 
-
 @implementation MPPasswordWindow
 
 #pragma mark - Life
-
-- (void)awakeFromNib {
-
-    [super awakeFromNib];
-
-    self.opaque = NO;
-    self.backgroundColor = [NSColor clearColor];
-    self.level = NSScreenSaverWindowLevel;
-    self.alphaValue = 0;
-}
 
 - (BOOL)canBecomeKeyWindow {
 
@@ -39,6 +28,21 @@
 }
 
 #pragma mark - State
+
+- (void)update {
+
+    if ([[MPMacConfig get].fullScreen boolValue]) {
+        [self setLevel:NSScreenSaverWindowLevel];
+        [self setFrame:self.screen.frame display:YES];
+    }
+    else {
+        [self setLevel:NSNormalWindowLevel];
+        [self setFrame:NSMakeRect( 0, 0, 640, 600) display:NO];
+        [self center];
+    }
+
+    [super update];
+}
 
 #pragma mark - Private
 

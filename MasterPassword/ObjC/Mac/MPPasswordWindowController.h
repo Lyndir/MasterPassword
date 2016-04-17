@@ -19,6 +19,7 @@
 #import <Cocoa/Cocoa.h>
 #import "MPSiteModel.h"
 #import "MPSitesTableView.h"
+#import "MPPasswordWindow.h"
 
 @class MPMacAppDelegate;
 
@@ -33,7 +34,6 @@
 @property(nonatomic) BOOL newUser;
 
 @property(nonatomic, weak) IBOutlet NSArrayController *sitesController;
-@property(nonatomic, weak) IBOutlet NSImageView *blurView;
 @property(nonatomic, weak) IBOutlet NSTextField *inputLabel;
 @property(nonatomic, weak) IBOutlet NSTextField *securePasswordField;
 @property(nonatomic, weak) IBOutlet NSTextField *revealPasswordField;

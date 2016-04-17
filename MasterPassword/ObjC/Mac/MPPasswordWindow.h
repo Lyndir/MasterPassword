@@ -20,4 +20,5 @@
 
 
 @interface MPPasswordWindow : NSWindow
+
 @end
