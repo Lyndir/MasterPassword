@@ -427,15 +427,14 @@
 - (IBAction)changeType:(id)sender {
 
     MPSiteModel *site = self.selectedSite;
-    NSArray *types = [site.algorithm allTypesStartingWith:MPSiteTypeGeneratedPIN];
+    NSArray *types = [site.algorithm allTypes];
     [self.passwordTypesMatrix renewRows:(NSInteger)[types count] columns:1];
     for (NSUInteger t = 0; t < [types count]; ++t) {
         MPSiteType type = (MPSiteType)[types[t] unsignedIntegerValue];
         NSString *title = [site.algorithm nameOfType:type];
         if (type & MPSiteTypeClassGenerated)
-            title = [site.algorithm generatePasswordForSiteNamed:site.name ofType:type
-                                                     withCounter:site.counter
-                                                        usingKey:[MPMacAppDelegate get].key];
+            title = strf( @"%@ – %@", [site.algorithm generatePasswordForSiteNamed:site.name ofType:type withCounter:site.counter
+                                                                          usingKey:[MPMacAppDelegate get].key], title );
 
         NSButtonCell *cell = [self.passwordTypesMatrix cellAtRow:(NSInteger)t column:0];
         cell.tag = type;
@@ -443,11 +442,12 @@
         cell.title = title;
     }
 
+    self.passwordTypesBox.title = strf( @"Choose a password type for %@:", site.name );
+
     NSAlert *alert = [NSAlert new];
     [alert addButtonWithTitle:@"Save"];
     [alert addButtonWithTitle:@"Cancel"];
     [alert setMessageText:@"Change Password Type"];
-    [alert setInformativeText:strf( @"Choose a new password type for: %@", site.name )];
     [alert setAccessoryView:self.passwordTypesBox];
     [alert layout];
     [alert beginSheetModalForWindow:self.window modalDelegate:self

@@ -168,6 +168,15 @@
         [self updateContent];
 }
 
+- (void)setQuestion:(NSString *)question {
+
+    if ([question isEqualToString:_question])
+        return;
+    _question = question;
+
+    [self updateContent];
+}
+
 - (BOOL)outdated {
 
     return self.algorithmVersion < MPAlgorithmVersionCurrent;

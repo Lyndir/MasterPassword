@@ -179,7 +179,7 @@ NSOperationQueue *_mpwQueue = nil;
             return @"PIN";
 
         case MPSiteTypeGeneratedName:
-            return @"Login Name";
+            return @"Name";
 
         case MPSiteTypeGeneratedPhrase:
             return @"Phrase";
@@ -281,7 +281,7 @@ NSOperationQueue *_mpwQueue = nil;
 
 - (NSArray *)allTypes {
 
-    return [self allTypesStartingWith:MPSiteTypeGeneratedMaximum];
+    return [self allTypesStartingWith:MPSiteTypeGeneratedPhrase];
 }
 
 - (NSArray *)allTypesStartingWith:(MPSiteType)startingType {
@@ -298,6 +298,10 @@ NSOperationQueue *_mpwQueue = nil;
 - (MPSiteType)nextType:(MPSiteType)type {
 
     switch (type) {
+        case MPSiteTypeGeneratedPhrase:
+            return MPSiteTypeGeneratedName;
+        case MPSiteTypeGeneratedName:
+            return MPSiteTypeGeneratedMaximum;
         case MPSiteTypeGeneratedMaximum:
             return MPSiteTypeGeneratedLong;
         case MPSiteTypeGeneratedLong:
@@ -313,7 +317,7 @@ NSOperationQueue *_mpwQueue = nil;
         case MPSiteTypeStoredPersonal:
             return MPSiteTypeStoredDevicePrivate;
         case MPSiteTypeStoredDevicePrivate:
-            return MPSiteTypeGeneratedMaximum;
+            return MPSiteTypeGeneratedPhrase;
         default:
             return MPSiteTypeGeneratedLong;
     }
