@@ -45,6 +45,10 @@
 @property(nonatomic, strong) IBOutlet NSBox *passwordTypesBox;
 @property(nonatomic, weak) IBOutlet NSMatrix *passwordTypesMatrix;
 
+@property(nonatomic, strong) IBOutlet NSBox *securityQuestionsBox;
+@property(nonatomic, weak) IBOutlet NSTextField *securityQuestionField;
+@property(nonatomic, weak) IBOutlet NSTextField *securityAnswerField;
+
 - (BOOL)handleCommand:(SEL)commandSelector;
 
 @end

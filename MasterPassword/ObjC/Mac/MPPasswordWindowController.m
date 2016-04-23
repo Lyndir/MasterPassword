@@ -411,6 +411,30 @@
     }];
 }
 
+- (IBAction)securityQuestions:(id)sender {
+
+    MPSiteModel *site = self.selectedSite;
+    self.securityQuestionsBox.title = strf( @"Answer to security questions for %@:", site.name );
+
+    NSAlert *alert = [NSAlert new];
+    [alert addButtonWithTitle:@"Copy Answer"];
+    [alert addButtonWithTitle:@"Close"];
+    [alert setMessageText:@"Security Questions"];
+    [alert setAccessoryView:self.securityQuestionsBox];
+    [alert layout];
+    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+        switch (returnCode) {
+            case NSAlertFirstButtonReturn: {
+                // "Copy Answer" button.
+                [self copyContent:self.securityAnswerField.stringValue];
+                break;
+            }
+            default:
+                break;
+        }
+    }];
+}
+
 #pragma mark - Private
 
 - (BOOL)handleCommand:(SEL)commandSelector {
