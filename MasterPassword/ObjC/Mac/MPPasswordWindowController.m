@@ -23,14 +23,6 @@
 #import "MPAppDelegate_Store.h"
 #import "MPAppDelegate_Key.h"
 
-#define MPAlertIncorrectMP      @"MPAlertIncorrectMP"
-#define MPAlertChangeMP         @"MPAlertChangeMP"
-#define MPAlertCreateSite       @"MPAlertCreateSite"
-#define MPAlertChangeType       @"MPAlertChangeType"
-#define MPAlertChangeLogin      @"MPAlertChangeLogin"
-#define MPAlertChangeContent    @"MPAlertChangeContent"
-#define MPAlertDeleteSite       @"MPAlertDeleteSite"
-
 @interface MPPasswordWindowController()
 
 @property(nonatomic, strong) CAGradientLayer *siteGradient;
@@ -193,8 +185,7 @@
             if (!success)
                 [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
                         NSLocalizedDescriptionKey : strf( @"Incorrect master password for user %@", userName )
-                }]] beginSheetModalForWindow:self.window modalDelegate:self
-                              didEndSelector:@selector( alertDidEnd:returnCode:contextInfo: ) contextInfo:MPAlertIncorrectMP];
+                }]] beginSheetModalForWindow:self.window completionHandler:nil];
         } );
     }];
 }
@@ -223,122 +214,6 @@
 - (void)tableView:(NSTableView *)tableView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
 
     [self replaceFonts:rowView];
-}
-
-#pragma mark - NSAlert
-
-- (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-
-    if (contextInfo == MPAlertIncorrectMP)
-        return;
-    if (contextInfo == MPAlertChangeMP) {
-        switch (returnCode) {
-            case NSAlertFirstButtonReturn: {
-                // "Reset" button.
-                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:context];
-                    NSString *activeUserName = activeUser.name;
-                    activeUser.keyID = nil;
-                    [[MPMacAppDelegate get] forgetSavedKeyFor:activeUser];
-                    [context saveToStore];
-
-                    PearlMainQueue( ^{
-                        NSAlert *alert_ = [NSAlert new];
-                        alert_.messageText = @"Master Password Reset";
-                        alert_.informativeText = strf( @"%@'s master password has been reset.\n\nYou can now set a new one by logging in.",
-                                activeUserName );
-                        [alert_ beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:NULL contextInfo:nil];
-
-                        if ([MPMacAppDelegate get].key)
-                            [[MPMacAppDelegate get] signOutAnimated:YES];
-                    } );
-                }];
-            }
-            default:
-                break;
-        }
-        return;
-    }
-    if (contextInfo == MPAlertCreateSite) {
-        switch (returnCode) {
-            case NSAlertFirstButtonReturn: {
-                // "Create" button.
-                [[MPMacAppDelegate get] addSiteNamed:[self.siteField stringValue] completion:
-                        ^(MPSiteEntity *site, NSManagedObjectContext *context) {
-                            if (site)
-                                PearlMainQueue( ^{ [self updateSites]; } );
-                        }];
-                break;
-            }
-            default:
-                break;
-        }
-    }
-    if (contextInfo == MPAlertChangeType) {
-        switch (returnCode) {
-            case NSAlertFirstButtonReturn: {
-                // "Save" button.
-                MPSiteType type = (MPSiteType)[self.passwordTypesMatrix.selectedCell tag];
-                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPSiteEntity *entity = [[MPMacAppDelegate get] changeSite:[self.selectedSite entityInContext:context]
-                                                                saveInContext:context toType:type];
-                    if ([entity isKindOfClass:[MPStoredSiteEntity class]] && ![(MPStoredSiteEntity *)entity contentObject].length)
-                        PearlMainQueue( ^{
-                            [self changePassword:nil];
-                        } );
-                }];
-                break;
-            }
-            default:
-                break;
-        }
-    }
-    if (contextInfo == MPAlertChangeLogin) {
-        switch (returnCode) {
-            case NSAlertFirstButtonReturn: {
-                // "Save" button.
-                NSString *loginName = [(NSSecureTextField *)alert.accessoryView stringValue];
-                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPSiteEntity *entity = [self.selectedSite entityInContext:context];
-                    entity.loginName = loginName;
-                    [context saveToStore];
-                }];
-                break;
-            }
-            default:
-                break;
-        }
-    }
-    if (contextInfo == MPAlertChangeContent) {
-        switch (returnCode) {
-            case NSAlertFirstButtonReturn: {
-                // "Save" button.
-                NSString *password = [(NSSecureTextField *)alert.accessoryView stringValue];
-                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    MPSiteEntity *entity = [self.selectedSite entityInContext:context];
-                    [entity.algorithm savePassword:password toSite:entity usingKey:[MPMacAppDelegate get].key];
-                    [context saveToStore];
-                }];
-                break;
-            }
-            default:
-                break;
-        }
-    }
-    if (contextInfo == MPAlertDeleteSite) {
-        switch (returnCode) {
-            case NSAlertFirstButtonReturn: {
-                // "Delete" button.
-                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                    [context deleteObject:[self.selectedSite entityInContext:context]];
-                    [context saveToStore];
-                }];
-                break;
-            }
-            default:
-                break;
-        }
-    }
 }
 
 #pragma mark - State
@@ -373,8 +248,20 @@
     [alert addButtonWithTitle:@"Cancel"];
     [alert setMessageText:@"Delete Site?"];
     [alert setInformativeText:strf( @"Do you want to delete the site named:\n\n%@", self.selectedSite.name )];
-    [alert beginSheetModalForWindow:self.window modalDelegate:self
-                     didEndSelector:@selector( alertDidEnd:returnCode:contextInfo: ) contextInfo:MPAlertDeleteSite];
+    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+        switch (returnCode) {
+            case NSAlertFirstButtonReturn: {
+                // "Delete" button.
+                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                    [context deleteObject:[self.selectedSite entityInContext:context]];
+                    [context saveToStore];
+                }];
+                break;
+            }
+            default:
+                break;
+        }
+    }];
 }
 
 - (IBAction)changeLogin:(id)sender {
@@ -389,23 +276,62 @@
     [loginField selectText:self];
     [alert setAccessoryView:loginField];
     [alert layout];
-    [alert beginSheetModalForWindow:self.window modalDelegate:self
-                     didEndSelector:@selector( alertDidEnd:returnCode:contextInfo: ) contextInfo:MPAlertChangeLogin];
+    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+        switch (returnCode) {
+            case NSAlertFirstButtonReturn: {
+                // "Save" button.
+                NSString *loginName = [(NSSecureTextField *)alert.accessoryView stringValue];
+                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                    MPSiteEntity *entity = [self.selectedSite entityInContext:context];
+                    entity.loginName = loginName;
+                    [context saveToStore];
+                }];
+                break;
+            }
+            default:
+                break;
+        }
+    }];
 }
 
 - (IBAction)resetMasterPassword:(id)sender {
-
-    MPUserEntity *activeUser = [MPMacAppDelegate get].activeUserForMainThread;
 
     NSAlert *alert = [NSAlert new];
     [alert addButtonWithTitle:@"Reset"];
     [alert addButtonWithTitle:@"Cancel"];
     [alert setMessageText:@"Reset My Master Password"];
     [alert setInformativeText:strf( @"This will allow you to change %@'s master password.\n\n"
-            @"WARNING: All your site passwords will change.  Do this only if you've forgotten your "
-            @"master password and are fully prepared to change all your sites' passwords to the new ones.", activeUser.name )];
-    [alert beginSheetModalForWindow:self.window modalDelegate:self
-                     didEndSelector:@selector( alertDidEnd:returnCode:contextInfo: ) contextInfo:MPAlertChangeMP];
+                    @"WARNING: All your site passwords will change.  Do this only if you've forgotten your "
+                    @"master password and are fully prepared to change all your sites' passwords to the new ones.",
+            [MPMacAppDelegate get].activeUserForMainThread.name )];
+
+    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+        switch (returnCode) {
+            case NSAlertFirstButtonReturn: {
+                // "Reset" button.
+                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                    MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:context];
+                    NSString *activeUserName = activeUser.name;
+                    activeUser.keyID = nil;
+                    [[MPMacAppDelegate get] forgetSavedKeyFor:activeUser];
+                    [context saveToStore];
+
+                    PearlMainQueue( ^{
+                        NSAlert *alert_ = [NSAlert new];
+                        alert_.messageText = @"Master Password Reset";
+                        alert_.informativeText = strf( @"%@'s master password has been reset.\n\nYou can now set a new one by logging in.",
+                                activeUserName );
+                        [alert_ beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:NULL contextInfo:nil];
+
+                        if ([MPMacAppDelegate get].key)
+                            [[MPMacAppDelegate get] signOutAnimated:YES];
+                    } );
+                }];
+            }
+            default:
+                break;
+        }
+    }];
 }
 
 - (IBAction)changePassword:(id)sender {
@@ -420,8 +346,22 @@
     [alert setInformativeText:strf( @"Enter the new password for: %@", self.selectedSite.name )];
     [alert setAccessoryView:[[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )]];
     [alert layout];
-    [alert beginSheetModalForWindow:self.window modalDelegate:self
-                     didEndSelector:@selector( alertDidEnd:returnCode:contextInfo: ) contextInfo:MPAlertChangeContent];
+    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+        switch (returnCode) {
+            case NSAlertFirstButtonReturn: {
+                // "Save" button.
+                NSString *password = [(NSSecureTextField *)alert.accessoryView stringValue];
+                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                    MPSiteEntity *entity = [self.selectedSite entityInContext:context];
+                    [entity.algorithm savePassword:password toSite:entity usingKey:[MPMacAppDelegate get].key];
+                    [context saveToStore];
+                }];
+                break;
+            }
+            default:
+                break;
+        }
+    }];
 }
 
 - (IBAction)changeType:(id)sender {
@@ -450,8 +390,25 @@
     [alert setMessageText:@"Change Password Type"];
     [alert setAccessoryView:self.passwordTypesBox];
     [alert layout];
-    [alert beginSheetModalForWindow:self.window modalDelegate:self
-                     didEndSelector:@selector( alertDidEnd:returnCode:contextInfo: ) contextInfo:MPAlertChangeType];
+    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+        switch (returnCode) {
+            case NSAlertFirstButtonReturn: {
+                // "Save" button.
+                MPSiteType type = (MPSiteType)[self.passwordTypesMatrix.selectedCell tag];
+                [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+                    MPSiteEntity *entity = [[MPMacAppDelegate get] changeSite:[self.selectedSite entityInContext:context]
+                                                                saveInContext:context toType:type];
+                    if ([entity isKindOfClass:[MPStoredSiteEntity class]] && ![(MPStoredSiteEntity *)entity contentObject].length)
+                        PearlMainQueue( ^{
+                            [self changePassword:nil];
+                        } );
+                }];
+                break;
+            }
+            default:
+                break;
+        }
+    }];
 }
 
 #pragma mark - Private
@@ -618,8 +575,21 @@
         [alert addButtonWithTitle:@"Cancel"];
         [alert setMessageText:@"Create site?"];
         [alert setInformativeText:strf( @"Do you want to create a new site named:\n\n%@", siteName )];
-        [alert beginSheetModalForWindow:self.window modalDelegate:self
-                         didEndSelector:@selector( alertDidEnd:returnCode:contextInfo: ) contextInfo:MPAlertCreateSite];
+        [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+            switch (returnCode) {
+                case NSAlertFirstButtonReturn: {
+                    // "Create" button.
+                    [[MPMacAppDelegate get] addSiteNamed:[self.siteField stringValue] completion:
+                            ^(MPSiteEntity *site, NSManagedObjectContext *context) {
+                                if (site)
+                                    PearlMainQueue( ^{ [self updateSites]; } );
+                            }];
+                    break;
+                }
+                default:
+                    break;
+            }
+        }];
     } );
 }
 
