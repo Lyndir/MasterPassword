@@ -209,6 +209,14 @@
     [self.algorithm resolveAnswerForSite:self usingKey:key result:result];
 }
 
+- (void)resolveAnswerUsingKey:(MPKey *)key forQuestion:(NSString *)question result:(void ( ^ )(NSString *))result {
+
+    MPSiteQuestionEntity *questionEntity = [MPSiteQuestionEntity new];
+    questionEntity.site = self;
+    questionEntity.keyword = question;
+    [questionEntity resolveQuestionAnswerUsingKey:key result:result];
+}
+
 @end
 
 @implementation MPGeneratedSiteEntity(MP)

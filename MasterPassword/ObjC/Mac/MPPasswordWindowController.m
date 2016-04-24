@@ -433,6 +433,9 @@
                 break;
         }
     }];
+    PearlMainQueueAfter(2, ^{
+        [[[alert buttons] firstObject] becomeFirstResponder];
+    });
 }
 
 #pragma mark - Private

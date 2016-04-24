@@ -226,9 +226,8 @@
     [entity resolveLoginUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
         [self updateLoginNameWithResult:result];
     }];
-    [entity resolveSiteAnswerUsingKey:[MPAppDelegate_Shared get].key result:^(NSString *result) {
-        [self updateAnswerWithResult:result];
-    }];
+    [self updateAnswerWithResult:[self.algorithm generateAnswerForSiteNamed:self.name onQuestion:self.question
+                                                                   usingKey:[MPAppDelegate_Shared get].key]];
 }
 
 - (void)updatePasswordWithResult:(NSString *)result {

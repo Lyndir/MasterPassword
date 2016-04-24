@@ -49,6 +49,7 @@
 - (void)resolveLoginUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result;
 - (void)resolvePasswordUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result;
 - (void)resolveSiteAnswerUsingKey:(MPKey *)key result:(void ( ^ )(NSString *))result;
+- (void)resolveAnswerUsingKey:(MPKey *)key forQuestion:(NSString *)question result:(void ( ^ )(NSString *))result;
 
 @end
 
