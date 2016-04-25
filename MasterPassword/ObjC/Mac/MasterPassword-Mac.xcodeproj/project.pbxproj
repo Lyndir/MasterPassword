@@ -2569,7 +2569,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Mac,
+					"\"$(SRCROOT)/../../../External/Mac\"",
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
@@ -2577,7 +2577,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
+					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
 				PROVISIONING_PROFILE = "";
@@ -2598,7 +2598,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Mac,
+					"\"$(SRCROOT)/../../../External/Mac\"",
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
@@ -2606,7 +2606,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
+					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
 				PROVISIONING_PROFILE = "";
@@ -2753,7 +2753,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Mac,
+					"\"$(SRCROOT)/../../../External/Mac\"",
 				);
 				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
@@ -2761,7 +2761,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
+					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
 				PROVISIONING_PROFILE = "";
@@ -2779,9 +2779,7 @@
 				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto\"",
 					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
-					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2861,9 +2859,7 @@
 				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto\"",
 					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
-					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2880,9 +2876,7 @@
 				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto\"",
 					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
-					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";

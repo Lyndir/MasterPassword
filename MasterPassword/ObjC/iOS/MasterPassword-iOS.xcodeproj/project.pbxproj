@@ -4225,7 +4225,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
-					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4325,7 +4324,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
-					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4341,7 +4339,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
-					"/Users/lhunath/Documents/workspace/lyndir/MasterPassword/External/Pearl/Pearl-Crypto/lib",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
