@@ -35,7 +35,7 @@
         [self setLevel:NSScreenSaverWindowLevel];
         [self setFrame:self.screen.frame display:YES];
     }
-    else {
+    else if (self.level != NSNormalWindowLevel) {
         [self setLevel:NSNormalWindowLevel];
         [self setFrame:NSMakeRect( 0, 0, 640, 600) display:NO];
         [self center];
