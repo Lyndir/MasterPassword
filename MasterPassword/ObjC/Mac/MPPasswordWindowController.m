@@ -427,15 +427,13 @@
             case NSAlertFirstButtonReturn: {
                 // "Copy Answer" button.
                 [self copyContent:self.securityAnswerField.stringValue];
+                [self.window close];
                 break;
             }
             default:
                 break;
         }
     }];
-    PearlMainQueueAfter(2, ^{
-        [[[alert buttons] firstObject] becomeFirstResponder];
-    });
 }
 
 #pragma mark - Private
@@ -475,7 +473,6 @@
 
     // Performing action while content is available.  Copy it.
     [self copyContent:self.shiftPressed? selectedSite.answer: selectedSite.content];
-
     [self.window close];
 
     NSUserNotification *notification = [NSUserNotification new];
