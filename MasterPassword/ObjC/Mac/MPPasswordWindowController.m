@@ -42,14 +42,6 @@
     [self replaceFonts:self.window.contentView];
     prof_rewind( @"replaceFonts" );
 
-//    [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillBecomeActiveNotification object:nil
-//                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-//        [self fadeIn];
-//    }];
-//    [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillResignActiveNotification object:nil
-//                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-//        [self fadeOut];
-//    }];
     [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:self.window
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
                 prof_new( @"didBecomeKey" );
@@ -66,9 +58,7 @@
             }];
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillResignActiveNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-#ifndef DEBUG
-                [self.window fadeOut];
-#endif
+                [self.window close];
             }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedInNotification object:nil
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
