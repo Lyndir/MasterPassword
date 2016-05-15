@@ -356,6 +356,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     }
 
     [MPMacConfig flush];
+    [self updateMenuItems];
 }
 
 - (IBAction)newUser:(NSMenuItem *)sender {
