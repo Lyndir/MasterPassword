@@ -16,6 +16,7 @@
 		93D395F08A087F8A24689347 /* NSArray+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */; };
 		93D39784E725A34D1EE3FB3B /* MPInitialWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D3CB30874147D9A9E1B /* MPInitialWindowController.m */; };
 		93D3987F6D9046DBEE4D8364 /* NSView+Traversing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D392870DF659AFC1870521 /* NSView+Traversing.m */; };
+		93D398D1F5D8CD5A22AF6929 /* MPGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39934FD8D5BFABA46F41C /* MPGradientView.m */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
 		93D39C5789EFA607CF788082 /* MPSiteModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39E73BF5CBF8E5B005CD3 /* MPSiteModel.m */; };
 		93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */; };
@@ -271,6 +272,7 @@
 		93D392870DF659AFC1870521 /* NSView+Traversing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+Traversing.m"; sourceTree = "<group>"; };
 		93D392A4F3DE0BD758B9B056 /* MPNoStateButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNoStateButton.h; sourceTree = "<group>"; };
 		93D392C3918763B3B72CF366 /* MPPasswordWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindowController.h; sourceTree = "<group>"; };
+		93D392FD65A1DF0E8B2A45C6 /* MPGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPGradientView.h; sourceTree = "<group>"; };
 		93D39368EF3CBFEF2AFCA15A /* MPInitialWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPInitialWindowController.h; sourceTree = "<group>"; };
 		93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Indexing.h"; sourceTree = "<group>"; };
 		93D393EE88DE554BCCBC1C2D /* NSView+Traversing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+Traversing.h"; sourceTree = "<group>"; };
@@ -279,6 +281,7 @@
 		93D39538C4CEFF46DF379254 /* MPNoStateButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNoStateButton.m; sourceTree = "<group>"; };
 		93D396D04E57792A54D437AC /* NSArray+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Indexing.h"; sourceTree = "<group>"; };
 		93D3977484534E99F9BA579D /* MPPasswordWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPasswordWindow.h; sourceTree = "<group>"; };
+		93D39934FD8D5BFABA46F41C /* MPGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPGradientView.m; sourceTree = "<group>"; };
 		93D39A57A7823DE98A0FF83C /* MPPasswordWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordWindowController.m; sourceTree = "<group>"; };
 		93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Indexing.m"; sourceTree = "<group>"; };
 		93D39AC6360DDC16AEAA4119 /* MPSitesTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSitesTableView.h; sourceTree = "<group>"; };
@@ -1145,6 +1148,8 @@
 				93D39423D7BF4FD31FE6D27C /* MPSitesTableView.m */,
 				93D39F83DD151985F2C7345A /* MPMacApplication.m */,
 				93D3942099C9AD0374B5777D /* MPMacApplication.h */,
+				93D39934FD8D5BFABA46F41C /* MPGradientView.m */,
+				93D392FD65A1DF0E8B2A45C6 /* MPGradientView.h */,
 			);
 			path = Mac;
 			sourceTree = "<group>";
@@ -2269,6 +2274,7 @@
 				DA4DAE941A7D8117003E5423 /* MPAlgorithmV3.m in Sources */,
 				DA4DAE951A7D8117003E5423 /* MPTypes.m in Sources */,
 				93D393A1646430FAAC73E7FE /* MPMacApplication.m in Sources */,
+				93D398D1F5D8CD5A22AF6929 /* MPGradientView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

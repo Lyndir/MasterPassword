@@ -34,6 +34,7 @@
 @property (nonatomic) NSString *question;
 @property (nonatomic) NSString *answer;
 @property (nonatomic) NSString *loginName;
+@property (nonatomic) BOOL loginGenerated;
 @property (nonatomic) NSNumber *uses;
 @property (nonatomic) NSUInteger counter;
 @property (nonatomic) NSDate *lastUsed;

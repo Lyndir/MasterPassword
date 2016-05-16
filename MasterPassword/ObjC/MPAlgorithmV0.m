@@ -496,7 +496,7 @@ NSOperationQueue *_mpwQueue = nil;
     NSAssert( [[siteKey keyIDForAlgorithm:site.user.algorithm] isEqualToData:site.user.keyID], @"Site does not belong to current user." );
     NSString *name = site.name;
     BOOL loginGenerated = site.loginGenerated && [[MPAppDelegate_Shared get] isFeatureUnlocked:MPProductGenerateLogins];
-    NSString *loginName = loginGenerated? nil: site.loginName;
+    NSString *loginName = site.loginName;
     id<MPAlgorithm> algorithm = nil;
     if (!name.length)
         err( @"Missing name." );
@@ -506,10 +506,8 @@ NSOperationQueue *_mpwQueue = nil;
         algorithm = site.algorithm;
 
     dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
-        if (loginGenerated)
-            resultBlock( [algorithm generateLoginForSiteNamed:name usingKey:siteKey] );
-        else
-            resultBlock( loginName );
+        resultBlock( loginName || !loginGenerated? loginName:
+                     [algorithm generateLoginForSiteNamed:name usingKey:siteKey] );
     } );
 }
 
@@ -611,7 +609,7 @@ NSOperationQueue *_mpwQueue = nil;
         err( @"Missing name." );
     else if (!siteKey)
         err( @"Missing key." );
-    else
+    else if ([[MPAppDelegate_Shared get] isFeatureUnlocked:MPProductGenerateAnswers])
         algorithm = question.site.algorithm;
 
     dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{

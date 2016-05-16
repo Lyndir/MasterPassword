@@ -17,7 +17,6 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
-#import <Foundation/Foundation.h>
 #import "MPPasswordWindowController.h"
 #import "MPMacAppDelegate.h"
 #import "MPAppDelegate_Store.h"
@@ -260,21 +259,36 @@
     [alert addButtonWithTitle:@"Save"];
     [alert addButtonWithTitle:@"Cancel"];
     [alert setMessageText:@"Change Login Name"];
-    [alert setInformativeText:strf( @"Enter the login name for: %@", self.selectedSite.name )];
-    NSTextField *loginField = [[NSTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
-    loginField.stringValue = self.selectedSite.loginName?: @"";
-    [loginField selectText:self];
-    [alert setAccessoryView:loginField];
+    [alert setInformativeText:strf( @"Your login name for: %@", self.selectedSite.name )];
+    NSTextField *loginField = [NSTextField new];
+    [loginField bind:@"value" toObject:self.selectedSite withKeyPath:@"loginName" options:nil];
+    NSButton *generatedField = [NSButton new];
+    [generatedField setButtonType:NSSwitchButton];
+    [generatedField bind:@"value" toObject:self.selectedSite withKeyPath:@"loginGenerated" options:nil];
+    generatedField.title = @"Generated";
+    NSStackView *stackView = [NSStackView stackViewWithViews:@[ loginField, generatedField ]];
+    stackView.orientation = NSUserInterfaceLayoutOrientationVertical;
+    stackView.frame = NSMakeRect( 0, 0, 200, 44 );
+    [stackView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[loginField(200)]"
+                                                                      options:0 metrics:nil
+                                                                        views:NSDictionaryOfVariableBindings( loginField, stackView )]];
+    [stackView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[generatedField(200)]"
+                                                                      options:0 metrics:nil
+                                                                        views:NSDictionaryOfVariableBindings( generatedField, stackView )]];
+    [alert setAccessoryView:stackView];
     [alert layout];
+    [loginField selectText:self];
+
     [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
         switch (returnCode) {
             case NSAlertFirstButtonReturn: {
                 // "Save" button.
-                NSString *loginName = [(NSSecureTextField *)alert.accessoryView stringValue];
+                NSString *loginName = [loginField stringValue];
                 [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                     MPSiteEntity *entity = [self.selectedSite entityInContext:context];
-                    entity.loginName = loginName;
+                    entity.loginName = !self.selectedSite.loginGenerated && [loginName length]? loginName: nil;
                     [context saveToStore];
+                    [self.selectedSite updateContent];
                 }];
                 break;
             }
@@ -311,7 +325,7 @@
                         alert_.messageText = @"Master Password Reset";
                         alert_.informativeText = strf( @"%@'s master password has been reset.\n\nYou can now set a new one by logging in.",
                                 activeUserName );
-                        [alert_ beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:NULL contextInfo:nil];
+                        [alert_ beginSheetModalForWindow:self.window completionHandler:nil];
 
                         if ([MPMacAppDelegate get].key)
                             [[MPMacAppDelegate get] signOutAnimated:YES];
@@ -334,17 +348,19 @@
     [alert addButtonWithTitle:@"Cancel"];
     [alert setMessageText:@"Change Password"];
     [alert setInformativeText:strf( @"Enter the new password for: %@", self.selectedSite.name )];
-    [alert setAccessoryView:[[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )]];
+    NSSecureTextField *passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
+    [alert setAccessoryView:passwordField];
     [alert layout];
     [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
         switch (returnCode) {
             case NSAlertFirstButtonReturn: {
                 // "Save" button.
-                NSString *password = [(NSSecureTextField *)alert.accessoryView stringValue];
+                NSString *password = [passwordField stringValue];
                 [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                     MPSiteEntity *entity = [self.selectedSite entityInContext:context];
                     [entity.algorithm savePassword:password toSite:entity usingKey:[MPMacAppDelegate get].key];
                     [context saveToStore];
+                    [self.selectedSite updateContent];
                 }];
                 break;
             }

@@ -216,6 +216,12 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     return NO;
 }
 
+- (BOOL)isFeatureUnlocked:(NSString *)productIdentifier {
+
+    // All features are unlocked for mac versions.
+    return YES;
+}
+
 #pragma mark - Actions
 
 - (void)selectUser:(NSMenuItem *)item {

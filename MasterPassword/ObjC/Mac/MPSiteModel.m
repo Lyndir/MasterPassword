@@ -79,6 +79,8 @@
     self.typeName = entity.typeName;
     self.uses = entity.uses_;
     self.counter = [entity isKindOfClass:[MPGeneratedSiteEntity class]]? [(MPGeneratedSiteEntity *)entity counter]: 0;
+    self.loginGenerated = entity.loginGenerated;
+    NSLog( @"%@: loginGenerated: %d", self.name, self.loginGenerated );
 
     // Find all password types and the index of the current type amongst them.
     [self updateContent:entity];
@@ -138,6 +140,28 @@
 
                 [self updateContent:entity];
             }
+        }];
+    else
+        [self updateContent];
+}
+
+- (void)setLoginGenerated:(BOOL)loginGenerated {
+
+    if (loginGenerated == _loginGenerated)
+        return;
+    _loginGenerated = loginGenerated;
+
+    if (!_initialized)
+        // This wasn't a change to the entity.
+        return;
+
+    if (_entityOID)
+        [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+            MPSiteEntity *entity = [self entityInContext:context];
+            entity.loginGenerated = loginGenerated;
+            [context saveToStore];
+
+            [self updateContent:entity];
         }];
     else
         [self updateContent];
@@ -252,6 +276,7 @@
 
     PearlMainQueue( ^{
         self.loginName = loginName;
+        NSLog( @"%@: loginGenerated: %d, loginName: %@", self.name, self.loginGenerated, loginName );
     } );
 }
 

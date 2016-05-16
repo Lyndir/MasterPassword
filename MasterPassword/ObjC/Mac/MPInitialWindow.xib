@@ -17,7 +17,7 @@
         <window title="Welcome to Master Password" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" animationBehavior="default" id="1">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" moveToActiveSpace="YES"/>
-            <rect key="contentRect" x="196" y="240" width="1000" height="640"/>
+            <rect key="contentRect" x="0.0" y="0.0" width="1000" height="640"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="2" userLabel="Container">
                 <rect key="frame" x="0.0" y="0.0" width="1000" height="640"/>
@@ -102,11 +102,8 @@ from anywhere.</string>
                             <constraint firstItem="C4d-ih-ARL" firstAttribute="top" secondItem="283" secondAttribute="bottom" constant="8" symbolic="YES" id="tqS-gV-jpd"/>
                         </constraints>
                     </customView>
-                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="508">
-                        <rect key="frame" x="858" y="8" width="122" height="25"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="122" id="509"/>
-                        </constraints>
+                    <button horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="508">
+                        <rect key="frame" x="770" y="8" width="210" height="25"/>
                         <buttonCell key="cell" type="roundTextured" title="Launch After Computer Restarts" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="510">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -116,7 +113,7 @@ from anywhere.</string>
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="562">
-                        <rect key="frame" x="21" y="13" width="831" height="17"/>
+                        <rect key="frame" x="21" y="13" width="743" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="To begin: hold command, control and P (⌘⌃P) or access the ●●●| menu icon next to your clock." id="563">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
