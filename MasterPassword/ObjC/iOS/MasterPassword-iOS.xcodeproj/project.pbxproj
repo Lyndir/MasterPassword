@@ -4038,7 +4038,7 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-framework",
+					"-weak_framework",
 					Reveal,
 				);
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
