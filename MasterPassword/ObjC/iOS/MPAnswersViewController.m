@@ -46,6 +46,13 @@
             } );
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+
+    [super viewDidAppear:animated];
+
+    [self.view.window endEditing:YES];
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
 
     [super viewWillDisappear:animated];
