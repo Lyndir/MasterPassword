@@ -3928,6 +3928,7 @@
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				WARNING_CFLAGS = "-Wno-float-conversion";
 			};
 			name = "Debug-iOS";
 		};
@@ -4013,6 +4014,7 @@
 				STRIP_INSTALLED_PRODUCT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				WARNING_CFLAGS = "-Wno-float-conversion";
 			};
 			name = "AdHoc-iOS";
 		};
@@ -4175,6 +4177,7 @@
 				STRIP_INSTALLED_PRODUCT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				WARNING_CFLAGS = "-Wno-float-conversion";
 			};
 			name = "AppStore-iOS";
 		};
