@@ -369,16 +369,16 @@ referenceSizeForFooterInSection:(NSInteger)section {
             userAvatar.spinnerActive = YES;
             if (!isNew && mainUser && [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                 MPUserEntity *user = [MPUserEntity existingObjectWithID:mainUser.objectID inContext:context];
-                BOOL signedIn = [[MPiOSAppDelegate get] signInAsUser:user saveInContext:mainContext usingMasterPassword:nil];
-                
-                PearlMainQueue(^{
+                BOOL signedIn = [[MPiOSAppDelegate get] signInAsUser:user saveInContext:context usingMasterPassword:nil];
+
+                PearlMainQueue( ^{
                     self.entryField.text = @"";
                     self.entryField.enabled = YES;
                     userAvatar.spinnerActive = NO;
 
                     if (!signedIn)
                         [self.entryField becomeFirstResponder];
-                });
+                } );
             }])
                 return;
 
