@@ -259,11 +259,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     NSURL *url = openPanel.URL;
     [openPanel close];
 
-    PearlNotMainQueue( ^{
-        NSError *error;
-        NSURLResponse *response;
-        NSData *importedSitesData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
-                                                          returningResponse:&response error:&error];
+    [[NSURLSession sharedSession]
+            dataTaskWithURL:url completionHandler:^(NSData *importedSitesData, NSURLResponse *response, NSError *error) {
         if (error)
             err( @"While reading imported sites from %@: %@", url, [error fullDescription] );
         if (!importedSitesData)
@@ -335,7 +332,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                     break;
             }
         } );
-    } );
+    }];
 }
 
 - (IBAction)togglePreference:(id)sender {
@@ -367,16 +364,18 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)newUser:(NSMenuItem *)sender {
 
-    NSAlert *alert = [NSAlert alertWithMessageText:@"New User"
-                                     defaultButton:@"Create User" alternateButton:nil otherButton:@"Cancel"
-                         informativeTextWithFormat:@"To begin, enter your full name.\n\n"
-                                 @"IMPORTANT: Enter your name correctly, including the right capitalization, "
-                                 @"as you would on an official document."];
+    NSAlert *alert = [NSAlert new];
+    [alert setMessageText:@"New User"];
+    [alert setInformativeText:@"To begin, enter your full name.\n\n"
+            @"IMPORTANT: Enter your name correctly, including the right capitalization, "
+            @"as you would on an official document."];
+    [alert addButtonWithTitle:@"Create User"];
+    [alert addButtonWithTitle:@"Cancel"];
     NSTextField *nameField = [[NSTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
     [alert setAccessoryView:nameField];
     [alert layout];
     [nameField becomeFirstResponder];
-    if ([alert runModal] != NSAlertDefaultReturn)
+    if ([alert runModal] != NSAlertFirstButtonReturn)
         return;
 
     NSString *name = [(NSSecureTextField *)alert.accessoryView stringValue];
@@ -399,10 +398,12 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
 - (IBAction)deleteUser:(NSMenuItem *)sender {
 
-    NSAlert *alert = [NSAlert alertWithMessageText:@"Delete User"
-                                     defaultButton:@"Delete" alternateButton:nil otherButton:@"Cancel"
-                         informativeTextWithFormat:@"This will delete %@ and all their sites.", self.activeUserForMainThread.name];
-    if ([alert runModal] != NSAlertDefaultReturn)
+    NSAlert *alert = [NSAlert new];
+    [alert setMessageText:@"Delete User"];
+    [alert setInformativeText:strf( @"This will delete %@ and all their sites.", self.activeUserForMainThread.name )];
+    [alert addButtonWithTitle:@"Delete"];
+    [alert addButtonWithTitle:@"Cancel"];
+    if ([alert runModal] != NSAlertFirstButtonReturn)
         return;
 
     [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {

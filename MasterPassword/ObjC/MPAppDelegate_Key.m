@@ -100,7 +100,6 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
     if (self.key)
         self.key = nil;
 
-    self.activeUser = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedOutNotification object:self userInfo:@{ @"animated" : @(animated) }];
 }
 
