@@ -43,7 +43,7 @@ printf -v commit '%s' "${description##*-g}"
 
 addPlistWithKey GITDescription string "$description"
 setPlistWithKey CFBundleVersion "$(hr "${version%%.*}" 13).${version#*.}"
-setPlistWithKey CFBundleShortVersionString "$release"
+setPlistWithKey CFBundleShortVersionString "$version"
 
 setSettingWithTitle "Build" "$commit"
 setSettingWithTitle "Version" "$version"
