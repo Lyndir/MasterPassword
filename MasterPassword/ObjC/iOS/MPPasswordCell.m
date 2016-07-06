@@ -532,23 +532,21 @@
         self.passwordField.attributedPlaceholder = stra(
                 mainSite.type & MPSiteTypeClassStored? strl( @"No password" ):
                 mainSite.type & MPSiteTypeClassGenerated? strl( @"..." ): @"", @{
-                NSForegroundColorAttributeName : [UIColor whiteColor]
-        } );
+                        NSForegroundColorAttributeName : [UIColor whiteColor]
+                } );
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             MPSiteEntity *site = [self siteInContext:context];
             MPKey *key = [MPiOSAppDelegate get].key;
             if (!key)
                 return;
 
-            NSString *password, *loginName = [site resolveLoginUsingKey:key];
-            if (self.transientSite)
-                password = [MPAlgorithmDefault generatePasswordForSiteNamed:self.transientSite ofType:
-                                [[MPiOSAppDelegate get] activeUserInContext:context].defaultType?: MPSiteTypeGeneratedLong
+            NSString *password = nil, *loginName = [site resolveLoginUsingKey:key];
+            MPSiteType transientType = [[MPiOSAppDelegate get] activeUserInContext:context].defaultType?: MPSiteTypeGeneratedLong;
+            if (self.transientSite && transientType & MPSiteTypeClassGenerated)
+                password = [MPAlgorithmDefault generatePasswordForSiteNamed:self.transientSite ofType:transientType
                                                                 withCounter:1 usingKey:key];
             else if (site)
                 password = [site resolvePasswordUsingKey:key];
-            else
-                return;
 
             TimeToCrack timeToCrack;
             NSString *timeToCrackString = nil;

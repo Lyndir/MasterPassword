@@ -66,6 +66,9 @@ void mpw_freeString(const char *string) {
 uint8_t const *mpw_scrypt(const size_t keySize, const char *secret, const uint8_t *salt, const size_t saltSize,
         uint64_t N, uint32_t r, uint32_t p) {
 
+    if (!secret || !salt)
+        return NULL;
+
     uint8_t *key = malloc( keySize );
     if (!key)
         return NULL;
