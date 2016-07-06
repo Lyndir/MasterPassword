@@ -78,6 +78,7 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
     if (user.saveKey) {
         inf( @"Saving key in keychain for user: %@", user.userID );
 
+        [self forgetSavedKeyFor:user];
         [PearlKeyChain addOrUpdateItemForQuery:createKeyQuery( user, YES, nil )
                                 withAttributes:@{
                                         (__bridge id)kSecValueData : [self.key keyDataForAlgorithm:user.algorithm],
@@ -100,6 +101,7 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
     if (self.key)
         self.key = nil;
 
+    self.activeUser = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedOutNotification object:self userInfo:@{ @"animated" : @(animated) }];
 }
 
@@ -171,15 +173,7 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
         self.key = tryKey;
 
         // Update the key chain if necessary.
-        switch (self.key.origin) {
-            case MPKeyOriginMasterPassword:
-                [self storeSavedKeyFor:user];
-                break;
-
-            case MPKeyOriginKeyChain:
-            case MPKeyOriginKeyChainBiometric:
-                break;
-        }
+        [self storeSavedKeyFor:user];
     }
 
     @try {
