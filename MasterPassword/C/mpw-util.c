@@ -54,8 +54,10 @@ void mpw_pushInt(uint8_t **const buffer, size_t *const bufferSize, const uint32_
 
 void mpw_free(const void *buffer, const size_t bufferSize) {
 
-    memset( (void *)buffer, 0, bufferSize );
-    free( (void *)buffer );
+    if (buffer) {
+        memset( (void *)buffer, 0, bufferSize );
+        free( (void *)buffer );
+    }
 }
 
 void mpw_freeString(const char *string) {

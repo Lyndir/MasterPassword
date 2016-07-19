@@ -140,10 +140,12 @@ NSOperationQueue *_mpwQueue = nil;
     [self mpw_perform:^{
         NSDate *start = [NSDate date];
         uint8_t const *masterKeyBytes = mpw_masterKeyForUser( fullName.UTF8String, masterPassword.UTF8String, [self version] );
-        keyData = [NSData dataWithBytes:masterKeyBytes length:MP_dkLen];
-        trc( @"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", //
-                fullName, masterPassword, [self keyIDForKeyData:keyData], -[start timeIntervalSinceNow] );
-        mpw_free( masterKeyBytes, MP_dkLen );
+        if (masterKeyBytes) {
+            keyData = [NSData dataWithBytes:masterKeyBytes length:MP_dkLen];
+            trc( @"User: %@, password: %@ derives to key ID: %@ (took %0.2fs)", //
+                    fullName, masterPassword, [self keyIDForKeyData:keyData], -[start timeIntervalSinceNow] );
+            mpw_free( masterKeyBytes, MP_dkLen );
+        }
     }];
 
     return keyData;
@@ -358,8 +360,10 @@ NSOperationQueue *_mpwQueue = nil;
     [self mpw_perform:^{
         char const *contentBytes = mpw_passwordForSite( [key keyDataForAlgorithm:self].bytes,
                 name.UTF8String, type, (uint32_t)counter, variant, context.UTF8String, [self version] );
-        content = [NSString stringWithCString:contentBytes encoding:NSUTF8StringEncoding];
-        mpw_freeString( contentBytes );
+        if (contentBytes) {
+            content = [NSString stringWithCString:contentBytes encoding:NSUTF8StringEncoding];
+            mpw_freeString( contentBytes );
+        }
     }];
 
     return content;

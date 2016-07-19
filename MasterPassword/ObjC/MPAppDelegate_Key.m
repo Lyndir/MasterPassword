@@ -26,7 +26,7 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
             *keyOrigin = MPKeyOriginKeyChainBiometric;
 
         CFErrorRef acError = NULL;
-        SecAccessControlRef accessControl = SecAccessControlCreateWithFlags( kCFAllocatorDefault,
+        id accessControl = (__bridge_transfer id)SecAccessControlCreateWithFlags( kCFAllocatorDefault,
                 kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, kSecAccessControlTouchIDCurrentSet, &acError );
         if (!accessControl || acError)
             err( @"Could not use TouchID on this device: %@", acError );
@@ -36,7 +36,7 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
                                            attributes:@{
                                                    (__bridge id)kSecAttrService         : @"Saved Master Password",
                                                    (__bridge id)kSecAttrAccount         : user.name?: @"",
-                                                   (__bridge id)kSecAttrAccessControl   : (__bridge id)accessControl,
+                                                   (__bridge id)kSecAttrAccessControl   : accessControl,
                                                    (__bridge id)kSecUseAuthenticationUI : (__bridge id)kSecUseAuthenticationUIAllow,
                                                    (__bridge id)kSecUseOperationPrompt  :
                                                    strf( @"Access %@'s master password.", user.name ),
