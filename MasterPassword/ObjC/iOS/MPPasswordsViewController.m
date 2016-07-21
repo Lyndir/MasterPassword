@@ -91,13 +91,15 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:context];
         if (![MPAlgorithmDefault tryMigrateUser:activeUser inContext:context])
-            [self performSegueWithIdentifier:@"message" sender:
-                    [MPMessage messageWithTitle:@"You have sites that can be upgraded." text:
-                                    @"Upgrading a site allows it to take advantage of the latest improvements in the Master Password algorithm.\n\n"
-                                            "When you upgrade a site, a new and stronger password will be generated for it.  To upgrade a site, first log into the site, navigate to your account preferences where you can change the site's password.  Make sure you fill in any \"current password\" fields on the website first, then press the upgrade button here to get your new site password.\n\n"
-                                            "You can then update your site's account with the new and stronger password.\n\n"
-                                            "The upgrade button can be found in the site's settings and looks like this:"
-                                           info:YES]];
+            PearlMainQueue(^{
+                [self performSegueWithIdentifier:@"message" sender:
+                        [MPMessage messageWithTitle:@"You have sites that can be upgraded." text:
+                                        @"Upgrading a site allows it to take advantage of the latest improvements in the Master Password algorithm.\n\n"
+                                                "When you upgrade a site, a new and stronger password will be generated for it.  To upgrade a site, first log into the site, navigate to your account preferences where you can change the site's password.  Make sure you fill in any \"current password\" fields on the website first, then press the upgrade button here to get your new site password.\n\n"
+                                                "You can then update your site's account with the new and stronger password.\n\n"
+                                                "The upgrade button can be found in the site's settings and looks like this:"
+                                               info:YES]];
+            });
         [context saveToStore];
     }];
 }
@@ -417,36 +419,38 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         if (![self.fetchedResultsController performFetch:&error])
             err( @"Couldn't fetch sites: %@", [error fullDescription] );
 
-        @try {
-            [self.passwordCollectionView performBatchUpdates:^{
-                [self fetchedItemsDidUpdate];
-
-                NSInteger fromSections = self.passwordCollectionView.numberOfSections;
-                NSInteger toSections = [self numberOfSectionsInCollectionView:self.passwordCollectionView];
-                for (NSInteger section = 0; section < MAX( toSections, fromSections ); ++section) {
-                    if (section >= fromSections)
-                        [self.passwordCollectionView insertSections:[NSIndexSet indexSetWithIndex:section]];
-                    else if (section >= toSections)
-                        [self.passwordCollectionView deleteSections:[NSIndexSet indexSetWithIndex:section]];
-                    else if (section < [oldSections count])
-                        [self.passwordCollectionView reloadItemsFromArray:oldSections[section]
-                                                                  toArray:[[self.fetchedResultsController sections][section] objects]
-                                                                inSection:section];
-                    else
-                        [self.passwordCollectionView reloadSections:[NSIndexSet indexSetWithIndex:section]];
-                }
-            }                                     completion:^(BOOL finished) {
-                if (finished)
-                    [self.passwordCollectionView setContentOffset:CGPointMake( 0, -self.passwordCollectionView.contentInset.top )
-                                                         animated:YES];
-                for (MPPasswordCell *cell in self.passwordCollectionView.visibleCells)
-                    [cell setFuzzyGroups:_fuzzyGroups];
-            }];
-        }
-        @catch (NSException *exception) {
-            wrn( @"While updating password cells: %@", [exception fullDescription] );
-            [self.passwordCollectionView reloadData];
-        }
+        PearlMainQueue(^{
+            @try {
+                [self.passwordCollectionView performBatchUpdates:^{
+                    [self fetchedItemsDidUpdate];
+    
+                    NSInteger fromSections = self.passwordCollectionView.numberOfSections;
+                    NSInteger toSections = [self numberOfSectionsInCollectionView:self.passwordCollectionView];
+                    for (NSInteger section = 0; section < MAX( toSections, fromSections ); ++section) {
+                        if (section >= fromSections)
+                            [self.passwordCollectionView insertSections:[NSIndexSet indexSetWithIndex:section]];
+                        else if (section >= toSections)
+                            [self.passwordCollectionView deleteSections:[NSIndexSet indexSetWithIndex:section]];
+                        else if (section < [oldSections count])
+                            [self.passwordCollectionView reloadItemsFromArray:oldSections[section]
+                                                                      toArray:[[self.fetchedResultsController sections][section] objects]
+                                                                    inSection:section];
+                        else
+                            [self.passwordCollectionView reloadSections:[NSIndexSet indexSetWithIndex:section]];
+                    }
+                }                                     completion:^(BOOL finished) {
+                    if (finished)
+                        [self.passwordCollectionView setContentOffset:CGPointMake( 0, -self.passwordCollectionView.contentInset.top )
+                                                             animated:YES];
+                    for (MPPasswordCell *cell in self.passwordCollectionView.visibleCells)
+                        [cell setFuzzyGroups:_fuzzyGroups];
+                }];
+            }
+            @catch (NSException *exception) {
+                wrn( @"While updating password cells: %@", [exception fullDescription] );
+                [self.passwordCollectionView reloadData];
+            }
+        });
     }];
 }
 
