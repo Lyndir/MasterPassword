@@ -84,7 +84,7 @@ public class MPSiteMarshaller {
                                   strf( "%d:%d:%d", //
                                         site.getSiteType().getType(), // type
                                         site.getAlgorithmVersion().toInt(), // algorithm
-                                        site.getSiteCounter() ), // counter
+                                        site.getSiteCounter().intValue() ), // counter
                                   ifNotNullElse( site.getLoginName(), "" ), // loginName
                                   site.getSiteName(), // siteName
                                   ifNotNullElse( contentMode.contentForSite( site, masterKey ), "" ) // password
