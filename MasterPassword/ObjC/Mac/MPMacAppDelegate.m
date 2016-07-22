@@ -183,7 +183,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     [super setActiveUser:activeUser];
 
-    [MPMacConfig get].usedUserName = activeUser.name;
+    if (activeUser)
+        [MPMacConfig get].usedUserName = activeUser.name;
 
     PearlMainQueue( ^{
         [self updateUsers];
