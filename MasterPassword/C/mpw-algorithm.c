@@ -19,6 +19,9 @@
 
 const uint8_t *mpw_masterKeyForUser(const char *fullName, const char *masterPassword, const MPAlgorithmVersion algorithmVersion) {
 
+    if (!fullName || !masterPassword)
+        return NULL;
+
     switch (algorithmVersion) {
         case MPAlgorithmVersion0:
             return mpw_masterKeyForUser_v0( fullName, masterPassword );
@@ -36,6 +39,9 @@ const uint8_t *mpw_masterKeyForUser(const char *fullName, const char *masterPass
 
 const char *mpw_passwordForSite(const uint8_t *masterKey, const char *siteName, const MPSiteType siteType, const uint32_t siteCounter,
         const MPSiteVariant siteVariant, const char *siteContext, const MPAlgorithmVersion algorithmVersion) {
+
+    if (!masterKey || !siteName)
+        return NULL;
 
     switch (algorithmVersion) {
         case MPAlgorithmVersion0:

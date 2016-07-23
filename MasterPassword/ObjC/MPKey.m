@@ -62,9 +62,12 @@
 - (NSData *)keyDataForAlgorithm:(id<MPAlgorithm>)algorithm {
 
     NSData *keyData = [_keyCache objectForKey:algorithm];
-    if (!keyData)
-        [_keyCache setObject:keyData = [algorithm keyDataForFullName:self.fullName withMasterPassword:self.masterPassword]
-                      forKey:algorithm];
+    if (keyData)
+        return keyData;
+
+    keyData = [algorithm keyDataForFullName:self.fullName withMasterPassword:self.masterPassword];
+    if (keyData)
+        [_keyCache setObject:keyData forKey:algorithm];
 
     return keyData;
 }

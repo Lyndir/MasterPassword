@@ -50,8 +50,8 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
 
     return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
                                    attributes:@{
-                                           (__bridge id)kSecAttrService    : @"Saved Master Password",
-                                           (__bridge id)kSecAttrAccount    : user.name?: @"",
+                                           (__bridge id)kSecAttrService : @"Saved Master Password",
+                                           (__bridge id)kSecAttrAccount : user.name?: @"",
 #if TARGET_OS_IPHONE
                                            (__bridge id)kSecAttrAccessible : (__bridge id)(kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly?: kSecAttrAccessibleWhenUnlockedThisDeviceOnly),
 #endif
@@ -76,13 +76,14 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
 - (void)storeSavedKeyFor:(MPUserEntity *)user {
 
     if (user.saveKey) {
-        inf( @"Saving key in keychain for user: %@", user.userID );
+        NSData *keyData = [self.key keyDataForAlgorithm:user.algorithm];
+        if (keyData) {
+            [self forgetSavedKeyFor:user];
 
-        [self forgetSavedKeyFor:user];
-        [PearlKeyChain addOrUpdateItemForQuery:createKeyQuery( user, YES, nil )
-                                withAttributes:@{
-                                        (__bridge id)kSecValueData : [self.key keyDataForAlgorithm:user.algorithm],
-                                }];
+            inf( @"Saving key in keychain for user: %@", user.userID );
+            [PearlKeyChain addOrUpdateItemForQuery:createKeyQuery( user, YES, nil )
+                                    withAttributes:@{ (__bridge id)kSecValueData : keyData }];
+        }
     }
 }
 
