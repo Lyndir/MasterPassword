@@ -8,7 +8,6 @@
 
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-#import <LocalAuthentication/LocalAuthentication.h>
 
 @interface MPAppDelegate_Shared()
 
@@ -21,7 +20,7 @@
 static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigin *keyOrigin) {
 
 #if TARGET_OS_IPHONE
-    if (user.touchID && kSecUseOperationPrompt) {
+    if (user.touchID && kSecUseAuthenticationUI) {
         if (keyOrigin)
             *keyOrigin = MPKeyOriginKeyChainBiometric;
 

@@ -183,7 +183,7 @@
 		DA854C8418D4CFBF00106317 /* avatar-add.png in Resources */ = {isa = PBXBuildFile; fileRef = DA854C8218D4CFBF00106317 /* avatar-add.png */; };
 		DA92614E1BE1A57500369DE5 /* MPAppDelegate_InApp.m in Sources */ = {isa = PBXBuildFile; fileRef = DA92614D1BE1A57500369DE5 /* MPAppDelegate_InApp.m */; };
 		DA945C8717E3F3FD0053236B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA945C8617E3F3FD0053236B /* Images.xcassets */; };
-		DA95B50C1C476B6A0067F5EF /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95B50B1C476B6A0067F5EF /* LocalAuthentication.framework */; };
+		DA95B50C1C476B6A0067F5EF /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95B50B1C476B6A0067F5EF /* LocalAuthentication.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		DA95B50F1C4776F00067F5EF /* NSMutableSet+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DA95B50E1C4776F00067F5EF /* NSMutableSet+Pearl.m */; };
 		DA95B5191C477DB50067F5EF /* MasterPassword.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA95B5101C477DB50067F5EF /* MasterPassword.xcdatamodeld */; };
 		DA95D5F214DF0B2C008D1B94 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */; };
