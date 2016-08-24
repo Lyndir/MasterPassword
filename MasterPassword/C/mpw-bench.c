@@ -59,32 +59,33 @@ int main(int argc, char *const argv[]) {
 
     // Start MPW
     unsigned int iterations = 100;
+    const uint8_t *masterKey = NULL;
     mpw_getTime( &startTime );
     for (int i = 0; i < iterations; ++i) {
-        const uint8_t *masterKey = mpw_masterKeyForUser(
-                fullName, masterPassword, MPAlgorithmVersionCurrent );
+        free( (void *)masterKey );
+        masterKey = mpw_masterKeyForUser( fullName, masterPassword, MPAlgorithmVersionCurrent );
         if (!masterKey)
             ftl( "Could not allocate master key: %d\n", errno );
         free( (void *)mpw_passwordForSite(
                 masterKey, siteName, siteType, siteCounter, siteVariant, siteContext, MPAlgorithmVersionCurrent ) );
-        free( (void *)masterKey );
 
         if (i % ( iterations / 100 ) == 0)
-            fprintf( stderr, "\rmpw: iteration %d / %d (%d%%)..", i, iterations, i * 100 / iterations );
+            fprintf( stderr, "\rmpw: iteration %d / %d (%u%%)..", i, iterations, i * 100 / iterations );
     }
     const double mpwSpeed = mpw_showSpeed( startTime, iterations, "mpw" );
 
-    // Start SHA-256
-    iterations = 45000000;
+    // Start HMAC-SHA-256
+    uint8_t *sitePasswordInfo = malloc( 128 );
+    iterations = 5500000;
     uint8_t hash[32];
     mpw_getTime( &startTime );
     for (int i = 0; i < iterations; ++i) {
-        SHA256_Buf( masterPassword, strlen( masterPassword ), hash );
+        free( (void *)mpw_hmac_sha256( masterKey, MP_dkLen, sitePasswordInfo, 128 ) );
 
         if (i % ( iterations / 100 ) == 0)
-            fprintf( stderr, "\rsha256: iteration %d / %d (%d%%)..", i, iterations, i * 100 / iterations );
+            fprintf( stderr, "\rhmac-sha-256: iteration %d / %d (%u%%)..", i, iterations, i * 100 / iterations );
     }
-    const double sha256Speed = mpw_showSpeed( startTime, iterations, "sha256" );
+    const double hmacSha256Speed = mpw_showSpeed( startTime, iterations, "hmac-sha-256" );
 
     // Start BCrypt
     int bcrypt_cost = 9;
@@ -94,13 +95,13 @@ int main(int argc, char *const argv[]) {
         crypt( masterPassword, crypt_gensalt( "$2b$", bcrypt_cost, fullName, strlen( fullName ) ) );
 
         if (i % ( iterations / 100 ) == 0)
-            fprintf( stderr, "\rbcrypt (cost %d): iteration %d / %d (%d%%)..", bcrypt_cost, i, iterations, i * 100 / iterations );
+            fprintf( stderr, "\rbcrypt (cost %d): iteration %d / %d (%u%%)..", bcrypt_cost, i, iterations, i * 100 / iterations );
     }
     const double bcrypt9Speed = mpw_showSpeed( startTime, iterations, "bcrypt9" );
 
     // Summarize.
     fprintf( stdout, "\n== SUMMARY ==\nOn this machine,\n" );
-    fprintf( stdout, " - mpw is %f times slower than sha256 (reference: 320000 on an MBP Late 2013).\n", sha256Speed / mpwSpeed );
+    fprintf( stdout, " - mpw is %f times slower than hmac-sha-256 (reference: 320000 on an MBP Late 2013).\n", hmacSha256Speed / mpwSpeed );
     fprintf( stdout, " - mpw is %f times slower than bcrypt (cost 9) (reference: 22 on an MBP Late 2013).\n", bcrypt9Speed / mpwSpeed );
 
     return 0;
