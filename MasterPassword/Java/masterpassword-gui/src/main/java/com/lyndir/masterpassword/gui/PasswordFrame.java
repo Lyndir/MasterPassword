@@ -119,7 +119,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                                                         siteVersionField = Components.comboBox( MasterKey.Version.values() ), //
                                                         Components.stud(),                                                    //
                                                         siteCounterField = Components.spinner(
-                                                                new SpinnerNumberModel( 1L, 1L, UnsignedInteger.MAX_VALUE, 1L ) ) );
+                                                                new SpinnerNumberModel( UnsignedInteger.ONE, UnsignedInteger.ONE, UnsignedInteger.MAX_VALUE, UnsignedInteger.ONE ) ) );
         sitePanel.add( siteSettings );
         siteTypeField.setFont( Res.valueFont().deriveFont( 12f ) );
         siteTypeField.setSelectedItem( MPSiteType.GeneratedLong );
