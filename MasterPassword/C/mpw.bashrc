@@ -5,7 +5,7 @@ mpw() {
         if hash pbcopy 2>/dev/null; then
             pbcopy
         elif hash xclip 2>/dev/null; then
-            xclip
+            xclip -selection clip
         else
             cat; echo 2>/dev/null
             return
