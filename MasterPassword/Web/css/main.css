@@ -60,6 +60,9 @@ input:focus, select:focus {
 input.half, select.half {
     width:              33%;
 }
+input.minimal, select.minimal {
+    width:              auto;
+}
 input[type="submit"], input[type="image"] {
     background:         transparent;
     border:             none;
