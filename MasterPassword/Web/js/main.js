@@ -31,8 +31,10 @@ function update(working) {
         if (!working)
             $('#userName').focus();
     }
-    else
+    else {
         $('#identity').removeClass('active');
+        $('#userName')[0].value = $('#masterPassword')[0].value = '';
+    }
 
     if (screen == 'site') {
         $('#site').addClass('active');
@@ -40,16 +42,16 @@ function update(working) {
         if (!working)
             $('#siteName').focus();
     }
-    else
+    else {
         $('#site').removeClass('active');
+        $('#siteName')[0].value = $('#sitePassword')[0].value = '';
+    }
 
     // Working
     if (working && screen == 'identity')
         $('#identity').addClass('working').find('input, select').attr('disabled', 'disabled');
-    else {
-        $('#userName')[0].value = $('#masterPassword')[0].value = '';
+    else
         $('#identity').removeClass('working').find('input, select').removeAttr('disabled');
-    }
 
     if (working && screen == 'site')
         $('#site').addClass('working');
