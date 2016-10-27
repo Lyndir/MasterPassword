@@ -3,7 +3,7 @@ var mpw, error;
 function updateMPW() {
     mpw = null;
     startWork();
-    mpw = new MPW( $('#userName')[0].value, $('#masterPassword')[0].value, $('#version')[0].valueAsNumber );
+    mpw = new MPW( $('#userName')[0].value, $('#masterPassword')[0].value, $('#version')[0].value );
     mpw.key.then(
         function() {
             doneWork();
