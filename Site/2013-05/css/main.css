@@ -3,7 +3,7 @@ html, body {
 }
 
 body {
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-weight: 300;
 }
 
@@ -285,7 +285,7 @@ header .box .maximized {
 #algorithm header,
 #support header {
     height: 40%;
-    
+
     background: #272727;
 }
 #what header .background,
@@ -443,10 +443,15 @@ footer {
     overflow: hidden;
     text-align: center;
 }
+@media (ya-dock-fade: false) {
+    footer {
+        padding-bottom: 32px
+    }
+}
 footer h1 {
     background: #EEE;
 
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-size: 170%;
     font-weight: 100;
 }
