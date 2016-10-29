@@ -1,14 +1,16 @@
 package com.lyndir.masterpassword.gui;
 
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.primitives.UnsignedInteger;
 import com.google.common.util.concurrent.*;
-import com.lyndir.lhunath.opal.system.util.PredicateNN;
 import com.lyndir.masterpassword.*;
 import com.lyndir.masterpassword.gui.util.Components;
+import com.lyndir.masterpassword.gui.util.UnsignedIntegerModel;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
@@ -31,6 +33,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
     private final JComboBox<MPSiteType>        siteTypeField;
     private final JComboBox<MasterKey.Version> siteVersionField;
     private final JSpinner                     siteCounterField;
+    private final UnsignedIntegerModel         siteCounterModel;
     private final JPasswordField               passwordField;
     private final JLabel                       tipLabel;
     private final JCheckBox                    maskPasswordField;
@@ -112,14 +115,14 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         sitePanel.add( Components.stud() );
 
         // Site Type & Counter
+        siteCounterModel = new UnsignedIntegerModel( UnsignedInteger.ONE, UnsignedInteger.ONE );
         MPSiteType[] types = Iterables.toArray( MPSiteType.forClass( MPSiteTypeClass.Generated ), MPSiteType.class );
-        JComponent siteSettings = Components.boxLayout(                                                                       BoxLayout.LINE_AXIS,                                                  //
+        JComponent siteSettings = Components.boxLayout( BoxLayout.LINE_AXIS,                                                  //
                                                         siteTypeField = Components.comboBox( types ),                         //
                                                         Components.stud(),                                                    //
                                                         siteVersionField = Components.comboBox( MasterKey.Version.values() ), //
                                                         Components.stud(),                                                    //
-                                                        siteCounterField = Components.spinner(
-                                                                new SpinnerNumberModel( UnsignedInteger.ONE, UnsignedInteger.ONE, UnsignedInteger.MAX_VALUE, UnsignedInteger.ONE ) ) );
+                                                        siteCounterField = Components.spinner( siteCounterModel ) );
         sitePanel.add( siteSettings );
         siteTypeField.setFont( Res.valueFont().deriveFont( 12f ) );
         siteTypeField.setSelectedItem( MPSiteType.GeneratedLong );
@@ -212,18 +215,18 @@ public class PasswordFrame extends JFrame implements DocumentListener {
 
         final MPSiteType siteType = siteTypeField.getModel().getElementAt( siteTypeField.getSelectedIndex() );
         final MasterKey.Version siteVersion = siteVersionField.getItemAt( siteVersionField.getSelectedIndex() );
-        final UnsignedInteger siteCounter = UnsignedInteger.valueOf( ((Number) siteCounterField.getValue()).longValue() );
+        final UnsignedInteger siteCounter = siteCounterModel.getNumber();
 
         Iterable<Site> siteResults = user.findSitesByName( siteNameQuery );
         if (!allowNameCompletion)
-            siteResults = FluentIterable.from( siteResults ).filter( new PredicateNN<Site>() {
+            siteResults = FluentIterable.from( siteResults ).filter( new Predicate<Site>() {
                 @Override
-                public boolean apply(Site input) {
-                    return siteNameQuery.equals( input.getSiteName() );
+                public boolean apply(@Nullable Site siteResult) {
+                    return siteResult != null && siteNameQuery.equals( siteResult.getSiteName() );
                 }
             } );
-        final Site site = Iterables.getFirst( siteResults,
-                                              new IncognitoSite( siteNameQuery, siteType, siteCounter, siteVersion ) );
+        final Site site = ifNotNullElse( Iterables.getFirst( siteResults, null ),
+                                         new IncognitoSite( siteNameQuery, siteType, siteCounter, siteVersion ) );
         if (currentSite != null && currentSite.getSiteName().equals( site.getSiteName() )) {
             site.setSiteType( siteType );
             site.setAlgorithmVersion( siteVersion );
