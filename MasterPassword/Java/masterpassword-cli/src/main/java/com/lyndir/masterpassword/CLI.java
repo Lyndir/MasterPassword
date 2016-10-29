@@ -37,21 +37,17 @@ import java.util.Map;
  */
 public class CLI {
 
-    private static final String ENV_USERNAME    = "MP_USERNAME";
-    private static final String ENV_SITETYPE    = "MP_SITETYPE";
-    private static final String ENV_SITECOUNTER = "MP_SITECOUNTER";
-
     public static void main(final String[] args)
             throws IOException {
 
         // Read information from the environment.
         char[] masterPassword;
         String siteName = null, context = null;
-        String userName = System.getenv( ENV_USERNAME );
-        String siteTypeName = ifNotNullElse( System.getenv( ENV_SITETYPE ), "" );
+        String userName = System.getenv( MPConstant.env_userName );
+        String siteTypeName = ifNotNullElse( System.getenv( MPConstant.env_siteType ), "" );
         MPSiteType siteType = siteTypeName.isEmpty()? MPSiteType.GeneratedLong: MPSiteType.forOption( siteTypeName );
         MPSiteVariant variant = MPSiteVariant.Password;
-        String siteCounterName = ifNotNullElse( System.getenv( ENV_SITECOUNTER ), "" );
+        String siteCounterName = ifNotNullElse( System.getenv( MPConstant.env_siteCounter ), "" );
         UnsignedInteger siteCounter = siteCounterName.isEmpty()? UnsignedInteger.valueOf( 1 ): UnsignedInteger.valueOf( siteCounterName );
 
         // Parse information from option arguments.
@@ -102,9 +98,9 @@ public class CLI {
                 System.out.println();
                 System.out.format( "Usage: mpw [-u name] [-t type] [-c counter] site\n\n" );
                 System.out.format( "    -u name      Specify the full name of the user.\n" );
-                System.out.format( "                 Defaults to %s in env.\n\n", ENV_USERNAME );
+                System.out.format( "                 Defaults to %s in env.\n\n", MPConstant.env_userName );
                 System.out.format( "    -t type      Specify the password's template.\n" );
-                System.out.format( "                 Defaults to %s in env or 'long' for password, 'name' for login.\n", ENV_SITETYPE );
+                System.out.format( "                 Defaults to %s in env or 'long' for password, 'name' for login.\n", MPConstant.env_siteType );
 
                 int optionsLength = 0;
                 Map<String, MPSiteType> typeMap = Maps.newLinkedHashMap();
@@ -122,7 +118,7 @@ public class CLI {
                 System.out.println();
 
                 System.out.format( "    -c counter   The value of the counter.\n" );
-                System.out.format( "                 Defaults to %s in env or '1'.\n\n", ENV_SITECOUNTER );
+                System.out.format( "                 Defaults to %s in env or '1'.\n\n", MPConstant.env_siteCounter );
                 System.out.format( "    -v variant   The kind of content to generate.\n" );
                 System.out.format( "                 Defaults to 'password'.\n" );
 

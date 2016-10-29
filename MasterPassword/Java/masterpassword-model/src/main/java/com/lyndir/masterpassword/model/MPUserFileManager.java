@@ -1,31 +1,32 @@
 package com.lyndir.masterpassword.model;
 
+import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
+
 import com.google.common.base.*;
 import com.google.common.collect.*;
 import com.google.common.io.CharSink;
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import com.lyndir.masterpassword.MPConstant;
 import java.io.*;
-import java.util.SortedSet;
 import javax.annotation.Nullable;
 
 
 /**
+ * Manages user data stored in user-specific {@code .mpsites} files under {@code .mpw.d}.
  * @author lhunath, 14-12-07
  */
 public class MPUserFileManager extends MPUserManager {
 
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MPUserFileManager.class );
-    private static final File   mpwd   = new File( System.getProperty( "user.home" ), ".mpw.d" );
     private static final MPUserFileManager instance;
 
     static {
-        File mpwrc = new File( System.getProperty( "user.home" ), ".mpwrc" );
-        if (mpwrc.exists() && !mpwd.exists())
-            if (!mpwrc.renameTo( mpwd ))
-                logger.err( "Couldn't migrate: %s -> %s", mpwrc, mpwd );
-
-        instance = create( mpwd );
+        String rcDir = System.getenv( MPConstant.env_rcDir );
+        if (rcDir != null)
+            instance = create( new File( rcDir ) );
+        else
+            instance = create( new File( ifNotNullElseNullable( System.getProperty( "user.home" ), System.getenv( "HOME" ) ), ".mpw.d" ) );
     }
 
     private final File userFilesDirectory;
@@ -51,12 +52,7 @@ public class MPUserFileManager extends MPUserManager {
             return ImmutableList.of();
         }
 
-        return FluentIterable.from( ImmutableList.copyOf( userFilesDirectory.listFiles( new FilenameFilter() {
-            @Override
-            public boolean accept(final File dir, final String name) {
-                return name.endsWith( ".mpsites" );
-            }
-        } ) ) ).transform( new Function<File, MPUser>() {
+        return FluentIterable.from( listUserFiles( userFilesDirectory ) ).transform( new Function<File, MPUser>() {
             @Nullable
             @Override
             public MPUser apply(@Nullable final File file) {
@@ -69,6 +65,15 @@ public class MPUserFileManager extends MPUserManager {
                 }
             }
         } ).filter( Predicates.notNull() );
+    }
+
+    private static ImmutableList<File> listUserFiles(final File userFilesDirectory) {
+        return ImmutableList.copyOf( ifNotNullElse( userFilesDirectory.listFiles( new FilenameFilter() {
+            @Override
+            public boolean accept(final File dir, final String name) {
+                return name.endsWith( ".mpsites" );
+            }
+        } ), new File[0] ) );
     }
 
     @Override
@@ -103,12 +108,7 @@ public class MPUserFileManager extends MPUserManager {
             }
 
         // Remove deleted users.
-        for (File userFile : userFilesDirectory.listFiles( new FilenameFilter() {
-            @Override
-            public boolean accept(final File dir, final String name) {
-                return name.endsWith( ".mpsites" );
-            }
-        } ))
+        for (File userFile : listUserFiles( userFilesDirectory ))
             if (getUserNamed( userFile.getName().replaceFirst( "\\.mpsites$", "" ) ) == null)
                 if (!userFile.delete())
                     logger.err( "Couldn't delete file: %s", userFile );
@@ -118,6 +118,6 @@ public class MPUserFileManager extends MPUserManager {
      * @return The location on the file system where the user models are stored.
      */
     public File getPath() {
-        return mpwd;
+        return userFilesDirectory;
     }
 }

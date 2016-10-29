@@ -1,6 +1,5 @@
 package com.lyndir.masterpassword;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.UnsignedInteger;
@@ -8,7 +7,6 @@ import com.lambdaworks.crypto.SCrypt;
 import com.lyndir.lhunath.opal.system.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.nio.*;
-import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import javax.annotation.Nonnull;
@@ -25,18 +23,10 @@ import javax.annotation.Nullable;
  */
 public class MasterKeyV0 extends MasterKey {
 
+    private static final int                          MP_intLen    = 32;
+
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MasterKeyV0.class );
-
-    protected final int                          MP_N         = 32768;
-    protected final int                          MP_r         = 8;
-    protected final int                          MP_p         = 2;
-    protected final int                          MP_dkLen     = 64;
-    protected final int                          MP_intLen    = 32;
-    protected final Charset                      MP_charset   = Charsets.UTF_8;
-    protected final ByteOrder                    MP_byteOrder = ByteOrder.BIG_ENDIAN;
-    protected final MessageDigests               MP_hash      = MessageDigests.SHA256;
-    protected final MessageAuthenticationDigests MP_mac       = MessageAuthenticationDigests.HmacSHA256;
 
     public MasterKeyV0(final String fullName) {
         super( fullName );
@@ -52,15 +42,15 @@ public class MasterKeyV0 extends MasterKey {
     @Override
     protected byte[] deriveKey(final char[] masterPassword) {
         String fullName = getFullName();
-        byte[] fullNameBytes = fullName.getBytes( MP_charset );
+        byte[] fullNameBytes = fullName.getBytes( MPConstant.mpw_charset );
         byte[] fullNameLengthBytes = bytesForInt( fullName.length() );
 
         String mpKeyScope = MPSiteVariant.Password.getScope();
-        byte[] masterKeySalt = Bytes.concat( mpKeyScope.getBytes( MP_charset ), fullNameLengthBytes, fullNameBytes );
+        byte[] masterKeySalt = Bytes.concat( mpKeyScope.getBytes( MPConstant.mpw_charset ), fullNameLengthBytes, fullNameBytes );
         logger.trc( "key scope: %s", mpKeyScope );
         logger.trc( "masterKeySalt ID: %s", CodeUtils.encodeHex( idForBytes( masterKeySalt ) ) );
 
-        ByteBuffer mpBytesBuf = MP_charset.encode( CharBuffer.wrap( masterPassword ) );
+        ByteBuffer mpBytesBuf = MPConstant.mpw_charset.encode( CharBuffer.wrap( masterPassword ) );
         byte[] mpBytes = new byte[mpBytesBuf.remaining()];
         mpBytesBuf.get( mpBytes, 0, mpBytes.length );
         Arrays.fill( mpBytesBuf.array(), (byte) 0 );
@@ -71,9 +61,9 @@ public class MasterKeyV0 extends MasterKey {
     protected byte[] scrypt(final byte[] masterKeySalt, final byte[] mpBytes) {
         try {
             if (isAllowNative())
-                return SCrypt.scrypt( mpBytes, masterKeySalt, MP_N, MP_r, MP_p, MP_dkLen );
+                return SCrypt.scrypt( mpBytes, masterKeySalt, MPConstant.scrypt_N, MPConstant.scrypt_r, MPConstant.scrypt_p, MPConstant.mpw_dkLen );
             else
-                return SCrypt.scryptJ( mpBytes, masterKeySalt, MP_N, MP_r, MP_p, MP_dkLen );
+                return SCrypt.scryptJ( mpBytes, masterKeySalt, MPConstant.scrypt_N, MPConstant.scrypt_r, MPConstant.scrypt_p, MPConstant.mpw_dkLen );
         }
         catch (GeneralSecurityException e) {
             logger.bug( e );
@@ -99,22 +89,22 @@ public class MasterKeyV0 extends MasterKey {
             siteCounter = UnsignedInteger.valueOf( (System.currentTimeMillis() / (300 * 1000)) * 300 );
 
         String siteScope = siteVariant.getScope();
-        byte[] siteNameBytes = siteName.getBytes( MP_charset );
+        byte[] siteNameBytes = siteName.getBytes( MPConstant.mpw_charset );
         byte[] siteNameLengthBytes = bytesForInt( siteName.length() );
         byte[] siteCounterBytes = bytesForInt( siteCounter );
-        byte[] siteContextBytes = siteContext == null || siteContext.isEmpty()? null: siteContext.getBytes( MP_charset );
+        byte[] siteContextBytes = siteContext == null || siteContext.isEmpty()? null: siteContext.getBytes( MPConstant.mpw_charset );
         byte[] siteContextLengthBytes = bytesForInt( siteContextBytes == null? 0: siteContextBytes.length );
         logger.trc( "site scope: %s, context: %s", siteScope, siteContextBytes == null? "<empty>": siteContext );
         logger.trc( "seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)", siteScope, CodeUtils.encodeHex( siteNameLengthBytes ),
                     siteName, CodeUtils.encodeHex( siteCounterBytes ), CodeUtils.encodeHex( siteContextLengthBytes ),
                     siteContextBytes == null? "(null)": siteContext );
 
-        byte[] sitePasswordInfo = Bytes.concat( siteScope.getBytes( MP_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
+        byte[] sitePasswordInfo = Bytes.concat( siteScope.getBytes( MPConstant.mpw_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
         if (siteContextBytes != null)
             sitePasswordInfo = Bytes.concat( sitePasswordInfo, siteContextLengthBytes, siteContextBytes );
         logger.trc( "sitePasswordInfo ID: %s", CodeUtils.encodeHex( idForBytes( sitePasswordInfo ) ) );
 
-        byte[] sitePasswordSeedBytes = MP_mac.of( getKey(), sitePasswordInfo );
+        byte[] sitePasswordSeedBytes = MPConstant.mpw_digest.of( getKey(), sitePasswordInfo );
         int[] sitePasswordSeed = new int[sitePasswordSeedBytes.length];
         for (int i = 0; i < sitePasswordSeedBytes.length; ++i) {
             ByteBuffer buf = ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( ByteOrder.BIG_ENDIAN );
@@ -146,16 +136,16 @@ public class MasterKeyV0 extends MasterKey {
 
     @Override
     protected byte[] bytesForInt(final int number) {
-        return ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( MP_byteOrder ).putInt( number ).array();
+        return ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( MPConstant.mpw_byteOrder ).putInt( number ).array();
     }
 
     @Override
     protected byte[] bytesForInt(@Nonnull final UnsignedInteger number) {
-        return ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( MP_byteOrder ).putInt( number.intValue() ).array();
+        return ByteBuffer.allocate( MP_intLen / Byte.SIZE ).order( MPConstant.mpw_byteOrder ).putInt( number.intValue() ).array();
     }
 
     @Override
     protected byte[] idForBytes(final byte[] bytes) {
-        return MP_hash.of( bytes );
+        return MPConstant.mpw_hash.of( bytes );
     }
 }

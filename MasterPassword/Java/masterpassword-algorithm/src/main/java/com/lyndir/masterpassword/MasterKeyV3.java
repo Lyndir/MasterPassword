@@ -1,12 +1,10 @@
 package com.lyndir.masterpassword;
 
 import com.google.common.primitives.Bytes;
-import com.lambdaworks.crypto.SCrypt;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import javax.annotation.Nullable;
 
@@ -35,15 +33,15 @@ public class MasterKeyV3 extends MasterKeyV2 {
     @Nullable
     @Override
     protected byte[] deriveKey(final char[] masterPassword) {
-        byte[] fullNameBytes = getFullName().getBytes( MP_charset );
+        byte[] fullNameBytes = getFullName().getBytes( MPConstant.mpw_charset );
         byte[] fullNameLengthBytes = bytesForInt( fullNameBytes.length );
 
         String mpKeyScope = MPSiteVariant.Password.getScope();
-        byte[] masterKeySalt = Bytes.concat( mpKeyScope.getBytes( MP_charset ), fullNameLengthBytes, fullNameBytes );
+        byte[] masterKeySalt = Bytes.concat( mpKeyScope.getBytes( MPConstant.mpw_charset ), fullNameLengthBytes, fullNameBytes );
         logger.trc( "key scope: %s", mpKeyScope );
         logger.trc( "masterKeySalt ID: %s", CodeUtils.encodeHex( idForBytes( masterKeySalt ) ) );
 
-        ByteBuffer mpBytesBuf = MP_charset.encode( CharBuffer.wrap( masterPassword ) );
+        ByteBuffer mpBytesBuf = MPConstant.mpw_charset.encode( CharBuffer.wrap( masterPassword ) );
         byte[] mpBytes = new byte[mpBytesBuf.remaining()];
         mpBytesBuf.get( mpBytes, 0, mpBytes.length );
         Arrays.fill( mpBytesBuf.array(), (byte) 0 );
