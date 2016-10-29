@@ -16,10 +16,17 @@ public class MPUserFileManager extends MPUserManager {
 
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MPUserFileManager.class );
-    private static final File   mpwd   = new File( System.getProperty( "user.home" ), ".mpw.d" );
+    private static final File   mpwd;
     private static final MPUserFileManager instance;
 
     static {
+        String mpwDirectory = System.getProperty( "mp.user.directory" );
+        if (mpwDirectory == null) {
+            mpwd = new File( System.getProperty( "user.home" ), ".mpw.d" );
+        } else {
+            mpwd = new File( mpwDirectory );
+        }
+
         File mpwrc = new File( System.getProperty( "user.home" ), ".mpwrc" );
         if (mpwrc.exists() && !mpwd.exists())
             if (!mpwrc.renameTo( mpwd ))
