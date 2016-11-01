@@ -210,7 +210,9 @@ int main(int argc, char *const argv[]) {
         masterPassword = getpass( "Your master password: " );
 
     // Summarize operation.
-    fprintf( stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, mpw_identicon( fullName, masterPassword ) );
+    char const * identicon = mpw_identicon( fullName, masterPassword );
+    fprintf( stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, identicon );
+	mpw_freeString( identicon );
 
     // Output the password.
     const uint8_t *masterKey = mpw_masterKeyForUser(
