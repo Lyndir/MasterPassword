@@ -228,5 +228,6 @@ int main(int argc, char *const argv[]) {
         ftl( "Couldn't derive site password." );
 
     fprintf( stdout, "%s\n", sitePassword );
+    mpw_freeString( sitePassword );
     return 0;
 }
