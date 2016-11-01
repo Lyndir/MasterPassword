@@ -116,7 +116,7 @@ int main(int argc, char *const argv[]) {
     for (int opt; (opt = getopt( argc, argv, "u:P:t:c:V:a:C:vqh" )) != -1;)
         switch (opt) {
             case 'u':
-                fullName = optarg;
+                fullName = strdup( optarg );
                 break;
             case 'P':
                 // Do not use this.  Passing your master password via the command-line
@@ -166,7 +166,7 @@ int main(int argc, char *const argv[]) {
                 ftl("Unexpected option: %c", opt);
         }
     if (optind < argc)
-        siteName = argv[optind];
+        siteName = strdup( argv[optind] );
 
     // Convert and validate input.
     if (!fullName && !(fullName = getlinep( "Your full name:" )))
@@ -218,12 +218,14 @@ int main(int argc, char *const argv[]) {
     const uint8_t *masterKey = mpw_masterKeyForUser(
             fullName, masterPassword, algorithmVersion );
     mpw_freeString( masterPassword );
+    mpw_freeString( fullName );
     if (!masterKey)
         ftl( "Couldn't derive master key." );
 
     const char *sitePassword = mpw_passwordForSite(
             masterKey, siteName, siteType, siteCounter, siteVariant, siteContextString, algorithmVersion );
     mpw_free( masterKey, MP_dkLen );
+    mpw_freeString( siteName );
     if (!sitePassword)
         ftl( "Couldn't derive site password." );
 
