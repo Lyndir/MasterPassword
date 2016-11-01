@@ -44,7 +44,7 @@ int main(int argc, char *const argv[]) {
         fprintf( stdout, "test case %s... ", id );
         if (!xmlStrlen( result )) {
             fprintf( stdout, "abstract.\n" );
-            continue;
+            goto free_and_continue;
         }
 
         // 1. calculate the master key.
@@ -71,6 +71,8 @@ int main(int argc, char *const argv[]) {
 
         // Free test case.
         mpw_freeString( sitePassword );
+
+free_and_continue:
         xmlFree( id );
         xmlFree( fullName );
         xmlFree( masterPassword );
