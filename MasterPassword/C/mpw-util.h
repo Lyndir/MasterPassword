@@ -8,6 +8,8 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <signal.h>
+#include <termios.h>
 
 //// Logging.
 
@@ -77,6 +79,9 @@ void mpw_free(
 /** Free a string after zero'ing its contents. */
 void mpw_freeString(
         const char *string);
+
+/** Enable/Disable keyboard input **/
+void mpw_toggle_term_echo ();
 
 //// Cryptographic functions.
 

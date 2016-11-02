@@ -212,6 +212,9 @@ int main(int argc, char *const argv[]) {
     // Summarize operation.
     fprintf( stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, mpw_identicon( fullName, masterPassword ) );
 
+	// Disable keyboard input.
+	mpw_toggle_term_echo();
+
     // Output the password.
     const uint8_t *masterKey = mpw_masterKeyForUser(
             fullName, masterPassword, algorithmVersion );
@@ -226,5 +229,8 @@ int main(int argc, char *const argv[]) {
         ftl( "Couldn't derive site password." );
 
     fprintf( stdout, "%s\n", sitePassword );
+
+	// Enable keyboard input.
+	mpw_toggle_term_echo();
     return 0;
 }

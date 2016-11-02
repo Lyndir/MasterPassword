@@ -145,6 +145,39 @@ static int putvar(int c) {
 }
 #endif
 
+
+void mpw_toggle_term_echo () {
+   static sigset_t sigOld;
+   static struct termios termOld;
+   static FILE *fp = NULL;
+
+   if (!fp) {
+       if ((fp = fopen( ctermid(NULL), "r+")) == NULL)
+            return;
+
+        sigset_t sig;
+        struct  termios term;
+
+        setbuf( fp, NULL);
+        sigemptyset( &sig );
+        sigaddset( &sig, SIGINT); /* block SIGINT */
+        sigaddset( &sig, SIGTSTP); /* block SIGTSTP */
+        sigprocmask( SIG_BLOCK, &sig, &sigOld);
+
+        tcgetattr( fileno(fp), &term);
+        termOld = term; /*save attr.*/
+
+        term.c_lflag &= ~(ECHO | ECHOE | ECHOK | ECHONL);
+        tcsetattr( fileno(fp), TCSAFLUSH, &term);
+
+    } else {
+        tcsetattr( fileno(fp), TCSAFLUSH, &termOld);
+        sigprocmask( SIG_SETMASK, &sigOld, NULL);
+        fclose(fp);
+        fp = NULL;
+    }
+}
+
 const char *mpw_identicon(const char *fullName, const char *masterPassword) {
 
     const char *leftArm[] = { "╔", "╚", "╰", "═" };
