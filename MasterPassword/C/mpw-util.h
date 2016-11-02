@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <signal.h>
-#include <termio.h>
+#include <termios.h>
 
 //// Logging.
 
