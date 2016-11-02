@@ -25,7 +25,9 @@ static const char *mpw_templateForType_v0(MPSiteType type, uint16_t seedByte) {
     if (!count)
         return NULL;
 
-    return templates[seedByte % count];
+    const char * template = templates[seedByte % count];
+    free( templates );
+    return template;
 }
 
 static const char mpw_characterFromClass_v0(char characterClass, uint16_t seedByte) {

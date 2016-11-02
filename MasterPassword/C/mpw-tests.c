@@ -13,8 +13,13 @@
 int main(int argc, char *const argv[]) {
 
     int failedTests = 0;
+    char const  * const xmlFileName = "mpw_tests.xml";
 
-    xmlNodePtr tests = xmlDocGetRootElement( xmlParseFile( "mpw_tests.xml" ) );
+    xmlDocPtr doc = xmlParseFile( xmlFileName );
+    if(!doc)
+      ftl( "Missing file: %s\n", xmlFileName );
+
+    xmlNodePtr tests = xmlDocGetRootElement( doc );
     for (xmlNodePtr testCase = tests->children; testCase; testCase = testCase->next) {
         if (testCase->type != XML_ELEMENT_NODE || xmlStrcmp( testCase->name, BAD_CAST "case" ) != 0)
             continue;
@@ -39,7 +44,7 @@ int main(int argc, char *const argv[]) {
         fprintf( stdout, "test case %s... ", id );
         if (!xmlStrlen( result )) {
             fprintf( stdout, "abstract.\n" );
-            continue;
+            goto free_and_continue;
         }
 
         // 1. calculate the master key.
@@ -66,6 +71,8 @@ int main(int argc, char *const argv[]) {
 
         // Free test case.
         mpw_freeString( sitePassword );
+
+free_and_continue:
         xmlFree( id );
         xmlFree( fullName );
         xmlFree( masterPassword );
@@ -77,5 +84,6 @@ int main(int argc, char *const argv[]) {
         xmlFree( result );
     }
 
+    xmlFreeDoc( doc );
     return failedTests;
 }
