@@ -78,7 +78,7 @@ static char *homedir(const char *filename) {
     return homefile;
 }
 
-static char *getlinep(const char *prompt) {
+static char *getline_prompt(const char *prompt) {
 
     char *buf = NULL;
     size_t bufSize = 0;
@@ -96,7 +96,7 @@ static char *getlinep(const char *prompt) {
 int main(int argc, char *const argv[]) {
 
     // Read the environment.
-    char *fullName = getenv( MP_env_fullname );
+    char *fullName = strdup( getenv( MP_env_fullname ) );
     const char *masterPassword = NULL;
     const char *siteName = NULL;
     MPSiteType siteType = MPSiteTypeGeneratedLong;
@@ -116,7 +116,7 @@ int main(int argc, char *const argv[]) {
     for (int opt; (opt = getopt( argc, argv, "u:P:t:c:V:a:C:vqh" )) != -1;)
         switch (opt) {
             case 'u':
-                fullName = optarg;
+                fullName = strdup( optarg );
                 break;
             case 'P':
                 // Do not use this.  Passing your master password via the command-line
@@ -166,12 +166,12 @@ int main(int argc, char *const argv[]) {
                 ftl("Unexpected option: %c", opt);
         }
     if (optind < argc)
-        siteName = argv[optind];
+        siteName = strdup( argv[optind] );
 
     // Convert and validate input.
-    if (!fullName && !(fullName = getlinep( "Your full name:" )))
+    if (!fullName && !(fullName = getline_prompt( "Your full name:" )))
         ftl( "Missing full name.\n" );
-    if (!siteName && !(siteName = getlinep( "Site name:" )))
+    if (!siteName && !(siteName = getline_prompt( "Site name:" )))
         ftl( "Missing site name.\n" );
     if (siteCounterString)
         siteCounter = (uint32_t)atol( siteCounterString );
@@ -210,21 +210,27 @@ int main(int argc, char *const argv[]) {
         masterPassword = getpass( "Your master password: " );
 
     // Summarize operation.
-    fprintf( stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, mpw_identicon( fullName, masterPassword ) );
+    const char *identicon = mpw_identicon( fullName, masterPassword );
+    fprintf( stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, identicon );
+    mpw_free_string( identicon );
 
     // Output the password.
     const uint8_t *masterKey = mpw_masterKeyForUser(
             fullName, masterPassword, algorithmVersion );
     mpw_free_string( masterPassword );
+    mpw_free_string( fullName );
     if (!masterKey)
         ftl( "Couldn't derive master key." );
 
     const char *sitePassword = mpw_passwordForSite(
             masterKey, siteName, siteType, siteCounter, siteVariant, siteContextString, algorithmVersion );
     mpw_free( masterKey, MP_dkLen );
+    mpw_free_string( siteName );
     if (!sitePassword)
         ftl( "Couldn't derive site password." );
 
     fprintf( stdout, "%s\n", sitePassword );
+    mpw_free_string( sitePassword );
+
     return 0;
 }

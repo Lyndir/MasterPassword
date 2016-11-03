@@ -112,10 +112,7 @@ const char *mpw_templateForType(MPSiteType type, uint8_t seedByte) {
 
     size_t count = 0;
     const char **templates = mpw_templatesForType( type, &count );
-    if (!count)
-        return NULL;
-
-    char const *template = templates[seedByte % count];
+    char const *template = count? templates[seedByte % count]: NULL;
     free( templates );
     return template;
 }

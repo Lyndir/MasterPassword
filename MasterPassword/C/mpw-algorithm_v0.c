@@ -22,10 +22,9 @@ static const char *mpw_templateForType_v0(MPSiteType type, uint16_t seedByte) {
 
     size_t count = 0;
     const char **templates = mpw_templatesForType( type, &count );
-    if (!count)
-        return NULL;
-
-    return templates[seedByte % count];
+    char const *template = count? templates[seedByte % count]: NULL;
+    free( templates );
+    return template;
 }
 
 static const char mpw_characterFromClass_v0(char characterClass, uint16_t seedByte) {
