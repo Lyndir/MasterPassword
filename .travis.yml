@@ -3,4 +3,4 @@ osx_image: xcode8
 env: TERM=dumb SHLVL=0
 git:
   submodules: true
-script: bundle exec xcodebuild -workspace MasterPassword.xcworkspace -scheme 'MasterPassword iOS (App Store)' -sdk iphonesimulator
+script: xcodebuild -workspace MasterPassword.xcworkspace -scheme 'MasterPassword iOS (App Store)' -sdk iphonesimulator
