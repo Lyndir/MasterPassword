@@ -65,7 +65,7 @@ int main(int argc, char *const argv[]) {
         }
 
         // Free test case.
-        mpw_freeString( sitePassword );
+        mpw_free_string( sitePassword );
         xmlFree( id );
         xmlFree( fullName );
         xmlFree( masterPassword );

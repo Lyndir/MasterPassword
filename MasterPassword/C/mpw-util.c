@@ -21,7 +21,7 @@
 
 #include "mpw-util.h"
 
-void mpw_pushBuf(uint8_t **const buffer, size_t *const bufferSize, const void *pushBuffer, const size_t pushSize) {
+void mpw_push_buf(uint8_t **const buffer, size_t *const bufferSize, const void *pushBuffer, const size_t pushSize) {
 
     if (*bufferSize == (size_t)-1)
         // The buffer was marked as broken, it is missing a previous push.  Abort to avoid corrupt content.
@@ -42,14 +42,14 @@ void mpw_pushBuf(uint8_t **const buffer, size_t *const bufferSize, const void *p
     memcpy( pushDst, pushBuffer, pushSize );
 }
 
-void mpw_pushString(uint8_t **buffer, size_t *const bufferSize, const char *pushString) {
+void mpw_push_string(uint8_t **buffer, size_t *const bufferSize, const char *pushString) {
 
-    mpw_pushBuf( buffer, bufferSize, pushString, strlen( pushString ) );
+    mpw_push_buf( buffer, bufferSize, pushString, strlen( pushString ) );
 }
 
-void mpw_pushInt(uint8_t **const buffer, size_t *const bufferSize, const uint32_t pushInt) {
+void mpw_push_int(uint8_t **const buffer, size_t *const bufferSize, const uint32_t pushInt) {
 
-    mpw_pushBuf( buffer, bufferSize, &pushInt, sizeof( pushInt ) );
+    mpw_push_buf( buffer, bufferSize, &pushInt, sizeof( pushInt ) );
 }
 
 void mpw_free(const void *buffer, const size_t bufferSize) {
@@ -60,7 +60,7 @@ void mpw_free(const void *buffer, const size_t bufferSize) {
     }
 }
 
-void mpw_freeString(const char *string) {
+void mpw_free_string(const char *string) {
 
     mpw_free( string, strlen( string ) );
 }
@@ -93,7 +93,7 @@ uint8_t const *mpw_hmac_sha256(const uint8_t *key, const size_t keySize, const u
     return buffer;
 }
 
-const char *mpw_idForBuf(const void *buf, size_t length) {
+const char *mpw_id_buf(const void *buf, size_t length) {
 
     uint8_t hash[32];
     SHA256_Buf( buf, length, hash );
@@ -194,7 +194,7 @@ const char *mpw_identicon(const char *fullName, const char *masterPassword) {
 /**
 * @return the amount of bytes used by UTF-8 to encode a single character that starts with the given byte.
 */
-static int mpw_charByteSize(unsigned char utf8Byte) {
+static int mpw_utf8_sizeof(unsigned char utf8Byte) {
 
     if (!utf8Byte)
         return 0;
@@ -212,11 +212,11 @@ static int mpw_charByteSize(unsigned char utf8Byte) {
     return 0;
 }
 
-const size_t mpw_charlen(const char *utf8String) {
+const size_t mpw_utf8_strlen(const char *utf8String) {
 
     size_t charlen = 0;
     char *remainingString = (char *)utf8String;
-    for (int charByteSize; (charByteSize = mpw_charByteSize( (unsigned char)*remainingString )); remainingString += charByteSize)
+    for (int charByteSize; (charByteSize = mpw_utf8_sizeof( (unsigned char)*remainingString )); remainingString += charByteSize)
         ++charlen;
 
     return charlen;

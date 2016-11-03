@@ -54,7 +54,7 @@ int mpw_verbosity;
 
 //// Buffers and memory.
 
-#define alloc_array(_count, _type, ...) ({ \
+#define mpw_alloc_array(_count, _type, ...) ({ \
     _type stackElements[] = { __VA_ARGS__ }; \
     _count = sizeof( stackElements ) / sizeof( _type ); \
     _type *allocElements = malloc( sizeof( stackElements ) ); \
@@ -63,19 +63,19 @@ int mpw_verbosity;
  })
 
 /** Push a buffer onto a buffer.  reallocs the given buffer and appends the given buffer. */
-void mpw_pushBuf(
+void mpw_push_buf(
         uint8_t **const buffer, size_t *const bufferSize, const void *pushBuffer, const size_t pushSize);
 /** Push a string onto a buffer.  reallocs the given buffer and appends the given string. */
-void mpw_pushString(
+void mpw_push_string(
         uint8_t **buffer, size_t *const bufferSize, const char *pushString);
 /** Push an integer onto a buffer.  reallocs the given buffer and appends the given integer. */
-void mpw_pushInt(
+void mpw_push_int(
         uint8_t **const buffer, size_t *const bufferSize, const uint32_t pushInt);
 /** Free a buffer after zero'ing its contents. */
 void mpw_free(
         const void *buffer, const size_t bufferSize);
 /** Free a string after zero'ing its contents. */
-void mpw_freeString(
+void mpw_free_string(
         const char *string);
 
 //// Cryptographic functions.
@@ -98,7 +98,7 @@ const char *mpw_hex(const void *buf, size_t length);
 const char *mpw_hex_l(uint32_t number);
 /** Encode a fingerprint for a buffer.
   * @return A C-string in a reused buffer, do not free or store it. */
-const char *mpw_idForBuf(const void *buf, size_t length);
+const char *mpw_id_buf(const void *buf, size_t length);
 /** Encode a visual fingerprint for a user.
   * @return A newly allocated string. */
 const char *mpw_identicon(const char *fullName, const char *masterPassword);
@@ -106,4 +106,4 @@ const char *mpw_identicon(const char *fullName, const char *masterPassword);
 //// String utilities.
 
 /** @return The amount of display characters in the given UTF-8 string. */
-const size_t mpw_charlen(const char *utf8String);
+const size_t mpw_utf8_strlen(const char *utf8String);

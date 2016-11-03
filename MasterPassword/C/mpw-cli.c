@@ -215,7 +215,7 @@ int main(int argc, char *const argv[]) {
     // Output the password.
     const uint8_t *masterKey = mpw_masterKeyForUser(
             fullName, masterPassword, algorithmVersion );
-    mpw_freeString( masterPassword );
+    mpw_free_string( masterPassword );
     if (!masterKey)
         ftl( "Couldn't derive master key." );
 

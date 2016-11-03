@@ -5,3 +5,4 @@ set -e
 cd "${BASH_SOURCE%/*}"
 
 rm -vfr lib/*/{.unpacked,.patched,src} lib/include
+rm -vfr *.o *.dSYM mpw mpw-bench mpw-tests

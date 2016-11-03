@@ -63,11 +63,11 @@ const char **mpw_templatesForType(MPSiteType type, size_t *count) {
 
     switch (type) {
         case MPSiteTypeGeneratedMaximum: {
-            return alloc_array( *count, const char *,
+            return mpw_alloc_array( *count, const char *,
                     "anoxxxxxxxxxxxxxxxxx", "axxxxxxxxxxxxxxxxxno" );
         }
         case MPSiteTypeGeneratedLong: {
-            return alloc_array( *count, const char *,
+            return mpw_alloc_array( *count, const char *,
                     "CvcvnoCvcvCvcv", "CvcvCvcvnoCvcv", "CvcvCvcvCvcvno",
                     "CvccnoCvcvCvcv", "CvccCvcvnoCvcv", "CvccCvcvCvcvno",
                     "CvcvnoCvccCvcv", "CvcvCvccnoCvcv", "CvcvCvccCvcvno",
@@ -77,27 +77,27 @@ const char **mpw_templatesForType(MPSiteType type, size_t *count) {
                     "CvccnoCvcvCvcc", "CvccCvcvnoCvcc", "CvccCvcvCvccno" );
         }
         case MPSiteTypeGeneratedMedium: {
-            return alloc_array( *count, const char *,
+            return mpw_alloc_array( *count, const char *,
                     "CvcnoCvc", "CvcCvcno" );
         }
         case MPSiteTypeGeneratedBasic: {
-            return alloc_array( *count, const char *,
+            return mpw_alloc_array( *count, const char *,
                     "aaanaaan", "aannaaan", "aaannaaa" );
         }
         case MPSiteTypeGeneratedShort: {
-            return alloc_array( *count, const char *,
+            return mpw_alloc_array( *count, const char *,
                     "Cvcn" );
         }
         case MPSiteTypeGeneratedPIN: {
-            return alloc_array( *count, const char *,
+            return mpw_alloc_array( *count, const char *,
                     "nnnn" );
         }
         case MPSiteTypeGeneratedName: {
-            return alloc_array( *count, const char *,
+            return mpw_alloc_array( *count, const char *,
                     "cvccvcvcv" );
         }
         case MPSiteTypeGeneratedPhrase: {
-            return alloc_array( *count, const char *,
+            return mpw_alloc_array( *count, const char *,
                     "cvcc cvc cvccvcv cvc", "cvc cvccvcvcv cvcv", "cv cvccv cvc cvcvccv" );
         }
         default: {
