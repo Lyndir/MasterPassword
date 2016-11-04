@@ -362,7 +362,7 @@ NSOperationQueue *_mpwQueue = nil;
                 name.UTF8String, type, (uint32_t)counter, variant, context.UTF8String, [self version] );
         if (contentBytes) {
             content = [NSString stringWithCString:contentBytes encoding:NSUTF8StringEncoding];
-            mpw_freeString( contentBytes );
+            mpw_free_string( contentBytes );
         }
     }];
 
