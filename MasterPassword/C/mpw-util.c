@@ -147,7 +147,6 @@ static int putvar(int c) {
 
 
 void mpw_toggle_term_echo () {
-   static sigset_t sigOld;
    static struct termios termOld;
    static FILE *fp = NULL;
 
@@ -155,14 +154,9 @@ void mpw_toggle_term_echo () {
        if ((fp = fopen( ctermid(NULL), "r+")) == NULL)
             return;
 
-        sigset_t sig;
-        struct  termios term;
-
         setbuf( fp, NULL);
-        sigemptyset( &sig );
-        sigaddset( &sig, SIGINT); /* block SIGINT */
-        sigaddset( &sig, SIGTSTP); /* block SIGTSTP */
-        sigprocmask( SIG_BLOCK, &sig, &sigOld);
+
+        struct  termios term;
 
         tcgetattr( fileno(fp), &term);
         termOld = term; /*save attr.*/
@@ -172,7 +166,6 @@ void mpw_toggle_term_echo () {
 
     } else {
         tcsetattr( fileno(fp), TCSAFLUSH, &termOld);
-        sigprocmask( SIG_SETMASK, &sigOld, NULL);
         fclose(fp);
         fp = NULL;
     }
