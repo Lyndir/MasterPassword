@@ -85,7 +85,7 @@ static char *getline_prompt(const char *prompt) {
     ssize_t lineSize;
     fprintf( stderr, "%s", prompt );
     fprintf( stderr, " " );
-    if ((lineSize = getline( &buf, &bufSize, stdin )) < 0) {
+    if ((lineSize = getline( &buf, &bufSize, stdin )) <= 1) {
         free( buf );
         return NULL;
     }
