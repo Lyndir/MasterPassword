@@ -96,7 +96,7 @@ static char *getline_prompt(const char *prompt) {
 int main(int argc, char *const argv[]) {
 
     // Read the environment.
-    char *fullName = strdup( getenv( MP_env_fullname ) );
+    const char *fullName = NULL;
     const char *masterPassword = NULL;
     const char *siteName = NULL;
     MPSiteType siteType = MPSiteTypeGeneratedLong;
@@ -169,6 +169,8 @@ int main(int argc, char *const argv[]) {
         siteName = strdup( argv[optind] );
 
     // Convert and validate input.
+    if (!fullName && (fullName = getenv( MP_env_fullname )))
+        fullName = strdup( fullName );
     if (!fullName && !(fullName = getline_prompt( "Your full name:" )))
         ftl( "Missing full name.\n" );
     if (!siteName && !(siteName = getline_prompt( "Site name:" )))
