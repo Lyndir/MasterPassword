@@ -129,15 +129,20 @@ const char *mpw_hex_l(uint32_t number) {
 #ifdef COLOR
 static int putvari;
 static char *putvarc = NULL;
-static int istermsetup = 0;
-static void initputvar() {
+static int termsetup = ERR;
+static int initputvar() {
+    if (!isatty(STDERR_FILENO))
+        return 0;
     if (putvarc)
         free(putvarc);
+    if (termsetup != OK)
+        setupterm(NULL, STDERR_FILENO, &termsetup);
+    if (termsetup != OK)
+        return 0;
+
     putvarc=(char *)calloc(256, sizeof(char));
     putvari=0;
-
-    if (!istermsetup)
-        istermsetup = (OK == setupterm(NULL, STDERR_FILENO, NULL));
+    return 1;
 }
 static int putvar(int c) {
     putvarc[putvari++]=c;
@@ -161,9 +166,8 @@ const char *mpw_identicon(const char *fullName, const char *masterPassword) {
 
     char *colorString, *resetString;
 #ifdef COLOR
-    if (isatty( STDERR_FILENO )) {
+    if (initputvar()) {
         uint8_t colorIdentifier = (uint8_t)(identiconSeed[4] % 7 + 1);
-        initputvar();
         tputs(tparm(tgetstr("AF", NULL), colorIdentifier), 1, putvar);
         colorString = calloc(strlen(putvarc) + 1, sizeof(char));
         strcpy(colorString, putvarc);
