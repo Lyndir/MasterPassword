@@ -135,10 +135,11 @@ static int initputvar() {
         return 0;
     if (putvarc)
         free(putvarc);
-    if (termsetup != OK)
-        setupterm(NULL, STDERR_FILENO, &termsetup);
-    if (termsetup != OK)
-        return 0;
+    if (termsetup != OK) {
+        int err;
+        if ((termsetup = setupterm(NULL, STDERR_FILENO, &err)) != OK)
+            return 0;
+    }
 
     putvarc=(char *)calloc(256, sizeof(char));
     putvari=0;
