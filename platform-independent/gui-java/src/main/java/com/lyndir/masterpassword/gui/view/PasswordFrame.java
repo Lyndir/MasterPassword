@@ -88,7 +88,10 @@ public class PasswordFrame extends JFrame implements DocumentListener {
                                 passwordField.setText( null );
                                 siteNameField.setText( null );
 
-                                dispatchEvent( new WindowEvent( PasswordFrame.this, WindowEvent.WINDOW_CLOSING ) );
+                                String p = System.getProperty("mpw.keep-gui");
+                                if (p == null || p != "1") {
+                                    dispatchEvent( new WindowEvent( PasswordFrame.this, WindowEvent.WINDOW_CLOSING ) );
+                                }
                             }
                         } );
                     }
