@@ -129,16 +129,19 @@ const char *mpw_hex_l(uint32_t number) {
 #ifdef COLOR
 static int putvari;
 static char *putvarc = NULL;
-static int termsetup = ERR;
+static int termsetup;
 static int initputvar() {
     if (!isatty(STDERR_FILENO))
         return 0;
     if (putvarc)
         free(putvarc);
-    if (termsetup != OK)
-        setupterm(NULL, STDERR_FILENO, &termsetup);
-    if (termsetup != OK)
-        return 0;
+    if (!termsetup) {
+        int status;
+        if (! (termsetup = (setupterm(NULL, STDERR_FILENO, &status) == OK && status == 1))) {
+            wrn( "Terminal doesn't support color (setupterm errno %d).\n", status );
+            return 0;
+        }
+    }
 
     putvarc=(char *)calloc(256, sizeof(char));
     putvari=0;
