@@ -51,7 +51,7 @@ fi
 ### DEPENDENCIES
 
 digest() {
-    openssl sha -sha256 -binary < "$1" | od -t x1 -An -v | tr -d '[:space:]'
+    openssl sha256 -binary < "$1" | od -t x1 -An -v | tr -d '[:space:]'
 }
 fetch() {
     if hash wget 2>/dev/null; then
