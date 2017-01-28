@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <string.h>
 #include <errno.h>
 #include <sys/time.h>
@@ -56,53 +57,79 @@ int main(int argc, char *const argv[]) {
     const MPSiteVariant siteVariant = MPSiteVariantPassword;
     const char *siteContext = NULL;
     struct timeval startTime;
-
-    // Start MPW
-    unsigned int iterations = 100;
-    const uint8_t *masterKey = NULL;
-    mpw_getTime( &startTime );
-    for (int i = 0; i < iterations; ++i) {
-        free( (void *)masterKey );
-        masterKey = mpw_masterKeyForUser( fullName, masterPassword, MPAlgorithmVersionCurrent );
-        if (!masterKey)
-            ftl( "Could not allocate master key: %d\n", errno );
-        free( (void *)mpw_passwordForSite(
-                masterKey, siteName, siteType, siteCounter, siteVariant, siteContext, MPAlgorithmVersionCurrent ) );
-
-        if (i % ( iterations / 100 ) == 0)
-            fprintf( stderr, "\rmpw: iteration %d / %d (%u%%)..", i, iterations, i * 100 / iterations );
-    }
-    const double mpwSpeed = mpw_showSpeed( startTime, iterations, "mpw" );
+    unsigned int iterations;
+    float percent;
+    const uint8_t *masterKey;
 
     // Start HMAC-SHA-256
+    // Similar to phase-two of mpw
     uint8_t *sitePasswordInfo = malloc( 128 );
-    iterations = 5500000;
-    uint8_t hash[32];
+    iterations = 3000000;
+    masterKey = mpw_masterKeyForUser( fullName, masterPassword, MPAlgorithmVersionCurrent );
+    if (!masterKey) {
+        ftl( "Could not allocate master key: %d\n", errno );
+        abort();
+    }
     mpw_getTime( &startTime );
-    for (int i = 0; i < iterations; ++i) {
+    for (int i = 1; i <= iterations; ++i) {
         free( (void *)mpw_hmac_sha256( masterKey, MP_dkLen, sitePasswordInfo, 128 ) );
 
-        if (i % ( iterations / 100 ) == 0)
-            fprintf( stderr, "\rhmac-sha-256: iteration %d / %d (%u%%)..", i, iterations, i * 100 / iterations );
+        if (modff(100.f * i / iterations, &percent) == 0)
+            fprintf( stderr, "\rhmac-sha-256: iteration %d / %d (%.0f%%)..", i, iterations, percent );
     }
     const double hmacSha256Speed = mpw_showSpeed( startTime, iterations, "hmac-sha-256" );
+    free( (void *)masterKey );
 
     // Start BCrypt
+    // Similar to phase-one of mpw
     int bcrypt_cost = 9;
     iterations = 1000;
     mpw_getTime( &startTime );
-    for (int i = 0; i < iterations; ++i) {
+    for (int i = 1; i <= iterations; ++i) {
         crypt( masterPassword, crypt_gensalt( "$2b$", bcrypt_cost, fullName, strlen( fullName ) ) );
 
-        if (i % ( iterations / 100 ) == 0)
-            fprintf( stderr, "\rbcrypt (cost %d): iteration %d / %d (%u%%)..", bcrypt_cost, i, iterations, i * 100 / iterations );
+        if (modff(100.f * i / iterations, &percent) == 0)
+            fprintf( stderr, "\rbcrypt (cost %d): iteration %d / %d (%.0f%%)..", bcrypt_cost, i, iterations, percent );
     }
     const double bcrypt9Speed = mpw_showSpeed( startTime, iterations, "bcrypt9" );
+
+    // Start SCrypt
+    // Phase one of mpw
+    iterations = 50;
+    mpw_getTime( &startTime );
+    for (int i = 1; i <= iterations; ++i) {
+        free( (void *)mpw_masterKeyForUser( fullName, masterPassword, MPAlgorithmVersionCurrent ) );
+
+        if (modff(100.f * i / iterations, &percent) == 0)
+            fprintf( stderr, "\rscrypt_mpw: iteration %d / %d (%.0f%%)..", i, iterations, percent );
+    }
+    const double scryptSpeed = mpw_showSpeed( startTime, iterations, "scrypt_mpw" );
+
+    // Start MPW
+    // Both phases of mpw
+    iterations = 50;
+    mpw_getTime( &startTime );
+    for (int i = 1; i <= iterations; ++i) {
+        masterKey = mpw_masterKeyForUser( fullName, masterPassword, MPAlgorithmVersionCurrent );
+        if (!masterKey) {
+            ftl( "Could not allocate master key: %d\n", errno );
+            abort();
+        }
+
+        free( (void *)mpw_passwordForSite(
+                masterKey, siteName, siteType, siteCounter, siteVariant, siteContext, MPAlgorithmVersionCurrent ) );
+        free( (void *)masterKey );
+
+        if (modff(100.f * i / iterations, &percent) == 0)
+            fprintf( stderr, "\rmpw: iteration %d / %d (%.0f%%)..", i, iterations, percent );
+    }
+    const double mpwSpeed = mpw_showSpeed( startTime, iterations, "mpw" );
 
     // Summarize.
     fprintf( stdout, "\n== SUMMARY ==\nOn this machine,\n" );
     fprintf( stdout, " - mpw is %f times slower than hmac-sha-256 (reference: 320000 on an MBP Late 2013).\n", hmacSha256Speed / mpwSpeed );
     fprintf( stdout, " - mpw is %f times slower than bcrypt (cost 9) (reference: 22 on an MBP Late 2013).\n", bcrypt9Speed / mpwSpeed );
+    fprintf( stdout, " - scrypt is %f times slower than bcrypt (cost 9) (reference: 22 on an MBP Late 2013).\n", bcrypt9Speed / scryptSpeed );
 
     return 0;
 }
