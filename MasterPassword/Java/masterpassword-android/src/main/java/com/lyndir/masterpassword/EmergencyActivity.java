@@ -13,8 +13,8 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.*;
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.UnsignedInteger;
@@ -40,40 +40,40 @@ public class EmergencyActivity extends Activity {
 
     private ListenableFuture<MasterKey> masterKeyFuture;
 
-    @InjectView(R.id.progressView)
+    @BindView(R.id.progressView)
     ProgressBar progressView;
 
-    @InjectView(R.id.fullNameField)
+    @BindView(R.id.fullNameField)
     EditText fullNameField;
 
-    @InjectView(R.id.masterPasswordField)
+    @BindView(R.id.masterPasswordField)
     EditText masterPasswordField;
 
-    @InjectView(R.id.siteNameField)
+    @BindView(R.id.siteNameField)
     EditText siteNameField;
 
-    @InjectView(R.id.siteTypeButton)
+    @BindView(R.id.siteTypeButton)
     Button siteTypeButton;
 
-    @InjectView(R.id.counterField)
+    @BindView(R.id.counterField)
     Button siteCounterButton;
 
-    @InjectView(R.id.siteVersionButton)
+    @BindView(R.id.siteVersionButton)
     Button siteVersionButton;
 
-    @InjectView(R.id.sitePasswordField)
+    @BindView(R.id.sitePasswordField)
     Button sitePasswordField;
 
-    @InjectView(R.id.sitePasswordTip)
+    @BindView(R.id.sitePasswordTip)
     TextView sitePasswordTip;
 
-    @InjectView(R.id.rememberFullNameField)
+    @BindView(R.id.rememberFullNameField)
     CheckBox rememberFullNameField;
 
-    @InjectView(R.id.rememberPasswordField)
+    @BindView(R.id.rememberPasswordField)
     CheckBox forgetPasswordField;
 
-    @InjectView(R.id.maskPasswordField)
+    @BindView(R.id.maskPasswordField)
     CheckBox maskPasswordField;
 
     private int    id_userName;
@@ -92,7 +92,7 @@ public class EmergencyActivity extends Activity {
 
         getWindow().setFlags( WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE );
         setContentView( R.layout.activity_emergency );
-        ButterKnife.inject( this );
+        ButterKnife.bind( this );
 
         fullNameField.setOnFocusChangeListener( new ValueChangedListener() {
             @Override

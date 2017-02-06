@@ -1,0 +1,27 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
+
+    defaultConfig {
+        applicationId "com.lyndir.masterpassword"
+        minSdkVersion 19
+        targetSdkVersion 25
+        versionCode 2003
+        versionName "2.3"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+dependencies {
+    compile project( ':masterpassword-algorithm' )
+    compile project( ':masterpassword-tests' )
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.jakewharton:butterknife:8.5.1'
+    compile 'com.lambdaworks:scrypt:1.4.0-android'
+    compile 'org.slf4j:slf4j-android:1.7.13-underscore'
+}

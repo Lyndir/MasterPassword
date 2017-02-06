@@ -8,8 +8,8 @@ import android.content.Intent;
 import android.os.*;
 import android.view.View;
 import android.widget.*;
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import com.google.common.base.*;
 import com.google.common.collect.*;
 import com.google.common.util.concurrent.*;
@@ -27,19 +27,19 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
     private final ListeningExecutorService backgroundExecutor = MoreExecutors.listeningDecorator( Executors.newSingleThreadExecutor() );
     private final ListeningExecutorService mainExecutor       = MoreExecutors.listeningDecorator( new MainThreadExecutor() );
 
-    @InjectView(R.id.progressView)
+    @BindView(R.id.progressView)
     ProgressBar progressView;
 
-    @InjectView(R.id.statusView)
+    @BindView(R.id.statusView)
     TextView statusView;
 
-    @InjectView(R.id.logView)
+    @BindView(R.id.logView)
     TextView logView;
 
-    @InjectView(R.id.actionButton)
+    @BindView(R.id.actionButton)
     Button actionButton;
 
-    @InjectView(R.id.nativeKDFField)
+    @BindView(R.id.nativeKDFField)
     CheckBox nativeKDFField;
 
     private MPTestSuite               testSuite;
@@ -57,7 +57,7 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
         Res.init( getResources() );
 
         setContentView( R.layout.activity_test );
-        ButterKnife.inject( this );
+        ButterKnife.bind( this );
 
         nativeKDFField.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
             @Override

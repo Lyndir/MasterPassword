@@ -1,0 +1,35 @@
+allprojects    {
+    apply plugin: 'maven'
+    //apply plugin: 'findbugs'
+
+    group = 'com.lyndir.masterpassword'
+    version = 'GIT-SNAPSHOT'
+
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = "1.7"
+        targetCompatibility = "1.7"
+    }
+    tasks.withType(FindBugs) {
+        reports {
+            xml.enabled false
+            html.enabled true
+        }
+    }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath group: 'com.android.tools.build', name: 'gradle', version: '2.2.3'
+    }
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+        maven { url "http://maven.lyndir.com" }
+    }
+}
