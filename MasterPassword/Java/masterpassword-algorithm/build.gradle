@@ -3,7 +3,7 @@ apply plugin: 'java'
 description = 'Master Password Algorithm Implementation'
 
 dependencies {
-    compile( 'com.lyndir.lhunath.opal:opal-system:1.6-p9' ) {
+    compile( 'com.lyndir.lhunath.opal:opal-system:1.6-p10' ) {
         exclude( module: 'joda-time' )
     }
     compile 'com.lambdaworks:scrypt:1.4.0'

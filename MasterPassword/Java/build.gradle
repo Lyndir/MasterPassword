@@ -1,5 +1,4 @@
 allprojects    {
-    apply plugin: 'maven'
     //apply plugin: 'findbugs'
 
     group = 'com.lyndir.masterpassword'
