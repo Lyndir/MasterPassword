@@ -15,6 +15,7 @@ android {
         versionCode 20401
         versionName "2.4.1"
     }
+    // release with: STORE_PW=$(mpw masterpassword.keystore) KEY_PW=$(mpw masterpassword-android) gradle assembleRelease
     signingConfigs {
         release {
             storeFile file('masterpassword.keystore')
