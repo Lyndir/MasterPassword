@@ -12,7 +12,7 @@ mpwArchive=mpw-$commit.tar.gz
 read -n1 -p "Will prepare and release $mpwArchive.  Press a key to continue or ^C to abort."
 
 git ls-files -z . | xargs -0 tar -Lcvzf "$mpwArchive"
-echo "$mpwArchive ready, SHA256: $(openssl sha -sha256 < "$mpwArchive")"
+echo "$mpwArchive ready, SHA256: $(openssl sha256 < "$mpwArchive")"
 
 cd ../../Site/current
 ln -sf "../../MasterPassword/C/$mpwArchive"
