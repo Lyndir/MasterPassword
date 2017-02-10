@@ -18,8 +18,6 @@
         <activity
                 android:name=".TestActivity"
                 android:theme="@style/MPTheme" />
-        <activity android:name=".MainActivity">
-        </activity>
     </application>
 
 </manifest>
