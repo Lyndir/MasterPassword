@@ -16,9 +16,17 @@ android {
         versionName "2.4.1"
     }
     signingConfigs {
-        lyndir {
-            keyAlias 'lyndir'
-            storeFile file('/Users/lhunath/annex/secret/masterpassword.keystore')
+        release {
+            storeFile file('masterpassword.keystore')
+            storePassword System.getenv('STORE_PW')
+
+            keyAlias 'masterpassword-android'
+            keyPassword System.getenv('KEY_PW')
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
         }
     }
 }
