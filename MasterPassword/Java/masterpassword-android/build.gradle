@@ -1,16 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        lyndir {
-            keyAlias 'lyndir'
-            keyPassword 'JaxeMeruDafc0('
-            storeFile file('/Users/lhunath/annex/secret/lyndir.keystore')
-            storePassword 'JaxeMeruDafc0('
-        }
-    }
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
     defaultConfig {
         applicationId "com.lyndir.masterpassword"
         minSdkVersion 19
@@ -18,9 +15,11 @@ android {
         versionCode 20401
         versionName "2.4.1"
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+    signingConfigs {
+        lyndir {
+            keyAlias 'lyndir'
+            storeFile file('/Users/lhunath/annex/secret/masterpassword.keystore')
+        }
     }
 }
 
