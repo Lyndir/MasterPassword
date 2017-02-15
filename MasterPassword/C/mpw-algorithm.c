@@ -11,6 +11,7 @@
 #include "mpw-algorithm_v1.c"
 #include "mpw-algorithm_v2.c"
 #include "mpw-algorithm_v3.c"
+#include "mpw-algorithm_v4.c"
 
 #define MP_N                32768
 #define MP_r                8
@@ -31,6 +32,8 @@ const uint8_t *mpw_masterKeyForUser(const char *fullName, const char *masterPass
             return mpw_masterKeyForUser_v2( fullName, masterPassword );
         case MPAlgorithmVersion3:
             return mpw_masterKeyForUser_v3( fullName, masterPassword );
+        case MPAlgorithmVersion4:
+            return mpw_masterKeyForUser_v4( fullName, masterPassword );
         default:
             ftl( "Unsupported version: %d", algorithmVersion );
             return NULL;
@@ -52,6 +55,8 @@ const char *mpw_passwordForSite(const uint8_t *masterKey, const char *siteName, 
             return mpw_passwordForSite_v2( masterKey, siteName, siteType, siteCounter, siteVariant, siteContext );
         case MPAlgorithmVersion3:
             return mpw_passwordForSite_v3( masterKey, siteName, siteType, siteCounter, siteVariant, siteContext );
+        case MPAlgorithmVersion4:
+            return mpw_passwordForSite_v4( masterKey, siteName, siteType, siteCounter, siteVariant, siteContext );
         default:
             ftl( "Unsupported version: %d", algorithmVersion );
             return NULL;

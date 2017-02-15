@@ -78,7 +78,7 @@ const MPSiteType mpw_typeWithName(const char *typeName);
  * @return A newly allocated array of internal strings that express the templates to use for the given type.
  *         The amount of elements in the array is stored in count.
  *         If an unsupported type is given, count will be 0 and will return NULL.
-*          The array needs to be free'ed, the strings themselves must not be free'ed or modified.
+ *         The array needs to be free'ed, the strings themselves must not be free'ed or modified.
  */
 const char **mpw_templatesForType(MPSiteType type, size_t *count);
 /**
@@ -91,9 +91,21 @@ const char *mpw_templateForType(MPSiteType type, uint8_t seedByte);
  * @return An internal string that contains all the characters that occur in the given character class.
  */
 const char *mpw_charactersInClass(char characterClass);
+
+/**
+ * @return An internal string that contains all the characters that occur in the given character class.
+ * For the version 4.
+ */
+const char *mpw_charactersInClass_v4(char characterClass);
+
 /**
  * @return A character from given character class that encodes the given byte.
  */
 const char mpw_characterFromClass(char characterClass, uint8_t seedByte);
+
+/**
+ * @return A character from given character class that encodes the given byte. For the version 4.
+ */
+const char mpw_characterFromClass_v4(char characterClass, uint8_t seedByte);
 
 #endif // _MPW_TYPES_H
