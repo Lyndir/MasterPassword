@@ -16,10 +16,12 @@ typedef enum(unsigned int, MPAlgorithmVersion) {
             MPAlgorithmVersion1,
     /** V2 miscounted the byte-length of multi-byte user names. */
             MPAlgorithmVersion2,
-    /** V3 is the current version. */
+    /** V3 missing symbols from o in x character class. */
             MPAlgorithmVersion3,
+    /** V4 is the current version. */
+            MPAlgorithmVersion4,
 };
-#define MPAlgorithmVersionCurrent MPAlgorithmVersion3
+#define MPAlgorithmVersionCurrent MPAlgorithmVersion4
 
 /** Derive the master key for a user based on their name and master password.
  * @return A new MP_dkLen-byte allocated buffer or NULL if an allocation error occurred. */

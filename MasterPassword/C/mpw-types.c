@@ -186,8 +186,44 @@ const char *mpw_charactersInClass(char characterClass) {
     }
 }
 
+const char *mpw_charactersInClass_v4(char characterClass) {
+
+    switch (characterClass) {
+        case 'V':
+            return "AEIOU";
+        case 'C':
+            return "BCDFGHJKLMNPQRSTVWXYZ";
+        case 'v':
+            return "aeiou";
+        case 'c':
+            return "bcdfghjklmnpqrstvwxyz";
+        case 'A':
+            return "AEIOUBCDFGHJKLMNPQRSTVWXYZ";
+        case 'a':
+            return "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz";
+        case 'n':
+            return "0123456789";
+        case 'o':
+            return "@&%?,=[]_:-+*$#!'^~;()/.";
+        case 'x':
+            return "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789@&%?,=[]_:-+*$#!'^~;()/.";
+        case ' ':
+            return " ";
+        default: {
+            fprintf( stderr, "Unknown character class: %c", characterClass );
+            abort();
+        }
+    }
+}
+
 const char mpw_characterFromClass(char characterClass, uint8_t seedByte) {
 
     const char *classCharacters = mpw_charactersInClass( characterClass );
+    return classCharacters[seedByte % strlen( classCharacters )];
+}
+
+const char mpw_characterFromClass_v4(char characterClass, uint8_t seedByte) {
+
+    const char *classCharacters = mpw_charactersInClass_v4( characterClass );
     return classCharacters[seedByte % strlen( classCharacters )];
 }
