@@ -3,4 +3,6 @@
 
 # Master Password
 
+[![Join the chat at https://gitter.im/lyndir/MasterPassword](https://badges.gitter.im/lyndir/MasterPassword.svg)](https://gitter.im/lyndir/MasterPassword?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Master Password is an algorithm and Java/iOS application to solve the real trouble with passwords.
