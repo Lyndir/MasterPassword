@@ -80,7 +80,7 @@
                             </menuItem>
                             <menuItem title="Claim the entire screen while looking up passwords." enabled="NO" id="3k1-4V-IZ7">
                                 <attributedString key="attributedTitle">
-                                    <fragment content="Always open Master Password at start-up.">
+                                    <fragment content="Claim the entire screen while looking up passwords.">
                                         <attributes>
                                             <font key="NSFont" size="12" name="Helvetica"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
