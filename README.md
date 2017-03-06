@@ -6,6 +6,10 @@ Master Password is a completely new way of thinking about passwords.
 
 It consists of an algorithm that implements the core idea and applications for various platforms making the alogirthm available to users on a variety of devices and platforms.
 
+To skip the intro and go straight to the information on how to use the code, [click here](#source-code).
+
+Master Password is available for [iOS](#macos-or-ios), [macOS](#macos-or-ios), [Android](#java), [Desktop](#java), and [Console](#c).
+
 ## What is a password?
 
 The "password".  Somehow, passwords have become the default solution to authentication across the web.  We've long since accepted this as the way things are, but let's stop to think for a moment about what passwords actually are:
