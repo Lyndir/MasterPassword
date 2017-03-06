@@ -84,6 +84,10 @@ There are several components available here.  As an end-user, you can currently 
  - `platform-independent/gui-java`: This is the platform-independent desktop implementation of Master Password, written in Java.
  - `platform-independent/web-js`: This is the platform-independent browser application for Master Password, written in JavaScript.
 
+## Building
+
+To build the Java code, go into the `build` root directory and run `gradle build`.  All Java components will then be built, you can find the build product for each component by going into the component's directory and looking in its own `build` subdirectory.
+
 ## Support
 
 Feel free to contribute by forking the project, contributing issues or joining the discussion on Gitter, #masterpassword (on chat.freenode.net) or #masterpassword:lyndir.com (on Matrix).
