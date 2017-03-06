@@ -10,6 +10,7 @@
 #       try commenting the line in lib/bcrypt/x86.S.
 #   - Take a look at the "Optional features" section.  Some features have dependencies,
 #       either make sure you have them or disable those features.
+#       eg. mpw_color=0 ./build
 #
 # BUGS
 #   masterpassword@lyndir.com
@@ -38,7 +39,7 @@ else
 fi
 
 # Optional features.
-mpw_color=1 # Colorized Identicon, requires libncurses-dev
+mpw_color=${mpw_color:-1} # Colorized Identicon, requires libncurses-dev
 
 # Distribution specific configuration.
 # Homebrew
