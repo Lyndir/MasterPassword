@@ -57,7 +57,7 @@ Master Password is *not* a password manager.  It does not store your website pas
 
 ## How does it work?
 
-The details of how Master Password works [[are available here][http://masterpasswordapp.com/algorithm.html]].
+The details of how Master Password works [are available here](http://masterpasswordapp.com/algorithm.html).
 
 In short:
 
@@ -67,22 +67,22 @@ In short:
 
 # Source Code
 
-Master Password's algorithm is [[documented][http://masterpasswordapp.com/algorithm.html]] and its implementation is Free Software (GPLv3).
+Master Password's algorithm is [documented](http://masterpasswordapp.com/algorithm.html) and its implementation is Free Software (GPLv3).
 
 ## Components
 
 There are several components available here.  As an end-user, you can currently use the iOS app, the Android app, the OS X app, the Java desktop app, the C CLI app or the Java CLI app.  There are also several components that are useful for developers:
 
- - core/c: This is the reference implementation of the Master Password algorithm, written in C.
- - core/java/algorithm: This is a Java implementation of the Master Password algorithm.
- - core/java/model: This is an object model to simplify use of Master Password by Java applications.
- - core/java/tests: These are Java integration tests designed to ensure Master Password performs as expected.
- - platform-android: This is the official Android implementation of Master Password in Java.
- - platform-ios: This is the official iOS implementation of Master Password in Objective-C.
- - platform-independent/cli-c: This is the platform-independent console implementation of Master Password, written in C.
- - platform-independent/cli-java: This is the platform-independent console implementation of Master Password, written in Java.
- - platform-independent/gui-java: This is the platform-independent desktop implementation of Master Password, written in Java.
- - platform-independent/web-js: This is the platform-independent browser application for Master Password, written in JavaScript.
+ - `core/c`: This is the reference implementation of the Master Password algorithm, written in C.
+ - `core/java/algorithm`: This is a Java implementation of the Master Password algorithm.
+ - `core/java/model`: This is an object model to simplify use of Master Password by Java applications.
+ - `core/java/tests`: These are Java integration tests designed to ensure Master Password performs as expected.
+ - `platform-android`: This is the official Android implementation of Master Password in Java.
+ - `platform-ios`: This is the official iOS implementation of Master Password in Objective-C.
+ - `platform-independent/cli-c`: This is the platform-independent console implementation of Master Password, written in C.
+ - `platform-independent/cli-java`: This is the platform-independent console implementation of Master Password, written in Java.
+ - `platform-independent/gui-java`: This is the platform-independent desktop implementation of Master Password, written in Java.
+ - `platform-independent/web-js`: This is the platform-independent browser application for Master Password, written in JavaScript.
 
 ## Support
 
