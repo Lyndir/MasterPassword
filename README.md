@@ -8,7 +8,9 @@ It consists of an algorithm that implements the core idea and applications for v
 
 To skip the intro and go straight to the information on how to use the code, [click here](#source-code).
 
-Master Password is available for [iOS](#macos-or-ios), [macOS](#macos-or-ios), [Android](#java), [Desktop](#java), and [Console](#c).
+Master Password is available for [iOS](https://itunes.apple.com/app/id510296984), [macOS](https://ssl.masterpasswordapp.com/masterpassword-mac.zip), [Android](https://ssl.masterpasswordapp.com/masterpassword-android.apk), [Desktop](https://ssl.masterpasswordapp.com/masterpassword-gui.jar), and [Console](https://ssl.masterpasswordapp.com/masterpassword-cli.tar.gz).
+
+Master Password is also available from the following package managers: mac OS: [Homebrew](https://brew.sh/).  Get in touch if you are interested in adding Master Password to any other package managers.
 
 ## What is a password?
 
@@ -67,7 +69,11 @@ In short:
 
     master-key = SCRYPT( user-name, master-password )
     site-key = HMAC-SHA-256( site-name . site-counter, master-key )
-    site-password = PW-TEMPLATE( site-key, template )
+    site-password = PW-TEMPLATE( site-key, site-template )
+
+Master Password can derive the `site-password` in an entirely stateless manner.  It is therefore better defined as a calculator than a manager.  It is the user's responsibility to remember the inputs: `user-name`, `master-password`, `site-name`, `site-counter` and `site-template`.
+
+We standardize `user-name` as your full name, `site-name` as the domain name of the site, `site-counter` to `1` (unless you explicitly increment it) and `site-template` to `Long Password`; as a result the only token the user really needs to remember actively is `master-password`.
 
 # Source Code
 
