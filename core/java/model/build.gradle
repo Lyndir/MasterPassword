@@ -6,7 +6,7 @@ plugins {
 description = 'Master Password Site Model'
 
 dependencies {
-    compile     project(':masterpassword-algorithm')
+    compile     project(':masterpassword:algorithm')
 
     compile     group: 'joda-time', name: 'joda-time', version:'2.4'
 

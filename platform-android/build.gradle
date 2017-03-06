@@ -27,14 +27,15 @@ android {
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            if (System.getenv('STORE_PW') != null)
+                signingConfig signingConfigs.release
         }
     }
 }
 
 dependencies {
-    compile project( ':masterpassword-algorithm' )
-    compile project( ':masterpassword-tests' )
+    compile project( ':masterpassword:algorithm' )
+    compile project( ':masterpassword:tests' )
 
     // Android dependencies
     compile 'org.slf4j:slf4j-android:1.7.13-underscore'
