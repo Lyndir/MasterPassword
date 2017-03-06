@@ -102,7 +102,15 @@ Go into the `build` root directory and run `gradle build`.  All Java components 
 
 ### macOS or iOS
 
+Make sure you have all relevant submodules checked out.
+
 Go into `platform-darwin` and open `MasterPassword.xcworkspace` in Xcode.  Select the desired target from the Scheme Selector and build, run or archive.
+
+### Web
+
+Make sure you have all relevant submodules checked out.
+
+Go into `platform-independent/web-js` and open `index.html` in your browser.  You should be able to run this locally, there is no need for hosting or an application server.
 
 ## Support
 
