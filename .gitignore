@@ -19,7 +19,7 @@ DerivedData/
 # Generated
 /platform-independent/cli-c/VERSION
 /platform-independent/cli-c/mpw-*.tar.gz
-/platform-ios/Resources/Media/Images.xcassets/
+/platform-darwin/Resources/Media/Images.xcassets/
 
 # Media
 public/Press/Background.png

@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 source bashlib
-cd "${0%/*}/../MasterPassword/Resources/Media"
+cd "${0%/*}/../Resources/Media"
 PATH+=:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin
 temp="${TMPDIR:-/tmp}/.$$.convertImages"
 mkdir "$temp" || err "Couldn't create temp directory." || return

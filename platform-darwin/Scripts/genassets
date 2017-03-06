@@ -4,7 +4,7 @@ cd "${BASH_SOURCE%/*}"
 source bashlib
 set -e
 cd ..
-export PATH+=/usr/local/bin
+export PATH+=:/usr/local/bin
 
 # icons format: [pixel size]@[scale]@[idiom]@[os]:[filename] -- if os is "anything lower", omit it
 icons=(
@@ -73,12 +73,12 @@ copyImage() {
     fi
 }
 
-xcassets=MasterPassword/Resources/Media/Images.xcassets
+xcassets=Resources/Media/Images.xcassets
 appiconset="$xcassets/AppIcon.appiconset"
 launchimage="$xcassets/LaunchImage.launchimage"
-ios_icon=MasterPassword/Resources/Media/ios/icon
-ios_launch=MasterPassword/Resources/Media/ios/launch
-mac_icon=MasterPassword/Resources/Media/mac/icon
+ios_icon=Resources/Media/ios/icon
+ios_launch=Resources/Media/ios/launch
+mac_icon=Resources/Media/mac/icon
 
 if [[ "$(latest "$ios_icon"/*)" -nt "$appiconset/Contents.json" ]] ||
    [[ "$(latest "$mac_icon"/*)" -nt "$appiconset/Contents.json" ]]; then

@@ -78,15 +78,21 @@ There are several components available here.  As an end-user, you can currently 
  - `core/java/model`: This is an object model to simplify use of Master Password by Java applications.
  - `core/java/tests`: These are Java integration tests designed to ensure Master Password performs as expected.
  - `platform-android`: This is the official Android implementation of Master Password in Java.
- - `platform-ios`: This is the official iOS implementation of Master Password in Objective-C.
+ - `platform-darwin`: This is the official iOS and OS X implementation of Master Password in Objective-C.
  - `platform-independent/cli-c`: This is the platform-independent console implementation of Master Password, written in C.
  - `platform-independent/cli-java`: This is the platform-independent console implementation of Master Password, written in Java.
  - `platform-independent/gui-java`: This is the platform-independent desktop implementation of Master Password, written in Java.
  - `platform-independent/web-js`: This is the platform-independent browser application for Master Password, written in JavaScript.
 
-## Building
+## Building and running
 
-To build the Java code, go into the `build` root directory and run `gradle build`.  All Java components will then be built, you can find the build product for each component by going into the component's directory and looking in its own `build` subdirectory.
+### Java
+
+Go into the `build` root directory and run `gradle build`.  All Java components will then be built, you can find the build product for each component by going into the component's directory and looking in its own `build` subdirectory.
+
+### macOS or iOS
+
+Go into `platform-darwin` and open `MasterPassword.xcworkspace` in Xcode.  Select the desired target from the Scheme Selector and build, run or archive.
 
 ## Support
 

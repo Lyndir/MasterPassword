@@ -1,20 +1,20 @@
 [submodule "External/Pearl"]
-	path = platform-ios/External/Pearl
+	path = platform-darwin/External/Pearl
 	url = git://github.com/Lyndir/Pearl.git
 [submodule "External/InAppSettingsKit"]
-	path = platform-ios/External/InAppSettingsKit
+	path = platform-darwin/External/InAppSettingsKit
 	url = git://github.com/lhunath/InAppSettingsKit.git
 [submodule "External/KCOrderedAccessorFix"]
-	path = platform-ios/External/KCOrderedAccessorFix
+	path = platform-darwin/External/KCOrderedAccessorFix
 	url = https://github.com/lhunath/KCOrderedAccessorFix.git
 [submodule "External/AttributedMarkdown"]
-	path = platform-ios/External/AttributedMarkdown
+	path = platform-darwin/External/AttributedMarkdown
 	url = https://github.com/dreamwieber/AttributedMarkdown.git
 [submodule "External/uicolor-utilities"]
-	path = platform-ios/External/uicolor-utilities
+	path = platform-darwin/External/uicolor-utilities
 	url = git://github.com/lhunath/uicolor-utilities.git
 [submodule "External/jrswizzle"]
-	path = platform-ios/External/jrswizzle
+	path = platform-darwin/External/jrswizzle
 	url = git://github.com/jonmarimba/jrswizzle.git
 [submodule "MasterPassword/Web/js/mpw-js"]
 	path = platform-independent/web-js/js/mpw-js

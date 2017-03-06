@@ -78,19 +78,12 @@
 		DA60717C195D040500CA98B5 /* icon_gear.png in Resources */ = {isa = PBXBuildFile; fileRef = DA607092195D03E200CA98B5 /* icon_gear.png */; };
 		DA60717D195D040500CA98B5 /* icon_gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA607093195D03E200CA98B5 /* icon_gear@2x.png */; };
 		DA6558A419A99609009A0BEB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA6558A319A99609009A0BEB /* Images.xcassets */; };
-		DA6773CA1A4746AF004F356A /* bashlib in Resources */ = {isa = PBXBuildFile; fileRef = DA67732A1A4746AF004F356A /* bashlib */; };
-		DA6773CB1A4746AF004F356A /* build in Resources */ = {isa = PBXBuildFile; fileRef = DA67732B1A4746AF004F356A /* build */; };
-		DA6773CC1A4746AF004F356A /* distribute in Resources */ = {isa = PBXBuildFile; fileRef = DA67732C1A4746AF004F356A /* distribute */; };
-		DA6773CD1A4746AF004F356A /* install in Resources */ = {isa = PBXBuildFile; fileRef = DA67732D1A4746AF004F356A /* install */; };
 		DA6774291A4746AF004F356A /* mpw-algorithm.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773BB1A4746AF004F356A /* mpw-algorithm.c */; };
 		DA67742F1A4746AF004F356A /* mpw-types.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C21A4746AF004F356A /* mpw-types.c */; };
 		DA6774311A4746AF004F356A /* mpw-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C51A4746AF004F356A /* mpw-util.c */; };
-		DA6774331A4746AF004F356A /* mpw.bashrc in Resources */ = {isa = PBXBuildFile; fileRef = DA6773C81A4746AF004F356A /* mpw.bashrc */; };
 		DA6774431A474A3B004F356A /* mpw-algorithm.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773BB1A4746AF004F356A /* mpw-algorithm.c */; };
-		DA6774441A474A3B004F356A /* mpw-tests.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C11A4746AF004F356A /* mpw-tests.c */; };
 		DA6774451A474A3B004F356A /* mpw-types.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C21A4746AF004F356A /* mpw-types.c */; };
 		DA6774461A474A3B004F356A /* mpw-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6773C51A4746AF004F356A /* mpw-util.c */; };
-		DA67744A1A47C8F7004F356A /* mpw-tests-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6774481A47C8F7004F356A /* mpw-tests-util.c */; };
 		DA89D4EC1A51EABD00AC64D7 /* Pearl-Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = DA89D4EA1A51EABD00AC64D7 /* Pearl-Cocoa.h */; };
 		DA89D4ED1A51EABD00AC64D7 /* Pearl-Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = DA89D4EB1A51EABD00AC64D7 /* Pearl-Cocoa.m */; };
 		DA8ED895192906920099B726 /* PearlTween.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8ED891192906920099B726 /* PearlTween.m */; };
@@ -298,8 +291,6 @@
 		DA2508F919513C1400AC23F1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DA2508FA19513C1400AC23F1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		DA2508FB19513C1400AC23F1 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		DA2509261951B86C00AC23F1 /* small-screen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "small-screen.png"; sourceTree = "<group>"; };
-		DA2509271951B86C00AC23F1 /* screen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screen.png; sourceTree = "<group>"; };
 		DA2C3D661BD9665B001137B3 /* PearlProfiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlProfiler.h; sourceTree = "<group>"; };
 		DA2C3D671BD9665B001137B3 /* PearlProfiler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlProfiler.m; sourceTree = "<group>"; };
 		DA2CA4E718D323D3007798F8 /* NSError+PearlFullDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+PearlFullDescription.m"; sourceTree = "<group>"; };
@@ -364,7 +355,6 @@
 		DA5E5CB51724A667003798D8 /* MPMacConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPMacConfig.h; sourceTree = "<group>"; };
 		DA5E5CB61724A667003798D8 /* MPMacConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPMacConfig.m; sourceTree = "<group>"; };
 		DA5E5CBA1724A667003798D8 /* MasterPassword-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MasterPassword-Info.plist"; sourceTree = "<group>"; };
-		DA5E5CBE1724A667003798D8 /* MasterPassword-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MasterPassword-Prefix.pch"; sourceTree = "<group>"; };
 		DA5E5CBF1724A667003798D8 /* MasterPassword.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = MasterPassword.entitlements; sourceTree = "<group>"; };
 		DA5E5CC31724A667003798D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DA5E5CC51724A667003798D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -774,23 +764,14 @@
 		DA6558A319A99609009A0BEB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DA6701B716406A4100B61001 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		DA6701DD16406B7300B61001 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
-		DA67732A1A4746AF004F356A /* bashlib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bashlib; sourceTree = "<group>"; };
-		DA67732B1A4746AF004F356A /* build */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = build; sourceTree = "<group>"; };
-		DA67732C1A4746AF004F356A /* distribute */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = distribute; sourceTree = "<group>"; };
-		DA67732D1A4746AF004F356A /* install */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = install; sourceTree = "<group>"; };
 		DA6773BB1A4746AF004F356A /* mpw-algorithm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm.c"; sourceTree = "<group>"; };
 		DA6773BC1A4746AF004F356A /* mpw-algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm.h"; sourceTree = "<group>"; };
-		DA6773BF1A4746AF004F356A /* mpw-bench.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-bench.c"; sourceTree = "<group>"; };
-		DA6773C01A4746AF004F356A /* mpw-cli.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-cli.c"; sourceTree = "<group>"; };
-		DA6773C11A4746AF004F356A /* mpw-tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests.c"; sourceTree = "<group>"; };
 		DA6773C21A4746AF004F356A /* mpw-types.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-types.c"; sourceTree = "<group>"; };
 		DA6773C31A4746AF004F356A /* mpw-types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-types.h"; sourceTree = "<group>"; };
 		DA6773C51A4746AF004F356A /* mpw-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-util.c"; sourceTree = "<group>"; };
 		DA6773C61A4746AF004F356A /* mpw-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-util.h"; sourceTree = "<group>"; };
-		DA6773C81A4746AF004F356A /* mpw.bashrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mpw.bashrc; sourceTree = "<group>"; };
 		DA67743B1A474A03004F356A /* mpw-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mpw-test"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA6774481A47C8F7004F356A /* mpw-tests-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests-util.c"; sourceTree = "<group>"; };
-		DA6774491A47C8F7004F356A /* mpw-tests-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-tests-util.h"; sourceTree = "<group>"; };
+		DA771FE51E6E15A1004D7EDE /* MasterPassword-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MasterPassword-Prefix.pch"; sourceTree = "<group>"; };
 		DA831A271A6E1146000AC234 /* mpw-algorithm_v0.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v0.c"; sourceTree = "<group>"; };
 		DA831A281A6E1146000AC234 /* mpw-algorithm_v1.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v1.c"; sourceTree = "<group>"; };
 		DA831A291A6E1146000AC234 /* mpw-algorithm_v2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v2.c"; sourceTree = "<group>"; };
@@ -823,7 +804,7 @@
 		DAC6326C148680650075AEA5 /* libjrswizzle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjrswizzle.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC632871486D95D0075AEA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		DAC77CAD148291A600BCF976 /* libPearl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPearl.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		DAC77CB1148291A600BCF976 /* Pearl-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Pearl-Prefix.pch"; path = "../../MasterPassword/ObjC/Pearl/Pearl-Prefix.pch"; sourceTree = "<group>"; };
+		DAC77CB1148291A600BCF976 /* Pearl-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Pearl-Prefix.pch"; path = "../../Source/Pearl/Pearl-Prefix.pch"; sourceTree = "<group>"; };
 		DACA241C1705DF7D002C6C22 /* logo-bare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-bare.png"; sourceTree = "<group>"; };
 		DACA24321705DF7D002C6C22 /* avatar-13@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-13@2x.png"; sourceTree = "<group>"; };
 		DACA24331705DF7D002C6C22 /* avatar-3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-3@2x.png"; sourceTree = "<group>"; };
@@ -1010,9 +991,9 @@
 		DA3B8449190FC5A900246EEA /* Mac */ = {
 			isa = PBXGroup;
 			children = (
-				DA92614F1BE1A86700369DE5 /* SystemConfiguration.framework */,
-				DA9261501BE1A86700369DE5 /* Fabric.framework */,
 				DA3B844A190FC5A900246EEA /* Crashlytics.framework */,
+				DA9261501BE1A86700369DE5 /* Fabric.framework */,
+				DA92614F1BE1A86700369DE5 /* SystemConfiguration.framework */,
 			);
 			path = Mac;
 			sourceTree = "<group>";
@@ -1021,7 +1002,7 @@
 			isa = PBXGroup;
 			children = (
 				DA6773291A4746AF004F356A /* C */,
-				DA5E5C961724A667003798D8 /* ObjC */,
+				DA5E5C961724A667003798D8 /* Source */,
 				DACA23B41705DF7D002C6C22 /* Resources */,
 				DACA22121705DDC5002C6C22 /* External */,
 				DA5BFA47147E415C00F98B1E /* Frameworks */,
@@ -1044,20 +1025,20 @@
 		DA5BFA47147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DA9261551BE1A89600369DE5 /* libz.tbd */,
-				DA9261531BE1A88900369DE5 /* libc++.tbd */,
-				DAD9B5EF1762CAA4001835F9 /* ServiceManagement.framework */,
-				DA16B343170661EE000A0EAB /* Cocoa.framework */,
-				DA16B340170661DB000A0EAB /* Carbon.framework */,
-				DA6701DD16406B7300B61001 /* Social.framework */,
 				DA6701B716406A4100B61001 /* Accounts.framework */,
-				DABB981515100B4000B05417 /* SystemConfiguration.framework */,
+				DA16B340170661DB000A0EAB /* Carbon.framework */,
+				DA16B343170661EE000A0EAB /* Cocoa.framework */,
+				DA5BFA4E147E415C00F98B1E /* CoreData.framework */,
+				DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */,
+				DA5BFA4A147E415C00F98B1E /* Foundation.framework */,
+				DA9261531BE1A88900369DE5 /* libc++.tbd */,
+				DA9261551BE1A89600369DE5 /* libz.tbd */,
+				DA2508F819513C1400AC23F1 /* Other Frameworks */,
 				DAEBC45214F6364500987BF6 /* QuartzCore.framework */,
 				DAC632871486D95D0075AEA5 /* Security.framework */,
-				DA5BFA4A147E415C00F98B1E /* Foundation.framework */,
-				DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */,
-				DA5BFA4E147E415C00F98B1E /* CoreData.framework */,
-				DA2508F819513C1400AC23F1 /* Other Frameworks */,
+				DAD9B5EF1762CAA4001835F9 /* ServiceManagement.framework */,
+				DA6701DD16406B7300B61001 /* Social.framework */,
+				DABB981515100B4000B05417 /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1072,10 +1053,11 @@
 			path = lib;
 			sourceTree = "<group>";
 		};
-		DA5E5C961724A667003798D8 /* ObjC */ = {
+		DA5E5C961724A667003798D8 /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				DA5E5CB21724A667003798D8 /* Mac */,
+				DA771FE51E6E15A1004D7EDE /* MasterPassword-Prefix.pch */,
 				DA95B51A1C477DE10067F5EF /* MasterPassword.xcdatamodeld */,
 				DA5E5C971724A667003798D8 /* MPAlgorithm.h */,
 				DA5E5C981724A667003798D8 /* MPAlgorithm.m */,
@@ -1114,8 +1096,7 @@
 				DA32CFE319CF1C71004F3F0E /* MPUserEntity.h */,
 				DA32CFE419CF1C71004F3F0E /* MPUserEntity.m */,
 			);
-			name = ObjC;
-			path = ..;
+			path = Source;
 			sourceTree = "<group>";
 		};
 		DA5E5CB21724A667003798D8 /* Mac */ = {
@@ -1126,13 +1107,16 @@
 				DA5E5CC41724A667003798D8 /* MainMenu.xib */,
 				DA5E5CBA1724A667003798D8 /* MasterPassword-Info.plist */,
 				DAD9B5E1176299B9001835F9 /* MasterPassword-Mac-LoginHelper.xcodeproj */,
-				DA5E5CBE1724A667003798D8 /* MasterPassword-Prefix.pch */,
 				DA5E5CBF1724A667003798D8 /* MasterPassword.entitlements */,
+				93D392FD65A1DF0E8B2A45C6 /* MPGradientView.h */,
+				93D39934FD8D5BFABA46F41C /* MPGradientView.m */,
 				DA0933C91747A56A00DE1CEF /* MPInitialWindow.xib */,
 				93D39368EF3CBFEF2AFCA15A /* MPInitialWindowController.h */,
 				93D39D3CB30874147D9A9E1B /* MPInitialWindowController.m */,
 				DA5E5CB31724A667003798D8 /* MPMacAppDelegate.h */,
 				DA5E5CB41724A667003798D8 /* MPMacAppDelegate.m */,
+				93D3942099C9AD0374B5777D /* MPMacApplication.h */,
+				93D39F83DD151985F2C7345A /* MPMacApplication.m */,
 				DA5E5CB51724A667003798D8 /* MPMacConfig.h */,
 				DA5E5CB61724A667003798D8 /* MPMacConfig.m */,
 				93D392A4F3DE0BD758B9B056 /* MPNoStateButton.h */,
@@ -1146,10 +1130,6 @@
 				93D39E73BF5CBF8E5B005CD3 /* MPSiteModel.m */,
 				93D39AC6360DDC16AEAA4119 /* MPSitesTableView.h */,
 				93D39423D7BF4FD31FE6D27C /* MPSitesTableView.m */,
-				93D39F83DD151985F2C7345A /* MPMacApplication.m */,
-				93D3942099C9AD0374B5777D /* MPMacApplication.h */,
-				93D39934FD8D5BFABA46F41C /* MPGradientView.m */,
-				93D392FD65A1DF0E8B2A45C6 /* MPGradientView.h */,
 			);
 			path = Mac;
 			sourceTree = "<group>";
@@ -1566,38 +1546,28 @@
 		DA6773291A4746AF004F356A /* C */ = {
 			isa = PBXGroup;
 			children = (
-				DA67732A1A4746AF004F356A /* bashlib */,
-				DA67732B1A4746AF004F356A /* build */,
-				DA67732C1A4746AF004F356A /* distribute */,
-				DA67732D1A4746AF004F356A /* install */,
 				DA831A271A6E1146000AC234 /* mpw-algorithm_v0.c */,
 				DA831A281A6E1146000AC234 /* mpw-algorithm_v1.c */,
 				DA831A291A6E1146000AC234 /* mpw-algorithm_v2.c */,
 				DA831A2A1A6E1146000AC234 /* mpw-algorithm_v3.c */,
 				DA6773BB1A4746AF004F356A /* mpw-algorithm.c */,
 				DA6773BC1A4746AF004F356A /* mpw-algorithm.h */,
-				DA6773BF1A4746AF004F356A /* mpw-bench.c */,
-				DA6773C01A4746AF004F356A /* mpw-cli.c */,
-				DA6774481A47C8F7004F356A /* mpw-tests-util.c */,
-				DA6774491A47C8F7004F356A /* mpw-tests-util.h */,
-				DA6773C11A4746AF004F356A /* mpw-tests.c */,
 				DA6773C21A4746AF004F356A /* mpw-types.c */,
 				DA6773C31A4746AF004F356A /* mpw-types.h */,
 				DA6773C51A4746AF004F356A /* mpw-util.c */,
 				DA6773C61A4746AF004F356A /* mpw-util.h */,
-				DA6773C81A4746AF004F356A /* mpw.bashrc */,
 			);
 			name = C;
-			path = ../../C;
+			path = ../core/c;
 			sourceTree = "<group>";
 		};
 		DA89D4E51A51E53100AC64D7 /* Pearl-Cocoa */ = {
 			isa = PBXGroup;
 			children = (
+				93D393EE88DE554BCCBC1C2D /* NSView+Traversing.h */,
+				93D392870DF659AFC1870521 /* NSView+Traversing.m */,
 				DA89D4EA1A51EABD00AC64D7 /* Pearl-Cocoa.h */,
 				DA89D4EB1A51EABD00AC64D7 /* Pearl-Cocoa.m */,
-				93D392870DF659AFC1870521 /* NSView+Traversing.m */,
-				93D393EE88DE554BCCBC1C2D /* NSView+Traversing.h */,
 			);
 			path = "Pearl-Cocoa";
 			sourceTree = "<group>";
@@ -1633,41 +1603,37 @@
 		DACA22121705DDC5002C6C22 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				DACA29751705E2BD002C6C22 /* jrswizzle */,
 				DAADCC6819FB007F00987B1D /* KCOrderedAccessorFix */,
 				DA3B8449190FC5A900246EEA /* Mac */,
-				DACA29751705E2BD002C6C22 /* jrswizzle */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
 			);
-			name = External;
-			path = ../../../External;
+			path = External;
 			sourceTree = "<group>";
 		};
 		DACA23B41705DF7D002C6C22 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DACA26991705DF81002C6C22 /* Crashlytics */,
 				DACA29701705E1A8002C6C22 /* Data */,
 				DACA23B51705DF7D002C6C22 /* Media */,
-				DACA26991705DF81002C6C22 /* Crashlytics */,
 			);
-			name = Resources;
-			path = ../../Resources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		DACA23B51705DF7D002C6C22 /* Media */ = {
 			isa = PBXGroup;
 			children = (
-				DAD0C5F419FD6034009CB08D /* mac */,
+				DA0933CF1747B91B00DE1CEF /* appstore.png */,
+				DACA24311705DF7D002C6C22 /* Avatars */,
+				DACA268A1705DF81002C6C22 /* Fonts */,
+				DAAA81AF195A8D1300FA30D9 /* gradient.png */,
 				DA6558A319A99609009A0BEB /* Images.xcassets */,
 				DA606FE9195D03E200CA98B5 /* Insignia */,
-				DAAA81AF195A8D1300FA30D9 /* gradient.png */,
-				DA2509261951B86C00AC23F1 /* small-screen.png */,
-				DA2509271951B86C00AC23F1 /* screen.png */,
-				DA0933CF1747B91B00DE1CEF /* appstore.png */,
-				DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */,
-				DACA24311705DF7D002C6C22 /* Avatars */,
 				DACA241C1705DF7D002C6C22 /* logo-bare.png */,
+				DAD0C5F419FD6034009CB08D /* mac */,
 				DACA24581705DF7D002C6C22 /* menu-icon.png */,
-				DACA268A1705DF81002C6C22 /* Fonts */,
+				DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */,
 			);
 			path = Media;
 			sourceTree = "<group>";
@@ -1675,44 +1641,44 @@
 		DACA24311705DF7D002C6C22 /* Avatars */ = {
 			isa = PBXGroup;
 			children = (
-				DACA24321705DF7D002C6C22 /* avatar-13@2x.png */,
-				DACA24331705DF7D002C6C22 /* avatar-3@2x.png */,
-				DACA24341705DF7D002C6C22 /* avatar-7.png */,
 				DACA24351705DF7D002C6C22 /* avatar-0.png */,
-				DACA24361705DF7D002C6C22 /* avatar-12.png */,
-				DACA24371705DF7D002C6C22 /* avatar-15.png */,
-				DACA24381705DF7D002C6C22 /* avatar-9.png */,
-				DACA24391705DF7D002C6C22 /* avatar-1@2x.png */,
-				DACA243A1705DF7D002C6C22 /* avatar-11@2x.png */,
-				DACA243B1705DF7D002C6C22 /* avatar-7@2x.png */,
-				DACA243C1705DF7D002C6C22 /* avatar-17@2x.png */,
-				DACA243D1705DF7D002C6C22 /* avatar-14.png */,
-				DACA243E1705DF7D002C6C22 /* avatar-18@2x.png */,
-				DACA243F1705DF7D002C6C22 /* avatar-8.png */,
-				DACA24401705DF7D002C6C22 /* avatar-13.png */,
-				DACA24411705DF7D002C6C22 /* avatar-8@2x.png */,
+				DACA24561705DF7D002C6C22 /* avatar-0@2x.png */,
 				DACA24421705DF7D002C6C22 /* avatar-1.png */,
-				DACA24431705DF7D002C6C22 /* avatar-15@2x.png */,
+				DACA24391705DF7D002C6C22 /* avatar-1@2x.png */,
+				DACA244B1705DF7D002C6C22 /* avatar-2.png */,
+				DACA24541705DF7D002C6C22 /* avatar-2@2x.png */,
+				DACA244F1705DF7D002C6C22 /* avatar-3.png */,
+				DACA24331705DF7D002C6C22 /* avatar-3@2x.png */,
+				DACA24511705DF7D002C6C22 /* avatar-4.png */,
+				DACA244D1705DF7D002C6C22 /* avatar-4@2x.png */,
+				DACA244A1705DF7D002C6C22 /* avatar-5.png */,
 				DACA24441705DF7D002C6C22 /* avatar-5@2x.png */,
 				DACA24451705DF7D002C6C22 /* avatar-6.png */,
 				DACA24461705DF7D002C6C22 /* avatar-6@2x.png */,
-				DACA24471705DF7D002C6C22 /* avatar-16@2x.png */,
-				DACA24481705DF7D002C6C22 /* avatar-10.png */,
-				DACA24491705DF7D002C6C22 /* avatar-17.png */,
-				DACA244A1705DF7D002C6C22 /* avatar-5.png */,
-				DACA244B1705DF7D002C6C22 /* avatar-2.png */,
-				DACA244C1705DF7D002C6C22 /* avatar-14@2x.png */,
-				DACA244D1705DF7D002C6C22 /* avatar-4@2x.png */,
+				DACA24341705DF7D002C6C22 /* avatar-7.png */,
+				DACA243B1705DF7D002C6C22 /* avatar-7@2x.png */,
+				DACA243F1705DF7D002C6C22 /* avatar-8.png */,
+				DACA24411705DF7D002C6C22 /* avatar-8@2x.png */,
+				DACA24381705DF7D002C6C22 /* avatar-9.png */,
 				DACA244E1705DF7D002C6C22 /* avatar-9@2x.png */,
-				DACA244F1705DF7D002C6C22 /* avatar-3.png */,
-				DACA24501705DF7D002C6C22 /* avatar-18.png */,
-				DACA24511705DF7D002C6C22 /* avatar-4.png */,
-				DACA24521705DF7D002C6C22 /* avatar-16.png */,
-				DACA24531705DF7D002C6C22 /* avatar-12@2x.png */,
-				DACA24541705DF7D002C6C22 /* avatar-2@2x.png */,
-				DACA24551705DF7D002C6C22 /* avatar-11.png */,
-				DACA24561705DF7D002C6C22 /* avatar-0@2x.png */,
+				DACA24481705DF7D002C6C22 /* avatar-10.png */,
 				DACA24571705DF7D002C6C22 /* avatar-10@2x.png */,
+				DACA24551705DF7D002C6C22 /* avatar-11.png */,
+				DACA243A1705DF7D002C6C22 /* avatar-11@2x.png */,
+				DACA24361705DF7D002C6C22 /* avatar-12.png */,
+				DACA24531705DF7D002C6C22 /* avatar-12@2x.png */,
+				DACA24401705DF7D002C6C22 /* avatar-13.png */,
+				DACA24321705DF7D002C6C22 /* avatar-13@2x.png */,
+				DACA243D1705DF7D002C6C22 /* avatar-14.png */,
+				DACA244C1705DF7D002C6C22 /* avatar-14@2x.png */,
+				DACA24371705DF7D002C6C22 /* avatar-15.png */,
+				DACA24431705DF7D002C6C22 /* avatar-15@2x.png */,
+				DACA24521705DF7D002C6C22 /* avatar-16.png */,
+				DACA24471705DF7D002C6C22 /* avatar-16@2x.png */,
+				DACA24491705DF7D002C6C22 /* avatar-17.png */,
+				DACA243C1705DF7D002C6C22 /* avatar-17@2x.png */,
+				DACA24501705DF7D002C6C22 /* avatar-18.png */,
+				DACA243E1705DF7D002C6C22 /* avatar-18@2x.png */,
 			);
 			path = Avatars;
 			sourceTree = "<group>";
@@ -1720,13 +1686,13 @@
 		DACA268A1705DF81002C6C22 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */,
-				DAF4EF52190A828100023C90 /* Exo2.0-Thin.otf */,
-				DAF4EF53190A828100023C90 /* Exo2.0-Regular.otf */,
-				DAF4EF54190A828100023C90 /* Exo2.0-ExtraBold.otf */,
 				DAF4EF55190A828100023C90 /* Exo2.0-Bold.otf */,
-				DACA268E1705DF81002C6C22 /* SourceCodePro-ExtraLight.otf */,
+				DAF4EF54190A828100023C90 /* Exo2.0-ExtraBold.otf */,
+				DAF4EF53190A828100023C90 /* Exo2.0-Regular.otf */,
+				DAF4EF52190A828100023C90 /* Exo2.0-Thin.otf */,
 				DACA268F1705DF81002C6C22 /* SourceCodePro-Black.otf */,
+				DACA268E1705DF81002C6C22 /* SourceCodePro-ExtraLight.otf */,
+				DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -1769,14 +1735,14 @@
 		DAD0C5F519FD6034009CB08D /* icon */ = {
 			isa = PBXGroup;
 			children = (
-				DAD0C5F619FD6034009CB08D /* icon_128x128.png */,
-				DAD0C5F719FD6034009CB08D /* icon_128x128@2x.png */,
 				DAD0C5F819FD6034009CB08D /* icon_16x16.png */,
 				DAD0C5F919FD6034009CB08D /* icon_16x16@2x.png */,
-				DAD0C5FA19FD6034009CB08D /* icon_256x256.png */,
-				DAD0C5FB19FD6034009CB08D /* icon_256x256@2x.png */,
 				DAD0C5FC19FD6034009CB08D /* icon_32x32.png */,
 				DAD0C5FD19FD6034009CB08D /* icon_32x32@2x.png */,
+				DAD0C5F619FD6034009CB08D /* icon_128x128.png */,
+				DAD0C5F719FD6034009CB08D /* icon_128x128@2x.png */,
+				DAD0C5FA19FD6034009CB08D /* icon_256x256.png */,
+				DAD0C5FB19FD6034009CB08D /* icon_256x256@2x.png */,
 				DAD0C5FE19FD6034009CB08D /* icon_512x512.png */,
 				DAD0C5FF19FD6034009CB08D /* icon_512x512@2x.png */,
 			);
@@ -1794,8 +1760,8 @@
 		DAEB938518AB0FFD000490CC /* include */ = {
 			isa = PBXGroup;
 			children = (
-				DAE8E65619867AF500416A0F /* scrypt */,
 				DAE8E65719867AF500416A0F /* openssl */,
+				DAE8E65619867AF500416A0F /* scrypt */,
 			);
 			path = include;
 			sourceTree = "<group>";
@@ -2123,7 +2089,6 @@
 				DACA27131705DF81002C6C22 /* avatar-3@2x.png in Resources */,
 				DACA27141705DF81002C6C22 /* avatar-7.png in Resources */,
 				DAF4EF57190A828100023C90 /* Exo2.0-Regular.otf in Resources */,
-				DA6773CA1A4746AF004F356A /* bashlib in Resources */,
 				DACA27151705DF81002C6C22 /* avatar-0.png in Resources */,
 				DA6558A419A99609009A0BEB /* Images.xcassets in Resources */,
 				DACA27161705DF81002C6C22 /* avatar-12.png in Resources */,
@@ -2131,7 +2096,6 @@
 				DAF4EF59190A828100023C90 /* Exo2.0-Bold.otf in Resources */,
 				DACA27181705DF81002C6C22 /* avatar-9.png in Resources */,
 				DAAA81B0195A8D1300FA30D9 /* gradient.png in Resources */,
-				DA6774331A4746AF004F356A /* mpw.bashrc in Resources */,
 				DACA27191705DF81002C6C22 /* avatar-1@2x.png in Resources */,
 				DA2508F119511D3600AC23F1 /* MPPasswordWindowController.xib in Resources */,
 				DA60717C195D040500CA98B5 /* icon_gear.png in Resources */,
@@ -2154,7 +2118,6 @@
 				DACA27291705DF81002C6C22 /* avatar-17.png in Resources */,
 				DACA272A1705DF81002C6C22 /* avatar-5.png in Resources */,
 				DACA272B1705DF81002C6C22 /* avatar-2.png in Resources */,
-				DA6773CD1A4746AF004F356A /* install in Resources */,
 				DACA272C1705DF81002C6C22 /* avatar-14@2x.png in Resources */,
 				DACA272D1705DF81002C6C22 /* avatar-4@2x.png in Resources */,
 				DACA272E1705DF81002C6C22 /* avatar-9@2x.png in Resources */,
@@ -2171,9 +2134,7 @@
 				DACA27351705DF81002C6C22 /* avatar-11.png in Resources */,
 				DACA27361705DF81002C6C22 /* avatar-0@2x.png in Resources */,
 				DACA27371705DF81002C6C22 /* avatar-10@2x.png in Resources */,
-				DA6773CC1A4746AF004F356A /* distribute in Resources */,
 				DACA27381705DF81002C6C22 /* menu-icon.png in Resources */,
-				DA6773CB1A4746AF004F356A /* build in Resources */,
 				DACA29671705DF81002C6C22 /* SourceCodePro-ExtraLight.otf in Resources */,
 				DACA29681705DF81002C6C22 /* SourceCodePro-Black.otf in Resources */,
 				DACA296F1705DF81002C6C22 /* Crashlytics.plist in Resources */,
@@ -2202,7 +2163,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
-			shellScript = "exec ../../../Scripts/genassets";
+			shellScript = "exec Scripts/genassets";
 			showEnvVarsInLog = 0;
 		};
 		DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */ = {
@@ -2217,7 +2178,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
-			shellScript = "exec ../../../Scripts/updatePlist";
+			shellScript = "exec Scripts/updatePlist";
 		};
 		DAD3125D155288AA00A3F9ED /* Run Script: Crashlytics */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2231,7 +2192,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
-			shellScript = "../../../External/Mac/Fabric.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" ../../Resources/Crashlytics/Crashlytics.plist)\" 410fb41450e3a2e50fa8357682d812ecd3e1846f2141a99bdb9d3a6a981ad69c";
+			shellScript = "External/Mac/Fabric.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" ../../Resources/Crashlytics/Crashlytics.plist)\" 410fb41450e3a2e50fa8357682d812ecd3e1846f2141a99bdb9d3a6a981ad69c";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2282,8 +2243,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA6774441A474A3B004F356A /* mpw-tests.c in Sources */,
-				DA67744A1A47C8F7004F356A /* mpw-tests-util.c in Sources */,
 				DA6774451A474A3B004F356A /* mpw-types.c in Sources */,
 				DA6774461A474A3B004F356A /* mpw-util.c in Sources */,
 				DA6774431A474A3B004F356A /* mpw-algorithm.c in Sources */,
@@ -2417,6 +2376,7 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2506,6 +2466,7 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -2576,23 +2537,21 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_ENTITLEMENTS = Source/Mac/MasterPassword.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/Mac\"",
+					"\"$(SRCROOT)/External/Mac\"",
 				);
-				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
+				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				INFOPLIST_FILE = "MasterPassword-Info.plist";
+				INFOPLIST_FILE = "Source/Mac/MasterPassword-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
+					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
-				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
@@ -2605,23 +2564,21 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_ENTITLEMENTS = Source/Mac/MasterPassword.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/Mac\"",
+					"\"$(SRCROOT)/External/Mac\"",
 				);
-				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
+				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				INFOPLIST_FILE = "MasterPassword-Info.plist";
+				INFOPLIST_FILE = "Source/Mac/MasterPassword-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
+					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
-				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
@@ -2690,6 +2647,7 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
+				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -2760,23 +2718,21 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";
+				CODE_SIGN_ENTITLEMENTS = Source/Mac/MasterPassword.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/Mac\"",
+					"\"$(SRCROOT)/External/Mac\"",
 				);
-				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
+				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				INFOPLIST_FILE = "MasterPassword-Info.plist";
+				INFOPLIST_FILE = "Source/Mac/MasterPassword-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
+					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
-				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};

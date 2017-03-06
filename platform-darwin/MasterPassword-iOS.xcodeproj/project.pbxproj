@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		93D390228D0B8ED51C0AFDB4 /* bashlib in Resources */ = {isa = PBXBuildFile; fileRef = 93D39E71D6BAECEC4CD886F4 /* bashlib */; };
 		93D390C1B93F9D3AE37DD0A5 /* MPAnswersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39C426E03358384018E85 /* MPAnswersViewController.m */; };
 		93D391ECBD9BD2C64115B5DD /* PearlSizedTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39156E806BB78E04F78B9 /* PearlSizedTextView.m */; };
 		93D3922A53E41A54832E90D9 /* PearlOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D390FADEB325D8D54A957D /* PearlOverlay.m */; };
@@ -28,7 +27,6 @@
 		93D3954FCE045A3CC7E804B7 /* MPUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D399E571F61E50A9BF8FAF /* MPUsersViewController.m */; };
 		93D3957237D303DE2D38C267 /* MPAvatarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39B381350802A194BF332 /* MPAvatarCell.m */; };
 		93D39577FD8BB0945DB2F0A3 /* MPAlgorithmV3.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39FD9623E8D5571C0AEB3 /* MPAlgorithmV3.m */; };
-		93D3958C13B557F60F63C72B /* distribute in Resources */ = {isa = PBXBuildFile; fileRef = 93D3979016BF0C5B29D1340D /* distribute */; };
 		93D395B715D15F2B56F2A2EE /* mpw-types.c in Sources */ = {isa = PBXBuildFile; fileRef = 93D392C5A6572DB0EB5B82C8 /* mpw-types.c */; };
 		93D395F08A087F8A24689347 /* NSArray+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */; };
 		93D39673DDC085BE72C34D7C /* MPPopdownSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39B050DD5F55E9794EFD4 /* MPPopdownSegue.m */; };
@@ -54,17 +52,14 @@
 		93D39B8F90F58A5D158DDBA3 /* MPPasswordsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3924EE15017F8A12CB436 /* MPPasswordsViewController.m */; };
 		93D39BA1EA3CAAC8A220B4A6 /* MPAppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3916C1D8F1427DFBDEBCA /* MPAppSettingsViewController.m */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
-		93D39CEA71BD460ED4876920 /* build in Resources */ = {isa = PBXBuildFile; fileRef = 93D39B573E4DE98BAE518215 /* build */; };
 		93D39D47FC623E91FC39D20C /* UICollectionView+PearlReloadFromArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3908DF8EABBD952065DC0 /* UICollectionView+PearlReloadFromArray.m */; };
 		93D39D596A2E376D6F6F5DA1 /* MPCombinedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D393310223DDB35218467A /* MPCombinedViewController.m */; };
 		93D39D8F78978196D6ABDEDE /* MPNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39CC01630D0421205C4C4 /* MPNavigationController.m */; };
-		93D39DF2E77B937D77C10414 /* install in Resources */ = {isa = PBXBuildFile; fileRef = 93D39ACD33E79386E6F33601 /* install */; };
 		93D39E281E3658B30550CB55 /* NSDictionary+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */; };
 		93D39E34FD28D24FE3442C48 /* UITextView+PearlAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3977321EB249981821AB0 /* UITextView+PearlAttributes.m */; };
 		93D39E5F7F6D7F5C0FAD090F /* MPTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39D72239990DDAC2D75B0 /* MPTypes.m */; };
 		93D39EAA4D064193074D3021 /* MPFixable.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A813CA9D7E192261ED2 /* MPFixable.m */; };
 		93D39F8A9254177891F38705 /* MPSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A28369954D147E239BA /* MPSetupViewController.m */; };
-		93D39FAE1BB6A393BFE15FD0 /* mpw.bashrc in Resources */ = {isa = PBXBuildFile; fileRef = 93D39245A478883C672818F3 /* mpw.bashrc */; };
 		DA04E33E14B1E70400ECA4F3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */; };
 		DA071BF3190187FE00179766 /* empty@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA071BF1190187FE00179766 /* empty@2x.png */; };
 		DA071BF4190187FE00179766 /* empty.png in Resources */ = {isa = PBXBuildFile; fileRef = DA071BF2190187FE00179766 /* empty.png */; };
@@ -478,7 +473,6 @@
 		93D3916C1D8F1427DFBDEBCA /* MPAppSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAppSettingsViewController.m; sourceTree = "<group>"; };
 		93D391943675426839501BB8 /* MPLogsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPLogsViewController.h; sourceTree = "<group>"; };
 		93D391AA32F24290C424438E /* NSNotificationCenter+PearlEasyCleanup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+PearlEasyCleanup.h"; sourceTree = "<group>"; };
-		93D39245A478883C672818F3 /* mpw.bashrc */ = {isa = PBXFileReference; lastKnownFileType = file.bashrc; path = mpw.bashrc; sourceTree = "<group>"; };
 		93D39246FC21C6E63E35D615 /* UICollectionView+PearlReloadFromArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionView+PearlReloadFromArray.h"; sourceTree = "<group>"; };
 		93D3924D6F77E6BF41AC32D3 /* MPRootSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPRootSegue.h; sourceTree = "<group>"; };
 		93D3924EE15017F8A12CB436 /* MPPasswordsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordsViewController.m; sourceTree = "<group>"; };
@@ -501,13 +495,10 @@
 		93D396F918E6470DB846C17F /* mpw-algorithm_v1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm_v1.c"; sourceTree = "<group>"; };
 		93D3970502644794E8A027BE /* MPNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNavigationController.h; sourceTree = "<group>"; };
 		93D3971FE104BB4052484151 /* MPUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUsersViewController.h; sourceTree = "<group>"; };
-		93D397288D0655822A73A539 /* mpw-tests-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests-util.c"; sourceTree = "<group>"; };
 		93D39730673227EFF6DEFF19 /* MPSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSetupViewController.h; sourceTree = "<group>"; };
 		93D3977321EB249981821AB0 /* UITextView+PearlAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+PearlAttributes.m"; sourceTree = "<group>"; };
-		93D3979016BF0C5B29D1340D /* distribute */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = distribute; sourceTree = "<group>"; };
 		93D3979190DACEBD1F6AE9F4 /* MPLogsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPLogsViewController.m; sourceTree = "<group>"; };
 		93D397F4BAFFF7CF3F1B21A4 /* NSPersistentStore+PearlMigration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPersistentStore+PearlMigration.h"; sourceTree = "<group>"; };
-		93D398121C8F063A3637144E /* mpw-cli.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-cli.c"; sourceTree = "<group>"; };
 		93D398567FD02DB2647B8CF3 /* PearlNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlNavigationController.h; sourceTree = "<group>"; };
 		93D398C95847261903D781D3 /* NSError+PearlFullDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+PearlFullDescription.h"; sourceTree = "<group>"; };
 		93D3990D850D76A94C6B7A4D /* mpw-algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-algorithm.h"; sourceTree = "<group>"; };
@@ -529,15 +520,11 @@
 		93D39AA10CD00D05937671B1 /* UITextView+PearlAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+PearlAttributes.h"; sourceTree = "<group>"; };
 		93D39AA1EE2E1E7B81372240 /* NSDictionary+Indexing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Indexing.m"; sourceTree = "<group>"; };
 		93D39ACBA9F4878B6A1CC33B /* MPEmergencyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEmergencyViewController.m; sourceTree = "<group>"; };
-		93D39ACD33E79386E6F33601 /* install */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = install; sourceTree = "<group>"; };
 		93D39AFD17CBE324D745DAB0 /* mpw-types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-types.h"; sourceTree = "<group>"; };
 		93D39B050DD5F55E9794EFD4 /* MPPopdownSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPopdownSegue.m; sourceTree = "<group>"; };
 		93D39B1D8177A86C5B9EDDE3 /* PearlUICollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlUICollectionView.h; sourceTree = "<group>"; };
 		93D39B381350802A194BF332 /* MPAvatarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAvatarCell.m; sourceTree = "<group>"; };
 		93D39B455A71EC98C749E623 /* MPOverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPOverlayViewController.h; sourceTree = "<group>"; };
-		93D39B48CAB328B3E0C0C67D /* mpw-tests-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mpw-tests-util.h"; sourceTree = "<group>"; };
-		93D39B573E4DE98BAE518215 /* build */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = build; sourceTree = "<group>"; };
-		93D39B70138D0E28F7D5E86B /* mpw-bench.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-bench.c"; sourceTree = "<group>"; };
 		93D39BAA71DE51B4D8A1286C /* MPCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCell.m; sourceTree = "<group>"; };
 		93D39C41A27AA42D044D68AE /* NSString+MPMarkDown.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+MPMarkDown.m"; path = "iOS/NSString+MPMarkDown.m"; sourceTree = "<group>"; };
 		93D39C426E03358384018E85 /* MPAnswersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAnswersViewController.m; sourceTree = "<group>"; };
@@ -555,7 +542,6 @@
 		93D39DA27D768B53C8B1330C /* MPAvatarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAvatarCell.h; sourceTree = "<group>"; };
 		93D39DE2CB351D4E3789462B /* UIScrollView+PearlAdjustInsets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+PearlAdjustInsets.h"; sourceTree = "<group>"; };
 		93D39DEA995041A13DC9CAF7 /* MPPasswordCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordCell.m; sourceTree = "<group>"; };
-		93D39E71D6BAECEC4CD886F4 /* bashlib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bashlib; sourceTree = "<group>"; };
 		93D39E7A12CC352B2825AA66 /* MPPasswordsSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordsSegue.m; sourceTree = "<group>"; };
 		93D39F556F2F142740A65E59 /* MPWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPWebViewController.h; sourceTree = "<group>"; };
 		93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlEMail.h; sourceTree = "<group>"; };
@@ -662,8 +648,8 @@
 		DA67460A18DE7F0C00DFE240 /* Exo2.0-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Regular.otf"; sourceTree = "<group>"; };
 		DA67460B18DE7F0C00DFE240 /* Exo2.0-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-ExtraBold.otf"; sourceTree = "<group>"; };
 		DA67460C18DE7F0C00DFE240 /* Exo2.0-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2.0-Bold.otf"; sourceTree = "<group>"; };
-		DA6774351A4749CC004F356A /* mpw-tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-tests.c"; sourceTree = "<group>"; };
 		DA70EC7F1811B13C00F65DB2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		DA771FE41E6E1595004D7EDE /* MasterPassword-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MasterPassword-Prefix.pch"; sourceTree = "<group>"; };
 		DA7F2C5E1C48B70D00404A26 /* libopensslcrypto-ios-sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopensslcrypto-ios-sim.a"; sourceTree = "<group>"; };
 		DA7F2C5F1C48B70D00404A26 /* libscryptenc-ios-sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libscryptenc-ios-sim.a"; sourceTree = "<group>"; };
 		DA854C8118D4CFBF00106317 /* avatar-add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar-add@2x.png"; sourceTree = "<group>"; };
@@ -1382,7 +1368,6 @@
 		DABD3BF01711E2DC00CF925C /* MPiOSConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPiOSConfig.h; sourceTree = "<group>"; };
 		DABD3BF11711E2DC00CF925C /* MPiOSConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPiOSConfig.m; sourceTree = "<group>"; };
 		DABD3BF31711E2DC00CF925C /* MasterPassword-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MasterPassword-Info.plist"; sourceTree = "<group>"; };
-		DABD3BF41711E2DC00CF925C /* MasterPassword-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MasterPassword-Prefix.pch"; sourceTree = "<group>"; };
 		DABD3BF81711E2DC00CF925C /* MasterPassword.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = MasterPassword.entitlements; sourceTree = "<group>"; };
 		DABD3BF91711E2DC00CF925C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		DABD3BFB1711E2DC00CF925C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1395,7 +1380,7 @@
 		DAC6326C148680650075AEA5 /* libjrswizzle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjrswizzle.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC632871486D95D0075AEA5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		DAC77CAD148291A600BCF976 /* libPearl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPearl.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		DAC77CB1148291A600BCF976 /* Pearl-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Pearl-Prefix.pch"; path = "../../MasterPassword/ObjC/Pearl/Pearl-Prefix.pch"; sourceTree = "<group>"; };
+		DAC77CB1148291A600BCF976 /* Pearl-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Pearl-Prefix.pch"; path = "../../Source/Pearl/Pearl-Prefix.pch"; sourceTree = "<group>"; };
 		DACA269A1705DF81002C6C22 /* Crashlytics.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Crashlytics.plist; sourceTree = "<group>"; };
 		DACA29711705E1A8002C6C22 /* ciphers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ciphers.plist; sourceTree = "<group>"; };
 		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
@@ -1626,29 +1611,19 @@
 		93D39A2239FFFE6BEC83E191 /* C */ = {
 			isa = PBXGroup;
 			children = (
-				93D39E71D6BAECEC4CD886F4 /* bashlib */,
-				93D39B573E4DE98BAE518215 /* build */,
-				93D3979016BF0C5B29D1340D /* distribute */,
-				93D39ACD33E79386E6F33601 /* install */,
 				93D390A99850139D0FF0211E /* mpw-algorithm_v0.c */,
 				93D396F918E6470DB846C17F /* mpw-algorithm_v1.c */,
 				93D390A3B351FEF1B9EDAB56 /* mpw-algorithm_v2.c */,
 				93D39D4E713564B7654341B0 /* mpw-algorithm_v3.c */,
 				93D3969393A3A46BD27D7078 /* mpw-algorithm.c */,
 				93D3990D850D76A94C6B7A4D /* mpw-algorithm.h */,
-				93D39B70138D0E28F7D5E86B /* mpw-bench.c */,
-				93D398121C8F063A3637144E /* mpw-cli.c */,
-				93D397288D0655822A73A539 /* mpw-tests-util.c */,
-				93D39B48CAB328B3E0C0C67D /* mpw-tests-util.h */,
-				DA6774351A4749CC004F356A /* mpw-tests.c */,
 				93D392C5A6572DB0EB5B82C8 /* mpw-types.c */,
 				93D39AFD17CBE324D745DAB0 /* mpw-types.h */,
 				93D396C311C3725870343EE0 /* mpw-util.c */,
 				93D39CF7DB942C69D1C5D6BE /* mpw-util.h */,
-				93D39245A478883C672818F3 /* mpw.bashrc */,
 			);
 			name = C;
-			path = ../../C;
+			path = ../core/c;
 			sourceTree = "<group>";
 		};
 		DA24EBB019DAD4D000FF010B /* ios */ = {
@@ -1665,13 +1640,13 @@
 		DA24EBB119DAD4D000FF010B /* icon */ = {
 			isa = PBXGroup;
 			children = (
-				DA24EBE619DAD6DE00FF010B /* Icon-320.png */,
-				DA24EBE719DAD6DE00FF010B /* Icon-64.png */,
 				DA24EBB219DAD4D000FF010B /* Icon-60.png */,
 				DA24EBB319DAD4D000FF010B /* Icon-60@2x.png */,
 				DA24EBB419DAD4D000FF010B /* Icon-60@3x.png */,
+				DA24EBE719DAD6DE00FF010B /* Icon-64.png */,
 				DA24EBB519DAD4D000FF010B /* Icon-76.png */,
 				DA24EBB619DAD4D000FF010B /* Icon-76@2x.png */,
+				DA24EBE619DAD6DE00FF010B /* Icon-320.png */,
 				DA24EBB719DAD4D000FF010B /* Icon-Small-40.png */,
 				DA24EBB819DAD4D000FF010B /* Icon-Small-40@2x.png */,
 				DA24EBB919DAD4D000FF010B /* Icon-Small-40@3x.png */,
@@ -1703,28 +1678,28 @@
 		DA2509B619563E1E00AC23F1 /* Guide */ = {
 			isa = PBXGroup;
 			children = (
-				DAA1762919D8B82B0044227B /* site_new@2x.png */,
-				DAA1762A19D8B82B0044227B /* site_new.png */,
-				DAA1762B19D8B82B0044227B /* settings@2x.png */,
-				DAA1762C19D8B82B0044227B /* settings.png */,
-				DAA1762D19D8B82B0044227B /* personal_pw@2x.png */,
-				DAA1762E19D8B82B0044227B /* personal_pw.png */,
-				DAA1762F19D8B82B0044227B /* name_new@2x.png */,
-				DAA1763019D8B82B0044227B /* name_new.png */,
-				DAA1763119D8B82B0044227B /* mpw_new@2x.png */,
-				DAA1763219D8B82B0044227B /* mpw_new.png */,
-				DAA1763319D8B82B0044227B /* login_new@2x.png */,
-				DAA1763419D8B82B0044227B /* login_new.png */,
-				DAA1763519D8B82B0044227B /* login_name@2x.png */,
-				DAA1763619D8B82B0044227B /* login_name.png */,
-				DAA1763719D8B82B0044227B /* initial@2x.png */,
-				DAA1763819D8B82B0044227B /* initial.png */,
-				DAA1763919D8B82B0044227B /* counter@2x.png */,
-				DAA1763A19D8B82B0044227B /* counter.png */,
-				DAA1763B19D8B82B0044227B /* copy_pw@2x.png */,
-				DAA1763C19D8B82B0044227B /* copy_pw.png */,
-				DAA1763D19D8B82B0044227B /* choose_type@2x.png */,
 				DAA1763E19D8B82B0044227B /* choose_type.png */,
+				DAA1763D19D8B82B0044227B /* choose_type@2x.png */,
+				DAA1763C19D8B82B0044227B /* copy_pw.png */,
+				DAA1763B19D8B82B0044227B /* copy_pw@2x.png */,
+				DAA1763A19D8B82B0044227B /* counter.png */,
+				DAA1763919D8B82B0044227B /* counter@2x.png */,
+				DAA1763819D8B82B0044227B /* initial.png */,
+				DAA1763719D8B82B0044227B /* initial@2x.png */,
+				DAA1763619D8B82B0044227B /* login_name.png */,
+				DAA1763519D8B82B0044227B /* login_name@2x.png */,
+				DAA1763419D8B82B0044227B /* login_new.png */,
+				DAA1763319D8B82B0044227B /* login_new@2x.png */,
+				DAA1763219D8B82B0044227B /* mpw_new.png */,
+				DAA1763119D8B82B0044227B /* mpw_new@2x.png */,
+				DAA1763019D8B82B0044227B /* name_new.png */,
+				DAA1762F19D8B82B0044227B /* name_new@2x.png */,
+				DAA1762E19D8B82B0044227B /* personal_pw.png */,
+				DAA1762D19D8B82B0044227B /* personal_pw@2x.png */,
+				DAA1762C19D8B82B0044227B /* settings.png */,
+				DAA1762B19D8B82B0044227B /* settings@2x.png */,
+				DAA1762A19D8B82B0044227B /* site_new.png */,
+				DAA1762919D8B82B0044227B /* site_new@2x.png */,
 			);
 			path = Guide;
 			sourceTree = "<group>";
@@ -1742,7 +1717,7 @@
 			isa = PBXGroup;
 			children = (
 				93D39A2239FFFE6BEC83E191 /* C */,
-				DABD3B9F1711E2DB00CF925C /* ObjC */,
+				DABD3B9F1711E2DB00CF925C /* Source */,
 				DACA23B41705DF7D002C6C22 /* Resources */,
 				DACA22121705DDC5002C6C22 /* External */,
 				DA5BFA47147E415C00F98B1E /* Frameworks */,
@@ -1767,26 +1742,26 @@
 		DA5BFA47147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DA95B50B1C476B6A0067F5EF /* LocalAuthentication.framework */,
-				DA2C3D641BD9612F001137B3 /* libz.tbd */,
-				DA2C3D621BD96126001137B3 /* libc++.tbd */,
-				DA2C3D601BD95EEE001137B3 /* Fabric.framework */,
-				DA3B844D190FC5DF00246EEA /* Crashlytics.framework */,
-				DA70EC7F1811B13C00F65DB2 /* StoreKit.framework */,
-				DA6701DF16406BB400B61001 /* AdSupport.framework */,
-				DA6701DD16406B7300B61001 /* Social.framework */,
 				DA6701B716406A4100B61001 /* Accounts.framework */,
-				93D394077F8FAB8167647187 /* Twitter.framework */,
-				DAAC35DD156BD77D00C5FD93 /* CoreTelephony.framework */,
-				DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */,
-				DABB981515100B4000B05417 /* SystemConfiguration.framework */,
-				DAEBC45214F6364500987BF6 /* QuartzCore.framework */,
-				DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */,
-				DAC632871486D95D0075AEA5 /* Security.framework */,
-				DA5BFA48147E415C00F98B1E /* UIKit.framework */,
-				DA5BFA4A147E415C00F98B1E /* Foundation.framework */,
-				DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */,
+				DA6701DF16406BB400B61001 /* AdSupport.framework */,
 				DA5BFA4E147E415C00F98B1E /* CoreData.framework */,
+				DA5BFA4C147E415C00F98B1E /* CoreGraphics.framework */,
+				DAAC35DD156BD77D00C5FD93 /* CoreTelephony.framework */,
+				DA3B844D190FC5DF00246EEA /* Crashlytics.framework */,
+				DA2C3D601BD95EEE001137B3 /* Fabric.framework */,
+				DA5BFA4A147E415C00F98B1E /* Foundation.framework */,
+				DA2C3D621BD96126001137B3 /* libc++.tbd */,
+				DA2C3D641BD9612F001137B3 /* libz.tbd */,
+				DA95B50B1C476B6A0067F5EF /* LocalAuthentication.framework */,
+				DA95D5F014DF0B1E008D1B94 /* MessageUI.framework */,
+				DA04E33D14B1E70400ECA4F3 /* MobileCoreServices.framework */,
+				DAEBC45214F6364500987BF6 /* QuartzCore.framework */,
+				DAC632871486D95D0075AEA5 /* Security.framework */,
+				DA6701DD16406B7300B61001 /* Social.framework */,
+				DA70EC7F1811B13C00F65DB2 /* StoreKit.framework */,
+				DABB981515100B4000B05417 /* SystemConfiguration.framework */,
+				93D394077F8FAB8167647187 /* Twitter.framework */,
+				DA5BFA48147E415C00F98B1E /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1806,8 +1781,8 @@
 		DA5E5C6417248959003798D8 /* include */ = {
 			isa = PBXGroup;
 			children = (
-				DA25C6B51980D3DD0046CDCF /* scrypt */,
 				DA25C6B31980D3C10046CDCF /* openssl */,
+				DA25C6B51980D3DD0046CDCF /* scrypt */,
 			);
 			path = include;
 			sourceTree = "<group>";
@@ -1851,56 +1826,56 @@
 		DABD360D1711E29400CF925C /* Media */ = {
 			isa = PBXGroup;
 			children = (
-				DA24EBB019DAD4D000FF010B /* ios */,
-				DAA1761D19D89B600044227B /* thumb_touch_id@3x.png */,
-				DAA1761E19D89B600044227B /* thumb_touch_id@2x.png */,
-				DAA1761F19D89B600044227B /* thumb_touch_id.png */,
-				DAA1762019D89B600044227B /* thumb_ios_integration@3x.png */,
-				DAA1762119D89B600044227B /* thumb_ios_integration@2x.png */,
-				DAA1762219D89B600044227B /* thumb_ios_integration.png */,
-				DA32D07719D7D784004F3F0E /* background@3x.png */,
-				DA32D07819D7D784004F3F0E /* background@2x.png */,
-				DA32D07919D7D784004F3F0E /* background.png */,
-				DA32D04B19D2F59B004F3F0E /* meter_fuel@3x.png */,
-				DA32D04C19D2F59B004F3F0E /* meter_fuel@2x.png */,
-				DA32D04D19D2F59B004F3F0E /* meter_fuel.png */,
-				DA32D04519D2F417004F3F0E /* thumb_fuel@3x.png */,
-				DA32D04619D2F417004F3F0E /* thumb_fuel@2x.png */,
-				DA32D04719D2F417004F3F0E /* thumb_fuel.png */,
-				DA32D03F19D27093004F3F0E /* thumb_generated_answers@3x.png */,
-				DA32D04019D27093004F3F0E /* thumb_generated_answers@2x.png */,
-				DA32D04119D27093004F3F0E /* thumb_generated_answers.png */,
-				DA29993119C9132F00AF7DF1 /* thumb_generated_login@3x.png */,
-				DA29992D19C86F5700AF7DF1 /* thumb_generated_login@2x.png */,
-				DA29992E19C86F5700AF7DF1 /* thumb_generated_login.png */,
-				DA2509B619563E1E00AC23F1 /* Guide */,
-				DA071BF1190187FE00179766 /* empty@2x.png */,
-				DA071BF2190187FE00179766 /* empty.png */,
-				DADBB55918DB0CFC00D099FE /* keyboard-dark@2x.png */,
-				DA945C8617E3F3FD0053236B /* Images.xcassets */,
-				DA5E5C3C1723681B003798D8 /* Square-bottom.png */,
-				DA5A09E8171BB0F7005284AB /* unlocked.png */,
-				DA5A09E9171BB0F7005284AB /* unlocked@2x.png */,
-				DA5A09DD171A70E4005284AB /* play.png */,
-				DA5A09DE171A70E4005284AB /* play@2x.png */,
 				DABD360E1711E29400CF925C /* Automaton */,
 				DABD366B1711E29400CF925C /* Avatars */,
-				DABD36BB1711E29500CF925C /* Fonts */,
-				DABD36D91711E29500CF925C /* Insignia */,
-				DABD38751711E29700CF925C /* Tooltips */,
+				DA32D07919D7D784004F3F0E /* background.png */,
+				DA32D07819D7D784004F3F0E /* background@2x.png */,
+				DA32D07719D7D784004F3F0E /* background@3x.png */,
 				DABD3FC81712446200CF925C /* cloud.png */,
 				DABD3FC91712446200CF925C /* cloud@2x.png */,
+				DA071BF2190187FE00179766 /* empty.png */,
+				DA071BF1190187FE00179766 /* empty@2x.png */,
+				DABD36BB1711E29500CF925C /* Fonts */,
+				DA2509B619563E1E00AC23F1 /* Guide */,
 				DABD3FCC1714F45B00CF925C /* identity.png */,
 				DABD3FCD1714F45B00CF925C /* identity@2x.png */,
+				DA945C8617E3F3FD0053236B /* Images.xcassets */,
+				DABD36D91711E29500CF925C /* Insignia */,
+				DA24EBB019DAD4D000FF010B /* ios */,
 				DABD38C81711E29700CF925C /* jquery-1.6.1.min.js */,
+				DADBB55918DB0CFC00D099FE /* keyboard-dark@2x.png */,
 				DABD38C91711E29700CF925C /* keypad.png */,
 				DABD38CA1711E29700CF925C /* logo-bare.png */,
 				DABD38CB1711E29700CF925C /* menu-icon.png */,
 				DABD38CC1711E29700CF925C /* menu-icon@2x.png */,
+				DA32D04D19D2F59B004F3F0E /* meter_fuel.png */,
+				DA32D04C19D2F59B004F3F0E /* meter_fuel@2x.png */,
+				DA32D04B19D2F59B004F3F0E /* meter_fuel@3x.png */,
+				DA5A09DD171A70E4005284AB /* play.png */,
+				DA5A09DE171A70E4005284AB /* play@2x.png */,
 				DABD38D11711E29700CF925C /* pull-down.png */,
 				DABD38D21711E29700CF925C /* pull-down@2x.png */,
 				DABD38D31711E29700CF925C /* pull-up.png */,
 				DABD38D41711E29700CF925C /* pull-up@2x.png */,
+				DA5E5C3C1723681B003798D8 /* Square-bottom.png */,
+				DA32D04719D2F417004F3F0E /* thumb_fuel.png */,
+				DA32D04619D2F417004F3F0E /* thumb_fuel@2x.png */,
+				DA32D04519D2F417004F3F0E /* thumb_fuel@3x.png */,
+				DA32D04119D27093004F3F0E /* thumb_generated_answers.png */,
+				DA32D04019D27093004F3F0E /* thumb_generated_answers@2x.png */,
+				DA32D03F19D27093004F3F0E /* thumb_generated_answers@3x.png */,
+				DA29992E19C86F5700AF7DF1 /* thumb_generated_login.png */,
+				DA29992D19C86F5700AF7DF1 /* thumb_generated_login@2x.png */,
+				DA29993119C9132F00AF7DF1 /* thumb_generated_login@3x.png */,
+				DAA1762219D89B600044227B /* thumb_ios_integration.png */,
+				DAA1762119D89B600044227B /* thumb_ios_integration@2x.png */,
+				DAA1762019D89B600044227B /* thumb_ios_integration@3x.png */,
+				DAA1761F19D89B600044227B /* thumb_touch_id.png */,
+				DAA1761E19D89B600044227B /* thumb_touch_id@2x.png */,
+				DAA1761D19D89B600044227B /* thumb_touch_id@3x.png */,
+				DABD38751711E29700CF925C /* Tooltips */,
+				DA5A09E8171BB0F7005284AB /* unlocked.png */,
+				DA5A09E9171BB0F7005284AB /* unlocked@2x.png */,
 			);
 			path = Media;
 			sourceTree = "<group>";
@@ -1930,10 +1905,10 @@
 				DABD36221711E29400CF925C /* ui_button_standard_small@2x.png */,
 				DABD36231711E29400CF925C /* ui_dropdown.png */,
 				DABD36241711E29400CF925C /* ui_dropdown@2x.png */,
-				DABD36251711E29400CF925C /* ui_list_arrow.png */,
-				DABD36261711E29400CF925C /* ui_list_arrow@2x.png */,
 				DABD36271711E29400CF925C /* ui_list_arrow_active.png */,
 				DABD36281711E29400CF925C /* ui_list_arrow_active@2x.png */,
+				DABD36251711E29400CF925C /* ui_list_arrow.png */,
+				DABD36261711E29400CF925C /* ui_list_arrow@2x.png */,
 				DABD36291711E29400CF925C /* ui_list_first.png */,
 				DABD362A1711E29400CF925C /* ui_list_first@2x.png */,
 				DABD362B1711E29400CF925C /* ui_list_last.png */,
@@ -1988,18 +1963,18 @@
 				DABD365C1711E29400CF925C /* ui_textfield@2x.png */,
 				DABD365D1711E29400CF925C /* ui_toolbar_container.png */,
 				DABD365E1711E29400CF925C /* ui_toolbar_container@2x.png */,
-				DABD365F1711E29400CF925C /* ui_toolbar_tab_first.png */,
-				DABD36601711E29400CF925C /* ui_toolbar_tab_first@2x.png */,
 				DABD36611711E29400CF925C /* ui_toolbar_tab_first_active.png */,
 				DABD36621711E29400CF925C /* ui_toolbar_tab_first_active@2x.png */,
-				DABD36631711E29400CF925C /* ui_toolbar_tab_last.png */,
-				DABD36641711E29400CF925C /* ui_toolbar_tab_last@2x.png */,
+				DABD365F1711E29400CF925C /* ui_toolbar_tab_first.png */,
+				DABD36601711E29400CF925C /* ui_toolbar_tab_first@2x.png */,
 				DABD36651711E29400CF925C /* ui_toolbar_tab_last_active.png */,
 				DABD36661711E29400CF925C /* ui_toolbar_tab_last_active@2x.png */,
-				DABD36671711E29400CF925C /* ui_toolbar_tab_middle.png */,
-				DABD36681711E29400CF925C /* ui_toolbar_tab_middle@2x.png */,
+				DABD36631711E29400CF925C /* ui_toolbar_tab_last.png */,
+				DABD36641711E29400CF925C /* ui_toolbar_tab_last@2x.png */,
 				DABD36691711E29400CF925C /* ui_toolbar_tab_middle_active.png */,
 				DABD366A1711E29400CF925C /* ui_toolbar_tab_middle_active@2x.png */,
+				DABD36671711E29400CF925C /* ui_toolbar_tab_middle.png */,
+				DABD36681711E29400CF925C /* ui_toolbar_tab_middle@2x.png */,
 			);
 			path = Automaton;
 			sourceTree = "<group>";
@@ -2007,11 +1982,26 @@
 		DABD366B1711E29400CF925C /* Avatars */ = {
 			isa = PBXGroup;
 			children = (
-				DA854C8118D4CFBF00106317 /* avatar-add@2x.png */,
-				DA854C8218D4CFBF00106317 /* avatar-add.png */,
 				DABD366C1711E29400CF925C /* avatar-0.png */,
 				DABD366D1711E29400CF925C /* avatar-0@2x.png */,
 				DABD366E1711E29400CF925C /* avatar-1.png */,
+				DABD36811711E29400CF925C /* avatar-1@2x.png */,
+				DABD36821711E29400CF925C /* avatar-2.png */,
+				DABD36831711E29400CF925C /* avatar-2@2x.png */,
+				DABD36841711E29400CF925C /* avatar-3.png */,
+				DABD36851711E29400CF925C /* avatar-3@2x.png */,
+				DABD36861711E29400CF925C /* avatar-4.png */,
+				DABD36871711E29400CF925C /* avatar-4@2x.png */,
+				DABD36881711E29400CF925C /* avatar-5.png */,
+				DABD36891711E29400CF925C /* avatar-5@2x.png */,
+				DABD368A1711E29400CF925C /* avatar-6.png */,
+				DABD368B1711E29400CF925C /* avatar-6@2x.png */,
+				DABD368C1711E29400CF925C /* avatar-7.png */,
+				DABD368D1711E29400CF925C /* avatar-7@2x.png */,
+				DABD368E1711E29400CF925C /* avatar-8.png */,
+				DABD368F1711E29400CF925C /* avatar-8@2x.png */,
+				DABD36901711E29400CF925C /* avatar-9.png */,
+				DABD36911711E29400CF925C /* avatar-9@2x.png */,
 				DABD366F1711E29400CF925C /* avatar-10.png */,
 				DABD36701711E29400CF925C /* avatar-10@2x.png */,
 				DABD36711711E29400CF925C /* avatar-11.png */,
@@ -2030,23 +2020,8 @@
 				DABD367E1711E29400CF925C /* avatar-17@2x.png */,
 				DABD367F1711E29400CF925C /* avatar-18.png */,
 				DABD36801711E29400CF925C /* avatar-18@2x.png */,
-				DABD36811711E29400CF925C /* avatar-1@2x.png */,
-				DABD36821711E29400CF925C /* avatar-2.png */,
-				DABD36831711E29400CF925C /* avatar-2@2x.png */,
-				DABD36841711E29400CF925C /* avatar-3.png */,
-				DABD36851711E29400CF925C /* avatar-3@2x.png */,
-				DABD36861711E29400CF925C /* avatar-4.png */,
-				DABD36871711E29400CF925C /* avatar-4@2x.png */,
-				DABD36881711E29400CF925C /* avatar-5.png */,
-				DABD36891711E29400CF925C /* avatar-5@2x.png */,
-				DABD368A1711E29400CF925C /* avatar-6.png */,
-				DABD368B1711E29400CF925C /* avatar-6@2x.png */,
-				DABD368C1711E29400CF925C /* avatar-7.png */,
-				DABD368D1711E29400CF925C /* avatar-7@2x.png */,
-				DABD368E1711E29400CF925C /* avatar-8.png */,
-				DABD368F1711E29400CF925C /* avatar-8@2x.png */,
-				DABD36901711E29400CF925C /* avatar-9.png */,
-				DABD36911711E29400CF925C /* avatar-9@2x.png */,
+				DA854C8218D4CFBF00106317 /* avatar-add.png */,
+				DA854C8118D4CFBF00106317 /* avatar-add@2x.png */,
 			);
 			path = Avatars;
 			sourceTree = "<group>";
@@ -2054,13 +2029,13 @@
 		DABD36BB1711E29500CF925C /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				DA3BCFCA19BD09D5006B2681 /* SourceCodePro-Regular.otf */,
-				DA67460918DE7F0C00DFE240 /* Exo2.0-Thin.otf */,
-				DA67460A18DE7F0C00DFE240 /* Exo2.0-Regular.otf */,
-				DA67460B18DE7F0C00DFE240 /* Exo2.0-ExtraBold.otf */,
 				DA67460C18DE7F0C00DFE240 /* Exo2.0-Bold.otf */,
+				DA67460B18DE7F0C00DFE240 /* Exo2.0-ExtraBold.otf */,
+				DA67460A18DE7F0C00DFE240 /* Exo2.0-Regular.otf */,
+				DA67460918DE7F0C00DFE240 /* Exo2.0-Thin.otf */,
 				DABD36BF1711E29500CF925C /* SourceCodePro-Black.otf */,
 				DABD36C01711E29500CF925C /* SourceCodePro-ExtraLight.otf */,
+				DA3BCFCA19BD09D5006B2681 /* SourceCodePro-Regular.otf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -2503,14 +2478,14 @@
 				DABD388D1711E29700CF925C /* tip_arrow_wood@2x.png */,
 				DABD388E1711E29700CF925C /* tip_basic_banana.png */,
 				DABD388F1711E29700CF925C /* tip_basic_banana@2x.png */,
-				DABD38901711E29700CF925C /* tip_basic_black.png */,
-				DABD38911711E29700CF925C /* tip_basic_black@2x.png */,
 				DABD38921711E29700CF925C /* tip_basic_black_bottom_right.png */,
 				DABD38931711E29700CF925C /* tip_basic_black_bottom_right@2x.png */,
-				DABD38941711E29700CF925C /* tip_basic_black_top.png */,
-				DABD38951711E29700CF925C /* tip_basic_black_top@2x.png */,
 				DABD38961711E29700CF925C /* tip_basic_black_top_right.png */,
 				DABD38971711E29700CF925C /* tip_basic_black_top_right@2x.png */,
+				DABD38941711E29700CF925C /* tip_basic_black_top.png */,
+				DABD38951711E29700CF925C /* tip_basic_black_top@2x.png */,
+				DABD38901711E29700CF925C /* tip_basic_black.png */,
+				DABD38911711E29700CF925C /* tip_basic_black@2x.png */,
 				DABD38981711E29700CF925C /* tip_basic_gray.png */,
 				DABD38991711E29700CF925C /* tip_basic_gray@2x.png */,
 				DABD389A1711E29700CF925C /* tip_basic_mercury.png */,
@@ -2559,10 +2534,11 @@
 			path = Tooltips;
 			sourceTree = "<group>";
 		};
-		DABD3B9F1711E2DB00CF925C /* ObjC */ = {
+		DABD3B9F1711E2DB00CF925C /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				DABD3BD71711E2DC00CF925C /* iOS */,
+				DA771FE41E6E1595004D7EDE /* MasterPassword-Prefix.pch */,
 				DA95B5101C477DB50067F5EF /* MasterPassword.xcdatamodeld */,
 				DABD3BA01711E2DC00CF925C /* MPAlgorithm.h */,
 				DABD3BA11711E2DC00CF925C /* MPAlgorithm.m */,
@@ -2605,8 +2581,7 @@
 				93D393CB0B1F4EC8C17CFE43 /* NSString+MPMarkDown.h */,
 				93D39C41A27AA42D044D68AE /* NSString+MPMarkDown.m */,
 			);
-			name = ObjC;
-			path = ..;
+			path = Source;
 			sourceTree = "<group>";
 		};
 		DABD3BD71711E2DC00CF925C /* iOS */ = {
@@ -2615,7 +2590,6 @@
 				DABD3BFA1711E2DC00CF925C /* InfoPlist.strings */,
 				DABD3BFC1711E2DC00CF925C /* main.m */,
 				DABD3BF31711E2DC00CF925C /* MasterPassword-Info.plist */,
-				DABD3BF41711E2DC00CF925C /* MasterPassword-Prefix.pch */,
 				DABD3BF81711E2DC00CF925C /* MasterPassword.entitlements */,
 				93D39D6604447D7708039155 /* MPAnswersViewController.h */,
 				93D39C426E03358384018E85 /* MPAnswersViewController.m */,
@@ -2688,27 +2662,25 @@
 			isa = PBXGroup;
 			children = (
 				DAA1759319D86C610044227B /* AttributedMarkdown */,
-				DA32D03719D111EB004F3F0E /* KCOrderedAccessorFix */,
-				DAA141181922FED80032B392 /* iOS */,
 				DAFC5662172C57EC00CB5CC5 /* InAppSettingsKit */,
+				DAA141181922FED80032B392 /* iOS */,
 				DACA29751705E2BD002C6C22 /* jrswizzle */,
-				DACA29B41705E2DE002C6C22 /* uicolor-utilities */,
+				DA32D03719D111EB004F3F0E /* KCOrderedAccessorFix */,
 				DAC77CAF148291A600BCF976 /* Pearl */,
+				DACA29B41705E2DE002C6C22 /* uicolor-utilities */,
 			);
-			name = External;
-			path = ../../../External;
+			path = External;
 			sourceTree = "<group>";
 		};
 		DACA23B41705DF7D002C6C22 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				DACA29701705E1A8002C6C22 /* Data */,
-				DABD360D1711E29400CF925C /* Media */,
 				DACA26991705DF81002C6C22 /* Crashlytics */,
+				DACA29701705E1A8002C6C22 /* Data */,
 				DAE1EF2417E942DE00BC0086 /* Localizable.strings */,
+				DABD360D1711E29400CF925C /* Media */,
 			);
-			name = Resources;
-			path = ../../Resources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		DACA26991705DF81002C6C22 /* Crashlytics */ = {
@@ -2741,8 +2713,8 @@
 			isa = PBXGroup;
 			children = (
 				DACA29B51705E2DE002C6C22 /* UIColor+Expanded.h */,
-				DACA29B61705E2DE002C6C22 /* UIColor+HSV.h */,
 				DACA29BA1705E2DE002C6C22 /* UIColor+Expanded.m */,
+				DACA29B61705E2DE002C6C22 /* UIColor+HSV.h */,
 				DACA29BB1705E2DE002C6C22 /* UIColor+HSV.m */,
 			);
 			path = "uicolor-utilities";
@@ -3551,11 +3523,6 @@
 				DAA1762819D89B610044227B /* thumb_ios_integration.png in Resources */,
 				DA5A09EB171BB0F7005284AB /* unlocked@2x.png in Resources */,
 				DAA1764F19D8B82B0044227B /* counter@2x.png in Resources */,
-				93D39CEA71BD460ED4876920 /* build in Resources */,
-				93D390228D0B8ED51C0AFDB4 /* bashlib in Resources */,
-				93D39DF2E77B937D77C10414 /* install in Resources */,
-				93D3958C13B557F60F63C72B /* distribute in Resources */,
-				93D39FAE1BB6A393BFE15FD0 /* mpw.bashrc in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3574,7 +3541,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
-			shellScript = "exec ../../../Scripts/updatePlist";
+			shellScript = "exec Scripts/updatePlist";
 			showEnvVarsInLog = 0;
 		};
 		DA8D88E019DA412A00B189D0 /* Run Script: genassets */ = {
@@ -3589,7 +3556,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
-			shellScript = "exec ../../../Scripts/genassets";
+			shellScript = "exec Scripts/genassets";
 			showEnvVarsInLog = 0;
 		};
 		DAD3125D155288AA00A3F9ED /* Run Script: Crashlytics */ = {
@@ -3604,7 +3571,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/bash -e";
-			shellScript = "../../../External/iOS/Crashlytics.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" ../../Resources/Crashlytics/Crashlytics.plist)\" || [[ $DEPLOYMENT_LOCATION != YES ]]";
+			shellScript = "External/iOS/Crashlytics.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" ../../Resources/Crashlytics/Crashlytics.plist)\" || [[ $DEPLOYMENT_LOCATION != YES ]]";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -4028,24 +3995,20 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
 				DEVELOPMENT_TEAM = HL3Q45LX9N;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/iOS\"",
+					"\"$(SRCROOT)/External/iOS\"",
 				);
-				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
-				INFOPLIST_FILE = "MasterPassword-Info.plist";
+				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
+				INFOPLIST_FILE = "Source/iOS/MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
+					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-weak_framework",
-					Reveal,
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"$(inherited)",
 					"-lscryptenc-ios",
@@ -4069,19 +4032,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = HL3Q45LX9N;
 				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/iOS\"",
+					"\"$(SRCROOT)/External/iOS\"",
 				);
-				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
-				INFOPLIST_FILE = "MasterPassword-Info.plist";
+				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
+				INFOPLIST_FILE = "Source/iOS/MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
+					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
@@ -4197,19 +4160,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = MasterPassword.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = HL3Q45LX9N;
 				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../External/iOS\"",
+					"\"$(SRCROOT)/External/iOS\"",
 				);
-				GCC_PREFIX_HEADER = "MasterPassword-Prefix.pch";
-				INFOPLIST_FILE = "MasterPassword-Info.plist";
+				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
+				INFOPLIST_FILE = "Source/iOS/MasterPassword-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
+					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
@@ -4236,9 +4199,9 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Pearl.dst;
-				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
+				GCC_PREFIX_HEADER = "Source/Pearl/Pearl-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
+					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4250,10 +4213,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
-				DSTROOT = /tmp/uicolor_utilities.dst;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = "AppStore-iOS";
@@ -4269,7 +4229,7 @@
 		DAA1758C19D86BE80044227B /* Debug-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREFIX_HEADER = "../../../External/AttributedMarkdown/attributed-markdown.pch";
+				GCC_PREFIX_HEADER = "External/AttributedMarkdown/attributed-markdown.pch";
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
 			name = "Debug-iOS";
@@ -4277,7 +4237,7 @@
 		DAA1758D19D86BE80044227B /* AdHoc-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREFIX_HEADER = "../../../External/AttributedMarkdown/attributed-markdown.pch";
+				GCC_PREFIX_HEADER = "External/AttributedMarkdown/attributed-markdown.pch";
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
 			name = "AdHoc-iOS";
@@ -4285,7 +4245,7 @@
 		DAA1758E19D86BE80044227B /* AppStore-iOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREFIX_HEADER = "../../../External/AttributedMarkdown/attributed-markdown.pch";
+				GCC_PREFIX_HEADER = "External/AttributedMarkdown/attributed-markdown.pch";
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
 			name = "AppStore-iOS";
@@ -4294,10 +4254,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
-				DSTROOT = /tmp/uicolor_utilities.dst;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = "Debug-iOS";
@@ -4306,10 +4263,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
-				DSTROOT = /tmp/uicolor_utilities.dst;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = "AdHoc-iOS";
@@ -4335,9 +4289,9 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Pearl.dst;
-				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
+				GCC_PREFIX_HEADER = "Source/Pearl/Pearl-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
+					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4350,9 +4304,9 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Pearl.dst;
-				GCC_PREFIX_HEADER = "../Pearl/Pearl-Prefix.pch";
+				GCC_PREFIX_HEADER = "Source/Pearl/Pearl-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../../External/Pearl/Pearl-Crypto/lib\"",
+					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
