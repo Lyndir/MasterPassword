@@ -1,6 +1,6 @@
 [![Travis CI](http://img.shields.io/travis-ci/Lyndir/MasterPassword.png)](https://travis-ci.org/Lyndir/MasterPassword)
 
-# [Master Password](http://masterpassordapp.com)
+# [Master Password ●●●|](http://masterpasswordapp.com)
 
 Master Password is a completely new way of thinking about passwords.
 
