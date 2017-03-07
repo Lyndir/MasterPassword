@@ -1,6 +1,6 @@
 [![Travis CI](http://img.shields.io/travis-ci/Lyndir/MasterPassword.png)](https://travis-ci.org/Lyndir/MasterPassword)
 
-# Master Password
+# [Master Password](http://masterpassordapp.com)
 
 Master Password is a completely new way of thinking about passwords.
 
@@ -96,10 +96,6 @@ There are several components available here.  As an end-user, you can currently 
 
 ## Building and running
 
-### Java
-
-Go into the `build` root directory and run `gradle build`.  All Java components will then be built, you can find the build product for each component by going into the component's directory and looking in its own `build` subdirectory.
-
 ### macOS or iOS
 
 Make sure you have all relevant submodules checked out.
@@ -112,6 +108,19 @@ Make sure you have all relevant submodules checked out.
 
 Go into `platform-independent/web-js` and open `index.html` in your browser.  You should be able to run this locally, there is no need for hosting or an application server.
 
+### Java
+
+Go into the `gradle` directory and run `./gradlew build`.  All Java components will then be built:
+
+ - `platform-independent/gui-java/build/distributions`: contains an archive with the Master Password Java GUI.  Unpack it and run the `gui` script.
+ - `platform-independent/cli-java/build/distributions`: contains an archive with the Master Password Java command-line interface.  Unpack it and run the `cli` script.
+ - `platform-android/build/outputs/apk`: contains the Android application package.  Install it on your Android device.
+
 ## Support
 
-Feel free to contribute by forking the project, contributing issues or joining the discussion on Gitter, #masterpassword (on chat.freenode.net) or #masterpassword:lyndir.com (on Matrix).
+Feel free to contribute by forking the project, reporting issues or joining the discussion on:
+
+ - [Gitter](https://gitter.im/lyndir/MasterPassword)
+ - #masterpassword (on chat.freenode.net)
+ - #masterpassword:lyndir.com (on Matrix)
+ - masterpassword@lyndir.com
