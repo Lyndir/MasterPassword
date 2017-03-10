@@ -22,6 +22,9 @@ import com.google.common.io.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.TypeUtils;
 
+import com.lyndir.masterpassword.gui.model.User;
+import com.lyndir.masterpassword.gui.view.PasswordFrame;
+import com.lyndir.masterpassword.gui.view.UnlockFrame;
 import java.io.*;
 import java.net.URI;
 import java.net.URL;

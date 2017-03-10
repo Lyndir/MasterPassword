@@ -1,4 +1,4 @@
-package com.lyndir.masterpassword.gui;
+package com.lyndir.masterpassword.gui.view;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.*;
@@ -9,6 +9,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.primitives.UnsignedInteger;
 import com.google.common.util.concurrent.*;
 import com.lyndir.masterpassword.*;
+import com.lyndir.masterpassword.gui.Res;
+import com.lyndir.masterpassword.gui.model.*;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.gui.util.UnsignedIntegerModel;
 import java.awt.*;

@@ -1,5 +1,8 @@
-package com.lyndir.masterpassword.gui;
+package com.lyndir.masterpassword.gui.view;
 
+import com.lyndir.masterpassword.gui.Res;
+import com.lyndir.masterpassword.gui.model.IncognitoUser;
+import com.lyndir.masterpassword.gui.model.User;
 import com.lyndir.masterpassword.gui.util.Components;
 import java.awt.*;
 import java.awt.event.ActionEvent;

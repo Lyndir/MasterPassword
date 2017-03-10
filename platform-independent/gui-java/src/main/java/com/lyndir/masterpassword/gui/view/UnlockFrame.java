@@ -1,12 +1,16 @@
-package com.lyndir.masterpassword.gui;
+package com.lyndir.masterpassword.gui.view;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
 import com.lyndir.masterpassword.MPIdenticon;
+import com.lyndir.masterpassword.gui.*;
+import com.lyndir.masterpassword.gui.model.User;
 import com.lyndir.masterpassword.gui.util.Components;
 import com.lyndir.masterpassword.model.IncorrectMasterPasswordException;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 import javax.swing.*;
 
@@ -22,6 +26,7 @@ public class UnlockFrame extends JFrame {
     private final JButton                  signInButton;
     private final JPanel                   authenticationContainer;
     private       AuthenticationPanel      authenticationPanel;
+    private       Future<?>                identiconFuture;
     private       boolean                  incognito;
     public        User                     user;
 
@@ -139,18 +144,34 @@ public class UnlockFrame extends JFrame {
     }
 
     boolean checkSignIn() {
+        if (identiconFuture != null)
+            identiconFuture.cancel( false );
+        identiconFuture = Res.schedule( this, new Runnable() {
+            @Override
+            public void run() {
+                SwingUtilities.invokeLater( new Runnable() {
+                    @Override
+                    public void run() {
+                        String fullName = user == null? "": user.getFullName();
+                        char[] masterPassword = authenticationPanel.getMasterPassword();
+
+                        if (fullName.isEmpty() || masterPassword.length == 0) {
+                            identiconLabel.setText( " " );
+                            return;
+                        }
+
+                        MPIdenticon identicon = new MPIdenticon( fullName, masterPassword );
+                        identiconLabel.setText( identicon.getText() );
+                        identiconLabel.setForeground(
+                                Res.colors().fromIdenticonColor( identicon.getColor(), Res.Colors.BackgroundMode.DARK ) );
+                    }
+                } );
+            }
+        }, 300, TimeUnit.MILLISECONDS );
+
         String fullName = user == null? "": user.getFullName();
         char[] masterPassword = authenticationPanel.getMasterPassword();
         boolean enabled = !fullName.isEmpty() && masterPassword.length > 0;
-
-        if (fullName.isEmpty() || masterPassword.length == 0)
-            identiconLabel.setText( " " );
-        else {
-            MPIdenticon identicon = new MPIdenticon( fullName, masterPassword );
-            identiconLabel.setText( identicon.getText() );
-            identiconLabel.setForeground( Res.colors().fromIdenticonColor( identicon.getColor(), Res.Colors.BackgroundMode.DARK ) );
-        }
-
         signInButton.setEnabled( enabled );
 
         return enabled;
@@ -197,7 +218,7 @@ public class UnlockFrame extends JFrame {
         } );
     }
 
-    interface SignInCallback {
+    public interface SignInCallback {
 
         void signedIn(User user);
     }

@@ -1,4 +1,4 @@
-package com.lyndir.masterpassword.gui;
+package com.lyndir.masterpassword.gui.model;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 

@@ -1,8 +1,9 @@
-package com.lyndir.masterpassword.gui;
+package com.lyndir.masterpassword.gui.model;
 
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.FluentIterable;
+import com.lyndir.masterpassword.gui.*;
 import com.lyndir.masterpassword.model.*;
 import java.util.Arrays;
 import javax.annotation.Nullable;
@@ -43,7 +44,7 @@ public class ModelUser extends User {
     }
 
     public void setAvatar(final int avatar) {
-        model.setAvatar(avatar % Res.avatars());
+        model.setAvatar( avatar % Res.avatars());
         MPUserFileManager.get().save();
     }
 

@@ -1,4 +1,4 @@
-package com.lyndir.masterpassword.gui;
+package com.lyndir.masterpassword.gui.model;
 
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.masterpassword.MPSiteType;

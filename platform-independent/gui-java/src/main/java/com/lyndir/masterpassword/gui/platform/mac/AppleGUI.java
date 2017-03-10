@@ -2,8 +2,8 @@ package com.lyndir.masterpassword.gui.platform.mac;
 
 import com.apple.eawt.*;
 import com.lyndir.masterpassword.gui.GUI;
-import com.lyndir.masterpassword.gui.PasswordFrame;
-import com.lyndir.masterpassword.gui.User;
+import com.lyndir.masterpassword.gui.view.PasswordFrame;
+import com.lyndir.masterpassword.gui.model.User;
 
 import javax.swing.*;
 

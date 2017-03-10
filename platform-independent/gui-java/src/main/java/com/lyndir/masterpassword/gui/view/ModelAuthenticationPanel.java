@@ -1,4 +1,4 @@
-package com.lyndir.masterpassword.gui;
+package com.lyndir.masterpassword.gui.view;
 
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
@@ -6,6 +6,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.*;
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import com.lyndir.masterpassword.gui.Res;
+import com.lyndir.masterpassword.gui.model.ModelUser;
 import com.lyndir.masterpassword.model.MPUser;
 import com.lyndir.masterpassword.model.MPUserFileManager;
 import com.lyndir.masterpassword.gui.util.Components;

@@ -30,12 +30,16 @@ import javax.swing.*;
  */
 public abstract class Res {
 
-    private static final WeakHashMap<Window, ExecutorService> executorByWindow = new WeakHashMap<>();
-    private static final Logger                               logger           = Logger.get( Res.class );
-    private static final Colors                               colors           = new Colors();
+    private static final WeakHashMap<Window, ScheduledExecutorService> executorByWindow = new WeakHashMap<>();
+    private static final Logger                                        logger           = Logger.get( Res.class );
+    private static final Colors                                        colors           = new Colors();
 
     public static Future<?> execute(final Window host, final Runnable job) {
-        return getExecutor( host ).submit( new Runnable() {
+        return schedule( host, job, 0, TimeUnit.MILLISECONDS );
+    }
+
+    public static Future<?> schedule(final Window host, final Runnable job, final long delay, final TimeUnit timeUnit) {
+        return getExecutor( host ).schedule( new Runnable() {
             @Override
             public void run() {
                 try {
@@ -45,12 +49,16 @@ public abstract class Res {
                     logger.err( t, "Unexpected: %s", t.getLocalizedMessage() );
                 }
             }
-        } );
+        }, delay, timeUnit );
     }
 
     public static <V> ListenableFuture<V> execute(final Window host, final Callable<V> job) {
-        ExecutorService executor = getExecutor( host );
-        return JdkFutureAdapters.listenInPoolThread( executor.submit( new Callable<V>() {
+        return schedule( host, job, 0, TimeUnit.MILLISECONDS );
+    }
+
+    public static <V> ListenableFuture<V> schedule(final Window host, final Callable<V> job, final long delay, final TimeUnit timeUnit) {
+        ScheduledExecutorService executor = getExecutor( host );
+        return JdkFutureAdapters.listenInPoolThread( executor.schedule( new Callable<V>() {
             @Override
             public V call()
                     throws Exception {
@@ -62,14 +70,14 @@ public abstract class Res {
                     throw t;
                 }
             }
-        } ), executor );
+        }, delay, timeUnit ), executor );
     }
 
-    private static ExecutorService getExecutor(final Window host) {
-        ExecutorService executor = executorByWindow.get( host );
+    private static ScheduledExecutorService getExecutor(final Window host) {
+        ScheduledExecutorService executor = executorByWindow.get( host );
 
         if (executor == null) {
-            executorByWindow.put( host, executor = Executors.newSingleThreadExecutor() );
+            executorByWindow.put( host, executor = Executors.newSingleThreadScheduledExecutor() );
 
             host.addWindowListener( new WindowAdapter() {
                 @Override
@@ -252,8 +260,8 @@ public abstract class Res {
 
     public static class Colors {
 
-        private final Color frameBg   = Color.decode( "#5A5D6B" );
-        private final Color controlBg = Color.decode( "#ECECEC" );
+        private final Color frameBg       = Color.decode( "#5A5D6B" );
+        private final Color controlBg     = Color.decode( "#ECECEC" );
         private final Color controlBorder = Color.decode( "#BFBFBF" );
 
         public Color frameBg() {

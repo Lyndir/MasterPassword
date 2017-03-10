@@ -2,44 +2,45 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion '25.0.0'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
     defaultConfig {
-        applicationId "com.lyndir.masterpassword"
+        applicationId 'com.lyndir.masterpassword'
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 20401
-        versionName "2.4.1"
+        versionName '2.4.1'
     }
+
     // release with: STORE_PW=$(mpw masterpassword.keystore) KEY_PW=$(mpw masterpassword-android) gradle assembleRelease
     signingConfigs {
         release {
-            storeFile file('masterpassword.keystore')
-            storePassword System.getenv('STORE_PW')
+            storeFile file( 'masterpassword.keystore' )
+            storePassword System.getenv( 'STORE_PW' )
 
             keyAlias 'masterpassword-android'
-            keyPassword System.getenv('KEY_PW')
+            keyPassword System.getenv( 'KEY_PW' )
         }
     }
     buildTypes {
         release {
-            if (System.getenv('STORE_PW') != null)
+            if (System.getenv( 'STORE_PW' ) != null)
                 signingConfig signingConfigs.release
         }
     }
 }
 
 dependencies {
-    compile project( ':masterpassword:algorithm' )
-    compile project( ':masterpassword:tests' )
+    compile             project( ':masterpassword:algorithm' )
+    compile             project( ':masterpassword:tests' )
 
-    // Android dependencies
-    compile 'org.slf4j:slf4j-android:1.7.13-underscore'
-    compile 'com.jakewharton:butterknife:8.5.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    compile files('libs/scrypt-1.4.0-native.jar')
+    compile             group: 'org.slf4j', name: 'slf4j-android', version:'1.7.13-underscore'
+    compile             group: 'com.jakewharton', name: 'butterknife', version:'8.5.1'
+    annotationProcessor group: 'com.jakewharton', name: 'butterknife-compiler', version:'8.5.1'
+    compile             files( 'libs/scrypt-1.4.0-native.jar' )
 }

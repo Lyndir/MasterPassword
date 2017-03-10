@@ -1,4 +1,4 @@
-package com.lyndir.masterpassword.gui;
+package com.lyndir.masterpassword.gui.model;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;

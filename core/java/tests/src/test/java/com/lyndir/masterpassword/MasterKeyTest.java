@@ -2,14 +2,10 @@ package com.lyndir.masterpassword;
 
 import static org.testng.Assert.*;
 
-import com.google.common.io.Resources;
 import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.NNFunctionNN;
-import com.lyndir.lhunath.opal.system.util.StringUtils;
-import java.net.URL;
 import javax.annotation.Nonnull;
-import javax.xml.bind.JAXBContext;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -88,7 +84,7 @@ public class MasterKeyTest {
             masterKey.encode( defaultCase.getSiteName(), defaultCase.getSiteType(), defaultCase.getSiteCounter(),
                               defaultCase.getSiteVariant(), defaultCase.getSiteContext() );
 
-            assertTrue( false, "[testInvalidate] Master key should have been invalidated, but was still usable." );
+            fail( "[testInvalidate] Master key should have been invalidated, but was still usable." );
         }
         catch (IllegalStateException ignored) {
         }

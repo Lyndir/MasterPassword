@@ -10,7 +10,7 @@ To skip the intro and go straight to the information on how to use the code, [cl
 
 Master Password is available for [📲 iOS](https://itunes.apple.com/app/id510296984), [🖥 macOS](https://ssl.masterpasswordapp.com/masterpassword-mac.zip), [📲 Android](https://ssl.masterpasswordapp.com/masterpassword-android.apk), [🖥 Desktop](https://ssl.masterpasswordapp.com/masterpassword-gui.jar), and [⌨ Console](https://ssl.masterpasswordapp.com/masterpassword-cli.tar.gz).
 
-Master Password is also available from the following package managers: [mac OS: Homebrew](https://brew.sh/).  Get in touch if you are interested in adding Master Password to any other package managers.
+Master Password is also available from the following package managers: [macOS: Homebrew](https://brew.sh/).  Get in touch if you are interested in adding Master Password to any other package managers.
 
 ## What is a password?
 

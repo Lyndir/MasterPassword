@@ -1,4 +1,4 @@
-package com.lyndir.masterpassword.gui;
+package com.lyndir.masterpassword.gui.model;
 
 import com.google.common.collect.ImmutableList;
 import com.lyndir.masterpassword.model.IncorrectMasterPasswordException;

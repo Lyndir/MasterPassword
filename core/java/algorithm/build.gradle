@@ -1,12 +1,15 @@
-apply plugin: 'java'
+plugins {
+    id 'java'
+}
 
 description = 'Master Password Algorithm Implementation'
 
 dependencies {
-    compile( 'com.lyndir.lhunath.opal:opal-system:1.6-p10' ) {
+    compile (group: 'com.lyndir.lhunath.opal', name: 'opal-system', version: '1.6-p10') {
         exclude( module: 'joda-time' )
     }
-    compile 'com.lambdaworks:scrypt:1.4.0'
-    compile 'org.jetbrains:annotations:13.0'
-    compile 'com.google.code.findbugs:jsr305:3.0.1'
+
+    compile group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
+    compile group: 'org.jetbrains', name: 'annotations', version: '13.0'
+    compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 }
