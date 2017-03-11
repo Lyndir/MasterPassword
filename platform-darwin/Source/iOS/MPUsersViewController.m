@@ -118,11 +118,10 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
     [super viewWillLayoutSubviews];
 }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-
-    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
 
     [self.avatarCollectionView.collectionViewLayout invalidateLayout];
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

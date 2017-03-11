@@ -2040,7 +2040,7 @@
 					};
 				};
 			};
-			buildConfigurationList = DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-Mac" */;
+			buildConfigurationList = DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-macOS" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -2855,7 +2855,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-Mac" */ = {
+		DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DA5BFA6B147E415C00F98B1E /* Debug-Mac */,

@@ -122,11 +122,10 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         ((MPMessageViewController *)segue.destinationViewController).message = sender;
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
 
     [self.passwordCollectionView.collectionViewLayout invalidateLayout];
-
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout

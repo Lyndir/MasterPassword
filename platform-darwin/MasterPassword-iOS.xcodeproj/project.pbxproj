@@ -419,8 +419,6 @@
 		DAFE4A5315039824003ABA7C /* PearlUIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE461F15039823003ABA7C /* PearlUIUtils.m */; };
 		DAFE4A5415039824003ABA7C /* PearlValidatingTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE462015039823003ABA7C /* PearlValidatingTextField.h */; };
 		DAFE4A5515039824003ABA7C /* PearlValidatingTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE462115039823003ABA7C /* PearlValidatingTextField.m */; };
-		DAFE4A5615039824003ABA7C /* PearlWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE462215039823003ABA7C /* PearlWebViewController.h */; };
-		DAFE4A5715039824003ABA7C /* PearlWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE462315039823003ABA7C /* PearlWebViewController.m */; };
 		DAFE4A5815039824003ABA7C /* UIImage+PearlScaling.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFE4A1115039824003ABA7C /* UIImage+PearlScaling.h */; };
 		DAFE4A5915039824003ABA7C /* UIImage+PearlScaling.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFE4A1215039824003ABA7C /* UIImage+PearlScaling.m */; };
 		DAFE4A5A1503982E003ABA7C /* Pearl.strings in Resources */ = {isa = PBXBuildFile; fileRef = DAFE45FA15039823003ABA7C /* Pearl.strings */; };
@@ -1506,8 +1504,6 @@
 		DAFE461F15039823003ABA7C /* PearlUIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlUIUtils.m; sourceTree = "<group>"; };
 		DAFE462015039823003ABA7C /* PearlValidatingTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlValidatingTextField.h; sourceTree = "<group>"; };
 		DAFE462115039823003ABA7C /* PearlValidatingTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlValidatingTextField.m; sourceTree = "<group>"; };
-		DAFE462215039823003ABA7C /* PearlWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlWebViewController.h; sourceTree = "<group>"; };
-		DAFE462315039823003ABA7C /* PearlWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlWebViewController.m; sourceTree = "<group>"; };
 		DAFE462415039823003ABA7C /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		DAFE4A1115039824003ABA7C /* UIImage+PearlScaling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+PearlScaling.h"; sourceTree = "<group>"; };
 		DAFE4A1215039824003ABA7C /* UIImage+PearlScaling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+PearlScaling.m"; sourceTree = "<group>"; };
@@ -2926,8 +2922,6 @@
 				DAFE461F15039823003ABA7C /* PearlUIUtils.m */,
 				DAFE462015039823003ABA7C /* PearlValidatingTextField.h */,
 				DAFE462115039823003ABA7C /* PearlValidatingTextField.m */,
-				DAFE462215039823003ABA7C /* PearlWebViewController.h */,
-				DAFE462315039823003ABA7C /* PearlWebViewController.m */,
 				DAFE462415039823003ABA7C /* README */,
 				DAFE462515039823003ABA7C /* Resources */,
 				DA250A16195665A100AC23F1 /* UICollectionReusableView+PearlDequeue.h */,
@@ -3040,7 +3034,6 @@
 				DAFE4A5015039824003ABA7C /* PearlUIDebug.h in Headers */,
 				DAFE4A5215039824003ABA7C /* PearlUIUtils.h in Headers */,
 				DAFE4A5415039824003ABA7C /* PearlValidatingTextField.h in Headers */,
-				DAFE4A5615039824003ABA7C /* PearlWebViewController.h in Headers */,
 				DAFE4A5815039824003ABA7C /* UIImage+PearlScaling.h in Headers */,
 				DAFE4A63150399FF003ABA7C /* PearlAppDelegate.h in Headers */,
 				DA30E9D715723E6900A68B4C /* PearlLazy.h in Headers */,
@@ -3210,6 +3203,7 @@
 					};
 					DA5BFA43147E415C00F98B1E = {
 						DevelopmentTeam = HL3Q45LX9N;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 0;
@@ -3710,7 +3704,6 @@
 				DAFE4A5315039824003ABA7C /* PearlUIUtils.m in Sources */,
 				DAFE4A5515039824003ABA7C /* PearlValidatingTextField.m in Sources */,
 				DAEC85B618E3DD9A007FC0DF /* PearlUINavigationBar.m in Sources */,
-				DAFE4A5715039824003ABA7C /* PearlWebViewController.m in Sources */,
 				DACE2F6C19BA6A2A0010F92E /* PearlMutableStaticTableViewController.m in Sources */,
 				DAFE4A5915039824003ABA7C /* UIImage+PearlScaling.m in Sources */,
 				DAFE4A62150399FF003ABA7C /* PearlAppDelegate.m in Sources */,
@@ -3846,7 +3839,6 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = "/tmp/${PRODUCT_NAME}.dst";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -3937,7 +3929,6 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = "/tmp/${PRODUCT_NAME}.dst";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -4006,7 +3997,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
-				DEVELOPMENT_TEAM = HL3Q45LX9N;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/External/iOS\"",
@@ -4030,7 +4021,6 @@
 					"-lopensslcrypto-ios-sim",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
-				PROVISIONING_PROFILE_SPECIFIER = "Master Password Development";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -4043,6 +4033,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = HL3Q45LX9N;
 				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
@@ -4069,7 +4060,6 @@
 					"-lopensslcrypto-ios-sim",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
-				PROVISIONING_PROFILE_SPECIFIER = "Master Password Ad Hoc";
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -4107,7 +4097,6 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = "/tmp/${PRODUCT_NAME}.dst";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -4176,6 +4165,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = HL3Q45LX9N;
 				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
@@ -4202,7 +4192,6 @@
 					"-lopensslcrypto-ios-sim",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
-				PROVISIONING_PROFILE_SPECIFIER = "Master Password App Store";
 				SKIP_INSTALL = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
 				TARGETED_DEVICE_FAMILY = 1;

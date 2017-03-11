@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DA5BFA43147E415C00F98B1E"
-               BuildableName = "Master Password.app"
-               BlueprintName = "MasterPassword"
-               ReferencedContainer = "container:MasterPassword-Mac.xcodeproj">
+               BlueprintIdentifier = "DA67743A1A474A03004F356A"
+               BuildableName = "mpw-test"
+               BlueprintName = "mpw-test"
+               ReferencedContainer = "container:MasterPassword-macOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DA5BFA43147E415C00F98B1E"
-            BuildableName = "Master Password.app"
-            BlueprintName = "MasterPassword"
-            ReferencedContainer = "container:MasterPassword-Mac.xcodeproj">
+            BlueprintIdentifier = "DA67743A1A474A03004F356A"
+            BuildableName = "mpw-test"
+            BlueprintName = "mpw-test"
+            ReferencedContainer = "container:MasterPassword-macOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -55,24 +55,17 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DA5BFA43147E415C00F98B1E"
-            BuildableName = "Master Password.app"
-            BlueprintName = "MasterPassword"
-            ReferencedContainer = "container:MasterPassword-Mac.xcodeproj">
+            BlueprintIdentifier = "DA67743A1A474A03004F356A"
+            BuildableName = "mpw-test"
+            BlueprintName = "mpw-test"
+            ReferencedContainer = "container:MasterPassword-macOS.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "CA_DEBUG_TRANSACTIONS"
-            value = "1"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Debug-Mac"
+      buildConfiguration = "AdHoc-Mac"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -81,10 +74,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DA5BFA43147E415C00F98B1E"
-            BuildableName = "Master Password.app"
-            BlueprintName = "MasterPassword"
-            ReferencedContainer = "container:MasterPassword-Mac.xcodeproj">
+            BlueprintIdentifier = "DA67743A1A474A03004F356A"
+            BuildableName = "mpw-test"
+            BlueprintName = "mpw-test"
+            ReferencedContainer = "container:MasterPassword-macOS.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
