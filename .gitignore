@@ -37,14 +37,14 @@ target
 dependency-reduced-pom.xml
 
 # C
-desktop/cli/c/*.o
-desktop/cli/c/mpw-*.tar.gz
-desktop/cli/c/mpw
-desktop/cli/c/mpw-bench
-desktop/cli/c/mpw-tests
-desktop/cli/c/VERSION
 core/c/*.o
 core/c/lib/*/.unpacked
 core/c/lib/*/.patched
 core/c/lib/*/src
 core/c/lib/include
+platform-independent/cli-c/cli/*.o
+platform-independent/cli-c/mpw-*.tar.gz
+platform-independent/cli-c/mpw
+platform-independent/cli-c/mpw-bench
+platform-independent/cli-c/mpw-tests
+platform-independent/cli-c/VERSION

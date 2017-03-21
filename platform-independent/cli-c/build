@@ -217,26 +217,28 @@ mpw() {
     echo
     echo "Building target: $target..."
     local CFLAGS=(
-        # include paths
+        # library paths
         -I"lib/include"
+        # mpw paths
+        -I"core" -I"cli"
     )
     local LDFLAGS=(
         # scrypt
         "lib/scrypt/src/libcperciva/"*/*.o
         "lib/scrypt/src/lib/crypto/"*.o
         # library paths
-        -L"." -L"lib/scrypt/src"
+        -L"lib/scrypt/src"
         # link libraries
         -l"crypto"
     )
     # optional features
     (( mpw_color )) && CFLAGS+=( -DCOLOR ) LDFLAGS+=( -l"curses" )
 
-    cc "${CFLAGS[@]}" "$@"                  -c mpw-algorithm.c    -o mpw-algorithm.o
-    cc "${CFLAGS[@]}" "$@"                  -c mpw-types.c        -o mpw-types.o
-    cc "${CFLAGS[@]}" "$@"                  -c mpw-util.c         -o mpw-util.o
-    cc "${CFLAGS[@]}" "$@" "mpw-algorithm.o" "mpw-types.o" "mpw-util.o" \
-       "${LDFLAGS[@]}"     "mpw-cli.c" -o "mpw"
+    cc "${CFLAGS[@]}" "$@"                  -c core/mpw-algorithm.c -o core/mpw-algorithm.o
+    cc "${CFLAGS[@]}" "$@"                  -c core/mpw-types.c     -o core/mpw-types.o
+    cc "${CFLAGS[@]}" "$@"                  -c core/mpw-util.c      -o core/mpw-util.o
+    cc "${CFLAGS[@]}" "$@" "core/mpw-algorithm.o" "core/mpw-types.o" "core/mpw-util.o" \
+       "${LDFLAGS[@]}"     "cli/mpw-cli.c" -o "mpw"
     echo "done!  Now run ./install or use ./mpw"
 }
 
@@ -249,8 +251,10 @@ mpw-bench() {
     echo
     echo "Building target: $target..."
     local CFLAGS=(
-        # include paths
+        # library paths
         -I"lib/include"
+        # mpw paths
+        -I"core" -I"cli"
     )
     local LDFLAGS=(
         # scrypt
@@ -262,17 +266,17 @@ mpw-bench() {
         "lib/bcrypt/src/wrapper.o"
         "lib/bcrypt/src/x86.o"
         # library paths
-        -L"." -L"lib/scrypt/src"
+        -L"lib/scrypt/src"
         -L"lib/bcrypt/src"
         # link libraries
         -l"crypto"
     )
 
-    cc "${CFLAGS[@]}" "$@"                  -c mpw-algorithm.c    -o mpw-algorithm.o
-    cc "${CFLAGS[@]}" "$@"                  -c mpw-types.c        -o mpw-types.o
-    cc "${CFLAGS[@]}" "$@"                  -c mpw-util.c         -o mpw-util.o
-    cc "${CFLAGS[@]}" "$@" "mpw-algorithm.o" "mpw-types.o" "mpw-util.o" \
-       "${LDFLAGS[@]}"     "mpw-bench.c" -o "mpw-bench"
+    cc "${CFLAGS[@]}" "$@"                  -c core/mpw-algorithm.c -o core/mpw-algorithm.o
+    cc "${CFLAGS[@]}" "$@"                  -c core/mpw-types.c     -o core/mpw-types.o
+    cc "${CFLAGS[@]}" "$@"                  -c core/mpw-util.c      -o core/mpw-util.o
+    cc "${CFLAGS[@]}" "$@" "core/mpw-algorithm.o" "core/mpw-types.o" "core/mpw-util.o" \
+       "${LDFLAGS[@]}"     "cli/mpw-bench.c" -o "mpw-bench"
     echo "done!  Now use ./mpw-bench"
 }
 
@@ -284,27 +288,29 @@ mpw-tests() {
     echo
     echo "Building target: $target..."
     local CFLAGS=(
-        # include paths
+        # library paths
         -I"lib/include"
         -I"/usr/include/libxml2"
         -I"/usr/local/include/libxml2"
+        # mpw paths
+        -I"core" -I"cli"
     )
     local LDFLAGS=(
         # scrypt
         "lib/scrypt/src/libcperciva/"*/*.o
         "lib/scrypt/src/lib/crypto/"*.o
         # library paths
-        -L"." -L"lib/scrypt/src"
+        -L"lib/scrypt/src"
         # link libraries
         -l"crypto" -l"xml2"
     )
 
-    cc "${CFLAGS[@]}" "$@"                  -c mpw-algorithm.c    -o mpw-algorithm.o
-    cc "${CFLAGS[@]}" "$@"                  -c mpw-types.c        -o mpw-types.o
-    cc "${CFLAGS[@]}" "$@"                  -c mpw-util.c         -o mpw-util.o
-    cc "${CFLAGS[@]}" "$@"                  -c mpw-tests-util.c   -o mpw-tests-util.o
-    cc "${CFLAGS[@]}" "$@" "mpw-algorithm.o" "mpw-types.o" "mpw-util.o" "mpw-tests-util.o" \
-       "${LDFLAGS[@]}"     "mpw-tests.c" -o "mpw-tests"
+    cc "${CFLAGS[@]}" "$@"                  -c core/mpw-algorithm.c -o core/mpw-algorithm.o
+    cc "${CFLAGS[@]}" "$@"                  -c core/mpw-types.c     -o core/mpw-types.o
+    cc "${CFLAGS[@]}" "$@"                  -c core/mpw-util.c      -o core/mpw-util.o
+    cc "${CFLAGS[@]}" "$@"                  -c cli/mpw-tests-util.c -o cli/mpw-tests-util.o
+    cc "${CFLAGS[@]}" "$@" "core/mpw-algorithm.o" "core/mpw-types.o" "core/mpw-util.o" \
+       "${LDFLAGS[@]}"     "cli/mpw-tests-util.o" "cli/mpw-tests.c" -o "mpw-tests"
     echo "done!  Now use ./mpw-tests"
 }
 
