@@ -22,11 +22,11 @@
 //// Types.
 
 typedef enum( unsigned int, MPSiteVariant ) {
-    /** Generate the password to log in with. */
+    /** Generate a key for authentication. */
             MPSiteVariantPassword,
-    /** Generate the login name to log in as. */
+    /** Generate a name for identification. */
             MPSiteVariantLogin,
-    /** Generate the answer to a security question. */
+    /** Generate an answer to a security question. */
             MPSiteVariantAnswer,
 };
 

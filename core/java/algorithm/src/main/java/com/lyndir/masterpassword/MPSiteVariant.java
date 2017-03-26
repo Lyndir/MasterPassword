@@ -11,11 +11,11 @@ import org.jetbrains.annotations.Contract;
  * @author lhunath, 14-12-02
  */
 public enum MPSiteVariant {
-    Password( "The password to log in with.", "Doesn't currently use a context.", //
+    Password( "Generate a key for authentication.", "Doesn't currently use a context.", //
               ImmutableList.of( "p", "password" ), "com.lyndir.masterpassword" ),
-    Login( "The username to log in as.", "Doesn't currently use a context.", //
+    Login( "Generate a name for identification.", "Doesn't currently use a context.", //
            ImmutableList.of( "l", "login" ), "com.lyndir.masterpassword.login" ),
-    Answer( "The answer to a security question.", "Empty for a universal site answer or\nthe most significant word(s) of the question.", //
+    Answer( "Generate an answer to a security question.", "Empty for a universal site answer or\nthe most significant word(s) of the question.", //
             ImmutableList.of( "a", "answer" ), "com.lyndir.masterpassword.answer" );
 
     static final Logger logger = Logger.get( MPSiteType.class );
