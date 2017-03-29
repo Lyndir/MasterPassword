@@ -23,7 +23,7 @@ bindir=$(ask -d "$bindir" "What bin directory should I install to?")
 [[ -w "$bindir" ]] || ftl 'Cannot write to bin directory: %s' "$bindir" || exit
 
 # Install Master Password.
-install mpw "$bindir"
+install -m555 mpw "$bindir"
 [[ ! -e "$bindir/bashlib" ]] && install bashlib "$bindir" ||:
 
 # Convenience bash function.

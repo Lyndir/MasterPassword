@@ -153,17 +153,22 @@ Go into the `platform-independent/cli-c` directory and run `./build`.  The nativ
 
 When the build completes, you will have an `mpw` binary you can use.  You can copy it into your `PATH` or use the `./install` script to help you do so.
 
+For example:
+
+    sudo ./install
+    mpw -h
+
 The build has a few dependencies you should have installed before running it:
 
-    - `mpw`: openssl-dev, ncurses-dev (if `mpw_color=1`)
-    - `mpw-bench`: openssl-dev
-    - `mpw-tests`: openssl-dev, libxml2
+ - `mpw`: `openssl-dev`, `ncurses-dev` (if `mpw_color=1`)
+ - `mpw-bench`: `openssl-dev`
+ - `mpw-tests`: `openssl-dev`, `libxml2`
 
 There are a few different ways you can modify the build process:
 
  - You can change the targets that should be built.  By default, all targets are built.  These are the available targets:
     - `mpw`: This is the standard command-line `mpw` tool which implements all Master Password features.
-    - `mpw-tests`: This is a tool to perform the standard test script on the `mpw` implementation.
+    - `mpw-tests`: This is a tool to perform the standard tests script on the `mpw` implementation.
     - `mpw-bench`: This is a tool to run a benchmark on the `mpw` implementation, comparing it to the performance of other algorithms.
  - You can specify custom arguments to the compiler, pass them as arguments to the build script.
  - The build process involves some optionals, they can by toggled from their default setting by passing variables:
