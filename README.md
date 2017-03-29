@@ -1,5 +1,8 @@
 [![Travis CI](http://img.shields.io/travis-ci/Lyndir/MasterPassword.png)](https://travis-ci.org/Lyndir/MasterPassword)
 
+
+
+
 # [Master Password •••|](http://masterpasswordapp.com)
 
 Master Password is a completely new way of thinking about passwords.
@@ -12,6 +15,8 @@ Master Password is available for [📲 iOS](https://itunes.apple.com/app/id51029
 
 Master Password is also available from the following package managers: [macOS: Homebrew](https://brew.sh/).  Get in touch if you are interested in adding Master Password to any other package managers.
 
+
+
 ## What is a password?
 
 The "password".  Somehow, passwords have become the default solution to authentication across the web.  We've long since accepted this as the way things are, but let's stop to think for a moment about what passwords actually are:
@@ -20,6 +25,8 @@ A password is a secret that is known only to the party providing a service and t
 
 Simple enough - a secret that you know and your website knows but nobody else, thereby guaranteeing that you and only you have access to your account on this website.  Unfortunately, in practice, the ubiquitous use of passwords has us completely overwhelmed.  And the only way we can cope with that is by finding ways of making the problem manageable.
 
+
+
 ## What's the problem?
 
 Coming up with a secret password is pretty easy.  Say you're organizing a secret meeting and will only let people in if they know the password at the door.  You tell those you trust, the password for tonight's meeting is "purple oranges with a smile".
@@ -27,6 +34,8 @@ Coming up with a secret password is pretty easy.  Say you're organizing a secret
 The problem we have in our daily lives, however, is the fact that we need secret passwords for almost everything now.  A password for our email, twitter, 9gag, facebook, imgur, amazon, ebay, paypal, bank, reddit, etc.  And every time we want to use a new site, we need another one.  The problem now becomes clear: passwords are meant to be remembered and recalled with ease when needed, but this becomes impossible when we have secrets for every distinct activity in our lives.
 
 We cannot recall passwords the way we are expected to when there are too many.
+
+
 
 ## Coping
 
@@ -40,6 +49,8 @@ These coping mechanisms come in various forms, and they all have down-sides, bec
 
 Our passwords are no longer true to the original definition.
 
+
+
 ## Master Password's approach
 
 The theory behind Master Password starts with accepting that it is impossible to keep track of passwords for all your accounts.  Instead, we return to the core premise of the password: a secret phrase that you can remember easily, all by yourself.
@@ -52,6 +63,8 @@ Master Password solves this problem by letting you remember one and only one pas
 
 Master Password is *not* a password manager.  It does not store your website passwords.  Therefore, there is zero risk of you losing your website passwords (or them falling in the wrong hands).  Master Password simply uses your one password and the name of the site to generate a site-specific secret.
 
+
+
 ## Benefits
 
  - You don't need to come up with a secure password every time you make a new account - Master Password gives you the key for it.
@@ -60,6 +73,8 @@ Master Password is *not* a password manager.  It does not store your website pas
  - You don't need to try to keep password lists in sync or stored somewhere easily accessible - Master Password is always available.
  - You don't need to worry what you'll do if your computer dies or you need to log into your bank while you're in the airport transit zone - Master Password is always available.
  - You don't need to worry about your password manager website getting hacked, your phone getting duplicated, somebody taking a picture of your passwords book - Master Password keeps no records.
+
+
 
 ## How does it work?
 
@@ -75,9 +90,14 @@ Master Password can derive the `site-password` in an entirely stateless manner. 
 
 We standardize `user-name` as your full name, `site-name` as the domain name of the site, `site-counter` to `1` (unless you explicitly increment it) and `site-template` to `Long Password`; as a result the only token the user really needs to remember actively is `master-password`.
 
+
+
+
 # Source Code
 
 Master Password's algorithm is [documented](http://masterpasswordapp.com/algorithm.html) and its implementation is Free Software (GPLv3).
+
+
 
 ## Components
 
@@ -94,7 +114,10 @@ There are several components available here.  As an end-user, you can currently 
  - `platform-independent/gui-java`: This is the platform-independent desktop implementation of Master Password, written in Java.
  - `platform-independent/web-js`: This is the platform-independent browser application for Master Password, written in JavaScript.
 
+
+
 ## Building and running
+
 
 ### macOS or iOS
 
@@ -102,11 +125,13 @@ Make sure you have all relevant submodules checked out.
 
 Go into `platform-darwin` and open `MasterPassword.xcworkspace` in Xcode.  Select the desired target from the Scheme Selector and build, run or archive.
 
+
 ### Web
 
 Make sure you have all relevant submodules checked out.
 
 Go into `platform-independent/web-js` and open `index.html` in your browser.  You should be able to run this locally, there is no need for hosting or an application server.
+
 
 ### Java
 
@@ -118,6 +143,43 @@ Go into the `gradle` directory and run `./gradlew build`.  All Java components w
    contains an archive with the Master Password Java command-line interface.  Unpack it and run the `cli` script.
  - `platform-android/build/outputs/apk`:
    contains the Android application package.  Install it on your Android device.
+
+
+### Native CLI
+
+Go into the `platform-independent/cli-c` directory and run `./build`.  The native command-line client will then be built.
+
+When the build completes, you will have an `mpw` binary you can use.  You can copy it into your `PATH` or use the `./install` script to help you do so.
+
+The build has a few dependencies you should have installed before running it:
+
+    - `mpw`: openssl-dev, ncurses-dev (if `mpw_color=1`)
+    - `mpw-bench`: openssl-dev
+    - `mpw-tests`: openssl-dev, libxml2
+
+There are a few different ways you can modify the build process:
+
+ - You can change the targets that should be built.  By default, all targets are built.  These are the available targets:
+    - `mpw`: This is the standard command-line `mpw` tool which implements all Master Password features.
+    - `mpw-tests`: This is a tool to perform the standard test script on the `mpw` implementation.
+    - `mpw-bench`: This is a tool to run a benchmark on the `mpw` implementation, comparing it to the performance of other algorithms.
+ - You can specify custom arguments to the compiler, pass them as arguments to the build script.
+ - The build process involves some optionals, they can by toggled from their default setting by passing variables:
+    - `mpw_color`: [default: 1] Colorized Identicon, depends on 
+
+To change the targets to build, use:
+
+    targets='mpw mpw-bench' ./build
+
+To add a library search path, use:
+
+    ./build -L/usr/local/lib
+
+Change an optional feature:
+
+    mpw_color=0 ./build
+
+
 
 ## Support
 
