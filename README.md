@@ -155,7 +155,7 @@ When the build completes, you will have an `mpw` binary you can use.  You can co
 
 For example:
 
-    sudo ./install
+    ./build && sudo ./install
     mpw -h
 
 The build has a few dependencies you should have installed before running it:
