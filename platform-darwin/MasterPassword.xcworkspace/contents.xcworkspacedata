@@ -5,6 +5,6 @@
       location = "group:MasterPassword-iOS.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:/Users/lhunath/Documents/workspace/lyndir/MasterPassword/platform-darwin/MasterPassword-macOS.xcodeproj">
+      location = "group:MasterPassword-macOS.xcodeproj">
    </FileRef>
 </Workspace>

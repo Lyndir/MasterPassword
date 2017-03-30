@@ -3200,6 +3200,7 @@
 				TargetAttributes = {
 					DA32D01F19D111C6004F3F0E = {
 						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = HL3Q45LX9N;
 					};
 					DA5BFA43147E415C00F98B1E = {
 						DevelopmentTeam = HL3Q45LX9N;
@@ -3221,6 +3222,19 @@
 					};
 					DAA1757C19D86BE70044227B = {
 						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = HL3Q45LX9N;
+					};
+					DAC6325C1486805C0075AEA5 = {
+						DevelopmentTeam = HL3Q45LX9N;
+					};
+					DAC6326B148680650075AEA5 = {
+						DevelopmentTeam = HL3Q45LX9N;
+					};
+					DAC77CAC148291A600BCF976 = {
+						DevelopmentTeam = HL3Q45LX9N;
+					};
+					DAFC5654172C573B00CB5CC5 = {
+						DevelopmentTeam = HL3Q45LX9N;
 					};
 				};
 			};
@@ -3839,7 +3853,9 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = HL3Q45LX9N;
 				DSTROOT = "/tmp/${PRODUCT_NAME}.dst";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -3929,7 +3945,9 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = HL3Q45LX9N;
 				DSTROOT = "/tmp/${PRODUCT_NAME}.dst";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -3997,7 +4015,6 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/External/iOS\"",
@@ -4033,9 +4050,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = HL3Q45LX9N;
 				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4097,7 +4112,9 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = HL3Q45LX9N;
 				DSTROOT = "/tmp/${PRODUCT_NAME}.dst";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4165,9 +4182,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = HL3Q45LX9N;
 				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4202,14 +4217,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				DSTROOT = /tmp/Pearl.dst;
 				GCC_PREFIX_HEADER = "Source/Pearl/Pearl-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
 			};
 			name = "AppStore-iOS";
 		};
@@ -4218,7 +4230,6 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				SKIP_INSTALL = YES;
 			};
 			name = "AppStore-iOS";
 		};
@@ -4259,7 +4270,6 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				SKIP_INSTALL = YES;
 			};
 			name = "Debug-iOS";
 		};
@@ -4268,7 +4278,6 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				SKIP_INSTALL = YES;
 			};
 			name = "AdHoc-iOS";
 		};
@@ -4292,14 +4301,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				DSTROOT = /tmp/Pearl.dst;
 				GCC_PREFIX_HEADER = "Source/Pearl/Pearl-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
 			};
 			name = "Debug-iOS";
 		};
@@ -4307,14 +4313,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				DSTROOT = /tmp/Pearl.dst;
 				GCC_PREFIX_HEADER = "Source/Pearl/Pearl-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
 			};
 			name = "AdHoc-iOS";
 		};
