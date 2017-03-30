@@ -65,8 +65,8 @@
                                 <attributedString key="attributedTitle">
                                     <fragment content="Always open Master Password at start-up.">
                                         <attributes>
-                                            <font key="NSFont" size="12" name="Helvetica"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                            <font key="NSFont" size="11" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8"/>
                                         </attributes>
                                     </fragment>
                                 </attributedString>
@@ -82,8 +82,8 @@
                                 <attributedString key="attributedTitle">
                                     <fragment content="Claim the entire screen while looking up passwords.">
                                         <attributes>
-                                            <font key="NSFont" size="12" name="Helvetica"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                            <font key="NSFont" size="11" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8"/>
                                         </attributes>
                                     </fragment>
                                 </attributedString>
@@ -99,20 +99,20 @@
                                 <attributedString key="attributedTitle">
                                     <fragment content="Don't display the password.  Hold alt ">
                                         <attributes>
-                                            <font key="NSFont" size="12" name="Helvetica"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                            <font key="NSFont" size="11" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8"/>
                                         </attributes>
                                     </fragment>
                                     <fragment content="⌥">
                                         <attributes>
-                                            <font key="NSFont" size="12" name="LucidaGrande"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                            <font key="NSFont" size="11" name="LucidaGrande"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8"/>
                                         </attributes>
                                     </fragment>
                                     <fragment content=" to reveal temporarily.">
                                         <attributes>
-                                            <font key="NSFont" size="12" name="Helvetica"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                            <font key="NSFont" size="11" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8"/>
                                         </attributes>
                                     </fragment>
                                 </attributedString>
@@ -128,8 +128,8 @@
                                 <attributedString key="attributedTitle">
                                     <fragment content="Remember the password while the application is running.">
                                         <attributes>
-                                            <font key="NSFont" size="12" name="Helvetica"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                            <font key="NSFont" size="11" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8"/>
                                         </attributes>
                                     </fragment>
                                 </attributedString>
@@ -145,8 +145,8 @@
                                 <attributedString key="attributedTitle">
                                     <fragment content="Save the password in your keychain so you don't need to enter it again.">
                                         <attributes>
-                                            <font key="NSFont" size="12" name="Helvetica"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                            <font key="NSFont" size="11" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="8"/>
                                         </attributes>
                                     </fragment>
                                 </attributedString>
