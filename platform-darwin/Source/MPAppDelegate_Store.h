@@ -21,10 +21,10 @@ typedef NS_ENUM( NSUInteger, MPImportResult ) {
 @interface MPAppDelegate_Shared(Store)
 
 + (NSManagedObjectContext *)managedObjectContextForMainThreadIfReady;
-+ (BOOL)managedObjectContextForMainThreadPerformBlock:(void (^)(NSManagedObjectContext *mainContext))mocBlock;
-+ (BOOL)managedObjectContextForMainThreadPerformBlockAndWait:(void (^)(NSManagedObjectContext *mainContext))mocBlock;
-+ (BOOL)managedObjectContextPerformBlock:(void (^)(NSManagedObjectContext *context))mocBlock;
-+ (BOOL)managedObjectContextPerformBlockAndWait:(void (^)(NSManagedObjectContext *context))mocBlock;
++ (BOOL)managedObjectContextForMainThreadPerformBlock:(void ( ^ )(NSManagedObjectContext *mainContext))mocBlock;
++ (BOOL)managedObjectContextForMainThreadPerformBlockAndWait:(void ( ^ )(NSManagedObjectContext *mainContext))mocBlock;
++ (BOOL)managedObjectContextPerformBlock:(void ( ^ )(NSManagedObjectContext *context))mocBlock;
++ (BOOL)managedObjectContextPerformBlockAndWait:(void ( ^ )(NSManagedObjectContext *context))mocBlock;
 
 - (MPFixableResult)findAndFixInconsistenciesSaveInContext:(NSManagedObjectContext *)context;
 - (void)deleteAndResetStore;
@@ -33,8 +33,8 @@ typedef NS_ENUM( NSUInteger, MPImportResult ) {
 - (void)addSiteNamed:(NSString *)siteName completion:(void ( ^ )(MPSiteEntity *site, NSManagedObjectContext *context))completion;
 - (MPSiteEntity *)changeSite:(MPSiteEntity *)site saveInContext:(NSManagedObjectContext *)context toType:(MPSiteType)type;
 - (MPImportResult)importSites:(NSString *)importedSitesString
-            askImportPassword:(NSString *(^)(NSString *userName))importPassword
-              askUserPassword:(NSString *(^)(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword;
+            askImportPassword:(NSString *( ^ )(NSString *userName))importPassword
+              askUserPassword:(NSString *( ^ )(NSString *userName, NSUInteger importCount, NSUInteger deleteCount))userPassword;
 - (NSString *)exportSitesRevealPasswords:(BOOL)revealPasswords;
 
 @end

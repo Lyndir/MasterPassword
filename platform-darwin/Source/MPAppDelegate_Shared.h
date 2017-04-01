@@ -11,7 +11,9 @@
 #if TARGET_OS_IPHONE
 @interface MPAppDelegate_Shared : PearlAppDelegate
 #else
-@interface MPAppDelegate_Shared : NSObject <PearlConfigDelegate>
+
+@interface MPAppDelegate_Shared : NSObject<PearlConfigDelegate>
+
 #endif
 
 @property(strong, nonatomic, readonly) MPKey *key;

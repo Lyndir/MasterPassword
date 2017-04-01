@@ -18,9 +18,7 @@
 
 #import "MPNoStateButton.h"
 
-
 @implementation MPNoStateButtonCell {
-
 }
 
 - (void)setState:(NSInteger)state {

@@ -9,7 +9,6 @@
 #import "MPUserEntity.h"
 #import "MPSiteEntity.h"
 
-
 @implementation MPUserEntity
 
 @dynamic avatar_;

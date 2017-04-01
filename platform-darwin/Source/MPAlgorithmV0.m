@@ -426,7 +426,7 @@ NSOperationQueue *_mpwQueue = nil;
                 [PearlKeyChain deleteItemForQuery:siteQuery];
             else
                 [PearlKeyChain addOrUpdateItemForQuery:siteQuery withAttributes:@{
-                        (__bridge id)kSecValueData : encryptedContent,
+                        (__bridge id)kSecValueData: encryptedContent,
 #if TARGET_OS_IPHONE
                         (__bridge id)kSecAttrAccessible : (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
 #endif
@@ -730,8 +730,8 @@ NSOperationQueue *_mpwQueue = nil;
 
     return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
                                    attributes:@{
-                                           (__bridge id)kSecAttrService : @"DevicePrivate",
-                                           (__bridge id)kSecAttrAccount : name
+                                           (__bridge id)kSecAttrService: @"DevicePrivate",
+                                           (__bridge id)kSecAttrAccount: name
                                    }
                                       matches:nil];
 }

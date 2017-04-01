@@ -80,7 +80,7 @@
     for (NSValue *dismissButtonValue in [_dismissSegueByButton allKeys])
         if (((UIStoryboardSegue *)_dismissSegueByButton[dismissButtonValue]).sourceViewController == viewController) {
             dismissButton = [dismissButtonValue nonretainedObjectValue];
-            NSAssert([self.view.subviews containsObject:dismissButton], @"Missing dismiss button in dictionary.");
+            NSAssert( [self.view.subviews containsObject:dismissButton], @"Missing dismiss button in dictionary." );
         }
     if (!dismissButton)
         return;

@@ -8,7 +8,6 @@
 
 #import "MPStoredSiteEntity.h"
 
-
 @implementation MPStoredSiteEntity
 
 @dynamic contentObject;

@@ -12,7 +12,7 @@
 
 @interface MPAnswersViewController : UIViewController
 
-@property (nonatomic) IBOutlet UITableView *tableView;
+@property(nonatomic) IBOutlet UITableView *tableView;
 
 - (void)setSite:(MPSiteEntity *)site;
 - (MPSiteEntity *)siteInContext:(NSManagedObjectContext *)context;
@@ -21,8 +21,8 @@
 
 @interface MPGlobalAnswersCell : UITableViewCell
 
-@property (nonatomic) IBOutlet UILabel *titleLabel;
-@property (nonatomic) IBOutlet UITextField *answerField;
+@property(nonatomic) IBOutlet UILabel *titleLabel;
+@property(nonatomic) IBOutlet UITextField *answerField;
 
 - (void)setSite:(MPSiteEntity *)site;
 
@@ -32,7 +32,7 @@
 
 @end
 
-@interface MPMultipleAnswersCell : UITableViewCell <UITextFieldDelegate>
+@interface MPMultipleAnswersCell : UITableViewCell<UITextFieldDelegate>
 
 @end
 

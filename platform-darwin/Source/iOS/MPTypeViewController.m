@@ -22,7 +22,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 
-    inf(@"Type selection will appear");
+    inf( @"Type selection will appear" );
     self.recommendedTipContainer.alpha = 0;
 
     [super viewWillAppear:animated];
@@ -55,7 +55,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
 
-    inf(@"Type selection will disappear");
+    inf( @"Type selection will disappear" );
     [super viewWillDisappear:animated];
 }
 
@@ -94,11 +94,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    NSAssert(self.navigationController.topViewController == self, @"Not the currently active navigation item.");
+    NSAssert( self.navigationController.topViewController == self, @"Not the currently active navigation item." );
 
     MPSiteType type = [self typeAtIndexPath:indexPath];
     if (type == (MPSiteType)NSNotFound)
-            // Selected a non-type row.
+        // Selected a non-type row.
         return;
 
     [self.delegate didSelectType:type];
@@ -129,7 +129,7 @@
                     return (MPSiteType)NSNotFound;
 
                 default: {
-                    Throw(@"Unsupported row: %ld, when selecting generated site type.", (long)indexPath.row);
+                    Throw( @"Unsupported row: %ld, when selecting generated site type.", (long)indexPath.row );
                 }
             }
         }
@@ -147,13 +147,13 @@
                     return (MPSiteType)NSNotFound;
 
                 default: {
-                    Throw(@"Unsupported row: %ld, when selecting stored site type.", (long)indexPath.row);
+                    Throw( @"Unsupported row: %ld, when selecting stored site type.", (long)indexPath.row );
                 }
             }
         }
 
         default:
-            Throw(@"Unsupported section: %ld, when selecting site type.", (long)indexPath.section);
+            Throw( @"Unsupported section: %ld, when selecting site type.", (long)indexPath.section );
     }
 }
 

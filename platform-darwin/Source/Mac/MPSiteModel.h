@@ -25,25 +25,25 @@
 
 @interface MPSiteModel : NSObject
 
-@property (nonatomic) NSString *name;
-@property (nonatomic) NSAttributedString *displayedName;
-@property (nonatomic) MPSiteType type;
-@property (nonatomic) NSString *typeName;
-@property (nonatomic) NSString *content;
-@property (nonatomic) NSString *displayedContent;
-@property (nonatomic) NSString *question;
-@property (nonatomic) NSString *answer;
-@property (nonatomic) NSString *loginName;
-@property (nonatomic) BOOL loginGenerated;
-@property (nonatomic) NSNumber *uses;
-@property (nonatomic) NSUInteger counter;
-@property (nonatomic) NSDate *lastUsed;
-@property (nonatomic) id<MPAlgorithm> algorithm;
-@property (nonatomic) MPAlgorithmVersion algorithmVersion;
-@property (nonatomic, readonly) BOOL outdated;
-@property (nonatomic, readonly) BOOL generated;
-@property (nonatomic, readonly) BOOL stored;
-@property (nonatomic, readonly) BOOL transient;
+@property(nonatomic) NSString *name;
+@property(nonatomic) NSAttributedString *displayedName;
+@property(nonatomic) MPSiteType type;
+@property(nonatomic) NSString *typeName;
+@property(nonatomic) NSString *content;
+@property(nonatomic) NSString *displayedContent;
+@property(nonatomic) NSString *question;
+@property(nonatomic) NSString *answer;
+@property(nonatomic) NSString *loginName;
+@property(nonatomic) BOOL loginGenerated;
+@property(nonatomic) NSNumber *uses;
+@property(nonatomic) NSUInteger counter;
+@property(nonatomic) NSDate *lastUsed;
+@property(nonatomic) id<MPAlgorithm> algorithm;
+@property(nonatomic) MPAlgorithmVersion algorithmVersion;
+@property(nonatomic, readonly) BOOL outdated;
+@property(nonatomic, readonly) BOOL generated;
+@property(nonatomic, readonly) BOOL stored;
+@property(nonatomic, readonly) BOOL transient;
 
 - (instancetype)initWithEntity:(MPSiteEntity *)entity fuzzyGroups:(NSArray *)fuzzyGroups;
 - (instancetype)initWithName:(NSString *)siteName forUser:(MPUserEntity *)user;

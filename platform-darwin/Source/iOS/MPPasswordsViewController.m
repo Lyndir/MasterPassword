@@ -91,7 +91,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserInContext:context];
         if (![MPAlgorithmDefault tryMigrateUser:activeUser inContext:context])
-            PearlMainQueue(^{
+            PearlMainQueue( ^{
                 [self performSegueWithIdentifier:@"message" sender:
                         [MPMessage messageWithTitle:@"You have sites that can be upgraded." text:
                                         @"Upgrading a site allows it to take advantage of the latest improvements in the Master Password algorithm.\n\n"
@@ -99,7 +99,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
                                                 "You can then update your site's account with the new and stronger password.\n\n"
                                                 "The upgrade button can be found in the site's settings and looks like this:"
                                                info:YES]];
-            });
+            } );
         [context saveToStore];
     }];
 }
@@ -418,11 +418,11 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         if (![self.fetchedResultsController performFetch:&error])
             err( @"Couldn't fetch sites: %@", [error fullDescription] );
 
-        PearlMainQueue(^{
+        PearlMainQueue( ^{
             @try {
                 [self.passwordCollectionView performBatchUpdates:^{
                     [self fetchedItemsDidUpdate];
-    
+
                     NSInteger fromSections = self.passwordCollectionView.numberOfSections;
                     NSInteger toSections = [self numberOfSectionsInCollectionView:self.passwordCollectionView];
                     for (NSInteger section = 0; section < MAX( toSections, fromSections ); ++section) {
@@ -449,7 +449,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
                 wrn( @"While updating password cells: %@", [exception fullDescription] );
                 [self.passwordCollectionView reloadData];
             }
-        });
+        } );
     }];
 }
 

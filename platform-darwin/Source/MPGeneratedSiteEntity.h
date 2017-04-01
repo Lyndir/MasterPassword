@@ -10,9 +10,8 @@
 #import <CoreData/CoreData.h>
 #import "MPSiteEntity.h"
 
-
 @interface MPGeneratedSiteEntity : MPSiteEntity
 
-@property (nonatomic, retain) NSNumber * counter_;
+@property(nonatomic, retain) NSNumber *counter_;
 
 @end

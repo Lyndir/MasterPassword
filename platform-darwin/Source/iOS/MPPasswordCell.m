@@ -532,7 +532,7 @@
         self.passwordField.attributedPlaceholder = stra(
                 mainSite.type & MPSiteTypeClassStored? strl( @"No password" ):
                 mainSite.type & MPSiteTypeClassGenerated? strl( @"..." ): @"", @{
-                        NSForegroundColorAttributeName : [UIColor whiteColor]
+                        NSForegroundColorAttributeName: [UIColor whiteColor]
                 } );
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             MPSiteEntity *site = [self siteInContext:context];
@@ -570,8 +570,8 @@
                     [self.modeScrollView addSubview:self.indicatorView];
                     [self.contentView addConstraintsWithVisualFormat:@"V:[indicator][target]" options:NSLayoutFormatAlignAllCenterX
                                                              metrics:nil views:@{
-                                    @"indicator" : self.indicatorView,
-                                    @"target"    : settingsMode? self.editButton: self.modeButton
+                                    @"indicator": self.indicatorView,
+                                    @"target"   : settingsMode? self.editButton: self.modeButton
                             }];
                 }
                 else if (requiresExplicitMigration) {
@@ -580,8 +580,8 @@
                     [self.modeScrollView addSubview:self.indicatorView];
                     [self.contentView addConstraintsWithVisualFormat:@"V:[indicator][target]" options:NSLayoutFormatAlignAllCenterX
                                                              metrics:nil views:@{
-                                    @"indicator" : self.indicatorView,
-                                    @"target"    : settingsMode? self.upgradeButton: self.modeButton
+                                    @"indicator": self.indicatorView,
+                                    @"target"   : settingsMode? self.upgradeButton: self.modeButton
                             }];
                 }
                 else
@@ -617,7 +617,7 @@
         }
 
     [attributedSiteName appendAttributedString:stra(
-            strf( @" - %@", self.transientSite? @"Tap to create": [site.algorithm shortNameOfType:site.type] ), @{ } )];
+            strf( @" - %@", self.transientSite? @"Tap to create": [site.algorithm shortNameOfType:site.type] ), @{} )];
     self.siteNameLabel.attributedText = attributedSiteName;
 }
 

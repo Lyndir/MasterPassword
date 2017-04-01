@@ -14,19 +14,19 @@
 @interface MPSiteEntity : NSManagedObject
 
 //@property (nonatomic, retain) id content; // Hide here, reveal in MPStoredSiteEntity
-@property (nonatomic, retain) NSDate * lastUsed;
-@property (nonatomic, retain) NSNumber * loginGenerated_;
-@property (nonatomic, retain) NSString * loginName;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * requiresExplicitMigration_;
-@property (nonatomic, retain) NSNumber * type_;
-@property (nonatomic, retain) NSNumber * uses_;
-@property (nonatomic, retain) NSNumber * version_;
-@property (nonatomic, retain) NSOrderedSet *questions;
-@property (nonatomic, retain) MPUserEntity *user;
+@property(nonatomic, retain) NSDate *lastUsed;
+@property(nonatomic, retain) NSNumber *loginGenerated_;
+@property(nonatomic, retain) NSString *loginName;
+@property(nonatomic, retain) NSString *name;
+@property(nonatomic, retain) NSNumber *requiresExplicitMigration_;
+@property(nonatomic, retain) NSNumber *type_;
+@property(nonatomic, retain) NSNumber *uses_;
+@property(nonatomic, retain) NSNumber *version_;
+@property(nonatomic, retain) NSOrderedSet *questions;
+@property(nonatomic, retain) MPUserEntity *user;
 @end
 
-@interface MPSiteEntity (CoreDataGeneratedAccessors)
+@interface MPSiteEntity(CoreDataGeneratedAccessors)
 
 - (void)insertObject:(MPSiteQuestionEntity *)value inQuestionsAtIndex:(NSUInteger)idx;
 - (void)removeObjectFromQuestionsAtIndex:(NSUInteger)idx;

@@ -20,7 +20,7 @@
 #import "MPPasswordsViewController.h"
 #import "MPEmergencyViewController.h"
 
-typedef NS_ENUM(NSUInteger, MPCombinedMode) {
+typedef NS_ENUM( NSUInteger, MPCombinedMode ) {
     MPCombinedModeUserSelection,
     MPCombinedModePasswordSelection,
 };

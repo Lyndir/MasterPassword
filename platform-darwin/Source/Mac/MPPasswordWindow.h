@@ -18,7 +18,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-
 @interface MPPasswordWindow : NSWindow
 
 @end

@@ -17,16 +17,16 @@
         return self;
 
     [self.defaults registerDefaults:@{
-            NSStringFromSelector( @selector( helpHidden ) )             : @NO,
-            NSStringFromSelector( @selector( siteInfoHidden ) )         : @YES,
-            NSStringFromSelector( @selector( showSetup ) )              : @YES,
-            NSStringFromSelector( @selector( appleID ) )                : @"510296984",
-            NSStringFromSelector( @selector( actionsTipShown ) )        : @(!self.firstRun),
-            NSStringFromSelector( @selector( typeTipShown ) )           : @(!self.firstRun),
-            NSStringFromSelector( @selector( loginNameTipShown ) )      : @NO,
-            NSStringFromSelector( @selector( traceMode ) )              : @NO,
-            NSStringFromSelector( @selector( dictationSearch ) )        : @NO,
-            NSStringFromSelector( @selector( allowDowngrade ) )         : @NO,
+            NSStringFromSelector( @selector( helpHidden ) )       : @NO,
+            NSStringFromSelector( @selector( siteInfoHidden ) )   : @YES,
+            NSStringFromSelector( @selector( showSetup ) )        : @YES,
+            NSStringFromSelector( @selector( appleID ) )          : @"510296984",
+            NSStringFromSelector( @selector( actionsTipShown ) )  : @(!self.firstRun),
+            NSStringFromSelector( @selector( typeTipShown ) )     : @(!self.firstRun),
+            NSStringFromSelector( @selector( loginNameTipShown ) ): @NO,
+            NSStringFromSelector( @selector( traceMode ) )        : @NO,
+            NSStringFromSelector( @selector( dictationSearch ) )  : @NO,
+            NSStringFromSelector( @selector( allowDowngrade ) )   : @NO,
     }];
 
     return self;

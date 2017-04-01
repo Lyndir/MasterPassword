@@ -20,6 +20,6 @@
 
 @interface MPPasswordsSegue : UIStoryboardSegue
 
-@property (nonatomic, assign) BOOL animated;
+@property(nonatomic, assign) BOOL animated;
 
 @end

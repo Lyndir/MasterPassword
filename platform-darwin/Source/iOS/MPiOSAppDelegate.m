@@ -42,7 +42,7 @@
 #ifdef CRASHLYTICS
         NSString *crashlyticsAPIKey = [self crashlyticsAPIKey];
         if ([crashlyticsAPIKey length]) {
-            inf(@"Initializing Crashlytics");
+            inf( @"Initializing Crashlytics" );
 #if defined (DEBUG) || defined (ADHOC)
             [Crashlytics sharedInstance].debugMode = YES;
 #endif
@@ -82,12 +82,12 @@
 
 #ifdef ADHOC
         [PearlAlert showAlertWithTitle:@"Welcome, tester!" message:
-         @"Thank you for taking the time to test Master Password.\n\n"
-         @"Please provide any feedback, however minor it may seem, via the Feedback action item accessible from the top right.\n\n"
-         @"Contact me directly at:\n"
-         @"lhunath@lyndir.com\n"
-         @"Or report detailed issues at:\n"
-         @"https://youtrack.lyndir.com\n"
+                        @"Thank you for taking the time to test Master Password.\n\n"
+                                @"Please provide any feedback, however minor it may seem, via the Feedback action item accessible from the top right.\n\n"
+                                @"Contact me directly at:\n"
+                                @"lhunath@lyndir.com\n"
+                                @"Or report detailed issues at:\n"
+                                @"https://youtrack.lyndir.com\n"
                              viewStyle:UIAlertViewStyleDefault initAlert:nil tappedButtonBlock:nil
                            cancelTitle:nil otherTitles:[PearlStrings get].commonButtonOkay, nil];
 #endif

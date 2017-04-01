@@ -49,8 +49,8 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
 
     return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
                                    attributes:@{
-                                           (__bridge id)kSecAttrService : @"Saved Master Password",
-                                           (__bridge id)kSecAttrAccount : user.name?: @"",
+                                           (__bridge id)kSecAttrService: @"Saved Master Password",
+                                           (__bridge id)kSecAttrAccount: user.name?: @"",
 #if TARGET_OS_IPHONE
                                            (__bridge id)kSecAttrAccessible : (__bridge id)(kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly?: kSecAttrAccessibleWhenUnlockedThisDeviceOnly),
 #endif
@@ -81,7 +81,7 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
 
             inf( @"Saving key in keychain for user: %@", user.userID );
             [PearlKeyChain addOrUpdateItemForQuery:createKeyQuery( user, YES, nil )
-                                    withAttributes:@{ (__bridge id)kSecValueData : keyData }];
+                                    withAttributes:@{ (__bridge id)kSecValueData: keyData }];
         }
     }
 }
@@ -102,7 +102,7 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
         self.key = nil;
 
     self.activeUser = nil;
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedOutNotification object:self userInfo:@{ @"animated" : @(animated) }];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPSignedOutNotification object:self userInfo:@{ @"animated": @(animated) }];
 }
 
 - (BOOL)signInAsUser:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc usingMasterPassword:(NSString *)password {

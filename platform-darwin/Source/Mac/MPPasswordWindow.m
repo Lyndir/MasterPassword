@@ -37,7 +37,7 @@
     }
     else if (self.level != NSNormalWindowLevel) {
         [self setLevel:NSNormalWindowLevel];
-        [self setFrame:NSMakeRect( 0, 0, 640, 600) display:NO];
+        [self setFrame:NSMakeRect( 0, 0, 640, 600 ) display:NO];
         [self center];
     }
 

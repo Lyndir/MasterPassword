@@ -18,8 +18,7 @@
 
 #import <Foundation/Foundation.h>
 
-
-@interface MPWebViewController : UIViewController <UIWebViewDelegate>
+@interface MPWebViewController : UIViewController<UIWebViewDelegate>
 
 @property(nonatomic) IBOutlet UIWebView *webView;
 @property(nonatomic) IBOutlet UINavigationItem *webNavigationItem;

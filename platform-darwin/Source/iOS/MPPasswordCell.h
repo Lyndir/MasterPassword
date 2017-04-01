@@ -25,9 +25,9 @@ typedef NS_ENUM ( NSUInteger, MPPasswordCellMode ) {
     MPPasswordCellModeSettings,
 };
 
-@interface MPPasswordCell : MPCell <UIScrollViewDelegate, UITextFieldDelegate>
+@interface MPPasswordCell : MPCell<UIScrollViewDelegate, UITextFieldDelegate>
 
-@property (nonatomic) NSArray *fuzzyGroups;
+@property(nonatomic) NSArray *fuzzyGroups;
 
 - (void)setSite:(MPSiteEntity *)site animated:(BOOL)animated;
 - (void)setTransientSite:(NSString *)siteName animated:(BOOL)animated;

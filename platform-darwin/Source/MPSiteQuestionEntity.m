@@ -9,7 +9,6 @@
 #import "MPSiteQuestionEntity.h"
 #import "MPSiteEntity.h"
 
-
 @implementation MPSiteQuestionEntity
 
 @dynamic keyword;

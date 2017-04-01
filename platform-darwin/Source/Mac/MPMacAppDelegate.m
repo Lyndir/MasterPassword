@@ -123,12 +123,10 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
             ^(MPMacAppDelegate *self, NSNotification *note) {
                 PearlMainQueue( ^{
                     NSString *key = note.object;
-                    if (!key || [key isEqualToString:NSStringFromSelector( @
-                        selector( hidePasswords ) )])
-                    self.hidePasswordsItem.state = [[MPConfig get].hidePasswords boolValue]? NSOnState: NSOffState;
-                    if (!key || [key isEqualToString:NSStringFromSelector( @
-                        selector( rememberLogin ) )])
-                    self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
+                    if (!key || [key isEqualToString:NSStringFromSelector( @selector( hidePasswords ) )])
+                        self.hidePasswordsItem.state = [[MPConfig get].hidePasswords boolValue]? NSOnState: NSOffState;
+                    if (!key || [key isEqualToString:NSStringFromSelector( @selector( rememberLogin ) )])
+                        self.rememberPasswordItem.state = [[MPConfig get].rememberLogin boolValue]? NSOnState: NSOffState;
                 } );
             } );
     [self updateUsers];
@@ -136,7 +134,8 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     // Global hotkey.
     EventHotKeyRef hotKeyRef;
     EventTypeSpec hotKeyEvents[1] = { { .eventClass = kEventClassKeyboard, .eventKind = kEventHotKeyPressed } };
-    OSStatus status = InstallApplicationEventHandler( NewEventHandlerUPP( MPHotKeyHander ), GetEventTypeCount( hotKeyEvents ), hotKeyEvents, (__bridge void *)self, NULL );
+    OSStatus status = InstallApplicationEventHandler( NewEventHandlerUPP( MPHotKeyHander ), GetEventTypeCount( hotKeyEvents ), hotKeyEvents,
+            (__bridge void *)self, NULL );
     if (status != noErr)
         err( @"Error installing application event handler: %i", (int)status );
     status = RegisterEventHotKey( 35 /* p */, controlKey + cmdKey, MPShowHotKey, GetApplicationEventTarget(), 0, &hotKeyRef );
@@ -318,17 +317,17 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                     break;
                 case MPImportResultInternalError:
                     [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
-                            NSLocalizedDescriptionKey : @"Import failed because of an internal error."
+                            NSLocalizedDescriptionKey: @"Import failed because of an internal error."
                     }]] runModal];
                     break;
                 case MPImportResultMalformedInput:
                     [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
-                            NSLocalizedDescriptionKey : @"The import doesn't look like a Master Password export."
+                            NSLocalizedDescriptionKey: @"The import doesn't look like a Master Password export."
                     }]] runModal];
                     break;
                 case MPImportResultInvalidPassword:
                     [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
-                            NSLocalizedDescriptionKey : @"Incorrect master password for the import sites."
+                            NSLocalizedDescriptionKey: @"Incorrect master password for the import sites."
                     }]] runModal];
                     break;
             }
@@ -441,7 +440,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     prof_new( @"showPasswordWindow" );
     [NSApp activateIgnoringOtherApps:YES];
-    prof_rewind(@"activateIgnoringOtherApps");
+    prof_rewind( @"activateIgnoringOtherApps" );
 
     // If no user, can't activate.
     if (![self activeUserForMainThread]) {

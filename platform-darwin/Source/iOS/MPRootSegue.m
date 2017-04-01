@@ -18,9 +18,7 @@
 
 #import "MPRootSegue.h"
 
-
 @implementation MPRootSegue {
-
 }
 
 - (void)perform {

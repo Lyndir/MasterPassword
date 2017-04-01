@@ -93,8 +93,8 @@
     NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
     paragraphStyle.alignment = NSCenterTextAlignment;
     self.displayedName = stra( siteName, @{
-            NSBackgroundColorAttributeName : [NSColor alternateSelectedControlColor],
-            NSParagraphStyleAttributeName  : paragraphStyle,
+            NSBackgroundColorAttributeName: [NSColor alternateSelectedControlColor],
+            NSParagraphStyleAttributeName : paragraphStyle,
     } );
     self.name = siteName;
     self.algorithm = MPAlgorithmDefault;

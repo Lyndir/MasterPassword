@@ -20,8 +20,9 @@
 #import <UIKit/UIKit.h>
 
 @interface MPLogsViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UITextView *logView;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *levelControl;
+
+@property(weak, nonatomic) IBOutlet UITextView *logView;
+@property(weak, nonatomic) IBOutlet UISegmentedControl *levelControl;
 
 - (IBAction)toggleLevelControl:(UISegmentedControl *)sender;
 - (IBAction)refresh:(UIBarButtonItem *)sender;

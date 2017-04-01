@@ -20,6 +20,6 @@
 
 @interface MPMessageViewController : UIViewController
 
-@property (nonatomic) MPMessage *message;
+@property(nonatomic) MPMessage *message;
 
 @end

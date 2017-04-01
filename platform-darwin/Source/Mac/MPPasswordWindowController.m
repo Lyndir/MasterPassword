@@ -173,7 +173,7 @@
             [self.progressView stopAnimation:self];
             if (!success)
                 [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
-                        NSLocalizedDescriptionKey : strf( @"Incorrect master password for user %@", userName )
+                        NSLocalizedDescriptionKey: strf( @"Incorrect master password for user %@", userName )
                 }]] beginSheetModalForWindow:self.window completionHandler:nil];
         } );
     }];

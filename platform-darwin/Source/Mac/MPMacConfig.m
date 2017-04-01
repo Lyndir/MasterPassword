@@ -17,8 +17,8 @@
         return self;
 
     [self.defaults registerDefaults:@{
-            NSStringFromSelector( @selector( appleID ) )    : @"510296984",
-            NSStringFromSelector( @selector( fullScreen ) ) : @YES,
+            NSStringFromSelector( @selector( appleID ) )   : @"510296984",
+            NSStringFromSelector( @selector( fullScreen ) ): @YES,
     }];
 
     return self;

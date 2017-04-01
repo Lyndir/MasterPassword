@@ -82,7 +82,7 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 - (void)resolvePasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey
                         result:(void ( ^ )(NSString *result))resultBlock;
 - (void)resolveAnswerForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey
-                        result:(void ( ^ )(NSString *result))resultBlock;
+                      result:(void ( ^ )(NSString *result))resultBlock;
 - (void)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question usingKey:(MPKey *)siteKey
                           result:(void ( ^ )(NSString *result))resultBlock;
 

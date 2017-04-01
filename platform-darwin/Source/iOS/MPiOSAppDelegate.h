@@ -16,6 +16,6 @@
 - (void)openFeedbackWithLogs:(BOOL)logs forVC:(UIViewController *)viewController;
 
 - (void)showExportForVC:(UIViewController *)viewController;
-- (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void (^)(void))didReset;
+- (void)changeMasterPasswordFor:(MPUserEntity *)user saveInContext:(NSManagedObjectContext *)moc didResetBlock:(void ( ^ )(void))didReset;
 
 @end

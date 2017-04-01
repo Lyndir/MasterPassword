@@ -211,8 +211,8 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         }
         if (![self.storeCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[self localStoreURL]
                                                        options:@{
-                                                               NSMigratePersistentStoresAutomaticallyOption : @YES,
-                                                               NSInferMappingModelAutomaticallyOption       : @YES,
+                                                               NSMigratePersistentStoresAutomaticallyOption: @YES,
+                                                               NSInferMappingModelAutomaticallyOption      : @YES,
                                                                STORE_OPTIONS
                                                        } error:&error]) {
             err( @"Failed to open store: %@", [error fullDescription] );
@@ -292,7 +292,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     else {
         [context saveToStore];
         [[NSNotificationCenter defaultCenter] postNotificationName:MPFoundInconsistenciesNotification object:nil userInfo:@{
-                MPInconsistenciesFixResultUserKey : @(result)
+                MPInconsistenciesFixResultUserKey: @(result)
         }];
     }
 
@@ -383,12 +383,12 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
     NSError *error = nil;
     if (![NSPersistentStore migrateStore:oldLocalStoreURL withOptions:@{
-            NSMigratePersistentStoresAutomaticallyOption : @YES,
-            NSInferMappingModelAutomaticallyOption       : @YES,
+            NSMigratePersistentStoresAutomaticallyOption: @YES,
+            NSInferMappingModelAutomaticallyOption      : @YES,
             STORE_OPTIONS
     }                            toStore:newLocalStoreURL withOptions:@{
-            NSMigratePersistentStoresAutomaticallyOption : @YES,
-            NSInferMappingModelAutomaticallyOption       : @YES,
+            NSMigratePersistentStoresAutomaticallyOption: @YES,
+            NSInferMappingModelAutomaticallyOption      : @YES,
             STORE_OPTIONS
     }                              model:nil error:&error]) {
         err( @"Couldn't migrate the old store to the new location: %@", [error fullDescription] );
@@ -755,7 +755,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     inf( @"Import completed successfully." );
 
     [[NSNotificationCenter defaultCenter] postNotificationName:MPSitesImportedNotification object:nil userInfo:@{
-            MPSitesImportedNotificationUserKey : user
+            MPSitesImportedNotificationUserKey: user
     }];
 
     return MPImportResultSuccess;

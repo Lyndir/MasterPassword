@@ -90,7 +90,7 @@
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             if ([[MPiOSAppDelegate get] findAndFixInconsistenciesSaveInContext:context] == MPFixableResultNoProblems)
                 [PearlAlert showAlertWithTitle:@"No Inconsistencies" message:
-                        @"No inconsistencies were detected in your sites."
+                                @"No inconsistencies were detected in your sites."
                                      viewStyle:UIAlertViewStyleDefault initAlert:nil
                              tappedButtonBlock:nil cancelTitle:[PearlStrings get].commonButtonOkay otherTitles:nil];
         }];
@@ -111,9 +111,9 @@
                 [[MPiOSAppDelegate get] forgetSavedKeyFor:activeUser];
             [context saveToStore];
 
-            PearlMainQueue(^{
+            PearlMainQueue( ^{
                 [self reload];
-            });
+            } );
         }];
 
     if (sender == self.touchIDSwitch)
@@ -241,7 +241,7 @@
                     return MPSiteTypeStoredDevicePrivate;
                 default:
                     Throw( @"unsupported selected type index: generated=%ld, stored=%ld", (long)selectedGeneratedIndex,
-                                    (long)selectedStoredIndex );
+                            (long)selectedStoredIndex );
             }
     }
 }

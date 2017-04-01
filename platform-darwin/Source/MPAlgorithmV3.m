@@ -33,7 +33,7 @@
 
     if (!explicit) {
         if (site.type & MPSiteTypeClassGenerated &&
-                site.user.name.length != [site.user.name dataUsingEncoding:NSUTF8StringEncoding].length) {
+            site.user.name.length != [site.user.name dataUsingEncoding:NSUTF8StringEncoding].length) {
             // This migration requires explicit permission for types of the generated class.
             site.requiresExplicitMigration = YES;
             return NO;

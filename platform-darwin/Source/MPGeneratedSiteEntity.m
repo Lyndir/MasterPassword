@@ -8,7 +8,6 @@
 
 #import "MPGeneratedSiteEntity.h"
 
-
 @implementation MPGeneratedSiteEntity
 
 @dynamic counter_;

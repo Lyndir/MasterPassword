@@ -20,7 +20,7 @@
 
 @protocol MPAlgorithm;
 
-typedef NS_ENUM(NSUInteger, MPKeyOrigin) {
+typedef NS_ENUM( NSUInteger, MPKeyOrigin ) {
     MPKeyOriginMasterPassword,
     MPKeyOriginKeyChain,
     MPKeyOriginKeyChainBiometric,

@@ -13,18 +13,18 @@
 
 @interface MPUserEntity : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * avatar_;
-@property (nonatomic, retain) NSNumber * defaultType_;
-@property (nonatomic, retain) NSData * keyID;
-@property (nonatomic, retain) NSDate * lastUsed;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * saveKey_;
-@property (nonatomic, retain) NSNumber * touchID_;
-@property (nonatomic, retain) NSNumber * version_;
-@property (nonatomic, retain) NSSet *sites;
+@property(nonatomic, retain) NSNumber *avatar_;
+@property(nonatomic, retain) NSNumber *defaultType_;
+@property(nonatomic, retain) NSData *keyID;
+@property(nonatomic, retain) NSDate *lastUsed;
+@property(nonatomic, retain) NSString *name;
+@property(nonatomic, retain) NSNumber *saveKey_;
+@property(nonatomic, retain) NSNumber *touchID_;
+@property(nonatomic, retain) NSNumber *version_;
+@property(nonatomic, retain) NSSet *sites;
 @end
 
-@interface MPUserEntity (CoreDataGeneratedAccessors)
+@interface MPUserEntity(CoreDataGeneratedAccessors)
 
 - (void)addSitesObject:(MPSiteEntity *)value;
 - (void)removeSitesObject:(MPSiteEntity *)value;

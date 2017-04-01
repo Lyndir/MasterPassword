@@ -10,7 +10,6 @@
 #import "MPSiteQuestionEntity.h"
 #import "MPUserEntity.h"
 
-
 @implementation MPSiteEntity
 
 //@dynamic content;

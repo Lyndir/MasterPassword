@@ -18,6 +18,5 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface MPNoStateButtonCell : NSButtonCell
 @end

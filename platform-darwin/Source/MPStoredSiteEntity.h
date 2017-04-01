@@ -10,9 +10,8 @@
 #import <CoreData/CoreData.h>
 #import "MPSiteEntity.h"
 
-
 @interface MPStoredSiteEntity : MPSiteEntity
 
-@property (nonatomic, retain) NSData *contentObject;
+@property(nonatomic, retain) NSData *contentObject;
 
 @end

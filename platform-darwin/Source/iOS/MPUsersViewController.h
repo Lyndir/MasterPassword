@@ -16,7 +16,7 @@
 //  Copyright, lhunath (Maarten Billemont) 2014. All rights reserved.
 //
 
-@interface MPUsersViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextFieldDelegate>
+@interface MPUsersViewController : UIViewController<UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextFieldDelegate>
 
 @property(weak, nonatomic) IBOutlet UIView *userSelectionContainer;
 @property(weak, nonatomic) IBOutlet UIButton *marqueeButton;

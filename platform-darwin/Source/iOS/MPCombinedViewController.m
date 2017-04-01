@@ -131,7 +131,7 @@
             [self.usersVC setActive:YES animated:animated];
             if (_passwordsVC) {
                 MPPasswordsSegue *segue = [[MPPasswordsSegue alloc] initWithIdentifier:@"passwords" source:_passwordsVC destination:self];
-                [self prepareForSegue:segue sender:@{ @"animated" : @(animated) }];
+                [self prepareForSegue:segue sender:@{ @"animated": @(animated) }];
                 [segue perform];
             }
             break;
@@ -139,7 +139,7 @@
         case MPCombinedModePasswordSelection: {
             self.usersVC.view.userInteractionEnabled = NO;
             [self.usersVC setActive:NO animated:animated];
-            [self performSegueWithIdentifier:@"passwords" sender:@{ @"animated" : @(animated) }];
+            [self performSegueWithIdentifier:@"passwords" sender:@{ @"animated": @(animated) }];
             break;
         }
     }

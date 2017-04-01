@@ -5,7 +5,7 @@
 
 #import "MPMacApplication.h"
 
-@interface NSResponder (Editing)
+@interface NSResponder(Editing)
 
 - (void)undo:(id)sender;
 - (void)redo:(id)sender;

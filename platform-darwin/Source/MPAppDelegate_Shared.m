@@ -11,7 +11,7 @@
 #import "MPAppDelegate_Key.h"
 #import "NSManagedObjectModel+KCOrderedAccessorFix.h"
 
-@interface MPAppDelegate_Shared ()
+@interface MPAppDelegate_Shared()
 
 @property(strong, nonatomic) MPKey *key;
 @property(strong, nonatomic) NSManagedObjectID *activeUserOID;
@@ -66,13 +66,12 @@
 
     NSError *error;
     if (activeUser.objectID.isTemporaryID && ![activeUser.managedObjectContext obtainPermanentIDsForObjects:@[ activeUser ] error:&error])
-    err(@"Failed to obtain a permanent object ID after setting active user: %@", [error fullDescription]);
+        err( @"Failed to obtain a permanent object ID after setting active user: %@", [error fullDescription] );
 
     self.activeUserOID = activeUser.objectID;
 }
 
 - (void)handleCoordinatorError:(NSError *)error {
-
 }
 
 @end
