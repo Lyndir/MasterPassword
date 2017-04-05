@@ -1,0 +1,5 @@
+<root>
+    <item name='org.testng.Assert void assertEquals(java.lang.String, java.lang.String, java.lang.String) 2'>
+        <annotation name='org.jetbrains.annotations.NonNls' />
+    </item>
+</root>
