@@ -1,19 +1,20 @@
-/**
-* Copyright Maarten Billemont (http://www.lhunath.com, lhunath@lyndir.com)
-*
-* See the enclosed file LICENSE for license information (LGPLv3). If you did
-* not receive this file, see http://www.gnu.org/licenses/lgpl-3.0.txt
-*
-* @author   Maarten Billemont <lhunath@lyndir.com>
-* @license  http://www.gnu.org/licenses/lgpl-3.0.txt
-*/
-
+//==============================================================================
+// This file is part of Master Password.
+// Copyright (c) 2011-2017, Maarten Billemont.
 //
-//  MPAlgorithm
+// Master Password is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
-//  Created by Maarten Billemont on 16/07/12.
-//  Copyright 2012 lhunath (Maarten Billemont). All rights reserved.
+// Master Password is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
 //
+// You can find a copy of the GNU General Public License in the
+// LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
+//==============================================================================
 
 #import "MPAlgorithm.h"
 
