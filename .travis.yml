@@ -3,7 +3,7 @@ osx_image: xcode8
 env: TERM=dumb SHLVL=0
 git:
   submodules: true
-script:
-  - "./platform-independent/cli-c/build"
-  - "xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -scheme 'MasterPassword iOS: App Store' -configuration 'AdHoc-iOS' -sdk iphonesimulator"
-  - "xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -scheme 'MasterPassword macOS: App Store' -configuration 'AdHoc-macOS' -sdk macosx"
+script: "
+  ./platform-independent/cli-c/build &&
+  xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -scheme 'MasterPassword iOS: App Store' -configuration 'AdHoc-iOS' -sdk iphonesimulator &&
+  xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -scheme 'MasterPassword macOS: App Store' -configuration 'AdHoc-macOS' -sdk macosx"
