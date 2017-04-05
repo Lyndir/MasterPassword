@@ -156,7 +156,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		DA3B845A1916AC5100246EEA /* AppStore-Mac */ = {
+		DA0974511E9587AC00F0BFE8 /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -207,22 +207,21 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
-			name = "AppStore-Mac";
+			name = Test;
 		};
-		DA3B845B1916AC5100246EEA /* AppStore-Mac */ = {
+		DA0974521E9587AC00F0BFE8 /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper.entitlements";
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = HL3Q45LX9N;
 				INFOPLIST_FILE = "$(SRCROOT)/MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac.LoginHelper;
-				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
-			name = "AppStore-Mac";
+			name = Test;
 		};
-		DAD9B5DC176299B9001835F9 /* Debug-Mac */ = {
+		DAD9B5DC176299B9001835F9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -281,9 +280,9 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
-			name = "Debug-Mac";
+			name = Debug;
 		};
-		DAD9B5DD176299B9001835F9 /* AdHoc-Mac */ = {
+		DAD9B5DD176299B9001835F9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -334,33 +333,31 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
-			name = "AdHoc-Mac";
+			name = Release;
 		};
-		DAD9B5DF176299B9001835F9 /* Debug-Mac */ = {
+		DAD9B5DF176299B9001835F9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper.entitlements";
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = HL3Q45LX9N;
 				INFOPLIST_FILE = "$(SRCROOT)/MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac.LoginHelper;
-				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
-			name = "Debug-Mac";
+			name = Debug;
 		};
-		DAD9B5E0176299B9001835F9 /* AdHoc-Mac */ = {
+		DAD9B5E0176299B9001835F9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper.entitlements";
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = HL3Q45LX9N;
 				INFOPLIST_FILE = "$(SRCROOT)/MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac.LoginHelper;
-				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
-			name = "AdHoc-Mac";
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -368,22 +365,22 @@
 		DAD9B5BC176299B9001835F9 /* Build configuration list for PBXProject "MasterPassword-Mac-LoginHelper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAD9B5DC176299B9001835F9 /* Debug-Mac */,
-				DAD9B5DD176299B9001835F9 /* AdHoc-Mac */,
-				DA3B845A1916AC5100246EEA /* AppStore-Mac */,
+				DAD9B5DC176299B9001835F9 /* Debug */,
+				DAD9B5DD176299B9001835F9 /* Release */,
+				DA0974511E9587AC00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-Mac";
+			defaultConfigurationName = Test;
 		};
 		DAD9B5DE176299B9001835F9 /* Build configuration list for PBXNativeTarget "MasterPassword-Mac-LoginHelper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAD9B5DF176299B9001835F9 /* Debug-Mac */,
-				DAD9B5E0176299B9001835F9 /* AdHoc-Mac */,
-				DA3B845B1916AC5100246EEA /* AppStore-Mac */,
+				DAD9B5DF176299B9001835F9 /* Debug */,
+				DAD9B5E0176299B9001835F9 /* Release */,
+				DA0974521E9587AC00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-Mac";
+			defaultConfigurationName = Test;
 		};
 /* End XCConfigurationList section */
 	};
