@@ -2201,7 +2201,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
-			shellScript = "External/Mac/Fabric.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" Resources/Crashlytics/Crashlytics.plist)\" 410fb41450e3a2e50fa8357682d812ecd3e1846f2141a99bdb9d3a6a981ad69c";
+			shellScript = "[[ $DEPLOYMENT_LOCATION != YES ]] && exit\n\napiKey=$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" Resources/Crashlytics/Crashlytics.plist)\n[[ $apiKey ]] && External/Mac/Fabric.framework/run \"$apiKey\" 410fb41450e3a2e50fa8357682d812ecd3e1846f2141a99bdb9d3a6a981ad69c";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

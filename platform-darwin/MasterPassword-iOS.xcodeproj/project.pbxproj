@@ -3579,7 +3579,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/bash -e";
-			shellScript = "External/iOS/Crashlytics.framework/run \\\n    \"$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" ../../Resources/Crashlytics/Crashlytics.plist)\" || [[ $DEPLOYMENT_LOCATION != YES ]]";
+			shellScript = "[[ $DEPLOYMENT_LOCATION != YES ]] && exit\n\napiKey=$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" Resources/Crashlytics/Crashlytics.plist)\n[[ $apiKey ]] && External/iOS/Crashlytics.framework/run \"$apiKey\"";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
