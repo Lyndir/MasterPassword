@@ -58,6 +58,7 @@ public class MasterKeyV0 extends MasterKey {
         return scrypt( masterKeySalt, mpBytes );
     }
 
+    @Nullable
     protected byte[] scrypt(final byte[] masterKeySalt, final byte[] mpBytes) {
         try {
             if (isAllowNative())
@@ -65,7 +66,7 @@ public class MasterKeyV0 extends MasterKey {
             else
                 return SCrypt.scryptJ( mpBytes, masterKeySalt, MPConstant.scrypt_N, MPConstant.scrypt_r, MPConstant.scrypt_p, MPConstant.mpw_dkLen );
         }
-        catch (GeneralSecurityException e) {
+        catch (final GeneralSecurityException e) {
             logger.bug( e );
             return null;
         }
@@ -86,18 +87,18 @@ public class MasterKeyV0 extends MasterKey {
         logger.trc( "siteType: %d (%s)", siteType.ordinal(), siteType );
 
         if (siteCounter.longValue() == 0)
-            siteCounter = UnsignedInteger.valueOf( (System.currentTimeMillis() / (300 * 1000)) * 300 );
+            siteCounter = UnsignedInteger.valueOf( (System.currentTimeMillis() / (MPConstant.mpw_counter_timeout * 1000)) * MPConstant.mpw_counter_timeout );
 
         String siteScope = siteVariant.getScope();
         byte[] siteNameBytes = siteName.getBytes( MPConstant.mpw_charset );
         byte[] siteNameLengthBytes = bytesForInt( siteName.length() );
         byte[] siteCounterBytes = bytesForInt( siteCounter );
-        byte[] siteContextBytes = siteContext == null || siteContext.isEmpty()? null: siteContext.getBytes( MPConstant.mpw_charset );
-        byte[] siteContextLengthBytes = bytesForInt( siteContextBytes == null? 0: siteContextBytes.length );
-        logger.trc( "site scope: %s, context: %s", siteScope, siteContextBytes == null? "<empty>": siteContext );
+        byte[] siteContextBytes = ((siteContext == null) || siteContext.isEmpty())? null: siteContext.getBytes( MPConstant.mpw_charset );
+        byte[] siteContextLengthBytes = bytesForInt( (siteContextBytes == null)? 0: siteContextBytes.length );
+        logger.trc( "site scope: %s, context: %s", siteScope, (siteContextBytes == null)? "<empty>": siteContext );
         logger.trc( "seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)", siteScope, CodeUtils.encodeHex( siteNameLengthBytes ),
                     siteName, CodeUtils.encodeHex( siteCounterBytes ), CodeUtils.encodeHex( siteContextLengthBytes ),
-                    siteContextBytes == null? "(null)": siteContext );
+                    (siteContextBytes == null)? "(null)": siteContext );
 
         byte[] sitePasswordInfo = Bytes.concat( siteScope.getBytes( MPConstant.mpw_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
         if (siteContextBytes != null)
@@ -108,7 +109,7 @@ public class MasterKeyV0 extends MasterKey {
         int[] sitePasswordSeed = new int[sitePasswordSeedBytes.length];
         for (int i = 0; i < sitePasswordSeedBytes.length; ++i) {
             ByteBuffer buf = ByteBuffer.allocate( Integer.SIZE / Byte.SIZE ).order( ByteOrder.BIG_ENDIAN );
-            Arrays.fill( buf.array(), sitePasswordSeedBytes[i] > 0? (byte) 0x00: (byte) 0xFF );
+            Arrays.fill( buf.array(), (byte) ((sitePasswordSeedBytes[i] > 0)? 0x00: 0xFF) );
             buf.position( 2 );
             buf.put( sitePasswordSeedBytes[i] ).rewind();
             sitePasswordSeed[i] = buf.getInt() & 0xFFFF;

@@ -36,8 +36,8 @@ android {
 }
 
 dependencies {
-    compile             project( ':masterpassword:algorithm' )
-    compile             project( ':masterpassword:tests' )
+    compile             project( ':masterpassword-algorithm' )
+    compile             project( ':masterpassword-tests' )
 
     compile             group: 'org.slf4j', name: 'slf4j-android', version:'1.7.13-underscore'
     compile             group: 'com.jakewharton', name: 'butterknife', version:'8.5.1'

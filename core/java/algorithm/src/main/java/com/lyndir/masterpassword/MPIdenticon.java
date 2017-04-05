@@ -19,12 +19,12 @@ public class MPIdenticon {
     private static final Logger logger = Logger.get( MPIdenticon.class );
 
     private static final Charset charset   = Charsets.UTF_8;
-    private static final Color[] colors    = new Color[]{
+    private static final Color[] colors    = {
             Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, Color.CYAN, Color.MONO };
-    private static final char[]  leftArm   = new char[]{ '╔', '╚', '╰', '═' };
-    private static final char[]  rightArm  = new char[]{ '╗', '╝', '╯', '═' };
-    private static final char[]  body      = new char[]{ '█', '░', '▒', '▓', '☺', '☻' };
-    private static final char[]  accessory = new char[]{
+    private static final char[]  leftArm   = { '╔', '╚', '╰', '═' };
+    private static final char[]  rightArm  = { '╗', '╝', '╯', '═' };
+    private static final char[]  body      = { '█', '░', '▒', '▓', '☺', '☻' };
+    private static final char[]  accessory = {
             '◈', '◎', '◐', '◑', '◒', '◓', '☀', '☁', '☂', '☃', '☄', '★', '☆', '☎', '☏', '⎈', '⌂', '☘', '☢', '☣', '☕', '⌚', '⌛', '⏰', '⚡',
             '⛄', '⛅', '☔', '♔', '♕', '♖', '♗', '♘', '♙', '♚', '♛', '♜', '♝', '♞', '♟', '♨', '♩', '♪', '♫', '⚐', '⚑', '⚔', '⚖', '⚙', '⚠',
             '⌘', '⏎', '✄', '✆', '✈', '✉', '✌' };
@@ -33,11 +33,12 @@ public class MPIdenticon {
     private final Color  color;
     private final String text;
 
-    public MPIdenticon(String fullName, String masterPassword) {
+    public MPIdenticon(final String fullName, final String masterPassword) {
         this( fullName, masterPassword.toCharArray() );
     }
 
-    public MPIdenticon(String fullName, char[] masterPassword) {
+    @SuppressWarnings("MethodCanBeVariableArityMethod")
+    public MPIdenticon(final String fullName, final char[] masterPassword) {
         this.fullName = fullName;
 
         byte[] masterPasswordBytes = charset.encode( CharBuffer.wrap( masterPassword ) ).array();

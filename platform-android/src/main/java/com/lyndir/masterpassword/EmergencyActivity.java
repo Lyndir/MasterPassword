@@ -32,6 +32,7 @@ public class EmergencyActivity extends Activity {
     private static final Logger   logger                = Logger.get( EmergencyActivity.class );
     private static final ClipData EMPTY_CLIP            = new ClipData( new ClipDescription( "", new String[0] ), new ClipData.Item( "" ) );
     private static final int      PASSWORD_NOTIFICATION = 0;
+    public static final int CLIPBOARD_CLEAR_DELAY = 20 /* s */ * MPConstant.MS_PER_S;
 
     private final Preferences                      preferences  = Preferences.get( this );
     private final ListeningExecutorService         executor     = MoreExecutors.listeningDecorator( Executors.newSingleThreadExecutor() );
@@ -81,14 +82,13 @@ public class EmergencyActivity extends Activity {
     private int    id_version;
     private String sitePassword;
 
-    public static void start(Context context) {
+    public static void start(final Context context) {
         context.startActivity( new Intent( context, EmergencyActivity.class ) );
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        Res.init( getResources() );
 
         getWindow().setFlags( WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE );
         setContentView( R.layout.activity_emergency );
@@ -157,13 +157,13 @@ public class EmergencyActivity extends Activity {
             }
         } );
 
-        fullNameField.setTypeface( Res.exo_Thin );
+        fullNameField.setTypeface( Res.get( this ).exo_Thin );
         fullNameField.setPaintFlags( fullNameField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
-        masterPasswordField.setTypeface( Res.sourceCodePro_ExtraLight );
+        masterPasswordField.setTypeface( Res.get( this ).sourceCodePro_ExtraLight );
         masterPasswordField.setPaintFlags( masterPasswordField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
-        siteNameField.setTypeface( Res.exo_Regular );
+        siteNameField.setTypeface( Res.get( this ).exo_Regular );
         siteNameField.setPaintFlags( siteNameField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
-        sitePasswordField.setTypeface( Res.sourceCodePro_Black );
+        sitePasswordField.setTypeface( Res.get( this ).sourceCodePro_Black );
         sitePasswordField.setPaintFlags( sitePasswordField.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG );
 
         rememberFullNameField.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
@@ -243,9 +243,11 @@ public class EmergencyActivity extends Activity {
         final String fullName = fullNameField.getText().toString();
         final char[] masterPassword = masterPasswordField.getText().toString().toCharArray();
         final MasterKey.Version version = (MasterKey.Version) siteVersionButton.getTag();
-        if (fullName.hashCode() == id_userName && Arrays.hashCode( masterPassword ) == id_masterPassword &&
-            version.ordinal() == id_version && masterKeyFuture != null && !masterKeyFuture.isCancelled())
-            return;
+        if ((id_userName == fullName.hashCode())
+            && (id_masterPassword == Arrays.hashCode( masterPassword ))
+            && (id_version == version.ordinal()))
+            if ((masterKeyFuture != null) && !masterKeyFuture.isCancelled())
+                return;
 
         id_userName = fullName.hashCode();
         id_masterPassword = Arrays.hashCode( masterPassword );
@@ -257,7 +259,7 @@ public class EmergencyActivity extends Activity {
         if (masterKeyFuture != null)
             masterKeyFuture.cancel( true );
 
-        if (fullName.isEmpty() || masterPassword.length == 0) {
+        if (fullName.isEmpty() || (masterPassword.length == 0)) {
             sitePasswordField.setText( "" );
             progressView.setVisibility( View.INVISIBLE );
             return;
@@ -272,7 +274,7 @@ public class EmergencyActivity extends Activity {
                 try {
                     return MasterKey.create( version, fullName, masterPassword );
                 }
-                catch (Exception e) {
+                catch (final Exception e) {
                     sitePasswordField.setText( "" );
                     progressView.setVisibility( View.INVISIBLE );
                     logger.err( e, "While generating master key." );
@@ -297,7 +299,7 @@ public class EmergencyActivity extends Activity {
         final MPSiteType type = (MPSiteType) siteTypeButton.getTag();
         final UnsignedInteger counter = UnsignedInteger.valueOf( siteCounterButton.getText().toString() );
 
-        if (masterKeyFuture == null || siteName.isEmpty() || type == null) {
+        if ((masterKeyFuture == null) || siteName.isEmpty() || (type == null)) {
             sitePasswordField.setText( "" );
             progressView.setVisibility( View.INVISIBLE );
 
@@ -322,17 +324,17 @@ public class EmergencyActivity extends Activity {
                         }
                     } );
                 }
-                catch (InterruptedException ignored) {
+                catch (final InterruptedException ignored) {
                     sitePasswordField.setText( "" );
                     progressView.setVisibility( View.INVISIBLE );
                 }
-                catch (ExecutionException e) {
+                catch (final ExecutionException e) {
                     sitePasswordField.setText( "" );
                     progressView.setVisibility( View.INVISIBLE );
                     logger.err( e, "While generating site password." );
                     throw Throwables.propagate( e );
                 }
-                catch (RuntimeException e) {
+                catch (final RuntimeException e) {
                     sitePasswordField.setText( "" );
                     progressView.setVisibility( View.INVISIBLE );
                     logger.err( e, "While generating site password." );
@@ -342,7 +344,7 @@ public class EmergencyActivity extends Activity {
         } );
     }
 
-    public void integrityTests(View view) {
+    public void integrityTests(final View view) {
         if (masterKeyFuture != null) {
             masterKeyFuture.cancel( true );
             masterKeyFuture = null;
@@ -350,8 +352,8 @@ public class EmergencyActivity extends Activity {
         TestActivity.startNoSkip( this );
     }
 
-    public void copySitePassword(View view) {
-        final String currentSitePassword = this.sitePassword;
+    public void copySitePassword(final View view) {
+        final String currentSitePassword = sitePassword;
         if (TextUtils.isEmpty( currentSitePassword ))
             return;
 
@@ -384,7 +386,7 @@ public class EmergencyActivity extends Activity {
                 notificationManager.cancel( PASSWORD_NOTIFICATION );
                 timer.cancel();
             }
-        }, 20000 );
+        }, CLIPBOARD_CLEAR_DELAY );
 
         Intent startMain = new Intent( Intent.ACTION_MAIN );
         startMain.addCategory( Intent.CATEGORY_HOME );
@@ -392,7 +394,7 @@ public class EmergencyActivity extends Activity {
         startActivity( startMain );
     }
 
-    private abstract class ValueChangedListener
+    private abstract static class ValueChangedListener
             implements TextWatcher, NumberPicker.OnValueChangeListener, AdapterView.OnItemSelectedListener, View.OnFocusChangeListener {
 
         abstract void update();

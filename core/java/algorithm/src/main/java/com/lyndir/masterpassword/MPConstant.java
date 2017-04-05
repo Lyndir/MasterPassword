@@ -10,7 +10,7 @@ import java.nio.charset.Charset;
 /**
  * @author lhunath, 2016-10-29
  */
-public class MPConstant {
+public final class MPConstant {
 
     /* Environment */
 
@@ -58,17 +58,24 @@ public class MPConstant {
     /**
      * mpw: Input character encoding.
      */
-    public static final Charset                      mpw_charset   = Charsets.UTF_8;
+    public static final Charset                      mpw_charset         = Charsets.UTF_8;
     /**
      * mpw: Platform-agnostic byte order.
      */
-    public static final ByteOrder                    mpw_byteOrder = ByteOrder.BIG_ENDIAN;
+    public static final ByteOrder                    mpw_byteOrder       = ByteOrder.BIG_ENDIAN;
     /**
      * mpw: Site digest.
      */
-    public static final MessageAuthenticationDigests mpw_digest    = MessageAuthenticationDigests.HmacSHA256;
+    public static final MessageAuthenticationDigests mpw_digest          = MessageAuthenticationDigests.HmacSHA256;
     /**
      * mpw: Key ID hash.
      */
-    public static final MessageDigests               mpw_hash      = MessageDigests.SHA256;
+    public static final MessageDigests               mpw_hash            = MessageDigests.SHA256;
+    /**
+     * mpw: validity for the time-based rolling counter.
+     */
+    public static final int                          mpw_counter_timeout = 5 * 60 /* s */;
+
+
+    public static final int MS_PER_S = 1000;
 }

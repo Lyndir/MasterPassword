@@ -3,8 +3,10 @@ package com.lyndir.masterpassword;
 import com.google.common.collect.ImmutableList;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.util.List;
+import java.util.Locale;
 import javax.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
 
 
 /**
@@ -12,11 +14,11 @@ import org.jetbrains.annotations.Contract;
  */
 public enum MPSiteVariant {
     Password( "Generate a key for authentication.", "Doesn't currently use a context.", //
-              ImmutableList.of( "p", "password" ), "com.lyndir.masterpassword" ),
+              ImmutableList.of( "p", "password" ), "com.lyndir.masterpassword" ), // NON-NLS
     Login( "Generate a name for identification.", "Doesn't currently use a context.", //
-           ImmutableList.of( "l", "login" ), "com.lyndir.masterpassword.login" ),
+           ImmutableList.of( "l", "login" ), "com.lyndir.masterpassword.login" ), // NON-NLS
     Answer( "Generate an answer to a security question.", "Empty for a universal site answer or\nthe most significant word(s) of the question.", //
-            ImmutableList.of( "a", "answer" ), "com.lyndir.masterpassword.answer" );
+            ImmutableList.of( "a", "answer" ), "com.lyndir.masterpassword.answer" ); // NON-NLS
 
     static final Logger logger = Logger.get( MPSiteType.class );
 
@@ -25,7 +27,7 @@ public enum MPSiteVariant {
     private final List<String> options;
     private final String       scope;
 
-    MPSiteVariant(final String description, final String contextDescription, final List<String> options, final String scope) {
+    MPSiteVariant(final String description, final String contextDescription, final List<String> options, @NonNls final String scope) {
         this.contextDescription = contextDescription;
 
         this.options = options;
@@ -57,7 +59,7 @@ public enum MPSiteVariant {
     public static MPSiteVariant forOption(final String option) {
 
         for (final MPSiteVariant variant : values())
-            if (variant.getOptions().contains( option.toLowerCase() ))
+            if (variant.getOptions().contains( option.toLowerCase( Locale.ROOT ) ))
                 return variant;
 
         throw logger.bug( "No variant for option: %s", option );
@@ -67,7 +69,7 @@ public enum MPSiteVariant {
      *
      * @return The variant registered with the given name.
      */
-    @Contract("!null -> !null, null -> null")
+    @Contract("!null -> !null")
     public static MPSiteVariant forName(@Nullable final String name) {
 
         if (name == null)

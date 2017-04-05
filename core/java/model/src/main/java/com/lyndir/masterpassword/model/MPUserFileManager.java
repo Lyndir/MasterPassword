@@ -59,7 +59,7 @@ public class MPUserFileManager extends MPUserManager {
                 try {
                     return MPSiteUnmarshaller.unmarshall( Preconditions.checkNotNull( file ) ).getUser();
                 }
-                catch (IOException e) {
+                catch (final IOException e) {
                     logger.err( e, "Couldn't read user from: %s", file );
                     return null;
                 }
@@ -99,16 +99,17 @@ public class MPUserFileManager extends MPUserManager {
                     @Override
                     public Writer openStream()
                             throws IOException {
-                        return new FileWriter( new File( userFilesDirectory, user.getFullName() + ".mpsites" ) );
+                        File mpsitesFile = new File( userFilesDirectory, user.getFullName() + ".mpsites" );
+                        return new OutputStreamWriter( new FileOutputStream( mpsitesFile ), Charsets.UTF_8 );
                     }
                 }.write( MPSiteMarshaller.marshallSafe( user ).getExport() );
             }
-            catch (IOException e) {
+            catch (final IOException e) {
                 logger.err( e, "Unable to save sites for user: %s", user );
             }
 
         // Remove deleted users.
-        for (File userFile : listUserFiles( userFilesDirectory ))
+        for (final File userFile : listUserFiles( userFilesDirectory ))
             if (getUserNamed( userFile.getName().replaceFirst( "\\.mpsites$", "" ) ) == null)
                 if (!userFile.delete())
                     logger.err( "Couldn't delete file: %s", userFile );

@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 /**
  * @author lhunath, 2016-02-20
  */
-public class Preferences {
+public final class Preferences {
 
     private static final String PREF_TESTS_PASSED       = "integrityTestsPassed";
     private static final String PREF_NATIVE_KDF         = "nativeKDF";
@@ -35,7 +35,7 @@ public class Preferences {
         return instance;
     }
 
-    private Preferences(Context context) {
+    private Preferences(final Context context) {
         this.context = context;
     }
 
@@ -47,7 +47,7 @@ public class Preferences {
         return prefs;
     }
 
-    public boolean setNativeKDFEnabled(boolean enabled) {
+    public boolean setNativeKDFEnabled(final boolean enabled) {
         if (isAllowNativeKDF() == enabled)
             return false;
 
@@ -71,7 +71,7 @@ public class Preferences {
         return prefs().getStringSet( PREF_TESTS_PASSED, ImmutableSet.<String>of() );
     }
 
-    public boolean setRememberFullName(boolean enabled) {
+    public boolean setRememberFullName(final boolean enabled) {
         if (isRememberFullName() == enabled)
             return false;
 
@@ -83,7 +83,7 @@ public class Preferences {
         return prefs().getBoolean( PREF_REMEMBER_FULL_NAME, false );
     }
 
-    public boolean setForgetPassword(boolean enabled) {
+    public boolean setForgetPassword(final boolean enabled) {
         if (isForgetPassword() == enabled)
             return false;
 
@@ -95,7 +95,7 @@ public class Preferences {
         return prefs().getBoolean( PREF_FORGET_PASSWORD, false );
     }
 
-    public boolean setMaskPassword(boolean enabled) {
+    public boolean setMaskPassword(final boolean enabled) {
         if (isMaskPassword() == enabled)
             return false;
 
@@ -107,7 +107,7 @@ public class Preferences {
         return prefs().getBoolean( PREF_MASK_PASSWORD, false );
     }
 
-    public boolean setFullName(@Nullable String value) {
+    public boolean setFullName(@Nullable final String value) {
         if (getFullName().equals( value ))
             return false;
 
@@ -120,8 +120,8 @@ public class Preferences {
         return prefs().getString( PREF_FULL_NAME, "" );
     }
 
-    public boolean setDefaultSiteType(@Nonnull MPSiteType value) {
-        if (getDefaultSiteType().equals( value ))
+    public boolean setDefaultSiteType(@Nonnull final MPSiteType value) {
+        if (getDefaultSiteType() == value)
             return false;
 
         prefs().edit().putInt( PREF_SITE_TYPE, value.ordinal() ).apply();
@@ -133,8 +133,8 @@ public class Preferences {
         return MPSiteType.values()[prefs().getInt( PREF_SITE_TYPE, MPSiteType.GeneratedLong.ordinal() )];
     }
 
-    public boolean setDefaultVersion(@Nonnull MasterKey.Version value) {
-        if (getDefaultVersion().equals( value ))
+    public boolean setDefaultVersion(@Nonnull final MasterKey.Version value) {
+        if (getDefaultVersion() == value)
             return false;
 
         prefs().edit().putInt( PREF_ALGORITHM_VERSION, value.ordinal() ).apply();

@@ -128,7 +128,7 @@ public class MPSite {
 
     @Override
     public boolean equals(final Object obj) {
-        return this == obj || obj instanceof MPSite && Objects.equals( siteName, ((MPSite) obj).siteName );
+        return (this == obj) || ((obj instanceof MPSite) && Objects.equals( siteName, ((MPSite) obj).siteName ));
     }
 
     @Override

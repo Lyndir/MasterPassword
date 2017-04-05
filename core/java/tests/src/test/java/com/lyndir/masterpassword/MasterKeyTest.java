@@ -6,6 +6,7 @@ import com.lyndir.lhunath.opal.system.CodeUtils;
 import com.lyndir.lhunath.opal.system.logging.Logger;
 import com.lyndir.lhunath.opal.system.util.NNFunctionNN;
 import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -15,6 +16,7 @@ public class MasterKeyTest {
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( MasterKeyTest.class );
 
+    @NonNls
     private MPTestSuite testSuite;
 
     @BeforeMethod
@@ -86,7 +88,7 @@ public class MasterKeyTest {
 
             fail( "[testInvalidate] Master key should have been invalidated, but was still usable." );
         }
-        catch (IllegalStateException ignored) {
+        catch (final IllegalStateException ignored) {
         }
     }
 }

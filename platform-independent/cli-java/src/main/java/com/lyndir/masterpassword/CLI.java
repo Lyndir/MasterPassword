@@ -19,6 +19,7 @@ package com.lyndir.masterpassword;
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.ifNotNullElse;
 import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import com.google.common.io.LineReader;
@@ -35,9 +36,10 @@ import java.util.Map;
  *
  * @author mbillemo
  */
-public class CLI {
+@SuppressWarnings({ "UseOfSystemOutOrSystemErr", "HardCodedStringLiteral" })
+public final class CLI {
 
-    public static void main(final String[] args)
+    public static void main(final String... args)
             throws IOException {
 
         // Read information from the environment.
@@ -96,68 +98,68 @@ public class CLI {
             // Help
             else if ("-h".equals( arg ) || "--help".equals( arg )) {
                 System.out.println();
-                System.out.format( "Usage: mpw [-u name] [-t type] [-c counter] site\n\n" );
-                System.out.format( "    -u name      Specify the full name of the user.\n" );
-                System.out.format( "                 Defaults to %s in env.\n\n", MPConstant.env_userName );
-                System.out.format( "    -t type      Specify the password's template.\n" );
-                System.out.format( "                 Defaults to %s in env or 'long' for password, 'name' for login.\n", MPConstant.env_siteType );
+                System.out.format( "Usage: mpw [-u name] [-t type] [-c counter] site%n%n" );
+                System.out.format( "    -u name      Specify the full name of the user.%n" );
+                System.out.format( "                 Defaults to %s in env.%n%n", MPConstant.env_userName );
+                System.out.format( "    -t type      Specify the password's template.%n" );
+                System.out.format( "                 Defaults to %s in env or 'long' for password, 'name' for login.%n", MPConstant.env_siteType );
 
                 int optionsLength = 0;
                 Map<String, MPSiteType> typeMap = Maps.newLinkedHashMap();
-                for (MPSiteType elementType : MPSiteType.values()) {
+                for (final MPSiteType elementType : MPSiteType.values()) {
                     String options = Joiner.on( ", " ).join( elementType.getOptions() );
                     typeMap.put( options, elementType );
                     optionsLength = Math.max( optionsLength, options.length() );
                 }
-                for (Map.Entry<String, MPSiteType> entry : typeMap.entrySet()) {
+                for (final Map.Entry<String, MPSiteType> entry : typeMap.entrySet()) {
                     String infoString = strf( "                  -v %" + optionsLength + "s | ", entry.getKey() );
-                    String infoNewline = "\n" + StringUtils.repeat( " ", infoString.length() - 3 ) + " | ";
-                    infoString += entry.getValue().getDescription().replaceAll( "\n", infoNewline );
+                    String infoNewline = strf( "%n%s | ", StringUtils.repeat( " ", infoString.length() - 3 ) );
+                    infoString += entry.getValue().getDescription().replaceAll( strf( "%n" ), infoNewline );
                     System.out.println( infoString );
                 }
                 System.out.println();
 
-                System.out.format( "    -c counter   The value of the counter.\n" );
-                System.out.format( "                 Defaults to %s in env or '1'.\n\n", MPConstant.env_siteCounter );
-                System.out.format( "    -v variant   The kind of content to generate.\n" );
-                System.out.format( "                 Defaults to 'password'.\n" );
+                System.out.format( "    -c counter   The value of the counter.%n" );
+                System.out.format( "                 Defaults to %s in env or '1'.%n%n", MPConstant.env_siteCounter );
+                System.out.format( "    -v variant   The kind of content to generate.%n" );
+                System.out.format( "                 Defaults to 'password'.%n" );
 
                 optionsLength = 0;
                 Map<String, MPSiteVariant> variantMap = Maps.newLinkedHashMap();
-                for (MPSiteVariant elementVariant : MPSiteVariant.values()) {
+                for (final MPSiteVariant elementVariant : MPSiteVariant.values()) {
                     String options = Joiner.on( ", " ).join( elementVariant.getOptions() );
                     variantMap.put( options, elementVariant );
                     optionsLength = Math.max( optionsLength, options.length() );
                 }
-                for (Map.Entry<String, MPSiteVariant> entry : variantMap.entrySet()) {
+                for (final Map.Entry<String, MPSiteVariant> entry : variantMap.entrySet()) {
                     String infoString = strf( "                  -v %" + optionsLength + "s | ", entry.getKey() );
-                    String infoNewline = "\n" + StringUtils.repeat( " ", infoString.length() - 3 ) + " | ";
-                    infoString += entry.getValue().getDescription().replaceAll( "\n", infoNewline );
+                    String infoNewline = strf( "%n%s | ", StringUtils.repeat( " ", infoString.length() - 3 ) );
+                    infoString += entry.getValue().getDescription().replaceAll( strf( "%n" ), infoNewline );
                     System.out.println( infoString );
                 }
                 System.out.println();
 
-                System.out.format( "    -C context   A variant-specific context.\n" );
-                System.out.format( "                 Defaults to empty.\n" );
-                for (Map.Entry<String, MPSiteVariant> entry : variantMap.entrySet()) {
+                System.out.format( "    -C context   A variant-specific context.%n" );
+                System.out.format( "                 Defaults to empty.%n" );
+                for (final Map.Entry<String, MPSiteVariant> entry : variantMap.entrySet()) {
                     String infoString = strf( "                  -v %" + optionsLength + "s | ", entry.getKey() );
-                    String infoNewline = "\n" + StringUtils.repeat( " ", infoString.length() - 3 ) + " | ";
-                    infoString += entry.getValue().getContextDescription().replaceAll( "\n", infoNewline );
+                    String infoNewline = strf( "%n%s | ", StringUtils.repeat( " ", infoString.length() - 3 ) );
+                    infoString += entry.getValue().getContextDescription().replaceAll( strf( "%n" ), infoNewline );
                     System.out.println( infoString );
                 }
                 System.out.println();
 
-                System.out.format( "    ENVIRONMENT\n\n" );
-                System.out.format( "        MP_USERNAME    | The full name of the user.\n" );
-                System.out.format( "        MP_SITETYPE    | The default password template.\n" );
-                System.out.format( "        MP_SITECOUNTER | The default counter value.\n\n" );
+                System.out.format( "    ENVIRONMENT%n%n" );
+                System.out.format( "        MP_USERNAME    | The full name of the user.%n" );
+                System.out.format( "        MP_SITETYPE    | The default password template.%n" );
+                System.out.format( "        MP_SITECOUNTER | The default counter value.%n%n" );
                 return;
             } else
                 siteName = arg;
 
         // Read missing information from the console.
         Console console = System.console();
-        try (InputStreamReader inReader = new InputStreamReader( System.in )) {
+        try (InputStreamReader inReader = new InputStreamReader( System.in, Charsets.UTF_8 )) {
             LineReader lineReader = new LineReader( inReader );
 
             if (siteName == null) {

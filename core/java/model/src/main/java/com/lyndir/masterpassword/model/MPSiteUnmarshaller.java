@@ -2,6 +2,7 @@ package com.lyndir.masterpassword.model;
 
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.CharStreams;
@@ -31,26 +32,28 @@ public class MPSiteUnmarshaller {
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger            logger            = Logger.get( MPSite.class );
     private static final DateTimeFormatter rfc3339           = ISODateTimeFormat.dateTimeNoMillis();
-    private static final Pattern[]         unmarshallFormats = new Pattern[]{
+    private static final Pattern[]         unmarshallFormats = {
             Pattern.compile( "^([^ ]+) +(\\d+) +(\\d+)(:\\d+)? +([^\t]+)\t(.*)" ),
             Pattern.compile( "^([^ ]+) +(\\d+) +(\\d+)(:\\d+)?(:\\d+)? +([^\t]*)\t *([^\t]+)\t(.*)" ) };
     private static final Pattern           headerFormat      = Pattern.compile( "^#\\s*([^:]+): (.*)" );
 
     private final int     importFormat;
+    @SuppressWarnings({ "FieldCanBeLocal", "unused" })
     private final int     mpVersion;
+    @SuppressWarnings({ "FieldCanBeLocal", "unused" })
     private final boolean clearContent;
     private final MPUser  user;
 
     @Nonnull
-    public static MPSiteUnmarshaller unmarshall(@Nonnull File file)
+    public static MPSiteUnmarshaller unmarshall(@Nonnull final File file)
             throws IOException {
-        try (Reader reader = new FileReader( file )) {
+        try (Reader reader = new InputStreamReader( new FileInputStream( file ), Charsets.UTF_8 )) {
             return unmarshall( CharStreams.readLines( reader ) );
         }
     }
 
     @Nonnull
-    public static MPSiteUnmarshaller unmarshall(@Nonnull List<String> lines) {
+    public static MPSiteUnmarshaller unmarshall(@Nonnull final List<String> lines) {
         byte[] keyID = null;
         String fullName = null;
         int mpVersion = 0, importFormat = 0, avatar = 0;
@@ -59,7 +62,7 @@ public class MPSiteUnmarshaller {
         MPSiteUnmarshaller marshaller = null;
         final ImmutableList.Builder<MPSite> sites = ImmutableList.builder();
 
-        for (String line : lines)
+        for (final String line : lines)
             // Header delimitor.
             if (line.startsWith( "##" ))
                 if (!headerStarted)
@@ -71,7 +74,7 @@ public class MPSiteUnmarshaller {
 
                 // Comment.
             else if (line.startsWith( "#" )) {
-                if (headerStarted && marshaller == null) {
+                if (headerStarted && (marshaller == null)) {
                     // In header.
                     Matcher headerMatcher = headerFormat.matcher( line );
                     if (headerMatcher.matches()) {
@@ -87,7 +90,7 @@ public class MPSiteUnmarshaller {
                         else if ("Avatar".equalsIgnoreCase( name ))
                             avatar = ConversionUtils.toIntegerNN( value );
                         else if ("Passwords".equalsIgnoreCase( name ))
-                            clearContent = value.equalsIgnoreCase( "visible" );
+                            clearContent = "visible".equalsIgnoreCase( value );
                         else if ("Default Type".equalsIgnoreCase( name ))
                             defaultType = MPSiteType.forType( ConversionUtils.toIntegerNN( value ) );
                     }
@@ -116,7 +119,7 @@ public class MPSiteUnmarshaller {
     }
 
     @Nullable
-    public MPSite unmarshallSite(@Nonnull String siteLine) {
+    public MPSite unmarshallSite(@Nonnull final String siteLine) {
         Matcher siteMatcher = unmarshallFormats[importFormat].matcher( siteLine );
         if (!siteMatcher.matches())
             return null;

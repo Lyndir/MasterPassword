@@ -7,10 +7,10 @@ import com.lyndir.masterpassword.gui.util.Components;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -62,7 +62,7 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel implements
         return new IncognitoUser( fullNameField.getText() );
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public char[] getMasterPassword() {
         return masterPasswordField.getPassword();

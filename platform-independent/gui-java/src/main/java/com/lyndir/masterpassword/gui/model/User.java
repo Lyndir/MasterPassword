@@ -4,8 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.lyndir.masterpassword.MasterKey;
 import com.lyndir.masterpassword.model.IncorrectMasterPasswordException;
-import java.util.EnumMap;
-import java.util.Objects;
+import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -16,14 +15,15 @@ import javax.annotation.Nullable;
 public abstract class User {
 
     @Nonnull
-    private final EnumMap<MasterKey.Version, MasterKey> keyByVersion = Maps.newEnumMap( MasterKey.Version.class  );
+    private final Map<MasterKey.Version, MasterKey> keyByVersion = Maps.newEnumMap( MasterKey.Version.class  );
 
     public abstract String getFullName();
 
     @Nullable
     protected abstract char[] getMasterPassword();
 
-    public abstract void authenticate(final char[] masterPassword)
+    @SuppressWarnings("MethodCanBeVariableArityMethod")
+    public abstract void authenticate(char[] masterPassword)
             throws IncorrectMasterPasswordException;
 
     public int getAvatar() {
@@ -35,7 +35,7 @@ public abstract class User {
     }
 
     @Nonnull
-    public MasterKey getKey(MasterKey.Version algorithmVersion) {
+    public MasterKey getKey(final MasterKey.Version algorithmVersion) {
         char[] masterPassword = Preconditions.checkNotNull( getMasterPassword(), "User is not authenticated: " + getFullName() );
 
         MasterKey key = keyByVersion.get( algorithmVersion );
@@ -47,26 +47,26 @@ public abstract class User {
         return key;
     }
 
-    protected void putKey(MasterKey masterKey) {
+    protected void putKey(final MasterKey masterKey) {
         MasterKey oldKey = keyByVersion.put( masterKey.getAlgorithmVersion(), masterKey );
         if (oldKey != null)
             oldKey.invalidate();
     }
 
     public void reset() {
-        for (MasterKey key : keyByVersion.values())
+        for (final MasterKey key : keyByVersion.values())
             key.invalidate();
     }
 
-    public abstract Iterable<Site> findSitesByName(final String siteName);
+    public abstract Iterable<Site> findSitesByName(String siteName);
 
-    public abstract void addSite(final Site site);
+    public abstract void addSite(Site site);
 
-    public abstract void deleteSite(final Site site);
+    public abstract void deleteSite(Site site);
 
     @Override
     public boolean equals(final Object obj) {
-        return this == obj || obj instanceof User && Objects.equals( getFullName(), ((User) obj).getFullName() );
+        return (this == obj) || ((obj instanceof User) && Objects.equals( getFullName(), ((User) obj).getFullName() ));
     }
 
     @Override

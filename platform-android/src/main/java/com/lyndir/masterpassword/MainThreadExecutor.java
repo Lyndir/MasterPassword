@@ -53,7 +53,7 @@ public class MainThreadExecutor extends AbstractExecutorService {
         synchronized (commands) {
             ImmutableList<Runnable> pendingTasks = ImmutableList.copyOf( commands );
             commands.clear();
-            commands.notify();
+            commands.notifyAll();
             return pendingTasks;
         }
     }

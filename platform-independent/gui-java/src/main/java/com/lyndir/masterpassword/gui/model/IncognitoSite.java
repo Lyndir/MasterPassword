@@ -23,18 +23,22 @@ public class IncognitoSite extends Site {
         this.algorithmVersion = algorithmVersion;
     }
 
+    @Override
     public String getSiteName() {
         return siteName;
     }
 
+    @Override
     public void setSiteName(final String siteName) {
         this.siteName = siteName;
     }
 
+    @Override
     public MPSiteType getSiteType() {
         return siteType;
     }
 
+    @Override
     public void setSiteType(final MPSiteType siteType) {
         this.siteType = siteType;
     }
@@ -49,10 +53,12 @@ public class IncognitoSite extends Site {
         this.algorithmVersion = algorithmVersion;
     }
 
+    @Override
     public UnsignedInteger getSiteCounter() {
         return siteCounter;
     }
 
+    @Override
     public void setSiteCounter(final UnsignedInteger siteCounter) {
         this.siteCounter = siteCounter;
     }

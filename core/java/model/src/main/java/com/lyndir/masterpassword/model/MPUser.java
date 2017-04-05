@@ -39,16 +39,16 @@ public class MPUser implements Comparable<MPUser> {
     public MPUser(final String fullName, @Nullable final byte[] keyID, final MasterKey.Version algorithmVersion, final int avatar,
                   final MPSiteType defaultType, final ReadableInstant lastUsed) {
         this.fullName = fullName;
-        this.keyID = keyID;
+        this.keyID = (keyID == null)? null: keyID.clone();
         this.algorithmVersion = algorithmVersion;
         this.avatar = avatar;
         this.defaultType = defaultType;
         this.lastUsed = lastUsed;
     }
 
-    public Collection<MPSiteResult> findSitesByName(String query) {
+    public Collection<MPSiteResult> findSitesByName(final String query) {
         ImmutableList.Builder<MPSiteResult> results = ImmutableList.builder();
-        for (MPSite site : getSites())
+        for (final MPSite site : getSites())
             if (site.getSiteName().startsWith( query ))
                 results.add( new MPSiteResult( site ) );
 
@@ -87,10 +87,11 @@ public class MPUser implements Comparable<MPUser> {
      * @throws IncorrectMasterPasswordException If authentication fails due to the given master password not matching the user's keyID.
      */
     @Nonnull
+    @SuppressWarnings("MethodCanBeVariableArityMethod")
     public MasterKey authenticate(final char[] masterPassword)
             throws IncorrectMasterPasswordException {
         MasterKey masterKey = MasterKey.create( algorithmVersion, getFullName(), masterPassword );
-        if (keyID == null || keyID.length == 0)
+        if ((keyID == null) || (keyID.length == 0))
             keyID = masterKey.getKeyID();
         else if (!Arrays.equals( masterKey.getKeyID(), keyID ))
             throw new IncorrectMasterPasswordException( this );
@@ -119,7 +120,7 @@ public class MPUser implements Comparable<MPUser> {
     }
 
     public void updateLastUsed() {
-        this.lastUsed = new Instant();
+        lastUsed = new Instant();
     }
 
     public Iterable<MPSite> getSites() {
@@ -128,7 +129,7 @@ public class MPUser implements Comparable<MPUser> {
 
     @Override
     public boolean equals(final Object obj) {
-        return this == obj || obj instanceof MPUser && Objects.equals( fullName, ((MPUser) obj).fullName );
+        return (this == obj) || ((obj instanceof MPUser) && Objects.equals( fullName, ((MPUser) obj).fullName ));
     }
 
     @Override

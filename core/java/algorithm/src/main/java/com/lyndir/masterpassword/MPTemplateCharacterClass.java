@@ -1,6 +1,7 @@
 package com.lyndir.masterpassword;
 
 import com.lyndir.lhunath.opal.system.logging.Logger;
+import org.jetbrains.annotations.NonNls;
 
 
 /**
@@ -27,7 +28,7 @@ public enum MPTemplateCharacterClass {
     private final char   identifier;
     private final char[] characters;
 
-    MPTemplateCharacterClass(final char identifier, final String characters) {
+    MPTemplateCharacterClass(final char identifier, @NonNls final String characters) {
 
         this.identifier = identifier;
         this.characters = characters.toCharArray();
@@ -44,7 +45,7 @@ public enum MPTemplateCharacterClass {
     }
 
     public static MPTemplateCharacterClass forIdentifier(final char identifier) {
-        for (MPTemplateCharacterClass characterClass : values())
+        for (final MPTemplateCharacterClass characterClass : values())
             if (characterClass.getIdentifier() == identifier)
                 return characterClass;
 

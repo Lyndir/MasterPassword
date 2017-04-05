@@ -19,17 +19,17 @@ public class AppleGUI extends GUI {
         application.addAppEventListener( new AppForegroundListener() {
 
             @Override
-            public void appMovedToBackground(AppEvent.AppForegroundEvent arg0) {
+            public void appMovedToBackground(final AppEvent.AppForegroundEvent arg0) {
             }
 
             @Override
-            public void appRaisedToForeground(AppEvent.AppForegroundEvent arg0) {
+            public void appRaisedToForeground(final AppEvent.AppForegroundEvent arg0) {
                 open();
             }
         } );
         application.addAppEventListener( new AppReOpenedListener() {
             @Override
-            public void appReOpened(AppEvent.AppReOpenedEvent arg0) {
+            public void appReOpened(final AppEvent.AppReOpenedEvent arg0) {
                 open();
             }
         } );

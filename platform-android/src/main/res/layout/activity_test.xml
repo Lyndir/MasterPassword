@@ -3,8 +3,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:background="@drawable/background">
+            android:fillViewport="true">
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -53,6 +52,7 @@
                 android:layout_marginTop="20dp"
                 android:gravity="bottom"
                 android:background="@android:color/transparent"
+                android:textIsSelectable="true"
                 android:textSize="9sp"
                 android:textColor="@android:color/tertiary_text_dark" />
 

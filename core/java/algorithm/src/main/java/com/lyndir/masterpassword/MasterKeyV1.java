@@ -43,18 +43,18 @@ public class MasterKeyV1 extends MasterKeyV0 {
         logger.trc( "siteType: %d (%s)", siteType.ordinal(), siteType );
 
         if (siteCounter.longValue() == 0)
-            siteCounter = UnsignedInteger.valueOf( (System.currentTimeMillis() / (300 * 1000)) * 300 );
+            siteCounter = UnsignedInteger.valueOf( (System.currentTimeMillis() / (MPConstant.mpw_counter_timeout * 1000)) * MPConstant.mpw_counter_timeout );
 
         String siteScope = siteVariant.getScope();
         byte[] siteNameBytes = siteName.getBytes( MPConstant.mpw_charset );
         byte[] siteNameLengthBytes = bytesForInt( siteName.length() );
         byte[] siteCounterBytes = bytesForInt( siteCounter );
-        byte[] siteContextBytes = siteContext == null || siteContext.isEmpty()? null: siteContext.getBytes( MPConstant.mpw_charset );
-        byte[] siteContextLengthBytes = bytesForInt( siteContextBytes == null? 0: siteContextBytes.length );
-        logger.trc( "site scope: %s, context: %s", siteScope, siteContextBytes == null? "<empty>": siteContext );
+        byte[] siteContextBytes = ((siteContext == null) || siteContext.isEmpty())? null: siteContext.getBytes( MPConstant.mpw_charset );
+        byte[] siteContextLengthBytes = bytesForInt( (siteContextBytes == null)? 0: siteContextBytes.length );
+        logger.trc( "site scope: %s, context: %s", siteScope, (siteContextBytes == null)? "<empty>": siteContext );
         logger.trc( "seed from: hmac-sha256(masterKey, %s | %s | %s | %s | %s | %s)", siteScope, CodeUtils.encodeHex( siteNameLengthBytes ),
                     siteName, CodeUtils.encodeHex( siteCounterBytes ), CodeUtils.encodeHex( siteContextLengthBytes ),
-                    siteContextBytes == null? "(null)": siteContext );
+                    (siteContextBytes == null)? "(null)": siteContext );
 
         byte[] sitePasswordInfo = Bytes.concat( siteScope.getBytes( MPConstant.mpw_charset ), siteNameLengthBytes, siteNameBytes, siteCounterBytes );
         if (siteContextBytes != null)

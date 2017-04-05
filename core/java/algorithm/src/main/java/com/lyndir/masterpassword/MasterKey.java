@@ -1,5 +1,7 @@
 package com.lyndir.masterpassword;
 
+import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
+
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.*;
@@ -7,7 +9,6 @@ import com.lyndir.lhunath.opal.system.logging.Logger;
 import java.util.Arrays;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -26,13 +27,15 @@ public abstract class MasterKey {
     @Nullable
     private byte[] masterKey;
 
+    @SuppressWarnings("MethodCanBeVariableArityMethod")
     public static MasterKey create(final String fullName, final char[] masterPassword) {
 
         return create( Version.CURRENT, fullName, masterPassword );
     }
 
     @Nonnull
-    public static MasterKey create(Version version, final String fullName, final char[] masterPassword) {
+    @SuppressWarnings("MethodCanBeVariableArityMethod")
+    public static MasterKey create(final Version version, final String fullName, final char[] masterPassword) {
 
         switch (version) {
             case V0:
@@ -45,7 +48,7 @@ public abstract class MasterKey {
                 return new MasterKeyV3( fullName ).revalidate( masterPassword );
         }
 
-        throw new UnsupportedOperationException( "Unsupported version: " + version );
+        throw new UnsupportedOperationException( strf( "Unsupported version: %s", version ) );
     }
 
     public static boolean isAllowNativeByDefault() {
@@ -65,18 +68,19 @@ public abstract class MasterKey {
         allowNativeByDefault = allowNative;
     }
 
-    protected MasterKey(@NotNull final String fullName) {
+    protected MasterKey(@Nonnull final String fullName) {
 
         this.fullName = fullName;
         logger.trc( "fullName: %s", fullName );
     }
 
     @Nullable
-    protected abstract byte[] deriveKey(final char[] masterPassword);
+    @SuppressWarnings("MethodCanBeVariableArityMethod")
+    protected abstract byte[] deriveKey(char[] masterPassword);
 
     public abstract Version getAlgorithmVersion();
 
-    @NotNull
+    @Nonnull
     public String getFullName() {
 
         return fullName;
@@ -103,8 +107,8 @@ public abstract class MasterKey {
         return idForBytes( getKey() );
     }
 
-    public abstract String encode(@Nonnull final String siteName, final MPSiteType siteType, @Nonnull final UnsignedInteger siteCounter,
-                                  final MPSiteVariant siteVariant, @Nullable final String siteContext);
+    public abstract String encode(@Nonnull String siteName, MPSiteType siteType, @Nonnull UnsignedInteger siteCounter,
+                                  MPSiteVariant siteVariant, @Nullable String siteContext);
 
     public boolean isValid() {
         return masterKey != null;
@@ -118,6 +122,7 @@ public abstract class MasterKey {
         }
     }
 
+    @SuppressWarnings("MethodCanBeVariableArityMethod")
     public MasterKey revalidate(final char[] masterPassword) {
         invalidate();
 
@@ -127,19 +132,19 @@ public abstract class MasterKey {
         masterKey = deriveKey( masterPassword );
 
         if (masterKey == null)
-            logger.dbg( "masterKey calculation failed after %.2fs.", (System.currentTimeMillis() - start) / 1000D );
+            logger.dbg( "masterKey calculation failed after %.2fs.", (double)(System.currentTimeMillis() - start) / MPConstant.MS_PER_S );
         else
             logger.trc( "masterKey ID: %s (derived in %.2fs)", CodeUtils.encodeHex( idForBytes( masterKey ) ),
-                        (System.currentTimeMillis() - start) / 1000D );
+                        (double)(System.currentTimeMillis() - start) / MPConstant.MS_PER_S );
 
         return this;
     }
 
-    protected abstract byte[] bytesForInt(final int number);
+    protected abstract byte[] bytesForInt(int number);
 
-    protected abstract byte[] bytesForInt(@Nonnull final UnsignedInteger number);
+    protected abstract byte[] bytesForInt(@Nonnull UnsignedInteger number);
 
-    protected abstract byte[] idForBytes(final byte[] bytes);
+    protected abstract byte[] idForBytes(byte[] bytes);
 
     public enum Version {
         /**
@@ -190,7 +195,7 @@ public abstract class MasterKey {
                     return "2.2";
             }
 
-            throw new UnsupportedOperationException( "Unsupported version: " + this );
+            throw new UnsupportedOperationException( strf( "Unsupported version: %s", this ) );
         }
     }
 }

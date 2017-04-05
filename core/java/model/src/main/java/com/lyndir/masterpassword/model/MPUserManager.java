@@ -17,7 +17,7 @@ public abstract class MPUserManager {
     }
 
     protected MPUserManager(final Iterable<MPUser> users) {
-        for (MPUser user : users)
+        for (final MPUser user : users)
             usersByName.put( user.getFullName(), user );
     }
 
@@ -25,7 +25,7 @@ public abstract class MPUserManager {
         return FluentIterable.from( usersByName.values() ).toSortedSet( Ordering.natural() );
     }
 
-    public MPUser getUserNamed(String fullName) {
+    public MPUser getUserNamed(final String fullName) {
         return usersByName.get( fullName );
     }
 

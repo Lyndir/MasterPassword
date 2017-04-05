@@ -13,11 +13,11 @@ import javax.swing.border.CompoundBorder;
  */
 public abstract class Components {
 
-    public static GradientPanel boxLayout(int axis, Component... components) {
+    public static GradientPanel boxLayout(final int axis, final Component... components) {
         GradientPanel container = gradientPanel( null, null );
         //        container.setBackground( Color.red );
         container.setLayout( new BoxLayout( container, axis ) );
-        for (Component component : components)
+        for (final Component component : components)
             container.add( component );
 
         return container;
@@ -27,7 +27,7 @@ public abstract class Components {
         return borderPanel( component, border, null );
     }
 
-    public static GradientPanel borderPanel(final JComponent component, @Nullable final Border border, @Nullable Color background) {
+    public static GradientPanel borderPanel(final JComponent component, @Nullable final Border border, @Nullable final Color background) {
         GradientPanel box = boxLayout( BoxLayout.LINE_AXIS, component );
 
         if (border != null)
@@ -83,7 +83,7 @@ public abstract class Components {
         };
     }
 
-    public static JButton button(String label) {
+    public static JButton button(final String label) {
         return new JButton( label ) {
             {
                 setFont( Res.controlFont().deriveFont( 12f ) );
@@ -126,18 +126,18 @@ public abstract class Components {
         };
     }
 
-    public static JLabel label(@Nullable String label) {
+    public static JLabel label(@Nullable final String label) {
         return label( label, SwingConstants.LEADING );
     }
 
     /**
      * @param horizontalAlignment One of the following constants
-     *                            defined in <code>SwingConstants</code>:
-     *                            <code>LEFT</code>,
-     *                            <code>CENTER</code>,
-     *                            <code>RIGHT</code>,
-     *                            <code>LEADING</code> or
-     *                            <code>TRAILING</code>.
+     *                            defined in {@code SwingConstants}:
+     *                            {@code LEFT},
+     *                            {@code CENTER},
+     *                            {@code RIGHT},
+     *                            {@code LEADING} or
+     *                            {@code TRAILING}.
      */
     public static JLabel label(@Nullable final String label, final int horizontalAlignment) {
         return new JLabel( label, horizontalAlignment ) {

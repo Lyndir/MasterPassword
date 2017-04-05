@@ -4,7 +4,9 @@ import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
 import com.google.common.collect.ImmutableList;
 import com.lyndir.lhunath.opal.system.util.MetaObject;
+import java.io.Serializable;
 import java.util.List;
+import org.jetbrains.annotations.NonNls;
 
 
 /**
@@ -12,12 +14,14 @@ import java.util.List;
  *
  * @author lhunath
  */
-public class MPTemplate extends MetaObject {
+public class MPTemplate extends MetaObject implements Serializable {
 
-    private final String                         templateString;
+    private static final long serialVersionUID = 1L;
+
+    private final String templateString;
     private final List<MPTemplateCharacterClass> template;
 
-    MPTemplate(final String templateString) {
+    MPTemplate(@NonNls final String templateString) {
 
         ImmutableList.Builder<MPTemplateCharacterClass> builder = ImmutableList.builder();
         for (int i = 0; i < templateString.length(); ++i)

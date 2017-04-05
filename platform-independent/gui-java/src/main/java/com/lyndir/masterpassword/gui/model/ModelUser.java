@@ -19,7 +19,7 @@ public class ModelUser extends User {
     @Nullable
     private char[] masterPassword;
 
-    public ModelUser(MPUser model) {
+    public ModelUser(final MPUser model) {
         this.model = model;
     }
 
@@ -48,10 +48,11 @@ public class ModelUser extends User {
         MPUserFileManager.get().save();
     }
 
+    @Override
     public void authenticate(final char[] masterPassword)
             throws IncorrectMasterPasswordException {
         putKey( model.authenticate( masterPassword ) );
-        this.masterPassword = masterPassword;
+        this.masterPassword = masterPassword.clone();
         MPUserFileManager.get().save();
     }
 
@@ -66,8 +67,8 @@ public class ModelUser extends User {
     }
 
     @Override
-    public Iterable<Site> findSitesByName(final String query) {
-        return FluentIterable.from( model.findSitesByName( query ) ).transform( new Function<MPSiteResult, Site>() {
+    public Iterable<Site> findSitesByName(final String siteName) {
+        return FluentIterable.from( model.findSitesByName( siteName ) ).transform( new Function<MPSiteResult, Site>() {
             @Nullable
             @Override
             public Site apply(@Nullable final MPSiteResult site) {
@@ -84,7 +85,7 @@ public class ModelUser extends User {
     }
 
     @Override
-    public void deleteSite(Site site) {
+    public void deleteSite(final Site site) {
         if (site instanceof ModelSite) {
             model.deleteSite(((ModelSite) site).getModel());
             MPUserFileManager.get().save();

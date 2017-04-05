@@ -13,12 +13,12 @@ import com.lyndir.masterpassword.model.MPUserFileManager;
 import com.lyndir.masterpassword.gui.util.Components;
 import java.awt.*;
 import java.awt.event.*;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.metal.MetalComboBoxEditor;
-import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -109,7 +109,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
         return userField.getModel().getElementAt( selectedIndex );
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public char[] getMasterPassword() {
         return masterPasswordField.getPassword();
@@ -175,7 +175,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
         masterPasswordField.setText( "" );
     }
 
-    private ModelUser[] readConfigUsers() {
+    private static ModelUser[] readConfigUsers() {
         return FluentIterable.from( MPUserFileManager.get().getUsers() ).transform( new Function<MPUser, ModelUser>() {
             @Nullable
             @Override

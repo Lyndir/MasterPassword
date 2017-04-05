@@ -28,22 +28,21 @@ public class UnlockFrame extends JFrame {
     private       AuthenticationPanel      authenticationPanel;
     private       Future<?>                identiconFuture;
     private       boolean                  incognito;
-    public        User                     user;
+    private       User                     user;
 
-    public UnlockFrame(final SignInCallback signInCallback)
-            throws HeadlessException {
+    public UnlockFrame(final SignInCallback signInCallback) {
         super( "Unlock Master Password" );
         this.signInCallback = signInCallback;
 
         setDefaultCloseOperation( DISPOSE_ON_CLOSE );
         addWindowFocusListener( new WindowAdapter() {
             @Override
-            public void windowGainedFocus(WindowEvent e) {
+            public void windowGainedFocus(final WindowEvent e) {
                 root.setGradientColor( Res.colors().frameBg() );
             }
 
             @Override
-            public void windowLostFocus(WindowEvent e) {
+            public void windowLostFocus(final WindowEvent e) {
                 root.setGradientColor( Color.RED );
             }
         } );
@@ -118,7 +117,7 @@ public class UnlockFrame extends JFrame {
 
         JComponent toolsPanel = Components.boxLayout( BoxLayout.LINE_AXIS, incognitoCheckBox, Box.createGlue() );
         authenticationContainer.add( toolsPanel );
-        for (JButton button : authenticationPanel.getButtons()) {
+        for (final JButton button : authenticationPanel.getButtons()) {
             toolsPanel.add( button );
             button.setBorder( BorderFactory.createEmptyBorder() );
             button.setMargin( new Insets( 0, 0, 0, 0 ) );
@@ -138,7 +137,7 @@ public class UnlockFrame extends JFrame {
         } );
     }
 
-    void updateUser(@Nullable User user) {
+    void updateUser(@Nullable final User user) {
         this.user = user;
         checkSignIn();
     }
@@ -152,10 +151,10 @@ public class UnlockFrame extends JFrame {
                 SwingUtilities.invokeLater( new Runnable() {
                     @Override
                     public void run() {
-                        String fullName = user == null? "": user.getFullName();
+                        String fullName = (user == null)? "": user.getFullName();
                         char[] masterPassword = authenticationPanel.getMasterPassword();
 
-                        if (fullName.isEmpty() || masterPassword.length == 0) {
+                        if (fullName.isEmpty() || (masterPassword.length == 0)) {
                             identiconLabel.setText( " " );
                             return;
                         }
@@ -169,9 +168,9 @@ public class UnlockFrame extends JFrame {
             }
         }, 300, TimeUnit.MILLISECONDS );
 
-        String fullName = user == null? "": user.getFullName();
+        String fullName = (user == null)? "": user.getFullName();
         char[] masterPassword = authenticationPanel.getMasterPassword();
-        boolean enabled = !fullName.isEmpty() && masterPassword.length > 0;
+        boolean enabled = !fullName.isEmpty() && (masterPassword.length > 0);
         signInButton.setEnabled( enabled );
 
         return enabled;
@@ -181,7 +180,7 @@ public class UnlockFrame extends JFrame {
         if (!checkSignIn())
             return;
 
-        for (JComponent signInComponent : signInComponents)
+        for (final JComponent signInComponent : signInComponents)
             signInComponent.setEnabled( false );
 
         signInButton.setEnabled( false );
@@ -208,7 +207,7 @@ public class UnlockFrame extends JFrame {
                             JOptionPane.showMessageDialog( null, e.getLocalizedMessage(), "Sign In Failed", JOptionPane.ERROR_MESSAGE );
                             authenticationPanel.reset();
                             signInButton.setText( "Sign In" );
-                            for (JComponent signInComponent : signInComponents)
+                            for (final JComponent signInComponent : signInComponents)
                                 signInComponent.setEnabled( true );
                             checkSignIn();
                         }

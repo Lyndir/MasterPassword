@@ -2,6 +2,7 @@ package com.lyndir.masterpassword;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.lyndir.lhunath.opal.system.util.ObjectUtils.*;
+import static com.lyndir.lhunath.opal.system.util.StringUtils.strf;
 
 import com.google.common.primitives.UnsignedInteger;
 import com.lyndir.lhunath.opal.system.logging.Logger;
@@ -28,20 +29,20 @@ public class MPTests {
         return checkNotNull( cases );
     }
 
-    public Case getCase(String identifier) {
-        for (Case testCase : getCases())
+    public Case getCase(final String identifier) {
+        for (final Case testCase : getCases())
             if (identifier.equals( testCase.getIdentifier() ))
                 return testCase;
 
-        throw new IllegalArgumentException( "No case for identifier: " + identifier );
+        throw new IllegalArgumentException( strf( "No case for identifier: %s", identifier ) );
     }
 
     public Case getDefaultCase() {
         try {
             return getCase( ID_DEFAULT );
         }
-        catch (IllegalArgumentException e) {
-            throw new IllegalStateException( "Missing default case in test suite.  Add a case with id: " + ID_DEFAULT, e );
+        catch (final IllegalArgumentException e) {
+            throw new IllegalStateException( strf( "Missing default case in test suite.  Add a case with id: %d", ID_DEFAULT ), e );
         }
     }
 
@@ -62,7 +63,7 @@ public class MPTests {
 
         private transient Case parentCase;
 
-        public void initializeParentHierarchy(MPTests tests) {
+        public void initializeParentHierarchy(final MPTests tests) {
 
             if (parent != null) {
                 parentCase = tests.getCase( parent );
@@ -129,14 +130,14 @@ public class MPTests {
                 @Nonnull
                 @Override
                 public String get() {
-                    return parentCase == null? "": checkNotNull( parentCase.siteContext );
+                    return (parentCase == null)? "": checkNotNull( parentCase.siteContext );
                 }
             } );
             result = ifNotNullElse( result, new NNSupplier<String>() {
                 @Nonnull
                 @Override
                 public String get() {
-                    return parentCase == null? "": checkNotNull( parentCase.result );
+                    return (parentCase == null)? "": checkNotNull( parentCase.result );
                 }
             } );
         }

@@ -8,7 +8,7 @@ description = 'Master Password CLI'
 mainClassName = 'com.lyndir.masterpassword.CLI'
 
 dependencies {
-    compile project(':masterpassword:algorithm')
+    compile project(':masterpassword-algorithm')
 
     compile group: 'ch.qos.logback', name: 'logback-classic', version:'1.1.2'
 }

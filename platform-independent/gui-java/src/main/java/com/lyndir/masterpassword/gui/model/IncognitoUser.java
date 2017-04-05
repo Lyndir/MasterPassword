@@ -11,12 +11,14 @@ import javax.annotation.Nullable;
 public class IncognitoUser extends User {
 
     private final String fullName;
+    @Nullable
     private       char[] masterPassword;
 
     public IncognitoUser(final String fullName) {
         this.fullName = fullName;
     }
 
+    @Override
     public String getFullName() {
         return fullName;
     }
@@ -30,7 +32,7 @@ public class IncognitoUser extends User {
     @Override
     public void authenticate(final char[] masterPassword)
             throws IncorrectMasterPasswordException {
-        this.masterPassword = masterPassword;
+        this.masterPassword = masterPassword.clone();
     }
 
     @Override
@@ -43,6 +45,6 @@ public class IncognitoUser extends User {
     }
 
     @Override
-    public void deleteSite(Site site) {
+    public void deleteSite(final Site site) {
     }
 }

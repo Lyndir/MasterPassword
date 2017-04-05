@@ -22,7 +22,7 @@ public class MPSiteResult {
 
     @Override
     public boolean equals(final Object obj) {
-        return this == obj || obj instanceof MPSiteResult && Objects.equals( site, ((MPSiteResult) obj).site );
+        return (this == obj) || ((obj instanceof MPSiteResult) && Objects.equals( site, ((MPSiteResult) obj).site ));
     }
 
     @Override

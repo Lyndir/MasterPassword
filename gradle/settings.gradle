@@ -1,19 +1,19 @@
-rootProject.name = ':masterpassword'
+rootProject.name = 'masterpassword'
 
-include ':masterpassword:algorithm'
-project(':masterpassword:algorithm').projectDir = new File( '../core/java/algorithm' )
+include 'masterpassword-algorithm'
+project(':masterpassword-algorithm').projectDir = new File( '../core/java/algorithm' )
 
-include ':masterpassword:model'
-project(':masterpassword:model').projectDir = new File( '../core/java/model' )
+include 'masterpassword-model'
+project(':masterpassword-model').projectDir = new File( '../core/java/model' )
 
-include ':masterpassword:tests'
-project(':masterpassword:tests').projectDir = new File( '../core/java/tests' )
+include 'masterpassword-tests'
+project(':masterpassword-tests').projectDir = new File( '../core/java/tests' )
 
-include ':masterpassword:android'
-project(':masterpassword:android').projectDir = new File( '../platform-android' )
+include 'masterpassword-cli'
+project(':masterpassword-cli').projectDir = new File( '../platform-independent/cli-java' )
 
-include ':masterpassword:cli'
-project(':masterpassword:cli').projectDir = new File( '../platform-independent/cli-java' )
+include 'masterpassword-gui'
+project(':masterpassword-gui').projectDir = new File( '../platform-independent/gui-java' )
 
-include ':masterpassword:gui'
-project(':masterpassword:gui').projectDir = new File( '../platform-independent/gui-java' )
+include 'masterpassword-android'
+project(':masterpassword-android').projectDir = new File( '../platform-android' )

@@ -26,7 +26,7 @@ public class MPSiteMarshaller {
     public static MPSiteMarshaller marshallSafe(final MPUser user) {
         MPSiteMarshaller marshaller = new MPSiteMarshaller();
         marshaller.marshallHeaderForSafeContent( user );
-        for (MPSite site : user.getSites())
+        for (final MPSite site : user.getSites())
             marshaller.marshallSite( site );
 
         return marshaller;
@@ -35,7 +35,7 @@ public class MPSiteMarshaller {
     public static MPSiteMarshaller marshallVisible(final MPUser user, final MasterKey masterKey) {
         MPSiteMarshaller marshaller = new MPSiteMarshaller();
         marshaller.marshallHeaderForVisibleContentWithKey( user, masterKey );
-        for (MPSite site : user.getSites())
+        for (final MPSite site : user.getSites())
             marshaller.marshallSite( site );
 
         return marshaller;
@@ -77,7 +77,7 @@ public class MPSiteMarshaller {
         return header.toString();
     }
 
-    public String marshallSite(MPSite site) {
+    public String marshallSite(final MPSite site) {
         String exportLine = strf( "%s  %8d  %8s  %25s\t%25s\t%s", //
                                   rfc3339.print( site.getLastUsed() ), // lastUsed
                                   site.getUses(), // uses
@@ -126,6 +126,6 @@ public class MPSiteMarshaller {
             return description;
         }
 
-        public abstract String contentForSite(final MPSite site, final MasterKey masterKey);
+        public abstract String contentForSite(MPSite site, MasterKey masterKey);
     }
 }

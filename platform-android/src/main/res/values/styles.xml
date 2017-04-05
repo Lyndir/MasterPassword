@@ -2,5 +2,6 @@
 <resources>
 
     <style name="MPTheme" parent="android:Theme.Holo.Dialog.MinWidth">
+        <item name="android:windowBackground">@drawable/background</item>
     </style>
 </resources>

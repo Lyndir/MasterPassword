@@ -23,14 +23,17 @@ import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.*;
+import org.jetbrains.annotations.NonNls;
 
 
 /**
  * @author lhunath, 2014-06-11
  */
+@SuppressWarnings("HardcodedFileSeparator")
 public abstract class Res {
 
-    private static final WeakHashMap<Window, ScheduledExecutorService> executorByWindow = new WeakHashMap<>();
+    private static final int AVATAR_COUNT = 19;
+    private static final Map<Window, ScheduledExecutorService> executorByWindow = new WeakHashMap<>();
     private static final Logger                                        logger           = Logger.get( Res.class );
     private static final Colors                                        colors           = new Colors();
 
@@ -45,7 +48,7 @@ public abstract class Res {
                 try {
                     job.run();
                 }
-                catch (Throwable t) {
+                catch (final Throwable t) {
                     logger.err( t, "Unexpected: %s", t.getLocalizedMessage() );
                 }
             }
@@ -65,9 +68,9 @@ public abstract class Res {
                 try {
                     return job.call();
                 }
-                catch (Throwable t) {
+                catch (final Throwable t) {
                     logger.err( t, "Unexpected: %s", t.getLocalizedMessage() );
-                    throw t;
+                    throw Throwables.propagate( t );
                 }
             }
         }, delay, timeUnit ), executor );
@@ -109,7 +112,7 @@ public abstract class Res {
     }
 
     public static int avatars() {
-        return 19;
+        return AVATAR_COUNT;
     }
 
     public static Font emoticonsFont() {
@@ -180,10 +183,10 @@ public abstract class Res {
         return font( "fonts/Arimo-Regular.ttf" );
     }
 
-    private static Font font(String fontResourceName) {
+    private static Font font(@NonNls final String fontResourceName) {
         Map<String, SoftReference<Font>> fontsByResourceName = Maps.newHashMap();
         SoftReference<Font> fontRef = fontsByResourceName.get( fontResourceName );
-        Font font = fontRef == null? null: fontRef.get();
+        Font font = (fontRef == null)? null: fontRef.get();
         if (font == null)
             try {
                 fontsByResourceName.put( fontResourceName, new SoftReference<>(
@@ -203,17 +206,15 @@ public abstract class Res {
     private static final class RetinaIcon extends ImageIcon {
 
         private static final Pattern scalePattern = Pattern.compile( ".*@(\\d+)x.[^.]+$" );
+        private static final long serialVersionUID = 1L;
 
         private final float scale;
 
-        public RetinaIcon(final URL url) {
+        private RetinaIcon(final URL url) {
             super( url );
 
             Matcher scaleMatcher = scalePattern.matcher( url.getPath() );
-            if (scaleMatcher.matches())
-                scale = Float.parseFloat( scaleMatcher.group( 1 ) );
-            else
-                scale = 1;
+            scale = scaleMatcher.matches()? Float.parseFloat( scaleMatcher.group( 1 ) ): 1;
         }
 
         //private static URL retinaURL(final URL url) {
@@ -242,13 +243,14 @@ public abstract class Res {
             return (int) (super.getIconHeight() / scale);
         }
 
-        public synchronized void paintIcon(Component c, Graphics g, int x, int y) {
+        @Override
+        public synchronized void paintIcon(final Component c, final Graphics g, final int x, final int y) {
             ImageObserver observer = ifNotNullElse( getImageObserver(), c );
 
             Image image = getImage();
             int width = image.getWidth( observer );
             int height = image.getHeight( observer );
-            final Graphics2D g2d = (Graphics2D) g.create( x, y, width, height );
+            Graphics2D g2d = (Graphics2D) g.create( x, y, width, height );
 
             g2d.scale( 1 / scale, 1 / scale );
             g2d.drawImage( image, 0, 0, observer );
@@ -276,7 +278,7 @@ public abstract class Res {
             return controlBorder;
         }
 
-        public Color fromIdenticonColor(MPIdenticon.Color identiconColor, BackgroundMode backgroundMode) {
+        public Color fromIdenticonColor(final MPIdenticon.Color identiconColor, final BackgroundMode backgroundMode) {
             switch (identiconColor) {
                 case RED:
                     switch (backgroundMode) {

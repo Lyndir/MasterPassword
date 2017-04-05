@@ -20,29 +20,30 @@ import org.xml.sax.ext.DefaultHandler2;
 /**
  * @author lhunath, 2015-12-22
  */
+@SuppressWarnings("HardCodedStringLiteral")
 public class MPTestSuite implements Callable<Boolean> {
 
     @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger                = Logger.get( MPTestSuite.class );
     private static final String DEFAULT_RESOURCE_NAME = "mpw_tests.xml";
 
-    private MPTests  tests;
-    private Listener listener;
+    private final MPTests  tests;
+    private       Listener listener;
 
     public MPTestSuite()
             throws UnavailableException {
         this( DEFAULT_RESOURCE_NAME );
     }
 
-    public MPTestSuite(String resourceName)
+    public MPTestSuite(final String resourceName)
             throws UnavailableException {
         try {
             tests = new MPTests();
             tests.cases = Lists.newLinkedList();
             SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
             parser.parse( Thread.currentThread().getContextClassLoader().getResourceAsStream( resourceName ), new DefaultHandler2() {
-                private Deque<String> currentTags = Lists.newLinkedList();
-                private Deque<StringBuilder> currentTexts = Lists.newLinkedList();
+                private final Deque<String> currentTags = Lists.newLinkedList();
+                private final Deque<StringBuilder> currentTexts = Lists.newLinkedList();
                 private MPTests.Case currentCase;
 
                 @Override
@@ -103,7 +104,7 @@ public class MPTestSuite implements Callable<Boolean> {
             throw new UnavailableException( e );
         }
 
-        for (MPTests.Case testCase : tests.getCases())
+        for (final MPTests.Case testCase : tests.getCases())
             testCase.initializeParentHierarchy( tests );
     }
 
@@ -115,7 +116,7 @@ public class MPTestSuite implements Callable<Boolean> {
         return tests;
     }
 
-    public boolean forEach(String testName, NNFunctionNN<MPTests.Case, Boolean> testFunction) {
+    public boolean forEach(final String testName, final NNFunctionNN<MPTests.Case, Boolean> testFunction) {
         List<MPTests.Case> cases = tests.getCases();
         for (int c = 0; c < cases.size(); c++) {
             MPTests.Case testCase = cases.get( c );
@@ -163,6 +164,8 @@ public class MPTestSuite implements Callable<Boolean> {
     }
 
     public static class UnavailableException extends Exception {
+
+        private static final long serialVersionUID = 1L;
 
         public UnavailableException(final Throwable cause) {
             super( cause );

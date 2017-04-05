@@ -14,19 +14,19 @@ public abstract class Site {
 
     public abstract String getSiteName();
 
-    public abstract void setSiteName(final String siteName);
+    public abstract void setSiteName(String siteName);
 
     public abstract MPSiteType getSiteType();
 
-    public abstract void setSiteType(final MPSiteType siteType);
+    public abstract void setSiteType(MPSiteType siteType);
 
     public abstract MasterKey.Version getAlgorithmVersion();
 
-    public abstract void setAlgorithmVersion(final MasterKey.Version algorithmVersion);
+    public abstract void setAlgorithmVersion(MasterKey.Version algorithmVersion);
 
     public abstract UnsignedInteger getSiteCounter();
 
-    public abstract void setSiteCounter(final UnsignedInteger siteCounter);
+    public abstract void setSiteCounter(UnsignedInteger siteCounter);
 
     @Override
     public String toString() {

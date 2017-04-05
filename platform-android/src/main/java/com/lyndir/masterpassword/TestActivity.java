@@ -47,14 +47,13 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
     private Runnable                  action;
     private ImmutableSet<String>      testNames;
 
-    public static void startNoSkip(Context context) {
+    public static void startNoSkip(final Context context) {
         context.startActivity( new Intent( context, TestActivity.class ) );
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        Res.init( getResources() );
 
         setContentView( R.layout.activity_test );
         ButterKnife.bind( this );
@@ -76,11 +75,11 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
                         @Nullable
                         @Override
                         public String apply(@Nullable final MPTests.Case input) {
-                            return input == null? null: input.identifier;
+                            return (input == null)? null: input.identifier;
                         }
                     } ).filter( Predicates.notNull() ).toSet();
         }
-        catch (MPTestSuite.UnavailableException e) {
+        catch (final MPTestSuite.UnavailableException e) {
             logger.err( e, "While loading test suite" );
             setStatus( R.string.tests_unavailable, R.string.tests_btn_unavailable, new Runnable() {
                 @Override
@@ -111,7 +110,7 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
         Futures.addCallback( testFuture = backgroundExecutor.submit( testSuite ), new FutureCallback<Boolean>() {
             @Override
             public void onSuccess(@Nullable final Boolean result) {
-                if (result != null && result)
+                if ((result != null) && result)
                     setStatus( R.string.tests_passed, R.string.tests_btn_passed, new Runnable() {
                         @Override
                         public void run() {
@@ -141,12 +140,12 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
         }, mainExecutor );
     }
 
-    public void onAction(View v) {
+    public void onAction(final View v) {
         if (action != null)
             action.run();
     }
 
-    private void setStatus(int statusId, int buttonId, @Nullable Runnable action) {
+    private void setStatus(final int statusId, final int buttonId, @Nullable final Runnable action) {
         this.action = action;
 
         if (statusId == 0)
@@ -166,7 +165,7 @@ public class TestActivity extends Activity implements MPTestSuite.Listener {
         runOnUiThread( new Runnable() {
             @Override
             public void run() {
-                logView.append( strf( '\n' + messageFormat, args ) );
+                logView.append( strf( "%n" + messageFormat, args ) );
 
                 progressView.setMax( max );
                 progressView.setProgress( current );

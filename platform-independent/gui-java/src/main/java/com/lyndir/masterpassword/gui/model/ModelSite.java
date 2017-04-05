@@ -14,13 +14,14 @@ public class ModelSite extends Site {
     private final MPSite model;
 
     public ModelSite(final MPSiteResult result) {
-        this.model = result.getSite();
+        model = result.getSite();
     }
 
     public MPSite getModel() {
         return model;
     }
 
+    @Override
     public String getSiteName() {
         return model.getSiteName();
     }
@@ -31,6 +32,7 @@ public class ModelSite extends Site {
         MPUserFileManager.get().save();
     }
 
+    @Override
     public MPSiteType getSiteType() {
         return model.getSiteType();
     }
@@ -56,6 +58,7 @@ public class ModelSite extends Site {
         }
     }
 
+    @Override
     public UnsignedInteger getSiteCounter() {
         return model.getSiteCounter();
     }

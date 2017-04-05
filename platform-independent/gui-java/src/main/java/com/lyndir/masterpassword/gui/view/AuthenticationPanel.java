@@ -9,7 +9,6 @@ import java.awt.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
-import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -20,7 +19,7 @@ public abstract class AuthenticationPanel extends Components.GradientPanel {
     protected final UnlockFrame unlockFrame;
     protected final JLabel      avatarLabel;
 
-    public AuthenticationPanel(final UnlockFrame unlockFrame) {
+    protected AuthenticationPanel(final UnlockFrame unlockFrame) {
         super( null, null );
         this.unlockFrame = unlockFrame;
 
@@ -39,7 +38,7 @@ public abstract class AuthenticationPanel extends Components.GradientPanel {
         avatarLabel.setToolTipText( "The avatar for your user.  Click to change it." );
     }
 
-    protected void updateUser(boolean repack) {
+    protected void updateUser(final boolean repack) {
         unlockFrame.updateUser( getSelectedUser() );
         validate();
 
@@ -50,7 +49,6 @@ public abstract class AuthenticationPanel extends Components.GradientPanel {
     @Nullable
     protected abstract User getSelectedUser();
 
-    @NotNull
     @Nonnull
     public abstract char[] getMasterPassword();
 

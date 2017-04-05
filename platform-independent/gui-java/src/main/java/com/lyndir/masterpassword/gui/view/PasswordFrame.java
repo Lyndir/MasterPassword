@@ -28,7 +28,7 @@ import javax.swing.event.*;
  */
 public class PasswordFrame extends JFrame implements DocumentListener {
 
-    private final User                         user;
+    @SuppressWarnings("FieldCanBeLocal")
     private final Components.GradientPanel     root;
     private final JTextField                   siteNameField;
     private final JButton                      siteActionButton;
@@ -41,13 +41,13 @@ public class PasswordFrame extends JFrame implements DocumentListener {
     private final JCheckBox                    maskPasswordField;
     private final char                         passwordEchoChar;
     private final Font                         passwordEchoFont;
+    private final User                         user;
 
     @Nullable
     private Site    currentSite;
     private boolean updatingUI;
 
-    public PasswordFrame(User user)
-            throws HeadlessException {
+    public PasswordFrame(final User user) {
         super( "Master Password" );
         this.user = user;
 
@@ -104,7 +104,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
             public void actionPerformed(final ActionEvent e) {
                 if (currentSite == null)
                     return;
-                else if (currentSite instanceof ModelSite)
+                if (currentSite instanceof ModelSite)
                     PasswordFrame.this.user.deleteSite( currentSite );
                 else
                     PasswordFrame.this.user.addSite( currentSite );
@@ -160,7 +160,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         maskPasswordField.setSelected( true );
         maskPasswordField.addItemListener( new ItemListener() {
             @Override
-            public void itemStateChanged(ItemEvent e) {
+            public void itemStateChanged(final ItemEvent e) {
                 updateMask();
             }
         } );
@@ -203,33 +203,33 @@ public class PasswordFrame extends JFrame implements DocumentListener {
     }
 
     @Nonnull
-    private ListenableFuture<String> updatePassword(boolean allowNameCompletion) {
+    private ListenableFuture<String> updatePassword(final boolean allowNameCompletion) {
 
         final String siteNameQuery = siteNameField.getText();
         if (updatingUI)
             return Futures.immediateCancelledFuture();
-        if (siteNameQuery == null || siteNameQuery.isEmpty() || !user.isKeyAvailable()) {
+        if ((siteNameQuery == null) || siteNameQuery.isEmpty() || !user.isKeyAvailable()) {
             siteActionButton.setVisible( false );
             tipLabel.setText( null );
             passwordField.setText( null );
             return Futures.immediateCancelledFuture();
         }
 
-        final MPSiteType siteType = siteTypeField.getModel().getElementAt( siteTypeField.getSelectedIndex() );
-        final MasterKey.Version siteVersion = siteVersionField.getItemAt( siteVersionField.getSelectedIndex() );
-        final UnsignedInteger siteCounter = siteCounterModel.getNumber();
+        MPSiteType        siteType    = siteTypeField.getModel().getElementAt( siteTypeField.getSelectedIndex() );
+        MasterKey.Version siteVersion = siteVersionField.getItemAt( siteVersionField.getSelectedIndex() );
+        UnsignedInteger   siteCounter = siteCounterModel.getNumber();
 
         Iterable<Site> siteResults = user.findSitesByName( siteNameQuery );
         if (!allowNameCompletion)
             siteResults = FluentIterable.from( siteResults ).filter( new Predicate<Site>() {
                 @Override
-                public boolean apply(@Nullable Site siteResult) {
-                    return siteResult != null && siteNameQuery.equals( siteResult.getSiteName() );
+                public boolean apply(@Nullable final Site siteResult) {
+                    return (siteResult != null) && siteNameQuery.equals( siteResult.getSiteName() );
                 }
             } );
         final Site site = ifNotNullElse( Iterables.getFirst( siteResults, null ),
                                          new IncognitoSite( siteNameQuery, siteType, siteCounter, siteVersion ) );
-        if (currentSite != null && currentSite.getSiteName().equals( site.getSiteName() )) {
+        if ((currentSite != null) && currentSite.getSiteName().equals( site.getSiteName() )) {
             site.setSiteType( siteType );
             site.setAlgorithmVersion( siteVersion );
             site.setSiteCounter( siteCounter );
