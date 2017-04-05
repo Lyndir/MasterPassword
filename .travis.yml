@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode8
+osx_image: xcode8.3
 env: TERM=dumb SHLVL=0
 git:
   submodules: true
