@@ -3,11 +3,7 @@
 Thumbs.db
 
 # IntelliJ
-.idea/*
-!.idea/encodings.xml
-!.idea/inspectionProfiles
-!.idea/projectCodeStyle.xml
-!.idea/validation.xml
+.idea
 *.iml
 *.ipr
 *.iws
