@@ -2358,7 +2358,172 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		DA5BFA6B147E415C00F98B1E /* Debug-macOS */ = {
+		DA0974431E956FA600F0BFE8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_WARN_BOOL_CONVERSION = NO;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_CXX0X_EXTENSIONS = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_RECEIVER_WEAK = NO;
+				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = NO;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
+				CODE_SIGN_IDENTITY = "";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = HL3Q45LX9N;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"ADHOC=1",
+					"$(inherited)",
+					"NDEBUG=1",
+					"NS_BLOCK_ASSERTIONS=1",
+					"CRASHLYTICS=1",
+				);
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
+				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
+					"$(inherited)",
+				);
+				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherit)";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				PUBLIC_HEADERS_FOLDER_PATH = include;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Test;
+		};
+		DA0974441E956FA600F0BFE8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = Source/Mac/MasterPassword.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/External/Mac\"",
+				);
+				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				INFOPLIST_FILE = "Source/Mac/MasterPassword-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
+				SKIP_INSTALL = NO;
+				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
+			};
+			name = Test;
+		};
+		DA0974451E956FA600F0BFE8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				GCC_PREFIX_HEADER = "Source/Pearl/Pearl-Prefix.pch";
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
+					"$(inherited)",
+				);
+			};
+			name = Test;
+		};
+		DA0974461E956FA600F0BFE8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				DSTROOT = /tmp/jrswizzle.dst;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Test;
+		};
+		DA0974471E956FA600F0BFE8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+			};
+			name = Test;
+		};
+		DA0974481E956FA600F0BFE8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/include/libxml2,
+				);
+			};
+			name = Test;
+		};
+		DA5BFA6B147E415C00F98B1E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2446,10 +2611,11 @@
 				PUBLIC_HEADERS_FOLDER_PATH = include;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
-			name = "Debug-macOS";
+			name = Debug;
 		};
-		DA5BFA6C147E415C00F98B1E /* AdHoc-macOS */ = {
+		DA5BFA6C147E415C00F98B1E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2540,36 +2706,9 @@
 				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
 			};
-			name = "AdHoc-macOS";
+			name = Release;
 		};
-		DA5BFA6E147E415C00F98B1E /* Debug-macOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = Source/Mac/MasterPassword.entitlements;
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/External/Mac\"",
-				);
-				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				INFOPLIST_FILE = "Source/Mac/MasterPassword-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
-				SKIP_INSTALL = NO;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
-			};
-			name = "Debug-macOS";
-		};
-		DA5BFA6F147E415C00F98B1E /* AdHoc-macOS */ = {
+		DA5BFA6E147E415C00F98B1E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -2593,138 +2732,9 @@
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
-			name = "AdHoc-macOS";
+			name = Debug;
 		};
-		DA6774401A474A03004F356A /* Debug-macOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					/usr/include/libxml2,
-				);
-			};
-			name = "Debug-macOS";
-		};
-		DA6774411A474A03004F356A /* AdHoc-macOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					/usr/include/libxml2,
-				);
-			};
-			name = "AdHoc-macOS";
-		};
-		DA6774421A474A03004F356A /* AppStore-macOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					/usr/include/libxml2,
-				);
-			};
-			name = "AppStore-macOS";
-		};
-		DA95D60914DF3F3B008D1B94 /* AppStore-macOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
-				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
-				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
-				CLANG_WARN_BOOL_CONVERSION = NO;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_CXX0X_EXTENSIONS = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
-				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
-				CLANG_WARN_OBJC_RECEIVER_WEAK = NO;
-				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = NO;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = HL3Q45LX9N;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"APPSTORE=1",
-					"$(inherited)",
-					"NDEBUG=1",
-					"NS_BLOCK_ASSERTIONS=1",
-					"CRASHLYTICS=1",
-				);
-				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
-				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
-				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = YES;
-				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
-				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
-				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
-				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
-				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
-				GCC_WARN_MISSING_PARENTHESES = YES;
-				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNKNOWN_PRAGMAS = YES;
-				GCC_WARN_UNUSED_FUNCTION = NO;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"$(inherited)",
-				);
-				LD_DYLIB_INSTALL_NAME = "@rpath/$(EXECUTABLE_PATH)";
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherit)";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				PUBLIC_HEADERS_FOLDER_PATH = include;
-				RUN_CLANG_STATIC_ANALYZER = YES;
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "AppStore-macOS";
-		};
-		DA95D60A14DF3F3B008D1B94 /* AppStore-macOS */ = {
+		DA5BFA6F147E415C00F98B1E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -2748,22 +2758,49 @@
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
-			name = "AppStore-macOS";
+			name = Release;
 		};
-		DA95D60B14DF3F3B008D1B94 /* AppStore-macOS */ = {
+		DA6774401A474A03004F356A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/include/libxml2,
+				);
+			};
+			name = Debug;
+		};
+		DA6774411A474A03004F356A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/include/libxml2,
+				);
+			};
+			name = Release;
+		};
+		DAADCC5F19FB006500987B1D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				GCC_PREFIX_HEADER = "Source/Pearl/Pearl-Prefix.pch";
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
-					"$(inherited)",
-				);
+				COMBINE_HIDPI_IMAGES = YES;
 			};
-			name = "AppStore-macOS";
+			name = Debug;
 		};
-		DA95D60D14DF3F3B008D1B94 /* AppStore-macOS */ = {
+		DAADCC6019FB006500987B1D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+			};
+			name = Release;
+		};
+		DAC63275148680650075AEA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -2774,33 +2811,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = "AppStore-macOS";
+			name = Debug;
 		};
-		DAADCC5F19FB006500987B1D /* Debug-macOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-			};
-			name = "Debug-macOS";
-		};
-		DAADCC6019FB006500987B1D /* AdHoc-macOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-			};
-			name = "AdHoc-macOS";
-		};
-		DAADCC6119FB006500987B1D /* AppStore-macOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-			};
-			name = "AppStore-macOS";
-		};
-		DAC63275148680650075AEA5 /* Debug-macOS */ = {
+		DAC63276148680650075AEA5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -2811,22 +2824,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = "Debug-macOS";
+			name = Release;
 		};
-		DAC63276148680650075AEA5 /* AdHoc-macOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
-				COMBINE_HIDPI_IMAGES = YES;
-				DSTROOT = /tmp/jrswizzle.dst;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = "AdHoc-macOS";
-		};
-		DAC77CB5148291A600BCF976 /* Debug-macOS */ = {
+		DAC77CB5148291A600BCF976 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -2837,9 +2837,9 @@
 					"$(inherited)",
 				);
 			};
-			name = "Debug-macOS";
+			name = Debug;
 		};
-		DAC77CB6148291A600BCF976 /* AdHoc-macOS */ = {
+		DAC77CB6148291A600BCF976 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -2850,7 +2850,7 @@
 					"$(inherited)",
 				);
 			};
-			name = "AdHoc-macOS";
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -2858,62 +2858,62 @@
 		DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA5BFA6B147E415C00F98B1E /* Debug-macOS */,
-				DA5BFA6C147E415C00F98B1E /* AdHoc-macOS */,
-				DA95D60914DF3F3B008D1B94 /* AppStore-macOS */,
+				DA5BFA6B147E415C00F98B1E /* Debug */,
+				DA5BFA6C147E415C00F98B1E /* Release */,
+				DA0974431E956FA600F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-macOS";
+			defaultConfigurationName = Test;
 		};
 		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA5BFA6E147E415C00F98B1E /* Debug-macOS */,
-				DA5BFA6F147E415C00F98B1E /* AdHoc-macOS */,
-				DA95D60A14DF3F3B008D1B94 /* AppStore-macOS */,
+				DA5BFA6E147E415C00F98B1E /* Debug */,
+				DA5BFA6F147E415C00F98B1E /* Release */,
+				DA0974441E956FA600F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-macOS";
+			defaultConfigurationName = Test;
 		};
 		DA67743F1A474A03004F356A /* Build configuration list for PBXNativeTarget "mpw-test" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA6774401A474A03004F356A /* Debug-macOS */,
-				DA6774411A474A03004F356A /* AdHoc-macOS */,
-				DA6774421A474A03004F356A /* AppStore-macOS */,
+				DA6774401A474A03004F356A /* Debug */,
+				DA6774411A474A03004F356A /* Release */,
+				DA0974481E956FA600F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-macOS";
+			defaultConfigurationName = Test;
 		};
 		DAADCC5E19FB006500987B1D /* Build configuration list for PBXNativeTarget "KCOrderedAccessorFix" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAADCC5F19FB006500987B1D /* Debug-macOS */,
-				DAADCC6019FB006500987B1D /* AdHoc-macOS */,
-				DAADCC6119FB006500987B1D /* AppStore-macOS */,
+				DAADCC5F19FB006500987B1D /* Debug */,
+				DAADCC6019FB006500987B1D /* Release */,
+				DA0974471E956FA600F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-macOS";
+			defaultConfigurationName = Test;
 		};
 		DAC63274148680650075AEA5 /* Build configuration list for PBXNativeTarget "jrswizzle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAC63275148680650075AEA5 /* Debug-macOS */,
-				DAC63276148680650075AEA5 /* AdHoc-macOS */,
-				DA95D60D14DF3F3B008D1B94 /* AppStore-macOS */,
+				DAC63275148680650075AEA5 /* Debug */,
+				DAC63276148680650075AEA5 /* Release */,
+				DA0974461E956FA600F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-macOS";
+			defaultConfigurationName = Test;
 		};
 		DAC77CB7148291A600BCF976 /* Build configuration list for PBXNativeTarget "Pearl" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAC77CB5148291A600BCF976 /* Debug-macOS */,
-				DAC77CB6148291A600BCF976 /* AdHoc-macOS */,
-				DA95D60B14DF3F3B008D1B94 /* AppStore-macOS */,
+				DAC77CB5148291A600BCF976 /* Debug */,
+				DAC77CB6148291A600BCF976 /* Release */,
+				DA0974451E956FA600F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-macOS";
+			defaultConfigurationName = Test;
 		};
 /* End XCConfigurationList section */
 

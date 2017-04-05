@@ -3805,25 +3805,200 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		DA32D02E19D111C7004F3F0E /* Debug-iOS */ = {
+		DA0974491E95703B00F0BFE8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = deep;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_CXX0X_EXTENSIONS = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = NO;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_RECEIVER_WEAK = NO;
+				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = NO;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = HL3Q45LX9N;
+				DSTROOT = "/tmp/${PRODUCT_NAME}.dst";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"ADHOC=1",
+					"$(inherited)",
+					"NDEBUG=1",
+					"NS_BLOCK_ASSERTIONS=1",
+					"CRASHLYTICS=1",
+				);
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
+				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SIGN_COMPARE = NO;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				PUBLIC_HEADERS_FOLDER_PATH = include;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				WARNING_CFLAGS = "-Wno-float-conversion";
+			};
+			name = Test;
+		};
+		DA09744A1E95703B00F0BFE8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
+				COPY_PHASE_STRIP = YES;
+				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/External/iOS\"",
+				);
+				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
+				INFOPLIST_FILE = "Source/iOS/MasterPassword-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = "$(inherited)";
+				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
+					"$(inherited)",
+					"-lscryptenc-ios",
+					"-lopensslcrypto-ios",
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"-lscryptenc-ios-sim",
+					"-lopensslcrypto-ios-sim",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
+				SKIP_INSTALL = NO;
+				STRIP_INSTALLED_PRODUCT = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Test;
+		};
+		DA09744B1E95703B00F0BFE8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				GCC_PREFIX_HEADER = "Source/Pearl/Pearl-Prefix.pch";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
+					"$(inherited)",
+				);
+			};
+			name = Test;
+		};
+		DA09744C1E95703B00F0BFE8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+			};
+			name = Test;
+		};
+		DA09744D1E95703B00F0BFE8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+			};
+			name = Test;
+		};
+		DA09744E1E95703B00F0BFE8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+			};
+			name = Test;
+		};
+		DA09744F1E95703B00F0BFE8 /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
-			name = "Debug-iOS";
+			name = Test;
 		};
-		DA32D02F19D111C7004F3F0E /* AdHoc-iOS */ = {
+		DA0974501E95703B00F0BFE8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREFIX_HEADER = "External/AttributedMarkdown/attributed-markdown.pch";
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+			};
+			name = Test;
+		};
+		DA32D02E19D111C7004F3F0E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
-			name = "AdHoc-iOS";
+			name = Debug;
 		};
-		DA32D03019D111C7004F3F0E /* AppStore-iOS */ = {
+		DA32D02F19D111C7004F3F0E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
-			name = "AppStore-iOS";
+			name = Release;
 		};
-		DA5BFA6B147E415C00F98B1E /* Debug-iOS */ = {
+		DA5BFA6B147E415C00F98B1E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -3912,9 +4087,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WARNING_CFLAGS = "-Wno-float-conversion";
 			};
-			name = "Debug-iOS";
+			name = Debug;
 		};
-		DA5BFA6C147E415C00F98B1E /* AdHoc-iOS */ = {
+		DA5BFA6C147E415C00F98B1E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -4006,9 +4181,9 @@
 				VALIDATE_PRODUCT = YES;
 				WARNING_CFLAGS = "-Wno-float-conversion";
 			};
-			name = "AdHoc-iOS";
+			name = Release;
 		};
-		DA5BFA6E147E415C00F98B1E /* Debug-iOS */ = {
+		DA5BFA6E147E415C00F98B1E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -4041,141 +4216,9 @@
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = "Debug-iOS";
+			name = Debug;
 		};
-		DA5BFA6F147E415C00F98B1E /* AdHoc-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
-				COPY_PHASE_STRIP = YES;
-				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/External/iOS\"",
-				);
-				GCC_PREFIX_HEADER = "Source/MasterPassword-Prefix.pch";
-				INFOPLIST_FILE = "Source/iOS/MasterPassword-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
-					"$(inherited)",
-				);
-				OTHER_LDFLAGS = "$(inherited)";
-				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
-					"$(inherited)",
-					"-lscryptenc-ios",
-					"-lopensslcrypto-ios",
-				);
-				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
-					"$(inherited)",
-					"-lscryptenc-ios-sim",
-					"-lopensslcrypto-ios-sim",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword;
-				SKIP_INSTALL = NO;
-				STRIP_INSTALLED_PRODUCT = YES;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = "AdHoc-iOS";
-		};
-		DA95D60914DF3F3B008D1B94 /* AppStore-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
-				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_STATIC_ANALYZER_MODE = deep;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_CXX0X_EXTENSIONS = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = NO;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
-				CLANG_WARN_OBJC_RECEIVER_WEAK = NO;
-				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = NO;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = HL3Q45LX9N;
-				DSTROOT = "/tmp/${PRODUCT_NAME}.dst";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"APPSTORE=1",
-					"$(inherited)",
-					"NDEBUG=1",
-					"NS_BLOCK_ASSERTIONS=1",
-					"CRASHLYTICS=1",
-				);
-				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
-				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				GCC_VERSION = "";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
-				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = YES;
-				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
-				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
-				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
-				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
-				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
-				GCC_WARN_MISSING_PARENTHESES = YES;
-				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				GCC_WARN_SIGN_COMPARE = NO;
-				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/$(PLATFORM_NAME)/include\"",
-					"$(inherited)",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				PUBLIC_HEADERS_FOLDER_PATH = include;
-				RUN_CLANG_STATIC_ANALYZER = YES;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				STRIP_INSTALLED_PRODUCT = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				WARNING_CFLAGS = "-Wno-float-conversion";
-			};
-			name = "AppStore-iOS";
-		};
-		DA95D60A14DF3F3B008D1B94 /* AppStore-iOS */ = {
+		DA5BFA6F147E415C00F98B1E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -4211,9 +4254,57 @@
 				STRIP_INSTALLED_PRODUCT = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = "AppStore-iOS";
+			name = Release;
 		};
-		DA95D60B14DF3F3B008D1B94 /* AppStore-iOS */ = {
+		DAA1758C19D86BE80044227B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREFIX_HEADER = "External/AttributedMarkdown/attributed-markdown.pch";
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+			};
+			name = Debug;
+		};
+		DAA1758D19D86BE80044227B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREFIX_HEADER = "External/AttributedMarkdown/attributed-markdown.pch";
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+			};
+			name = Release;
+		};
+		DAC632661486805C0075AEA5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+			};
+			name = Debug;
+		};
+		DAC632671486805C0075AEA5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+			};
+			name = Release;
+		};
+		DAC63275148680650075AEA5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+			};
+			name = Debug;
+		};
+		DAC63276148680650075AEA5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+			};
+			name = Release;
+		};
+		DAC77CB5148291A600BCF976 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -4223,81 +4314,9 @@
 					"$(inherited)",
 				);
 			};
-			name = "AppStore-iOS";
+			name = Debug;
 		};
-		DA95D60C14DF3F3B008D1B94 /* AppStore-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = "AppStore-iOS";
-		};
-		DA95D60D14DF3F3B008D1B94 /* AppStore-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = "AppStore-iOS";
-		};
-		DAA1758C19D86BE80044227B /* Debug-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_PREFIX_HEADER = "External/AttributedMarkdown/attributed-markdown.pch";
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = "Debug-iOS";
-		};
-		DAA1758D19D86BE80044227B /* AdHoc-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_PREFIX_HEADER = "External/AttributedMarkdown/attributed-markdown.pch";
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = "AdHoc-iOS";
-		};
-		DAA1758E19D86BE80044227B /* AppStore-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_PREFIX_HEADER = "External/AttributedMarkdown/attributed-markdown.pch";
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = "AppStore-iOS";
-		};
-		DAC632661486805C0075AEA5 /* Debug-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = "Debug-iOS";
-		};
-		DAC632671486805C0075AEA5 /* AdHoc-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = "AdHoc-iOS";
-		};
-		DAC63275148680650075AEA5 /* Debug-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = "Debug-iOS";
-		};
-		DAC63276148680650075AEA5 /* AdHoc-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = "AdHoc-iOS";
-		};
-		DAC77CB5148291A600BCF976 /* Debug-iOS */ = {
+		DAC77CB6148291A600BCF976 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -4307,43 +4326,23 @@
 					"$(inherited)",
 				);
 			};
-			name = "Debug-iOS";
+			name = Release;
 		};
-		DAC77CB6148291A600BCF976 /* AdHoc-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				GCC_PREFIX_HEADER = "Source/Pearl/Pearl-Prefix.pch";
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
-					"$(inherited)",
-				);
-			};
-			name = "AdHoc-iOS";
-		};
-		DAFC565F172C573B00CB5CC5 /* Debug-iOS */ = {
+		DAFC565F172C573B00CB5CC5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
-			name = "Debug-iOS";
+			name = Debug;
 		};
-		DAFC5660172C573B00CB5CC5 /* AdHoc-iOS */ = {
+		DAFC5660172C573B00CB5CC5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 			};
-			name = "AdHoc-iOS";
-		};
-		DAFC5661172C573B00CB5CC5 /* AppStore-iOS */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-			};
-			name = "AppStore-iOS";
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -4351,82 +4350,82 @@
 		DA32D03419D111C7004F3F0E /* Build configuration list for PBXNativeTarget "KCOrderedAccessorFix" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA32D02E19D111C7004F3F0E /* Debug-iOS */,
-				DA32D02F19D111C7004F3F0E /* AdHoc-iOS */,
-				DA32D03019D111C7004F3F0E /* AppStore-iOS */,
+				DA32D02E19D111C7004F3F0E /* Debug */,
+				DA32D02F19D111C7004F3F0E /* Release */,
+				DA09744F1E95703B00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-iOS";
+			defaultConfigurationName = Test;
 		};
 		DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA5BFA6B147E415C00F98B1E /* Debug-iOS */,
-				DA5BFA6C147E415C00F98B1E /* AdHoc-iOS */,
-				DA95D60914DF3F3B008D1B94 /* AppStore-iOS */,
+				DA5BFA6B147E415C00F98B1E /* Debug */,
+				DA5BFA6C147E415C00F98B1E /* Release */,
+				DA0974491E95703B00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-iOS";
+			defaultConfigurationName = Test;
 		};
 		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA5BFA6E147E415C00F98B1E /* Debug-iOS */,
-				DA5BFA6F147E415C00F98B1E /* AdHoc-iOS */,
-				DA95D60A14DF3F3B008D1B94 /* AppStore-iOS */,
+				DA5BFA6E147E415C00F98B1E /* Debug */,
+				DA5BFA6F147E415C00F98B1E /* Release */,
+				DA09744A1E95703B00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-iOS";
+			defaultConfigurationName = Test;
 		};
 		DAA1758B19D86BE80044227B /* Build configuration list for PBXNativeTarget "AttributedMarkdown" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAA1758C19D86BE80044227B /* Debug-iOS */,
-				DAA1758D19D86BE80044227B /* AdHoc-iOS */,
-				DAA1758E19D86BE80044227B /* AppStore-iOS */,
+				DAA1758C19D86BE80044227B /* Debug */,
+				DAA1758D19D86BE80044227B /* Release */,
+				DA0974501E95703B00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-iOS";
+			defaultConfigurationName = Test;
 		};
 		DAC632651486805C0075AEA5 /* Build configuration list for PBXNativeTarget "uicolor-utilities" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAC632661486805C0075AEA5 /* Debug-iOS */,
-				DAC632671486805C0075AEA5 /* AdHoc-iOS */,
-				DA95D60C14DF3F3B008D1B94 /* AppStore-iOS */,
+				DAC632661486805C0075AEA5 /* Debug */,
+				DAC632671486805C0075AEA5 /* Release */,
+				DA09744C1E95703B00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-iOS";
+			defaultConfigurationName = Test;
 		};
 		DAC63274148680650075AEA5 /* Build configuration list for PBXNativeTarget "jrswizzle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAC63275148680650075AEA5 /* Debug-iOS */,
-				DAC63276148680650075AEA5 /* AdHoc-iOS */,
-				DA95D60D14DF3F3B008D1B94 /* AppStore-iOS */,
+				DAC63275148680650075AEA5 /* Debug */,
+				DAC63276148680650075AEA5 /* Release */,
+				DA09744D1E95703B00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-iOS";
+			defaultConfigurationName = Test;
 		};
 		DAC77CB7148291A600BCF976 /* Build configuration list for PBXNativeTarget "Pearl" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAC77CB5148291A600BCF976 /* Debug-iOS */,
-				DAC77CB6148291A600BCF976 /* AdHoc-iOS */,
-				DA95D60B14DF3F3B008D1B94 /* AppStore-iOS */,
+				DAC77CB5148291A600BCF976 /* Debug */,
+				DAC77CB6148291A600BCF976 /* Release */,
+				DA09744B1E95703B00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-iOS";
+			defaultConfigurationName = Test;
 		};
 		DAFC565E172C573B00CB5CC5 /* Build configuration list for PBXNativeTarget "InAppSettingsKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAFC565F172C573B00CB5CC5 /* Debug-iOS */,
-				DAFC5660172C573B00CB5CC5 /* AdHoc-iOS */,
-				DAFC5661172C573B00CB5CC5 /* AppStore-iOS */,
+				DAFC565F172C573B00CB5CC5 /* Debug */,
+				DAFC5660172C573B00CB5CC5 /* Release */,
+				DA09744E1E95703B00F0BFE8 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-iOS";
+			defaultConfigurationName = Test;
 		};
 /* End XCConfigurationList section */
 
