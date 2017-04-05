@@ -2358,7 +2358,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		DA5BFA6B147E415C00F98B1E /* Debug-Mac */ = {
+		DA5BFA6B147E415C00F98B1E /* Debug-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2447,9 +2447,9 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
-			name = "Debug-Mac";
+			name = "Debug-macOS";
 		};
-		DA5BFA6C147E415C00F98B1E /* AdHoc-Mac */ = {
+		DA5BFA6C147E415C00F98B1E /* AdHoc-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2540,9 +2540,9 @@
 				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
 			};
-			name = "AdHoc-Mac";
+			name = "AdHoc-macOS";
 		};
-		DA5BFA6E147E415C00F98B1E /* Debug-Mac */ = {
+		DA5BFA6E147E415C00F98B1E /* Debug-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -2567,9 +2567,9 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
-			name = "Debug-Mac";
+			name = "Debug-macOS";
 		};
-		DA5BFA6F147E415C00F98B1E /* AdHoc-Mac */ = {
+		DA5BFA6F147E415C00F98B1E /* AdHoc-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -2593,9 +2593,9 @@
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
-			name = "AdHoc-Mac";
+			name = "AdHoc-macOS";
 		};
-		DA6774401A474A03004F356A /* Debug-Mac */ = {
+		DA6774401A474A03004F356A /* Debug-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
@@ -2605,9 +2605,9 @@
 					/usr/include/libxml2,
 				);
 			};
-			name = "Debug-Mac";
+			name = "Debug-macOS";
 		};
-		DA6774411A474A03004F356A /* AdHoc-Mac */ = {
+		DA6774411A474A03004F356A /* AdHoc-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
@@ -2617,9 +2617,9 @@
 					/usr/include/libxml2,
 				);
 			};
-			name = "AdHoc-Mac";
+			name = "AdHoc-macOS";
 		};
-		DA6774421A474A03004F356A /* AppStore-Mac */ = {
+		DA6774421A474A03004F356A /* AppStore-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
@@ -2629,9 +2629,9 @@
 					/usr/include/libxml2,
 				);
 			};
-			name = "AppStore-Mac";
+			name = "AppStore-macOS";
 		};
-		DA95D60914DF3F3B008D1B94 /* AppStore-Mac */ = {
+		DA95D60914DF3F3B008D1B94 /* AppStore-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2722,9 +2722,9 @@
 				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
 			};
-			name = "AppStore-Mac";
+			name = "AppStore-macOS";
 		};
-		DA95D60A14DF3F3B008D1B94 /* AppStore-Mac */ = {
+		DA95D60A14DF3F3B008D1B94 /* AppStore-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -2748,9 +2748,9 @@
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
 			};
-			name = "AppStore-Mac";
+			name = "AppStore-macOS";
 		};
-		DA95D60B14DF3F3B008D1B94 /* AppStore-Mac */ = {
+		DA95D60B14DF3F3B008D1B94 /* AppStore-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -2761,9 +2761,9 @@
 					"$(inherited)",
 				);
 			};
-			name = "AppStore-Mac";
+			name = "AppStore-macOS";
 		};
-		DA95D60D14DF3F3B008D1B94 /* AppStore-Mac */ = {
+		DA95D60D14DF3F3B008D1B94 /* AppStore-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -2774,33 +2774,33 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = "AppStore-Mac";
+			name = "AppStore-macOS";
 		};
-		DAADCC5F19FB006500987B1D /* Debug-Mac */ = {
+		DAADCC5F19FB006500987B1D /* Debug-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 			};
-			name = "Debug-Mac";
+			name = "Debug-macOS";
 		};
-		DAADCC6019FB006500987B1D /* AdHoc-Mac */ = {
+		DAADCC6019FB006500987B1D /* AdHoc-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 			};
-			name = "AdHoc-Mac";
+			name = "AdHoc-macOS";
 		};
-		DAADCC6119FB006500987B1D /* AppStore-Mac */ = {
+		DAADCC6119FB006500987B1D /* AppStore-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 			};
-			name = "AppStore-Mac";
+			name = "AppStore-macOS";
 		};
-		DAC63275148680650075AEA5 /* Debug-Mac */ = {
+		DAC63275148680650075AEA5 /* Debug-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -2811,9 +2811,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = "Debug-Mac";
+			name = "Debug-macOS";
 		};
-		DAC63276148680650075AEA5 /* AdHoc-Mac */ = {
+		DAC63276148680650075AEA5 /* AdHoc-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -2824,9 +2824,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
-			name = "AdHoc-Mac";
+			name = "AdHoc-macOS";
 		};
-		DAC77CB5148291A600BCF976 /* Debug-Mac */ = {
+		DAC77CB5148291A600BCF976 /* Debug-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -2837,9 +2837,9 @@
 					"$(inherited)",
 				);
 			};
-			name = "Debug-Mac";
+			name = "Debug-macOS";
 		};
-		DAC77CB6148291A600BCF976 /* AdHoc-Mac */ = {
+		DAC77CB6148291A600BCF976 /* AdHoc-macOS */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -2850,7 +2850,7 @@
 					"$(inherited)",
 				);
 			};
-			name = "AdHoc-Mac";
+			name = "AdHoc-macOS";
 		};
 /* End XCBuildConfiguration section */
 
@@ -2858,62 +2858,62 @@
 		DA5BFA3E147E415C00F98B1E /* Build configuration list for PBXProject "MasterPassword-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA5BFA6B147E415C00F98B1E /* Debug-Mac */,
-				DA5BFA6C147E415C00F98B1E /* AdHoc-Mac */,
-				DA95D60914DF3F3B008D1B94 /* AppStore-Mac */,
+				DA5BFA6B147E415C00F98B1E /* Debug-macOS */,
+				DA5BFA6C147E415C00F98B1E /* AdHoc-macOS */,
+				DA95D60914DF3F3B008D1B94 /* AppStore-macOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-Mac";
+			defaultConfigurationName = "AdHoc-macOS";
 		};
 		DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA5BFA6E147E415C00F98B1E /* Debug-Mac */,
-				DA5BFA6F147E415C00F98B1E /* AdHoc-Mac */,
-				DA95D60A14DF3F3B008D1B94 /* AppStore-Mac */,
+				DA5BFA6E147E415C00F98B1E /* Debug-macOS */,
+				DA5BFA6F147E415C00F98B1E /* AdHoc-macOS */,
+				DA95D60A14DF3F3B008D1B94 /* AppStore-macOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-Mac";
+			defaultConfigurationName = "AdHoc-macOS";
 		};
 		DA67743F1A474A03004F356A /* Build configuration list for PBXNativeTarget "mpw-test" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA6774401A474A03004F356A /* Debug-Mac */,
-				DA6774411A474A03004F356A /* AdHoc-Mac */,
-				DA6774421A474A03004F356A /* AppStore-Mac */,
+				DA6774401A474A03004F356A /* Debug-macOS */,
+				DA6774411A474A03004F356A /* AdHoc-macOS */,
+				DA6774421A474A03004F356A /* AppStore-macOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-Mac";
+			defaultConfigurationName = "AdHoc-macOS";
 		};
 		DAADCC5E19FB006500987B1D /* Build configuration list for PBXNativeTarget "KCOrderedAccessorFix" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAADCC5F19FB006500987B1D /* Debug-Mac */,
-				DAADCC6019FB006500987B1D /* AdHoc-Mac */,
-				DAADCC6119FB006500987B1D /* AppStore-Mac */,
+				DAADCC5F19FB006500987B1D /* Debug-macOS */,
+				DAADCC6019FB006500987B1D /* AdHoc-macOS */,
+				DAADCC6119FB006500987B1D /* AppStore-macOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-Mac";
+			defaultConfigurationName = "AdHoc-macOS";
 		};
 		DAC63274148680650075AEA5 /* Build configuration list for PBXNativeTarget "jrswizzle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAC63275148680650075AEA5 /* Debug-Mac */,
-				DAC63276148680650075AEA5 /* AdHoc-Mac */,
-				DA95D60D14DF3F3B008D1B94 /* AppStore-Mac */,
+				DAC63275148680650075AEA5 /* Debug-macOS */,
+				DAC63276148680650075AEA5 /* AdHoc-macOS */,
+				DA95D60D14DF3F3B008D1B94 /* AppStore-macOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-Mac";
+			defaultConfigurationName = "AdHoc-macOS";
 		};
 		DAC77CB7148291A600BCF976 /* Build configuration list for PBXNativeTarget "Pearl" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DAC77CB5148291A600BCF976 /* Debug-Mac */,
-				DAC77CB6148291A600BCF976 /* AdHoc-Mac */,
-				DA95D60B14DF3F3B008D1B94 /* AppStore-Mac */,
+				DAC77CB5148291A600BCF976 /* Debug-macOS */,
+				DAC77CB6148291A600BCF976 /* AdHoc-macOS */,
+				DA95D60B14DF3F3B008D1B94 /* AppStore-macOS */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "AdHoc-Mac";
+			defaultConfigurationName = "AdHoc-macOS";
 		};
 /* End XCConfigurationList section */
 
