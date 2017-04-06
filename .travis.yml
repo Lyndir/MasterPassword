@@ -5,5 +5,5 @@ git:
   submodules: true
 script:
   - "./platform-independent/cli-c/build"
-  - "xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -scheme 'MasterPassword iOS: Development' -sdk iphonesimulator"
-  - "xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -scheme 'MasterPassword macOS: Development' -sdk macosx"
+  - "xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -scheme 'MasterPassword iOS' -sdk iphonesimulator"
+  - "xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -scheme 'MasterPassword macOS' -sdk macosx"
