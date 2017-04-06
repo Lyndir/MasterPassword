@@ -4,6 +4,6 @@ env: TERM=dumb SHLVL=0
 git:
   submodules: true
 script:
-  - "cd ./platform-independent/cli-c && ./clean && ./build && ./mpw-tests"
-  - "xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword iOS' -sdk iphonesimulator"
-  - "xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword macOS'"
+  - "( cd ./platform-independent/cli-c && ./clean && ./build && ./mpw-tests )"
+  - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword iOS' -sdk iphonesimulator )"
+  - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword macOS' )"
