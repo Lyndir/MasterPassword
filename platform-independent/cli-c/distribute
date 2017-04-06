@@ -2,19 +2,28 @@
 set -e
 
 cd "${BASH_SOURCE%/*}"
-tag=$(git describe)
-commit=$(git describe --long --dirty)
-[[ $tag && $commit = $tag* ]] || exit 1
+tag=$(git describe --match '*-cli*')
+commit=$(git describe --long --dirty --match '*-cli*')
+[[ $commit != *-dirty ]] || { echo >&2 "Tree is dirty, first commit any changes."; exit 1; }
 git show --show-signature --pretty=format:%H --quiet "$tag" > VERSION
 
 mpwArchive=mpw-$commit.tar.gz
-[[ -e $mpwArchive ]] && echo "WARNING: $mpwArchive already exists.  Will overwrite."
+[[ -e $mpwArchive ]] && echo >&2 "WARNING: $mpwArchive already exists.  Will overwrite."
 read -n1 -p "Will prepare and release $mpwArchive.  Press a key to continue or ^C to abort."
 
+echo "Creating archive $mpwArchive .."
 git ls-files -z . | xargs -0 tar -Lcvzf "$mpwArchive"
-echo "$mpwArchive ready, SHA256: $(openssl sha -sha256 < "$mpwArchive")"
+echo "Creating archive signature $mpwArchive.sig .."
+gpg --detach-sign "$mpwArchive"
 
+echo "Installing archive and signature in current site .."
 cd ../../public/site/current
 ln -sf "../../../platform-independent/cli-c/$mpwArchive"; [[ -e $_ ]]
+ln -sf "../../../platform-independent/cli-c/$mpwArchive.sig"; [[ -e $_ ]]
 ln -sf "$mpwArchive" "masterpassword-cli.tar.gz"; [[ -e $_ ]]
-echo "Linked from site, please update your hyperlinks to point to https://ssl.masterpasswordapp.com/$mpwArchive"
+ln -sf "$mpwArchive.sig" "masterpassword-cli.tar.gz.sig"; [[ -e $_ ]]
+
+echo
+echo "Done.  Don't forget to publish the site."
+echo "package: $mpwArchive"
+echo "signature: $mpwArchive.sig"
