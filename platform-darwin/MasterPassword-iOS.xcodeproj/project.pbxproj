@@ -3902,7 +3902,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = Source/iOS/MasterPassword.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "-";
 				COPY_PHASE_STRIP = YES;
 				EXCLUDED_SOURCE_FILE_NAMES = libDCIntrospect.a;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3916,7 +3916,6 @@
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
-				OTHER_CODE_SIGN_FLAGS = "--sign -";
 				OTHER_LDFLAGS = "$(inherited)";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"$(inherited)",

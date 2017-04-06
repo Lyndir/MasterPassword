@@ -213,11 +213,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper.entitlements";
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = HL3Q45LX9N;
 				INFOPLIST_FILE = "$(SRCROOT)/MasterPassword-Mac-LoginHelper/MasterPassword-Mac-LoginHelper-Info.plist";
-				OTHER_CODE_SIGN_FLAGS = "--sign -";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac.LoginHelper;
 			};
 			name = Test;

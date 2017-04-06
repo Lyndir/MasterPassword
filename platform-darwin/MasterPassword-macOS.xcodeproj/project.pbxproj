@@ -2457,7 +2457,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = Source/Mac/MasterPassword.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2471,7 +2471,6 @@
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
-				OTHER_CODE_SIGN_FLAGS = "--sign -";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
