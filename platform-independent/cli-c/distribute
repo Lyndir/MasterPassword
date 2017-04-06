@@ -14,7 +14,7 @@ read -n1 -p "Will prepare and release $mpwArchive.  Press a key to continue or ^
 git ls-files -z . | xargs -0 tar -Lcvzf "$mpwArchive"
 echo "$mpwArchive ready, SHA256: $(openssl sha -sha256 < "$mpwArchive")"
 
-cd ../../Site/current
-ln -sf "../../MasterPassword/C/$mpwArchive"
-[[ -e $_ ]]
-echo "Linked from site, please update your hyperlinks to point to http://masterpasswordapp.com/$mpwArchive"
+cd ../../public/site/current
+ln -sf "../../../platform-independent/cli-c/$mpwArchive"; [[ -e $_ ]]
+ln -sf "$mpwArchive" "masterpassword-cli.tar.gz"; [[ -e $_ ]]
+echo "Linked from site, please update your hyperlinks to point to https://ssl.masterpasswordapp.com/$mpwArchive"
