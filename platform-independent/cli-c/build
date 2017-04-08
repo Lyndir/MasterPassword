@@ -41,13 +41,11 @@ fi
 # Optional features.
 mpw_color=${mpw_color:-1} # Colorized Identicon, requires libncurses-dev
 
-# Distribution specific configuration.
-# Homebrew
-if hash brew 2>/dev/null; then
-    opensslPath=$(brew --prefix openssl)
-    export CFLAGS="$CFLAGS -I$opensslPath/include"
-    export LDFLAGS="$LDFLAGS -L$opensslPath/lib"
-fi
+# Default build flags.
+export CFLAGS="-O3 $CFLAGS"
+export LDFLAGS="$LDFLAGS"
+
+
 
 ### DEPENDENCIES
 
@@ -208,26 +206,40 @@ depend() {
     popd
     popd
 }
+depend_scrypt() {
+    if haslib scrypt && haslib sodium; then
+        CFLAGS+=" -DHAS_SCRYPT_SODIUM=1"
+        LDFLAGS+=" -lscrypt -lsodium"
+        return
+    fi
+
+    depend scrypt
+    local objects=(
+        "lib/scrypt/src/libcperciva/"*/*.o
+        "lib/scrypt/src/lib/crypto/"*.o
+    )
+    CFLAGS+="  -DHAS_CPERCIVA=1"
+    LDFLAGS+=" -Llib/scrypt/src ${objects[*]}"
+}
 
 
 ### MPW
 mpw() {
-    depend scrypt
+    depend_scrypt
 
     echo
     echo "Building target: $target..."
     local CFLAGS=(
+        $CFLAGS
+
         # library paths
         -I"lib/include"
         # mpw paths
         -I"core" -I"cli"
     )
     local LDFLAGS=(
-        # scrypt
-        "lib/scrypt/src/libcperciva/"*/*.o
-        "lib/scrypt/src/lib/crypto/"*.o
-        # library paths
-        -L"lib/scrypt/src"
+        $LDFLAGS
+
         # link libraries
         -l"crypto"
     )
@@ -245,28 +257,28 @@ mpw() {
 
 ### MPW-BENCH
 mpw-bench() {
-    depend scrypt
+    depend_scrypt
     depend bcrypt
 
     echo
     echo "Building target: $target..."
     local CFLAGS=(
+        $CFLAGS
+
         # library paths
         -I"lib/include"
         # mpw paths
         -I"core" -I"cli"
     )
     local LDFLAGS=(
-        # scrypt
-        "lib/scrypt/src/libcperciva/"*/*.o
-        "lib/scrypt/src/lib/crypto/"*.o
+        $LDFLAGS
+
         # bcrypt
         "lib/bcrypt/src/crypt_blowfish.o"
         "lib/bcrypt/src/crypt_gensalt.o"
         "lib/bcrypt/src/wrapper.o"
         "lib/bcrypt/src/x86.o"
         # library paths
-        -L"lib/scrypt/src"
         -L"lib/bcrypt/src"
         # link libraries
         -l"crypto"
@@ -283,11 +295,13 @@ mpw-bench() {
 
 ### MPW-TESTS
 mpw-tests() {
-    depend scrypt
+    depend_scrypt
 
     echo
     echo "Building target: $target..."
     local CFLAGS=(
+        $CFLAGS
+
         # library paths
         -I"lib/include"
         -I"/usr/include/libxml2"
@@ -296,11 +310,8 @@ mpw-tests() {
         -I"core" -I"cli"
     )
     local LDFLAGS=(
-        # scrypt
-        "lib/scrypt/src/libcperciva/"*/*.o
-        "lib/scrypt/src/lib/crypto/"*.o
-        # library paths
-        -L"lib/scrypt/src"
+        $LDFLAGS
+
         # link libraries
         -l"crypto" -l"xml2"
     )

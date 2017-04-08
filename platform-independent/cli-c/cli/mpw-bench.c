@@ -13,7 +13,6 @@
 #include <errno.h>
 #include <sys/time.h>
 
-#include <scrypt/sha256.h>
 #include <bcrypt/ow-crypt.h>
 
 #include "mpw-algorithm.h"

@@ -20,14 +20,23 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef COLOR
+#if COLOR
 #include <unistd.h>
 #include <curses.h>
 #include <term.h>
 #endif
 
-#include <scrypt/sha256.h>
+#if HAS_CPERCIVA
 #include <scrypt/crypto_scrypt.h>
+#include <scrypt/sha256.h>
+#elif HAS_SCRYPT_SODIUM
+#include <libscrypt.h>
+#include <sodium.h>
+#endif
+
+#ifndef trc
+int mpw_verbosity;
+#endif
 
 #include "mpw-util.h"
 
@@ -85,30 +94,62 @@ uint8_t const *mpw_scrypt(const size_t keySize, const char *secret, const uint8_
     if (!key)
         return NULL;
 
+#if HAS_CPERCIVA
     if (crypto_scrypt( (const uint8_t *)secret, strlen( secret ), salt, saltSize, N, r, p, key, keySize ) < 0) {
         mpw_free( key, keySize );
         return NULL;
     }
+#elif HAS_SCRYPT_SODIUM
+    if (crypto_pwhash_scryptsalsa208sha256_ll( (const uint8_t *)secret, strlen( secret ), salt, saltSize, N, r, p, key, keySize) != 0 ) {
+        mpw_free( key, keySize );
+        return NULL;
+    }
+#endif
 
     return key;
 }
 
 uint8_t const *mpw_hmac_sha256(const uint8_t *key, const size_t keySize, const uint8_t *salt, const size_t saltSize) {
 
+#if HAS_CPERCIVA
     uint8_t *const buffer = malloc( 32 );
     if (!buffer)
         return NULL;
 
     HMAC_SHA256_Buf( key, keySize, salt, saltSize, buffer );
     return buffer;
+#elif HAS_SCRYPT_SODIUM
+    uint8_t *const buffer = malloc( crypto_auth_hmacsha256_BYTES );
+    if (!buffer)
+        return NULL;
+
+    crypto_auth_hmacsha256_state state;
+    if (crypto_auth_hmacsha256_init( &state, key, keySize ) != 0 ||
+        crypto_auth_hmacsha256_update( &state, salt, saltSize ) != 0 ||
+        crypto_auth_hmacsha256_final( &state, buffer ) != 0) {
+        mpw_free( buffer, crypto_auth_hmacsha256_BYTES );
+        return NULL;
+    }
+
+    return buffer;
+#endif
+
+    return NULL;
 }
 
 const char *mpw_id_buf(const void *buf, size_t length) {
 
+#if HAS_CPERCIVA
     uint8_t hash[32];
     SHA256_Buf( buf, length, hash );
 
     return mpw_hex( hash, 32 );
+#elif HAS_SCRYPT_SODIUM
+    uint8_t hash[crypto_hash_sha256_BYTES];
+    crypto_hash_sha256( hash, buf, length );
+
+    return mpw_hex( hash, crypto_hash_sha256_BYTES );
+#endif
 }
 
 static char **mpw_hex_buf = NULL;
@@ -144,10 +185,10 @@ static int initputvar() {
     if (!isatty(STDERR_FILENO))
         return 0;
     if (putvarc)
-        free(putvarc);
+        free( putvarc );
     if (!termsetup) {
         int status;
-        if (! (termsetup = (setupterm(NULL, STDERR_FILENO, &status) == OK && status == 1))) {
+        if (! (termsetup = (setupterm( NULL, STDERR_FILENO, &status ) == 0 && status == 1))) {
             wrn( "Terminal doesn't support color (setupterm errno %d).\n", status );
             return 0;
         }
@@ -174,8 +215,9 @@ const char *mpw_identicon(const char *fullName, const char *masterPassword) {
             "♨", "♩", "♪", "♫", "⚐", "⚑", "⚔", "⚖", "⚙", "⚠", "⌘", "⏎", "✄", "✆", "✈", "✉", "✌"
     };
 
-    uint8_t identiconSeed[32];
-    HMAC_SHA256_Buf( masterPassword, strlen( masterPassword ), fullName, strlen( fullName ), identiconSeed );
+    const uint8_t *identiconSeed = mpw_hmac_sha256( (const uint8_t *)masterPassword, strlen( masterPassword ), (const uint8_t *)fullName, strlen( fullName ) );
+    if (!identiconSeed)
+        return NULL;
 
     char *colorString, *resetString;
 #ifdef COLOR
@@ -203,6 +245,7 @@ const char *mpw_identicon(const char *fullName, const char *masterPassword) {
             accessory[identiconSeed[3] % (sizeof( accessory ) / sizeof( accessory[0] ))],
             resetString );
 
+    mpw_free( identiconSeed, 32 );
     free( colorString );
     free( resetString );
     return identicon;

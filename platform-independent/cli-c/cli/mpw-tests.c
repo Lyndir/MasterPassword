@@ -15,6 +15,11 @@ int main(int argc, char *const argv[]) {
     int failedTests = 0;
 
     xmlNodePtr tests = xmlDocGetRootElement( xmlParseFile( "mpw_tests.xml" ) );
+    if (!tests) {
+        ftl( "Couldn't find test case: mpw_tests.xml\n" );
+        abort();
+    }
+
     for (xmlNodePtr testCase = tests->children; testCase; testCase = testCase->next) {
         if (testCase->type != XML_ELEMENT_NODE || xmlStrcmp( testCase->name, BAD_CAST "case" ) != 0)
             continue;

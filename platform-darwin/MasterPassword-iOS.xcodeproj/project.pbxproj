@@ -3916,6 +3916,7 @@
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
+				OTHER_CFLAGS = "-DHAS_CPERCIVA=1";
 				OTHER_LDFLAGS = "$(inherited)";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"$(inherited)",
@@ -4192,6 +4193,7 @@
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
+				OTHER_CFLAGS = "-DHAS_CPERCIVA=1";
 				OTHER_LDFLAGS = "$(inherited)";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"$(inherited)",
@@ -4230,6 +4232,7 @@
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
+				OTHER_CFLAGS = "-DHAS_CPERCIVA=1";
 				OTHER_LDFLAGS = "$(inherited)";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
 					"$(inherited)",

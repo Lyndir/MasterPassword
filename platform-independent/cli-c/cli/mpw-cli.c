@@ -213,8 +213,12 @@ int main(int argc, char *const argv[]) {
 
     // Summarize operation.
     const char *identicon = mpw_identicon( fullName, masterPassword );
-    fprintf( stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, identicon );
-    mpw_free_string( identicon );
+    if (!identicon) {
+        err( "Couldn't determine identicon.\n" );
+    } else {
+        fprintf( stderr, "%s's password for %s:\n[ %s ]: ", fullName, siteName, identicon );
+        mpw_free_string( identicon );
+    }
 
     // Output the password.
     const uint8_t *masterKey = mpw_masterKeyForUser(

@@ -22,7 +22,7 @@
 //// Logging.
 
 #ifndef trc
-int mpw_verbosity;
+extern int mpw_verbosity;
     #define trc_level 3
     #define trc(...) \
         if (mpw_verbosity >= 3) \

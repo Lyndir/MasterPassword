@@ -23,6 +23,13 @@
 		93D39F833DEC1C89B2F795AC /* MPPasswordWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39A57A7823DE98A0FF83C /* MPPasswordWindowController.m */; };
 		DA0933CC1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */; };
 		DA0933D01747B91B00DE1CEF /* appstore.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0933CF1747B91B00DE1CEF /* appstore.png */; };
+		DA0974541E9957F300F0BFE8 /* libopensslcrypto-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAE8E65319867ADA00416A0F /* libopensslcrypto-osx.a */; };
+		DA0974551E9957F300F0BFE8 /* libscryptenc-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5E5C8717248AA1003798D8 /* libscryptenc-osx.a */; };
+		DA09745A1E99582900F0BFE8 /* mpw-tests-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA0974561E99582200F0BFE8 /* mpw-tests-util.c */; };
+		DA09745B1E99582900F0BFE8 /* mpw-tests.c in Sources */ = {isa = PBXBuildFile; fileRef = DA0974571E99582200F0BFE8 /* mpw-tests.c */; };
+		DA09745E1E99586600F0BFE8 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA09745D1E99586600F0BFE8 /* libxml2.tbd */; };
+		DA0974621E9961F100F0BFE8 /* libsodium.18.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DA0974611E9961F100F0BFE8 /* libsodium.18.dylib */; };
+		DA0974641E99620400F0BFE8 /* libscrypt.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DA0974631E99620400F0BFE8 /* libscrypt.0.dylib */; };
 		DA10007F1998A4C6002B873F /* scrypt in Headers */ = {isa = PBXBuildFile; fileRef = DAE8E65619867AF500416A0F /* scrypt */; settings = {ATTRIBUTES = (Public, ); }; };
 		DA1000801998A4C6002B873F /* openssl in Headers */ = {isa = PBXBuildFile; fileRef = DAE8E65719867AF500416A0F /* openssl */; settings = {ATTRIBUTES = (Public, ); }; };
 		DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B340170661DB000A0EAB /* Carbon.framework */; };
@@ -285,6 +292,13 @@
 		DA0933C91747A56A00DE1CEF /* MPInitialWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPInitialWindow.xib; sourceTree = "<group>"; };
 		DA0933CB1747AD2D00DE1CEF /* shot-laptop-leaning-iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shot-laptop-leaning-iphone.png"; sourceTree = "<group>"; };
 		DA0933CF1747B91B00DE1CEF /* appstore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = appstore.png; sourceTree = "<group>"; };
+		DA0974561E99582200F0BFE8 /* mpw-tests-util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "mpw-tests-util.c"; path = "../../platform-independent/cli-c/cli/mpw-tests-util.c"; sourceTree = "<group>"; };
+		DA0974571E99582200F0BFE8 /* mpw-tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "mpw-tests.c"; path = "../../platform-independent/cli-c/cli/mpw-tests.c"; sourceTree = "<group>"; };
+		DA09745C1E99583B00F0BFE8 /* mpw-tests-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "mpw-tests-util.h"; path = "../../platform-independent/cli-c/cli/mpw-tests-util.h"; sourceTree = "<group>"; };
+		DA09745D1E99586600F0BFE8 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
+		DA09745F1E995EB500F0BFE8 /* mpw_tests.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = mpw_tests.xml; path = ../../core/java/tests/src/main/resources/mpw_tests.xml; sourceTree = "<group>"; };
+		DA0974611E9961F100F0BFE8 /* libsodium.18.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsodium.18.dylib; path = ../../../../../../../usr/local/Cellar/libsodium/1.0.12/lib/libsodium.18.dylib; sourceTree = "<group>"; };
+		DA0974631E99620400F0BFE8 /* libscrypt.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libscrypt.0.dylib; path = ../../../../../../../usr/local/Cellar/libscrypt/1.21/lib/libscrypt.0.dylib; sourceTree = "<group>"; };
 		DA16B340170661DB000A0EAB /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		DA16B343170661EE000A0EAB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPPasswordWindowController.xib; sourceTree = "<group>"; };
@@ -945,6 +959,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA0974641E99620400F0BFE8 /* libscrypt.0.dylib in Frameworks */,
+				DA0974621E9961F100F0BFE8 /* libsodium.18.dylib in Frameworks */,
+				DA09745E1E99586600F0BFE8 /* libxml2.tbd in Frameworks */,
+				DA0974541E9957F300F0BFE8 /* libopensslcrypto-osx.a in Frameworks */,
+				DA0974551E9957F300F0BFE8 /* libscryptenc-osx.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1025,6 +1044,9 @@
 		DA5BFA47147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA0974631E99620400F0BFE8 /* libscrypt.0.dylib */,
+				DA0974611E9961F100F0BFE8 /* libsodium.18.dylib */,
+				DA09745D1E99586600F0BFE8 /* libxml2.tbd */,
 				DA6701B716406A4100B61001 /* Accounts.framework */,
 				DA16B340170661DB000A0EAB /* Carbon.framework */,
 				DA16B343170661EE000A0EAB /* Cocoa.framework */,
@@ -1552,6 +1574,9 @@
 				DA831A2A1A6E1146000AC234 /* mpw-algorithm_v3.c */,
 				DA6773BB1A4746AF004F356A /* mpw-algorithm.c */,
 				DA6773BC1A4746AF004F356A /* mpw-algorithm.h */,
+				DA0974561E99582200F0BFE8 /* mpw-tests-util.c */,
+				DA09745C1E99583B00F0BFE8 /* mpw-tests-util.h */,
+				DA0974571E99582200F0BFE8 /* mpw-tests.c */,
 				DA6773C21A4746AF004F356A /* mpw-types.c */,
 				DA6773C31A4746AF004F356A /* mpw-types.h */,
 				DA6773C51A4746AF004F356A /* mpw-util.c */,
@@ -1614,6 +1639,7 @@
 		DACA23B41705DF7D002C6C22 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DA09745F1E995EB500F0BFE8 /* mpw_tests.xml */,
 				DACA26991705DF81002C6C22 /* Crashlytics */,
 				DACA29701705E1A8002C6C22 /* Data */,
 				DACA23B51705DF7D002C6C22 /* Media */,
@@ -2252,6 +2278,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA09745B1E99582900F0BFE8 /* mpw-tests.c in Sources */,
+				DA09745A1E99582900F0BFE8 /* mpw-tests-util.c in Sources */,
 				DA6774451A474A3B004F356A /* mpw-types.c in Sources */,
 				DA6774461A474A3B004F356A /* mpw-util.c in Sources */,
 				DA6774431A474A3B004F356A /* mpw-algorithm.c in Sources */,
@@ -2471,6 +2499,7 @@
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
+				OTHER_CFLAGS = "-DHAS_CPERCIVA=1";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
@@ -2517,8 +2546,19 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					/usr/include/libxml2,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
+					"$(inherited)",
+					"$(PROJECT_DIR)/External/Pearl/Pearl-Crypto/lib",
+					/usr/local/Cellar/libsodium/1.0.12/lib,
+					/usr/local/Cellar/libscrypt/1.21/lib,
+				);
+				OTHER_CFLAGS = (
+					"-DHAS_CPERCIVA=0",
+					"-DHAS_SCRYPT_SODIUM=1",
 				);
 			};
 			name = Test;
@@ -2727,6 +2767,7 @@
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
+				OTHER_CFLAGS = "-DHAS_CPERCIVA=1";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
@@ -2754,6 +2795,7 @@
 					"\"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib\"",
 					"$(inherited)",
 				);
+				OTHER_CFLAGS = "-DHAS_CPERCIVA=1";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lyndir.lhunath.MasterPassword.Mac;
 				SKIP_INSTALL = NO;
 				WRAPPER_NAME = "Master Password.${WRAPPER_EXTENSION}";
@@ -2766,8 +2808,19 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					/usr/include/libxml2,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
+					"$(inherited)",
+					"$(PROJECT_DIR)/External/Pearl/Pearl-Crypto/lib",
+					/usr/local/Cellar/libsodium/1.0.12/lib,
+					/usr/local/Cellar/libscrypt/1.21/lib,
+				);
+				OTHER_CFLAGS = (
+					"-DHAS_CPERCIVA=0",
+					"-DHAS_SCRYPT_SODIUM=1",
 				);
 			};
 			name = Debug;
@@ -2778,8 +2831,19 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					/usr/include/libxml2,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/External/Pearl/Pearl-Crypto/lib",
+					"$(inherited)",
+					"$(PROJECT_DIR)/External/Pearl/Pearl-Crypto/lib",
+					/usr/local/Cellar/libsodium/1.0.12/lib,
+					/usr/local/Cellar/libscrypt/1.21/lib,
+				);
+				OTHER_CFLAGS = (
+					"-DHAS_CPERCIVA=0",
+					"-DHAS_SCRYPT_SODIUM=1",
 				);
 			};
 			name = Release;
