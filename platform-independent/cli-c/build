@@ -45,7 +45,13 @@ mpw_color=${mpw_color:-1} # Colorized Identicon, requires libncurses-dev
 export CFLAGS="-O3 $CFLAGS"
 export LDFLAGS="$LDFLAGS"
 
-
+# Distribution specific configuration.
+# Homebrew - openssl for scrypt
+if hash brew 2>/dev/null; then
+    opensslPath=$(brew --prefix openssl)
+    CFLAGS+="  -I$opensslPath/include"
+    LDFLAGS+=" -L$opensslPath/lib"
+fi
 
 ### DEPENDENCIES
 
@@ -207,9 +213,9 @@ depend() {
     popd
 }
 depend_scrypt() {
-    if haslib scrypt && haslib sodium; then
-        CFLAGS+=" -DHAS_SCRYPT_SODIUM=1"
-        LDFLAGS+=" -lscrypt -lsodium"
+    if haslib sodium; then
+        CFLAGS+=" -DHAS_SODIUM=1"
+        LDFLAGS+=" -lsodium"
         return
     fi
 

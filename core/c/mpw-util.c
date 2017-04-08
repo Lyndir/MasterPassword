@@ -29,7 +29,7 @@
 #if HAS_CPERCIVA
 #include <scrypt/crypto_scrypt.h>
 #include <scrypt/sha256.h>
-#elif HAS_SCRYPT_SODIUM
+#elif HAS_SODIUM
 #include <libscrypt.h>
 #include <sodium.h>
 #endif
@@ -99,7 +99,7 @@ uint8_t const *mpw_scrypt(const size_t keySize, const char *secret, const uint8_
         mpw_free( key, keySize );
         return NULL;
     }
-#elif HAS_SCRYPT_SODIUM
+#elif HAS_SODIUM
     if (crypto_pwhash_scryptsalsa208sha256_ll( (const uint8_t *)secret, strlen( secret ), salt, saltSize, N, r, p, key, keySize) != 0 ) {
         mpw_free( key, keySize );
         return NULL;
@@ -118,7 +118,7 @@ uint8_t const *mpw_hmac_sha256(const uint8_t *key, const size_t keySize, const u
 
     HMAC_SHA256_Buf( key, keySize, salt, saltSize, buffer );
     return buffer;
-#elif HAS_SCRYPT_SODIUM
+#elif HAS_SODIUM
     uint8_t *const buffer = malloc( crypto_auth_hmacsha256_BYTES );
     if (!buffer)
         return NULL;
@@ -144,7 +144,7 @@ const char *mpw_id_buf(const void *buf, size_t length) {
     SHA256_Buf( buf, length, hash );
 
     return mpw_hex( hash, 32 );
-#elif HAS_SCRYPT_SODIUM
+#elif HAS_SODIUM
     uint8_t hash[crypto_hash_sha256_BYTES];
     crypto_hash_sha256( hash, buf, length );
 
