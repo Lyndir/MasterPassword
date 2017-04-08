@@ -214,18 +214,22 @@ depend() {
 }
 depend_scrypt() {
     if haslib sodium; then
-        CFLAGS+=" -DHAS_SODIUM=1"
-        LDFLAGS+=" -lsodium"
+        if [[ $CFLAGS != *HAS_SODIUM=1* ]]; then
+            CFLAGS+="  -DHAS_SODIUM=1"
+            LDFLAGS+=" -lsodium"
+        fi
         return
     fi
 
     depend scrypt
-    local objects=(
-        "lib/scrypt/src/libcperciva/"*/*.o
-        "lib/scrypt/src/lib/crypto/"*.o
-    )
-    CFLAGS+="  -DHAS_CPERCIVA=1"
-    LDFLAGS+=" -Llib/scrypt/src ${objects[*]}"
+    if [[ $CFLAGS != *HAS_CPERCIVA=1* ]]; then
+        local objects=(
+            "lib/scrypt/src/libcperciva/"*/*.o
+            "lib/scrypt/src/lib/crypto/"*.o
+        )
+        CFLAGS+="  -DHAS_CPERCIVA=1"
+        LDFLAGS+=" -Llib/scrypt/src ${objects[*]}"
+    fi
 }
 
 
