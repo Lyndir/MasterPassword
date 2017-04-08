@@ -1,0 +1,1 @@
+../../../platform-independent/cli-c/mpw-2.5-cli-1-0-gb01e370f.tar.gz.sig

@@ -40,6 +40,7 @@ core/c/lib/*/src
 core/c/lib/include
 platform-independent/cli-c/cli/*.o
 platform-independent/cli-c/mpw-*.tar.gz
+platform-independent/cli-c/mpw-*.tar.gz.sig
 platform-independent/cli-c/mpw
 platform-independent/cli-c/mpw-bench
 platform-independent/cli-c/mpw-tests
