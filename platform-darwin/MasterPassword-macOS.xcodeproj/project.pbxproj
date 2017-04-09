@@ -29,7 +29,6 @@
 		DA09745B1E99582900F0BFE8 /* mpw-tests.c in Sources */ = {isa = PBXBuildFile; fileRef = DA0974571E99582200F0BFE8 /* mpw-tests.c */; };
 		DA09745E1E99586600F0BFE8 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA09745D1E99586600F0BFE8 /* libxml2.tbd */; };
 		DA0974621E9961F100F0BFE8 /* libsodium.18.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DA0974611E9961F100F0BFE8 /* libsodium.18.dylib */; };
-		DA0974641E99620400F0BFE8 /* libscrypt.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DA0974631E99620400F0BFE8 /* libscrypt.0.dylib */; };
 		DA10007F1998A4C6002B873F /* scrypt in Headers */ = {isa = PBXBuildFile; fileRef = DAE8E65619867AF500416A0F /* scrypt */; settings = {ATTRIBUTES = (Public, ); }; };
 		DA1000801998A4C6002B873F /* openssl in Headers */ = {isa = PBXBuildFile; fileRef = DAE8E65719867AF500416A0F /* openssl */; settings = {ATTRIBUTES = (Public, ); }; };
 		DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B340170661DB000A0EAB /* Carbon.framework */; };
@@ -959,7 +958,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA0974641E99620400F0BFE8 /* libscrypt.0.dylib in Frameworks */,
 				DA0974621E9961F100F0BFE8 /* libsodium.18.dylib in Frameworks */,
 				DA09745E1E99586600F0BFE8 /* libxml2.tbd in Frameworks */,
 				DA0974541E9957F300F0BFE8 /* libopensslcrypto-osx.a in Frameworks */,
@@ -2558,7 +2556,7 @@
 				);
 				OTHER_CFLAGS = (
 					"-DHAS_CPERCIVA=0",
-					"-DHAS_SCRYPT_SODIUM=1",
+					"-DHAS_SODIUM=1",
 				);
 			};
 			name = Test;
@@ -2820,7 +2818,7 @@
 				);
 				OTHER_CFLAGS = (
 					"-DHAS_CPERCIVA=0",
-					"-DHAS_SCRYPT_SODIUM=1",
+					"-DHAS_SODIUM=1",
 				);
 			};
 			name = Debug;
@@ -2843,7 +2841,7 @@
 				);
 				OTHER_CFLAGS = (
 					"-DHAS_CPERCIVA=0",
-					"-DHAS_SCRYPT_SODIUM=1",
+					"-DHAS_SODIUM=1",
 				);
 			};
 			name = Release;
