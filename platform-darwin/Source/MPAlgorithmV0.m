@@ -24,8 +24,6 @@
 #import "MPAppDelegate_Shared.h"
 #import "MPAppDelegate_InApp.h"
 #import "mpw-util.h"
-#include <openssl/bn.h>
-#include <openssl/err.h>
 
 /* An AMD HD 7970 calculates 2495M SHA-1 hashes per second at a cost of ~350$ per GPU */
 #define CRACKING_PER_SECOND 2495000000UL
@@ -33,16 +31,12 @@
 
 NSOperationQueue *_mpwQueue = nil;
 
-@implementation MPAlgorithmV0 {
-    BN_CTX *_ctx;
-}
+@implementation MPAlgorithmV0
 
 - (id)init {
 
     if (!(self = [super init]))
         return nil;
-
-    _ctx = BN_CTX_new();
 
     static dispatch_once_t once = 0;
     dispatch_once( &once, ^{
@@ -52,12 +46,6 @@ NSOperationQueue *_mpwQueue = nil;
     } );
 
     return self;
-}
-
-- (void)dealloc {
-
-    BN_CTX_free( _ctx );
-    _ctx = NULL;
 }
 
 - (MPAlgorithmVersion)version {
@@ -427,9 +415,9 @@ NSOperationQueue *_mpwQueue = nil;
                 [PearlKeyChain deleteItemForQuery:siteQuery];
             else
                 [PearlKeyChain addOrUpdateItemForQuery:siteQuery withAttributes:@{
-                        (__bridge id)kSecValueData: encryptedContent,
+                        (__bridge id)kSecValueData     : encryptedContent,
 #if TARGET_OS_IPHONE
-                        (__bridge id)kSecAttrAccessible : (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+                        (__bridge id)kSecAttrAccessible: (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
 #endif
                 }];
             ((MPStoredSiteEntity *)site).contentObject = nil;
@@ -761,18 +749,17 @@ NSOperationQueue *_mpwQueue = nil;
     if (!templates)
         return NO;
 
-    BIGNUM *permutations = BN_new(), *templatePermutations = BN_new();
+    NSDecimalNumber *permutations = [NSDecimalNumber zero], *templatePermutations;
     for (size_t t = 0; t < count; ++t) {
         const char *template = templates[t];
-        BN_one( templatePermutations );
+        templatePermutations = [NSDecimalNumber one];
 
         for (NSUInteger c = 0; c < strlen( template ); ++c)
-            BN_mul_word( templatePermutations,
-                    (BN_ULONG)strlen( mpw_charactersInClass( template[c] ) ) );
+            templatePermutations = [templatePermutations decimalNumberByMultiplyingBy:
+                    (id)[[NSDecimalNumber alloc] initWithUnsignedLong:strlen( mpw_charactersInClass( template[c] ) )]];
 
-        BN_add( permutations, permutations, templatePermutations );
+        permutations = [permutations decimalNumberByAdding:templatePermutations];
     }
-    BN_free( templatePermutations );
     free( templates );
 
     return [self timeToCrack:timeToCrack permutations:permutations forAttacker:attacker];
@@ -780,114 +767,108 @@ NSOperationQueue *_mpwQueue = nil;
 
 - (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack passwordString:(NSString *)password byAttacker:(MPAttacker)attacker {
 
-    BIGNUM *permutations = BN_new();
-    BN_one( permutations );
+    NSDecimalNumber *permutations = [NSDecimalNumber one];
 
     for (NSUInteger c = 0; c < [password length]; ++c) {
         const char passwordCharacter = [password substringWithRange:NSMakeRange( c, 1 )].UTF8String[0];
 
-        unsigned int characterEntropy = 0;
+        unsigned long characterEntropy = 0;
         for (NSString *characterClass in @[ @"v", @"c", @"a", @"x" ]) {
             char const *charactersForClass = mpw_charactersInClass( characterClass.UTF8String[0] );
 
             if (strchr( charactersForClass, passwordCharacter )) {
                 // Found class for password character.
-                characterEntropy = (BN_ULONG)strlen( charactersForClass );
+                characterEntropy = strlen( charactersForClass );
                 break;
             }
         }
         if (!characterEntropy)
             characterEntropy = 256 /* a byte */;
 
-        BN_mul_word( permutations, characterEntropy );
+        permutations = [permutations decimalNumberByMultiplyingBy:
+                (id)[[NSDecimalNumber alloc] initWithUnsignedLong:characterEntropy]];
     }
 
     return [self timeToCrack:timeToCrack permutations:permutations forAttacker:attacker];
 }
 
-- (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack permutations:(BIGNUM *)permutations forAttacker:(MPAttacker)attacker {
+- (BOOL)timeToCrack:(out TimeToCrack *)timeToCrack permutations:(NSDecimalNumber *)permutations forAttacker:(MPAttacker)attacker {
 
     // Determine base seconds needed to calculate the permutations.
-    BIGNUM *secondsToCrack = BN_dup( permutations );
-    BN_div_word( secondsToCrack, CRACKING_PER_SECOND );
+    NSDecimalNumber *secondsToCrack = [permutations decimalNumberByDividingBy:
+            (id)[[NSDecimalNumber alloc] initWithUnsignedLong:CRACKING_PER_SECOND]];
 
     // Modify seconds needed by applying our hardware budget.
     switch (attacker) {
         case MPAttacker1:
             break;
         case MPAttacker5K:
-            BN_mul_word( secondsToCrack, CRACKING_PRICE );
-            BN_div_word( secondsToCrack, 5000 );
+            secondsToCrack = [secondsToCrack decimalNumberByMultiplyingBy:
+                    (id)[[NSDecimalNumber alloc] initWithUnsignedLong:CRACKING_PRICE]];
+            secondsToCrack = [secondsToCrack decimalNumberByDividingBy:
+                    (id)[[NSDecimalNumber alloc] initWithUnsignedLong:5000]];
             break;
         case MPAttacker20M:
-            BN_mul_word( secondsToCrack, CRACKING_PRICE );
-            BN_div_word( secondsToCrack, 20000000 );
+            secondsToCrack = [secondsToCrack decimalNumberByMultiplyingBy:
+                    (id)[[NSDecimalNumber alloc] initWithUnsignedLong:CRACKING_PRICE]];
+            secondsToCrack = [secondsToCrack decimalNumberByDividingBy:
+                    (id)[[NSDecimalNumber alloc] initWithUnsignedLong:20000000]];
             break;
         case MPAttacker5B:
-            BN_mul_word( secondsToCrack, CRACKING_PRICE );
-            BN_div_word( secondsToCrack, 5000 );
-            BN_div_word( secondsToCrack, 1000000 );
+            secondsToCrack = [secondsToCrack decimalNumberByMultiplyingBy:
+                    (id)[[NSDecimalNumber alloc] initWithUnsignedLong:CRACKING_PRICE]];
+            secondsToCrack = [secondsToCrack decimalNumberByDividingBy:
+                    (id)[[NSDecimalNumber alloc] initWithUnsignedLong:5000]];
+            secondsToCrack = [secondsToCrack decimalNumberByDividingBy:
+                    (id)[[NSDecimalNumber alloc] initWithUnsignedLong:1000000]];
             break;
     }
 
-    BIGNUM *max = BN_new();
-    BN_set_word( max, (BN_ULONG)-1 );
+    NSDecimalNumber *ulong_max = (id)[[NSDecimalNumber alloc] initWithUnsignedLong:ULONG_MAX];
 
-    BIGNUM *hoursToCrack = BN_dup( secondsToCrack );
-    BN_div_word( hoursToCrack, 3600 );
-    if (BN_cmp( hoursToCrack, max ) < 0)
-        timeToCrack->hours = BN_get_word( hoursToCrack );
+    NSDecimalNumber *hoursToCrack = [secondsToCrack decimalNumberByDividingBy:
+            (id)[[NSDecimalNumber alloc] initWithUnsignedLong:3600L]];
+    if ([hoursToCrack compare:ulong_max] == NSOrderedAscending)
+        timeToCrack->hours = (unsigned long long)[hoursToCrack doubleValue];
     else
-        timeToCrack->hours = (BN_ULONG)-1;
+        timeToCrack->hours = ULONG_MAX;
 
-    BIGNUM *daysToCrack = BN_dup( hoursToCrack );
-    BN_div_word( daysToCrack, 24 );
-    if (BN_cmp( daysToCrack, max ) < 0)
-        timeToCrack->days = BN_get_word( daysToCrack );
+    NSDecimalNumber *daysToCrack = [hoursToCrack decimalNumberByDividingBy:
+            (id)[[NSDecimalNumber alloc] initWithUnsignedLong:24L]];
+    if ([daysToCrack compare:ulong_max] == NSOrderedAscending)
+        timeToCrack->days = (unsigned long long)[daysToCrack doubleValue];
     else
-        timeToCrack->days = (BN_ULONG)-1;
+        timeToCrack->days = ULONG_MAX;
 
-    BIGNUM *weeksToCrack = BN_dup( daysToCrack );
-    BN_div_word( weeksToCrack, 7 );
-    if (BN_cmp( weeksToCrack, max ) < 0)
-        timeToCrack->weeks = BN_get_word( weeksToCrack );
+    NSDecimalNumber *weeksToCrack = [daysToCrack decimalNumberByDividingBy:
+            (id)[[NSDecimalNumber alloc] initWithUnsignedLong:7L]];
+    if ([weeksToCrack compare:ulong_max] == NSOrderedAscending)
+        timeToCrack->weeks = (unsigned long long)[weeksToCrack doubleValue];
     else
-        timeToCrack->weeks = (BN_ULONG)-1;
+        timeToCrack->weeks = ULONG_MAX;
 
-    BIGNUM *monthsToCrack = BN_dup( daysToCrack );
-    BN_div_word( monthsToCrack, 31 );
-    if (BN_cmp( monthsToCrack, max ) < 0)
-        timeToCrack->months = BN_get_word( monthsToCrack );
+    NSDecimalNumber *monthsToCrack = [daysToCrack decimalNumberByDividingBy:
+            (id)[[NSDecimalNumber alloc] initWithUnsignedLong:31L]];
+    if ([monthsToCrack compare:ulong_max] == NSOrderedAscending)
+        timeToCrack->months = (unsigned long long)[monthsToCrack doubleValue];
     else
-        timeToCrack->months = (BN_ULONG)-1;
+        timeToCrack->months = ULONG_MAX;
 
-    BIGNUM *yearsToCrack = BN_dup( daysToCrack );
-    BN_div_word( yearsToCrack, 356 );
-    if (BN_cmp( yearsToCrack, max ) < 0)
-        timeToCrack->years = BN_get_word( yearsToCrack );
+    NSDecimalNumber *yearsToCrack = [daysToCrack decimalNumberByDividingBy:
+            (id)[[NSDecimalNumber alloc] initWithUnsignedLong:356L]];
+    if ([yearsToCrack compare:ulong_max] == NSOrderedAscending)
+        timeToCrack->years = (unsigned long long)[yearsToCrack doubleValue];
     else
-        timeToCrack->years = (BN_ULONG)-1;
+        timeToCrack->years = ULONG_MAX;
 
-    BIGNUM *universesToCrack = BN_dup( yearsToCrack );
-    BN_div_word( universesToCrack, 14000 );
-    BN_div_word( universesToCrack, 1000000 );
-    if (BN_cmp( universesToCrack, max ) < 0)
-        timeToCrack->universes = BN_get_word( universesToCrack );
+    NSDecimalNumber *universesToCrack = [yearsToCrack decimalNumberByDividingBy:
+            (id)[[NSDecimalNumber alloc] initWithUnsignedLong:14000L]];
+    universesToCrack = [universesToCrack decimalNumberByDividingBy:
+            (id)[[NSDecimalNumber alloc] initWithUnsignedLong:1000000L]];
+    if ([universesToCrack compare:ulong_max] == NSOrderedAscending)
+        timeToCrack->universes = (unsigned long long)[universesToCrack doubleValue];
     else
-        timeToCrack->universes = (BN_ULONG)-1;
-
-    for (unsigned long error = ERR_get_error(); error; error = ERR_get_error())
-        err( @"bignum error: %lu", error );
-
-    BN_free( max );
-    BN_free( permutations );
-    BN_free( secondsToCrack );
-    BN_free( hoursToCrack );
-    BN_free( daysToCrack );
-    BN_free( weeksToCrack );
-    BN_free( monthsToCrack );
-    BN_free( yearsToCrack );
-    BN_free( universesToCrack );
+        timeToCrack->universes = ULONG_MAX;
 
     return YES;
 }

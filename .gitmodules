@@ -19,3 +19,6 @@
 [submodule "MasterPassword/Web/js/mpw-js"]
 	path = platform-independent/web-js/js/mpw-js
 	url = https://github.com/tmthrgd/mpw-js.git
+[submodule "platform-darwin/External/libsodium"]
+	path = platform-darwin/External/libsodium
+	url = https://github.com/jedisct1/libsodium.git

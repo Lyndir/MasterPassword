@@ -30,7 +30,7 @@
 #include <scrypt/crypto_scrypt.h>
 #include <scrypt/sha256.h>
 #elif HAS_SODIUM
-#include <sodium.h>
+#include "sodium.h"
 #endif
 
 #ifndef trc
