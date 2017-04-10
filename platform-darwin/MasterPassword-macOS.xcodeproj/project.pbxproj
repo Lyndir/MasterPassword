@@ -2098,6 +2098,7 @@
 			buildConfigurationList = DA5BFA6D147E415C00F98B1E /* Build configuration list for PBXNativeTarget "MasterPassword" */;
 			buildPhases = (
 				DA4EF9CB19FD4B600032ECB5 /* Run Script: genassets */,
+				DA0E86A91E9BED9300F4D60E /* Run Script: libsodium/dist-build/osx.sh */,
 				DA5BFA40147E415C00F98B1E /* Sources */,
 				DA5BFA41147E415C00F98B1E /* Frameworks */,
 				DA5BFA42147E415C00F98B1E /* Resources */,
@@ -2332,6 +2333,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		DA0E86A91E9BED9300F4D60E /* Run Script: libsodium/dist-build/osx.sh */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script: libsodium/dist-build/osx.sh";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = "/bin/sh -e";
+			shellScript = "cd External/libsodium\n[[ -d libsodium-osx ]] && return\n\n# Xcode misinterpretes autogen.sh's stderr output as errors so we try to silence it.\n[[ -e configure ]] || { err=$(./autogen.sh 2>&1 >&3); } 3>&1 || { x=$?; echo >&2 \"$err\"; exit $x; }\n./dist-build/osx.sh";
+			showEnvVarsInLog = 0;
+		};
 		DA4EF9CB19FD4B600032ECB5 /* Run Script: genassets */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
