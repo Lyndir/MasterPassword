@@ -17,7 +17,6 @@
 //==============================================================================
 
 #import <QuartzCore/QuartzCore.h>
-#import <CoreData/CoreData.h>
 #import "MPPasswordWindowController.h"
 #import "MPMacAppDelegate.h"
 #import "MPAppDelegate_Store.h"
@@ -68,12 +67,11 @@
                                                        queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
                 [self updateUser];
             }];
-    [self observeKeyPath:@"sitesController.selection"
-               withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
-                   prof_new( @"sitesController.selection" );
-                   [_self updateSelection];
-                   prof_finish( @"updateSelection" );
-               }];
+    [self observeKeyPath:@"sitesController.selection" withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
+        prof_new( @"sitesController.selection" );
+        [_self updateSelection];
+        prof_finish( @"updateSelection" );
+    }];
     prof_rewind( @"observers" );
 
     NSSearchFieldCell *siteFieldCell = (NSSearchFieldCell *)self.siteField.cell;
