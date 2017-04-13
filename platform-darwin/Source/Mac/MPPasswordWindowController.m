@@ -17,6 +17,7 @@
 //==============================================================================
 
 #import <QuartzCore/QuartzCore.h>
+#import <CoreData/CoreData.h>
 #import "MPPasswordWindowController.h"
 #import "MPMacAppDelegate.h"
 #import "MPAppDelegate_Store.h"
@@ -535,30 +536,33 @@
         fuzzyRE = [NSRegularExpression regularExpressionWithPattern:@"(.)" options:0 error:nil];
     } );
 
+    prof_new( @"updateSites" );
     NSString *queryString = self.siteField.stringValue;
-    NSString *queryPattern;
-    if ([queryString length] < 13)
-        queryPattern = [queryString stringByReplacingMatchesOfExpression:fuzzyRE withTemplate:@"*$1*"];
-    else
-        // If query is too long, a wildcard per character makes the CoreData fetch take excessively long.
-        queryPattern = strf( @"*%@*", queryString );
+    NSString *queryPattern = [[queryString stringByReplacingMatchesOfExpression:fuzzyRE withTemplate:@"*$1"] stringByAppendingString:@"*"];
+    prof_rewind( @"queryPattern" );
     NSMutableArray *fuzzyGroups = [NSMutableArray new];
     [fuzzyRE enumerateMatchesInString:queryString options:0 range:NSMakeRange( 0, queryString.length )
                            usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
                                [fuzzyGroups addObject:[queryString substringWithRange:result.range]];
                            }];
+    prof_rewind( @"fuzzyRE" );
     [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        prof_rewind( @"moc" );
+
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
         fetchRequest.sortDescriptors = @[ [[NSSortDescriptor alloc] initWithKey:@"lastUsed" ascending:NO] ];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name LIKE[cd] %@) AND user == %@",
                                                                   queryPattern, queryPattern, [MPMacAppDelegate get].activeUserOID];
+        prof_rewind( @"fetchRequest" );
 
         NSError *error = nil;
         NSArray *siteResults = [context executeFetchRequest:fetchRequest error:&error];
         if (!siteResults) {
+            prof_finish( @"executeFetchRequest: %@ // %@", fetchRequest.predicate, [error fullDescription] );
             err( @"While fetching sites for completion: %@", [error fullDescription] );
             return;
         }
+        prof_rewind( @"executeFetchRequest: %@", fetchRequest.predicate );
 
         BOOL exact = NO;
         NSMutableArray *newSites = [NSMutableArray arrayWithCapacity:[siteResults count]];
@@ -566,10 +570,12 @@
             [newSites addObject:[[MPSiteModel alloc] initWithEntity:site fuzzyGroups:fuzzyGroups]];
             exact |= [site.name isEqualToString:queryString];
         }
+        prof_rewind( @"newSites: %u, exact: %d", (uint)[siteResults count], exact );
         if (!exact && [queryString length]) {
             MPUserEntity *activeUser = [[MPAppDelegate_Shared get] activeUserInContext:context];
             [newSites addObject:[[MPSiteModel alloc] initWithName:queryString forUser:activeUser]];
         }
+        prof_finish( @"newSites: %@", newSites );
 
         dbg( @"newSites: %@", newSites );
         if (![newSites isEqualToArray:self.sites])

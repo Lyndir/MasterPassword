@@ -80,7 +80,6 @@
     self.uses = entity.uses_;
     self.counter = [entity isKindOfClass:[MPGeneratedSiteEntity class]]? [(MPGeneratedSiteEntity *)entity counter]: 0;
     self.loginGenerated = entity.loginGenerated;
-    NSLog( @"%@: loginGenerated: %d", self.name, self.loginGenerated );
 
     // Find all password types and the index of the current type amongst them.
     [self updateContent:entity];
@@ -276,7 +275,6 @@
 
     PearlMainQueue( ^{
         self.loginName = loginName;
-        NSLog( @"%@: loginGenerated: %d, loginName: %@", self.name, self.loginGenerated, loginName );
     } );
 }
 

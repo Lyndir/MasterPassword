@@ -3688,7 +3688,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
-			shellScript = "cd External/libsodium\n[[ -d libsodium-ios ]] && return\n\n# Xcode misinterpretes autogen.sh's stderr output as errors so we try to silence it.\n[[ -e configure ]] || { err=$(./autogen.sh 2>&1 >&3); } 3>&1 || { x=$?; echo >&2 \"$err\"; exit $x; }\n./dist-build/ios.sh";
+			shellScript = "cd External/libsodium\n[[ -d libsodium-ios ]] && exit\n\n# Xcode misinterpretes autogen.sh's stderr output as errors so we try to silence it.\n[[ -e configure ]] || { err=$(./autogen.sh 2>&1 >&3); } 3>&1 || { x=$?; echo >&2 \"$err\"; exit $x; }\n./dist-build/ios.sh";
 			showEnvVarsInLog = 0;
 		};
 		DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */ = {
