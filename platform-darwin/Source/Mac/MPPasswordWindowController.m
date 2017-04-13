@@ -478,7 +478,7 @@
 
     // Performing action while content is available.  Copy it.
     [self copyContent:self.shiftPressed? selectedSite.answer: selectedSite.content];
-    [self.window close];
+    [NSApp hide:nil];
 
     NSUserNotification *notification = [NSUserNotification new];
     notification.title = @"Password Copied";
