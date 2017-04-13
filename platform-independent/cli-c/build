@@ -32,14 +32,14 @@ else
     # Default targets.
     # Modify here or override using targets='mpw mpw-bench' ./build
     targets=(
-        mpw                         # C CLI version of Master Password.
-        mpw-bench                   # C CLI Master Password benchmark utility.
-        mpw-tests                   # C Master Password algorithm tester.
+        mpw                         # C CLI version of Master Password, requires libsodium or openssl-dev.
+        #mpw-bench                  # C CLI Master Password benchmark utility.
+        #mpw-tests                  # C Master Password algorithm test suite, requires libxml2.
     )
 fi
 
 # Optional features.
-mpw_color=${mpw_color:-1} # Colorized Identicon, requires libncurses-dev
+mpw_color=${mpw_color:-1} # Colorized Identicon, requires libncurses-dev.
 
 # Default build flags.
 export CFLAGS="-O3 $CFLAGS"
