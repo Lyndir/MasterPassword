@@ -5,6 +5,6 @@ git:
   submodules: true
 script:
   - "( brew install libsodium )"
-  - "( cd ./platform-independent/cli-c && ./clean && ./build && ./mpw-tests )"
+  - "( cd ./platform-independent/cli-c && ./clean && targets='mpw mpw-bench mpw-tests' ./build && ./mpw-tests )"
   - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword iOS' -sdk iphonesimulator )"
   - "( xcodebuild -workspace platform-darwin/MasterPassword.xcworkspace -configuration 'Test' -scheme 'MasterPassword macOS' )"
