@@ -37,7 +37,7 @@ setSettingWithTitle() {
 
 case $PLATFORM_NAME in
     macosx) platform=mac ;;
-    ios)    platform=ios ;;
+    iphone*)    platform=ios ;;
     *)      ftl 'ERROR: Unknown platform: %s.' "$PLATFORM_NAME"; exit 1 ;;
 esac
 
