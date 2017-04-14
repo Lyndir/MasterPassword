@@ -339,7 +339,7 @@ mpw-tests() {
 ### TARGETS
 
 haslib() {
-    ! LC_ALL=C cc -l"$1" 2>&1 | grep -q 'library not found'
+    return cc -l"$1" -x c -o /dev/null - <<< 'int main() { return 0; }'
 }
 cc() {
     if hash llvm-gcc 2>/dev/null; then
