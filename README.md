@@ -146,6 +146,10 @@ Go into the `gradle` directory and run `./gradlew build`.  All Java components w
  - `platform-android/build/outputs/apk`:
    contains the Android application package.  Install it on your Android device.
 
+Note that in order to build the Android application, you will need to have the Android SDK installed and either have the environment variable `ANDROID_HOME` set to its location or a `gradle/local.properties` file with its location, eg. (for Homebrew users who installed the SDK using `brew install android-sdk`):
+
+    sdk.dir=/usr/local/opt/android-sdk
+
 
 ### Native CLI
 
