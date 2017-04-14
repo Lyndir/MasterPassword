@@ -129,7 +129,7 @@ The `master-password` on the other hand, is only a simple phrase, which means it
 
  5. I have another question.
 
-Please don't hesitate to get in touch.  You can reach us on IRC (#masterpassword), Matrix (#masterpassword:lyndir.com) or [Gitter](https://gitter.im/lyndir/MasterPassword).
+Please don't hesitate to [get in touch](#support), we're more than happy to answer all your Master Password questions.  Any problems or suggestions can be reported [as GitHub issues](https://github.com/Lyndir/MasterPassword/issues).
 
 
 
