@@ -17,6 +17,13 @@ Master Password is available for [📲 iOS](https://itunes.apple.com/app/id51029
 
 Master Password is also available from the following package managers: [macOS: Homebrew](https://brew.sh/).  Get in touch if you are interested in adding Master Password to any other package managers.
 
+There are many reasons for using Master Password instead of an ordinary password manager, read below for the details, but if you want my personal favourites, they would be:
+
+ - I don't need to worry about keeping backups of my countless authentication credentials.
+ - I don't need to worry that when I travel, I might not have access to my passwords vault.
+ - I don't need to trust an external party, proprietary code or for a service to stay online.
+ - If I feel at risk of my device being stolen or confiscated, I can set a fake master password, delete my user or wipe it worry-free.
+
 
 
 ## What is a password?
@@ -91,6 +98,35 @@ In short:
 Master Password can derive the `site-password` in an entirely stateless manner.  It is therefore better defined as a calculator than a manager.  It is the user's responsibility to remember the inputs: `user-name`, `master-password`, `site-name`, `site-counter` and `site-template`.
 
 We standardize `user-name` as your full name, `site-name` as the domain name of the site, `site-counter` to `1` (unless you explicitly increment it) and `site-template` to `Long Password`; as a result the only token the user really needs to remember actively is `master-password`.
+
+
+
+## FAQ
+
+ 1. If I lose my master password and need to set a new one, will I need to change all of my site passwords?
+
+Yes.  If your master password is compromised, it is only sensible for you to change all of your site passwords.  Just like if you lose the keys in your pocket, you'll have to change all the locks they open.  Master Password effectively enforces this security practice.
+
+ 2. But what if I just forget my master password or I just want to change it to something else?
+
+Sorry, still yes.  Your master password is the secret component to your Master Password identity.  If it changes, your identity changes.  I wholly encourage you to think very carefully about what makes for a really memorable and good master password before just diving in with something lazy.  A short phrase works great, eg. `banana coloured duckling`.
+
+ 3. Doesn't this mean an attacker can reverse my master password from any of my site passwords?
+
+Technically, yes.  Practically, no.
+
+You could argue that site passwords are "breadcrumbs" of your master password, but the same argument would suggest encrypted messages are breadcrumbs to the encryption key.  Encryption works because it is computationally unfeasible to "guess" the encryption key that made the encrypted message, just like Master Password works because it is computationally unfeasible to "guess" your master password that made the site password.
+
+ 4. The second step is just a HMAC-SHA-256, doesn't that make the SCRYPT completely pointless?
+
+No.  They are used for different reasons and one is not weaker than the other.
+
+HMAC-SHA-256 is much faster to compute than SCRYPT, which leads some people to think "all an attacker needs to do is brute-force the SHA and ignore the SCRYPT".  The reality is that the HMAC-SHA-256 guards a 64-byte authentication key (the `master-key`) which makes the search space for brute-forcing the HMAC wildly too large to compute.
+The `master-password` on the other hand, is only a simple phrase, which means its search space is much smaller.  This is why it is guarded by a much tougher SCRYPT operation.
+
+ 5. I have another question.
+
+Please don't hesitate to get in touch.  You can reach us on IRC (#masterpassword), Matrix (#masterpassword:lyndir.com) or [Gitter](https://gitter.im/lyndir/MasterPassword).
 
 
 
