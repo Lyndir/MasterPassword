@@ -79,12 +79,12 @@ Master Password is *not* a password manager.  It does not store your website pas
 
 ## Benefits
 
- - You don't need to come up with a secure password every time you make a new account - Master Password gives you the key for it.
- - You don't need to try to remember a password you created two years ago for that one account - Master Password just gives you the key for it.
- - You don't need to that you can't get into that account you made at work when you come home because you don't have your work passwords with you - Master Password is always available.
- - You don't need to try to keep password lists in sync or stored somewhere easily accessible - Master Password is always available.
- - You don't need to worry what you'll do if your computer dies or you need to log into your bank while you're in the airport transit zone - Master Password is always available.
- - You don't need to worry about your password manager website getting hacked, your phone getting duplicated, somebody taking a picture of your passwords book - Master Password keeps no records.
+ - You don't need to think up a new strong password every time you make a new account - Master Password gives you the key for it.
+ - You don't need to try remembering a password you created two years ago for that one account - Master Password just gives you the key for it.
+ - You don't need to worry about getting into that account you made at work after you come home because you don't have your office passwords with you - Master Password is availale everywhere, even offline.
+ - You don't need to try to keep password lists in sync or stored somewhere easily accessible - Master Password keys can be created anywhere.
+ - You don't need to worry what you'll do if your computer dies or you need to log into your bank while you're in the airport transit zone - your Master Password keys are always available, even when starting empty.
+ - You don't need to worry about your password manager website getting hacked, your phone getting duplicated, somebody taking a picture of your passwords book - Master Password stores no secrets.
 
 
 
