@@ -269,80 +269,80 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     NSURL *url = openPanel.URL;
     [openPanel close];
 
-    [[NSURLSession sharedSession]
-            dataTaskWithURL:url completionHandler:^(NSData *importedSitesData, NSURLResponse *response, NSError *error) {
-        if (error)
-            err( @"While reading imported sites from %@: %@", url, [error fullDescription] );
-        if (!importedSitesData)
-            return;
+    [[[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:
+            ^(NSData *importedSitesData, NSURLResponse *response, NSError *error) {
+                if (error)
+                    err( @"While reading imported sites from %@: %@", url, [error fullDescription] );
+                if (!importedSitesData)
+                    return;
 
-        NSString *importedSitesString = [[NSString alloc] initWithData:importedSitesData encoding:NSUTF8StringEncoding];
-        MPImportResult result = [self importSites:importedSitesString askImportPassword:^NSString *(NSString *userName) {
-            __block NSString *masterPassword = nil;
+                NSString *importedSitesString = [[NSString alloc] initWithData:importedSitesData encoding:NSUTF8StringEncoding];
+                MPImportResult result = [self importSites:importedSitesString askImportPassword:^NSString *(NSString *userName) {
+                    __block NSString *masterPassword = nil;
 
-            PearlMainQueueWait( ^{
-                NSAlert *alert = [NSAlert new];
-                [alert addButtonWithTitle:@"Unlock"];
-                [alert addButtonWithTitle:@"Cancel"];
-                alert.messageText = @"Import File's Master Password";
-                alert.informativeText = strf( @"%@'s export was done using a different master password.\n"
-                        @"Enter that master password to unlock the exported data.", userName );
-                alert.accessoryView = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
-                [alert layout];
-                if ([alert runModal] == NSAlertFirstButtonReturn)
-                    masterPassword = ((NSTextField *)alert.accessoryView).stringValue;
-            } );
+                    PearlMainQueueWait( ^{
+                        NSAlert *alert = [NSAlert new];
+                        [alert addButtonWithTitle:@"Unlock"];
+                        [alert addButtonWithTitle:@"Cancel"];
+                        alert.messageText = @"Import File's Master Password";
+                        alert.informativeText = strf( @"%@'s export was done using a different master password.\n"
+                                @"Enter that master password to unlock the exported data.", userName );
+                        alert.accessoryView = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
+                        [alert layout];
+                        if ([alert runModal] == NSAlertFirstButtonReturn)
+                            masterPassword = ((NSTextField *)alert.accessoryView).stringValue;
+                    } );
 
-            return masterPassword;
-        }                         askUserPassword:^NSString *(NSString *userName, NSUInteger importCount, NSUInteger deleteCount) {
-            __block NSString *masterPassword = nil;
+                    return masterPassword;
+                }                         askUserPassword:^NSString *(NSString *userName, NSUInteger importCount, NSUInteger deleteCount) {
+                    __block NSString *masterPassword = nil;
 
-            PearlMainQueueWait( ^{
-                NSAlert *alert = [NSAlert new];
-                [alert addButtonWithTitle:@"Import"];
-                [alert addButtonWithTitle:@"Cancel"];
-                alert.messageText = strf( @"Master Password for\n%@", userName );
-                alert.informativeText = strf( @"Imports %lu sites, overwriting %lu.",
-                        (unsigned long)importCount, (unsigned long)deleteCount );
-                alert.accessoryView = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
-                [alert layout];
-                if ([alert runModal] == NSAlertFirstButtonReturn)
-                    masterPassword = ((NSTextField *)alert.accessoryView).stringValue;
-            } );
+                    PearlMainQueueWait( ^{
+                        NSAlert *alert = [NSAlert new];
+                        [alert addButtonWithTitle:@"Import"];
+                        [alert addButtonWithTitle:@"Cancel"];
+                        alert.messageText = strf( @"Master Password for\n%@", userName );
+                        alert.informativeText = strf( @"Imports %lu sites, overwriting %lu.",
+                                (unsigned long)importCount, (unsigned long)deleteCount );
+                        alert.accessoryView = [[NSSecureTextField alloc] initWithFrame:NSMakeRect( 0, 0, 200, 22 )];
+                        [alert layout];
+                        if ([alert runModal] == NSAlertFirstButtonReturn)
+                            masterPassword = ((NSTextField *)alert.accessoryView).stringValue;
+                    } );
 
-            return masterPassword;
-        }];
+                    return masterPassword;
+                }];
 
-        PearlMainQueue( ^{
-            switch (result) {
-                case MPImportResultSuccess: {
-                    [self updateUsers];
+                PearlMainQueue( ^{
+                    switch (result) {
+                        case MPImportResultSuccess: {
+                            [self updateUsers];
 
-                    NSAlert *alert = [NSAlert new];
-                    alert.messageText = @"Successfully imported sites.";
-                    [alert runModal];
-                    break;
-                }
-                case MPImportResultCancelled:
-                    break;
-                case MPImportResultInternalError:
-                    [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
-                            NSLocalizedDescriptionKey: @"Import failed because of an internal error."
-                    }]] runModal];
-                    break;
-                case MPImportResultMalformedInput:
-                    [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
-                            NSLocalizedDescriptionKey: @"The import doesn't look like a Master Password export."
-                    }]] runModal];
-                    break;
-                case MPImportResultInvalidPassword:
-                    [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
-                            NSLocalizedDescriptionKey: @"Incorrect master password for the import sites."
-                    }]] runModal];
-                    break;
-            }
-        } );
-    }];
+                            NSAlert *alert = [NSAlert new];
+                            alert.messageText = @"Successfully imported sites.";
+                            [alert runModal];
+                            break;
+                        }
+                        case MPImportResultCancelled:
+                            break;
+                        case MPImportResultInternalError:
+                            [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
+                                    NSLocalizedDescriptionKey: @"Import failed because of an internal error."
+                            }]] runModal];
+                            break;
+                        case MPImportResultMalformedInput:
+                            [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
+                                    NSLocalizedDescriptionKey: @"The import doesn't look like a Master Password export."
+                            }]] runModal];
+                            break;
+                        case MPImportResultInvalidPassword:
+                            [[NSAlert alertWithError:[NSError errorWithDomain:MPErrorDomain code:0 userInfo:@{
+                                    NSLocalizedDescriptionKey: @"Incorrect master password for the import sites."
+                            }]] runModal];
+                            break;
+                    }
+                } );
+            }] resume];
 }
 
 - (IBAction)togglePreference:(id)sender {
