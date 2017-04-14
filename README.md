@@ -15,20 +15,23 @@ To skip the intro and go straight to the information on how to use the code, [cl
 
 Master Password is available for [📲 iOS](https://itunes.apple.com/app/id510296984), [🖥 macOS](https://ssl.masterpasswordapp.com/masterpassword-mac.zip), [📲 Android](https://ssl.masterpasswordapp.com/masterpassword-android.apk), [🖥 Desktop](https://ssl.masterpasswordapp.com/masterpassword-gui.jar), and [⌨ Console](https://ssl.masterpasswordapp.com/masterpassword-cli.tar.gz).
 
-Master Password is also available from the following package managers: [macOS: Homebrew](https://brew.sh/).  Get in touch if you are interested in adding Master Password to any other package managers.
+Master Password is also available from the following package managers: [macOS: Homebrew](https://brew.sh/) (`brew install mpw`).
+Get in touch if you are interested in adding Master Password to any other package managers.
 
 There are many reasons for using Master Password instead of an ordinary password manager, read below for the details, but if you want my personal favourites, they would be:
 
  - I don't need to worry about keeping backups of my countless authentication credentials.
  - I don't need to worry that when I travel, I might not have access to my passwords vault.
- - I don't need to trust an external party, proprietary code or for a service to stay online.
+ - I don't need to trust an external party, proprietary code or a service to be online and stay online.
  - If I feel at risk of my device being stolen or confiscated, I can set a fake master password, delete my user or wipe it worry-free.
+
+We also have a [Frequently Asked Questions](#faq).
 
 
 
 ## What is a password?
 
-The "password".  Somehow, passwords have become the default solution to authentication across the web.  We've long since accepted this as the way things are, but let's stop to think for a moment about what passwords actually are:
+Ah, the "password".  Somehow, passwords have become the default solution to authentication across the web.  We've long since accepted this as the way things are, but let's stop to think for a moment about what passwords actually are:
 
 A password is a secret that is known only to the party providing a service and the party that should be allowed access to this service.
 
