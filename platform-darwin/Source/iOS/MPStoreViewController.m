@@ -245,7 +245,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
     NSMutableArray *showCells = [NSMutableArray array];
     NSMutableArray *hideCells = [NSMutableArray array];
-    [hideCells addObjectsFromArray:self.allCellsBySection[0]];
+    [hideCells addObjectsFromArray:[self.allCellsBySection[0] array]];
     [hideCells addObject:self.loadingCell];
 
     for (SKProduct *product in self.products) {
