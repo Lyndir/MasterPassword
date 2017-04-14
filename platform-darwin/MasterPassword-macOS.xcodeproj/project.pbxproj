@@ -26,7 +26,6 @@
 		DA09745A1E99582900F0BFE8 /* mpw-tests-util.c in Sources */ = {isa = PBXBuildFile; fileRef = DA0974561E99582200F0BFE8 /* mpw-tests-util.c */; };
 		DA09745B1E99582900F0BFE8 /* mpw-tests.c in Sources */ = {isa = PBXBuildFile; fileRef = DA0974571E99582200F0BFE8 /* mpw-tests.c */; };
 		DA09745E1E99586600F0BFE8 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA09745D1E99586600F0BFE8 /* libxml2.tbd */; };
-		DA09795D1E9A824700F0BFE8 /* libsodium.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA0979571E9A824700F0BFE8 /* libsodium.a */; };
 		DA0979681E9A834C00F0BFE8 /* libsodium.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA0979571E9A824700F0BFE8 /* libsodium.a */; };
 		DA1000801998A4C6002B873F /* openssl in Headers */ = {isa = PBXBuildFile; fileRef = DAE8E65719867AF500416A0F /* openssl */; settings = {ATTRIBUTES = (Public, ); }; };
 		DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B340170661DB000A0EAB /* Carbon.framework */; };
@@ -157,6 +156,7 @@
 		DACBFCDF1C59B22E007EF90F /* NSMutableSet+Pearl.m in Sources */ = {isa = PBXBuildFile; fileRef = DACBFCDC1C59B22E007EF90F /* NSMutableSet+Pearl.m */; };
 		DAD9B5F01762CAA4001835F9 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD9B5EF1762CAA4001835F9 /* ServiceManagement.framework */; };
 		DAD9B5F11762CAB9001835F9 /* MasterPassword-Mac-LoginHelper.app in Copy LoginHelper */ = {isa = PBXBuildFile; fileRef = DAD9B5E6176299BA001835F9 /* MasterPassword-Mac-LoginHelper.app */; };
+		DADD5DFA1EA173B0005E7D96 /* libsodium.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA0979571E9A824700F0BFE8 /* libsodium.a */; };
 		DAEB942E18B47FB3000490CC /* MPInitialWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA0933C91747A56A00DE1CEF /* MPInitialWindow.xib */; };
 		DAF4EF56190A828100023C90 /* Exo2.0-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAF4EF52190A828100023C90 /* Exo2.0-Thin.otf */; };
 		DAF4EF57190A828100023C90 /* Exo2.0-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DAF4EF53190A828100023C90 /* Exo2.0-Regular.otf */; };
@@ -291,7 +291,6 @@
 		DA09745C1E99583B00F0BFE8 /* mpw-tests-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "mpw-tests-util.h"; path = "../../platform-independent/cli-c/cli/mpw-tests-util.h"; sourceTree = "<group>"; };
 		DA09745D1E99586600F0BFE8 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		DA09745F1E995EB500F0BFE8 /* mpw_tests.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = mpw_tests.xml; path = ../../core/java/tests/src/main/resources/mpw_tests.xml; sourceTree = "<group>"; };
-		DA0974611E9961F100F0BFE8 /* libsodium.18.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsodium.18.dylib; path = ../../../../../../../usr/local/Cellar/libsodium/1.0.12/lib/libsodium.18.dylib; sourceTree = "<group>"; };
 		DA09791B1E9A824700F0BFE8 /* core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = core.h; sourceTree = "<group>"; };
 		DA09791C1E9A824700F0BFE8 /* crypto_aead_aes256gcm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto_aead_aes256gcm.h; sourceTree = "<group>"; };
 		DA09791D1E9A824700F0BFE8 /* crypto_aead_chacha20poly1305.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto_aead_chacha20poly1305.h; sourceTree = "<group>"; };
@@ -350,11 +349,7 @@
 		DA0979521E9A824700F0BFE8 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		DA0979531E9A824700F0BFE8 /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
 		DA0979541E9A824700F0BFE8 /* sodium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sodium.h; sourceTree = "<group>"; };
-		DA0979561E9A824700F0BFE8 /* libsodium.18.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libsodium.18.dylib; sourceTree = "<group>"; };
 		DA0979571E9A824700F0BFE8 /* libsodium.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsodium.a; sourceTree = "<group>"; };
-		DA0979581E9A824700F0BFE8 /* libsodium.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libsodium.dylib; sourceTree = "<group>"; };
-		DA0979591E9A824700F0BFE8 /* libsodium.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libsodium.la; sourceTree = "<group>"; };
-		DA09795B1E9A824700F0BFE8 /* libsodium.pc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libsodium.pc; sourceTree = "<group>"; };
 		DA16B340170661DB000A0EAB /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		DA16B343170661EE000A0EAB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPPasswordWindowController.xib; sourceTree = "<group>"; };
@@ -995,8 +990,8 @@
 				DA9261561BE1A89600369DE5 /* libz.tbd in Frameworks */,
 				DA9261541BE1A88900369DE5 /* libc++.tbd in Frameworks */,
 				DAADCC6A19FB00B500987B1D /* libKCOrderedAccessorFix.a in Frameworks */,
+				DADD5DFA1EA173B0005E7D96 /* libsodium.a in Frameworks */,
 				DA9261521BE1A86700369DE5 /* Fabric.framework in Frameworks */,
-				DA09795D1E9A824700F0BFE8 /* libsodium.a in Frameworks */,
 				DA9261511BE1A86700369DE5 /* SystemConfiguration.framework in Frameworks */,
 				DA250925195148E200AC23F1 /* QuartzCore.framework in Frameworks */,
 				DAD9B5F01762CAA4001835F9 /* ServiceManagement.framework in Frameworks */,
@@ -1132,21 +1127,9 @@
 		DA0979551E9A824700F0BFE8 /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				DA0979561E9A824700F0BFE8 /* libsodium.18.dylib */,
 				DA0979571E9A824700F0BFE8 /* libsodium.a */,
-				DA0979581E9A824700F0BFE8 /* libsodium.dylib */,
-				DA0979591E9A824700F0BFE8 /* libsodium.la */,
-				DA09795A1E9A824700F0BFE8 /* pkgconfig */,
 			);
 			path = lib;
-			sourceTree = "<group>";
-		};
-		DA09795A1E9A824700F0BFE8 /* pkgconfig */ = {
-			isa = PBXGroup;
-			children = (
-				DA09795B1E9A824700F0BFE8 /* libsodium.pc */,
-			);
-			path = pkgconfig;
 			sourceTree = "<group>";
 		};
 		DA2508F819513C1400AC23F1 /* Other Frameworks */ = {
@@ -1196,7 +1179,6 @@
 		DA5BFA47147E415C00F98B1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DA0974611E9961F100F0BFE8 /* libsodium.18.dylib */,
 				DA09745D1E99586600F0BFE8 /* libxml2.tbd */,
 				DA6701B716406A4100B61001 /* Accounts.framework */,
 				DA16B340170661DB000A0EAB /* Carbon.framework */,
@@ -2345,7 +2327,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
-			shellScript = "cd External/libsodium\n[[ -d libsodium-osx ]] && exit\n\n# Xcode misinterpretes autogen.sh's stderr output as errors so we try to silence it.\n[[ -e configure ]] || { err=$(./autogen.sh 2>&1 >&3); } 3>&1 || { x=$?; echo >&2 \"$err\"; exit $x; }\n./dist-build/osx.sh";
+			shellScript = "cd External/libsodium\nif ! [[ -d libsodium-osx ]]; then\n    # Xcode misinterpretes autogen.sh's stderr output as errors so we try to silence it.\n    [[ -e configure ]] || { err=$(./autogen.sh 2>&1 >&3); } 3>&1 || { x=$?; echo >&2 \"$err\"; exit $x; }\n./dist-build/osx.sh\nfi\n\n# Xcode incorrectly links the dynamic libraries if they're present instead of linking the .a.\nrm -f libsodium-osx/lib/*.dylib";
 			showEnvVarsInLog = 0;
 		};
 		DA4EF9CB19FD4B600032ECB5 /* Run Script: genassets */ = {
