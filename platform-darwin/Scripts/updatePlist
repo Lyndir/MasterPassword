@@ -35,11 +35,15 @@ setSettingWithTitle() {
     done
 }
 
-description=$(git describe --always --dirty --long --match '*-release')
-version=${description%-g*}
-release=${version%%-*} build=${version##*-}
-printf -v version '%s.%d' "$release" "$build"
-printf -v commit '%s' "${description##*-g}"
+case $PLATFORM_NAME in
+    macosx) platform=mac ;;
+    ios)    platform=ios ;;
+    *)      ftl 'ERROR: Unknown platform: %s.' "$PLATFORM_NAME"; exit 1 ;;
+esac
+
+description=$(git describe --always --dirty --long --match "*-$platform-*")
+version=${description%-g*} build=${version##*-} version=${version%-$build}
+version=${version//-*-/.} release=${version%%-*} commit=${description##*-g}
 
 addPlistWithKey GITDescription string "$description"
 setPlistWithKey CFBundleVersion "$(hr "${version%%.*}" 14).${version#*.}"
@@ -55,6 +59,8 @@ if [[ $DEPLOYMENT_LOCATION = YES ]]; then
     passed=1
     [[ $description != *-dirty ]] || \
         { passed=0; err 'ERROR: Cannot release a dirty version, first commit any changes.'; }
+    [[ $build == 0 ]] || \
+        { passed=0; err 'ERROR: Commit is not tagged for release, first tag accordingly.'; }
     [[ -r "$crashlyticsPlist" && $(PlistBuddy -c "Print :'API Key'" "$crashlyticsPlist" 2>/dev/null) ]] || \
         { passed=0; err 'ERROR: Cannot release: Crashlytics API key is missing.'; }
     (( passed )) || \
