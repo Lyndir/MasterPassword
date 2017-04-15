@@ -19,7 +19,6 @@
 #import "MPiOSAppDelegate.h"
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
-#import "IASKSettingsReader.h"
 #import "MPStoreViewController.h"
 
 @interface MPiOSAppDelegate()<UIDocumentInteractionControllerDelegate>
@@ -199,57 +198,33 @@
 
     PearlOverlay *activityOverlay = [PearlOverlay showProgressOverlayWithTitle:@"Importing"];
     MPImportResult result = [self importSites:importedSitesString askImportPassword:^NSString *(NSString *userName) {
-        __block NSString *masterPassword = nil;
-
-        dispatch_group_t importPasswordGroup = dispatch_group_create();
-        dispatch_group_enter( importPasswordGroup );
-        dispatch_async( dispatch_get_main_queue(), ^{
+        return PearlAwait( ^(void (^setResult)(id)) {
             [PearlAlert showAlertWithTitle:@"Import File's Master Password"
                                    message:strf( @"%@'s export was done using a different master password.\n"
                                            @"Enter that master password to unlock the exported data.", userName )
                                  viewStyle:UIAlertViewStyleSecureTextInput
                                  initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                        @try {
-                            if (buttonIndex_ == [alert_ cancelButtonIndex])
-                                return;
-
-                            masterPassword = [alert_ textFieldAtIndex:0].text;
-                        }
-                        @finally {
-                            dispatch_group_leave( importPasswordGroup );
-                        }
+                        if (buttonIndex_ == [alert_ cancelButtonIndex])
+                            setResult( nil );
+                        else
+                            setResult( [alert_ textFieldAtIndex:0].text );
                     }
                                cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Unlock Import", nil];
         } );
-        dispatch_group_wait( importPasswordGroup, DISPATCH_TIME_FOREVER );
-
-        return masterPassword;
     }                         askUserPassword:^NSString *(NSString *userName, NSUInteger importCount, NSUInteger deleteCount) {
-        __block NSString *masterPassword = nil;
-
-        dispatch_group_t userPasswordGroup = dispatch_group_create();
-        dispatch_group_enter( userPasswordGroup );
-        dispatch_async( dispatch_get_main_queue(), ^{
+        return PearlAwait( (id)^(void (^setResult)(id)) {
             [PearlAlert showAlertWithTitle:strf( @"Master Password for\n%@", userName )
                                    message:strf( @"Imports %lu sites, overwriting %lu.",
                                            (unsigned long)importCount, (unsigned long)deleteCount )
                                  viewStyle:UIAlertViewStyleSecureTextInput
                                  initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                        @try {
-                            if (buttonIndex_ == [alert_ cancelButtonIndex])
-                                return;
-
-                            masterPassword = [alert_ textFieldAtIndex:0].text;
-                        }
-                        @finally {
-                            dispatch_group_leave( userPasswordGroup );
-                        }
+                        if (buttonIndex_ == [alert_ cancelButtonIndex])
+                            setResult( nil );
+                        else
+                            setResult( [alert_ textFieldAtIndex:0].text );
                     }
                                cancelTitle:[PearlStrings get].commonButtonCancel otherTitles:@"Import", nil];
         } );
-        dispatch_group_wait( userPasswordGroup, DISPATCH_TIME_FOREVER );
-
-        return masterPassword;
     }];
 
     switch (result) {

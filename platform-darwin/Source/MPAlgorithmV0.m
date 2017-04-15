@@ -430,58 +430,38 @@ NSOperationQueue *_mpwQueue = nil;
 
 - (NSString *)resolveLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey {
 
-    dispatch_group_t group = dispatch_group_create();
-    dispatch_group_enter( group );
-    __block NSString *result = nil;
-    [self resolveLoginForSite:site usingKey:siteKey result:^(NSString *result_) {
-        result = result_;
-        dispatch_group_leave( group );
-    }];
-    dispatch_group_wait( group, DISPATCH_TIME_FOREVER );
-
-    return result;
+    return PearlAwait( ^(void (^setResult)(id)) {
+        [self resolveLoginForSite:site usingKey:siteKey result:^(NSString *result_) {
+            setResult( result_ );
+        }];
+    } );
 }
 
 - (NSString *)resolvePasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey {
 
-    dispatch_group_t group = dispatch_group_create();
-    dispatch_group_enter( group );
-    __block NSString *result = nil;
-    [self resolvePasswordForSite:site usingKey:siteKey result:^(NSString *result_) {
-        result = result_;
-        dispatch_group_leave( group );
-    }];
-    dispatch_group_wait( group, DISPATCH_TIME_FOREVER );
-
-    return result;
+    return PearlAwait( ^(void (^setResult)(id)) {
+        [self resolvePasswordForSite:site usingKey:siteKey result:^(NSString *result_) {
+            setResult( result_ );
+        }];
+    } );
 }
 
 - (NSString *)resolveAnswerForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey {
 
-    dispatch_group_t group = dispatch_group_create();
-    dispatch_group_enter( group );
-    __block NSString *result = nil;
-    [self resolveAnswerForSite:site usingKey:siteKey result:^(NSString *result_) {
-        result = result_;
-        dispatch_group_leave( group );
-    }];
-    dispatch_group_wait( group, DISPATCH_TIME_FOREVER );
-
-    return result;
+    return PearlAwait( ^(void (^setResult)(id)) {
+        [self resolveAnswerForSite:site usingKey:siteKey result:^(NSString *result_) {
+            setResult( result_ );
+        }];
+    } );
 }
 
 - (NSString *)resolveAnswerForQuestion:(MPSiteQuestionEntity *)question usingKey:(MPKey *)siteKey {
 
-    dispatch_group_t group = dispatch_group_create();
-    dispatch_group_enter( group );
-    __block NSString *result = nil;
-    [self resolveAnswerForQuestion:question usingKey:siteKey result:^(NSString *result_) {
-        result = result_;
-        dispatch_group_leave( group );
-    }];
-    dispatch_group_wait( group, DISPATCH_TIME_FOREVER );
-
-    return result;
+    return PearlAwait( ^(void (^setResult)(id)) {
+        [self resolveAnswerForQuestion:question usingKey:siteKey result:^(NSString *result_) {
+            setResult( result_ );
+        }];
+    } );
 }
 
 - (void)resolveLoginForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey result:(void ( ^ )(NSString *result))resultBlock {

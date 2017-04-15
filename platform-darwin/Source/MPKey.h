@@ -28,12 +28,12 @@ typedef NS_ENUM( NSUInteger, MPKeyOrigin ) {
 
 @interface MPKey : NSObject
 
-@property(nonatomic, readonly) NSString *fullName;
 @property(nonatomic, readonly) MPKeyOrigin origin;
+@property(nonatomic, readonly, copy) NSString *fullName;
 
 - (instancetype)initForFullName:(NSString *)fullName withMasterPassword:(NSString *)masterPassword;
-- (instancetype)initForFullName:(NSString *)fullName withKeyData:(NSData *)keyData
-                   forAlgorithm:(id<MPAlgorithm>)algorithm keyOrigin:(MPKeyOrigin)origin;
+- (instancetype)initForFullName:(NSString *)fullName withKeyResolver:(NSData *( ^ )(id<MPAlgorithm>))keyResolver
+                      keyOrigin:(MPKeyOrigin)origin;
 
 - (NSData *)keyIDForAlgorithm:(id<MPAlgorithm>)algorithm;
 - (NSData *)keyDataForAlgorithm:(id<MPAlgorithm>)algorithm;

@@ -361,6 +361,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     if (mainContext)
         PearlAddNotificationObserver( NSManagedObjectContextDidSaveNotification, mainContext, nil,
                 ^(MPPasswordsViewController *self, NSNotification *note) {
+                    // TODO: either move this into the app delegate or remove the duplicate signOutAnimated: call from the app delegate.
                     if (![[MPiOSAppDelegate get] activeUserInContext:note.object])
                         [[MPiOSAppDelegate get] signOutAnimated:YES];
                 } );

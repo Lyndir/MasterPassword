@@ -72,14 +72,20 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
 
     MPKeyOrigin keyOrigin;
     NSDictionary *keyQuery = createKeyQuery( user, NO, &keyOrigin );
-    NSData *keyData = [PearlKeyChain dataOfItemForQuery:keyQuery];
-    if (!keyData) {
-        inf( @"No key found in keychain for user: %@", user.userID );
-        return nil;
-    }
+    id<MPAlgorithm> keyAlgorithm = user.algorithm;
+    MPKey *key = [[MPKey alloc] initForFullName:user.name withKeyResolver:^NSData *(id<MPAlgorithm> algorithm) {
+        return ![algorithm isEqual:keyAlgorithm]? nil:
+               PearlMainQueueAwait( (id)^{
+                   return [PearlKeyChain dataOfItemForQuery:keyQuery];
+               } );
+    }                                 keyOrigin:keyOrigin];
 
-    inf( @"Found key in keychain for user: %@", user.userID );
-    return [[MPKey alloc] initForFullName:user.name withKeyData:keyData forAlgorithm:user.algorithm keyOrigin:keyOrigin];
+    if ([key keyIDForAlgorithm:user.algorithm])
+        inf( @"Found key in keychain for user: %@", user.userID );
+    else
+        inf( @"No key found in keychain for user: %@", user.userID );
+
+    return key;
 }
 
 - (void)storeSavedKeyFor:(MPUserEntity *)user {
@@ -230,28 +236,22 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
             NSString *content;
             while (!(content = [site.algorithm storedPasswordForSite:(MPStoredSiteEntity *)site usingKey:recoverKey])) {
                 // Failed to decrypt site with the current recoveryKey.  Ask user for a new one to use.
-                __block NSString *masterPassword = nil;
+                NSString *masterPassword = nil;
 
 #ifdef PEARL_UIKIT
-                dispatch_group_t recoverPasswordGroup = dispatch_group_create();
-                dispatch_group_enter( recoverPasswordGroup );
-                [PearlAlert showAlertWithTitle:@"Enter Old Master Password"
-                                       message:PearlString( @"Your old master password is required to migrate the stored password for %@",
-                                                       site.name )
-                                     viewStyle:UIAlertViewStyleSecureTextInput
-                                     initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
-                            @try {
+                masterPassword = PearlAwait( ^(void (^setResult)(id)) {
+                    [PearlAlert showAlertWithTitle:@"Enter Old Master Password"
+                                           message:PearlString(
+                                                           @"Your old master password is required to migrate the stored password for %@",
+                                                           site.name )
+                                         viewStyle:UIAlertViewStyleSecureTextInput
+                                         initAlert:nil tappedButtonBlock:^(UIAlertView *alert_, NSInteger buttonIndex_) {
                                 if (buttonIndex_ == [alert_ cancelButtonIndex])
-                                    // Don't Migrate
-                                    return;
-
-                                masterPassword = [alert_ textFieldAtIndex:0].text;
-                            }
-                            @finally {
-                                dispatch_group_leave( recoverPasswordGroup );
-                            }
-                        }          cancelTitle:@"Don't Migrate" otherTitles:@"Migrate", nil];
-                dispatch_group_wait( recoverPasswordGroup, DISPATCH_TIME_FOREVER );
+                                    setResult( nil );
+                                else
+                                    setResult( [alert_ textFieldAtIndex:0].text );
+                            }          cancelTitle:@"Don't Migrate" otherTitles:@"Migrate", nil];
+                } );
 #endif
                 if (!masterPassword)
                     // Don't Migrate

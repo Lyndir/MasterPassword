@@ -19,9 +19,9 @@
 
 @interface MPKey()
 
-@property(nonatomic) NSString *fullName;
 @property(nonatomic) MPKeyOrigin origin;
-@property(nonatomic) NSString *masterPassword;
+@property(nonatomic, copy) NSString *fullName;
+@property(nonatomic, copy) NSData *( ^keyResolver )(id<MPAlgorithm>);
 
 @end
 
@@ -31,25 +31,22 @@
 
 - (instancetype)initForFullName:(NSString *)fullName withMasterPassword:(NSString *)masterPassword {
 
+    return [self initForFullName:fullName withKeyResolver:^NSData *(id<MPAlgorithm> algorithm) {
+        return [algorithm keyDataForFullName:self.fullName withMasterPassword:masterPassword];
+    }                  keyOrigin:MPKeyOriginMasterPassword];
+}
+
+- (instancetype)initForFullName:(NSString *)fullName withKeyResolver:(NSData *( ^ )(id<MPAlgorithm>))keyResolver
+                      keyOrigin:(MPKeyOrigin)origin {
+
     if (!(self = [super init]))
         return nil;
 
     _keyCache = [NSCache new];
-    self.fullName = fullName;
-    self.origin = MPKeyOriginMasterPassword;
-    self.masterPassword = masterPassword;
-
-    return self;
-}
-
-- (instancetype)initForFullName:(NSString *)fullName withKeyData:(NSData *)keyData
-                   forAlgorithm:(id<MPAlgorithm>)algorithm keyOrigin:(MPKeyOrigin)origin {
-
-    if (!(self = [self initForFullName:fullName withMasterPassword:nil]))
-        return nil;
 
     self.origin = origin;
-    [_keyCache setObject:keyData forKey:algorithm];
+    self.fullName = fullName;
+    self.keyResolver = keyResolver;
 
     return self;
 }
@@ -61,15 +58,17 @@
 
 - (NSData *)keyDataForAlgorithm:(id<MPAlgorithm>)algorithm {
 
-    NSData *keyData = [_keyCache objectForKey:algorithm];
-    if (keyData)
+    @synchronized (self) {
+        NSData *keyData = [_keyCache objectForKey:algorithm];
+        if (keyData)
+            return keyData;
+
+        keyData = self.keyResolver( algorithm );
+        if (keyData)
+            [_keyCache setObject:keyData forKey:algorithm];
+
         return keyData;
-
-    keyData = [algorithm keyDataForFullName:self.fullName withMasterPassword:self.masterPassword];
-    if (keyData)
-        [_keyCache setObject:keyData forKey:algorithm];
-
-    return keyData;
+    }
 }
 
 - (NSData *)keyDataForAlgorithm:(id<MPAlgorithm>)algorithm trimmedLength:(NSUInteger)subKeyLength {
@@ -80,7 +79,7 @@
 
 - (BOOL)isEqualToKey:(MPKey *)key {
 
-    return [self.fullName isEqualToString:key.fullName] && [self.masterPassword isEqualToString:self.masterPassword];
+    return [[self keyIDForAlgorithm:MPAlgorithmDefault] isEqualToData:[key keyIDForAlgorithm:MPAlgorithmDefault]];
 }
 
 - (BOOL)isEqual:(id)object {

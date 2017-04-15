@@ -328,7 +328,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cF4-TE-GEj" userLabel="Avatar Tip">
-                                        <rect key="frame" x="23" y="86" width="276" height="60"/>
+                                        <rect key="frame" x="22" y="86" width="276" height="60"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" translatesAutoresizingMaskIntoConstraints="NO" id="V4W-bK-age">
                                                 <rect key="frame" x="0.0" y="0.0" width="276" height="60"/>
@@ -3041,7 +3041,7 @@ invested: 3.7 work hours</string>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Send the answer(s) to my email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AAV-yg-dfK">
-                                                    <rect key="frame" x="8" y="8" width="326" height="27"/>
+                                                    <rect key="frame" x="8" y="8" width="271" height="27"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="12"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -3064,7 +3064,7 @@ invested: 3.7 work hours</string>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="This site needs different answers for each question" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="een-0g-CMy">
-                                                    <rect key="frame" x="8" y="8" width="320" height="27"/>
+                                                    <rect key="frame" x="8" y="8" width="265" height="27"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="12"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -3087,7 +3087,7 @@ invested: 3.7 work hours</string>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="mother" textAlignment="center" minimumFontSize="14" clearButtonMode="unlessEditing" translatesAutoresizingMaskIntoConstraints="NO" id="T2F-PD-Nw8" userLabel="Question Field">
-                                                    <rect key="frame" x="8" y="18" width="359" height="30"/>
+                                                    <rect key="frame" x="8" y="18" width="304" height="30"/>
                                                     <color key="backgroundColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="28"/>
@@ -3098,13 +3098,13 @@ invested: 3.7 work hours</string>
                                                     </connections>
                                                 </textField>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="pifm gup balvabi yiz" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="3xA-ez-efa" userLabel="Answer Field">
-                                                    <rect key="frame" x="20" y="90" width="335" height="31"/>
+                                                    <rect key="frame" x="20" y="90" width="280" height="31"/>
                                                     <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" name="SourceCodePro-Black" family="Source Code Pro" pointSize="24"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="alphabet" keyboardAppearance="alert" returnKeyType="next"/>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Enter the single most significant word in the question above." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qqg-Ny-7Po">
-                                                    <rect key="frame" x="8" y="56" width="359" height="14"/>
+                                                    <rect key="frame" x="8" y="56" width="304" height="14"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -3484,7 +3484,7 @@ You can then update your site's account with the new and stronger password.
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="GZk-I4-JyH"/>
-        <segue reference="k2G-nL-x3l"/>
+        <segue reference="Ql4-wf-T8u"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>
