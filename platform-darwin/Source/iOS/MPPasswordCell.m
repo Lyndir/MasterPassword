@@ -28,6 +28,7 @@
 @property(nonatomic, strong) IBOutlet UITextField *passwordField;
 @property(nonatomic, strong) IBOutlet UIView *loginNameContainer;
 @property(nonatomic, strong) IBOutlet UITextField *loginNameField;
+@property(nonatomic, strong) IBOutlet UILabel *loginNameGenerated;
 @property(nonatomic, strong) IBOutlet UILabel *strengthLabel;
 @property(nonatomic, strong) IBOutlet UILabel *counterLabel;
 @property(nonatomic, strong) IBOutlet UIButton *counterButton;
@@ -199,7 +200,7 @@
                            atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
 
     if (textField == self.loginNameField)
-        self.loginNameButton.titleLabel.alpha = [self.loginNameField.text length] || self.loginNameField.enabled? 0: 1;
+        self.loginNameButton.hidden = [self.loginNameField.attributedText length] || self.loginNameField.enabled;
 }
 
 - (IBAction)textFieldDidChange:(UITextField *)textField {
@@ -224,7 +225,7 @@
 
     if (textField == self.passwordField || textField == self.loginNameField) {
         textField.enabled = NO;
-        NSString *text = textField.text;
+        NSString *text = [textField.attributedText string]?: textField.text;
 
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             MPSiteEntity *site = [self siteInContext:context];
@@ -235,10 +236,8 @@
                 if ([site.algorithm savePassword:text toSite:site usingKey:[MPiOSAppDelegate get].key])
                     [PearlOverlay showTemporaryOverlayWithTitle:@"Password Updated" dismissAfter:2];
             }
-            else if (textField == self.loginNameField &&
-                     ((site.loginGenerated && ![text length]) ||
-                      (!site.loginGenerated && ![text isEqualToString:site.loginName]))) {
-                if (site.loginGenerated || !([site.loginName isEqualToString:text] || (!text && !site.loginName))) {
+            else if (textField == self.loginNameField) {
+                if (![text isEqualToString:[site.algorithm resolveLoginForSite:site usingKey:[MPiOSAppDelegate get].key]]) {
                     site.loginGenerated = NO;
                     site.loginName = text;
 
@@ -508,7 +507,6 @@
         self.answersButton.gone = ![[MPiOSAppDelegate get] isFeatureUnlocked:MPProductGenerateAnswers];
         BOOL settingsMode = self.mode == MPPasswordCellModeSettings;
         self.loginNameContainer.alpha = settingsMode || mainSite.loginGenerated || [mainSite.loginName length]? 0.7f: 0;
-        self.loginNameField.textColor = [UIColor colorWithHexString:mainSite.loginGenerated? @"5E636D": @"6D5E63"];
         self.modeButton.alpha = self.transientSite? 0: settingsMode? 0.5f: 0.1f;
         self.counterLabel.alpha = self.counterButton.alpha = mainSite.type & MPSiteTypeClassGenerated? 0.5f: 0;
         self.modeButton.selected = settingsMode;
@@ -520,12 +518,20 @@
             [self.passwordField resignFirstResponder];
         }
         if ([[MPiOSAppDelegate get] isFeatureUnlocked:MPProductGenerateLogins])
-            [self.loginNameButton setTitle:@"Tap to generate username or use pencil to save one" forState:UIControlStateNormal];
+            [self.loginNameButton setTitle:@"Tap here to ⚙ generate username or the pencil to type one" forState:UIControlStateNormal];
         else
-            [self.loginNameButton setTitle:@"Tap the pencil to save a username" forState:UIControlStateNormal];
+            [self.loginNameButton setTitle:@"Tap the pencil to type a username" forState:UIControlStateNormal];
 
         // Site Name
         [self updateSiteName:mainSite];
+
+        // Site Counter
+        if ([mainSite isKindOfClass:[MPGeneratedSiteEntity class]])
+            self.counterLabel.text = strf( @"%lu", (unsigned long)((MPGeneratedSiteEntity *)mainSite).counter );
+
+        // Site Login Name
+        self.loginNameField.enabled = self.passwordField.enabled = //
+                [self.loginNameField isFirstResponder] || [self.passwordField isFirstResponder];
 
         // Site Password
         self.passwordField.secureTextEntry = [[MPiOSConfig get].hidePasswords boolValue];
@@ -534,12 +540,15 @@
                 mainSite.type & MPSiteTypeClassGenerated? strl( @"..." ): @"", @{
                         NSForegroundColorAttributeName: [UIColor whiteColor]
                 } );
+
+        // Calculate Fields
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             MPSiteEntity *site = [self siteInContext:context];
             MPKey *key = [MPiOSAppDelegate get].key;
             if (!key)
                 return;
 
+            BOOL loginGenerated = site.loginGenerated;
             NSString *password = nil, *loginName = [site resolveLoginUsingKey:key];
             MPSiteType transientType = [[MPiOSAppDelegate get] activeUserInContext:context].defaultType?: MPSiteTypeGeneratedLong;
             if (self.transientSite && transientType & MPSiteTypeClassGenerated)
@@ -559,13 +568,15 @@
             BOOL requiresExplicitMigration = site.requiresExplicitMigration;
 
             PearlMainQueue( ^{
-                self.loginNameField.text = loginName;
                 self.passwordField.text = password;
                 self.strengthLabel.text = timeToCrackString;
-                self.loginNameButton.titleLabel.alpha = [loginName length] || self.loginNameField.enabled? 0: 1;
+                self.loginNameGenerated.hidden = !loginGenerated;
+                self.loginNameField.attributedText =
+                        strarm( stra( loginName?: @"", self.siteNameLabel.textAttributes ), NSParagraphStyleAttributeName, nil );
+                self.loginNameButton.hidden = [loginName length] || self.loginNameField.enabled;
 
                 if (![password length]) {
-                    self.indicatorView.alpha = 1;
+                    self.indicatorView.hidden = NO;
                     [self.indicatorView removeFromSuperview];
                     [self.modeScrollView addSubview:self.indicatorView];
                     [self.contentView addConstraintsWithVisualFormat:@"V:[indicator][target]" options:NSLayoutFormatAlignAllCenterX
@@ -575,7 +586,7 @@
                             }];
                 }
                 else if (requiresExplicitMigration) {
-                    self.indicatorView.alpha = 1;
+                    self.indicatorView.hidden = NO;
                     [self.indicatorView removeFromSuperview];
                     [self.modeScrollView addSubview:self.indicatorView];
                     [self.contentView addConstraintsWithVisualFormat:@"V:[indicator][target]" options:NSLayoutFormatAlignAllCenterX
@@ -585,17 +596,9 @@
                             }];
                 }
                 else
-                    self.indicatorView.alpha = 0;
+                    self.indicatorView.hidden = YES;
             } );
         }];
-
-        // Site Counter
-        if ([mainSite isKindOfClass:[MPGeneratedSiteEntity class]])
-            self.counterLabel.text = strf( @"%lu", (unsigned long)((MPGeneratedSiteEntity *)mainSite).counter );
-
-        // Site Login Name
-        self.loginNameField.enabled = self.passwordField.enabled = //
-                [self.loginNameField isFirstResponder] || [self.passwordField isFirstResponder];
 
         [self.contentView layoutIfNeeded];
     }];
@@ -616,8 +619,9 @@
                                        range:NSMakeRange( s, [self.fuzzyGroups[f] length] )];
         }
 
-    [attributedSiteName appendAttributedString:stra(
-            strf( @" - %@", self.transientSite? @"Tap to create": [site.algorithm shortNameOfType:site.type] ), @{} )];
+    if (self.transientSite)
+        [attributedSiteName appendAttributedString:stra( @" – Tap to create", @{} )];
+
     self.siteNameLabel.attributedText = attributedSiteName;
 }
 

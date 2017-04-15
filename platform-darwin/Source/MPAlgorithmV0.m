@@ -478,10 +478,12 @@ NSOperationQueue *_mpwQueue = nil;
     else
         algorithm = site.algorithm;
 
-    dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
-        resultBlock( loginName || !loginGenerated? loginName:
-                     [algorithm generateLoginForSiteNamed:name usingKey:siteKey] );
-    } );
+    if (!loginGenerated || [loginName length])
+        resultBlock( loginName );
+    else
+        PearlNotMainQueue( ^{
+            resultBlock( [algorithm generateLoginForSiteNamed:name usingKey:siteKey] );
+        } );
 }
 
 - (void)resolvePasswordForSite:(MPSiteEntity *)site usingKey:(MPKey *)siteKey result:(void ( ^ )(NSString *result))resultBlock {
@@ -513,9 +515,8 @@ NSOperationQueue *_mpwQueue = nil;
             else
                 algorithm = site.algorithm;
 
-            dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
-                NSString *result = [algorithm generatePasswordForSiteNamed:name ofType:type withCounter:counter usingKey:siteKey];
-                resultBlock( result );
+            PearlNotMainQueue( ^{
+                resultBlock( [algorithm generatePasswordForSiteNamed:name ofType:type withCounter:counter usingKey:siteKey] );
             } );
             break;
         }
@@ -529,9 +530,8 @@ NSOperationQueue *_mpwQueue = nil;
 
             NSData *encryptedContent = ((MPStoredSiteEntity *)site).contentObject;
 
-            dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
-                NSString *result = [self decryptContent:encryptedContent usingKey:siteKey];
-                resultBlock( result );
+            PearlNotMainQueue( ^{
+                resultBlock( [self decryptContent:encryptedContent usingKey:siteKey] );
             } );
             break;
         }
@@ -543,9 +543,8 @@ NSOperationQueue *_mpwQueue = nil;
             NSDictionary *siteQuery = [self queryForDevicePrivateSiteNamed:site.name];
             NSData *encryptedContent = [PearlKeyChain dataOfItemForQuery:siteQuery];
 
-            dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
-                NSString *result = [self decryptContent:encryptedContent usingKey:siteKey];
-                resultBlock( result );
+            PearlNotMainQueue( ^{
+                resultBlock( [self decryptContent:encryptedContent usingKey:siteKey] );
             } );
             break;
         }
@@ -564,9 +563,8 @@ NSOperationQueue *_mpwQueue = nil;
     else
         algorithm = site.algorithm;
 
-    dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
-        NSString *result = [algorithm generateAnswerForSiteNamed:name onQuestion:nil usingKey:siteKey];
-        resultBlock( result );
+    PearlNotMainQueue( ^{
+        resultBlock( [algorithm generateAnswerForSiteNamed:name onQuestion:nil usingKey:siteKey] );
     } );
 }
 
@@ -585,9 +583,8 @@ NSOperationQueue *_mpwQueue = nil;
     else if ([[MPAppDelegate_Shared get] isFeatureUnlocked:MPProductGenerateAnswers])
         algorithm = question.site.algorithm;
 
-    dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
-        NSString *result = [algorithm generateAnswerForSiteNamed:name onQuestion:keyword usingKey:siteKey];
-        resultBlock( result );
+    PearlNotMainQueue( ^{
+        resultBlock( [algorithm generateAnswerForSiteNamed:name onQuestion:keyword usingKey:siteKey] );
     } );
 }
 

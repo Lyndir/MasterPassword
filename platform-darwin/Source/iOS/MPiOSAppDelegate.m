@@ -163,26 +163,24 @@
         return NO;
 
     // Arbitrary URL to mpsites data.
-    dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
-        NSError *error;
-        NSURLResponse *response;
-        NSData *importedSitesData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:url]
-                                                          returningResponse:&response error:&error];
-        if (error)
-            err( @"While reading imported sites from %@: %@", url, [error fullDescription] );
-        if (!importedSitesData) {
-            [PearlAlert showError:strf( @"Master Password couldn't read the import sites.\n\n%@", [error localizedDescription]?: error )];
-            return;
-        }
+    [[[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:
+            ^(NSData *importedSitesData, NSURLResponse *response, NSError *error) {
+                if (error)
+                    err( @"While reading imported sites from %@: %@", url, [error fullDescription] );
+                if (!importedSitesData) {
+                    [PearlAlert showError:strf( @"Master Password couldn't read the import sites.\n\n%@",
+                            [error localizedDescription]?: error )];
+                    return;
+                }
 
-        NSString *importedSitesString = [[NSString alloc] initWithData:importedSitesData encoding:NSUTF8StringEncoding];
-        if (!importedSitesString) {
-            [PearlAlert showError:@"Master Password couldn't understand the import file."];
-            return;
-        }
+                NSString *importedSitesString = [[NSString alloc] initWithData:importedSitesData encoding:NSUTF8StringEncoding];
+                if (!importedSitesString) {
+                    [PearlAlert showError:@"Master Password couldn't understand the import file."];
+                    return;
+                }
 
-        [self importSites:importedSitesString];
-    } );
+                [self importSites:importedSitesString];
+            }] resume];
 
     return YES;
 }

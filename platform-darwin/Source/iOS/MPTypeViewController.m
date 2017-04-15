@@ -89,11 +89,11 @@
         if ([selectedSite isKindOfClass:[MPGeneratedSiteEntity class]])
             counter = ((MPGeneratedSiteEntity *)selectedSite).counter;
 
-        dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0 ), ^{
+        PearlNotMainQueue( ^{
             NSString *typeContent = [MPAlgorithmDefault generatePasswordForSiteNamed:name ofType:cellType
                                                                          withCounter:counter usingKey:[MPiOSAppDelegate get].key];
 
-            dispatch_async( dispatch_get_main_queue(), ^{
+            PearlMainQueue( ^{
                 [(UITextField *)[[tableView cellForRowAtIndexPath:indexPath] viewWithTag:2] setText:typeContent];
             } );
         } );
