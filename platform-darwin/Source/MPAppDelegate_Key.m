@@ -82,8 +82,11 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
 
     if ([key keyIDForAlgorithm:user.algorithm])
         inf( @"Found key in keychain for user: %@", user.userID );
-    else
+        
+    else {
         inf( @"No key found in keychain for user: %@", user.userID );
+        key = nil;
+    }
 
     return key;
 }
