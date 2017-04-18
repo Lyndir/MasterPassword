@@ -22,8 +22,6 @@
 @implementation MPPopdownSegue {
 }
 
-static char UnwindingObserverKey;
-
 - (void)perform {
 
     MPPasswordsViewController *passwordsVC;
@@ -39,19 +37,20 @@ static char UnwindingObserverKey;
         [passwordsVC.popdownContainer addConstraintsWithVisualFormats:@[ @"H:|[popdownView]|", @"V:|[popdownView]|" ] options:0
                                                               metrics:nil views:NSDictionaryOfVariableBindings( popdownView )];
 
-        [UIView animateWithDuration:0.3f animations:^{
-            [[passwordsVC.popdownToTopConstraint updatePriority:1] layoutIfNeeded];
-        }                completion:^(BOOL finished) {
-            [popdownVC didMoveToParentViewController:passwordsVC];
+        [passwordsVC.popdownToTopConstraint layoutIfNeeded];
 
-            id<NSObject> observer = [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil
-                                                                                       queue:[NSOperationQueue mainQueue] usingBlock:
-                            ^(NSNotification *note) {
-                                [[[MPPopdownSegue alloc] initWithIdentifier:@"unwind-popdown" source:popdownVC
-                                                                destination:passwordsVC] perform];
-                            }];
-            objc_setAssociatedObject( popdownVC, &UnwindingObserverKey, observer, OBJC_ASSOCIATION_RETAIN );
-        }];
+        [UIView animateWithDuration:0.6f delay:0 usingSpringWithDamping:0.75f initialSpringVelocity:1
+                            options:UIViewAnimationOptionCurveEaseOut animations:^{
+                    [[passwordsVC.popdownToTopConstraint updatePriority:1] layoutIfNeeded];
+                }        completion:^(BOOL finished) {
+                    [popdownVC didMoveToParentViewController:passwordsVC];
+
+                    PearlAddNotificationObserverTo( popdownVC, MPSignedOutNotification, nil, [NSOperationQueue mainQueue],
+                            ^(id host, NSNotification *note) {
+                                [[[MPPopdownSegue alloc] initWithIdentifier:@"unwind-popdown" source:popdownVC destination:passwordsVC]
+                                        perform];
+                            } );
+                }];
     }
     else {
         popdownVC = self.sourceViewController;
@@ -59,16 +58,16 @@ static char UnwindingObserverKey;
              passwordsVC = (id)passwordsVC.parentViewController);
         NSAssert( passwordsVC, @"Couldn't find passwords VC to pop back to." );
 
-        [[NSNotificationCenter defaultCenter] removeObserver:objc_getAssociatedObject( popdownVC, &UnwindingObserverKey )];
-        objc_setAssociatedObject( popdownVC, &UnwindingObserverKey, nil, OBJC_ASSOCIATION_RETAIN );
+        PearlRemoveNotificationObserversFrom( popdownVC );
 
         [popdownVC willMoveToParentViewController:nil];
-        [UIView animateWithDuration:0.3f delay:0 options:UIViewAnimationOptionOverrideInheritedDuration animations:^{
-            [[passwordsVC.popdownToTopConstraint updatePriority:UILayoutPriorityDefaultHigh] layoutIfNeeded];
-        }                completion:^(BOOL finished) {
-            [popdownVC.view removeFromSuperview];
-            [popdownVC removeFromParentViewController];
-        }];
+        [UIView animateWithDuration:0.4f delay:0 options:UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionOverrideInheritedDuration
+                         animations:^{
+                             [[passwordsVC.popdownToTopConstraint updatePriority:UILayoutPriorityDefaultHigh] layoutIfNeeded];
+                         } completion:^(BOOL finished) {
+                    [popdownVC.view removeFromSuperview];
+                    [popdownVC removeFromParentViewController];
+                }];
     }
 }
 

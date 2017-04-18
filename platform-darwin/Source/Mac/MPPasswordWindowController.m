@@ -41,40 +41,38 @@
     [self replaceFonts:self.window.contentView];
     prof_rewind( @"replaceFonts" );
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidBecomeKeyNotification object:self.window
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+    PearlAddNotificationObserver( NSWindowDidBecomeKeyNotification, self.window, [NSOperationQueue mainQueue],
+            ^(id host, NSNotification *note) {
                 prof_new( @"didBecomeKey" );
                 [self.window makeKeyAndOrderFront:nil];
                 prof_rewind( @"fadeIn" );
                 [self updateUser];
                 prof_finish( @"updateUser" );
-            }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillCloseNotification object:self.window
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+            } );
+    PearlAddNotificationObserver( NSWindowWillCloseNotification, self.window, [NSOperationQueue mainQueue],
+            ^(id host, NSNotification *note) {
+                PearlRemoveNotificationObservers();
+
                 NSWindow *sheet = [self.window attachedSheet];
                 if (sheet)
                     [self.window endSheet:sheet];
-            }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillResignActiveNotification object:nil
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+            } );
+    PearlAddNotificationObserver( NSApplicationWillResignActiveNotification, nil, [NSOperationQueue mainQueue],
+            ^(id host, NSNotification *note) {
                 [self.window close];
-            }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedInNotification object:nil
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                [self updateUser];
-            }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:MPSignedOutNotification object:nil
-                                                       queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-                [self updateUser];
-            }];
+            } );
+    PearlAddNotificationObserver( MPSignedInNotification, nil, [NSOperationQueue mainQueue], ^(id host, NSNotification *note) {
+        [self updateUser];
+    } );
+    PearlAddNotificationObserver( MPSignedOutNotification, nil, [NSOperationQueue mainQueue], ^(id host, NSNotification *note) {
+        [self updateUser];
+    } );
     [self observeKeyPath:@"sitesController.selection" withBlock:^(id from, id to, NSKeyValueChange cause, id _self) {
-        prof_new( @"sitesController.selection" );
         [_self updateSelection];
-        prof_finish( @"updateSelection" );
     }];
     prof_rewind( @"observers" );
 
-    NSSearchFieldCell *siteFieldCell = (NSSearchFieldCell *)self.siteField.cell;
+    NSSearchFieldCell *siteFieldCell = self.siteField.cell;
     siteFieldCell.searchButtonCell = nil;
     siteFieldCell.cancelButtonCell = nil;
 

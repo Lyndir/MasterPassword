@@ -55,12 +55,24 @@
 - (void)reload {
 
     MPUserEntity *activeUser = [[MPiOSAppDelegate get] activeUserForMainThread];
-    self.generatedTypeControl.selectedSegmentIndex = [self generatedSegmentIndexForType:activeUser.defaultType];
-    self.storedTypeControl.selectedSegmentIndex = [self storedSegmentIndexForType:activeUser.defaultType];
     self.avatarImage.image = [UIImage imageNamed:strf( @"avatar-%lu", (unsigned long)activeUser.avatar )];
     self.savePasswordSwitch.on = activeUser.saveKey;
     self.touchIDSwitch.on = activeUser.touchID;
     self.touchIDSwitch.enabled = self.savePasswordSwitch.on && [[MPiOSAppDelegate get] isFeatureUnlocked:MPProductTouchID];
+
+    MPSiteType defaultType = activeUser.defaultType;
+    self.generated1TypeControl.selectedSegmentIndex = [self generated1SegmentIndexForType:defaultType];
+    self.generated2TypeControl.selectedSegmentIndex = [self generated2SegmentIndexForType:defaultType];
+    self.storedTypeControl.selectedSegmentIndex = [self storedSegmentIndexForType:defaultType];
+    PearlNotMainQueue( ^{
+        NSString *examplePassword = nil;
+        if (defaultType & MPSiteTypeClassGenerated)
+            examplePassword = [MPAlgorithmDefault generatePasswordForSiteNamed:@"test" ofType:defaultType
+                                                                   withCounter:1 usingKey:[MPiOSAppDelegate get].key];
+        PearlMainQueue( ^{
+            self.passwordTypeExample.text = [examplePassword length]? [NSString stringWithFormat:@"eg. %@", examplePassword]: nil;
+        } );
+    } );
 }
 
 #pragma mark - UITableViewDelegate
@@ -88,14 +100,18 @@
         [self dismissPopup];
         [[MPiOSAppDelegate get] signOutAnimated:YES];
     }
+
     if (cell == self.feedbackCell)
         [[MPiOSAppDelegate get] showFeedbackWithLogs:YES forVC:self];
+
     if (cell == self.exportCell)
         [[MPiOSAppDelegate get] showExportForVC:self];
+
     if (cell == self.showHelpCell) {
         MPPasswordsViewController *passwordsVC = [self dismissPopup];
         [passwordsVC performSegueWithIdentifier:@"guide" sender:self];
     }
+
     if (cell == self.checkInconsistencies)
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             if ([[MPiOSAppDelegate get] findAndFixInconsistenciesSaveInContext:context] == MPFixableResultNoProblems)
@@ -140,11 +156,13 @@
             } );
         }];
 
-    if (sender == self.generatedTypeControl || sender == self.storedTypeControl) {
-        if (sender == self.generatedTypeControl)
+    if (sender == self.generated1TypeControl || sender == self.generated2TypeControl || sender == self.storedTypeControl) {
+        if (sender != self.generated1TypeControl)
+            self.generated1TypeControl.selectedSegmentIndex = -1;
+        if (sender != self.generated2TypeControl)
+            self.generated2TypeControl.selectedSegmentIndex = -1;
+        if (sender != self.storedTypeControl)
             self.storedTypeControl.selectedSegmentIndex = -1;
-        else if (sender == self.storedTypeControl)
-            self.generatedTypeControl.selectedSegmentIndex = -1;
 
         MPSiteType defaultType = [self typeForSelectedSegment];
         [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
@@ -226,10 +244,17 @@
 
 - (MPSiteType)typeForSelectedSegment {
 
-    NSInteger selectedGeneratedIndex = self.generatedTypeControl.selectedSegmentIndex;
+    NSInteger selectedGenerated1Index = self.generated1TypeControl.selectedSegmentIndex;
+    NSInteger selectedGenerated2Index = self.generated2TypeControl.selectedSegmentIndex;
     NSInteger selectedStoredIndex = self.storedTypeControl.selectedSegmentIndex;
 
-    switch (selectedGeneratedIndex) {
+    switch (selectedGenerated1Index) {
+        case 0:
+            return MPSiteTypeGeneratedPhrase;
+        case 1:
+            return MPSiteTypeGeneratedName;
+        default:
+    switch (selectedGenerated2Index) {
         case 0:
             return MPSiteTypeGeneratedMaximum;
         case 1:
@@ -250,13 +275,26 @@
                 case 1:
                     return MPSiteTypeStoredDevicePrivate;
                 default:
-                    Throw( @"unsupported selected type index: generated=%ld, stored=%ld", (long)selectedGeneratedIndex,
-                            (long)selectedStoredIndex );
+                    Throw( @"unsupported selected type index: generated1=%ld, generated2=%ld, stored=%ld",
+                            (long)selectedGenerated1Index, (long)selectedGenerated2Index, (long)selectedStoredIndex );
             }
+    }
     }
 }
 
-- (NSInteger)generatedSegmentIndexForType:(MPSiteType)type {
+- (NSInteger)generated1SegmentIndexForType:(MPSiteType)type {
+
+    switch (type) {
+        case MPSiteTypeGeneratedPhrase:
+            return 0;
+        case MPSiteTypeGeneratedName:
+            return 1;
+        default:
+            return -1;
+    }
+}
+
+- (NSInteger)generated2SegmentIndexForType:(MPSiteType)type {
 
     switch (type) {
         case MPSiteTypeGeneratedMaximum:

@@ -28,10 +28,10 @@
 
     [super windowDidLoad];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillCloseNotification object:self.window
-                                                       queue:nil usingBlock:^(NSNotification *note) {
-                [MPMacAppDelegate get].initialWindowController = nil;
-            }];
+    PearlAddNotificationObserver( NSWindowWillCloseNotification, self.window, nil, ^(id host, NSNotification *note) {
+        PearlRemoveNotificationObserversFrom( host );
+        [MPMacAppDelegate get].initialWindowController = nil;
+    } );
 }
 
 #pragma mark - Actions

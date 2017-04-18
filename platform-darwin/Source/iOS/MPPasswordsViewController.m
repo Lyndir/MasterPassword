@@ -46,6 +46,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     NSUInteger _transientItem;
     NSCharacterSet *_siteNameAcceptableCharactersSet;
     NSArray *_fuzzyGroups;
+    NSMutableArray *_passwordCollectionViewUpdatesBatch;
 }
 
 #pragma mark - Life
@@ -62,6 +63,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     _backgroundColor = self.passwordCollectionView.backgroundColor;
     _darkenedBackgroundColor = [_backgroundColor colorWithAlphaComponent:0.6f];
     _transientItem = NSNotFound;
+    _passwordCollectionViewUpdatesBatch = [NSMutableArray arrayWithCapacity:4];
 
     self.view.backgroundColor = [UIColor clearColor];
     [self.passwordCollectionView automaticallyAdjustInsetsForKeyboard];
@@ -181,10 +183,13 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath
      forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
 
+    Weakify( self );
+
     if (controller == _fetchedResultsController) {
-        @try {
-            [self.passwordCollectionView performBatchUpdates:^{
-                [self fetchedItemsDidUpdate];
+        @synchronized (_passwordCollectionViewUpdatesBatch) {
+            [_passwordCollectionViewUpdatesBatch addObject:[^{
+                Strongify( self );
+
                 switch (type) {
                     case NSFetchedResultsChangeInsert:
                         [self.passwordCollectionView insertItemsAtIndexPaths:@[ newIndexPath ]];
@@ -193,18 +198,35 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
                         [self.passwordCollectionView deleteItemsAtIndexPaths:@[ indexPath ]];
                         break;
                     case NSFetchedResultsChangeMove:
-                        [self.passwordCollectionView moveItemAtIndexPath:indexPath toIndexPath:newIndexPath];
+                        if (![indexPath isEqual:newIndexPath])
+                            [self.passwordCollectionView moveItemAtIndexPath:indexPath toIndexPath:newIndexPath];
                         break;
                     case NSFetchedResultsChangeUpdate:
                         [self.passwordCollectionView reloadItemsAtIndexPaths:@[ indexPath ]];
                         break;
                 }
-            }                                     completion:nil];
+            } copy]];
         }
-        @catch (NSException *exception) {
-            wrn( @"While updating password cells: %@", [exception fullDescription] );
-            [self.passwordCollectionView reloadData];
-        }
+
+        [controller.managedObjectContext performBlock:^{
+            PearlMainQueueOperation( ^{
+                @try {
+                    [self.passwordCollectionView performBatchUpdates:^{
+                        [self updateTransientItem];
+
+                        @synchronized (_passwordCollectionViewUpdatesBatch) {
+                            for (VoidBlock block in _passwordCollectionViewUpdatesBatch)
+                                block();
+                            [_passwordCollectionViewUpdatesBatch removeAllObjects];
+                        }
+                    }                                     completion:nil];
+                }
+                @catch (NSException *exception) {
+                    wrn( @"While updating password cells: %@", [exception fullDescription] );
+                    [self.passwordCollectionView reloadData];
+                }
+            } );
+        }];
     }
 }
 
@@ -290,25 +312,24 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     }];
 }
 
-- (void)fetchedItemsDidUpdate {
+- (void)updateTransientItem {
 
     NSString *query = self.query;
-    _showTransientItem = [query length] > 0;
-    NSUInteger objects = ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[0]).numberOfObjects;
-    if (_showTransientItem && objects == 1 &&
-        [[[self.fetchedResultsController.fetchedObjects firstObject] name] isEqualToString:query])
-        _showTransientItem = NO;
-    if ([self.passwordCollectionView numberOfSections] > 0) {
-        if (!_showTransientItem && _transientItem != NSNotFound)
-            [self.passwordCollectionView deleteItemsAtIndexPaths:
-                    @[ [NSIndexPath indexPathForItem:_transientItem inSection:0] ]];
-        else if (_showTransientItem && _transientItem == NSNotFound)
-            [self.passwordCollectionView insertItemsAtIndexPaths:
-                    @[ [NSIndexPath indexPathForItem:objects inSection:0] ]];
-        else if (_transientItem != NSNotFound)
-            [self.passwordCollectionView reloadItemsAtIndexPaths:
-                    @[ [NSIndexPath indexPathForItem:_transientItem inSection:0] ]];
+    _showTransientItem = [query length] > 0 && ![[[self.fetchedResultsController.sections[0] objects] filteredArrayUsingPredicate:
+            [NSPredicate predicateWithBlock:^BOOL(MPSiteEntity *site, NSDictionary<NSString *, id> *bindings) {
+                return [site.name isEqualToString:query];
+            }]] count];
+    if (!_showTransientItem && _transientItem != NSNotFound)
+        [self.passwordCollectionView deleteItemsAtIndexPaths:
+                @[ [NSIndexPath indexPathForItem:_transientItem inSection:0] ]];
+    else if (_showTransientItem && _transientItem == NSNotFound) {
+        NSUInteger objects = [self.fetchedResultsController.sections[0] numberOfObjects];
+        [self.passwordCollectionView insertItemsAtIndexPaths:
+                @[ [NSIndexPath indexPathForItem:objects inSection:0] ]];
     }
+    else if (_transientItem != NSNotFound)
+        [self.passwordCollectionView reloadItemsAtIndexPaths:
+                @[ [NSIndexPath indexPathForItem:_transientItem inSection:0] ]];
 }
 
 - (void)registerObservers {
@@ -422,7 +443,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         PearlMainQueue( ^{
             @try {
                 [self.passwordCollectionView performBatchUpdates:^{
-                    [self fetchedItemsDidUpdate];
+                    [self updateTransientItem];
 
                     NSInteger fromSections = self.passwordCollectionView.numberOfSections;
                     NSInteger toSections = [self numberOfSectionsInCollectionView:self.passwordCollectionView];

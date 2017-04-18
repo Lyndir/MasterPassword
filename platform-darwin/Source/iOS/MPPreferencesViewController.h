@@ -29,8 +29,10 @@
 @property(weak, nonatomic) IBOutlet UITableViewCell *exportCell;
 @property(weak, nonatomic) IBOutlet UITableViewCell *checkInconsistencies;
 @property(weak, nonatomic) IBOutlet UIImageView *avatarImage;
-@property(weak, nonatomic) IBOutlet UISegmentedControl *generatedTypeControl;
+@property(weak, nonatomic) IBOutlet UISegmentedControl *generated1TypeControl;
+@property(weak, nonatomic) IBOutlet UISegmentedControl *generated2TypeControl;
 @property(weak, nonatomic) IBOutlet UISegmentedControl *storedTypeControl;
+@property(weak, nonatomic) IBOutlet UILabel *passwordTypeExample;
 
 - (IBAction)previousAvatar:(id)sender;
 - (IBAction)nextAvatar:(id)sender;
