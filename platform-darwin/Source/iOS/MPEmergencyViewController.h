@@ -28,7 +28,7 @@
 @property(weak, nonatomic) IBOutlet UISegmentedControl *typeControl;
 @property(weak, nonatomic) IBOutlet UILabel *counterLabel;
 @property(weak, nonatomic) IBOutlet UIActivityIndicatorView *activity;
-@property(weak, nonatomic) IBOutlet UILabel *passwordLabel;
+@property(weak, nonatomic) IBOutlet UIButton *passwordButton;
 @property(weak, nonatomic) IBOutlet UIView *tipContainer;
 
 - (IBAction)controlChanged:(UIControl *)control;

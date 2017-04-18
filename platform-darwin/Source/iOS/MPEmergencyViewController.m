@@ -81,21 +81,19 @@
         [self updatePassword];
 }
 
-- (IBAction)copyPassword:(UITapGestureRecognizer *)recognizer {
+- (IBAction)copyPassword:(id)sender {
 
-    if (recognizer.state == UIGestureRecognizerStateEnded) {
-        NSString *sitePassword = self.passwordLabel.text;
-        if ([sitePassword length]) {
-            [UIPasteboard generalPasteboard].string = sitePassword;
-            [UIView animateWithDuration:0.3f animations:^{
-                self.tipContainer.alpha = 1;
-            }                completion:^(BOOL finished) {
-                if (finished)
-                    PearlMainQueueAfter( 3, ^{
-                        self.tipContainer.alpha = 0;
-                    } );
-            }];
-        }
+    NSString *sitePassword = [self.passwordButton titleForState:UIControlStateNormal];
+    if ([sitePassword length]) {
+        [UIPasteboard generalPasteboard].string = sitePassword;
+        [UIView animateWithDuration:0.3f animations:^{
+            self.tipContainer.alpha = 1;
+        }                completion:^(BOOL finished) {
+            if (finished)
+                PearlMainQueueAfter( 3, ^{
+                    self.tipContainer.alpha = 0;
+                } );
+        }];
     }
 }
 
@@ -106,7 +104,7 @@
     NSString *fullName = self.fullNameField.text;
     NSString *masterPassword = self.masterPasswordField.text;
 
-    self.passwordLabel.text = nil;
+    [self.passwordButton setTitle:nil forState:UIControlStateNormal];
     [self.activity startAnimating];
     [_emergencyKeyQueue cancelAllOperations];
     [_emergencyKeyQueue addOperationWithBlock:^{
@@ -128,7 +126,7 @@
     NSUInteger siteCounter = (NSUInteger)self.counterStepper.value;
     self.counterLabel.text = strf( @"%lu", (unsigned long)siteCounter );
 
-    self.passwordLabel.text = nil;
+    [self.passwordButton setTitle:nil forState:UIControlStateNormal];
     [self.activity startAnimating];
     [_emergencyPasswordQueue cancelAllOperations];
     [_emergencyPasswordQueue addOperationWithBlock:^{
@@ -138,7 +136,7 @@
 
         PearlMainQueue( ^{
             [self.activity stopAnimating];
-            self.passwordLabel.text = sitePassword;
+            [self.passwordButton setTitle:sitePassword forState:UIControlStateNormal];
         } );
     }];
 }
