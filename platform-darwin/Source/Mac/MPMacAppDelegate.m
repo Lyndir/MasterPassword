@@ -72,7 +72,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     NSString *crashlyticsAPIKey = [self crashlyticsAPIKey];
     if ([crashlyticsAPIKey length]) {
         inf(@"Initializing Crashlytics");
-#if defined (DEBUG) || defined (ADHOC)
+#if DEBUG
         [Crashlytics sharedInstance].debugMode = YES;
 #endif
         [[Crashlytics sharedInstance] setUserIdentifier:[PearlKeyChain deviceIdentifier]];

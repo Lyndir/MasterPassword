@@ -75,7 +75,7 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
         // Consumable product.
         return NO;
 
-#if ADHOC || DEBUG
+#if DEBUG
     // All features are unlocked for beta / debug / mac versions.
     return YES;
 #else
