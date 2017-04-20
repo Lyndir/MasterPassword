@@ -237,8 +237,8 @@
         // Invalid self.user.defaultType
         result = MPApplyFix( result, ^MPFixableResult {
             wrn( @"Invalid type for: %@ of %@, type: %ld.  Will use %ld instead.",
-                    self.name, self.user.name, (long)self.type, (long)MPSiteTypeGeneratedLong );
-            self.type = MPSiteTypeGeneratedLong;
+                    self.name, self.user.name, (long)self.type, (long)[self.algorithm defaultType] );
+            self.type = [self.algorithm defaultType];
             return MPFixableResultProblemsFixed;
         } );
     if (![self isKindOfClass:[self.algorithm classOfType:self.type]])
@@ -330,7 +330,7 @@
 
 - (MPSiteType)defaultType {
 
-    return (MPSiteType)[self.defaultType_ unsignedIntegerValue]?: MPSiteTypeGeneratedLong;
+    return (MPSiteType)[self.defaultType_ unsignedIntegerValue]?: self.algorithm.defaultType;
 }
 
 - (void)setDefaultType:(MPSiteType)aDefaultType {

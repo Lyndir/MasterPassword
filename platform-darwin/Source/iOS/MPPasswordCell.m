@@ -281,12 +281,12 @@
 
     [self setMode:MPPasswordCellModePassword animated:YES];
 
+    MPSiteEntity *mainSite = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
     [PearlSheet showSheetWithTitle:@"Change Password Type" viewStyle:UIActionSheetStyleAutomatic
                          initSheet:^(UIActionSheet *sheet) {
-                             MPSiteEntity *mainSite = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
-                             for (NSNumber *typeNumber in [MPAlgorithmDefault allTypes]) {
+                             for (NSNumber *typeNumber in [mainSite.algorithm allTypes]) {
                                  MPSiteType type = (MPSiteType)[typeNumber unsignedIntegerValue];
-                                 NSString *typeName = [MPAlgorithmDefault nameOfType:type];
+                                 NSString *typeName = [mainSite.algorithm nameOfType:type];
                                  if (type == mainSite.type)
                                      [sheet addButtonWithTitle:strf( @"● %@", typeName )];
                                  else
@@ -296,7 +296,8 @@
                 if (buttonIndex == [sheet cancelButtonIndex])
                     return;
 
-                MPSiteType type = (MPSiteType)[[MPAlgorithmDefault allTypes][buttonIndex] unsignedIntegerValue]?: MPSiteTypeGeneratedLong;
+                MPSiteType type = (MPSiteType)[[mainSite.algorithm allTypes][buttonIndex] unsignedIntegerValue]?:
+                                  mainSite.user.defaultType?: mainSite.algorithm.defaultType;
 
                 [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
                     MPSiteEntity *site = [self siteInContext:context];
@@ -550,7 +551,7 @@
 
             BOOL loginGenerated = site.loginGenerated;
             NSString *password = nil, *loginName = [site resolveLoginUsingKey:key];
-            MPSiteType transientType = [[MPiOSAppDelegate get] activeUserInContext:context].defaultType?: MPSiteTypeGeneratedLong;
+            MPSiteType transientType = [[MPiOSAppDelegate get] activeUserInContext:context].defaultType?: MPAlgorithmDefault.defaultType;
             if (self.transientSite && transientType & MPSiteTypeClassGenerated)
                 password = [MPAlgorithmDefault generatePasswordForSiteNamed:self.transientSite ofType:transientType
                                                                 withCounter:1 usingKey:key];

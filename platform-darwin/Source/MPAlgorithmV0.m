@@ -286,6 +286,11 @@ NSOperationQueue *_mpwQueue = nil;
     return allTypes;
 }
 
+- (MPSiteType)defaultType {
+
+    return MPSiteTypeGeneratedLong;
+}
+
 - (MPSiteType)nextType:(MPSiteType)type {
 
     switch (type) {
@@ -309,9 +314,9 @@ NSOperationQueue *_mpwQueue = nil;
             return MPSiteTypeStoredDevicePrivate;
         case MPSiteTypeStoredDevicePrivate:
             return MPSiteTypeGeneratedPhrase;
-        default:
-            return MPSiteTypeGeneratedLong;
     }
+
+    return [self defaultType];
 }
 
 - (MPSiteType)previousType:(MPSiteType)type {

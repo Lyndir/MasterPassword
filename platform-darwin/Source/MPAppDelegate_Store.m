@@ -537,12 +537,13 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
     // Parse import data.
     inf( @"Importing sites." );
-    __block MPUserEntity *user = nil;
-    id<MPAlgorithm> importAlgorithm = nil;
     NSUInteger importFormat = 0;
+    __block MPUserEntity *user = nil;
     NSUInteger importAvatar = NSNotFound;
-    NSString *importBundleVersion = nil, *importUserName = nil;
     NSData *importKeyID = nil;
+    NSString *importBundleVersion = nil, *importUserName = nil;
+    id<MPAlgorithm> importAlgorithm = nil;
+    MPSiteType importDefaultType = (MPSiteType)0;
     BOOL headerStarted = NO, headerEnded = NO, clearText = NO;
     NSArray *importedSiteLines = [importedSitesString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     NSMutableSet *sitesToDelete = [NSMutableSet set];
@@ -573,7 +574,15 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                                                                           range:NSMakeRange( 0, [importedSiteLine length] )] lastObject];
             NSString *headerName = [importedSiteLine substringWithRange:[headerSites rangeAtIndex:1]];
             NSString *headerValue = [importedSiteLine substringWithRange:[headerSites rangeAtIndex:2]];
-            if ([headerName isEqualToString:@"User Name"]) {
+
+            if ([headerName isEqualToString:@"Format"]) {
+                importFormat = (NSUInteger)[headerValue integerValue];
+                if (importFormat >= [sitePatterns count]) {
+                    err( @"Unsupported import format: %lu", (unsigned long)importFormat );
+                    return MPImportResultInternalError;
+                }
+            }
+            if (([headerName isEqualToString:@"User Name"] || [headerName isEqualToString:@"Full Name"]) && !importUserName) {
                 importUserName = headerValue;
 
                 NSFetchRequest *userFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPUserEntity class] )];
@@ -591,21 +600,18 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                 user = [users lastObject];
                 dbg( @"Existing user? %@", [user debugDescription] );
             }
+            if ([headerName isEqualToString:@"Avatar"])
+                importAvatar = (NSUInteger)[headerValue integerValue];
             if ([headerName isEqualToString:@"Key ID"])
                 importKeyID = [headerValue decodeHex];
             if ([headerName isEqualToString:@"Version"]) {
                 importBundleVersion = headerValue;
                 importAlgorithm = MPAlgorithmDefaultForBundleVersion( importBundleVersion );
             }
-            if ([headerName isEqualToString:@"Format"]) {
-                importFormat = (NSUInteger)[headerValue integerValue];
-                if (importFormat >= [sitePatterns count]) {
-                    err( @"Unsupported import format: %lu", (unsigned long)importFormat );
-                    return MPImportResultInternalError;
-                }
-            }
-            if ([headerName isEqualToString:@"Avatar"])
-                importAvatar = (NSUInteger)[headerValue integerValue];
+            if ([headerName isEqualToString:@"Algorithm"])
+                importAlgorithm = MPAlgorithmForVersion( (MPAlgorithmVersion)[headerValue integerValue] );
+            if ([headerName isEqualToString:@"Default Type"])
+                importDefaultType = (MPSiteType)[headerValue integerValue];
             if ([headerName isEqualToString:@"Passwords"]) {
                 if ([headerValue isEqualToString:@"VISIBLE"])
                     clearText = YES;
@@ -709,6 +715,8 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     if (user) {
         if (importAvatar != NSNotFound)
             user.avatar = importAvatar;
+        if (importDefaultType)
+            user.defaultType = importDefaultType;
         dbg( @"Updating User: %@", [user debugDescription] );
     }
     else {
@@ -716,6 +724,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         user.name = importUserName;
         user.algorithm = MPAlgorithmDefault;
         user.keyID = [userKey keyIDForAlgorithm:user.algorithm];
+        user.defaultType = importDefaultType?: user.algorithm.defaultType;
         if (importAvatar != NSNotFound)
             user.avatar = importAvatar;
         dbg( @"Created User: %@", [user debugDescription] );
@@ -785,16 +794,16 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         [export appendFormat:@"#     Export of site names and stored passwords (unless device-private) encrypted with the master key.\n"];
     [export appendFormat:@"# \n"];
     [export appendFormat:@"##\n"];
+    [export appendFormat:@"# Format: 1\n"];
+    [export appendFormat:@"# Date: %@\n", [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]]];
     [export appendFormat:@"# User Name: %@\n", activeUser.name];
+    [export appendFormat:@"# Full Name: %@\n", activeUser.name];
     [export appendFormat:@"# Avatar: %lu\n", (unsigned long)activeUser.avatar];
     [export appendFormat:@"# Key ID: %@\n", [activeUser.keyID encodeHex]];
-    [export appendFormat:@"# Date: %@\n", [[NSDateFormatter rfc3339DateFormatter] stringFromDate:[NSDate date]]];
     [export appendFormat:@"# Version: %@\n", [PearlInfoPlist get].CFBundleVersion];
-    [export appendFormat:@"# Format: 1\n"];
-    if (revealPasswords)
-        [export appendFormat:@"# Passwords: VISIBLE\n"];
-    else
-        [export appendFormat:@"# Passwords: PROTECTED\n"];
+    [export appendFormat:@"# Algorithm: %d\n", activeUser.algorithm.version];
+    [export appendFormat:@"# Default Type: %d\n", activeUser.defaultType];
+    [export appendFormat:@"# Passwords: %@\n", revealPasswords? @"VISIBLE": @"PROTECTED"];
     [export appendFormat:@"##\n"];
     [export appendFormat:@"#\n"];
     [export appendFormat:@"#               Last     Times  Password                      Login\t                     Site\tSite\n"];

@@ -58,6 +58,7 @@ NSString *NSStringFromTimeToCrack(TimeToCrack timeToCrack);
 - (Class)classOfType:(MPSiteType)type;
 - (NSArray *)allTypes;
 - (NSArray *)allTypesStartingWith:(MPSiteType)startingType;
+- (MPSiteType)defaultType;
 - (MPSiteType)nextType:(MPSiteType)type;
 - (MPSiteType)previousType:(MPSiteType)type;
 

@@ -220,6 +220,7 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
                     if (isNew) {
                         user = [MPUserEntity insertNewObjectInContext:context];
                         user.algorithm = MPAlgorithmDefault;
+                        user.defaultType = user.algorithm.defaultType;
                         user.avatar = newUserAvatar;
                         user.name = newUserName;
                     }
