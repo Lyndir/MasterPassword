@@ -65,7 +65,7 @@
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="VDd-oM-ZOO" userLabel="Store Activity">
                                         <rect key="frame" x="169" y="315" width="37" height="37"/>
                                     </activityIndicatorView>
-                                    <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="L6J-pd-gcp" userLabel="Avatar Collection">
+                                    <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="L6J-pd-gcp" userLabel="Avatar Collection">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="ATB-kM-EGu">
@@ -104,10 +104,10 @@
                                                             </constraints>
                                                         </imageView>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Sa-Vg-EEI" userLabel="Name Backdrop">
-                                                            <rect key="frame" x="43" y="263" width="129" height="16"/>
+                                                            <rect key="frame" x="43.5" y="263" width="128.5" height="16"/>
                                                             <subviews>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="1000" text="Maarten Billemont" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cLT-s0-4SQ" userLabel="Name Field">
-                                                                    <rect key="frame" x="5" y="0.0" width="119" height="16"/>
+                                                                    <rect key="frame" x="5" y="0.0" width="118.5" height="16"/>
                                                                     <fontDescription key="fontDescription" name="Exo2.0-ExtraBold" family="Exo 2.0" pointSize="13"/>
                                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <nil key="highlightedColor"/>
@@ -164,6 +164,9 @@
                                             <rect key="frame" x="295" y="0.0" width="80" height="667"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </collectionReusableView>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="visible" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <outlet property="dataSource" destination="S8q-YF-Kt9" id="mm7-Yb-NWW"/>
                                             <outlet property="delegate" destination="S8q-YF-Kt9" id="det-Eh-phM"/>
@@ -196,20 +199,20 @@
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qp1-nX-o4i" userLabel="Entry">
-                                        <rect key="frame" x="0.0" y="360" width="375" height="71"/>
+                                        <rect key="frame" x="0.0" y="361" width="375" height="70"/>
                                         <subviews>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Enter your full name:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="5fe-rt-zFa" userLabel="Entry Label">
-                                                <rect key="frame" x="20" y="0.0" width="335" height="21"/>
+                                                <rect key="frame" x="20" y="0.0" width="335" height="20"/>
                                                 <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ui_textfield.png" translatesAutoresizingMaskIntoConstraints="NO" id="UfK-na-vOU" userLabel="Field Background">
-                                                <rect key="frame" x="20" y="29" width="335" height="42"/>
+                                                <rect key="frame" x="20" y="28" width="335" height="42"/>
                                                 <rect key="contentStretch" x="0.25" y="0.25" width="0.49999999999999961" height="0.49999999999999961"/>
                                             </imageView>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="MyMasterPassword" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="z3Z-AB-fG2" userLabel="Entry Field">
-                                                <rect key="frame" x="30" y="33" width="315" height="34"/>
+                                                <rect key="frame" x="30" y="32" width="315" height="34"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardAppearance="alert" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
@@ -217,21 +220,21 @@
                                                     <outlet property="delegate" destination="S8q-YF-Kt9" id="5u3-XN-LOe"/>
                                                 </connections>
                                             </textField>
-                                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fdS-zb-K9I" userLabel="Entry Tip">
-                                                <rect key="frame" x="70" y="-33" width="235" height="83"/>
+                                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fdS-zb-K9I" userLabel="Entry Tip">
+                                                <rect key="frame" x="70.5" y="-33" width="234.5" height="82"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" translatesAutoresizingMaskIntoConstraints="NO" id="g2g-5i-er4">
-                                                        <rect key="frame" x="0.0" y="0.0" width="235" height="83"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="234.5" height="82"/>
                                                         <rect key="contentStretch" x="0.15000000000000002" y="0.14999999999999999" width="0.69999999999999973" height="0.44999999999999996"/>
                                                     </imageView>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Looks like a typo!" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="ZI7-qg-7OW">
-                                                        <rect key="frame" x="20" y="12" width="195" height="17"/>
+                                                        <rect key="frame" x="20" y="12" width="194.5" height="17"/>
                                                         <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Try again; the password was wrong." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KhE-Yj-Kvm">
-                                                        <rect key="frame" x="20" y="37" width="195" height="15"/>
+                                                        <rect key="frame" x="20" y="37" width="194.5" height="14"/>
                                                         <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -251,6 +254,9 @@
                                                     <constraint firstAttribute="trailing" secondItem="ZI7-qg-7OW" secondAttribute="trailing" constant="20" id="wEs-fc-uQi"/>
                                                     <constraint firstAttribute="bottom" secondItem="g2g-5i-er4" secondAttribute="bottom" id="ycz-7a-HTB"/>
                                                 </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="visible" value="NO"/>
+                                                </userDefinedRuntimeAttributes>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -289,15 +295,15 @@
                                                     <segue destination="Sd5-eW-Cx2" kind="modal" identifier="web" id="gtb-zE-u9H"/>
                                                 </connections>
                                             </button>
-                                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="069-Pu-yXe" userLabel="Thanks Tip">
-                                                <rect key="frame" x="71" y="0.0" width="233" height="60"/>
+                                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="069-Pu-yXe" userLabel="Thanks Tip">
+                                                <rect key="frame" x="71.5" y="0.0" width="232.5" height="60"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" translatesAutoresizingMaskIntoConstraints="NO" id="Z8P-ZK-aS0">
-                                                        <rect key="frame" x="0.0" y="0.0" width="233" height="60"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="232.5" height="60"/>
                                                         <rect key="contentStretch" x="0.15000000000000002" y="0.0" width="0.69999999999999973" height="1"/>
                                                     </imageView>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Why is Master Password free?" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="BLV-3x-Q0z">
-                                                        <rect key="frame" x="20" y="12" width="193" height="17"/>
+                                                        <rect key="frame" x="20" y="12" width="192.5" height="17"/>
                                                         <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -313,6 +319,9 @@
                                                     <constraint firstItem="BLV-3x-Q0z" firstAttribute="leading" secondItem="069-Pu-yXe" secondAttribute="leading" constant="20" id="UNf-fZ-Bvm"/>
                                                     <constraint firstItem="Z8P-ZK-aS0" firstAttribute="top" secondItem="069-Pu-yXe" secondAttribute="top" id="wre-wd-rRo"/>
                                                 </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="visible" value="NO"/>
+                                                </userDefinedRuntimeAttributes>
                                             </view>
                                         </subviews>
                                         <constraints>
@@ -327,7 +336,7 @@
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="ignoreTouches" value="YES"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
-                                    <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cF4-TE-GEj" userLabel="Avatar Tip">
+                                    <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cF4-TE-GEj" userLabel="Avatar Tip">
                                         <rect key="frame" x="50" y="185" width="276" height="60"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" translatesAutoresizingMaskIntoConstraints="NO" id="V4W-bK-age">
@@ -351,8 +360,11 @@
                                             <constraint firstAttribute="bottom" secondItem="V4W-bK-age" secondAttribute="bottom" id="HNq-IE-XvE"/>
                                             <constraint firstAttribute="trailing" secondItem="MoM-8d-jlm" secondAttribute="trailing" constant="20" id="Hc3-Mb-x5c"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="visible" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
                                     </view>
-                                    <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Um-Ot-hI6" userLabel="Preferences Tip">
+                                    <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Um-Ot-hI6" userLabel="Preferences Tip">
                                         <rect key="frame" x="73" y="42" width="230" height="60"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_top.png" translatesAutoresizingMaskIntoConstraints="NO" id="5H0-ml-Uso">
@@ -376,6 +388,9 @@
                                             <constraint firstItem="5H0-ml-Uso" firstAttribute="top" secondItem="0Um-Ot-hI6" secondAttribute="top" id="Yk4-fX-z3Z"/>
                                             <constraint firstItem="Er5-X1-ejQ" firstAttribute="leading" secondItem="0Um-Ot-hI6" secondAttribute="leading" constant="20" id="hlG-SM-xC3"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="visible" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
                                     </view>
                                 </subviews>
                                 <constraints>
@@ -511,7 +526,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="Q1S-vU-GGO" customClass="MPNavigationController" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="4yl-zs-iUd">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="4yl-zs-iUd">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -619,17 +634,17 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="250"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eth-Dc-JYn" id="8m6-pP-lda">
-                                            <rect key="frame" x="0.0" y="0.0" width="342" height="249"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="249.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Show Help" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x9b-Qa-Pza">
-                                                    <rect key="frame" x="20" y="20" width="302" height="21"/>
+                                                    <rect key="frame" x="20" y="20" width="302" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Open the short step-by-step guide which explains how to use Master Password." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bKz-o1-gHv">
-                                                    <rect key="frame" x="20" y="49" width="302" height="180"/>
+                                                    <rect key="frame" x="20" y="48" width="302" height="181"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -651,17 +666,17 @@
                                         <rect key="frame" x="0.0" y="250" width="375" height="250"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="R30-AU-bR6" id="f6h-Ff-2Qc">
-                                            <rect key="frame" x="0.0" y="0.0" width="342" height="249"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="249.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Sign Out" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nr5-ze-6PW">
-                                                    <rect key="frame" x="20" y="20" width="302" height="21"/>
+                                                    <rect key="frame" x="20" y="20" width="302" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Log yourself out and return to the user selection screen." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0G1-cX-MT3">
-                                                    <rect key="frame" x="20" y="49" width="302" height="180"/>
+                                                    <rect key="frame" x="20" y="48" width="302" height="181"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -683,23 +698,23 @@
                                         <rect key="frame" x="0.0" y="500" width="375" height="250"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B8R-iE-Ffe" id="8r5-Zc-TRj">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="249"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="249.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Default Password Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dws-U7-RI8">
-                                                    <rect key="frame" x="20" y="20" width="335" height="21"/>
+                                                    <rect key="frame" x="20" y="20" width="335" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="The password type to use to when creating a new site." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mzg-1u-aEg">
-                                                    <rect key="frame" x="20" y="49" width="335" height="50"/>
+                                                    <rect key="frame" x="20" y="48" width="335" height="52"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="E0r-Ey-eVH" userLabel="Type">
-                                                    <rect key="frame" x="131" y="107" width="113" height="29"/>
+                                                    <rect key="frame" x="131" y="108" width="113" height="29"/>
                                                     <segments>
                                                         <segment title="Phrase"/>
                                                         <segment title="Name"/>
@@ -710,7 +725,7 @@
                                                     </connections>
                                                 </segmentedControl>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="H8F-E0-dqF" userLabel="Type">
-                                                    <rect key="frame" x="41" y="143" width="293" height="29"/>
+                                                    <rect key="frame" x="41" y="144" width="293" height="29"/>
                                                     <segments>
                                                         <segment title="Max"/>
                                                         <segment title="Long"/>
@@ -725,7 +740,7 @@
                                                     </connections>
                                                 </segmentedControl>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="Rei-aO-UBD" userLabel="Type">
-                                                    <rect key="frame" x="86" y="179" width="203" height="29"/>
+                                                    <rect key="frame" x="86" y="180" width="203" height="29"/>
                                                     <segments>
                                                         <segment title="Personal"/>
                                                         <segment title="Device Private"/>
@@ -736,7 +751,7 @@
                                                     </connections>
                                                 </segmentedControl>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="eg. LarwPopm4@Zewt" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lhS-L1-2OB">
-                                                    <rect key="frame" x="20" y="215" width="335" height="14"/>
+                                                    <rect key="frame" x="20" y="216" width="335" height="13"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -767,17 +782,17 @@
                                         <rect key="frame" x="0.0" y="750" width="375" height="250"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Sz1-JP-dw2" id="R4X-LE-ir9">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="249"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="249.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Avatar" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="njo-UA-mT3">
-                                                    <rect key="frame" x="20" y="20" width="335" height="21"/>
+                                                    <rect key="frame" x="20" y="20" width="335" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="The icon that represents your user on the login screen.  It has no bearing on your passwords." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AA4-AD-IbY">
-                                                    <rect key="frame" x="20" y="49" width="335" height="62"/>
+                                                    <rect key="frame" x="20" y="48" width="335" height="63"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -842,7 +857,7 @@
                                         <rect key="frame" x="0.0" y="1000" width="375" height="250"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fRZ-Uh-FR8" id="qCQ-L5-teL">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="249"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="249.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jr5-mX-nw0">
@@ -852,13 +867,13 @@
                                                     </connections>
                                                 </switch>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Save Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3fk-Io-xQI">
-                                                    <rect key="frame" x="20" y="20" width="335" height="21"/>
+                                                    <rect key="frame" x="20" y="20" width="335" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z1N-JR-4fr">
-                                                    <rect key="frame" x="20" y="49" width="335" height="141"/>
+                                                    <rect key="frame" x="20" y="48" width="335" height="142"/>
                                                     <string key="text">This will store your master password in your device's keychain.  As a result, you'll be able to log in without entering your master password. This is somewhat less secure in the event of theft: anyone who figures out your device's PIN can get in.  You can compensate for the reduced security by setting a more secure passcode for your device (in Settings, go to: General-&gt;Passcode Lock, disable "Simple Passcode") or by purchasing and enabling support for TouchID.</string>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -883,7 +898,7 @@
                                         <rect key="frame" x="0.0" y="1250" width="375" height="250"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bKn-6f-TKE" id="GBL-TP-VnH">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="249"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="249.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wOM-X3-jCG">
@@ -893,13 +908,13 @@
                                                     </connections>
                                                 </switch>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="TouchID" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6xf-vt-aXd">
-                                                    <rect key="frame" x="20" y="20" width="335" height="21"/>
+                                                    <rect key="frame" x="20" y="20" width="335" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="URR-yZ-QuC">
-                                                    <rect key="frame" x="20" y="49" width="335" height="141"/>
+                                                    <rect key="frame" x="20" y="48" width="335" height="142"/>
                                                     <string key="text">When enabled on a TouchID-enabled device, your fingerprint will be required to load your saved password.  Note that this feature requires that the Save Password option is enabled and TouchID support has been purchased from the in-app store.</string>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -924,17 +939,17 @@
                                         <rect key="frame" x="0.0" y="1500" width="375" height="250"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9QG-lM-ymM" id="hK8-XQ-lLz">
-                                            <rect key="frame" x="0.0" y="0.0" width="342" height="249"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="249.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Feedback" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5zr-Nr-zRb">
-                                                    <rect key="frame" x="20" y="20" width="302" height="21"/>
+                                                    <rect key="frame" x="20" y="20" width="302" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Contact me if you have a question, idea, praise or issue.  Try to be as detailed as possible." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8dg-Ew-Vy1">
-                                                    <rect key="frame" x="20" y="49" width="302" height="180"/>
+                                                    <rect key="frame" x="20" y="48" width="302" height="181"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -956,17 +971,17 @@
                                         <rect key="frame" x="0.0" y="1750" width="375" height="250"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UdB-BV-AHA" id="V2Y-nu-jhZ">
-                                            <rect key="frame" x="0.0" y="0.0" width="342" height="249"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="249.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Check For Inconsistencies" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WXh-sg-l2h">
-                                                    <rect key="frame" x="20" y="20" width="302" height="21"/>
+                                                    <rect key="frame" x="20" y="20" width="302" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Perform a check to see if there are any inconsistencies in your site data that might cause issues." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gTs-JA-zmL">
-                                                    <rect key="frame" x="20" y="49" width="302" height="180"/>
+                                                    <rect key="frame" x="20" y="48" width="302" height="181"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -988,17 +1003,17 @@
                                         <rect key="frame" x="0.0" y="2000" width="375" height="250"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IVT-Rs-nTu" id="Q5J-2f-mmz">
-                                            <rect key="frame" x="0.0" y="0.0" width="342" height="249"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="249.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Export" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KEh-y5-Obc">
-                                                    <rect key="frame" x="20" y="20" width="302" height="21"/>
+                                                    <rect key="frame" x="20" y="20" width="302" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U77-XF-Bvb">
-                                                    <rect key="frame" x="20" y="49" width="302" height="180"/>
+                                                    <rect key="frame" x="20" y="48" width="302" height="181"/>
                                                     <string key="text">An export saves all your sites and optionally their passwords to a file that you can store separately.  It can function as a back-up or a way to move all your sites to a new device.</string>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1021,7 +1036,7 @@
                                         <rect key="frame" x="0.0" y="2250" width="375" height="250"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hmf-Wz-9l2" id="AL3-2q-tgO">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="249"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="249.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="999" verticalCompressionResistancePriority="1000" text="© 2012-2014, Maarten Billemont (lhunath)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sPw-mV-mFF">
@@ -1181,13 +1196,13 @@
                                                                                                 <constraint firstAttribute="height" constant="1" id="jyk-dC-QLb"/>
                                                                                             </constraints>
                                                                                         </view>
-                                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iwe-rQ-ma0" userLabel="Copy Login">
+                                                                                        <button opaque="NO" alpha="0.40000000000000002" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iwe-rQ-ma0" userLabel="Copy Login">
                                                                                             <rect key="frame" x="0.0" y="0.0" width="355" height="33"/>
                                                                                             <color key="backgroundColor" red="0.18431372549019609" green="0.15686274509803921" blue="0.15686274509803921" alpha="0.01" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                             <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="11"/>
                                                                                             <inset key="titleEdgeInsets" minX="0.0" minY="-4" maxX="0.0" maxY="0.0"/>
                                                                                             <state key="normal" title="Tap to ⚙ generate username or use pencil to save one">
-                                                                                                <color key="titleColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                                                 <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                                             </state>
                                                                                             <connections>
@@ -1195,18 +1210,18 @@
                                                                                             </connections>
                                                                                         </button>
                                                                                         <label opaque="NO" userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⚙" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z3Z-Zc-1EC">
-                                                                                            <rect key="frame" x="332" y="4" width="15" height="14"/>
+                                                                                            <rect key="frame" x="332" y="5" width="15" height="13"/>
                                                                                             <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="11"/>
                                                                                             <nil key="textColor"/>
                                                                                             <nil key="highlightedColor"/>
                                                                                         </label>
-                                                                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="3I9-vf-IZK" userLabel="Login">
+                                                                                        <textField opaque="NO" clipsSubviews="YES" alpha="0.40000000000000002" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="3I9-vf-IZK" userLabel="Login">
                                                                                             <rect key="frame" x="8" y="0.0" width="339" height="20"/>
                                                                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                             <constraints>
                                                                                                 <constraint firstAttribute="height" constant="20" id="9gA-Ti-g1e"/>
                                                                                             </constraints>
-                                                                                            <color key="textColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                                             <fontDescription key="fontDescription" name="SourceCodePro-Regular" family="Source Code Pro" pointSize="14"/>
                                                                                             <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="alphabet" keyboardAppearance="alert" returnKeyType="done"/>
                                                                                             <connections>
@@ -1269,13 +1284,13 @@
                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tl3-hd-x35" userLabel="Main Container">
                                                                                     <rect key="frame" x="0.0" y="0.0" width="355" height="100"/>
                                                                                     <subviews>
-                                                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OwP-sb-Wxl" userLabel="Site Name">
-                                                                                            <rect key="frame" x="8" y="76" width="303" height="16"/>
+                                                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.40000000000000002" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OwP-sb-Wxl" userLabel="Site Name">
+                                                                                            <rect key="frame" x="8" y="77" width="303" height="15"/>
                                                                                             <accessibility key="accessibilityConfiguration" label="">
                                                                                                 <accessibilityTraits key="traits" staticText="YES" summaryElement="YES"/>
                                                                                             </accessibility>
                                                                                             <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
-                                                                                            <color key="textColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                                             <nil key="highlightedColor"/>
                                                                                             <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                                             <size key="shadowOffset" width="0.0" height="1"/>
@@ -1336,7 +1351,7 @@
                                                                                             </connections>
                                                                                         </button>
                                                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" text="1" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="PKP-M9-T8E" userLabel="Counter">
-                                                                                            <rect key="frame" x="128" y="67" width="7" height="22"/>
+                                                                                            <rect key="frame" x="128" y="67.5" width="7" height="21"/>
                                                                                             <accessibility key="accessibilityConfiguration" hint="Site's counter."/>
                                                                                             <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
                                                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1464,7 +1479,7 @@
                                                                                     </connections>
                                                                                 </button>
                                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⬇︎" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tuh-Au-J9k">
-                                                                                    <rect key="frame" x="325" y="35" width="17" height="21"/>
+                                                                                    <rect key="frame" x="325" y="36" width="17" height="20"/>
                                                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
                                                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                     <nil key="highlightedColor"/>
@@ -1570,7 +1585,7 @@
                                             <navigationItem id="JCx-F3-LfN">
                                                 <nil key="title"/>
                                                 <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="UWl-Y4-LsH" userLabel="Popdown">
-                                                    <rect key="frame" x="124" y="26" width="128" height="33"/>
+                                                    <rect key="frame" x="123.5" y="25.5" width="128" height="33"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal">
                                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1596,15 +1611,15 @@
                                             <outlet property="delegate" destination="nkY-z6-8jd" id="ENG-q5-XwX"/>
                                         </connections>
                                     </searchBar>
-                                    <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LEX-BK-PdS" userLabel="Bad Name Tip">
-                                        <rect key="frame" x="37" y="86" width="301" height="76"/>
+                                    <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LEX-BK-PdS" userLabel="Bad Name Tip">
+                                        <rect key="frame" x="37.5" y="86" width="300.5" height="75.5"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_top.png" translatesAutoresizingMaskIntoConstraints="NO" id="Rt5-v4-I0R">
-                                                <rect key="frame" x="0.0" y="0.0" width="301" height="76"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="300.5" height="75.5"/>
                                                 <rect key="contentStretch" x="0.050000000000000003" y="0.49999999999999994" width="0.90000000000000002" height="0.20000000000000001"/>
                                             </imageView>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="1000" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="Eie-8u-hV2">
-                                                <rect key="frame" x="20" y="26" width="261" height="44"/>
+                                                <rect key="frame" x="20" y="26" width="260.5" height="43.5"/>
                                                 <string key="text">Try using exclusively bare domain names.
 Avoid capitals and use @ to include a user name.
 eg. apple.com, rmitchell@twitter.com</string>
@@ -1624,6 +1639,9 @@ eg. apple.com, rmitchell@twitter.com</string>
                                             <constraint firstAttribute="bottom" secondItem="Eie-8u-hV2" secondAttribute="bottom" constant="6" id="nBn-UF-DMQ"/>
                                             <constraint firstItem="Rt5-v4-I0R" firstAttribute="top" secondItem="LEX-BK-PdS" secondAttribute="top" id="ztu-iz-qfZ"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="visible" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
                                     </view>
                                     <view opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XNM-XQ-rMe" userLabel="Popdown">
                                         <rect key="frame" x="0.0" y="-667" width="375" height="667"/>
@@ -1749,10 +1767,10 @@ eg. apple.com, rmitchell@twitter.com</string>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1lc-e7-Qme" userLabel="Emergency Generator">
-                                        <rect key="frame" x="20" y="135" width="335" height="399"/>
+                                        <rect key="frame" x="20" y="136" width="335" height="397.5"/>
                                         <subviews>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Emergency Generator" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="4Lh-s0-Dbt">
-                                                <rect key="frame" x="20" y="20" width="295" height="22"/>
+                                                <rect key="frame" x="20" y="20" width="295" height="21"/>
                                                 <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -1760,7 +1778,7 @@ eg. apple.com, rmitchell@twitter.com</string>
                                                 <size key="shadowOffset" width="0.0" height="1"/>
                                             </label>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Generate your password without logging in.  Great for if you're borrowing a friend's device or are having trouble logging in." lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="vHS-3A-Tae">
-                                                <rect key="frame" x="20" y="50" width="295" height="52"/>
+                                                <rect key="frame" x="20" y="49" width="295" height="51.5"/>
                                                 <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="14"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -1768,7 +1786,7 @@ eg. apple.com, rmitchell@twitter.com</string>
                                                 <size key="shadowOffset" width="0.0" height="1"/>
                                             </label>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Your Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XAC-Da-lpf" userLabel="User Name">
-                                                <rect key="frame" x="20" y="110" width="295" height="30"/>
+                                                <rect key="frame" x="20" y="108.5" width="295" height="30"/>
                                                 <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardAppearance="alert" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                                                 <connections>
@@ -1777,7 +1795,7 @@ eg. apple.com, rmitchell@twitter.com</string>
                                                 </connections>
                                             </textField>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Your Master Password" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="J46-0E-no3" userLabel="Master Password">
-                                                <rect key="frame" x="20" y="148" width="295" height="30"/>
+                                                <rect key="frame" x="20" y="146.5" width="295" height="30"/>
                                                 <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardAppearance="alert" returnKeyType="next" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
                                                 <connections>
@@ -1786,7 +1804,7 @@ eg. apple.com, rmitchell@twitter.com</string>
                                                 </connections>
                                             </textField>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Site Name" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="56H-xR-09J" userLabel="Site Name">
-                                                <rect key="frame" x="20" y="186" width="295" height="30"/>
+                                                <rect key="frame" x="20" y="184.5" width="295" height="30"/>
                                                 <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL" keyboardAppearance="alert" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                                 <connections>
@@ -1795,7 +1813,7 @@ eg. apple.com, rmitchell@twitter.com</string>
                                                 </connections>
                                             </textField>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="e4b-Iv-Pk9" userLabel="Type">
-                                                <rect key="frame" x="20" y="224" width="295" height="29"/>
+                                                <rect key="frame" x="20" y="222.5" width="295" height="29"/>
                                                 <segments>
                                                     <segment title="Max"/>
                                                     <segment title="Long"/>
@@ -1810,7 +1828,7 @@ eg. apple.com, rmitchell@twitter.com</string>
                                                 </connections>
                                             </segmentedControl>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Counter" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="cAo-K2-E23">
-                                                <rect key="frame" x="20" y="263" width="64" height="22"/>
+                                                <rect key="frame" x="20" y="262" width="64" height="21"/>
                                                 <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -1818,13 +1836,13 @@ eg. apple.com, rmitchell@twitter.com</string>
                                                 <size key="shadowOffset" width="0.0" height="1"/>
                                             </label>
                                             <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="ZPT-EI-yuv" userLabel="Counter">
-                                                <rect key="frame" x="221" y="260" width="94" height="29"/>
+                                                <rect key="frame" x="221" y="258.5" width="94" height="29"/>
                                                 <connections>
                                                     <action selector="controlChanged:" destination="osn-5H-SWW" eventType="valueChanged" id="eQA-3X-uc9"/>
                                                 </connections>
                                             </stepper>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="1" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="3Cd-XH-Wau">
-                                                <rect key="frame" x="206" y="263" width="7" height="21"/>
+                                                <rect key="frame" x="206" y="262" width="7" height="20"/>
                                                 <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1865,10 +1883,10 @@ eg. apple.com, rmitchell@twitter.com</string>
                                                 </state>
                                             </button>
                                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="4sN-hm-xio">
-                                                <rect key="frame" x="149" y="336" width="37" height="37"/>
+                                                <rect key="frame" x="149" y="334.5" width="37" height="37"/>
                                             </activityIndicatorView>
                                             <button opaque="NO" clipsSubviews="YES" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="clip" translatesAutoresizingMaskIntoConstraints="NO" id="bHR-he-dnZ">
-                                                <rect key="frame" x="20" y="329" width="295" height="50"/>
+                                                <rect key="frame" x="20" y="327.5" width="295" height="50"/>
                                                 <gestureRecognizers/>
                                                 <fontDescription key="fontDescription" name="SourceCodePro-Black" family="Source Code Pro" pointSize="30"/>
                                                 <state key="normal" title="XapaNuwjFihn6$">
@@ -1879,8 +1897,8 @@ eg. apple.com, rmitchell@twitter.com</string>
                                                     <action selector="copyPassword:" destination="osn-5H-SWW" eventType="touchUpInside" id="1sI-ib-MXZ"/>
                                                 </connections>
                                             </button>
-                                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="beo-cJ-jIn" userLabel="View - Content Tip">
-                                                <rect key="frame" x="63" y="294" width="210" height="60"/>
+                                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="beo-cJ-jIn" userLabel="View - Content Tip">
+                                                <rect key="frame" x="63" y="292.5" width="210" height="60"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black.png" translatesAutoresizingMaskIntoConstraints="NO" id="nyL-cO-aPa">
                                                         <rect key="frame" x="0.0" y="0.0" width="210" height="60"/>
@@ -1903,6 +1921,9 @@ eg. apple.com, rmitchell@twitter.com</string>
                                                     <constraint firstAttribute="trailing" secondItem="rtA-NK-3HP" secondAttribute="trailing" constant="20" symbolic="YES" id="nWa-6t-02o"/>
                                                     <constraint firstAttribute="centerY" secondItem="rtA-NK-3HP" secondAttribute="centerY" constant="10.5" id="zCJ-Ju-uEc"/>
                                                 </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="visible" value="NO"/>
+                                                </userDefinedRuntimeAttributes>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" red="0.1215686275" green="0.12941176469999999" blue="0.14117647059999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2001,7 +2022,7 @@ eg. apple.com, rmitchell@twitter.com</string>
             <objects>
                 <navigationController definesPresentationContext="YES" id="LBn-EA-NAH" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Settings" image="icon_gears.png" id="6n3-Ay-Knn"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="h6j-1o-LHf">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="h6j-1o-LHf">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -2026,10 +2047,10 @@ eg. apple.com, rmitchell@twitter.com</string>
                         <color key="sectionIndexColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="-" id="3ZC-Sm-lB8">
-                                <rect key="frame" x="0.0" y="56" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3ZC-Sm-lB8" id="UzB-cq-EM3">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -2252,7 +2273,7 @@ Suspendisse potenti. Etiam ut nisi id augue tempor ultrices et sit amet sapien. 
             <objects>
                 <navigationController definesPresentationContext="YES" id="Ec4-G7-5Td" customClass="PearlNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" id="MA4-cY-VCZ">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="MA4-cY-VCZ">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2292,7 +2313,7 @@ Suspendisse potenti. Etiam ut nisi id augue tempor ultrices et sit amet sapien. 
                                         <rect key="frame" x="20" y="20" width="335" height="79"/>
                                     </imageView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Stay Logged In?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5X1-J4-TbH">
-                                        <rect key="frame" x="20" y="107" width="335" height="21"/>
+                                        <rect key="frame" x="20" y="107" width="335" height="20"/>
                                         <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -2302,7 +2323,7 @@ Suspendisse potenti. Etiam ut nisi id augue tempor ultrices et sit amet sapien. 
                                         <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </switch>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e80-98-V6D">
-                                        <rect key="frame" x="20" y="136" width="335" height="152"/>
+                                        <rect key="frame" x="20" y="135" width="335" height="151.5"/>
                                         <string key="text">The right balance between security and convenience is often very personal.
 
 To make getting to your passwords faster, you can remain logged in after you close Master Password.  This allows you to skip having to log in the next time.
@@ -2380,13 +2401,13 @@ However, it means that anyone who finds your device unlocked can do the same.</s
                                         <rect key="frame" x="20" y="20" width="335" height="79"/>
                                     </imageView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Getting Started" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0UA-Nw-PXP">
-                                        <rect key="frame" x="20" y="107" width="335" height="21"/>
+                                        <rect key="frame" x="20" y="107" width="335" height="20"/>
                                         <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J90-SQ-ljR">
-                                        <rect key="frame" x="20" y="136" width="335" height="522"/>
+                                        <rect key="frame" x="20" y="135" width="335" height="521.5"/>
                                         <attributedString key="attributedText">
                                             <fragment content="The passwords generated by this app are not stored but ">
                                                 <attributes>
@@ -2542,17 +2563,17 @@ See </string>
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="400"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JVW-tG-xxe" id="CLQ-CW-NGn">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Generate Login Names" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pax-1J-IZi">
-                                                    <rect key="frame" x="20" y="226" width="291" height="21"/>
+                                                    <rect key="frame" x="20" y="226" width="291" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ra0-yS-99P">
-                                                    <rect key="frame" x="20" y="255" width="335" height="124"/>
+                                                    <rect key="frame" x="20" y="254" width="335" height="125"/>
                                                     <string key="text">Master Password is great for making your passwords immune to loss, and it even lets you save your login name.  But saved login names can't be recovered when all is lost.  Generated login names use the same algorithm to generate a good login name to use for each of your sites.  In addition, using unique non-identifying login names for your sites helps protect against companies working together to build a bigger picture on your identity.</string>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2571,7 +2592,7 @@ See </string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$0.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="68f-wn-UlS">
-                                                    <rect key="frame" x="319" y="226" width="36" height="21"/>
+                                                    <rect key="frame" x="319" y="226" width="36" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -2607,17 +2628,17 @@ See </string>
                                         <rect key="frame" x="0.0" y="400" width="375" height="400"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="l1g-Ul-Vg8" id="FWE-cE-L02">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Generate Security Answers" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kkl-gT-YAO">
-                                                    <rect key="frame" x="20" y="226" width="291" height="21"/>
+                                                    <rect key="frame" x="20" y="226" width="291" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yRH-27-edZ">
-                                                    <rect key="frame" x="20" y="255" width="335" height="124"/>
+                                                    <rect key="frame" x="20" y="254" width="335" height="125"/>
                                                     <string key="text">The infamous security questions are in fact a veritable assault on your security.  For starters, they weaken the protection of your account by allowing an attacker in by simply knowing enough about you, allowing him to bypass guessing your strong password.  Arguably worse is the amount of highly personal and private information you're "willingly" divulging to these websites, under the assumption that only you know the answers.  Generating security answers allows you to stop sharing your highly personal details and weakening your acccounts by generating unguessable answers to these questions.</string>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2636,7 +2657,7 @@ See </string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$0.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9ct-IM-QKR">
-                                                    <rect key="frame" x="319" y="226" width="36" height="21"/>
+                                                    <rect key="frame" x="319" y="226" width="36" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -2672,17 +2693,17 @@ See </string>
                                         <rect key="frame" x="0.0" y="800" width="375" height="400"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9Na-CL-jBq" id="ETY-Ou-DW7">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="iOS Integration" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zch-DS-J3I">
-                                                    <rect key="frame" x="20" y="226" width="244" height="21"/>
+                                                    <rect key="frame" x="20" y="226" width="244" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="riF-bB-x5g">
-                                                    <rect key="frame" x="20" y="255" width="335" height="124"/>
+                                                    <rect key="frame" x="20" y="254" width="335" height="125"/>
                                                     <string key="text">Up to now, the best way to use your passwords in other iOS apps was by copy/pasting them from Master Password.  With iOS integration, you can access your Master Password passwords directly from other applications, without having to switch back and forth between it and Master Password.</string>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2701,7 +2722,7 @@ See </string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Coming Soon" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3jH-eX-9N2">
-                                                    <rect key="frame" x="272" y="226" width="83" height="21"/>
+                                                    <rect key="frame" x="272" y="226" width="83" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -2737,17 +2758,17 @@ See </string>
                                         <rect key="frame" x="0.0" y="1200" width="375" height="400"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8en-6R-GvR" id="NKB-rd-1Vy">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="TouchID Login" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e1D-jp-GBs">
-                                                    <rect key="frame" x="20" y="226" width="244" height="21"/>
+                                                    <rect key="frame" x="20" y="226" width="244" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yxc-Lr-382">
-                                                    <rect key="frame" x="20" y="255" width="335" height="124"/>
+                                                    <rect key="frame" x="20" y="254" width="335" height="125"/>
                                                     <string key="text">Since the iPhone 5s, all iPhones are now equipped with an advanced Touch ID fingerprint sensor in the home button.  This sensor allows you to quickly and easily identify yourself to the system.  With Touch ID support, you will be able to skip the step of entering your Master Password manually and gain the ability to unlock your user using Touch ID instead.</string>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2766,7 +2787,7 @@ See </string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Coming Soon" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZGg-O6-rsg">
-                                                    <rect key="frame" x="272" y="226" width="83" height="21"/>
+                                                    <rect key="frame" x="272" y="226" width="83" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -2802,17 +2823,17 @@ See </string>
                                         <rect key="frame" x="0.0" y="1600" width="375" height="400"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="le3-Q5-MSO" id="SzQ-Y5-XIF">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Fuel Top-Up" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jnv-uN-xeg">
-                                                    <rect key="frame" x="20" y="226" width="292" height="21"/>
+                                                    <rect key="frame" x="20" y="226" width="292" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fz2-AO-aGW">
-                                                    <rect key="frame" x="20" y="255" width="335" height="124"/>
+                                                    <rect key="frame" x="20" y="254" width="335" height="125"/>
                                                     <string key="text">You really love Master Password and how it's solving your password problems.  You're eager to encourage the maintenance, technical support and development of new features.  I am a one-man shop, fuel enables me to allocate more work hours to Master Password.
 
 UPCOMING:
@@ -2831,7 +2852,7 @@ UPCOMING:
                                                     <rect key="frame" x="170" y="100" width="37" height="37"/>
                                                 </activityIndicatorView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$2.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EbU-DV-fKF">
-                                                    <rect key="frame" x="320" y="226" width="35" height="21"/>
+                                                    <rect key="frame" x="320" y="226" width="35" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -2853,7 +2874,7 @@ UPCOMING:
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kYb-j4-32C">
-                                                    <rect key="frame" x="20" y="64" width="118" height="27"/>
+                                                    <rect key="frame" x="20" y="64" width="117.5" height="26"/>
                                                     <string key="text">fuel left: 0.3 work hours
 invested: 3.7 work hours</string>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
@@ -2898,14 +2919,14 @@ invested: 3.7 work hours</string>
                                         <rect key="frame" x="0.0" y="2000" width="375" height="150"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="u3P-ng-YHc" id="y85-0Q-tbK">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Vjt-7c-BJ4">
-                                                    <rect key="frame" x="169" y="20" width="37" height="20"/>
+                                                    <rect key="frame" x="169" y="20" width="37" height="21"/>
                                                 </activityIndicatorView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Loading products..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ARC-xH-0U0">
-                                                    <rect key="frame" x="115" y="80" width="146" height="21"/>
+                                                    <rect key="frame" x="115.5" y="81" width="145.5" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -2925,7 +2946,7 @@ invested: 3.7 work hours</string>
                                         <rect key="frame" x="0.0" y="2150" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UUA-xl-CAh" id="4Zu-Ig-Ws4">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IOk-WZ-HJ8">
@@ -3023,23 +3044,23 @@ invested: 3.7 work hours</string>
                                         <rect key="frame" x="0.0" y="22" width="375" height="133"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DT2-Vb-uXj" id="URA-cl-MJP">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="132"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="132.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Answer for lyndir.com:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tal-1I-HQw" userLabel="Title Label">
-                                                    <rect key="frame" x="8" y="8" width="180" height="21"/>
+                                                    <rect key="frame" x="8" y="8" width="180" height="20"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="hok petwuvaqu xixo" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="GfC-j4-Qx7" userLabel="Answer Field">
-                                                    <rect key="frame" x="8" y="49" width="359" height="41"/>
+                                                    <rect key="frame" x="8" y="48" width="359" height="43"/>
                                                     <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" name="SourceCodePro-Black" family="Source Code Pro" pointSize="24"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="alphabet" keyboardAppearance="alert" returnKeyType="next"/>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Use this as the answer for each of the security questions on this site." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EUe-A5-H8h">
-                                                    <rect key="frame" x="8" y="98" width="359" height="14"/>
+                                                    <rect key="frame" x="8" y="99" width="359" height="13"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -3067,7 +3088,7 @@ invested: 3.7 work hours</string>
                                         <rect key="frame" x="0.0" y="155" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tvm-WZ-MDZ" id="BTm-Lm-V9p">
-                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Send the answer(s) to my email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AAV-yg-dfK">
@@ -3090,7 +3111,7 @@ invested: 3.7 work hours</string>
                                         <rect key="frame" x="0.0" y="199" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5MB-qb-oPk" id="4wX-xO-9QU">
-                                            <rect key="frame" x="0.0" y="0.0" width="336" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="This site needs different answers for each question" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="een-0g-CMy">
@@ -3113,11 +3134,11 @@ invested: 3.7 work hours</string>
                                         <rect key="frame" x="0.0" y="243" width="375" height="130"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iFm-3w-hOv" id="X5d-5g-uJa">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="129"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="129.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="mother" textAlignment="center" minimumFontSize="14" clearButtonMode="unlessEditing" translatesAutoresizingMaskIntoConstraints="NO" id="T2F-PD-Nw8" userLabel="Question Field">
-                                                    <rect key="frame" x="8" y="18" width="359" height="30"/>
+                                                    <rect key="frame" x="8" y="19" width="359" height="30"/>
                                                     <color key="backgroundColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="28"/>
@@ -3134,7 +3155,7 @@ invested: 3.7 work hours</string>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="alphabet" keyboardAppearance="alert" returnKeyType="next"/>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Enter the single most significant word in the question above." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qqg-Ny-7Po">
-                                                    <rect key="frame" x="8" y="56" width="359" height="14"/>
+                                                    <rect key="frame" x="8" y="57" width="359" height="13"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Thin" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -3217,7 +3238,7 @@ invested: 3.7 work hours</string>
                                         <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                     </textField>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Show Passwords?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J5V-1h-NhW">
-                                        <rect key="frame" x="20" y="108" width="335" height="21"/>
+                                        <rect key="frame" x="20" y="108" width="335" height="20"/>
                                         <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -3227,7 +3248,7 @@ invested: 3.7 work hours</string>
                                         <color key="onTintColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </switch>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yx2-Eh-hM0">
-                                        <rect key="frame" x="20" y="137" width="335" height="202"/>
+                                        <rect key="frame" x="20" y="136" width="335" height="202"/>
                                         <string key="text">To make it easy for you to recognize and copy passwords manually using a keyboard or other means, Master Password makes your site passwords visible on your screen by default.
 
 If you are worried about "shoulder surfing" or people taking pictures of you while using Master Password, turn this setting off and your passwords will be hidden on-screen.
@@ -3296,17 +3317,17 @@ You can temporarily reveal a password by holding your finger down on the site's 
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="aNU-Nq-clY">
-                                <rect key="frame" x="0.0" y="341" width="375" height="326"/>
+                                <rect key="frame" x="0.0" y="342.5" width="375" height="324.5"/>
                                 <items/>
                             </toolbar>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="You have sites that can be upgraded." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Qi-GN-vhQ" userLabel="Title Label">
-                                <rect key="frame" x="16" y="361" width="343" height="21"/>
+                                <rect key="frame" x="16" y="362.5" width="343" height="20"/>
                                 <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="1000" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rnV-lT-dTT">
-                                <rect key="frame" x="16" y="390" width="343" height="217"/>
+                                <rect key="frame" x="16" y="390.5" width="343" height="216.5"/>
                                 <attributedString key="attributedText">
                                     <fragment>
                                         <string key="content">Upgrading a site allows it to take advantage of

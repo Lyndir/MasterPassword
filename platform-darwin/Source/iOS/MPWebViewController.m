@@ -36,7 +36,7 @@
 
     self.webNavigationItem.title = self.initialURL.host;
 
-    self.webView.alpha = 0;
+    self.webView.visible = NO;
     [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:self.initialURL]];
 }
 
@@ -75,7 +75,7 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
 
     [UIView animateWithDuration:0.3 animations:^{
-        self.webView.alpha = 1;
+        self.webView.visible = YES;
     }];
 
     [self.webNavigationItem setLeftBarButtonItem:[webView canGoBack]? [[UIBarButtonItem alloc]

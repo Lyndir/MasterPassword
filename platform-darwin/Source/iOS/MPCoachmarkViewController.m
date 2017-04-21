@@ -28,17 +28,16 @@
 
     [super viewDidLoad];
 
-    _views = [NSArray arrayWithObjects:
-            self.view0, self.view1, self.view2, self.view3, self.view4, self.view5, self.view6, self.view7, self.view8, self.view9, nil];
+    _views = @[ self.view0, self.view1, self.view2, self.view3, self.view4, self.view5, self.view6, self.view7, self.view8, self.view9 ];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 
     [super viewWillAppear:animated];
 
-    self.viewProgress.hidden = NO;
+    self.viewProgress.visible = YES;
     self.viewProgress.progress = 0;
-    [_views makeObjectsPerformSelector:@selector( setAlpha: ) withObject:@0];
+    [_views makeObjectsPerformSelector:@selector( setVisible: ) withObject:@NO];
     _nextView = 0;
 }
 
@@ -47,7 +46,7 @@
     [super viewDidAppear:animated];
 
     [UIView animateWithDuration:0.3f animations:^{
-        [_views[_nextView++] setAlpha:1];
+        [_views[_nextView++] setVisible:YES];
     }];
 
     _viewTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 block:^(NSTimer *timer) {
@@ -56,11 +55,11 @@
         if (self.viewProgress.progress == 1)
             [UIView animateWithDuration:0.3f animations:^{
                 self.viewProgress.progress = 0;
-                [_views[_nextView++] setAlpha:1];
+                [_views[_nextView++] setVisible:YES];
 
                 if (_nextView >= [_views count]) {
                     [_viewTimer invalidate];
-                    self.viewProgress.hidden = YES;
+                    self.viewProgress.visible = NO;
                 }
             }];
     }                                            repeats:YES];

@@ -49,11 +49,10 @@ const long MPAvatarAdd = 10000;
 
     [super awakeFromNib];
 
-    self.alpha = 0;
+    self.visible = NO;
 
     self.nameContainer.layer.cornerRadius = 5;
 
-    self.avatarImageView.hidden = NO;
     self.avatarImageView.layer.cornerRadius = self.avatarImageView.bounds.size.height / 2;
     self.avatarImageView.layer.masksToBounds = NO;
     self.avatarImageView.backgroundColor = [UIColor clearColor];
@@ -211,7 +210,7 @@ const long MPAvatarAdd = 10000;
     [UIView animateWithDuration:animated? 0.5f: 0 delay:0
                         options:UIViewAnimationOptionOverrideInheritedDuration | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
-                         self.alpha = 1;
+                         self.visible = YES;
 
                          if (self.newUser) {
                              if (self.mode == MPAvatarModeLowered)
@@ -220,6 +219,10 @@ const long MPAvatarAdd = 10000;
                                  self.avatar = arc4random() % MPAvatarCount;
                          }
 
+                         self.nameContainer.alpha = self.visibility;
+                         self.avatarImageView.alpha = self.visibility * 0.7f + 0.3f;
+                         self.avatarImageView.layer.shadowRadius = 15 * self.visibility * self.visibility;
+
                          switch (self.mode) {
                              case MPAvatarModeLowered: {
                                  [self.avatarSizeConstraint updateConstant:
@@ -227,10 +230,9 @@ const long MPAvatarAdd = 10000;
                                  [self.avatarRaisedConstraint updatePriority:UILayoutPriorityDefaultLow];
                                  [self.avatarToTopConstraint updatePriority:UILayoutPriorityDefaultLow];
                                  [self.nameToCenterConstraint updatePriority:UILayoutPriorityDefaultLow];
-                                 self.nameContainer.alpha = self.visibility;
+                                 self.nameContainer.visible = YES;
                                  self.nameContainer.backgroundColor = [UIColor clearColor];
-                                 self.avatarImageView.alpha = self.visibility * 0.7f + 0.3f;
-                                 self.avatarImageView.layer.shadowRadius = 15 * self.visibility * self.visibility;
+                                 self.avatarImageView.visible = YES;
                                  break;
                              }
                              case MPAvatarModeRaisedButInactive: {
@@ -239,10 +241,9 @@ const long MPAvatarAdd = 10000;
                                  [self.avatarRaisedConstraint updatePriority:UILayoutPriorityDefaultHigh];
                                  [self.avatarToTopConstraint updatePriority:UILayoutPriorityDefaultLow];
                                  [self.nameToCenterConstraint updatePriority:UILayoutPriorityDefaultLow];
-                                 self.nameContainer.alpha = self.visibility;
+                                 self.nameContainer.visible = YES;
                                  self.nameContainer.backgroundColor = [UIColor clearColor];
-                                 self.avatarImageView.alpha = 0;
-                                 self.avatarImageView.layer.shadowRadius = 15 * self.visibility * self.visibility;
+                                 self.avatarImageView.visible = NO;
                                  break;
                              }
                              case MPAvatarModeRaisedAndActive: {
@@ -251,10 +252,9 @@ const long MPAvatarAdd = 10000;
                                  [self.avatarRaisedConstraint updatePriority:UILayoutPriorityDefaultHigh];
                                  [self.avatarToTopConstraint updatePriority:UILayoutPriorityDefaultLow];
                                  [self.nameToCenterConstraint updatePriority:UILayoutPriorityDefaultHigh];
-                                 self.nameContainer.alpha = self.visibility;
+                                 self.nameContainer.visible = YES;
                                  self.nameContainer.backgroundColor = [UIColor blackColor];
-                                 self.avatarImageView.alpha = 1;
-                                 self.avatarImageView.layer.shadowRadius = 15 * self.visibility * self.visibility;
+                                 self.avatarImageView.visible = YES;
                                  break;
                              }
                              case MPAvatarModeRaisedAndHidden: {
@@ -263,10 +263,9 @@ const long MPAvatarAdd = 10000;
                                  [self.avatarRaisedConstraint updatePriority:UILayoutPriorityDefaultHigh];
                                  [self.avatarToTopConstraint updatePriority:UILayoutPriorityDefaultLow];
                                  [self.nameToCenterConstraint updatePriority:UILayoutPriorityDefaultHigh];
-                                 self.nameContainer.alpha = 0;
+                                 self.nameContainer.visible = NO;
                                  self.nameContainer.backgroundColor = [UIColor blackColor];
-                                 self.avatarImageView.alpha = 0;
-                                 self.avatarImageView.layer.shadowRadius = 15 * self.visibility * self.visibility;
+                                 self.avatarImageView.visible = NO;
                                  break;
                              }
                              case MPAvatarModeRaisedAndMinimized: {
@@ -274,9 +273,9 @@ const long MPAvatarAdd = 10000;
                                  [self.avatarRaisedConstraint updatePriority:UILayoutPriorityDefaultLow];
                                  [self.avatarToTopConstraint updatePriority:UILayoutPriorityDefaultHigh + 2];
                                  [self.nameToCenterConstraint updatePriority:UILayoutPriorityDefaultHigh];
-                                 self.nameContainer.alpha = 0;
+                                 self.nameContainer.visible = NO;
                                  self.nameContainer.backgroundColor = [UIColor blackColor];
-                                 self.avatarImageView.alpha = 1;
+                                 self.avatarImageView.visible = YES;
                                  break;
                              }
                          }
@@ -293,7 +292,7 @@ const long MPAvatarAdd = 10000;
                          else
                              self.avatarImageView.backgroundColor = [UIColor clearColor];
                          self.avatarImageView.layer.cornerRadius = self.avatarImageView.bounds.size.height / 2;
-                         self.spinner.alpha = self.spinnerActive? 1: 0;
+                         self.spinner.visible = self.spinnerActive;
 
                          [self.contentView layoutIfNeeded];
                      } completion:nil];

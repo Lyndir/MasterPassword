@@ -57,7 +57,7 @@
     UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [dismissButton addTarget:self action:@selector( dismissOverlay: ) forControlEvents:UIControlEventTouchUpInside];
     dismissButton.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5f];
-    dismissButton.alpha = 0;
+    dismissButton.visible = NO;
     dismissButton.frame = self.view.bounds;
     dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _dismissSegueByButton[[NSValue valueWithNonretainedObject:dismissButton]] =
@@ -89,7 +89,7 @@
     [_dismissSegueByButton removeObjectForKey:dismissSegueKey];
 
     [UIView animateWithDuration:0.1f animations:^{
-        dismissButton.alpha = 0;
+        dismissButton.visible = NO;
     }                completion:^(BOOL finished) {
         [dismissButton removeFromSuperview];
     }];
@@ -127,14 +127,14 @@
 
         CGRectSetY( destinationViewController.view.frame, 100 );
         destinationViewController.view.transform = CGAffineTransformMakeScale( 1.2f, 1.2f );
-        destinationViewController.view.alpha = 0;
+        destinationViewController.view.visible = NO;
 
         [UIView transitionWithView:containerViewController.view duration:0.3f
                            options:UIViewAnimationOptionAllowAnimatedContent animations:^{
                     destinationViewController.view.transform = CGAffineTransformIdentity;
                     CGRectSetY( destinationViewController.view.frame, 0 );
-                    destinationViewController.view.alpha = 1;
-                    dismissButton.alpha = 1;
+                    destinationViewController.view.visible = YES;
+                    dismissButton.visible = YES;
                 }       completion:^(BOOL finished) {
                     [destinationViewController didMoveToParentViewController:containerViewController];
                     [containerViewController setNeedsStatusBarAppearanceUpdate];
@@ -147,7 +147,7 @@
                            options:UIViewAnimationOptionAllowAnimatedContent animations:^{
                     CGRectSetY( sourceViewController.view.frame, 100 );
                     sourceViewController.view.transform = CGAffineTransformMakeScale( 0.8f, 0.8f );
-                    sourceViewController.view.alpha = 0;
+                    sourceViewController.view.visible = NO;
                     [containerViewController removeDismissButtonForViewController:sourceViewController];
                 }       completion:^(BOOL finished) {
                     if (finished) {

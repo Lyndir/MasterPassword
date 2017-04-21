@@ -300,15 +300,14 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
     [UIView animateWithDuration:0.3f animations:^{
         if (showTips & MPPasswordsBadNameTip)
-            self.badNameTipContainer.alpha = 1;
+            self.badNameTipContainer.visible = YES;
     }                completion:^(BOOL finished) {
-        if (finished)
-            PearlMainQueueAfter( 5, ^{
-                [UIView animateWithDuration:0.3f animations:^{
-                    if (showTips & MPPasswordsBadNameTip)
-                        self.badNameTipContainer.alpha = 0;
-                }];
-            } );
+        PearlMainQueueAfter( 5, ^{
+            [UIView animateWithDuration:0.3f animations:^{
+                if (showTips & MPPasswordsBadNameTip)
+                    self.badNameTipContainer.visible = NO;
+            }];
+        } );
     }];
 }
 
@@ -337,7 +336,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     PearlRemoveNotificationObservers();
     PearlAddNotificationObserver( UIApplicationDidEnterBackgroundNotification, nil, [NSOperationQueue mainQueue],
             ^(MPPasswordsViewController *self, NSNotification *note) {
-                self.passwordSelectionContainer.alpha = 0;
+                self.passwordSelectionContainer.visible = NO;
             } );
     PearlAddNotificationObserver( UIApplicationWillEnterForegroundNotification, nil, [NSOperationQueue mainQueue],
             ^(MPPasswordsViewController *self, NSNotification *note) {
@@ -346,7 +345,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     PearlAddNotificationObserver( UIApplicationDidBecomeActiveNotification, nil, [NSOperationQueue mainQueue],
             ^(MPPasswordsViewController *self, NSNotification *note) {
                 [UIView animateWithDuration:0.7f animations:^{
-                    self.passwordSelectionContainer.alpha = 1;
+                    self.passwordSelectionContainer.visible = YES;
                 }];
             } );
     PearlAddNotificationObserver( MPSignedOutNotification, nil, nil,

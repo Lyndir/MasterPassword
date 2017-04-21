@@ -19,7 +19,9 @@
 		93D3932889B6B4206E66A6D6 /* PearlEMail.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39F7C9F47BF6387FBC5C3 /* PearlEMail.h */; };
 		93D39392DEDA376F93C6C718 /* MPCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39BAA71DE51B4D8A1286C /* MPCell.m */; };
 		93D3939661CE37180AF7CD6A /* MPStoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3957D76F71A652716EECC /* MPStoreViewController.m */; };
+		93D393AA69A1193401160418 /* UIView+AlphaScale.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39488AB33616661725929 /* UIView+AlphaScale.m */; };
 		93D393DB5325820241BA90A7 /* PearlSizedTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39A4759186F6D2D34AA6B /* PearlSizedTextView.h */; };
+		93D3942C1B117EE4851AA7B6 /* UIView+Visible.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3952910EDB8E0EBC94BA9 /* UIView+Visible.m */; };
 		93D394982CBD25D46692DD7C /* MPWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3990E0CD1B5CF9FBB2C07 /* MPWebViewController.m */; };
 		93D394B5036C882B33C71872 /* MPPasswordsSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39E7A12CC352B2825AA66 /* MPPasswordsSegue.m */; };
 		93D39508A6814612A5B3C226 /* MPMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D399B36CDB2004D7C51391 /* MPMessageViewController.m */; };
@@ -28,6 +30,7 @@
 		93D3954FCE045A3CC7E804B7 /* MPUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D399E571F61E50A9BF8FAF /* MPUsersViewController.m */; };
 		93D3957237D303DE2D38C267 /* MPAvatarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39B381350802A194BF332 /* MPAvatarCell.m */; };
 		93D39577FD8BB0945DB2F0A3 /* MPAlgorithmV3.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39FD9623E8D5571C0AEB3 /* MPAlgorithmV3.m */; };
+		93D3959696396A91961C6148 /* UIView+AlphaScale.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D392D76C091DEA3319F11D /* UIView+AlphaScale.h */; };
 		93D395B715D15F2B56F2A2EE /* mpw-types.c in Sources */ = {isa = PBXBuildFile; fileRef = 93D392C5A6572DB0EB5B82C8 /* mpw-types.c */; };
 		93D395F08A087F8A24689347 /* NSArray+Indexing.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39067C0AFDC581794E2B8 /* NSArray+Indexing.m */; };
 		93D39673DDC085BE72C34D7C /* MPPopdownSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D39B050DD5F55E9794EFD4 /* MPPopdownSegue.m */; };
@@ -53,6 +56,7 @@
 		93D39B842AB9A5D072810D76 /* NSError+PearlFullDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D398C95847261903D781D3 /* NSError+PearlFullDescription.h */; };
 		93D39B8F90F58A5D158DDBA3 /* MPPasswordsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3924EE15017F8A12CB436 /* MPPasswordsViewController.m */; };
 		93D39BA1EA3CAAC8A220B4A6 /* MPAppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3916C1D8F1427DFBDEBCA /* MPAppSettingsViewController.m */; };
+		93D39BFB5F5F9337F6565DE3 /* UIView+Visible.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D39B7B765546B1F1900CB7 /* UIView+Visible.h */; };
 		93D39C34FE35830EF5BE1D2A /* NSArray+Indexing.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D396D04E57792A54D437AC /* NSArray+Indexing.h */; };
 		93D39D47FC623E91FC39D20C /* UICollectionView+PearlReloadFromArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D3908DF8EABBD952065DC0 /* UICollectionView+PearlReloadFromArray.m */; };
 		93D39D596A2E376D6F6F5DA1 /* MPCombinedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D393310223DDB35218467A /* MPCombinedViewController.m */; };
@@ -476,6 +480,7 @@
 		93D3924EE15017F8A12CB436 /* MPPasswordsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPasswordsViewController.m; sourceTree = "<group>"; };
 		93D392876BE5C011DE73B43F /* MPPopdownSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPopdownSegue.h; sourceTree = "<group>"; };
 		93D392C5A6572DB0EB5B82C8 /* mpw-types.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-types.c"; sourceTree = "<group>"; };
+		93D392D76C091DEA3319F11D /* UIView+AlphaScale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+AlphaScale.h"; sourceTree = "<group>"; };
 		93D393310223DDB35218467A /* MPCombinedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCombinedViewController.m; sourceTree = "<group>"; };
 		93D393B97158D7BE9332EA53 /* NSDictionary+Indexing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Indexing.h"; sourceTree = "<group>"; };
 		93D393BB973253D4BAAC84AA /* PearlEMail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlEMail.m; sourceTree = "<group>"; };
@@ -483,8 +488,10 @@
 		93D394077F8FAB8167647187 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		93D3942A356B639724157982 /* PearlOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlOverlay.h; sourceTree = "<group>"; };
 		93D394482BB07F90E8FD1314 /* UIResponder+PearlFirstResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+PearlFirstResponder.h"; sourceTree = "<group>"; };
+		93D39488AB33616661725929 /* UIView+AlphaScale.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+AlphaScale.m"; sourceTree = "<group>"; };
 		93D394D73F5BC92297CE8D7B /* MPAlgorithmV3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAlgorithmV3.h; sourceTree = "<group>"; };
 		93D395105935859D71679931 /* MPOverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPOverlayViewController.m; sourceTree = "<group>"; };
+		93D3952910EDB8E0EBC94BA9 /* UIView+Visible.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Visible.m"; sourceTree = "<group>"; };
 		93D3956915634581E737B38C /* PearlNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PearlNavigationController.m; sourceTree = "<group>"; };
 		93D3957D76F71A652716EECC /* MPStoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPStoreViewController.m; sourceTree = "<group>"; };
 		93D3969393A3A46BD27D7078 /* mpw-algorithm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mpw-algorithm.c"; sourceTree = "<group>"; };
@@ -524,6 +531,7 @@
 		93D39B1D8177A86C5B9EDDE3 /* PearlUICollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PearlUICollectionView.h; sourceTree = "<group>"; };
 		93D39B381350802A194BF332 /* MPAvatarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAvatarCell.m; sourceTree = "<group>"; };
 		93D39B455A71EC98C749E623 /* MPOverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPOverlayViewController.h; sourceTree = "<group>"; };
+		93D39B7B765546B1F1900CB7 /* UIView+Visible.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Visible.h"; sourceTree = "<group>"; };
 		93D39BAA71DE51B4D8A1286C /* MPCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCell.m; sourceTree = "<group>"; };
 		93D39C41A27AA42D044D68AE /* NSString+MPMarkDown.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+MPMarkDown.m"; path = "iOS/NSString+MPMarkDown.m"; sourceTree = "<group>"; };
 		93D39C426E03358384018E85 /* MPAnswersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAnswersViewController.m; sourceTree = "<group>"; };
@@ -3098,6 +3106,10 @@
 				DAEFB01C19BCBD9E00525079 /* UIView+LayoutGone.m */,
 				DAEC85B418E3DD9A007FC0DF /* UIView+Touches.h */,
 				DAEC85B118E3DD9A007FC0DF /* UIView+Touches.m */,
+				93D39488AB33616661725929 /* UIView+AlphaScale.m */,
+				93D392D76C091DEA3319F11D /* UIView+AlphaScale.h */,
+				93D3952910EDB8E0EBC94BA9 /* UIView+Visible.m */,
+				93D39B7B765546B1F1900CB7 /* UIView+Visible.h */,
 			);
 			path = "Pearl-UIKit";
 			sourceTree = "<group>";
@@ -3206,6 +3218,8 @@
 				93D39A53D76CA70786423458 /* UICollectionView+PearlReloadFromArray.h in Headers */,
 				93D39AA4A0BE66A872CCC02E /* NSPersistentStore+PearlMigration.h in Headers */,
 				93D399E4BC1E092A8C8B12AE /* NSOrderedSetOrArray.h in Headers */,
+				93D3959696396A91961C6148 /* UIView+AlphaScale.h in Headers */,
+				93D39BFB5F5F9337F6565DE3 /* UIView+Visible.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3912,6 +3926,8 @@
 				93D39D47FC623E91FC39D20C /* UICollectionView+PearlReloadFromArray.m in Sources */,
 				93D3928D629EA563F9EC4909 /* NSPersistentStore+PearlMigration.m in Sources */,
 				93D392A33CCE85431E910C7B /* NSOrderedSetOrArray.m in Sources */,
+				93D393AA69A1193401160418 /* UIView+AlphaScale.m in Sources */,
+				93D3942C1B117EE4851AA7B6 /* UIView+Visible.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

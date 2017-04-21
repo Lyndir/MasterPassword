@@ -33,7 +33,7 @@
 - (void)viewWillAppear:(BOOL)animated {
 
     inf( @"Type selection will appear" );
-    self.recommendedTipContainer.alpha = 0;
+    self.recommendedTipContainer.visible = NO;
 
     [super viewWillAppear:animated];
 }
@@ -42,15 +42,13 @@
 
     if ([[MPiOSConfig get].firstRun boolValue])
         [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
-            self.recommendedTipContainer.alpha = 1;
+            self.recommendedTipContainer.visible = YES;
         }                completion:^(BOOL finished) {
-            if (finished) {
-                dispatch_after( dispatch_time( DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC) ), dispatch_get_main_queue(), ^{
-                    [UIView animateWithDuration:0.2f animations:^{
-                        self.recommendedTipContainer.alpha = 0;
-                    }];
-                } );
-            }
+            PearlMainQueueAfter( 5, ^{
+                [UIView animateWithDuration:0.2f animations:^{
+                    self.recommendedTipContainer.visible = NO;
+                }];
+            } );
         }];
 
     [super viewDidAppear:animated];

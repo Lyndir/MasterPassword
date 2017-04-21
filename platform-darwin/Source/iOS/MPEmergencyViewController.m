@@ -87,12 +87,13 @@
     if ([sitePassword length]) {
         [UIPasteboard generalPasteboard].string = sitePassword;
         [UIView animateWithDuration:0.3f animations:^{
-            self.tipContainer.alpha = 1;
+            self.tipContainer.visible = YES;
         }                completion:^(BOOL finished) {
-            if (finished)
-                PearlMainQueueAfter( 3, ^{
-                    self.tipContainer.alpha = 0;
-                } );
+            PearlMainQueueAfter( 3, ^{
+                [UIView animateWithDuration:0.3f animations:^{
+                    self.tipContainer.visible = NO;
+                }];
+            } );
         }];
     }
 }

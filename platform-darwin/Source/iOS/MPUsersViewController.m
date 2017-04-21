@@ -76,7 +76,7 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
     self.avatarCollectionView.allowsMultipleSelection = YES;
     [self.entryField addTarget:self action:@selector( textFieldEditingChanged: ) forControlEvents:UIControlEventEditingChanged];
 
-    self.preferencesTipContainer.alpha = 0;
+    self.preferencesTipContainer.visible = NO;
 
     [self setActive:YES animated:NO];
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"tipped.thanks"])
@@ -87,7 +87,7 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
 
     [super viewWillAppear:animated];
 
-    self.userSelectionContainer.alpha = 0;
+    self.userSelectionContainer.visible = NO;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -498,25 +498,25 @@ referenceSizeForFooterInSection:(NSInteger)section {
 
     [UIView animateWithDuration:0.3f animations:^{
         if (showTips & MPUsersThanksTip)
-            self.thanksTipContainer.alpha = 1;
+            self.thanksTipContainer.visible = YES;
         if (showTips & MPUsersAvatarTip)
-            self.avatarTipContainer.alpha = 1;
+            self.avatarTipContainer.visible = YES;
         if (showTips & MPUsersMasterPasswordTip)
-            self.entryTipContainer.alpha = 1;
+            self.entryTipContainer.visible = YES;
         if (showTips & MPUsersPreferencesTip)
-            self.preferencesTipContainer.alpha = 1;
+            self.preferencesTipContainer.visible = YES;
     }                completion:^(BOOL finished) {
         if (finished)
             PearlMainQueueAfter( 5, ^{
                 [UIView animateWithDuration:0.3f animations:^{
                     if (showTips & MPUsersThanksTip)
-                        self.thanksTipContainer.alpha = 0;
+                        self.thanksTipContainer.visible = NO;
                     if (showTips & MPUsersAvatarTip)
-                        self.avatarTipContainer.alpha = 0;
+                        self.avatarTipContainer.visible = NO;
                     if (showTips & MPUsersMasterPasswordTip)
-                        self.entryTipContainer.alpha = 0;
+                        self.entryTipContainer.visible = NO;
                     if (showTips & MPUsersPreferencesTip)
-                        self.preferencesTipContainer.alpha = 0;
+                        self.preferencesTipContainer.visible = NO;
                 }];
             } );
     }];
@@ -539,14 +539,14 @@ referenceSizeForFooterInSection:(NSInteger)section {
         return;
 
     [UIView animateWithDuration:timer? 0.5f: 0 animations:^{
-        self.marqueeButton.alpha = 0;
+        self.marqueeButton.visible = NO;
     }                completion:^(BOOL finished) {
         if (!finished)
             return;
 
         [self.marqueeButton setTitle:nextMarqueeString forState:UIControlStateNormal];
         [UIView animateWithDuration:timer? 0.5f: 0 animations:^{
-            self.marqueeButton.alpha = 0.5f;
+            self.marqueeButton.visible = YES;
         }];
     }];
 }
@@ -589,8 +589,6 @@ referenceSizeForFooterInSection:(NSInteger)section {
 
 - (void)updateAvatarVisibility {
 
-    self.previousAvatarButton.alpha = 0;
-    self.nextAvatarButton.alpha = 0;
     for (NSIndexPath *indexPath in self.avatarCollectionView.indexPathsForVisibleItems) {
         MPAvatarCell *cell = (MPAvatarCell *)[self.avatarCollectionView cellForItemAtIndexPath:indexPath];
         [self updateVisibilityForAvatar:cell atIndexPath:indexPath animated:NO];
@@ -634,10 +632,10 @@ referenceSizeForFooterInSection:(NSInteger)section {
     CGFloat visibility = MAX( 0, MIN( 1, 1 - ABS( current / (max / 2) - 1 ) ) );
     [cell setVisibility:visibility animated:animated];
 
-    if (cell.newUser) {
-        self.previousAvatarButton.alpha = cell.mode == MPAvatarModeRaisedAndActive? visibility * 0.7f: 0;
-        self.nextAvatarButton.alpha = cell.mode == MPAvatarModeRaisedAndActive? visibility * 0.7f: 0;
-    }
+    [UIView animateWithDuration:animated? 0.3f: 0 animations:^{
+        self.nextAvatarButton.visible = self.previousAvatarButton.visible = cell.newUser && cell.mode == MPAvatarModeRaisedAndActive;
+        self.nextAvatarButton.alpha = self.previousAvatarButton.alpha = visibility * 0.7f;
+    }];
 }
 
 - (void)afterUpdatesMainQueue:(void ( ^ )(void))block {
@@ -658,7 +656,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
     PearlRemoveNotificationObservers();
     PearlAddNotificationObserver( UIApplicationDidEnterBackgroundNotification, nil, [NSOperationQueue mainQueue],
             ^(MPUsersViewController *self, NSNotification *note) {
-                self.userSelectionContainer.alpha = 0;
+                self.userSelectionContainer.visible = NO;
             } );
     PearlAddNotificationObserver( UIApplicationWillEnterForegroundNotification, nil, [NSOperationQueue mainQueue],
             ^(MPUsersViewController *self, NSNotification *note) {
@@ -667,7 +665,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
     PearlAddNotificationObserver( UIApplicationDidBecomeActiveNotification, nil, [NSOperationQueue mainQueue],
             ^(MPUsersViewController *self, NSNotification *note) {
                 [UIView animateWithDuration:0.5f animations:^{
-                    self.userSelectionContainer.alpha = 1;
+                    self.userSelectionContainer.visible = YES;
                 }];
             } );
     PearlAddNotificationObserver( UIKeyboardWillShowNotification, nil, [NSOperationQueue mainQueue],
@@ -679,7 +677,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
 
     NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
     [UIView animateWithDuration:0.3f animations:^{
-        self.avatarCollectionView.alpha = mainContext? 1: 0;
+        self.avatarCollectionView.visible = mainContext != nil;
     }];
     if (mainContext && self.storeLoadingActivity.isAnimating)
         [self.storeLoadingActivity stopAnimating];
@@ -764,7 +762,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
                                               scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
 
         [UIView animateWithDuration:0.3f animations:^{
-            self.userSelectionContainer.alpha = 1;
+            self.userSelectionContainer.visible = YES;
         }];
     } );
 }
@@ -829,8 +827,8 @@ referenceSizeForFooterInSection:(NSInteger)section {
         switch (activeUserState) {
             case MPActiveUserStateNone: {
                 self.avatarCollectionView.scrollEnabled = YES;
-                self.entryContainer.alpha = 0;
-                self.footerContainer.alpha = 1;
+                self.entryContainer.visible = NO;
+                self.footerContainer.visible = YES;
                 break;
             }
             case MPActiveUserStateLogin:
@@ -838,15 +836,15 @@ referenceSizeForFooterInSection:(NSInteger)section {
             case MPActiveUserStateMasterPasswordChoice:
             case MPActiveUserStateMasterPasswordConfirmation: {
                 self.avatarCollectionView.scrollEnabled = NO;
-                self.entryContainer.alpha = 1;
-                self.footerContainer.alpha = 1;
+                self.entryContainer.visible = YES;
+                self.footerContainer.visible = YES;
                 requestFirstResponder = YES;
                 break;
             }
             case MPActiveUserStateMinimized: {
                 self.avatarCollectionView.scrollEnabled = NO;
-                self.entryContainer.alpha = 0;
-                self.footerContainer.alpha = 0;
+                self.entryContainer.visible = NO;
+                self.footerContainer.visible = NO;
                 break;
             }
         }

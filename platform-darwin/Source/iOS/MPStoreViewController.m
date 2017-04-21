@@ -76,7 +76,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
     [self reloadCellsHiding:self.allCellsBySection[0] showing:@[ self.loadingCell ]];
     [self.allCellsBySection[0] enumerateObjectsUsingBlock:^(MPStoreProductCell *cell, NSUInteger idx, BOOL *stop) {
         if ([cell isKindOfClass:[MPStoreProductCell class]]) {
-            cell.purchasedIndicator.alpha = 0;
+            cell.purchasedIndicator.visible = NO;
             [cell.activityIndicator stopAnimating];
         }
     }];
@@ -313,7 +313,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
     BOOL purchased = [[MPiOSAppDelegate get] isFeatureUnlocked:productIdentifier];
     NSInteger quantity = [self quantityForProductIdentifier:productIdentifier];
     cell.priceLabel.text = purchased? @"": [self.currencyFormatter stringFromNumber:@([product.price floatValue] * quantity)];
-    cell.purchasedIndicator.alpha = purchased? 1: 0;
+    cell.purchasedIndicator.visible = purchased;
 }
 
 - (NSInteger)quantityForProductIdentifier:(NSString *)productIdentifier {
