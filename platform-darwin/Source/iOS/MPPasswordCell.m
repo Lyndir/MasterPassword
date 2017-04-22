@@ -507,7 +507,7 @@
         self.upgradeButton.gone = !mainSite.requiresExplicitMigration && ![[MPiOSConfig get].allowDowngrade boolValue];
         self.answersButton.gone = ![[MPiOSAppDelegate get] isFeatureUnlocked:MPProductGenerateAnswers];
         BOOL settingsMode = self.mode == MPPasswordCellModeSettings;
-        self.loginNameContainer.visible = settingsMode || mainSite.loginGenerated || [mainSite.loginName length]);
+        self.loginNameContainer.visible = settingsMode || mainSite.loginGenerated || [mainSite.loginName length];
         self.modeButton.visible = !self.transientSite;
         self.modeButton.alpha = settingsMode? 0.5f: 0.1f;
         self.counterLabel.visible = self.counterButton.visible = mainSite.type & MPSiteTypeClassGenerated;
