@@ -12,7 +12,7 @@ mpwArchive=mpw-$commit.tar.gz
 read -n1 -p "Will prepare and release $mpwArchive.  Press a key to continue or ^C to abort."
 
 echo "Cleaning .."
-( git clean -fdx . && cd core && git clean -fdx . )
+( git clean -ffdx . && cd core && git clean -ffdx . )
 
 echo "Creating archive $mpwArchive .."
 git ls-files -z . | xargs -0 tar -Lcvzf "$mpwArchive"
@@ -22,12 +22,13 @@ gpg --detach-sign "$mpwArchive"
 
 echo "Installing archive and signature in current site .."
 cd ../../public/site/current
-ln -sf "../../../platform-independent/cli-c/$mpwArchive"; [[ -e $_ ]]
-ln -sf "../../../platform-independent/cli-c/$mpwArchive.sig"; [[ -e $_ ]]
+mv "../../../platform-independent/cli-c/$mpwArchive" .; [[ -e $_ ]]
+mv "../../../platform-independent/cli-c/$mpwArchive.sig" .; [[ -e $_ ]]
 ln -sf "$mpwArchive" "masterpassword-cli.tar.gz"; [[ -e $_ ]]
 ln -sf "$mpwArchive.sig" "masterpassword-cli.tar.gz.sig"; [[ -e $_ ]]
 
 echo
-echo "Done.  Don't forget to publish the site."
-echo "package: $mpwArchive"
-echo "signature: $mpwArchive.sig"
+echo "Done.  Ready to publish the site."
+echo "     package: $mpwArchive"
+echo "   signature: $mpwArchive.sig"
+echo "         url: https://ssl.masterpasswordapp.com/$mpwArchive"
