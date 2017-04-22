@@ -11,8 +11,12 @@ mpwArchive=mpw-$commit.tar.gz
 [[ -e $mpwArchive ]] && echo >&2 "WARNING: $mpwArchive already exists.  Will overwrite."
 read -n1 -p "Will prepare and release $mpwArchive.  Press a key to continue or ^C to abort."
 
+echo "Cleaning .."
+./clean
+
 echo "Creating archive $mpwArchive .."
 git ls-files -z . | xargs -0 tar -Lcvzf "$mpwArchive"
+
 echo "Creating archive signature $mpwArchive.sig .."
 gpg --detach-sign "$mpwArchive"
 
