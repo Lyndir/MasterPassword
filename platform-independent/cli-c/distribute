@@ -12,7 +12,7 @@ mpwArchive=mpw-$commit.tar.gz
 read -n1 -p "Will prepare and release $mpwArchive.  Press a key to continue or ^C to abort."
 
 echo "Cleaning .."
-./clean
+( git clean -fdx . && cd core && git clean -fdx . )
 
 echo "Creating archive $mpwArchive .."
 git ls-files -z . | xargs -0 tar -Lcvzf "$mpwArchive"
