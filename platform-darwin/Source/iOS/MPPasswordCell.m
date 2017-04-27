@@ -635,8 +635,19 @@
         return NO;
 
     PearlMainQueue( ^{
-        [PearlOverlay showTemporaryOverlayWithTitle:strl( @"Password Copied" ) dismissAfter:2];
-        [UIPasteboard generalPasteboard].string = password;
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        if ([pasteboard respondsToSelector:@selector(setItems:options:)]) {
+            [pasteboard setItems:@[ @{ UIPasteboardTypeAutomatic: password } ]
+                         options:@{
+                                 UIPasteboardOptionLocalOnly     : @NO,
+                                 UIPasteboardOptionExpirationDate: [NSDate dateWithTimeIntervalSinceNow:3 * 60]
+                         }];
+            [PearlOverlay showTemporaryOverlayWithTitle:strl( @"Password Copied (3 min)" ) dismissAfter:2];
+        }
+        else {
+            pasteboard.string = password;
+            [PearlOverlay showTemporaryOverlayWithTitle:strl( @"Password Copied" ) dismissAfter:2];
+        }
     } );
 
     [site use];
