@@ -73,7 +73,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
     self.tableView.contentInset = UIEdgeInsetsMake( 64, 0, 49, 0 );
 
-    [self reloadCellsHiding:self.allCellsBySection[0] showing:@[ self.loadingCell ]];
+    [self updateCellsHiding:self.allCellsBySection[0] showing:@[ self.loadingCell ]];
     [self.allCellsBySection[0] enumerateObjectsUsingBlock:^(MPStoreProductCell *cell, NSUInteger idx, BOOL *stop) {
         if ([cell isKindOfClass:[MPStoreProductCell class]]) {
             cell.purchasedIndicator.visible = NO;
@@ -257,7 +257,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
     }
 
     [hideCells removeObjectsInArray:showCells];
-    [self reloadCellsHiding:hideCells showing:showCells];
+    [self updateCellsHiding:hideCells showing:showCells];
 }
 
 - (void)updateFuel {

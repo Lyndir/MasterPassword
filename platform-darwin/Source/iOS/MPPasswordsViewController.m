@@ -25,6 +25,8 @@
 #import "MPAnswersViewController.h"
 #import "MPMessageViewController.h"
 
+static const NSString *MPTransientPasswordItem = @"MPTransientPasswordItem";
+
 typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     MPPasswordsBadNameTip = 1 << 0,
 };
@@ -32,7 +34,6 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 @interface MPPasswordsViewController()<NSFetchedResultsControllerDelegate>
 
 @property(nonatomic, strong) IBOutlet UINavigationBar *navigationBar;
-@property(nonatomic, readonly) NSString *query;
 
 @end
 
@@ -42,11 +43,9 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     UIColor *_backgroundColor;
     UIColor *_darkenedBackgroundColor;
     __weak UIViewController *_popdownVC;
-    BOOL _showTransientItem;
-    NSUInteger _transientItem;
     NSCharacterSet *_siteNameAcceptableCharactersSet;
     NSArray *_fuzzyGroups;
-    NSMutableArray *_passwordCollectionViewUpdatesBatch;
+    NSMutableArray<NSMutableArray *> *_passwordCollectionSections;
 }
 
 #pragma mark - Life
@@ -62,8 +61,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
     _backgroundColor = self.passwordCollectionView.backgroundColor;
     _darkenedBackgroundColor = [_backgroundColor colorWithAlphaComponent:0.6f];
-    _transientItem = NSNotFound;
-    _passwordCollectionViewUpdatesBatch = [NSMutableArray arrayWithCapacity:4];
+    _passwordCollectionSections = [NSMutableArray new];
 
     self.view.backgroundColor = [UIColor clearColor];
     [self.passwordCollectionView automaticallyAdjustInsetsForKeyboard];
@@ -83,7 +81,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
     [self registerObservers];
     [self updateConfigKey:nil];
-    [self updatePasswords];
+    [self reloadPasswords];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -140,30 +138,42 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     return CGSizeMake( itemWidth, 100 );
 }
 
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
+        insetForSectionAtIndex:(NSInteger)section {
+
+    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)collectionViewLayout;
+    UIEdgeInsets occludedInsets = [self.passwordCollectionView occludedInsets];
+    UIEdgeInsets insets = layout.sectionInset;
+
+    if (section == 0)
+        insets.top += occludedInsets.top;
+
+    if (section == collectionView.numberOfSections - 1)
+        insets.bottom += occludedInsets.bottom;
+
+    return insets;
+}
+
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
 
-    return [self.fetchedResultsController.sections count];
+    return [_passwordCollectionSections count];
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 
-    if (![MPiOSAppDelegate get].activeUserOID || !_fetchedResultsController)
-        return 0;
-
-    NSUInteger objects = ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[section]).numberOfObjects;
-    _transientItem = _showTransientItem? objects: NSNotFound;
-    return objects + (_showTransientItem? 1: 0);
+    return [_passwordCollectionSections[(NSUInteger)section] count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
     MPPasswordCell *cell = [MPPasswordCell dequeueCellFromCollectionView:collectionView indexPath:indexPath];
     [cell setFuzzyGroups:_fuzzyGroups];
-    if (indexPath.item < ((id<NSFetchedResultsSectionInfo>)self.fetchedResultsController.sections[indexPath.section]).numberOfObjects)
-        [cell setSite:[self.fetchedResultsController objectAtIndexPath:indexPath] animated:NO];
-    else
+    id item = _passwordCollectionSections[(NSUInteger)indexPath.section][(NSUInteger)indexPath.item];
+    if ([item isKindOfClass:[MPSiteEntity class]])
+        [cell setSite:item animated:NO];
+    else // item == MPTransientPasswordItem
         [cell setTransientSite:self.query animated:NO];
 
     return cell;
@@ -180,61 +190,14 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 #pragma mark - NSFetchedResultsControllerDelegate
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath
-     forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
-
-    Weakify( self );
-
-    if (controller == _fetchedResultsController) {
-        @synchronized (_passwordCollectionViewUpdatesBatch) {
-            [_passwordCollectionViewUpdatesBatch addObject:[^{
-                Strongify( self );
-
-                switch (type) {
-                    case NSFetchedResultsChangeInsert:
-                        [self.passwordCollectionView insertItemsAtIndexPaths:@[ newIndexPath ]];
-                        break;
-                    case NSFetchedResultsChangeDelete:
-                        [self.passwordCollectionView deleteItemsAtIndexPaths:@[ indexPath ]];
-                        break;
-                    case NSFetchedResultsChangeMove:
-                        if (![indexPath isEqual:newIndexPath])
-                            [self.passwordCollectionView moveItemAtIndexPath:indexPath toIndexPath:newIndexPath];
-                        break;
-                    case NSFetchedResultsChangeUpdate:
-                        [self.passwordCollectionView reloadItemsAtIndexPaths:@[ indexPath ]];
-                        break;
-                }
-            } copy]];
-        }
-
-        [controller.managedObjectContext performBlock:^{
-            PearlMainQueueOperation( ^{
-                @try {
-                    [self.passwordCollectionView performBatchUpdates:^{
-                        [self updateTransientItem];
-
-                        @synchronized (_passwordCollectionViewUpdatesBatch) {
-                            for (VoidBlock block in _passwordCollectionViewUpdatesBatch)
-                                block();
-                            [_passwordCollectionViewUpdatesBatch removeAllObjects];
-                        }
-                    }                                     completion:nil];
-                }
-                @catch (NSException *exception) {
-                    wrn( @"While updating password cells: %@", [exception fullDescription] );
-                    [self.passwordCollectionView reloadData];
-                }
-            } );
-        }];
-    }
-}
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo
-           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
 
     if (controller == _fetchedResultsController)
-        [self.passwordCollectionView reloadData];
+        PearlMainQueue( ^{
+            [self.passwordCollectionView updateDataSource:_passwordCollectionSections
+                                               toSections:[self createPasswordCollectionSections]
+                                              reloadItems:nil completion:nil];
+        } );
 }
 
 #pragma mark - UISearchBarDelegate
@@ -266,7 +229,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         if (_passwordsDismissRecognizer)
             [self.view removeGestureRecognizer:_passwordsDismissRecognizer];
 
-        [self updatePasswords];
+        [self reloadPasswords];
         [UIView animateWithDuration:0.3f animations:^{
             self.passwordCollectionView.backgroundColor = _backgroundColor;
         }];
@@ -290,7 +253,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         if ([[self.query stringByTrimmingCharactersInSet:_siteNameAcceptableCharactersSet] length])
             [self showTips:MPPasswordsBadNameTip];
 
-        [self updatePasswords];
+        [self reloadPasswords];
     }
 }
 
@@ -311,24 +274,29 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     }];
 }
 
-- (void)updateTransientItem {
+- (NSMutableArray<NSMutableArray *> *)createPasswordCollectionSections {
 
     NSString *query = self.query;
-    _showTransientItem = [query length] > 0 && ![[[self.fetchedResultsController.sections[0] objects] filteredArrayUsingPredicate:
-            [NSPredicate predicateWithBlock:^BOOL(MPSiteEntity *site, NSDictionary<NSString *, id> *bindings) {
-                return [site.name isEqualToString:query];
-            }]] count];
-    if (!_showTransientItem && _transientItem != NSNotFound)
-        [self.passwordCollectionView deleteItemsAtIndexPaths:
-                @[ [NSIndexPath indexPathForItem:_transientItem inSection:0] ]];
-    else if (_showTransientItem && _transientItem == NSNotFound) {
-        NSUInteger objects = [self.fetchedResultsController.sections[0] numberOfObjects];
-        [self.passwordCollectionView insertItemsAtIndexPaths:
-                @[ [NSIndexPath indexPathForItem:objects inSection:0] ]];
+    BOOL needTransientItem = [query length] > 0;
+
+    NSArray<id<NSFetchedResultsSectionInfo>> *sectionInfos = [self.fetchedResultsController sections];
+    NSMutableArray *sections = [[NSMutableArray alloc] initWithCapacity:[sectionInfos count]];
+    for (id<NSFetchedResultsSectionInfo> sectionInfo in sectionInfos) {
+        NSArray<MPSiteEntity *> *sites = [sectionInfo.objects copy];
+        [sections addObject:sites];
+
+        if (needTransientItem)
+            for (MPSiteEntity *site in sites)
+                if ([site.name isEqualToString:query]) {
+                    needTransientItem = NO;
+                    break;
+                }
     }
-    else if (_transientItem != NSNotFound)
-        [self.passwordCollectionView reloadItemsAtIndexPaths:
-                @[ [NSIndexPath indexPathForItem:_transientItem inSection:0] ]];
+
+    if (needTransientItem)
+        [sections addObject:@[ MPTransientPasswordItem ]];
+
+    return sections;
 }
 
 - (void)registerObservers {
@@ -340,7 +308,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
             } );
     PearlAddNotificationObserver( UIApplicationWillEnterForegroundNotification, nil, [NSOperationQueue mainQueue],
             ^(MPPasswordsViewController *self, NSNotification *note) {
-                [self updatePasswords];
+                [self reloadPasswords];
             } );
     PearlAddNotificationObserver( UIApplicationDidBecomeActiveNotification, nil, [NSOperationQueue mainQueue],
             ^(MPPasswordsViewController *self, NSNotification *note) {
@@ -372,7 +340,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresDidChangeNotification, nil, nil,
             ^(MPPasswordsViewController *self, NSNotification *note) {
                 PearlMainQueue( ^{
-                    [self updatePasswords];
+                    [self reloadPasswords];
                     [self registerObservers];
                 } );
             } );
@@ -395,81 +363,40 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         [self.passwordCollectionView reloadData];
 }
 
-- (void)updatePasswords {
+- (void)reloadPasswords {
 
-    NSManagedObjectID *activeUserOID = [MPiOSAppDelegate get].activeUserOID;
-    if (!activeUserOID) {
-        PearlMainQueue( ^{
-            self.passwordsSearchBar.text = nil;
-            [self.passwordCollectionView reloadData];
-            [self.passwordCollectionView setContentOffset:CGPointMake( 0, -self.passwordCollectionView.contentInset.top ) animated:YES];
-        } );
-        return;
-    }
-
-    static NSRegularExpression *fuzzyRE;
-    static dispatch_once_t once = 0;
-    dispatch_once( &once, ^{
-        fuzzyRE = [NSRegularExpression regularExpressionWithPattern:@"(.)" options:0 error:nil];
-    } );
-
-    NSString *queryString = self.query;
-    NSString *queryPattern;
-    if ([queryString length] < 13)
-        queryPattern = [queryString stringByReplacingMatchesOfExpression:fuzzyRE withTemplate:@"*$1*"];
-    else
-        // If query is too long, a wildcard per character makes the CoreData fetch take excessively long.
-        queryPattern = strf( @"*%@*", queryString );
-    NSMutableArray *fuzzyGroups = [NSMutableArray arrayWithCapacity:[queryString length]];
-    [fuzzyRE enumerateMatchesInString:queryString options:0 range:NSMakeRange( 0, queryString.length )
-                           usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-                               [fuzzyGroups addObject:[queryString substringWithRange:result.range]];
-                           }];
-    _fuzzyGroups = fuzzyGroups;
     [self.fetchedResultsController.managedObjectContext performBlock:^{
-        NSArray *oldSectionInfos = [self.fetchedResultsController sections];
-        NSMutableArray *oldSections = [[NSMutableArray alloc] initWithCapacity:[oldSectionInfos count]];
-        for (id<NSFetchedResultsSectionInfo> sectionInfo in oldSectionInfos)
-            [oldSections addObject:[sectionInfo.objects copy]];
+        static NSRegularExpression *fuzzyRE;
+        static dispatch_once_t once = 0;
+        dispatch_once( &once, ^{
+            fuzzyRE = [NSRegularExpression regularExpressionWithPattern:@"(.)" options:0 error:nil];
+        } );
+
+        prof_new( @"updateSites" );
+        NSString *queryString = self.query;
+        NSString *queryPattern = [[queryString stringByReplacingMatchesOfExpression:fuzzyRE withTemplate:@"*$1"]
+                stringByAppendingString:@"*"];
+        prof_rewind( @"queryPattern" );
+        NSMutableArray *fuzzyGroups = [NSMutableArray new];
+        [fuzzyRE enumerateMatchesInString:queryString options:0 range:NSMakeRange( 0, queryString.length )
+                               usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+                                   [fuzzyGroups addObject:[queryString substringWithRange:result.range]];
+                               }];
+        _fuzzyGroups = fuzzyGroups;
 
         NSError *error = nil;
         self.fetchedResultsController.fetchRequest.predicate =
-                [NSPredicate predicateWithFormat:@"(%@ == '' OR name LIKE[cd] %@) AND user == %@",
-                                                 queryPattern, queryPattern, activeUserOID];
+                [NSPredicate predicateWithFormat:@"name LIKE[cd] %@ AND user == %@", queryPattern, [MPiOSAppDelegate get].activeUserOID];
         if (![self.fetchedResultsController performFetch:&error])
             err( @"Couldn't fetch sites: %@", [error fullDescription] );
 
         PearlMainQueue( ^{
-            @try {
-                [self.passwordCollectionView performBatchUpdates:^{
-                    [self updateTransientItem];
-
-                    NSInteger fromSections = self.passwordCollectionView.numberOfSections;
-                    NSInteger toSections = [self numberOfSectionsInCollectionView:self.passwordCollectionView];
-                    for (NSInteger section = 0; section < MAX( toSections, fromSections ); ++section) {
-                        if (section >= fromSections)
-                            [self.passwordCollectionView insertSections:[NSIndexSet indexSetWithIndex:section]];
-                        else if (section >= toSections)
-                            [self.passwordCollectionView deleteSections:[NSIndexSet indexSetWithIndex:section]];
-                        else if (section < [oldSections count])
-                            [self.passwordCollectionView reloadItemsFromArray:oldSections[section]
-                                                                      toArray:[[self.fetchedResultsController sections][section] objects]
-                                                                    inSection:section];
-                        else
-                            [self.passwordCollectionView reloadSections:[NSIndexSet indexSetWithIndex:section]];
-                    }
-                }                                     completion:^(BOOL finished) {
-                    if (finished)
-                        [self.passwordCollectionView setContentOffset:CGPointMake( 0, -self.passwordCollectionView.contentInset.top )
-                                                             animated:YES];
-                    for (MPPasswordCell *cell in self.passwordCollectionView.visibleCells)
-                        [cell setFuzzyGroups:_fuzzyGroups];
-                }];
-            }
-            @catch (NSException *exception) {
-                wrn( @"While updating password cells: %@", [exception fullDescription] );
-                [self.passwordCollectionView reloadData];
-            }
+            [self.passwordCollectionView updateDataSource:_passwordCollectionSections
+                                               toSections:[self createPasswordCollectionSections]
+                                              reloadItems:@[ MPTransientPasswordItem ] completion:^(BOOL finished) {
+                        for (MPPasswordCell *cell in self.passwordCollectionView.visibleCells)
+                            [cell setFuzzyGroups:_fuzzyGroups];
+                    }];
         } );
     }];
 }
@@ -484,15 +411,15 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 - (NSFetchedResultsController *)fetchedResultsController {
 
     if (!_fetchedResultsController) {
-        _showTransientItem = NO;
         [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlockAndWait:^(NSManagedObjectContext *mainContext) {
             NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
             fetchRequest.sortDescriptors = @[
                     [[NSSortDescriptor alloc] initWithKey:NSStringFromSelector( @selector( lastUsed ) ) ascending:NO]
             ];
             fetchRequest.fetchBatchSize = 10;
-            _fetchedResultsController = [[NSFetchedResultsController alloc]
-                    initWithFetchRequest:fetchRequest managedObjectContext:mainContext sectionNameKeyPath:nil cacheName:nil];
+            _fetchedResultsController =
+                    [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:mainContext
+                                                          sectionNameKeyPath:nil cacheName:nil];
             _fetchedResultsController.delegate = self;
         }];
         [self registerObservers];

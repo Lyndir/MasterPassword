@@ -34,7 +34,7 @@
 @property(assign, nonatomic) BOOL active;
 
 - (void)setActive:(BOOL)active animated:(BOOL)animated completion:(void ( ^ )(BOOL finished))completion;
-- (void)updatePasswords;
+- (void)reloadPasswords;
 
 - (IBAction)dismissPopdown:(id)sender;
 

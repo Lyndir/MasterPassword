@@ -547,8 +547,8 @@
 
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
         fetchRequest.sortDescriptors = @[ [[NSSortDescriptor alloc] initWithKey:@"lastUsed" ascending:NO] ];
-        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(%@ == '' OR name LIKE[cd] %@) AND user == %@",
-                                                                  queryPattern, queryPattern, [MPMacAppDelegate get].activeUserOID];
+        fetchRequest.predicate =
+                [NSPredicate predicateWithFormat:@"name LIKE[cd] %@ AND user == %@", queryPattern, [MPMacAppDelegate get].activeUserOID];
         prof_rewind( @"fetchRequest" );
 
         NSError *error = nil;

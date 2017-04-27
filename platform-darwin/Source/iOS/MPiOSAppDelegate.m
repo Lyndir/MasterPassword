@@ -25,6 +25,7 @@
 
 @property(nonatomic, strong) UIDocumentInteractionController *interactionController;
 
+@property(nonatomic) UIBackgroundTaskIdentifier task;
 @end
 
 @implementation MPiOSAppDelegate
@@ -243,6 +244,44 @@
     inf( @"Will background" );
     if (![[MPiOSConfig get].rememberLogin boolValue])
         [self signOutAnimated:NO];
+
+//    self.task = [application beginBackgroundTaskWithExpirationHandler:^{
+//        [application endBackgroundTask:self.task];
+//        dbg( @"background expiring" );
+//    }];
+//    PearlNotMainQueueOperation( ^{
+//        NSString *pbstring = [UIPasteboard generalPasteboard].string;
+//        while (YES) {
+//            NSString *newString = [UIPasteboard generalPasteboard].string;
+//            if (![newString isEqualToString:pbstring]) {
+//                dbg( @"pasteboard changed to: %@", newString );
+//                pbstring = newString;
+//                NSURL *url = [NSURL URLWithString:pbstring];
+//                if (url) {
+//                    NSString *siteName = [url host];
+//                }
+//                MPKey *key = [MPiOSAppDelegate get].key;
+//                if (key)
+//                    [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+//                        NSFetchRequest<MPSiteEntity *>
+//                                *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass( [MPSiteEntity class] )];
+//                        fetchRequest.sortDescriptors = @[
+//                                [[NSSortDescriptor alloc] initWithKey:NSStringFromSelector( @selector( lastUsed ) ) ascending:NO]
+//                        ];
+//                        fetchRequest.fetchBatchSize = 2;
+//                        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(name LIKE[cd] %@) AND user == %@", siteName,
+//                                                                                  [[MPiOSAppDelegate get] activeUserOID]];
+//                        NSError *error = nil;
+//                        NSArray<MPSiteEntity *> *results = [fetchRequest execute:&error];
+//                        dbg( @"site search, error: %@, results:\n%@", error, results );
+//                        if ([results count]) {
+//                            [UIPasteboard generalPasteboard].string = [[results firstObject] resolvePasswordUsingKey:key];
+//                        }
+//                    }];
+//            }
+//            [NSThread sleepForTimeInterval:5];
+//        }
+//    } );
 
     [super applicationDidEnterBackground:application];
 }
