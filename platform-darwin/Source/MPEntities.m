@@ -16,7 +16,7 @@
 - (BOOL)saveToStore {
 
     __block BOOL success = YES;
-    if ([self hasChanges]) {
+    if ([self hasChanges])
         [self performBlockAndWait:^{
             @try {
                 NSError *error = nil;
@@ -28,7 +28,6 @@
                 err( @"While saving: %@", [exception fullDescription] );
             }
         }];
-    }
 
     return success && (!self.parentContext || [self.parentContext saveToStore]);
 }

@@ -131,6 +131,25 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     return YES;
 }
 
++ (id)managedObjectContextChanged:(void ( ^ )(NSDictionary<NSManagedObjectID *, NSString *> *affectedObjects))changedBlock {
+
+    NSManagedObjectContext *privateManagedObjectContextIfReady = [[self get] privateManagedObjectContextIfReady];
+    if (!privateManagedObjectContextIfReady)
+        return nil;
+
+    return PearlAddNotificationObserver( NSManagedObjectContextObjectsDidChangeNotification, privateManagedObjectContextIfReady, nil,
+            ^(id host, NSNotification *note) {
+                NSMutableDictionary *affectedObjects = [NSMutableDictionary new];
+                for (NSManagedObject *object in note.userInfo[NSInsertedObjectsKey])
+                    affectedObjects[object.objectID] = NSInsertedObjectsKey;
+                for (NSManagedObject *object in note.userInfo[NSUpdatedObjectsKey])
+                    affectedObjects[object.objectID] = NSUpdatedObjectsKey;
+                for (NSManagedObject *object in note.userInfo[NSDeletedObjectsKey])
+                    affectedObjects[object.objectID] = NSDeletedObjectsKey;
+                changedBlock( affectedObjects );
+            } );
+}
+
 - (NSManagedObjectContext *)mainManagedObjectContextIfReady {
 
     [self loadStore];
@@ -196,19 +215,21 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
         self.mainManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
         self.mainManagedObjectContext.parentContext = self.privateManagedObjectContext;
-
-        // When privateManagedObjectContext is saved, import the changes into mainManagedObjectContext.
-        PearlAddNotificationObserverTo( self.mainManagedObjectContext, NSManagedObjectContextDidSaveNotification,
-                self.privateManagedObjectContext, nil, ^(NSManagedObjectContext *mainManagedObjectContext, NSNotification *note) {
-            [mainManagedObjectContext performBlock:^{
-                @try {
-                    [mainManagedObjectContext mergeChangesFromContextDidSaveNotification:note];
-                }
-                @catch (NSException *exception) {
-                    err( @"While merging changes:\n%@", [exception fullDescription] );
-                }
-            }];
-        } );
+        if ([self.mainManagedObjectContext respondsToSelector:@selector( automaticallyMergesChangesFromParent )]) // iOS 10+
+            self.mainManagedObjectContext.automaticallyMergesChangesFromParent = YES;
+        else
+            // When privateManagedObjectContext is saved, import the changes into mainManagedObjectContext.
+            PearlAddNotificationObserverTo( self.mainManagedObjectContext, NSManagedObjectContextDidSaveNotification,
+                    self.privateManagedObjectContext, nil, ^(NSManagedObjectContext *mainContext, NSNotification *note) {
+                [mainContext performBlock:^{
+                    @try {
+                        [mainContext mergeChangesFromContextDidSaveNotification:note];
+                    }
+                    @catch (NSException *exception) {
+                        err( @"While merging changes:\n%@", [exception fullDescription] );
+                    }
+                }];
+            } );
 
 
         // Create a new store coordinator.
