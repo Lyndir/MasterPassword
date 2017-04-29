@@ -81,7 +81,6 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
     [self registerObservers];
     [self updateConfigKey:nil];
-    [self reloadPasswords];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -301,17 +300,31 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 
 - (void)registerObservers {
 
+    static NSRegularExpression *bareHostRE = nil;
+    static dispatch_once_t once = 0;
+    dispatch_once( &once, ^{
+        bareHostRE = [NSRegularExpression regularExpressionWithPattern:@"([^\\.]+\\.[^\\.]+)$" options:0 error:nil];
+    } );
+
     PearlRemoveNotificationObservers();
-    PearlAddNotificationObserver( UIApplicationDidEnterBackgroundNotification, nil, [NSOperationQueue mainQueue],
+    PearlAddNotificationObserver( UIApplicationWillResignActiveNotification, nil, [NSOperationQueue mainQueue],
             ^(MPPasswordsViewController *self, NSNotification *note) {
                 self.passwordSelectionContainer.visible = NO;
             } );
-    PearlAddNotificationObserver( UIApplicationWillEnterForegroundNotification, nil, [NSOperationQueue mainQueue],
-            ^(MPPasswordsViewController *self, NSNotification *note) {
-                [self reloadPasswords];
-            } );
     PearlAddNotificationObserver( UIApplicationDidBecomeActiveNotification, nil, [NSOperationQueue mainQueue],
             ^(MPPasswordsViewController *self, NSNotification *note) {
+                NSURL *pasteboardURL = nil;
+                UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                if ([pasteboard respondsToSelector:@selector( hasURLs )])
+                    pasteboardURL = pasteboard.hasURLs? pasteboard.URL: nil;
+                else
+                    pasteboardURL = [NSURL URLWithString:pasteboard.string];
+
+                if (pasteboardURL.host)
+                    self.query = NSNullToNil( [pasteboardURL.host firstMatchGroupsOfExpression:bareHostRE][0] );
+                else
+                    [self reloadPasswords];
+
                 [UIView animateWithDuration:0.7f animations:^{
                     self.passwordSelectionContainer.visible = YES;
                 }];
@@ -319,9 +332,8 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     PearlAddNotificationObserver( MPSignedOutNotification, nil, nil,
             ^(MPPasswordsViewController *self, NSNotification *note) {
                 PearlMainQueue( ^{
-                    _fetchedResultsController = nil;
-                    self.passwordsSearchBar.text = nil;
-                    [self.passwordCollectionView reloadData];
+                    self->_fetchedResultsController = nil;
+                    self.query = nil;
                 } );
             } );
     PearlAddNotificationObserver( MPCheckConfigNotification, nil, nil,
@@ -333,9 +345,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresWillChangeNotification, nil, nil,
             ^(MPPasswordsViewController *self, NSNotification *note) {
                 self->_fetchedResultsController = nil;
-                PearlMainQueue( ^{
-                    [self.passwordCollectionView reloadData];
-                } );
+                [self reloadPasswords];
             } );
     PearlAddNotificationObserver( NSPersistentStoreCoordinatorStoresDidChangeNotification, nil, nil,
             ^(MPPasswordsViewController *self, NSNotification *note) {
@@ -345,14 +355,13 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
                 } );
             } );
 
-    NSManagedObjectContext *mainContext = [MPiOSAppDelegate managedObjectContextForMainThreadIfReady];
-    if (mainContext)
-        PearlAddNotificationObserver( NSManagedObjectContextDidSaveNotification, mainContext, nil,
-                ^(MPPasswordsViewController *self, NSNotification *note) {
-                    // TODO: either move this into the app delegate or remove the duplicate signOutAnimated: call from the app delegate.
-                    if (![[MPiOSAppDelegate get] activeUserInContext:note.object])
-                        [[MPiOSAppDelegate get] signOutAnimated:YES];
-                } );
+    [MPiOSAppDelegate managedObjectContextChanged:^(NSDictionary<NSManagedObjectID *, NSString *> *affectedObjects) {
+        [MPiOSAppDelegate managedObjectContextForMainThreadPerformBlock:^(NSManagedObjectContext *mainContext) {
+            // TODO: either move this into the app delegate or remove the duplicate signOutAnimated: call from the app delegate.
+            if (![[MPiOSAppDelegate get] activeUserInContext:mainContext])
+                [[MPiOSAppDelegate get] signOutAnimated:YES];
+        }];
+    }];
 }
 
 - (void)updateConfigKey:(NSString *)key {
@@ -372,11 +381,9 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
             fuzzyRE = [NSRegularExpression regularExpressionWithPattern:@"(.)" options:0 error:nil];
         } );
 
-        prof_new( @"updateSites" );
         NSString *queryString = self.query;
         NSString *queryPattern = [[queryString stringByReplacingMatchesOfExpression:fuzzyRE withTemplate:@"*$1"]
                 stringByAppendingString:@"*"];
-        prof_rewind( @"queryPattern" );
         NSMutableArray *fuzzyGroups = [NSMutableArray new];
         [fuzzyRE enumerateMatchesInString:queryString options:0 range:NSMakeRange( 0, queryString.length )
                                usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
@@ -406,6 +413,12 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
 - (NSString *)query {
 
     return [self.passwordsSearchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+}
+
+- (void)setQuery:(NSString *)query {
+
+    self.passwordsSearchBar.text = [query stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    [self reloadPasswords];
 }
 
 - (NSFetchedResultsController *)fetchedResultsController {

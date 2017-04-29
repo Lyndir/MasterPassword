@@ -493,10 +493,12 @@
 
 - (void)updateAnimated:(BOOL)animated {
 
+    Weakify( self );
     if (![NSThread isMainThread]) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        PearlMainQueueOperation( ^{
+            Strongify( self );
             [self updateAnimated:animated];
-        }];
+        } );
         return;
     }
 
@@ -544,11 +546,17 @@
                 } );
 
         // Calculate Fields
-        [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        if (![MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
             MPSiteEntity *site = [self siteInContext:context];
             MPKey *key = [MPiOSAppDelegate get].key;
-            if (!key)
+            if (!key) {
+                wrn( @"Could not load cell content: key unavailable." );
+                PearlMainQueueOperation( ^{
+                    Strongify( self );
+                    [self updateAnimated:YES];
+                } );
                 return;
+            }
 
             BOOL loginGenerated = site.loginGenerated;
             NSString *password = nil, *loginName = [site resolveLoginUsingKey:key];
@@ -600,7 +608,13 @@
                 else
                     self.indicatorView.hidden = YES;
             } );
-        }];
+        }]) {
+            wrn( @"Could not load cell content: store unavailable." );
+            PearlMainQueueOperation( ^{
+                Strongify( self );
+                [self updateAnimated:YES];
+            } );
+        }
 
         [self.contentView layoutIfNeeded];
     }];
@@ -635,6 +649,8 @@
         return NO;
 
     PearlMainQueue( ^{
+        [self.window endEditing:YES];
+
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         if ([pasteboard respondsToSelector:@selector(setItems:options:)]) {
             [pasteboard setItems:@[ @{ UIPasteboardTypeAutomatic: password } ]
@@ -663,8 +679,10 @@
         return NO;
 
     PearlMainQueue( ^{
-        [PearlOverlay showTemporaryOverlayWithTitle:strl( @"Login Name Copied" ) dismissAfter:2];
+        [self.window endEditing:YES];
+
         [UIPasteboard generalPasteboard].string = loginName;
+        [PearlOverlay showTemporaryOverlayWithTitle:strl( @"Login Name Copied" ) dismissAfter:2];
     } );
 
     [site use];

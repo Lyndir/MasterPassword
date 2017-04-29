@@ -84,18 +84,28 @@
 - (IBAction)copyPassword:(id)sender {
 
     NSString *sitePassword = [self.passwordButton titleForState:UIControlStateNormal];
-    if ([sitePassword length]) {
-        [UIPasteboard generalPasteboard].string = sitePassword;
-        [UIView animateWithDuration:0.3f animations:^{
-            self.tipContainer.visible = YES;
-        }                completion:^(BOOL finished) {
-            PearlMainQueueAfter( 3, ^{
-                [UIView animateWithDuration:0.3f animations:^{
-                    self.tipContainer.visible = NO;
-                }];
-            } );
-        }];
-    }
+    if (![sitePassword length])
+        return;
+
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    if ([pasteboard respondsToSelector:@selector( setItems:options: )])
+        [pasteboard setItems:@[ @{ UIPasteboardTypeAutomatic: sitePassword } ]
+                     options:@{
+                             UIPasteboardOptionLocalOnly     : @NO,
+                             UIPasteboardOptionExpirationDate: [NSDate dateWithTimeIntervalSinceNow:3 * 60]
+                     }];
+    else
+        pasteboard.string = sitePassword;
+
+    [UIView animateWithDuration:0.3f animations:^{
+        self.tipContainer.visible = YES;
+    }                completion:^(BOOL finished) {
+        PearlMainQueueAfter( 3, ^{
+            [UIView animateWithDuration:0.3f animations:^{
+                self.tipContainer.visible = NO;
+            }];
+        } );
+    }];
 }
 
 #pragma mark - Private

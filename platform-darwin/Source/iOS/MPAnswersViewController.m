@@ -161,10 +161,9 @@
     MPSiteEntity *site = [self siteInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]];
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
 
-    if ([cell isKindOfClass:[MPGlobalAnswersCell class]]) {
-        [PearlOverlay showTemporaryOverlayWithTitle:strl( @"Answer Copied" ) dismissAfter:2];
-        [UIPasteboard generalPasteboard].string = ((MPGlobalAnswersCell *)cell).answerField.text;
-    }
+    if ([cell isKindOfClass:[MPGlobalAnswersCell class]])
+        [self copyAnswer:((MPGlobalAnswersCell *)cell).answerField.text];
+
     else if ([cell isKindOfClass:[MPMultipleAnswersCell class]]) {
         if (!_multiple)
             [self setMultiple:YES animated:YES];
@@ -192,6 +191,7 @@
                              } cancelTitle:@"Cancel" otherTitles:@"Remove Questions", nil];
         }
     }
+
     else if ([cell isKindOfClass:[MPSendAnswersCell class]]) {
         NSString *body;
         if (!_multiple) {
@@ -215,12 +215,28 @@
 
         [PearlEMail sendEMailTo:nil fromVC:self subject:strf( @"Master Password security answers for %@", site.name ) body:body];
     }
-    else if ([cell isKindOfClass:[MPAnswersQuestionCell class]]) {
-        [PearlOverlay showTemporaryOverlayWithTitle:strl( @"Answer Copied" ) dismissAfter:2];
-        [UIPasteboard generalPasteboard].string = ((MPAnswersQuestionCell *)cell).answerField.text;
-    }
+
+    else if ([cell isKindOfClass:[MPAnswersQuestionCell class]])
+        [self copyAnswer:((MPAnswersQuestionCell *)cell).answerField.text];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)copyAnswer:(NSString *)answer {
+
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    if ([pasteboard respondsToSelector:@selector( setItems:options: )]) {
+        [pasteboard setItems:@[ @{ UIPasteboardTypeAutomatic: answer } ]
+                     options:@{
+                             UIPasteboardOptionLocalOnly     : @NO,
+                             UIPasteboardOptionExpirationDate: [NSDate dateWithTimeIntervalSinceNow:3 * 60]
+                     }];
+        [PearlOverlay showTemporaryOverlayWithTitle:strl( @"Answer Copied (3 min)" ) dismissAfter:2];
+    }
+    else {
+        pasteboard.string = answer;
+        [PearlOverlay showTemporaryOverlayWithTitle:strl( @"Answer Copied" ) dismissAfter:2];
+    }
 }
 
 #pragma mark - Private
