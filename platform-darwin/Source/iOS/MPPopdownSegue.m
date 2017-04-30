@@ -38,6 +38,7 @@
                                                               metrics:nil views:NSDictionaryOfVariableBindings( popdownView )];
 
         [passwordsVC.popdownToTopConstraint layoutIfNeeded];
+        [passwordsVC.view endEditing:YES];
 
         [UIView animateWithDuration:0.6f delay:0 usingSpringWithDamping:0.75f initialSpringVelocity:1
                             options:UIViewAnimationOptionCurveEaseOut animations:^{

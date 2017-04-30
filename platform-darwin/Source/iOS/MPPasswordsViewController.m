@@ -309,6 +309,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     PearlRemoveNotificationObservers();
     PearlAddNotificationObserver( UIApplicationWillResignActiveNotification, nil, [NSOperationQueue mainQueue],
             ^(MPPasswordsViewController *self, NSNotification *note) {
+                [self.view endEditing:YES];
                 self.passwordSelectionContainer.visible = NO;
             } );
     PearlAddNotificationObserver( UIApplicationDidBecomeActiveNotification, nil, [NSOperationQueue mainQueue],
