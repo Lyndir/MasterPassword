@@ -143,6 +143,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)collectionViewLayout;
     UIEdgeInsets occludedInsets = [self.passwordCollectionView occludedInsets];
     UIEdgeInsets insets = layout.sectionInset;
+    insets.top = insets.bottom; // Undo storyboard hack for manual top-occluded insets.
 
     if (section == 0)
         insets.top += occludedInsets.top;
