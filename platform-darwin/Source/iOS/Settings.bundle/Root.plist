@@ -6,7 +6,7 @@
 	<array>
 		<dict>
 			<key>FooterText</key>
-			<string>Enable this setting to send us carefully anonymized information to help us diagnose and resolve issues you might experience in the future.</string>
+			<string>Enable this setting to send carefully anonymized information to help us diagnose and resolve any issues you encounter in a future update.</string>
 			<key>Title</key>
 			<string></string>
 			<key>Type</key>
@@ -50,7 +50,7 @@
 			<key>Key</key>
 			<string>sendInfo</string>
 			<key>DefaultValue</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>FooterText</key>

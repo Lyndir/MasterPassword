@@ -237,7 +237,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         NSURL *localStoreURL = [self localStoreURL];
         if (![[NSFileManager defaultManager] createDirectoryAtURL:[localStoreURL URLByDeletingLastPathComponent]
                                       withIntermediateDirectories:YES attributes:nil error:&error]) {
-            err( @"Couldn't create our application support directory: %@", [error fullDescription] );
+            MPError( error, @"Couldn't create our application support directory." );
             return;
         }
         if (![self.storeCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[self localStoreURL]
@@ -246,7 +246,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                                                                NSInferMappingModelAutomaticallyOption      : @YES,
                                                                STORE_OPTIONS
                                                        } error:&error]) {
-            err( @"Failed to open store: %@", [error fullDescription] );
+            MPError( error, @"Failed to open store." );
             self.storeCorrupted = @YES;
             [self handleCoordinatorError:error];
             return;
@@ -255,12 +255,15 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
 #if TARGET_OS_IPHONE
         PearlAddNotificationObserver( UIApplicationWillResignActiveNotification, UIApp, [NSOperationQueue mainQueue],
+                ^(MPAppDelegate_Shared *self, NSNotification *note) {
+                    [self.mainManagedObjectContext saveToStore];
+                } );
 #else
         PearlAddNotificationObserver( NSApplicationWillResignActiveNotification, NSApp, [NSOperationQueue mainQueue],
-#endif
                 ^(MPAppDelegate_Shared *self, NSNotification *note) {
-        [self.mainManagedObjectContext saveToStore];
-        } );
+                    [self.mainManagedObjectContext saveToStore];
+                } );
+#endif
 
         // Perform a data sanity check on the newly loaded store to find and fix any issues.
         if ([[MPConfig get].checkInconsistency boolValue])
@@ -286,10 +289,10 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         NSError *error = nil;
         for (NSPersistentStore *store in self.storeCoordinator.persistentStores) {
             if (![self.storeCoordinator removePersistentStore:store error:&error])
-                err( @"Couldn't remove persistence store from coordinator: %@", [error fullDescription] );
+                MPError( error, @"Couldn't remove persistence store from coordinator." );
         }
         if (![[NSFileManager defaultManager] removeItemAtURL:self.localStoreURL error:&error])
-            err( @"Couldn't remove persistence store at URL %@: %@", self.localStoreURL, [error fullDescription] );
+            MPError( error, @"Couldn't remove persistence store at URL %@.", self.localStoreURL );
 
         [self loadStore];
     }
@@ -307,7 +310,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
             fetchRequest.entity = entity;
             NSArray *objects = [context executeFetchRequest:fetchRequest error:&error];
             if (!objects) {
-                err( @"Failed to fetch %@ objects: %@", entity, [error fullDescription] );
+                MPError( error, @"Failed to fetch %@ objects.", entity );
                 continue;
             }
 
@@ -332,7 +335,8 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
 - (void)migrateStore {
 
-    MPStoreMigrationLevel migrationLevel = (signed)[[NSUserDefaults standardUserDefaults] integerForKey:MPMigrationLevelLocalStoreKey];
+    MPStoreMigrationLevel migrationLevel = (MPStoreMigrationLevel)
+            [[NSUserDefaults standardUserDefaults] integerForKey:MPMigrationLevelLocalStoreKey];
     if (migrationLevel >= MPStoreMigrationLevelCurrent)
         // Local store up-to-date.
         return;
@@ -375,7 +379,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
     if (![NSPersistentStore migrateStore:oldLocalStoreURL withOptions:@{ STORE_OPTIONS }
                                  toStore:newLocalStoreURL withOptions:@{ STORE_OPTIONS }
                                    model:nil error:&error]) {
-        err( @"Couldn't migrate the old store to the new location: %@", [error fullDescription] );
+        MPError( error, @"Couldn't migrate the old store to the new location." );
         return NO;
     }
 
@@ -422,7 +426,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
             NSInferMappingModelAutomaticallyOption      : @YES,
             STORE_OPTIONS
     }                              model:nil error:&error]) {
-        err( @"Couldn't migrate the old store to the new location: %@", [error fullDescription] );
+        MPError( error, @"Couldn't migrate the old store to the new location." );
         return NO;
     }
 
@@ -459,7 +463,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
         NSError *error = nil;
         if (site.objectID.isTemporaryID && ![context obtainPermanentIDsForObjects:@[ site ] error:&error])
-            err( @"Failed to obtain a permanent object ID after creating new site: %@", [error fullDescription] );
+            MPError( error, @"Failed to obtain a permanent object ID after creating new site." );
 
         [context saveToStore];
 
@@ -491,7 +495,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
 
         NSError *error = nil;
         if (![context obtainPermanentIDsForObjects:@[ newSite ] error:&error])
-            err( @"Failed to obtain a permanent object ID after changing object type: %@", [error fullDescription] );
+            MPError( error, @"Failed to obtain a permanent object ID after changing object type." );
 
         [context deleteObject:site];
         [context saveToStore];
@@ -537,7 +541,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                 initWithPattern:@"^#[[:space:]]*([^:]+): (.*)"
                         options:(NSRegularExpressionOptions)0 error:&error];
         if (error) {
-            err( @"Error loading the header pattern: %@", [error fullDescription] );
+            MPError( error, @"Error loading the header pattern." );
             return MPImportResultInternalError;
         }
     }
@@ -551,7 +555,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                                 options:(NSRegularExpressionOptions)0 error:&error]
         ];
         if (error) {
-            err( @"Error loading the site patterns: %@", [error fullDescription] );
+            MPError( error, @"Error loading the site patterns." );
             return MPImportResultInternalError;
         }
     }
@@ -610,7 +614,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
                 userFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@", importUserName];
                 NSArray *users = [context executeFetchRequest:userFetchRequest error:&error];
                 if (!users) {
-                    err( @"While looking for user: %@, error: %@", importUserName, [error fullDescription] );
+                    MPError( error, @"While looking for user: %@.", importUserName );
                     return MPImportResultInternalError;
                 }
                 if ([users count] > 1) {
@@ -694,7 +698,7 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
             siteFetchRequest.predicate = [NSPredicate predicateWithFormat:@"name == %@ AND user == %@", siteName, user];
             NSArray *existingSites = [context executeFetchRequest:siteFetchRequest error:&error];
             if (!existingSites) {
-                err( @"Lookup of existing sites failed for site: %@, user: %@, error: %@", siteName, user.userID, [error fullDescription] );
+                MPError( error, @"Lookup of existing sites failed for site: %@, user: %@.", siteName, user.userID );
                 return MPImportResultInternalError;
             }
             if ([existingSites count]) {

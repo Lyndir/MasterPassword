@@ -16,12 +16,13 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
+#import <Crashlytics/Answers.h>
 #import "MPAppDelegate_Key.h"
 #import "MPAppDelegate_Store.h"
 
 @interface MPAppDelegate_Shared()
 
-@property(strong, nonatomic) MPKey *key;
+@property(strong, atomic) MPKey *key;
 
 @end
 
@@ -177,6 +178,14 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
         else
             dbg( @"Automatic login failed for user: %@", user.userID );
 
+        if ([[MPConfig get].sendInfo boolValue]) {
+#ifdef CRASHLYTICS
+            [Answers logLoginWithMethod:password? @"Password": @"Automatic" success:@NO customAttributes:@{
+                    @"algorithm": @(user.algorithm.version),
+            }];
+#endif
+        }
+
         return NO;
     }
     inf( @"Logged in user: %@", user.userID );
@@ -198,8 +207,11 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
     @try {
         if ([[MPConfig get].sendInfo boolValue]) {
 #ifdef CRASHLYTICS
-            [[Crashlytics sharedInstance] setObjectValue:user.userID forKey:@"username"];
             [[Crashlytics sharedInstance] setUserName:user.userID];
+
+            [Answers logLoginWithMethod:password? @"Password": @"Automatic" success:@YES customAttributes:@{
+                    @"algorithm": @(user.algorithm.version),
+            }];
 #endif
         }
     }

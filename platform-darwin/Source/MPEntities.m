@@ -21,11 +21,11 @@
             @try {
                 NSError *error = nil;
                 if (!(success = [self save:&error]))
-                    err( @"While saving: %@", [error fullDescription] );
+                    MPError( error, @"While saving." );
             }
             @catch (NSException *exception) {
                 success = NO;
-                err( @"While saving: %@", [exception fullDescription] );
+                err( @"While saving.\n%@", [exception fullDescription] );
             }
         }];
 

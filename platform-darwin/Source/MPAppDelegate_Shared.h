@@ -26,9 +26,9 @@
 
 #endif
 
-@property(strong, nonatomic, readonly) MPKey *key;
-@property(strong, nonatomic, readonly) NSManagedObjectID *activeUserOID;
-@property(strong, nonatomic, readonly) NSPersistentStoreCoordinator *storeCoordinator;
+@property(strong, atomic, readonly) MPKey *key;
+@property(strong, atomic, readonly) NSManagedObjectID *activeUserOID;
+@property(strong, atomic, readonly) NSPersistentStoreCoordinator *storeCoordinator;
 
 + (instancetype)get;
 

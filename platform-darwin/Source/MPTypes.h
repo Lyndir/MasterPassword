@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Lyndir. All rights reserved.
 //
 
+#import <Crashlytics/Crashlytics.h>
+#import <Crashlytics/Answers.h>
+
 __BEGIN_DECLS
 extern NSString *const MPErrorDomain;
 
@@ -19,4 +22,21 @@ extern NSString *const MPFoundInconsistenciesNotification;
 
 extern NSString *const MPSitesImportedNotificationUserKey;
 extern NSString *const MPInconsistenciesFixResultUserKey;
+
 __END_DECLS
+
+#ifdef CRASHLYTICS
+#define MPError(error_, message, ...) ({ \
+    err( message @"%@%@", ##__VA_ARGS__, error_? @"\n": @"", [error_ fullDescription]?: @"" ); \
+    \
+    if ([[MPConfig get].sendInfo boolValue]) { \
+        [[Crashlytics sharedInstance] recordError:error_ withAdditionalUserInfo:@{ \
+                @"location": strf( @"%@:%d %@", @(basename((char *)__FILE__)), __LINE__, NSStringFromSelector(_cmd) ), \
+        }]; \
+    } \
+})
+#else
+#define MPError(error_, ...) ({ \
+    err( message @"%@%@", ##__VA_ARGS__, error_? @"\n": @"", [error_ fullDescription]?: @"" ); \
+})
+#endif

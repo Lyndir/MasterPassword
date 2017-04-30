@@ -115,7 +115,7 @@
     NSError *error;
     MPSiteEntity *entity = (MPSiteEntity *)[moc existingObjectWithID:_entityOID error:&error];
     if (!entity)
-        err( @"Couldn't retrieve active site: %@", [error fullDescription] );
+        MPError( error, @"Couldn't retrieve active site." );
 
     return entity;
 }

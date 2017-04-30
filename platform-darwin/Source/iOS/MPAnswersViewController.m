@@ -333,12 +333,12 @@
         question.keyword = keyword;
 
         if ([context saveToStore]) {
-            if ([question.objectID isTemporaryID]) {
-                NSError *error = nil;
-                [context obtainPermanentIDsForObjects:@[ question ] error:&error];
-                if (error)
-                    err( @"Failed to obtain permanent object ID: %@", [error fullDescription] );
-            }
+//            if ([question.objectID isTemporaryID]) {
+//                NSError *error = nil;
+//                [context obtainPermanentIDsForObjects:@[ question ] error:&error];
+//                if (error)
+//                    MPError( error, @"Failed to obtain permanent object ID: %@" );
+//            }
 
             _questionOID = question.objectID;
             [self updateAnswerForQuestion:question ofSite:site];

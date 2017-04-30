@@ -555,7 +555,7 @@
         NSArray *siteResults = [context executeFetchRequest:fetchRequest error:&error];
         if (!siteResults) {
             prof_finish( @"executeFetchRequest: %@ // %@", fetchRequest.predicate, [error fullDescription] );
-            err( @"While fetching sites for completion: %@", [error fullDescription] );
+            MPError( error, @"While fetching sites for completion." );
             return;
         }
         prof_rewind( @"executeFetchRequest: %@", fetchRequest.predicate );

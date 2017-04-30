@@ -2620,8 +2620,10 @@ See </string>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <outlet property="activityIndicator" destination="cef-sc-aph" id="VmL-AX-R3f"/>
+                                            <outlet property="descriptionLabel" destination="Ra0-yS-99P" id="99B-ao-lE6"/>
                                             <outlet property="priceLabel" destination="68f-wn-UlS" id="e99-ys-HtZ"/>
                                             <outlet property="purchasedIndicator" destination="FWu-V6-mLT" id="Zqt-GG-e5v"/>
+                                            <outlet property="titleLabel" destination="Pax-1J-IZi" id="kVH-n6-mDs"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MPStoreProductCellGenerateAnswers" id="l1g-Ul-Vg8" userLabel="Generate Answers" customClass="MPStoreProductCell">
@@ -2685,8 +2687,10 @@ See </string>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <outlet property="activityIndicator" destination="X2g-Go-2Hz" id="PvQ-bP-exW"/>
+                                            <outlet property="descriptionLabel" destination="yRH-27-edZ" id="pfv-na-UM3"/>
                                             <outlet property="priceLabel" destination="9ct-IM-QKR" id="UTQ-L7-vbu"/>
                                             <outlet property="purchasedIndicator" destination="N9y-ue-L8d" id="Ppv-ay-M1J"/>
+                                            <outlet property="titleLabel" destination="Kkl-gT-YAO" id="cHy-iU-oHr"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MPStoreProductCellOSIntegration" id="9Na-CL-jBq" userLabel="iOS Integration" customClass="MPStoreProductCell">
@@ -2750,8 +2754,10 @@ See </string>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <outlet property="activityIndicator" destination="yUe-TX-fli" id="DH6-pK-fse"/>
+                                            <outlet property="descriptionLabel" destination="riF-bB-x5g" id="3v9-6H-PAK"/>
                                             <outlet property="priceLabel" destination="3jH-eX-9N2" id="agT-az-dVU"/>
                                             <outlet property="purchasedIndicator" destination="ec8-P9-KPY" id="M39-bc-Ksp"/>
+                                            <outlet property="titleLabel" destination="Zch-DS-J3I" id="cY2-FQ-q69"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MPStoreProductCellTouchID" id="8en-6R-GvR" userLabel="TouchID" customClass="MPStoreProductCell">
@@ -2815,8 +2821,10 @@ See </string>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <outlet property="activityIndicator" destination="Dv5-t7-lL1" id="AFu-Dd-TgU"/>
+                                            <outlet property="descriptionLabel" destination="Yxc-Lr-382" id="47I-83-lgP"/>
                                             <outlet property="priceLabel" destination="ZGg-O6-rsg" id="dAn-xu-gut"/>
                                             <outlet property="purchasedIndicator" destination="yZX-ns-8oV" id="7x0-eq-oSs"/>
+                                            <outlet property="titleLabel" destination="e1D-jp-GBs" id="jFw-dm-vp6"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MPStoreProductCellFuel" id="le3-Q5-MSO" userLabel="Fuel" customClass="MPStoreProductCell">
@@ -2908,7 +2916,9 @@ invested: 3.7 work hours</string>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <outlet property="activityIndicator" destination="eS4-59-Xny" id="kGW-fn-VqH"/>
+                                            <outlet property="descriptionLabel" destination="fz2-AO-aGW" id="xkc-xV-Z6Y"/>
                                             <outlet property="priceLabel" destination="EbU-DV-fKF" id="pg2-8o-7We"/>
+                                            <outlet property="titleLabel" destination="Jnv-uN-xeg" id="Kxi-RE-ipa"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>

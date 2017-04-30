@@ -78,7 +78,6 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         [[Crashlytics sharedInstance] setUserIdentifier:[PearlKeyChain deviceIdentifier]];
         [[Crashlytics sharedInstance] setObjectValue:[PearlKeyChain deviceIdentifier] forKey:@"deviceIdentifier"];
         [[Crashlytics sharedInstance] setUserName:@"Anonymous"];
-        [[Crashlytics sharedInstance] setObjectValue:@"Anonymous" forKey:@"username"];
         [Crashlytics startWithAPIKey:crashlyticsAPIKey];
         [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
             PearlLogLevel level = PearlLogLevelInfo;
@@ -272,7 +271,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     [[[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:
             ^(NSData *importedSitesData, NSURLResponse *response, NSError *error) {
                 if (error)
-                    err( @"While reading imported sites from %@: %@", url, [error fullDescription] );
+                    MPError( error, @"While reading imported sites from %@.", url );
                 if (!importedSitesData)
                     return;
 
@@ -394,9 +393,9 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
                                                               inManagedObjectContext:moc];
         newUser.name = name;
         [moc saveToStore];
-        NSError *error = nil;
-        if (![moc obtainPermanentIDsForObjects:@[ newUser ] error:&error])
-            err( @"Failed to obtain permanent object ID for new user: %@", [error fullDescription] );
+//        NSError *error = nil;
+//        if (![moc obtainPermanentIDsForObjects:@[ newUser ] error:&error])
+//            MPError( error, @"Failed to obtain permanent object ID for new user." );
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self updateUsers];
@@ -516,20 +515,23 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 
     NSError *coordinateError = nil;
     NSString *exportedSites = [self exportSitesRevealPasswords:revealPasswords];
-    [[[NSFileCoordinator alloc] initWithFilePresenter:nil] coordinateWritingItemAtURL:savePanel.URL options:0 error:&coordinateError
-                                                                           byAccessor:^(NSURL *newURL) {
-                                                                               NSError *writeError = nil;
-                                                                               if (![exportedSites writeToURL:newURL atomically:NO
-                                                                                                     encoding:NSUTF8StringEncoding
-                                                                                                        error:&writeError])
-                                                                                   PearlMainQueue( ^{
-                                                                                       [[NSAlert alertWithError:writeError] runModal];
-                                                                                   } );
-                                                                           }];
-    if (coordinateError)
+    [[[NSFileCoordinator alloc] initWithFilePresenter:nil] coordinateWritingItemAtURL:savePanel.URL options:0
+                                                                                error:&coordinateError byAccessor:
+                    ^(NSURL *newURL) {
+                        NSError *writeError = nil;
+                        if (![exportedSites writeToURL:newURL atomically:NO encoding:NSUTF8StringEncoding error:&writeError])
+                            MPError( writeError, @"Could not write to the export file." );
+
+                        PearlMainQueue( ^{
+                            [[NSAlert alertWithError:writeError] runModal];
+                        } );
+                    }];
+    if (coordinateError) {
+        MPError( coordinateError, @"Write access to the export file could not be obtained." );
         PearlMainQueue( ^{
             [[NSAlert alertWithError:coordinateError] runModal];
         } );
+    }
 }
 
 - (void)updateUsers {
@@ -567,7 +569,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"lastUsed" ascending:NO] ];
     NSArray *users = [mainContext executeFetchRequest:fetchRequest error:&error];
     if (!users)
-        err( @"Failed to load users: %@", [error fullDescription] );
+        MPError( error, @"Failed to load users." );
 
     if (![users count]) {
         NSMenuItem *noUsersItem = [self.usersItem.submenu addItemWithTitle:@"No users" action:NULL keyEquivalent:@""];

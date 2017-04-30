@@ -395,7 +395,7 @@ typedef NS_OPTIONS( NSUInteger, MPPasswordsTips ) {
         self.fetchedResultsController.fetchRequest.predicate =
                 [NSPredicate predicateWithFormat:@"name LIKE[cd] %@ AND user == %@", queryPattern, [MPiOSAppDelegate get].activeUserOID];
         if (![self.fetchedResultsController performFetch:&error])
-            err( @"Couldn't fetch sites: %@", [error fullDescription] );
+            MPError( error, @"Couldn't fetch sites." );
 
         PearlMainQueue( ^{
             [self.passwordCollectionView updateDataSource:_passwordCollectionSections

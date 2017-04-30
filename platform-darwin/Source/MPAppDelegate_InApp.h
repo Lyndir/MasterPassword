@@ -29,7 +29,7 @@
 
 @protocol MPInAppDelegate
 
-- (void)updateWithProducts:(NSArray /* SKProduct */ *)products;
+- (void)updateWithProducts:(NSDictionary<NSString *, SKProduct *> *)products;
 - (void)updateWithTransaction:(SKPaymentTransaction *)transaction;
 
 @end

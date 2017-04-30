@@ -16,6 +16,7 @@
 // LICENSE file.  Alternatively, see <http://www.gnu.org/licenses/>.
 //==============================================================================
 
+#import <Crashlytics/Answers.h>
 #import "MPUsersViewController.h"
 #import "MPEntities.h"
 #import "MPAvatarCell.h"
@@ -224,6 +225,17 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
                         user.defaultType = user.algorithm.defaultType;
                         user.avatar = newUserAvatar;
                         user.name = newUserName;
+
+                        if ([[MPConfig get].sendInfo boolValue]) {
+#ifdef CRASHLYTICS
+                            [Answers logSignUpWithMethod:@"Manual"
+                                                 success:@YES
+                                        customAttributes:@{
+                                                @"algorithm": @(user.algorithm.version),
+                                                @"avatar"   : @(user.avatar),
+                                        }];
+#endif
+                        }
                     }
 
                     BOOL signedIn = [[MPiOSAppDelegate get] signInAsUser:user saveInContext:context
@@ -719,7 +731,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
             ];
             NSArray *users = [mainContext executeFetchRequest:fetchRequest error:&error];
             if (!users) {
-                err( @"Failed to load users: %@", [error fullDescription] );
+                MPError( error, @"Failed to load users." );
                 self.userIDs = nil;
             }
 

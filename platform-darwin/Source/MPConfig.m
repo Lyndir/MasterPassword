@@ -20,7 +20,7 @@
     [self.defaults registerDefaults:@{
             NSStringFromSelector( @selector( askForReviews ) )     : @YES,
 
-            NSStringFromSelector( @selector( sendInfo ) )          : @NO,
+            NSStringFromSelector( @selector( sendInfo ) )          : @YES,
             NSStringFromSelector( @selector( rememberLogin ) )     : @NO,
             NSStringFromSelector( @selector( hidePasswords ) )     : @NO,
             NSStringFromSelector( @selector( checkInconsistency ) ): @NO,

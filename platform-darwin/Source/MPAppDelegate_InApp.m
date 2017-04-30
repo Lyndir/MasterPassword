@@ -23,7 +23,8 @@
 
 @implementation MPAppDelegate_Shared(InApp)
 
-PearlAssociatedObjectProperty( NSArray*, Products, products );
+PearlAssociatedObjectProperty( NSDictionary*, Products, products );
+
 PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObservers );
 
 - (void)registerProductsObserver:(id<MPInAppDelegate>)delegate {
@@ -101,11 +102,25 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
     }
 #endif
 
-    for (SKProduct *product in self.products)
+    for (SKProduct *product in [self.products allValues])
         if ([product.productIdentifier isEqualToString:productIdentifier]) {
             SKMutablePayment *payment = [SKMutablePayment paymentWithProduct:product];
-            payment.quantity = quantity;
-            [[self paymentQueue] addPayment:payment];
+            if (payment) {
+                payment.quantity = quantity;
+                [[self paymentQueue] addPayment:payment];
+
+                if ([[MPConfig get].sendInfo boolValue]) {
+#ifdef CRASHLYTICS
+                    [Answers logAddToCartWithPrice:product.price currency:product.priceLocale.currencyCode itemName:product.localizedTitle
+                                          itemType:@"InApp" itemId:product.productIdentifier
+                                  customAttributes:nil];
+                    [Answers logStartCheckoutWithPrice:product.price currency:product.priceLocale.currencyCode itemCount:@(quantity)
+                                      customAttributes:@{
+                                              @"products": @[ productIdentifier ],
+                                      }];
+#endif
+                }
+            }
             return;
         }
 }
@@ -114,14 +129,21 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
 
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
 
-    inf( @"products: %@, invalid: %@", response.products, response.invalidProductIdentifiers );
-    self.products = response.products;
+    if ([response.invalidProductIdentifiers count])
+        inf( @"Invalid products: %@", response.invalidProductIdentifiers );
+
+    NSMutableDictionary *products = [NSMutableDictionary dictionaryWithCapacity:[response.products count]];
+    for (SKProduct *product in response.products)
+        products[product.productIdentifier] = product;
+    self.products = products;
 
     for (id<MPInAppDelegate> productObserver in self.productObservers)
         [productObserver updateWithProducts:self.products];
 }
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
+
+    MPError( error, @"StoreKit request (%@) failed.", request );
 
 #if TARGET_OS_IPHONE
     [PearlAlert showAlertWithTitle:@"Purchase Failed" message:
@@ -131,7 +153,6 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
                        cancelTitle:@"OK" otherTitles:nil];
 #else
 #endif
-    err( @"StoreKit request (%@) failed: %@", request, [error fullDescription] );
 }
 
 - (void)requestDidFinish:(SKRequest *)request {
@@ -147,21 +168,37 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
         dbg( @"transaction updated: %@ -> %d", transaction.payment.productIdentifier, (int)(transaction.transactionState) );
         switch (transaction.transactionState) {
             case SKPaymentTransactionStatePurchased: {
-                inf( @"purchased: %@", transaction.payment.productIdentifier );
+                inf( @"Purchased: %@", transaction.payment.productIdentifier );
+                NSMutableDictionary *attributes = [NSMutableDictionary new];
+
                 if ([transaction.payment.productIdentifier isEqualToString:MPProductFuel]) {
                     float currentFuel = [[MPiOSConfig get].developmentFuelRemaining floatValue];
                     float purchasedFuel = transaction.payment.quantity / MP_FUEL_HOURLY_RATE;
                     [MPiOSConfig get].developmentFuelRemaining = @(currentFuel + purchasedFuel);
                     if (![MPiOSConfig get].developmentFuelChecked || currentFuel < DBL_EPSILON)
                         [MPiOSConfig get].developmentFuelChecked = [NSDate date];
+                    [attributes addEntriesFromDictionary:@{
+                            @"currentFuel"  : @(currentFuel),
+                            @"purchasedFuel": @(purchasedFuel),
+                    }];
                 }
+
                 [[NSUserDefaults standardUserDefaults] setObject:transaction.transactionIdentifier
                                                           forKey:transaction.payment.productIdentifier];
                 [queue finishTransaction:transaction];
+
+                if ([[MPConfig get].sendInfo boolValue]) {
+#ifdef CRASHLYTICS
+                    SKProduct *product = self.products[transaction.payment.productIdentifier];
+                    [Answers logPurchaseWithPrice:product.price currency:product.priceLocale.currencyCode success:@YES
+                                         itemName:product.localizedTitle itemType:@"InApp" itemId:product.productIdentifier
+                                 customAttributes:attributes];
+#endif
+                }
                 break;
             }
             case SKPaymentTransactionStateRestored: {
-                inf( @"restored: %@", transaction.payment.productIdentifier );
+                inf( @"Restored: %@", transaction.payment.productIdentifier );
                 [[NSUserDefaults standardUserDefaults] setObject:transaction.transactionIdentifier
                                                           forKey:transaction.payment.productIdentifier];
                 [queue finishTransaction:transaction];
@@ -173,6 +210,18 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
             case SKPaymentTransactionStateFailed:
                 err( @"Transaction failed: %@, reason: %@", transaction.payment.productIdentifier, [transaction.error fullDescription] );
                 [queue finishTransaction:transaction];
+
+                if ([[MPConfig get].sendInfo boolValue]) {
+#ifdef CRASHLYTICS
+                    SKProduct *product = self.products[transaction.payment.productIdentifier];
+                    [Answers logPurchaseWithPrice:product.price currency:product.priceLocale.currencyCode success:@YES
+                                         itemName:product.localizedTitle itemType:@"InApp" itemId:product.productIdentifier
+                                 customAttributes:@{
+                                         @"state" : @"Failed",
+                                         @"reason": [transaction.error fullDescription],
+                                 }];
+#endif
+                }
                 break;
         }
 
@@ -185,7 +234,7 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
 
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {
 
-    err( @"StoreKit restore failed: %@", [error fullDescription] );
+    MPError( error, @"StoreKit restore failed." );
 }
 
 @end

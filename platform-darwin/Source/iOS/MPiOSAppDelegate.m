@@ -25,7 +25,6 @@
 
 @property(nonatomic, strong) UIDocumentInteractionController *interactionController;
 
-@property(nonatomic) UIBackgroundTaskIdentifier task;
 @end
 
 @implementation MPiOSAppDelegate
@@ -59,10 +58,9 @@
             [[Crashlytics sharedInstance] setUserIdentifier:[PearlKeyChain deviceIdentifier]];
             [[Crashlytics sharedInstance] setObjectValue:[PearlKeyChain deviceIdentifier] forKey:@"deviceIdentifier"];
             [[Crashlytics sharedInstance] setUserName:@"Anonymous"];
-            [[Crashlytics sharedInstance] setObjectValue:@"Anonymous" forKey:@"username"];
             [Crashlytics startWithAPIKey:crashlyticsAPIKey];
             [[PearlLogger get] registerListener:^BOOL(PearlLogMessage *message) {
-                PearlLogLevel level = PearlLogLevelInfo;
+                PearlLogLevel level = PearlLogLevelWarn;
                 if ([[MPConfig get].sendInfo boolValue])
                     level = PearlLogLevelDebug;
 
@@ -83,9 +81,6 @@
         PearlAddNotificationObserver( MPCheckConfigNotification, nil, [NSOperationQueue mainQueue], ^(id self, NSNotification *note) {
             [self updateConfigKey:note.object];
         } );
-//      PearlAddNotificationObserver( kIASKAppSettingChanged, nil, nil, ^(id self, NSNotification *note) {
-//          [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:note.object];
-//      } );
         PearlAddNotificationObserver( NSUserDefaultsDidChangeNotification, nil, nil, ^(id self, NSNotification *note) {
             [[NSNotificationCenter defaultCenter] postNotificationName:MPCheckConfigNotification object:nil];
         } );
@@ -155,7 +150,8 @@
     [[[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:
             ^(NSData *importedSitesData, NSURLResponse *response, NSError *error) {
                 if (error)
-                    err( @"While reading imported sites from %@: %@", url, [error fullDescription] );
+                    MPError( error, @"While reading imported sites from %@.", url );
+
                 if (!importedSitesData) {
                     [PearlAlert showError:strf( @"Master Password couldn't read the import sites.\n\n%@",
                             [error localizedDescription]?: error )];
@@ -483,7 +479,7 @@
                      NSError *error = nil;
                      if (![[exportedSites dataUsingEncoding:NSUTF8StringEncoding]
                              writeToURL:exportURL options:NSDataWritingFileProtectionComplete error:&error])
-                         err( @"Failed to write export data to URL %@: %@", exportURL, [error fullDescription] );
+                         MPError( error, @"Failed to write export data to URL %@.", exportURL );
                      else {
                          self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:exportURL];
                          self.interactionController.UTI = @"com.lyndir.masterpassword.sites";
@@ -574,7 +570,7 @@
     static NSDictionary *crashlyticsInfo = nil;
     if (crashlyticsInfo == nil)
         crashlyticsInfo = [[NSDictionary alloc] initWithContentsOfURL:
-                [[NSBundle mainBundle] URLForResource:@"Crashlytics" withExtension:@"plist"]];
+                [[NSBundle mainBundle] URLForResource:@"Fabric" withExtension:@"plist"]];
 
     return crashlyticsInfo;
 }

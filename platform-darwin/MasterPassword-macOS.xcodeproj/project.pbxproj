@@ -27,6 +27,7 @@
 		DA09745B1E99582900F0BFE8 /* mpw-tests.c in Sources */ = {isa = PBXBuildFile; fileRef = DA0974571E99582200F0BFE8 /* mpw-tests.c */; };
 		DA09745E1E99586600F0BFE8 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA09745D1E99586600F0BFE8 /* libxml2.tbd */; };
 		DA0979681E9A834C00F0BFE8 /* libsodium.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA0979571E9A824700F0BFE8 /* libsodium.a */; };
+		DA0CC53E1EB57B69009A8ED9 /* Fabric.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA0CC53D1EB57B69009A8ED9 /* Fabric.plist */; };
 		DA1000801998A4C6002B873F /* openssl in Headers */ = {isa = PBXBuildFile; fileRef = DAE8E65719867AF500416A0F /* openssl */; settings = {ATTRIBUTES = (Public, ); }; };
 		DA16B341170661DB000A0EAB /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16B340170661DB000A0EAB /* Carbon.framework */; };
 		DA16B342170661E0000A0EAB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC632871486D95D0075AEA5 /* Security.framework */; };
@@ -148,7 +149,6 @@
 		DACA27381705DF81002C6C22 /* menu-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DACA24581705DF7D002C6C22 /* menu-icon.png */; };
 		DACA29671705DF81002C6C22 /* SourceCodePro-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = DACA268E1705DF81002C6C22 /* SourceCodePro-ExtraLight.otf */; };
 		DACA29681705DF81002C6C22 /* SourceCodePro-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = DACA268F1705DF81002C6C22 /* SourceCodePro-Black.otf */; };
-		DACA296F1705DF81002C6C22 /* Crashlytics.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA269A1705DF81002C6C22 /* Crashlytics.plist */; };
 		DACA29731705E1A8002C6C22 /* ciphers.plist in Resources */ = {isa = PBXBuildFile; fileRef = DACA29711705E1A8002C6C22 /* ciphers.plist */; };
 		DACA29741705E1A8002C6C22 /* dictionary.lst in Resources */ = {isa = PBXBuildFile; fileRef = DACA29721705E1A8002C6C22 /* dictionary.lst */; };
 		DACA298D1705E2BD002C6C22 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = DACA29771705E2BD002C6C22 /* JRSwizzle.h */; };
@@ -350,6 +350,7 @@
 		DA0979531E9A824700F0BFE8 /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
 		DA0979541E9A824700F0BFE8 /* sodium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sodium.h; sourceTree = "<group>"; };
 		DA0979571E9A824700F0BFE8 /* libsodium.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsodium.a; sourceTree = "<group>"; };
+		DA0CC53D1EB57B69009A8ED9 /* Fabric.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Fabric.plist; sourceTree = "<group>"; };
 		DA16B340170661DB000A0EAB /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		DA16B343170661EE000A0EAB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		DA2508F019511D3600AC23F1 /* MPPasswordWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MPPasswordWindowController.xib; sourceTree = "<group>"; };
@@ -911,7 +912,6 @@
 		DACA24581705DF7D002C6C22 /* menu-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-icon.png"; sourceTree = "<group>"; };
 		DACA268E1705DF81002C6C22 /* SourceCodePro-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-ExtraLight.otf"; sourceTree = "<group>"; };
 		DACA268F1705DF81002C6C22 /* SourceCodePro-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceCodePro-Black.otf"; sourceTree = "<group>"; };
-		DACA269A1705DF81002C6C22 /* Crashlytics.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Crashlytics.plist; sourceTree = "<group>"; };
 		DACA29711705E1A8002C6C22 /* ciphers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ciphers.plist; sourceTree = "<group>"; };
 		DACA29721705E1A8002C6C22 /* dictionary.lst */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dictionary.lst; sourceTree = "<group>"; };
 		DACA29771705E2BD002C6C22 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
@@ -1130,6 +1130,14 @@
 				DA0979571E9A824700F0BFE8 /* libsodium.a */,
 			);
 			path = lib;
+			sourceTree = "<group>";
+		};
+		DA0CC53C1EB57B69009A8ED9 /* Fabric */ = {
+			isa = PBXGroup;
+			children = (
+				DA0CC53D1EB57B69009A8ED9 /* Fabric.plist */,
+			);
+			path = Fabric;
 			sourceTree = "<group>";
 		};
 		DA2508F819513C1400AC23F1 /* Other Frameworks */ = {
@@ -1772,8 +1780,8 @@
 		DACA23B41705DF7D002C6C22 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DA0CC53C1EB57B69009A8ED9 /* Fabric */,
 				DA09745F1E995EB500F0BFE8 /* mpw_tests.xml */,
-				DACA26991705DF81002C6C22 /* Crashlytics */,
 				DACA29701705E1A8002C6C22 /* Data */,
 				DACA23B51705DF7D002C6C22 /* Media */,
 			);
@@ -1854,14 +1862,6 @@
 				DA3BCFCC19BD09E0006B2681 /* SourceCodePro-Regular.otf */,
 			);
 			path = Fonts;
-			sourceTree = "<group>";
-		};
-		DACA26991705DF81002C6C22 /* Crashlytics */ = {
-			isa = PBXGroup;
-			children = (
-				DACA269A1705DF81002C6C22 /* Crashlytics.plist */,
-			);
-			path = Crashlytics;
 			sourceTree = "<group>";
 		};
 		DACA29701705E1A8002C6C22 /* Data */ = {
@@ -2086,7 +2086,7 @@
 				DA5BFA42147E415C00F98B1E /* Resources */,
 				DAD9B5EE1762CA3A001835F9 /* Copy LoginHelper */,
 				DA6556E314D55F3000841C99 /* Run Script: GIT version -> Info.plist */,
-				DAD3125D155288AA00A3F9ED /* Run Script: Crashlytics */,
+				DAD3125D155288AA00A3F9ED /* Run Script: Fabric */,
 			);
 			buildRules = (
 			);
@@ -2295,13 +2295,13 @@
 				DACA27331705DF81002C6C22 /* avatar-12@2x.png in Resources */,
 				DACA27341705DF81002C6C22 /* avatar-2@2x.png in Resources */,
 				DA60717D195D040500CA98B5 /* icon_gear@2x.png in Resources */,
+				DA0CC53E1EB57B69009A8ED9 /* Fabric.plist in Resources */,
 				DACA27351705DF81002C6C22 /* avatar-11.png in Resources */,
 				DACA27361705DF81002C6C22 /* avatar-0@2x.png in Resources */,
 				DACA27371705DF81002C6C22 /* avatar-10@2x.png in Resources */,
 				DACA27381705DF81002C6C22 /* menu-icon.png in Resources */,
 				DACA29671705DF81002C6C22 /* SourceCodePro-ExtraLight.otf in Resources */,
 				DACA29681705DF81002C6C22 /* SourceCodePro-Black.otf in Resources */,
-				DACA296F1705DF81002C6C22 /* Crashlytics.plist in Resources */,
 				DACA29731705E1A8002C6C22 /* ciphers.plist in Resources */,
 				DACA29741705E1A8002C6C22 /* dictionary.lst in Resources */,
 				DA5E5D081724A667003798D8 /* MasterPassword.entitlements in Resources */,
@@ -2359,19 +2359,19 @@
 			shellPath = "/bin/sh -e";
 			shellScript = "exec Scripts/updatePlist";
 		};
-		DAD3125D155288AA00A3F9ED /* Run Script: Crashlytics */ = {
+		DAD3125D155288AA00A3F9ED /* Run Script: Fabric */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Run Script: Crashlytics";
+			name = "Run Script: Fabric";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -e";
-			shellScript = "[[ $DEPLOYMENT_LOCATION != YES ]] && exit\n\napiKey=$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" Resources/Crashlytics/Crashlytics.plist)\n[[ $apiKey ]] && External/Mac/Fabric.framework/run \"$apiKey\" 410fb41450e3a2e50fa8357682d812ecd3e1846f2141a99bdb9d3a6a981ad69c";
+			shellScript = "[[ $DEPLOYMENT_LOCATION != YES ]] && exit\n\napiKey=$(/usr/libexec/PlistBuddy -c \"Print :'API Key'\" Resources/Fabric/Fabric.plist)\n[[ $apiKey ]] && External/Mac/Fabric.framework/run \"$apiKey\" 410fb41450e3a2e50fa8357682d812ecd3e1846f2141a99bdb9d3a6a981ad69c";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

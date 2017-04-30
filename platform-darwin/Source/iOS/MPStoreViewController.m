@@ -28,7 +28,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
 @interface MPStoreViewController()<MPInAppDelegate>
 
 @property(nonatomic, strong) NSNumberFormatter *currencyFormatter;
-@property(nonatomic, strong) NSArray *products;
+@property(nonatomic, strong) NSDictionary<NSString *, SKProduct *> *products;
 
 @end
 
@@ -43,7 +43,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
     ];
     NSInteger storeVersion = [[NSUserDefaults standardUserDefaults] integerForKey:@"storeVersion"];
     for (; storeVersion < [storeVersions count]; ++storeVersion)
-        [features appendFormat:@"%@\n", storeVersions[storeVersion]];
+        [features appendFormat:@"%@\n", storeVersions[(NSUInteger)storeVersion]];
     if (![features length])
         return nil;
 
@@ -170,7 +170,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
 #pragma mark - MPInAppDelegate
 
-- (void)updateWithProducts:(NSArray *)products {
+- (void)updateWithProducts:(NSDictionary<NSString *, SKProduct *> *)products {
 
     self.products = products;
 
@@ -218,7 +218,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
 - (SKProduct *)productForCell:(MPStoreProductCell *)cell {
 
-    for (SKProduct *product in self.products)
+    for (SKProduct *product in [self.products allValues])
         if ([self cellForProductIdentifier:product.productIdentifier] == cell)
             return product;
 
@@ -248,7 +248,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
     [hideCells addObjectsFromArray:[self.allCellsBySection[0] array]];
     [hideCells addObject:self.loadingCell];
 
-    for (SKProduct *product in self.products) {
+    for (SKProduct *product in [self.products allValues]) {
         [self showCellForProductWithIdentifier:MPProductGenerateLogins ifProduct:product showingCells:showCells];
         [self showCellForProductWithIdentifier:MPProductGenerateAnswers ifProduct:product showingCells:showCells];
         [self showCellForProductWithIdentifier:MPProductOSIntegration ifProduct:product showingCells:showCells];
@@ -313,6 +313,8 @@ PearlEnum( MPDevelopmentFuelConsumption,
     BOOL purchased = [[MPiOSAppDelegate get] isFeatureUnlocked:productIdentifier];
     NSInteger quantity = [self quantityForProductIdentifier:productIdentifier];
     cell.priceLabel.text = purchased? @"": [self.currencyFormatter stringFromNumber:@([product.price floatValue] * quantity)];
+    cell.titleLabel.text = product.localizedTitle;
+    cell.descriptionLabel.text = product.localizedDescription;
     cell.purchasedIndicator.visible = purchased;
 }
 

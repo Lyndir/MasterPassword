@@ -55,14 +55,14 @@ setSettingWithTitle "Copyright" "$(getPlistWithKey NSHumanReadableCopyright)"
 
 if [[ $DEPLOYMENT_LOCATION = YES ]]; then
     # This build is a release.  Do some release checks.
-    crashlyticsPlist="$BUILT_PRODUCTS_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/Crashlytics.plist"
+    fabricPlist="$BUILT_PRODUCTS_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/Fabric.plist"
     passed=1
     [[ $description != *-dirty ]] || \
         { passed=0; err 'ERROR: Cannot release a dirty version, first commit any changes.'; }
     [[ $build == 0 ]] || \
         { passed=0; err 'ERROR: Commit is not tagged for release, first tag accordingly.'; }
-    [[ -r "$crashlyticsPlist" && $(PlistBuddy -c "Print :'API Key'" "$crashlyticsPlist" 2>/dev/null) ]] || \
-        { passed=0; err 'ERROR: Cannot release: Crashlytics API key is missing.'; }
+    [[ -r "$fabricPlist" && $(PlistBuddy -c "Print :'API Key'" "$fabricPlist" 2>/dev/null) ]] || \
+        { passed=0; err 'ERROR: Cannot release: Fabric API key is missing.'; }
     (( passed )) || \
         { ftl "Failed to pass release checks.  Fix the above errors and re-try.  Aborting."; exit 1; }
 fi

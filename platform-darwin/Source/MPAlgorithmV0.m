@@ -93,7 +93,7 @@ NSOperationQueue *_mpwQueue = nil;
     migrationRequest.predicate = [NSPredicate predicateWithFormat:@"version_ < %d AND user == %@", self.version, user];
     NSArray *migrationSites = [moc executeFetchRequest:migrationRequest error:&error];
     if (!migrationSites) {
-        err( @"While looking for sites to migrate: %@", [error fullDescription] );
+        MPError( error, @"While looking for sites to migrate." );
         return NO;
     }
 
