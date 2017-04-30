@@ -32,7 +32,7 @@
     [super viewWillAppear:animated];
 
     if (!self.initialURL)
-        self.initialURL = [NSURL URLWithString:@"http://masterpasswordapp.com"];
+        self.initialURL = [NSURL URLWithString:@"https://ssl.masterpasswordapp.com"];
 
     self.webNavigationItem.title = self.initialURL.host;
 

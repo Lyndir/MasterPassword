@@ -160,7 +160,7 @@ PearlEnum( MPDevelopmentFuelConsumption,
 - (IBAction)sendThanks:(id)sender {
 
     [[self dismissPopup].navigationController performSegueWithIdentifier:@"web" sender:
-            [NSURL URLWithString:@"http://thanks.lhunath.com"]];
+            [NSURL URLWithString:@"https://thanks.lhunath.com"]];
 }
 
 #pragma mark - MPInAppDelegate
@@ -220,12 +220,29 @@ PearlEnum( MPDevelopmentFuelConsumption,
     self.priceLabel.text = purchased? @"": [self price];
     self.titleLabel.text = product.localizedTitle;
     self.descriptionLabel.text = product.localizedDescription;
+    self.thumbnailView.image = [self productImage];
 
     if (transaction && (transaction.transactionState == SKPaymentTransactionStateDeferred ||
                         transaction.transactionState == SKPaymentTransactionStatePurchasing))
         [self.activityIndicator startAnimating];
     else
         [self.activityIndicator stopAnimating];
+}
+
+- (UIImage *)productImage {
+
+    if ([MPProductGenerateLogins isEqualToString:self.product.productIdentifier])
+        return [UIImage imageNamed:@"thumb_generated_login"];
+    if ([MPProductGenerateAnswers isEqualToString:self.product.productIdentifier])
+        return [UIImage imageNamed:@"thumb_generated_answers"];
+    if ([MPProductOSIntegration isEqualToString:self.product.productIdentifier])
+        return [UIImage imageNamed:@"thumb_ios_integration"];
+    if ([MPProductTouchID isEqualToString:self.product.productIdentifier])
+        return [UIImage imageNamed:@"thumb_touch_id"];
+    if ([MPProductFuel isEqualToString:self.product.productIdentifier])
+        return [UIImage imageNamed:@"thumb_fuel"];
+
+    return nil;
 }
 
 - (NSString *)price {

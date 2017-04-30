@@ -32,6 +32,7 @@
 @property(nonatomic) IBOutlet UILabel *priceLabel;
 @property(nonatomic) IBOutlet UILabel *titleLabel;
 @property(nonatomic) IBOutlet UILabel *descriptionLabel;
+@property(nonatomic) IBOutlet UIImageView *thumbnailView;
 @property(nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property(nonatomic) IBOutlet UIView *purchasedIndicator;
 

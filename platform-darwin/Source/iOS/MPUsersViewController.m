@@ -119,8 +119,9 @@ typedef NS_ENUM( NSUInteger, MPActiveUserState ) {
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
-    if ([segue.identifier isEqualToString:@"web"])
-        ((MPWebViewController *)segue.destinationViewController).initialURL = [NSURL URLWithString:@"http://thanks.lhunath.com"];
+    if ([segue.identifier isEqualToString:@"thanks"])
+        ((MPWebViewController *)segue.destinationViewController).initialURL =
+                [NSURL URLWithString:@"https://thanks.lhunath.com"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

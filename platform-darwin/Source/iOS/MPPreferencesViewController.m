@@ -207,13 +207,13 @@
 - (IBAction)homePageButton:(id)sender {
 
     [[self dismissPopup].navigationController performSegueWithIdentifier:@"web" sender:
-            [NSURL URLWithString:@"http://masterpasswordapp.com"]];
+            [NSURL URLWithString:@"https://ssl.masterpasswordapp.com"]];
 }
 
 - (IBAction)securityButton:(id)sender {
 
     [[self dismissPopup].navigationController performSegueWithIdentifier:@"web" sender:
-            [NSURL URLWithString:@"http://masterpasswordapp.com/security.html"]];
+            [NSURL URLWithString:@"https://ssl.masterpasswordapp.com/security.html"]];
 }
 
 - (IBAction)sourceButton:(id)sender {
@@ -225,7 +225,7 @@
 - (IBAction)thanksButton:(id)sender {
 
     [[self dismissPopup].navigationController performSegueWithIdentifier:@"web" sender:
-            [NSURL URLWithString:@"http://thanks.lhunath.com"]];
+            [NSURL URLWithString:@"https://thanks.lhunath.com"]];
 }
 
 #pragma mark - Private
