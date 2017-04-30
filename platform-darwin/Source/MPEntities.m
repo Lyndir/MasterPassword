@@ -34,6 +34,23 @@
 
 @end
 
+@implementation NSManagedObject(MP)
+
+- (NSManagedObjectID *)permanentObjectID {
+
+    NSManagedObjectID *objectID = self.objectID;
+    if ([objectID isTemporaryID]) {
+        NSError *error = nil;
+        if (![self.managedObjectContext obtainPermanentIDsForObjects:@[ self ] error:&error])
+            MPError( error, @"Failed to obtain permanent object ID." );
+        objectID = self.objectID;
+    }
+
+    return objectID.isTemporaryID? nil: objectID;
+}
+
+@end
+
 @implementation MPSiteQuestionEntity(MP)
 
 - (NSString *)resolveQuestionAnswerUsingKey:(MPKey *)key {

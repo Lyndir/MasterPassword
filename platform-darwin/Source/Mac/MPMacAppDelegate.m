@@ -171,17 +171,17 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
     // Save changes in the application's managed object context before the application terminates.
 
-    NSManagedObjectContext *context = [MPMacAppDelegate managedObjectContextForMainThreadIfReady];
-    if (!context)
+    NSManagedObjectContext *mainContext = [MPMacAppDelegate managedObjectContextForMainThreadIfReady];
+    if (!mainContext)
         return NSTerminateNow;
 
-    if (![context commitEditing])
+    if (![mainContext commitEditing])
         return NSTerminateCancel;
 
-    if (![context hasChanges])
+    if (![mainContext hasChanges])
         return NSTerminateNow;
 
-    [context saveToStore];
+    [mainContext saveToStore];
     return NSTerminateNow;
 }
 
@@ -388,20 +388,16 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
         return;
 
     NSString *name = [(NSSecureTextField *)alert.accessoryView stringValue];
-    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
+    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
         MPUserEntity *newUser = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass( [MPUserEntity class] )
-                                                              inManagedObjectContext:moc];
+                                                              inManagedObjectContext:context];
         newUser.name = name;
-        [moc saveToStore];
-//        NSError *error = nil;
-//        if (![moc obtainPermanentIDsForObjects:@[ newUser ] error:&error])
-//            MPError( error, @"Failed to obtain permanent object ID for new user." );
+        [context saveToStore];
+        [self setActiveUser:newUser];
 
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [self updateUsers];
-            [self setActiveUser:newUser];
+        PearlMainQueue( ^{
             [self showPasswordWindow:nil];
-        }];
+        } );
     }];
 }
 
@@ -415,10 +411,10 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     if ([alert runModal] != NSAlertFirstButtonReturn)
         return;
 
-    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-        [moc deleteObject:[self activeUserInContext:moc]];
+    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        [context deleteObject:[self activeUserInContext:context]];
         [self setActiveUser:nil];
-        [moc saveToStore];
+        [context saveToStore];
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self updateUsers];
@@ -581,7 +577,7 @@ static OSStatus MPHotKeyHander(EventHandlerCallRef nextHandler, EventRef theEven
     for (MPUserEntity *user in users) {
         NSMenuItem *userItem = [[NSMenuItem alloc] initWithTitle:user.name action:@selector( selectUser: ) keyEquivalent:@""];
         [userItem setTarget:self];
-        [userItem setRepresentedObject:[user objectID]];
+        [userItem setRepresentedObject:user.permanentObjectID];
         [[self.usersItem submenu] addItem:userItem];
 
         if (!mainActiveUser && [user.name isEqualToString:[MPMacConfig get].usedUserName])

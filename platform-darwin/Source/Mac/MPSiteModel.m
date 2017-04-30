@@ -52,9 +52,9 @@
 
 - (void)setEntity:(MPSiteEntity *)entity fuzzyGroups:(NSArray *)fuzzyGroups {
 
-    if ([_entityOID isEqual:entity.objectID])
+    if ([_entityOID isEqual:entity.permanentObjectID])
         return;
-    _entityOID = entity.objectID;
+    _entityOID = entity.permanentObjectID;
 
     NSString *siteName = entity.name;
     NSMutableAttributedString *attributedSiteName = [[NSMutableAttributedString alloc] initWithString:siteName];

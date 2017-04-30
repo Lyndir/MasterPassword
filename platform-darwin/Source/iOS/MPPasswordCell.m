@@ -171,7 +171,7 @@
 
 - (void)setSite:(MPSiteEntity *)site animated:(BOOL)animated {
 
-    _siteOID = [site objectID];
+    _siteOID = site.permanentObjectID;
     [self updateAnimated:animated];
 }
 

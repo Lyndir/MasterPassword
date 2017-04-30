@@ -22,6 +22,12 @@
 
 @end
 
+@interface NSManagedObject(MP)
+
+- (NSManagedObjectID *)permanentObjectID;
+
+@end
+
 @interface MPSiteQuestionEntity(MP)
 
 - (NSString *)resolveQuestionAnswerUsingKey:(MPKey *)key;

@@ -461,10 +461,6 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         site.lastUsed = [NSDate date];
         site.algorithm = algorithm;
 
-        NSError *error = nil;
-        if (site.objectID.isTemporaryID && ![context obtainPermanentIDsForObjects:@[ site ] error:&error])
-            MPError( error, @"Failed to obtain a permanent object ID after creating new site." );
-
         [context saveToStore];
 
         completion( site, context );
@@ -493,18 +489,14 @@ PearlAssociatedObjectProperty( NSNumber*, StoreCorrupted, storeCorrupted );
         newSite.algorithm = site.algorithm;
         newSite.loginName = site.loginName;
 
-        NSError *error = nil;
-        if (![context obtainPermanentIDsForObjects:@[ newSite ] error:&error])
-            MPError( error, @"Failed to obtain a permanent object ID after changing object type." );
-
         [context deleteObject:site];
         [context saveToStore];
 
-        [[NSNotificationCenter defaultCenter] postNotificationName:MPSiteUpdatedNotification object:site.objectID];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MPSiteUpdatedNotification object:site.permanentObjectID];
         site = newSite;
     }
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPSiteUpdatedNotification object:site.objectID];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MPSiteUpdatedNotification object:site.permanentObjectID];
     return site;
 }
 

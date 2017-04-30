@@ -80,7 +80,7 @@
 
 - (void)setSite:(MPSiteEntity *)site {
 
-    _siteOID = [site objectID];
+    _siteOID = site.permanentObjectID;
     _multiple = [site.questions count] > 0;
     [self.tableView reloadData];
     [self updateAnimated:NO];
@@ -301,8 +301,8 @@
 
 - (void)setQuestion:(MPSiteQuestionEntity *)question forSite:(MPSiteEntity *)site inVC:(MPAnswersViewController *)answersVC {
 
-    _siteOID = site.objectID;
-    _questionOID = question.objectID;
+    _siteOID = site.permanentObjectID;
+    _questionOID = question.permanentObjectID;
     _answersVC = answersVC;
 
     [self updateAnswerForQuestion:question ofSite:site];
@@ -333,14 +333,7 @@
         question.keyword = keyword;
 
         if ([context saveToStore]) {
-//            if ([question.objectID isTemporaryID]) {
-//                NSError *error = nil;
-//                [context obtainPermanentIDsForObjects:@[ question ] error:&error];
-//                if (error)
-//                    MPError( error, @"Failed to obtain permanent object ID: %@" );
-//            }
-
-            _questionOID = question.objectID;
+            _questionOID = question.permanentObjectID;
             [self updateAnswerForQuestion:question ofSite:site];
 
             if (didAddQuestionObject)

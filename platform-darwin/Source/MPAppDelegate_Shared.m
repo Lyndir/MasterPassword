@@ -74,11 +74,7 @@
 
 - (void)setActiveUser:(MPUserEntity *)activeUser {
 
-    NSError *error;
-    if (activeUser.objectID.isTemporaryID && ![activeUser.managedObjectContext obtainPermanentIDsForObjects:@[ activeUser ] error:&error])
-        MPError( error, @"Failed to obtain a permanent object ID after setting active user." );
-
-    self.activeUserOID = activeUser.objectID;
+    self.activeUserOID = activeUser.permanentObjectID;
 }
 
 - (void)handleCoordinatorError:(NSError *)error {

@@ -381,7 +381,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
             MPAvatarCell *userAvatar = [self selectedAvatar];
             userAvatar.spinnerActive = YES;
             if (!isNew && mainUser && [MPiOSAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
-                MPUserEntity *user = [MPUserEntity existingObjectWithID:mainUser.objectID inContext:context];
+                MPUserEntity *user = [MPUserEntity existingObjectWithID:mainUser.permanentObjectID inContext:context];
                 BOOL signedIn = [[MPiOSAppDelegate get] signInAsUser:user saveInContext:context usingMasterPassword:nil];
 
                 PearlMainQueue( ^{
@@ -424,10 +424,10 @@ referenceSizeForFooterInSection:(NSInteger)section {
 
         BOOL isNew = NO;
         MPUserEntity *user = [self userForAvatar:avatarCell inContext:mainContext isNew:&isNew];
-        NSManagedObjectID *userID = user.objectID;
         if (isNew || !user)
             return;
 
+        NSManagedObjectID *userID = user.permanentObjectID;
         [PearlSheet showSheetWithTitle:user.name
                              viewStyle:UIActionSheetStyleBlackTranslucent
                              initSheet:nil tappedButtonBlock:^(UIActionSheet *sheet, NSInteger buttonIndex) {
@@ -737,7 +737,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
 
             NSMutableArray *userIDs = [NSMutableArray arrayWithCapacity:[users count]];
             for (MPUserEntity *user in users)
-                [userIDs addObject:user.objectID];
+                [userIDs addObject:user.permanentObjectID];
             self.userIDs = userIDs;
         }])
             self.userIDs = nil;
@@ -765,7 +765,7 @@ referenceSizeForFooterInSection:(NSInteger)section {
         NSManagedObjectID *selectUserID = [MPiOSAppDelegate get].activeUserOID;
         if (!selectUserID)
             selectUserID = [self selectedUserInContext:[MPiOSAppDelegate managedObjectContextForMainThreadIfReady]
-                                                 isNew:&isNew].objectID;
+                                                 isNew:&isNew].permanentObjectID;
         [self.avatarCollectionView reloadData];
 
         NSUInteger selectedAvatarItem = isNew? [_userIDs count]: selectUserID? [_userIDs indexOfObject:selectUserID]: NSNotFound;

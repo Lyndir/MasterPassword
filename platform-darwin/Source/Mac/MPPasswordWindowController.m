@@ -160,10 +160,10 @@
 - (IBAction)doUnlockUser:(id)sender {
 
     [self.progressView startAnimation:self];
-    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-        MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:moc];
+    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        MPUserEntity *activeUser = [[MPMacAppDelegate get] activeUserInContext:context];
         NSString *userName = activeUser.name;
-        BOOL success = [[MPMacAppDelegate get] signInAsUser:activeUser saveInContext:moc usingMasterPassword:self.masterPassword];
+        BOOL success = [[MPMacAppDelegate get] signInAsUser:activeUser saveInContext:context usingMasterPassword:self.masterPassword];
 
         PearlMainQueue( ^{
             self.masterPassword = nil;
@@ -633,9 +633,9 @@
         return;
     }
 
-    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *moc) {
-        [[self.selectedSite entityInContext:moc] use];
-        [moc saveToStore];
+    [MPMacAppDelegate managedObjectContextPerformBlock:^(NSManagedObjectContext *context) {
+        [[self.selectedSite entityInContext:context] use];
+        [context saveToStore];
     }];
 }
 
