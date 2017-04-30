@@ -27,6 +27,16 @@ PearlAssociatedObjectProperty( NSDictionary*, Products, products );
 
 PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObservers );
 
+- (NSDictionary<NSString *, SKPaymentTransaction *> *)transactions {
+
+    NSMutableDictionary<NSString *, SKPaymentTransaction *> *transactions =
+            [NSMutableDictionary dictionaryWithCapacity:self.paymentQueue.transactions.count];
+    for (SKPaymentTransaction *transaction in self.paymentQueue.transactions)
+        transactions[transaction.payment.productIdentifier] = transaction;
+
+    return transactions;
+}
+
 - (void)registerProductsObserver:(id<MPInAppDelegate>)delegate {
 
     if (!self.productObservers)
@@ -34,7 +44,7 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
     [self.productObservers addObject:delegate];
 
     if (self.products)
-        [delegate updateWithProducts:self.products];
+        [delegate updateWithProducts:self.products transactions:[self transactions]];
     else
         [self reloadProducts];
 }
@@ -108,18 +118,6 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
             if (payment) {
                 payment.quantity = quantity;
                 [[self paymentQueue] addPayment:payment];
-
-                if ([[MPConfig get].sendInfo boolValue]) {
-#ifdef CRASHLYTICS
-                    [Answers logAddToCartWithPrice:product.price currency:product.priceLocale.currencyCode itemName:product.localizedTitle
-                                          itemType:@"InApp" itemId:product.productIdentifier
-                                  customAttributes:nil];
-                    [Answers logStartCheckoutWithPrice:product.price currency:product.priceLocale.currencyCode itemCount:@(quantity)
-                                      customAttributes:@{
-                                              @"products": @[ productIdentifier ],
-                                      }];
-#endif
-                }
             }
             return;
         }
@@ -138,7 +136,7 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
     self.products = products;
 
     for (id<MPInAppDelegate> productObserver in self.productObservers)
-        [productObserver updateWithProducts:self.products];
+        [productObserver updateWithProducts:self.products transactions:[self transactions]];
 }
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
@@ -166,6 +164,7 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
 
     for (SKPaymentTransaction *transaction in transactions) {
         dbg( @"transaction updated: %@ -> %d", transaction.payment.productIdentifier, (int)(transaction.transactionState) );
+
         switch (transaction.transactionState) {
             case SKPaymentTransactionStatePurchased: {
                 inf( @"Purchased: %@", transaction.payment.productIdentifier );
@@ -190,9 +189,10 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
                 if ([[MPConfig get].sendInfo boolValue]) {
 #ifdef CRASHLYTICS
                     SKProduct *product = self.products[transaction.payment.productIdentifier];
-                    [Answers logPurchaseWithPrice:product.price currency:product.priceLocale.currencyCode success:@YES
-                                         itemName:product.localizedTitle itemType:@"InApp" itemId:product.productIdentifier
-                                 customAttributes:attributes];
+                    for (int q = 0; q < transaction.payment.quantity; ++q)
+                        [Answers logPurchaseWithPrice:product.price currency:[product.priceLocale objectForKey:NSLocaleCurrencyCode]
+                                              success:@YES itemName:product.localizedTitle itemType:@"InApp"
+                                               itemId:product.productIdentifier customAttributes:attributes];
 #endif
                 }
                 break;
@@ -208,28 +208,33 @@ PearlAssociatedObjectProperty( NSMutableArray*, ProductObservers, productObserve
             case SKPaymentTransactionStateDeferred:
                 break;
             case SKPaymentTransactionStateFailed:
-                err( @"Transaction failed: %@, reason: %@", transaction.payment.productIdentifier, [transaction.error fullDescription] );
+                MPError( transaction.error, @"Transaction failed: %@.", transaction.payment.productIdentifier );
                 [queue finishTransaction:transaction];
 
                 if ([[MPConfig get].sendInfo boolValue]) {
 #ifdef CRASHLYTICS
                     SKProduct *product = self.products[transaction.payment.productIdentifier];
-                    [Answers logPurchaseWithPrice:product.price currency:product.priceLocale.currencyCode success:@YES
-                                         itemName:product.localizedTitle itemType:@"InApp" itemId:product.productIdentifier
+                    [Answers logPurchaseWithPrice:product.price currency:[product.priceLocale objectForKey:NSLocaleCurrencyCode]
+                                          success:@NO itemName:product.localizedTitle itemType:@"InApp" itemId:product.productIdentifier
                                  customAttributes:@{
-                                         @"state" : @"Failed",
-                                         @"reason": [transaction.error fullDescription],
+                                         @"state"   : @"Failed",
+                                         @"quantity": @(transaction.payment.quantity),
+                                         @"reason"  : [transaction.error localizedFailureReason]?: [transaction.error localizedDescription],
                                  }];
 #endif
                 }
                 break;
         }
-
-        for (id<MPInAppDelegate> productObserver in self.productObservers)
-            [productObserver updateWithTransaction:transaction];
     }
+
     if (![[NSUserDefaults standardUserDefaults] synchronize])
         wrn( @"Couldn't synchronize after transaction updates." );
+
+    NSMutableDictionary<NSString *, SKPaymentTransaction *> *allTransactions = [[self transactions] mutableCopy];
+    for (SKPaymentTransaction *transaction in transactions)
+        allTransactions[transaction.payment.productIdentifier] = transaction;
+    for (id<MPInAppDelegate> productObserver in self.productObservers)
+        [productObserver updateWithProducts:self.products transactions:allTransactions];
 }
 
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {

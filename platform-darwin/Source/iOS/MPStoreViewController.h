@@ -17,20 +17,11 @@
 //==============================================================================
 
 #import <UIKit/UIKit.h>
+#import <StoreKit/StoreKit.h>
 
 @class MPStoreProductCell;
 
-@interface MPStoreViewController : PearlMutableStaticTableViewController
-
-@property(weak, nonatomic) IBOutlet MPStoreProductCell *generateLoginCell;
-@property(weak, nonatomic) IBOutlet MPStoreProductCell *generateAnswersCell;
-@property(weak, nonatomic) IBOutlet MPStoreProductCell *iOSIntegrationCell;
-@property(weak, nonatomic) IBOutlet MPStoreProductCell *touchIDCell;
-@property(weak, nonatomic) IBOutlet MPStoreProductCell *fuelCell;
-@property(weak, nonatomic) IBOutlet UITableViewCell *loadingCell;
-@property(weak, nonatomic) IBOutlet NSLayoutConstraint *fuelMeterConstraint;
-@property(weak, nonatomic) IBOutlet UIButton *fuelSpeedButton;
-@property(weak, nonatomic) IBOutlet UILabel *fuelStatusLabel;
+@interface MPStoreViewController : UITableViewController
 
 + (NSString *)latestStoreFeatures;
 
@@ -43,5 +34,18 @@
 @property(nonatomic) IBOutlet UILabel *descriptionLabel;
 @property(nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property(nonatomic) IBOutlet UIView *purchasedIndicator;
+
+@property(nonatomic, readonly) SKProduct *product;
+@property(nonatomic, readonly) NSInteger quantity;
+
+- (void)updateWithProduct:(SKProduct *)product transaction:(SKPaymentTransaction *)transaction;
+
+@end
+
+@interface MPStoreFuelProductCell : MPStoreProductCell
+
+@property(weak, nonatomic) IBOutlet NSLayoutConstraint *fuelMeterConstraint;
+@property(weak, nonatomic) IBOutlet UIButton *fuelSpeedButton;
+@property(weak, nonatomic) IBOutlet UILabel *fuelStatusLabel;
 
 @end

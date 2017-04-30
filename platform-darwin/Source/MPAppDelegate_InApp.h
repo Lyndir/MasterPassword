@@ -25,16 +25,19 @@
 #define MPProductTouchID                        @"com.lyndir.masterpassword.products.touchid"
 #define MPProductFuel                           @"com.lyndir.masterpassword.products.fuel"
 
-#define MP_FUEL_HOURLY_RATE                     30.f /* Tier 1 purchases/h ~> USD/h */
+#define MP_FUEL_HOURLY_RATE                     40.f /* payment in tier 1 purchases / h (≅ USD / h) */
 
 @protocol MPInAppDelegate
 
-- (void)updateWithProducts:(NSDictionary<NSString *, SKProduct *> *)products;
-- (void)updateWithTransaction:(SKPaymentTransaction *)transaction;
+- (void)updateWithProducts:(NSDictionary<NSString *, SKProduct *> *)products
+              transactions:(NSDictionary<NSString *, SKPaymentTransaction *> *)transactions;
 
 @end
 
 @interface MPAppDelegate_Shared(InApp)
+
+- (NSDictionary<NSString *, SKProduct *> *)products;
+- (NSDictionary<NSString *, SKPaymentTransaction *> *)transactions;
 
 - (void)registerProductsObserver:(id<MPInAppDelegate>)delegate;
 - (void)removeProductsObserver:(id<MPInAppDelegate>)delegate;

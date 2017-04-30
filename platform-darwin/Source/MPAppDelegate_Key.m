@@ -28,7 +28,7 @@
 
 @implementation MPAppDelegate_Shared(Key)
 
-static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigin *keyOrigin) {
+- (NSDictionary *)createKeyQueryforUser:(MPUserEntity *)user origin:(out MPKeyOrigin *)keyOrigin {
 
 #if TARGET_OS_IPHONE
     if (user.touchID && kSecUseAuthenticationUI) {
@@ -38,17 +38,17 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
         CFErrorRef acError = NULL;
         id accessControl = (__bridge_transfer id)SecAccessControlCreateWithFlags( kCFAllocatorDefault,
                 kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, kSecAccessControlTouchIDCurrentSet, &acError );
-        if (!accessControl || acError)
-            err( @"Could not use TouchID on this device: %@", acError );
+        if (!accessControl)
+            MPError( (__bridge_transfer NSError *)acError, @"Could not use TouchID on this device." );
 
         else
             return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
                                            attributes:@{
-                                                   (__bridge id)kSecAttrService         : @"Saved Master Password",
-                                                   (__bridge id)kSecAttrAccount         : user.name?: @"",
-                                                   (__bridge id)kSecAttrAccessControl   : accessControl,
-                                                   (__bridge id)kSecUseAuthenticationUI : (__bridge id)kSecUseAuthenticationUIAllow,
-                                                   (__bridge id)kSecUseOperationPrompt  :
+                                                   (__bridge id)kSecAttrService        : @"Saved Master Password",
+                                                   (__bridge id)kSecAttrAccount        : user.name?: @"",
+                                                   (__bridge id)kSecAttrAccessControl  : accessControl,
+                                                   (__bridge id)kSecUseAuthenticationUI: (__bridge id)kSecUseAuthenticationUIAllow,
+                                                   (__bridge id)kSecUseOperationPrompt :
                                                    strf( @"Access %@'s master password.", user.name ),
                                            }
                                               matches:nil];
@@ -60,10 +60,10 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
 
     return [PearlKeyChain createQueryForClass:kSecClassGenericPassword
                                    attributes:@{
-                                           (__bridge id)kSecAttrService: @"Saved Master Password",
-                                           (__bridge id)kSecAttrAccount: user.name?: @"",
+                                           (__bridge id)kSecAttrService   : @"Saved Master Password",
+                                           (__bridge id)kSecAttrAccount   : user.name?: @"",
 #if TARGET_OS_IPHONE
-                                           (__bridge id)kSecAttrAccessible : (__bridge id)(kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly?: kSecAttrAccessibleWhenUnlockedThisDeviceOnly),
+                                           (__bridge id)kSecAttrAccessible: (__bridge id)(kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly?: kSecAttrAccessibleWhenUnlockedThisDeviceOnly),
 #endif
                                    }
                                       matches:nil];
@@ -72,7 +72,7 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
 - (MPKey *)loadSavedKeyFor:(MPUserEntity *)user {
 
     MPKeyOrigin keyOrigin;
-    NSDictionary *keyQuery = createKeyQuery( user, NO, &keyOrigin );
+    NSDictionary *keyQuery = [self createKeyQueryforUser:user origin:&keyOrigin];
     id<MPAlgorithm> keyAlgorithm = user.algorithm;
     MPKey *key = [[MPKey alloc] initForFullName:user.name withKeyResolver:^NSData *(id<MPAlgorithm> algorithm) {
         return ![algorithm isEqual:keyAlgorithm]? nil:
@@ -100,7 +100,7 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
             [self forgetSavedKeyFor:user];
 
             inf( @"Saving key in keychain for user: %@", user.userID );
-            [PearlKeyChain addOrUpdateItemForQuery:createKeyQuery( user, YES, nil )
+            [PearlKeyChain addOrUpdateItemForQuery:[self createKeyQueryforUser:user origin:nil]
                                     withAttributes:@{ (__bridge id)kSecValueData: keyData }];
         }
     }
@@ -108,7 +108,7 @@ static NSDictionary *createKeyQuery(MPUserEntity *user, BOOL newItem, MPKeyOrigi
 
 - (void)forgetSavedKeyFor:(MPUserEntity *)user {
 
-    OSStatus result = [PearlKeyChain deleteItemForQuery:createKeyQuery( user, NO, nil )];
+    OSStatus result = [PearlKeyChain deleteItemForQuery:[self createKeyQueryforUser:user origin:nil]];
     if (result == noErr) {
         inf( @"Removed key from keychain for user: %@", user.userID );
 

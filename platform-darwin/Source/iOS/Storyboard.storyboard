@@ -1039,7 +1039,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="249.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="999" verticalCompressionResistancePriority="1000" text="© 2012-2014, Maarten Billemont (lhunath)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sPw-mV-mFF">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="999" verticalCompressionResistancePriority="1000" text="© 2011-2017, Maarten Billemont (lhunath)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sPw-mV-mFF">
                                                     <rect key="frame" x="20" y="4" width="335" height="105"/>
                                                     <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1158,16 +1158,15 @@
                                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="aXw-tn-8Sj" userLabel="Password Collection">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <inset key="scrollIndicatorInsets" minX="0.0" minY="108" maxX="0.0" maxY="0.0"/>
                                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Mv1-29-TWx">
                                                     <size key="itemSize" width="355" height="100"/>
                                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                                    <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
+                                                    <inset key="sectionInset" minX="10" minY="250" maxX="10" maxY="10"/>
                                                 </collectionViewFlowLayout>
                                                 <cells>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MPPasswordCell" id="W2g-yv-V3V" customClass="MPPasswordCell">
-                                                        <rect key="frame" x="10" y="10" width="355" height="100"/>
+                                                        <rect key="frame" x="10" y="250" width="355" height="100"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                             <rect key="frame" x="0.0" y="0.0" width="355" height="100"/>
@@ -1247,12 +1246,12 @@
                                                                                     </constraints>
                                                                                 </view>
                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2tX-WK-ASq" userLabel="Password Container">
-                                                                                    <rect key="frame" x="0.0" y="20" width="355" height="43"/>
+                                                                                    <rect key="frame" x="0.0" y="19.5" width="355" height="44"/>
                                                                                     <subviews>
                                                                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="CuzaSasy3*Rimo" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="blw-Ou-8I8" userLabel="Password">
-                                                                                            <rect key="frame" x="8" y="0.0" width="339" height="31"/>
+                                                                                            <rect key="frame" x="8" y="0.0" width="339" height="32"/>
                                                                                             <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                            <fontDescription key="fontDescription" name="SourceCodePro-Black" family="Source Code Pro" pointSize="24"/>
+                                                                                            <fontDescription key="fontDescription" name="SourceCodePro-Black" family="Source Code Pro" pointSize="25"/>
                                                                                             <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="alphabet" keyboardAppearance="alert" returnKeyType="next"/>
                                                                                             <connections>
                                                                                                 <action selector="textFieldDidChange:" destination="W2g-yv-V3V" eventType="editingChanged" id="gTE-0d-r2l"/>
@@ -1260,7 +1259,7 @@
                                                                                             </connections>
                                                                                         </textField>
                                                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="left" text="&gt; age of the universe" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="wfM-xz-roR" userLabel="Strength">
-                                                                                            <rect key="frame" x="0.0" y="31" width="355" height="12"/>
+                                                                                            <rect key="frame" x="0.0" y="32" width="355" height="12"/>
                                                                                             <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="10"/>
                                                                                             <color key="textColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                             <nil key="highlightedColor"/>
@@ -1611,7 +1610,7 @@
                                             <outlet property="delegate" destination="nkY-z6-8jd" id="ENG-q5-XwX"/>
                                         </connections>
                                     </searchBar>
-                                    <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LEX-BK-PdS" userLabel="Bad Name Tip">
+                                    <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LEX-BK-PdS" userLabel="Bad Name Tip">
                                         <rect key="frame" x="37.5" y="86" width="300.5" height="75.5"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tip_basic_black_top.png" translatesAutoresizingMaskIntoConstraints="NO" id="Rt5-v4-I0R">
@@ -2550,460 +2549,249 @@ See </string>
         <scene sceneID="j3J-72-mva">
             <objects>
                 <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="pdl-xv-zjX" customClass="MPStoreViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="400" sectionHeaderHeight="22" sectionFooterHeight="22" id="Yd8-L6-OMk">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="380" sectionHeaderHeight="22" sectionFooterHeight="22" id="Yd8-L6-OMk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.12549020350000001" green="0.1411764771" blue="0.14901961389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <inset key="scrollIndicatorInsets" minX="0.0" minY="64" maxX="0.0" maxY="49"/>
                         <color key="separatorColor" red="0.37254901959999998" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <sections>
-                            <tableViewSection id="efu-Mw-9J5">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MPStoreProductCellGenerateLogin" id="JVW-tG-xxe" userLabel="Generate Login" customClass="MPStoreProductCell">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="400"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JVW-tG-xxe" id="CLQ-CW-NGn">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Generate Login Names" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pax-1J-IZi">
-                                                    <rect key="frame" x="20" y="226" width="291" height="20"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ra0-yS-99P">
-                                                    <rect key="frame" x="20" y="254" width="335" height="125"/>
-                                                    <string key="text">Master Password is great for making your passwords immune to loss, and it even lets you save your login name.  But saved login names can't be recovered when all is lost.  Generated login names use the same algorithm to generate a good login name to use for each of your sites.  In addition, using unique non-identifying login names for your sites helps protect against companies working together to build a bigger picture on your identity.</string>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumb_generated_login.png" translatesAutoresizingMaskIntoConstraints="NO" id="DMJ-sd-eNJ">
-                                                    <rect key="frame" x="88.5" y="20" width="198" height="198"/>
-                                                </imageView>
-                                                <activityIndicatorView hidden="YES" opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="cef-sc-aph">
-                                                    <rect key="frame" x="168.5" y="100" width="37" height="37"/>
-                                                </activityIndicatorView>
-                                                <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✔︎" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FWu-V6-mLT">
-                                                    <rect key="frame" x="200.5" y="-6" width="93" height="132"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="110"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$0.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="68f-wn-UlS">
-                                                    <rect key="frame" x="319" y="226" width="36" height="20"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MPStoreProductCell" id="JVW-tG-xxe" userLabel="Product" customClass="MPStoreProductCell">
+                                <rect key="frame" x="0.0" y="22" width="375" height="380"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JVW-tG-xxe" id="CLQ-CW-NGn">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="379.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Negare non possum" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pax-1J-IZi">
+                                            <rect key="frame" x="20" y="226" width="291" height="21"/>
+                                            <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ra0-yS-99P">
+                                            <rect key="frame" x="20" y="255" width="335" height="104.5"/>
+                                            <string key="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. At multis se probavit. Sic consequentibus vestris sublatis prima tolluntur. Nescio quo modo praetervolavit oratio. Reguli reiciendam; Theophrastus mediocriterne delectat, cum tractat locos ab Aristotele ante tractatos? Duo Reges: constructio interrete.</string>
+                                            <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumb_generated_login.png" translatesAutoresizingMaskIntoConstraints="NO" id="DMJ-sd-eNJ">
+                                            <rect key="frame" x="88.5" y="20" width="198" height="198"/>
+                                        </imageView>
+                                        <activityIndicatorView hidden="YES" opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="cef-sc-aph">
+                                            <rect key="frame" x="168.5" y="100" width="37" height="37"/>
+                                        </activityIndicatorView>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✔︎" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FWu-V6-mLT">
+                                            <rect key="frame" x="200.5" y="-6" width="93" height="132"/>
+                                            <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="110"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$0.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="68f-wn-UlS">
+                                            <rect key="frame" x="319" y="226" width="36" height="21"/>
+                                            <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="Pax-1J-IZi" firstAttribute="top" secondItem="DMJ-sd-eNJ" secondAttribute="bottom" constant="8" symbolic="YES" id="59d-hK-0pg"/>
+                                        <constraint firstItem="cef-sc-aph" firstAttribute="centerX" secondItem="DMJ-sd-eNJ" secondAttribute="centerX" id="5vZ-ZF-AtA"/>
+                                        <constraint firstItem="68f-wn-UlS" firstAttribute="leading" secondItem="Pax-1J-IZi" secondAttribute="trailing" constant="8" symbolic="YES" id="KIw-Fe-rZl"/>
+                                        <constraint firstItem="cef-sc-aph" firstAttribute="centerY" secondItem="DMJ-sd-eNJ" secondAttribute="centerY" id="M5w-oj-KwI"/>
+                                        <constraint firstItem="DMJ-sd-eNJ" firstAttribute="top" secondItem="CLQ-CW-NGn" secondAttribute="top" constant="20" symbolic="YES" id="NoB-R4-dDv"/>
+                                        <constraint firstItem="Ra0-yS-99P" firstAttribute="leading" secondItem="CLQ-CW-NGn" secondAttribute="leading" constant="20" symbolic="YES" id="Yz3-UE-DRU"/>
+                                        <constraint firstItem="Pax-1J-IZi" firstAttribute="top" secondItem="68f-wn-UlS" secondAttribute="top" id="aeI-88-vEl"/>
+                                        <constraint firstItem="Pax-1J-IZi" firstAttribute="bottom" secondItem="68f-wn-UlS" secondAttribute="bottom" id="dwX-cl-uGl"/>
+                                        <constraint firstAttribute="centerX" secondItem="DMJ-sd-eNJ" secondAttribute="centerX" id="eep-uR-mt1"/>
+                                        <constraint firstAttribute="trailing" secondItem="68f-wn-UlS" secondAttribute="trailing" constant="20" id="evt-4g-dcO"/>
+                                        <constraint firstItem="Pax-1J-IZi" firstAttribute="leading" secondItem="CLQ-CW-NGn" secondAttribute="leading" constant="20" symbolic="YES" id="gxx-4T-jjl"/>
+                                        <constraint firstItem="DMJ-sd-eNJ" firstAttribute="top" secondItem="FWu-V6-mLT" secondAttribute="centerY" constant="-40" id="ruj-0V-F34"/>
+                                        <constraint firstItem="FWu-V6-mLT" firstAttribute="centerX" secondItem="DMJ-sd-eNJ" secondAttribute="trailing" constant="-40" id="tho-ED-1LI"/>
+                                        <constraint firstItem="Ra0-yS-99P" firstAttribute="top" secondItem="Pax-1J-IZi" secondAttribute="bottom" constant="8" symbolic="YES" id="ul7-hL-9en"/>
+                                        <constraint firstAttribute="bottom" secondItem="Ra0-yS-99P" secondAttribute="bottom" constant="20" symbolic="YES" id="wmd-pF-UHR"/>
+                                        <constraint firstAttribute="trailing" secondItem="Ra0-yS-99P" secondAttribute="trailing" constant="20" id="yrC-ya-86D"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <outlet property="activityIndicator" destination="cef-sc-aph" id="VmL-AX-R3f"/>
+                                    <outlet property="descriptionLabel" destination="Ra0-yS-99P" id="99B-ao-lE6"/>
+                                    <outlet property="priceLabel" destination="68f-wn-UlS" id="e99-ys-HtZ"/>
+                                    <outlet property="purchasedIndicator" destination="FWu-V6-mLT" id="Zqt-GG-e5v"/>
+                                    <outlet property="titleLabel" destination="Pax-1J-IZi" id="kVH-n6-mDs"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MPStoreFuelProductCell" id="le3-Q5-MSO" userLabel="Fuel" customClass="MPStoreFuelProductCell">
+                                <rect key="frame" x="0.0" y="402" width="375" height="380"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="le3-Q5-MSO" id="SzQ-Y5-XIF">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="379.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Fuel Top-Up" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jnv-uN-xeg">
+                                            <rect key="frame" x="20" y="226" width="292" height="20"/>
+                                            <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fz2-AO-aGW">
+                                            <rect key="frame" x="20" y="254" width="335" height="105.5"/>
+                                            <string key="text">You really love Master Password and how it's solving your password problems.  You're eager to encourage the maintenance, technical support and development of new features.  I am a one-man shop, fuel enables me to allocate more work hours to Master Password.</string>
+                                            <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumb_fuel.png" translatesAutoresizingMaskIntoConstraints="NO" id="PnG-hP-syh">
+                                            <rect key="frame" x="88.5" y="20" width="198" height="198"/>
+                                        </imageView>
+                                        <activityIndicatorView hidden="YES" opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="eS4-59-Xny">
+                                            <rect key="frame" x="169.5" y="101" width="37" height="37"/>
+                                        </activityIndicatorView>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$2.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EbU-DV-fKF">
+                                            <rect key="frame" x="320" y="226" width="35" height="20"/>
+                                            <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="meter_fuel.png" translatesAutoresizingMaskIntoConstraints="NO" id="aGb-QC-A92">
+                                            <rect key="frame" x="262.5" y="209" width="11" height="9"/>
+                                        </imageView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dsR-fr-dY4">
+                                            <rect key="frame" x="20" y="20" width="111" height="44"/>
                                             <constraints>
-                                                <constraint firstItem="Pax-1J-IZi" firstAttribute="top" secondItem="DMJ-sd-eNJ" secondAttribute="bottom" constant="8" symbolic="YES" id="59d-hK-0pg"/>
-                                                <constraint firstItem="cef-sc-aph" firstAttribute="centerX" secondItem="DMJ-sd-eNJ" secondAttribute="centerX" id="5vZ-ZF-AtA"/>
-                                                <constraint firstItem="68f-wn-UlS" firstAttribute="leading" secondItem="Pax-1J-IZi" secondAttribute="trailing" constant="8" symbolic="YES" id="KIw-Fe-rZl"/>
-                                                <constraint firstItem="cef-sc-aph" firstAttribute="centerY" secondItem="DMJ-sd-eNJ" secondAttribute="centerY" id="M5w-oj-KwI"/>
-                                                <constraint firstItem="DMJ-sd-eNJ" firstAttribute="top" secondItem="CLQ-CW-NGn" secondAttribute="top" constant="20" symbolic="YES" id="NoB-R4-dDv"/>
-                                                <constraint firstItem="Ra0-yS-99P" firstAttribute="leading" secondItem="CLQ-CW-NGn" secondAttribute="leading" constant="20" symbolic="YES" id="Yz3-UE-DRU"/>
-                                                <constraint firstItem="Pax-1J-IZi" firstAttribute="top" secondItem="68f-wn-UlS" secondAttribute="top" id="aeI-88-vEl"/>
-                                                <constraint firstItem="Pax-1J-IZi" firstAttribute="bottom" secondItem="68f-wn-UlS" secondAttribute="bottom" id="dwX-cl-uGl"/>
-                                                <constraint firstAttribute="centerX" secondItem="DMJ-sd-eNJ" secondAttribute="centerX" id="eep-uR-mt1"/>
-                                                <constraint firstAttribute="trailing" secondItem="68f-wn-UlS" secondAttribute="trailing" constant="20" id="evt-4g-dcO"/>
-                                                <constraint firstItem="Pax-1J-IZi" firstAttribute="leading" secondItem="CLQ-CW-NGn" secondAttribute="leading" constant="20" symbolic="YES" id="gxx-4T-jjl"/>
-                                                <constraint firstItem="DMJ-sd-eNJ" firstAttribute="top" secondItem="FWu-V6-mLT" secondAttribute="centerY" constant="-40" id="ruj-0V-F34"/>
-                                                <constraint firstItem="FWu-V6-mLT" firstAttribute="centerX" secondItem="DMJ-sd-eNJ" secondAttribute="trailing" constant="-40" id="tho-ED-1LI"/>
-                                                <constraint firstItem="Ra0-yS-99P" firstAttribute="top" secondItem="Pax-1J-IZi" secondAttribute="bottom" constant="8" symbolic="YES" id="ul7-hL-9en"/>
-                                                <constraint firstAttribute="bottom" secondItem="Ra0-yS-99P" secondAttribute="bottom" constant="20" symbolic="YES" id="wmd-pF-UHR"/>
-                                                <constraint firstAttribute="trailing" secondItem="Ra0-yS-99P" secondAttribute="trailing" constant="20" id="yrC-ya-86D"/>
+                                                <constraint firstAttribute="height" constant="44" id="W6p-kB-VBX"/>
                                             </constraints>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <connections>
-                                            <outlet property="activityIndicator" destination="cef-sc-aph" id="VmL-AX-R3f"/>
-                                            <outlet property="descriptionLabel" destination="Ra0-yS-99P" id="99B-ao-lE6"/>
-                                            <outlet property="priceLabel" destination="68f-wn-UlS" id="e99-ys-HtZ"/>
-                                            <outlet property="purchasedIndicator" destination="FWu-V6-mLT" id="Zqt-GG-e5v"/>
-                                            <outlet property="titleLabel" destination="Pax-1J-IZi" id="kVH-n6-mDs"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MPStoreProductCellGenerateAnswers" id="l1g-Ul-Vg8" userLabel="Generate Answers" customClass="MPStoreProductCell">
-                                        <rect key="frame" x="0.0" y="400" width="375" height="400"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="l1g-Ul-Vg8" id="FWE-cE-L02">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Generate Security Answers" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kkl-gT-YAO">
-                                                    <rect key="frame" x="20" y="226" width="291" height="20"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yRH-27-edZ">
-                                                    <rect key="frame" x="20" y="254" width="335" height="125"/>
-                                                    <string key="text">The infamous security questions are in fact a veritable assault on your security.  For starters, they weaken the protection of your account by allowing an attacker in by simply knowing enough about you, allowing him to bypass guessing your strong password.  Arguably worse is the amount of highly personal and private information you're "willingly" divulging to these websites, under the assumption that only you know the answers.  Generating security answers allows you to stop sharing your highly personal details and weakening your acccounts by generating unguessable answers to these questions.</string>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumb_generated_answers.png" translatesAutoresizingMaskIntoConstraints="NO" id="6km-y3-4gu">
-                                                    <rect key="frame" x="88.5" y="20" width="198" height="198"/>
-                                                </imageView>
-                                                <activityIndicatorView hidden="YES" opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="X2g-Go-2Hz">
-                                                    <rect key="frame" x="169.5" y="100" width="37" height="37"/>
-                                                </activityIndicatorView>
-                                                <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✔︎" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N9y-ue-L8d">
-                                                    <rect key="frame" x="200.5" y="-6" width="93" height="132"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="110"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$0.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9ct-IM-QKR">
-                                                    <rect key="frame" x="319" y="226" width="36" height="20"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="6km-y3-4gu" firstAttribute="centerY" secondItem="X2g-Go-2Hz" secondAttribute="centerY" id="8cn-tp-Vfc"/>
-                                                <constraint firstItem="yRH-27-edZ" firstAttribute="leading" secondItem="FWE-cE-L02" secondAttribute="leading" constant="20" symbolic="YES" id="DSv-a4-VPg"/>
-                                                <constraint firstItem="9ct-IM-QKR" firstAttribute="leading" secondItem="Kkl-gT-YAO" secondAttribute="trailing" constant="8" symbolic="YES" id="Fov-kQ-Wkn"/>
-                                                <constraint firstItem="6km-y3-4gu" firstAttribute="top" secondItem="FWE-cE-L02" secondAttribute="top" constant="20" symbolic="YES" id="Kdx-UC-Q2x"/>
-                                                <constraint firstItem="Kkl-gT-YAO" firstAttribute="leading" secondItem="FWE-cE-L02" secondAttribute="leading" constant="20" symbolic="YES" id="Nsd-7W-1Tq"/>
-                                                <constraint firstItem="Kkl-gT-YAO" firstAttribute="bottom" secondItem="9ct-IM-QKR" secondAttribute="bottom" id="Oo3-Q5-Dzd"/>
-                                                <constraint firstItem="N9y-ue-L8d" firstAttribute="centerX" secondItem="6km-y3-4gu" secondAttribute="trailing" constant="-40" id="PNi-RN-ybE"/>
-                                                <constraint firstItem="Kkl-gT-YAO" firstAttribute="top" secondItem="6km-y3-4gu" secondAttribute="bottom" constant="8" symbolic="YES" id="UPs-VG-2ND"/>
-                                                <constraint firstItem="6km-y3-4gu" firstAttribute="centerX" secondItem="X2g-Go-2Hz" secondAttribute="centerX" id="Zpt-vq-iVk"/>
-                                                <constraint firstItem="yRH-27-edZ" firstAttribute="top" secondItem="Kkl-gT-YAO" secondAttribute="bottom" constant="8" symbolic="YES" id="eHf-L3-Ong"/>
-                                                <constraint firstAttribute="trailing" secondItem="yRH-27-edZ" secondAttribute="trailing" constant="20" id="eUN-6Y-FEC"/>
-                                                <constraint firstAttribute="centerX" secondItem="6km-y3-4gu" secondAttribute="centerX" id="gv6-jC-Gaa"/>
-                                                <constraint firstAttribute="trailing" secondItem="9ct-IM-QKR" secondAttribute="trailing" constant="20" id="iAM-za-9Ev"/>
-                                                <constraint firstAttribute="bottom" secondItem="yRH-27-edZ" secondAttribute="bottom" constant="20" symbolic="YES" id="krK-MM-VKm"/>
-                                                <constraint firstItem="Kkl-gT-YAO" firstAttribute="top" secondItem="9ct-IM-QKR" secondAttribute="top" id="lie-rM-flE"/>
-                                                <constraint firstItem="6km-y3-4gu" firstAttribute="top" secondItem="N9y-ue-L8d" secondAttribute="centerY" constant="-40" id="z16-aI-lwY"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <connections>
-                                            <outlet property="activityIndicator" destination="X2g-Go-2Hz" id="PvQ-bP-exW"/>
-                                            <outlet property="descriptionLabel" destination="yRH-27-edZ" id="pfv-na-UM3"/>
-                                            <outlet property="priceLabel" destination="9ct-IM-QKR" id="UTQ-L7-vbu"/>
-                                            <outlet property="purchasedIndicator" destination="N9y-ue-L8d" id="Ppv-ay-M1J"/>
-                                            <outlet property="titleLabel" destination="Kkl-gT-YAO" id="cHy-iU-oHr"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MPStoreProductCellOSIntegration" id="9Na-CL-jBq" userLabel="iOS Integration" customClass="MPStoreProductCell">
-                                        <rect key="frame" x="0.0" y="800" width="375" height="400"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9Na-CL-jBq" id="ETY-Ou-DW7">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="iOS Integration" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zch-DS-J3I">
-                                                    <rect key="frame" x="20" y="226" width="244" height="20"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="riF-bB-x5g">
-                                                    <rect key="frame" x="20" y="254" width="335" height="125"/>
-                                                    <string key="text">Up to now, the best way to use your passwords in other iOS apps was by copy/pasting them from Master Password.  With iOS integration, you can access your Master Password passwords directly from other applications, without having to switch back and forth between it and Master Password.</string>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumb_ios_integration.png" translatesAutoresizingMaskIntoConstraints="NO" id="yAc-Sm-IVo">
-                                                    <rect key="frame" x="88.5" y="20" width="198" height="198"/>
-                                                </imageView>
-                                                <activityIndicatorView hidden="YES" opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="yUe-TX-fli">
-                                                    <rect key="frame" x="169.5" y="100" width="37" height="37"/>
-                                                </activityIndicatorView>
-                                                <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✔︎" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ec8-P9-KPY">
-                                                    <rect key="frame" x="200.5" y="-6" width="93" height="132"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="110"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Coming Soon" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3jH-eX-9N2">
-                                                    <rect key="frame" x="272" y="226" width="83" height="20"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="Zch-DS-J3I" firstAttribute="top" secondItem="yAc-Sm-IVo" secondAttribute="bottom" constant="8" symbolic="YES" id="0M4-0I-kCB"/>
-                                                <constraint firstItem="ec8-P9-KPY" firstAttribute="centerX" secondItem="yAc-Sm-IVo" secondAttribute="trailing" constant="-40" id="31k-Co-bGU"/>
-                                                <constraint firstItem="yAc-Sm-IVo" firstAttribute="top" secondItem="ETY-Ou-DW7" secondAttribute="top" constant="20" symbolic="YES" id="PnQ-1d-y9S"/>
-                                                <constraint firstItem="Zch-DS-J3I" firstAttribute="bottom" secondItem="3jH-eX-9N2" secondAttribute="bottom" id="XMk-An-t5v"/>
-                                                <constraint firstItem="riF-bB-x5g" firstAttribute="top" secondItem="Zch-DS-J3I" secondAttribute="bottom" constant="8" symbolic="YES" id="ZMH-Sv-ttk"/>
-                                                <constraint firstAttribute="trailing" secondItem="3jH-eX-9N2" secondAttribute="trailing" constant="20" id="diQ-Rs-Vrj"/>
-                                                <constraint firstAttribute="centerX" secondItem="yAc-Sm-IVo" secondAttribute="centerX" id="fsX-dO-EGx"/>
-                                                <constraint firstItem="Zch-DS-J3I" firstAttribute="top" secondItem="3jH-eX-9N2" secondAttribute="top" id="gZU-lV-XZJ"/>
-                                                <constraint firstAttribute="bottom" secondItem="riF-bB-x5g" secondAttribute="bottom" constant="20" symbolic="YES" id="hQZ-Qb-A7u"/>
-                                                <constraint firstAttribute="trailing" secondItem="riF-bB-x5g" secondAttribute="trailing" constant="20" id="iCn-kq-xNy"/>
-                                                <constraint firstItem="yAc-Sm-IVo" firstAttribute="centerX" secondItem="yUe-TX-fli" secondAttribute="centerX" id="kUQ-lP-EQP"/>
-                                                <constraint firstItem="3jH-eX-9N2" firstAttribute="leading" secondItem="Zch-DS-J3I" secondAttribute="trailing" constant="8" symbolic="YES" id="qqB-1E-QPE"/>
-                                                <constraint firstItem="yAc-Sm-IVo" firstAttribute="top" secondItem="ec8-P9-KPY" secondAttribute="centerY" constant="-40" id="swf-Ua-uwD"/>
-                                                <constraint firstItem="yAc-Sm-IVo" firstAttribute="centerY" secondItem="yUe-TX-fli" secondAttribute="centerY" id="tha-UC-Hwi"/>
-                                                <constraint firstItem="Zch-DS-J3I" firstAttribute="leading" secondItem="ETY-Ou-DW7" secondAttribute="leading" constant="20" symbolic="YES" id="uV9-xY-ayE"/>
-                                                <constraint firstItem="riF-bB-x5g" firstAttribute="leading" secondItem="ETY-Ou-DW7" secondAttribute="leading" constant="20" symbolic="YES" id="y9l-fO-HMK"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <connections>
-                                            <outlet property="activityIndicator" destination="yUe-TX-fli" id="DH6-pK-fse"/>
-                                            <outlet property="descriptionLabel" destination="riF-bB-x5g" id="3v9-6H-PAK"/>
-                                            <outlet property="priceLabel" destination="3jH-eX-9N2" id="agT-az-dVU"/>
-                                            <outlet property="purchasedIndicator" destination="ec8-P9-KPY" id="M39-bc-Ksp"/>
-                                            <outlet property="titleLabel" destination="Zch-DS-J3I" id="cY2-FQ-q69"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MPStoreProductCellTouchID" id="8en-6R-GvR" userLabel="TouchID" customClass="MPStoreProductCell">
-                                        <rect key="frame" x="0.0" y="1200" width="375" height="400"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8en-6R-GvR" id="NKB-rd-1Vy">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="TouchID Login" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e1D-jp-GBs">
-                                                    <rect key="frame" x="20" y="226" width="291.5" height="20"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yxc-Lr-382">
-                                                    <rect key="frame" x="20" y="254" width="335" height="125"/>
-                                                    <string key="text">Since the iPhone 5s, all iPhones are now equipped with an advanced Touch ID fingerprint sensor in the home button.  This sensor allows you to quickly and easily identify yourself to the system.  With Touch ID support, you will be able to skip the step of entering your Master Password manually and gain the ability to unlock your user using Touch ID instead.</string>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumb_touch_id.png" translatesAutoresizingMaskIntoConstraints="NO" id="8v7-JH-mzu">
-                                                    <rect key="frame" x="88.5" y="20" width="198" height="198"/>
-                                                </imageView>
-                                                <activityIndicatorView hidden="YES" opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Dv5-t7-lL1">
-                                                    <rect key="frame" x="169.5" y="100" width="37" height="37"/>
-                                                </activityIndicatorView>
-                                                <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✔︎" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yZX-ns-8oV">
-                                                    <rect key="frame" x="200.5" y="-6" width="93" height="132"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="110"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$0.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZGg-O6-rsg">
-                                                    <rect key="frame" x="319.5" y="226" width="35.5" height="20"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="Yxc-Lr-382" firstAttribute="top" secondItem="e1D-jp-GBs" secondAttribute="bottom" constant="8" symbolic="YES" id="BMp-dh-Elb"/>
-                                                <constraint firstItem="e1D-jp-GBs" firstAttribute="top" secondItem="8v7-JH-mzu" secondAttribute="bottom" constant="8" symbolic="YES" id="CCe-dk-eBT"/>
-                                                <constraint firstItem="Dv5-t7-lL1" firstAttribute="centerY" secondItem="8v7-JH-mzu" secondAttribute="centerY" id="DUJ-Xb-503"/>
-                                                <constraint firstItem="e1D-jp-GBs" firstAttribute="bottom" secondItem="ZGg-O6-rsg" secondAttribute="bottom" id="MPG-Zj-vDr"/>
-                                                <constraint firstItem="e1D-jp-GBs" firstAttribute="leading" secondItem="NKB-rd-1Vy" secondAttribute="leading" constant="20" symbolic="YES" id="N8Z-X2-ir7"/>
-                                                <constraint firstItem="8v7-JH-mzu" firstAttribute="top" secondItem="NKB-rd-1Vy" secondAttribute="top" constant="20" symbolic="YES" id="PEc-aa-i3N"/>
-                                                <constraint firstAttribute="trailing" secondItem="ZGg-O6-rsg" secondAttribute="trailing" constant="20" id="QAy-Rp-XJc"/>
-                                                <constraint firstItem="Yxc-Lr-382" firstAttribute="leading" secondItem="NKB-rd-1Vy" secondAttribute="leading" constant="20" symbolic="YES" id="UvU-wL-3WN"/>
-                                                <constraint firstAttribute="centerX" secondItem="8v7-JH-mzu" secondAttribute="centerX" id="XVh-6p-4qT"/>
-                                                <constraint firstAttribute="trailing" secondItem="Yxc-Lr-382" secondAttribute="trailing" constant="20" id="YMA-ID-9KD"/>
-                                                <constraint firstItem="Dv5-t7-lL1" firstAttribute="centerX" secondItem="8v7-JH-mzu" secondAttribute="centerX" id="bWe-Wx-6CH"/>
-                                                <constraint firstItem="8v7-JH-mzu" firstAttribute="top" secondItem="yZX-ns-8oV" secondAttribute="centerY" constant="-40" id="n0h-tr-yA0"/>
-                                                <constraint firstItem="e1D-jp-GBs" firstAttribute="top" secondItem="ZGg-O6-rsg" secondAttribute="top" id="oZN-4h-Awv"/>
-                                                <constraint firstAttribute="bottom" secondItem="Yxc-Lr-382" secondAttribute="bottom" constant="20" symbolic="YES" id="pFY-vd-3UR"/>
-                                                <constraint firstItem="ZGg-O6-rsg" firstAttribute="leading" secondItem="e1D-jp-GBs" secondAttribute="trailing" constant="8" symbolic="YES" id="stO-51-Mlk"/>
-                                                <constraint firstItem="yZX-ns-8oV" firstAttribute="centerX" secondItem="8v7-JH-mzu" secondAttribute="trailing" constant="-40" id="yyS-FS-gvJ"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <connections>
-                                            <outlet property="activityIndicator" destination="Dv5-t7-lL1" id="AFu-Dd-TgU"/>
-                                            <outlet property="descriptionLabel" destination="Yxc-Lr-382" id="47I-83-lgP"/>
-                                            <outlet property="priceLabel" destination="ZGg-O6-rsg" id="dAn-xu-gut"/>
-                                            <outlet property="purchasedIndicator" destination="yZX-ns-8oV" id="7x0-eq-oSs"/>
-                                            <outlet property="titleLabel" destination="e1D-jp-GBs" id="jFw-dm-vp6"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MPStoreProductCellFuel" id="le3-Q5-MSO" userLabel="Fuel" customClass="MPStoreProductCell">
-                                        <rect key="frame" x="0.0" y="1600" width="375" height="400"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="le3-Q5-MSO" id="SzQ-Y5-XIF">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Fuel Top-Up" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jnv-uN-xeg">
-                                                    <rect key="frame" x="20" y="226" width="292" height="20"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fz2-AO-aGW">
-                                                    <rect key="frame" x="20" y="254" width="335" height="125"/>
-                                                    <string key="text">You really love Master Password and how it's solving your password problems.  You're eager to encourage the maintenance, technical support and development of new features.  I am a one-man shop, fuel enables me to allocate more work hours to Master Password.
-
-UPCOMING:
- – Safari integration
- – Touch ID support
- – Multi-platform support
- – Your feedback</string>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumb_fuel.png" translatesAutoresizingMaskIntoConstraints="NO" id="PnG-hP-syh">
-                                                    <rect key="frame" x="88.5" y="20" width="198" height="198"/>
-                                                </imageView>
-                                                <activityIndicatorView hidden="YES" opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="eS4-59-Xny">
-                                                    <rect key="frame" x="169.5" y="100" width="37" height="37"/>
-                                                </activityIndicatorView>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="$2.95" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EbU-DV-fKF">
-                                                    <rect key="frame" x="320" y="226" width="35" height="20"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="14"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="meter_fuel.png" translatesAutoresizingMaskIntoConstraints="NO" id="aGb-QC-A92">
-                                                    <rect key="frame" x="262.5" y="209" width="11" height="9"/>
-                                                </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dsR-fr-dY4">
-                                                    <rect key="frame" x="20" y="20" width="111" height="44"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="44" id="W6p-kB-VBX"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="14"/>
-                                                    <state key="normal" title="1h / quarter" image="icon_meter.png">
-                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="toggleFuelConsumption:" destination="pdl-xv-zjX" eventType="touchUpInside" id="NkB-Dy-IeY"/>
-                                                    </connections>
-                                                </button>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kYb-j4-32C">
-                                                    <rect key="frame" x="20" y="64" width="131.5" height="29"/>
-                                                    <string key="text">fuel left: 0.3 work hours
-invested: 3.7 work hours</string>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="aGb-QC-A92" firstAttribute="bottom" secondItem="PnG-hP-syh" secondAttribute="bottom" id="0Jx-M5-xlh"/>
-                                                <constraint firstItem="Jnv-uN-xeg" firstAttribute="leading" secondItem="SzQ-Y5-XIF" secondAttribute="leading" constant="20" symbolic="YES" id="1ng-ce-JH9"/>
-                                                <constraint firstItem="Jnv-uN-xeg" firstAttribute="top" secondItem="EbU-DV-fKF" secondAttribute="top" id="F04-ip-fHo"/>
-                                                <constraint firstItem="fz2-AO-aGW" firstAttribute="top" secondItem="Jnv-uN-xeg" secondAttribute="bottom" constant="8" symbolic="YES" id="F3H-iv-edF"/>
-                                                <constraint firstItem="fz2-AO-aGW" firstAttribute="leading" secondItem="SzQ-Y5-XIF" secondAttribute="leading" constant="20" symbolic="YES" id="G6B-g9-Z35"/>
-                                                <constraint firstItem="PnG-hP-syh" firstAttribute="top" secondItem="SzQ-Y5-XIF" secondAttribute="top" constant="20" symbolic="YES" id="JNg-lM-Jns"/>
-                                                <constraint firstItem="Jnv-uN-xeg" firstAttribute="bottom" secondItem="EbU-DV-fKF" secondAttribute="bottom" id="KbL-rF-pVN"/>
-                                                <constraint firstItem="Jnv-uN-xeg" firstAttribute="top" secondItem="PnG-hP-syh" secondAttribute="bottom" constant="8" symbolic="YES" id="OZV-m1-YZ1"/>
-                                                <constraint firstItem="dsR-fr-dY4" firstAttribute="top" secondItem="SzQ-Y5-XIF" secondAttribute="top" constant="20" id="VH2-O8-CGj"/>
-                                                <constraint firstItem="eS4-59-Xny" firstAttribute="centerX" secondItem="PnG-hP-syh" secondAttribute="centerX" id="ZbQ-LX-kmS"/>
-                                                <constraint firstItem="kYb-j4-32C" firstAttribute="leading" secondItem="dsR-fr-dY4" secondAttribute="leading" id="bih-Ha-Tz7"/>
-                                                <constraint firstItem="EbU-DV-fKF" firstAttribute="leading" secondItem="Jnv-uN-xeg" secondAttribute="trailing" constant="8" symbolic="YES" id="cku-JX-4bK"/>
-                                                <constraint firstItem="kYb-j4-32C" firstAttribute="top" secondItem="dsR-fr-dY4" secondAttribute="bottom" id="eJU-g8-KuU"/>
-                                                <constraint firstItem="aGb-QC-A92" firstAttribute="centerX" secondItem="PnG-hP-syh" secondAttribute="centerX" constant="80" id="eMa-Gj-BUc"/>
-                                                <constraint firstItem="dsR-fr-dY4" firstAttribute="leading" secondItem="SzQ-Y5-XIF" secondAttribute="leading" constant="20" id="eX0-7y-eHi"/>
-                                                <constraint firstAttribute="centerX" secondItem="PnG-hP-syh" secondAttribute="centerX" id="gO5-ME-YVO"/>
-                                                <constraint firstAttribute="trailing" secondItem="EbU-DV-fKF" secondAttribute="trailing" constant="20" id="hae-Jv-wOU"/>
-                                                <constraint firstAttribute="trailing" secondItem="fz2-AO-aGW" secondAttribute="trailing" constant="20" id="vlt-qH-1Xx"/>
-                                                <constraint firstAttribute="bottom" secondItem="fz2-AO-aGW" secondAttribute="bottom" constant="20" symbolic="YES" id="xkO-cL-7m2"/>
-                                                <constraint firstItem="eS4-59-Xny" firstAttribute="centerY" secondItem="PnG-hP-syh" secondAttribute="centerY" id="yUc-2F-y1r"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <connections>
-                                            <outlet property="activityIndicator" destination="eS4-59-Xny" id="kGW-fn-VqH"/>
-                                            <outlet property="descriptionLabel" destination="fz2-AO-aGW" id="xkc-xV-Z6Y"/>
-                                            <outlet property="priceLabel" destination="EbU-DV-fKF" id="pg2-8o-7We"/>
-                                            <outlet property="titleLabel" destination="Jnv-uN-xeg" id="Kxi-RE-ipa"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                            <tableViewSection id="hN1-J4-w3w">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MPStoreCellSpinner" rowHeight="150" id="u3P-ng-YHc" userLabel="Spinner">
-                                        <rect key="frame" x="0.0" y="2000" width="375" height="150"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="u3P-ng-YHc" id="y85-0Q-tbK">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Vjt-7c-BJ4">
-                                                    <rect key="frame" x="169" y="20" width="37" height="21"/>
-                                                </activityIndicatorView>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Loading products..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ARC-xH-0U0">
-                                                    <rect key="frame" x="115" y="81" width="145.5" height="20"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="ARC-xH-0U0" secondAttribute="bottom" constant="48" id="5L9-Ag-d1G"/>
-                                                <constraint firstAttribute="centerX" secondItem="ARC-xH-0U0" secondAttribute="centerX" id="asI-QK-u6O"/>
-                                                <constraint firstItem="ARC-xH-0U0" firstAttribute="top" secondItem="Vjt-7c-BJ4" secondAttribute="bottom" constant="40" id="g1T-rA-vOW"/>
-                                                <constraint firstAttribute="centerX" secondItem="Vjt-7c-BJ4" secondAttribute="centerX" id="j2l-mA-Duf"/>
-                                                <constraint firstItem="Vjt-7c-BJ4" firstAttribute="top" secondItem="y85-0Q-tbK" secondAttribute="top" constant="20" id="v16-PA-82f"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MPStoreCellFooter" id="UUA-xl-CAh" userLabel="Footer">
-                                        <rect key="frame" x="0.0" y="2150" width="375" height="400"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UUA-xl-CAh" id="4Zu-Ig-Ws4">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="749" verticalCompressionResistancePriority="751" text="© 2012-2014, Maarten Billemont (lhunath)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DxV-2L-bxL">
-                                                    <rect key="frame" x="20" y="4" width="335" height="305.5"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="11"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IOk-WZ-HJ8">
-                                                    <rect key="frame" x="20" y="317.5" width="335" height="27"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="12"/>
-                                                    <state key="normal" title="Restore Previous Purchases">
-                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="restorePurchases:" destination="pdl-xv-zjX" eventType="touchUpInside" id="lKu-PL-PfX"/>
-                                                    </connections>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bCe-a3-cDC">
-                                                    <rect key="frame" x="8" y="352.5" width="359" height="27"/>
-                                                    <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
-                                                    <state key="normal" title="Send Thanks">
-                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="sendThanks:" destination="pdl-xv-zjX" eventType="touchUpInside" id="r5l-3U-jCA"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="bCe-a3-cDC" secondAttribute="bottom" constant="20" symbolic="YES" id="84k-uv-gb7"/>
-                                                <constraint firstAttribute="trailing" secondItem="IOk-WZ-HJ8" secondAttribute="trailing" constant="20" symbolic="YES" id="CuJ-h7-aGJ"/>
-                                                <constraint firstAttribute="trailing" secondItem="bCe-a3-cDC" secondAttribute="trailing" constant="8" id="Lfp-Hx-vLN"/>
-                                                <constraint firstAttribute="trailing" secondItem="DxV-2L-bxL" secondAttribute="trailing" constant="20" symbolic="YES" id="QHU-Jw-LPy"/>
-                                                <constraint firstItem="bCe-a3-cDC" firstAttribute="top" secondItem="IOk-WZ-HJ8" secondAttribute="bottom" constant="8" symbolic="YES" id="XJh-dK-J4C"/>
-                                                <constraint firstItem="DxV-2L-bxL" firstAttribute="leading" secondItem="4Zu-Ig-Ws4" secondAttribute="leading" constant="20" symbolic="YES" id="fAD-At-gqS"/>
-                                                <constraint firstItem="DxV-2L-bxL" firstAttribute="top" secondItem="4Zu-Ig-Ws4" secondAttribute="top" constant="4" id="hTN-Cx-hOS"/>
-                                                <constraint firstItem="bCe-a3-cDC" firstAttribute="leading" secondItem="4Zu-Ig-Ws4" secondAttribute="leading" constant="8" id="l4A-fH-9fA"/>
-                                                <constraint firstItem="IOk-WZ-HJ8" firstAttribute="top" secondItem="DxV-2L-bxL" secondAttribute="bottom" constant="8" symbolic="YES" id="lq6-sj-DVg"/>
-                                                <constraint firstItem="IOk-WZ-HJ8" firstAttribute="leading" secondItem="4Zu-Ig-Ws4" secondAttribute="leading" constant="20" symbolic="YES" id="mx2-Jk-5jo"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                        </sections>
+                                            <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="14"/>
+                                            <state key="normal" title="1h / quarter" image="icon_meter.png">
+                                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="toggleFuelConsumption:" destination="pdl-xv-zjX" eventType="touchUpInside" id="NkB-Dy-IeY"/>
+                                            </connections>
+                                        </button>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kYb-j4-32C">
+                                            <rect key="frame" x="20" y="64" width="132" height="29"/>
+                                            <string key="text">Fuel left: 0.3 work hours
+Invested: 3.7 work hours</string>
+                                            <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="aGb-QC-A92" firstAttribute="bottom" secondItem="PnG-hP-syh" secondAttribute="bottom" id="0Jx-M5-xlh"/>
+                                        <constraint firstItem="Jnv-uN-xeg" firstAttribute="leading" secondItem="SzQ-Y5-XIF" secondAttribute="leading" constant="20" symbolic="YES" id="1ng-ce-JH9"/>
+                                        <constraint firstItem="Jnv-uN-xeg" firstAttribute="top" secondItem="EbU-DV-fKF" secondAttribute="top" id="F04-ip-fHo"/>
+                                        <constraint firstItem="fz2-AO-aGW" firstAttribute="top" secondItem="Jnv-uN-xeg" secondAttribute="bottom" constant="8" symbolic="YES" id="F3H-iv-edF"/>
+                                        <constraint firstItem="fz2-AO-aGW" firstAttribute="leading" secondItem="SzQ-Y5-XIF" secondAttribute="leading" constant="20" symbolic="YES" id="G6B-g9-Z35"/>
+                                        <constraint firstItem="PnG-hP-syh" firstAttribute="top" secondItem="SzQ-Y5-XIF" secondAttribute="top" constant="20" symbolic="YES" id="JNg-lM-Jns"/>
+                                        <constraint firstItem="Jnv-uN-xeg" firstAttribute="bottom" secondItem="EbU-DV-fKF" secondAttribute="bottom" id="KbL-rF-pVN"/>
+                                        <constraint firstItem="Jnv-uN-xeg" firstAttribute="top" secondItem="PnG-hP-syh" secondAttribute="bottom" constant="8" symbolic="YES" id="OZV-m1-YZ1"/>
+                                        <constraint firstItem="dsR-fr-dY4" firstAttribute="top" secondItem="SzQ-Y5-XIF" secondAttribute="top" constant="20" id="VH2-O8-CGj"/>
+                                        <constraint firstItem="eS4-59-Xny" firstAttribute="centerX" secondItem="PnG-hP-syh" secondAttribute="centerX" id="ZbQ-LX-kmS"/>
+                                        <constraint firstItem="kYb-j4-32C" firstAttribute="leading" secondItem="dsR-fr-dY4" secondAttribute="leading" id="bih-Ha-Tz7"/>
+                                        <constraint firstItem="EbU-DV-fKF" firstAttribute="leading" secondItem="Jnv-uN-xeg" secondAttribute="trailing" constant="8" symbolic="YES" id="cku-JX-4bK"/>
+                                        <constraint firstItem="kYb-j4-32C" firstAttribute="top" secondItem="dsR-fr-dY4" secondAttribute="bottom" id="eJU-g8-KuU"/>
+                                        <constraint firstItem="aGb-QC-A92" firstAttribute="centerX" secondItem="PnG-hP-syh" secondAttribute="centerX" constant="80" id="eMa-Gj-BUc"/>
+                                        <constraint firstItem="dsR-fr-dY4" firstAttribute="leading" secondItem="SzQ-Y5-XIF" secondAttribute="leading" constant="20" id="eX0-7y-eHi"/>
+                                        <constraint firstAttribute="centerX" secondItem="PnG-hP-syh" secondAttribute="centerX" id="gO5-ME-YVO"/>
+                                        <constraint firstAttribute="trailing" secondItem="EbU-DV-fKF" secondAttribute="trailing" constant="20" id="hae-Jv-wOU"/>
+                                        <constraint firstAttribute="trailing" secondItem="fz2-AO-aGW" secondAttribute="trailing" constant="20" id="vlt-qH-1Xx"/>
+                                        <constraint firstAttribute="bottom" secondItem="fz2-AO-aGW" secondAttribute="bottom" constant="20" symbolic="YES" id="xkO-cL-7m2"/>
+                                        <constraint firstItem="eS4-59-Xny" firstAttribute="centerY" secondItem="PnG-hP-syh" secondAttribute="centerY" id="yUc-2F-y1r"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <outlet property="activityIndicator" destination="eS4-59-Xny" id="kGW-fn-VqH"/>
+                                    <outlet property="descriptionLabel" destination="fz2-AO-aGW" id="xkc-xV-Z6Y"/>
+                                    <outlet property="fuelMeterConstraint" destination="eMa-Gj-BUc" id="1uc-fa-b20"/>
+                                    <outlet property="fuelSpeedButton" destination="dsR-fr-dY4" id="7yS-9g-xkM"/>
+                                    <outlet property="fuelStatusLabel" destination="kYb-j4-32C" id="ctc-ES-lGR"/>
+                                    <outlet property="priceLabel" destination="EbU-DV-fKF" id="pg2-8o-7We"/>
+                                    <outlet property="titleLabel" destination="Jnv-uN-xeg" id="Kxi-RE-ipa"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MPStoreCellSpinner" rowHeight="170" id="LOh-72-Ifp" userLabel="Spinner">
+                                <rect key="frame" x="0.0" y="782" width="375" height="170"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LOh-72-Ifp" id="gjr-8l-JJ0">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="169.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="MIJ-rP-BeU">
+                                            <rect key="frame" x="169" y="20" width="37" height="37"/>
+                                        </activityIndicatorView>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Loading products..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NPg-it-juF">
+                                            <rect key="frame" x="115" y="97" width="145.5" height="24.5"/>
+                                            <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="17"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="centerX" secondItem="MIJ-rP-BeU" secondAttribute="centerX" id="DXM-74-LKR"/>
+                                        <constraint firstAttribute="bottom" secondItem="NPg-it-juF" secondAttribute="bottom" constant="48" id="aCB-sK-ZCP"/>
+                                        <constraint firstAttribute="centerX" secondItem="NPg-it-juF" secondAttribute="centerX" id="fGb-Sq-nBz"/>
+                                        <constraint firstItem="MIJ-rP-BeU" firstAttribute="top" secondItem="gjr-8l-JJ0" secondAttribute="top" constant="20" id="nh6-ca-qKI"/>
+                                        <constraint firstItem="NPg-it-juF" firstAttribute="top" secondItem="MIJ-rP-BeU" secondAttribute="bottom" constant="40" id="s5N-EF-Rd4"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MPStoreCellFooter" rowHeight="100" id="jsY-TE-4y5" userLabel="Footer">
+                                <rect key="frame" x="0.0" y="952" width="375" height="100"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jsY-TE-4y5" id="guB-Eb-KpI">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="99.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="749" verticalCompressionResistancePriority="751" text="© 2012-2014, Maarten Billemont (lhunath)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="26U-st-xNs">
+                                            <rect key="frame" x="20" y="4" width="335" height="21.5"/>
+                                            <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="11"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lQ1-b9-Xp4">
+                                            <rect key="frame" x="20" y="33.5" width="335" height="27"/>
+                                            <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="12"/>
+                                            <state key="normal" title="Restore Previous Purchases">
+                                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="restorePurchases:" destination="pdl-xv-zjX" eventType="touchUpInside" id="Q8M-ud-OHL"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eus-kQ-emn">
+                                            <rect key="frame" x="8" y="68.5" width="359" height="27"/>
+                                            <fontDescription key="fontDescription" name="Exo2.0-Regular" family="Exo 2.0" pointSize="12"/>
+                                            <state key="normal" title="Send Thanks">
+                                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="sendThanks:" destination="pdl-xv-zjX" eventType="touchUpInside" id="IrU-IR-em1"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="lQ1-b9-Xp4" firstAttribute="leading" secondItem="guB-Eb-KpI" secondAttribute="leading" constant="20" symbolic="YES" id="A2j-I5-HlU"/>
+                                        <constraint firstAttribute="bottom" secondItem="eus-kQ-emn" secondAttribute="bottom" constant="4" id="Cw6-qh-jbe"/>
+                                        <constraint firstAttribute="trailing" secondItem="lQ1-b9-Xp4" secondAttribute="trailing" constant="20" symbolic="YES" id="I2K-u3-cOn"/>
+                                        <constraint firstItem="26U-st-xNs" firstAttribute="top" secondItem="guB-Eb-KpI" secondAttribute="top" constant="4" id="I2p-hX-EOW"/>
+                                        <constraint firstItem="lQ1-b9-Xp4" firstAttribute="top" secondItem="26U-st-xNs" secondAttribute="bottom" constant="8" symbolic="YES" id="IXV-6Z-hyF"/>
+                                        <constraint firstItem="eus-kQ-emn" firstAttribute="leading" secondItem="guB-Eb-KpI" secondAttribute="leading" constant="8" id="Kkk-AE-iWm"/>
+                                        <constraint firstItem="eus-kQ-emn" firstAttribute="top" secondItem="lQ1-b9-Xp4" secondAttribute="bottom" constant="8" symbolic="YES" id="UMw-e1-O9o"/>
+                                        <constraint firstAttribute="trailing" secondItem="26U-st-xNs" secondAttribute="trailing" constant="20" symbolic="YES" id="eOG-B5-WwQ"/>
+                                        <constraint firstAttribute="trailing" secondItem="eus-kQ-emn" secondAttribute="trailing" constant="8" id="hYo-sy-8wY"/>
+                                        <constraint firstItem="26U-st-xNs" firstAttribute="leading" secondItem="guB-Eb-KpI" secondAttribute="leading" constant="20" symbolic="YES" id="xfW-Sz-Kuz"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
                         <connections>
                             <outlet property="dataSource" destination="pdl-xv-zjX" id="ZOr-qJ-zl2"/>
                             <outlet property="delegate" destination="pdl-xv-zjX" id="xkn-ZJ-BPX"/>
@@ -3012,17 +2800,6 @@ invested: 3.7 work hours</string>
                     <tabBarItem key="tabBarItem" title="Store" image="icon_star-hollow.png" id="j4c-Kp-fnH"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
-                    <connections>
-                        <outlet property="fuelCell" destination="le3-Q5-MSO" id="oAk-6g-cFj"/>
-                        <outlet property="fuelMeterConstraint" destination="eMa-Gj-BUc" id="9iF-EO-UU6"/>
-                        <outlet property="fuelSpeedButton" destination="dsR-fr-dY4" id="XGI-PE-9mh"/>
-                        <outlet property="fuelStatusLabel" destination="kYb-j4-32C" id="o5R-0u-kGL"/>
-                        <outlet property="generateAnswersCell" destination="l1g-Ul-Vg8" id="GlG-iZ-7FP"/>
-                        <outlet property="generateLoginCell" destination="JVW-tG-xxe" id="PXM-WX-8Qe"/>
-                        <outlet property="iOSIntegrationCell" destination="9Na-CL-jBq" id="LSO-OV-9KA"/>
-                        <outlet property="loadingCell" destination="u3P-ng-YHc" id="gzb-K3-nKN"/>
-                        <outlet property="touchIDCell" destination="8en-6R-GvR" id="edt-KM-iU1"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WvF-bk-cgx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3327,11 +3104,11 @@ You can temporarily reveal a password by holding your finger down on the site's 
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="aNU-Nq-clY">
-                                <rect key="frame" x="0.0" y="342.5" width="375" height="324.5"/>
+                                <rect key="frame" x="0.0" y="341.5" width="375" height="325.5"/>
                                 <items/>
                             </toolbar>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="You have sites that can be upgraded." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Qi-GN-vhQ" userLabel="Title Label">
-                                <rect key="frame" x="16" y="362.5" width="343" height="20"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Lorem ipsum dolor sit amet." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Qi-GN-vhQ" userLabel="Title Label">
+                                <rect key="frame" x="16" y="361.5" width="343" height="21"/>
                                 <fontDescription key="fontDescription" name="Exo2.0-Bold" family="Exo 2.0" pointSize="17"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -3340,62 +3117,18 @@ You can temporarily reveal a password by holding your finger down on the site's 
                                 <rect key="frame" x="16" y="390.5" width="343" height="216.5"/>
                                 <attributedString key="attributedText">
                                     <fragment>
-                                        <string key="content">Upgrading a site allows it to take advantage of
-the latest improvements in the Master Password algorithm.
-</string>
-                                        <attributes>
-                                            <color key="NSBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <color key="NSColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" size="12" name="Exo2.0-Regular"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">
-When you upgrade a site, </string>
-                                        <attributes>
-                                            <color key="NSBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <color key="NSColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" size="12" name="Exo2.0-Regular"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="a new and stronger password will be generated for it">
-                                        <attributes>
-                                            <color key="NSBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <color key="NSColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" size="12" name="Exo2.0-Bold"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">.  To upgrade a site, first log into the site, navigate to your account preferences where you can change the site's password.  Make sure you fill in any "current password" fields on the website first, then press the upgrade button here to get your new site password.
-</string>
-                                        <attributes>
-                                            <color key="NSBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <color key="NSColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" size="12" name="Exo2.0-Regular"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">
-You can then update your site's account with the new and stronger password.
+                                        <mutableString key="content">Prodest, inquit, mihi eo esse animo. Sed residamus, inquit, si placet. Istam voluptatem, inquit, Epicurus ignorat?
 
-</string>
+Qualem igitur hominem natura inchoavit? Duo Reges: constructio interrete. Iam id ipsum absurdum, maximum malum neglegi. Quod cum dixissent, ille contra.
+
+Nihil sane. Erat enim Polemonis. Sumenda potius quam expetenda. Sed ad illum redeo. Equidem e Cn.
+
+Ut in geometria, prima si dederis, danda sunt omnia. Nonne igitur tibi videntur, inquit, mala? Quasi vero, inquit, perpetua oratio rhetorum solum, non etiam philosophorum sit. Tuo vero id quidem, inquam, arbitratu. A mene tu? Quid enim ab antiquis ex eo genere, quod ad disserendum valet, praetermissum est.</mutableString>
                                         <attributes>
                                             <color key="NSBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <color key="NSColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <font key="NSFont" size="12" name="Exo2.0-Regular"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="The upgrade button can be found in the site's settings and looks like this:">
-                                        <attributes>
-                                            <color key="NSBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <color key="NSColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" size="12" name="Exo2.0-Regular"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                         </attributes>
                                     </fragment>
                                 </attributedString>
@@ -3528,10 +3261,7 @@ You can then update your site's account with the new and stronger password.
         <image name="initial.png" width="320" height="568"/>
         <image name="meter_fuel.png" width="11" height="9"/>
         <image name="thumb_fuel.png" width="198" height="198"/>
-        <image name="thumb_generated_answers.png" width="198" height="198"/>
         <image name="thumb_generated_login.png" width="198" height="198"/>
-        <image name="thumb_ios_integration.png" width="198" height="198"/>
-        <image name="thumb_touch_id.png" width="198" height="198"/>
         <image name="tip_basic_black.png" width="210" height="60"/>
         <image name="tip_basic_black_top.png" width="210" height="60"/>
         <image name="ui_spinner.png" width="75" height="75"/>

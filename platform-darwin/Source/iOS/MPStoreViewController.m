@@ -27,8 +27,9 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
 @interface MPStoreViewController()<MPInAppDelegate>
 
-@property(nonatomic, strong) NSNumberFormatter *currencyFormatter;
 @property(nonatomic, strong) NSDictionary<NSString *, SKProduct *> *products;
+@property(nonatomic, strong) NSDictionary<NSString *, SKPaymentTransaction *> *transactions;
+@property(nonatomic, strong) NSMutableArray<NSArray *> *dataSource;
 
 @end
 
@@ -57,14 +58,13 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
     [super viewDidLoad];
 
-    self.currencyFormatter = [NSNumberFormatter new];
-    self.currencyFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
-
     self.tableView.tableHeaderView = [UIView new];
     self.tableView.tableFooterView = [UIView new];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 400;
     self.view.backgroundColor = [UIColor clearColor];
+
+    self.dataSource = [@[ @[], @[ @"MPStoreCellSpinner", @"MPStoreCellFooter" ] ] mutableCopy];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -73,50 +73,44 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
     self.tableView.contentInset = UIEdgeInsetsMake( 64, 0, 49, 0 );
 
-    [self updateCellsHiding:self.allCellsBySection[0] showing:@[ self.loadingCell ]];
-    [self.allCellsBySection[0] enumerateObjectsUsingBlock:^(MPStoreProductCell *cell, NSUInteger idx, BOOL *stop) {
-        if ([cell isKindOfClass:[MPStoreProductCell class]]) {
-            cell.purchasedIndicator.visible = NO;
-            [cell.activityIndicator stopAnimating];
-        }
-    }];
-
-    PearlAddNotificationObserver( NSUserDefaultsDidChangeNotification, nil, [NSOperationQueue mainQueue],
-            ^(MPStoreViewController *self, NSNotification *note) {
-                [self updateProducts];
-                [self updateFuel];
-            } );
     [[MPiOSAppDelegate get] registerProductsObserver:self];
-    [self updateFuel];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 
     [super viewWillDisappear:animated];
 
-    PearlRemoveNotificationObservers();
+    [[MPiOSAppDelegate get] removeProductsObserver:self];
 }
 
 #pragma mark - UITableViewDataSource
 
-- (MPStoreProductCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 
-    MPStoreProductCell *cell = (MPStoreProductCell *)[super tableView:tableView cellForRowAtIndexPath:indexPath];
-    if (indexPath.section == 0)
-        cell.selectionStyle = [[MPiOSAppDelegate get] isFeatureUnlocked:[self productForCell:cell].productIdentifier]?
-                              UITableViewCellSelectionStyleNone: UITableViewCellSelectionStyleDefault;
-
-    if (cell.selectionStyle != UITableViewCellSelectionStyleNone) {
-        cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.bounds];
-        cell.selectedBackgroundView.backgroundColor = [UIColor colorWithRGBAHex:0x78DDFB33];
-    }
-
-    return cell;
+    return [self.dataSource count];
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
-    return NO;
+    return [self.dataSource[(NSUInteger)section] count];
+}
+
+- (MPStoreProductCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    id content = self.dataSource[(NSUInteger)indexPath.section][(NSUInteger)indexPath.row];
+    if ([content isKindOfClass:[SKProduct class]]) {
+        SKProduct *product = content;
+        MPStoreProductCell *cell;
+        if ([product.productIdentifier isEqualToString:MPProductFuel])
+            cell = [MPStoreFuelProductCell dequeueCellFromTableView:tableView indexPath:indexPath];
+        else
+            cell = [MPStoreProductCell dequeueCellFromTableView:tableView indexPath:indexPath];
+        [cell updateWithProduct:product transaction:self.transactions[product.productIdentifier]];
+
+        return cell;
+    }
+
+    return [tableView dequeueReusableCellWithIdentifier:content forIndexPath:indexPath];
 }
 
 #pragma mark - UITableViewDelegate
@@ -128,14 +122,13 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    MPStoreProductCell *cell = (MPStoreProductCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
-    if (cell.selectionStyle == UITableViewCellSelectionStyleNone)
-        return;
+    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+    if (cell.selectionStyle != UITableViewCellSelectionStyleNone && [cell isKindOfClass:[MPStoreProductCell class]]) {
+        MPStoreProductCell *productCell = (MPStoreProductCell *)cell;
 
-    SKProduct *product = [self productForCell:cell];
-    if (product && ![[MPAppDelegate_Shared get] isFeatureUnlocked:product.productIdentifier])
-        [[MPAppDelegate_Shared get] purchaseProductWithIdentifier:product.productIdentifier
-                                                         quantity:[self quantityForProductIdentifier:product.productIdentifier]];
+        if (productCell.product && ![[MPAppDelegate_Shared get] isFeatureUnlocked:productCell.product.productIdentifier])
+            [[MPAppDelegate_Shared get] purchaseProductWithIdentifier:productCell.product.productIdentifier quantity:productCell.quantity];
+    }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -146,7 +139,9 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
     NSUInteger fuelConsumption = [[MPiOSConfig get].developmentFuelConsumption unsignedIntegerValue];
     [MPiOSConfig get].developmentFuelConsumption = @((fuelConsumption + 1) % MPDevelopmentFuelConsumptionCount);
-    [self updateProducts];
+
+    [self.tableView updateDataSource:self.dataSource toSections:nil reloadItems:@[ self.products[MPProductFuel] ]
+                    withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (IBAction)restorePurchases:(id)sender {
@@ -170,36 +165,28 @@ PearlEnum( MPDevelopmentFuelConsumption,
 
 #pragma mark - MPInAppDelegate
 
-- (void)updateWithProducts:(NSDictionary<NSString *, SKProduct *> *)products {
+- (void)updateWithProducts:(NSDictionary<NSString *, SKProduct *> *)products
+              transactions:(NSDictionary<NSString *, SKPaymentTransaction *> *)transactions {
 
     self.products = products;
+    self.transactions = transactions;
+    NSMutableArray *newDataSource = [NSMutableArray arrayWithCapacity:2];
 
-    [self updateProducts];
-}
+    // Section 0: products
+    [newDataSource addObject:[[products allValues] sortedArrayUsingComparator:
+            ^NSComparisonResult(SKProduct *p1, SKProduct *p2) {
+                return [p1.productIdentifier compare:p2.productIdentifier];
+            }]];
+    NSArray *reloadProducts = [newDataSource[0] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:
+            ^BOOL(SKProduct *product, NSDictionary *bindings) {
+                return self.transactions[product.productIdentifier] != nil;
+            }]];
 
-- (void)updateWithTransaction:(SKPaymentTransaction *)transaction {
+    // Section 1: information cells
+    [newDataSource addObject:@[ @"MPStoreCellFooter" ]];
 
-    MPStoreProductCell *cell = [self cellForProductIdentifier:transaction.payment.productIdentifier];
-    if (!cell)
-        return;
-
-    switch (transaction.transactionState) {
-        case SKPaymentTransactionStatePurchasing:
-            [cell.activityIndicator startAnimating];
-            break;
-        case SKPaymentTransactionStatePurchased:
-            [cell.activityIndicator stopAnimating];
-            break;
-        case SKPaymentTransactionStateFailed:
-            [cell.activityIndicator stopAnimating];
-            break;
-        case SKPaymentTransactionStateRestored:
-            [cell.activityIndicator stopAnimating];
-            break;
-        case SKPaymentTransactionStateDeferred:
-            [cell.activityIndicator startAnimating];
-            break;
-    }
+    [self.tableView updateDataSource:self.dataSource toSections:newDataSource
+                         reloadItems:reloadProducts withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - Private
@@ -216,60 +203,63 @@ PearlEnum( MPDevelopmentFuelConsumption,
     return nil;
 }
 
-- (SKProduct *)productForCell:(MPStoreProductCell *)cell {
+@end
 
-    for (SKProduct *product in [self.products allValues])
-        if ([self cellForProductIdentifier:product.productIdentifier] == cell)
-            return product;
+@implementation MPStoreProductCell
 
-    return nil;
+- (void)updateWithProduct:(SKProduct *)product transaction:(SKPaymentTransaction *)transaction {
+
+    _product = product;
+
+    BOOL purchased = [[MPiOSAppDelegate get] isFeatureUnlocked:self.product.productIdentifier];
+    self.selectionStyle = purchased? UITableViewCellSelectionStyleNone: UITableViewCellSelectionStyleDefault;
+    self.selectedBackgroundView = self.selectionStyle == UITableViewCellSelectionStyleNone? nil: [[UIView alloc] initWithFrame:self.bounds];
+    self.selectedBackgroundView.backgroundColor = [UIColor colorWithRGBAHex:0x78DDFB33];
+
+    self.purchasedIndicator.visible = purchased;
+    self.priceLabel.text = purchased? @"": [self price];
+    self.titleLabel.text = product.localizedTitle;
+    self.descriptionLabel.text = product.localizedDescription;
+
+    if (transaction && (transaction.transactionState == SKPaymentTransactionStateDeferred ||
+                        transaction.transactionState == SKPaymentTransactionStatePurchasing))
+        [self.activityIndicator startAnimating];
+    else
+        [self.activityIndicator stopAnimating];
 }
 
-- (MPStoreProductCell *)cellForProductIdentifier:(NSString *)productIdentifier {
+- (NSString *)price {
 
-    if ([productIdentifier isEqualToString:MPProductGenerateLogins])
-        return self.generateLoginCell;
-    if ([productIdentifier isEqualToString:MPProductGenerateAnswers])
-        return self.generateAnswersCell;
-    if ([productIdentifier isEqualToString:MPProductOSIntegration])
-        return self.iOSIntegrationCell;
-    if ([productIdentifier isEqualToString:MPProductTouchID])
-        return self.touchIDCell;
-    if ([productIdentifier isEqualToString:MPProductFuel])
-        return self.fuelCell;
+    NSNumberFormatter *currencyFormatter = [NSNumberFormatter new];
+    currencyFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
+    currencyFormatter.locale = self.product.priceLocale;
 
-    return nil;
+    return [currencyFormatter stringFromNumber:@([self.product.price floatValue] * self.quantity)];
 }
 
-- (void)updateProducts {
+- (NSInteger)quantity {
 
-    NSMutableArray *showCells = [NSMutableArray array];
-    NSMutableArray *hideCells = [NSMutableArray array];
-    [hideCells addObjectsFromArray:[self.allCellsBySection[0] array]];
-    [hideCells addObject:self.loadingCell];
-
-    for (SKProduct *product in [self.products allValues]) {
-        [self showCellForProductWithIdentifier:MPProductGenerateLogins ifProduct:product showingCells:showCells];
-        [self showCellForProductWithIdentifier:MPProductGenerateAnswers ifProduct:product showingCells:showCells];
-        [self showCellForProductWithIdentifier:MPProductOSIntegration ifProduct:product showingCells:showCells];
-        [self showCellForProductWithIdentifier:MPProductTouchID ifProduct:product showingCells:showCells];
-        [self showCellForProductWithIdentifier:MPProductFuel ifProduct:product showingCells:showCells];
-    }
-
-    [hideCells removeObjectsInArray:showCells];
-    [self updateCellsHiding:hideCells showing:showCells];
+    return 1;
 }
 
-- (void)updateFuel {
+@end
+
+@implementation MPStoreFuelProductCell
+
+- (void)updateWithProduct:(SKProduct *)product transaction:(SKPaymentTransaction *)transaction {
+
+    [super updateWithProduct:product transaction:transaction];
 
     CGFloat weeklyFuelConsumption = [self weeklyFuelConsumption]; /* consume x fuel / week */
+    [self.fuelSpeedButton setTitle:[self weeklyFuelConsumptionTitle] forState:UIControlStateNormal];
+
+    NSTimeInterval fuelSecondsElapsed = 0;
     CGFloat fuelRemaining = [[MPiOSConfig get].developmentFuelRemaining floatValue]; /* x fuel left */
     CGFloat fuelInvested = [[MPiOSConfig get].developmentFuelInvested floatValue]; /* x fuel left */
-    NSDate *now = [NSDate date];
-    NSTimeInterval fuelSecondsElapsed = -[[MPiOSConfig get].developmentFuelChecked timeIntervalSinceDate:now];
-    if (fuelSecondsElapsed > 3600 || ![MPiOSConfig get].developmentFuelChecked) {
+    NSDate *now = [NSDate date], *checked = [MPiOSConfig get].developmentFuelChecked;
+    if (!checked || 3600 < (fuelSecondsElapsed = [now timeIntervalSinceDate:checked])) {
         NSTimeInterval weeksElapsed = fuelSecondsElapsed / (3600 * 24 * 7 /* 1 week */); /* x weeks elapsed */
-        NSTimeInterval fuelConsumed = weeklyFuelConsumption * weeksElapsed;
+        NSTimeInterval fuelConsumed = MIN( fuelRemaining, weeklyFuelConsumption * weeksElapsed );
         fuelRemaining -= fuelConsumed;
         fuelInvested += fuelConsumed;
         [MPiOSConfig get].developmentFuelChecked = now;
@@ -277,56 +267,43 @@ PearlEnum( MPDevelopmentFuelConsumption,
         [MPiOSConfig get].developmentFuelInvested = @(fuelInvested);
     }
 
-    CGFloat fuelRatio = weeklyFuelConsumption == 0? 0: fuelRemaining / weeklyFuelConsumption; /* x weeks worth of fuel left */
-    [self.fuelMeterConstraint updateConstant:MIN( 0.5f, fuelRatio - 0.5f ) * 160]; /* -80pt = 0 weeks left, 80pt = >=1 week left */
-    self.fuelStatusLabel.text = strf( @"fuel left: %0.1f work hours\ninvested: %0.1f work hours", fuelRemaining, fuelInvested );
+    CGFloat fuelRatio = weeklyFuelConsumption? fuelRemaining / weeklyFuelConsumption: 0; /* x weeks worth of fuel left */
+    [self.fuelMeterConstraint updateConstant:MIN( 0.5f, fuelRatio - 0.5f ) * 160]; /* -80pt = 0 weeks left, +80pt = >=1 week left */
+    self.fuelStatusLabel.text = strf( @"Fuel left: %0.1f work hours\nFunded: %0.1f work hours", fuelRemaining, fuelInvested );
     self.fuelStatusLabel.hidden = (fuelRemaining + fuelInvested) == 0;
+}
+
+- (NSInteger)quantity {
+
+    return MAX( 1, (NSInteger)ceil( MP_FUEL_HOURLY_RATE * [self weeklyFuelConsumption] ) );
 }
 
 - (CGFloat)weeklyFuelConsumption {
 
     switch ((MPDevelopmentFuelConsumption)[[MPiOSConfig get].developmentFuelConsumption unsignedIntegerValue]) {
         case MPDevelopmentFuelConsumptionQuarterly:
-            [self.fuelSpeedButton setTitle:@"1h / quarter" forState:UIControlStateNormal];
             return 1.f / 12 /* 12 weeks */;
         case MPDevelopmentFuelConsumptionMonthly:
-            [self.fuelSpeedButton setTitle:@"1h / month" forState:UIControlStateNormal];
             return 1.f / 4 /* 4 weeks */;
         case MPDevelopmentFuelWeekly:
-            [self.fuelSpeedButton setTitle:@"1h / week" forState:UIControlStateNormal];
-            return 1.f;
+            return 1.f /* 1 week */;
     }
 
     return 0;
 }
 
-- (void)showCellForProductWithIdentifier:(NSString *)productIdentifier ifProduct:(SKProduct *)product
-                            showingCells:(NSMutableArray *)showCells {
+- (NSString *)weeklyFuelConsumptionTitle {
 
-    if (![product.productIdentifier isEqualToString:productIdentifier])
-        return;
+    switch ((MPDevelopmentFuelConsumption)[[MPiOSConfig get].developmentFuelConsumption unsignedIntegerValue]) {
+        case MPDevelopmentFuelConsumptionQuarterly:
+            return @"1h / quarter";
+        case MPDevelopmentFuelConsumptionMonthly:
+            return @"1h / month";
+        case MPDevelopmentFuelWeekly:
+            return @"1h / week";
+    }
 
-    MPStoreProductCell *cell = [self cellForProductIdentifier:productIdentifier];
-    [showCells addObject:cell];
-
-    self.currencyFormatter.locale = product.priceLocale;
-    BOOL purchased = [[MPiOSAppDelegate get] isFeatureUnlocked:productIdentifier];
-    NSInteger quantity = [self quantityForProductIdentifier:productIdentifier];
-    cell.priceLabel.text = purchased? @"": [self.currencyFormatter stringFromNumber:@([product.price floatValue] * quantity)];
-    cell.titleLabel.text = product.localizedTitle;
-    cell.descriptionLabel.text = product.localizedDescription;
-    cell.purchasedIndicator.visible = purchased;
+    return nil;
 }
 
-- (NSInteger)quantityForProductIdentifier:(NSString *)productIdentifier {
-
-    if ([productIdentifier isEqualToString:MPProductFuel])
-        return (NSInteger)(MP_FUEL_HOURLY_RATE * [self weeklyFuelConsumption] + .5f);
-
-    return 1;
-}
-
-@end
-
-@implementation MPStoreProductCell
 @end
