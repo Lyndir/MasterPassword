@@ -526,7 +526,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="Q1S-vU-GGO" customClass="MPNavigationController" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="4yl-zs-iUd">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="4yl-zs-iUd">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1281,7 +1281,7 @@
                                                                                     </userDefinedRuntimeAttributes>
                                                                                 </view>
                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tl3-hd-x35" userLabel="Main Container">
-                                                                                    <rect key="frame" x="-355" y="0.0" width="355" height="100"/>
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="355" height="100"/>
                                                                                     <subviews>
                                                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" text="apple.com" lineBreakMode="tailTruncation" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OwP-sb-Wxl" userLabel="Site Name">
                                                                                             <rect key="frame" x="8" y="74" width="303" height="18"/>
@@ -1306,7 +1306,7 @@
                                                                                     </userDefinedRuntimeAttributes>
                                                                                 </view>
                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LvK-28-fbm" userLabel="Settings Container">
-                                                                                    <rect key="frame" x="0.0" y="0.0" width="355" height="100"/>
+                                                                                    <rect key="frame" x="355" y="0.0" width="355" height="100"/>
                                                                                     <subviews>
                                                                                         <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="kfn-Wq-g5M">
                                                                                             <rect key="frame" x="-4" y="56" width="315" height="44"/>
@@ -1509,7 +1509,7 @@
                                                                                 <constraint firstItem="LvK-28-fbm" firstAttribute="leading" secondItem="tl3-hd-x35" secondAttribute="trailing" id="NXL-Fd-whf"/>
                                                                                 <constraint firstItem="b5f-wN-2xb" firstAttribute="top" secondItem="tuh-Au-J9k" secondAttribute="bottom" id="SBC-kJ-Gku"/>
                                                                                 <constraint firstAttribute="bottom" secondItem="LvK-28-fbm" secondAttribute="bottom" id="ZBx-Lf-XHF"/>
-                                                                                <constraint firstItem="tl3-hd-x35" firstAttribute="leading" secondItem="bff-RU-OcY" secondAttribute="leading" constant="-355" id="fx5-KQ-LSM"/>
+                                                                                <constraint firstItem="tl3-hd-x35" firstAttribute="leading" secondItem="bff-RU-OcY" secondAttribute="leading" id="fx5-KQ-LSM"/>
                                                                                 <constraint firstItem="tl3-hd-x35" firstAttribute="top" secondItem="bff-RU-OcY" secondAttribute="top" id="jc9-39-FY3"/>
                                                                                 <constraint firstItem="b5f-wN-2xb" firstAttribute="centerX" secondItem="tuh-Au-J9k" secondAttribute="centerX" id="pYG-bz-kd8"/>
                                                                                 <constraint firstAttribute="trailing" secondItem="LvK-28-fbm" secondAttribute="trailing" id="r9d-ym-Frs"/>
@@ -2035,7 +2035,7 @@ eg. apple.com, rmitchell@twitter.com</string>
             <objects>
                 <navigationController definesPresentationContext="YES" id="LBn-EA-NAH" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Settings" image="icon_gears.png" id="6n3-Ay-Knn"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="h6j-1o-LHf">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="h6j-1o-LHf">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -2286,7 +2286,7 @@ Suspendisse potenti. Etiam ut nisi id augue tempor ultrices et sit amet sapien. 
             <objects>
                 <navigationController definesPresentationContext="YES" id="Ec4-G7-5Td" customClass="PearlNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" id="MA4-cY-VCZ">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="MA4-cY-VCZ">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.47450980390000003" green="0.86666666670000003" blue="0.98431372549999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
